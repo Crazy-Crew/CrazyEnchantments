@@ -1,0 +1,10 @@
+name: CrazyEnchantments
+main: me.BadBones69.CrazyEnchantments.Main
+version: 1.0.6
+description: >
+             A Plugin full of Crazy Enchantments.
+commands:
+  CE:
+    description: Opens the Enchanter GUI.
+  CrazyEnchantments:
+    description: Opens the Enchanter GUI.
