@@ -24,33 +24,15 @@ public class Fortify implements Listener{
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Fortify I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(12);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5*20, 1));
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Fortify II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 8*20, 2));
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Fortify III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(8);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 15*20, 4));
+						for(String lore : armor.getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Fortify"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(12);
+									if(chance == 1){
+										en.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5*20, Api.getPower(lore, Api.getEnchName("Fortify"))));
+									}
 								}
 							}
 						}

@@ -113,6 +113,7 @@ public class Main extends JavaPlugin{
 				if(args[0].equalsIgnoreCase("Reload")){
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Reload"))return true;
 					settings.reloadConfig();
+					settings.reloadEnchs();
 					sender.sendMessage(Api.getPrefix()+Api.color("&3You have just reloaded the Config.yml"));
 					return true;
 				}

@@ -35,6 +35,24 @@ public class Api{
 		msg = ChatColor.stripColor(msg);
 		return msg;
 	}
+	public static int getPower(String line, String ench){
+		line = line.replace(ench+" ", "");
+		if(Api.isInt(line))return Integer.parseInt(line);
+		if(line.equalsIgnoreCase("I"))return 1;
+		if(line.equalsIgnoreCase("II"))return 2;
+		if(line.equalsIgnoreCase("III"))return 3;
+		if(line.equalsIgnoreCase("IV"))return 4;
+		if(line.equalsIgnoreCase("V"))return 5;
+		if(line.equalsIgnoreCase("VI"))return 6;
+		if(line.equalsIgnoreCase("VII"))return 7;
+		if(line.equalsIgnoreCase("VIII"))return 8;
+		if(line.equalsIgnoreCase("IX"))return 9;
+		if(line.equalsIgnoreCase("X"))return 10;
+		return 1;
+	}
+	public static String getEnchName(String ench){
+		return Main.settings.getEnchs().getString("Enchantments."+ench+".Name");
+	}
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
 			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(en.getLocation());
@@ -69,6 +87,23 @@ public class Api{
 		for(String L:lore)l.add(color(L));
 		m.setLore(l);
 		item.setItemMeta(m);
+		return item;
+	}
+	public static ItemStack makeItem(String type, int amount, String name, List<String> lore){
+		ArrayList<String> l = new ArrayList<String>();
+		int ty = 0;
+		if(type.contains(":")){
+			String[] b = type.split(":");
+			type = b[0];
+			ty = Integer.parseInt(b[1]);
+		}
+		Material m = Material.matchMaterial(type);
+		ItemStack item = new ItemStack(m, amount, (short) ty);
+		ItemMeta me = item.getItemMeta();
+		me.setDisplayName(color(name));
+		for(String L:lore)l.add(color(L));
+		me.setLore(l);
+		item.setItemMeta(me);
 		return item;
 	}
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore, List<String> lore2){
@@ -179,14 +214,23 @@ public class Api{
 	static String getInvName(){
 		return color(Main.settings.getConfig().getString("Settings.InvName"));
 	}
-	static String getBookColor(){
-		return Main.settings.getConfig().getString("Settings.BookNameColor");
-	}
 	static int getXPLvl(Player player){
 		return player.getLevel();
 	}
-	static void takeXP(Player player, int amount){
+	static void takeLvlXP(Player player, int amount){
 		player.setLevel(player.getLevel() - amount);
+	}
+	static void takeTotalXP(Player player, int amount){
+		int total = player.getTotalExperience() - amount;
+        player.setTotalExperience(total);
+        player.setLevel(0);
+        player.setExp(0);
+        for(;total > player.getExpToLevel();){
+            total -= player.getExpToLevel();
+            player.setLevel(player.getLevel()+1);
+        }
+        float xp = (float)total / (float)player.getExpToLevel();
+        player.setExp(xp);
 	}
 	static boolean successChance(ItemStack item){
 		String[] breakdown = item.getItemMeta().getLore().get(2).split("%");

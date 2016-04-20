@@ -22,33 +22,15 @@ public class LightWeight implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!damager.getItemInHand().getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7LightWeight I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(8);
-								if(chance == 1){
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5*20, 0));
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7LightWeight II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(6);
-								if(chance == 1){
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5*20, 2));
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7LightWeight III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(4);
-								if(chance == 1){
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5*20, 4));
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("LightWeight"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(8);
+									if(chance == 1){
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5*20, Api.getPower(lore, Api.getEnchName("LightWeight"))-1));
+									}
 								}
 							}
 						}

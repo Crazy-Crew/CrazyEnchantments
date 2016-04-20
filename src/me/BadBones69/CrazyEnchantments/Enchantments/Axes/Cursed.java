@@ -21,14 +21,10 @@ public class Cursed implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!damager.getItemInHand().getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Cursed I"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 9*20, 1));
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Cursed II"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 12*20, 2));
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Cursed III"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 16*20, 4));
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Cursed"))){
+								en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Api.getPower(lore, Api.getEnchName("Cursed"))+9*20, 1));
+							}
 						}
 					}
 				}

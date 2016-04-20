@@ -1,5 +1,7 @@
 package me.BadBones69.CrazyEnchantments.Enchantments.Armor;
 
+import me.BadBones69.CrazyEnchantments.Api;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,9 +17,9 @@ public class SelfDestruct implements Listener{
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String l : item.getItemMeta().getLore()){
-						if(l.contains("SelfDestruct")){
+						if(l.contains(Api.getEnchName("SelfDestruct"))){
 							 Location loc = e.getEntity().getLocation();
-							 loc.getWorld().createExplosion(loc, 1.0F);
+							 loc.getWorld().createExplosion(loc, Api.getPower(l, Api.getEnchName("SelfDestruct")));
 							 return;
 						}
 					}

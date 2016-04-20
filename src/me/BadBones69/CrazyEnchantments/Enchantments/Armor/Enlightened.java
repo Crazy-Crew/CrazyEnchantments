@@ -21,42 +21,18 @@ public class Enlightened implements Listener{
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Enlightened I"))){
-							Random number = new Random();
-							Random num = new Random();
-							double heal = 1+num.nextInt(1);
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									if(player.getHealth()+heal<player.getMaxHealth())player.setHealth(player.getHealth()+heal);
-									if(player.getHealth()+heal>=player.getMaxHealth())player.setHealth(player.getMaxHealth());
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Enlightened II"))){
-							Random number = new Random();
-							Random num = new Random();
-							double heal = 1+num.nextInt(2);
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									if(player.getHealth()+heal<player.getMaxHealth())player.setHealth(player.getHealth()+heal);
-									if(player.getHealth()+heal>=player.getMaxHealth())player.setHealth(player.getMaxHealth());
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Enlightened III"))){
-							Random number = new Random();
-							Random num = new Random();
-							double heal = 1+num.nextInt(3);
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									if(player.getHealth()+heal<player.getMaxHealth())player.setHealth(player.getHealth()+heal);
-									if(player.getHealth()+heal>=player.getMaxHealth())player.setHealth(player.getMaxHealth());
+						for(String lore : armor.getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Enlightened"))){
+								Random number = new Random();
+								Random num = new Random();
+								double heal = Api.getPower(lore, Api.getEnchName("Enlightened"))+num.nextInt(1);
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(10);
+									if(chance == 1){
+										if(player.getHealth()+heal<player.getMaxHealth())player.setHealth(player.getHealth()+heal);
+										if(player.getHealth()+heal>=player.getMaxHealth())player.setHealth(player.getMaxHealth());
+									}
 								}
 							}
 						}

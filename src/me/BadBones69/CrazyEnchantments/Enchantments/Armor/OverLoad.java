@@ -21,16 +21,8 @@ public class OverLoad implements Listener{
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7OverLoad I"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 55555*20, 0));
-					return;
-				}
-				if(lore.equals(Api.color("&7OverLoad II"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 55555*20, 1));
-					return;
-				}
-				if(lore.equals(Api.color("&7OverLoad III"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 55555*20, 2));
+				if(lore.contains(Api.getEnchName("OverLoad"))){
+					player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 55555*20, Api.getPower(lore, Api.getEnchName("OverLoad"))-1));
 					return;
 				}
 			}
@@ -38,15 +30,7 @@ public class OverLoad implements Listener{
 		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
 			if(!OldItem.getItemMeta().hasLore())return;
 			for(String lore : OldItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7OverLoad I"))){
-					player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
-					return;
-				}
-				if(lore.equals(Api.color("&7OverLoad II"))){
-					player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
-					return;
-				}
-				if(lore.equals(Api.color("&7OverLoad III"))){
+				if(lore.contains(Api.getEnchName("OverLoad"))){
 					player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
 					return;
 				}

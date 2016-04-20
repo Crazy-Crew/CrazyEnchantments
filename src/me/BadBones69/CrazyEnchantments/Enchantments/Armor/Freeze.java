@@ -24,33 +24,15 @@ public class Freeze implements Listener{
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Freeze I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 3));
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Freeze II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 9*20, 5));
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Freeze III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 15*20, 7));
+						for(String lore : armor.getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Freeze"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(10);
+									if(chance == 1){
+										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 2+Api.getPower(lore, Api.getEnchName("Freeze"))));
+									}
 								}
 							}
 						}

@@ -21,22 +21,10 @@ public class Hulk implements Listener{
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7Hulk I"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 55555, 0));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 55555, 0));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 55555, 1));
-					return;
-				}
-				if(lore.equals(Api.color("&7Hulk II"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 55555, 1));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 55555, 1));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 55555, 2));
-					return;
-				}
-				if(lore.equals(Api.color("&7Hulk III"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 55555, 2));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 55555, 2));
-					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 55555, 3));
+				if(lore.contains(Api.getEnchName("Hulk"))){
+					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 55555, Api.getPower(lore, Api.getEnchName("Hulk"))-1));
+					player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 55555, Api.getPower(lore, Api.getEnchName("Hulk"))-1));
+					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 55555, Api.getPower(lore, Api.getEnchName("Hulk"))));
 					return;
 				}
 			}
@@ -44,19 +32,7 @@ public class Hulk implements Listener{
 		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
 			if(!OldItem.getItemMeta().hasLore())return;
 			for(String lore : OldItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7Hulk I"))){
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-					player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-					player.removePotionEffect(PotionEffectType.SLOW);
-					return;
-				}
-				if(lore.equals(Api.color("&7Hulk II"))){
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-					player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-					player.removePotionEffect(PotionEffectType.SLOW);
-					return;
-				}
-				if(lore.equals(Api.color("&7Hulk III"))){
+				if(lore.contains(Api.getEnchName("Hulk"))){
 					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
 					player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
 					player.removePotionEffect(PotionEffectType.SLOW);

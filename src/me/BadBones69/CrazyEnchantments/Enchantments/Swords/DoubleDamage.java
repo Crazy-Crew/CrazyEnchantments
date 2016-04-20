@@ -21,33 +21,15 @@ public class DoubleDamage implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!damager.getItemInHand().getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7DoubleDamage I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(7);
-								if(chance == 1){
-									e.setDamage(damage);
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7DoubleDamage II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(5);
-								if(chance == 1){
-									e.setDamage(damage);
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7DoubleDamage III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(3);
-								if(chance == 1){
-									e.setDamage(damage);
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("DoubleDamage"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(20-Api.getPower(lore, Api.getEnchName("DoubleDamage")));
+									if(chance == 1){
+										e.setDamage(damage);
+									}
 								}
 							}
 						}

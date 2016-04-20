@@ -24,36 +24,16 @@ public class Berserk implements Listener{
 						return;
 					}
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Berserk I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(12);
-								if(chance == 1){
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 5*20, 1));
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5*20, 0));
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Berserk II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 8*20, 3));
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 8*20, 1));
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Berserk III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(8);
-								if(chance == 1){
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 8*20, 4));
-									damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 8*20, 2));
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Berserk"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(12);
+									if(chance == 1){
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Api.getPower(lore, Api.getEnchName("Berserk"))+5*20, 1));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, Api.getPower(lore, Api.getEnchName("Berserk"))+5*20, 0));
+									}
 								}
 							}
 						}

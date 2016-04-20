@@ -22,50 +22,23 @@ public class FeedMe implements Listener{
 						return;
 					}
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7FeedMe I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(8);
-								if(chance == 1){
-									if(damager.getSaturation()<20){
-										damager.setSaturation(damager.getSaturation()+2);
-									}
-									if(damager.getSaturation()+2>20){
-										damager.setSaturation(20);
-									}
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7FeedMe II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(6);
-								if(chance == 1){
-									if(damager.getSaturation()<20){
-										damager.setSaturation(damager.getSaturation()+4);
-									}
-									if(damager.getSaturation()+4>20){
-										damager.setSaturation(20);
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("FeedMe"))){
+								Random number = new Random();
+								int chance;
+								int food = 2*Api.getPower(lore, Api.getEnchName("FeedMe"));
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(8);
+									if(chance == 1){
+										if(damager.getSaturation()+food<20){
+											damager.setSaturation(damager.getSaturation()+food);
+										}
+										if(damager.getSaturation()+food>20){
+											damager.setSaturation(20);
+										}
 									}
 								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7FeedMe III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(4);
-								if(chance == 1){
-									if(damager.getSaturation()<20){
-										damager.setSaturation(damager.getSaturation()+6);
-									}
-									if(damager.getSaturation()+6>20){
-										damager.setSaturation(20);
-									}
-								}
-							}
+							}	
 						}
 					}
 				}

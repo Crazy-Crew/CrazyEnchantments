@@ -23,38 +23,16 @@ public class Savior implements Listener{
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Savior I"))){
-							if(player.getHealth() <= 8){
-								Random number = new Random();
-								int chance;
-								for(int counter = 1; counter<=1; counter++){
-									chance = 1 + number.nextInt(5);
-									if(chance == 1){
-										e.setDamage(e.getDamage()/2);
-									}
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Savior II"))){
-							if(player.getHealth() <= 8){
-								Random number = new Random();
-								int chance;
-								for(int counter = 1; counter<=1; counter++){
-									chance = 1 + number.nextInt(3);
-									if(chance == 1){
-										e.setDamage(e.getDamage()/2);
-									}
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7Savior III"))){
-							if(player.getHealth() <= 8){
-								Random number = new Random();
-								int chance;
-								for(int counter = 1; counter<=1; counter++){
-									chance = 1 + number.nextInt(2);
-									if(chance == 1){
-										e.setDamage(e.getDamage()/2);
+						for(String lore : armor.getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Savior"))){
+								if(player.getHealth() <= 8){
+									Random number = new Random();
+									int chance;
+									for(int counter = 1; counter<=1; counter++){
+										chance = 1 + number.nextInt(10-Api.getPower(lore, Api.getEnchName("Savior")));
+										if(chance == 1){
+											e.setDamage(e.getDamage()/2);
+										}
 									}
 								}
 							}

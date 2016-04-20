@@ -24,33 +24,15 @@ public class Blessed implements Listener{
 						return;
 					}
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Blessed I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(12);
-								if(chance == 1){
-									removeBadPotions(damager);
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Blessed II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(8);
-								if(chance == 1){
-									removeBadPotions(damager);
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Blessed III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(5);
-								if(chance == 1){
-									removeBadPotions(damager);
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Blessed"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(20-Api.getPower(lore, Api.getEnchName("Blessed")));
+									if(chance == 1){
+										removeBadPotions(damager);
+									}
 								}
 							}
 						}

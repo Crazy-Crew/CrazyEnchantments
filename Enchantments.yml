@@ -1,0 +1,316 @@
+Enchantments:
+  Glowing: #Enchantment
+    Name: 'Glowing' #The in-game name of the enchantment
+    Color: '&7' #The color of the enchantment on the item
+    BookColor: '&b&l' #The color of the enchantment on the book
+    MaxPower: 1 #Max lvl the enchantment goes up to
+    Categories: #All the categories the Enchantment can be found in
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  BurnShield:
+    Name: 'BurnShield'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Piercing:
+    Name: 'Piercing'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  OverLoad:
+    Name: 'OverLoad'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  SelfDestruct:
+    Name: 'SelfDestruct'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Springs:
+    Name: 'Springs'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Gears:
+    Name: 'Gears'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Hulk:
+    Name: 'Hulk'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Mermaid:
+    Name: 'Mermaid'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Ninja:
+    Name: 'Ninja'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Vampire:
+    Name: 'Vampire'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  LifeSteal:
+    Name: 'LifeSteal'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Doctor:
+    Name: 'Doctor'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Boom:
+    Name: 'Boom'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Venom:
+    Name: 'Venom'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  DoubleDamage:
+    Name: 'DoubleDamage'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  SlowMo:
+    Name: 'SlowMo'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Blindness:
+    Name: 'Blindness'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Viper:
+    Name: 'Viper'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  AntiGravity:
+    Name: 'AntiGravity'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  FastTurn:
+    Name: 'FastTurn'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  LightWeight:
+    Name: 'LightWeight'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Blessed:
+    Name: 'Blessed'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  FeedMe:
+    Name: 'FeedMe'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Dizzy:
+    Name: 'Dizzy'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Berserk:
+    Name: 'Berserk'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Cursed:
+    Name: 'Cursed'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Rekt:
+    Name: 'Rekt'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Enlightened:
+    Name: 'Enlightened'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Freeze:
+    Name: 'Freeze'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Fortify:
+    Name: 'Fortify'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Molten:
+    Name: 'Molten'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  PainGiver:
+    Name: 'PainGiver'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Savior:
+    Name: 'Savior'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Nursery:
+    Name: 'Nursery'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'

@@ -16,15 +16,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class GUI implements Listener{
 	static void openGUI(Player player){
-		Inventory inv = Bukkit.createInventory(null, 9, Api.getInvName());
-		inv.setItem(0, Api.makeItem(Material.matchMaterial(Main.settings.getConfig().getString("Settings.Info.Item")), 1, 0, Main.settings.getConfig().getString("Settings.Info.GUIName")));
-		inv.setItem(2, Api.makeItem(Material.matchMaterial(Main.settings.getConfig().getString("Settings.T1.Item")), 1, 0, Main.settings.getConfig().getString("Settings.T1.GUIName")
-				, Main.settings.getConfig().getStringList("Settings.T1.GUILore")));
-		inv.setItem(4, Api.makeItem(Material.matchMaterial(Main.settings.getConfig().getString("Settings.T2.Item")), 1, 0, Main.settings.getConfig().getString("Settings.T2.GUIName")
-				, Main.settings.getConfig().getStringList("Settings.T2.GUILore")));
-		inv.setItem(6, Api.makeItem(Material.matchMaterial(Main.settings.getConfig().getString("Settings.T3.Item")), 1, 0, Main.settings.getConfig().getString("Settings.T3.GUIName")
-				, Main.settings.getConfig().getStringList("Settings.T3.GUILore")));
-		inv.setItem(8, Api.makeItem(Material.matchMaterial(Main.settings.getConfig().getString("Settings.Info.Item")), 1, 0, Main.settings.getConfig().getString("Settings.Info.GUIName")));
+		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Api.getInvName());
+		for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+			inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
+					Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
+		}
 		player.openInventory(inv);
 	}
 	void openInfo(Player player){
@@ -45,40 +41,27 @@ public class GUI implements Listener{
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
 						String name = item.getItemMeta().getDisplayName();
-						if(name.equals(Api.color(Main.settings.getConfig().getString("Settings.Info.GUIName")))){
-							openInfo(player);
-							return;
-						}
-						if(name.equals(Api.color(Main.settings.getConfig().getString("Settings.T1.GUIName")))){
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Settings.T1.XP")){
-									player.sendMessage(Api.color("&cYou need &6" + Integer.toString(Main.settings.getConfig().getInt("Settings.T1.XP") - Api.getXPLvl(player)) + " &cmore XP Lvls."));
-									return;
+						for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+							if(name.equals(Api.color(Main.settings.getConfig().getString("Categories."+cat+".Name")))){
+								if(player.getGameMode() != GameMode.CREATIVE){
+									if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
+										if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".XP")){
+											player.sendMessage(Api.color("&cYou need &6" + Integer.toString(Main.settings.getConfig().getInt("Categories."+cat+".XP") - Api.getXPLvl(player)) + " &cmore XP Lvls."));
+											return;
+										}
+										Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
+									}
+									if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
+										if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".XP")){
+											player.sendMessage(Api.color("&cYou need &6" + Integer.toString(Main.settings.getConfig().getInt("Categories."+cat+".XP") - player.getTotalExperience()) + " &cmore Total XP."));
+											return;
+										}
+										Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
+									}
 								}
-								Api.takeXP(player, Main.settings.getConfig().getInt("Settings.T1.XP"));
+								player.getInventory().addItem(ECControl.pick(Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max"), Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min"), cat));
+								return;
 							}
-							player.getInventory().addItem(ECControl.pickT1());
-							return;
-						}
-						if(name.equals(Api.color(Main.settings.getConfig().getString("Settings.T2.GUIName")))){
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Settings.T2.XP")){
-									player.sendMessage(Api.color("&cYou need &6" + Integer.toString(Main.settings.getConfig().getInt("Settings.T2.XP") - Api.getXPLvl(player)) + " &cmore XP Lvls."));
-									return;
-								}
-								Api.takeXP(player, Main.settings.getConfig().getInt("Settings.T2.XP"));
-							}
-							player.getInventory().addItem(ECControl.pickT2());
-						}
-						if(name.equals(Api.color(Main.settings.getConfig().getString("Settings.T3.GUIName")))){
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Settings.T3.XP")){
-									player.sendMessage(Api.color("&cYou need &6" + Integer.toString(Main.settings.getConfig().getInt("Settings.T3.XP") - Api.getXPLvl(player)) + " &cmore XP Lvls."));
-									return;
-								}
-								Api.takeXP(player, Main.settings.getConfig().getInt("Settings.T3.XP"));
-							}
-							player.getInventory().addItem(ECControl.pickT3());
 						}
 					}
 				}
@@ -97,8 +80,8 @@ public class GUI implements Listener{
 				if(c.hasItemMeta()){
 					if(c.getItemMeta().hasDisplayName()){
 						String name = c.getItemMeta().getDisplayName();
-						for(String en : ECControl.allEnchantments().keySet()){
-							if(name.contains(en)){
+						for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+							if(name.contains(Main.settings.getEnchs().getString("Enchantments."+en+".Name"))){
 								for(Material m : ECControl.allEnchantments().get(en)){
 									if(item.getType() == m){
 										if(c.getAmount() == 1){
@@ -113,9 +96,10 @@ public class GUI implements Listener{
 											if(Api.successChance(c) || player.getGameMode() == GameMode.CREATIVE){
 												name = Api.removeColor(name);
 												String[] breakdown = name.split(" ");
-												String enchantment = en;
+												String color = Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+												String enchantment = Main.settings.getEnchs().getString("Enchantments."+en+".Name");
 												String lvl = breakdown[1];
-												String full = Api.color("&7"+enchantment+" "+lvl);
+												String full = Api.color(color+enchantment+" "+lvl);
 												e.setCursor(new ItemStack(Material.AIR));
 												Api.addLore(item, full);
 												player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);

@@ -2,6 +2,8 @@ package me.BadBones69.CrazyEnchantments.Enchantments.Armor;
 
 import java.util.Random;
 
+import me.BadBones69.CrazyEnchantments.Api;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,65 +24,26 @@ public class Nursery implements Listener{
 			for(ItemStack i : player.getEquipment().getArmorContents()){
 				if(i.hasItemMeta()){
 					if(i.getItemMeta().hasLore()){
-						if(i.getItemMeta().getLore().contains("Nursery I")){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(24);
-								if(chance == 1){
-									if(player.getHealth()+3<=player.getMaxHealth()){
-										player.setHealth(player.getHealth()+3);
-									}
-									if(player.getHealth()+3>=player.getMaxHealth()){
-										player.setHealth(player.getMaxHealth());
-									}
-									if(player.getSaturation()+3<=20){
-										player.setSaturation(player.getSaturation()+3);
-									}
-									if(player.getSaturation()+3>=20){
-										player.setSaturation(20);
-									}
-								}
-							}
-						}
-						if(i.getItemMeta().getLore().contains("Nursery II")){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(24);
-								if(chance == 1){
-									if(player.getHealth()+5<=player.getMaxHealth()){
-										player.setHealth(player.getHealth()+5);
-									}
-									if(player.getHealth()+5>=player.getMaxHealth()){
-										player.setHealth(player.getMaxHealth());
-									}
-									if(player.getSaturation()+5<=20){
-										player.setSaturation(player.getSaturation()+5);
-									}
-									if(player.getSaturation()+5>=20){
-										player.setSaturation(20);
-									}
-								}
-							}
-						}
-						if(i.getItemMeta().getLore().contains("Nursery III")){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(24);
-								if(chance == 1){
-									if(player.getHealth()+7<=player.getMaxHealth()){
-										player.setHealth(player.getHealth()+7);
-									}
-									if(player.getHealth()+7>=player.getMaxHealth()){
-										player.setHealth(player.getMaxHealth());
-									}
-									if(player.getSaturation()+7<=20){
-										player.setSaturation(player.getSaturation()+7);
-									}
-									if(player.getSaturation()+7>=20){
-										player.setSaturation(20);
+						for(String lore : i.getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Nursery"))){
+								Random number = new Random();
+								int chance;
+								int heal = 1+Api.getPower(lore, Api.getEnchName("Nursery"));
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(24);
+									if(chance == 1){
+										if(player.getHealth()+heal<=player.getMaxHealth()){
+											player.setHealth(player.getHealth()+heal);
+										}
+										if(player.getHealth()+heal>=player.getMaxHealth()){
+											player.setHealth(player.getMaxHealth());
+										}
+										if(player.getSaturation()+heal<=20){
+											player.setSaturation(player.getSaturation()+heal);
+										}
+										if(player.getSaturation()+heal>=20){
+											player.setSaturation(20);
+										}
 									}
 								}
 							}

@@ -21,8 +21,8 @@ public class BurnShield implements Listener{
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7BurnShield I"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 55555*20, 0));
+				if(lore.contains(Api.getEnchName("BurnShield"))){
+					player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 55555*20, Api.getPower(lore, Api.getEnchName("BurnShield"))));
 					return;
 				}
 			}
@@ -30,7 +30,7 @@ public class BurnShield implements Listener{
 		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
 			if(!OldItem.getItemMeta().hasLore())return;
 			for(String lore : OldItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7BurnShield I"))){
+				if(lore.contains(Api.getEnchName("BurnShield"))){
 					player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
 					return;
 				}

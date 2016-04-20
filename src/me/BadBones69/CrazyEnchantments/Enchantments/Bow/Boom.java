@@ -1,6 +1,6 @@
 package me.BadBones69.CrazyEnchantments.Enchantments.Bow;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import me.BadBones69.CrazyEnchantments.Api;
@@ -13,57 +13,27 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class Boom implements Listener{
-	ArrayList<Projectile> arrow1 = new ArrayList<Projectile>();
-	ArrayList<Projectile> arrow2 = new ArrayList<Projectile>();
-	ArrayList<Projectile> arrow3 = new ArrayList<Projectile>();
+	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
 		if (e.getBow().hasItemMeta()) {
-			if (e.getBow().getItemMeta().getLore().contains(Api.color("&7Boom I"))) {
-				arrow1.add((Projectile) e.getProjectile());
-			}
-			if (e.getBow().getItemMeta().getLore().contains(Api.color("&7Boom II"))) {
-				arrow2.add((Projectile) e.getProjectile());
-			}
-			if (e.getBow().getItemMeta().getLore().contains(Api.color("&7Boom III"))) {
-				arrow3.add((Projectile) e.getProjectile());
+			for(String lore : e.getBow().getItemMeta().getLore()){
+				if(lore.contains(Api.getEnchName("Boom"))){
+					Arrow.put((Projectile) e.getProjectile(), Api.getPower(lore, Api.getEnchName("Boom")));
+				}
 			}
 		}
 	}
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
-		if(arrow1.contains(e.getEntity())){
+		if(Arrow.containsKey(e.getEntity())){
 			Random number = new Random();
 			int chance;
 			for(int counter = 1; counter<=1; counter++){
-				chance = 1 + number.nextInt(10);
+				chance = 1 + number.nextInt(20-Api.getPower(Arrow.get(e.getEntity())+"", Api.getEnchName("Boom")));
 				if(chance == 1){
 					e.getEntity().getWorld().spawn(e.getEntity().getLocation(), TNTPrimed.class);
-					arrow1.remove(e.getEntity());
-					e.getEntity().remove();
-				}
-			}
-		}
-		if(arrow2.contains(e.getEntity())){
-			Random number = new Random();
-			int chance;
-			for(int counter = 1; counter<=1; counter++){
-				chance = 1 + number.nextInt(5);
-				if(chance == 1){
-					e.getEntity().getWorld().spawn(e.getEntity().getLocation(), TNTPrimed.class);
-					arrow2.remove(e.getEntity());
-					e.getEntity().remove();
-				}
-			}
-		}
-		if(arrow3.contains(e.getEntity())){
-			Random number = new Random();
-			int chance;
-			for(int counter = 1; counter<=1; counter++){
-				chance = 1 + number.nextInt(3);
-				if(chance == 1){
-					e.getEntity().getWorld().spawn(e.getEntity().getLocation(), TNTPrimed.class);
-					arrow3.remove(e.getEntity());
+					Arrow.remove(e.getEntity());
 					e.getEntity().remove();
 				}
 			}

@@ -21,16 +21,8 @@ public class AntiGravity implements Listener{
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7AntiGravity I"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 4));
-					return;
-				}
-				if(lore.equals(Api.color("&7AntiGravity II"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 7));
-					return;
-				}
-				if(lore.equals(Api.color("&7AntiGravity III"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 10));
+				if(lore.contains(Api.getEnchName("AntiGravity"))){
+					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 3+Api.getPower(lore, Api.getEnchName("AntiGravity"))));
 					return;
 				}
 			}
@@ -38,15 +30,7 @@ public class AntiGravity implements Listener{
 		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
 			if(!OldItem.getItemMeta().hasLore())return;
 			for(String lore : OldItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7AntiGravity I"))){
-					player.removePotionEffect(PotionEffectType.JUMP);
-					return;
-				}
-				if(lore.equals(Api.color("&7AntiGravity II"))){
-					player.removePotionEffect(PotionEffectType.JUMP);
-					return;
-				}
-				if(lore.equals(Api.color("&7AntiGravity III"))){
+				if(lore.contains(Api.getEnchName("AntiGravity"))){
 					player.removePotionEffect(PotionEffectType.JUMP);
 					return;
 				}

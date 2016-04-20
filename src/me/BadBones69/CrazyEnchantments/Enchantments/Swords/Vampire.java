@@ -20,47 +20,19 @@ public class Vampire implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!e.getEntity().isDead()){
 						if(!damager.getItemInHand().getItemMeta().hasLore())return;
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Vampire I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(1);
-								if(chance == 1){
-									if(damager.getHealth() + e.getDamage() /2 < damager.getMaxHealth()){
-										damager.setHealth(damager.getHealth() + e.getDamage() /2);
-									}
-									if(damager.getHealth() + e.getDamage() /2 >= damager.getMaxHealth()){
-										damager.setHealth(damager.getMaxHealth());
-									}
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Vampire II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(15);
-								if(chance == 1){
-									if(damager.getHealth() + e.getDamage() /2 < damager.getMaxHealth()){
-										damager.setHealth(damager.getHealth() + e.getDamage() /2);
-									}
-									if(damager.getHealth() + e.getDamage() /2 >= damager.getMaxHealth()){
-										damager.setHealth(damager.getMaxHealth());
-									}
-								}
-							}
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Vampire III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									if(damager.getHealth() + e.getDamage() /2 < damager.getMaxHealth()){
-										damager.setHealth(damager.getHealth() + e.getDamage() /2);
-									}
-									if(damager.getHealth() + e.getDamage() /2 >= damager.getMaxHealth()){
-										damager.setHealth(damager.getMaxHealth());
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Vampire"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(20-Api.getPower(lore, Api.getEnchName("Vampire")));
+									if(chance == 1){
+										if(damager.getHealth() + e.getDamage() /2 < damager.getMaxHealth()){
+											damager.setHealth(damager.getHealth() + e.getDamage() /2);
+										}
+										if(damager.getHealth() + e.getDamage() /2 >= damager.getMaxHealth()){
+											damager.setHealth(damager.getMaxHealth());
+										}
 									}
 								}
 							}

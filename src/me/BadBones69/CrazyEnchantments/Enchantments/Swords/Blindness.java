@@ -21,14 +21,10 @@ public class Blindness implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!damager.getItemInHand().getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Blindness I"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3*20, 0));
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Blindness II"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 5*20, 0));
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7Blindness III"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 8*20, 0));
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("Blindness"))){
+								en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3*20, Api.getPower(lore, Api.getEnchName("Blindness"))-1));
+							}
 						}
 					}
 				}

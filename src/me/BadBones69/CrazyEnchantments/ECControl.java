@@ -13,32 +13,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ECControl implements Listener{
-	static String T1(){
+	static String Enchants(String cat){
 		ArrayList<String> enchants = new ArrayList<String>();
 		Random number = new Random();
-		String power = " I";
-		for(String i : Main.settings.getConfig().getStringList("Settings.T1.Enchantments")){
-			enchants.add(Api.getBookColor()+i+power);
-		}
-		String enchant = enchants.get(number.nextInt(enchants.size()));
-		return enchant;
-	}
-	static String T2(){
-		ArrayList<String> enchants = new ArrayList<String>();
-		Random number = new Random();
-		String power = " II";
-		for(String i : Main.settings.getConfig().getStringList("Settings.T2.Enchantments")){
-			enchants.add(Api.getBookColor()+i+power);
-		}
-		String enchant = enchants.get(number.nextInt(enchants.size()));
-		return enchant;
-	}
-	static String T3(){
-		ArrayList<String> enchants = new ArrayList<String>();
-		Random number = new Random();
-		String power = " III";
-		for(String i : Main.settings.getConfig().getStringList("Settings.T3.Enchantments")){
-			enchants.add(Api.getBookColor()+i+power);
+		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en+".Categories")){
+				if(cat.equalsIgnoreCase(C)){
+					String power = powerPicker(en);
+					enchants.add(Main.settings.getEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en+".Name")+" "+power);
+				}
+			}
 		}
 		String enchant = enchants.get(number.nextInt(enchants.size()));
 		return enchant;
@@ -104,56 +88,29 @@ public class ECControl implements Listener{
 			}
 		}
 	}
-	static ItemStack pickT1(){
-		Random number = new Random();
-		int chance;
-		for(int counter = 1; counter<=1; counter++){
-			chance = 1 + number.nextInt(100);
-			if(chance >= 1 && chance <= 20){
-				return Api.makeItem(Material.BOOK, 1, 0, T2(),
-						Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPickT2()+"% Success Chance")));
-			}
-		}
-		return Api.makeItem(Material.BOOK, 1, 0, T1(),
-				Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPickT1()+"% Success Chance")));
+	static ItemStack pick(int max, int min, String cat){
+		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat),
+				Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPick(max, min)+"% Success Chance")));
 	}
-	static ItemStack pickT2(){
-		Random number = new Random();
-		int chance;
-		for(int counter = 1; counter<=1; counter++){
-			chance = 1 + number.nextInt(100);
-			if(chance >= 1 && chance <= 20){
-				return Api.makeItem(Material.BOOK, 1, 0, T3(),
-						Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPickT3()+"% Success Chance")));
-			}
-		}
-		return Api.makeItem(Material.BOOK, 1, 0, T2(),
-				Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPickT2()+"% Success Chance")));
-	}
-	static ItemStack pickT3(){
-		Random number = new Random();
-		int chance;
-		for(int counter = 1; counter<=1; counter++){
-			chance = 1 + number.nextInt(100);
-			if(chance >= 1 && chance <= 5){
-				return Api.makeItem(Material.BOOK, 1, 0, T2(),
-						Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPickT2()+"% Success Chance")));
-			}
-		}
-		return Api.makeItem(Material.BOOK, 1, 0, T3(),
-				Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPickT3()+"% Success Chance")));
-	}
-	private static String percentPickT1(){
+	private static String percentPick(int max, int min){
 		Random i = new Random();
-		return Integer.toString(40+i.nextInt(50));
+		return Integer.toString(min+i.nextInt(max-min));
 	}
-	private static String percentPickT2(){
-		Random i = new Random();
-		return Integer.toString(30+i.nextInt(30));
-	}
-	private static String percentPickT3(){
-		Random i = new Random();
-		return Integer.toString(10+i.nextInt(35));
+	private static String powerPicker(String en){
+		Random r = new Random();
+		int i = 1+r.nextInt(Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower"));
+		if(i==0)return "I";
+		if(i==1)return "I";
+		if(i==2)return "II";
+		if(i==3)return "III";
+		if(i==4)return "IV";
+		if(i==5)return "V";
+		if(i==6)return "VI";
+		if(i==7)return "VII";
+		if(i==8)return "VII";
+		if(i==9)return "IX";
+		if(i==10)return "X";
+		return i+"";
 	}
 	public static ArrayList<Material> isArmor(){
 		ArrayList<Material> ma = new ArrayList<Material>();

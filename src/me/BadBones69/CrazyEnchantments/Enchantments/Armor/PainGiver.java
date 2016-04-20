@@ -24,33 +24,15 @@ public class PainGiver implements Listener{
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
-						if(armor.getItemMeta().getLore().contains(Api.color("&7PainGiver I"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5*20, 1));
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7PainGiver II"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 6*20, 2));
-								}
-							}
-						}
-						if(armor.getItemMeta().getLore().contains(Api.color("&7PainGiver III"))){
-							Random number = new Random();
-							int chance;
-							for(int counter = 1; counter<=1; counter++){
-								chance = 1 + number.nextInt(10);
-								if(chance == 1){
-									en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 8*20, 3));
+						for(String lore : armor.getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("PainGiver"))){
+								Random number = new Random();
+								int chance;
+								for(int counter = 1; counter<=1; counter++){
+									chance = 1 + number.nextInt(10);
+									if(chance == 1){
+										en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5*20, Api.getPower(lore, Api.getEnchName("PainGiver"))));
+									}
 								}
 							}
 						}

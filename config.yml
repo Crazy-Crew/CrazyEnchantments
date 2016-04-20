@@ -1,127 +1,44 @@
 Settings:
-  Prefix: '&8[&aCrazyEnchants&8]: '
-  InvName: '&4&l&nCrazy Enchanter'
-  BookNameColor: '&b&l&n'
-  BlackScroll:
-    Item: '339'
-    Name: '&8&l&nThe Black Scroll'
-  T1:
-    GUIName: '&c&l&nTier 1'
-    GUILore:
+  Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
+  InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
+  GUISize: 9 #The size of the GUI, Must be a factor of 9
+  BlackScroll: #Settings for the Black Scrolls
+    Item: '339' #The item the Black Scroll can be
+    Name: '&8&l&nThe Black Scroll' #The name of the Black Scroll
+Categories: #You can make as many different categories as you want
+  T1: #Name of the category
+    Name: '&c&l&nTier 1' #Name in the GUI
+    Slot: 3 #The Slot number the item will be in
+    Lore: #The lore of the Item
       - '&eCost: &6&l20 XP'
-    Item: '266'
-    XP: 20
-    Enchantments:
-      - 'Glowing'
-      - 'BurnShield'
-      - 'Piercing'
-      - 'SelfDestruct'
-      - 'Springs'
-      - 'Gears'
-      - 'Hulk'
-      - 'Mermaid'
-      - 'Ninja'
-      - 'Vampire'
-      - 'LifeSteal'
-      - 'Doctor'
-      - 'Boom'
-      - 'Venom'
-      - 'DoubleDamage'
-      - 'SlowMo'
-      - 'Blindness'
-      - 'Viper'
-      - 'AntiGravity'
-      - 'FastTurn'
-      - 'LightWeight'
-      - 'Blessed'
-      - 'FeedMe'
-      - 'Dizzy'
-      - 'Berserk'
-      - 'Cursed'
-      - 'Rekt'
-      - 'Enlightened'
-      - 'Freeze'
-      - 'Fortify'
-      - 'Molten'
-      - 'PainGiver'
-      - 'Savior'
-      - 'Nursery'
+    Item: '266' #The id for the item
+    Lvl/Total: Lvl #You can choose Lvl or Total, Lvl uses XP lvls and Total uses the total XP the player has
+    XP: 20 #How much the Books cost
+    EnchOptions: #Enchantment Options
+      SuccessPercent: #The range for the success rate that the enchantment will have
+        Max: 90 #The max success rate
+        Min: 40 #The min success rate
   T2:
-    GUIName: '&c&l&nTier 2'
-    GUILore:
+    Name: '&c&l&nTier 2'
+    Slot: 5
+    Lore:
       - '&eCost: &6&l40 XP'
     Item: '264'
+    Lvl/Total: Lvl
     XP: 40
-    Enchantments:
-      - 'OverLoad'
-      - 'Piercing'
-      - 'Springs'
-      - 'Gears'
-      - 'Hulk'
-      - 'Ninja'
-      - 'Vampire'
-      - 'LifeSteal'
-      - 'Doctor'
-      - 'Boom'
-      - 'Venom'
-      - 'DoubleDamage'
-      - 'SlowMo'
-      - 'Blindness'
-      - 'Viper'
-      - 'AntiGravity'
-      - 'FastTurn'
-      - 'LightWeight'
-      - 'Blessed'
-      - 'FeedMe'
-      - 'Dizzy'
-      - 'Berserk'
-      - 'Cursed'
-      - 'Rekt'
-      - 'Enlightened'
-      - 'Freeze'
-      - 'Fortify'
-      - 'Molten'
-      - 'PainGiver'
-      - 'Savior'
-      - 'Nursery'
+    EnchOptions:
+      SuccessPercent:
+        Max: 70
+        Min: 35
   T3:
-    GUIName: '&c&l&nTier 3'
-    GUILore:
+    Name: '&c&l&nTier 3'
+    Slot: 7
+    Lore:
       - '&eCost: &6&l60 XP'
     Item: '388'
+    Lvl/Total: Lvl
     XP: 60
-    Enchantments:
-      - 'OverLoad'
-      - 'Piercing'
-      - 'Springs'
-      - 'Gears'
-      - 'Hulk'
-      - 'Ninja'
-      - 'Vampire'
-      - 'LifeSteal'
-      - 'Doctor'
-      - 'Boom'
-      - 'Venom'
-      - 'DoubleDamage'
-      - 'SlowMo'
-      - 'Blindness'
-      - 'Viper'
-      - 'AntiGravity'
-      - 'FastTurn'
-      - 'LightWeight'
-      - 'Blessed'
-      - 'FeedMe'
-      - 'Dizzy'
-      - 'Berserk'
-      - 'Cursed'
-      - 'Rekt'
-      - 'Enlightened'
-      - 'Freeze'
-      - 'Fortify'
-      - 'Molten'
-      - 'PainGiver'
-      - 'Savior'
-      - 'Nursery'
-  Info:
-    GUIName: '&b&l&nInfo'
-    Item: '131'
+    EnchOptions:
+      SuccessPercent:
+        Max: 50
+        Min: 25

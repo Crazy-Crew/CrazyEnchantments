@@ -21,14 +21,10 @@ public class SlowMo implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!damager.getItemInHand().getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7SlowMo I"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 1));
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7SlowMo II"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 8*20, 2));
-						}
-						if(damager.getItemInHand().getItemMeta().getLore().contains(Api.color("&7SlowMo III"))){
-							en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 11*20, 3));
+						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+							if(lore.contains(Api.getEnchName("SlowMo"))){
+								en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, Api.getPower(lore, Api.getEnchName("SlowMo"))));
+							}
 						}
 					}
 				}

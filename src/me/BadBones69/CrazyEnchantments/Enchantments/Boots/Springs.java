@@ -21,16 +21,8 @@ public class Springs implements Listener{
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7Springs I"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 0));
-					return;
-				}
-				if(lore.equals(Api.color("&7Springs II"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 1));
-					return;
-				}
-				if(lore.equals(Api.color("&7Springs III"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 2));
+				if(lore.contains(Api.getEnchName("Springs"))){
+					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, Api.getPower(lore, Api.getEnchName("Springs"))-1));
 					return;
 				}
 			}
@@ -38,15 +30,7 @@ public class Springs implements Listener{
 		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
 			if(!OldItem.getItemMeta().hasLore())return;
 			for(String lore : OldItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7Springs I"))){
-					player.removePotionEffect(PotionEffectType.JUMP);
-					return;
-				}
-				if(lore.equals(Api.color("&7Springs II"))){
-					player.removePotionEffect(PotionEffectType.JUMP);
-					return;
-				}
-				if(lore.equals(Api.color("&7Springs III"))){
+				if(lore.contains(Api.getEnchName("Springs"))){
 					player.removePotionEffect(PotionEffectType.JUMP);
 					return;
 				}

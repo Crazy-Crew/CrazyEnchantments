@@ -21,8 +21,8 @@ public class Glowing implements Listener{
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7Glowing I"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 55555*20, 0));
+				if(lore.contains(Api.getEnchName("Glowing"))){
+					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 55555*20, Api.getPower(lore, Api.getEnchName("Glowing"))-1));
 					return;
 				}
 			}
@@ -30,7 +30,7 @@ public class Glowing implements Listener{
 		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
 			if(!OldItem.getItemMeta().hasLore())return;
 			for(String lore : OldItem.getItemMeta().getLore()){
-				if(lore.equals(Api.color("&7Glowing I"))){
+				if(lore.contains(Api.getEnchName("Glowing"))){
 					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 					return;
 				}
