@@ -21,6 +21,38 @@ public class GUI implements Listener{
 			inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
 					Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
 		}
+		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
+			for(String custom : Main.settings.getConfig().getStringList("Settings.GUICustomization")){
+				String name = "";
+				String item = "1";
+				int slot = 0;
+				ArrayList<String> lore = new ArrayList<String>();
+				String[] b = custom.split(", ");
+				for(String i : b){
+					if(i.contains("Item:")){
+						i=i.replace("Item:", "");
+						item=i;
+					}
+					if(i.contains("Name:")){
+						i=i.replace("Name:", "");
+						name=i;
+					}
+					if(i.contains("Slot:")){
+						i=i.replace("Slot:", "");
+						slot=Integer.parseInt(i);
+					}
+					if(i.contains("Lore:")){
+						i=i.replace("Lore:", "");
+						String[] d = i.split("_");
+						for(String l : d){
+							lore.add(l);
+						}
+					}
+				}
+				slot--;
+				inv.setItem(slot, Api.makeItem(item, 1, name, lore));
+			}
+		}
 		player.openInventory(inv);
 	}
 	void openInfo(Player player){
@@ -46,20 +78,23 @@ public class GUI implements Listener{
 								if(player.getGameMode() != GameMode.CREATIVE){
 									if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
 										if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".XP")){
-											player.sendMessage(Api.color("&cYou need &6" + Integer.toString(Main.settings.getConfig().getInt("Categories."+cat+".XP") - Api.getXPLvl(player)) + " &cmore XP Lvls."));
+											String xp = Main.settings.getConfig().getInt("Categories."+cat+".XP") - Api.getXPLvl(player)+"";
+											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 											return;
 										}
 										Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
 									}
 									if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
 										if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".XP")){
-											player.sendMessage(Api.color("&cYou need &6" + Integer.toString(Main.settings.getConfig().getInt("Categories."+cat+".XP") - player.getTotalExperience()) + " &cmore Total XP."));
+											String xp = Main.settings.getConfig().getInt("Categories."+cat+".XP") - player.getTotalExperience()+"";
+											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 											return;
 										}
 										Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
 									}
 								}
-								player.getInventory().addItem(ECControl.pick(Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max"), Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min"), cat));
+								player.getInventory().addItem(ECControl.pick(Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max"),
+										Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min"), cat));
 								return;
 							}
 						}
@@ -119,7 +154,17 @@ public class GUI implements Listener{
 			}
 		}
 	}
-	ArrayList<ItemStack> addInfo(){
+	@EventHandler
+	public void infoClick(InventoryClickEvent e){
+		Inventory inv = e.getInventory();
+		if(inv!=null){
+			if(inv.getName().equals(Api.color("&6&lEnchantment Info"))){
+				e.setCancelled(true);
+				return;
+			}
+		}
+	}
+	public static ArrayList<ItemStack> addInfo(){
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> swords = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> axes = new ArrayList<ItemStack>();
@@ -154,7 +199,8 @@ public class GUI implements Listener{
 		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lNinja", Arrays.asList("&c&lArmor Only", "&3Will give you Speed and Health Boost", "&3Once you put the Armor on")));
 		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lMolten", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Ignight your attacker")));
 		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lSavior", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Take less incoming damage at low health")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lFreezen", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Slow your attacker")));
+		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lFreeze", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Slow your attacker")));
+		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lNursery", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Heal you while you walk.")));
 		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lFortify", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Give your attaker Weakness")));
 		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lOverLoad", Arrays.asList("&c&lArmor Only", "&3Will give you Health Boost", "&3Once you put the Armor on")));
 		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lPain Giver", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Give your attacker Poison")));

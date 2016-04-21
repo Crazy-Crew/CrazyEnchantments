@@ -1,7 +1,6 @@
 package me.BadBones69.CrazyEnchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -129,11 +128,6 @@ public class Api{
 	static String percentPicker(){
 		Random i = new Random();
 		return Integer.toString(i.nextInt(100));
-	}
-	static ItemStack setBook(String type){
-		String name = removeColor(type);
-		name = color(Main.settings.getConfig().getString("Settings.BookNameColor")+name);
-		return makeItem(Material.BOOK, 1, 0, name, addDiscription(), Arrays.asList(color("&a" + percentPicker() + "% Success Chance")));
 	}
 	static ItemStack BlackScroll(int i){
 		String name = color(Main.settings.getConfig().getString("Settings.BlackScroll.Name"));

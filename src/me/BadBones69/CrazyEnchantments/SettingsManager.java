@@ -27,6 +27,9 @@ public class SettingsManager {
 
 	FileConfiguration enchs;
 	File efile;
+	
+	FileConfiguration msg;
+	File mfile;
 
 	public void setup(Plugin p) {
 		cfile = new File(p.getDataFolder(), "config.yml");
@@ -47,10 +50,25 @@ public class SettingsManager {
          	}
 		}
 		enchs = YamlConfiguration.loadConfiguration(efile);
+		
+		mfile = new File(p.getDataFolder(), "Messages.yml");
+		if (!mfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/Messages.yml");
+         		InputStream E = getClass().getResourceAsStream("/Messages.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		msg = YamlConfiguration.loadConfiguration(mfile);
 	}
 
 	public FileConfiguration getEnchs() {
 		return enchs;
+	}
+	public FileConfiguration getMsg() {
+		return msg;
 	}
 	public void saveEnchs() {
 		try {
@@ -59,6 +77,17 @@ public class SettingsManager {
 			Bukkit.getServer().getLogger()
 					.severe(ChatColor.RED + "Could not save Enchantments.yml!");
 		}
+	}
+	public void saveMsg() {
+		try {
+			msg.save(mfile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save Messages.yml!");
+		}
+	}
+	public void reloadMsg() {
+		msg = YamlConfiguration.loadConfiguration(mfile);
 	}
 	public void reloadEnchs() {
 		enchs = YamlConfiguration.loadConfiguration(efile);

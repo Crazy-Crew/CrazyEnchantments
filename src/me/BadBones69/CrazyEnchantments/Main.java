@@ -41,6 +41,8 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.thederpygolems.armorequip.ArmorListener;
@@ -56,7 +58,7 @@ public class Main extends JavaPlugin{
 		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(null), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new BS(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OverLoad(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Glowing(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new BurnShield(), this);
@@ -105,6 +107,7 @@ public class Main extends JavaPlugin{
 					sender.sendMessage(Api.color("&2&l&nCrazy Enchantments"));
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Api.color("&b/CE Help - &9Shows all CE Commands."));
+					sender.sendMessage(Api.color("&b/CE Info - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE BlackScroll <Player> <Amount> - &9Gives a player Black Scrolls."));
@@ -114,7 +117,22 @@ public class Main extends JavaPlugin{
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Reload"))return true;
 					settings.reloadConfig();
 					settings.reloadEnchs();
-					sender.sendMessage(Api.getPrefix()+Api.color("&3You have just reloaded the Config.yml"));
+					settings.reloadMsg();
+					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
+					return true;
+				}
+				if(args[0].equalsIgnoreCase("Info")){
+					if(!(sender instanceof Player)){
+						sender.sendMessage(Api.color("&cYou need to be a Player to use this command."));
+						return true;
+					}
+					Player player = (Player)sender;
+					if(!Api.permCheck(player, "Info"))return true;
+					Inventory inv = Bukkit.createInventory(null, 54, Api.color("&6&lEnchantment Info"));
+					for(ItemStack i : GUI.addInfo()){
+						inv.addItem(i);
+					}
+					player.openInventory(inv);
 					return true;
 				}
 			}
@@ -139,7 +157,7 @@ public class Main extends JavaPlugin{
 						}
 					}
 					if(!T){
-						sender.sendMessage(Api.getPrefix()+Api.color("&cThat is not an enchantment"));
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
 					String lvl = args[2];

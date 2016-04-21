@@ -19,7 +19,7 @@ public class ECControl implements Listener{
 		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
 			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en+".Categories")){
 				if(cat.equalsIgnoreCase(C)){
-					String power = powerPicker(en);
+					String power = powerPicker(en, cat);
 					enchants.add(Main.settings.getEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en+".Name")+" "+power);
 				}
 			}
@@ -81,7 +81,7 @@ public class ECControl implements Listener{
 				if(item.getItemMeta().hasDisplayName()){
 					for(String i : allEnchantments().keySet()){
 						if(item.getItemMeta().getDisplayName().contains(i)){
-							player.sendMessage(Api.getPrefix()+Api.color("&7The &bSuccess Chance &7is the chance the enchantment will successfully be added to your item."));
+							player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Right-Click-Book")));
 						}
 					}
 				}
@@ -92,13 +92,28 @@ public class ECControl implements Listener{
 		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat),
 				Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPick(max, min)+"% Success Chance")));
 	}
-	private static String percentPick(int max, int min){
+	static String percentPick(int max, int min){
 		Random i = new Random();
 		return Integer.toString(min+i.nextInt(max-min));
 	}
-	private static String powerPicker(String en){
+	static String powerPicker(String en, String C){
 		Random r = new Random();
-		int i = 1+r.nextInt(Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower"));
+		int ench = Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower"); //Max set by the enchantment
+		int cat = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.MaxLvl"); //Max set by the Category
+		int i = 1+r.nextInt(ench);
+		if(Main.settings.getConfig().contains("Categories."+C+".EnchOptions.MaxLvlToggle")){
+			if(Main.settings.getConfig().getBoolean("Categories."+C+".EnchOptions.MaxLvlToggle")){
+				if(i>cat){
+					for(Boolean l=false;l==false;){
+						i=1+r.nextInt(ench);
+						if(i<=cat){
+							l=true;
+							break;
+						}
+					}
+				}
+			}
+		}
 		if(i==0)return "I";
 		if(i==1)return "I";
 		if(i==2)return "II";

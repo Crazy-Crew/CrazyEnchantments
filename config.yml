@@ -1,14 +1,38 @@
 Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
-  GUISize: 9 #The size of the GUI, Must be a factor of 9
+  GUISize: 27 #The size of the GUI, Must be a factor of 9
   BlackScroll: #Settings for the Black Scrolls
-    Item: '339' #The item the Black Scroll can be
-    Name: '&8&l&nThe Black Scroll' #The name of the Black Scroll
+    Item: '351' #The item the Black Scroll can be
+    Name: '&8&l&nBlack Scroll' #The name of the Black Scroll
+    SuccessChance: #Controls what the success chance will be when they get the book from the Black Scroll
+      Max: 75 #The Max percent
+      Min: 35 #The Minimum percent
+  GUICustomization: #This allows you to customize unclickable items into you GUI.
+    - 'Slot:1, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:2, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:3, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:4, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:5, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:6, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:7, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:8, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:9, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:10, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:18, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:19, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:20, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:21, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:22, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:23, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:24, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:25, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:26, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:27, Item:160:0, Name: , Lore:&7Border'
 Categories: #You can make as many different categories as you want
   T1: #Name of the category
     Name: '&c&l&nTier 1' #Name in the GUI
-    Slot: 3 #The Slot number the item will be in
+    Slot: 12 #The Slot number the item will be in
     Lore: #The lore of the Item
       - '&eCost: &6&l20 XP'
     Item: '266' #The id for the item
@@ -18,9 +42,11 @@ Categories: #You can make as many different categories as you want
       SuccessPercent: #The range for the success rate that the enchantment will have
         Max: 90 #The max success rate
         Min: 40 #The min success rate
+      MaxLvlToggle: True #Turn on and off Max Level cap
+      MaxLvl: 2 #The max level that a book can be. Example: Freeze II is the highest that can come out.
   T2:
     Name: '&c&l&nTier 2'
-    Slot: 5
+    Slot: 14
     Lore:
       - '&eCost: &6&l40 XP'
     Item: '264'
@@ -30,9 +56,11 @@ Categories: #You can make as many different categories as you want
       SuccessPercent:
         Max: 70
         Min: 35
+      MaxLvlToggle: True
+      MaxLvl: 3
   T3:
     Name: '&c&l&nTier 3'
-    Slot: 7
+    Slot: 16
     Lore:
       - '&eCost: &6&l60 XP'
     Item: '388'
@@ -42,3 +70,5 @@ Categories: #You can make as many different categories as you want
       SuccessPercent:
         Max: 50
         Min: 25
+      MaxLvlToggle: True
+      MaxLvl: 5
