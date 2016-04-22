@@ -16,7 +16,9 @@ public class Boom implements Listener{
 	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
+		if(!Api.allowsPVP(e.getEntity()))return;
 		if (e.getBow().hasItemMeta()) {
+			if(!e.getBow().getItemMeta().hasLore())return;
 			for(String lore : e.getBow().getItemMeta().getLore()){
 				if(lore.contains(Api.getEnchName("Boom"))){
 					Arrow.put((Projectile) e.getProjectile(), Api.getPower(lore, Api.getEnchName("Boom")));
@@ -26,6 +28,7 @@ public class Boom implements Listener{
 	}
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
+		if(!Api.allowsPVP(e.getEntity()))return;
 		if(Arrow.containsKey(e.getEntity())){
 			Random number = new Random();
 			int chance;

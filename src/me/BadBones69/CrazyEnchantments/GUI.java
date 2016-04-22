@@ -67,9 +67,10 @@ public class GUI implements Listener{
 		ItemStack item = e.getCurrentItem();
 		Inventory inv = e.getInventory();
 		Player player = (Player) e.getWhoClicked();
-		if(inv != null){
+		if(inv!=null){
 			if(inv.getName().equals(Api.getInvName())){
 				e.setCancelled(true);
+				if(item==null)return;
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
 						String name = item.getItemMeta().getDisplayName();

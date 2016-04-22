@@ -54,7 +54,11 @@ public class Api{
 	}
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(en.getLocation());
+			int x = en.getLocation().getBlockX();
+			int y = en.getLocation().getBlockY();
+			int z = en.getLocation().getBlockZ();
+			Location loc = new Location(en.getWorld(),x,y,z);
+			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
 			if (set.queryState(null, DefaultFlag.PVP)==StateFlag.State.DENY)return false;
 		}
 		return true;

@@ -99,18 +99,22 @@ public class ECControl implements Listener{
 	static String powerPicker(String en, String C){
 		Random r = new Random();
 		int ench = Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower"); //Max set by the enchantment
-		int cat = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.MaxLvl"); //Max set by the Category
+		int max = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
+		int min = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
 		int i = 1+r.nextInt(ench);
 		if(Main.settings.getConfig().contains("Categories."+C+".EnchOptions.MaxLvlToggle")){
 			if(Main.settings.getConfig().getBoolean("Categories."+C+".EnchOptions.MaxLvlToggle")){
-				if(i>cat){
+				if(i>max){
 					for(Boolean l=false;l==false;){
 						i=1+r.nextInt(ench);
-						if(i<=cat){
+						if(i<=max){
 							l=true;
 							break;
 						}
 					}
+				}
+				if(i<min){
+					i=min;
 				}
 			}
 		}

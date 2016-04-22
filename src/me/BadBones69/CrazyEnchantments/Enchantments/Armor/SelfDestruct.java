@@ -13,6 +13,7 @@ public class SelfDestruct implements Listener{
 	@EventHandler
  	public void onDeath(PlayerDeathEvent e){
 		Player player = e.getEntity();
+		if(!Api.allowsPVP(player))return;
 		for(ItemStack item : player.getEquipment().getArmorContents()){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){

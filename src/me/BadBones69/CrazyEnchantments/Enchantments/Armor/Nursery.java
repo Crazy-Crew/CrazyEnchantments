@@ -17,9 +17,9 @@ public class Nursery implements Listener{
 		int X = e.getFrom().getBlockX();
 		int Y = e.getFrom().getBlockY();
 		int Z = e.getFrom().getBlockZ();
-		int x = player.getLocation().getBlockX();
-		int y = player.getLocation().getBlockY();
-		int z = player.getLocation().getBlockZ();
+		int x = e.getTo().getBlockX();
+		int y = e.getTo().getBlockY();
+		int z = e.getTo().getBlockZ();
 		if(x!=X||y!=Y|z!=Z){
 			for(ItemStack i : player.getEquipment().getArmorContents()){
 				if(i!=null){

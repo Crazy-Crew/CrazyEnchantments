@@ -21,6 +21,7 @@ public class Dizzy implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!damager.getItemInHand().getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
+						if(!Api.allowsPVP(e.getEntity()))return;
 						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("Dizzy"))){
 								en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, Api.getPower(lore, Api.getEnchName("Dizzy"))+9*20, 0));

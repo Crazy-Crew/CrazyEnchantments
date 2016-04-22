@@ -21,6 +21,7 @@ public class Rekt implements Listener{
 				if(damager.getItemInHand().hasItemMeta()){
 					if(!damager.getItemInHand().getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
+						if(!Api.allowsPVP(e.getEntity()))return;
 						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("Rekt"))){
 								Random number = new Random();

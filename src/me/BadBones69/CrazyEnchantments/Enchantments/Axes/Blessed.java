@@ -24,6 +24,7 @@ public class Blessed implements Listener{
 						return;
 					}
 					if(!e.getEntity().isDead()){
+						if(!Api.allowsPVP(e.getEntity()))return;
 						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("Blessed"))){
 								Random number = new Random();

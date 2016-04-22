@@ -43,7 +43,9 @@ Categories: #You can make as many different categories as you want
         Max: 90 #The max success rate
         Min: 40 #The min success rate
       MaxLvlToggle: True #Turn on and off Max Level cap
-      MaxLvl: 2 #The max level that a book can be. Example: Freeze II is the highest that can come out.
+      LvlRange: #The range of lvls that can be found in the Category.
+        Max: 2
+        Min: 1
   T2:
     Name: '&c&l&nTier 2'
     Slot: 14
@@ -57,7 +59,9 @@ Categories: #You can make as many different categories as you want
         Max: 70
         Min: 35
       MaxLvlToggle: True
-      MaxLvl: 3
+      LvlRange:
+        Max: 3
+        Min: 2
   T3:
     Name: '&c&l&nTier 3'
     Slot: 16
@@ -71,4 +75,6 @@ Categories: #You can make as many different categories as you want
         Max: 50
         Min: 25
       MaxLvlToggle: True
-      MaxLvl: 5
+      LvlRange:
+        Max: 5
+        Min: 3

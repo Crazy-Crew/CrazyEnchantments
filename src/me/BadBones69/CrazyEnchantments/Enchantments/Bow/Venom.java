@@ -18,6 +18,7 @@ public class Venom implements Listener{
 	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
+		if(!Api.allowsPVP(e.getEntity()))return;
 		if (e.getBow().hasItemMeta()){
 			if(e.getBow().getItemMeta().hasLore()){
 				for(String lore : e.getBow().getItemMeta().getLore()){
@@ -34,7 +35,8 @@ public class Venom implements Listener{
 			LivingEntity en = (LivingEntity) e.getEntity();
 			Projectile arrow = (Projectile) e.getDamager();
 			if(Arrow.containsKey(arrow)){
-				en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Venom"))+5*20, 1));
+				if(!Api.allowsPVP(e.getEntity()))return;
+				en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Venom"))+2*20, 1));
 			}
 		}
 		return;
