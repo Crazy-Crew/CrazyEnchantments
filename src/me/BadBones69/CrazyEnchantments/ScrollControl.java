@@ -61,7 +61,12 @@ public class ScrollControl implements Listener{
 		}
 	}
 	ItemStack makeEnchantBook(int max, int min, String ench, String power){
-		ench=Main.settings.getEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+ench+".Name")+" "+power;
+		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
+			ench=Main.settings.getEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+ench+".Name")+" "+power;
+		}
+		if(Main.settings.getCustomEnchs().contains("Enchantments."+ench)){
+			ench=Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name")+" "+power;
+		}
 		return Api.makeItem(Material.BOOK, 1, 0, ench,
 				Api.addDiscription(), Arrays.asList(Api.color("&a"+ECControl.percentPick(max, min)+"% Success Chance")));
 	}

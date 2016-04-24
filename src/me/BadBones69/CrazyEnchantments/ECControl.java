@@ -24,6 +24,14 @@ public class ECControl implements Listener{
 				}
 			}
 		}
+		for(String en : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+			for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Categories")){
+				if(cat.equalsIgnoreCase(C)){
+					String power = powerPicker(en, cat);
+					enchants.add(Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+en+".Name")+" "+power);
+				}
+			}
+		}
 		String enchant = enchants.get(number.nextInt(enchants.size()));
 		return enchant;
 	}
@@ -70,6 +78,17 @@ public class ECControl implements Listener{
 		en.put("Gears", isBoots());
 		en.put("Springs", isBoots());
 		en.put("AntiGravity", isBoots());
+		//---------Custom--------//
+		for(String ench : CustomEnchantments.getEnchantments()){
+			String type = Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable");
+			if(type.equalsIgnoreCase("Armor"))en.put(ench, isArmor());
+			if(type.equalsIgnoreCase("Helmets"))en.put(ench, isHelmet());
+			if(type.equalsIgnoreCase("Boots"))en.put(ench, isBoots());
+			if(type.equalsIgnoreCase("Swords"))en.put(ench, isSword());
+			if(type.equalsIgnoreCase("Axes"))en.put(ench, isAxe());
+			if(type.equalsIgnoreCase("Weapons"))en.put(ench, isWeapon());
+			if(type.equalsIgnoreCase("Bows"))en.put(ench, isBow());
+		}
 		return en;
 	}
 	@EventHandler
@@ -98,7 +117,13 @@ public class ECControl implements Listener{
 	}
 	static String powerPicker(String en, String C){
 		Random r = new Random();
-		int ench = Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower"); //Max set by the enchantment
+		int ench = 5; //Max set by the enchantment
+		if(Main.settings.getEnchs().contains("Enchantments."+en)){
+			ench=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
+		}
+		if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
+		}
 		int max = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
 		int min = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
 		int i = 1+r.nextInt(ench);
@@ -192,6 +217,18 @@ public class ECControl implements Listener{
 		ma.add(Material.STONE_SWORD);
 		ma.add(Material.IRON_SWORD);
 		ma.add(Material.DIAMOND_SWORD);
+		return ma;
+	}
+	public static ArrayList<Material> isWeapon(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.add(Material.WOOD_SWORD);
+		ma.add(Material.STONE_SWORD);
+		ma.add(Material.IRON_SWORD);
+		ma.add(Material.DIAMOND_SWORD);
+		ma.add(Material.WOOD_AXE);
+		ma.add(Material.STONE_AXE);
+		ma.add(Material.IRON_AXE);
+		ma.add(Material.DIAMOND_AXE);
 		return ma;
 	}
 }

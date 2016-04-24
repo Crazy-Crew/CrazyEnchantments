@@ -34,8 +34,32 @@ public class Api{
 		msg = ChatColor.stripColor(msg);
 		return msg;
 	}
+	public static Integer getVersion(){
+		String ver = Bukkit.getServer().getClass().getPackage().getName();
+		ver = ver.substring(ver.lastIndexOf('.')+1);
+		ver=ver.replaceAll("_", "").replaceAll("R", "").replaceAll("v", "");
+		ver=ver.substring(0, ver.length()-1);
+		return Integer.parseInt(ver);
+	}
+	@SuppressWarnings("deprecation")
+	public static ItemStack getItemInHand(Player player){
+		if(Api.getVersion()==19){
+			return player.getInventory().getItemInMainHand();
+		}else{
+			return player.getItemInHand();
+		}
+	}
+	@SuppressWarnings("deprecation")
+	public static void setItemInHand(Player player, ItemStack item){
+		if(Api.getVersion()==19){
+			player.getInventory().setItemInMainHand(item);
+		}else{
+			player.setItemInHand(item);
+		}
+	}
 	public static int getPower(String line, String ench){
 		line = line.replace(ench+" ", "");
+		line = removeColor(line);
 		if(Api.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
 		if(line.equalsIgnoreCase("II"))return 2;
@@ -49,8 +73,42 @@ public class Api{
 		if(line.equalsIgnoreCase("X"))return 10;
 		return 1;
 	}
+	public static ArrayList<String> getPotions(){
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("ABSORPTION");
+		list.add("BLINDNESS");
+		list.add("CONFUSION");
+		list.add("DAMAGE_RESISTANCE");
+		list.add("FAST_DIGGING");
+		list.add("FIRE_RESISTANCE");
+		list.add("GLOWING");
+		list.add("HARM");
+		list.add("HEAL");
+		list.add("HEALTH_BOOST");
+		list.add("HUNGER");
+		list.add("INCREASE_DAMAGE");
+		list.add("INVISIBILITY");
+		list.add("JUMP");
+		list.add("LEVITATION");
+		list.add("LUCK");
+		list.add("NIGHT_VISION");
+		list.add("POISON");
+		list.add("REGENERATION");
+		list.add("SATURATION");
+		list.add("SLOW");
+		list.add("SLOW_DIGGING");
+		list.add("SPEED");
+		list.add("UNLUCK");
+		list.add("WATER_BREATHING");
+		list.add("WEAKNESS");
+		list.add("WITHER");
+		return list;
+	}
 	public static String getEnchName(String ench){
-		return Main.settings.getEnchs().getString("Enchantments."+ench+".Name");
+		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
+			return Main.settings.getEnchs().getString("Enchantments."+ench+".Name");
+		}
+		return Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name");
 	}
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
@@ -60,6 +118,17 @@ public class Api{
 			Location loc = new Location(en.getWorld(),x,y,z);
 			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
 			if (set.queryState(null, DefaultFlag.PVP)==StateFlag.State.DENY)return false;
+		}
+		return true;
+	}
+	public static boolean allowsExplotions(Entity en){
+		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
+			int x = en.getLocation().getBlockX();
+			int y = en.getLocation().getBlockY();
+			int z = en.getLocation().getBlockZ();
+			Location loc = new Location(en.getWorld(),x,y,z);
+			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
+			if (set.queryState(null, DefaultFlag.OTHER_EXPLOSION)==StateFlag.State.DENY)return false;
 		}
 		return true;
 	}

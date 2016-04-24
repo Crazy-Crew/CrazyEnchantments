@@ -116,14 +116,14 @@ public class GUI implements Listener{
 				if(c.hasItemMeta()){
 					if(c.getItemMeta().hasDisplayName()){
 						String name = c.getItemMeta().getDisplayName();
-						for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-							if(name.contains(Main.settings.getEnchs().getString("Enchantments."+en+".Name"))){
+						for(String en : ECControl.allEnchantments().keySet()){
+							if(name.contains(Api.getEnchName(en))){
 								for(Material m : ECControl.allEnchantments().get(en)){
 									if(item.getType() == m){
 										if(c.getAmount() == 1){
 											if(item.getItemMeta().hasLore()){
 												for(String l:item.getItemMeta().getLore()){
-													if(l.contains(en)){
+													if(l.contains(Api.getEnchName(en))){
 														return;
 													}
 												}
@@ -132,17 +132,31 @@ public class GUI implements Listener{
 											if(Api.successChance(c) || player.getGameMode() == GameMode.CREATIVE){
 												name = Api.removeColor(name);
 												String[] breakdown = name.split(" ");
-												String color = Main.settings.getEnchs().getString("Enchantments."+en+".Color");
-												String enchantment = Main.settings.getEnchs().getString("Enchantments."+en+".Name");
+												String color = "&7";
+												if(Main.settings.getEnchs().contains("Enchantments."+en)){
+													color=Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+												}
+												if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+													color=Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
+												}
+												String enchantment = Api.getEnchName(en);
 												String lvl = breakdown[1];
 												String full = Api.color(color+enchantment+" "+lvl);
 												e.setCursor(new ItemStack(Material.AIR));
 												Api.addLore(item, full);
-												player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
+												if(Api.getVersion()==19){
+													player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
+												}else{
+													player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
+												}
 												return;
 											}else{
 												e.setCursor(new ItemStack(Material.AIR));
-												player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1, 1);
+												if(Api.getVersion()==19){
+													player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+												}else{
+													player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+												}
 												return;
 											}
 										}

@@ -30,6 +30,9 @@ public class SettingsManager {
 	
 	FileConfiguration msg;
 	File mfile;
+	
+	FileConfiguration cenchs;
+	File cefile;
 
 	public void setup(Plugin p) {
 		cfile = new File(p.getDataFolder(), "config.yml");
@@ -62,13 +65,35 @@ public class SettingsManager {
          	}
 		}
 		msg = YamlConfiguration.loadConfiguration(mfile);
+		
+		cefile = new File(p.getDataFolder(), "CustomEnchantments.yml");
+		if (!cefile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/CustomEnchantments.yml");
+         		InputStream E = getClass().getResourceAsStream("/CustomEnchantments.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		cenchs = YamlConfiguration.loadConfiguration(cefile);
 	}
-
+	public FileConfiguration getCustomEnchs() {
+		return cenchs;
+	}
 	public FileConfiguration getEnchs() {
 		return enchs;
 	}
 	public FileConfiguration getMsg() {
 		return msg;
+	}
+	public void saveCustomEnchs() {
+		try {
+			cenchs.save(cefile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save CustomEnchantments.yml!");
+		}
 	}
 	public void saveEnchs() {
 		try {
@@ -88,6 +113,9 @@ public class SettingsManager {
 	}
 	public void reloadMsg() {
 		msg = YamlConfiguration.loadConfiguration(mfile);
+	}
+	public void reloadCustomEnchs() {
+		cenchs = YamlConfiguration.loadConfiguration(cefile);
 	}
 	public void reloadEnchs() {
 		enchs = YamlConfiguration.loadConfiguration(efile);

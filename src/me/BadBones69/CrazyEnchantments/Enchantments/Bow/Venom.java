@@ -31,11 +31,11 @@ public class Venom implements Listener{
 	}
 	@EventHandler
  	public void onArrowLand(EntityDamageByEntityEvent e){
+		if(!Api.allowsPVP(e.getEntity()))return;
 		if(e.getDamager() instanceof Arrow&&e.getEntity() instanceof LivingEntity){
 			LivingEntity en = (LivingEntity) e.getEntity();
 			Projectile arrow = (Projectile) e.getDamager();
 			if(Arrow.containsKey(arrow)){
-				if(!Api.allowsPVP(e.getEntity()))return;
 				en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Venom"))+2*20, 1));
 			}
 		}

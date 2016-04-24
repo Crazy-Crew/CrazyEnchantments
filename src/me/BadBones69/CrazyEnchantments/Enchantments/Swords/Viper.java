@@ -22,10 +22,10 @@ public class Viper implements Listener{
 			if(e.getDamager() instanceof Player){
 				Player damager = (Player) e.getDamager();
 				LivingEntity en = (LivingEntity) e.getEntity();
-				if(damager.getItemInHand().hasItemMeta()){
-					if(!damager.getItemInHand().getItemMeta().hasLore())return;
+				if(Api.getItemInHand(damager).hasItemMeta()){
+					if(!Api.getItemInHand(damager).getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
-						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+						for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("Viper"))){
 								Random number = new Random();
 								int chance;

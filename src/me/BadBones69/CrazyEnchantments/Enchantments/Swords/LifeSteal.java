@@ -19,10 +19,10 @@ public class LifeSteal implements Listener{
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
 				Player damager = (Player) e.getDamager();
-				if(damager.getItemInHand().hasItemMeta()){
-					if(!damager.getItemInHand().getItemMeta().hasLore())return;
+				if(Api.getItemInHand(damager).hasItemMeta()){
+					if(!Api.getItemInHand(damager).getItemMeta().hasLore())return;
 					if(!e.getEntity().isDead()){
-						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+						for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("LifeSteal"))){
 								Random number = new Random();
 								int chance;

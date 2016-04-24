@@ -19,10 +19,10 @@ public class Vampire implements Listener{
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
 				Player damager = (Player) e.getDamager();
-				if(damager.getItemInHand().hasItemMeta()){
+				if(Api.getItemInHand(damager).hasItemMeta()){
 					if(!e.getEntity().isDead()){
-						if(!damager.getItemInHand().getItemMeta().hasLore())return;
-						for(String lore : damager.getItemInHand().getItemMeta().getLore()){
+						if(!Api.getItemInHand(damager).getItemMeta().hasLore())return;
+						for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("Vampire"))){
 								Random number = new Random();
 								int chance;

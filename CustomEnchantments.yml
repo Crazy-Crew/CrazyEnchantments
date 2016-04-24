@@ -1,0 +1,68 @@
+#Potion Effect Names to pick from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
+Enchantments:
+  Cyborg: #Enchantment
+    Name: 'Cyborg' #The in-game name of the enchantment
+    Color: '&7' #The color of the enchantment on the item
+    BookColor: '&b&l' #The color of the enchantment on the book
+    MaxPower: 5 #Max lvl the enchantment goes up to
+    Categories: #All the categories the Enchantment can be found in
+      - 'T1'
+      - 'T2'
+      - 'T3'
+    EnchantOptions: #Customizing Options for each enchantment.
+      ItemsEnchantable: 'Armor' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
+      ArmorOptions: #Options that only effect Armor Enchantments.
+        PowerIncrease: 1 #How many times the Potion Effects go up each lvl.
+        PotionEffects: #Potion types that will be applied.
+          - 'SPEED:1, Time:1000000'
+          - 'INCREASE_DAMAGE:2, Time:1000000'
+          - 'JUMP:2, Time:1000000'
+  Sniper: #Enchantment
+    Name: 'Sniper' #The in-game name of the enchantment
+    Color: '&7' #The color of the enchantment on the item
+    BookColor: '&b&l' #The color of the enchantment on the book
+    MaxPower: 5 #Max lvl the enchantment goes up to
+    Categories: #All the categories the Enchantment can be found in
+      - 'T1'
+      - 'T2'
+      - 'T3'
+    EnchantOptions: #Customizing Options for each enchantment.
+      ItemsEnchantable: 'Bows' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
+      BowOptions: #Options that only effect Bow Enchantments.
+        OnHit: #When the arrow Hits.
+          #Remove the # to use the Exploding option.
+          #Ground: #Options if the arrow hits the ground.
+          #  Explode: #Options for the explosion.
+          #   Power: 2 #The power of the explosion.
+          #    PowerIncrease: 2 #How much each lvl will increases the strength.
+          #    Chance: 25 #Chance of the arrow exploding.
+          Damaged: #The player that is attacked.
+            PowerIncrease: 1 #How many times the Potion Effects go up each lvl.
+            PotionEffects: #Effects that are added to the Damaged.
+            - 'POISON:2, Time:5, Chance:25'
+  Slice: #Enchantment
+    Name: 'Slice' #The in-game name of the enchantment
+    Color: '&7' #The color of the enchantment on the item
+    BookColor: '&b&l' #The color of the enchantment on the book
+    MaxPower: 5 #Max lvl the enchantment goes up to
+    Categories: #All the categories the Enchantment can be found in
+      - 'T1'
+      - 'T2'
+      - 'T3'
+    EnchantOptions: #Customizing Options for each enchantment.
+      ItemsEnchantable: 'Weapons' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
+      WeaponOptions: #Options that only effect Sword and Axe Enchantments.
+        #Remove the # to use the Damager options.
+        #Damager: #The player with the sword.
+        #  PowerIncrease: 1 #How many times the Potion Effects go up each lvl.
+        #  PotionEffects: #Effects that are added to the Damager.
+        #    - 'REGENERATION:2, Time:10, Chance:25'
+        Damaged: #The player that is attacked.
+          DamageMultiplyer: #The Damager Multipler Option.
+            PowerIncrease: 1 #How many times the Multiplier will go up each lvl.
+            Multiplyer: 2 #How many times stronger the attack is.
+            Chance: 25 #The chance of the multiplier happening.
+          #Remove the # to use the Potion options.
+          #PowerIncrease: 1 #How many times the Potion Effects go up each lvl.
+          #PotionEffects: #Effects that are added to the Damaged.
+          #  - 'POISON:2, Time:5, Chance:25'

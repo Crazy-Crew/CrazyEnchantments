@@ -55,6 +55,7 @@ public class Main extends JavaPlugin{
 	public void onEnable(){
 		saveDefaultConfig();
 		settings.setup(this);
+		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(null), this);
@@ -118,6 +119,7 @@ public class Main extends JavaPlugin{
 					settings.reloadConfig();
 					settings.reloadEnchs();
 					settings.reloadMsg();
+					settings.reloadCustomEnchs();
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
 					return true;
 				}
@@ -164,10 +166,17 @@ public class Main extends JavaPlugin{
 					if(lvl.equals("1"))lvl="I";
 					if(lvl.equals("2"))lvl="II";
 					if(lvl.equals("3"))lvl="III";
-					if(player.getItemInHand().getType() == Material.AIR){
+					if(lvl.equals("4"))lvl="IV";
+					if(lvl.equals("5"))lvl="V";
+					if(lvl.equals("6"))lvl="VI";
+					if(lvl.equals("7"))lvl="VII";
+					if(lvl.equals("8"))lvl="VIII";
+					if(lvl.equals("9"))lvl="IX";
+					if(lvl.equals("10"))lvl="X";
+					if(Api.getItemInHand(player).getType() == Material.AIR){
 						player.sendMessage(Api.getPrefix()+Api.color("&cYou must have an item in your hand."));return true;
 					}
-					player.setItemInHand(Api.addLore(player.getItemInHand(), Api.color("&7"+en+" "+lvl)));
+					Api.setItemInHand(player, Api.addLore(Api.getItemInHand(player), Api.color("&7"+en+" "+lvl)));
 					return true;
 				}
 			}
