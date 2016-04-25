@@ -110,7 +110,7 @@ public class Main extends JavaPlugin{
 				GUI.openGUI((Player)sender);
 				return true;
 			}
-			if(args.length == 1){
+			if(args.length>=1){
 				if(args[0].equalsIgnoreCase("Help")){
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Access"))return true;
 					sender.sendMessage(Api.color("&2&l&nCrazy Enchantments"));
@@ -120,6 +120,7 @@ public class Main extends JavaPlugin{
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
+					sender.sendMessage(Api.color("&b/CE Book <Enchantment> <Lvl> <Amount> <Player> - &9Gives a player a Enchantment Book."));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
@@ -146,9 +147,11 @@ public class Main extends JavaPlugin{
 					player.openInventory(inv);
 					return true;
 				}
-			}
-			if(args.length == 4){
 				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Player> <Scroll> <Amount>
+					if(args.length!=4){
+						sender.sendMessage(Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
+						return true;
+					}
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Scroll"))return true;
 					String name = args[1];
 					if(!Api.isInt(args[3])){
@@ -168,9 +171,11 @@ public class Main extends JavaPlugin{
 					sender.sendMessage(Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
 					return true;
 				}
-			}
-			if(args.length == 3){
 				if(args[0].equalsIgnoreCase("Add")){
+					if(args.length!=3){
+						sender.sendMessage(Api.color("&c/CE Add <Enchantment> <LvL>"));
+						return true;
+					}
 					Player player = (Player) sender;
 					if(!Api.permCheck((Player)sender, "Admin"))return true;
 					boolean T = false;
@@ -197,9 +202,39 @@ public class Main extends JavaPlugin{
 					if(lvl.equals("9"))lvl="IX";
 					if(lvl.equals("10"))lvl="X";
 					if(Api.getItemInHand(player).getType() == Material.AIR){
-						player.sendMessage(Api.getPrefix()+Api.color("&cYou must have an item in your hand."));return true;
+						player.sendMessage(Api.getPrefix()+Api.color(Api.getPrefix()+"&cYou must have an item in your hand."));return true;
 					}
 					Api.setItemInHand(player, Api.addLore(Api.getItemInHand(player), Api.color("&7"+en+" "+lvl)));
+					return true;
+				}
+				if(args[0].equalsIgnoreCase("Book")){// /CE Book <Enchantment> <Lvl> <Amount> <Player>
+					if(args.length!=5){
+						sender.sendMessage(Api.color("&c/CE Book <Enchantment> <Lvl> <Amount> <Player>"));
+						return true;
+					}
+					if(!Api.permCheck((Player)sender, "Admin"))return true;
+					String ench = args[1];
+					if(!Api.isInt(args[2])||!Api.isInt(args[3])){
+						sender.sendMessage(Api.color("&c/CE Book <Enchantment> <Lvl> <Amount> <Player>"));
+						return true;
+					}
+					int lvl = Integer.parseInt(args[2]);
+					int amount = Integer.parseInt(args[3]);
+					if(!Api.isOnline(args[4], sender))return true;
+					Player player = Api.getPlayer(args[4]);
+					boolean toggle = false;
+					for(String en : ECControl.allEnchantments().keySet()){
+						if(ench.equalsIgnoreCase(Api.getEnchName(en))){
+							ench=en;
+							toggle=true;
+						}
+					}
+					if(!toggle){
+						sender.sendMessage(Api.color(Api.getPrefix()+"&cThe enchantmnet &6"+ench+" &cis not an enchantment."));
+						return true;
+					}
+					sender.sendMessage(Api.color(Api.getPrefix()+"&7You have sent &6"+player.getName()+" &7an Crazy Enchantment Book."));
+					player.getInventory().addItem(ScrollControl.makeEnchantBook(ench, Api.getPower(lvl), amount));
 					return true;
 				}
 			}

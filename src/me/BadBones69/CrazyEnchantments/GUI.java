@@ -127,6 +127,16 @@ public class GUI implements Listener{
 													}
 												}
 											}
+											if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+												if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+													int limit = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
+													int total = Api.getEnchAmount(item);
+													if(total>=limit){
+														player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
+														return;
+													}
+												}
+											}
 											e.setCancelled(true);
 											if(Api.successChance(c) || player.getGameMode() == GameMode.CREATIVE){
 												boolean destroy = Api.destroyChance(c);

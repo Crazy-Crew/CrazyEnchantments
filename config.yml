@@ -18,6 +18,9 @@ Settings:
   EnchantmentOptions: #Options for enchanted books.
     SuccessChance: True #Enable/Disable success rate on books.
     DestroyChance: True #Enable/Disable destroy rate on books.
+    MaxAmountOfEnchantmentsToggle: True #Turn on an off the Max amount of enchantments
+    IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
+    MaxAmountOfEnchantments: 5 #The Max amount of enchantments an item can have(Will not effect Vanilla Enchantments)
   SignOptions: #Options for the Signs.
     CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
       Line1: '&b&lCrazy Enchant' #Line 1 of the sign

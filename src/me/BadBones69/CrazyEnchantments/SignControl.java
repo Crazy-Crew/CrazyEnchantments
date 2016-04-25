@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class SignControl implements Listener{
 	@EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
+		if(e.getClickedBlock()==null)return;
 		Location Loc = e.getClickedBlock().getLocation();
 		Player player = e.getPlayer();
 		if(!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;

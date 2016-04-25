@@ -30,27 +30,29 @@ public class ScrollControl implements Listener{
 				if(c.hasItemMeta()){
 					if(c.getItemMeta().hasDisplayName()){
 						if(c.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
-							if(!Api.isProtected(item)){
-								ArrayList<Material> types = new ArrayList<Material>();
-								types.addAll(ECControl.isArmor());
-								types.addAll(ECControl.isBoots());
-								types.addAll(ECControl.isHelmet());
-								types.addAll(ECControl.isSword());
-								types.addAll(ECControl.isBow());
-								types.addAll(ECControl.isAxe());
-								if(types.contains(item.getType())){
-									e.setCancelled(true);
-									ArrayList<String> lore = new ArrayList<String>();
-									String name = "";
-									if(item.hasItemMeta()){
-										if(item.getItemMeta().hasLore())lore.addAll(item.getItemMeta().getLore());
-										if(item.getItemMeta().hasDisplayName())name=item.getItemMeta().getDisplayName();
+							if(c.getAmount()==1){
+								if(!Api.isProtected(item)){
+									ArrayList<Material> types = new ArrayList<Material>();
+									types.addAll(ECControl.isArmor());
+									types.addAll(ECControl.isBoots());
+									types.addAll(ECControl.isHelmet());
+									types.addAll(ECControl.isSword());
+									types.addAll(ECControl.isBow());
+									types.addAll(ECControl.isAxe());
+									if(types.contains(item.getType())){
+										e.setCancelled(true);
+										ArrayList<String> lore = new ArrayList<String>();
+										String name = "";
+										if(item.hasItemMeta()){
+											if(item.getItemMeta().hasLore())lore.addAll(item.getItemMeta().getLore());
+											if(item.getItemMeta().hasDisplayName())name=item.getItemMeta().getDisplayName();
+										}
+										lore.add(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName"));
+										e.setCurrentItem(Api.makeItem(item.getType(), item.getAmount(), 0, name, lore));
+										e.setCursor(new ItemStack(Material.AIR));
+										player.updateInventory();
+										return;
 									}
-									lore.add(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName"));
-									e.setCurrentItem(Api.makeItem(item.getType(), item.getAmount(), 0, name, lore));
-									e.setCursor(new ItemStack(Material.AIR));
-									player.updateInventory();
-									return;
 								}
 							}
 						}
@@ -77,7 +79,7 @@ public class ScrollControl implements Listener{
 										String RealLore = pickEnchant(enchants);
 										e.setCurrentItem(Api.removeLore(item, RealLore));
 										e.setCursor(new ItemStack(Material.AIR));
-										player.getInventory().addItem(makeEnchantBook(enchs.get(RealLore), lvl.get(RealLore)));
+										player.getInventory().addItem(makeEnchantBook(enchs.get(RealLore), lvl.get(RealLore), 1));
 									}
 								}
 							}
@@ -87,7 +89,7 @@ public class ScrollControl implements Listener{
 			}
 		}
 	}
-	ItemStack makeEnchantBook(String ench, String power){
+	public static ItemStack makeEnchantBook(String ench, String power, int amount){
 		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
 		int Smin = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
 		int Dmax = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
@@ -105,7 +107,7 @@ public class ScrollControl implements Listener{
 		if(Main.settings.getCustomEnchs().contains("Enchantments."+ench)){
 			ench=Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name")+" "+power;
 		}
-		return Api.makeItem(Material.BOOK, 1, 0, ench, Api.addDiscription(), lore);
+		return Api.makeItem(Material.BOOK, amount, 0, ench, Api.addDiscription(), lore);
 	}
 	@EventHandler
 	public void onClick(PlayerInteractEvent e){

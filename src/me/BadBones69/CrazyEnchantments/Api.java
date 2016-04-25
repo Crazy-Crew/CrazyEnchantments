@@ -73,6 +73,20 @@ public class Api{
 		if(line.equalsIgnoreCase("X"))return 10;
 		return 1;
 	}
+	public static String getPower(Integer i){
+		if(i==0)return "I";
+		if(i==1)return "I";
+		if(i==2)return "II";
+		if(i==3)return "III";
+		if(i==4)return "IV";
+		if(i==5)return "V";
+		if(i==6)return "VI";
+		if(i==7)return "VII";
+		if(i==8)return "VII";
+		if(i==9)return "IX";
+		if(i==10)return "X";
+		return i+"";
+	}
 	public static ArrayList<String> getPotions(){
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("ABSORPTION");
@@ -329,6 +343,30 @@ public class Api{
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
+	}
+	public static int getEnchAmount(ItemStack item){
+		int amount = 0;
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasLore()){
+				for(String lore : item.getItemMeta().getLore()){
+					for(String en : ECControl.allEnchantments().keySet()){
+						if(lore.contains(getEnchName(en))){
+							amount++;
+						}
+					}
+				}
+			}
+		}
+		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.IncludeVanillaEnchantments")){
+			if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")){
+				if(item.hasItemMeta()){
+					if(item.getItemMeta().hasEnchants()){
+						amount=amount+item.getItemMeta().getEnchants().size();
+					}
+				}
+			}
+		}
+		return amount;
 	}
 	static boolean successChance(ItemStack item){
 		for(String lore : item.getItemMeta().getLore()){
