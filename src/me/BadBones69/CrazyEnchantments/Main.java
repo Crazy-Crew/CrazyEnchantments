@@ -111,7 +111,7 @@ public class Main extends JavaPlugin{
 					sender.sendMessage(Api.color("&b/CE Info - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
-					sender.sendMessage(Api.color("&b/CE BlackScroll <Player> <Amount> - &9Gives a player Black Scrolls."));
+					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
@@ -138,15 +138,29 @@ public class Main extends JavaPlugin{
 					return true;
 				}
 			}
-			if(args.length == 3){
-				if(args[0].equalsIgnoreCase("BlackScroll")||args[0].equalsIgnoreCase("BS")){
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "BlackScroll"))return true;
+			if(args.length == 4){
+				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Player> <Scroll> <Amount>
+					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Scroll"))return true;
 					String name = args[1];
-					int i = Integer.parseInt(args[2]);
+					if(!Api.isInt(args[3])){
+						sender.sendMessage(Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
+						return true;
+					}
+					int i = Integer.parseInt(args[3]);
 					if(!Api.isOnline(name, sender))return true;
-					Api.getPlayer(name).getInventory().addItem(Api.BlackScroll(i));
+					if(args[2].equalsIgnoreCase("Black")||args[2].equalsIgnoreCase("BlackScroll")){
+						Api.getPlayer(name).getInventory().addItem(Api.BlackScroll(i));
+						return true;
+					}
+					if(args[2].equalsIgnoreCase("White")||args[2].equalsIgnoreCase("WhiteScroll")){
+						Api.getPlayer(name).getInventory().addItem(Api.addWhiteScroll(i));
+						return true;
+					}
+					sender.sendMessage(Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
 					return true;
 				}
+			}
+			if(args.length == 3){
 				if(args[0].equalsIgnoreCase("Add")){
 					Player player = (Player) sender;
 					if(!Api.permCheck((Player)sender, "Admin"))return true;

@@ -8,6 +8,16 @@ Settings:
     SuccessChance: #Controls what the success chance will be when they get the book from the Black Scroll
       Max: 75 #The Max percent
       Min: 35 #The Minimum percent
+    DestroyChance: #Controls what the destroy chance will be when they get the book from the Black Scroll
+      Max: 25 #The Max percent
+      Min: 5 #The Minimum percent
+  WhiteScroll:
+    Item: '339' #The item the white scroll is.
+    Name: '&e&lWhite Scroll' #The name of the white scrolls.
+    ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
+  EnchantmentOptions: #Options for enchanted books.
+    SuccessChance: True #Enable/Disable success rate on books.
+    DestroyChance: True #Enable/Disable destroy rate on books.
   GUICustomization: #This allows you to customize unclickable items into you GUI.
     - 'Slot:1, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:2, Item:160:0, Name: , Lore:&7Border'
@@ -42,6 +52,9 @@ Categories: #You can make as many different categories as you want
       SuccessPercent: #The range for the success rate that the enchantment will have
         Max: 90 #The max success rate
         Min: 40 #The min success rate
+      DestroyPercent: #The range for the destroy rate that the enchantment will have
+        Max: 10 #The max destroy rate
+        Min: 0 #The min destroy rate
       MaxLvlToggle: True #Turn on and off Max Level cap
       LvlRange: #The range of lvls that can be found in the Category.
         Max: 2
@@ -58,6 +71,9 @@ Categories: #You can make as many different categories as you want
       SuccessPercent:
         Max: 70
         Min: 35
+      DestroyPercent:
+        Max: 25
+        Min: 10
       MaxLvlToggle: True
       LvlRange:
         Max: 3
@@ -74,6 +90,9 @@ Categories: #You can make as many different categories as you want
       SuccessPercent:
         Max: 50
         Min: 25
+      DestroyPercent:
+        Max: 35
+        Min: 15
       MaxLvlToggle: True
       LvlRange:
         Max: 5

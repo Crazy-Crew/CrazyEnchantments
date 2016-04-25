@@ -1,7 +1,6 @@
 package me.BadBones69.CrazyEnchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -107,9 +106,19 @@ public class ECControl implements Listener{
 			}
 		}
 	}
-	static ItemStack pick(int max, int min, String cat){
-		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat),
-				Api.addDiscription(), Arrays.asList(Api.color("&a"+percentPick(max, min)+"% Success Chance")));
+	static ItemStack pick(String cat){
+		int Smax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max");
+		int Smin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min");
+		int Dmax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Max");
+		int Dmin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Min");
+		ArrayList<String> lore = new ArrayList<String>();
+		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.DestroyChance")){
+			lore.add(Api.color("&4"+percentPick(Dmax, Dmin)+"% Destroy Chance"));
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.SuccessChance")){
+			lore.add(Api.color("&a"+percentPick(Smax, Smin)+"% Success Chance"));
+		}
+		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat), Api.addDiscription(), lore);
 	}
 	static String percentPick(int max, int min){
 		Random i = new Random();

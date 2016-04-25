@@ -225,17 +225,6 @@ public class Api{
 		lore.add(color("&7Right click for more Info."));
 		return lore;
 	}
-	public static ItemStack addLore(ItemStack item, String i){
-		ArrayList<String> lore = new ArrayList<String>();
-		ItemMeta m = item.getItemMeta();
-		if(item.getItemMeta().hasLore()){
-			lore.addAll(item.getItemMeta().getLore());
-		}
-		lore.add(i);
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
-	}
 	public static boolean isInt(String s) {
 	    try {
 	        Integer.parseInt(s);
@@ -299,15 +288,79 @@ public class Api{
         float xp = (float)total / (float)player.getExpToLevel();
         player.setExp(xp);
 	}
+	static boolean isProtected(ItemStack i){
+		if(i.hasItemMeta()){
+			if(i.getItemMeta().hasLore()){
+				if(i.getItemMeta().getLore().contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName"))))return true;
+			}
+		}
+		return false;
+	}
+	static ItemStack addWhiteScroll(int amount){
+		ArrayList<String> lore = new ArrayList<String>();
+		lore.add("&7Prevents an item from being destroyed");
+		lore.add("&7due to a failed Enchantment Book.");
+		lore.add("&ePlace scroll on item to apply.");
+		return makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"), amount, Main.settings.getConfig().getString("Settings.WhiteScroll.Name"), lore);
+	}
+	public static ItemStack addLore(ItemStack item, String i){
+		ArrayList<String> lore = new ArrayList<String>();
+		ItemMeta m = item.getItemMeta();
+		if(item.getItemMeta().hasLore()){
+			lore.addAll(item.getItemMeta().getLore());
+		}
+		lore.add(i);
+		if(lore.contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
+			lore.remove(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+			lore.add(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+		}
+		m.setLore(lore);
+		item.setItemMeta(m);
+		return item;
+	}
+	static ItemStack removeProtected(ItemStack item){
+		ArrayList<String> lore = new ArrayList<String>();
+		ItemMeta m = item.getItemMeta();
+		lore.addAll(m.getLore());
+		lore.remove(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+		m.setLore(lore);
+		item.setItemMeta(m);
+		return item;
+	}
 	static boolean successChance(ItemStack item){
-		String[] breakdown = item.getItemMeta().getLore().get(2).split("%");
-		String c = ChatColor.stripColor(breakdown[0]);
-		Random number = new Random();
-		int chance;
-		for(int counter = 1; counter<=1; counter++){
-			chance = 1 + number.nextInt(99);
-			if(chance >= 1 && chance <= Integer.parseInt(c)){
-				return true;
+		for(String lore : item.getItemMeta().getLore()){
+			if(lore.contains("% Success Chance")){
+				lore=lore.replaceAll("% Success Chance", "");
+				lore=removeColor(lore);
+				Random number = new Random();
+				int chance;
+				for(int counter = 1; counter<=1;){
+					chance = 1 + number.nextInt(99);
+					if(chance >= 1 && chance <= Integer.parseInt(lore)){
+						return true;
+					}else{
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	static boolean destroyChance(ItemStack item){
+		for(String lore : item.getItemMeta().getLore()){
+			if(lore.contains("% Destroy Chance")){
+				lore=lore.replaceAll("% Destroy Chance", "");
+				lore=removeColor(lore);
+				Random number = new Random();
+				int chance;
+				for(int counter = 1; counter<=1;){
+					chance = 1 + number.nextInt(99);
+					if(chance >= 1 && chance <= Integer.parseInt(lore)){
+						return true;
+					}else{
+						return false;
+					}
+				}
 			}
 		}
 		return false;

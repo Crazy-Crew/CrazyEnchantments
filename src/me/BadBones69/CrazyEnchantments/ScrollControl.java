@@ -1,7 +1,6 @@
 package me.BadBones69.CrazyEnchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +27,35 @@ public class ScrollControl implements Listener{
 		HashMap<String, String> lvl = new HashMap<String, String>();
 		if(inv != null){
 			if(item!=null&&c!=null){
+				if(c.hasItemMeta()){
+					if(c.getItemMeta().hasDisplayName()){
+						if(c.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
+							if(!Api.isProtected(item)){
+								ArrayList<Material> types = new ArrayList<Material>();
+								types.addAll(ECControl.isArmor());
+								types.addAll(ECControl.isBoots());
+								types.addAll(ECControl.isHelmet());
+								types.addAll(ECControl.isSword());
+								types.addAll(ECControl.isBow());
+								types.addAll(ECControl.isAxe());
+								if(types.contains(item.getType())){
+									e.setCancelled(true);
+									ArrayList<String> lore = new ArrayList<String>();
+									String name = "";
+									if(item.hasItemMeta()){
+										if(item.getItemMeta().hasLore())lore.addAll(item.getItemMeta().getLore());
+										if(item.getItemMeta().hasDisplayName())name=item.getItemMeta().getDisplayName();
+									}
+									lore.add(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName"));
+									e.setCurrentItem(Api.makeItem(item.getType(), item.getAmount(), 0, name, lore));
+									e.setCursor(new ItemStack(Material.AIR));
+									player.updateInventory();
+									return;
+								}
+							}
+						}
+					}
+				}
 				if(item.hasItemMeta()){
 					if(c.hasItemMeta()){
 						if(item.getItemMeta().hasLore()&&c.getItemMeta().hasDisplayName()){
@@ -49,8 +77,7 @@ public class ScrollControl implements Listener{
 										String RealLore = pickEnchant(enchants);
 										e.setCurrentItem(Api.removeLore(item, RealLore));
 										e.setCursor(new ItemStack(Material.AIR));
-										player.getInventory().addItem(makeEnchantBook(Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max"),
-												Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min"), enchs.get(RealLore), lvl.get(RealLore)));
+										player.getInventory().addItem(makeEnchantBook(enchs.get(RealLore), lvl.get(RealLore)));
 									}
 								}
 							}
@@ -60,15 +87,25 @@ public class ScrollControl implements Listener{
 			}
 		}
 	}
-	ItemStack makeEnchantBook(int max, int min, String ench, String power){
+	ItemStack makeEnchantBook(String ench, String power){
+		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
+		int Smin = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
+		int Dmax = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
+		int Dmin = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
+		ArrayList<String> lore = new ArrayList<String>();
+		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.DestroyChance")){
+			lore.add(Api.color("&4"+ECControl.percentPick(Dmax, Dmin)+"% Destroy Chance"));
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.SuccessChance")){
+			lore.add(Api.color("&a"+ECControl.percentPick(Smax, Smin)+"% Success Chance"));
+		}
 		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
 			ench=Main.settings.getEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+ench+".Name")+" "+power;
 		}
 		if(Main.settings.getCustomEnchs().contains("Enchantments."+ench)){
 			ench=Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name")+" "+power;
 		}
-		return Api.makeItem(Material.BOOK, 1, 0, ench,
-				Api.addDiscription(), Arrays.asList(Api.color("&a"+ECControl.percentPick(max, min)+"% Success Chance")));
+		return Api.makeItem(Material.BOOK, 1, 0, ench, Api.addDiscription(), lore);
 	}
 	@EventHandler
 	public void onClick(PlayerInteractEvent e){

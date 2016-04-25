@@ -94,8 +94,7 @@ public class GUI implements Listener{
 										Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
 									}
 								}
-								player.getInventory().addItem(ECControl.pick(Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max"),
-										Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min"), cat));
+								player.getInventory().addItem(ECControl.pick(cat));
 								return;
 							}
 						}
@@ -130,26 +129,54 @@ public class GUI implements Listener{
 											}
 											e.setCancelled(true);
 											if(Api.successChance(c) || player.getGameMode() == GameMode.CREATIVE){
-												name = Api.removeColor(name);
-												String[] breakdown = name.split(" ");
-												String color = "&7";
-												if(Main.settings.getEnchs().contains("Enchantments."+en)){
-													color=Main.settings.getEnchs().getString("Enchantments."+en+".Color");
-												}
-												if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-													color=Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
-												}
-												String enchantment = Api.getEnchName(en);
-												String lvl = breakdown[1];
-												String full = Api.color(color+enchantment+" "+lvl);
-												e.setCursor(new ItemStack(Material.AIR));
-												Api.addLore(item, full);
-												if(Api.getVersion()==19){
-													player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
+												boolean destroy = Api.destroyChance(c);
+												if(!destroy||Api.isProtected(item)||player.getGameMode()==GameMode.CREATIVE){
+													name = Api.removeColor(name);
+													String[] breakdown = name.split(" ");
+													String color = "&7";
+													if(Main.settings.getEnchs().contains("Enchantments."+en)){
+														color=Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+													}
+													if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+														color=Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
+													}
+													String enchantment = Api.getEnchName(en);
+													String lvl = breakdown[1];
+													String full = Api.color(color+enchantment+" "+lvl);
+													e.setCursor(new ItemStack(Material.AIR));
+													if(!destroy||player.getGameMode()==GameMode.CREATIVE){
+														e.setCurrentItem(Api.addLore(item, full));
+														if(Api.getVersion()==19){
+															player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
+														}else{
+															player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
+														}
+													}
+													if(destroy&&Api.isProtected(item)){
+														if(player.getGameMode()!=GameMode.CREATIVE){
+															e.setCurrentItem(Api.removeProtected(item));
+															if(Api.getVersion()==19){
+																player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+															}else{
+																player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+															}
+															return;
+														}
+													}
+													player.updateInventory();
+													return;
 												}else{
-													player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
+													e.setCursor(new ItemStack(Material.AIR));
+													e.setCurrentItem(new ItemStack(Material.AIR));
+													e.setCursor(new ItemStack(Material.AIR));
+													if(Api.getVersion()==19){
+														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+													}else{
+														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+													}
+													player.updateInventory();
+													return;
 												}
-												return;
 											}else{
 												e.setCursor(new ItemStack(Material.AIR));
 												if(Api.getVersion()==19){
