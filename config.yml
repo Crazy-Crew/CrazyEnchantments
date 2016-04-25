@@ -18,6 +18,28 @@ Settings:
   EnchantmentOptions: #Options for enchanted books.
     SuccessChance: True #Enable/Disable success rate on books.
     DestroyChance: True #Enable/Disable destroy rate on books.
+  SignOptions: #Options for the Signs.
+    CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
+      Line1: '&b&lCrazy Enchant' #Line 1 of the sign
+      Line2: '&b&lShop:' #Line 2 of the sign
+      Line3: '&2&l%Category%' #Line 3 of the sign
+      Line4: '&c&lCost: &6&l%XP%XP' #Line 4 of the sign
+    BlackScrollStyle: 
+      Cost: 50 #How much to buy a black scroll
+      Money/XP: Money #Use money or xp
+      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
+      Line1: '&b&lCrazy Enchant'
+      Line2: '&b&lShop:'
+      Line3: '&4&lBlack &8&lScrolls'
+      Line4: '&c&lCost: &a&l$50'
+    WhiteScrollStyle:
+      Cost: 50
+      Money/XP: Money
+      Lvl/Total: XP
+      Line1: '&b&lCrazy Enchant'
+      Line2: '&b&lShop:'
+      Line3: '&f&lWhite &b&lScrolls'
+      Line4: '&c&lCost: &a&l$50'
   GUICustomization: #This allows you to customize unclickable items into you GUI.
     - 'Slot:1, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:2, Item:160:0, Name: , Lore:&7Border'

@@ -35,6 +35,8 @@ import me.BadBones69.CrazyEnchantments.Enchantments.Swords.LightWeight;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.SlowMo;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Vampire;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Viper;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -43,6 +45,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.thederpygolems.armorequip.ArmorListener;
@@ -50,11 +53,13 @@ import ca.thederpygolems.armorequip.ArmorListener;
 public class Main extends JavaPlugin{
 	public static SettingsManager settings = SettingsManager.getInstance();
 	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
-	static Main plugin;
+	public static Economy econ = null;
+	public static EconomyResponse r;
 	@Override
 	public void onEnable(){
 		saveDefaultConfig();
 		settings.setup(this);
+		Bukkit.getServer().getPluginManager().registerEvents(new SignControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
@@ -94,6 +99,9 @@ public class Main extends JavaPlugin{
 		Bukkit.getServer().getPluginManager().registerEvents(new PainGiver(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Savior(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Nursery(), this);
+		if (!setupEconomy()){
+	   		saveDefaultConfig();
+	    }
 	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
 		if(commandLable.equalsIgnoreCase("CE")||commandLable.equalsIgnoreCase("CrazyEnchantments")){
@@ -120,6 +128,7 @@ public class Main extends JavaPlugin{
 					settings.reloadEnchs();
 					settings.reloadMsg();
 					settings.reloadCustomEnchs();
+					settings.reloadSigns();
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
 					return true;
 				}
@@ -198,4 +207,15 @@ public class Main extends JavaPlugin{
 		}
 		return false;
 	}
+	private boolean setupEconomy(){
+        if (getServer().getPluginManager().getPlugin("Vault") == null){
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null){
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
 }

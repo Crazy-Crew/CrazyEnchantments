@@ -219,6 +219,9 @@ public class Api{
 	static String getPrefix(){
 		return color(Main.settings.getConfig().getString("Settings.Prefix"));
 	}
+	static double getMoney(Player player){
+		return Main.econ.getBalance(player);
+	}
 	static List<String> addDiscription(){
 		ArrayList<String> lore = new ArrayList<String>();
 		lore.add(color("&7Drag book and drop on Item."));

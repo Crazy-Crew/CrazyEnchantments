@@ -33,6 +33,9 @@ public class SettingsManager {
 	
 	FileConfiguration cenchs;
 	File cefile;
+	
+	FileConfiguration signs;
+	File sfile;
 
 	public void setup(Plugin p) {
 		cfile = new File(p.getDataFolder(), "config.yml");
@@ -77,6 +80,21 @@ public class SettingsManager {
          	}
 		}
 		cenchs = YamlConfiguration.loadConfiguration(cefile);
+		
+		sfile = new File(p.getDataFolder(), "Signs.yml");
+		if (!sfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/Signs.yml");
+         		InputStream E = getClass().getResourceAsStream("/Signs.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		signs = YamlConfiguration.loadConfiguration(sfile);
+	}
+	public FileConfiguration getSigns() {
+		return signs;
 	}
 	public FileConfiguration getCustomEnchs() {
 		return cenchs;
@@ -86,6 +104,14 @@ public class SettingsManager {
 	}
 	public FileConfiguration getMsg() {
 		return msg;
+	}
+	public void saveSigns() {
+		try {
+			signs.save(sfile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save Signs.yml!");
+		}
 	}
 	public void saveCustomEnchs() {
 		try {
@@ -110,6 +136,9 @@ public class SettingsManager {
 			Bukkit.getServer().getLogger()
 					.severe(ChatColor.RED + "Could not save Messages.yml!");
 		}
+	}
+	public void reloadSigns() {
+		signs = YamlConfiguration.loadConfiguration(sfile);
 	}
 	public void reloadMsg() {
 		msg = YamlConfiguration.loadConfiguration(mfile);
