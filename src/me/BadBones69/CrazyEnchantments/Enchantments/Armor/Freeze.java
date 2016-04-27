@@ -32,7 +32,7 @@ public class Freeze implements Listener{
 								for(int counter = 1; counter<=1; counter++){
 									chance = 1 + number.nextInt(10);
 									if(chance == 1){
-										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 2+Api.getPower(lore, Api.getEnchName("Freeze"))));
+										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3*20, 1+Api.getPower(lore, Api.getEnchName("Freeze"))));
 									}
 								}
 							}

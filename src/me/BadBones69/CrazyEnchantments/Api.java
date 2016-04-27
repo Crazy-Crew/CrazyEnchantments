@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import me.BadBones69.CrazyEnchantments.MultiSupport.Eight;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Nine;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -22,6 +25,13 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 
 public class Api{
+	public static ItemStack addGlow(ItemStack item) {
+		if(getVersion()==19){
+			return Nine.addGlow(item);
+		}else{
+			return Eight.addGlow(item);
+		}
+    }
 	public static String color(String msg){
 		msg = msg.replaceAll("(&([a-f0-9]))", "\u00A7$2");
 		msg = msg.replaceAll("&l", ChatColor.BOLD + "");
@@ -43,7 +53,7 @@ public class Api{
 	}
 	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(Player player){
-		if(Api.getVersion()==19){
+		if(getVersion()==19){
 			return player.getInventory().getItemInMainHand();
 		}else{
 			return player.getItemInHand();
@@ -326,7 +336,7 @@ public class Api{
 		if(item.getItemMeta().hasLore()){
 			lore.addAll(item.getItemMeta().getLore());
 		}
-		lore.add(i);
+		lore.add(color(i));
 		if(lore.contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
 			lore.remove(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 			lore.add(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
@@ -403,6 +413,23 @@ public class Api{
 					}
 				}
 			}
+		}
+		return false;
+	}
+	public static boolean randomPicker(int max){
+		Random number = new Random();
+		int chance;
+		for(int counter = 1; counter<=1; counter++){
+			chance = 1 + number.nextInt(max);
+			if(chance == 1){
+				return true;
+			}
+		}
+		return false;
+	}
+	public static boolean isInvFull(Player player){
+		if(player.getInventory().firstEmpty()==-1){
+			return true;
 		}
 		return false;
 	}

@@ -22,7 +22,7 @@ public class AntiGravity implements Listener{
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
 				if(lore.contains(Api.getEnchName("AntiGravity"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 3+Api.getPower(lore, Api.getEnchName("AntiGravity"))));
+					player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 1+Api.getPower(lore, Api.getEnchName("AntiGravity"))));
 					return;
 				}
 			}

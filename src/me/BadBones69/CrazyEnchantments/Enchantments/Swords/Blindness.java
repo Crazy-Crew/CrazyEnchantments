@@ -25,7 +25,9 @@ public class Blindness implements Listener{
 					if(!e.getEntity().isDead()){
 						for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("Blindness"))){
-								en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3*20, Api.getPower(lore, Api.getEnchName("Blindness"))-1));
+								if(Api.randomPicker(20-Api.getPower(lore, Api.getEnchName("Blindness")))){
+									en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3*20, Api.getPower(lore, Api.getEnchName("Blindness"))-1));
+								}
 							}
 						}
 					}

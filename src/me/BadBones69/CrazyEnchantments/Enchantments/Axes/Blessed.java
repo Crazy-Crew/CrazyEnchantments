@@ -30,7 +30,7 @@ public class Blessed implements Listener{
 								Random number = new Random();
 								int chance;
 								for(int counter = 1; counter<=1; counter++){
-									chance = 1 + number.nextInt(20-Api.getPower(lore, Api.getEnchName("Blessed")));
+									chance = 1 + number.nextInt(10-Api.getPower(lore, Api.getEnchName("Blessed")));
 									if(chance == 1){
 										removeBadPotions(damager);
 									}

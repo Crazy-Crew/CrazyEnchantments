@@ -41,14 +41,7 @@ public class ScrollControl implements Listener{
 									types.addAll(ECControl.isAxe());
 									if(types.contains(item.getType())){
 										e.setCancelled(true);
-										ArrayList<String> lore = new ArrayList<String>();
-										String name = "";
-										if(item.hasItemMeta()){
-											if(item.getItemMeta().hasLore())lore.addAll(item.getItemMeta().getLore());
-											if(item.getItemMeta().hasDisplayName())name=item.getItemMeta().getDisplayName();
-										}
-										lore.add(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName"));
-										e.setCurrentItem(Api.makeItem(item.getType(), item.getAmount(), 0, name, lore));
+										e.setCurrentItem(Api.addLore(item, Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 										e.setCursor(new ItemStack(Material.AIR));
 										player.updateInventory();
 										return;
@@ -107,7 +100,7 @@ public class ScrollControl implements Listener{
 		if(Main.settings.getCustomEnchs().contains("Enchantments."+ench)){
 			ench=Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name")+" "+power;
 		}
-		return Api.makeItem(Material.BOOK, amount, 0, ench, Api.addDiscription(), lore);
+		return Api.addGlow(Api.makeItem(Material.BOOK, amount, 0, ench, Api.addDiscription(), lore));
 	}
 	@EventHandler
 	public void onClick(PlayerInteractEvent e){

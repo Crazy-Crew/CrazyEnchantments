@@ -36,7 +36,9 @@ public class Venom implements Listener{
 			LivingEntity en = (LivingEntity) e.getEntity();
 			Projectile arrow = (Projectile) e.getDamager();
 			if(Arrow.containsKey(arrow)){
-				en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Venom"))+2*20, 1));
+				if(Api.randomPicker(10)){
+					en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2*20, Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Venom"))-1));
+				}
 			}
 		}
 		return;

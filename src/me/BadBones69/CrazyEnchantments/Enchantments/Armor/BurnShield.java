@@ -22,7 +22,7 @@ public class BurnShield implements Listener{
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
 				if(lore.contains(Api.getEnchName("BurnShield"))){
-					player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 55555*20, Api.getPower(lore, Api.getEnchName("BurnShield"))));
+					player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 55555*20, 0));
 					return;
 				}
 			}

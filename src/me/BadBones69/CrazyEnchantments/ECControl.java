@@ -134,7 +134,6 @@ public class ECControl implements Listener{
 			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
 		}
 		int max = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
-		int min = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
 		int i = 1+r.nextInt(ench);
 		if(Main.settings.getConfig().contains("Categories."+C+".EnchOptions.MaxLvlToggle")){
 			if(Main.settings.getConfig().getBoolean("Categories."+C+".EnchOptions.MaxLvlToggle")){
@@ -146,9 +145,6 @@ public class ECControl implements Listener{
 							break;
 						}
 					}
-				}
-				if(i<min){
-					i=min;
 				}
 			}
 		}

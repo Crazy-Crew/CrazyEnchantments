@@ -5,6 +5,11 @@ Settings:
   BlackScroll: #Settings for the Black Scrolls
     Item: '351' #The item the Black Scroll can be
     Name: '&8&l&nBlack Scroll' #The name of the Black Scroll
+    InGUI: False #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    Slot: 20 #Slot you can buy the scroll at
+    Lore: #Lore of the item in the GUI
+      - '&7&lBlack Scrolls Shop'
+      - '&c&lCost: &a&l$50'
     SuccessChance: #Controls what the success chance will be when they get the book from the Black Scroll
       Max: 75 #The Max percent
       Min: 35 #The Minimum percent
@@ -14,6 +19,11 @@ Settings:
   WhiteScroll:
     Item: '339' #The item the white scroll is.
     Name: '&e&lWhite Scroll' #The name of the white scrolls.
+    InGUI: False #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    Slot: 20 #Slot you can buy the scroll at
+    Lore: #Lore of the scroll in the GUI
+      - '&e&lWhite Scrolls Shop'
+      - '&c&lCost: &a&l$50'
     ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
   EnchantmentOptions: #Options for enchanted books.
     SuccessChance: True #Enable/Disable success rate on books.

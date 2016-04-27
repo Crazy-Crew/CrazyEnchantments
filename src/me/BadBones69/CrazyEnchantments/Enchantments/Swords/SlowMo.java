@@ -25,7 +25,9 @@ public class SlowMo implements Listener{
 					if(!e.getEntity().isDead()){
 						for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("SlowMo"))){
-								en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, Api.getPower(lore, Api.getEnchName("SlowMo"))));
+								if(Api.randomPicker(20-Api.getPower(lore, Api.getEnchName("SlowMo")))){
+									en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3*20, Api.getPower(lore, Api.getEnchName("SlowMo"))));
+								}
 							}
 						}
 					}

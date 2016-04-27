@@ -30,6 +30,14 @@ public class SignControl implements Listener{
 				Location loc = new Location(world,x,y,z);
 				if(Loc.equals(loc)){
 					if(type.equalsIgnoreCase("BlackScroll")){
+						if(Api.isInvFull(player)){
+							if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+								player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+							}else{
+								player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+							}
+							return;
+						}
 						int price = Main.settings.getConfig().getInt("Settings.SignOptions.BlackScrollStyle.Cost");
 						if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Money/XP").equalsIgnoreCase("Money")){
 							if(Api.getMoney(player)<price){
@@ -60,6 +68,14 @@ public class SignControl implements Listener{
 						return;
 					}
 					if(type.equalsIgnoreCase("WhiteScroll")){
+						if(Api.isInvFull(player)){
+							if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+								player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+							}else{
+								player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+							}
+							return;
+						}
 						int price = Main.settings.getConfig().getInt("Settings.SignOptions.WhiteScrollStyle.Cost");
 						if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Money/XP").equalsIgnoreCase("Money")){
 							if(Api.getMoney(player)<price){
@@ -91,6 +107,14 @@ public class SignControl implements Listener{
 					}
 					for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
 						if(type.equalsIgnoreCase(cat)){
+							if(Api.isInvFull(player)){
+								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+								}else{
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+								}
+								return;
+							}
 							if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
 								if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".XP")){
 									String xp = Main.settings.getConfig().getInt("Categories."+cat+".XP") - Api.getXPLvl(player)+"";
@@ -107,7 +131,7 @@ public class SignControl implements Listener{
 								}
 								Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
 							}
-							player.getInventory().addItem(ECControl.pick(cat));
+							player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
 							return;
 						}
 					}

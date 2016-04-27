@@ -32,7 +32,7 @@ public class PainGiver implements Listener{
 								for(int counter = 1; counter<=1; counter++){
 									chance = 1 + number.nextInt(10);
 									if(chance == 1){
-										en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5*20, Api.getPower(lore, Api.getEnchName("PainGiver"))));
+										en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 3*20, Api.getPower(lore, Api.getEnchName("PainGiver"))));
 									}
 								}
 							}

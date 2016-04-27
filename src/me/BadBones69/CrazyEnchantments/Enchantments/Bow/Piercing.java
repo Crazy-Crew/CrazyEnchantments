@@ -1,7 +1,6 @@
 package me.BadBones69.CrazyEnchantments.Enchantments.Bow;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import me.BadBones69.CrazyEnchantments.Api;
 
@@ -32,13 +31,8 @@ public class Piercing implements Listener{
 		if(e.getDamager() instanceof Arrow){
 			Projectile arrow = (Projectile) e.getDamager();
 			if(Arrow.containsKey(arrow)){
-				Random number = new Random();
-				int chance;
-				for(int counter = 1; counter<=1; counter++){
-					chance = 1 + number.nextInt(20-Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Piercing")));
-					if(chance == 1){
-						e.setDamage(e.getDamage() *2);
-					}
+				if(Api.randomPicker(20-Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Piercing")))){
+					e.setDamage(e.getDamage() *2);
 				}
 			}
 		}

@@ -29,7 +29,7 @@ public class Molten implements Listener{
 								for(int counter = 1; counter<=1; counter++){
 									chance = 1 + number.nextInt(12);
 									if(chance == 1){
-										en.setFireTicks(Api.getPower(lore, Api.getEnchName("Molten"))+4*20);
+										en.setFireTicks(Api.getPower(lore, Api.getEnchName("Molten"))+2*20);
 									}
 								}
 							}
