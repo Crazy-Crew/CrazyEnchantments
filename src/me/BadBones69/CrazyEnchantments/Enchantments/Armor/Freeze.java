@@ -16,6 +16,9 @@ import org.bukkit.potion.PotionEffectType;
 public class Freeze implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("Freeze"))return;
+		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof Player){
 			if(e.getDamager() instanceof LivingEntity){

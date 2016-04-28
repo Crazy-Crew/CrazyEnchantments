@@ -18,8 +18,10 @@ public class ECControl implements Listener{
 		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
 			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en+".Categories")){
 				if(cat.equalsIgnoreCase(C)){
-					String power = powerPicker(en, cat);
-					enchants.add(Main.settings.getEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en+".Name")+" "+power);
+					if(Api.isEnchantmentEnabled(en)){
+						String power = powerPicker(en, cat);
+						enchants.add(Main.settings.getEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en+".Name")+" "+power);
+					}
 				}
 			}
 		}
@@ -37,12 +39,26 @@ public class ECControl implements Listener{
 	static HashMap<String, ArrayList<Material>> allEnchantments(){
 		HashMap<String, ArrayList<Material>> en = new HashMap<String, ArrayList<Material>>();
 		//---------Sword---------//
+		en.put("Trap", isSword());
+		en.put("Rage", isSword());
 		en.put("Viper", isSword());
+		en.put("Snare", isSword());
 		en.put("SlowMo", isSword());
+		en.put("Wither", isSword());
 		en.put("Vampire", isSword());
+		en.put("Execute", isSword());
 		en.put("FastTurn", isSword());
+		en.put("Disarmer", isSword());
+		en.put("Headless", isSword());
+		en.put("Insomnia", isSword());
+		en.put("Paralyze", isSword());
 		en.put("Blindness", isSword());
 		en.put("LifeSteal", isSword());
+		en.put("Confusion", isSword());
+		en.put("Nutrition", isSword());
+		en.put("SkillSwipe", isSword());
+		en.put("Obliterate", isSword());
+		en.put("Inquisitive", isSword());
 		en.put("LightWeight", isSword());
 		en.put("DoubleDamage", isSword());
 		//----------Axes--------//
@@ -52,20 +68,27 @@ public class ECControl implements Listener{
 		en.put("FeedMe", isAxe());
 		en.put("Blessed", isAxe());
 		en.put("Berserk", isAxe());
+		en.put("Decapitation", isAxe());
 		//----------Bow----------//
 		en.put("Boom", isBow());
 		en.put("Venom", isBow());
 		en.put("Doctor", isBow());
 		en.put("Piercing", isBow());
+		en.put("IceFreeze", isBow());
+		en.put("Lightning", isBow());
 		//---------Armor---------//
 		en.put("Hulk", isArmor());
+		en.put("Valor", isArmor());
+		en.put("Drunk", isArmor());
 		en.put("Ninja", isArmor());
+		en.put("Voodoo", isArmor());
 		en.put("Molten", isArmor());
 		en.put("Savior", isArmor());
 		en.put("Freeze", isArmor());
 		en.put("Nursery", isArmor());
 		en.put("Fortify", isArmor());
 		en.put("OverLoad", isArmor());
+		en.put("SmokeBomb", isArmor());
 		en.put("PainGiver", isArmor());
 		en.put("BurnShield", isArmor());
 		en.put("Enlightened", isArmor());
@@ -77,6 +100,13 @@ public class ECControl implements Listener{
 		en.put("Gears", isBoots());
 		en.put("Springs", isBoots());
 		en.put("AntiGravity", isBoots());
+		//---------PickAxes--------//
+		en.put("AutoSmelt", isPickAxe());
+		en.put("Experience", isPickAxe());
+		//---------Tools--------//
+		en.put("Haste", isTool());
+		en.put("Telepathy", isTool());
+		en.put("Oxygenate", isTool());
 		//---------Custom--------//
 		for(String ench : CustomEnchantments.getEnchantments()){
 			String type = Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable");
@@ -87,6 +117,8 @@ public class ECControl implements Listener{
 			if(type.equalsIgnoreCase("Axes"))en.put(ench, isAxe());
 			if(type.equalsIgnoreCase("Weapons"))en.put(ench, isWeapon());
 			if(type.equalsIgnoreCase("Bows"))en.put(ench, isBow());
+			if(type.equalsIgnoreCase("Pickaxes"))en.put(ench, isPickAxe());
+			if(type.equalsIgnoreCase("Tools"))en.put(ench, isTool());
 		}
 		return en;
 	}
@@ -134,6 +166,7 @@ public class ECControl implements Listener{
 			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
 		}
 		int max = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
+		int min = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
 		int i = 1+r.nextInt(ench);
 		if(Main.settings.getConfig().contains("Categories."+C+".EnchOptions.MaxLvlToggle")){
 			if(Main.settings.getConfig().getBoolean("Categories."+C+".EnchOptions.MaxLvlToggle")){
@@ -145,6 +178,12 @@ public class ECControl implements Listener{
 							break;
 						}
 					}
+				}
+				if(i<min){//If i is smaller then the Min of the Category
+					i=min;
+				}
+				if(i>ench){//If i is bigger then the Enchantment Max
+					i=ench;
 				}
 			}
 		}
@@ -234,6 +273,30 @@ public class ECControl implements Listener{
 		ma.add(Material.STONE_AXE);
 		ma.add(Material.IRON_AXE);
 		ma.add(Material.DIAMOND_AXE);
+		return ma;
+	}
+	public static ArrayList<Material> isPickAxe(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.add(Material.WOOD_PICKAXE);
+		ma.add(Material.STONE_PICKAXE);
+		ma.add(Material.IRON_PICKAXE);
+		ma.add(Material.DIAMOND_PICKAXE);
+		return ma;
+	}
+	public static ArrayList<Material> isTool(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.add(Material.WOOD_PICKAXE);
+		ma.add(Material.STONE_PICKAXE);
+		ma.add(Material.IRON_PICKAXE);
+		ma.add(Material.DIAMOND_PICKAXE);
+		ma.add(Material.WOOD_AXE);
+		ma.add(Material.STONE_AXE);
+		ma.add(Material.IRON_AXE);
+		ma.add(Material.DIAMOND_AXE);
+		ma.add(Material.WOOD_SPADE);
+		ma.add(Material.STONE_SPADE);
+		ma.add(Material.IRON_SPADE);
+		ma.add(Material.DIAMOND_SPADE);
 		return ma;
 	}
 }

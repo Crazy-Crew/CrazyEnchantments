@@ -17,6 +17,7 @@ public class Doctor implements Listener{
 	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
+		if(!Api.isEnchantmentEnabled("Doctor"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if (e.getBow().hasItemMeta()) {
 			if(!e.getBow().getItemMeta().hasLore())return;
@@ -29,7 +30,9 @@ public class Doctor implements Listener{
 	}
 	@EventHandler
  	public void onArrowLand(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("Doctor"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;
 		Entity en = e.getEntity();
 		if(e.getDamager() instanceof Arrow){

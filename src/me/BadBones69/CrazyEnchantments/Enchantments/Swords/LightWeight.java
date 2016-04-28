@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 public class LightWeight implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("LightWeight"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;

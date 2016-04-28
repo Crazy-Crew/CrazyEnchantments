@@ -16,6 +16,7 @@ public class Savior implements Listener{
 	ArrayList<Player> fall = new ArrayList<Player>();
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("Savior"))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getEntity() instanceof Player){
@@ -29,7 +30,7 @@ public class Savior implements Listener{
 									Random number = new Random();
 									int chance;
 									for(int counter = 1; counter<=1; counter++){
-										chance = 1 + number.nextInt(10-Api.getPower(lore, Api.getEnchName("Savior")));
+										chance = 1 + number.nextInt(8-Api.getPower(lore, Api.getEnchName("Savior")));
 										if(chance == 1){
 											e.setDamage(e.getDamage()/2);
 										}

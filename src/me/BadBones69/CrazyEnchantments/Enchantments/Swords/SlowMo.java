@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 public class SlowMo implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("SlowMo"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;

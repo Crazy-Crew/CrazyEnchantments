@@ -1,7 +1,10 @@
 package me.BadBones69.CrazyEnchantments;
 
+import java.util.List;
+
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor.BurnShield;
+import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Drunk;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Enlightened;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Fortify;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Freeze;
@@ -13,9 +16,13 @@ import me.BadBones69.CrazyEnchantments.Enchantments.Armor.OverLoad;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor.PainGiver;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Savior;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor.SelfDestruct;
+import me.BadBones69.CrazyEnchantments.Enchantments.Armor.SmokeBomb;
+import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Valor;
+import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Voodoo;
 import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Berserk;
 import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Blessed;
 import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Cursed;
+import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Decapitation;
 import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Dizzy;
 import me.BadBones69.CrazyEnchantments.Enchantments.Axes.FeedMe;
 import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Rekt;
@@ -23,18 +30,39 @@ import me.BadBones69.CrazyEnchantments.Enchantments.Boots.AntiGravity;
 import me.BadBones69.CrazyEnchantments.Enchantments.Boots.Gears;
 import me.BadBones69.CrazyEnchantments.Enchantments.Boots.Springs;
 import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Boom;
+import me.BadBones69.CrazyEnchantments.Enchantments.Bow.IceFreeze;
+import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Lightning;
 import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Piercing;
 import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Venom;
 import me.BadBones69.CrazyEnchantments.Enchantments.Helmets.Glowing;
 import me.BadBones69.CrazyEnchantments.Enchantments.Helmets.Mermaid;
+import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes.AutoSmelt;
+import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes.Experience;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Blindness;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Confusion;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Disarmer;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.DoubleDamage;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Execute;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.FastTurn;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Headless;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Inquisitive;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Insomnia;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.LifeSteal;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.LightWeight;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Nutrition;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Obliterate;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Paralyze;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Rage;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.SkillSwipe;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.SlowMo;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Snare;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Trap;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Vampire;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Viper;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Wither;
+import me.BadBones69.CrazyEnchantments.Enchantments.Tools.Haste;
+import me.BadBones69.CrazyEnchantments.Enchantments.Tools.Oxygenate;
+import me.BadBones69.CrazyEnchantments.Enchantments.Tools.Telepathy;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -43,8 +71,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,6 +85,32 @@ public class Main extends JavaPlugin{
 	public void onEnable(){
 		saveDefaultConfig();
 		settings.setup(this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Valor(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new SmokeBomb(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Drunk(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Voodoo(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Confusion(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Disarmer(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Execute(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Headless(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Inquisitive(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Insomnia(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Nutrition(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Obliterate(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Paralyze(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Rage(this), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new SkillSwipe(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Snare(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Trap(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Wither(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Decapitation(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new IceFreeze(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Lightning(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Oxygenate(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Haste(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Telepathy(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Experience(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new AutoSmelt(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SignControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
@@ -116,7 +168,7 @@ public class Main extends JavaPlugin{
 					sender.sendMessage(Api.color("&2&l&nCrazy Enchantments"));
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Api.color("&b/CE Help - &9Shows all CE Commands."));
-					sender.sendMessage(Api.color("&b/CE Info - &9Shows info on all Enchantmnets."));
+					sender.sendMessage(Api.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
@@ -134,18 +186,29 @@ public class Main extends JavaPlugin{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Info")){
-					if(!(sender instanceof Player)){
-						sender.sendMessage(Api.color("&cYou need to be a Player to use this command."));
+					if(args.length==1){
+						if(!(sender instanceof Player)){
+							sender.sendMessage(Api.color("&cYou need to be a Player to use this command."));
+							return true;
+						}
+						Player player = (Player)sender;
+						if(!Api.permCheck(player, "Info"))return true;
+						GUI.openInfo(player);
+						return true;
+					}else{
+						String ench = args[1];
+						for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+							if(en.equalsIgnoreCase(ench)||Api.getEnchName(en).equalsIgnoreCase(ench)){
+								String name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
+								List<String> desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+								sender.sendMessage(Api.color(name));
+								for(String msg : desc)sender.sendMessage(Api.color(msg));
+								return true;
+							}
+						}
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
-					Player player = (Player)sender;
-					if(!Api.permCheck(player, "Info"))return true;
-					Inventory inv = Bukkit.createInventory(null, 54, Api.color("&6&lEnchantment Info"));
-					for(ItemStack i : GUI.addInfo()){
-						inv.addItem(i);
-					}
-					player.openInventory(inv);
-					return true;
 				}
 				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Player> <Scroll> <Amount>
 					if(args.length!=4){

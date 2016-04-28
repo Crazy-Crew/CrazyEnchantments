@@ -15,6 +15,7 @@ import ca.thederpygolems.armorequip.ArmorEquipEvent;
 public class Glowing implements Listener{
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
+		if(!Api.isEnchantmentEnabled("Glowing"))return;
 		Player player = e.getPlayer();
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();

@@ -39,6 +39,7 @@ public class ScrollControl implements Listener{
 									types.addAll(ECControl.isSword());
 									types.addAll(ECControl.isBow());
 									types.addAll(ECControl.isAxe());
+									types.addAll(ECControl.isPickAxe());
 									if(types.contains(item.getType())){
 										e.setCancelled(true);
 										e.setCurrentItem(Api.addLore(item, Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));

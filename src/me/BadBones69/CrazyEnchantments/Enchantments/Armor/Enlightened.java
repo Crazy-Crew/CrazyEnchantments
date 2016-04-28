@@ -14,6 +14,9 @@ import org.bukkit.inventory.ItemStack;
 public class Enlightened implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("Enlightened"))return;
+		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getEntity() instanceof Player){

@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public class SelfDestruct implements Listener{
 	@EventHandler
  	public void onDeath(PlayerDeathEvent e){
+		if(!Api.isEnchantmentEnabled("SelfDestruct"))return;
 		Player player = e.getEntity();
 		if(!Api.allowsPVP(player))return;
 		for(ItemStack item : player.getEquipment().getArmorContents()){

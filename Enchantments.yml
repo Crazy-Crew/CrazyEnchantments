@@ -1,315 +1,976 @@
 Enchantments:
   Glowing: #Enchantment
+    Enabled: True #Wither or not an enchantment is active
     Name: 'Glowing' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
     MaxPower: 1 #Max lvl the enchantment goes up to
+    Info: #Info for the enchantment
+      Name: '&e&lGlowing' #Name for the GUI
+      Description: #The description of what it does
+        - '&c&lHelmets Only'
+        - '&3Gives night vision'
+        - '&3When they are put on'
     Categories: #All the categories the Enchantment can be found in
       - 'T1'
       - 'T2'
       - 'T3'
   BurnShield:
+    Enabled: True
     Name: 'BurnShield'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Info:
+      Name: '&e&lBurn Shield'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives fire resistants'
+        - '&3When they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Piercing:
+    Enabled: True
     Name: 'Piercing'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lPiercing'
+      Description:
+        - '&c&lBows Only'
+        - '&3Has a chance to'
+        - '&3Deal double the damage'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   OverLoad:
+    Enabled: True
     Name: 'OverLoad'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lOverload'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives Health Boost'
+        - '&3When they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   SelfDestruct:
+    Enabled: True
     Name: 'SelfDestruct'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lSelf Destruct'
+      Description:
+        - '&c&lArmor Only'
+        - '&3When the user dies'
+        - '&3Their body will explode'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Springs:
+    Enabled: True
     Name: 'Springs'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lSprings'
+      Description:
+        - '&c&lBoots Only'
+        - '&3Gives small Jump Boost'
+        - '&3When they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Gears:
+    Enabled: True
     Name: 'Gears'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lGears'
+      Description:
+        - '&c&lGears Only'
+        - '&3Gives a Speed Boost'
+        - '&3When they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Hulk:
+    Enabled: True
     Name: 'Hulk'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lHulk'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives Strength, Damage Resistens,'
+        - '&3and Slowness when they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Mermaid:
+    Enabled: True
     Name: 'Mermaid'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lMermaid'
+      Description:
+        - '&c&lHelmets Only'
+        - '&3Gives Water Breathing'
+        - '&3When they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Ninja:
+    Enabled: True
     Name: 'Ninja'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lNinja'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives Speed and Health Boost'
+        - '&3When they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Vampire:
+    Enabled: True
     Name: 'Vampire'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lVampire'
+      Description:
+        - '&c&lSword Only'
+        - '&3Has a chance to heal'
+        - '&3The user by 1 heart'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   LifeSteal:
+    Enabled: True
     Name: 'LifeSteal'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lLife Steal'
+      Description:
+        - '&c&lSword Only'
+        - '&3Has a chance to steal'
+        - '&3Health from the opponent'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Doctor:
+    Enabled: True
     Name: 'Doctor'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lDoctor'
+      Description:
+        - '&c&lBow Only'
+        - '&3Has a chance to'
+        - '&3Heal a player when hit'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Boom:
+    Enabled: True
     Name: 'Boom'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lBoom'
+      Description:
+        - '&c&lBow Only'
+        - '&3Has a chance to spawn'
+        - '&3TnT where the arrow lands'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Venom:
+    Enabled: True
     Name: 'Venom'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lVenom'
+      Description:
+        - '&c&lBow Only'
+        - '&3Has a chance to give'
+        - '&3The opponent poison'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   DoubleDamage:
+    Enabled: True
     Name: 'DoubleDamage'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lDouble Damage'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to '
+        - '&3Deal double the damage'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   SlowMo:
+    Enabled: True
     Name: 'SlowMo'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lSlowMo'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give'
+        - '&3The opponent slowness'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Blindness:
+    Enabled: True
     Name: 'Blindness'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lBlindness'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give'
+        - '&3The opponent blindness'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Viper:
+    Enabled: True
     Name: 'Viper'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lViper'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give'
+        - '&3The opponent poison'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   AntiGravity:
+    Enabled: True
     Name: 'AntiGravity'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lAnti-Gravity'
+      Description:
+        - '&c&lBoots Only'
+        - '&3Gives a stronger jump boost'
+        - '&3When they are put on'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   FastTurn:
+    Enabled: True
     Name: 'FastTurn'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lFast Turn'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to'
+        - '&3Deal more damage'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   LightWeight:
+    Enabled: True
     Name: 'LightWeight'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lLight Weight'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to'
+        - '&3Give the user haste'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Blessed:
+    Enabled: True
     Name: 'Blessed'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lBlessed'
+      Description:
+        - '&c&lAxes Only'
+        - '&3Has a chance to'
+        - '&3Remove all bad effect'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   FeedMe:
+    Enabled: True
     Name: 'FeedMe'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lFeedMe'
+      Description:
+        - '&c&lAxes Only'
+        - '&3Has a chance to'
+        - '&3Feed you while fighting'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Dizzy:
+    Enabled: True
     Name: 'Dizzy'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lDizzy'
+      Description:
+        - '&c&lAxes Only'
+        - '&3Has a chance to give'
+        - '&3Your opponent confusion'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Berserk:
+    Enabled: True
     Name: 'Berserk'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lBerserk'
+      Description:
+        - '&c&lAxes Only'
+        - '&3Has a chance to give'
+        - '&3You strength and mining fatigue'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Cursed:
+    Enabled: True
     Name: 'Cursed'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lCursed'
+      Description:
+        - '&c&lAxes Only'
+        - '&3Has a chance to give'
+        - '&3Your opponent mining fatigue'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Rekt:
+    Enabled: True
     Name: 'Rekt'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lRekt'
+      Description:
+        - '&c&lAxes Only'
+        - '&3Has a chance to'
+        - '&3Deal double the damage'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Enlightened:
+    Enabled: True
     Name: 'Enlightened'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lEnlightened'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to'
+        - '&3Heal you when being attacked'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Freeze:
+    Enabled: True
     Name: 'Freeze'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lFreeze'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to give'
+        - '&3Your attacker slowness'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Fortify:
+    Enabled: True
     Name: 'Fortify'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lFortify'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to give'
+        - '&3Your attacker weakness'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Molten:
+    Enabled: True
     Name: 'Molten'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lMolten'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to set'
+        - '&3Your attacker on fire'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   PainGiver:
+    Enabled: True
     Name: 'PainGiver'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lPain Giver'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to give'
+        - '&3Your attacker poison'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Savior:
+    Enabled: True
     Name: 'Savior'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lSavior'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to cut'
+        - '&3Your incoming damage in haft'
     Categories:
       - 'T1'
       - 'T2'
       - 'T3'
   Nursery:
+    Enabled: True
     Name: 'Nursery'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Info:
+      Name: '&e&lNursery'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to'
+        - '&3Heal you when walking'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  AutoSmelt:
+    Enabled: True
+    Name: 'AutoSmelt'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lAuto Smelt'
+      Description:
+        - '&c&lPickaxes Only'
+        - '&3Has a chance to auto smelt'
+        - '&3Ores and give more ingots'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Experience:
+    Enabled: True
+    Name: 'Experience'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lExperience'
+      Description:
+        - '&c&lPickaxes Only'
+        - '&3Has a chance to give'
+        - '&3Twice or more xp from mining'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Telepathy:
+    Enabled: True
+    Name: 'Telepathy'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Info:
+      Name: '&e&lTelepathy'
+      Description:
+        - '&c&lTools Only'
+        - '&3Will automatically send'
+        - '&3Mined items to your inventory'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Haste:
+    Enabled: True
+    Name: 'Haste'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lHaste'
+      Description:
+        - '&c&lTools Only'
+        - '&3Gives haste when'
+        - '&3Holding the item in your hand'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Oxygenate:
+    Enabled: True
+    Name: 'Oxygenate'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Info:
+      Name: '&e&lOxygenate'
+      Description:
+        - '&c&lTools Only'
+        - '&3Gives water breathing'
+        - '&3When holding item in your hand'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  IceFreeze:
+    Enabled: True
+    Name: 'IceFreeze'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Info:
+      Name: '&e&lIce Freeze'
+      Description:
+        - '&c&lBows Only'
+        - '&3Has a chance to give'
+        - '&3Your opponent slowness'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Lightning:
+    Enabled: True
+    Name: 'Lightning'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Info:
+      Name: '&e&lLightning'
+      Description:
+        - '&c&lBows Only'
+        - '&3Has a chance to strike'
+        - '&3Lightning where the arrow lands'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Decapitation:
+    Enabled: True
+    Name: 'Decapitation'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lDecapitation'
+      Description:
+        - '&c&lAxes Only'
+        - '&3Has a chance to drop'
+        - '&3The player head on death'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Confusion:
+    Enabled: True
+    Name: 'Confusion'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lConfusion'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give'
+        - '&3Your opponent confusion'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Disarmer:
+    Enabled: True
+    Name: 'Disarmer'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lDisarmer'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to take a'
+        - '&3Random piece of armor off'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Execute:
+    Enabled: True
+    Name: 'Execute'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lExecute'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to get strength'
+        - '&3When opponent is low on health'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Headless:
+    Enabled: True
+    Name: 'Headless'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lHeadless'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to drop'
+        - '&3Players head on death'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Inquisitive:
+    Enabled: True
+    Name: 'Inquisitive'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lInquisitive'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Will double or more XP'
+        - '&3Based on the enchantment Lvl'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Insomnia:
+    Enabled: True
+    Name: 'Insomnia'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Info:
+      Name: '&e&lInsomnia'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Gives confusion, mining fatigue, and slowness'
+        - '&3But has a high chance of doing double the damage'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Nutrition:
+    Enabled: True
+    Name: 'Nutrition'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lNutrition'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to'
+        - '&3Feed you in a fight'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Obliterate:
+    Enabled: True
+    Name: 'Obliterate'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lObliterate'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to send'
+        - '&3Your opponent flying backwards'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Paralyze:
+    Enabled: True
+    Name: 'Paralyze'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lParalyze'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give your'
+        - '&3Opponent High mining fatigue and High slowness'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  SkillSwipe:
+    Enabled: True
+    Name: 'SkillSwipe'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lSkill Swipe'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to steal xp'
+        - '&3From your opponent while fighting'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Snare:
+    Enabled: True
+    Name: 'Snare'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lSnare'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give your'
+        - '&3Opponent slowness and mining fatigue'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Trap:
+    Enabled: True
+    Name: 'Trap'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lTrap'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give'
+        - '&3Your opponent high slowness'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Wither:
+    Enabled: True
+    Name: 'Wither'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lWither'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Has a chance to give'
+        - '&3Your opponent high wither'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Rage:
+    Enabled: True
+    Name: 'Rage'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lRage'
+      Description:
+        - '&c&lSwords Only'
+        - '&3Attacks will get stronger'
+        - '&3As long as you keep attacking'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Valor:
+    Enabled: True
+    Name: 'Valor'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lValor'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives damage resistants'
+        - '&3Based on your enchantment lvl'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  SmokeBomb:
+    Enabled: True
+    Name: 'SmokeBomb'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lSmoke Bomb'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to Blind and'
+        - '&3Slow your attacker so you can escape'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Drunk:
+    Enabled: True
+    Name: 'Drunk'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lDrunk'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives strength, mining fatigue,'
+        - '&3And slowness when put on'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Voodoo:
+    Enabled: True
+    Name: 'Voodoo'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lVoodoo'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to give'
+        - '&3Your attacker weakness'
     Categories:
       - 'T1'
       - 'T2'

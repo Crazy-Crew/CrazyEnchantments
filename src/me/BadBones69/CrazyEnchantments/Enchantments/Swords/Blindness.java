@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 public class Blindness implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("Blindness"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;

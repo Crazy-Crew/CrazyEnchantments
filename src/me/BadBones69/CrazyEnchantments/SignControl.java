@@ -20,7 +20,6 @@ public class SignControl implements Listener{
 		Player player = e.getPlayer();
 		if(!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
 		if(e.getClickedBlock().getState() instanceof Sign){
-			//Sign s = (Sign)e.getClickedBlock().getState();
 			for(String l : Main.settings.getSigns().getConfigurationSection("Locations").getKeys(false)){
 				String type = Main.settings.getSigns().getString("Locations."+l+".Type");;
 				World world = Bukkit.getWorld(Main.settings.getSigns().getString("Locations."+l+".World"));

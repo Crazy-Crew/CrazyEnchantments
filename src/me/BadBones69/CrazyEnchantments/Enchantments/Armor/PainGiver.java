@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 public class PainGiver implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("PainGiver"))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof Player){
 			if(e.getDamager() instanceof LivingEntity){

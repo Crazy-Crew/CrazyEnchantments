@@ -1,7 +1,6 @@
 package me.BadBones69.CrazyEnchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -53,6 +52,17 @@ public class GUI implements Listener{
 				slot--;
 				inv.setItem(slot, Api.makeItem(item, 1, name, lore));
 			}
+			if(Main.settings.getConfig().getBoolean("Settings.Info.InGUI")){
+				String name = Main.settings.getConfig().getString("Settings.Info.Name");
+				String id = Main.settings.getConfig().getString("Settings.Info.Item");
+				List<String> lore = Main.settings.getConfig().getStringList("Settings.Info.Lore");
+				int slot = Main.settings.getConfig().getInt("Settings.Info.Slot")-1;
+				if(Main.settings.getConfig().getBoolean("Settings.Info.Glowing")){
+					inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+				}else{
+					inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+				}
+			}
 			if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.InGUI")){
 				String name = Main.settings.getConfig().getString("Settings.BlackScroll.GUIName");
 				String id = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
@@ -67,13 +77,6 @@ public class GUI implements Listener{
 				int slot = Main.settings.getConfig().getInt("Settings.WhiteScroll.Slot")-1;
 				inv.setItem(slot, Api.makeItem(id, 1, name, lore));
 			}
-		}
-		player.openInventory(inv);
-	}
-	void openInfo(Player player){
-		Inventory inv = Bukkit.createInventory(null, 54, Api.getInvName());
-		for(ItemStack i : addInfo()){
-			inv.addItem(i);
 		}
 		player.openInventory(inv);
 	}
@@ -120,6 +123,10 @@ public class GUI implements Listener{
 								player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
 								return;
 							}
+						}
+						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Info.Name")))){
+							openInfo(player);
+							return;
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.GUIName")))){
 							if(Api.isInvFull(player)){
@@ -309,61 +316,138 @@ public class GUI implements Listener{
 	public void infoClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
 		if(inv!=null){
-			if(inv.getName().equals(Api.color("&6&lEnchantment Info"))){
+			if(inv.getName().equals(Api.color("&c&lEnchantment Info"))){
 				e.setCancelled(true);
+				if(e.getCurrentItem()!=null){
+					ItemStack item = e.getCurrentItem();
+					if(item.hasItemMeta()){
+						if(item.getItemMeta().hasDisplayName()){
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&7&l<<&b&lBack"))){
+								openInfo((Player)e.getWhoClicked());
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lHelmet Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("helmet")){
+									in.addItem(i);
+								}
+								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lBoot Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("boots")){
+									in.addItem(i);
+								}
+								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lArmor Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("armor")){
+									in.addItem(i);
+								}
+								in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lSword Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 27, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("sword")){
+									in.addItem(i);
+								}
+								in.setItem(26, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lAxe Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("axe")){
+									in.addItem(i);
+								}
+								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lBow Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("bow")){
+									in.addItem(i);
+								}
+								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lPickaxe Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("pick")){
+									in.addItem(i);
+								}
+								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lTool Enchantments"))){
+								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								for(ItemStack i : getInfo("tools")){
+									in.addItem(i);
+								}
+								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+						}
+					}
+				}
 				return;
 			}
 		}
 	}
-	public static ArrayList<ItemStack> addInfo(){
-		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+	public static void openInfo(Player player){
+		Inventory inv = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+		inv.addItem(Api.makeItem(Material.GOLD_HELMET, 1, 0, "&e&lHelmet Enchantments"));
+		inv.addItem(Api.makeItem(Material.GOLD_BOOTS, 1, 0, "&e&lBoot Enchantments"));
+		inv.addItem(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lArmor Enchantments"));
+		inv.addItem(Api.makeItem(Material.BOW, 1, 0, "&e&lBow Enchantments"));
+		inv.addItem(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lSword Enchantments"));
+		inv.addItem(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lAxe Enchantments"));
+		inv.addItem(Api.makeItem(Material.GOLD_HOE, 1, 0, "&e&lTool Enchantments"));
+		inv.addItem(Api.makeItem(Material.GOLD_PICKAXE, 1, 0, "&e&lPickaxe Enchantments"));
+		player.openInventory(inv);
+	}
+	public static ArrayList<ItemStack> getInfo(String type){
 		ArrayList<ItemStack> swords = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> axes = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> bows = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> armor = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> helmets = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> boots = new ArrayList<ItemStack>();
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lViper", Arrays.asList("&c&lSwords Only", "&3Has a chance to give", "&3Your enemy Poison")));
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lSlowMo", Arrays.asList("&c&lSwords Only", "&3Has a chance to give", "&3Your enemy Slowness")));
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lVampire", Arrays.asList("&c&lSwords Only", "&3Has a chance to give", "&3To gain 1 heart when attaking")));
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lFast Turn", Arrays.asList("&c&lSwords Only", "&3Has a chance", "&3To deal more damage")));
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lBlindness", Arrays.asList("&c&lSwords Only", "&3Has a chance to give", "&3Your enemy Blindness")));
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lLife Steal", Arrays.asList("&c&lSwords Only", "&3Has a chance to take", "&3Your enemies health")));
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lLight Weight", Arrays.asList("&c&lSwords Only", "&3Has a chance to", "&3Give You Hast")));
-		swords.add(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lDouble Damage", Arrays.asList("&c&lSwords Only", "&3Has a chance to", "&3Deal Double Damage")));
-		axes.add(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lRekt", Arrays.asList("&c&lAxes Only", "&3Has a chance to", "&3Deal Double Damage")));
-		axes.add(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lDizzy", Arrays.asList("&c&lAxes Only", "&3Has a chance to give", "&3Your enemy Confusion")));
-		axes.add(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lCursed", Arrays.asList("&c&lAxes Only", "&3Has a chance to give", "&3Your enemy Mining Fatigue")));
-		axes.add(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lFeedMe", Arrays.asList("&c&lAxes Only", "&3Has a chance to", "&3Give you food when you attack")));
-		axes.add(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lBlessed", Arrays.asList("&c&lAxes Only", "&3Has a chance to", "&3Remove all bad effects from you.")));
-		axes.add(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lBerserk", Arrays.asList("&c&lAxes Only", "&3Has a chance to", "&3Give you Strength and Mining Fatigue")));
-		bows.add(Api.makeItem(Material.BOW, 1, 0, "&e&lBoom", Arrays.asList("&c&lBows Only", "&3Has a chance to", "&3Spawn Primed Tnt on hit")));
-		bows.add(Api.makeItem(Material.BOW, 1, 0, "&e&lVenom", Arrays.asList("&c&lBows Only", "&3Has a chance to", "&3Give your enemy Poison")));
-		bows.add(Api.makeItem(Material.BOW, 1, 0, "&e&lDoctor", Arrays.asList("&c&lBows Only", "&3Has a chance to", "&3To heal a player you hit")));
-		bows.add(Api.makeItem(Material.BOW, 1, 0, "&e&lPiercing", Arrays.asList("&c&lBows Only", "&3Has a chance to", "&3Deal Double Damage")));
-		helmets.add(Api.makeItem(Material.GOLD_HELMET, 1, 0, "&e&lMermaid", Arrays.asList("&c&lHelmets Only", "&3Will give you Water Breathing", "&3Once you put the helmet on")));
-		helmets.add(Api.makeItem(Material.GOLD_HELMET, 1, 0, "&e&lGlowing", Arrays.asList("&c&lHelmets Only", "&3Will give you Night Vision", "&3Once you put the helmet on")));
-		boots.add(Api.makeItem(Material.GOLD_BOOTS, 1, 0, "&e&lGears", Arrays.asList("&c&lBoots Only", "&3Will give you Speed Boost", "&3Once you put the Boots on")));
-		boots.add(Api.makeItem(Material.GOLD_BOOTS, 1, 0, "&e&lSprings", Arrays.asList("&c&lBoots Only", "&3Will give you Jump Boost", "&3Once you put the Boots on")));
-		boots.add(Api.makeItem(Material.GOLD_BOOTS, 1, 0, "&e&lAnti Gravity", Arrays.asList("&c&lBoots Only", "&3Will give you Higher Jump Boost", "&3Once you put the Boots on")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lHulk", Arrays.asList("&c&lArmor Only", "&3Will give you Strength and Slowness", "&3Once you put the Armor on")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lNinja", Arrays.asList("&c&lArmor Only", "&3Will give you Speed and Health Boost", "&3Once you put the Armor on")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lMolten", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Ignight your attacker")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lSavior", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Take less incoming damage at low health")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lFreeze", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Slow your attacker")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lNursery", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Heal you while you walk.")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lFortify", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Give your attaker Weakness")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lOverLoad", Arrays.asList("&c&lArmor Only", "&3Will give you Health Boost", "&3Once you put the Armor on")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lPain Giver", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Give your attacker Poison")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lBurn Shield", Arrays.asList("&c&lArmor Only", "&3Will give you Fire Resistance", "&3Once you put the Armor on")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lEnlightened", Arrays.asList("&c&lArmor Only", "&3Has a chance to", "&3Heal you when being attacked")));
-		armor.add(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lSelf Destruct", Arrays.asList("&c&lArmor Only", "&3When you die your", "&3Body will explode with uder destruction")));
-		items.addAll(armor);
-		items.addAll(helmets);
-		items.addAll(boots);
-		items.addAll(swords);
-		items.addAll(axes);
-		items.addAll(bows);
-		return items;
+		ArrayList<ItemStack> picks = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
+		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+			String name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
+			List<String> desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+			ArrayList<Material> Items = ECControl.allEnchantments().get(en);
+			ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
+			if(Items.equals(ECControl.isArmor()))armor.add(i);
+			if(Items.equals(ECControl.isSword()))swords.add(i);
+			if(Items.equals(ECControl.isAxe()))axes.add(i);
+			if(Items.equals(ECControl.isBow()))bows.add(i);
+			if(Items.equals(ECControl.isHelmet()))helmets.add(i);
+			if(Items.equals(ECControl.isBoots()))boots.add(i);
+			if(Items.equals(ECControl.isPickAxe()))picks.add(i);
+			if(Items.equals(ECControl.isTool()))tools.add(i);
+		}
+		if(type.equalsIgnoreCase("Armor"))return armor;
+		if(type.equalsIgnoreCase("Sword"))return swords;
+		if(type.equalsIgnoreCase("Helmet"))return helmets;
+		if(type.equalsIgnoreCase("Boots"))return boots;
+		if(type.equalsIgnoreCase("Bow"))return bows;
+		if(type.equalsIgnoreCase("Axe"))return axes;
+		if(type.equalsIgnoreCase("Pick"))return picks;
+		if(type.equalsIgnoreCase("Tools"))return tools;
+		return null;
 	}
 }

@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class Nursery implements Listener{
 	@EventHandler
 	public void onMovment(PlayerMoveEvent e){
+		if(!Api.isEnchantmentEnabled("Nursery"))return;
 		Player player = e.getPlayer();
 		int X = e.getFrom().getBlockX();
 		int Y = e.getFrom().getBlockY();

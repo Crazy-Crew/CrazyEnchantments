@@ -13,6 +13,9 @@ import org.bukkit.potion.PotionEffectType;
 public class Cursed implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getDamager()))return;
+		if(!Api.isEnchantmentEnabled("Cursed"))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){

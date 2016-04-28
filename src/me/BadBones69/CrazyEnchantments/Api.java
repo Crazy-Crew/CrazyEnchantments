@@ -300,10 +300,10 @@ public class Api{
 	static int getXPLvl(Player player){
 		return player.getLevel();
 	}
-	static void takeLvlXP(Player player, int amount){
+	public static void takeLvlXP(Player player, int amount){
 		player.setLevel(player.getLevel() - amount);
 	}
-	static void takeTotalXP(Player player, int amount){
+	public static void takeTotalXP(Player player, int amount){
 		int total = player.getTotalExperience() - amount;
         player.setTotalExperience(total);
         player.setLevel(0);
@@ -430,6 +430,16 @@ public class Api{
 	public static boolean isInvFull(Player player){
 		if(player.getInventory().firstEmpty()==-1){
 			return true;
+		}
+		return false;
+	}
+	public static Boolean isEnchantmentEnabled(String ench){
+		for(String en : ECControl.allEnchantments().keySet()){
+			if(getEnchName(en).equalsIgnoreCase(ench)){
+				if(Main.settings.getEnchs().getBoolean("Enchantments."+en+".Enabled")){
+					return true;
+				}
+			}
 		}
 		return false;
 	}

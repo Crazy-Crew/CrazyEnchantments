@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 public class Viper implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("Viper"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;

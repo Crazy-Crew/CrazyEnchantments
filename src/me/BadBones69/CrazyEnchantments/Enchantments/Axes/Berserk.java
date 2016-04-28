@@ -15,6 +15,9 @@ import org.bukkit.potion.PotionEffectType;
 public class Berserk implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(!Api.isEnchantmentEnabled("SmokeBomb"))return;
+		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
