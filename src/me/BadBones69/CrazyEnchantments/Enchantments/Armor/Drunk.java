@@ -22,7 +22,7 @@ public class Drunk implements Listener{
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
 			if(!NewItem.getItemMeta().hasLore())return;
 			for(String lore : NewItem.getItemMeta().getLore()){
-				if(lore.contains(Api.getEnchName("Dunk"))){
+				if(lore.contains(Api.getEnchName("Drunk"))){
 					int power = Api.getPower(lore, Api.getEnchName("Drunk"));
 					player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 55555, power-1));
 					player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 55555, power-1));

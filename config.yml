@@ -3,10 +3,10 @@ Settings:
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   GUISize: 27 #The size of the GUI, Must be a factor of 9
   Info: #Settings for Info item in the GUI
-    InGUI: True #Toggle wether it is in the /CE GUI or not
+    InGUI: True #Toggle whether it is in the /CE GUI or not
     Slot: 23 #Slot it is in
     Item: '131' #Item it is
-    Glowing: True #Wether it glows like its enchanted
+    Glowing: True #Whether it glows like its enchanted
     Name: '&e&lEnchantment Info' #Name of the Item
     Lore: #Lore of the item
       - '&b>>&7&lClick to view&b<<'
