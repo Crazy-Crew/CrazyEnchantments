@@ -85,6 +85,13 @@ public class Main extends JavaPlugin{
 	public void onEnable(){
 		saveDefaultConfig();
 		settings.setup(this);
+		//==========================================================================\\
+		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
+		//==========================================================================\\
 		Bukkit.getServer().getPluginManager().registerEvents(new Valor(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SmokeBomb(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Drunk(), this);
@@ -112,11 +119,6 @@ public class Main extends JavaPlugin{
 		Bukkit.getServer().getPluginManager().registerEvents(new Experience(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new AutoSmelt(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new SignControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(null), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OverLoad(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Glowing(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new BurnShield(), this);
@@ -247,10 +249,10 @@ public class Main extends JavaPlugin{
 					for(String i : ECControl.allEnchantments().keySet()){
 						if(Api.getEnchName(i).equalsIgnoreCase(args[1])){
 							T = true;
-							if(Main.settings.getEnchs().contains("Enchantments."+en)){
-								color = Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+							if(Main.settings.getEnchs().contains("Enchantments."+i)){
+								color = Main.settings.getEnchs().getString("Enchantments."+i+".Color");
 							}else{
-								color = Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
+								color = Main.settings.getCustomEnchs().getString("Enchantments."+i+".Color");
 							}
 							en = Api.getEnchName(i);
 						}

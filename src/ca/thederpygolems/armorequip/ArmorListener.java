@@ -1,7 +1,6 @@
 package ca.thederpygolems.armorequip;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -33,7 +32,7 @@ public class ArmorListener implements Listener{
 
 	private final HashMap<String, HashMap<ArmorType, Long>> lastEquip;
 
-	public ArmorListener(List<String> blockedMaterials){
+	public ArmorListener(){
 		lastEquip = new HashMap<String, HashMap<ArmorType, Long>>();
 	}
 

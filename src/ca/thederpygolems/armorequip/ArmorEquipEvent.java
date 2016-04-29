@@ -1,14 +1,17 @@
 package ca.thederpygolems.armorequip;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * @Author Borlea
  * @Github https://github.com/borlea/
- * @Website http://thederpygolems.ca/
+ * @Website http://codingforcookies.com/
+ * @since Jul 30, 2015
  */
 public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 
@@ -16,8 +19,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 	private boolean cancel = false;
 	private final EquipMethod equipType;
 	private final ArmorType type;
-	private final ItemStack oldArmorPiece;
-	private ItemStack newArmorPiece;
+	private ItemStack oldArmorPiece, newArmorPiece;
 
 	/**
 	 * Constructor for the ArmorEquipEvent.
@@ -77,14 +79,18 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 	}
 
 	/**
-	 * Returns the last equipped armor piece, could be a piece of armor, an AIR material, or null.
+	 * Returns the last equipped armor piece, could be a piece of armor, {@link Material#Air}, or null.
 	 */
 	public final ItemStack getOldArmorPiece(){
 		return oldArmorPiece;
 	}
 
+	public final void setOldArmorPiece(final ItemStack oldArmorPiece){
+		this.oldArmorPiece = oldArmorPiece;
+	}
+
 	/**
-	 * Returns the newly equipped armor, could be a piece of armor, an AIR material, or null.
+	 * Returns the newly equipped armor, could be a piece of armor, {@link Material#Air}, or null.
 	 */
 	public final ItemStack getNewArmorPiece(){
 		return newArmorPiece;
@@ -95,14 +101,41 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable{
 	}
 
 	/**
-	 * Gets the method used to either equip or uneqiip an armor piece.
+	 * Gets the method used to either equip or unequip an armor piece.
 	 */
 	public EquipMethod getMethod(){
 		return equipType;
 	}
 
-
 	public enum EquipMethod{
-		SHIFT_CLICK, DRAG, HOTBAR, DISPENSER, BROKE, DEATH;
+	    /**
+	     * When you shift click an armor piece to equip or unequip
+	     */
+		SHIFT_CLICK,
+		/**
+		 * When you drag and drop the item to equip or unequip
+		 */
+		DRAG,
+		/**
+		 * When you right click an armor piece in the hotbar without the inventory open to equip.
+		 */
+		HOTBAR,
+		/**
+		 * When you press the hotbar slot number while hovering over the armor slot to equip or unequip
+		 */
+		HOTBAR_SWAP,
+		/**
+		 * When in range of a dispenser that shoots an armor piece to equip.
+		 */
+		DISPENSER,
+		/**
+		 * When an armor piece breaks to unequip
+		 */
+		BROKE,
+		/**
+		 * When you die causing all armor to unequip
+		 */
+		DEATH,
+		;
 	}
 }

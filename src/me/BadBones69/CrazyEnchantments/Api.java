@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
 
-import me.BadBones69.CrazyEnchantments.MultiSupport.Eight;
-import me.BadBones69.CrazyEnchantments.MultiSupport.Nine;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R3;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R1;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,13 +29,6 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 
 public class Api{
-	public static ItemStack addGlow(ItemStack item) {
-		if(getVersion()==19){
-			return Nine.addGlow(item);
-		}else{
-			return Eight.addGlow(item);
-		}
-    }
 	public static String color(String msg){
 		msg = msg.replaceAll("(&([a-f0-9]))", "\u00A7$2");
 		msg = msg.replaceAll("&l", ChatColor.BOLD + "");
@@ -48,9 +45,29 @@ public class Api{
 		String ver = Bukkit.getServer().getClass().getPackage().getName();
 		ver = ver.substring(ver.lastIndexOf('.')+1);
 		ver=ver.replaceAll("_", "").replaceAll("R", "").replaceAll("v", "");
-		ver=ver.substring(0, ver.length()-1);
 		return Integer.parseInt(ver);
 	}
+	public static ItemStack addGlow(ItemStack item) {
+		if(getVersion()==191){
+			return NMS_v1_9_R1.addGlow(item);
+		}
+		if(getVersion()==183){
+			return NMS_v1_8_R3.addGlow(item);
+		}
+		if(getVersion()==182){
+			return NMS_v1_8_R2.addGlow(item);
+		}
+		if(getVersion()==181){
+			return NMS_v1_8_R1.addGlow(item);
+		}
+		if(getVersion()==174){
+			return NMS_v1_7_R4.addGlow(item);
+		}else{
+			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date."
+					+ "Please update or remove this plugin to stop ferther Errors.");
+			return null;
+		}
+    }
 	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(Player player){
 		if(getVersion()==19){
