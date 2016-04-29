@@ -243,10 +243,16 @@ public class Main extends JavaPlugin{
 					if(!Api.permCheck((Player)sender, "Admin"))return true;
 					boolean T = false;
 					String en = "";
+					String color = "&7";
 					for(String i : ECControl.allEnchantments().keySet()){
 						if(Api.getEnchName(i).equalsIgnoreCase(args[1])){
 							T = true;
-							en = i;
+							if(Main.settings.getEnchs().contains("Enchantments."+en)){
+								color = Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+							}else{
+								color = Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
+							}
+							en = Api.getEnchName(i);
 						}
 					}
 					if(!T){
@@ -267,7 +273,7 @@ public class Main extends JavaPlugin{
 					if(Api.getItemInHand(player).getType() == Material.AIR){
 						player.sendMessage(Api.getPrefix()+Api.color(Api.getPrefix()+"&cYou must have an item in your hand."));return true;
 					}
-					Api.setItemInHand(player, Api.addGlow(Api.addLore(Api.getItemInHand(player), Api.color("&7"+en+" "+lvl))));
+					Api.setItemInHand(player, Api.addGlow(Api.addLore(Api.getItemInHand(player), Api.color(color+en+" "+lvl))));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Book")){// /CE Book <Enchantment> <Lvl> <Amount> <Player>

@@ -29,7 +29,7 @@ public class Valor implements Listener{
 			}
 		}
 		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
-			if(!NewItem.getItemMeta().hasLore())return;
+			if(!OldItem.getItemMeta().hasLore())return;
 			for(String lore : OldItem.getItemMeta().getLore()){
 				if(lore.contains(Api.getEnchName("Valor"))){
 					player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
