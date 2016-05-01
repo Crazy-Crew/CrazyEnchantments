@@ -81,6 +81,7 @@ public class Main extends JavaPlugin{
 	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static Economy econ = null;
 	public static EconomyResponse r;
+	
 	@Override
 	public void onEnable(){
 		saveDefaultConfig();
@@ -251,7 +252,8 @@ public class Main extends JavaPlugin{
 							T = true;
 							if(Main.settings.getEnchs().contains("Enchantments."+i)){
 								color = Main.settings.getEnchs().getString("Enchantments."+i+".Color");
-							}else{
+							}
+							if(Main.settings.getCustomEnchs().contains("Enchantments."+i)){
 								color = Main.settings.getCustomEnchs().getString("Enchantments."+i+".Color");
 							}
 							en = Api.getEnchName(i);

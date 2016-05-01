@@ -297,6 +297,10 @@ public class ECControl implements Listener{
 		ma.add(Material.STONE_SPADE);
 		ma.add(Material.IRON_SPADE);
 		ma.add(Material.DIAMOND_SPADE);
+		ma.add(Material.WOOD_HOE);
+		ma.add(Material.STONE_HOE);
+		ma.add(Material.IRON_HOE);
+		ma.add(Material.DIAMOND_HOE);
 		return ma;
 	}
 }

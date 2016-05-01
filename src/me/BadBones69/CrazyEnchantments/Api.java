@@ -151,6 +151,18 @@ public class Api{
 		}
 		return Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name");
 	}
+	public static String getEnchColor(String en){
+		if(Main.settings.getEnchs().contains("Enchantments."+en)){
+			return Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+		}
+		return Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
+	}
+	public static String getEnchBookColor(String en){
+		if(Main.settings.getEnchs().contains("Enchantments."+en)){
+			return Main.settings.getEnchs().getString("Enchantments."+en+".BookColor");
+		}
+		return Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor");
+	}
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
 			int x = en.getLocation().getBlockX();
@@ -396,6 +408,8 @@ public class Api{
 		return amount;
 	}
 	static boolean successChance(ItemStack item){
+		if(!item.hasItemMeta())return true;
+		if(!item.getItemMeta().hasLore())return true;
 		for(String lore : item.getItemMeta().getLore()){
 			if(lore.contains("% Success Chance")){
 				lore=lore.replaceAll("% Success Chance", "");
@@ -415,6 +429,8 @@ public class Api{
 		return true;
 	}
 	static boolean destroyChance(ItemStack item){
+		if(!item.hasItemMeta())return false;
+		if(!item.getItemMeta().hasLore())return false;
 		for(String lore : item.getItemMeta().getLore()){
 			if(lore.contains("% Destroy Chance")){
 				lore=lore.replaceAll("% Destroy Chance", "");

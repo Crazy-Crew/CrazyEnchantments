@@ -1,6 +1,7 @@
 package me.BadBones69.CrazyEnchantments;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -222,7 +223,8 @@ public class GUI implements Listener{
 					if(c.getItemMeta().hasDisplayName()){
 						String name = c.getItemMeta().getDisplayName();
 						for(String en : ECControl.allEnchantments().keySet()){
-							if(name.contains(Api.getEnchName(en))){
+							if(name.contains(Api.color(Api.getEnchBookColor(en)+Api.getEnchName(en)))){
+								if(c.getType()!=Material.BOOK)return;
 								for(Material m : ECControl.allEnchantments().get(en)){
 									if(item.getType() == m){
 										if(c.getAmount() == 1){
@@ -407,14 +409,22 @@ public class GUI implements Listener{
 	}
 	public static void openInfo(Player player){
 		Inventory inv = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
-		inv.addItem(Api.makeItem(Material.GOLD_HELMET, 1, 0, "&e&lHelmet Enchantments"));
-		inv.addItem(Api.makeItem(Material.GOLD_BOOTS, 1, 0, "&e&lBoot Enchantments"));
-		inv.addItem(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lArmor Enchantments"));
-		inv.addItem(Api.makeItem(Material.BOW, 1, 0, "&e&lBow Enchantments"));
-		inv.addItem(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lSword Enchantments"));
-		inv.addItem(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lAxe Enchantments"));
-		inv.addItem(Api.makeItem(Material.GOLD_HOE, 1, 0, "&e&lTool Enchantments"));
-		inv.addItem(Api.makeItem(Material.GOLD_PICKAXE, 1, 0, "&e&lPickaxe Enchantments"));
+		inv.addItem(Api.makeItem(Material.GOLD_HELMET, 1, 0, "&e&lHelmet Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- Leather Helmet", "&a- Chain Helmet", "&a- Iron Helmet", "&a- Gold Helmet", "&a- Diamond Helmet")));
+		inv.addItem(Api.makeItem(Material.GOLD_BOOTS, 1, 0, "&e&lBoot Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- Leather Boots", "&a- Chain Boots", "&a- Iron Boots", "&a- Gold Boots", "&a- Diamond Boots")));
+		inv.addItem(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lArmor Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- All Leather Armor", "&a- All Chain Armor", "&a- All Iron Armor", "&a- All Gold Armor", "&a- All Diamond Armor")));
+		inv.addItem(Api.makeItem(Material.BOW, 1, 0, "&e&lBow Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- Bow")));
+		inv.addItem(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lSword Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- Wood Sword", "&a- Stone Sword", "&a- Iron Sword", "&a- Gold Sword", "&a- Diamond Sword")));
+		inv.addItem(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lAxe Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- Wood Axe", "&a- Stone Axe", "&a- Iron Axe", "&a- Gold Axe", "&a- Diamond Axe")));
+		inv.addItem(Api.makeItem(Material.GOLD_HOE, 1, 0, "&e&lTool Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- All Pickaxes", "&a- All Axes", "&a- All Shovels", "&a- All Hoes")));
+		inv.addItem(Api.makeItem(Material.GOLD_PICKAXE, 1, 0, "&e&lPickaxe Enchantments", 
+				Arrays.asList("&cEnchantable Items:", "&a- Wood Pickaxe", "&a- Stone Pickaxe", "&a- Iron Pickaxe", "&a- Gold Pickaxe", "&a- Diamond Pickaxe")));
 		player.openInventory(inv);
 	}
 	public static ArrayList<ItemStack> getInfo(String type){
