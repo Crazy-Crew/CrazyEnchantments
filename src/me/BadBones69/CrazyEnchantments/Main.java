@@ -181,7 +181,7 @@ public class Main extends JavaPlugin{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Reload"))return true;
+					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					settings.reloadConfig();
 					settings.reloadEnchs();
 					settings.reloadMsg();
@@ -216,6 +216,7 @@ public class Main extends JavaPlugin{
 					}
 				}
 				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]
+					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					if(args.length==3){
 						if(!(sender instanceof Player)){
 							sender.sendMessage(Api.getPrefix()+Api.color("&cYou need to be a Player to use this command."));
@@ -289,7 +290,7 @@ public class Main extends JavaPlugin{
 						sender.sendMessage(Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
 						return true;
 					}
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Scroll"))return true;
+					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					String name = args[1];
 					if(!Api.isInt(args[3])){
 						sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[3]+" is not a number."));
