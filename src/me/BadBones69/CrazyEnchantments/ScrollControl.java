@@ -90,10 +90,10 @@ public class ScrollControl implements Listener{
 		int Dmin = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
 		ArrayList<String> lore = new ArrayList<String>();
 		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.DestroyChance")){
-			lore.add(Api.color("&4"+ECControl.percentPick(Dmax, Dmin)+"% Destroy Chance"));
+			lore.add(Api.color("&4"+Api.percentPick(Dmax, Dmin)+"% Destroy Chance"));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.SuccessChance")){
-			lore.add(Api.color("&a"+ECControl.percentPick(Smax, Smin)+"% Success Chance"));
+			lore.add(Api.color("&a"+Api.percentPick(Smax, Smin)+"% Success Chance"));
 		}
 		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
 			ench=Main.settings.getEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+ench+".Name")+" "+power;

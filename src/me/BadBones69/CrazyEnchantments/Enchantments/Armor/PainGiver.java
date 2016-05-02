@@ -24,6 +24,7 @@ public class PainGiver implements Listener{
 				LivingEntity en = (LivingEntity) e.getDamager();
 				if(!Api.allowsPVP(player))return;
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
+					if(armor==null)return;
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
 						for(String lore : armor.getItemMeta().getLore()){

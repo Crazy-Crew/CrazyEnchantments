@@ -16,6 +16,7 @@ public class SelfDestruct implements Listener{
 		Player player = e.getEntity();
 		if(!Api.allowsPVP(player))return;
 		for(ItemStack item : player.getEquipment().getArmorContents()){
+			if(item==null)return;
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String l : item.getItemMeta().getLore()){

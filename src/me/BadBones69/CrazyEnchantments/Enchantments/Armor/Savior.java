@@ -22,6 +22,7 @@ public class Savior implements Listener{
 			if(e.getEntity() instanceof Player){
 				final Player player = (Player) e.getEntity();
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
+					if(armor==null)return;
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
 						for(String lore : armor.getItemMeta().getLore()){

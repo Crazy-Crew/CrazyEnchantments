@@ -25,6 +25,7 @@ public class Fortify implements Listener{
 				Player player = (Player) e.getEntity();
 				LivingEntity en = (LivingEntity) e.getDamager();
 				for(ItemStack armor : player.getEquipment().getArmorContents()){
+					if(armor==null)return;
 					if(armor.hasItemMeta()){
 						if(!armor.getItemMeta().hasLore())return;
 						for(String lore : armor.getItemMeta().getLore()){

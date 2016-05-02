@@ -145,16 +145,12 @@ public class ECControl implements Listener{
 		int Dmin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Min");
 		ArrayList<String> lore = new ArrayList<String>();
 		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.DestroyChance")){
-			lore.add(Api.color("&4"+percentPick(Dmax, Dmin)+"% Destroy Chance"));
+			lore.add(Api.color("&4"+Api.percentPick(Dmax, Dmin)+"% Destroy Chance"));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.SuccessChance")){
-			lore.add(Api.color("&a"+percentPick(Smax, Smin)+"% Success Chance"));
+			lore.add(Api.color("&a"+Api.percentPick(Smax, Smin)+"% Success Chance"));
 		}
 		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat), Api.addDiscription(), lore);
-	}
-	static String percentPick(int max, int min){
-		Random i = new Random();
-		return Integer.toString(min+i.nextInt(max-min));
 	}
 	static String powerPicker(String en, String C){
 		Random r = new Random();

@@ -255,20 +255,6 @@ public class Api{
 		Random i = new Random();
 		return Integer.toString(i.nextInt(100));
 	}
-	static ItemStack BlackScroll(int i){
-		String name = color(Main.settings.getConfig().getString("Settings.BlackScroll.Name"));
-		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(Api.color("&7Right Click for more Info."));
-		String type = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
-		int ty=0;
-		if(type.contains(":")){
-			String[] b = type.split(":");
-			type = b[0];
-			ty = Integer.parseInt(b[1]);
-		}
-		Material m = Material.matchMaterial(type);
-		return makeItem(m, i, ty, name, lore);
-	}
 	static String getPrefix(){
 		return color(Main.settings.getConfig().getString("Settings.Prefix"));
 	}
@@ -277,8 +263,9 @@ public class Api{
 	}
 	static List<String> addDiscription(){
 		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(color("&7Drag book and drop on Item."));
-		lore.add(color("&7Right click for more Info."));
+		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
+			lore.add(color(l));
+		}
 		return lore;
 	}
 	public static boolean isInt(String s) {
@@ -323,6 +310,16 @@ public class Api{
 			i.setAmount(item.getAmount() - 1);
 		}
 	}
+	static ItemStack removeItem(ItemStack item){
+		if(item.getAmount() <= 1){
+			return new ItemStack(Material.AIR);
+		}
+		else{
+			ItemStack i = item;
+			i.setAmount(item.getAmount() - 1);
+			return i;
+		}
+	}
 	static String getInvName(){
 		return color(Main.settings.getConfig().getString("Settings.InvName"));
 	}
@@ -351,6 +348,20 @@ public class Api{
 			}
 		}
 		return false;
+	}
+	static ItemStack BlackScroll(int i){
+		String name = color(Main.settings.getConfig().getString("Settings.BlackScroll.Name"));
+		ArrayList<String> lore = new ArrayList<String>();
+		lore.add(Api.color("&7Right Click for more Info."));
+		String type = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
+		int ty=0;
+		if(type.contains(":")){
+			String[] b = type.split(":");
+			type = b[0];
+			ty = Integer.parseInt(b[1]);
+		}
+		Material m = Material.matchMaterial(type);
+		return makeItem(m, i, ty, name, lore);
 	}
 	static ItemStack addWhiteScroll(int amount){
 		ArrayList<String> lore = new ArrayList<String>();
@@ -459,6 +470,10 @@ public class Api{
 			}
 		}
 		return false;
+	}
+	public static Integer percentPick(int max, int min){
+		Random i = new Random();
+		return min+i.nextInt(max-min);
 	}
 	public static boolean isInvFull(Player player){
 		if(player.getInventory().firstEmpty()==-1){

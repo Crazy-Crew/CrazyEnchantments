@@ -64,6 +64,20 @@ public class GUI implements Listener{
 					inv.setItem(slot, Api.makeItem(id, 1, name, lore));
 				}
 			}
+			if(Main.settings.getConfig().getBoolean("Settings.Dust.SuccessDust.InGUI")){
+				String name = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName");
+				String id = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item");
+				List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.SuccessDust.GUILore");
+				int slot = Main.settings.getConfig().getInt("Settings.Dust.SuccessDust.Slot")-1;
+				inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+			}
+			if(Main.settings.getConfig().getBoolean("Settings.Dust.DestroyDust.InGUI")){
+				String name = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName");
+				String id = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item");
+				List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.DestroyDust.GUILore");
+				int slot = Main.settings.getConfig().getInt("Settings.Dust.DestroyDust.Slot")-1;
+				inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+			}
 			if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.InGUI")){
 				String name = Main.settings.getConfig().getString("Settings.BlackScroll.GUIName");
 				String id = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
@@ -127,6 +141,82 @@ public class GUI implements Listener{
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Info.Name")))){
 							openInfo(player);
+							return;
+						}
+						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName")))){
+							if(Api.isInvFull(player)){
+								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+								}else{
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+								}
+								return;
+							}
+							int price = Main.settings.getConfig().getInt("Settings.SignOptions.DestroyDustStyle.Cost");
+							if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Money/XP").equalsIgnoreCase("Money")){
+								if(Api.getMoney(player)<price){
+									double needed = price-Api.getMoney(player);
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									return;
+								}
+								Main.econ.withdrawPlayer(player, price);
+							}else{
+								if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
+									if(Api.getXPLvl(player)<price){
+										String xp = price - Api.getXPLvl(player)+"";
+										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+										return;
+									}
+									Api.takeLvlXP(player, price);
+								}
+								if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
+									if(player.getTotalExperience()<price){
+										String xp = price - player.getTotalExperience()+"";
+										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										return;
+									}
+									Api.takeTotalXP(player, price);
+								}
+							}
+							player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));
+							return;
+						}
+						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName")))){
+							if(Api.isInvFull(player)){
+								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+								}else{
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+								}
+								return;
+							}
+							int price = Main.settings.getConfig().getInt("Settings.SignOptions.SuccessDustStyle.Cost");
+							if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Money/XP").equalsIgnoreCase("Money")){
+								if(Api.getMoney(player)<price){
+									double needed = price-Api.getMoney(player);
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									return;
+								}
+								Main.econ.withdrawPlayer(player, price);
+							}else{
+								if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
+									if(Api.getXPLvl(player)<price){
+										String xp = price - Api.getXPLvl(player)+"";
+										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+										return;
+									}
+									Api.takeLvlXP(player, price);
+								}
+								if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
+									if(player.getTotalExperience()<price){
+										String xp = price - player.getTotalExperience()+"";
+										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										return;
+									}
+									Api.takeTotalXP(player, price);
+								}
+							}
+							player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));
 							return;
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.GUIName")))){

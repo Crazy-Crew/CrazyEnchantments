@@ -2,6 +2,44 @@ Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   GUISize: 27 #The size of the GUI, Must be a factor of 9
+  EnchantmentBookLore:
+    - '&7Drag book and drop on Item.'
+    - '&7Right click for more Info.'
+  Dust: #Settings for the Magical Dust
+    SuccessDust:
+      InGUI: True #If you can buy it in the /CE Gui
+      GUIName: '&aMagical Angel Dust' #Name of the item in the GUI
+      GUILore: #Lore in the GUI.
+        - '&eCost: &a&l$50'
+        - '&7Dust allows you to bring'
+        - '&7Up your &aSuccess Rate'
+      Slot: 4 #Slot number it is in
+      Item: '353' #Item the dust is
+      Name: '&aMagical Angel Dust' #Name of the dust
+      Lore: #Lore for the dust
+        - '&a+%Percent%% Success Rate'
+        - '&7Apply to an Enchantment Book to'
+        - '&7Increase the Success Rate by &e%Percent%%'
+      PercentRange: #Range the success rate will be.
+        Max: 30 #Max percent
+        Min: 2 #Minimum percent
+    DestroyDust:
+      InGUI: True #If you can buy it in the /CE Gui
+      GUIName: '&eMagical Fixing Dust' #Name of the item in the GUI
+      GUILore: #Lore in the GUI.
+        - '&eCost: &a&l$50'
+        - '&7Dust allows you to bring'
+        - '&7Down your &4Destroy Rate'
+      Slot: 6 #Slot number it is in
+      Item: '353' #Item the dust is
+      Name: '&eMagical Fixing Dust' #Name of the dust
+      Lore: #Lore for the dust
+        - '&c-%Percent%% Destroy Rate'
+        - '&7Apply to an Enchantment Book to'
+        - '&7Decrease the Destroy Rate by &e%Percent%%'
+      PercentRange: #Range the destroy rate will be.
+        Max: 10 #Max percent
+        Min: 2 #Minimum percent
   Info: #Settings for Info item in the GUI
     InGUI: True #Toggle whether it is in the /CE GUI or not
     Slot: 23 #Slot it is in
@@ -40,6 +78,22 @@ Settings:
     IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
     MaxAmountOfEnchantments: 5 #The Max amount of enchantments an item can have(Will not effect Vanilla Enchantments)
   SignOptions: #Options for the Signs.
+    SuccessDustStyle: 
+      Cost: 50 #How much to buy a Magical Dust
+      Money/XP: Money #Use money or xp
+      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
+      Line1: '&b&lCrazy Enchant'
+      Line2: '&b&lShop:'
+      Line3: '&e&lMagical Angel Dust'
+      Line4: '&c&lCost: &a&l$50'
+    DestroyDustStyle: 
+      Cost: 50 #How much to buy a Magical Dust
+      Money/XP: Money #Use money or xp
+      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
+      Line1: '&b&lCrazy Enchant'
+      Line2: '&b&lShop:'
+      Line3: '&e&lMagical Fixing Dust'
+      Line4: '&c&lCost: &a&l$50'
     CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
       Line1: '&b&lCrazy Enchant' #Line 1 of the sign
       Line2: '&b&lShop:' #Line 2 of the sign

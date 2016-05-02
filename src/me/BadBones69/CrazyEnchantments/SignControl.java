@@ -28,6 +28,82 @@ public class SignControl implements Listener{
 				int z = Main.settings.getSigns().getInt("Locations."+l+".Z");
 				Location loc = new Location(world,x,y,z);
 				if(Loc.equals(loc)){
+					if(type.equalsIgnoreCase("DestroyDust")){
+						if(Api.isInvFull(player)){
+							if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+								player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+							}else{
+								player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+							}
+							return;
+						}
+						int price = Main.settings.getConfig().getInt("Settings.SignOptions.DestroyDustStyle.Cost");
+						if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Money/XP").equalsIgnoreCase("Money")){
+							if(Api.getMoney(player)<price){
+								double needed = price-Api.getMoney(player);
+								player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+								return;
+							}
+							Main.econ.withdrawPlayer(player, price);
+						}else{
+							if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
+								if(Api.getXPLvl(player)<price){
+									String xp = price - Api.getXPLvl(player)+"";
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									return;
+								}
+								Api.takeLvlXP(player, price);
+							}
+							if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
+								if(player.getTotalExperience()<price){
+									String xp = price - player.getTotalExperience()+"";
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+									return;
+								}
+								Api.takeTotalXP(player, price);
+							}
+						}
+						player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));
+						return;
+					}
+					if(type.equalsIgnoreCase("SuccessDust")){
+						if(Api.isInvFull(player)){
+							if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+								player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+							}else{
+								player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+							}
+							return;
+						}
+						int price = Main.settings.getConfig().getInt("Settings.SignOptions.SuccessDustStyle.Cost");
+						if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Money/XP").equalsIgnoreCase("Money")){
+							if(Api.getMoney(player)<price){
+								double needed = price-Api.getMoney(player);
+								player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+								return;
+							}
+							Main.econ.withdrawPlayer(player, price);
+						}else{
+							if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
+								if(Api.getXPLvl(player)<price){
+									String xp = price - Api.getXPLvl(player)+"";
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									return;
+								}
+								Api.takeLvlXP(player, price);
+							}
+							if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
+								if(player.getTotalExperience()<price){
+									String xp = price - player.getTotalExperience()+"";
+									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+									return;
+								}
+								Api.takeTotalXP(player, price);
+							}
+						}
+						player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));
+						return;
+					}
 					if(type.equalsIgnoreCase("BlackScroll")){
 						if(Api.isInvFull(player)){
 							if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
@@ -184,6 +260,32 @@ public class SignControl implements Listener{
 					Main.settings.saveSigns();
 					return;
 				}
+			}
+			if(line2.equalsIgnoreCase("{SuccessDust}")){
+				e.setLine(0, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line1")));
+				e.setLine(1, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line2")));
+				e.setLine(2, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line3")));
+				e.setLine(3, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line4")));
+				Main.settings.getSigns().set("Locations."+size+".Type", "SuccessDust");
+				Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
+				Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
+				Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
+				Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
+				Main.settings.saveSigns();
+				return;
+			}
+			if(line2.equalsIgnoreCase("{DestroyDust}")){
+				e.setLine(0, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line1")));
+				e.setLine(1, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line2")));
+				e.setLine(2, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line3")));
+				e.setLine(3, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line4")));
+				Main.settings.getSigns().set("Locations."+size+".Type", "DestroyDust");
+				Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
+				Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
+				Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
+				Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
+				Main.settings.saveSigns();
+				return;
 			}
 			if(line2.equalsIgnoreCase("{BlackScroll}")){
 				e.setLine(0, Api.color(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Line1")));
