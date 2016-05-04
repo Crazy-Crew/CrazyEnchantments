@@ -3,11 +3,16 @@ package me.BadBones69.CrazyEnchantments;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -84,6 +89,32 @@ public class DustControl implements Listener{
 			}
 		}
 	}
+	@EventHandler
+	public void openDust(PlayerInteractEvent e){
+		Player player = e.getPlayer();
+		if(e.getAction()==Action.RIGHT_CLICK_AIR||e.getAction()==Action.RIGHT_CLICK_BLOCK){
+			if(Api.getItemInHand(player)!=null){
+				ItemStack item = Api.getItemInHand(player);
+				if(item.hasItemMeta()){
+					if(item.getItemMeta().hasDisplayName()&&item.getItemMeta().hasLore()){
+						if(item.getType()==Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.MysteryDust.Item"), 1, "", Arrays.asList("")).getType()){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.MysteryDust.Name")))){
+								e.setCancelled(true);
+								Api.setItemInHand(player, Api.removeItem(item));
+								player.getInventory().addItem(getDust(pickDust(), 1, Api.percentPick(getPercent("MysteryDust", item)+1, 1)));
+								if(Api.getVersion()>=191){
+									player.playSound(player.getLocation(), Sound.valueOf("BLOCK_LAVA_POP"), 1, 1);
+								}else{
+									player.playSound(player.getLocation(), Sound.valueOf("LAVA_POP"), 1, 1);
+								}
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	public static ItemStack getDust(String Dust,int i){
 		String id = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Item");
 		String name = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Name");
@@ -105,7 +136,13 @@ public class DustControl implements Listener{
 		}
 		return Api.makeItem(id, i, name, lore);
 	}
-	Integer getPercent(String dust, ItemStack item){
+	String pickDust(){
+		Random r = new Random();
+		int i = r.nextInt(2);
+		if(i==0)return "SuccessDust";
+		return "DestroyDust";
+	}
+	public static Integer getPercent(String dust, ItemStack item){
 		List<String> lore = item.getItemMeta().getLore();
 		List<String> L = Main.settings.getConfig().getStringList("Settings.Dust."+dust+".Lore");
 		String arg = "";

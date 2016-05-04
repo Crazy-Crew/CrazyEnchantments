@@ -53,6 +53,17 @@ public class GUI implements Listener{
 				slot--;
 				inv.setItem(slot, Api.makeItem(item, 1, name, lore));
 			}
+			if(Main.settings.getConfig().getBoolean("Settings.Tinker.InGUI")){
+				String name = Main.settings.getConfig().getString("Settings.Tinker.Name");
+				String id = Main.settings.getConfig().getString("Settings.Tinker.Item");
+				List<String> lore = Main.settings.getConfig().getStringList("Settings.Tinker.Lore");
+				int slot = Main.settings.getConfig().getInt("Settings.Tinker.Slot")-1;
+				if(Main.settings.getConfig().getBoolean("Settings.Tinker.Glowing")){
+					inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+				}else{
+					inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+				}
+			}
 			if(Main.settings.getConfig().getBoolean("Settings.Info.InGUI")){
 				String name = Main.settings.getConfig().getString("Settings.Info.Name");
 				String id = Main.settings.getConfig().getString("Settings.Info.Item");
@@ -103,6 +114,7 @@ public class GUI implements Listener{
 		if(inv!=null){
 			if(inv.getName().equals(Api.getInvName())){
 				e.setCancelled(true);
+				if(!inGUI(e.getRawSlot(), Main.settings.getConfig().getInt("Settings.GUISize")))return;
 				if(item==null)return;
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
@@ -138,6 +150,10 @@ public class GUI implements Listener{
 								player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
 								return;
 							}
+						}
+						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
+							Tinkerer.openTinker(player);
+							return;
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Info.Name")))){
 							openInfo(player);
@@ -354,7 +370,7 @@ public class GUI implements Listener{
 													e.setCursor(new ItemStack(Material.AIR));
 													if(!destroy||player.getGameMode()==GameMode.CREATIVE){
 														e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
-														if(Api.getVersion()==19){
+														if(Api.getVersion()>=191){
 															player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
 														}else{
 															player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
@@ -363,7 +379,7 @@ public class GUI implements Listener{
 													if(destroy&&Api.isProtected(item)){
 														if(player.getGameMode()!=GameMode.CREATIVE){
 															e.setCurrentItem(Api.removeProtected(item));
-															if(Api.getVersion()==19){
+															if(Api.getVersion()>=191){
 																player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 															}else{
 																player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -377,7 +393,7 @@ public class GUI implements Listener{
 													e.setCursor(new ItemStack(Material.AIR));
 													e.setCurrentItem(new ItemStack(Material.AIR));
 													e.setCursor(new ItemStack(Material.AIR));
-													if(Api.getVersion()==19){
+													if(Api.getVersion()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 													}else{
 														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -387,7 +403,7 @@ public class GUI implements Listener{
 												}
 											}else{
 												e.setCursor(new ItemStack(Material.AIR));
-												if(Api.getVersion()==19){
+												if(Api.getVersion()>=191){
 													player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 												}else{
 													player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -423,7 +439,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("helmet")){
 									in.addItem(i);
 								}
-								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -432,7 +452,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("boots")){
 									in.addItem(i);
 								}
-								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -441,7 +465,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("armor")){
 									in.addItem(i);
 								}
-								in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(17, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -450,7 +478,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("sword")){
 									in.addItem(i);
 								}
-								in.setItem(26, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(26, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(26, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -459,7 +491,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("axe")){
 									in.addItem(i);
 								}
-								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -468,7 +504,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("bow")){
 									in.addItem(i);
 								}
-								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -477,7 +517,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("pick")){
 									in.addItem(i);
 								}
-								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -486,7 +530,11 @@ public class GUI implements Listener{
 								for(ItemStack i : getInfo("tools")){
 									in.addItem(i);
 								}
-								in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								if(Api.getVersion()<181){
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
@@ -549,5 +597,10 @@ public class GUI implements Listener{
 		if(type.equalsIgnoreCase("Pick"))return picks;
 		if(type.equalsIgnoreCase("Tools"))return tools;
 		return null;
+	}
+	boolean inGUI(int slot, int max){
+		//The last slot in the tinker is 54
+		if(slot<max)return true;
+		return false;
 	}
 }

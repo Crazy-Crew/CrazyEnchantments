@@ -481,7 +481,7 @@ public class Api{
 		}
 		return false;
 	}
-	public static Boolean isEnchantmentEnabled(String ench){
+	public static boolean isEnchantmentEnabled(String ench){
 		for(String en : ECControl.allEnchantments().keySet()){
 			if(en.equalsIgnoreCase(ench)){
 				if(Main.settings.getEnchs().getBoolean("Enchantments."+en+".Enabled")){

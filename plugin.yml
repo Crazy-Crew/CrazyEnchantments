@@ -1,6 +1,6 @@
 name: CrazyEnchantments
 main: me.BadBones69.CrazyEnchantments.Main
-version: 1.4.5.1
+version: 1.5
 description: >
              A Plugin full of Crazy Enchantments.
 commands:
@@ -8,3 +8,7 @@ commands:
     description: Opens the Enchanter GUI.
   CrazyEnchantments:
     description: Opens the Enchanter GUI.
+  Tinker:
+    description: Opens the Tinker GUI.
+  Tinkerer:
+    description: Opens the Tinker GUI.

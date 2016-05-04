@@ -5,7 +5,22 @@ Settings:
   EnchantmentBookLore:
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
+  Tinker: #Settings for Info item in the GUI
+    InGUI: True #Toggle whether it is in the /CE GUI or not
+    Slot: 5 #Slot it is in
+    Item: '145' #Item it is
+    Glowing: False #Whether it glows like its enchanted
+    Name: '&7&lThe &4&lCrazy &c&lTinkerer' #Name of the Item
+    Lore: #Lore of the item
+      - '&b>>&7&lClick to open&b<<'
   Dust: #Settings for the Magical Dust
+    MysteryDust:
+      Item: '289'
+      Name: '&7Mystery Dust'
+      Lore:
+        - '&a1-%Percent%% &7will be on a'
+        - '&aMagical AngelDust &7or &eMagical Fixing &7Dust'
+        - '&7&l(&6&l!&7&l) &7Right click'
     SuccessDust:
       InGUI: True #If you can buy it in the /CE Gui
       GUIName: '&aMagical Angel Dust' #Name of the item in the GUI

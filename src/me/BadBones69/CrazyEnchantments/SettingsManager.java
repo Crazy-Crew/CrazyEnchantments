@@ -36,6 +36,9 @@ public class SettingsManager {
 	
 	FileConfiguration signs;
 	File sfile;
+	
+	FileConfiguration tinker;
+	File tfile;
 
 	public void setup(Plugin p) {
 		cfile = new File(p.getDataFolder(), "config.yml");
@@ -92,6 +95,21 @@ public class SettingsManager {
          	}
 		}
 		signs = YamlConfiguration.loadConfiguration(sfile);
+		
+		tfile = new File(p.getDataFolder(), "Tinker.yml");
+		if (!tfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/Tinker.yml");
+         		InputStream E = getClass().getResourceAsStream("/Tinker.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		tinker = YamlConfiguration.loadConfiguration(tfile);
+	}
+	public FileConfiguration getTinker() {
+		return tinker;
 	}
 	public FileConfiguration getSigns() {
 		return signs;
@@ -104,6 +122,14 @@ public class SettingsManager {
 	}
 	public FileConfiguration getMsg() {
 		return msg;
+	}
+	public void saveTinker() {
+		try {
+			tinker.save(tfile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save Tinker.yml!");
+		}
 	}
 	public void saveSigns() {
 		try {
@@ -136,6 +162,9 @@ public class SettingsManager {
 			Bukkit.getServer().getLogger()
 					.severe(ChatColor.RED + "Could not save Messages.yml!");
 		}
+	}
+	public void reloadTinker() {
+		tinker = YamlConfiguration.loadConfiguration(tfile);
 	}
 	public void reloadSigns() {
 		signs = YamlConfiguration.loadConfiguration(sfile);

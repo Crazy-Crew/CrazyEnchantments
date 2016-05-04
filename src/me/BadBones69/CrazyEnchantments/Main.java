@@ -1,5 +1,6 @@
 package me.BadBones69.CrazyEnchantments;
 
+import java.io.IOException;
 import java.util.List;
 
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
@@ -71,12 +72,15 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.thederpygolems.armorequip.ArmorListener;
 
-public class Main extends JavaPlugin{
+public class Main extends JavaPlugin implements Listener{
 	public static SettingsManager settings = SettingsManager.getInstance();
 	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static Economy econ = null;
@@ -87,10 +91,12 @@ public class Main extends JavaPlugin{
 		saveDefaultConfig();
 		settings.setup(this);
 		//==========================================================================\\
+		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new DustControl(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Tinkerer(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
 		//==========================================================================\\
@@ -158,8 +164,22 @@ public class Main extends JavaPlugin{
 		if (!setupEconomy()){
 	   		saveDefaultConfig();
 	    }
+		try {
+			Metrics metrics = new Metrics(this); metrics.start();
+		} catch (IOException e) {
+			System.out.println("Error Submitting stats!");
+		}
 	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
+		if(commandLable.equalsIgnoreCase("Tinkerer")||commandLable.equalsIgnoreCase("Tinker")){
+			if(!(sender instanceof Player)){
+				sender.sendMessage(Api.getPrefix()+Api.color("&cYou must be a player to use that command."));
+				return true;
+			}
+			if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Tinker"))return true;
+			Player player = (Player) sender;
+			Tinkerer.openTinker(player);
+		}
 		if(commandLable.equalsIgnoreCase("CE")||commandLable.equalsIgnoreCase("CrazyEnchantments")){
 			if(args.length == 0){
 				if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Access"))return true;
@@ -171,6 +191,7 @@ public class Main extends JavaPlugin{
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Access"))return true;
 					sender.sendMessage(Api.color("&2&l&nCrazy Enchantments"));
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
+					sender.sendMessage(Api.color("&b/Tinker - &9Opens up the Tinkerer."));
 					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> <Amount> [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Api.color("&b/CE Help - &9Shows all CE Commands."));
 					sender.sendMessage(Api.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
@@ -187,6 +208,7 @@ public class Main extends JavaPlugin{
 					settings.reloadMsg();
 					settings.reloadCustomEnchs();
 					settings.reloadSigns();
+					settings.reloadTinker();
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
 					return true;
 				}
@@ -287,7 +309,7 @@ public class Main extends JavaPlugin{
 				}
 				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Player> <Scroll> <Amount>
 					if(args.length!=4){
-						sender.sendMessage(Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
+						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
 						return true;
 					}
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
@@ -390,6 +412,19 @@ public class Main extends JavaPlugin{
 			sender.sendMessage(Api.getPrefix()+Api.color("&cDo /CE Help for more info."));
 		}
 		return false;
+	}
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e){
+		if(e.getPlayer().getName().equals("BadBones69")){
+			final Player player = e.getPlayer();
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+				@Override
+				public void run() {
+					player.sendMessage(Api.getPrefix()+Api.color("&7This server is running your Crazy Enchantments Plugin. "
+							+ "&7It is runnung version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments").getDescription().getVersion()+"&7."));
+				}
+			}, 1*20);
+		}
 	}
 	private boolean setupEconomy(){
         if (getServer().getPluginManager().getPlugin("Vault") == null){
