@@ -15,6 +15,7 @@ public class Voodoo implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(!Api.isEnchantmentEnabled("Voodoo"))return;
+		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.isCancelled())return;

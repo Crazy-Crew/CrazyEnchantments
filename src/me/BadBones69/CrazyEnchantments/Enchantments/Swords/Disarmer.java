@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class Disarmer implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(!Api.isEnchantmentEnabled("Disarmer"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import me.BadBones69.CrazyEnchantments.Api;
 
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +14,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 
 public class Piercing implements Listener{
 	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
+	HashMap<Projectile, Entity> P = new HashMap<Projectile, Entity>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
 		if(!Api.isEnchantmentEnabled("Piercing"))return;
@@ -22,12 +24,14 @@ public class Piercing implements Listener{
 			for(String lore : e.getBow().getItemMeta().getLore()){
 				if(lore.contains(Api.getEnchName("Piercing"))){
 					Arrow.put((Projectile) e.getProjectile(), Api.getPower(lore, Api.getEnchName("Piercing")));
+					P.put((Projectile) e.getProjectile(), e.getEntity());
 				}
 			}
 		}
 	}
 	@EventHandler
  	public void onArrowLand(EntityDamageByEntityEvent e){
+		if(Api.isFriendly(P.get(e.getDamager()), e.getEntity()))return;
 		if(!Api.isEnchantmentEnabled("Piercing"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;

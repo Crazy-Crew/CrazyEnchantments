@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 public class Inquisitive implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDeathEvent e){
+		if(Api.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
 		if(!Api.isEnchantmentEnabled("Inquisitive"))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();

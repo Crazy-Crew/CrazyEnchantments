@@ -14,7 +14,7 @@ public class Decapitation implements Listener{
 	@EventHandler
 	public void onPlayerDamage(PlayerDeathEvent e){
 		if(!Api.isEnchantmentEnabled("Decapitation"))return;
-		if(!Api.allowsPVP(e.getEntity()))return;
+		if(Api.allowsPVP(e.getEntity()))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
 			Player player = e.getEntity();

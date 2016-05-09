@@ -1,10 +1,12 @@
 package me.BadBones69.CrazyEnchantments.Enchantments.Bow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.BadBones69.CrazyEnchantments.Api;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,6 +15,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class Lightning implements Listener{
 	ArrayList<Projectile> arrow = new ArrayList<Projectile>();
+	HashMap<Projectile, Entity> P = new HashMap<Projectile, Entity>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
 		if(!Api.isEnchantmentEnabled("Lightning"))return;
@@ -21,6 +24,7 @@ public class Lightning implements Listener{
 			if(e.getBow().getItemMeta().hasLore()){
 				if (e.getBow().getItemMeta().getLore().contains(Api.getEnchName("Lightning"))) {
 					arrow.add((Projectile) e.getProjectile());
+					P.put((Projectile) e.getProjectile(), e.getEntity());
 				}
 			}
 		}

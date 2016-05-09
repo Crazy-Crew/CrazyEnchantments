@@ -23,6 +23,7 @@ public class Rage implements Listener{
 	HashMap<Player, Integer> reset = new HashMap<Player, Integer>();
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(!Api.isEnchantmentEnabled("Rage"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;

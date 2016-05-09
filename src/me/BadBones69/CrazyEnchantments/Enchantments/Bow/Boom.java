@@ -5,6 +5,7 @@ import java.util.Random;
 
 import me.BadBones69.CrazyEnchantments.Api;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class Boom implements Listener{
 	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
+	HashMap<Projectile, Entity> P = new HashMap<Projectile, Entity>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
 		if(!Api.isEnchantmentEnabled("Boom"))return;
@@ -23,6 +25,7 @@ public class Boom implements Listener{
 			for(String lore : e.getBow().getItemMeta().getLore()){
 				if(lore.contains(Api.getEnchName("Boom"))){
 					Arrow.put((Projectile) e.getProjectile(), Api.getPower(lore, Api.getEnchName("Boom")));
+					P.put((Projectile) e.getProjectile(), e.getEntity());
 				}
 			}
 		}

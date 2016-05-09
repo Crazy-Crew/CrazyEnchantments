@@ -18,6 +18,7 @@ public class Blessed implements Listener{
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(!Api.isEnchantmentEnabled("Blessed"))return;
+		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){

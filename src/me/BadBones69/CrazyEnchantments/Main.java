@@ -332,6 +332,10 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Add")){
+					if(!(sender instanceof Player)){
+						sender.sendMessage(Api.getPrefix()+Api.color("&cOnly players can use this command."));
+						return true;
+					}
 					if(args.length!=3){
 						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Add <Enchantment> <LvL>"));
 						return true;
@@ -379,7 +383,7 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Book <Enchantment> <Lvl> <Amount> <Player>"));
 						return true;
 					}
-					if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					String ench = args[1];
 					if(!Api.isInt(args[2])){
 						sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[2]+" is not a number."));

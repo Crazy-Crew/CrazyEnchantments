@@ -1,6 +1,7 @@
 name: CrazyEnchantments
 main: me.BadBones69.CrazyEnchantments.Main
-version: 1.5
+version: 1.5.1
+softdepend: [Factions, WorldEdit]
 description: >
              A Plugin full of Crazy Enchantments.
 commands:

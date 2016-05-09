@@ -390,7 +390,6 @@ public class GUI implements Listener{
 													player.updateInventory();
 													return;
 												}else{
-													e.setCursor(new ItemStack(Material.AIR));
 													e.setCurrentItem(new ItemStack(Material.AIR));
 													e.setCursor(new ItemStack(Material.AIR));
 													if(Api.getVersion()>=191){

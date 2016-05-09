@@ -23,6 +23,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MPlayer;
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
@@ -162,6 +165,36 @@ public class Api{
 			return Main.settings.getEnchs().getString("Enchantments."+en+".BookColor");
 		}
 		return Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor");
+	}
+	public static boolean isFriendly(Player player, Player other){
+		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
+			Faction p = MPlayer.get(player).getFaction();
+			Faction o = MPlayer.get(other).getFaction();
+			Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));
+			if(Api.removeColor(o.getName()).equalsIgnoreCase("Wilderness"))return false;
+			if(Api.removeColor(p.getName()).equalsIgnoreCase("Wilderness"))return false;
+			if(!r.isFriend())return false;
+			if(r.isFriend())return true;
+			if(p==o)return true;
+		}
+		return false;
+	}
+	public static boolean isFriendly(Entity P, Entity O){
+		if(P instanceof Player&&O instanceof Player){
+			Player player = (Player)P;
+			Player other = (Player)O;
+			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
+				Faction p = MPlayer.get(player).getFaction();
+				Faction o = MPlayer.get(other).getFaction();
+				Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));
+				if(Api.removeColor(o.getName()).equalsIgnoreCase("Wilderness"))return false;
+				if(Api.removeColor(p.getName()).equalsIgnoreCase("Wilderness"))return false;
+				if(!r.isFriend())return false;
+				if(r.isFriend())return true;
+				if(p==o)return true;
+			}
+		}
+		return false;
 	}
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
@@ -329,8 +362,32 @@ public class Api{
 	public static void takeLvlXP(Player player, int amount){
 		player.setLevel(player.getLevel() - amount);
 	}
+	public static int getTotalExperience(Player player){// https://www.spigotmc.org/threads/72804
+		int experience = 0;
+		int level = player.getLevel();
+		if(level >= 0 && level <= 15) {
+			experience = (int) Math.ceil(Math.pow(level, 2) + (6 * level));
+			int requiredExperience = 2 * level + 7;
+			double currentExp = Double.parseDouble(Float.toString(player.getExp()));
+			experience += Math.ceil(currentExp * requiredExperience);
+			return experience;
+		} else if(level > 15 && level <= 30) {
+			experience = (int) Math.ceil((2.5 * Math.pow(level, 2) - (40.5 * level) + 360));
+			int requiredExperience = 5 * level - 38;
+			double currentExp = Double.parseDouble(Float.toString(player.getExp()));
+			experience += Math.ceil(currentExp * requiredExperience);
+			return experience;
+		} else {
+			experience = (int) Math.ceil(((4.5 * Math.pow(level, 2) - (162.5 * level) + 2220)));
+			int requiredExperience = 9 * level - 158;
+			double currentExp = Double.parseDouble(Float.toString(player.getExp()));
+			experience += Math.ceil(currentExp * requiredExperience);
+			return experience;       
+		}
+	}
 	public static void takeTotalXP(Player player, int amount){
-		int total = player.getTotalExperience() - amount;
+		int total = getTotalExperience(player) - amount;
+		player.setTotalExperience(0);
         player.setTotalExperience(total);
         player.setLevel(0);
         player.setExp(0);
@@ -344,7 +401,9 @@ public class Api{
 	static boolean isProtected(ItemStack i){
 		if(i.hasItemMeta()){
 			if(i.getItemMeta().hasLore()){
-				if(i.getItemMeta().getLore().contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName"))))return true;
+				if(i.getItemMeta().getLore().contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
+					return true;
+				}
 			}
 		}
 		return false;
