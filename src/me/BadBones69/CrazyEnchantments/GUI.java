@@ -152,6 +152,7 @@ public class GUI implements Listener{
 							}
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
+							if(!Api.permCheck(player, "Tinker"))return;
 							Tinkerer.openTinker(player);
 							return;
 						}

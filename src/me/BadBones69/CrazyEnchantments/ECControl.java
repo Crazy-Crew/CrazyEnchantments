@@ -127,10 +127,11 @@ public class ECControl implements Listener{
 		Player player = e.getPlayer();
 		if(e.getItem()!=null){
 			ItemStack item = e.getItem();
+			if(item.getType()!=Material.BOOK)return;
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
 					for(String i : allEnchantments().keySet()){
-						if(item.getItemMeta().getDisplayName().contains(i)){
+						if(item.getItemMeta().getDisplayName().contains(Api.color(Api.getEnchBookColor(i)+Api.getEnchName(i)))){
 							player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Right-Click-Book")));
 						}
 					}

@@ -6,11 +6,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 
+import me.BadBones69.CrazyEnchantments.MultiSupport.FactionSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R3;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R1;
+import me.BadBones69.CrazyEnchantments.MultiSupport.WorldGuardSupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,14 +24,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.MPlayer;
-import com.sk89q.worldguard.bukkit.WGBukkit;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import com.sk89q.worldguard.protection.flags.StateFlag;
 
 public class Api{
 	public static String color(String msg){
@@ -168,53 +162,33 @@ public class Api{
 	}
 	public static boolean isFriendly(Player player, Player other){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
-			Faction p = MPlayer.get(player).getFaction();
-			Faction o = MPlayer.get(other).getFaction();
-			Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));
-			if(Api.removeColor(o.getName()).equalsIgnoreCase("Wilderness"))return false;
-			if(Api.removeColor(p.getName()).equalsIgnoreCase("Wilderness"))return false;
-			if(!r.isFriend())return false;
-			if(r.isFriend())return true;
-			if(p==o)return true;
+			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
+				if(FactionSupport.isFriendly(player, other))return true;
+				if(!FactionSupport.isFriendly(player, other))return false;
+			}
 		}
 		return false;
 	}
 	public static boolean isFriendly(Entity P, Entity O){
 		if(P instanceof Player&&O instanceof Player){
-			Player player = (Player)P;
-			Player other = (Player)O;
 			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
-				Faction p = MPlayer.get(player).getFaction();
-				Faction o = MPlayer.get(other).getFaction();
-				Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));
-				if(Api.removeColor(o.getName()).equalsIgnoreCase("Wilderness"))return false;
-				if(Api.removeColor(p.getName()).equalsIgnoreCase("Wilderness"))return false;
-				if(!r.isFriend())return false;
-				if(r.isFriend())return true;
-				if(p==o)return true;
+				if(FactionSupport.isFriendly(P, O))return true;
+				if(!FactionSupport.isFriendly(P, O))return false;
 			}
 		}
 		return false;
 	}
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			int x = en.getLocation().getBlockX();
-			int y = en.getLocation().getBlockY();
-			int z = en.getLocation().getBlockZ();
-			Location loc = new Location(en.getWorld(),x,y,z);
-			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
-			if (set.queryState(null, DefaultFlag.PVP)==StateFlag.State.DENY)return false;
+			if(WorldGuardSupport.allowsPVP(en))return true;
+			if(WorldGuardSupport.allowsPVP(en))return false;
 		}
 		return true;
 	}
 	public static boolean allowsExplotions(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			int x = en.getLocation().getBlockX();
-			int y = en.getLocation().getBlockY();
-			int z = en.getLocation().getBlockZ();
-			Location loc = new Location(en.getWorld(),x,y,z);
-			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
-			if (set.queryState(null, DefaultFlag.OTHER_EXPLOSION)==StateFlag.State.DENY)return false;
+			if(WorldGuardSupport.allowsExplotions(en))return true;
+			if(WorldGuardSupport.allowsExplotions(en))return false;
 		}
 		return true;
 	}
