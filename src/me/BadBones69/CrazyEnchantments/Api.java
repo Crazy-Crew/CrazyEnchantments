@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionSupport;
+import me.BadBones69.CrazyEnchantments.MultiSupport.FactionUUIDSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
@@ -24,6 +25,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 public class Api{
 	public static String color(String msg){
@@ -160,20 +162,20 @@ public class Api{
 		}
 		return Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor");
 	}
-	public static boolean isFriendly(Player player, Player other){
-		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
-			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
-				if(FactionSupport.isFriendly(player, other))return true;
-				if(!FactionSupport.isFriendly(player, other))return false;
-			}
-		}
-		return false;
-	}
 	public static boolean isFriendly(Entity P, Entity O){
 		if(P instanceof Player&&O instanceof Player){
 			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
-				if(FactionSupport.isFriendly(P, O))return true;
-				if(!FactionSupport.isFriendly(P, O))return false;
+				Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+				if(factions.getDescription().getAuthors().contains("drtshock")){
+					P.sendMessage("FactionsUUID");
+					if(FactionUUIDSupport.isFriendly(P, O))return true;
+					if(!FactionUUIDSupport.isFriendly(P, O))return false;
+				}
+				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+					P.sendMessage("Factions");
+					if(FactionSupport.isFriendly(P, O))return true;
+					if(!FactionSupport.isFriendly(P, O))return false;
+				}
 			}
 		}
 		return false;
