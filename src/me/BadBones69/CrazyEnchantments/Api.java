@@ -167,12 +167,10 @@ public class Api{
 			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
 				Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
 				if(factions.getDescription().getAuthors().contains("drtshock")){
-					P.sendMessage("FactionsUUID");
 					if(FactionUUIDSupport.isFriendly(P, O))return true;
 					if(!FactionUUIDSupport.isFriendly(P, O))return false;
 				}
 				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-					P.sendMessage("Factions");
 					if(FactionSupport.isFriendly(P, O))return true;
 					if(!FactionSupport.isFriendly(P, O))return false;
 				}
