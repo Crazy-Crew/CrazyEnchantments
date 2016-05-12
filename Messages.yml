@@ -1,7 +1,6 @@
 Messages:
   Config-Reload: '&7You have just reloaded the Config.yml'
   Not-An-Enchantment: '&cThat is not an enchantment'
-  Right-Click-Book: '&7The &bSuccess Chance &7is the chance the enchantment will successfully be added to your item.'
   Right-Click-Black-Scroll: '&7Black scrolls will remove a random enchantment from your item.'
   Need-More-XP-Lvls: '&cYou need &6%XP% &cmore XP Lvls.'
   Need-More-Total-XP: '&cYou need &6%XP% &cmore Total XP.'
@@ -10,3 +9,36 @@ Messages:
   Inventory-Full: '&cYour inventory is to full. Please open up some space to buy that.'
   Tinker-Inventory-Full: '&cThe inventory is full. Sell all or remove items.'
   Tinker-Sold-Msg: '&7Thank you for trading at &7&lThe &4&lCrazy &c&lTinkerer&7.'
+  InfoGUI:
+    Black-Scroll:
+      - '&7Do you have an enchantment on your item you dont want?'
+      - '&7Well Black Scrolls are here to help you remove that enchantment.'
+      - '&7All you need to do is put the Black Scroll on your cursor and then.'
+      - '&7Drag and drop it on the item and BLAMO. It takes a random enchantment off,'
+      - '&7And turns it into a normal enchantment book. Easy way to add new better enchantments.'
+      - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments.'
+    White-Scroll:
+      - '&7Have a item that is precious to you and dont want it to,'
+      - '&7Break because of Destroy Rate? Well this scroll allows you to,'
+      - '&7Protect or precious item and not let it break. Well your in luck,'
+      - '&7White Scrolls add a &b&lPROTECTED &7lore to your item to stop it from,'
+      - '&7Destroying your precious item. If the book tries to break your item it removes,'
+      - '&7The &b&lPROTECTED &7lore from your item and must add a new White Scroll to the item.'
+    Tinker:
+      - '&7Just raided a big base and have a lot of useless enchanted items?'
+      - '&7Want to get rid of them but not just throw them in lava or at a cactus?'
+      - '&7Well with &7&lThe &c&lCrazy &4&lTinkerer &7you can recycle those items,'
+      - '&7For XP bottles which you can then use to get new enchantments from the Enchanter'
+      - '&7The tinkerer also takes Enchantment books and will give you Mystery Dust which you'
+      - '&7Right click to receive either Success Dust or Destroy Dust.'
+      - '&7&l(&6&l!&7&l) &7Trading in books only works with Custom Enchanted Books.'
+    Success-Dust:
+      - '&7Do you have an enchantment book with sucky Success Rate?'
+      - '&7Well this dust can really help you bring the success rate up.'
+      - '&7Drag and drop the dust on an enchantment book and BLAMO.'
+      - '&7It will increase your success rate buy the percent the book says.'
+    Destroy-Dust:
+      - '&7Have an enchantment book with a high Destroy Rate?'
+      - '&7Well this dust allows you to bring that destroy rate down.'
+      - '&7Drag and drop the dust on an enchantment book and BLAMO.'
+      - '&7It will decrease your destroy rate buy the percent the book says.'

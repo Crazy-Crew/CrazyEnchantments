@@ -2,6 +2,7 @@ package me.BadBones69.CrazyEnchantments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Material;
@@ -130,9 +131,13 @@ public class ECControl implements Listener{
 			if(item.getType()!=Material.BOOK)return;
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
-					for(String i : allEnchantments().keySet()){
-						if(item.getItemMeta().getDisplayName().contains(Api.color(Api.getEnchBookColor(i)+Api.getEnchName(i)))){
-							player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Right-Click-Book")));
+					for(String en : allEnchantments().keySet()){
+						if(item.getItemMeta().getDisplayName().contains(Api.color(Api.getEnchBookColor(en)+Api.getEnchName(en)))){
+							String name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
+							List<String> desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+							player.sendMessage(Api.color(name));
+							for(String msg : desc)player.sendMessage(Api.color(msg));
+							return;
 						}
 					}
 				}

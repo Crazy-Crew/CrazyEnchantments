@@ -15,9 +15,9 @@ Settings:
       - '&b>>&7&lClick to open&b<<'
   Dust: #Settings for the Magical Dust
     MysteryDust:
-      Item: '289'
-      Name: '&7Mystery Dust'
-      Lore:
+      Item: '289' #Item mystery dust is
+      Name: '&7Mystery Dust' #Name of the dust
+      Lore: #Use %Percent% to set the percent
         - '&a1-%Percent%% &7will be on a'
         - '&aMagical AngelDust &7or &eMagical Fixing &7Dust'
         - '&7&l(&6&l!&7&l) &7Right click'

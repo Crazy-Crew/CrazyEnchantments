@@ -34,6 +34,7 @@ public class Api{
 		msg = msg.replaceAll("&o", ChatColor.ITALIC + "");
 		msg = msg.replaceAll("&k", ChatColor.MAGIC + "");
 		msg = msg.replaceAll("&n", ChatColor.UNDERLINE + "");
+		msg = msg.replaceAll("&m", ChatColor.STRIKETHROUGH + "");
 		return msg;
 	}
 	public static String removeColor(String msg){

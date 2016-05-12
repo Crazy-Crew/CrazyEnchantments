@@ -182,8 +182,13 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		if(commandLable.equalsIgnoreCase("CE")||commandLable.equalsIgnoreCase("CrazyEnchantments")){
 			if(args.length == 0){
-				if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Access"))return true;
-				GUI.openGUI((Player)sender);
+				if(!(sender instanceof Player)){
+					sender.sendMessage(Api.color(Api.getPrefix()+"&cYou must be a player to use this command."));
+					return true;
+				}
+				Player player = (Player)sender;
+				if(!Api.permCheck(player, "Access"))return true;
+				GUI.openGUI(player);
 				return true;
 			}
 			if(args.length>=1){

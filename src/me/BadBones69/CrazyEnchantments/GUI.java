@@ -430,7 +430,7 @@ public class GUI implements Listener{
 					ItemStack item = e.getCurrentItem();
 					if(item.hasItemMeta()){
 						if(item.getItemMeta().hasDisplayName()){
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&7&l<<&b&lBack"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&7&l<<&b&lBack"))||item.getItemMeta().getDisplayName().equals(Api.color("&b&lBack&7&l>>"))){
 								openInfo((Player)e.getWhoClicked());
 								return;
 							}
@@ -538,6 +538,74 @@ public class GUI implements Listener{
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lOther Info"))){
+								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								in.setItem(2, Api.makeItem(Main.settings.getConfig().getString("Settings.BlackScroll.Item"),
+										1, Main.settings.getConfig().getString("Settings.BlackScroll.Name"),
+										Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll")));
+								in.setItem(3, Api.makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"),
+										1, Main.settings.getConfig().getString("Settings.WhiteScroll.Name"),
+										Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll")));
+								in.setItem(4, Api.makeItem(Main.settings.getConfig().getString("Settings.Tinker.Item"),
+										1, Main.settings.getConfig().getString("Settings.Tinker.Name"),
+										Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker")));
+								in.setItem(5, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"),
+										1, Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name"),
+										Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust")));
+								in.setItem(6, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"),
+										1, Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name"),
+										Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust")));
+								if(Api.getVersion()<181){
+									in.setItem(0, Api.makeItem(Material.FEATHER, 1, 0, "&b&lBack&7&l>>"));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+								}else{
+									in.setItem(0, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&b&lBack&7&l>>"));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+								}
+								e.getWhoClicked().openInventory(in);
+								return;
+							}
+							String bar = Api.color("&a&m------------------------------------------------");
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
+								e.getWhoClicked().closeInventory();
+								e.getWhoClicked().sendMessage(bar);
+								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll"))e.getWhoClicked().sendMessage(Api.color(lore));
+								e.getWhoClicked().sendMessage(bar);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
+								e.getWhoClicked().closeInventory();
+								e.getWhoClicked().sendMessage(bar);
+								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll"))e.getWhoClicked().sendMessage(Api.color(lore));
+								e.getWhoClicked().sendMessage(bar);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
+								e.getWhoClicked().closeInventory();
+								e.getWhoClicked().sendMessage(bar);
+								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker"))e.getWhoClicked().sendMessage(Api.color(lore));
+								e.getWhoClicked().sendMessage(bar);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")))){
+								e.getWhoClicked().closeInventory();
+								e.getWhoClicked().sendMessage(bar);
+								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust"))e.getWhoClicked().sendMessage(Api.color(lore));
+								e.getWhoClicked().sendMessage(bar);
+								return;
+							}
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")))){
+								e.getWhoClicked().closeInventory();
+								e.getWhoClicked().sendMessage(bar);
+								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust"))e.getWhoClicked().sendMessage(Api.color(lore));
+								e.getWhoClicked().sendMessage(bar);
+								return;
+							}
 						}
 					}
 				}
@@ -563,6 +631,8 @@ public class GUI implements Listener{
 				Arrays.asList("&cEnchantable Items:", "&a- All Pickaxes", "&a- All Axes", "&a- All Shovels", "&a- All Hoes")));
 		inv.addItem(Api.makeItem(Material.GOLD_PICKAXE, 1, 0, "&e&lPickaxe Enchantments", 
 				Arrays.asList("&cEnchantable Items:", "&a- Wood Pickaxe", "&a- Stone Pickaxe", "&a- Iron Pickaxe", "&a- Gold Pickaxe", "&a- Diamond Pickaxe")));
+		inv.addItem(Api.makeItem(Material.EYE_OF_ENDER, 1, 0, "&e&lOther Info", 
+				Arrays.asList("&cInfo on these Items:", "&a- The Tinkerer", "&a- Scrolls", "&a- Dusts")));
 		player.openInventory(inv);
 	}
 	public static ArrayList<ItemStack> getInfo(String type){
