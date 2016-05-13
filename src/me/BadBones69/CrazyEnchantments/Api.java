@@ -13,6 +13,7 @@ import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R3;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R1;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R2;
 import me.BadBones69.CrazyEnchantments.MultiSupport.WorldGuardSupport;
 
 import org.bukkit.Bukkit;
@@ -48,6 +49,9 @@ public class Api{
 		return Integer.parseInt(ver);
 	}
 	public static ItemStack addGlow(ItemStack item) {
+		if(getVersion()==192){
+			return NMS_v1_9_R2.addGlow(item);
+		}
 		if(getVersion()==191){
 			return NMS_v1_9_R1.addGlow(item);
 		}
@@ -63,7 +67,7 @@ public class Api{
 		if(getVersion()==174){
 			return NMS_v1_7_R4.addGlow(item);
 		}else{
-			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date."
+			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date. "
 					+ "Please update or remove this plugin to stop ferther Errors.");
 			return null;
 		}

@@ -430,7 +430,7 @@ public class Main extends JavaPlugin implements Listener{
 				@Override
 				public void run() {
 					player.sendMessage(Api.getPrefix()+Api.color("&7This server is running your Crazy Enchantments Plugin. "
-							+ "&7It is runnung version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments").getDescription().getVersion()+"&7."));
+							+ "&7It is running version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments").getDescription().getVersion()+"&7."));
 				}
 			}, 1*20);
 		}
