@@ -9,7 +9,104 @@ Messages:
   Inventory-Full: '&cYour inventory is to full. Please open up some space to buy that.'
   Tinker-Inventory-Full: '&cThe inventory is full. Sell all or remove items.'
   Tinker-Sold-Msg: '&7Thank you for trading at &7&lThe &4&lCrazy &c&lTinkerer&7.'
+  Players-Only: '&cOnly players can use this command.'
+  No-Perm: '&cYou do not have permission to use that command!'
+  Not-Online: '&cThat player is not online at this time.'
+  Remove-Enchantment: '&7You have removed the enchantment &a%Enchantment% &7from this item.'
+  Doesnt-Have-Enchantment: '&cYour item does not contain the enchantment &6%Enchantment%&c.'
+  Doesnt-Have-Item-In-Hand: '&cYou must have an item in your hand.'
+  Not-A-Number: '&c%Arg% is not a number.'
+  Get-Success-Dust: '&7You have gained &a%Amount% &7Success Dust.'
+  Give-Success-Dust: '&7You have given &a%Player% %Amount% &7Success Dust.'
+  Get-Destroy-Dust: '&7You have gained &a%Amount% &7Destroy Dust.'
+  Give-Destroy-Dust: '&7You have given &a%Player% %Amount% &7Destroy Dust.'
   InfoGUI:
+    Categories-Info:
+      Back:
+        Right: '&7&l<<&b&lBack'
+        Left: '&b&lBack&7&l>>'
+      Helmets:
+        Name: '&e&lHelmet Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Helmet'
+          - '&a- Chain Helmet'
+          - '&a- Gold Helmet'
+          - '&a- Iron Helmet'
+          - '&a- Diamond Helmet'
+      Boots:
+        Name: '&e&lBoot Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Boots'
+          - '&a- Chain Boots'
+          - '&a- Gold Boots'
+          - '&a- Iron Boots'
+          - '&a- Diamond Boots'
+      Armor:
+        Name: '&e&lArmor Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Armor'
+          - '&a- Chain Armor'
+          - '&a- Gold Armor'
+          - '&a- Iron Armor'
+          - '&a- Diamond Armor'
+      Bow:
+        Name: '&e&lBow Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Bow'
+      Sword:
+        Name: '&e&lSword Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Sword'
+          - '&a- Stone Sword'
+          - '&a- Gold Sword'
+          - '&a- Iron Sword'
+          - '&a- Diamond Sword'
+      Axe:
+        Name: '&e&lAxe Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Axe'
+          - '&a- Stone Axe'
+          - '&a- Gold Axe'
+          - '&a- Iron Axe'
+          - '&a- Diamond Axe'
+      Tool:
+        Name: '&e&lTool Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- All Pickaxes'
+          - '&a- All Axes'
+          - '&a- All Shovels'
+          - '&a- All Hoes'
+      Pickaxe:
+        Name: '&e&lPickaxe Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Pickaxe'
+          - '&a- Stone Pickaxe'
+          - '&a- Gold Pickaxe'
+          - '&a- Iron Pickaxe'
+          - '&a- Diamond Pickaxe'
+      Other:
+        Name: '&e&lOther Info'
+        Lore:
+          - '&cInfo on these items:'
+          - '&a- The Tinkerer'
+          - '&a- Scrolls'
+          - '&a- Magic Dust'
+          - '&a- Black Smith'
+    BlackSmith:
+      - '&7Do you have an enchantment on your item you want leveled up?'
+      - '&7Or level up your book because you have to many low level ones?'
+      - '&7The Black Smith is just for you. It acts just like a Anvil but for'
+      - '&7Custom Enchantments. All you do is throw 2 items or books in and BLAMO,'
+      - '&7You can easily level up your old low level enchantments.'
+      - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments. Will not add Vanilla Enchantments to new Item.'
     Black-Scroll:
       - '&7Do you have an enchantment on your item you dont want?'
       - '&7Well Black Scrolls are here to help you remove that enchantment.'

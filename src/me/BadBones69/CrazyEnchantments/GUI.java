@@ -1,7 +1,6 @@
 package me.BadBones69.CrazyEnchantments;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -52,6 +51,17 @@ public class GUI implements Listener{
 				}
 				slot--;
 				inv.setItem(slot, Api.makeItem(item, 1, name, lore));
+			}
+			if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.InGUI")){
+				String name = Main.settings.getConfig().getString("Settings.BlackSmith.Name");
+				String id = Main.settings.getConfig().getString("Settings.BlackSmith.Item");
+				List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackSmith.Lore");
+				int slot = Main.settings.getConfig().getInt("Settings.BlackSmith.Slot")-1;
+				if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.Glowing")){
+					inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+				}else{
+					inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+				}
 			}
 			if(Main.settings.getConfig().getBoolean("Settings.Tinker.InGUI")){
 				String name = Main.settings.getConfig().getString("Settings.Tinker.Name");
@@ -150,6 +160,11 @@ public class GUI implements Listener{
 								player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
 								return;
 							}
+						}
+						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
+							if(!Api.permCheck(player, "BlackSmith"))return;
+							Tinkerer.openTinker(player);
+							return;
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
 							if(!Api.permCheck(player, "Tinker"))return;
@@ -430,142 +445,157 @@ public class GUI implements Listener{
 					ItemStack item = e.getCurrentItem();
 					if(item.hasItemMeta()){
 						if(item.getItemMeta().hasDisplayName()){
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&7&l<<&b&lBack"))||item.getItemMeta().getDisplayName().equals(Api.color("&b&lBack&7&l>>"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")))||item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")))){
 								openInfo((Player)e.getWhoClicked());
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lHelmet Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name")))){
 								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("helmet")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lBoot Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Boots.Name")))){
 								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("boots")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lArmor Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Armor.Name")))){
 								Inventory in = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("armor")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(17, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(17, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lSword Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Sword.Name")))){
 								Inventory in = Bukkit.createInventory(null, 27, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("sword")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(26, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(26, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(26, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(26, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lAxe Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Axe.Name")))){
 								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("axe")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lBow Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Bow.Name")))){
 								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("bow")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lPickaxe Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Pickaxe.Name")))){
 								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("pick")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lTool Enchantments"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Tool.Name")))){
 								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
 								for(ItemStack i : getInfo("tools")){
 									in.addItem(i);
 								}
 								if(Api.getVersion()<181){
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lOther Info"))){
-								Inventory in = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
+								Inventory in = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
 								in.setItem(2, Api.makeItem(Main.settings.getConfig().getString("Settings.BlackScroll.Item"),
 										1, Main.settings.getConfig().getString("Settings.BlackScroll.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll")));
-								in.setItem(3, Api.makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"),
+								in.setItem(11, Api.makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"),
 										1, Main.settings.getConfig().getString("Settings.WhiteScroll.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll")));
 								in.setItem(4, Api.makeItem(Main.settings.getConfig().getString("Settings.Tinker.Item"),
 										1, Main.settings.getConfig().getString("Settings.Tinker.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker")));
-								in.setItem(5, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"),
+								in.setItem(13, Api.makeItem(Main.settings.getConfig().getString("Settings.BlackSmith.Item"),
+										1, Main.settings.getConfig().getString("Settings.BlackSmith.Name"),
+										Main.settings.getMsg().getStringList("Messages.InfoGUI.BlackSmith")));
+								in.setItem(6, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"),
 										1, Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust")));
-								in.setItem(6, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"),
+								in.setItem(15, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"),
 										1, Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust")));
 								if(Api.getVersion()<181){
-									in.setItem(0, Api.makeItem(Material.FEATHER, 1, 0, "&b&lBack&7&l>>"));
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(0, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
+									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+									in.setItem(9, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
+									in.setItem(17, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}else{
-									in.setItem(0, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&b&lBack&7&l>>"));
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, "&7&l<<&b&lBack"));
+									in.setItem(0, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
+									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+									in.setItem(9, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
+									in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
 								e.getWhoClicked().openInventory(in);
 								return;
 							}
 							String bar = Api.color("&a&m------------------------------------------------");
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
+								e.getWhoClicked().closeInventory();
+								e.getWhoClicked().sendMessage(bar);
+								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.BlackSmith"))e.getWhoClicked().sendMessage(Api.color(lore));
+								e.getWhoClicked().sendMessage(bar);
+								return;
+							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
 								e.getWhoClicked().closeInventory();
 								e.getWhoClicked().sendMessage(bar);
@@ -615,24 +645,24 @@ public class GUI implements Listener{
 	}
 	public static void openInfo(Player player){
 		Inventory inv = Bukkit.createInventory(null, 9, Api.color("&c&lEnchantment Info"));
-		inv.addItem(Api.makeItem(Material.GOLD_HELMET, 1, 0, "&e&lHelmet Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- Leather Helmet", "&a- Chain Helmet", "&a- Iron Helmet", "&a- Gold Helmet", "&a- Diamond Helmet")));
-		inv.addItem(Api.makeItem(Material.GOLD_BOOTS, 1, 0, "&e&lBoot Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- Leather Boots", "&a- Chain Boots", "&a- Iron Boots", "&a- Gold Boots", "&a- Diamond Boots")));
-		inv.addItem(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, "&e&lArmor Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- All Leather Armor", "&a- All Chain Armor", "&a- All Iron Armor", "&a- All Gold Armor", "&a- All Diamond Armor")));
-		inv.addItem(Api.makeItem(Material.BOW, 1, 0, "&e&lBow Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- Bow")));
-		inv.addItem(Api.makeItem(Material.GOLD_SWORD, 1, 0, "&e&lSword Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- Wood Sword", "&a- Stone Sword", "&a- Iron Sword", "&a- Gold Sword", "&a- Diamond Sword")));
-		inv.addItem(Api.makeItem(Material.GOLD_AXE, 1, 0, "&e&lAxe Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- Wood Axe", "&a- Stone Axe", "&a- Iron Axe", "&a- Gold Axe", "&a- Diamond Axe")));
-		inv.addItem(Api.makeItem(Material.GOLD_HOE, 1, 0, "&e&lTool Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- All Pickaxes", "&a- All Axes", "&a- All Shovels", "&a- All Hoes")));
-		inv.addItem(Api.makeItem(Material.GOLD_PICKAXE, 1, 0, "&e&lPickaxe Enchantments", 
-				Arrays.asList("&cEnchantable Items:", "&a- Wood Pickaxe", "&a- Stone Pickaxe", "&a- Iron Pickaxe", "&a- Gold Pickaxe", "&a- Diamond Pickaxe")));
-		inv.addItem(Api.makeItem(Material.EYE_OF_ENDER, 1, 0, "&e&lOther Info", 
-				Arrays.asList("&cInfo on these Items:", "&a- The Tinkerer", "&a- Scrolls", "&a- Dusts")));
+		inv.addItem(Api.makeItem(Material.GOLD_HELMET, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Helmets.Lore")));
+		inv.addItem(Api.makeItem(Material.GOLD_BOOTS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Boots.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Boots.Lore")));
+		inv.addItem(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Armor.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Armor.Lore")));
+		inv.addItem(Api.makeItem(Material.BOW, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Bow.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Bow.Lore")));
+		inv.addItem(Api.makeItem(Material.GOLD_SWORD, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Sword.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Sword.Lore")));
+		inv.addItem(Api.makeItem(Material.GOLD_AXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Axe.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Axe.Lore")));
+		inv.addItem(Api.makeItem(Material.GOLD_HOE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Tool.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Tool.Lore")));
+		inv.addItem(Api.makeItem(Material.GOLD_PICKAXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Pickaxe.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Pickaxe.Lore")));
+		inv.addItem(Api.makeItem(Material.EYE_OF_ENDER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name"), 
+				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Other.Lore")));
 		player.openInventory(inv);
 	}
 	public static ArrayList<ItemStack> getInfo(String type){

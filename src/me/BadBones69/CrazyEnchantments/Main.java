@@ -75,6 +75,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -85,17 +86,18 @@ public class Main extends JavaPlugin implements Listener{
 	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static Economy econ = null;
 	public static EconomyResponse r;
-	
 	@Override
 	public void onEnable(){
 		saveDefaultConfig();
 		settings.setup(this);
+		Api.hasUpdate();
 		//==========================================================================\\
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new DustControl(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new BlackSmith(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Tinkerer(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
@@ -171,19 +173,32 @@ public class Main extends JavaPlugin implements Listener{
 		}
 	}
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
+		if(commandLable.equalsIgnoreCase("BlackSmith")||commandLable.equalsIgnoreCase("BSmith")
+				||commandLable.equalsIgnoreCase("BlackS")||commandLable.equalsIgnoreCase("BS")){
+			if(!(sender instanceof Player)){
+				sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+				return true;
+			}
+			if(sender instanceof Player)if(!Api.permCheck((Player)sender, "BlackSmith"))return true;
+			Player player = (Player) sender;
+			BlackSmith.openBlackSmith(player);
+			return true;
+		}
 		if(commandLable.equalsIgnoreCase("Tinkerer")||commandLable.equalsIgnoreCase("Tinker")){
 			if(!(sender instanceof Player)){
-				sender.sendMessage(Api.getPrefix()+Api.color("&cYou must be a player to use that command."));
+				sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 				return true;
 			}
 			if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Tinker"))return true;
 			Player player = (Player) sender;
 			Tinkerer.openTinker(player);
+			return true;
 		}
-		if(commandLable.equalsIgnoreCase("CE")||commandLable.equalsIgnoreCase("CrazyEnchantments")){
+		if(commandLable.equalsIgnoreCase("CE")||commandLable.equalsIgnoreCase("CrazyEnchantments")
+				||commandLable.equalsIgnoreCase("Enchant")||commandLable.equalsIgnoreCase("Enchanter")){
 			if(args.length == 0){
 				if(!(sender instanceof Player)){
-					sender.sendMessage(Api.color(Api.getPrefix()+"&cYou must be a player to use this command."));
+					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 					return true;
 				}
 				Player player = (Player)sender;
@@ -197,10 +212,12 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&2&l&nCrazy Enchantments"));
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Api.color("&b/Tinker - &9Opens up the Tinkerer."));
+					sender.sendMessage(Api.color("&b/BlackSmith - &9Opens up the Black Smith."));
 					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> <Amount> [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Api.color("&b/CE Help - &9Shows all CE Commands."));
 					sender.sendMessage(Api.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
+					sender.sendMessage(Api.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
 					sender.sendMessage(Api.color("&b/CE Book <Enchantment> <Lvl> <Amount> <Player> - &9Gives a player a Enchantment Book."));
@@ -220,7 +237,7 @@ public class Main extends JavaPlugin implements Listener{
 				if(args[0].equalsIgnoreCase("Info")){
 					if(args.length==1){
 						if(!(sender instanceof Player)){
-							sender.sendMessage(Api.getPrefix()+Api.color("&cYou need to be a Player to use this command."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 							return true;
 						}
 						Player player = (Player)sender;
@@ -246,42 +263,50 @@ public class Main extends JavaPlugin implements Listener{
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					if(args.length==3){
 						if(!(sender instanceof Player)){
-							sender.sendMessage(Api.getPrefix()+Api.color("&cYou need to be a Player to use this command."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 							return true;
 						}
 						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[2]+" is not a number."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 							return true;
 						}
 						Player player = (Player)sender;
 						if(args[1].equalsIgnoreCase("Success")||args[1].equalsIgnoreCase("S")){
 							player.getInventory().addItem(DustControl.getDust("SuccessDust", Integer.parseInt(args[2])));
-							sender.sendMessage(Api.getPrefix()+Api.color("&7You have gained &a"+args[2]+" &7Success Dust."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
 							player.getInventory().addItem(DustControl.getDust("DestroyDust", Integer.parseInt(args[2])));
-							sender.sendMessage(Api.getPrefix()+Api.color("&7You have gained &a"+args[2]+" &7Destroy Dust."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							return true;
 						}
 					}
 					if(args.length==4){// /CE Dust <Success/Destroy> <Amount> [Player]
 						if(!Api.isOnline(args[3], sender))return true;
 						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[2]+" is not a number."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 							return true;
 						}
 						Player player = Api.getPlayer(args[3]);
 						if(args[1].equalsIgnoreCase("Success")||args[1].equalsIgnoreCase("S")){
 							player.getInventory().addItem(DustControl.getDust("SuccessDust", Integer.parseInt(args[2])));
-							player.sendMessage(Api.getPrefix()+Api.color("&7You have gained &a"+args[2]+" &7Success Dust."));
-							sender.sendMessage(Api.getPrefix()+Api.color("&7You have given &a"+player.getName()+" "+args[2]+" &7Success Dust."));
+							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Success-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
 							player.getInventory().addItem(DustControl.getDust("DestroyDust", Integer.parseInt(args[2])));
-							player.sendMessage(Api.getPrefix()+Api.color("&7You have gained &a"+args[2]+" &7Destroy Dust."));
-							sender.sendMessage(Api.getPrefix()+Api.color("&7You have given &a"+player.getName()+" "+args[2]+" &7Destroy Dust."));
+							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							return true;
 						}
 					}
@@ -289,23 +314,29 @@ public class Main extends JavaPlugin implements Listener{
 						if(!Api.isOnline(args[3], sender))return true;
 						Player player = Api.getPlayer(args[3]);
 						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[2]+" is not a number."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 							return true;
 						}
 						if(!Api.isInt(args[4])){
-							sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[4]+" is not a number."));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[4]).replaceAll("%arg%", args[4])));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("Success")||args[1].equalsIgnoreCase("S")){
 							player.getInventory().addItem(DustControl.getDust("SuccessDust", Integer.parseInt(args[2]), Integer.parseInt(args[4])));
-							player.sendMessage(Api.getPrefix()+Api.color("&7You have gained &a"+args[2]+" &7Success Dust."));
-							sender.sendMessage(Api.getPrefix()+Api.color("&7You have given &a"+player.getName()+" "+args[2]+" &7Success Dust."));
+							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Success-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
 							player.getInventory().addItem(DustControl.getDust("DestroyDust", Integer.parseInt(args[2]), Integer.parseInt(args[4])));
-							player.sendMessage(Api.getPrefix()+Api.color("&7You have gained &a"+args[2]+" &7Destroy Dust."));
-							sender.sendMessage(Api.getPrefix()+Api.color("&7You have given &a"+player.getName()+" "+args[2]+" &7Destroy Dust."));
+							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							return true;
 						}
 					}
@@ -320,7 +351,8 @@ public class Main extends JavaPlugin implements Listener{
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					String name = args[1];
 					if(!Api.isInt(args[3])){
-						sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[3]+" is not a number."));
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+								.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3])));
 						return true;
 					}
 					int i = Integer.parseInt(args[3]);
@@ -336,9 +368,58 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
 					return true;
 				}
+				if(args[0].equalsIgnoreCase("Remove")){
+					if(!(sender instanceof Player)){
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+						return true;
+					}
+					if(args.length!=2){
+						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Remove <Enchantment>"));
+						return true;
+					}
+					Player player = (Player) sender;
+					if(!Api.permCheck(player, "Admin"))return true;
+					boolean T=false;
+					for(String i : ECControl.allEnchantments().keySet()){
+						if(Api.getEnchName(i).equalsIgnoreCase(args[1])){
+							T=true;
+						}
+					}
+					if(!T){
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
+						return true;
+					}
+					if(Api.getItemInHand(player).getType()==Material.AIR){
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
+						return true;
+					}
+					ItemStack item = Api.getItemInHand(player);
+					String enchantment = args[1];
+					if(item.hasItemMeta()){
+						if(item.getItemMeta().hasLore()){
+							for(String lore : item.getItemMeta().getLore()){
+								for(String i : ECControl.allEnchantments().keySet()){
+									if(Api.getEnchName(i).equalsIgnoreCase(enchantment)){
+										enchantment=Api.getEnchName(i);
+										if(lore.contains(Api.getEnchName(i))){
+											Api.setItemInHand(player, Api.removeLore(item, lore));
+											String msg = Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Remove-Enchantment")
+													.replaceAll("%Enchantment%", Api.getEnchName(i)).replaceAll("%enchantment%", Api.getEnchName(i)));
+											player.sendMessage(msg);
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
+					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Doesnt-Have-Enchantment")
+							.replaceAll("%Enchantment%", enchantment).replaceAll("%enchantment%", enchantment)));
+					return true;
+				}
 				if(args[0].equalsIgnoreCase("Add")){
 					if(!(sender instanceof Player)){
-						sender.sendMessage(Api.getPrefix()+Api.color("&cOnly players can use this command."));
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
 					}
 					if(args.length!=3){
@@ -378,7 +459,8 @@ public class Main extends JavaPlugin implements Listener{
 					if(lvl.equals("9"))lvl="IX";
 					if(lvl.equals("10"))lvl="X";
 					if(Api.getItemInHand(player).getType() == Material.AIR){
-						player.sendMessage(Api.getPrefix()+Api.color(Api.getPrefix()+"&cYou must have an item in your hand."));return true;
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
+						return false;
 					}
 					Api.setItemInHand(player, Api.addGlow(Api.addLore(Api.getItemInHand(player), Api.color(color+en+" "+lvl))));
 					return true;
@@ -391,11 +473,13 @@ public class Main extends JavaPlugin implements Listener{
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					String ench = args[1];
 					if(!Api.isInt(args[2])){
-						sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[2]+" is not a number."));
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 						return true;
 					}
 					if(!Api.isInt(args[3])){
-						sender.sendMessage(Api.getPrefix()+Api.color("&6"+args[3]+" is not a number."));
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+								.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3])));
 						return true;
 					}
 					int lvl = Integer.parseInt(args[2]);
@@ -410,7 +494,7 @@ public class Main extends JavaPlugin implements Listener{
 						}
 					}
 					if(!toggle){
-						sender.sendMessage(Api.color(Api.getPrefix()+"&cThe enchantmnet &6"+ench+" &cis not an enchantment."));
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
 					sender.sendMessage(Api.color(Api.getPrefix()+"&7You have sent &6"+player.getName()+" &7an Crazy Enchantment Book."));
@@ -424,16 +508,17 @@ public class Main extends JavaPlugin implements Listener{
 	}
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
-		if(e.getPlayer().getName().equals("BadBones69")){
-			final Player player = e.getPlayer();
-			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
-				@Override
-				public void run() {
+		final Player player = e.getPlayer();
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+			@Override
+			public void run() {
+				if(player.getName().equals("BadBones69")){
 					player.sendMessage(Api.getPrefix()+Api.color("&7This server is running your Crazy Enchantments Plugin. "
-							+ "&7It is running version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments").getDescription().getVersion()+"&7."));
+						+ "&7It is running version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments").getDescription().getVersion()+"&7."));
 				}
-			}, 1*20);
-		}
+				if(player.isOp())Api.hasUpdate(player);
+			}
+		}, 1*20);
 	}
 	private boolean setupEconomy(){
         if (getServer().getPluginManager().getPlugin("Vault") == null){

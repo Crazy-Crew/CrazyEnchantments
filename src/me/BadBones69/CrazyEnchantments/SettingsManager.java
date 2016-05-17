@@ -39,7 +39,7 @@ public class SettingsManager {
 	
 	FileConfiguration tinker;
 	File tfile;
-
+	
 	public void setup(Plugin p) {
 		cfile = new File(p.getDataFolder(), "config.yml");
 		config = p.getConfig();
@@ -107,6 +107,7 @@ public class SettingsManager {
          	}
 		}
 		tinker = YamlConfiguration.loadConfiguration(tfile);
+		
 	}
 	public FileConfiguration getTinker() {
 		return tinker;

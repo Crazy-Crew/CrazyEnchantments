@@ -38,6 +38,7 @@ public class ArmorListener implements Listener{
 
 	@EventHandler
 	public final void onInventoryClick(final InventoryClickEvent e){
+		if(!e.getWhoClicked().getOpenInventory().getTopInventory().getName().equals("container.crafting"))return;
 		boolean shift = false;
 		if(e.isCancelled()) { return; }
 		if(e.getClick() == ClickType.SHIFT_LEFT || e.getClick() == ClickType.SHIFT_RIGHT) {

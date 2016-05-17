@@ -5,6 +5,25 @@ Settings:
   EnchantmentBookLore:
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
+  BlackSmith: #Options for the Black Smith
+    InGUI: False #In the GUI.
+    Slot: 1 #Slot it is in.
+    Item: '61' #Item that shows in the GUI
+    Glowing: False #Is it enchanted
+    Name: '&8&lThe Black Smith' #Name of the Item in the GUI
+    Lore: #Lore on the item.
+      - '&b>>&7&lClick to open&b<<'
+    GUIName: '&8&lThe Black Smith' #Name of the Black Smith's GUI
+    Results:
+      None: '&c&lNo Results' #Name of the item when there are no results in the Black Smith
+      Found: '&c&lCost: &6&l%Cost%XP' #The lore at the bottom of the item
+    Transaction: #Options for the pricing
+      Money/XP: XP #Costs XP or Money
+      Lvl/Total: Lvl #Uses Total xp or xp Levels
+      Costs: #Cost options
+        Power-Up: 5 #When a enchantment levels up 1 on an item
+        Add-Enchantment: 3 #When it adds an enchantment to the item from another item
+        Book-Upgrade: 5 #Leveling up a books power
   Tinker: #Settings for Info item in the GUI
     InGUI: True #Toggle whether it is in the /CE GUI or not
     Slot: 5 #Slot it is in
