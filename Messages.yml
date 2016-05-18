@@ -61,7 +61,7 @@ Messages:
         Name: '&e&lSword Enchantments'
         Lore:
           - '&cEnchantable Items:'
-          - '&a- Leather Sword'
+          - '&a- Wooden Sword'
           - '&a- Stone Sword'
           - '&a- Gold Sword'
           - '&a- Iron Sword'
@@ -70,7 +70,7 @@ Messages:
         Name: '&e&lAxe Enchantments'
         Lore:
           - '&cEnchantable Items:'
-          - '&a- Leather Axe'
+          - '&a- Wooden Axe'
           - '&a- Stone Axe'
           - '&a- Gold Axe'
           - '&a- Iron Axe'
@@ -87,7 +87,7 @@ Messages:
         Name: '&e&lPickaxe Enchantments'
         Lore:
           - '&cEnchantable Items:'
-          - '&a- Leather Pickaxe'
+          - '&a- Wooden Pickaxe'
           - '&a- Stone Pickaxe'
           - '&a- Gold Pickaxe'
           - '&a- Iron Pickaxe'
