@@ -18,7 +18,10 @@ public class Inquisitive implements Listener{
 				if(Api.getItemInHand(damager).getItemMeta().hasLore()){
 					for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
 						if(lore.contains(Api.getEnchName("Inquisitive"))){
-							e.setDroppedExp(e.getDroppedExp() * (2+Api.getPower(lore, Api.getEnchName("Inquisitive"))));
+							int chance=9-Api.getPower(lore, Api.getEnchName("Inquisitive"));
+							if(Api.randomPicker(chance)){
+								e.setDroppedExp(e.getDroppedExp()*2);
+							}
 						}
 					}
 				}

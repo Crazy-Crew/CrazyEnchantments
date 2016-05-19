@@ -77,7 +77,7 @@ public class Api{
     }
 	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(Player player){
-		if(getVersion()==19){
+		if(getVersion()>=191){
 			return player.getInventory().getItemInMainHand();
 		}else{
 			return player.getItemInHand();
@@ -85,7 +85,7 @@ public class Api{
 	}
 	@SuppressWarnings("deprecation")
 	public static void setItemInHand(Player player, ItemStack item){
-		if(Api.getVersion()==19){
+		if(Api.getVersion()>=191){
 			player.getInventory().setItemInMainHand(item);
 		}else{
 			player.setItemInHand(item);
@@ -189,14 +189,21 @@ public class Api{
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
 			if(WorldGuardSupport.allowsPVP(en))return true;
-			if(WorldGuardSupport.allowsPVP(en))return false;
+			if(!WorldGuardSupport.allowsPVP(en))return false;
+		}
+		return true;
+	}
+	public static boolean allowsBreak(Entity en){
+		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
+			if(WorldGuardSupport.allowsBreak(en))return true;
+			if(!WorldGuardSupport.allowsBreak(en))return false;
 		}
 		return true;
 	}
 	public static boolean allowsExplotions(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
 			if(WorldGuardSupport.allowsExplotions(en))return true;
-			if(WorldGuardSupport.allowsExplotions(en))return false;
+			if(!WorldGuardSupport.allowsExplotions(en))return false;
 		}
 		return true;
 	}
@@ -225,6 +232,16 @@ public class Api{
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
+	}
+	public static ItemStack getLostBook(String cat, int amount){
+		String id = Main.settings.getConfig().getString("Settings.LostBook.Item");
+		String name = Main.settings.getConfig().getString("Settings.LostBook.Name");
+		List<String> lore = new ArrayList<String>();
+		String tn = Main.settings.getConfig().getString("Categories."+cat+".Name");
+		for(String l : Main.settings.getConfig().getStringList("Settings.LostBook.Lore")){
+			lore.add(l.replaceAll("%Category%", tn).replaceAll("%category%", tn));
+		}
+		return makeItem(id, amount, name, lore);
 	}
 	public static ItemStack makeItem(Material material, int amount, int type, String name){
 		ItemStack item = new ItemStack(material, amount, (short) type);

@@ -18,6 +18,7 @@ public class AutoSmelt implements Listener{
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e){
 		if(!Api.isEnchantmentEnabled("AutoSmelt"))return;
+		if(!Api.allowsBreak(e.getPlayer()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
 		if(player.getGameMode()!=GameMode.CREATIVE){

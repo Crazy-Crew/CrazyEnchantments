@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,10 +18,6 @@ import org.bukkit.inventory.ItemStack;
 public class GUI implements Listener{
 	static void openGUI(Player player){
 		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Api.getInvName());
-		for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-			inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
-					Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
-		}
 		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
 			for(String custom : Main.settings.getConfig().getStringList("Settings.GUICustomization")){
 				String name = "";
@@ -52,67 +49,85 @@ public class GUI implements Listener{
 				slot--;
 				inv.setItem(slot, Api.makeItem(item, 1, name, lore));
 			}
-			if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.InGUI")){
-				String name = Main.settings.getConfig().getString("Settings.BlackSmith.Name");
-				String id = Main.settings.getConfig().getString("Settings.BlackSmith.Item");
-				List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackSmith.Lore");
-				int slot = Main.settings.getConfig().getInt("Settings.BlackSmith.Slot")-1;
-				if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.Glowing")){
-					inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
-				}else{
-					inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+		}
+		for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+			inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
+					Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
+			FileConfiguration config = Main.settings.getConfig();
+			if(config.contains("Categories."+cat+".LostBook")){
+				if(config.getBoolean("Categories."+cat+".LostBook.InGUI")){
+					int slot = config.getInt("Categories."+cat+".LostBook.Slot");
+					String id = config.getString("Categories."+cat+".LostBook.Item");
+					String name = config.getString("Categories."+cat+".LostBook.Name");
+					List<String> lore = config.getStringList("Categories."+cat+".LostBook.Lore");
+					if(config.getBoolean("Categories."+cat+".LostBook.Glowing")){
+						inv.setItem(slot-1, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+					}else{
+						inv.setItem(slot-1, Api.makeItem(id, 1, name, lore));
+					}
 				}
 			}
-			if(Main.settings.getConfig().getBoolean("Settings.Tinker.InGUI")){
-				String name = Main.settings.getConfig().getString("Settings.Tinker.Name");
-				String id = Main.settings.getConfig().getString("Settings.Tinker.Item");
-				List<String> lore = Main.settings.getConfig().getStringList("Settings.Tinker.Lore");
-				int slot = Main.settings.getConfig().getInt("Settings.Tinker.Slot")-1;
-				if(Main.settings.getConfig().getBoolean("Settings.Tinker.Glowing")){
-					inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
-				}else{
-					inv.setItem(slot, Api.makeItem(id, 1, name, lore));
-				}
-			}
-			if(Main.settings.getConfig().getBoolean("Settings.Info.InGUI")){
-				String name = Main.settings.getConfig().getString("Settings.Info.Name");
-				String id = Main.settings.getConfig().getString("Settings.Info.Item");
-				List<String> lore = Main.settings.getConfig().getStringList("Settings.Info.Lore");
-				int slot = Main.settings.getConfig().getInt("Settings.Info.Slot")-1;
-				if(Main.settings.getConfig().getBoolean("Settings.Info.Glowing")){
-					inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
-				}else{
-					inv.setItem(slot, Api.makeItem(id, 1, name, lore));
-				}
-			}
-			if(Main.settings.getConfig().getBoolean("Settings.Dust.SuccessDust.InGUI")){
-				String name = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName");
-				String id = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item");
-				List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.SuccessDust.GUILore");
-				int slot = Main.settings.getConfig().getInt("Settings.Dust.SuccessDust.Slot")-1;
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.InGUI")){
+			String name = Main.settings.getConfig().getString("Settings.BlackSmith.Name");
+			String id = Main.settings.getConfig().getString("Settings.BlackSmith.Item");
+			List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackSmith.Lore");
+			int slot = Main.settings.getConfig().getInt("Settings.BlackSmith.Slot")-1;
+			if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.Glowing")){
+				inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+			}else{
 				inv.setItem(slot, Api.makeItem(id, 1, name, lore));
 			}
-			if(Main.settings.getConfig().getBoolean("Settings.Dust.DestroyDust.InGUI")){
-				String name = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName");
-				String id = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item");
-				List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.DestroyDust.GUILore");
-				int slot = Main.settings.getConfig().getInt("Settings.Dust.DestroyDust.Slot")-1;
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.Tinker.InGUI")){
+			String name = Main.settings.getConfig().getString("Settings.Tinker.Name");
+			String id = Main.settings.getConfig().getString("Settings.Tinker.Item");
+			List<String> lore = Main.settings.getConfig().getStringList("Settings.Tinker.Lore");
+			int slot = Main.settings.getConfig().getInt("Settings.Tinker.Slot")-1;
+			if(Main.settings.getConfig().getBoolean("Settings.Tinker.Glowing")){
+				inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+			}else{
 				inv.setItem(slot, Api.makeItem(id, 1, name, lore));
 			}
-			if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.InGUI")){
-				String name = Main.settings.getConfig().getString("Settings.BlackScroll.GUIName");
-				String id = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
-				List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackScroll.Lore");
-				int slot = Main.settings.getConfig().getInt("Settings.BlackScroll.Slot")-1;
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.Info.InGUI")){
+			String name = Main.settings.getConfig().getString("Settings.Info.Name");
+			String id = Main.settings.getConfig().getString("Settings.Info.Item");
+			List<String> lore = Main.settings.getConfig().getStringList("Settings.Info.Lore");
+			int slot = Main.settings.getConfig().getInt("Settings.Info.Slot")-1;
+			if(Main.settings.getConfig().getBoolean("Settings.Info.Glowing")){
+				inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+			}else{
 				inv.setItem(slot, Api.makeItem(id, 1, name, lore));
 			}
-			if(Main.settings.getConfig().getBoolean("Settings.WhiteScroll.InGUI")){
-				String name = Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName");
-				String id = Main.settings.getConfig().getString("Settings.WhiteScroll.Item");
-				List<String> lore = Main.settings.getConfig().getStringList("Settings.WhiteScroll.Lore");
-				int slot = Main.settings.getConfig().getInt("Settings.WhiteScroll.Slot")-1;
-				inv.setItem(slot, Api.makeItem(id, 1, name, lore));
-			}
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.Dust.SuccessDust.InGUI")){
+			String name = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName");
+			String id = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item");
+			List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.SuccessDust.GUILore");
+			int slot = Main.settings.getConfig().getInt("Settings.Dust.SuccessDust.Slot")-1;
+			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.Dust.DestroyDust.InGUI")){
+			String name = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName");
+			String id = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item");
+			List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.DestroyDust.GUILore");
+			int slot = Main.settings.getConfig().getInt("Settings.Dust.DestroyDust.Slot")-1;
+			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.InGUI")){
+			String name = Main.settings.getConfig().getString("Settings.BlackScroll.GUIName");
+			String id = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
+			List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackScroll.Lore");
+			int slot = Main.settings.getConfig().getInt("Settings.BlackScroll.Slot")-1;
+			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.WhiteScroll.InGUI")){
+			String name = Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName");
+			String id = Main.settings.getConfig().getString("Settings.WhiteScroll.Item");
+			List<String> lore = Main.settings.getConfig().getStringList("Settings.WhiteScroll.Lore");
+			int slot = Main.settings.getConfig().getInt("Settings.WhiteScroll.Slot")-1;
+			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
 		}
 		player.openInventory(inv);
 	}
@@ -158,6 +173,47 @@ public class GUI implements Listener{
 									}
 								}
 								player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
+								return;
+							}
+						}
+						for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+							if(name.equals(Api.color(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Name")))){
+								if(Api.isInvFull(player)){
+									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+										player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									}else{
+										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									}
+									return;
+								}
+								if(player.getGameMode() != GameMode.CREATIVE){
+									if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Money/XP").equalsIgnoreCase("Money")){
+										if(Api.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
+											String money = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Api.getMoney(player)+"";
+											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
+											return;
+										}
+										Main.econ.withdrawPlayer(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
+									}else{
+										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Lvl")){
+											if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
+												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Api.getXPLvl(player)+"";
+												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
+										}
+										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Total")){
+											if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
+												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - player.getTotalExperience()+"";
+												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
+										}
+									}
+								}
+								player.getInventory().addItem(Api.getLostBook(cat, 1));
 								return;
 							}
 						}
@@ -368,7 +424,8 @@ public class GUI implements Listener{
 												}
 											}
 											e.setCancelled(true);
-											if(Api.successChance(c) || player.getGameMode() == GameMode.CREATIVE){
+											boolean success = Api.successChance(c);
+											if(success||player.getGameMode() == GameMode.CREATIVE){
 												boolean destroy = Api.destroyChance(c);
 												if(!destroy||Api.isProtected(item)||player.getGameMode()==GameMode.CREATIVE){
 													name = Api.removeColor(name);
@@ -395,6 +452,7 @@ public class GUI implements Listener{
 													if(destroy&&Api.isProtected(item)){
 														if(player.getGameMode()!=GameMode.CREATIVE){
 															e.setCurrentItem(Api.removeProtected(item));
+															player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
 															if(Api.getVersion()>=191){
 																player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 															}else{
@@ -406,7 +464,11 @@ public class GUI implements Listener{
 													player.updateInventory();
 													return;
 												}else{
-													e.setCurrentItem(new ItemStack(Material.AIR));
+													if(!success&&destroy){
+														e.setCurrentItem(new ItemStack(Material.AIR));
+														player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
+													}
+													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
 													e.setCursor(new ItemStack(Material.AIR));
 													if(Api.getVersion()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
@@ -418,6 +480,7 @@ public class GUI implements Listener{
 												}
 											}else{
 												e.setCursor(new ItemStack(Material.AIR));
+												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
 												if(Api.getVersion()>=191){
 													player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 												}else{

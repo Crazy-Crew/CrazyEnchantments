@@ -20,6 +20,11 @@ Messages:
   Give-Success-Dust: '&7You have given &a%Player% %Amount% &7Success Dust.'
   Get-Destroy-Dust: '&7You have gained &a%Amount% &7Destroy Dust.'
   Give-Destroy-Dust: '&7You have given &a%Player% %Amount% &7Destroy Dust.'
+  Not-A-Category: '&6%Category% &cis not a category.'
+  Clean-Lost-Book: '&7You have just cleaned a lost book and found %Found%&7.'
+  Book-Failed: '&cYour item must not have liked that enchantment.'
+  Item-Destroyed: '&cOh no the destroy rate was to much for the item.'
+  Item-Was-Protected: '&cLuckily your item was blessed with Devine Protection and didnt break.'
   InfoGUI:
     Categories-Info:
       Back:

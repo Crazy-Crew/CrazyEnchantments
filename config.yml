@@ -5,6 +5,14 @@ Settings:
   EnchantmentBookLore:
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
+  LostBook:
+    Item: '340'
+    Name: '&8&l&nA Lost Book'
+    Lore:
+      - '&7This book has been lost for centuries'
+      - '&7It is said to be an enchantment book from %Category%'
+      - '&7But you must clean it off to find out what kind it is.'
+      - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
   BlackSmith: #Options for the Black Smith
     InGUI: False #In the GUI.
     Slot: 1 #Slot it is in.
@@ -153,9 +161,6 @@ Settings:
     - 'Slot:1, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:2, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:3, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:4, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:5, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:6, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:7, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:8, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:9, Item:160:0, Name: , Lore:&7Border'
@@ -178,6 +183,22 @@ Categories: #You can make as many different categories as you want
     Item: '266' #The id for the item
     Lvl/Total: Lvl #You can choose Lvl or Total, Lvl uses XP lvls and Total uses the total XP the player has
     XP: 20 #How much the Books cost
+    LostBook: #Controls the Lost Book shop for this tier
+      InGUI: False #If it shows in the /CE Gui
+      Slot: 1 #Slot it will be in
+      Item: '340' #The item that is showen in the GUI
+      Glowing: False #Is it enchanted
+      Name: '&8&l&nLost&c&l Tier1 &8&l&nBooks' #Name of the item
+      Lore: #Lore on the item
+        - '&7These are lost books that are'
+        - '&7Said to be &c&lTier1 &7Enchantment books.'
+        - '&7But no one has tried to clean the books yet.'
+        - '&7Will you be the one to clean the books?'
+        - ''
+        - '&c&lCost: &6&l$1000'
+      Money/XP: Money #Costs money or XP
+      Lvl/Total: Lvl #If XP then Levels or Total XP
+      Cost: 1000 #The Price of the book
     EnchOptions: #Enchantment Options
       SuccessPercent: #The range for the success rate that the enchantment will have
         Max: 90 #The max success rate
@@ -197,6 +218,22 @@ Categories: #You can make as many different categories as you want
     Item: '264'
     Lvl/Total: Lvl
     XP: 40
+    LostBook:
+      InGUI: False
+      Slot: 2
+      Item: '340'
+      Glowing: False
+      Name: '&8&l&nLost&c&l Tier2 &8&l&nBooks'
+      Lore:
+        - '&7These are lost books that are'
+        - '&7Said to be &c&lTier2 &7Enchantment books.'
+        - '&7But no one has tried to clean the books yet.'
+        - '&7Will you be the one to clean the books?'
+        - ''
+        - '&c&lCost: &6&l$2000'
+      Money/XP: Money
+      Lvl/Total: Lvl
+      Cost: 2000
     EnchOptions:
       SuccessPercent:
         Max: 70
@@ -216,6 +253,22 @@ Categories: #You can make as many different categories as you want
     Item: '388'
     Lvl/Total: Lvl
     XP: 60
+    LostBook:
+      InGUI: False
+      Slot: 3
+      Item: '340'
+      Glowing: False
+      Name: '&8&l&nLost&c&l Tier3 &8&l&nBooks'
+      Lore:
+        - '&7These are lost books that are'
+        - '&7Said to be &c&lTier3 &7Enchantment books.'
+        - '&7But no one has tried to clean the books yet.'
+        - '&7Will you be the one to clean the books?'
+        - ''
+        - '&c&lCost: &6&l$3000'
+      Money/XP: Money
+      Lvl/Total: Lvl
+      Cost: 3000
     EnchOptions:
       SuccessPercent:
         Max: 50

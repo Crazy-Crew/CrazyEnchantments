@@ -221,6 +221,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
 					sender.sendMessage(Api.color("&b/CE Book <Enchantment> <Lvl> <Amount> <Player> - &9Gives a player a Enchantment Book."));
+					sender.sendMessage(Api.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
@@ -258,6 +259,86 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
+				}
+				if(args[0].equalsIgnoreCase("LostBook")||args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
+					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(args.length==2){// /CE LostBook <Category>
+						if(!(sender instanceof Player)){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+							return true;
+						}
+						Player player = (Player)sender;
+						String cat = args[1];
+						for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+							if(cat.equalsIgnoreCase(C)){
+								cat=C;
+								if(Api.isInvFull(player)){
+									player.getWorld().dropItemNaturally(player.getLocation(), Api.getLostBook(cat, 1));
+								}else{
+									player.getInventory().addItem(Api.getLostBook(cat, 1));
+								}
+								return true;
+							}
+						}
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Category")
+								.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
+						return true;
+					}
+					if(args.length==3){// /CE LostBook <Category> [Amount]
+						if(!(sender instanceof Player)){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+							return true;
+						}
+						if(!Api.isInt(args[2])){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+							return true;
+						}
+						Player player = (Player)sender;
+						String cat = args[1];
+						int amount = Integer.parseInt(args[2]);
+						for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+							if(cat.equalsIgnoreCase(C)){
+								cat=C;
+								if(Api.isInvFull(player)){
+									player.getWorld().dropItemNaturally(player.getLocation(), Api.getLostBook(cat, amount));
+								}else{
+									player.getInventory().addItem(Api.getLostBook(cat, amount));
+								}
+								return true;
+							}
+						}
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Category")
+								.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
+						return true;
+					}
+					if(args.length==4){// /CE LostBook <Category> [Amount] [Player]
+						if(!Api.isInt(args[2])){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+							return true;
+						}
+						if(!Api.isOnline(args[3], sender))return true;
+						Player player = Api.getPlayer(args[3]);
+						String cat = args[1];
+						int amount = Integer.parseInt(args[2]);
+						for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+							if(cat.equalsIgnoreCase(C)){
+								cat=C;
+								if(Api.isInvFull(player)){
+									player.getWorld().dropItemNaturally(player.getLocation(), Api.getLostBook(cat, amount));
+								}else{
+									player.getInventory().addItem(Api.getLostBook(cat, amount));
+								}
+								return true;
+							}
+						}
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Category")
+								.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
+						return true;
+					}
+					sender.sendMessage(Api.getPrefix()+Api.color("&c/CE LostBook <Category> [Amount] [Player]"));
+					return true;
 				}
 				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;

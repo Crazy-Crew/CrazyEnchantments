@@ -13,6 +13,7 @@ public class Experience implements Listener{
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e){
 		if(!Api.isEnchantmentEnabled("Experience"))return;
+		if(!Api.allowsBreak(e.getPlayer()))return;
 		Player player = e.getPlayer();
 		if(player.getGameMode()!=GameMode.CREATIVE){
 			if(Api.getItemInHand(player)!=null){
@@ -23,7 +24,7 @@ public class Experience implements Listener{
 							if(lore.contains(Api.getEnchName("Experience"))){
 								int power = Api.getPower(lore, Api.getEnchName("Experience"));
 								if(Api.randomPicker(3)){
-									e.setExpToDrop(e.getExpToDrop()+(power+1));
+									e.setExpToDrop(e.getExpToDrop()+(power));
 									return;
 								}
 							}

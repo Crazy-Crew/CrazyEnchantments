@@ -124,6 +124,30 @@ public class ECControl implements Listener{
 		return en;
 	}
 	@EventHandler
+	public void onBookClean(PlayerInteractEvent e){
+		Player player = e.getPlayer();
+		if(e.getItem()!=null){
+			ItemStack item = e.getItem();
+			if(item.getType()!=Material.BOOK)return;
+			if(item.hasItemMeta()){
+				if(item.getItemMeta().hasDisplayName()){
+					if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.LostBook.Name")))){
+						for(String C : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+							if(Api.color(Main.settings.getConfig().getString("Categories."+C+".Name")).equalsIgnoreCase(getCategory(item))){
+								Api.removeItem(item, player);
+								ItemStack book = Api.addGlow(pick(C));
+								player.getInventory().addItem(book);
+								player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Clean-Lost-Book")
+										.replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	@EventHandler
 	public void onClick(PlayerInteractEvent e){
 		Player player = e.getPlayer();
 		if(e.getItem()!=null){
@@ -201,6 +225,28 @@ public class ECControl implements Listener{
 		if(i==9)return "IX";
 		if(i==10)return "X";
 		return i+"";
+	}
+	public static String getCategory(ItemStack item){
+		List<String> lore = item.getItemMeta().getLore();
+		List<String> L = Main.settings.getConfig().getStringList("Settings.LostBook.Lore");
+		String arg = "";
+		int i = 0;
+		for(String l : L){
+			l = Api.color(l);
+			String lo = lore.get(i);
+			if(l.contains("%Category%")){
+				String[] b = l.split("%Category%");
+				if(b.length>=1)arg = lo.replace(b[0], "");
+				if(b.length>=2)arg = arg.replace(b[1], "");
+			}
+			if(l.contains("%category%")){
+				String[] b = l.split("%category%");
+				if(b.length>=1)arg = lo.replace(b[0], "");
+				if(b.length>=2)arg = arg.replace(b[1], "");
+			}
+			i++;
+		}
+		return arg;
 	}
 	public static ArrayList<Material> isArmor(){
 		ArrayList<Material> ma = new ArrayList<Material>();
