@@ -21,7 +21,6 @@ public class Insomnia implements Listener{
 		if(!Api.isEnchantmentEnabled("Insomnia"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
-		if(e.isCancelled())return;
 		double damage = e.getDamage()*2;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){

@@ -15,7 +15,6 @@ public class Nutrition implements Listener{
 		if(!Api.isEnchantmentEnabled("Nutrition"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
-		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
 				Player damager = (Player) e.getDamager();

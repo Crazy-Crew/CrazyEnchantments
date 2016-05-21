@@ -20,7 +20,6 @@ public class Fortify implements Listener{
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
-		if(e.isCancelled())return;
 		if(e.getEntity() instanceof Player){
 			if(e.getDamager() instanceof LivingEntity){
 				Player player = (Player) e.getEntity();

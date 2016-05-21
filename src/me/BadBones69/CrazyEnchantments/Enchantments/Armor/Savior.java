@@ -18,7 +18,6 @@ public class Savior implements Listener{
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(!Api.isEnchantmentEnabled("Savior"))return;
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getEntity() instanceof Player){
 				final Player player = (Player) e.getEntity();

@@ -425,8 +425,8 @@ public class GUI implements Listener{
 											}
 											e.setCancelled(true);
 											boolean success = Api.successChance(c);
+											boolean destroy = Api.destroyChance(c);
 											if(success||player.getGameMode() == GameMode.CREATIVE){
-												boolean destroy = Api.destroyChance(c);
 												if(!destroy||Api.isProtected(item)||player.getGameMode()==GameMode.CREATIVE){
 													name = Api.removeColor(name);
 													String[] breakdown = name.split(" ");
@@ -464,10 +464,6 @@ public class GUI implements Listener{
 													player.updateInventory();
 													return;
 												}else{
-													if(!success&&destroy){
-														e.setCurrentItem(new ItemStack(Material.AIR));
-														player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
-													}
 													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
 													e.setCursor(new ItemStack(Material.AIR));
 													if(Api.getVersion()>=191){
@@ -478,6 +474,23 @@ public class GUI implements Listener{
 													player.updateInventory();
 													return;
 												}
+											}
+											if(!success&&destroy){
+												if(Api.isProtected(item)){
+													e.setCurrentItem(Api.removeProtected(item));
+													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
+												}else{
+													e.setCurrentItem(new ItemStack(Material.AIR));
+													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
+												}
+												e.setCursor(new ItemStack(Material.AIR));
+												if(Api.getVersion()>=191){
+													player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+												}else{
+													player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+												}
+												player.updateInventory();
+												return;
 											}else{
 												e.setCursor(new ItemStack(Material.AIR));
 												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));

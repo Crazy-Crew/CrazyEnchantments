@@ -23,6 +23,7 @@ import ca.thederpygolems.armorequip.ArmorEquipEvent;
 public class CustomEnchantments implements Listener{
 	public static ArrayList<String> getEnchantments(){
 		ArrayList<String> enchs = new ArrayList<String>();
+		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return enchs;
 		for(String ench : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
 			enchs.add(ench);
 		}
@@ -30,6 +31,7 @@ public class CustomEnchantments implements Listener{
 	}
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
+		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
 		Player player = e.getPlayer();
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
@@ -92,6 +94,7 @@ public class CustomEnchantments implements Listener{
 	}
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e){
+		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
 		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
@@ -220,6 +223,7 @@ public class CustomEnchantments implements Listener{
 	}
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
+		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsExplotions(e.getEntity()))return;
 		if(Power.containsKey(e.getEntity())){
@@ -248,6 +252,7 @@ public class CustomEnchantments implements Listener{
 	}
 	@EventHandler
  	public void onHit(EntityDamageByEntityEvent e){
+		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.getDamager() instanceof Arrow){
 			if(!(e.getEntity() instanceof LivingEntity))return;

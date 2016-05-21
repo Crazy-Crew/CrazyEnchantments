@@ -42,6 +42,7 @@ public class DustControl implements Listener{
 													int total = Integer.parseInt(lore);
 													if(total>=100)return;
 													per = per+total;
+													if(per<0)per=0;
 													if(per>100)per=100;
 													lore=Api.color("&a"+per+"% Success Chance");
 												}
@@ -68,6 +69,7 @@ public class DustControl implements Listener{
 													if(total<=0)return;
 													per = total-per;
 													if(per<0)per=0;
+													if(per>100)per=100;
 													lore=Api.color("&4"+per+"% Destroy Chance");
 												}
 												newlore.add(lore);

@@ -37,7 +37,7 @@ public class Rage implements Listener{
 							if(lore.contains(Api.getEnchName("Rage"))){
 								if(multi.containsKey(damager)){
 									Bukkit.getScheduler().cancelTask(reset.get(damager));
-									multi.put(damager, multi.get(damager) + (Api.getPower(lore, Api.getEnchName("Rage"))/10));
+									multi.put(damager, multi.get(damager) + (Api.getPower(lore, Api.getEnchName("Rage"))*0.1));
 									if(multi.get(damager).intValue() == num.get(damager)){
 										damager.sendMessage(Api.color("&3You are now doing &a" + num.get(damager) + "x &3Damage."));
 										num.put(damager, num.get(damager)+1);

@@ -26,11 +26,13 @@ public class ECControl implements Listener{
 				}
 			}
 		}
-		for(String en : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-			for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Categories")){
-				if(cat.equalsIgnoreCase(C)){
-					String power = powerPicker(en, cat);
-					enchants.add(Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+en+".Name")+" "+power);
+		if(Main.settings.getCustomEnchs().contains("Enchantments")){
+			for(String en : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+				for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Categories")){
+					if(cat.equalsIgnoreCase(C)){
+						String power = powerPicker(en, cat);
+						enchants.add(Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+en+".Name")+" "+power);
+					}
 				}
 			}
 		}

@@ -18,7 +18,6 @@ public class PainGiver implements Listener{
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(!Api.isEnchantmentEnabled("PainGiver"))return;
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(e.isCancelled())return;
 		if(e.getEntity() instanceof Player){
 			if(e.getDamager() instanceof LivingEntity){
 				Player player = (Player) e.getEntity();

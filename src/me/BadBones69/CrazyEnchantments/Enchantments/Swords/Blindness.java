@@ -17,7 +17,6 @@ public class Blindness implements Listener{
 		if(!Api.isEnchantmentEnabled("Blindness"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
-		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
 				Player damager = (Player) e.getDamager();

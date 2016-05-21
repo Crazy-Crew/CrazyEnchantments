@@ -18,7 +18,6 @@ public class Enlightened implements Listener{
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
-		if(e.isCancelled())return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getEntity() instanceof Player){
 				Player player = (Player) e.getEntity();

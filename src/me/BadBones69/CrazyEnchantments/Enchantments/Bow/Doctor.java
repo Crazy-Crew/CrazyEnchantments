@@ -36,7 +36,6 @@ public class Doctor implements Listener{
 		if(!Api.isEnchantmentEnabled("Doctor"))return;
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
-		if(e.isCancelled())return;
 		Entity en = e.getEntity();
 		if(e.getDamager() instanceof Arrow){
 			if(en instanceof LivingEntity){

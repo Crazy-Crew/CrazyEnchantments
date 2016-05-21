@@ -174,13 +174,15 @@ public class Api{
 		if(P instanceof Player&&O instanceof Player){
 			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
 				Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+				Player player = (Player) P;
+				Player other = (Player) O;
 				if(factions.getDescription().getAuthors().contains("drtshock")){
-					if(FactionUUIDSupport.isFriendly(P, O))return true;
-					if(!FactionUUIDSupport.isFriendly(P, O))return false;
+					if(FactionUUIDSupport.isFriendly(player, other))return true;
+					if(!FactionUUIDSupport.isFriendly(player, other))return false;
 				}
 				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-					if(FactionSupport.isFriendly(P, O))return true;
-					if(!FactionSupport.isFriendly(P, O))return false;
+					if(FactionSupport.isFriendly(player, other))return true;
+					if(!FactionSupport.isFriendly(player, other))return false;
 				}
 			}
 		}
@@ -414,7 +416,7 @@ public class Api{
 	static boolean isProtected(ItemStack i){
 		if(i.hasItemMeta()){
 			if(i.getItemMeta().hasLore()){
-				if(i.getItemMeta().getLore().contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
+				for(String lore : i.getItemMeta().getLore())if(lore.equals(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
 					return true;
 				}
 			}
