@@ -521,8 +521,9 @@ public class GUI implements Listener{
 					ItemStack item = e.getCurrentItem();
 					if(item.hasItemMeta()){
 						if(item.getItemMeta().hasDisplayName()){
+							Player player = (Player) e.getWhoClicked();
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")))||item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")))){
-								openInfo((Player)e.getWhoClicked());
+								openInfo((Player)player);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name")))){
@@ -535,7 +536,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Boots.Name")))){
@@ -548,7 +549,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Armor.Name")))){
@@ -561,7 +562,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Sword.Name")))){
@@ -574,7 +575,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(26, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Axe.Name")))){
@@ -587,7 +588,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Bow.Name")))){
@@ -600,7 +601,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Pickaxe.Name")))){
@@ -613,7 +614,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Tool.Name")))){
@@ -626,7 +627,7 @@ public class GUI implements Listener{
 								}else{
 									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lOther Info"))){
@@ -660,56 +661,56 @@ public class GUI implements Listener{
 									in.setItem(9, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
 									in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 								}
-								e.getWhoClicked().openInventory(in);
+								player.openInventory(in);
 								return;
 							}
 							String bar = Api.color("&a&m------------------------------------------------");
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
-								e.getWhoClicked().closeInventory();
-								e.getWhoClicked().sendMessage(bar);
-								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.BlackSmith"))e.getWhoClicked().sendMessage(Api.color(lore));
-								e.getWhoClicked().sendMessage(bar);
+								player.closeInventory();
+								player.sendMessage(bar);
+								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.BlackSmith"))player.sendMessage(Api.color(lore));
+								player.sendMessage(bar);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
-								e.getWhoClicked().closeInventory();
-								e.getWhoClicked().sendMessage(bar);
-								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll"))e.getWhoClicked().sendMessage(Api.color(lore));
-								e.getWhoClicked().sendMessage(bar);
+								player.closeInventory();
+								player.sendMessage(bar);
+								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll"))player.sendMessage(Api.color(lore));
+								player.sendMessage(bar);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
-								e.getWhoClicked().closeInventory();
-								e.getWhoClicked().sendMessage(bar);
-								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll"))e.getWhoClicked().sendMessage(Api.color(lore));
-								e.getWhoClicked().sendMessage(bar);
+								player.closeInventory();
+								player.sendMessage(bar);
+								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll"))player.sendMessage(Api.color(lore));
+								player.sendMessage(bar);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
-								e.getWhoClicked().closeInventory();
-								e.getWhoClicked().sendMessage(bar);
-								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker"))e.getWhoClicked().sendMessage(Api.color(lore));
-								e.getWhoClicked().sendMessage(bar);
+								player.closeInventory();
+								player.sendMessage(bar);
+								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker"))player.sendMessage(Api.color(lore));
+								player.sendMessage(bar);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")))){
-								e.getWhoClicked().closeInventory();
-								e.getWhoClicked().sendMessage(bar);
-								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust"))e.getWhoClicked().sendMessage(Api.color(lore));
-								e.getWhoClicked().sendMessage(bar);
+								player.closeInventory();
+								player.sendMessage(bar);
+								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust"))player.sendMessage(Api.color(lore));
+								player.sendMessage(bar);
 								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")))){
-								e.getWhoClicked().closeInventory();
-								e.getWhoClicked().sendMessage(bar);
-								e.getWhoClicked().sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust"))e.getWhoClicked().sendMessage(Api.color(lore));
-								e.getWhoClicked().sendMessage(bar);
+								player.closeInventory();
+								player.sendMessage(bar);
+								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust"))player.sendMessage(Api.color(lore));
+								player.sendMessage(bar);
 								return;
 							}
 						}

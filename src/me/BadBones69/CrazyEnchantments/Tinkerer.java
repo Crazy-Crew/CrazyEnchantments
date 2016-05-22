@@ -62,6 +62,7 @@ public class Tinkerer implements Listener{
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
+		Player player = (Player) e.getWhoClicked();
 		if(inv!=null){
 			if(inv.getName().equals(Api.color(Main.settings.getTinker().getString("Settings.GUIName")))){
 				e.setCancelled(true);
@@ -71,7 +72,6 @@ public class Tinkerer implements Listener{
 							// Recycling things
 							if(e.getCurrentItem().getItemMeta().hasDisplayName()){
 								if(e.getCurrentItem().getItemMeta().getDisplayName().equals(Api.color(Main.settings.getTinker().getString("Settings.TradeButton")))){
-									Player player = (Player) e.getWhoClicked();
 									int total=0;
 									for(int slot : getSlot().keySet()){
 										if(inv.getItem(getSlot().get(slot))!=null){
@@ -79,19 +79,19 @@ public class Tinkerer implements Listener{
 												ItemStack item = inv.getItem(slot);
 												total=total+getTotalXP(item);
 											}else{
-												if(Api.isInvFull(((Player)e.getWhoClicked()))){
-													e.getWhoClicked().getWorld().dropItem(e.getWhoClicked().getLocation(), inv.getItem(getSlot().get(slot)));
+												if(Api.isInvFull(((Player)player))){
+													player.getWorld().dropItem(player.getLocation(), inv.getItem(getSlot().get(slot)));
 												}else{
-													e.getWhoClicked().getInventory().addItem(inv.getItem(getSlot().get(slot)));
+													player.getInventory().addItem(inv.getItem(getSlot().get(slot)));
 												}
 											}
 										}
 										e.getInventory().setItem(slot, new ItemStack(Material.AIR));
 										e.getInventory().setItem(getSlot().get(slot), new ItemStack(Material.AIR));
 									}
-									e.getWhoClicked().closeInventory();
+									player.closeInventory();
 									if(total!=0)Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+player.getName()+" "+total);
-									e.getWhoClicked().sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Sold-Msg")));
+									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Sold-Msg")));
 									if(Api.getVersion()>=191){
 										player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_TRADING"), 1, 1);
 									}else{
@@ -105,10 +105,9 @@ public class Tinkerer implements Listener{
 								if(item.getType()==Material.BOOK){// Adding a book
 									for(String en : ECControl.allEnchantments().keySet()){
 										if(item.getItemMeta().getDisplayName().contains(Api.color(Api.getEnchBookColor(en)+Api.getEnchName(en)))){
-											Player player = (Player) e.getWhoClicked();
 											if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
 												e.setCurrentItem(new ItemStack(Material.AIR));
-												e.getWhoClicked().getInventory().addItem(item);
+												player.getInventory().addItem(item);
 												inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
 												if(Api.getVersion()>=191){
 													player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
@@ -116,8 +115,8 @@ public class Tinkerer implements Listener{
 													player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 												}
 											}else{// Clicking in their inventory
-												if(e.getWhoClicked().getOpenInventory().getTopInventory().firstEmpty()==-1){
-													e.getWhoClicked().sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
+												if(player.getOpenInventory().getTopInventory().firstEmpty()==-1){
+													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
 													return;
 												}
 												e.setCurrentItem(new ItemStack(Material.AIR));
@@ -133,10 +132,9 @@ public class Tinkerer implements Listener{
 									}
 								}
 								if(getTotalXP(e.getCurrentItem())>0){// Adding an item
-									Player player = (Player) e.getWhoClicked();
 									if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
 										e.setCurrentItem(new ItemStack(Material.AIR));
-										e.getWhoClicked().getInventory().addItem(item);
+										player.getInventory().addItem(item);
 										inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
 										if(Api.getVersion()>=191){
 											player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
@@ -144,8 +142,8 @@ public class Tinkerer implements Listener{
 											player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 										}
 									}else{// Clicking in their inventory
-										if(e.getWhoClicked().getOpenInventory().getTopInventory().firstEmpty()==-1){
-											e.getWhoClicked().sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
+										if(player.getOpenInventory().getTopInventory().firstEmpty()==-1){
+											player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
 											return;
 										}
 										e.setCurrentItem(new ItemStack(Material.AIR));
