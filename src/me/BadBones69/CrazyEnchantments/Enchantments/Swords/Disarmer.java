@@ -22,6 +22,7 @@ public class Disarmer implements Listener{
 			if(e.getDamager() instanceof Player){
 				Player damager = (Player) e.getDamager();
 				if(Api.getItemInHand(damager).hasItemMeta()){
+					if(!Api.getItemInHand(damager).getItemMeta().hasLore())return;
 					for(String lore :Api.getItemInHand(damager).getItemMeta().getLore()){
 						if(lore.contains(Api.getEnchName("Disarmer"))){
 							Random number = new Random();
