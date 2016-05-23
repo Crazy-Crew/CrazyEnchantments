@@ -264,7 +264,14 @@ public class BlackSmith implements Listener{
 						}
 					}
 				}
-				if(!T)item=Api.addLore(item, lore);
+				if(!T){
+					int maxEnchants = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
+					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+						if(Api.getEnchAmount(item)<maxEnchants){
+							item=Api.addLore(item, lore);
+						}
+					}
+				}
 			}
 		}
 		return item;
@@ -350,7 +357,12 @@ public class BlackSmith implements Listener{
 					}
 				}
 				if(!T){
-					total+=(Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment"));
+					int maxEnchants = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
+					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+						if(Api.getEnchAmount(item)<maxEnchants){
+							total+=(Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment"));
+						}
+					}
 				}
 			}
 		}
