@@ -13,6 +13,26 @@ Settings:
       - '&7It is said to be an enchantment book from %Category%'
       - '&7But you must clean it off to find out what kind it is.'
       - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
+  ProtectionCrystal:
+    InGUI: False #If its in the GUI.
+    Slot: 1 #Slot it is in
+    Item: '388' #Item it is
+    Glowing: True #If it is enchanted
+    Protected: '&6Ancient Protection'
+    Name: '&5&lProtection &b&lCrystal' #Name of the item
+    Lore: #Lore of the item
+      - '&7A rare crystal that is said to'
+      - '&7protect items from getting lost'
+      - '&7while the owners away in the after life.'
+      - ''
+      - '&7&l(&6&l!&7&l) &7Drag and drop on an item.'
+    GUIName: '&5&lProtection &b&lCrystal'
+    GUILore:
+      - '&7A rare crystal that is said to'
+      - '&7protect items from getting lost'
+      - '&7while the owners away in the after life.'
+      - ''
+      - '&eCost: &e&l$1000'
   BlackSmith: #Options for the Black Smith
     InGUI: False #In the GUI.
     Slot: 1 #Slot it is in.
@@ -120,6 +140,14 @@ Settings:
     IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
     MaxAmountOfEnchantments: 5 #The Max amount of enchantments an item can have(Will not effect Vanilla Enchantments)
   SignOptions: #Options for the Signs.
+    ProtectionCrystalStyle: 
+      Cost: 1000 #How much to buy it
+      Money/XP: Money #Use money or xp
+      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
+      Line1: '&b&lCrazy Enchant'
+      Line2: '&b&lShop:'
+      Line3: '&5&lProtection &b&lCrystal'
+      Line4: '&c&lCost: &a&l$1000'
     SuccessDustStyle: 
       Cost: 50 #How much to buy a Magical Dust
       Money/XP: Money #Use money or xp

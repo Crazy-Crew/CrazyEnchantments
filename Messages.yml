@@ -25,6 +25,8 @@ Messages:
   Book-Failed: '&cYour item must not have liked that enchantment.'
   Item-Destroyed: '&cOh no the destroy rate was to much for the item.'
   Item-Was-Protected: '&cLuckily your item was blessed with Devine Protection and didnt break.'
+  Give-Protection-Crystal: '&7You have just given %Player% %Amount% Protection Crystals.'
+  Get-Protection-Crystal: '&7You have gained %Amount% Protection Crystals.'
   InfoGUI:
     Categories-Info:
       Back:
@@ -97,6 +99,11 @@ Messages:
           - '&a- Gold Pickaxe'
           - '&a- Iron Pickaxe'
           - '&a- Diamond Pickaxe'
+      Misc:
+        Name: '&e&lMisc Enchantments'
+        Lore:
+          - '&aRead enchantment to'
+          - '&aSee enchantable Items.'
       Other:
         Name: '&e&lOther Info'
         Lore:

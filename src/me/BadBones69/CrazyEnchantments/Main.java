@@ -3,70 +3,6 @@ package me.BadBones69.CrazyEnchantments;
 import java.io.IOException;
 import java.util.List;
 
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.BurnShield;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Drunk;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Enlightened;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Fortify;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Freeze;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Hulk;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Molten;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Ninja;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Nursery;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.OverLoad;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.PainGiver;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Savior;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.SelfDestruct;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.SmokeBomb;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Valor;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor.Voodoo;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Berserk;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Blessed;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Cursed;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Decapitation;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Dizzy;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes.FeedMe;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes.Rekt;
-import me.BadBones69.CrazyEnchantments.Enchantments.Boots.AntiGravity;
-import me.BadBones69.CrazyEnchantments.Enchantments.Boots.Gears;
-import me.BadBones69.CrazyEnchantments.Enchantments.Boots.Springs;
-import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Boom;
-import me.BadBones69.CrazyEnchantments.Enchantments.Bow.IceFreeze;
-import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Lightning;
-import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Piercing;
-import me.BadBones69.CrazyEnchantments.Enchantments.Bow.Venom;
-import me.BadBones69.CrazyEnchantments.Enchantments.Helmets.Glowing;
-import me.BadBones69.CrazyEnchantments.Enchantments.Helmets.Mermaid;
-import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes.AutoSmelt;
-import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes.Experience;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Blindness;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Confusion;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Disarmer;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.DoubleDamage;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Execute;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.FastTurn;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Headless;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Inquisitive;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Insomnia;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.LifeSteal;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.LightWeight;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Nutrition;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Obliterate;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Paralyze;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Rage;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.SkillSwipe;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.SlowMo;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Snare;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Trap;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Vampire;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Viper;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords.Wither;
-import me.BadBones69.CrazyEnchantments.Enchantments.Tools.Haste;
-import me.BadBones69.CrazyEnchantments.Enchantments.Tools.Oxygenate;
-import me.BadBones69.CrazyEnchantments.Enchantments.Tools.Telepathy;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -80,6 +16,23 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.thederpygolems.armorequip.ArmorListener;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
+import me.BadBones69.CrazyEnchantments.Controlers.CustomEnchantments;
+import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
+import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
+import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
+import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
+import me.BadBones69.CrazyEnchantments.Enchantments.Armor;
+import me.BadBones69.CrazyEnchantments.Enchantments.Axes;
+import me.BadBones69.CrazyEnchantments.Enchantments.Boots;
+import me.BadBones69.CrazyEnchantments.Enchantments.Bows;
+import me.BadBones69.CrazyEnchantments.Enchantments.Helmets;
+import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes;
+import me.BadBones69.CrazyEnchantments.Enchantments.Swords;
+import me.BadBones69.CrazyEnchantments.Enchantments.Tools;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Main extends JavaPlugin implements Listener{
 	public static SettingsManager settings = SettingsManager.getInstance();
@@ -101,74 +54,22 @@ public class Main extends JavaPlugin implements Listener{
 		Bukkit.getServer().getPluginManager().registerEvents(new Tinkerer(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new ProtectionCrystal(), this);
 		//==========================================================================\\
-		Bukkit.getServer().getPluginManager().registerEvents(new Valor(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new SmokeBomb(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Drunk(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Voodoo(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Confusion(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Disarmer(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Execute(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Headless(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Inquisitive(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Insomnia(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Nutrition(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Obliterate(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Paralyze(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Rage(this), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new SkillSwipe(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Snare(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Trap(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Wither(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Decapitation(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new IceFreeze(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Lightning(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Oxygenate(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Haste(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Telepathy(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Experience(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new AutoSmelt(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new SignControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new OverLoad(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Glowing(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new BurnShield(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Piercing(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Springs(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Gears(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Hulk(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new SelfDestruct(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Mermaid(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Ninja(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Vampire(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new LifeSteal(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Boom(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Venom(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new DoubleDamage(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new SlowMo(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Blindness(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Viper(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new AntiGravity(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new FastTurn(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new LightWeight(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Blessed(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new FeedMe(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Dizzy(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Berserk(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Cursed(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Rekt(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Enlightened(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Freeze(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Fortify(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Molten(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new PainGiver(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Savior(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Nursery(), this);
-		if (!setupEconomy()){
+		Bukkit.getServer().getPluginManager().registerEvents(new Swords(this), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Armor(this), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Bows(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Axes(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Boots(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Helmets(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new PickAxes(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Tools(), this);
+		if(!setupEconomy()){
 	   		saveDefaultConfig();
 	    }
-		try {
+		try{
 			Metrics metrics = new Metrics(this); metrics.start();
-		} catch (IOException e) {
+		}catch (IOException e) {
 			System.out.println("Error Submitting stats!");
 		}
 	}
@@ -220,6 +121,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
+					sender.sendMessage(Api.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
 					sender.sendMessage(Api.color("&b/CE Book <Enchantment> <Lvl> <Amount> <Player> - &9Gives a player a Enchantment Book."));
 					sender.sendMessage(Api.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
 					return true;
@@ -338,6 +240,40 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					sender.sendMessage(Api.getPrefix()+Api.color("&c/CE LostBook <Category> [Amount] [Player]"));
+					return true;
+				}
+				if(args[0].equalsIgnoreCase("Crystal")||args[0].equalsIgnoreCase("C")){// /CE Crystal [Amount] [Player]
+					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
+					int amount = 1;
+					Player player = (Player) sender;
+					if(args.length<=2){
+						if(!(sender instanceof Player)){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+							return true;
+						}
+					}
+					if(args.length>=2){
+						if(!Api.isInt(args[1])){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
+							return true;
+						}
+						amount=Integer.parseInt(args[1]);
+					}
+					if(args.length>=3){
+						if(!Api.isOnline(args[2], sender))return true;
+						player=Api.getPlayer(args[2]);
+					}
+					if(Api.isInvFull(player)){
+						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Inventory-Full")));
+						return true;
+					}
+					player.getInventory().addItem(ProtectionCrystal.getCrystals(amount));
+					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Protection-Crystal")
+							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
+							.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
+					player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Protection-Crystal")
+							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]

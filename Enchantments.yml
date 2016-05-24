@@ -776,7 +776,7 @@ Enchantments:
     Info:
       Name: '&e&lInsomnia'
       Description:
-        - '&c&lSwords Only'
+        - '&c&lArmor Only'
         - '&3Gives confusion, mining fatigue, and slowness'
         - '&3But has a high chance of doing double the damage'
     Categories:
@@ -971,6 +971,166 @@ Enchantments:
         - '&c&lArmor Only'
         - '&3Has a chance to give'
         - '&3Your attacker weakness'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  MultiArrow:
+    Enabled: True
+    Name: 'MultiArrow'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lMultiArrow'
+      Description:
+        - '&c&lBow Only'
+        - '&3Has a chance to shoot'
+        - '&3Multiple arrows at once.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Recover:
+    Enabled: True
+    Name: 'Recover'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Info:
+      Name: '&e&lRecover'
+      Description:
+        - '&c&lArmor Only'
+        - '&3When you kill a player'
+        - '&3You get absorption and regen.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Cactus:
+    Enabled: True
+    Name: 'Cactus'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lCactus'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to damage'
+        - '&3The player that damages you.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Rocket:
+    Enabled: True
+    Name: 'Rocket'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lRocket'
+      Description:
+        - '&c&lBoots Only'
+        - '&3If low on health there is a chance'
+        - '&3You will blast off backwards to escape.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Angel:
+    Enabled: True
+    Name: 'Angel'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lAngel'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Heals near by Faction Members'
+        - '&3When you are wearing item.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  HellForged:
+    Enabled: True
+    Name: 'HellForged'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 4
+    Info:
+      Name: '&e&lHellForged'
+      Description:
+        - '&c&lAll Armor, Weapons, Tools'
+        - '&3Has a chance to fix up'
+        - '&3Your items as you walk.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Commander:
+    Enabled: True
+    Name: 'Commander'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lCommander'
+      Description:
+        - '&c&lHelmets Only'
+        - '&3Gives nearby Faction Members'
+        - '&3Haste when wearing item.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  StormCaller:
+    Enabled: True
+    Name: 'StormCaller'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lStormCaller'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Has a chance to strike your enemy'
+        - '&3Down with a lightning strike.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Leadership:
+    Enabled: True
+    Name: 'Leadership'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lLeadership'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Your attacks are stronger when'
+        - '&3You have allies around you.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Implants:
+    Enabled: True
+    Name: 'Implants'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lImplants'
+      Description:
+        - '&c&lHelmets Only'
+        - '&3While moving your hunger will'
+        - '&3Start to go up while equipped.'
     Categories:
       - 'T1'
       - 'T2'

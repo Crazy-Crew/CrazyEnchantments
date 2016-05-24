@@ -12,8 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.BadBones69.CrazyEnchantments.Controlers.CustomEnchantments;
+
 public class ECControl implements Listener{
-	static String Enchants(String cat){
+	public static String Enchants(String cat){
 		ArrayList<String> enchants = new ArrayList<String>();
 		Random number = new Random();
 		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
@@ -39,7 +41,7 @@ public class ECControl implements Listener{
 		String enchant = enchants.get(number.nextInt(enchants.size()));
 		return enchant;
 	}
-	static HashMap<String, ArrayList<Material>> allEnchantments(){
+	public static HashMap<String, ArrayList<Material>> allEnchantments(){
 		HashMap<String, ArrayList<Material>> en = new HashMap<String, ArrayList<Material>>();
 		//---------Sword---------//
 		en.put("Trap", isSword());
@@ -53,7 +55,6 @@ public class ECControl implements Listener{
 		en.put("FastTurn", isSword());
 		en.put("Disarmer", isSword());
 		en.put("Headless", isSword());
-		en.put("Insomnia", isSword());
 		en.put("Paralyze", isSword());
 		en.put("Blindness", isSword());
 		en.put("LifeSteal", isSword());
@@ -79,28 +80,38 @@ public class ECControl implements Listener{
 		en.put("Piercing", isBow());
 		en.put("IceFreeze", isBow());
 		en.put("Lightning", isBow());
+		en.put("MultiArrow", isBow());
 		//---------Armor---------//
 		en.put("Hulk", isArmor());
 		en.put("Valor", isArmor());
 		en.put("Drunk", isArmor());
 		en.put("Ninja", isArmor());
+		en.put("Angel", isArmor());
 		en.put("Voodoo", isArmor());
 		en.put("Molten", isArmor());
 		en.put("Savior", isArmor());
+		en.put("Cactus", isArmor());
 		en.put("Freeze", isArmor());
+		en.put("Recover", isArmor());
 		en.put("Nursery", isArmor());
 		en.put("Fortify", isArmor());
 		en.put("OverLoad", isArmor());
+		en.put("Insomnia", isArmor());
 		en.put("SmokeBomb", isArmor());
 		en.put("PainGiver", isArmor());
 		en.put("BurnShield", isArmor());
+		en.put("Leadership", isArmor());
+		en.put("StormCaller", isArmor());
 		en.put("Enlightened", isArmor());
 		en.put("SelfDestruct", isArmor());
 		//--------Helmets--------//
 		en.put("Mermaid", isHelmet());
 		en.put("Glowing", isHelmet());
+		en.put("Implants", isHelmet());
+		en.put("Commander", isHelmet());
 		//---------Boots--------//
 		en.put("Gears", isBoots());
+		en.put("Rocket", isBoots());
 		en.put("Springs", isBoots());
 		en.put("AntiGravity", isBoots());
 		//---------PickAxes--------//
@@ -110,6 +121,8 @@ public class ECControl implements Listener{
 		en.put("Haste", isTool());
 		en.put("Telepathy", isTool());
 		en.put("Oxygenate", isTool());
+		//---------All--------//
+		en.put("HellForged", isAll());
 		//---------Custom--------//
 		for(String ench : CustomEnchantments.getEnchantments()){
 			String type = Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable");
@@ -170,7 +183,7 @@ public class ECControl implements Listener{
 			}
 		}
 	}
-	static ItemStack pick(String cat){
+	public static ItemStack pick(String cat){
 		int Smax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max");
 		int Smin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min");
 		int Dmax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Max");
@@ -184,7 +197,7 @@ public class ECControl implements Listener{
 		}
 		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat), Api.addDiscription(), lore);
 	}
-	static String powerPicker(String en, String C){
+	public static String powerPicker(String en, String C){
 		Random r = new Random();
 		int ench = 5; //Max set by the enchantment
 		if(Main.settings.getEnchs().contains("Enchantments."+en)){
@@ -249,6 +262,14 @@ public class ECControl implements Listener{
 			i++;
 		}
 		return arg;
+	}
+	public static ArrayList<Material> isAll(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.addAll(isArmor());
+		ma.addAll(isTool());
+		ma.addAll(isBow());
+		ma.addAll(isWeapon());
+		return ma;
 	}
 	public static ArrayList<Material> isArmor(){
 		ArrayList<Material> ma = new ArrayList<Material>();

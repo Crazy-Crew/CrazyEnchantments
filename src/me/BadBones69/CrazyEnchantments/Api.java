@@ -72,7 +72,35 @@ public class Api{
 		}else{
 			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date. "
 					+ "Please update or remove this plugin to stop ferther Errors.");
-			return null;
+			return item;
+		}
+    }
+	public static ItemStack addGlow(ItemStack item, boolean toggle) {
+		if(toggle){
+			if(getVersion()==192){
+				return NMS_v1_9_R2.addGlow(item);
+			}
+			if(getVersion()==191){
+				return NMS_v1_9_R1.addGlow(item);
+			}
+			if(getVersion()==183){
+				return NMS_v1_8_R3.addGlow(item);
+			}
+			if(getVersion()==182){
+				return NMS_v1_8_R2.addGlow(item);
+			}
+			if(getVersion()==181){
+				return NMS_v1_8_R1.addGlow(item);
+			}
+			if(getVersion()==174){
+				return NMS_v1_7_R4.addGlow(item);
+			}else{
+				Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date. "
+						+ "Please update or remove this plugin to stop ferther Errors.");
+				return item;
+			}
+		}else{
+			return item;
 		}
     }
 	@SuppressWarnings("deprecation")
@@ -170,6 +198,10 @@ public class Api{
 		}
 		return Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor");
 	}
+	public static boolean hasFactions(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null)return true;
+		return false;
+	}
 	public static boolean isFriendly(Entity P, Entity O){
 		if(P instanceof Player&&O instanceof Player){
 			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
@@ -209,7 +241,7 @@ public class Api{
 		}
 		return true;
 	}
-	static ItemStack removeLore(ItemStack item, String i){
+	public static ItemStack removeLore(ItemStack item, String i){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
 		for(String l : item.getItemMeta().getLore()){
@@ -221,7 +253,7 @@ public class Api{
 		item.setItemMeta(m);
 		return item;
 	}
-	static ItemStack replaceLore(ItemStack item, String oldlore, String newlore){
+	public static ItemStack replaceLore(ItemStack item, String oldlore, String newlore){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
 		for(String l : item.getItemMeta().getLore()){
@@ -262,6 +294,19 @@ public class Api{
 		item.setItemMeta(m);
 		return item;
 	}
+	public static ItemStack makeItem(String type, int amount){
+		int ty = 0;
+		if(type.contains(":")){
+			String[] b = type.split(":");
+			type = b[0];
+			ty = Integer.parseInt(b[1]);
+		}
+		Material m = Material.matchMaterial(type);
+		ItemStack item = new ItemStack(m, amount, (short) ty);
+		ItemMeta me = item.getItemMeta();
+		item.setItemMeta(me);
+		return item;
+	}
 	public static ItemStack makeItem(String type, int amount, String name, List<String> lore){
 		ArrayList<String> l = new ArrayList<String>();
 		int ty = 0;
@@ -299,17 +344,17 @@ public class Api{
 		item.addUnsafeEnchantments(enchants);
 		return item;
 	}
-	static String percentPicker(){
+	public static String percentPicker(){
 		Random i = new Random();
 		return Integer.toString(i.nextInt(100));
 	}
-	static String getPrefix(){
+	public static String getPrefix(){
 		return color(Main.settings.getConfig().getString("Settings.Prefix"));
 	}
-	static double getMoney(Player player){
+	public static double getMoney(Player player){
 		return Main.econ.getBalance(player);
 	}
-	static List<String> addDiscription(){
+	public static List<String> addDiscription(){
 		ArrayList<String> lore = new ArrayList<String>();
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			lore.add(color(l));
@@ -349,7 +394,7 @@ public class Api{
 		}
 		return true;
 	}
-	static void removeItem(ItemStack item, Player player){
+	public static void removeItem(ItemStack item, Player player){
 		if(item.getAmount() <= 1){
 			player.getInventory().removeItem(item);
 		}
@@ -358,7 +403,7 @@ public class Api{
 			i.setAmount(item.getAmount() - 1);
 		}
 	}
-	static ItemStack removeItem(ItemStack item){
+	public static ItemStack removeItem(ItemStack item){
 		if(item.getAmount() <= 1){
 			return new ItemStack(Material.AIR);
 		}
@@ -368,10 +413,10 @@ public class Api{
 			return i;
 		}
 	}
-	static String getInvName(){
+	public static String getInvName(){
 		return color(Main.settings.getConfig().getString("Settings.InvName"));
 	}
-	static int getXPLvl(Player player){
+	public static int getXPLvl(Player player){
 		return player.getLevel();
 	}
 	public static void takeLvlXP(Player player, int amount){
@@ -417,7 +462,7 @@ public class Api{
 			player.giveExp(-amount);
 		}
 	}
-	static boolean isProtected(ItemStack i){
+	public static boolean isProtected(ItemStack i){
 		if(i.hasItemMeta()){
 			if(i.getItemMeta().hasLore()){
 				for(String lore : i.getItemMeta().getLore())if(lore.equals(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
@@ -427,7 +472,7 @@ public class Api{
 		}
 		return false;
 	}
-	static ItemStack BlackScroll(int i){
+	public static ItemStack BlackScroll(int i){
 		String name = color(Main.settings.getConfig().getString("Settings.BlackScroll.Name"));
 		ArrayList<String> lore = new ArrayList<String>();
 		lore.add(Api.color("&7Right Click for more Info."));
@@ -441,7 +486,7 @@ public class Api{
 		Material m = Material.matchMaterial(type);
 		return makeItem(m, i, ty, name, lore);
 	}
-	static ItemStack addWhiteScroll(int amount){
+	public static ItemStack addWhiteScroll(int amount){
 		ArrayList<String> lore = new ArrayList<String>();
 		lore.add("&7Prevents an item from being destroyed");
 		lore.add("&7due to a failed Enchantment Book.");
@@ -459,11 +504,15 @@ public class Api{
 			lore.remove(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 			lore.add(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 		}
+		if(lore.contains(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
+			lore.remove(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+			lore.add(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+		}
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
 	}
-	static ItemStack removeProtected(ItemStack item){
+	public static ItemStack removeProtected(ItemStack item){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
 		lore.addAll(m.getLore());
@@ -528,7 +577,7 @@ public class Api{
 		}
 		return amount;
 	}
-	static boolean successChance(ItemStack item){
+	public static boolean successChance(ItemStack item){
 		if(!item.hasItemMeta())return true;
 		if(!item.getItemMeta().hasLore())return true;
 		for(String lore : item.getItemMeta().getLore()){
@@ -549,7 +598,7 @@ public class Api{
 		}
 		return true;
 	}
-	static boolean destroyChance(ItemStack item){
+	public static boolean destroyChance(ItemStack item){
 		if(!item.hasItemMeta())return false;
 		if(!item.getItemMeta().hasLore())return false;
 		for(String lore : item.getItemMeta().getLore()){
