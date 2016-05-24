@@ -1,7 +1,7 @@
 name: CrazyEnchantments
 author: BadBones69
 main: me.BadBones69.CrazyEnchantments.Main
-version: 1.6.1.4
+version: 1.6.1.5
 softdepend: [Factions, WorldEdit]
 website: https://www.spigotmc.org/resources/16470/
 description: >

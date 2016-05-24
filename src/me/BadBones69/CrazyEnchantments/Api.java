@@ -401,17 +401,21 @@ public class Api{
 		}
 	}
 	public static void takeTotalXP(Player player, int amount){
-		int total = getTotalExperience(player) - amount;
-		player.setTotalExperience(0);
-        player.setTotalExperience(total);
-        player.setLevel(0);
-        player.setExp(0);
-        for(;total > player.getExpToLevel();){
-            total -= player.getExpToLevel();
-            player.setLevel(player.getLevel()+1);
-        }
-        float xp = (float)total / (float)player.getExpToLevel();
-        player.setExp(xp);
+		if(getVersion()>=181){
+			int total = getTotalExperience(player) - amount;
+			player.setTotalExperience(0);
+	        player.setTotalExperience(total);
+	        player.setLevel(0);
+	        player.setExp(0);
+	        for(;total > player.getExpToLevel();){
+	            total -= player.getExpToLevel();
+	            player.setLevel(player.getLevel()+1);
+	        }
+	        float xp = (float)total / (float)player.getExpToLevel();
+	        player.setExp(xp);
+		}else{
+			player.giveExp(-amount);
+		}
 	}
 	static boolean isProtected(ItemStack i){
 		if(i.hasItemMeta()){
