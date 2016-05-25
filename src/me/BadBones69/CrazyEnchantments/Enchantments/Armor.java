@@ -38,7 +38,7 @@ public class Armor implements Listener{
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
 		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
-			if(!NewItem.getItemMeta().hasLore()){
+			if(NewItem.getItemMeta().hasLore()){
 				for(String lore : NewItem.getItemMeta().getLore()){
 					if(lore.contains(Api.getEnchName("BurnShield"))){
 						if(Api.isEnchantmentEnabled("BurnShield")){

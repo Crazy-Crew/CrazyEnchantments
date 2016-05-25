@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -285,12 +286,25 @@ public class Swords implements Listener{
 									}
 								}
 							}
-							if(lore.contains(Api.getEnchName("Inquisitive"))){
-								if(Api.isEnchantmentEnabled("Inquisitive")){
-									int chance=9-Api.getPower(lore, Api.getEnchName("Inquisitive"));
-									if(Api.randomPicker(chance)){
-										e.setDroppedExp(e.getDroppedExp()*2);
-									}
+						}
+					}
+				}
+			}
+		}
+	}
+	@EventHandler
+	public void onPlayerDamage(EntityDeathEvent e){
+		if(Api.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
+		if(e.getEntity().getKiller() instanceof Player){
+			Player damager = (Player) e.getEntity().getKiller();
+			if(Api.getItemInHand(damager).hasItemMeta()){
+				if(Api.getItemInHand(damager).getItemMeta().hasLore()){
+					for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
+						if(lore.contains(Api.getEnchName("Inquisitive"))){
+							if(Api.isEnchantmentEnabled("Inquisitive")){
+								int chance=9-Api.getPower(lore, Api.getEnchName("Inquisitive"));
+								if(Api.randomPicker(chance)){
+									e.setDroppedExp(e.getDroppedExp()*2);
 								}
 							}
 						}
