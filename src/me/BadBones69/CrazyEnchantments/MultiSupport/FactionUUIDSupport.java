@@ -15,7 +15,7 @@ public class FactionUUIDSupport {
 		Faction p = FPlayers.getInstance().getByPlayer(player).getFaction();
 		Faction o = FPlayers.getInstance().getByPlayer(other).getFaction();
 		Relation r = FPlayers.getInstance().getByPlayer(player).getRelationTo(FPlayers.getInstance().getByPlayer(other));
-		if(Api.removeColor(o.getId()).equalsIgnoreCase("Wilderness"))return false;
+		if(Api.removeColor(o.getTag()).equalsIgnoreCase("Wilderness"))return false;
 		if(p==o)return true;
 		if(!r.isAlly())return false;
 		if(r.isAlly())return true;
