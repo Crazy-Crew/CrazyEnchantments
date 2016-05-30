@@ -10,16 +10,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 
-import me.BadBones69.CrazyEnchantments.MultiSupport.FactionSupport;
-import me.BadBones69.CrazyEnchantments.MultiSupport.FactionUUIDSupport;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R3;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R1;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R2;
-import me.BadBones69.CrazyEnchantments.MultiSupport.WorldGuardSupport;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -31,6 +21,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+
+import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
+import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R3;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R1;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R2;
+import me.BadBones69.CrazyEnchantments.MultiSupport.WorldGuard;
 
 public class Api{
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
@@ -209,12 +209,14 @@ public class Api{
 				Player player = (Player) P;
 				Player other = (Player) O;
 				if(factions.getDescription().getAuthors().contains("drtshock")){
-					if(FactionUUIDSupport.isFriendly(player, other))return true;
-					if(!FactionUUIDSupport.isFriendly(player, other))return false;
+					if(FactionsUUID.isFriendly(player, other))return true;
+					if(!FactionsUUID.isFriendly(player, other))return false;
 				}
 				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-					if(FactionSupport.isFriendly(player, other))return true;
-					if(!FactionSupport.isFriendly(player, other))return false;
+					if(FactionsSupport.isFriendly(player, other))return true;
+					if(!FactionsSupport.isFriendly(player, other))return false;
+				}else{
+					return false;
 				}
 			}
 		}
@@ -222,22 +224,22 @@ public class Api{
 	}
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			if(WorldGuardSupport.allowsPVP(en))return true;
-			if(!WorldGuardSupport.allowsPVP(en))return false;
+			if(WorldGuard.allowsPVP(en))return true;
+			if(!WorldGuard.allowsPVP(en))return false;
 		}
 		return true;
 	}
 	public static boolean allowsBreak(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			if(WorldGuardSupport.allowsBreak(en))return true;
-			if(!WorldGuardSupport.allowsBreak(en))return false;
+			if(WorldGuard.allowsBreak(en))return true;
+			if(!WorldGuard.allowsBreak(en))return false;
 		}
 		return true;
 	}
 	public static boolean allowsExplotions(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			if(WorldGuardSupport.allowsExplotions(en))return true;
-			if(!WorldGuardSupport.allowsExplotions(en))return false;
+			if(WorldGuard.allowsExplotions(en))return true;
+			if(!WorldGuard.allowsExplotions(en))return false;
 		}
 		return true;
 	}

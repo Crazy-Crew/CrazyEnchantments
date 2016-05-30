@@ -9,7 +9,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 
-public class WorldGuardSupport {
+public class WorldGuard {
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
 			int x = en.getLocation().getBlockX();

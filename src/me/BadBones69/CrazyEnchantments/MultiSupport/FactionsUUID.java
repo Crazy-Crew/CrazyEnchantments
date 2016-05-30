@@ -8,10 +8,8 @@ import com.massivecraft.factions.struct.Relation;
 
 import me.BadBones69.CrazyEnchantments.Api;
 
-public class FactionUUIDSupport {
-	public static boolean isFriendly(Player P, Player O){
-		Player player = (Player)P;
-		Player other = (Player)O;
+public class FactionsUUID {
+	public static boolean isFriendly(Player player, Player other){
 		Faction p = FPlayers.getInstance().getByPlayer(player).getFaction();
 		Faction o = FPlayers.getInstance().getByPlayer(other).getFaction();
 		Relation r = FPlayers.getInstance().getByPlayer(player).getRelationTo(FPlayers.getInstance().getByPlayer(other));

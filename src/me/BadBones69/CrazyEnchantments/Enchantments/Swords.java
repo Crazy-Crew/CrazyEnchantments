@@ -302,7 +302,7 @@ public class Swords implements Listener{
 					for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
 						if(lore.contains(Api.getEnchName("Inquisitive"))){
 							if(Api.isEnchantmentEnabled("Inquisitive")){
-								int chance=9-Api.getPower(lore, Api.getEnchName("Inquisitive"));
+								int chance=6-Api.getPower(lore, Api.getEnchName("Inquisitive"));
 								if(Api.randomPicker(chance)){
 									e.setDroppedExp(e.getDroppedExp()*2);
 								}

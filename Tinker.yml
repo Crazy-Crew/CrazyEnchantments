@@ -225,3 +225,33 @@ Tinker:
     Voodoo:
       Items: 20
       Book: 5
+    MultiArrow:
+      Items: 20
+      Book: 5
+    Recover:
+      Items: 20
+      Book: 5
+    Cactus:
+      Items: 20
+      Book: 5
+    Rocket:
+      Items: 20
+      Book: 5
+    Angel:
+      Items: 20
+      Book: 5
+    HellForged:
+      Items: 20
+      Book: 5
+    Commander:
+      Items: 20
+      Book: 5
+    StormCaller:
+      Items: 20
+      Book: 5
+    Leadership:
+      Items: 20
+      Book: 5
+    Implants:
+      Items: 20
+      Book: 5

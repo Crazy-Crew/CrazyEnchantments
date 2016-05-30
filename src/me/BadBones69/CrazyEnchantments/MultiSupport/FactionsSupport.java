@@ -8,10 +8,8 @@ import com.massivecraft.factions.entity.MPlayer;
 
 import me.BadBones69.CrazyEnchantments.Api;
 
-public class FactionSupport {
-	public static boolean isFriendly(Player P, Player O){
-		Player player = (Player)P;
-		Player other = (Player)O;
+public class FactionsSupport {
+	public static boolean isFriendly(Player player, Player other){
 		Faction p = MPlayer.get(player).getFaction();
 		Faction o = MPlayer.get(other).getFaction();
 		Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));

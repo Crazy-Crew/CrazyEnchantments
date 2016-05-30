@@ -22,6 +22,7 @@ import me.BadBones69.CrazyEnchantments.Controlers.CustomEnchantments;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
+import me.BadBones69.CrazyEnchantments.Controlers.SignControl;
 import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor;
 import me.BadBones69.CrazyEnchantments.Enchantments.Axes;
@@ -46,24 +47,26 @@ public class Main extends JavaPlugin implements Listener{
 		Api.hasUpdate();
 		//==========================================================================\\
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new DustControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new BlackSmith(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Tinkerer(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Tinkerer(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new BlackSmith(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new SignControl(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new DustControl(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new ProtectionCrystal(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
 		//==========================================================================\\
-		Bukkit.getServer().getPluginManager().registerEvents(new Swords(this), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Armor(this), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Bows(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Axes(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Boots(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Tools(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new Helmets(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new PickAxes(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Tools(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Armor(this), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new Swords(this), this);
+		//==========================================================================\\
 		if(!setupEconomy()){
 	   		saveDefaultConfig();
 	    }
@@ -114,7 +117,6 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Api.color("&b/Tinker - &9Opens up the Tinkerer."));
 					sender.sendMessage(Api.color("&b/BlackSmith - &9Opens up the Black Smith."));
-					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> <Amount> [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Api.color("&b/CE Help - &9Shows all CE Commands."));
 					sender.sendMessage(Api.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
@@ -122,6 +124,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
 					sender.sendMessage(Api.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
+					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> <Amount> [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Api.color("&b/CE Book <Enchantment> <Lvl> <Amount> <Player> - &9Gives a player a Enchantment Book."));
 					sender.sendMessage(Api.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
 					return true;
@@ -164,66 +167,30 @@ public class Main extends JavaPlugin implements Listener{
 				}
 				if(args[0].equalsIgnoreCase("LostBook")||args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
-					if(args.length==2){// /CE LostBook <Category>
-						if(!(sender instanceof Player)){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
-							return true;
-						}
-						Player player = (Player)sender;
-						String cat = args[1];
-						for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-							if(cat.equalsIgnoreCase(C)){
-								cat=C;
-								if(Api.isInvFull(player)){
-									player.getWorld().dropItemNaturally(player.getLocation(), Api.getLostBook(cat, 1));
-								}else{
-									player.getInventory().addItem(Api.getLostBook(cat, 1));
-								}
+					if(args.length>=2){// /CE LostBook <Category> [Amount] [Player]
+						if(args.length<=3){
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 								return true;
 							}
 						}
-						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Category")
-								.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
-						return true;
-					}
-					if(args.length==3){// /CE LostBook <Category> [Amount]
-						if(!(sender instanceof Player)){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
-							return true;
-						}
-						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
-							return true;
-						}
-						Player player = (Player)sender;
-						String cat = args[1];
-						int amount = Integer.parseInt(args[2]);
-						for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-							if(cat.equalsIgnoreCase(C)){
-								cat=C;
-								if(Api.isInvFull(player)){
-									player.getWorld().dropItemNaturally(player.getLocation(), Api.getLostBook(cat, amount));
-								}else{
-									player.getInventory().addItem(Api.getLostBook(cat, amount));
-								}
+						int amount = 1;
+						if(args.length>=3){
+							if(!Api.isInt(args[2])){
+								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 								return true;
 							}
+							amount=Integer.parseInt(args[2]);
 						}
-						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Category")
-								.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
-						return true;
-					}
-					if(args.length==4){// /CE LostBook <Category> [Amount] [Player]
-						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
-							return true;
+						Player player = null;
+						if(args.length>=4){
+							if(!Api.isOnline(args[3], sender))return true;
+							player=Api.getPlayer(args[3]);
+						}else{
+							player = (Player) sender;
 						}
-						if(!Api.isOnline(args[3], sender))return true;
-						Player player = Api.getPlayer(args[3]);
 						String cat = args[1];
-						int amount = Integer.parseInt(args[2]);
 						for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
 							if(cat.equalsIgnoreCase(C)){
 								cat=C;
@@ -245,7 +212,6 @@ public class Main extends JavaPlugin implements Listener{
 				if(args[0].equalsIgnoreCase("Crystal")||args[0].equalsIgnoreCase("C")){// /CE Crystal [Amount] [Player]
 					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
 					int amount = 1;
-					Player player = (Player) sender;
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
 							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
@@ -260,9 +226,12 @@ public class Main extends JavaPlugin implements Listener{
 						}
 						amount=Integer.parseInt(args[1]);
 					}
+					Player player = null;
 					if(args.length>=3){
 						if(!Api.isOnline(args[2], sender))return true;
 						player=Api.getPlayer(args[2]);
+					}else{
+						player = (Player) sender;
 					}
 					if(Api.isInvFull(player)){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Inventory-Full")));
@@ -315,7 +284,8 @@ public class Main extends JavaPlugin implements Listener{
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
 									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Success-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
+									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
@@ -323,7 +293,8 @@ public class Main extends JavaPlugin implements Listener{
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
 									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
+									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
 						}
 					}
@@ -345,7 +316,8 @@ public class Main extends JavaPlugin implements Listener{
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
 									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Success-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
+									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
@@ -353,7 +325,8 @@ public class Main extends JavaPlugin implements Listener{
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
 									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
 							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
+									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
 						}
 					}
