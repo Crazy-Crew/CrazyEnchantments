@@ -426,7 +426,6 @@ public class GUI implements Listener{
 			}
 		}
 	}
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void addEnchantment(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
@@ -444,6 +443,8 @@ public class GUI implements Listener{
 								for(Material m : ECControl.allEnchantments().get(en)){
 									if(item.getType() == m){
 										if(c.getAmount() == 1){
+											boolean success = Api.successChance(c);
+											boolean destroy = Api.destroyChance(c);
 											if(item.getItemMeta().hasLore()){
 												for(String l:item.getItemMeta().getLore()){
 													if(l.contains(Api.getEnchName(en))){
@@ -462,52 +463,35 @@ public class GUI implements Listener{
 												}
 											}
 											e.setCancelled(true);
-											boolean success = Api.successChance(c);
-											boolean destroy = Api.destroyChance(c);
 											if(success||player.getGameMode() == GameMode.CREATIVE){
-												if(!destroy||Api.isProtected(item)||player.getGameMode()==GameMode.CREATIVE){
-													name = Api.removeColor(name);
-													String[] breakdown = name.split(" ");
-													String color = "&7";
-													if(Main.settings.getEnchs().contains("Enchantments."+en)){
-														color=Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+												name = Api.removeColor(name);
+												String[] breakdown = name.split(" ");
+												String color = "&7";
+												if(Main.settings.getEnchs().contains("Enchantments."+en)){
+													color=Main.settings.getEnchs().getString("Enchantments."+en+".Color");
+												}
+												if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+													color=Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
+												}
+												String enchantment = Api.getEnchName(en);
+												String lvl = breakdown[1];
+												String full = Api.color(color+enchantment+" "+lvl);
+												player.setItemOnCursor(new ItemStack(Material.AIR));
+												e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
+												try{
+													if(Api.getVersion()>=191){
+														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
+													}else{
+														player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
 													}
-													if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-														color=Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
-													}
-													String enchantment = Api.getEnchName(en);
-													String lvl = breakdown[1];
-													String full = Api.color(color+enchantment+" "+lvl);
-													e.setCursor(new ItemStack(Material.AIR));
-													if(!destroy||player.getGameMode()==GameMode.CREATIVE){
-														e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
-														try{
-															if(Api.getVersion()>=191){
-																player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
-															}else{
-																player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
-															}
-														}catch(Exception ex){}
-													}
-													if(destroy&&Api.isProtected(item)){
-														if(player.getGameMode()!=GameMode.CREATIVE){
-															e.setCurrentItem(Api.removeProtected(item));
-															player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
-															try{
-																if(Api.getVersion()>=191){
-																	player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-																}else{
-																	player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-																}
-															}catch(Exception ex){}
-															return;
-														}
-													}
-													player.updateInventory();
-													return;
-												}else{
-													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
-													e.setCursor(new ItemStack(Material.AIR));
+												}catch(Exception ex){}
+												return;
+											}
+											if(destroy){
+												if(Api.isProtected(item)){
+													e.setCurrentItem(Api.removeProtected(item));
+													player.setItemOnCursor(new ItemStack(Material.AIR));
+													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
 													try{
 														if(Api.getVersion()>=191){
 															player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
@@ -515,19 +499,18 @@ public class GUI implements Listener{
 															player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
 														}
 													}catch(Exception ex){}
-													player.updateInventory();
 													return;
-												}
-											}
-											if(!success&&destroy){
-												if(Api.isProtected(item)){
-													e.setCurrentItem(Api.removeProtected(item));
-													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
 												}else{
+													player.setItemOnCursor(new ItemStack(Material.AIR));
 													e.setCurrentItem(new ItemStack(Material.AIR));
 													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
 												}
-												e.setCursor(new ItemStack(Material.AIR));
+												player.updateInventory();
+												return;
+											}
+											if(!success&&!destroy){
+												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
+												player.setItemOnCursor(new ItemStack(Material.AIR));
 												try{
 													if(Api.getVersion()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
@@ -536,17 +519,6 @@ public class GUI implements Listener{
 													}
 												}catch(Exception ex){}
 												player.updateInventory();
-												return;
-											}else{
-												e.setCursor(new ItemStack(Material.AIR));
-												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
-												try{
-													if(Api.getVersion()>=191){
-														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-													}else{
-														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-													}
-												}catch(Exception ex){}
 												return;
 											}
 										}

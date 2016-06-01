@@ -1,10 +1,10 @@
 package me.BadBones69.CrazyEnchantments.MultiSupport;
 
-import net.minecraft.server.v1_7_R4.NBTTagCompound;
-import net.minecraft.server.v1_7_R4.NBTTagList;
-
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+
+import net.minecraft.server.v1_7_R4.NBTTagCompound;
+import net.minecraft.server.v1_7_R4.NBTTagList;
 
 public class NMS_v1_7_R4 {
 	public static ItemStack addGlow(ItemStack item){

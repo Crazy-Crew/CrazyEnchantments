@@ -152,6 +152,7 @@ public class ECControl implements Listener{
 								Api.removeItem(item, player);
 								ItemStack book = Api.addGlow(pick(C));
 								player.getInventory().addItem(book);
+								player.updateInventory();
 								player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Clean-Lost-Book")
 										.replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
 								return;

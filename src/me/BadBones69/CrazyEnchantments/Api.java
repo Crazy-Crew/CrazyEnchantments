@@ -589,7 +589,7 @@ public class Api{
 				Random number = new Random();
 				int chance;
 				for(int counter = 1; counter<=1;){
-					chance = 1 + number.nextInt(99);
+					chance = 1 + number.nextInt(100);
 					if(chance >= 1 && chance <= Integer.parseInt(lore)){
 						return true;
 					}else{
@@ -610,7 +610,7 @@ public class Api{
 				Random number = new Random();
 				int chance;
 				for(int counter = 1; counter<=1;){
-					chance = 1 + number.nextInt(99);
+					chance = 1 + number.nextInt(100);
 					if(chance >= 1 && chance <= Integer.parseInt(lore)){
 						return true;
 					}else{

@@ -1,6 +1,5 @@
 package me.BadBones69.CrazyEnchantments.Enchantments;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Location;
@@ -21,7 +20,6 @@ import org.bukkit.util.Vector;
 import me.BadBones69.CrazyEnchantments.Api;
 
 public class Bows implements Listener{
-	ArrayList<Projectile> arrow = new ArrayList<Projectile>();
 	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
 	HashMap<Projectile, Entity> P = new HashMap<Projectile, Entity>();
 	HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
@@ -47,14 +45,14 @@ public class Bows implements Listener{
 					}
 					if(lore.contains(Api.getEnchName("IceFreeze"))){
 						if(Api.isEnchantmentEnabled("IceFreeze")){
-							arrow.add((Projectile) e.getProjectile());
+							Arrow.put((Projectile) e.getProjectile(), Api.getPower(lore, Api.getEnchName("IceFreeze")));
 							P.put((Projectile) e.getProjectile(), e.getEntity());
 							Enchant.put((Projectile) e.getProjectile(), "IceFreeze");
 						}
 					}
 					if(lore.contains(Api.getEnchName("Lightning"))) {
 						if(Api.isEnchantmentEnabled("Lightning")){
-							arrow.add((Projectile) e.getProjectile());
+							Arrow.put((Projectile) e.getProjectile(), Api.getPower(lore, Api.getEnchName("Lightning")));
 							P.put((Projectile) e.getProjectile(), e.getEntity());
 							Enchant.put((Projectile) e.getProjectile(), "Lightning");
 						}
@@ -101,14 +99,15 @@ public class Bows implements Listener{
 	public void onland(ProjectileHitEvent e) {
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(Arrow.containsKey(e.getEntity())){
+			Entity arrow = e.getEntity();
 			if(Enchant.get(e.getEntity()).equalsIgnoreCase("Boom")){
 				if(Api.isEnchantmentEnabled("Boom")){
-					if(Api.randomPicker(20-Api.getPower(Arrow.get(e.getEntity())+"", Api.getEnchName("Boom")))){
+					if(Api.randomPicker(10-Api.getPower(Arrow.get(e.getEntity())+"", Api.getEnchName("Boom")))){
 						e.getEntity().getWorld().spawn(e.getEntity().getLocation(), TNTPrimed.class);
-						Arrow.remove(e.getEntity());
 						e.getEntity().remove();
 					}
 				}
+				Arrow.remove(arrow);
 			}
 			if(Enchant.get(e.getEntity()).equalsIgnoreCase("Lightning")){
 				if(Api.isEnchantmentEnabled("Lightning")){
@@ -121,7 +120,7 @@ public class Bows implements Listener{
 		}
 	}
 	@EventHandler
- 	public void onArrowLand(EntityDamageByEntityEvent e){
+ 	public void onArrowDamage(EntityDamageByEntityEvent e){
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(!Api.allowsPVP(e.getDamager()))return;
 		if(e.getDamager() instanceof Arrow){
@@ -142,22 +141,22 @@ public class Bows implements Listener{
 							}
 						}
 					}
-					if(!Api.isFriendly(P.get(e.getDamager()), e.getEntity())){
-						if(Enchant.get(e.getEntity()).equalsIgnoreCase("IceFreeze")){
+					if(!Api.isFriendly(P.get(arrow), e.getEntity())){
+						if(Enchant.get(arrow).equalsIgnoreCase("IceFreeze")){
 							if(Api.isEnchantmentEnabled("IceFreeze")){
 								if(Api.randomPicker(5)){
 									en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 1));
 								}
 							}
 						}
-						if(Enchant.get(e.getEntity()).equalsIgnoreCase("Piercing")){
+						if(Enchant.get(arrow).equalsIgnoreCase("Piercing")){
 							if(Api.isEnchantmentEnabled("Piercing")){
 								if(Api.randomPicker(20-Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Piercing")))){
 									e.setDamage(e.getDamage() *2);
 								}
 							}
 						}
-						if(Enchant.get(e.getEntity()).equalsIgnoreCase("Venom")){
+						if(Enchant.get(arrow).equalsIgnoreCase("Venom")){
 							if(Api.isEnchantmentEnabled("Venom")){
 								if(Api.randomPicker(10)){
 									en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2*20, Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Venom"))-1));

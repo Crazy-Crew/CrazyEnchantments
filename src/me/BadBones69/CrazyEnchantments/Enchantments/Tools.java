@@ -2,8 +2,6 @@ package me.BadBones69.CrazyEnchantments.Enchantments;
 
 import java.util.HashMap;
 
-import me.BadBones69.CrazyEnchantments.Api;
-
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,6 +13,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import me.BadBones69.CrazyEnchantments.Api;
 
 public class Tools implements Listener{
 	private HashMap<Player, Boolean> effect = new HashMap<Player, Boolean>();

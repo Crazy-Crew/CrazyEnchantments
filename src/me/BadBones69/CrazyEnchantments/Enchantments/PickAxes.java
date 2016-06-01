@@ -3,8 +3,6 @@ package me.BadBones69.CrazyEnchantments.Enchantments;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.BadBones69.CrazyEnchantments.Api;
-
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+
+import me.BadBones69.CrazyEnchantments.Api;
 
 public class PickAxes implements Listener{
 	@EventHandler

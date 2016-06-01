@@ -1,7 +1,5 @@
 package me.BadBones69.CrazyEnchantments.Enchantments;
 
-import me.BadBones69.CrazyEnchantments.Api;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +9,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import ca.thederpygolems.armorequip.ArmorEquipEvent;
+import me.BadBones69.CrazyEnchantments.Api;
 
 public class Boots implements Listener{
 	@EventHandler
