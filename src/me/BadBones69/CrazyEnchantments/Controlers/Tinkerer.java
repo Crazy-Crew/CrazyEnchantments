@@ -145,16 +145,18 @@ public class Tinkerer implements Listener{
 								}
 								if(getTotalXP(e.getCurrentItem())>0){// Adding an item
 									if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
-										e.setCurrentItem(new ItemStack(Material.AIR));
-										player.getInventory().addItem(item);
-										inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
-										try{
-											if(Api.getVersion()>=191){
-												player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
-											}else{
-												player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
-											}
-										}catch(Exception ex){}
+										if(getSlot().containsKey(e.getRawSlot())){
+											e.setCurrentItem(new ItemStack(Material.AIR));
+											player.getInventory().addItem(item);
+											inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
+											try{
+												if(Api.getVersion()>=191){
+													player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
+												}else{
+													player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+												}
+											}catch(Exception ex){}
+										}
 									}else{// Clicking in their inventory
 										if(player.getOpenInventory().getTopInventory().firstEmpty()==-1){
 											player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
@@ -241,21 +243,21 @@ public class Tinkerer implements Listener{
 	}
 	int getTotalXP(ItemStack item){
 		int total=0;
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasLore()){
-				for(String lore : item.getItemMeta().getLore()){
-					for(String en : ECControl.allEnchantments().keySet()){
-						if(lore.contains(Api.getEnchName(en))){
-							total=total+Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+en+".Items");
+		if(ECControl.isAll().contains(item.getType())||item.getType()==Material.BOOK){
+			if(item.hasItemMeta()){
+				if(item.getItemMeta().hasLore()){
+					for(String lore : item.getItemMeta().getLore()){
+						for(String en : ECControl.allEnchantments().keySet()){
+							if(lore.contains(Api.getEnchName(en))){
+								total+=Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+en+".Items");
+							}
 						}
 					}
 				}
-			}
-		}
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasEnchants()){
-				for(Enchantment en : item.getEnchantments().keySet()){
-					total=total+Main.settings.getTinker().getInt("Tinker.Vanilla-Enchantments."+en.getName());
+				if(item.getItemMeta().hasEnchants()){
+					for(Enchantment en : item.getEnchantments().keySet()){
+						total+=Main.settings.getTinker().getInt("Tinker.Vanilla-Enchantments."+en.getName());
+					}
 				}
 			}
 		}
