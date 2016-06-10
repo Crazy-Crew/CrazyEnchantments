@@ -1,7 +1,9 @@
 package me.BadBones69.CrazyEnchantments.Enchantments;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -11,6 +13,7 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.potion.PotionEffect;
@@ -23,6 +26,7 @@ public class Bows implements Listener{
 	HashMap<Projectile, Integer> Arrow = new HashMap<Projectile, Integer>();
 	HashMap<Projectile, Entity> P = new HashMap<Projectile, Entity>();
 	HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
+	ArrayList<Entity> Explode = new ArrayList<Entity>();
 	@EventHandler
 	public void onBowShoot(final EntityShootBowEvent e){
 		if(!Api.allowsPVP(e.getEntity()))return;
@@ -100,23 +104,34 @@ public class Bows implements Listener{
 		if(!Api.allowsPVP(e.getEntity()))return;
 		if(Arrow.containsKey(e.getEntity())){
 			Entity arrow = e.getEntity();
-			if(Enchant.get(e.getEntity()).equalsIgnoreCase("Boom")){
+			if(Enchant.get(arrow).equalsIgnoreCase("Boom")){
 				if(Api.isEnchantmentEnabled("Boom")){
-					if(Api.randomPicker(10-Api.getPower(Arrow.get(e.getEntity())+"", Api.getEnchName("Boom")))){
-						e.getEntity().getWorld().spawn(e.getEntity().getLocation(), TNTPrimed.class);
-						e.getEntity().remove();
+					if(Api.randomPicker(6-Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Boom")))){
+						TNTPrimed tnt = arrow.getWorld().spawn(arrow.getLocation(), TNTPrimed.class);
+						tnt.setFuseTicks(0);
+						tnt.getWorld().playEffect(tnt.getLocation(), Effect.EXPLOSION_LARGE, 1);
+						Explode.add(tnt);
+						arrow.remove();
 					}
 				}
 				Arrow.remove(arrow);
 			}
-			if(Enchant.get(e.getEntity()).equalsIgnoreCase("Lightning")){
+			if(Enchant.get(arrow).equalsIgnoreCase("Lightning")){
 				if(Api.isEnchantmentEnabled("Lightning")){
-					Location loc = e.getEntity().getLocation();
+					Location loc = arrow.getLocation();
 					if(Api.randomPicker(5)){
 						loc.getWorld().strikeLightning(loc);
 					}
 				}
 			}
+		}
+	}
+	@EventHandler
+	public void onExplode(EntityExplodeEvent e){
+		Entity en = e.getEntity();
+		if(Explode.contains(en)){
+			e.setCancelled(true);
+			Explode.remove(en);
 		}
 	}
 	@EventHandler
@@ -129,7 +144,7 @@ public class Bows implements Listener{
 				Projectile arrow = (Projectile) e.getDamager();
 				if(Arrow.containsKey(arrow)){
 					if(Api.isFriendly(P.get(e.getDamager()), e.getEntity())){
-						if(Enchant.get(e.getEntity()).equalsIgnoreCase("Doctor")){
+						if(Enchant.get(arrow).equalsIgnoreCase("Doctor")){
 							if(Api.isEnchantmentEnabled("Doctor")){
 								int heal = 2+Api.getPower(Arrow.get(arrow)+"", Api.getEnchName("Doctor"));
 								if(en.getHealth() + heal < en.getMaxHealth()){

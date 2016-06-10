@@ -17,25 +17,28 @@ import org.bukkit.potion.PotionEffectType;
 import me.BadBones69.CrazyEnchantments.Api;
 
 public class Tools implements Listener{
-	private HashMap<Player, Boolean> effect = new HashMap<Player, Boolean>();
+	private HashMap<Player, HashMap<String, Boolean>> effect = new HashMap<Player, HashMap<String, Boolean>>();
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
 		Player player = e.getPlayer();
-		if(Api.getItemInHand(player)!=null){
-			ItemStack item = Api.getItemInHand(player);
+		ItemStack item = Api.getItemInHand(player);
+		HashMap<String, Boolean> Trigger = new HashMap<String, Boolean>();
+		Trigger.put("Haste", false);
+		Trigger.put("Oxygenate", false);
+		if(item!=null){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
 						if(lore.contains(Api.getEnchName("Haste"))){
 							if(Api.isEnchantmentEnabled("Haste")){
 								int power = Api.getPower(lore, Api.getEnchName("Haste"));
-								effect.put(player, true);
+								Trigger.put("Haste", true);
 								player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 55555*20, power-1));
 							}
 						}
 						if(lore.contains(Api.getEnchName("Oxygenate"))){
 							if(Api.isEnchantmentEnabled("Oxygenate")){
-								effect.put(player, true);
+								Trigger.put("Oxygenate", true);
 								player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 55555*20, 5));
 							}
 						}
@@ -43,12 +46,13 @@ public class Tools implements Listener{
 				}
 			}
 		}
+		effect.put(player, Trigger);
 		if(effect.containsKey(player)){
-			if(effect.get(player)){
-				effect.put(player, false);
+			if(!effect.get(player).get("Haste")){
 				player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+			}
+			if(!effect.get(player).get("Oxygenate")){
 				player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-				return;
 			}
 		}
 	}
