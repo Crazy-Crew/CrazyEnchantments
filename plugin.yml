@@ -1,15 +1,15 @@
 name: CrazyEnchantments
 author: BadBones69
 main: me.BadBones69.CrazyEnchantments.Main
-version: 1.6.2.6
-softdepend: [Factions, WorldEdit]
+version: 1.6.3
+softdepend: [Factions, WorldEdit, SilkSpawners]
 website: https://www.spigotmc.org/resources/16470/
 description: >
              A Plugin full of Crazy Enchantments.
 commands:
   crazyenchantments:
     description: Opens the Enchanter GUI.
-    aliases: [ce, enchant, enchanter]
+    aliases: [ce, enchanter]
   tinkerer:
     description: Opens the Tinker GUI.
     aliases: tinker

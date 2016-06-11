@@ -19,4 +19,11 @@ public class FactionsSupport {
 		if(p==o)return true;
 		return false;
 	}
+	public static boolean inTerritory(Player P){
+		MPlayer player = MPlayer.get(P);
+		if(player.isInOwnTerritory()){
+			return true;
+		}
+		return false;
+	}
 }

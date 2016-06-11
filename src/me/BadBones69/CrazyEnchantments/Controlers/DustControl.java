@@ -122,7 +122,7 @@ public class DustControl implements Listener{
 			}
 		}
 	}
-	public static ItemStack getDust(String Dust,int i){
+	public static ItemStack getDust(String Dust, int amount){
 		String id = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Item");
 		String name = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Name");
 		List<String> lore = new ArrayList<String>();
@@ -132,16 +132,16 @@ public class DustControl implements Listener{
 		for(String l : Main.settings.getConfig().getStringList("Settings.Dust."+Dust+".Lore")){
 			lore.add(l.replaceAll("%Percent%", percent+"").replaceAll("%percent%", percent+""));
 		}
-		return Api.makeItem(id, i, name, lore);
+		return Api.makeItem(id, amount, name, lore);
 	}
-	public static ItemStack getDust(String Dust,int i, int percent){
+	public static ItemStack getDust(String Dust,int amount, int percent){
 		String id = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Item");
 		String name = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Name");
 		List<String> lore = new ArrayList<String>();
 		for(String l : Main.settings.getConfig().getStringList("Settings.Dust."+Dust+".Lore")){
 			lore.add(l.replaceAll("%Percent%", percent+"").replaceAll("%percent%", percent+""));
 		}
-		return Api.makeItem(id, i, name, lore);
+		return Api.makeItem(id, amount, name, lore);
 	}
 	String pickDust(){
 		Random r = new Random();

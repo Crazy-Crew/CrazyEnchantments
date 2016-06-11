@@ -139,7 +139,7 @@ public class GUI implements Listener{
 		if(inv!=null){
 			if(inv.getName().equals(Api.getInvName())){
 				e.setCancelled(true);
-				if(!inGUI(e.getRawSlot(), Main.settings.getConfig().getInt("Settings.GUISize")))return;
+				if(e.getRawSlot()>=inv.getSize())return;
 				if(item==null)return;
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
@@ -155,21 +155,30 @@ public class GUI implements Listener{
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE){
-									if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".XP")){
-											String xp = Main.settings.getConfig().getInt("Categories."+cat+".XP") - Api.getXPLvl(player)+"";
-											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									if(Main.settings.getConfig().contains("Categories."+cat+".Money/XP")&&Main.settings.getConfig().getString("Categories."+cat+".Money/XP").equalsIgnoreCase("Money")){
+										if(Api.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
+											String money = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Api.getMoney(player)+"";
+											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
 											return;
 										}
-										Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
-									}
-									if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".XP")){
-											String xp = Main.settings.getConfig().getInt("Categories."+cat+".XP") - player.getTotalExperience()+"";
-											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
+										Main.econ.withdrawPlayer(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
+									}else{
+										if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
+											if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
+												String xp = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Api.getXPLvl(player)+"";
+												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
 										}
-										Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".XP"));
+										if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
+											if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
+												String xp = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - player.getTotalExperience()+"";
+												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
+										}
 									}
 								}
 								player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
@@ -218,12 +227,12 @@ public class GUI implements Listener{
 							}
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
-							if(!Api.permCheck(player, "BlackSmith"))return;
+							if(!Api.hasPermission(player, "BlackSmith"))return;
 							BlackSmith.openBlackSmith(player);
 							return;
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
-							if(!Api.permCheck(player, "Tinker"))return;
+							if(!Api.hasPermission(player, "Tinker"))return;
 							Tinkerer.openTinker(player);
 							return;
 						}
@@ -804,6 +813,8 @@ public class GUI implements Listener{
 		player.openInventory(inv);
 	}
 	public static ArrayList<ItemStack> getInfo(String type){
+		FileConfiguration enchants = Main.settings.getEnchs();
+		FileConfiguration customEnch = Main.settings.getCustomEnchs();
 		ArrayList<ItemStack> swords = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> axes = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> bows = new ArrayList<ItemStack>();
@@ -813,20 +824,40 @@ public class GUI implements Listener{
 		ArrayList<ItemStack> picks = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> tools = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> misc = new ArrayList<ItemStack>();
-		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-			String name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
-			List<String> desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
-			ArrayList<Material> Items = ECControl.allEnchantments().get(en);
-			ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
-			if(Items.equals(ECControl.isArmor()))armor.add(i);
-			if(Items.equals(ECControl.isSword()))swords.add(i);
-			if(Items.equals(ECControl.isAxe()))axes.add(i);
-			if(Items.equals(ECControl.isBow()))bows.add(i);
-			if(Items.equals(ECControl.isHelmet()))helmets.add(i);
-			if(Items.equals(ECControl.isBoots()))boots.add(i);
-			if(Items.equals(ECControl.isPickAxe()))picks.add(i);
-			if(Items.equals(ECControl.isTool()))tools.add(i);
-			if(Items.equals(ECControl.isAll()))misc.add(i);
+		for(String en : enchants.getConfigurationSection("Enchantments").getKeys(false)){
+			if(enchants.getBoolean("Enchantments."+en+".Enabled")){
+				String name = enchants.getString("Enchantments."+en+".Info.Name");
+				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
+				ArrayList<Material> Items = ECControl.allEnchantments().get(en);
+				ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
+				if(Items.equals(ECControl.isArmor()))armor.add(i);
+				if(Items.equals(ECControl.isSword()))swords.add(i);
+				if(Items.equals(ECControl.isAxe()))axes.add(i);
+				if(Items.equals(ECControl.isBow()))bows.add(i);
+				if(Items.equals(ECControl.isHelmet()))helmets.add(i);
+				if(Items.equals(ECControl.isBoots()))boots.add(i);
+				if(Items.equals(ECControl.isPickAxe()))picks.add(i);
+				if(Items.equals(ECControl.isTool()))tools.add(i);
+				if(Items.equals(ECControl.isAll()))misc.add(i);
+			}
+		}
+		for(String en : customEnch.getConfigurationSection("Enchantments").getKeys(false)){
+			if(customEnch.getBoolean("Enchantments."+en+".Enabled")){
+				String name = customEnch.getString("Enchantments."+en+".Info.Name");
+				List<String> desc = customEnch.getStringList("Enchantments."+en+".Info.Description");
+				ArrayList<Material> Items = ECControl.allEnchantments().get(en);
+				ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
+				if(Items.equals(ECControl.isArmor()))armor.add(i);
+				if(Items.equals(ECControl.isSword()))swords.add(i);
+				if(Items.equals(ECControl.isAxe()))axes.add(i);
+				if(Items.equals(ECControl.isBow()))bows.add(i);
+				if(Items.equals(ECControl.isHelmet()))helmets.add(i);
+				if(Items.equals(ECControl.isBoots()))boots.add(i);
+				if(Items.equals(ECControl.isPickAxe()))picks.add(i);
+				if(Items.equals(ECControl.isTool()))tools.add(i);
+				if(Items.equals(ECControl.isWeapon()))misc.add(i);
+				if(Items.equals(ECControl.isAll()))misc.add(i);
+			}
 		}
 		if(type.equalsIgnoreCase("Armor"))return armor;
 		if(type.equalsIgnoreCase("Sword"))return swords;

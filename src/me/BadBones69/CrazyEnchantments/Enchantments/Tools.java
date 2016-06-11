@@ -2,9 +2,11 @@ package me.BadBones69.CrazyEnchantments.Enchantments;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -69,15 +71,27 @@ public class Tools implements Listener{
 						for(String lore : item.getItemMeta().getLore()){
 							if(lore.contains(Api.getEnchName("Telepathy"))){
 								if(Api.isEnchantmentEnabled("Telepathy")){
-									e.setCancelled(true);
-									for(ItemStack i : block.getDrops()){
-										if(!Api.isInvFull(player)){
-											player.getInventory().addItem(i);
-										}else{
-											block.getWorld().dropItemNaturally(block.getLocation(), i);
+									Boolean T = false;
+									if(item.getItemMeta().hasEnchants()){
+										if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
+											if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners")!=null){
+												if(block.getType()==Material.MOB_SPAWNER){
+													T=true;
+												}
+											}
 										}
 									}
-									block.setType(Material.AIR);
+									if(!T){
+										e.setCancelled(true);
+										for(ItemStack i : block.getDrops()){
+											if(!Api.isInvFull(player)){
+												player.getInventory().addItem(i);
+											}else{
+												block.getWorld().dropItemNaturally(block.getLocation(), i);
+											}
+										}
+										block.setType(Material.AIR);
+									}
 								}
 							}
 						}

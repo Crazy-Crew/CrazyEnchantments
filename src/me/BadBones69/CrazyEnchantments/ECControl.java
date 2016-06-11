@@ -111,6 +111,7 @@ public class ECControl implements Listener{
 		en.put("Commander", isHelmet());
 		//---------Boots--------//
 		en.put("Gears", isBoots());
+		en.put("Wings", isBoots());
 		en.put("Rocket", isBoots());
 		en.put("Springs", isBoots());
 		en.put("AntiGravity", isBoots());
@@ -173,8 +174,16 @@ public class ECControl implements Listener{
 				if(item.getItemMeta().hasDisplayName()){
 					for(String en : allEnchantments().keySet()){
 						if(item.getItemMeta().getDisplayName().contains(Api.color(Api.getEnchBookColor(en)+Api.getEnchName(en)))){
-							String name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
-							List<String> desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+							String name = "";
+							List<String> desc = new ArrayList<String>();
+							if(Main.settings.getEnchs().contains("Enchantments."+en)){
+								name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
+								desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+							}
+							if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+								name = Main.settings.getCustomEnchs().getString("Enchantments."+en+".Info.Name");
+								desc = Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Info.Description");
+							}
 							player.sendMessage(Api.color(name));
 							for(String msg : desc)player.sendMessage(Api.color(msg));
 							return;
@@ -184,19 +193,37 @@ public class ECControl implements Listener{
 			}
 		}
 	}
+	public static ItemStack makeEnchantBook(String ench, String power, int amount){
+		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
+		int Smin = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
+		int Dmax = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
+		int Dmin = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
+		ArrayList<String> lore = new ArrayList<String>();
+		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
+			lore.add(Api.color(l)
+					.replaceAll("%Destroy_Rate%", Api.percentPick(Dmax, Dmin)+"").replaceAll("%destroy_rate%", Api.percentPick(Dmax, Dmin)+"")
+					.replaceAll("%Success_Rate%", Api.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Api.percentPick(Smax, Smin)+""));
+		}
+		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
+			ench=Main.settings.getEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+ench+".Name")+" "+power;
+		}
+		if(Main.settings.getCustomEnchs().contains("Enchantments."+ench)){
+			ench=Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name")+" "+power;
+		}
+		return Api.addGlow(Api.makeItem(Material.BOOK, amount, 0, ench, lore));
+	}
 	public static ItemStack pick(String cat){
 		int Smax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max");
 		int Smin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min");
 		int Dmax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Max");
 		int Dmin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Min");
 		ArrayList<String> lore = new ArrayList<String>();
-		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.DestroyChance")){
-			lore.add(Api.color("&4"+Api.percentPick(Dmax, Dmin)+"% Destroy Chance"));
+		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
+			lore.add(Api.color(l)
+					.replaceAll("%Destroy_Rate%", Api.percentPick(Dmax, Dmin)+"").replaceAll("%destroy_rate%", Api.percentPick(Dmax, Dmin)+"")
+					.replaceAll("%Success_Rate%", Api.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Api.percentPick(Smax, Smin)+""));
 		}
-		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.SuccessChance")){
-			lore.add(Api.color("&a"+Api.percentPick(Smax, Smin)+"% Success Chance"));
-		}
-		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat), Api.addDiscription(), lore);
+		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat), lore);
 	}
 	public static String powerPicker(String en, String C){
 		Random r = new Random();

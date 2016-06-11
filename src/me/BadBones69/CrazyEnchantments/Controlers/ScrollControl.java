@@ -77,7 +77,7 @@ public class ScrollControl implements Listener{
 										String RealLore = pickEnchant(enchants);
 										e.setCurrentItem(Api.removeLore(item, RealLore));
 										e.setCursor(new ItemStack(Material.AIR));
-										player.getInventory().addItem(makeEnchantBook(enchs.get(RealLore), lvl.get(RealLore), 1));
+										player.getInventory().addItem(ECControl.makeEnchantBook(enchs.get(RealLore), lvl.get(RealLore), 1));
 									}
 								}
 							}
@@ -86,26 +86,6 @@ public class ScrollControl implements Listener{
 				}
 			}
 		}
-	}
-	public static ItemStack makeEnchantBook(String ench, String power, int amount){
-		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
-		int Smin = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
-		int Dmax = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
-		int Dmin = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
-		ArrayList<String> lore = new ArrayList<String>();
-		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.DestroyChance")){
-			lore.add(Api.color("&4"+Api.percentPick(Dmax, Dmin)+"% Destroy Chance"));
-		}
-		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.SuccessChance")){
-			lore.add(Api.color("&a"+Api.percentPick(Smax, Smin)+"% Success Chance"));
-		}
-		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
-			ench=Main.settings.getEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+ench+".Name")+" "+power;
-		}
-		if(Main.settings.getCustomEnchs().contains("Enchantments."+ench)){
-			ench=Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name")+" "+power;
-		}
-		return Api.addGlow(Api.makeItem(Material.BOOK, amount, 0, ench, Api.addDiscription(), lore));
 	}
 	@EventHandler
 	public void onClick(PlayerInteractEvent e){

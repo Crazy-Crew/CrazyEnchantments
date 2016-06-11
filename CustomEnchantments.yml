@@ -1,6 +1,7 @@
 #Potion Effect Names to pick from: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffectType.html
 Enchantments:
   Cyborg: #Enchantment
+    Enabled: True #Enable and disable the enchantment
     Name: 'Cyborg' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
@@ -9,6 +10,12 @@ Enchantments:
       - 'T1'
       - 'T2'
       - 'T3'
+    Info:
+      Name: '&e&lCyborg'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives you speed, strength and'
+        - '&3Jump boost to take down your enemies.'
     EnchantOptions: #Customizing Options for each enchantment.
       ItemsEnchantable: 'Armor' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
       ArmorOptions: #Options that only effect Armor Enchantments.
@@ -18,6 +25,7 @@ Enchantments:
           - 'INCREASE_DAMAGE:2, Time:1000000'
           - 'JUMP:2, Time:1000000'
   Sniper: #Enchantment
+    Enabled: True #Enable and disable the enchantment
     Name: 'Sniper' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
@@ -26,6 +34,12 @@ Enchantments:
       - 'T1'
       - 'T2'
       - 'T3'
+    Info:
+      Name: '&e&lSniper'
+      Description:
+        - '&c&lBows Only'
+        - '&3Shoot an enemy with this and'
+        - '&3It has a chance to poison them.'
     EnchantOptions: #Customizing Options for each enchantment.
       ItemsEnchantable: 'Bows' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
       BowOptions: #Options that only effect Bow Enchantments.
@@ -41,6 +55,7 @@ Enchantments:
             PotionEffects: #Effects that are added to the Damaged.
             - 'POISON:2, Time:5, Chance:25'
   Slice: #Enchantment
+    Enabled: True #Enable and disable the enchantment
     Name: 'Slice' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
@@ -49,6 +64,12 @@ Enchantments:
       - 'T1'
       - 'T2'
       - 'T3'
+    Info:
+      Name: '&e&lSlice'
+      Description:
+        - '&c&lWeapons Only'
+        - '&3Gives you a chance to'
+        - '&3Do a lot more damage.'
     EnchantOptions: #Customizing Options for each enchantment.
       ItemsEnchantable: 'Weapons' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
       WeaponOptions: #Options that only effect Sword and Axe Enchantments.

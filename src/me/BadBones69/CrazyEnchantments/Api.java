@@ -24,6 +24,7 @@ import org.bukkit.plugin.Plugin;
 
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_10_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
@@ -52,6 +53,9 @@ public class Api{
 		return Integer.parseInt(ver);
 	}
 	public static ItemStack addGlow(ItemStack item) {
+		if(getVersion()==1101){
+			return NMS_v1_10_R1.addGlow(item);
+		}
 		if(getVersion()==192){
 			return NMS_v1_9_R2.addGlow(item);
 		}
@@ -71,7 +75,7 @@ public class Api{
 			return NMS_v1_7_R4.addGlow(item);
 		}else{
 			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date. "
-					+ "Please update or remove this plugin to stop ferther Errors.");
+					+ "Please update or remove this plugin to stop further Errors.");
 			return item;
 		}
     }
@@ -202,10 +206,26 @@ public class Api{
 		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null)return true;
 		return false;
 	}
+	public static boolean inTerritory(Player player){
+		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+		if(factions!=null){
+			if(factions.getDescription().getAuthors().contains("drtshock")){
+				if(FactionsUUID.inTerritory(player))return true;
+				if(!FactionsUUID.inTerritory(player))return false;
+			}
+			if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+				if(FactionsSupport.inTerritory(player))return true;
+				if(!FactionsSupport.inTerritory(player))return false;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
 	public static boolean isFriendly(Entity P, Entity O){
 		if(P instanceof Player&&O instanceof Player){
-			if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
-				Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+			if(factions!=null){
 				Player player = (Player) P;
 				Player other = (Player) O;
 				if(factions.getDescription().getAuthors().contains("drtshock")){
@@ -356,13 +376,6 @@ public class Api{
 	public static double getMoney(Player player){
 		return Main.econ.getBalance(player);
 	}
-	public static List<String> addDiscription(){
-		ArrayList<String> lore = new ArrayList<String>();
-		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
-			lore.add(color(l));
-		}
-		return lore;
-	}
 	public static boolean isInt(String s) {
 	    try {
 	        Integer.parseInt(s);
@@ -389,12 +402,25 @@ public class Api{
 		p.sendMessage(getPrefix()+color(Main.settings.getMsg().getString("Messages.Not-Online")));
 		return false;
 	}
-	public static boolean permCheck(Player player, String perm){
+	public static boolean hasPermission(Player player, String perm){
 		if(!player.hasPermission("CrazyEnchantments." + perm)){
 			player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Perm")));
 			return false;
 		}
 		return true;
+	}
+	public static boolean hasPermission(CommandSender sender, String perm){
+		if(sender instanceof Player){
+			Player player = (Player) sender;
+			if(!player.hasPermission("CrazyEnchantments." + perm)){
+				player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Perm")));
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			return true;
+		}
 	}
 	public static void removeItem(ItemStack item, Player player){
 		if(item.getAmount() <= 1){
@@ -580,55 +606,60 @@ public class Api{
 		return amount;
 	}
 	public static boolean successChance(ItemStack item){
-		if(!item.hasItemMeta())return true;
-		if(!item.getItemMeta().hasLore())return true;
-		for(String lore : item.getItemMeta().getLore()){
-			if(lore.contains("% Success Chance")){
-				lore=lore.replaceAll("% Success Chance", "");
-				lore=removeColor(lore);
-				Random number = new Random();
-				int chance;
-				for(int counter = 1; counter<=1;){
-					chance = 1 + number.nextInt(100);
-					if(chance >= 1 && chance <= Integer.parseInt(lore)){
-						return true;
-					}else{
-						return false;
-					}
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasLore()){
+				int percent = getPercent("%success_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
+				if(randomPicker(percent, 100)){
+					return true;
+				}else{
+					return false;
 				}
 			}
 		}
 		return true;
 	}
 	public static boolean destroyChance(ItemStack item){
-		if(!item.hasItemMeta())return false;
-		if(!item.getItemMeta().hasLore())return false;
-		for(String lore : item.getItemMeta().getLore()){
-			if(lore.contains("% Destroy Chance")){
-				lore=lore.replaceAll("% Destroy Chance", "");
-				lore=removeColor(lore);
-				Random number = new Random();
-				int chance;
-				for(int counter = 1; counter<=1;){
-					chance = 1 + number.nextInt(100);
-					if(chance >= 1 && chance <= Integer.parseInt(lore)){
-						return true;
-					}else{
-						return false;
-					}
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasLore()){
+				if(randomPicker(getPercent("%destroy_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")), 100)){
+					return true;
+				}else{
+					return false;
 				}
 			}
 		}
 		return false;
 	}
+	public static Integer getPercent(String Argument, ItemStack item, List<String> Msg){
+		List<String> lore = item.getItemMeta().getLore();
+		String arg = "100";
+		int i = 0;
+		for(String l : Msg){
+			l = Api.color(l).toLowerCase();
+			String lo = lore.get(i).toLowerCase();
+			if(l.contains(Argument.toLowerCase())){
+				String[] b = l.split(Argument.toLowerCase());
+				if(b.length>=1)arg = lo.replace(b[0], "");
+				if(b.length>=2)arg = arg.replace(b[1], "");
+			}
+			i++;
+		}
+		return Integer.parseInt(arg);
+	}
 	public static boolean randomPicker(int max){
 		Random number = new Random();
-		int chance;
-		for(int counter = 1; counter<=1; counter++){
-			chance = 1 + number.nextInt(max);
-			if(chance == 1){
-				return true;
-			}
+		int chance = 1 + number.nextInt(max);
+		if(chance == 1){
+			return true;
+		}
+		return false;
+	}
+	public static boolean randomPicker(int min, int max){
+		if(max==min)return true;
+		Random number = new Random();
+		int chance = 1 + number.nextInt(max);
+		if(chance>=1&&chance<=min){
+			return true;
 		}
 		return false;
 	}

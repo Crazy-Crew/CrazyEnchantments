@@ -1,11 +1,12 @@
 package me.BadBones69.CrazyEnchantments.Enchantments;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,14 +30,18 @@ public class PickAxes implements Listener{
 							for(String lore : item.getItemMeta().getLore()){
 								if(lore.contains(Api.getEnchName("AutoSmelt"))){
 									if(Api.isEnchantmentEnabled("AutoSmelt")){
-										int power = Api.getPower(lore, Api.getEnchName("AutoSmelt"));
-										if(Api.randomPicker(7)){
+										if(Api.randomPicker(2)){
 											e.setCancelled(true);
-											ArrayList<ItemStack> items = (ArrayList<ItemStack>) block.getDrops();
-											items.add(new ItemStack(getOres().get(block.getType()), power));
-											for(ItemStack i : items){
-												block.getWorld().dropItemNaturally(block.getLocation(), i);
+											int drop = 0;
+											drop+=Api.getPower(lore, Api.getEnchName("AutoSmelt"));
+											if(item.getItemMeta().hasEnchants()){
+												if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
+													drop+=item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
+												}
 											}
+											block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
+											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+											orb.setExperience(Api.percentPick(7, 3));
 											block.setType(Material.AIR);
 										}
 									}
@@ -44,8 +49,8 @@ public class PickAxes implements Listener{
 								if(lore.contains(Api.getEnchName("Experience"))){
 									if(Api.isEnchantmentEnabled("Experience")){
 										int power = Api.getPower(lore, Api.getEnchName("Experience"));
-										if(Api.randomPicker(3)){
-											e.setExpToDrop(e.getExpToDrop()+(power));
+										if(Api.randomPicker(2)){
+											e.setExpToDrop(e.getExpToDrop()+(power+2));
 										}
 									}
 								}

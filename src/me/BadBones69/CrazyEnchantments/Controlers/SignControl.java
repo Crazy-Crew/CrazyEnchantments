@@ -284,7 +284,7 @@ public class SignControl implements Listener{
 		Player player = e.getPlayer();
 		Location loc = e.getBlock().getLocation();
 		int size = Main.settings.getSigns().getConfigurationSection("Locations").getKeys(false).size()+1;
-		if(!Api.permCheck(player, "Sign"))return;
+		if(!Api.hasPermission(player, "Sign"))return;
 		String line1 = e.getLine(0);
 		String line2 = e.getLine(1);
 		if(line1.equalsIgnoreCase("{CrazyEnchant}")){

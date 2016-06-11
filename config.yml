@@ -2,9 +2,12 @@ Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   GUISize: 27 #The size of the GUI, Must be a factor of 9
+  Clouds: True #Enable and Disable the Clouds for the Wings Enchantment
   EnchantmentBookLore:
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
+    - '&4%Destroy_Rate% Destroy Chance'
+    - '&a%Success_Rate% Success Chance'
   LostBook:
     Item: '340'
     Name: '&8&l&nA Lost Book'
@@ -134,8 +137,6 @@ Settings:
       - '&c&lCost: &a&l$50'
     ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
   EnchantmentOptions: #Options for enchanted books.
-    SuccessChance: True #Enable/Disable success rate on books.
-    DestroyChance: True #Enable/Disable destroy rate on books.
     MaxAmountOfEnchantmentsToggle: True #Turn on an off the Max amount of enchantments
     IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
     MaxAmountOfEnchantments: 5 #The Max amount of enchantments an item can have(Will not effect Vanilla Enchantments)
@@ -209,8 +210,9 @@ Categories: #You can make as many different categories as you want
     Lore: #The lore of the Item
       - '&eCost: &6&l20 XP'
     Item: '266' #The id for the item
+    Money/XP: XP #Can be either Money or XP that players can use to by books
     Lvl/Total: Lvl #You can choose Lvl or Total, Lvl uses XP lvls and Total uses the total XP the player has
-    XP: 20 #How much the Books cost
+    Cost: 20 #How much the Books cost
     LostBook: #Controls the Lost Book shop for this tier
       InGUI: False #If it shows in the /CE Gui
       Slot: 1 #Slot it will be in
@@ -244,8 +246,9 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l40 XP'
     Item: '264'
+    Money/XP: XP
     Lvl/Total: Lvl
-    XP: 40
+    Cost: 40
     LostBook:
       InGUI: False
       Slot: 2
@@ -279,8 +282,9 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l60 XP'
     Item: '388'
+    Money/XP: XP
     Lvl/Total: Lvl
-    XP: 60
+    Cost: 60
     LostBook:
       InGUI: False
       Slot: 3

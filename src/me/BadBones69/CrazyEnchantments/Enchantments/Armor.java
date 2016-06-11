@@ -348,7 +348,7 @@ public class Armor implements Listener{
 								if(lore.contains(Api.getEnchName("HellForged"))){
 									if(Api.isEnchantmentEnabled("HellForged")){
 										if(i.getDurability()>0){
-											if(Api.randomPicker(12)){
+											if(Api.randomPicker(15)){
 												int dur = i.getDurability()-Api.getPower(lore, Api.getEnchName("HellForged"));
 												if(dur>0){
 													i.setDurability((short)dur);

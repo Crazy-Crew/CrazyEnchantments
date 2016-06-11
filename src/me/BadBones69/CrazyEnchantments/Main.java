@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,6 +33,7 @@ import me.BadBones69.CrazyEnchantments.Enchantments.Helmets;
 import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords;
 import me.BadBones69.CrazyEnchantments.Enchantments.Tools;
+import me.BadBones69.CrazyEnchantments.MultiSupport.SilkSpawners;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -45,28 +47,31 @@ public class Main extends JavaPlugin implements Listener{
 		saveDefaultConfig();
 		settings.setup(this);
 		Api.hasUpdate();
+		PluginManager pm = Bukkit.getServer().getPluginManager();
 		//==========================================================================\\
-		Bukkit.getServer().getPluginManager().registerEvents(this, this);
-		Bukkit.getServer().getPluginManager().registerEvents(new GUI(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Tinkerer(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ECControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new BlackSmith(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new SignControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new DustControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ArmorListener(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ScrollControl(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new ProtectionCrystal(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new CustomEnchantments(), this);
+		pm.registerEvents(this, this);
+		pm.registerEvents(new GUI(), this);
+		pm.registerEvents(new Tinkerer(), this);
+		pm.registerEvents(new ECControl(), this);
+		pm.registerEvents(new BlackSmith(), this);
+		pm.registerEvents(new SignControl(), this);
+		pm.registerEvents(new DustControl(), this);
+		pm.registerEvents(new ArmorListener(), this);
+		pm.registerEvents(new ScrollControl(), this);
+		pm.registerEvents(new ProtectionCrystal(), this);
+		pm.registerEvents(new CustomEnchantments(), this);
 		//==========================================================================\\
-		Bukkit.getServer().getPluginManager().registerEvents(new Bows(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Axes(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Boots(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Tools(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Helmets(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new PickAxes(), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Armor(this), this);
-		Bukkit.getServer().getPluginManager().registerEvents(new Swords(this), this);
+		pm.registerEvents(new Bows(), this);
+		pm.registerEvents(new Axes(), this);
+		pm.registerEvents(new Boots(this), this);
+		pm.registerEvents(new Tools(), this);
+		pm.registerEvents(new Helmets(), this);
+		pm.registerEvents(new PickAxes(), this);
+		pm.registerEvents(new Armor(this), this);
+		pm.registerEvents(new Swords(this), this);
+		pm.registerEvents(new SilkSpawners(), this);
 		//==========================================================================\\
+		Boots.onStart();
 		if(!setupEconomy()){
 	   		saveDefaultConfig();
 	    }
@@ -83,7 +88,7 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 				return true;
 			}
-			if(sender instanceof Player)if(!Api.permCheck((Player)sender, "BlackSmith"))return true;
+			if(!Api.hasPermission(sender, "BlackSmith"))return true;
 			Player player = (Player) sender;
 			BlackSmith.openBlackSmith(player);
 			return true;
@@ -93,26 +98,26 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 				return true;
 			}
-			if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Tinker"))return true;
+			if(!Api.hasPermission(sender, "Tinker"))return true;
 			Player player = (Player) sender;
 			Tinkerer.openTinker(player);
 			return true;
 		}
 		if(commandLable.equalsIgnoreCase("CE")||commandLable.equalsIgnoreCase("CrazyEnchantments")
-				||commandLable.equalsIgnoreCase("Enchant")||commandLable.equalsIgnoreCase("Enchanter")){
+				||commandLable.equalsIgnoreCase("Enchanter")){
 			if(args.length == 0){
 				if(!(sender instanceof Player)){
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 					return true;
 				}
 				Player player = (Player)sender;
-				if(!Api.permCheck(player, "Access"))return true;
+				if(!Api.hasPermission(sender, "Access"))return true;
 				GUI.openGUI(player);
 				return true;
 			}
 			if(args.length>=1){
 				if(args[0].equalsIgnoreCase("Help")){
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Access"))return true;
+					if(!Api.hasPermission(sender, "Access"))return true;
 					sender.sendMessage(Api.color("&2&l&nCrazy Enchantments"));
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Api.color("&b/Tinker - &9Opens up the Tinkerer."));
@@ -121,16 +126,16 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Api.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
-					sender.sendMessage(Api.color("&b/CE Add <Enchantment> <LvL> - &9Adds and enchantment to the item in your hand."));
+					sender.sendMessage(Api.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
 					sender.sendMessage(Api.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
-					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> <Amount> [Player] [Percent] - &9Give a player a some Magical Dust."));
-					sender.sendMessage(Api.color("&b/CE Book <Enchantment> <Lvl> <Amount> <Player> - &9Gives a player a Enchantment Book."));
+					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
+					sender.sendMessage(Api.color("&b/CE Book <Enchantment> [Lvl] [Amount] [Player] - &9Gives a player a Enchantment Book."));
 					sender.sendMessage(Api.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin"))return true;
 					settings.reloadConfig();
 					settings.reloadEnchs();
 					settings.reloadMsg();
@@ -147,7 +152,7 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 						Player player = (Player)sender;
-						if(!Api.permCheck(player, "Info"))return true;
+						if(!Api.hasPermission(sender, "Info"))return true;
 						GUI.openInfo(player);
 						return true;
 					}else{
@@ -166,7 +171,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 				}
 				if(args[0].equalsIgnoreCase("LostBook")||args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin"))return true;
 					if(args.length>=2){// /CE LostBook <Category> [Amount] [Player]
 						if(args.length<=3){
 							if(!(sender instanceof Player)){
@@ -210,7 +215,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Crystal")||args[0].equalsIgnoreCase("C")){// /CE Crystal [Amount] [Player]
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin"))return true;
 					int amount = 1;
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
@@ -245,87 +250,61 @@ public class Main extends JavaPlugin implements Listener{
 							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
-					if(args.length==3){
-						if(!(sender instanceof Player)){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
-							return true;
+				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> [Amount] [Player] [Percent]
+					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(args.length>=2){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]
+						Player player = Api.getPlayer(sender.getName());
+						int amount = 1;
+						int percent = 0;
+						if(args.length==2){
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+								return true;
+							}
 						}
-						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
-							return true;
+						if(args.length>=3){
+							if(!Api.isInt(args[2])){
+								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+								return true;
+							}
+							amount = Integer.parseInt(args[2]);
 						}
-						Player player = (Player)sender;
+						if(args.length>=4){
+							if(!Api.isOnline(args[3], sender))return true;
+							player = Api.getPlayer(args[3]);
+						}
+						if(args.length>=5){
+							if(!Api.isInt(args[4])){
+								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+										.replaceAll("%Arg%", args[4]).replaceAll("%arg%", args[4])));
+								return true;
+							}
+							percent = Integer.parseInt(args[4]);
+						}
 						if(args[1].equalsIgnoreCase("Success")||args[1].equalsIgnoreCase("S")){
-							player.getInventory().addItem(DustControl.getDust("SuccessDust", Integer.parseInt(args[2])));
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
-							return true;
-						}
-						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
-							player.getInventory().addItem(DustControl.getDust("DestroyDust", Integer.parseInt(args[2])));
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
-							return true;
-						}
-					}
-					if(args.length==4){// /CE Dust <Success/Destroy> <Amount> [Player]
-						if(!Api.isOnline(args[3], sender))return true;
-						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
-							return true;
-						}
-						Player player = Api.getPlayer(args[3]);
-						if(args[1].equalsIgnoreCase("Success")||args[1].equalsIgnoreCase("S")){
-							player.getInventory().addItem(DustControl.getDust("SuccessDust", Integer.parseInt(args[2])));
+							if(args.length>=5){
+								player.getInventory().addItem(DustControl.getDust("SuccessDust", amount, percent));
+							}else{
+								player.getInventory().addItem(DustControl.getDust("SuccessDust", amount));
+							}
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Success-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
+									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
-							player.getInventory().addItem(DustControl.getDust("DestroyDust", Integer.parseInt(args[2])));
+							if(args.length>=5){
+								player.getInventory().addItem(DustControl.getDust("DestroyDust", amount, percent));
+							}else{
+								player.getInventory().addItem(DustControl.getDust("DestroyDust", amount));
+							}
 							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
+									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
-									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-							return true;
-						}
-					}
-					if(args.length==5){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]
-						if(!Api.isOnline(args[3], sender))return true;
-						Player player = Api.getPlayer(args[3]);
-						if(!Api.isInt(args[2])){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
-							return true;
-						}
-						if(!Api.isInt(args[4])){
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-									.replaceAll("%Arg%", args[4]).replaceAll("%arg%", args[4])));
-							return true;
-						}
-						if(args[1].equalsIgnoreCase("Success")||args[1].equalsIgnoreCase("S")){
-							player.getInventory().addItem(DustControl.getDust("SuccessDust", Integer.parseInt(args[2]), Integer.parseInt(args[4])));
-							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Success-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Success-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
-									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-							return true;
-						}
-						if(args[1].equalsIgnoreCase("Destroy")||args[1].equalsIgnoreCase("D")){
-							player.getInventory().addItem(DustControl.getDust("DestroyDust", Integer.parseInt(args[2]), Integer.parseInt(args[4])));
-							player.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])));
-							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
-									.replaceAll("%Amount%", args[2]).replaceAll("%amount%", args[2])
+									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
 						}
@@ -338,7 +317,7 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
 						return true;
 					}
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin"))return true;
 					String name = args[1];
 					if(!Api.isInt(args[3])){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
@@ -368,7 +347,7 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					Player player = (Player) sender;
-					if(!Api.permCheck(player, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin"))return true;
 					boolean T=false;
 					for(String i : ECControl.allEnchantments().keySet()){
 						if(Api.getEnchName(i).equalsIgnoreCase(args[1])){
@@ -412,15 +391,24 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 						return true;
 					}
-					if(args.length!=3){
-						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Add <Enchantment> <LvL>"));
+					if(args.length<=1){
+						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Add <Enchantment> [LvL]"));
 						return true;
 					}
 					Player player = (Player) sender;
-					if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin"))return true;
 					boolean T = false;
 					String en = "";
 					String color = "&7";
+					String lvl = "1";
+					if(args.length>=3){
+						if(!Api.isInt(args[2])){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+							return true;
+						}
+						lvl = args[2];
+					}
 					for(String i : ECControl.allEnchantments().keySet()){
 						if(Api.getEnchName(i).equalsIgnoreCase(args[1])){
 							T = true;
@@ -437,7 +425,6 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
-					String lvl = args[2];
 					if(lvl.equals("1"))lvl="I";
 					if(lvl.equals("2"))lvl="II";
 					if(lvl.equals("3"))lvl="III";
@@ -455,27 +442,42 @@ public class Main extends JavaPlugin implements Listener{
 					Api.setItemInHand(player, Api.addGlow(Api.addLore(Api.getItemInHand(player), Api.color(color+en+" "+lvl))));
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Book")){// /CE Book <Enchantment> <Lvl> <Amount> <Player>
-					if(args.length!=5){
-						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Book <Enchantment> <Lvl> <Amount> <Player>"));
+				if(args[0].equalsIgnoreCase("Book")){// /CE Book <Enchantment> [Lvl] [Amount] [Player]
+					if(args.length<=1){
+						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Book <Enchantment> [Lvl] [Amount] [Player]"));
 						return true;
 					}
-					if(sender instanceof Player)if(!Api.permCheck((Player)sender, "Admin"))return true;
+					if(args.length<=2){
+						if(!(sender instanceof Player)){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+							return true;
+						}
+					}
+					if(!Api.hasPermission(sender, "Admin"))return true;
 					String ench = args[1];
-					if(!Api.isInt(args[2])){
-						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
-						return true;
+					int lvl = 1;
+					int amount = 1;
+					Player player = Api.getPlayer(sender.getName());
+					if(args.length>=3){
+						if(!Api.isInt(args[2])){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+							return true;
+						}
+						lvl = Integer.parseInt(args[2]);
 					}
-					if(!Api.isInt(args[3])){
-						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-								.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3])));
-						return true;
+					if(args.length>=4){
+						if(!Api.isInt(args[3])){
+							sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3])));
+							return true;
+						}
+						amount = Integer.parseInt(args[3]);
 					}
-					int lvl = Integer.parseInt(args[2]);
-					int amount = Integer.parseInt(args[3]);
-					if(!Api.isOnline(args[4], sender))return true;
-					Player player = Api.getPlayer(args[4]);
+					if(args.length>=5){
+						if(!Api.isOnline(args[4], sender))return true;
+						player = Api.getPlayer(args[4]);
+					}
 					boolean toggle = false;
 					for(String en : ECControl.allEnchantments().keySet()){
 						if(ench.equalsIgnoreCase(Api.getEnchName(en))){
@@ -488,7 +490,7 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					sender.sendMessage(Api.color(Api.getPrefix()+"&7You have sent &6"+player.getName()+" &7an Crazy Enchantment Book."));
-					player.getInventory().addItem(Api.addGlow(ScrollControl.makeEnchantBook(ench, Api.getPower(lvl), amount)));
+					player.getInventory().addItem(Api.addGlow(ECControl.makeEnchantBook(ench, Api.getPower(lvl), amount)));
 					return true;
 				}
 			}

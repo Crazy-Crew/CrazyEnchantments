@@ -19,4 +19,13 @@ public class FactionsUUID {
 		if(r.isAlly())return true;
 		return false;
 	}
+	public static boolean inTerritory(Player P){
+		if(FPlayers.getInstance().getByPlayer(P).isInOwnTerritory()){
+			return true;
+		}
+		if(FPlayers.getInstance().getByPlayer(P).isInAllyTerritory()){
+			return true;
+		}
+		return false;
+	}
 }

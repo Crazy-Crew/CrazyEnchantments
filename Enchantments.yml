@@ -1135,3 +1135,19 @@ Enchantments:
       - 'T1'
       - 'T2'
       - 'T3'
+  Wings:
+    Enabled: True
+    Name: 'Wings'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lWings'
+      Description:
+        - '&c&lBoots Only'
+        - '&3Allows you to fly in your'
+        - '&3Own territory and gives particles.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
