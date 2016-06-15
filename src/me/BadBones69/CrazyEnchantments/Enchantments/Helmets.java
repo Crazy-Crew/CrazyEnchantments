@@ -14,6 +14,7 @@ import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
 
 public class Helmets implements Listener{
+	int time = 99999999*20;
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
 		Player player = e.getPlayer();
@@ -24,12 +25,12 @@ public class Helmets implements Listener{
 				for(String lore : NewItem.getItemMeta().getLore()){
 					if(lore.contains(Api.getEnchName("Glowing"))){
 						if(Api.isEnchantmentEnabled("Glowing")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 55555*20, Api.getPower(lore, Api.getEnchName("Glowing"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, Api.getPower(lore, Api.getEnchName("Glowing"))-1));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Mermaid"))){
 						if(Api.isEnchantmentEnabled("Mermaid")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 55555*20, Api.getPower(lore, Api.getEnchName("Mermaid"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, Api.getPower(lore, Api.getEnchName("Mermaid"))-1));
 						}
 					}
 				}

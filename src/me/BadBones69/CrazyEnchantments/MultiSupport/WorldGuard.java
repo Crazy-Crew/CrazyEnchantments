@@ -12,10 +12,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 public class WorldGuard {
 	public static boolean allowsPVP(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			int x = en.getLocation().getBlockX();
-			int y = en.getLocation().getBlockY();
-			int z = en.getLocation().getBlockZ();
-			Location loc = new Location(en.getWorld(),x,y,z);
+			Location loc = en.getLocation();
 			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
 			if (set.queryState(null, DefaultFlag.PVP)==StateFlag.State.DENY)return false;
 		}
@@ -23,10 +20,7 @@ public class WorldGuard {
 	}
 	public static boolean allowsBreak(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			int x = en.getLocation().getBlockX();
-			int y = en.getLocation().getBlockY();
-			int z = en.getLocation().getBlockZ();
-			Location loc = new Location(en.getWorld(),x,y,z);
+			Location loc = en.getLocation();
 			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
 			if (set.queryState(null, DefaultFlag.BLOCK_BREAK)==StateFlag.State.DENY)return false;
 		}
@@ -34,10 +28,7 @@ public class WorldGuard {
 	}
 	public static boolean allowsExplotions(Entity en){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			int x = en.getLocation().getBlockX();
-			int y = en.getLocation().getBlockY();
-			int z = en.getLocation().getBlockZ();
-			Location loc = new Location(en.getWorld(),x,y,z);
+			Location loc = en.getLocation();
 			ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(en.getWorld()).getApplicableRegions(loc);
 			if (set.queryState(null, DefaultFlag.OTHER_EXPLOSION)==StateFlag.State.DENY)return false;
 		}

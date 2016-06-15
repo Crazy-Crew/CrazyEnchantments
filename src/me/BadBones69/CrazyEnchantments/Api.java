@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -74,7 +75,7 @@ public class Api{
 		if(getVersion()==174){
 			return NMS_v1_7_R4.addGlow(item);
 		}else{
-			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date. "
+			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too far out of date. "
 					+ "Please update or remove this plugin to stop further Errors.");
 			return item;
 		}
@@ -99,8 +100,8 @@ public class Api{
 			if(getVersion()==174){
 				return NMS_v1_7_R4.addGlow(item);
 			}else{
-				Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is to far out of date. "
-						+ "Please update or remove this plugin to stop ferther Errors.");
+				Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too far out of date. "
+						+ "Please update or remove this plugin to stop further Errors.");
 				return item;
 			}
 		}else{
@@ -205,6 +206,22 @@ public class Api{
 	public static boolean hasFactions(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null)return true;
 		return false;
+	}
+	public static boolean canBreakBlock(Player player, Block block){
+		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+		if(factions!=null){
+			if(factions.getDescription().getAuthors().contains("drtshock")){
+				if(FactionsUUID.canBreakBlock(player, block))return true;
+				if(!FactionsUUID.canBreakBlock(player, block))return false;
+			}
+			if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+				if(FactionsSupport.canBreakBlock(player, block))return true;
+				if(!FactionsSupport.canBreakBlock(player, block))return false;
+			}else{
+				return true;
+			}
+		}
+		return true;
 	}
 	public static boolean inTerritory(Player player){
 		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");

@@ -30,6 +30,7 @@ public class Boots implements Listener{
 		this.plugin = plugin;
 	}
 	public static ArrayList<Player> Flying = new ArrayList<Player>();
+	int time = 99999999*20;
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
 		Player player = e.getPlayer();
@@ -40,17 +41,17 @@ public class Boots implements Listener{
 				for(String lore : NewItem.getItemMeta().getLore()){
 					if(lore.contains(Api.getEnchName("AntiGravity"))){
 						if(Api.isEnchantmentEnabled("AntiGravity")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, 1+Api.getPower(lore, Api.getEnchName("AntiGravity"))));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, 1+Api.getPower(lore, Api.getEnchName("AntiGravity"))));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Gears"))){
 						if(Api.isEnchantmentEnabled("Gears")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 55555*20, Api.getPower(lore, Api.getEnchName("Gears"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, time, Api.getPower(lore, Api.getEnchName("Gears"))-1));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Springs"))){
 						if(Api.isEnchantmentEnabled("Springs")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 55555*20, Api.getPower(lore, Api.getEnchName("Springs"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, Api.getPower(lore, Api.getEnchName("Springs"))-1));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Wings"))){

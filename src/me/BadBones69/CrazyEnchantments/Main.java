@@ -69,7 +69,9 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new PickAxes(), this);
 		pm.registerEvents(new Armor(this), this);
 		pm.registerEvents(new Swords(this), this);
-		pm.registerEvents(new SilkSpawners(), this);
+		if(pm.getPlugin("SilkSpawners")!=null){
+			pm.registerEvents(new SilkSpawners(), this);
+		}
 		//==========================================================================\\
 		Boots.onStart();
 		if(!setupEconomy()){

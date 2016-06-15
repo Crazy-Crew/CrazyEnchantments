@@ -20,6 +20,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 
 public class Tools implements Listener{
 	private HashMap<Player, HashMap<String, Boolean>> effect = new HashMap<Player, HashMap<String, Boolean>>();
+	int time = 99999999*20;
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
 		Player player = e.getPlayer();
@@ -35,13 +36,13 @@ public class Tools implements Listener{
 							if(Api.isEnchantmentEnabled("Haste")){
 								int power = Api.getPower(lore, Api.getEnchName("Haste"));
 								Trigger.put("Haste", true);
-								player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 55555*20, power-1));
+								player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power-1));
 							}
 						}
 						if(lore.contains(Api.getEnchName("Oxygenate"))){
 							if(Api.isEnchantmentEnabled("Oxygenate")){
 								Trigger.put("Oxygenate", true);
-								player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 55555*20, 5));
+								player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
 							}
 						}
 					}
@@ -63,6 +64,7 @@ public class Tools implements Listener{
 		if(!Api.allowsBreak(e.getPlayer()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
+		if(!Api.canBreakBlock(player, block))return;
 		if(player.getGameMode()!=GameMode.CREATIVE){
 			if(Api.getItemInHand(player)!=null){
 				ItemStack item = Api.getItemInHand(player);

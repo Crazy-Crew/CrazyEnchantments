@@ -32,6 +32,7 @@ public class Armor implements Listener{
 		this.plugin = plugin;
 	}
 	ArrayList<Player> fall = new ArrayList<Player>();
+	int time = 99999999*20;
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
 		Player player = e.getPlayer();
@@ -42,45 +43,45 @@ public class Armor implements Listener{
 				for(String lore : NewItem.getItemMeta().getLore()){
 					if(lore.contains(Api.getEnchName("BurnShield"))){
 						if(Api.isEnchantmentEnabled("BurnShield")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 55555*20, 0));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, time, 0));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Drunk"))){
 						if(Api.isEnchantmentEnabled("Drunk")){
 							int power = Api.getPower(lore, Api.getEnchName("Drunk"));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 55555, power-1));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 55555, power-1));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 55555, power));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, time, power-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time, power-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time, power));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Hulk"))){
 						if(Api.isEnchantmentEnabled("Hulk")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 55555, Api.getPower(lore, Api.getEnchName("Hulk"))-1));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 55555, Api.getPower(lore, Api.getEnchName("Hulk"))-1));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 55555, Api.getPower(lore, Api.getEnchName("Hulk"))));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, time, Api.getPower(lore, Api.getEnchName("Hulk"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time, Api.getPower(lore, Api.getEnchName("Hulk"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time, Api.getPower(lore, Api.getEnchName("Hulk"))));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Valor"))){
 						if(Api.isEnchantmentEnabled("Valor")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 55555, Api.getPower(lore, Api.getEnchName("Valor"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time, Api.getPower(lore, Api.getEnchName("Valor"))-1));
 						}
 					}
 					if(lore.contains(Api.getEnchName("OverLoad"))){
 						if(Api.isEnchantmentEnabled("OverLoad")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 55555*20, Api.getPower(lore, Api.getEnchName("OverLoad"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, time, Api.getPower(lore, Api.getEnchName("OverLoad"))-1));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Ninja"))){
 						if(Api.isEnchantmentEnabled("Ninja")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 55555*20, Api.getPower(lore, Api.getEnchName("Ninja"))-1));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 55555*20, Api.getPower(lore, Api.getEnchName("Ninja"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, time, Api.getPower(lore, Api.getEnchName("Ninja"))-1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, time, Api.getPower(lore, Api.getEnchName("Ninja"))-1));
 						}
 					}
 					if(lore.contains(Api.getEnchName("Insomnia"))){
 						if(Api.isEnchantmentEnabled("Insomnia")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 55555, 0));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 55555, 0));
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 55555, 1));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, time, 0));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time, 0));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time, 1));
 						}
 					}
 				}

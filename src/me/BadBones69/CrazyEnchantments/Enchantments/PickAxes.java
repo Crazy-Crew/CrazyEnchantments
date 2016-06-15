@@ -21,6 +21,7 @@ public class PickAxes implements Listener{
 		if(!Api.allowsBreak(e.getPlayer()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
+		if(!Api.canBreakBlock(player, block))return;
 		if(player.getGameMode()!=GameMode.CREATIVE){
 			if(getOres().containsKey(block.getType())){
 				if(Api.getItemInHand(player)!=null){

@@ -13,12 +13,12 @@ import de.dustplanet.util.SilkUtil;
 import me.BadBones69.CrazyEnchantments.Api;
 
 public class SilkSpawners implements Listener{
-	SilkUtil su = SilkUtil.hookIntoSilkSpanwers();
 	@EventHandler
 	public void onBreak(SilkSpawnersSpawnerBreakEvent e){
 		Player player = e.getPlayer();
 		if(!Api.allowsBreak(player))return;
 		Block block = e.getBlock();
+		if(!Api.canBreakBlock(player, block))return;
 		if(player!=null){
 			if(block!=null){
 				if(player.getGameMode()!=GameMode.CREATIVE){
@@ -30,6 +30,7 @@ public class SilkSpawners implements Listener{
 									if(lore.contains(Api.getEnchName("Telepathy"))){
 										if(Api.isEnchantmentEnabled("Telepathy")){
 											e.setCancelled(true);
+											SilkUtil su = SilkUtil.hookIntoSilkSpanwers();
 											ItemStack it = su.newSpawnerItem(e.getEntityID(), su.getCustomSpawnerName(su.getCreatureName(e.getEntityID())), 1, false);
 											if(!Api.isInvFull(player)){
 												player.getInventory().addItem(it);

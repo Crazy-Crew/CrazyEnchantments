@@ -6,8 +6,8 @@ Settings:
   EnchantmentBookLore:
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
-    - '&4%Destroy_Rate% Destroy Chance'
-    - '&a%Success_Rate% Success Chance'
+    - '&4%Destroy_Rate%% Destroy Chance'
+    - '&a%Success_Rate%% Success Chance'
   LostBook:
     Item: '340'
     Name: '&8&l&nA Lost Book'

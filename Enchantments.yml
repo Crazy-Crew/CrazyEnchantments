@@ -1140,7 +1140,7 @@ Enchantments:
     Name: 'Wings'
     Color: '&7'
     BookColor: '&b&l'
-    MaxPower: 5
+    MaxPower: 1
     Info:
       Name: '&e&lWings'
       Description:
