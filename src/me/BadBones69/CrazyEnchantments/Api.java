@@ -663,6 +663,15 @@ public class Api{
 		}
 		return Integer.parseInt(arg);
 	}
+	public static Boolean hasArgument(String Argument, List<String> Msg){
+		for(String l : Msg){
+			l = Api.color(l).toLowerCase();
+			if(l.contains(Argument.toLowerCase())){
+				return true;
+			}
+		}
+		return false;
+	}
 	public static boolean randomPicker(int max){
 		Random number = new Random();
 		int chance = 1 + number.nextInt(max);

@@ -397,14 +397,15 @@ public class Armor implements Listener{
 		Player killer = player.getKiller();
 		if(!Api.allowsPVP(player))return;
 		for(ItemStack item : player.getEquipment().getArmorContents()){
-			if(item==null)return;
-			if(item.hasItemMeta()){
-				if(item.getItemMeta().hasLore()){
-					for(String l : item.getItemMeta().getLore()){
-						if(l.contains(Api.getEnchName("SelfDestruct"))){
-							if(Api.isEnchantmentEnabled("SelfDestruct")){
-								Location loc = e.getEntity().getLocation();
-								loc.getWorld().createExplosion(loc, Api.getPower(l, Api.getEnchName("SelfDestruct")));
+			if(item!=null){
+				if(item.hasItemMeta()){
+					if(item.getItemMeta().hasLore()){
+						for(String l : item.getItemMeta().getLore()){
+							if(l.contains(Api.getEnchName("SelfDestruct"))){
+								if(Api.isEnchantmentEnabled("SelfDestruct")){
+									Location loc = e.getEntity().getLocation();
+									loc.getWorld().createExplosion(loc, Api.getPower(l, Api.getEnchName("SelfDestruct")));
+								}
 							}
 						}
 					}
@@ -413,14 +414,15 @@ public class Armor implements Listener{
 		}
 		if(killer instanceof Player){
 			for(ItemStack item : killer.getEquipment().getArmorContents()){
-				if(item==null)return;
-				if(item.hasItemMeta()){
-					if(item.getItemMeta().hasLore()){
-						for(String l : item.getItemMeta().getLore()){
-							if(l.contains(Api.getEnchName("Recover"))){
-								if(Api.isEnchantmentEnabled("Recover")){
-									killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8*20, 2));
-									killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 1));
+				if(item!=null){
+					if(item.hasItemMeta()){
+						if(item.getItemMeta().hasLore()){
+							for(String l : item.getItemMeta().getLore()){
+								if(l.contains(Api.getEnchName("Recover"))){
+									if(Api.isEnchantmentEnabled("Recover")){
+										killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8*20, 2));
+										killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 1));
+									}
 								}
 							}
 						}
