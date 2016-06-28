@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,8 +20,10 @@ import org.bukkit.potion.PotionEffectType;
 import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class CustomEnchantments implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static ArrayList<String> getEnchantments(){
 		ArrayList<String> enchs = new ArrayList<String>();
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return enchs;
@@ -33,16 +34,14 @@ public class CustomEnchantments implements Listener{
 	}
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
-		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
-		Player player = e.getPlayer();
-		ItemStack NewItem = e.getNewArmorPiece();
-		ItemStack OldItem = e.getOldArmorPiece();
-		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
-			if(!NewItem.getItemMeta().hasLore())return;
-			for(String lore : NewItem.getItemMeta().getLore()){
+		if(Main.settings.getCustomEnchs().contains("Enchantments")){
+			Player player = e.getPlayer();
+			ItemStack NewItem = e.getNewArmorPiece();
+			ItemStack OldItem = e.getOldArmorPiece();
+			if(CE.hasEnchantments(NewItem)){
 				for(String ench : getEnchantments()){
-					if(lore.contains(Api.getEnchName(ench))){
-						int power = Api.getPower(lore, ench);
+					if(CE.hasEnchantment(NewItem, ench)){
+						int power = CE.getPower(NewItem, CE.getFromName(ench));
 						int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.ArmorOptions.PowerIncrease");
 						for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
 							PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -69,12 +68,9 @@ public class CustomEnchantments implements Listener{
 					}
 				}
 			}
-		}
-		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
-			if(!OldItem.getItemMeta().hasLore())return;
-			for(String lore : OldItem.getItemMeta().getLore()){
+			if(CE.hasEnchantments(OldItem)){
 				for(String ench : getEnchantments()){
-					if(lore.contains(Api.getEnchName(ench))){
+					if(CE.hasEnchantment(OldItem, ench)){
 						for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
 							PotionEffectType potion = PotionEffectType.NIGHT_VISION;
 							String[] b = po.split(", ");
@@ -96,23 +92,22 @@ public class CustomEnchantments implements Listener{
 	}
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e){
-		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
+		if(Main.settings.getCustomEnchs().contains("Enchantments")){
 		if(e.isCancelled())return;
-		if(e.getEntity() instanceof LivingEntity){
-			if(e.getDamager() instanceof Player){
-				Player damager = (Player) e.getDamager();
-				LivingEntity damaged = (LivingEntity) e.getEntity();
-				if(Api.getItemInHand(damager).hasItemMeta()){
-					if(!Api.getItemInHand(damager).getItemMeta().hasLore())return;
+			if(e.getEntity() instanceof LivingEntity){
+				if(e.getDamager() instanceof Player){
+					Player damager = (Player) e.getDamager();
+					LivingEntity damaged = (LivingEntity) e.getEntity();
+					ItemStack item = Api.getItemInHand(damager);
 					if(!e.getEntity().isDead()){
 						if(!Api.allowsPVP(e.getEntity()))return;
-						for(String lore : Api.getItemInHand(damager).getItemMeta().getLore()){
+						if(CE.hasEnchantments(item)){
 							for(String ench : getEnchantments()){
-								if(lore.contains(Api.getEnchName(ench))){
+								if(CE.hasEnchantment(item, ench)){
 									//Damager Potion Control
 									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease")){
 										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
-											int power = Api.getPower(lore, ench);
+											int power = CE.getPower(Api.getItemInHand(damager), CE.getFromName(ench));
 											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease");
 											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
 												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -148,7 +143,7 @@ public class CustomEnchantments implements Listener{
 									//Damaged Potion Control
 									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease")){
 										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
-											int power = Api.getPower(lore, ench);
+											int power = CE.getPower(Api.getItemInHand(damager), CE.getFromName(ench));
 											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease");
 											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
 												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -188,7 +183,7 @@ public class CustomEnchantments implements Listener{
 										int cha = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Chance");
 										int power = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.PowerIncrease");
 										int multi = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Multiplyer");
-										double damage = e.getDamage()*(multi+(Api.getPower(lore, Api.getEnchName(ench))+power));
+										double damage = e.getDamage()*(multi+(CE.getPower(Api.getItemInHand(damager), CE.getFromName(ench))+power));
 										for(int counter = 1; counter<=1; counter++){
 											chance = 1 + number.nextInt(99);
 											if(chance <= cha){
@@ -209,14 +204,12 @@ public class CustomEnchantments implements Listener{
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
 		if(!Api.allowsPVP(e.getEntity()))return;
-		if (e.getBow().hasItemMeta()) {
-			if(!e.getBow().getItemMeta().hasLore())return;
-			for(String lore : e.getBow().getItemMeta().getLore()){
-				for(String ench : getEnchantments()){
-					if(lore.contains(Api.getEnchName(ench))){
-						Power.put((Projectile) e.getProjectile(), Api.getPower(lore, Api.getEnchName(ench)));
-						Enchant.put((Projectile) e.getProjectile(), ench);
-					}
+		ItemStack item = e.getBow();
+		if(CE.hasEnchantments(item)){
+			for(String ench : getEnchantments()){
+				if(CE.hasEnchantment(item, ench)){
+					Power.put((Projectile) e.getProjectile(), CE.getPower(e.getBow(), CE.getFromName(ench)));
+					Enchant.put((Projectile) e.getProjectile(), ench);
 				}
 			}
 		}
@@ -260,7 +253,7 @@ public class CustomEnchantments implements Listener{
 			String ench = Enchant.get(arrow);
 			if(Power.containsKey(arrow)){
 				if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.BowOptions.OnHit.Damaged")){
-					int power = Api.getPower(Enchant.get(arrow), ench);
+					int power = Power.get(arrow);
 					int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.BowOptions.OnHit.Damaged.PowerIncrease");
 					for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.BowOptions.OnHit.Damaged.PotionEffects")){
 						PotionEffectType potion = PotionEffectType.NIGHT_VISION;

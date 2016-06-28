@@ -12,16 +12,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.Controlers.CustomEnchantments;
 
 public class ECControl implements Listener{
+	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static String Enchants(String cat){
 		ArrayList<String> enchants = new ArrayList<String>();
 		Random number = new Random();
 		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
 			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en+".Categories")){
 				if(cat.equalsIgnoreCase(C)){
-					if(Api.isEnchantmentEnabled(en)){
+					if(CE.getFromName(en).isEnabled()){
 						String power = powerPicker(en, cat);
 						enchants.add(Main.settings.getEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en+".Name")+" "+power);
 					}
@@ -144,7 +146,6 @@ public class ECControl implements Listener{
 		Player player = e.getPlayer();
 		if(e.getItem()!=null){
 			ItemStack item = e.getItem();
-			if(item.getType()!=Material.BOOK)return;
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
 					if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.LostBook.Name")))){
@@ -173,7 +174,7 @@ public class ECControl implements Listener{
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
 					for(String en : allEnchantments().keySet()){
-						if(item.getItemMeta().getDisplayName().contains(Api.color(Api.getEnchBookColor(en)+Api.getEnchName(en)))){
+						if(item.getItemMeta().getDisplayName().contains(Api.color(CE.getBookColor(en)+CE.getFromName(en).getCustomName()))){
 							String name = "";
 							List<String> desc = new ArrayList<String>();
 							if(Main.settings.getEnchs().contains("Enchantments."+en)){

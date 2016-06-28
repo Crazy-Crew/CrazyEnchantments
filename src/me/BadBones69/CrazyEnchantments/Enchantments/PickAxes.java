@@ -2,6 +2,7 @@ package me.BadBones69.CrazyEnchantments.Enchantments;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,8 +15,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class PickAxes implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e){
 		if(!Api.allowsBreak(e.getPlayer()))return;
@@ -24,36 +29,42 @@ public class PickAxes implements Listener{
 		if(!Api.canBreakBlock(player, block))return;
 		if(player.getGameMode()!=GameMode.CREATIVE){
 			if(getOres().containsKey(block.getType())){
-				if(Api.getItemInHand(player)!=null){
-					ItemStack item = Api.getItemInHand(player);
-					if(item.hasItemMeta()){
-						if(item.getItemMeta().hasLore()){
-							for(String lore : item.getItemMeta().getLore()){
-								if(lore.contains(Api.getEnchName("AutoSmelt"))){
-									if(Api.isEnchantmentEnabled("AutoSmelt")){
-										if(Api.randomPicker(2)){
-											e.setCancelled(true);
-											int drop = 0;
-											drop+=Api.getPower(lore, Api.getEnchName("AutoSmelt"));
-											if(item.getItemMeta().hasEnchants()){
-												if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
-													drop+=item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
-												}
-											}
-											block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
-											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-											orb.setExperience(Api.percentPick(7, 3));
-											block.setType(Material.AIR);
+				ItemStack item = Api.getItemInHand(player);
+				if(CE.hasEnchantments(item)){
+					if(CE.hasEnchantment(item, CEnchantments.AUTOSMELT)){
+						if(CEnchantments.AUTOSMELT.isEnabled()){
+							if(Api.randomPicker(2)){
+								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
+								Bukkit.getPluginManager().callEvent(event);
+								if(!event.isCancelled()){
+									e.setCancelled(true);
+									int drop = 0;
+									drop+=CE.getPower(item, CEnchantments.AUTOSMELT);
+									if(item.getItemMeta().hasEnchants()){
+										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
+											drop+=item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
 										}
 									}
+									block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
+									ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+									orb.setExperience(Api.percentPick(7, 3));
+									block.setType(Material.AIR);
+									int dur = item.getDurability()+1;
+									item.setDurability((short)dur);
 								}
-								if(lore.contains(Api.getEnchName("Experience"))){
-									if(Api.isEnchantmentEnabled("Experience")){
-										int power = Api.getPower(lore, Api.getEnchName("Experience"));
-										if(Api.randomPicker(2)){
-											e.setExpToDrop(e.getExpToDrop()+(power+2));
-										}
-									}
+							}
+						}
+					}
+					if(CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+						if(CEnchantments.EXPERIENCE.isEnabled()){
+							int power = CE.getPower(item, CEnchantments.EXPERIENCE);
+							if(Api.randomPicker(2)){
+								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
+								Bukkit.getPluginManager().callEvent(event);
+								if(!event.isCancelled()){
+									e.setExpToDrop(e.getExpToDrop()+(power+2));
+									int dur = item.getDurability()+1;
+									item.setDurability((short)dur);
 								}
 							}
 						}

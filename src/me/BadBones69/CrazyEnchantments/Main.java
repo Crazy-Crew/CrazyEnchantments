@@ -17,6 +17,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.thederpygolems.armorequip.ArmorListener;
+import me.BadBones69.CrazyEnchantments.API.CEBook;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.CustomEnchantments;
@@ -39,12 +40,11 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Main extends JavaPlugin implements Listener{
 	public static SettingsManager settings = SettingsManager.getInstance();
-	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static Economy econ = null;
 	public static EconomyResponse r;
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	@Override
 	public void onEnable(){
-		saveDefaultConfig();
 		settings.setup(this);
 		Api.hasUpdate();
 		PluginManager pm = Bukkit.getServer().getPluginManager();
@@ -90,7 +90,7 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 				return true;
 			}
-			if(!Api.hasPermission(sender, "BlackSmith"))return true;
+			if(!Api.hasPermission(sender, "BlackSmith", true))return true;
 			Player player = (Player) sender;
 			BlackSmith.openBlackSmith(player);
 			return true;
@@ -100,7 +100,7 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
 				return true;
 			}
-			if(!Api.hasPermission(sender, "Tinker"))return true;
+			if(!Api.hasPermission(sender, "Tinker", true))return true;
 			Player player = (Player) sender;
 			Tinkerer.openTinker(player);
 			return true;
@@ -113,13 +113,13 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				Player player = (Player)sender;
-				if(!Api.hasPermission(sender, "Access"))return true;
+				if(!Api.hasPermission(sender, "Access", true))return true;
 				GUI.openGUI(player);
 				return true;
 			}
 			if(args.length>=1){
 				if(args[0].equalsIgnoreCase("Help")){
-					if(!Api.hasPermission(sender, "Access"))return true;
+					if(!Api.hasPermission(sender, "Access", true))return true;
 					sender.sendMessage(Api.color("&2&l&nCrazy Enchantments"));
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Api.color("&b/Tinker - &9Opens up the Tinkerer."));
@@ -137,13 +137,14 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					settings.reloadConfig();
 					settings.reloadEnchs();
 					settings.reloadMsg();
 					settings.reloadCustomEnchs();
 					settings.reloadSigns();
 					settings.reloadTinker();
+					settings.setup(this);
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
 					return true;
 				}
@@ -154,15 +155,15 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 						Player player = (Player)sender;
-						if(!Api.hasPermission(sender, "Info"))return true;
+						if(!Api.hasPermission(sender, "Info", true))return true;
 						GUI.openInfo(player);
 						return true;
 					}else{
 						String ench = args[1];
-						for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-							if(en.equalsIgnoreCase(ench)||Api.getEnchName(en).equalsIgnoreCase(ench)){
-								String name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
-								List<String> desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+						for(String en : settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+							if(en.equalsIgnoreCase(ench)||CE.getCustomName(en).equalsIgnoreCase(ench)){
+								String name = settings.getEnchs().getString("Enchantments."+en+".Info.Name");
+								List<String> desc = settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
 								sender.sendMessage(Api.color(name));
 								for(String msg : desc)sender.sendMessage(Api.color(msg));
 								return true;
@@ -173,7 +174,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 				}
 				if(args[0].equalsIgnoreCase("LostBook")||args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					if(args.length>=2){// /CE LostBook <Category> [Amount] [Player]
 						if(args.length<=3){
 							if(!(sender instanceof Player)){
@@ -217,7 +218,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Crystal")||args[0].equalsIgnoreCase("C")){// /CE Crystal [Amount] [Player]
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					int amount = 1;
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
@@ -253,7 +254,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> [Amount] [Player] [Percent]
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					if(args.length>=2){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]
 						Player player = Api.getPlayer(sender.getName());
 						int amount = 1;
@@ -319,7 +320,7 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
 						return true;
 					}
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					String name = args[1];
 					if(!Api.isInt(args[3])){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
@@ -349,10 +350,10 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					Player player = (Player) sender;
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					boolean T=false;
-					for(String i : ECControl.allEnchantments().keySet()){
-						if(Api.getEnchName(i).equalsIgnoreCase(args[1])){
+					for(String en : ECControl.allEnchantments().keySet()){
+						if(CE.getCustomName(en).equalsIgnoreCase(args[1])){
 							T=true;
 						}
 					}
@@ -369,13 +370,13 @@ public class Main extends JavaPlugin implements Listener{
 					if(item.hasItemMeta()){
 						if(item.getItemMeta().hasLore()){
 							for(String lore : item.getItemMeta().getLore()){
-								for(String i : ECControl.allEnchantments().keySet()){
-									if(Api.getEnchName(i).equalsIgnoreCase(enchantment)){
-										enchantment=Api.getEnchName(i);
-										if(lore.contains(Api.getEnchName(i))){
+								for(String en : ECControl.allEnchantments().keySet()){
+									if(CE.getCustomName(en).equalsIgnoreCase(enchantment)){
+										enchantment=CE.getCustomName(en);
+										if(lore.contains(CE.getCustomName(en))){
 											Api.setItemInHand(player, Api.removeLore(item, lore));
 											String msg = Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Remove-Enchantment")
-													.replaceAll("%Enchantment%", Api.getEnchName(i)).replaceAll("%enchantment%", Api.getEnchName(i)));
+													.replaceAll("%Enchantment%", CE.getCustomName(en)).replaceAll("%enchantment%", CE.getCustomName(en)));
 											player.sendMessage(msg);
 											return true;
 										}
@@ -398,7 +399,7 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					Player player = (Player) sender;
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					boolean T = false;
 					String en = "";
 					String color = "&7";
@@ -412,15 +413,15 @@ public class Main extends JavaPlugin implements Listener{
 						lvl = args[2];
 					}
 					for(String i : ECControl.allEnchantments().keySet()){
-						if(Api.getEnchName(i).equalsIgnoreCase(args[1])){
+						if(CE.getCustomName(i).equalsIgnoreCase(args[1])){
 							T = true;
-							if(Main.settings.getEnchs().contains("Enchantments."+i)){
-								color = Main.settings.getEnchs().getString("Enchantments."+i+".Color");
+							if(settings.getEnchs().contains("Enchantments."+i)){
+								color = settings.getEnchs().getString("Enchantments."+i+".Color");
 							}
-							if(Main.settings.getCustomEnchs().contains("Enchantments."+i)){
-								color = Main.settings.getCustomEnchs().getString("Enchantments."+i+".Color");
+							if(settings.getCustomEnchs().contains("Enchantments."+i)){
+								color = settings.getCustomEnchs().getString("Enchantments."+i+".Color");
 							}
-							en = Api.getEnchName(i);
+							en = CE.getCustomName(i);
 						}
 					}
 					if(!T){
@@ -455,7 +456,7 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 					}
-					if(!Api.hasPermission(sender, "Admin"))return true;
+					if(!Api.hasPermission(sender, "Admin", true))return true;
 					String ench = args[1];
 					int lvl = 1;
 					int amount = 1;
@@ -482,7 +483,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 					boolean toggle = false;
 					for(String en : ECControl.allEnchantments().keySet()){
-						if(ench.equalsIgnoreCase(Api.getEnchName(en))){
+						if(ench.equalsIgnoreCase(CE.getCustomName(en))){
 							ench=en;
 							toggle=true;
 						}
@@ -492,7 +493,14 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					sender.sendMessage(Api.color(Api.getPrefix()+"&7You have sent &6"+player.getName()+" &7an Crazy Enchantment Book."));
-					player.getInventory().addItem(Api.addGlow(ECControl.makeEnchantBook(ench, Api.getPower(lvl), amount)));
+					int Smax = settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
+					int Smin = settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
+					int Dmax = settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
+					int Dmin = settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
+					CEBook book = new CEBook(CE.getFromName(ench), lvl, amount);
+					book.setDestoryRate(Api.percentPick(Dmax, Dmin));
+					book.setSuccessRate(Api.percentPick(Smax, Smin));
+					player.getInventory().addItem(Api.addGlow(book.buildBook()));
 					return true;
 				}
 			}

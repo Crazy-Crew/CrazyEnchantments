@@ -21,7 +21,7 @@ Tinker:
     WATER_WORKER: 15
     THORNS: 35
     DEPTH_STRIDER: 15
-    #Swords/Axe Enchantments
+    #Sword/Axe Enchantments
     DAMAGE_ALL: 20
     DAMAGE_UNDEAD: 10
     DAMAGE_ARTHROPODS: 10
@@ -33,7 +33,7 @@ Tinker:
     SILK_TOUCH: 35
     DURABILITY: 15
     LOOT_BONUS_BLOCKS: 20
-    #Bows Enchantments
+    #Bow Enchantments
     ARROW_DAMAGE: 20
     ARROW_KNOCKBACK: 20
     ARROW_FIRE: 25

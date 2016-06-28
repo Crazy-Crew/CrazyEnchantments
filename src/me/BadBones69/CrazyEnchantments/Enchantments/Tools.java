@@ -17,8 +17,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Tools implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	private HashMap<Player, HashMap<String, Boolean>> effect = new HashMap<Player, HashMap<String, Boolean>>();
 	int time = 99999999*20;
 	@EventHandler
@@ -28,26 +32,38 @@ public class Tools implements Listener{
 		HashMap<String, Boolean> Trigger = new HashMap<String, Boolean>();
 		Trigger.put("Haste", false);
 		Trigger.put("Oxygenate", false);
-		if(item!=null){
-			if(item.hasItemMeta()){
-				if(item.getItemMeta().hasLore()){
-					for(String lore : item.getItemMeta().getLore()){
-						if(lore.contains(Api.getEnchName("Haste"))){
-							if(Api.isEnchantmentEnabled("Haste")){
-								int power = Api.getPower(lore, Api.getEnchName("Haste"));
-								Trigger.put("Haste", true);
-								player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power-1));
-							}
-						}
-						if(lore.contains(Api.getEnchName("Oxygenate"))){
-							if(Api.isEnchantmentEnabled("Oxygenate")){
-								Trigger.put("Oxygenate", true);
-								player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
-							}
-						}
+		Boolean Haste = false;
+		Boolean Ox = false;
+		if(CE.hasEnchantments(item)){
+			if(CE.hasEnchantment(item, CEnchantments.HASTE)){
+				if(CEnchantments.HASTE.isEnabled()){
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()){
+						int power = CE.getPower(item, CEnchantments.HASTE);
+						Trigger.put("Haste", true);
+						player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power-1));
+						Haste=true;
 					}
 				}
 			}
+			if(CE.hasEnchantment(item, CEnchantments.OXYGENATE)){
+				if(CEnchantments.OXYGENATE.isEnabled()){
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()){
+						Trigger.put("Oxygenate", true);
+						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
+						Ox=true;
+					}
+				}
+			}
+		}
+		if(!Ox){
+			Trigger.put("Oxygenate", false);
+		}
+		if(!Haste){
+			Trigger.put("Haste", false);
 		}
 		effect.put(player, Trigger);
 		if(effect.containsKey(player)){
@@ -57,6 +73,7 @@ public class Tools implements Listener{
 			if(!effect.get(player).get("Oxygenate")){
 				player.removePotionEffect(PotionEffectType.WATER_BREATHING);
 			}
+			effect.remove(player);
 		}
 	}
 	@EventHandler
@@ -66,35 +83,35 @@ public class Tools implements Listener{
 		Player player = e.getPlayer();
 		if(!Api.canBreakBlock(player, block))return;
 		if(player.getGameMode()!=GameMode.CREATIVE){
-			if(Api.getItemInHand(player)!=null){
-				ItemStack item = Api.getItemInHand(player);
-				if(item.hasItemMeta()){
-					if(item.getItemMeta().hasLore()){
-						for(String lore : item.getItemMeta().getLore()){
-							if(lore.contains(Api.getEnchName("Telepathy"))){
-								if(Api.isEnchantmentEnabled("Telepathy")){
-									Boolean T = false;
-									if(item.getItemMeta().hasEnchants()){
-										if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
-											if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners")!=null){
-												if(block.getType()==Material.MOB_SPAWNER){
-													T=true;
-												}
-											}
-										}
-									}
-									if(!T){
-										e.setCancelled(true);
-										for(ItemStack i : block.getDrops()){
-											if(!Api.isInvFull(player)){
-												player.getInventory().addItem(i);
-											}else{
-												block.getWorld().dropItemNaturally(block.getLocation(), i);
-											}
-										}
-										block.setType(Material.AIR);
+			ItemStack item = Api.getItemInHand(player);
+			if(CE.hasEnchantments(item)){
+				if(CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
+					if(CEnchantments.TELEPATHY.isEnabled()){
+						Boolean T = false;
+						if(item.getItemMeta().hasEnchants()){
+							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
+								if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners")!=null){
+									if(block.getType()==Material.MOB_SPAWNER){
+										T=true;
 									}
 								}
+							}
+						}
+						if(!T){
+							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
+							Bukkit.getPluginManager().callEvent(event);
+							if(!event.isCancelled()){
+								e.setCancelled(true);
+								for(ItemStack i : block.getDrops()){
+									if(!Api.isInvFull(player)){
+										player.getInventory().addItem(i);
+									}else{
+										block.getWorld().dropItemNaturally(block.getLocation(), i);
+									}
+								}
+								block.setType(Material.AIR);
+								int dur = item.getDurability()+1;
+								item.setDurability((short)dur);
 							}
 						}
 					}

@@ -4,16 +4,20 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 
-
 public enum EnchantmentType{
 	ARMOR("Armor", isArmor()), AXE("Axe", isAxe()), BOW("Bow", isBow()), BOOTS("Boots", isBoots()),
-	HELMET("Helmet", isHelmet()), SWORD("Sword", isSword()), WEAPON("Weapon", isWeapon());
+	HELMET("Helmet", isHelmet()), SWORD("Sword", isSword()), WEAPON("Weapon", isWeapon()),
+	PICKAXE("PickAxe", isPickAxe()), TOOL("Tool", isTool()), ALL("All", isAll());
+	
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	String name;
 	ArrayList<Material> items;
+	
 	private EnchantmentType(String name, ArrayList<Material> items){
 		this.name=name;
 		this.items=items;
 	}
+	
 	/**
 	 * 
 	 * @return The Enchantment Type Name.
@@ -21,6 +25,7 @@ public enum EnchantmentType{
 	public String getName(){
 		return name;
 	}
+	
 	/**
 	 * 
 	 * @return List of all items in the Type.
@@ -28,19 +33,21 @@ public enum EnchantmentType{
 	public ArrayList<Material> getItems(){
 		return items;
 	}
+	
 	/**
 	 * 
 	 * @return List of all Enchantments in the Type.
 	 */
-	public ArrayList<Enchantment> getEnchantmnets(){
-		ArrayList<Enchantment> en = new ArrayList<Enchantment>();
-		for(Enchantment e : Enchantment.getEnchantments()){
+	public ArrayList<CEnchantments> getEnchantmnets(){
+		ArrayList<CEnchantments> en = new ArrayList<CEnchantments>();
+		for(CEnchantments e : CE.getEnchantments()){
 			if(e.getType()==getFromName(name)){
 				en.add(e);
 			}
 		}
 		return en;
 	}
+	
 	/**
 	 * 
 	 * @return List of all Types.
@@ -49,6 +56,7 @@ public enum EnchantmentType{
 		EnchantmentType[] enchs=EnchantmentType.values();
 		return enchs;
 	}
+	
 	/**
 	 * 
 	 * @param name Name of the Enchantment Type.
@@ -62,6 +70,7 @@ public enum EnchantmentType{
 		}
 		return null;
 	}
+	
 	static ArrayList<Material> isArmor(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_HELMET);
@@ -86,6 +95,7 @@ public enum EnchantmentType{
 		ma.add(Material.DIAMOND_BOOTS);
 		return ma;
 	}
+	
 	static ArrayList<Material> isHelmet(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_HELMET);
@@ -95,6 +105,7 @@ public enum EnchantmentType{
 		ma.add(Material.DIAMOND_HELMET);
 		return ma;
 	}
+	
 	static ArrayList<Material> isBoots(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_BOOTS);
@@ -104,6 +115,7 @@ public enum EnchantmentType{
 		ma.add(Material.DIAMOND_BOOTS);
 		return ma;
 	}
+	
 	static ArrayList<Material> isAxe(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_AXE);
@@ -112,11 +124,13 @@ public enum EnchantmentType{
 		ma.add(Material.DIAMOND_AXE);
 		return ma;
 	}
+	
 	static ArrayList<Material> isBow(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.BOW);
 		return ma;
 	}
+	
 	static ArrayList<Material> isSword(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_SWORD);
@@ -125,6 +139,7 @@ public enum EnchantmentType{
 		ma.add(Material.DIAMOND_SWORD);
 		return ma;
 	}
+	
 	static ArrayList<Material> isWeapon(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_SWORD);
@@ -135,6 +150,50 @@ public enum EnchantmentType{
 		ma.add(Material.STONE_AXE);
 		ma.add(Material.IRON_AXE);
 		ma.add(Material.DIAMOND_AXE);
+		return ma;
+	}
+	
+	static ArrayList<Material> isPickAxe(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.add(Material.WOOD_PICKAXE);
+		ma.add(Material.STONE_PICKAXE);
+		ma.add(Material.GOLD_PICKAXE);
+		ma.add(Material.IRON_PICKAXE);
+		ma.add(Material.DIAMOND_PICKAXE);
+		return ma;
+	}
+	
+	static ArrayList<Material> isTool(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.add(Material.WOOD_PICKAXE);
+		ma.add(Material.STONE_PICKAXE);
+		ma.add(Material.GOLD_PICKAXE);
+		ma.add(Material.IRON_PICKAXE);
+		ma.add(Material.DIAMOND_PICKAXE);
+		ma.add(Material.WOOD_AXE);
+		ma.add(Material.STONE_AXE);
+		ma.add(Material.GOLD_AXE);
+		ma.add(Material.IRON_AXE);
+		ma.add(Material.DIAMOND_AXE);
+		ma.add(Material.WOOD_SPADE);
+		ma.add(Material.STONE_SPADE);
+		ma.add(Material.GOLD_SPADE);
+		ma.add(Material.IRON_SPADE);
+		ma.add(Material.DIAMOND_SPADE);
+		ma.add(Material.WOOD_HOE);
+		ma.add(Material.STONE_HOE);
+		ma.add(Material.GOLD_HOE);
+		ma.add(Material.IRON_HOE);
+		ma.add(Material.DIAMOND_HOE);
+		return ma;
+	}
+	
+	static ArrayList<Material> isAll(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.addAll(isArmor());
+		ma.addAll(isTool());
+		ma.addAll(isBow());
+		ma.addAll(isWeapon());
 		return ma;
 	}
 }

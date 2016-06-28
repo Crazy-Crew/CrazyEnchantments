@@ -17,8 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.ECControl;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class ScrollControl implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onBlackScroll(InventoryClickEvent e){
@@ -64,7 +66,7 @@ public class ScrollControl implements Listener{
 									boolean i = false;
 									for(String l : item.getItemMeta().getLore()){
 										for(String en : ECControl.allEnchantments().keySet()){
-											if(l.contains(Api.getEnchName(en))){
+											if(l.contains(CE.getFromName(en).getCustomName())){
 												enchants.add(l);
 												lvl.put(l, l.substring(l.lastIndexOf(" ")+1));
 												enchs.put(l, en);

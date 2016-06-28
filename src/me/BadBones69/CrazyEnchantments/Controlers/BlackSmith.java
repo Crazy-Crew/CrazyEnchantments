@@ -18,8 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.ECControl;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class BlackSmith implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static void openBlackSmith(Player player){
 		Inventory inv = Bukkit.createInventory(null, 27, Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")));
 		List<Integer> other = new ArrayList<Integer>();
@@ -60,7 +62,7 @@ public class BlackSmith implements Listener{
 								if(!item.getItemMeta().hasDisplayName())return;
 								boolean T=false;
 								for(String en : ECControl.allEnchantments().keySet()){
-									if(item.getItemMeta().getDisplayName().contains(Api.getEnchName(en))){
+									if(item.getItemMeta().getDisplayName().contains(CE.getFromName(en).getCustomName())){
 										T=true;
 									}
 								}
@@ -207,9 +209,9 @@ public class BlackSmith implements Listener{
 		if(master.getType()==Material.BOOK&&sub.getType()==Material.BOOK){
 			if(Api.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Api.removeColor(sub.getItemMeta().getDisplayName()))){
 				for(String en : ECControl.allEnchantments().keySet()){
-					String ench = Api.getEnchName(en);
+					String ench = CE.getFromName(en).getCustomName();
 					if(master.getItemMeta().getDisplayName().contains(ench)){
-						int power = Api.getPower(master.getItemMeta().getDisplayName(), ench);
+						int power = CE.getPower(master, CE.getFromName(en));
 						int max = 1;
 						if(Main.settings.getEnchs().contains("Enchantments."+en)){
 							max=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
@@ -217,7 +219,7 @@ public class BlackSmith implements Listener{
 							max=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
 						}
 						if(power+1<=max){
-							item=Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, Api.getEnchBookColor(en)+ench+" "+Api.getPower(power+1), master.getItemMeta().getLore()));
+							item=Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, CE.getBookColor(en)+ench+" "+Api.getPower(power+1), master.getItemMeta().getLore()));
 						}
 					}
 				}
@@ -229,7 +231,7 @@ public class BlackSmith implements Listener{
 			List<String> m = new ArrayList<String>();//Master's Enchantments
 			List<String> s = new ArrayList<String>();//Sub's Enchantments
 			for(String en : ECControl.allEnchantments().keySet()){
-				String ench = Api.getEnchName(en);
+				String ench = CE.getFromName(en).getCustomName();
 				for(String lore : master.getItemMeta().getLore()){
 					if(lore.contains(ench)){
 						m.add(lore);
@@ -255,9 +257,9 @@ public class BlackSmith implements Listener{
 			}
 			for(String l : d){
 				for(String en : ECControl.allEnchantments().keySet()){
-					String ench = Api.getEnchName(en);
+					String ench = CE.getFromName(en).getCustomName();
 					if(l.contains(ench)){
-						int power = Api.getPower(l, ench);
+						int power = CE.getPower(item, CE.getFromName(en));
 						int max = 1;
 						if(Main.settings.getEnchs().contains("Enchantments."+en)){
 							max=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
@@ -265,7 +267,7 @@ public class BlackSmith implements Listener{
 							max=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
 						}
 						if(power+1<=max){
-							item=Api.replaceLore(item, l, Api.getEnchColor(en)+ench+" "+Api.getPower(power+1));
+							item=Api.replaceLore(item, l,CE.getEnchantmentColor(en)+ench+" "+Api.getPower(power+1));
 						}
 					}
 				}
@@ -273,7 +275,7 @@ public class BlackSmith implements Listener{
 			for(String lore : n){
 				boolean T=false;
 				for(String en : ECControl.allEnchantments().keySet()){
-					String ench = Api.getEnchName(en);
+					String ench = CE.getFromName(en).getCustomName();
 					if(lore.contains(ench)){
 						for(String l : item.getItemMeta().getLore()){
 							if(l.contains(ench))T=true;
@@ -297,9 +299,9 @@ public class BlackSmith implements Listener{
 		if(master.getType()==Material.BOOK&&sub.getType()==Material.BOOK){
 			if(Api.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Api.removeColor(sub.getItemMeta().getDisplayName()))){
 				for(String en : ECControl.allEnchantments().keySet()){
-					String ench = Api.getEnchName(en);
+					String ench = CE.getFromName(en).getCustomName();
 					if(master.getItemMeta().getDisplayName().contains(ench)){
-						int power = Api.getPower(master.getItemMeta().getDisplayName(), ench);
+						int power = CE.getPower(master, CE.getFromName(en));
 						int max = 1;
 						if(Main.settings.getEnchs().contains("Enchantments."+en)){
 							max=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
@@ -320,7 +322,7 @@ public class BlackSmith implements Listener{
 			List<String> m = new ArrayList<String>();//Master's Enchantments
 			List<String> s = new ArrayList<String>();//Sub's Enchantments
 			for(String en : ECControl.allEnchantments().keySet()){
-				String ench = Api.getEnchName(en);
+				String ench = CE.getFromName(en).getCustomName();
 				for(String lore : master.getItemMeta().getLore()){
 					if(lore.contains(ench)){
 						m.add(lore);
@@ -346,9 +348,9 @@ public class BlackSmith implements Listener{
 			}
 			for(String l : d){
 				for(String en : ECControl.allEnchantments().keySet()){
-					String ench = Api.getEnchName(en);
+					String ench = CE.getFromName(en).getCustomName();
 					if(l.contains(ench)){
-						int power = Api.getPower(l, ench);
+						int power = CE.getPower(item, CE.getFromName(en));
 						int max = 1;
 						if(Main.settings.getEnchs().contains("Enchantments."+en)){
 							max=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
@@ -356,7 +358,7 @@ public class BlackSmith implements Listener{
 							max=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
 						}
 						if(power+1<=max){
-							item=Api.replaceLore(item, l, Api.getEnchColor(en)+ench+" "+Api.getPower(power+1));
+							item=Api.replaceLore(item, l, CE.getEnchantmentColor(en)+ench+" "+Api.getPower(power+1));
 							total+=Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}
 					}
@@ -365,7 +367,7 @@ public class BlackSmith implements Listener{
 			for(String lore : n){
 				boolean T=false;
 				for(String en : ECControl.allEnchantments().keySet()){
-					String ench = Api.getEnchName(en);
+					String ench = CE.getFromName(en).getCustomName();
 					if(lore.contains(ench)){
 						for(String l : item.getItemMeta().getLore()){
 							if(l.contains(ench))T=true;
@@ -389,7 +391,7 @@ public class BlackSmith implements Listener{
 			if(item.getItemMeta().hasLore()){
 				for(String lore : item.getItemMeta().getLore()){
 					for(String en : ECControl.allEnchantments().keySet()){
-						if(lore.contains(Api.getEnchName(en))){
+						if(lore.contains(CE.getFromName(en).getCustomName())){
 							return true;
 						}
 					}

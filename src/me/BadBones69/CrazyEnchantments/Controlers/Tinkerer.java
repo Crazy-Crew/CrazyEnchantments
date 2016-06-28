@@ -22,8 +22,10 @@ import org.bukkit.inventory.ItemStack;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.ECControl;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class Tinkerer implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static void openTinker(Player player){
 		Inventory inv = Bukkit.createInventory(null, 54, Api.color(Main.settings.getTinker().getString("Settings.GUIName")));
 		inv.setItem(0, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, Main.settings.getTinker().getString("Settings.TradeButton")));
@@ -112,7 +114,7 @@ public class Tinkerer implements Listener{
 								ItemStack item = e.getCurrentItem();
 								if(item.getType()==Material.BOOK){// Adding a book
 									for(String en : ECControl.allEnchantments().keySet()){
-										if(item.getItemMeta().getDisplayName().contains(Api.color(Api.getEnchBookColor(en)+Api.getEnchName(en)))){
+										if(item.getItemMeta().getDisplayName().contains(Api.color(CE.getBookColor(en)+CE.getFromName(en).getCustomName()))){
 											if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
 												e.setCurrentItem(new ItemStack(Material.AIR));
 												player.getInventory().addItem(item);
@@ -248,7 +250,7 @@ public class Tinkerer implements Listener{
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
 						for(String en : ECControl.allEnchantments().keySet()){
-							if(lore.contains(Api.getEnchName(en))){
+							if(lore.contains(CE.getFromName(en).getCustomName())){
 								total+=Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+en+".Items");
 							}
 						}

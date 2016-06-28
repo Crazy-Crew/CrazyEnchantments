@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,8 +21,12 @@ import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.ParticleEffect;
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Boots implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	@SuppressWarnings("static-access")
 	public Boots(Plugin plugin){
@@ -36,60 +39,64 @@ public class Boots implements Listener{
 		Player player = e.getPlayer();
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
-		if(e.getNewArmorPiece() != null && e.getNewArmorPiece().hasItemMeta() && e.getNewArmorPiece().getType() != Material.AIR){
-			if(NewItem.getItemMeta().hasLore()){
-				for(String lore : NewItem.getItemMeta().getLore()){
-					if(lore.contains(Api.getEnchName("AntiGravity"))){
-						if(Api.isEnchantmentEnabled("AntiGravity")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, 1+Api.getPower(lore, Api.getEnchName("AntiGravity"))));
-						}
+		if(CE.hasEnchantments(NewItem)){
+			if(CE.hasEnchantment(NewItem, CEnchantments.ANTIGRAVITY)){
+				if(CEnchantments.ANTIGRAVITY.isEnabled()){
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ANTIGRAVITY, NewItem);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()){
+						player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, 1+CE.getPower(NewItem, CEnchantments.ANTIGRAVITY)));
 					}
-					if(lore.contains(Api.getEnchName("Gears"))){
-						if(Api.isEnchantmentEnabled("Gears")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, time, Api.getPower(lore, Api.getEnchName("Gears"))-1));
-						}
+				}
+			}
+			if(CE.hasEnchantment(NewItem, CEnchantments.GEARS)){
+				if(CEnchantments.GEARS.isEnabled()){
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GEARS, NewItem);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()){
+						player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, time, CE.getPower(NewItem, CEnchantments.GEARS)-1));
 					}
-					if(lore.contains(Api.getEnchName("Springs"))){
-						if(Api.isEnchantmentEnabled("Springs")){
-							player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, Api.getPower(lore, Api.getEnchName("Springs"))-1));
-						}
+				}
+			}
+			if(CE.hasEnchantment(NewItem, CEnchantments.SPRINGS)){
+				if(CEnchantments.SPRINGS.isEnabled()){
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SPRINGS, NewItem);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()){
+						player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, CE.getPower(NewItem, CEnchantments.SPRINGS)-1));
 					}
-					if(lore.contains(Api.getEnchName("Wings"))){
-						if(Api.isEnchantmentEnabled("Wings")){
-							if(Api.inTerritory(player)){
-								if(player.getGameMode()!=GameMode.CREATIVE){
-									player.setAllowFlight(true);
-								}
-							}
+				}
+			}
+			if(CE.hasEnchantment(NewItem, CEnchantments.WINGS)){
+				if(CEnchantments.WINGS.isEnabled()){
+					if(Api.inTerritory(player)){
+						if(player.getGameMode()!=GameMode.CREATIVE){
+							player.setAllowFlight(true);
 						}
 					}
 				}
 			}
 		}
-		if(e.getOldArmorPiece() != null && e.getOldArmorPiece().hasItemMeta() && e.getOldArmorPiece().getType() != Material.AIR){
-			if(OldItem.getItemMeta().hasLore()){
-				for(String lore : OldItem.getItemMeta().getLore()){
-					if(lore.contains(Api.getEnchName("AntiGravity"))){
-						if(Api.isEnchantmentEnabled("AntiGravity")){
-							player.removePotionEffect(PotionEffectType.JUMP);
-						}
-					}
-					if(lore.contains(Api.getEnchName("Gears"))){
-						if(Api.isEnchantmentEnabled("Gears")){
-							player.removePotionEffect(PotionEffectType.SPEED);
-						}
-					}
-					if(lore.contains(Api.getEnchName("Springs"))){
-						if(Api.isEnchantmentEnabled("Springs")){
-							player.removePotionEffect(PotionEffectType.JUMP);
-						}
-					}
-					if(lore.contains(Api.getEnchName("Wings"))){
-						if(Api.isEnchantmentEnabled("Wings")){
-							if(player.getGameMode()!=GameMode.CREATIVE){
-								player.setAllowFlight(false);
-							}
-						}
+		if(CE.hasEnchantments(OldItem)){
+			if(CE.hasEnchantment(OldItem, CEnchantments.ANTIGRAVITY)){
+				if(CEnchantments.ANTIGRAVITY.isEnabled()){
+					player.removePotionEffect(PotionEffectType.JUMP);
+				}
+			}
+			if(CE.hasEnchantment(OldItem, CEnchantments.GEARS)){
+				if(CEnchantments.GEARS.isEnabled()){
+					player.removePotionEffect(PotionEffectType.SPEED);
+				}
+			}
+			if(CE.hasEnchantment(OldItem, CEnchantments.SPRINGS)){
+				if(CEnchantments.SPRINGS.isEnabled()){
+					player.removePotionEffect(PotionEffectType.JUMP);
+				}
+			}
+			if(CE.hasEnchantment(OldItem, CEnchantments.WINGS)){
+				if(CEnchantments.WINGS.isEnabled()){
+					if(player.getGameMode()!=GameMode.CREATIVE){
+						player.setAllowFlight(false);
 					}
 				}
 			}
@@ -100,21 +107,15 @@ public class Boots implements Listener{
 		Player player = e.getPlayer();
 		if(Api.inTerritory(player)){
 			ItemStack boots = player.getEquipment().getBoots();
-			if(boots!=null){
-				if(boots.hasItemMeta()){
-					if(boots.getItemMeta().hasLore()){
-						for(String lore : boots.getItemMeta().getLore()){
-							if(lore.contains(Api.getEnchName("Wings"))){
-								if(Api.isEnchantmentEnabled("Wings")){
-									if(e.isFlying()){
-										e.setCancelled(true);
-										player.setFlying(true);
-										Flying.add(player);
-									}else{
-										Flying.remove(player);
-									}
-								}
-							}
+			if(CE.hasEnchantments(boots)){
+				if(CE.hasEnchantment(boots, CEnchantments.WINGS)){
+					if(CEnchantments.WINGS.isEnabled()){
+						if(e.isFlying()){
+							e.setCancelled(true);
+							player.setFlying(true);
+							Flying.add(player);
+						}else{
+							Flying.remove(player);
 						}
 					}
 				}
@@ -125,30 +126,24 @@ public class Boots implements Listener{
 	public void onMove(PlayerMoveEvent e){
 		Player player = e.getPlayer();
 		ItemStack boots = player.getEquipment().getBoots();
-		if(boots!=null){
-			if(boots.hasItemMeta()){
-				if(boots.getItemMeta().hasLore()){
-					for(String lore : boots.getItemMeta().getLore()){
-						if(lore.contains(Api.getEnchName("Wings"))){
-							if(Api.isEnchantmentEnabled("Wings")){
-								if(!Api.inTerritory(player)){
-									if(player.isFlying()){
-										if(player.getGameMode()!=GameMode.CREATIVE){
-											player.setFlying(false);
-											player.setAllowFlight(false);
-											Flying.remove(player);
-										}
-									}
-								}else{
-									if(!player.getAllowFlight()){
-										player.setAllowFlight(true);
-									}
-								}
-								if(player.isFlying()){
-									Flying.add(player);
-								}
+		if(CE.hasEnchantments(boots)){
+			if(CE.hasEnchantment(boots, CEnchantments.WINGS)){
+				if(CEnchantments.WINGS.isEnabled()){
+					if(!Api.inTerritory(player)){
+						if(player.isFlying()){
+							if(player.getGameMode()!=GameMode.CREATIVE){
+								player.setFlying(false);
+								player.setAllowFlight(false);
+								Flying.remove(player);
 							}
 						}
+					}else{
+						if(!player.getAllowFlight()){
+							player.setAllowFlight(true);
+						}
+					}
+					if(player.isFlying()){
+						Flying.add(player);
 					}
 				}
 			}
@@ -158,18 +153,12 @@ public class Boots implements Listener{
 	public void onJoin(PlayerJoinEvent e){
 		Player player = e.getPlayer();
 		ItemStack boots = player.getEquipment().getBoots();
-		if(boots!=null){
-			if(boots.hasItemMeta()){
-				if(boots.getItemMeta().hasLore()){
-					for(String lore : boots.getItemMeta().getLore()){
-						if(lore.contains(Api.getEnchName("Wings"))){
-							if(Api.isEnchantmentEnabled("Wings")){
-								if(Api.inTerritory(player)){
-									player.setAllowFlight(true);
-									Flying.add(player);
-								}
-							}
-						}
+		if(CE.hasEnchantments(boots)){
+			if(CE.hasEnchantment(boots, CEnchantments.WINGS)){
+				if(CEnchantments.WINGS.isEnabled()){
+					if(Api.inTerritory(player)){
+						player.setAllowFlight(true);
+						Flying.add(player);
 					}
 				}
 			}
@@ -179,18 +168,12 @@ public class Boots implements Listener{
 	public void onLeave(PlayerQuitEvent e){
 		Player player = e.getPlayer();
 		ItemStack boots = player.getEquipment().getBoots();
-		if(boots!=null){
-			if(boots.hasItemMeta()){
-				if(boots.getItemMeta().hasLore()){
-					for(String lore : boots.getItemMeta().getLore()){
-						if(lore.contains(Api.getEnchName("Wings"))){
-							if(Api.isEnchantmentEnabled("Wings")){
-								player.setFlying(false);
-								player.setAllowFlight(false);
-								Flying.remove(player);
-							}
-						}
-					}
+		if(CE.hasEnchantments(boots)){
+			if(CE.hasEnchantment(boots, CEnchantments.WINGS)){
+				if(CEnchantments.WINGS.isEnabled()){
+					player.setFlying(false);
+					player.setAllowFlight(false);
+					Flying.remove(player);
 				}
 			}
 		}
@@ -209,8 +192,8 @@ public class Boots implements Listener{
 									if(boots.hasItemMeta()){
 										if(boots.getItemMeta().hasLore()){
 											for(String lore : boots.getItemMeta().getLore()){
-												if(lore.contains(Api.getEnchName("Wings"))){
-													if(Api.isEnchantmentEnabled("Wings")){
+												if(lore.contains(CEnchantments.WINGS.getCustomName())){
+													if(CEnchantments.WINGS.isEnabled()){
 														ParticleEffect.CLOUD.display((float) .25, (float) 0, (float) .25, 0, 10, l, 100);
 													}
 												}

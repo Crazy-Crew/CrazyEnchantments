@@ -139,7 +139,6 @@ Settings:
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: True #Turn on an off the Max amount of enchantments
     IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
-    MaxAmountOfEnchantments: 5 #The Max amount of enchantments an item can have(Will not effect Vanilla Enchantments)
   SignOptions: #Options for the Signs.
     ProtectionCrystalStyle: 
       Cost: 1000 #How much to buy it
@@ -149,6 +148,7 @@ Settings:
       Line2: '&b&lShop:'
       Line3: '&5&lProtection &b&lCrystal'
       Line4: '&c&lCost: &a&l$1000'
+      Buy-Message: '&7You have just bought a &5&lProtection &b&lCrystal.' #Message when buying an item.
     SuccessDustStyle: 
       Cost: 50 #How much to buy a Magical Dust
       Money/XP: Money #Use money or xp
@@ -157,6 +157,7 @@ Settings:
       Line2: '&b&lShop:'
       Line3: '&e&lMagical Angel Dust'
       Line4: '&c&lCost: &a&l$50'
+      Buy-Message: '&7You have just bought a &aMagical Angel Dust&7.'
     DestroyDustStyle: 
       Cost: 50 #How much to buy a Magical Dust
       Money/XP: Money #Use money or xp
@@ -165,11 +166,13 @@ Settings:
       Line2: '&b&lShop:'
       Line3: '&e&lMagical Fixing Dust'
       Line4: '&c&lCost: &a&l$50'
+      Buy-Message: '&7You have just bought a &eMagical Fixing Dust&7.'
     CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
       Line1: '&b&lCrazy Enchant' #Line 1 of the sign
       Line2: '&b&lShop:' #Line 2 of the sign
       Line3: '&2&l%Category%' #Line 3 of the sign
       Line4: '&c&lCost: &6&l%XP%XP' #Line 4 of the sign
+      Buy-Message: '&7You have just bought an &8Custom Enchantment Book&7.'
     BlackScrollStyle: 
       Cost: 50 #How much to buy a black scroll
       Money/XP: Money #Use money or xp
@@ -178,6 +181,7 @@ Settings:
       Line2: '&b&lShop:'
       Line3: '&4&lBlack &8&lScrolls'
       Line4: '&c&lCost: &a&l$50'
+      Buy-Message: '&7You have just bought a &8&l&nBlack Scroll&7.'
     WhiteScrollStyle:
       Cost: 50
       Money/XP: Money
@@ -186,6 +190,7 @@ Settings:
       Line2: '&b&lShop:'
       Line3: '&f&lWhite &b&lScrolls'
       Line4: '&c&lCost: &a&l$50'
+      Buy-Message: '&7You have just bought a &e&lWhite Scroll&7.'
   GUICustomization: #This allows you to customize unclickable items into you GUI.
     - 'Slot:1, Item:160:0, Name: , Lore:&7Border'
     - 'Slot:2, Item:160:0, Name: , Lore:&7Border'

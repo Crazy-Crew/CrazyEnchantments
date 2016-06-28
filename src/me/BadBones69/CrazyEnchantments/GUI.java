@@ -14,13 +14,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
 
 public class GUI implements Listener{
+	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	static void openGUI(Player player){
 		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Api.getInvName());
 		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
@@ -227,12 +231,12 @@ public class GUI implements Listener{
 							}
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
-							if(!Api.hasPermission(player, "BlackSmith"))return;
+							if(!Api.hasPermission(player, "BlackSmith", true))return;
 							BlackSmith.openBlackSmith(player);
 							return;
 						}
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
-							if(!Api.hasPermission(player, "Tinker"))return;
+							if(!Api.hasPermission(player, "Tinker", true))return;
 							Tinkerer.openTinker(player);
 							return;
 						}
@@ -446,25 +450,36 @@ public class GUI implements Listener{
 				if(c.hasItemMeta()){
 					if(c.getItemMeta().hasDisplayName()){
 						String name = c.getItemMeta().getDisplayName();
-						for(String en : ECControl.allEnchantments().keySet()){
-							if(name.contains(Api.color(Api.getEnchBookColor(en)+Api.getEnchName(en)))){
+						for(CEnchantments en : CE.getEnchantments()){
+							if(name.contains(Api.color(en.getBookColor()+en.getCustomName()))){
 								if(c.getType()!=Material.BOOK)return;
-								for(Material m : ECControl.allEnchantments().get(en)){
+								for(Material m : ECControl.allEnchantments().get(en.getName())){
 									if(item.getType() == m){
 										if(c.getAmount() == 1){
 											boolean success = Api.successChance(c);
 											boolean destroy = Api.destroyChance(c);
 											if(item.getItemMeta().hasLore()){
 												for(String l:item.getItemMeta().getLore()){
-													if(l.contains(Api.getEnchName(en))){
+													if(l.contains(en.getCustomName())){
 														return;
 													}
 												}
 											}
-											if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-												if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-													int limit = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
-													int total = Api.getEnchAmount(item);
+											if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+												int limit = 0;
+												int total = Api.getEnchAmount(item);
+												for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
+													String perm = Permission.getPermission();
+													if(perm.startsWith("crazyenchantments.limit.")){
+														perm=perm.replace("crazyenchantments.limit.", "");
+														if(Api.isInt(perm)){
+															if(limit<Integer.parseInt(perm)){
+																limit = Integer.parseInt(perm);
+															}
+														}
+													}
+												}
+												if(!player.hasPermission("crazyenchantments.bypass")){
 													if(total>=limit){
 														player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
 														return;
@@ -482,11 +497,12 @@ public class GUI implements Listener{
 												if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
 													color=Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
 												}
-												String enchantment = Api.getEnchName(en);
+												String enchantment = en.getCustomName();
 												String lvl = breakdown[1];
 												String full = Api.color(color+enchantment+" "+lvl);
 												player.setItemOnCursor(new ItemStack(Material.AIR));
 												e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
+												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Worked")));
 												try{
 													if(Api.getVersion()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
@@ -555,149 +571,33 @@ public class GUI implements Listener{
 								openInfo((Player)player);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name")))){
-								int size=getInfo("helmet").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("helmet")){
-									in.addItem(i);
+							List<String> types = new ArrayList<String>();
+							types.add("Helmets");
+							types.add("Boots");
+							types.add("Armor");
+							types.add("Sword");
+							types.add("Axe");
+							types.add("Bow");
+							types.add("Pickaxe");
+							types.add("Tool");
+							types.add("Misc");
+							for(String type : types){
+								if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info."+type+".Name")))){
+									int size=getInfo(type).size()+1;
+									int slots=9;
+									for(;size>9;size-=9)slots+=9;
+									Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
+									for(ItemStack i : getInfo(type)){
+										in.addItem(i);
+									}
+									if(Api.getVersion()<181){
+										in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+									}else{
+										in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+									}
+									player.openInventory(in);
+									return;
 								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Boots.Name")))){
-								int size=getInfo("boots").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("boots")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Armor.Name")))){
-								int size=getInfo("armor").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("armor")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Sword.Name")))){
-								int size=getInfo("sword").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("sword")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Axe.Name")))){
-								int size=getInfo("axe").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("axe")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Bow.Name")))){
-								int size=getInfo("bow").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("bow")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Pickaxe.Name")))){
-								int size=getInfo("pick").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("pick")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Tool.Name")))){
-								int size=getInfo("tools").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("tools")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
-							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Misc.Name")))){
-								int size=getInfo("misc").size();
-								int slots=9;
-								for(;size>9;size-=9)slots+=9;
-								Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
-								for(ItemStack i : getInfo("misc")){
-									in.addItem(i);
-								}
-								if(Api.getVersion()<181){
-									in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}else{
-									in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-								}
-								player.openInventory(in);
-								return;
 							}
 							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lOther Info"))){
 								Inventory in = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
@@ -720,15 +620,19 @@ public class GUI implements Listener{
 										1, Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust")));
 								if(Api.getVersion()<181){
-									in.setItem(0, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
-									in.setItem(8, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-									in.setItem(9, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
-									in.setItem(17, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+									ItemStack left = Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left"));
+									ItemStack right = Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right"));
+									in.setItem(0, left);
+									in.setItem(8, right);
+									in.setItem(9, left);
+									in.setItem(17, right);
 								}else{
-									in.setItem(0, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
-									in.setItem(8, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-									in.setItem(9, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")));
-									in.setItem(17, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+									ItemStack left = Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left"));
+									ItemStack right = Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right"));
+									in.setItem(0, left);
+									in.setItem(8, right);
+									in.setItem(9, left);
+									in.setItem(17, right);
 								}
 								player.openInventory(in);
 								return;
@@ -861,12 +765,12 @@ public class GUI implements Listener{
 		}
 		if(type.equalsIgnoreCase("Armor"))return armor;
 		if(type.equalsIgnoreCase("Sword"))return swords;
-		if(type.equalsIgnoreCase("Helmet"))return helmets;
+		if(type.equalsIgnoreCase("Helmets"))return helmets;
 		if(type.equalsIgnoreCase("Boots"))return boots;
 		if(type.equalsIgnoreCase("Bow"))return bows;
 		if(type.equalsIgnoreCase("Axe"))return axes;
-		if(type.equalsIgnoreCase("Pick"))return picks;
-		if(type.equalsIgnoreCase("Tools"))return tools;
+		if(type.equalsIgnoreCase("Pickaxe"))return picks;
+		if(type.equalsIgnoreCase("Tool"))return tools;
 		if(type.equalsIgnoreCase("Misc"))return misc;
 		return null;
 	}

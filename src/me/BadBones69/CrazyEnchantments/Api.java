@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_10_R1;
@@ -35,6 +36,7 @@ import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R2;
 import me.BadBones69.CrazyEnchantments.MultiSupport.WorldGuard;
 
 public class Api{
+	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	@SuppressWarnings("static-access")
 	public Api(Plugin plugin){
@@ -82,6 +84,9 @@ public class Api{
     }
 	public static ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle){
+			if(getVersion()==1101){
+				return NMS_v1_10_R1.addGlow(item);
+			}
 			if(getVersion()==192){
 				return NMS_v1_9_R2.addGlow(item);
 			}
@@ -124,22 +129,6 @@ public class Api{
 			player.setItemInHand(item);
 		}
 	}
-	public static int getPower(String line, String ench){
-		line = line.replace(ench+" ", "");
-		line = removeColor(line);
-		if(Api.isInt(line))return Integer.parseInt(line);
-		if(line.equalsIgnoreCase("I"))return 1;
-		if(line.equalsIgnoreCase("II"))return 2;
-		if(line.equalsIgnoreCase("III"))return 3;
-		if(line.equalsIgnoreCase("IV"))return 4;
-		if(line.equalsIgnoreCase("V"))return 5;
-		if(line.equalsIgnoreCase("VI"))return 6;
-		if(line.equalsIgnoreCase("VII"))return 7;
-		if(line.equalsIgnoreCase("VIII"))return 8;
-		if(line.equalsIgnoreCase("IX"))return 9;
-		if(line.equalsIgnoreCase("X"))return 10;
-		return 1;
-	}
 	public static String getPower(Integer i){
 		if(i==0)return "I";
 		if(i==1)return "I";
@@ -149,7 +138,7 @@ public class Api{
 		if(i==5)return "V";
 		if(i==6)return "VI";
 		if(i==7)return "VII";
-		if(i==8)return "VII";
+		if(i==8)return "VIII";
 		if(i==9)return "IX";
 		if(i==10)return "X";
 		return i+"";
@@ -185,24 +174,6 @@ public class Api{
 		list.add("WITHER");
 		return list;
 	}
-	public static String getEnchName(String ench){
-		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
-			return Main.settings.getEnchs().getString("Enchantments."+ench+".Name");
-		}
-		return Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name");
-	}
-	public static String getEnchColor(String en){
-		if(Main.settings.getEnchs().contains("Enchantments."+en)){
-			return Main.settings.getEnchs().getString("Enchantments."+en+".Color");
-		}
-		return Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
-	}
-	public static String getEnchBookColor(String en){
-		if(Main.settings.getEnchs().contains("Enchantments."+en)){
-			return Main.settings.getEnchs().getString("Enchantments."+en+".BookColor");
-		}
-		return Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor");
-	}
 	public static boolean hasFactions(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null)return true;
 		return false;
@@ -210,15 +181,17 @@ public class Api{
 	public static boolean canBreakBlock(Player player, Block block){
 		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
 		if(factions!=null){
-			if(factions.getDescription().getAuthors().contains("drtshock")){
-				if(FactionsUUID.canBreakBlock(player, block))return true;
-				if(!FactionsUUID.canBreakBlock(player, block))return false;
-			}
-			if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-				if(FactionsSupport.canBreakBlock(player, block))return true;
-				if(!FactionsSupport.canBreakBlock(player, block))return false;
-			}else{
-				return true;
+			if(player!=null){
+				if(factions.getDescription().getAuthors().contains("drtshock")){
+					if(FactionsUUID.canBreakBlock(player, block))return true;
+					if(!FactionsUUID.canBreakBlock(player, block))return false;
+				}
+				if(factions.getDescription().getWebsite()!=null){
+					if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+						if(FactionsSupport.canBreakBlock(player, block))return true;
+						if(!FactionsSupport.canBreakBlock(player, block))return false;
+					}
+				}
 			}
 		}
 		return true;
@@ -230,11 +203,11 @@ public class Api{
 				if(FactionsUUID.inTerritory(player))return true;
 				if(!FactionsUUID.inTerritory(player))return false;
 			}
-			if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-				if(FactionsSupport.inTerritory(player))return true;
-				if(!FactionsSupport.inTerritory(player))return false;
-			}else{
-				return false;
+			if(factions.getDescription().getWebsite()!=null){
+				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+					if(FactionsSupport.inTerritory(player))return true;
+					if(!FactionsSupport.inTerritory(player))return false;
+				}
 			}
 		}
 		return false;
@@ -249,11 +222,11 @@ public class Api{
 					if(FactionsUUID.isFriendly(player, other))return true;
 					if(!FactionsUUID.isFriendly(player, other))return false;
 				}
-				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-					if(FactionsSupport.isFriendly(player, other))return true;
-					if(!FactionsSupport.isFriendly(player, other))return false;
-				}else{
-					return false;
+				if(factions.getDescription().getWebsite()!=null){
+					if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+						if(FactionsSupport.isFriendly(player, other))return true;
+						if(!FactionsSupport.isFriendly(player, other))return false;
+					}
 				}
 			}
 		}
@@ -419,18 +392,22 @@ public class Api{
 		p.sendMessage(getPrefix()+color(Main.settings.getMsg().getString("Messages.Not-Online")));
 		return false;
 	}
-	public static boolean hasPermission(Player player, String perm){
+	public static boolean hasPermission(Player player, String perm, Boolean toggle){
 		if(!player.hasPermission("CrazyEnchantments." + perm)){
-			player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Perm")));
+			if(toggle){
+				player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Perm")));
+			}
 			return false;
 		}
 		return true;
 	}
-	public static boolean hasPermission(CommandSender sender, String perm){
+	public static boolean hasPermission(CommandSender sender, String perm, Boolean toggle){
 		if(sender instanceof Player){
 			Player player = (Player) sender;
 			if(!player.hasPermission("CrazyEnchantments." + perm)){
-				player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Perm")));
+				if(toggle){
+					player.sendMessage(color(Main.settings.getMsg().getString("Messages.No-Perm")));
+				}
 				return false;
 			}else{
 				return true;
@@ -604,7 +581,7 @@ public class Api{
 			if(item.getItemMeta().hasLore()){
 				for(String lore : item.getItemMeta().getLore()){
 					for(String en : ECControl.allEnchantments().keySet()){
-						if(lore.contains(getEnchName(en))){
+						if(lore.contains(CE.getFromName(en).getCustomName())){
 							amount++;
 						}
 					}
@@ -696,16 +673,6 @@ public class Api{
 	public static boolean isInvFull(Player player){
 		if(player.getInventory().firstEmpty()==-1){
 			return true;
-		}
-		return false;
-	}
-	public static boolean isEnchantmentEnabled(String ench){
-		for(String en : ECControl.allEnchantments().keySet()){
-			if(en.equalsIgnoreCase(ench)){
-				if(Main.settings.getEnchs().getBoolean("Enchantments."+en+".Enabled")){
-					return true;
-				}
-			}
 		}
 		return false;
 	}

@@ -41,13 +41,20 @@ public class SettingsManager {
 	File tfile;
 	
 	public void setup(Plugin p) {
-		cfile = new File(p.getDataFolder(), "config.yml");
-		config = p.getConfig();
-
 		if (!p.getDataFolder().exists()) {
 			p.getDataFolder().mkdir();
 		}
-		
+		cfile = new File(p.getDataFolder(), "config.yml");
+		if (!cfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/config.yml");
+         		InputStream E = getClass().getResourceAsStream("/config.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		config = YamlConfiguration.loadConfiguration(cfile);
 		efile = new File(p.getDataFolder(), "Enchantments.yml");
 		if (!efile.exists()) {
 			try{
