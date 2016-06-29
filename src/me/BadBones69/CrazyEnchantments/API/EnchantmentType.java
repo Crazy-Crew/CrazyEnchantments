@@ -13,6 +13,11 @@ public enum EnchantmentType{
 	String name;
 	ArrayList<Material> items;
 	
+	/**\
+	 * 
+	 * @param name Name of the type.
+	 * @param items Items in the enchantment type.
+	 */
 	private EnchantmentType(String name, ArrayList<Material> items){
 		this.name=name;
 		this.items=items;
@@ -71,7 +76,7 @@ public enum EnchantmentType{
 		return null;
 	}
 	
-	static ArrayList<Material> isArmor(){
+	private static ArrayList<Material> isArmor(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.DIAMOND_CHESTPLATE);
@@ -96,7 +101,7 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isHelmet(){
+	private static ArrayList<Material> isHelmet(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.CHAINMAIL_HELMET);
@@ -106,7 +111,7 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isBoots(){
+	private static ArrayList<Material> isBoots(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.DIAMOND_BOOTS);
 		ma.add(Material.CHAINMAIL_BOOTS);
@@ -116,7 +121,7 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isAxe(){
+	private static ArrayList<Material> isAxe(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_AXE);
 		ma.add(Material.STONE_AXE);
@@ -125,13 +130,13 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isBow(){
+	private static ArrayList<Material> isBow(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.BOW);
 		return ma;
 	}
 	
-	static ArrayList<Material> isSword(){
+	private static ArrayList<Material> isSword(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_SWORD);
 		ma.add(Material.STONE_SWORD);
@@ -140,7 +145,7 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isWeapon(){
+	private static ArrayList<Material> isWeapon(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_SWORD);
 		ma.add(Material.STONE_SWORD);
@@ -153,7 +158,7 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isPickAxe(){
+	private static ArrayList<Material> isPickAxe(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_PICKAXE);
 		ma.add(Material.STONE_PICKAXE);
@@ -163,7 +168,7 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isTool(){
+	private static ArrayList<Material> isTool(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_PICKAXE);
 		ma.add(Material.STONE_PICKAXE);
@@ -188,7 +193,7 @@ public enum EnchantmentType{
 		return ma;
 	}
 	
-	static ArrayList<Material> isAll(){
+	private static ArrayList<Material> isAll(){
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.addAll(isArmor());
 		ma.addAll(isTool());

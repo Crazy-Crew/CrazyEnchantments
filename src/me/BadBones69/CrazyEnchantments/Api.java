@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
@@ -130,7 +131,7 @@ public class Api{
 		}
 	}
 	public static String getPower(Integer i){
-		if(i==0)return "I";
+		if(i<=0)return "I";
 		if(i==1)return "I";
 		if(i==2)return "II";
 		if(i==3)return "III";
@@ -580,8 +581,8 @@ public class Api{
 		if(item.hasItemMeta()){
 			if(item.getItemMeta().hasLore()){
 				for(String lore : item.getItemMeta().getLore()){
-					for(String en : ECControl.allEnchantments().keySet()){
-						if(lore.contains(CE.getFromName(en).getCustomName())){
+					for(CEnchantments en : CE.getEnchantments()){
+						if(lore.contains(en.getCustomName())){
 							amount++;
 						}
 					}

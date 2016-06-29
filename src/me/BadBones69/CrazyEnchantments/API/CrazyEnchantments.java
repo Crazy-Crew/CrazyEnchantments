@@ -1,8 +1,11 @@
 package me.BadBones69.CrazyEnchantments.API;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
@@ -10,22 +13,13 @@ import me.BadBones69.CrazyEnchantments.Main;
 public class CrazyEnchantments {
 	
 	public static CrazyEnchantments instance = new CrazyEnchantments();
-
-	public static CrazyEnchantments getInstance() {
-		return instance;
-	}
 	
 	/**
-	 * This one is useful for getting the custom enchantment colors.
-	 * @param enchantment The enchantment you wish to get the color from.
-	 * @return Returns the color of the enchantment that goes on books.
+	 * 
+	 * @return The instance of CrazyEnchantments.
 	 */
-	public String getBookColor(String enchantment){
-		if(Main.settings.getEnchs().contains("Enchantments."+enchantment)){
-			return Main.settings.getEnchs().getString("Enchantments."+enchantment+".BookColor");
-		}else{
-			return Main.settings.getCustomEnchs().getString("Enchantments."+enchantment+".BookColor");
-		}
+	public static CrazyEnchantments getInstance() {
+		return instance;
 	}
 	
 	/**
@@ -38,38 +32,12 @@ public class CrazyEnchantments {
 	}
 	
 	/**
-	 * This one is useful for getting the custom enchantment colors.
-	 * @param enchantment The enchantment you wish to get the color from.
-	 * @return Returns the color of the enchantment that goes on an item.
-	 */
-	public String getEnchantmentColor(String enchantment){
-		if(Main.settings.getEnchs().contains("Enchantments."+enchantment)){
-			return Main.settings.getEnchs().getString("Enchantments."+enchantment+".Color");
-		}else{
-			return Main.settings.getCustomEnchs().getString("Enchantments."+enchantment+".Color");
-		}
-	}
-	
-	/**
 	 * 
 	 * @param enchantment The enchantment you wish to get the color from.
 	 * @return Returns the color of the enchantment that goes on an item.
 	 */
 	public String getEnchantmentColor(CEnchantments enchantment){
 		return Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".Color");
-	}
-	
-	/**
-	 * This one is useful for getting the custom enchantment colors.
-	 * @param enchantment The enchantment you wish to check.
-	 * @return True if enchantment is enabled / False if the enchantment is disabled.
-	 */
-	public Boolean isEnchantmentEnabled(String enchantment){
-		if(Main.settings.getEnchs().contains("Enchantments."+enchantment)){
-			return Main.settings.getEnchs().getBoolean("Enchantments."+enchantment+".Enabbled");
-		}else{
-			return  Main.settings.getCustomEnchs().getBoolean("Enchantments."+enchantment+".Enabbled");
-		}
 	}
 	
 	/**
@@ -83,7 +51,7 @@ public class CrazyEnchantments {
 	
 	/**
 	 * 
-	 * @return List of all the enchantments.
+	 * @return List of all the enum enchantments.
 	 */
 	public ArrayList<CEnchantments> getEnchantments(){
 		ArrayList<CEnchantments> enchs = new ArrayList<CEnchantments>();
@@ -91,33 +59,6 @@ public class CrazyEnchantments {
 			enchs.add(en);
 		}
 		return enchs;
-	}
-	
-	/**
-	 * 
-	 * @return List of all the custom enchantments.
-	 */
-	public ArrayList<String> getCustomEnchantments(){
-		ArrayList<String> enchs = new ArrayList<String>();
-		if(Main.settings.getCustomEnchs().contains("Enchantments")){
-			for(String en : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-				enchs.add(en);
-			}
-		}
-		return enchs;
-	}
-	
-	/**
-	 * Good for getting Custom Enchantments.
-	 * @param enchant The enchantment you want to get the custom name of.
-	 * @return Custom enchantment name of the enchantment.
-	 */
-	public String getCustomName(String enchant){
-		if(Main.settings.getEnchs().contains("Enchantments."+enchant)){
-			return Main.settings.getEnchs().getString("Enchantments."+enchant+".Name");
-		}else{
-			return Main.settings.getCustomEnchs().getString("Enchantments."+enchant+".Name");
-		}
 	}
 	
 	/**
@@ -152,11 +93,11 @@ public class CrazyEnchantments {
 								return true;
 							}
 						}
-						for(String enchantment : getCustomEnchantments()){
+					/*	for(String enchantment : getCustomEnchantments()){
 							if(lore.contains(getCustomName(enchantment))){
 								return true;
 							}
-						}
+						}	*/
 					}
 				}
 			}
@@ -186,24 +127,51 @@ public class CrazyEnchantments {
 	}
 	
 	/**
-	 * Best used if needing to use custom enchantments.
-	 * @param item Item that you want to check if it has an enchantment.
-	 * @param enchantment The enchantment you want to check if the item has.
-	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
+	 * 
+	 * @param item Item you want to add the enchantment to.
+	 * @param enchant Enchantment you want added.
+	 * @param level Tier of the enchantment.
+	 * @return
 	 */
-	public Boolean hasEnchantment(ItemStack item, String enchantment){
-		if(item!=null){
-			if(item.hasItemMeta()){
-				if(item.getItemMeta().hasLore()){
-					for(String lore : item.getItemMeta().getLore()){
-						if(lore.contains(getCustomName(enchantment))){
-							return true;
-						}
-					}
-				}
+	public ItemStack addEnchantment(ItemStack item, CEnchantments enchant, Integer level){
+		List<String> newLore = new ArrayList<String>();
+		ItemMeta meta = item.getItemMeta();
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasLore()){
+				newLore.addAll(item.getItemMeta().getLore());
 			}
 		}
-		return false;
+		newLore.add(color(enchant.getEnchantmentColor()+enchant.getCustomName()+" "+convertPower(level)));
+		if(newLore.contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
+			newLore.remove(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+			newLore.add(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+		}
+		if(newLore.contains(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
+			newLore.remove(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+			newLore.add(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+		}
+		meta.setLore(newLore);
+		item.setItemMeta(meta);
+		return item;
+	}
+	
+	/**
+	 * 
+	 * @param item Item you want to remove the enchantment from.
+	 * @param enchant Enchantment you want removed.
+	 * @return Item with out the enchantment.
+	 */
+	public ItemStack removeEnchantment(ItemStack item, CEnchantments enchant){
+		List<String> newLore = new ArrayList<String>();
+		ItemMeta meta = item.getItemMeta();
+		for(String lore : item.getItemMeta().getLore()){
+			if(!lore.contains(enchant.getCustomName())){
+				newLore.add(lore);
+			}
+		}
+		meta.setLore(newLore);
+		item.setItemMeta(meta);
+		return item;
 	}
 	
 	/**
@@ -228,33 +196,28 @@ public class CrazyEnchantments {
 		}
 		return enchantments;
 	}
-	
+
 	/**
-	 * Use if you want to get the custom enchantments also.
-	 * @param item Item you want to get the enchantments from.
-	 * @return A list of enchantments the item has.
+	 * 
+	 * @param book The book you are getting the power from.
+	 * @param enchant The enchantment you want the power from.
+	 * @return The power the enchantment has.
 	 */
-	public ArrayList<String> getItemEnchantmentsWithCustom(ItemStack item){
-		ArrayList<String> enchantments = new ArrayList<String>();
-		if(item!=null){
-			if(item.hasItemMeta()){
-				if(item.getItemMeta().hasLore()){
-					for(String lore : item.getItemMeta().getLore()){
-						for(CEnchantments enchantment : getEnchantments()){
-							if(lore.contains(enchantment.getCustomName())){
-								enchantments.add(enchantment.getName());
-							}
-						}
-						for(String enchantment : getCustomEnchantments()){
-							if(lore.contains(getCustomName(enchantment))){
-								enchantments.add(enchantment);
-							}
-						}
-					}
-				}
-			}
-		}
-		return enchantments;
+	public Integer getBookPower(ItemStack book, CEnchantments enchant){
+		String line = book.getItemMeta().getDisplayName().replace(enchant.getCustomName()+" ", "");
+		line = Api.removeColor(line);
+		if(Api.isInt(line))return Integer.parseInt(line);
+		if(line.equalsIgnoreCase("I"))return 1;
+		if(line.equalsIgnoreCase("II"))return 2;
+		if(line.equalsIgnoreCase("III"))return 3;
+		if(line.equalsIgnoreCase("IV"))return 4;
+		if(line.equalsIgnoreCase("V"))return 5;
+		if(line.equalsIgnoreCase("VI"))return 6;
+		if(line.equalsIgnoreCase("VII"))return 7;
+		if(line.equalsIgnoreCase("VIII"))return 8;
+		if(line.equalsIgnoreCase("IX"))return 9;
+		if(line.equalsIgnoreCase("X"))return 10;
+		return 1;
 	}
 	
 	/**
@@ -287,33 +250,22 @@ public class CrazyEnchantments {
 		return 1;
 	}
 	
-	/**
-	 * Best used if you need to get a custom enchantments power.
-	 * @param item Item you are getting the power from.
-	 * @param enchant The enchantment you want the power from.
-	 * @return The power the enchantment has.
-	 */
-	public Integer getPower(ItemStack item, String enchant){
-		String line = "";
-		for(String lore : item.getItemMeta().getLore()){
-			if(lore.contains(getCustomName(enchant))){
-				line = lore;
-				break;
-			}
-		}
-		line = line.replace(getCustomName(enchant)+" ", "");
-		line = Api.removeColor(line);
-		if(Api.isInt(line))return Integer.parseInt(line);
-		if(line.equalsIgnoreCase("I"))return 1;
-		if(line.equalsIgnoreCase("II"))return 2;
-		if(line.equalsIgnoreCase("III"))return 3;
-		if(line.equalsIgnoreCase("IV"))return 4;
-		if(line.equalsIgnoreCase("V"))return 5;
-		if(line.equalsIgnoreCase("VI"))return 6;
-		if(line.equalsIgnoreCase("VII"))return 7;
-		if(line.equalsIgnoreCase("VIII"))return 8;
-		if(line.equalsIgnoreCase("IX"))return 9;
-		if(line.equalsIgnoreCase("X"))return 10;
-		return 1;
+	private String convertPower(Integer i){
+		if(i<=0)return "I";
+		if(i==1)return "I";
+		if(i==2)return "II";
+		if(i==3)return "III";
+		if(i==4)return "IV";
+		if(i==5)return "V";
+		if(i==6)return "VI";
+		if(i==7)return "VII";
+		if(i==8)return "VIII";
+		if(i==9)return "IX";
+		if(i==10)return "X";
+		return i+"";
+	}
+	
+	private String color(String msg){
+		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
 }

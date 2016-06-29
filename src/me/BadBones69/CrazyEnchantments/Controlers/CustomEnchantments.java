@@ -1,29 +1,9 @@
 package me.BadBones69.CrazyEnchantments.Controlers;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
-import ca.thederpygolems.armorequip.ArmorEquipEvent;
-import me.BadBones69.CrazyEnchantments.Api;
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class CustomEnchantments implements Listener{
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+/*	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static ArrayList<String> getEnchantments(){
 		ArrayList<String> enchs = new ArrayList<String>();
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return enchs;
@@ -293,5 +273,5 @@ public class CustomEnchantments implements Listener{
 				}
 			}
 		}
-	}
+	}	*/
 }

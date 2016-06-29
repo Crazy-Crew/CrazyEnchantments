@@ -18,9 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import ca.thederpygolems.armorequip.ArmorListener;
 import me.BadBones69.CrazyEnchantments.API.CEBook;
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
-import me.BadBones69.CrazyEnchantments.Controlers.CustomEnchantments;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
@@ -59,7 +59,7 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new ArmorListener(), this);
 		pm.registerEvents(new ScrollControl(), this);
 		pm.registerEvents(new ProtectionCrystal(), this);
-		pm.registerEvents(new CustomEnchantments(), this);
+	//	pm.registerEvents(new CustomEnchantments(), this);
 		//==========================================================================\\
 		pm.registerEvents(new Bows(), this);
 		pm.registerEvents(new Axes(), this);
@@ -160,10 +160,10 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}else{
 						String ench = args[1];
-						for(String en : settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-							if(en.equalsIgnoreCase(ench)||CE.getCustomName(en).equalsIgnoreCase(ench)){
-								String name = settings.getEnchs().getString("Enchantments."+en+".Info.Name");
-								List<String> desc = settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+						for(CEnchantments en : CE.getEnchantments()){
+							if(en.getName().equalsIgnoreCase(ench)||en.getCustomName().equalsIgnoreCase(ench)){
+								String name = settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
+								List<String> desc = settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
 								sender.sendMessage(Api.color(name));
 								for(String msg : desc)sender.sendMessage(Api.color(msg));
 								return true;
@@ -352,8 +352,8 @@ public class Main extends JavaPlugin implements Listener{
 					Player player = (Player) sender;
 					if(!Api.hasPermission(sender, "Admin", true))return true;
 					boolean T=false;
-					for(String en : ECControl.allEnchantments().keySet()){
-						if(CE.getCustomName(en).equalsIgnoreCase(args[1])){
+					for(CEnchantments en : CE.getEnchantments()){
+						if(en.getCustomName().equalsIgnoreCase(args[1])){
 							T=true;
 						}
 					}
@@ -370,13 +370,13 @@ public class Main extends JavaPlugin implements Listener{
 					if(item.hasItemMeta()){
 						if(item.getItemMeta().hasLore()){
 							for(String lore : item.getItemMeta().getLore()){
-								for(String en : ECControl.allEnchantments().keySet()){
-									if(CE.getCustomName(en).equalsIgnoreCase(enchantment)){
-										enchantment=CE.getCustomName(en);
-										if(lore.contains(CE.getCustomName(en))){
+								for(CEnchantments en : CE.getEnchantments()){
+									if(en.getCustomName().equalsIgnoreCase(enchantment)){
+										enchantment=en.getCustomName();
+										if(lore.contains(en.getCustomName())){
 											Api.setItemInHand(player, Api.removeLore(item, lore));
 											String msg = Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Remove-Enchantment")
-													.replaceAll("%Enchantment%", CE.getCustomName(en)).replaceAll("%enchantment%", CE.getCustomName(en)));
+													.replaceAll("%Enchantment%", en.getCustomName()).replaceAll("%enchantment%", en.getCustomName()));
 											player.sendMessage(msg);
 											return true;
 										}
@@ -401,8 +401,7 @@ public class Main extends JavaPlugin implements Listener{
 					Player player = (Player) sender;
 					if(!Api.hasPermission(sender, "Admin", true))return true;
 					boolean T = false;
-					String en = "";
-					String color = "&7";
+					CEnchantments en = null;
 					String lvl = "1";
 					if(args.length>=3){
 						if(!Api.isInt(args[2])){
@@ -412,37 +411,21 @@ public class Main extends JavaPlugin implements Listener{
 						}
 						lvl = args[2];
 					}
-					for(String i : ECControl.allEnchantments().keySet()){
-						if(CE.getCustomName(i).equalsIgnoreCase(args[1])){
+					for(CEnchantments i : CE.getEnchantments()){
+						if(i.getCustomName().equalsIgnoreCase(args[1])){
 							T = true;
-							if(settings.getEnchs().contains("Enchantments."+i)){
-								color = settings.getEnchs().getString("Enchantments."+i+".Color");
-							}
-							if(settings.getCustomEnchs().contains("Enchantments."+i)){
-								color = settings.getCustomEnchs().getString("Enchantments."+i+".Color");
-							}
-							en = CE.getCustomName(i);
+							en = i;
 						}
 					}
 					if(!T){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
-					if(lvl.equals("1"))lvl="I";
-					if(lvl.equals("2"))lvl="II";
-					if(lvl.equals("3"))lvl="III";
-					if(lvl.equals("4"))lvl="IV";
-					if(lvl.equals("5"))lvl="V";
-					if(lvl.equals("6"))lvl="VI";
-					if(lvl.equals("7"))lvl="VII";
-					if(lvl.equals("8"))lvl="VIII";
-					if(lvl.equals("9"))lvl="IX";
-					if(lvl.equals("10"))lvl="X";
 					if(Api.getItemInHand(player).getType() == Material.AIR){
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
 						return false;
 					}
-					Api.setItemInHand(player, Api.addGlow(Api.addLore(Api.getItemInHand(player), Api.color(color+en+" "+lvl))));
+					Api.setItemInHand(player, Api.addGlow(CE.addEnchantment(Api.getItemInHand(player), en, Integer.parseInt(lvl))));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Book")){// /CE Book <Enchantment> [Lvl] [Amount] [Player]
@@ -482,9 +465,9 @@ public class Main extends JavaPlugin implements Listener{
 						player = Api.getPlayer(args[4]);
 					}
 					boolean toggle = false;
-					for(String en : ECControl.allEnchantments().keySet()){
-						if(ench.equalsIgnoreCase(CE.getCustomName(en))){
-							ench=en;
+					for(CEnchantments en : CE.getEnchantments()){
+						if(ench.equalsIgnoreCase(en.getCustomName())){
+							ench=en.getName();
 							toggle=true;
 						}
 					}
@@ -518,7 +501,9 @@ public class Main extends JavaPlugin implements Listener{
 					player.sendMessage(Api.getPrefix()+Api.color("&7This server is running your Crazy Enchantments Plugin. "
 						+ "&7It is running version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments").getDescription().getVersion()+"&7."));
 				}
-				if(player.isOp())Api.hasUpdate(player);
+				if(player.isOp()){
+					Api.hasUpdate(player);
+				}
 			}
 		}, 1*20);
 	}

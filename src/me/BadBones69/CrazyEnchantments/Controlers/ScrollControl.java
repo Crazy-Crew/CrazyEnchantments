@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.ECControl;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.API.CEBook;
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class ScrollControl implements Listener{
@@ -28,9 +30,8 @@ public class ScrollControl implements Listener{
 		Inventory inv = e.getInventory();
 		ItemStack item = e.getCurrentItem();
 		ItemStack c = e.getCursor();
-		ArrayList<String> enchants = new ArrayList<String>();
-		HashMap<String, String> enchs = new HashMap<String, String>();
-		HashMap<String, String> lvl = new HashMap<String, String>();
+		ArrayList<CEnchantments> enchants = new ArrayList<CEnchantments>();
+		HashMap<CEnchantments, Integer> lvl = new HashMap<CEnchantments, Integer>();
 		if(inv != null){
 			if(item!=null&&c!=null){
 				if(c.hasItemMeta()){
@@ -64,22 +65,22 @@ public class ScrollControl implements Listener{
 							if(c.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
 								if(c.getAmount()==1){
 									boolean i = false;
-									for(String l : item.getItemMeta().getLore()){
-										for(String en : ECControl.allEnchantments().keySet()){
-											if(l.contains(CE.getFromName(en).getCustomName())){
-												enchants.add(l);
-												lvl.put(l, l.substring(l.lastIndexOf(" ")+1));
-												enchs.put(l, en);
+									if(CE.hasEnchantments(item)){
+										for(CEnchantments en : CE.getEnchantments()){
+											if(CE.hasEnchantment(item, en)){
+												enchants.add(en);
+												lvl.put(en, CE.getPower(item, en));
 												i = true;
 											}
 										}
 									}
 									if(i){
 										e.setCancelled(true);
-										String RealLore = pickEnchant(enchants);
-										e.setCurrentItem(Api.removeLore(item, RealLore));
+										CEnchantments enchantment = pickEnchant(enchants);
+										e.setCurrentItem(CE.removeEnchantment(item, enchantment));
 										e.setCursor(new ItemStack(Material.AIR));
-										player.getInventory().addItem(ECControl.makeEnchantBook(enchs.get(RealLore), lvl.get(RealLore), 1));
+										CEBook book = new CEBook(enchantment, lvl.get(enchantment), 1);
+										player.getInventory().addItem(book.buildBook());
 									}
 								}
 							}
@@ -103,8 +104,12 @@ public class ScrollControl implements Listener{
 			}
 		}
 	}
-	String pickEnchant(List<String> enchants){
+	CEnchantments pickEnchant(List<CEnchantments> enchants){
 		Random i = new Random();
 		return enchants.get(i.nextInt(enchants.size()));
+	}
+	Integer percentPick(int max, int min){
+		Random i = new Random();
+		return min+i.nextInt(max-min);
 	}
 }

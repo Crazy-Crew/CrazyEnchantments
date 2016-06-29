@@ -93,6 +93,11 @@ public enum CEnchantments {
 	EnchantmentType Type;
 	Boolean Toggle;
 	
+	/**
+	 * 
+	 * @param name Name of the enchantment.
+	 * @param type Type of items it goes on.
+	 */
 	private CEnchantments(String name, EnchantmentType type){
 		Name=name;
 		Type=type;
@@ -101,12 +106,12 @@ public enum CEnchantments {
 			BookColor = Main.settings.getEnchs().getString("Enchantments."+name+".BookColor");
 			EnchantmentColor = Main.settings.getEnchs().getString("Enchantments."+name+".Color");
 			Toggle = Main.settings.getEnchs().getBoolean("Enchantments."+name+".Enabled");
-		}else{
+		}/*else{
 			Main.settings.getCustomEnchs().getString("Enchantments."+Name+".Name");
 			BookColor = Main.settings.getCustomEnchs().getString("Enchantments."+name+".BookColor");
 			EnchantmentColor = Main.settings.getCustomEnchs().getString("Enchantments."+name+".Color");
 			Toggle = Main.settings.getCustomEnchs().getBoolean("Enchantments."+name+".Enabled");
-		}
+		}*/
 	}
 	
 	/**

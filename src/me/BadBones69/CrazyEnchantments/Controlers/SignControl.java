@@ -151,6 +151,7 @@ public class SignControl implements Listener{
 		msg=Api.color(msg);
 		msg=msg.replaceAll("%category%", cat).replaceAll("%Category%", cat);
 		msg=msg.replaceAll("%cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%Cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
+		msg=msg.replaceAll("%xp%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%XP%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
 		return msg;
 	}
 	@EventHandler

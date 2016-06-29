@@ -12,34 +12,34 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
-import me.BadBones69.CrazyEnchantments.Controlers.CustomEnchantments;
 
 public class ECControl implements Listener{
 	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static String Enchants(String cat){
 		ArrayList<String> enchants = new ArrayList<String>();
 		Random number = new Random();
-		for(String en : Main.settings.getEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en+".Categories")){
+		for(CEnchantments en : CE.getEnchantments()){
+			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Categories")){
 				if(cat.equalsIgnoreCase(C)){
-					if(CE.getFromName(en).isEnabled()){
-						String power = powerPicker(en, cat);
-						enchants.add(Main.settings.getEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en+".Name")+" "+power);
+					if(en.isEnabled()){
+						String power = powerPicker(en.getName(), cat);
+						enchants.add(Main.settings.getEnchs().getString("Enchantments."+en.getName()+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en.getName()+".Name")+" "+power);
 					}
 				}
 			}
 		}
-		if(Main.settings.getCustomEnchs().contains("Enchantments")){
+	/*	if(Main.settings.getCustomEnchs().contains("Enchantments")){
 			for(String en : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-				for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Categories")){
+				for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en.getName()+".Categories")){
 					if(cat.equalsIgnoreCase(C)){
 						String power = powerPicker(en, cat);
-						enchants.add(Main.settings.getCustomEnchs().getString("Enchantments."+en+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+en+".Name")+" "+power);
+						enchants.add(Main.settings.getCustomEnchs().getString("Enchantments."+en.getName()+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+en.getName()+".Name")+" "+power);
 					}
 				}
 			}
-		}
+		}	*/
 		String enchant = enchants.get(number.nextInt(enchants.size()));
 		return enchant;
 	}
@@ -127,7 +127,7 @@ public class ECControl implements Listener{
 		//---------All--------//
 		en.put("HellForged", isAll());
 		//---------Custom--------//
-		for(String ench : CustomEnchantments.getEnchantments()){
+	/*	for(String ench : CustomEnchantments.getEnchantments()){
 			String type = Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable");
 			if(type.equalsIgnoreCase("Armor"))en.put(ench, isArmor());
 			if(type.equalsIgnoreCase("Helmets"))en.put(ench, isHelmet());
@@ -138,7 +138,7 @@ public class ECControl implements Listener{
 			if(type.equalsIgnoreCase("Bows"))en.put(ench, isBow());
 			if(type.equalsIgnoreCase("Pickaxes"))en.put(ench, isPickAxe());
 			if(type.equalsIgnoreCase("Tools"))en.put(ench, isTool());
-		}
+		}	*/
 		return en;
 	}
 	@EventHandler
@@ -173,18 +173,18 @@ public class ECControl implements Listener{
 			if(item.getType()!=Material.BOOK)return;
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
-					for(String en : allEnchantments().keySet()){
-						if(item.getItemMeta().getDisplayName().contains(Api.color(CE.getBookColor(en)+CE.getFromName(en).getCustomName()))){
+					for(CEnchantments en : CE.getEnchantments()){
+						if(item.getItemMeta().getDisplayName().contains(Api.color(en.getBookColor()+en.getCustomName()))){
 							String name = "";
 							List<String> desc = new ArrayList<String>();
-							if(Main.settings.getEnchs().contains("Enchantments."+en)){
-								name = Main.settings.getEnchs().getString("Enchantments."+en+".Info.Name");
-								desc = Main.settings.getEnchs().getStringList("Enchantments."+en+".Info.Description");
+							if(Main.settings.getEnchs().contains("Enchantments."+en.getName())){
+								name = Main.settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
+								desc = Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
 							}
-							if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-								name = Main.settings.getCustomEnchs().getString("Enchantments."+en+".Info.Name");
-								desc = Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Info.Description");
-							}
+						/*	if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+								name = Main.settings.getCustomEnchs().getString("Enchantments."+en.getName()+".Info.Name");
+								desc = Main.settings.getCustomEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
+							}	*/
 							player.sendMessage(Api.color(name));
 							for(String msg : desc)player.sendMessage(Api.color(msg));
 							return;
@@ -193,25 +193,6 @@ public class ECControl implements Listener{
 				}
 			}
 		}
-	}
-	public static ItemStack makeEnchantBook(String ench, String power, int amount){
-		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
-		int Smin = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
-		int Dmax = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
-		int Dmin = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
-		ArrayList<String> lore = new ArrayList<String>();
-		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
-			lore.add(Api.color(l)
-					.replaceAll("%Destroy_Rate%", Api.percentPick(Dmax, Dmin)+"").replaceAll("%destroy_rate%", Api.percentPick(Dmax, Dmin)+"")
-					.replaceAll("%Success_Rate%", Api.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Api.percentPick(Smax, Smin)+""));
-		}
-		if(Main.settings.getEnchs().contains("Enchantments."+ench)){
-			ench=Main.settings.getEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+ench+".Name")+" "+power;
-		}
-		if(Main.settings.getCustomEnchs().contains("Enchantments."+ench)){
-			ench=Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name")+" "+power;
-		}
-		return Api.addGlow(Api.makeItem(Material.BOOK, amount, 0, ench, lore));
 	}
 	public static ItemStack pick(String cat){
 		int Smax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max");
@@ -232,9 +213,9 @@ public class ECControl implements Listener{
 		if(Main.settings.getEnchs().contains("Enchantments."+en)){
 			ench=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
 		}
-		if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
-		}
+	/*	if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
+		}	*/
 		int max = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
 		int min = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
 		int i = 1+r.nextInt(ench);

@@ -459,7 +459,7 @@ public class GUI implements Listener{
 											boolean success = Api.successChance(c);
 											boolean destroy = Api.destroyChance(c);
 											if(item.getItemMeta().hasLore()){
-												for(String l:item.getItemMeta().getLore()){
+												for(String l : item.getItemMeta().getLore()){
 													if(l.contains(en.getCustomName())){
 														return;
 													}
@@ -491,18 +491,13 @@ public class GUI implements Listener{
 												name = Api.removeColor(name);
 												String[] breakdown = name.split(" ");
 												String color = "&7";
-												if(Main.settings.getEnchs().contains("Enchantments."+en)){
-													color=Main.settings.getEnchs().getString("Enchantments."+en+".Color");
-												}
-												if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-													color=Main.settings.getCustomEnchs().getString("Enchantments."+en+".Color");
-												}
+												color = en.getEnchantmentColor();
 												String enchantment = en.getCustomName();
 												String lvl = breakdown[1];
 												String full = Api.color(color+enchantment+" "+lvl);
 												player.setItemOnCursor(new ItemStack(Material.AIR));
 												e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
-												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Worked")));
+												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Works")));
 												try{
 													if(Api.getVersion()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
@@ -718,7 +713,7 @@ public class GUI implements Listener{
 	}
 	public static ArrayList<ItemStack> getInfo(String type){
 		FileConfiguration enchants = Main.settings.getEnchs();
-		FileConfiguration customEnch = Main.settings.getCustomEnchs();
+	//	FileConfiguration customEnch = Main.settings.getCustomEnchs();
 		ArrayList<ItemStack> swords = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> axes = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> bows = new ArrayList<ItemStack>();
@@ -745,7 +740,7 @@ public class GUI implements Listener{
 				if(Items.equals(ECControl.isAll()))misc.add(i);
 			}
 		}
-		for(String en : customEnch.getConfigurationSection("Enchantments").getKeys(false)){
+	/*	for(String en : customEnch.getConfigurationSection("Enchantments").getKeys(false)){
 			if(customEnch.getBoolean("Enchantments."+en+".Enabled")){
 				String name = customEnch.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = customEnch.getStringList("Enchantments."+en+".Info.Description");
@@ -762,7 +757,7 @@ public class GUI implements Listener{
 				if(Items.equals(ECControl.isWeapon()))misc.add(i);
 				if(Items.equals(ECControl.isAll()))misc.add(i);
 			}
-		}
+		}	*/
 		if(type.equalsIgnoreCase("Armor"))return armor;
 		if(type.equalsIgnoreCase("Sword"))return swords;
 		if(type.equalsIgnoreCase("Helmets"))return helmets;

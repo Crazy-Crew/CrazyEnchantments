@@ -122,9 +122,9 @@ public class SettingsManager {
 	public FileConfiguration getSigns() {
 		return signs;
 	}
-	public FileConfiguration getCustomEnchs() {
+/*	public FileConfiguration getCustomEnchs() {
 		return cenchs;
-	}
+	}	*/
 	public FileConfiguration getEnchs() {
 		return enchs;
 	}
