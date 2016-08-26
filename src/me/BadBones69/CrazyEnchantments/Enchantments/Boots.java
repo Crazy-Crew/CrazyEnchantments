@@ -69,7 +69,7 @@ public class Boots implements Listener{
 			}
 			if(CE.hasEnchantment(NewItem, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Api.inTerritory(player)){
+					if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
 						if(player.getGameMode()!=GameMode.CREATIVE){
 							player.setAllowFlight(true);
 						}
@@ -105,7 +105,7 @@ public class Boots implements Listener{
 	@EventHandler
 	public void onFly(PlayerToggleFlightEvent e){
 		Player player = e.getPlayer();
-		if(Api.inTerritory(player)){
+		if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
 			ItemStack boots = player.getEquipment().getBoots();
 			if(CE.hasEnchantments(boots)){
 				if(CE.hasEnchantment(boots, CEnchantments.WINGS)){
@@ -129,7 +129,7 @@ public class Boots implements Listener{
 		if(CE.hasEnchantments(boots)){
 			if(CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(!Api.inTerritory(player)){
+					if(!(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation()))){
 						if(player.isFlying()){
 							if(player.getGameMode()!=GameMode.CREATIVE){
 								player.setFlying(false);
@@ -156,7 +156,7 @@ public class Boots implements Listener{
 		if(CE.hasEnchantments(boots)){
 			if(CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Api.inTerritory(player)){
+					if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
 						player.setAllowFlight(true);
 						Flying.add(player);
 					}

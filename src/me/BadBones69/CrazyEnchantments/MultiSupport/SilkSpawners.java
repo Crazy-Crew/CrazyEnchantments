@@ -21,7 +21,7 @@ public class SilkSpawners implements Listener{
 	@EventHandler
 	public void onBreak(SilkSpawnersSpawnerBreakEvent e){
 		Player player = e.getPlayer();
-		if(!Api.allowsBreak(player))return;
+		if(!Api.allowsBreak(player.getLocation()))return;
 		Block block = e.getBlock();
 		if(!Api.canBreakBlock(player, block))return;
 		if(player!=null){

@@ -18,13 +18,16 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
+import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
 
 public class GUI implements Listener{
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	static CustomEnchantments CustomE = CustomEnchantments.getInstance();
 	static void openGUI(Player player){
 		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Api.getInvName());
 		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
@@ -60,8 +63,15 @@ public class GUI implements Listener{
 			}
 		}
 		for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-			inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
-					Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
+			if(Main.settings.getConfig().contains("Categories."+cat+".InGUI")){
+				if(Main.settings.getConfig().getBoolean("Categories."+cat+".InGUI")){
+					inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
+							Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
+				}
+			}else{
+				inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
+						Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
+			}
 			FileConfiguration config = Main.settings.getConfig();
 			if(config.contains("Categories."+cat+".LostBook")){
 				if(config.getBoolean("Categories."+cat+".LostBook.InGUI")){
@@ -449,100 +459,111 @@ public class GUI implements Listener{
 				ItemStack item  = e.getCurrentItem();
 				if(c.hasItemMeta()){
 					if(c.getItemMeta().hasDisplayName()){
+						if(c.getType()!=Material.BOOK)return;
 						String name = c.getItemMeta().getDisplayName();
+						String enchant = "Glowing";
+						String enchantColor = "&7";
+						EnchantmentType type = EnchantmentType.ALL;
 						for(CEnchantments en : CE.getEnchantments()){
 							if(name.contains(Api.color(en.getBookColor()+en.getCustomName()))){
-								if(c.getType()!=Material.BOOK)return;
-								for(Material m : ECControl.allEnchantments().get(en.getName())){
-									if(item.getType() == m){
-										if(c.getAmount() == 1){
-											boolean success = Api.successChance(c);
-											boolean destroy = Api.destroyChance(c);
-											if(item.getItemMeta().hasLore()){
-												for(String l : item.getItemMeta().getLore()){
-													if(l.contains(en.getCustomName())){
-														return;
-													}
+								enchant = en.getCustomName();
+								enchantColor = en.getEnchantmentColor();
+								type = en.getType();
+							}
+						}
+						for(String en : CustomE.getEnchantments()){
+							if(name.contains(Api.color(CustomE.getBookColor(en)+CustomE.getCustomName(en)))){
+								enchant = CustomE.getCustomName(en);
+								enchantColor = CustomE.getEnchantmentColor(en);
+								type = CustomE.getType(en);
+							}
+						}
+						if(type.getItems().contains(item.getType())){
+							if(c.getAmount() == 1){
+								boolean success = Api.successChance(c);
+								boolean destroy = Api.destroyChance(c);
+								if(item.getItemMeta().hasLore()){
+									for(String l : item.getItemMeta().getLore()){
+										if(l.contains(enchant)){
+											return;
+										}
+									}
+								}
+								if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+									int limit = 0;
+									int total = Api.getEnchAmount(item);
+									for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
+										String perm = Permission.getPermission();
+										if(perm.startsWith("crazyenchantments.limit.")){
+											perm=perm.replace("crazyenchantments.limit.", "");
+											if(Api.isInt(perm)){
+												if(limit<Integer.parseInt(perm)){
+													limit = Integer.parseInt(perm);
 												}
-											}
-											if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-												int limit = 0;
-												int total = Api.getEnchAmount(item);
-												for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
-													String perm = Permission.getPermission();
-													if(perm.startsWith("crazyenchantments.limit.")){
-														perm=perm.replace("crazyenchantments.limit.", "");
-														if(Api.isInt(perm)){
-															if(limit<Integer.parseInt(perm)){
-																limit = Integer.parseInt(perm);
-															}
-														}
-													}
-												}
-												if(!player.hasPermission("crazyenchantments.bypass")){
-													if(total>=limit){
-														player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
-														return;
-													}
-												}
-											}
-											e.setCancelled(true);
-											if(success||player.getGameMode() == GameMode.CREATIVE){
-												name = Api.removeColor(name);
-												String[] breakdown = name.split(" ");
-												String color = "&7";
-												color = en.getEnchantmentColor();
-												String enchantment = en.getCustomName();
-												String lvl = breakdown[1];
-												String full = Api.color(color+enchantment+" "+lvl);
-												player.setItemOnCursor(new ItemStack(Material.AIR));
-												e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
-												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Works")));
-												try{
-													if(Api.getVersion()>=191){
-														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
-													}else{
-														player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
-													}
-												}catch(Exception ex){}
-												return;
-											}
-											if(destroy){
-												if(Api.isProtected(item)){
-													e.setCurrentItem(Api.removeProtected(item));
-													player.setItemOnCursor(new ItemStack(Material.AIR));
-													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
-													try{
-														if(Api.getVersion()>=191){
-															player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-														}else{
-															player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-														}
-													}catch(Exception ex){}
-													return;
-												}else{
-													player.setItemOnCursor(new ItemStack(Material.AIR));
-													e.setCurrentItem(new ItemStack(Material.AIR));
-													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
-												}
-												player.updateInventory();
-												return;
-											}
-											if(!success&&!destroy){
-												player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
-												player.setItemOnCursor(new ItemStack(Material.AIR));
-												try{
-													if(Api.getVersion()>=191){
-														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-													}else{
-														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-													}
-												}catch(Exception ex){}
-												player.updateInventory();
-												return;
 											}
 										}
 									}
+									if(!player.hasPermission("crazyenchantments.bypass")){
+										if(total>=limit){
+											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
+											return;
+										}
+									}
+								}
+								e.setCancelled(true);
+								if(success||player.getGameMode() == GameMode.CREATIVE){
+									name = Api.removeColor(name);
+									String[] breakdown = name.split(" ");
+									String color = "&7";
+									color = enchantColor;
+									String enchantment = enchant;
+									String lvl = breakdown[1];
+									String full = Api.color(color+enchantment+" "+lvl);
+									player.setItemOnCursor(new ItemStack(Material.AIR));
+									e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
+									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Works")));
+									try{
+										if(Api.getVersion()>=191){
+											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
+										}else{
+											player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
+										}
+									}catch(Exception ex){}
+									return;
+								}
+								if(destroy){
+									if(Api.isProtected(item)){
+										e.setCurrentItem(Api.removeProtected(item));
+										player.setItemOnCursor(new ItemStack(Material.AIR));
+										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
+										try{
+											if(Api.getVersion()>=191){
+												player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+											}else{
+												player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+											}
+										}catch(Exception ex){}
+										return;
+									}else{
+										player.setItemOnCursor(new ItemStack(Material.AIR));
+										e.setCurrentItem(new ItemStack(Material.AIR));
+										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
+									}
+									player.updateInventory();
+									return;
+								}
+								if(!success&&!destroy){
+									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
+									player.setItemOnCursor(new ItemStack(Material.AIR));
+									try{
+										if(Api.getVersion()>=191){
+											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+										}else{
+											player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+										}
+									}catch(Exception ex){}
+									player.updateInventory();
+									return;
 								}
 							}
 						}
@@ -594,7 +615,7 @@ public class GUI implements Listener{
 									return;
 								}
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color("&e&lOther Info"))){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name")))){
 								Inventory in = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
 								in.setItem(2, Api.makeItem(Main.settings.getConfig().getString("Settings.BlackScroll.Item"),
 										1, Main.settings.getConfig().getString("Settings.BlackScroll.Name"),
@@ -713,7 +734,7 @@ public class GUI implements Listener{
 	}
 	public static ArrayList<ItemStack> getInfo(String type){
 		FileConfiguration enchants = Main.settings.getEnchs();
-	//	FileConfiguration customEnch = Main.settings.getCustomEnchs();
+		FileConfiguration customEnchants = Main.settings.getCustomEnchs();
 		ArrayList<ItemStack> swords = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> axes = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> bows = new ArrayList<ItemStack>();
@@ -727,37 +748,38 @@ public class GUI implements Listener{
 			if(enchants.getBoolean("Enchantments."+en+".Enabled")){
 				String name = enchants.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
-				ArrayList<Material> Items = ECControl.allEnchantments().get(en);
+				EnchantmentType enchantType = CE.getFromName(en).getType();
 				ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
-				if(Items.equals(ECControl.isArmor()))armor.add(i);
-				if(Items.equals(ECControl.isSword()))swords.add(i);
-				if(Items.equals(ECControl.isAxe()))axes.add(i);
-				if(Items.equals(ECControl.isBow()))bows.add(i);
-				if(Items.equals(ECControl.isHelmet()))helmets.add(i);
-				if(Items.equals(ECControl.isBoots()))boots.add(i);
-				if(Items.equals(ECControl.isPickAxe()))picks.add(i);
-				if(Items.equals(ECControl.isTool()))tools.add(i);
-				if(Items.equals(ECControl.isAll()))misc.add(i);
+				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
+				if(enchantType == EnchantmentType.SWORD)swords.add(i);
+				if(enchantType == EnchantmentType.AXE)axes.add(i);
+				if(enchantType == EnchantmentType.BOW)bows.add(i);
+				if(enchantType == EnchantmentType.HELMET)helmets.add(i);
+				if(enchantType == EnchantmentType.BOOTS)boots.add(i);
+				if(enchantType == EnchantmentType.PICKAXE)picks.add(i);
+				if(enchantType == EnchantmentType.TOOL)tools.add(i);
+				if(enchantType == EnchantmentType.ALL)misc.add(i);
+				if(enchantType == EnchantmentType.WEAPONS)misc.add(i);
 			}
 		}
-	/*	for(String en : customEnch.getConfigurationSection("Enchantments").getKeys(false)){
-			if(customEnch.getBoolean("Enchantments."+en+".Enabled")){
-				String name = customEnch.getString("Enchantments."+en+".Info.Name");
-				List<String> desc = customEnch.getStringList("Enchantments."+en+".Info.Description");
-				ArrayList<Material> Items = ECControl.allEnchantments().get(en);
+		for(String enchantment : CustomE.getEnchantments()){
+			if(CustomE.isEnabled(enchantment)){
+				String name = customEnchants.getString("Enchantments."+enchantment+".Info.Name");
+				List<String> desc = CustomE.getDiscription(enchantment);
+				EnchantmentType enchantType = CustomE.getType(enchantment);
 				ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
-				if(Items.equals(ECControl.isArmor()))armor.add(i);
-				if(Items.equals(ECControl.isSword()))swords.add(i);
-				if(Items.equals(ECControl.isAxe()))axes.add(i);
-				if(Items.equals(ECControl.isBow()))bows.add(i);
-				if(Items.equals(ECControl.isHelmet()))helmets.add(i);
-				if(Items.equals(ECControl.isBoots()))boots.add(i);
-				if(Items.equals(ECControl.isPickAxe()))picks.add(i);
-				if(Items.equals(ECControl.isTool()))tools.add(i);
-				if(Items.equals(ECControl.isWeapon()))misc.add(i);
-				if(Items.equals(ECControl.isAll()))misc.add(i);
+				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
+				if(enchantType == EnchantmentType.SWORD)swords.add(i);
+				if(enchantType == EnchantmentType.AXE)axes.add(i);
+				if(enchantType == EnchantmentType.BOW)bows.add(i);
+				if(enchantType == EnchantmentType.HELMET)helmets.add(i);
+				if(enchantType == EnchantmentType.BOOTS)boots.add(i);
+				if(enchantType == EnchantmentType.PICKAXE)picks.add(i);
+				if(enchantType == EnchantmentType.TOOL)tools.add(i);
+				if(enchantType == EnchantmentType.ALL)misc.add(i);
+				if(enchantType == EnchantmentType.WEAPONS)misc.add(i);
 			}
-		}	*/
+		}
 		if(type.equalsIgnoreCase("Armor"))return armor;
 		if(type.equalsIgnoreCase("Sword"))return swords;
 		if(type.equalsIgnoreCase("Helmets"))return helmets;

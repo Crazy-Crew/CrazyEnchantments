@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
@@ -22,6 +23,11 @@ import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class BlackSmith implements Listener{
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
+	@SuppressWarnings("static-access")
+	public BlackSmith(Plugin plugin){
+		this.plugin = plugin;
+	}
 	public static void openBlackSmith(Player player){
 		Inventory inv = Bukkit.createInventory(null, 27, Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")));
 		List<Integer> other = new ArrayList<Integer>();
@@ -184,25 +190,34 @@ public class BlackSmith implements Listener{
 		}
 	}
 	@EventHandler
-	public void onInvClose(InventoryCloseEvent e){
-		Inventory inv = e.getInventory();
-		if(inv!=null){
-			if(inv.getName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")))){
-				List<Integer> slots = new ArrayList<Integer>();
-				slots.add(10);slots.add(13);
-				for(int slot : slots){
-					if(inv.getItem(slot)!=null){
-						if(inv.getItem(slot).getType()!=Material.AIR){
-							if(Api.isInvFull(((Player)e.getPlayer()))){
-								e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
-							}else{
-								e.getPlayer().getInventory().addItem(inv.getItem(slot));
+	public void onInvClose(final InventoryCloseEvent e){
+		final Inventory inv = e.getInventory();
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			public void run() {
+				if(inv!=null){
+					if(inv.getName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")))){
+						List<Integer> slots = new ArrayList<Integer>();
+						slots.add(10);slots.add(13);
+						Boolean dead = e.getPlayer().isDead();
+						for(int slot : slots){
+							if(inv.getItem(slot)!=null){
+								if(inv.getItem(slot).getType()!=Material.AIR){
+									if(dead){
+										e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
+									}else{
+										if(Api.isInvFull(((Player)e.getPlayer()))){
+											e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
+										}else{
+											e.getPlayer().getInventory().addItem(inv.getItem(slot));
+										}
+									}
+								}
 							}
 						}
 					}
 				}
 			}
-		}
+		}, 0);
 	}
 	ItemStack getUpgradedItem(ItemStack master, ItemStack sub){
 		ItemStack item = master.clone();

@@ -6,7 +6,7 @@ import org.bukkit.Material;
 
 public enum EnchantmentType{
 	ARMOR("Armor", isArmor()), AXE("Axe", isAxe()), BOW("Bow", isBow()), BOOTS("Boots", isBoots()),
-	HELMET("Helmet", isHelmet()), SWORD("Sword", isSword()), WEAPON("Weapon", isWeapon()),
+	HELMET("Helmet", isHelmet()), SWORD("Sword", isSword()), WEAPONS("Weapons", isWeapon()),
 	PICKAXE("PickAxe", isPickAxe()), TOOL("Tool", isTool()), ALL("All", isAll());
 	
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();

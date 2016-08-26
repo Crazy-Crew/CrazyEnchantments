@@ -1,17 +1,24 @@
 package me.BadBones69.CrazyEnchantments.Enchantments;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.Api;
@@ -20,19 +27,37 @@ import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class PickAxes implements Listener{
+	HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<Player, HashMap<Block, BlockFace>>();
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onBlockClick(PlayerInteractEvent e){
+		Player player = e.getPlayer();
+		if(e.getAction()==Action.LEFT_CLICK_BLOCK){
+			ItemStack item = Api.getItemInHand(player);
+			Block block = e.getClickedBlock();
+			if(CE.hasEnchantments(item)){
+				if(CE.hasEnchantment(item, CEnchantments.BLAST)){
+					if(CEnchantments.BLAST.isEnabled()){
+						HashMap<Block, BlockFace> blockFace = new HashMap<Block, BlockFace>();
+						blockFace.put(block, e.getBlockFace());
+						blocks.put(player, blockFace);
+					}
+				}
+			}
+		}
+	}
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
-		if(!Api.allowsBreak(e.getPlayer()))return;
+		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
 		if(!Api.canBreakBlock(player, block))return;
-		if(player.getGameMode()!=GameMode.CREATIVE){
-			if(getOres().containsKey(block.getType())){
-				ItemStack item = Api.getItemInHand(player);
-				if(CE.hasEnchantments(item)){
-					if(CE.hasEnchantment(item, CEnchantments.AUTOSMELT)){
-						if(CEnchantments.AUTOSMELT.isEnabled()){
+		ItemStack item = Api.getItemInHand(player);
+		if(CE.hasEnchantments(item)){
+			if(player.getGameMode() != GameMode.CREATIVE){
+				if(CE.hasEnchantment(item, CEnchantments.AUTOSMELT)){
+					if(CEnchantments.AUTOSMELT.isEnabled()){
+						if(getOres().containsKey(block.getType())){
 							if(Api.randomPicker(2)){
 								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
 								Bukkit.getPluginManager().callEvent(event);
@@ -55,9 +80,37 @@ public class PickAxes implements Listener{
 							}
 						}
 					}
-					if(CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
-						if(CEnchantments.EXPERIENCE.isEnabled()){
-							int power = CE.getPower(item, CEnchantments.EXPERIENCE);
+				}
+				if(CE.hasEnchantment(item, CEnchantments.FURNACE)){
+					if(CEnchantments.FURNACE.isEnabled()){
+						if(getOres().containsKey(block.getType())){
+							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
+							Bukkit.getPluginManager().callEvent(event);
+							if(!event.isCancelled()){
+								e.setCancelled(true);
+								int drop = 0;
+								if(item.getItemMeta().hasEnchants()){
+									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
+										drop+=item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
+									}
+								}
+								if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE){
+									drop+=Api.percentPick(0, 3);
+								}
+								block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
+								ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+								orb.setExperience(Api.percentPick(7, 3));
+								block.setType(Material.AIR);
+								int dur = item.getDurability()+1;
+								item.setDurability((short)dur);
+							}
+						}
+					}
+				}
+				if(CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+					if(CEnchantments.EXPERIENCE.isEnabled()){
+						if(getOres().containsKey(block.getType())){
+						int power = CE.getPower(item, CEnchantments.EXPERIENCE);
 							if(Api.randomPicker(2)){
 								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
 								Bukkit.getPluginManager().callEvent(event);
@@ -71,7 +124,73 @@ public class PickAxes implements Listener{
 					}
 				}
 			}
+			if(CE.hasEnchantment(item, CEnchantments.BLAST)){
+				if(CEnchantments.BLAST.isEnabled()){
+					if(blocks.containsKey(player)){
+						if(blocks.get(player).containsKey(block)){
+							for(Block b : getBlocks(block.getLocation(), blocks.get(player).get(block), (CE.getPower(item, CEnchantments.BLAST)-1))){
+								if(CE.getBlockList().contains(b.getType())){
+									if(Api.canBreakBlock(player, b)&&Api.allowsBreak(b.getLocation())){
+										if(player.getGameMode() == GameMode.CREATIVE){
+											b.setType(Material.AIR);
+										}else{
+											b.breakNaturally();
+										}
+									}
+								}
+							}
+							blocks.remove(player);
+						}
+					}
+				}
+			}
 		}
+	}
+	@SuppressWarnings("incomplete-switch")
+	List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth){
+		Location loc2 = loc.clone();
+		switch(blockFace){
+		case SOUTH:
+			loc.add(-1, 1, -depth);
+			loc2.add(1, -1, 0);
+			break;
+		case WEST:
+			loc.add(depth, 1, -1);
+			loc2.add(0, -1, 1);
+			break;
+		case EAST:
+			loc.add(-depth, 1, 1);
+			loc2.add(0, -1, -1);
+			break;
+		case NORTH:
+			loc.add(1, 1, depth);
+			loc2.add(-1, -1, 0);
+			break;
+		case UP:
+			loc.add(-1, -depth, -1);
+			loc2.add(1, 0, 1);
+			break;
+		case DOWN:
+			loc.add(1, depth, 1);
+			loc2.add(-1, 0, -1);
+			break;
+		}
+		List<Block> blocks = new ArrayList<Block>();
+		int topBlockX = (loc.getBlockX() < loc2.getBlockX() ? loc2.getBlockX() : loc.getBlockX());
+		int bottomBlockX = (loc.getBlockX() > loc2.getBlockX() ? loc2.getBlockX() : loc.getBlockX());
+		int topBlockY = (loc.getBlockY() < loc2.getBlockY() ? loc2.getBlockY() : loc.getBlockY());
+		int bottomBlockY = (loc.getBlockY() > loc2.getBlockY() ? loc2.getBlockY() : loc.getBlockY());
+		int topBlockZ = (loc.getBlockZ() < loc2.getBlockZ() ? loc2.getBlockZ() : loc.getBlockZ());
+		int bottomBlockZ = (loc.getBlockZ() > loc2.getBlockZ() ? loc2.getBlockZ() : loc.getBlockZ());
+		for(int x = bottomBlockX; x <= topBlockX; x++){
+			for(int z = bottomBlockZ; z <= topBlockZ; z++){
+				for(int y = bottomBlockY; y <= topBlockY; y++){
+					Block block = loc.getWorld().getBlockAt(x, y, z);
+					blocks.add(block);
+				}
+			}
+		}
+		return blocks;
 	}
 	HashMap<Material, Material> getOres(){
 		HashMap<Material, Material> ores = new HashMap<Material, Material>();

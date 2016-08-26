@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -13,6 +14,8 @@ import me.BadBones69.CrazyEnchantments.Main;
 public class CrazyEnchantments {
 	
 	public static CrazyEnchantments instance = new CrazyEnchantments();
+	ArrayList<Material> BlockList = new ArrayList<Material>();
+	int rageMaxLevel;
 	
 	/**
 	 * 
@@ -93,11 +96,6 @@ public class CrazyEnchantments {
 								return true;
 							}
 						}
-					/*	for(String enchantment : getCustomEnchantments()){
-							if(lore.contains(getCustomName(enchantment))){
-								return true;
-							}
-						}	*/
 					}
 				}
 			}
@@ -248,6 +246,37 @@ public class CrazyEnchantments {
 		if(line.equalsIgnoreCase("IX"))return 9;
 		if(line.equalsIgnoreCase("X"))return 10;
 		return 1;
+	}
+	
+	/**
+	 * Loads the block list for blast.
+	 */
+	public void load(){
+		BlockList.clear();
+		for(String id : Main.settings.getBlockList().getStringList("Block-List")){
+			BlockList.add(Api.makeItem(id, 1).getType());
+		}
+		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.MaxRageLevel")){
+			rageMaxLevel = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxRageLevel");
+		}else{
+			rageMaxLevel = 4;
+		}
+	}
+	
+	/**
+	 * 
+	 * @return The block list for blast.
+	 */
+	public ArrayList<Material> getBlockList(){
+		return BlockList;
+	}
+	
+	/**
+	 * 
+	 * @return The max rage stack level.
+	 */
+	public Integer getMaxRageLevel(){
+		return rageMaxLevel;
 	}
 	
 	private String convertPower(Integer i){

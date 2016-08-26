@@ -10,9 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 
-public class CEBook {
+public class CustomEBook {
 	
-	CEnchantments enchantment;
+	CustomEnchantments CustomE = CustomEnchantments.getInstance();
+	
+	String enchantment;
 	int amount;
 	int power;
 	int destory_rate;
@@ -24,7 +26,7 @@ public class CEBook {
 	 * @param power Tier of the enchantment.
 	 * @param amount Amount of books you want.
 	 */
-	public CEBook(CEnchantments enchantment, Integer power, Integer amount){
+	public CustomEBook(String enchantment, Integer power, Integer amount){
 		this.enchantment = enchantment;
 		this.amount = amount;
 		this.power = power;
@@ -40,7 +42,7 @@ public class CEBook {
 	 * 
 	 * @param enchantment Set the enchantment.
 	 */
-	public void setEnchantemnt(CEnchantments enchantment){
+	public void setEnchantemnt(String enchantment){
 		this.enchantment = enchantment;
 	}
 	
@@ -81,11 +83,11 @@ public class CEBook {
 	 * @return Return the book as an ItemStack.
 	 */
 	public ItemStack buildBook(){
-		String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + convertPower(power);
+		String name = CustomE.getBookColor(enchantment) + CustomE.getCustomName(enchantment) + " " + convertPower(power);
 		List<String> lore = new ArrayList<String>();
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			if(l.contains("%Description%")||l.contains("%description%")){
-				for(String m : enchantment.getDiscription()){
+				for(String m : CustomE.getDiscription(enchantment)){
 					lore.add(Api.color(m));
 				}
 			}else{

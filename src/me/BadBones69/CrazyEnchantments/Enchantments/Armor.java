@@ -164,8 +164,8 @@ public class Armor implements Listener{
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(!Api.allowsPVP(e.getEntity()))return;
-		if(!Api.allowsPVP(e.getDamager()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getDamager() instanceof LivingEntity){
 			if(e.getEntity() instanceof Player){
 				final Player player = (Player) e.getEntity();
@@ -320,7 +320,15 @@ public class Armor implements Listener{
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										damager.getWorld().strikeLightning(damager.getLocation());
+										Location loc = damager.getLocation();
+										loc.getWorld().strikeLightningEffect(loc);
+										for(LivingEntity en : Api.getNearbyEntities(loc, 2D, damager)){
+											if(Api.allowsPVP(en.getLocation())){
+												if(!Api.isFriendly(player, en)){
+													en.damage(5D);
+												}
+											}
+										}
 									}
 								}
 							}
@@ -333,7 +341,7 @@ public class Armor implements Listener{
 							if(CE.hasEnchantment(armor, CEnchantments.LEADERSHIP)){
 								if(CEnchantments.LEADERSHIP.isEnabled()){
 									if(Api.randomPicker(12)){
-										if(Api.hasFactions()){
+										if(Api.hasFactions()||Api.hasFeudal()){
 											int radius = 4+CE.getPower(armor, CEnchantments.LEADERSHIP);
 											int players = 0;
 											for(Entity en : damager.getNearbyEntities(radius, radius, radius)){
@@ -413,7 +421,7 @@ public class Armor implements Listener{
 					}
 					if(CE.hasEnchantment(armor, CEnchantments.ANGEL)){
 						if(CEnchantments.ANGEL.isEnabled()){
-							if(Api.hasFactions()){
+							if(Api.hasFactions()||Api.hasFeudal()){
 								int radius = 4+CE.getPower(armor, CEnchantments.ANGEL);
 								for(Entity en : player.getNearbyEntities(radius, radius, radius)){
 									if(en instanceof Player){
@@ -482,7 +490,7 @@ public class Armor implements Listener{
  	public void onDeath(PlayerDeathEvent e){
 		Player player = e.getEntity();
 		Player killer = player.getKiller();
-		if(!Api.allowsPVP(player))return;
+		if(!Api.allowsPVP(player.getLocation()))return;
 		for(ItemStack item : player.getEquipment().getArmorContents()){
 			if(CE.hasEnchantments(item)){
 				if(CE.hasEnchantment(item, CEnchantments.SELFDESTRUCT)){

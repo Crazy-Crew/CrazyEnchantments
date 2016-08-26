@@ -12,14 +12,19 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
@@ -27,6 +32,7 @@ import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
+import me.BadBones69.CrazyEnchantments.MultiSupport.FeudalSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_10_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
@@ -176,7 +182,65 @@ public class Api{
 		return list;
 	}
 	public static boolean hasFactions(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null)return true;
+		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
+			return true;
+		}
+		return false;
+	}
+	public static boolean hasFeudal(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("Feudal")!=null){
+			return true;
+		}
+		return false;
+	}
+	public static boolean inTerritory(Player player){
+		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+		if(factions!=null){
+			if(factions.getDescription().getAuthors().contains("drtshock")){
+				if(FactionsUUID.inTerritory(player))return true;
+				if(!FactionsUUID.inTerritory(player))return false;
+			}
+			if(factions.getDescription().getWebsite()!=null){
+				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+					if(FactionsSupport.inTerritory(player))return true;
+					if(!FactionsSupport.inTerritory(player))return false;
+				}
+			}
+		}
+		if(Bukkit.getServer().getPluginManager().getPlugin("Feudal")!=null){
+			if(FeudalSupport.inTerritory(player)){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		return false;
+	}
+	public static boolean isFriendly(Entity P, Entity O){
+		if(P instanceof Player&&O instanceof Player){
+			Player player = (Player) P;
+			Player other = (Player) O;
+			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
+			if(factions!=null){
+				if(factions.getDescription().getAuthors().contains("drtshock")){
+					if(FactionsUUID.isFriendly(player, other))return true;
+					if(!FactionsUUID.isFriendly(player, other))return false;
+				}
+				if(factions.getDescription().getWebsite()!=null){
+					if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+						if(FactionsSupport.isFriendly(player, other))return true;
+						if(!FactionsSupport.isFriendly(player, other))return false;
+					}
+				}
+			}
+			if(Bukkit.getServer().getPluginManager().getPlugin("Feudal")!=null){
+				if(FeudalSupport.isFrendly(player, other)){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}
 		return false;
 	}
 	public static boolean canBreakBlock(Player player, Block block){
@@ -195,64 +259,46 @@ public class Api{
 				}
 			}
 		}
+		if(Bukkit.getServer().getPluginManager().getPlugin("Feudal")!=null){
+			if(FeudalSupport.canBreakBlock(player, block)){
+				return true;
+			}else{
+				return false;
+			}
+		}
 		return true;
 	}
-	public static boolean inTerritory(Player player){
-		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
-		if(factions!=null){
-			if(factions.getDescription().getAuthors().contains("drtshock")){
-				if(FactionsUUID.inTerritory(player))return true;
-				if(!FactionsUUID.inTerritory(player))return false;
-			}
-			if(factions.getDescription().getWebsite()!=null){
-				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-					if(FactionsSupport.inTerritory(player))return true;
-					if(!FactionsSupport.inTerritory(player))return false;
+	public static boolean allowsPVP(Location loc){
+		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
+			if(WorldGuard.allowsPVP(loc))return true;
+			if(!WorldGuard.allowsPVP(loc))return false;
+		}
+		return true;
+	}
+	public static boolean allowsBreak(Location loc){
+		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
+			if(WorldGuard.allowsBreak(loc))return true;
+			if(!WorldGuard.allowsBreak(loc))return false;
+		}
+		return true;
+	}
+	public static boolean allowsExplotions(Location loc){
+		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
+			if(WorldGuard.allowsExplotions(loc))return true;
+			if(!WorldGuard.allowsExplotions(loc))return false;
+		}
+		return true;
+	}
+	public static boolean inWingsRegion(Location loc){
+		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")){
+			for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")){
+				if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
+					if(WorldGuard.inRegion(rg, loc))return true;
+					if(!WorldGuard.inRegion(rg, loc))return false;
 				}
 			}
 		}
 		return false;
-	}
-	public static boolean isFriendly(Entity P, Entity O){
-		if(P instanceof Player&&O instanceof Player){
-			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
-			if(factions!=null){
-				Player player = (Player) P;
-				Player other = (Player) O;
-				if(factions.getDescription().getAuthors().contains("drtshock")){
-					if(FactionsUUID.isFriendly(player, other))return true;
-					if(!FactionsUUID.isFriendly(player, other))return false;
-				}
-				if(factions.getDescription().getWebsite()!=null){
-					if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-						if(FactionsSupport.isFriendly(player, other))return true;
-						if(!FactionsSupport.isFriendly(player, other))return false;
-					}
-				}
-			}
-		}
-		return false;
-	}
-	public static boolean allowsPVP(Entity en){
-		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			if(WorldGuard.allowsPVP(en))return true;
-			if(!WorldGuard.allowsPVP(en))return false;
-		}
-		return true;
-	}
-	public static boolean allowsBreak(Entity en){
-		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			if(WorldGuard.allowsBreak(en))return true;
-			if(!WorldGuard.allowsBreak(en))return false;
-		}
-		return true;
-	}
-	public static boolean allowsExplotions(Entity en){
-		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			if(WorldGuard.allowsExplotions(en))return true;
-			if(!WorldGuard.allowsExplotions(en))return false;
-		}
-		return true;
 	}
 	public static ItemStack removeLore(ItemStack item, String i){
 		ArrayList<String> lore = new ArrayList<String>();
@@ -279,16 +325,6 @@ public class Api{
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
-	}
-	public static ItemStack getLostBook(String cat, int amount){
-		String id = Main.settings.getConfig().getString("Settings.LostBook.Item");
-		String name = Main.settings.getConfig().getString("Settings.LostBook.Name");
-		List<String> lore = new ArrayList<String>();
-		String tn = Main.settings.getConfig().getString("Categories."+cat+".Name");
-		for(String l : Main.settings.getConfig().getStringList("Settings.LostBook.Lore")){
-			lore.add(l.replaceAll("%Category%", tn).replaceAll("%category%", tn));
-		}
-		return makeItem(id, amount, name, lore);
 	}
 	public static ItemStack makeItem(Material material, int amount, int type, String name){
 		ItemStack item = new ItemStack(material, amount, (short) type);
@@ -616,7 +652,8 @@ public class Api{
 	public static boolean destroyChance(ItemStack item){
 		if(item.hasItemMeta()){
 			if(item.getItemMeta().hasLore()){
-				if(randomPicker(getPercent("%destroy_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")), 100)){
+				int percent = getPercent("%destroy_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
+				if(randomPicker(percent, 100)){
 					return true;
 				}else{
 					return false;
@@ -628,16 +665,23 @@ public class Api{
 	public static Integer getPercent(String Argument, ItemStack item, List<String> Msg){
 		List<String> lore = item.getItemMeta().getLore();
 		String arg = "100";
-		int i = 0;
-		for(String l : Msg){
-			l = Api.color(l).toLowerCase();
-			String lo = lore.get(i).toLowerCase();
-			if(l.contains(Argument.toLowerCase())){
-				String[] b = l.split(Argument.toLowerCase());
-				if(b.length>=1)arg = lo.replace(b[0], "");
-				if(b.length>=2)arg = arg.replace(b[1], "");
+		for(String oLine : Msg){
+			oLine = Api.color(oLine).toLowerCase();
+			if(oLine.contains(Argument.toLowerCase())){
+				String[] b = oLine.split(Argument.toLowerCase());
+				for(String iline : lore){
+					if(b.length>=1){
+						if(iline.toLowerCase().startsWith(b[0])){
+							arg = iline.toLowerCase().replace(b[0], "");
+						}
+					}
+					if(b.length>=2){
+						if(iline.toLowerCase().endsWith(b[1])){
+							arg = arg.toLowerCase().replace(b[1], "");
+						}
+					}
+				}
 			}
-			i++;
 		}
 		return Integer.parseInt(arg);
 	}
@@ -676,5 +720,65 @@ public class Api{
 			return true;
 		}
 		return false;
+	}
+	public static List<LivingEntity> getNearbyEntities(Location loc, double radius, Entity ent) {
+	    List<Entity> out = ent.getNearbyEntities(radius, radius, radius);
+	    List<LivingEntity> entities = new ArrayList<LivingEntity>();
+	    ent.remove();
+	    for(Entity en : out){
+	    	if(en instanceof LivingEntity){
+	    		entities.add((LivingEntity)en);
+	    	}
+	    }
+	    return entities;
+	}
+	public static ItemStack getLostBook(String cat, int amount){
+		String id = Main.settings.getConfig().getString("Settings.LostBook.Item");
+		String name = Main.settings.getConfig().getString("Settings.LostBook.Name");
+		List<String> lore = new ArrayList<String>();
+		String tn = Main.settings.getConfig().getString("Categories."+cat+".Name");
+		for(String l : Main.settings.getConfig().getStringList("Settings.LostBook.Lore")){
+			lore.add(l.replaceAll("%Category%", tn).replaceAll("%category%", tn));
+		}
+		return makeItem(id, amount, name, lore);
+	}
+	public static void fireWork(Location loc, ArrayList<Color> colors) {
+		Firework fw = loc.getWorld().spawn(loc, Firework.class);
+		FireworkMeta fm = fw.getFireworkMeta();
+		fm.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
+				.withColor(colors)
+				.trail(false)
+				.flicker(false)
+				.build());
+		fm.setPower(0);
+		fw.setFireworkMeta(fm);
+		detonate(fw);
+	}
+	private static void detonate(final Firework f) {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			public void run() {
+				f.detonate();
+			}
+		}, 2);
+	}
+	public static Color getColor(String color) {
+		if (color.equalsIgnoreCase("AQUA")) return Color.AQUA;
+		if (color.equalsIgnoreCase("BLACK")) return Color.BLACK;
+		if (color.equalsIgnoreCase("BLUE")) return Color.BLUE;
+		if (color.equalsIgnoreCase("FUCHSIA")) return Color.FUCHSIA;
+		if (color.equalsIgnoreCase("GRAY")) return Color.GRAY;
+		if (color.equalsIgnoreCase("GREEN")) return Color.GREEN;
+		if (color.equalsIgnoreCase("LIME")) return Color.LIME;
+		if (color.equalsIgnoreCase("MAROON")) return Color.MAROON;
+		if (color.equalsIgnoreCase("NAVY")) return Color.NAVY;
+		if (color.equalsIgnoreCase("OLIVE")) return Color.OLIVE;
+		if (color.equalsIgnoreCase("ORANGE")) return Color.ORANGE;
+		if (color.equalsIgnoreCase("PURPLE")) return Color.PURPLE;
+		if (color.equalsIgnoreCase("RED")) return Color.RED;
+		if (color.equalsIgnoreCase("SILVER")) return Color.SILVER;
+		if (color.equalsIgnoreCase("TEAL")) return Color.TEAL;
+		if (color.equalsIgnoreCase("WHITE")) return Color.WHITE;
+		if (color.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
+		return null;
 	}
 }

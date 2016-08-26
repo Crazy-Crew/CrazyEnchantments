@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,15 +19,21 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import me.BadBones69.CrazyEnchantments.Api;
-import me.BadBones69.CrazyEnchantments.ECControl;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 
 public class Tinkerer implements Listener{
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
+	@SuppressWarnings("static-access")
+	public Tinkerer(Plugin plugin){
+		this.plugin = plugin;
+	}
 	public static void openTinker(Player player){
 		Inventory inv = Bukkit.createInventory(null, 54, Api.color(Main.settings.getTinker().getString("Settings.GUIName")));
 		inv.setItem(0, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, Main.settings.getTinker().getString("Settings.TradeButton")));
@@ -186,24 +193,33 @@ public class Tinkerer implements Listener{
 			}
 		}
 	}
-	@EventHandler
-	public void onInvClose(InventoryCloseEvent e){
-		Inventory inv = e.getInventory();
-		if(inv!=null){
-			if(inv.getName().equals(Api.color(Main.settings.getTinker().getString("Settings.GUIName")))){
-				for(int slot : getSlot().keySet()){
-					if(inv.getItem(slot)!=null){
-						if(inv.getItem(slot).getType()!=Material.AIR){
-							if(Api.isInvFull(((Player)e.getPlayer()))){
-								e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
-							}else{
-								e.getPlayer().getInventory().addItem(inv.getItem(slot));
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onInvClose(final InventoryCloseEvent e){
+		final Inventory inv = e.getInventory();
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			public void run() {
+				if(inv!=null){
+					if(inv.getName().equals(Api.color(Main.settings.getTinker().getString("Settings.GUIName")))){
+						Boolean dead = e.getPlayer().isDead();
+						for(int slot : getSlot().keySet()){
+							if(inv.getItem(slot)!=null){
+								if(inv.getItem(slot).getType()!=Material.AIR){
+									if(dead){
+										e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
+									}else{
+										if(Api.isInvFull(((Player)e.getPlayer()))){
+											e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
+										}else{
+											e.getPlayer().getInventory().addItem(inv.getItem(slot));
+										}
+									}
+								}
 							}
 						}
 					}
 				}
 			}
-		}
+		}, 0);
 	}
 	ItemStack getBottle(ItemStack item){
 		String id = Main.settings.getTinker().getString("Settings.BottleOptions.Item");
@@ -248,7 +264,7 @@ public class Tinkerer implements Listener{
 	}
 	int getTotalXP(ItemStack item){
 		int total=0;
-		if(ECControl.isAll().contains(item.getType())||item.getType()==Material.BOOK){
+		if(EnchantmentType.ALL.getItems().contains(item.getType())||item.getType()==Material.BOOK){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){

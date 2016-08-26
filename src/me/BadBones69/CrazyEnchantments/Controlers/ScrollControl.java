@@ -15,11 +15,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.Api;
-import me.BadBones69.CrazyEnchantments.ECControl;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEBook;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 
 public class ScrollControl implements Listener{
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
@@ -40,13 +40,7 @@ public class ScrollControl implements Listener{
 							if(c.getAmount()==1){
 								if(!Api.isProtected(item)){
 									ArrayList<Material> types = new ArrayList<Material>();
-									types.addAll(ECControl.isArmor());
-									types.addAll(ECControl.isBoots());
-									types.addAll(ECControl.isHelmet());
-									types.addAll(ECControl.isSword());
-									types.addAll(ECControl.isBow());
-									types.addAll(ECControl.isAxe());
-									types.addAll(ECControl.isPickAxe());
+									types.addAll(EnchantmentType.ALL.getItems());
 									if(types.contains(item.getType())){
 										e.setCancelled(true);
 										e.setCurrentItem(Api.addLore(item, Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));

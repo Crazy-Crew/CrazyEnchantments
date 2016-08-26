@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,7 @@ import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 public class Helmets implements Listener{
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	int time = 99999999*20;
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
  	public void onEquip(ArmorEquipEvent e){
 		Player player = e.getPlayer();
 		ItemStack NewItem = e.getNewArmorPiece();
@@ -59,7 +60,7 @@ public class Helmets implements Listener{
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMovment(PlayerMoveEvent e){
 		Player player = e.getPlayer();
 		for(ItemStack armor : player.getEquipment().getArmorContents()){

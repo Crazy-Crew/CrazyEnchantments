@@ -1,16 +1,39 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.BadBones69.CrazyEnchantments.API;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import ca.thederpygolems.armorequip.ArmorEquipEvent;
+import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Main;
 
 public class CustomEnchantments implements Listener{
-/*	CrazyEnchantments CE = CrazyEnchantments.getInstance();
-	public static ArrayList<String> getEnchantments(){
-		ArrayList<String> enchs = new ArrayList<String>();
-		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return enchs;
-		for(String ench : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-			enchs.add(ench);
-		}
-		return enchs;
+	List<String> CustomEnchants = new ArrayList<String>();
+	HashMap<String, List<String>> Discription = new HashMap<String, List<String>>();
+	HashMap<String, String> Name = new HashMap<String, String>();
+	HashMap<String, String> BookColor = new HashMap<String, String>();
+	HashMap<String, String> EnchantmentColor = new HashMap<String, String>();
+	HashMap<String, Boolean> Toggle = new HashMap<String, Boolean>();
+	HashMap<String, EnchantmentType> Type = new HashMap<String, EnchantmentType>();
+	static CustomEnchantments instance = new CustomEnchantments();
+	public static CustomEnchantments getInstance() {
+		return instance;
 	}
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
@@ -18,10 +41,10 @@ public class CustomEnchantments implements Listener{
 			Player player = e.getPlayer();
 			ItemStack NewItem = e.getNewArmorPiece();
 			ItemStack OldItem = e.getOldArmorPiece();
-			if(CE.hasEnchantments(NewItem)){
+			if(hasEnchantments(NewItem)){
 				for(String ench : getEnchantments()){
-					if(CE.hasEnchantment(NewItem, ench)){
-						int power = CE.getPower(NewItem, CE.getFromName(ench));
+					if(hasEnchantment(NewItem, ench)){
+						int power = getPower(NewItem, ench);
 						int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.ArmorOptions.PowerIncrease");
 						for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
 							PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -48,9 +71,9 @@ public class CustomEnchantments implements Listener{
 					}
 				}
 			}
-			if(CE.hasEnchantments(OldItem)){
+			if(hasEnchantments(OldItem)){
 				for(String ench : getEnchantments()){
-					if(CE.hasEnchantment(OldItem, ench)){
+					if(hasEnchantment(OldItem, ench)){
 						for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
 							PotionEffectType potion = PotionEffectType.NIGHT_VISION;
 							String[] b = po.split(", ");
@@ -80,14 +103,14 @@ public class CustomEnchantments implements Listener{
 					LivingEntity damaged = (LivingEntity) e.getEntity();
 					ItemStack item = Api.getItemInHand(damager);
 					if(!e.getEntity().isDead()){
-						if(!Api.allowsPVP(e.getEntity()))return;
-						if(CE.hasEnchantments(item)){
+						if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+						if(hasEnchantments(item)){
 							for(String ench : getEnchantments()){
-								if(CE.hasEnchantment(item, ench)){
+								if(hasEnchantment(item, ench)){
 									//Damager Potion Control
 									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease")){
 										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
-											int power = CE.getPower(Api.getItemInHand(damager), CE.getFromName(ench));
+											int power = getPower(Api.getItemInHand(damager), ench);
 											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease");
 											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
 												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -123,7 +146,7 @@ public class CustomEnchantments implements Listener{
 									//Damaged Potion Control
 									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease")){
 										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
-											int power = CE.getPower(Api.getItemInHand(damager), CE.getFromName(ench));
+											int power = getPower(Api.getItemInHand(damager), ench);
 											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease");
 											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
 												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -163,7 +186,7 @@ public class CustomEnchantments implements Listener{
 										int cha = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Chance");
 										int power = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.PowerIncrease");
 										int multi = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Multiplyer");
-										double damage = e.getDamage()*(multi+(CE.getPower(Api.getItemInHand(damager), CE.getFromName(ench))+power));
+										double damage = e.getDamage()*(multi+(getPower(Api.getItemInHand(damager), ench)+power));
 										for(int counter = 1; counter<=1; counter++){
 											chance = 1 + number.nextInt(99);
 											if(chance <= cha){
@@ -183,12 +206,12 @@ public class CustomEnchantments implements Listener{
 	HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
-		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		ItemStack item = e.getBow();
-		if(CE.hasEnchantments(item)){
-			for(String ench : getEnchantments()){
-				if(CE.hasEnchantment(item, ench)){
-					Power.put((Projectile) e.getProjectile(), CE.getPower(e.getBow(), CE.getFromName(ench)));
+		if(hasEnchantments(item)){
+			for(String ench : CustomEnchants){
+				if(hasEnchantment(item, ench)){
+					Power.put((Projectile) e.getProjectile(), getPower(e.getBow(), ench));
 					Enchant.put((Projectile) e.getProjectile(), ench);
 				}
 			}
@@ -197,8 +220,8 @@ public class CustomEnchantments implements Listener{
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
-		if(!Api.allowsPVP(e.getEntity()))return;
-		if(!Api.allowsExplotions(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Api.allowsExplotions(e.getEntity().getLocation()))return;
 		if(Power.containsKey(e.getEntity())){
 			String ench = Enchant.get(e.getEntity());
 			if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.BowOptions.OnHit.Ground.Explode")){
@@ -226,7 +249,7 @@ public class CustomEnchantments implements Listener{
 	@EventHandler
  	public void onHit(EntityDamageByEntityEvent e){
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
-		if(!Api.allowsPVP(e.getDamager()))return;
+		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getDamager() instanceof Arrow){
 			if(!(e.getEntity() instanceof LivingEntity))return;
 			Projectile arrow = (Projectile) e.getDamager();
@@ -273,5 +296,160 @@ public class CustomEnchantments implements Listener{
 				}
 			}
 		}
-	}	*/
+	}
+	public List<String> getEnchantments(){
+		return instance.CustomEnchants;
+	}
+	public String getCustomName(String enchantment){
+		return instance.Name.get(enchantment);
+	}
+	public String getBookColor(String enchantment){
+		return instance.BookColor.get(enchantment);
+	}
+	public String getEnchantmentColor(String enchantment){
+		return instance.EnchantmentColor.get(enchantment);
+	}
+	public EnchantmentType getType(String enchantment){
+		return instance.Type.get(enchantment);
+	}
+	public Boolean isEnabled(String enchantment){
+		return instance.Toggle.get(enchantment);
+	}
+	public List<String> getDiscription(String enchantment){
+		return instance.Discription.get(enchantment);
+	}
+	public boolean hasEnchantments(ItemStack item){
+		if(item!=null){
+			if(item.hasItemMeta()){
+				if(item.getItemMeta().hasLore()){
+					for(String lore : item.getItemMeta().getLore()){
+						for(String enchantment : getEnchantments()){
+							if(lore.contains(getCustomName(enchantment))){
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	public boolean hasEnchantment(ItemStack item, String enchantment){
+		if(item!=null){
+			if(item.hasItemMeta()){
+				if(item.getItemMeta().hasLore()){
+					for(String lore : item.getItemMeta().getLore()){
+						if(lore.contains(getCustomName(enchantment))){
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	public ItemStack addEnchantment(ItemStack item, String enchant, Integer level){
+		List<String> newLore = new ArrayList<String>();
+		ItemMeta meta = item.getItemMeta();
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasLore()){
+				newLore.addAll(item.getItemMeta().getLore());
+			}
+		}
+		newLore.add(Api.color(getEnchantmentColor(enchant)+getCustomName(enchant)+" "+convertPower(level)));
+		if(newLore.contains(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
+			newLore.remove(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+			newLore.add(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+		}
+		if(newLore.contains(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
+			newLore.remove(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+			newLore.add(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+		}
+		meta.setLore(newLore);
+		item.setItemMeta(meta);
+		return item;
+	}
+	public ItemStack removeEnchantment(ItemStack item, String enchant){
+		List<String> newLore = new ArrayList<String>();
+		ItemMeta meta = item.getItemMeta();
+		for(String lore : item.getItemMeta().getLore()){
+			if(!lore.contains(getCustomName(enchant))){
+				newLore.add(lore);
+			}
+		}
+		meta.setLore(newLore);
+		item.setItemMeta(meta);
+		return item;
+	}
+	public Integer getBookPower(ItemStack book, String enchant){
+		String line = book.getItemMeta().getDisplayName().replace(getCustomName(enchant)+" ", "");
+		line = Api.removeColor(line);
+		if(Api.isInt(line))return Integer.parseInt(line);
+		if(line.equalsIgnoreCase("I"))return 1;
+		if(line.equalsIgnoreCase("II"))return 2;
+		if(line.equalsIgnoreCase("III"))return 3;
+		if(line.equalsIgnoreCase("IV"))return 4;
+		if(line.equalsIgnoreCase("V"))return 5;
+		if(line.equalsIgnoreCase("VI"))return 6;
+		if(line.equalsIgnoreCase("VII"))return 7;
+		if(line.equalsIgnoreCase("VIII"))return 8;
+		if(line.equalsIgnoreCase("IX"))return 9;
+		if(line.equalsIgnoreCase("X"))return 10;
+		return 1;
+	}
+	public Integer getPower(ItemStack item, String enchant){
+		String line = "";
+		for(String lore : item.getItemMeta().getLore()){
+			if(lore.contains(getCustomName(enchant))){
+				line = lore;
+				break;
+			}
+		}
+		line = line.replace(getCustomName(enchant)+" ", "");
+		line = Api.removeColor(line);
+		if(Api.isInt(line))return Integer.parseInt(line);
+		if(line.equalsIgnoreCase("I"))return 1;
+		if(line.equalsIgnoreCase("II"))return 2;
+		if(line.equalsIgnoreCase("III"))return 3;
+		if(line.equalsIgnoreCase("IV"))return 4;
+		if(line.equalsIgnoreCase("V"))return 5;
+		if(line.equalsIgnoreCase("VI"))return 6;
+		if(line.equalsIgnoreCase("VII"))return 7;
+		if(line.equalsIgnoreCase("VIII"))return 8;
+		if(line.equalsIgnoreCase("IX"))return 9;
+		if(line.equalsIgnoreCase("X"))return 10;
+		return 1;
+	}
+	private String convertPower(Integer i){
+		if(i<=0)return "I";
+		if(i==1)return "I";
+		if(i==2)return "II";
+		if(i==3)return "III";
+		if(i==4)return "IV";
+		if(i==5)return "V";
+		if(i==6)return "VI";
+		if(i==7)return "VII";
+		if(i==8)return "VIII";
+		if(i==9)return "IX";
+		if(i==10)return "X";
+		return i+"";
+	}
+	public void update(){
+		CustomEnchants.clear();
+		Name.clear();
+		BookColor.clear();
+		EnchantmentColor.clear();
+		Toggle.clear();
+		Discription.clear();
+		Type.clear();
+		for(String ench : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
+			CustomEnchants.add(ench);
+			Name.put(ench, Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Name"));
+			BookColor.put(ench, Main.settings.getCustomEnchs().getString("Enchantments."+ench+".BookColor"));
+			EnchantmentColor.put(ench, Main.settings.getCustomEnchs().getString("Enchantments."+ench+".Color"));
+			Toggle.put(ench, Main.settings.getCustomEnchs().getBoolean("Enchantments."+ench+".Enabled"));
+			Discription.put(ench, Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".Info.Description"));
+			Type.put(ench, EnchantmentType.getFromName(Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable")));
+		}
+	}
 }

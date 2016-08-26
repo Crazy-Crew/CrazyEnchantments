@@ -23,8 +23,8 @@ public class Axes implements Listener{
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	@EventHandler
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
-		if(!Api.allowsPVP(e.getEntity()))return;
-		if(!Api.allowsPVP(e.getDamager()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(e.getEntity() instanceof LivingEntity){
 			LivingEntity en = (LivingEntity) e.getEntity();
@@ -116,7 +116,7 @@ public class Axes implements Listener{
 	}
 	@EventHandler
 	public void onPlayerDamage(PlayerDeathEvent e){
-		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
 			Player player = e.getEntity();

@@ -1,5 +1,7 @@
 package me.BadBones69.CrazyEnchantments.API;
 
+import java.util.List;
+
 import me.BadBones69.CrazyEnchantments.Main;
 
 public enum CEnchantments {
@@ -77,8 +79,10 @@ public enum CEnchantments {
 	BLESSED("Blessed", EnchantmentType.AXE),
 	DECAPITATION("Decapitation", EnchantmentType.AXE),
 //	----------------PickAxes----------------  \\
+	BLAST("Blast", EnchantmentType.PICKAXE),
 	AUTOSMELT("AutoSmelt", EnchantmentType.PICKAXE),
 	EXPERIENCE("Experience", EnchantmentType.PICKAXE),
+	FURNACE("Furnace", EnchantmentType.PICKAXE),
 //	----------------Tools----------------  \\
 	HASTE("Haste", EnchantmentType.TOOL),
 	TELEPATHY("Telepathy", EnchantmentType.TOOL),
@@ -92,6 +96,7 @@ public enum CEnchantments {
 	String EnchantmentColor;
 	EnchantmentType Type;
 	Boolean Toggle;
+	List<String> Discription;
 	
 	/**
 	 * 
@@ -102,16 +107,12 @@ public enum CEnchantments {
 		Name=name;
 		Type=type;
 		if(Main.settings.getEnchs().contains("Enchantments."+name)){
-			CustomName = Main.settings.getEnchs().getString("Enchantments."+Name+".Name");
+			CustomName = Main.settings.getEnchs().getString("Enchantments."+name+".Name");
+			Discription = Main.settings.getEnchs().getStringList("Enchantments."+name+".Info.Description");
 			BookColor = Main.settings.getEnchs().getString("Enchantments."+name+".BookColor");
 			EnchantmentColor = Main.settings.getEnchs().getString("Enchantments."+name+".Color");
 			Toggle = Main.settings.getEnchs().getBoolean("Enchantments."+name+".Enabled");
-		}/*else{
-			Main.settings.getCustomEnchs().getString("Enchantments."+Name+".Name");
-			BookColor = Main.settings.getCustomEnchs().getString("Enchantments."+name+".BookColor");
-			EnchantmentColor = Main.settings.getCustomEnchs().getString("Enchantments."+name+".Color");
-			Toggle = Main.settings.getCustomEnchs().getBoolean("Enchantments."+name+".Enabled");
-		}*/
+		}
 	}
 	
 	/**
@@ -128,6 +129,14 @@ public enum CEnchantments {
 	 */
 	public String getCustomName(){
 		return CustomName;
+	}
+	
+	/**
+	 * 
+	 * @return The description of the enchantment in the Enchantments.yml.
+	 */
+	public List<String> getDiscription(){
+		return Discription;
 	}
 	
 	/**

@@ -36,7 +36,7 @@ public class Bows implements Listener{
 	ArrayList<Entity> Explode = new ArrayList<Entity>();
 	@EventHandler
 	public void onBowShoot(final EntityShootBowEvent e){
-		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		ItemStack item = e.getBow();
 		if(CE.hasEnchantments(item)){
 			if(CE.hasEnchantment(item, CEnchantments.BOOM)){
@@ -120,7 +120,7 @@ public class Bows implements Listener{
 	}
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
-		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		if(Arrow.containsKey(e.getEntity())){
 			Entity arrow = e.getEntity();
 			if(Enchant.get(arrow)==CEnchantments.BOOM){
@@ -135,12 +135,22 @@ public class Bows implements Listener{
 				}
 				Arrow.remove(arrow);
 			}
-		if(Enchant.get(arrow)==CEnchantments.LIGHTNING){
+			if(Enchant.get(arrow)==CEnchantments.LIGHTNING){
 				if(CEnchantments.LIGHTNING.isEnabled()){
 					Location loc = arrow.getLocation();
 					if(Api.randomPicker(5)){
-						loc.getWorld().strikeLightning(loc);
+						loc.getWorld().strikeLightningEffect(loc);
+						for(LivingEntity en : Api.getNearbyEntities(loc, 2D, arrow)){
+							if(Api.allowsPVP(en.getLocation())){
+								if(!Api.isFriendly(P.get(arrow), en)){
+									if(!P.containsKey(en)){
+										en.damage(5D);
+									}
+								}
+							}
+						}
 					}
+					P.remove(arrow);
 				}
 			}
 		}
@@ -155,8 +165,8 @@ public class Bows implements Listener{
 	}
 	@EventHandler
  	public void onArrowDamage(EntityDamageByEntityEvent e){
-		if(!Api.allowsPVP(e.getEntity()))return;
-		if(!Api.allowsPVP(e.getDamager()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getDamager() instanceof Arrow){
 			if(e.getEntity() instanceof LivingEntity){
 				LivingEntity en = (LivingEntity) e.getEntity();

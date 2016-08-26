@@ -3,9 +3,11 @@ package me.BadBones69.CrazyEnchantments.Enchantments;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -32,11 +34,11 @@ public class Swords implements Listener{
 	HashMap<Player, Double> multi = new HashMap<Player, Double>();
 	HashMap<Player, Integer> num = new HashMap<Player, Integer>();
 	HashMap<Player, Integer> reset = new HashMap<Player, Integer>();
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(!Api.allowsPVP(e.getEntity()))return;
-		if(!Api.allowsPVP(e.getDamager()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
 				final Player damager = (Player) e.getDamager();
@@ -100,13 +102,12 @@ public class Swords implements Listener{
 						}
 						if(CE.hasEnchantment(It, CEnchantments.RAGE)){
 							if(CEnchantments.RAGE.isEnabled()){
-								int Cap = 4;
 								EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.RAGE, It);
 								Bukkit.getPluginManager().callEvent(event);
 								if(!event.isCancelled()){
 									if(multi.containsKey(damager)){
 										Bukkit.getScheduler().cancelTask(reset.get(damager));
-										if(multi.get(damager)<=Cap)multi.put(damager, multi.get(damager) + (CE.getPower(It, CEnchantments.RAGE)*0.1));
+										if(multi.get(damager)<=CE.getMaxRageLevel())multi.put(damager, multi.get(damager) + (CE.getPower(It, CEnchantments.RAGE)*0.1));
 										if(multi.get(damager).intValue() == num.get(damager)){
 											damager.sendMessage(Api.color("&3You are now doing &a" + num.get(damager) + "x &3Damage."));
 											num.put(damager, num.get(damager)+1);
@@ -286,7 +287,15 @@ public class Swords implements Listener{
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.PARALYZE, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										en.getWorld().strikeLightning(en.getLocation());
+										Location loc = en.getLocation();
+										loc.getWorld().strikeLightningEffect(loc);
+										for(LivingEntity En : Api.getNearbyEntities(loc, 2D, damager)){
+											if(Api.allowsPVP(en.getLocation())){
+												if(!Api.isFriendly(damager, En)){
+													en.damage(5D);
+												}
+											}
+										}
 										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3*20, 2));
 										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3*20, 2));
 									}
@@ -354,10 +363,10 @@ public class Swords implements Listener{
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(PlayerDeathEvent e){
 		if(Api.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
-		if(!Api.allowsPVP(e.getEntity()))return;
+		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
 			Player player = e.getEntity();
@@ -382,7 +391,7 @@ public class Swords implements Listener{
 			}
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDeathEvent e){
 		if(Api.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
 		if(e.getEntity().getKiller() instanceof Player){

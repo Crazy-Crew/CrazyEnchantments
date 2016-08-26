@@ -258,3 +258,9 @@ Tinker:
     Wings:
       Items: 20
       Book: 5
+    Blast:
+      Items: 20
+      Book: 5
+    Furnace:
+      Items: 20
+      Book: 5

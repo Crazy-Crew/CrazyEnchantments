@@ -22,7 +22,7 @@ Messages:
   Give-Destroy-Dust: '&7You have given &a%Amount% &7Destroy Dust to &6%Player%&7.'
   Not-A-Category: '&6%Category% &cis not a category.'
   Clean-Lost-Book: '&7You have just cleaned a lost book and found %Found%&7.'
-  Book-Works: '&aYour item loved this books and accepted it.'
+  Book-Works: '&aYour item loved this book and accepted it.'
   Book-Failed: '&cYour item must not have liked that enchantment.'
   Item-Destroyed: '&cOh no the destroy rate was to much for the item.'
   Item-Was-Protected: '&cLuckily your item was blessed with Devine Protection and didnt break.'

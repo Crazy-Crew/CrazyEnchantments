@@ -1151,3 +1151,35 @@ Enchantments:
       - 'T1'
       - 'T2'
       - 'T3'
+  Blast:
+    Enabled: True
+    Name: 'Blast'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lBlast'
+      Description:
+        - '&c&lPickaxe Only'
+        - '&3Breaks blocks in a small radius'
+        - '&3Depending on the power of the enchantment.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'
+  Furnace:
+    Enabled: True
+    Name: 'Furnace'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Info:
+      Name: '&e&lFurnace'
+      Description:
+        - '&c&lPickaxe Only'
+        - '&3Always smelts ores into'
+        - '&3items instead of blocks.'
+    Categories:
+      - 'T1'
+      - 'T2'
+      - 'T3'

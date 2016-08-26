@@ -6,6 +6,7 @@ Settings:
   EnchantmentBookLore:
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
+    - '%Description%'
     - '&4%Destroy_Rate%% Destroy Chance'
     - '&a%Success_Rate%% Success Chance'
   LostBook:
@@ -139,6 +140,11 @@ Settings:
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: True #Turn on an off the Max amount of enchantments
     IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
+    MaxRageLevel: 4 #The max amount rage can stack when fighting.
+    Wings: #Options for the Wings Enchantment.
+      Regions: #All world guard regions the Wings enchantment can work in.
+        - 'Free_Fly'
+        - 'SafeZone'
   SignOptions: #Options for the Signs.
     ProtectionCrystalStyle: 
       Cost: 1000 #How much to buy it
@@ -172,7 +178,7 @@ Settings:
       Line2: '&b&lShop:' #Line 2 of the sign
       Line3: '&2&l%Category%' #Line 3 of the sign
       Line4: '&c&lCost: &6&l%Cost%XP' #Line 4 of the sign
-      Buy-Message: '&7You have just bought an &8Custom Enchantment Book&7.'
+      Buy-Message: '&7You have just bought a &8Custom Enchantment Book&7.'
     BlackScrollStyle: 
       Cost: 50 #How much to buy a black scroll
       Money/XP: Money #Use money or xp
@@ -212,6 +218,7 @@ Categories: #You can make as many different categories as you want
   T1: #Name of the category
     Name: '&c&l&nTier 1' #Name in the GUI
     Slot: 12 #The Slot number the item will be in
+    InGUI: True #Toggle if its in the GUI or not.
     Lore: #The lore of the Item
       - '&eCost: &6&l20 XP'
     Item: '266' #The id for the item
@@ -234,6 +241,8 @@ Categories: #You can make as many different categories as you want
       Money/XP: Money #Costs money or XP
       Lvl/Total: Lvl #If XP then Levels or Total XP
       Cost: 1000 #The Price of the book
+      FireworkToggle: True #Toggle on and off if when opening a lost book a firework effect happens
+      FireworkColors: 'Red, White, Blue' #The colors of the firework
     EnchOptions: #Enchantment Options
       SuccessPercent: #The range for the success rate that the enchantment will have
         Max: 90 #The max success rate
@@ -248,6 +257,7 @@ Categories: #You can make as many different categories as you want
   T2:
     Name: '&c&l&nTier 2'
     Slot: 14
+    InGUI: True
     Lore:
       - '&eCost: &6&l40 XP'
     Item: '264'
@@ -270,6 +280,8 @@ Categories: #You can make as many different categories as you want
       Money/XP: Money
       Lvl/Total: Lvl
       Cost: 2000
+      FireworkToggle: True
+      FireworkColors: 'Black, Yellow'
     EnchOptions:
       SuccessPercent:
         Max: 70
@@ -284,6 +296,7 @@ Categories: #You can make as many different categories as you want
   T3:
     Name: '&c&l&nTier 3'
     Slot: 16
+    InGUI: True
     Lore:
       - '&eCost: &6&l60 XP'
     Item: '388'
@@ -306,6 +319,8 @@ Categories: #You can make as many different categories as you want
       Money/XP: Money
       Lvl/Total: Lvl
       Cost: 3000
+      FireworkToggle: True
+      FireworkColors: 'White, Gray'
     EnchOptions:
       SuccessPercent:
         Max: 50

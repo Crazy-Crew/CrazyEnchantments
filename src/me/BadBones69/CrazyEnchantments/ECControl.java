@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,132 +15,40 @@ import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
 
 public class ECControl implements Listener{
 	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	static CustomEnchantments CustomE = CustomEnchantments.getInstance();
+	static HashMap<String, String> enchants = new HashMap<String, String>();
 	public static String Enchants(String cat){
-		ArrayList<String> enchants = new ArrayList<String>();
 		Random number = new Random();
+		List<String> enchantments = new ArrayList<String>();
 		for(CEnchantments en : CE.getEnchantments()){
 			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Categories")){
 				if(cat.equalsIgnoreCase(C)){
 					if(en.isEnabled()){
 						String power = powerPicker(en.getName(), cat);
-						enchants.add(Main.settings.getEnchs().getString("Enchantments."+en.getName()+".BookColor")+Main.settings.getEnchs().getString("Enchantments."+en.getName()+".Name")+" "+power);
+						enchants.put(en.getName(), en.getBookColor()+en.getCustomName()+" "+power);
+						enchantments.add(en.getName());
 					}
 				}
 			}
 		}
-	/*	if(Main.settings.getCustomEnchs().contains("Enchantments")){
-			for(String en : Main.settings.getCustomEnchs().getConfigurationSection("Enchantments").getKeys(false)){
-				for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en.getName()+".Categories")){
+		if(Main.settings.getCustomEnchs().contains("Enchantments")){
+			for(String en : CustomE.getEnchantments()){
+				for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Categories")){
 					if(cat.equalsIgnoreCase(C)){
-						String power = powerPicker(en, cat);
-						enchants.add(Main.settings.getCustomEnchs().getString("Enchantments."+en.getName()+".BookColor")+Main.settings.getCustomEnchs().getString("Enchantments."+en.getName()+".Name")+" "+power);
+						if(CustomE.isEnabled(en)){
+							String power = powerPicker(en, cat);
+							enchants.put(en, CustomE.getBookColor(en)+CustomE.getCustomName(en)+" "+power);
+							enchantments.add(en);
+						}
 					}
 				}
 			}
-		}	*/
-		String enchant = enchants.get(number.nextInt(enchants.size()));
-		return enchant;
-	}
-	public static HashMap<String, ArrayList<Material>> allEnchantments(){
-		HashMap<String, ArrayList<Material>> en = new HashMap<String, ArrayList<Material>>();
-		//---------Sword---------//
-		en.put("Trap", isSword());
-		en.put("Rage", isSword());
-		en.put("Viper", isSword());
-		en.put("Snare", isSword());
-		en.put("SlowMo", isSword());
-		en.put("Wither", isSword());
-		en.put("Vampire", isSword());
-		en.put("Execute", isSword());
-		en.put("FastTurn", isSword());
-		en.put("Disarmer", isSword());
-		en.put("Headless", isSword());
-		en.put("Paralyze", isSword());
-		en.put("Blindness", isSword());
-		en.put("LifeSteal", isSword());
-		en.put("Confusion", isSword());
-		en.put("Nutrition", isSword());
-		en.put("SkillSwipe", isSword());
-		en.put("Obliterate", isSword());
-		en.put("Inquisitive", isSword());
-		en.put("LightWeight", isSword());
-		en.put("DoubleDamage", isSword());
-		//----------Axes--------//
-		en.put("Rekt", isAxe());
-		en.put("Dizzy", isAxe());
-		en.put("Cursed", isAxe());
-		en.put("FeedMe", isAxe());
-		en.put("Blessed", isAxe());
-		en.put("Berserk", isAxe());
-		en.put("Decapitation", isAxe());
-		//----------Bow----------//
-		en.put("Boom", isBow());
-		en.put("Venom", isBow());
-		en.put("Doctor", isBow());
-		en.put("Piercing", isBow());
-		en.put("IceFreeze", isBow());
-		en.put("Lightning", isBow());
-		en.put("MultiArrow", isBow());
-		//---------Armor---------//
-		en.put("Hulk", isArmor());
-		en.put("Valor", isArmor());
-		en.put("Drunk", isArmor());
-		en.put("Ninja", isArmor());
-		en.put("Angel", isArmor());
-		en.put("Voodoo", isArmor());
-		en.put("Molten", isArmor());
-		en.put("Savior", isArmor());
-		en.put("Cactus", isArmor());
-		en.put("Freeze", isArmor());
-		en.put("Recover", isArmor());
-		en.put("Nursery", isArmor());
-		en.put("Fortify", isArmor());
-		en.put("OverLoad", isArmor());
-		en.put("Insomnia", isArmor());
-		en.put("SmokeBomb", isArmor());
-		en.put("PainGiver", isArmor());
-		en.put("BurnShield", isArmor());
-		en.put("Leadership", isArmor());
-		en.put("StormCaller", isArmor());
-		en.put("Enlightened", isArmor());
-		en.put("SelfDestruct", isArmor());
-		//--------Helmets--------//
-		en.put("Mermaid", isHelmet());
-		en.put("Glowing", isHelmet());
-		en.put("Implants", isHelmet());
-		en.put("Commander", isHelmet());
-		//---------Boots--------//
-		en.put("Gears", isBoots());
-		en.put("Wings", isBoots());
-		en.put("Rocket", isBoots());
-		en.put("Springs", isBoots());
-		en.put("AntiGravity", isBoots());
-		//---------PickAxes--------//
-		en.put("AutoSmelt", isPickAxe());
-		en.put("Experience", isPickAxe());
-		//---------Tools--------//
-		en.put("Haste", isTool());
-		en.put("Telepathy", isTool());
-		en.put("Oxygenate", isTool());
-		//---------All--------//
-		en.put("HellForged", isAll());
-		//---------Custom--------//
-	/*	for(String ench : CustomEnchantments.getEnchantments()){
-			String type = Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable");
-			if(type.equalsIgnoreCase("Armor"))en.put(ench, isArmor());
-			if(type.equalsIgnoreCase("Helmets"))en.put(ench, isHelmet());
-			if(type.equalsIgnoreCase("Boots"))en.put(ench, isBoots());
-			if(type.equalsIgnoreCase("Swords"))en.put(ench, isSword());
-			if(type.equalsIgnoreCase("Axes"))en.put(ench, isAxe());
-			if(type.equalsIgnoreCase("Weapons"))en.put(ench, isWeapon());
-			if(type.equalsIgnoreCase("Bows"))en.put(ench, isBow());
-			if(type.equalsIgnoreCase("Pickaxes"))en.put(ench, isPickAxe());
-			if(type.equalsIgnoreCase("Tools"))en.put(ench, isTool());
-		}	*/
-		return en;
+		}
+		return enchantments.get(number.nextInt(enchantments.size()));
 	}
 	@EventHandler
 	public void onBookClean(PlayerInteractEvent e){
@@ -157,6 +66,28 @@ public class ECControl implements Listener{
 								player.updateInventory();
 								player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Clean-Lost-Book")
 										.replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
+								if(Main.settings.getConfig().contains("Categories."+C+".LostBook.FireworkToggle")){
+									if(Main.settings.getConfig().contains("Categories."+C+".LostBook.FireworkColors")){
+										if(Main.settings.getConfig().getBoolean("Categories."+C+".LostBook.FireworkToggle")){
+											ArrayList<Color> colors = new ArrayList<Color>();
+											String Cs = Main.settings.getConfig().getString("Categories."+C+".LostBook.FireworkColors");
+											if(Cs.contains(", ")){
+												for(String color : Cs.split(", ")){
+													Color c = Api.getColor(color);
+													if(c != null){
+														colors.add(c);
+													}
+												}
+											}else{
+												Color c = Api.getColor(Cs);
+												if(c != null){
+													colors.add(c);
+												}
+											}
+											Api.fireWork(player.getLocation().add(0, 1, 0), colors);
+										}
+									}
+								}
 								return;
 							}
 						}
@@ -167,29 +98,31 @@ public class ECControl implements Listener{
 	}
 	@EventHandler
 	public void onClick(PlayerInteractEvent e){
-		Player player = e.getPlayer();
 		if(e.getItem()!=null){
 			ItemStack item = e.getItem();
 			if(item.getType()!=Material.BOOK)return;
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
+					String name = "";
+					Player player = e.getPlayer();
+					List<String> desc = new ArrayList<String>();
 					for(CEnchantments en : CE.getEnchantments()){
 						if(item.getItemMeta().getDisplayName().contains(Api.color(en.getBookColor()+en.getCustomName()))){
-							String name = "";
-							List<String> desc = new ArrayList<String>();
-							if(Main.settings.getEnchs().contains("Enchantments."+en.getName())){
-								name = Main.settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
-								desc = Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
-							}
-						/*	if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-								name = Main.settings.getCustomEnchs().getString("Enchantments."+en.getName()+".Info.Name");
-								desc = Main.settings.getCustomEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
-							}	*/
-							player.sendMessage(Api.color(name));
-							for(String msg : desc)player.sendMessage(Api.color(msg));
-							return;
+							name = Main.settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
+							desc = Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
 						}
 					}
+					for(String en : CustomE.getEnchantments()){
+						if(item.getItemMeta().getDisplayName().contains(Api.color(CustomE.getBookColor(en)+CustomE.getCustomName(en)))){
+							name = Main.settings.getCustomEnchs().getString("Enchantments."+en+".Info.Name");
+							desc = Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Info.Description");
+						}
+					}
+					if(name.length()>0){
+						player.sendMessage(Api.color(name));
+					}
+					for(String msg : desc)player.sendMessage(Api.color(msg));
+					return;
 				}
 			}
 		}
@@ -200,12 +133,27 @@ public class ECControl implements Listener{
 		int Dmax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Max");
 		int Dmin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Min");
 		ArrayList<String> lore = new ArrayList<String>();
+		String enchant = Enchants(cat);
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
-			lore.add(Api.color(l)
-					.replaceAll("%Destroy_Rate%", Api.percentPick(Dmax, Dmin)+"").replaceAll("%destroy_rate%", Api.percentPick(Dmax, Dmin)+"")
-					.replaceAll("%Success_Rate%", Api.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Api.percentPick(Smax, Smin)+""));
+			if(l.contains("%Description%")||l.contains("%description%")){
+				if(CE.getFromName(enchant)!=null){
+					for(String m : CE.getFromName(enchant).getDiscription()){
+						lore.add(Api.color(m));
+					}
+				}else{
+					if(CustomE.getEnchantments().contains(enchant)){
+						for(String m : CustomE.getDiscription(enchant)){
+							lore.add(Api.color(m));
+						}
+					}
+				}
+			}else{
+				lore.add(Api.color(l)
+						.replaceAll("%Destroy_Rate%", Api.percentPick(Dmax, Dmin)+"").replaceAll("%destroy_rate%", Api.percentPick(Dmax, Dmin)+"")
+						.replaceAll("%Success_Rate%", Api.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Api.percentPick(Smax, Smin)+""));
+			}
 		}
-		return Api.makeItem(Material.BOOK, 1, 0, Enchants(cat), lore);
+		return Api.makeItem(Material.BOOK, 1, 0, enchants.get(enchant), lore);
 	}
 	public static String powerPicker(String en, String C){
 		Random r = new Random();
@@ -213,9 +161,9 @@ public class ECControl implements Listener{
 		if(Main.settings.getEnchs().contains("Enchantments."+en)){
 			ench=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
 		}
-	/*	if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
-		}	*/
+		if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
+			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
+		}
 		int max = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
 		int min = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
 		int i = 1+r.nextInt(ench);
@@ -272,125 +220,5 @@ public class ECControl implements Listener{
 			i++;
 		}
 		return arg;
-	}
-	public static ArrayList<Material> isAll(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.addAll(isArmor());
-		ma.addAll(isTool());
-		ma.addAll(isBow());
-		ma.addAll(isWeapon());
-		return ma;
-	}
-	public static ArrayList<Material> isArmor(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.DIAMOND_HELMET);
-		ma.add(Material.DIAMOND_CHESTPLATE);
-		ma.add(Material.DIAMOND_LEGGINGS);
-		ma.add(Material.DIAMOND_BOOTS);
-		ma.add(Material.CHAINMAIL_HELMET);
-		ma.add(Material.CHAINMAIL_CHESTPLATE);
-		ma.add(Material.CHAINMAIL_LEGGINGS);
-		ma.add(Material.CHAINMAIL_BOOTS);
-		ma.add(Material.GOLD_HELMET);
-		ma.add(Material.GOLD_CHESTPLATE);
-		ma.add(Material.GOLD_LEGGINGS);
-		ma.add(Material.GOLD_BOOTS);
-		ma.add(Material.IRON_HELMET);
-		ma.add(Material.IRON_CHESTPLATE);
-		ma.add(Material.IRON_LEGGINGS);
-		ma.add(Material.IRON_BOOTS);
-		ma.add(Material.DIAMOND_HELMET);
-		ma.add(Material.DIAMOND_CHESTPLATE);
-		ma.add(Material.DIAMOND_LEGGINGS);
-		ma.add(Material.DIAMOND_BOOTS);
-		return ma;
-	}
-	public static ArrayList<Material> isHelmet(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.DIAMOND_HELMET);
-		ma.add(Material.CHAINMAIL_HELMET);
-		ma.add(Material.GOLD_HELMET);
-		ma.add(Material.IRON_HELMET);
-		ma.add(Material.DIAMOND_HELMET);
-		return ma;
-	}
-	public static ArrayList<Material> isBoots(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.DIAMOND_BOOTS);
-		ma.add(Material.CHAINMAIL_BOOTS);
-		ma.add(Material.GOLD_BOOTS);
-		ma.add(Material.IRON_BOOTS);
-		ma.add(Material.DIAMOND_BOOTS);
-		return ma;
-	}
-	public static ArrayList<Material> isAxe(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.WOOD_AXE);
-		ma.add(Material.STONE_AXE);
-		ma.add(Material.GOLD_AXE);
-		ma.add(Material.IRON_AXE);
-		ma.add(Material.DIAMOND_AXE);
-		return ma;
-	}
-	public static ArrayList<Material> isBow(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.BOW);
-		return ma;
-	}
-	public static ArrayList<Material> isSword(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.WOOD_SWORD);
-		ma.add(Material.STONE_SWORD);
-		ma.add(Material.GOLD_SWORD);
-		ma.add(Material.IRON_SWORD);
-		ma.add(Material.DIAMOND_SWORD);
-		return ma;
-	}
-	public static ArrayList<Material> isWeapon(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.WOOD_SWORD);
-		ma.add(Material.STONE_SWORD);
-		ma.add(Material.GOLD_SWORD);
-		ma.add(Material.IRON_SWORD);
-		ma.add(Material.DIAMOND_SWORD);
-		ma.add(Material.WOOD_AXE);
-		ma.add(Material.STONE_AXE);
-		ma.add(Material.GOLD_AXE);
-		ma.add(Material.IRON_AXE);
-		ma.add(Material.DIAMOND_AXE);
-		return ma;
-	}
-	public static ArrayList<Material> isPickAxe(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.WOOD_PICKAXE);
-		ma.add(Material.STONE_PICKAXE);
-		ma.add(Material.GOLD_PICKAXE);
-		ma.add(Material.IRON_PICKAXE);
-		ma.add(Material.DIAMOND_PICKAXE);
-		return ma;
-	}
-	public static ArrayList<Material> isTool(){
-		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.WOOD_PICKAXE);
-		ma.add(Material.STONE_PICKAXE);
-		ma.add(Material.GOLD_PICKAXE);
-		ma.add(Material.IRON_PICKAXE);
-		ma.add(Material.DIAMOND_PICKAXE);
-		ma.add(Material.WOOD_AXE);
-		ma.add(Material.STONE_AXE);
-		ma.add(Material.GOLD_AXE);
-		ma.add(Material.IRON_AXE);
-		ma.add(Material.DIAMOND_AXE);
-		ma.add(Material.WOOD_SPADE);
-		ma.add(Material.STONE_SPADE);
-		ma.add(Material.GOLD_SPADE);
-		ma.add(Material.IRON_SPADE);
-		ma.add(Material.DIAMOND_SPADE);
-		ma.add(Material.WOOD_HOE);
-		ma.add(Material.STONE_HOE);
-		ma.add(Material.GOLD_HOE);
-		ma.add(Material.IRON_HOE);
-		ma.add(Material.DIAMOND_HOE);
-		return ma;
 	}
 }

@@ -40,6 +40,9 @@ public class SettingsManager {
 	FileConfiguration tinker;
 	File tfile;
 	
+	FileConfiguration blocklist;
+	File blfile;
+	
 	public void setup(Plugin p) {
 		if (!p.getDataFolder().exists()) {
 			p.getDataFolder().mkdir();
@@ -115,6 +118,21 @@ public class SettingsManager {
 		}
 		tinker = YamlConfiguration.loadConfiguration(tfile);
 		
+		blfile = new File(p.getDataFolder(), "BlockList.yml");
+		if (!blfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/BlockList.yml");
+         		InputStream E = getClass().getResourceAsStream("/BlockList.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		blocklist = YamlConfiguration.loadConfiguration(blfile);
+		
+	}
+	public FileConfiguration getBlockList() {
+		return blocklist;
 	}
 	public FileConfiguration getTinker() {
 		return tinker;
@@ -122,14 +140,22 @@ public class SettingsManager {
 	public FileConfiguration getSigns() {
 		return signs;
 	}
-/*	public FileConfiguration getCustomEnchs() {
+	public FileConfiguration getCustomEnchs() {
 		return cenchs;
-	}	*/
+	}
 	public FileConfiguration getEnchs() {
 		return enchs;
 	}
 	public FileConfiguration getMsg() {
 		return msg;
+	}
+	public void saveBlockList() {
+		try {
+			blocklist.save(blfile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save BlockList.yml!");
+		}
 	}
 	public void saveTinker() {
 		try {
@@ -170,6 +196,9 @@ public class SettingsManager {
 			Bukkit.getServer().getLogger()
 					.severe(ChatColor.RED + "Could not save Messages.yml!");
 		}
+	}
+	public void reloadBlockList() {
+		blocklist = YamlConfiguration.loadConfiguration(blfile);
 	}
 	public void reloadTinker() {
 		tinker = YamlConfiguration.loadConfiguration(tfile);

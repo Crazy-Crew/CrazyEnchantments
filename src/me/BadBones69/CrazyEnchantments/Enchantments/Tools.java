@@ -24,6 +24,7 @@ import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 public class Tools implements Listener{
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	private HashMap<Player, HashMap<String, Boolean>> effect = new HashMap<Player, HashMap<String, Boolean>>();
+	private HashMap<Player, HashMap<String, Boolean>> hadEnchant = new HashMap<Player, HashMap<String, Boolean>>();
 	int time = 99999999*20;
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
@@ -44,6 +45,7 @@ public class Tools implements Listener{
 						Trigger.put("Haste", true);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power-1));
 						Haste=true;
+						hadEnchant.put(player, Trigger);
 					}
 				}
 			}
@@ -55,6 +57,7 @@ public class Tools implements Listener{
 						Trigger.put("Oxygenate", true);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
 						Ox=true;
+						hadEnchant.put(player, Trigger);
 					}
 				}
 			}
@@ -66,19 +69,23 @@ public class Tools implements Listener{
 			Trigger.put("Haste", false);
 		}
 		effect.put(player, Trigger);
-		if(effect.containsKey(player)){
-			if(!effect.get(player).get("Haste")){
+		if(effect.containsKey(player)&&hadEnchant.containsKey(player)){
+			if(!effect.get(player).get("Haste")&&hadEnchant.get(player).get("Haste")){
 				player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+				Trigger.put("Haste", false);
+				hadEnchant.put(player, Trigger);
 			}
-			if(!effect.get(player).get("Oxygenate")){
+			if(!effect.get(player).get("Oxygenate")&&hadEnchant.get(player).get("Oxygenate")){
 				player.removePotionEffect(PotionEffectType.WATER_BREATHING);
+				Trigger.put("Oxygenate", false);
+				hadEnchant.put(player, Trigger);
 			}
 			effect.remove(player);
 		}
 	}
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e){
-		if(!Api.allowsBreak(e.getPlayer()))return;
+		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
 		if(!Api.canBreakBlock(player, block))return;
