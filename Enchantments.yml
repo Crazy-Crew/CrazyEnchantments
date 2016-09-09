@@ -25,7 +25,7 @@ Enchantments:
       Name: '&e&lBurn Shield'
       Description:
         - '&c&lArmor Only'
-        - '&3Gives fire resistants'
+        - '&3Gives fire resistance'
         - '&3When they are put on'
     Categories:
       - 'T1'
@@ -104,7 +104,7 @@ Enchantments:
     Info:
       Name: '&e&lGears'
       Description:
-        - '&c&lGears Only'
+        - '&c&lBoots Only'
         - '&3Gives a Speed Boost'
         - '&3When they are put on'
     Categories:
@@ -121,7 +121,7 @@ Enchantments:
       Name: '&e&lHulk'
       Description:
         - '&c&lArmor Only'
-        - '&3Gives Strength, Damage Resistens,'
+        - '&3Gives Strength, Damage Resistance,'
         - '&3and Slowness when they are put on'
     Categories:
       - 'T1'
@@ -921,7 +921,7 @@ Enchantments:
       Name: '&e&lValor'
       Description:
         - '&c&lArmor Only'
-        - '&3Gives damage resistants'
+        - '&3Gives damage resistance'
         - '&3Based on your enchantment lvl'
     Categories:
       - 'T1'
