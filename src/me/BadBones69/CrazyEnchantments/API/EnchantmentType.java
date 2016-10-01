@@ -78,10 +78,14 @@ public enum EnchantmentType{
 	
 	private static ArrayList<Material> isArmor(){
 		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.DIAMOND_HELMET);
-		ma.add(Material.DIAMOND_CHESTPLATE);
-		ma.add(Material.DIAMOND_LEGGINGS);
-		ma.add(Material.DIAMOND_BOOTS);
+		ma.add(Material.LEATHER_HELMET);
+		ma.add(Material.LEATHER_CHESTPLATE);
+		ma.add(Material.LEATHER_LEGGINGS);
+		ma.add(Material.LEATHER_BOOTS);
+		ma.add(Material.IRON_HELMET);
+		ma.add(Material.IRON_CHESTPLATE);
+		ma.add(Material.IRON_LEGGINGS);
+		ma.add(Material.IRON_BOOTS);
 		ma.add(Material.CHAINMAIL_HELMET);
 		ma.add(Material.CHAINMAIL_CHESTPLATE);
 		ma.add(Material.CHAINMAIL_LEGGINGS);
@@ -90,10 +94,6 @@ public enum EnchantmentType{
 		ma.add(Material.GOLD_CHESTPLATE);
 		ma.add(Material.GOLD_LEGGINGS);
 		ma.add(Material.GOLD_BOOTS);
-		ma.add(Material.IRON_HELMET);
-		ma.add(Material.IRON_CHESTPLATE);
-		ma.add(Material.IRON_LEGGINGS);
-		ma.add(Material.IRON_BOOTS);
 		ma.add(Material.DIAMOND_HELMET);
 		ma.add(Material.DIAMOND_CHESTPLATE);
 		ma.add(Material.DIAMOND_LEGGINGS);
@@ -103,20 +103,20 @@ public enum EnchantmentType{
 	
 	private static ArrayList<Material> isHelmet(){
 		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.DIAMOND_HELMET);
+		ma.add(Material.LEATHER_HELMET);
+		ma.add(Material.IRON_HELMET);
 		ma.add(Material.CHAINMAIL_HELMET);
 		ma.add(Material.GOLD_HELMET);
-		ma.add(Material.IRON_HELMET);
 		ma.add(Material.DIAMOND_HELMET);
 		return ma;
 	}
 	
 	private static ArrayList<Material> isBoots(){
 		ArrayList<Material> ma = new ArrayList<Material>();
-		ma.add(Material.DIAMOND_BOOTS);
+		ma.add(Material.LEATHER_BOOTS);
+		ma.add(Material.IRON_BOOTS);
 		ma.add(Material.CHAINMAIL_BOOTS);
 		ma.add(Material.GOLD_BOOTS);
-		ma.add(Material.IRON_BOOTS);
 		ma.add(Material.DIAMOND_BOOTS);
 		return ma;
 	}
@@ -126,6 +126,7 @@ public enum EnchantmentType{
 		ma.add(Material.WOOD_AXE);
 		ma.add(Material.STONE_AXE);
 		ma.add(Material.IRON_AXE);
+		ma.add(Material.GOLD_AXE);
 		ma.add(Material.DIAMOND_AXE);
 		return ma;
 	}
@@ -141,6 +142,7 @@ public enum EnchantmentType{
 		ma.add(Material.WOOD_SWORD);
 		ma.add(Material.STONE_SWORD);
 		ma.add(Material.IRON_SWORD);
+		ma.add(Material.GOLD_SWORD);
 		ma.add(Material.DIAMOND_SWORD);
 		return ma;
 	}
@@ -150,10 +152,12 @@ public enum EnchantmentType{
 		ma.add(Material.WOOD_SWORD);
 		ma.add(Material.STONE_SWORD);
 		ma.add(Material.IRON_SWORD);
+		ma.add(Material.GOLD_SWORD);
 		ma.add(Material.DIAMOND_SWORD);
 		ma.add(Material.WOOD_AXE);
 		ma.add(Material.STONE_AXE);
 		ma.add(Material.IRON_AXE);
+		ma.add(Material.GOLD_AXE);
 		ma.add(Material.DIAMOND_AXE);
 		return ma;
 	}
@@ -162,8 +166,8 @@ public enum EnchantmentType{
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_PICKAXE);
 		ma.add(Material.STONE_PICKAXE);
-		ma.add(Material.GOLD_PICKAXE);
 		ma.add(Material.IRON_PICKAXE);
+		ma.add(Material.GOLD_PICKAXE);
 		ma.add(Material.DIAMOND_PICKAXE);
 		return ma;
 	}
@@ -172,23 +176,23 @@ public enum EnchantmentType{
 		ArrayList<Material> ma = new ArrayList<Material>();
 		ma.add(Material.WOOD_PICKAXE);
 		ma.add(Material.STONE_PICKAXE);
-		ma.add(Material.GOLD_PICKAXE);
 		ma.add(Material.IRON_PICKAXE);
+		ma.add(Material.GOLD_PICKAXE);
 		ma.add(Material.DIAMOND_PICKAXE);
 		ma.add(Material.WOOD_AXE);
 		ma.add(Material.STONE_AXE);
-		ma.add(Material.GOLD_AXE);
 		ma.add(Material.IRON_AXE);
+		ma.add(Material.GOLD_AXE);
 		ma.add(Material.DIAMOND_AXE);
 		ma.add(Material.WOOD_SPADE);
 		ma.add(Material.STONE_SPADE);
-		ma.add(Material.GOLD_SPADE);
 		ma.add(Material.IRON_SPADE);
+		ma.add(Material.GOLD_SPADE);
 		ma.add(Material.DIAMOND_SPADE);
 		ma.add(Material.WOOD_HOE);
 		ma.add(Material.STONE_HOE);
-		ma.add(Material.GOLD_HOE);
 		ma.add(Material.IRON_HOE);
+		ma.add(Material.GOLD_HOE);
 		ma.add(Material.DIAMOND_HOE);
 		return ma;
 	}
