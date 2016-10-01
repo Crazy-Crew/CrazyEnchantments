@@ -41,9 +41,21 @@ public class BlackSmith implements Listener{
 		for(int i:other)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 7, " "));
 		for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, " "));
 		if(Api.getVersion()<181){
-			inv.setItem(16, Api.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None")));
+			ItemStack item = Api.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
+			if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+				for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+					item = Api.addLore(item, line);
+				}
+			}
+			inv.setItem(16, item);
 		}else{
-			inv.setItem(16, Api.makeItem(Material.BARRIER, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None")));
+			ItemStack item = Api.makeItem(Material.BARRIER, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
+			if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+				for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+					item = Api.addLore(item, line);
+				}
+			}
+			inv.setItem(16, item);
 		}
 		player.openInventory(inv);
 	}

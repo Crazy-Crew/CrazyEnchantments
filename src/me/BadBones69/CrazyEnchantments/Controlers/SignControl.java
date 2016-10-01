@@ -142,7 +142,7 @@ public class SignControl implements Listener{
 			if(Loc.equals(loc)){
 				Main.settings.getSigns().set("Locations."+l, null);
 				Main.settings.saveSigns();
-				e.getPlayer().sendMessage(Api.color("&cYou have just removed a Crazy Enchantment Shop Sign."));
+				e.getPlayer().sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Break-Enchantment-Shop-Sign")));
 				return;
 			}
 		}

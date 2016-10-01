@@ -19,8 +19,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class DustControl implements Listener{
+	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
@@ -105,7 +108,21 @@ public class DustControl implements Listener{
 	private static void setLore(ItemStack item, int percent, String rate){
 		ItemMeta m = item.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
+		CEnchantments enchantment = null;
+		for(CEnchantments en : CE.getEnchantments()){
+			String ench = en.getCustomName();
+			if(item.getItemMeta().getDisplayName().contains(ench)){
+				enchantment = en;
+			}
+		}
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
+			Boolean line = true;
+			if(l.contains("%Description%")||l.contains("%description%")){
+				for(String L : enchantment.getDiscription()){
+					lore.add(Api.color(L));
+				}
+				line = false;
+			}
 			if(rate.equalsIgnoreCase("Success")){
 				l=l.replaceAll("%Success_Rate%", percent+"").replaceAll("%success_rate%", percent+"")
 						.replaceAll("%Destroy_Rate%", Api.getPercent("%Destroy_Rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"))+"")
@@ -115,7 +132,9 @@ public class DustControl implements Listener{
 						.replaceAll("%Success_Rate%", Api.getPercent("%Success_Rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"))+"")
 						.replaceAll("%success_rate%", Api.getPercent("%success_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"))+"");
 			}
-			lore.add(Api.color(l));
+			if(line){
+				lore.add(Api.color(l));
+			}
 		}
 		m.setLore(lore);
 		item.setItemMeta(m);

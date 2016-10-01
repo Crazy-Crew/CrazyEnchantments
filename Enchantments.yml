@@ -25,7 +25,7 @@ Enchantments:
       Name: '&e&lBurn Shield'
       Description:
         - '&c&lArmor Only'
-        - '&3Gives fire resistants'
+        - '&3Gives fire resistance'
         - '&3When they are put on'
     Categories:
       - 'T1'
@@ -104,7 +104,7 @@ Enchantments:
     Info:
       Name: '&e&lGears'
       Description:
-        - '&c&lGears Only'
+        - '&c&lBoots Only'
         - '&3Gives a Speed Boost'
         - '&3When they are put on'
     Categories:
@@ -121,7 +121,7 @@ Enchantments:
       Name: '&e&lHulk'
       Description:
         - '&c&lArmor Only'
-        - '&3Gives Strength, Damage Resistens,'
+        - '&3Gives Strength, Damage Resistance,'
         - '&3and Slowness when they are put on'
     Categories:
       - 'T1'
@@ -168,7 +168,7 @@ Enchantments:
     Info:
       Name: '&e&lVampire'
       Description:
-        - '&c&lSword Only'
+        - '&c&lSwords Only'
         - '&3Has a chance to heal'
         - '&3The user by 1 heart'
     Categories:
@@ -184,7 +184,7 @@ Enchantments:
     Info:
       Name: '&e&lLife Steal'
       Description:
-        - '&c&lSword Only'
+        - '&c&lSwords Only'
         - '&3Has a chance to steal'
         - '&3Health from the opponent'
     Categories:
@@ -200,7 +200,7 @@ Enchantments:
     Info:
       Name: '&e&lDoctor'
       Description:
-        - '&c&lBow Only'
+        - '&c&lBows Only'
         - '&3Has a chance to'
         - '&3Heal a player when hit'
     Categories:
@@ -216,7 +216,7 @@ Enchantments:
     Info:
       Name: '&e&lBoom'
       Description:
-        - '&c&lBow Only'
+        - '&c&lBows Only'
         - '&3Has a chance to spawn'
         - '&3TnT where the arrow lands'
     Categories:
@@ -232,7 +232,7 @@ Enchantments:
     Info:
       Name: '&e&lVenom'
       Description:
-        - '&c&lBow Only'
+        - '&c&lBows Only'
         - '&3Has a chance to give'
         - '&3The opponent poison'
     Categories:
@@ -921,7 +921,7 @@ Enchantments:
       Name: '&e&lValor'
       Description:
         - '&c&lArmor Only'
-        - '&3Gives damage resistants'
+        - '&3Gives damage resistance'
         - '&3Based on your enchantment lvl'
     Categories:
       - 'T1'
@@ -984,7 +984,7 @@ Enchantments:
     Info:
       Name: '&e&lMultiArrow'
       Description:
-        - '&c&lBow Only'
+        - '&c&lBows Only'
         - '&3Has a chance to shoot'
         - '&3Multiple arrows at once.'
     Categories:
@@ -1160,7 +1160,7 @@ Enchantments:
     Info:
       Name: '&e&lBlast'
       Description:
-        - '&c&lPickaxe Only'
+        - '&c&lPickaxes Only'
         - '&3Breaks blocks in a small radius'
         - '&3Depending on the power of the enchantment.'
     Categories:
@@ -1176,7 +1176,7 @@ Enchantments:
     Info:
       Name: '&e&lFurnace'
       Description:
-        - '&c&lPickaxe Only'
+        - '&c&lPickaxes Only'
         - '&3Always smelts ores into'
         - '&3items instead of blocks.'
     Categories:

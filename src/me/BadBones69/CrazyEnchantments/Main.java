@@ -578,7 +578,7 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
-					sender.sendMessage(Api.color(Api.getPrefix()+"&7You have sent &6"+player.getName()+" &7an Crazy Enchantment Book."));
+					sender.sendMessage(Api.color(Api.getPrefix()+settings.getMsg().getString("Messages.Send-Enchantment-Book").replace("%Player%", player.getName()).replace("%player%", player.getName())));
 					int Smax = settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
 					int Smin = settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
 					int Dmax = settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");

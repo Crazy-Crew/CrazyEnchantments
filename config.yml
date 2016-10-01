@@ -48,6 +48,12 @@ Settings:
     GUIName: '&8&lThe Black Smith' #Name of the Black Smith's GUI
     Results:
       None: '&c&lNo Results' #Name of the item when there are no results in the Black Smith
+      Not-Found-Lore:
+        - '&7No results could be found.'
+        - '&7Please put in two books of'
+        - '&7the same enchantment and level.'
+        - '&7Or put in two items to combined'
+        - '&7the enchantments on them.'
       Found: '&c&lCost: &6&l%Cost%XP' #The lore at the bottom of the item
     Transaction: #Options for the pricing
       Money/XP: XP #Costs XP or Money
