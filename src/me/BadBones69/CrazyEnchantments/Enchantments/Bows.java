@@ -143,7 +143,7 @@ public class Bows implements Listener{
 						for(LivingEntity en : Api.getNearbyEntities(loc, 2D, arrow)){
 							if(Api.allowsPVP(en.getLocation())){
 								if(!Api.isFriendly(P.get(arrow), en)){
-									if(!P.containsKey(en)){
+									if(!P.get(arrow).getName().equalsIgnoreCase(en.getName())){
 										en.damage(5D);
 									}
 								}

@@ -724,7 +724,6 @@ public class Api{
 	public static List<LivingEntity> getNearbyEntities(Location loc, double radius, Entity ent) {
 	    List<Entity> out = ent.getNearbyEntities(radius, radius, radius);
 	    List<LivingEntity> entities = new ArrayList<LivingEntity>();
-	    ent.remove();
 	    for(Entity en : out){
 	    	if(en instanceof LivingEntity){
 	    		entities.add((LivingEntity)en);

@@ -14,6 +14,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 public class FactionsSupport {
 	public static boolean isFriendly(Player player, Player other){
 		Faction p = MPlayer.get(player).getFaction();
+		if(MPlayer.get(other).getFaction() == null)return false;
 		Faction o = MPlayer.get(other).getFaction();
 		Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));
 		if(Api.removeColor(o.getName()).equalsIgnoreCase("Wilderness")){

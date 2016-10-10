@@ -329,6 +329,7 @@ public class Armor implements Listener{
 												}
 											}
 										}
+										damager.damage(5D);
 									}
 								}
 							}

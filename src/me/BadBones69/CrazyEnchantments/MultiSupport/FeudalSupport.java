@@ -10,6 +10,7 @@ import us.forseth11.feudal.kingdoms.Land;
 public class FeudalSupport{
 	public static boolean isFrendly(Player player, Player other){
 		Kingdom p = Feudal.getPlayerKingdom(player.getUniqueId().toString());
+		if(Feudal.getPlayerKingdom(other.getUniqueId().toString()) == null)return false;
 		Kingdom o = Feudal.getPlayerKingdom(other.getUniqueId().toString());
 		if(p==null||o==null){
 			return false;

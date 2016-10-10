@@ -179,22 +179,24 @@ public class Boots implements Listener{
 		}
 	}
 	public static void onStart(){
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
-			@Override
-			public void run() {
-				if(!Main.settings.getConfig().contains("Settings.Clouds")||Main.settings.getConfig().getBoolean("Settings.Clouds")){
-					for(Player player : Bukkit.getServer().getOnlinePlayers()){
-						if(Flying.contains(player)){
-							Location l = player.getLocation().subtract(0, .25, 0);
-							if(player.isFlying()){
-								ItemStack boots = player.getEquipment().getBoots();
-								if(boots!=null){
-									if(boots.hasItemMeta()){
-										if(boots.getItemMeta().hasLore()){
-											for(String lore : boots.getItemMeta().getLore()){
-												if(lore.contains(CEnchantments.WINGS.getCustomName())){
-													if(CEnchantments.WINGS.isEnabled()){
-														ParticleEffect.CLOUD.display((float) .25, (float) 0, (float) .25, 0, 10, l, 100);
+		if(!Main.settings.getConfig().contains("Settings.Clouds")){
+			if(Main.settings.getConfig().getBoolean("Settings.Clouds")){
+				Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+					@Override
+					public void run() {
+						for(Player player : Bukkit.getServer().getOnlinePlayers()){
+							if(Flying.contains(player)){
+								Location l = player.getLocation().subtract(0, .25, 0);
+								if(player.isFlying()){
+									ItemStack boots = player.getEquipment().getBoots();
+									if(boots!=null){
+										if(boots.hasItemMeta()){
+											if(boots.getItemMeta().hasLore()){
+												for(String lore : boots.getItemMeta().getLore()){
+													if(lore.contains(CEnchantments.WINGS.getCustomName())){
+														if(CEnchantments.WINGS.isEnabled()){
+															ParticleEffect.CLOUD.display((float) .25, (float) 0, (float) .25, 0, 10, l, 100);
+														}
 													}
 												}
 											}
@@ -204,8 +206,8 @@ public class Boots implements Listener{
 							}
 						}
 					}
-				}
+				}, 1, 1);
 			}
-		}, 1, 1);
+		}
 	}
 }

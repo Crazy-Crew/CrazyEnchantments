@@ -290,9 +290,9 @@ public class Swords implements Listener{
 										Location loc = en.getLocation();
 										loc.getWorld().strikeLightningEffect(loc);
 										for(LivingEntity En : Api.getNearbyEntities(loc, 2D, damager)){
-											if(Api.allowsPVP(en.getLocation())){
+											if(Api.allowsPVP(En.getLocation())){
 												if(!Api.isFriendly(damager, En)){
-													en.damage(5D);
+													En.damage(5D);
 												}
 											}
 										}

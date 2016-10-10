@@ -154,6 +154,7 @@ public class Main extends JavaPlugin implements Listener{
 					settings.setup(this);
 					CE.load();
 					CustomE.update();
+					Boots.onStart();
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
 					return true;
 				}
