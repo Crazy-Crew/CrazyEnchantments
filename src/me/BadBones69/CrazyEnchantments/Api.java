@@ -30,6 +30,7 @@ import org.bukkit.plugin.Plugin;
 
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
+import me.BadBones69.CrazyEnchantments.MultiSupport.ASkyBlockSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FeudalSupport;
@@ -55,6 +56,11 @@ public class Api{
 	public static String removeColor(String msg){
 		msg = ChatColor.stripColor(msg);
 		return msg;
+	}
+	public static void sendMultiMessage(Player player, List<String> messages){
+		for(String msg : messages){
+			player.sendMessage(color(msg));
+		}
 	}
 	public static Integer getVersion(){
 		String ver = Bukkit.getServer().getClass().getPackage().getName();
@@ -197,21 +203,26 @@ public class Api{
 		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
 		if(factions!=null){
 			if(factions.getDescription().getAuthors().contains("drtshock")){
-				if(FactionsUUID.inTerritory(player))return true;
-				if(!FactionsUUID.inTerritory(player))return false;
+				if(FactionsUUID.inTerritory(player)){
+					return true;
+				}
 			}
 			if(factions.getDescription().getWebsite()!=null){
 				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-					if(FactionsSupport.inTerritory(player))return true;
-					if(!FactionsSupport.inTerritory(player))return false;
+					if(FactionsSupport.inTerritory(player)){
+						return true;
+					}
 				}
 			}
 		}
 		if(Bukkit.getServer().getPluginManager().getPlugin("Feudal")!=null){
 			if(FeudalSupport.inTerritory(player)){
 				return true;
-			}else{
-				return false;
+			}
+		}
+		if(ASkyBlockSupport.hasASkyBlock()){
+			if(ASkyBlockSupport.inTerritory(player)){
+				return true;
 			}
 		}
 		return false;
@@ -533,8 +544,6 @@ public class Api{
 	}
 	public static ItemStack BlackScroll(int i){
 		String name = color(Main.settings.getConfig().getString("Settings.BlackScroll.Name"));
-		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(Api.color("&7Right Click for more Info."));
 		String type = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
 		int ty=0;
 		if(type.contains(":")){
@@ -543,14 +552,10 @@ public class Api{
 			ty = Integer.parseInt(b[1]);
 		}
 		Material m = Material.matchMaterial(type);
-		return makeItem(m, i, ty, name, lore);
+		return makeItem(m, i, ty, name, Main.settings.getConfig().getStringList("Settings.BlackScroll.Item-Lore"));
 	}
 	public static ItemStack addWhiteScroll(int amount){
-		ArrayList<String> lore = new ArrayList<String>();
-		lore.add("&7Prevents an item from being destroyed");
-		lore.add("&7due to a failed Enchantment Book.");
-		lore.add("&ePlace scroll on item to apply.");
-		return makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"), amount, Main.settings.getConfig().getString("Settings.WhiteScroll.Name"), lore);
+		return makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"), amount, Main.settings.getConfig().getString("Settings.WhiteScroll.Name"), Main.settings.getConfig().getStringList("Settings.WhiteScroll.Item-Lore"));
 	}
 	public static ItemStack addLore(ItemStack item, String i){
 		ArrayList<String> lore = new ArrayList<String>();

@@ -44,8 +44,8 @@ public class Main extends JavaPlugin implements Listener{
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static Economy econ = null;
 	public static EconomyResponse r;
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
-	CustomEnchantments CustomE = CustomEnchantments.getInstance();
+	public static CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
 	@Override
 	public void onEnable(){
 		PluginManager pm = Bukkit.getServer().getPluginManager();
@@ -139,7 +139,6 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Api.color("&b/CE Book <Enchantment> [Lvl] [Amount] [Player] - &9Gives a player a Enchantment Book."));
 					sender.sendMessage(Api.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
-					//sender.sendMessage(Api.color("&b/CE RandomBook [Category] [Level] [Player] - &9Gives a player a random enchantment book."));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
@@ -192,60 +191,6 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 				}
-			/*	if(args[0].equalsIgnoreCase("RandomBook")||args[0].equalsIgnoreCase("RB")){// /CE RB [Category] [Level] [Player]
-					if(!Api.hasPermission(sender, "Admin", true))return true;
-					if(args.length>=1){// /CE RB [Category] [Level] [Player]
-						if(args.length<=3){
-							if(!(sender instanceof Player)){
-								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
-								return true;
-							}
-						}
-						String cat = null;
-						if(args.length>=2){
-							Boolean T = false;
-							for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-								if(args[1].equalsIgnoreCase(C)){
-									cat=C;
-									T = true;
-								}
-							}
-							if(!T){
-								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Category")
-										.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
-								return true;
-							}
-						}
-						int level = 1;
-						if(args.length>=3){
-							if(!Api.isInt(args[2])){
-								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
-								return true;
-							}
-							level=Integer.parseInt(args[2]);
-							if(level<=0){
-								level = 1;
-							}
-						}
-						Player player = null;
-						if(args.length>=4){
-							if(!Api.isOnline(args[3], sender))return true;
-							player=Api.getPlayer(args[3]);
-						}else{
-							player = (Player) sender;
-						}
-						ItemStack book = Api.getRandomBook(cat, level, 1);
-						if(Api.isInvFull(player)){
-							player.getWorld().dropItemNaturally(player.getLocation(), book);
-						}else{
-							player.getInventory().addItem(book);
-						}
-						return true;
-					}
-					sender.sendMessage(Api.getPrefix()+Api.color("&c/CE RandomBook [Category] [Level] [Player]"));
-					return true;
-				}	*/
 				if(args[0].equalsIgnoreCase("LostBook")||args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
 					if(!Api.hasPermission(sender, "Admin", true))return true;
 					if(args.length>=2){// /CE LostBook <Category> [Amount] [Player]

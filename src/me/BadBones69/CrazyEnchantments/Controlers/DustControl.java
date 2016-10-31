@@ -20,10 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 
 public class DustControl implements Listener{
-	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
@@ -36,7 +34,7 @@ public class DustControl implements Listener{
 					if(book.hasItemMeta()&&dust.hasItemMeta()){
 						if(book.getItemMeta().hasLore()&&dust.getItemMeta().hasLore()){
 							if(book.getItemMeta().hasDisplayName()&&dust.getItemMeta().hasDisplayName()){
-								if(book.getType()==Material.BOOK){
+								if(book.getType()==Main.CE.getEnchantmentBookItem().getType()){
 									if(dust.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")))){
 										if(dust.getType()==Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"), 1, "", Arrays.asList("")).getType()){
 											int per = getPercent("SuccessDust", dust);
@@ -109,17 +107,30 @@ public class DustControl implements Listener{
 		ItemMeta m = item.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
 		CEnchantments enchantment = null;
-		for(CEnchantments en : CE.getEnchantments()){
+		for(CEnchantments en : Main.CE.getEnchantments()){
 			String ench = en.getCustomName();
 			if(item.getItemMeta().getDisplayName().contains(ench)){
 				enchantment = en;
 			}
 		}
+		String cEnchantment = "";
+		for(String en : Main.CustomE.getEnchantments()){
+			String ench = Main.CustomE.getCustomName(en);
+			if(item.getItemMeta().getDisplayName().contains(ench)){
+				cEnchantment = en;
+			}
+		}
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			Boolean line = true;
 			if(l.contains("%Description%")||l.contains("%description%")){
-				for(String L : enchantment.getDiscription()){
-					lore.add(Api.color(L));
+				if(enchantment != null){
+					for(String L : enchantment.getDiscription()){
+						lore.add(Api.color(L));
+					}
+				}else{
+					for(String L : Main.CustomE.getDiscription(cEnchantment)){
+						lore.add(Api.color(L));
+					}
 				}
 				line = false;
 			}

@@ -27,8 +27,11 @@ import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class PickAxes implements Listener{
+	
 	HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<Player, HashMap<Block, BlockFace>>();
+	
 	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockClick(PlayerInteractEvent e){
 		Player player = e.getPlayer();
@@ -46,6 +49,7 @@ public class PickAxes implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
 		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
@@ -95,7 +99,7 @@ public class PickAxes implements Listener{
 									}
 								}
 								if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE){
-									drop+=Api.percentPick(0, 3);
+									drop+=Api.percentPick(4, 1);
 								}
 								block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
 								ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
@@ -146,6 +150,7 @@ public class PickAxes implements Listener{
 			}
 		}
 	}
+	
 	@SuppressWarnings("incomplete-switch")
 	List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth){
 		Location loc2 = loc.clone();

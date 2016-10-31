@@ -15,6 +15,7 @@ public class CrazyEnchantments {
 	
 	public static CrazyEnchantments instance = new CrazyEnchantments();
 	ArrayList<Material> BlockList = new ArrayList<Material>();
+	
 	int rageMaxLevel;
 	
 	/**
@@ -23,6 +24,14 @@ public class CrazyEnchantments {
 	 */
 	public static CrazyEnchantments getInstance() {
 		return instance;
+	}
+	
+	/**
+	 * 
+	 * @return Returns the item the enchantment book will be.
+	 */
+	public ItemStack getEnchantmentBookItem(){
+		return Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1);
 	}
 	
 	/**

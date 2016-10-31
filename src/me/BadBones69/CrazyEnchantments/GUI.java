@@ -459,7 +459,7 @@ public class GUI implements Listener{
 				ItemStack item  = e.getCurrentItem();
 				if(c.hasItemMeta()){
 					if(c.getItemMeta().hasDisplayName()){
-						if(c.getType()!=Material.BOOK)return;
+						if(c.getType()!=Main.CE.getEnchantmentBookItem().getType())return;
 						String name = c.getItemMeta().getDisplayName();
 						String enchant = "Glowing";
 						String enchantColor = "&7";
@@ -749,7 +749,7 @@ public class GUI implements Listener{
 				String name = enchants.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
 				EnchantmentType enchantType = CE.getFromName(en).getType();
-				ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
+				ItemStack i = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
 				if(enchantType == EnchantmentType.AXE)axes.add(i);
@@ -767,7 +767,7 @@ public class GUI implements Listener{
 				String name = customEnchants.getString("Enchantments."+enchantment+".Info.Name");
 				List<String> desc = CustomE.getDiscription(enchantment);
 				EnchantmentType enchantType = CustomE.getType(enchantment);
-				ItemStack i = Api.addGlow(Api.makeItem(Material.BOOK, 1, 0, name, desc));
+				ItemStack i = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
 				if(enchantType == EnchantmentType.AXE)axes.add(i);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.Api;
@@ -81,6 +80,7 @@ public class CEBook {
 	 * @return Return the book as an ItemStack.
 	 */
 	public ItemStack buildBook(){
+		String item = Main.settings.getConfig().getString("Settings.Enchantment-Book-Item");
 		String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + convertPower(power);
 		List<String> lore = new ArrayList<String>();
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
@@ -94,7 +94,7 @@ public class CEBook {
 						.replaceAll("%Success_Rate%", success_rate+"").replaceAll("%success_Rate%", success_rate+""));
 			}
 		}
-		return Api.makeItem(Material.BOOK, amount, 0, name, lore);
+		return Api.makeItem(item, amount, name, lore);
 	}
 	
 	private String convertPower(Integer i){

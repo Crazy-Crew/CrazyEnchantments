@@ -1,6 +1,7 @@
 Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
+  Enchantment-Book-Item: '340'
   GUISize: 27 #The size of the GUI, Must be a factor of 9
   Clouds: True #Enable and Disable the Clouds for the Wings Enchantment
   EnchantmentBookLore:
@@ -120,9 +121,16 @@ Settings:
     Name: '&e&lEnchantment Info' #Name of the Item
     Lore: #Lore of the item
       - '&b>>&7&lClick to view&b<<'
-  BlackScroll: #Settings for the Black Scrolls
-    Item: '351' #The item the Black Scroll can be
-    Name: '&8&l&nBlack Scroll' #The name of the Black Scroll
+  BlackScroll: #Settings for the black scrolls
+    Item: '351' #The item the black scroll can be
+    Name: '&8&l&nBlack Scroll' #The name of the black scroll
+    Item-Lore: #The lore that will be on the black scroll.
+      - '&7Do you have an enchantment on your item you dont want?'
+      - '&7Well Black Scrolls are here to help you remove that enchantment.'
+      - '&7All you need to do is put the Black Scroll on your cursor and then.'
+      - '&7Drag and drop it on the item and BLAMO. It takes a random enchantment off,'
+      - '&7And turns it into a normal enchantment book. Easy way to add new better enchantments.'
+      - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments.'
     InGUI: False #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
     GUIName: '&7&lBlack Scrolls Shop'
     Slot: 11 #Slot you can buy the scroll at
@@ -137,6 +145,13 @@ Settings:
   WhiteScroll:
     Item: '339' #The item the white scroll is.
     Name: '&e&lWhite Scroll' #The name of the white scrolls.
+    Item-Lore: #The lore that will be on the white scroll.
+      - '&7Have a item that is precious to you and dont want it to,'
+      - '&7Break because of Destroy Rate? Well this scroll allows you to,'
+      - '&7Protect or precious item and not let it break. Well your in luck,'
+      - '&7White Scrolls add a &b&lPROTECTED &7lore to your item to stop it from,'
+      - '&7Destroying your precious item. If the book tries to break your item it removes,'
+      - '&7The &b&lPROTECTED &7lore from your item and must add a new White Scroll to the item.'
     InGUI: False #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
     GUIName: '&e&lWhite Scrolls Shop'
     Slot: 17 #Slot you can buy the scroll at

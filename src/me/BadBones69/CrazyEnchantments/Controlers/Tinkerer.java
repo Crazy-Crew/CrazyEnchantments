@@ -121,7 +121,7 @@ public class Tinkerer implements Listener{
 									}
 								}
 								if(It.getType()!=Material.STAINED_GLASS_PANE){// Adding/Taking Items
-									if(It.getType()==Material.BOOK){// Adding a book
+									if(It.getType()==Main.CE.getEnchantmentBookItem().getType()){// Adding a book
 										for(CEnchantments en : CE.getEnchantments()){
 											if(It.getItemMeta().getDisplayName().contains(Api.color(CE.getBookColor(en)+en.getCustomName()))){
 												if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
@@ -264,7 +264,7 @@ public class Tinkerer implements Listener{
 	}
 	int getTotalXP(ItemStack item){
 		int total=0;
-		if(EnchantmentType.ALL.getItems().contains(item.getType())||item.getType()==Material.BOOK){
+		if(EnchantmentType.ALL.getItems().contains(item.getType())||item.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){

@@ -234,6 +234,7 @@ public class ArmorListener implements Listener{
 		List<String> blocks = new ArrayList<String>();
 		blocks.add("FURNACE");
 		blocks.add("CHEST");
+		blocks.add("TRAPPED_CHEST");
 		blocks.add("BEACON");
 		blocks.add("DISPENSER");
 		blocks.add("DROPPER");

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -100,7 +99,7 @@ public class ECControl implements Listener{
 	public void onClick(PlayerInteractEvent e){
 		if(e.getItem()!=null){
 			ItemStack item = e.getItem();
-			if(item.getType()!=Material.BOOK)return;
+			if(item.getType()!=Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1).getType())return;
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
 					String name = "";
@@ -153,7 +152,7 @@ public class ECControl implements Listener{
 						.replaceAll("%Success_Rate%", Api.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Api.percentPick(Smax, Smin)+""));
 			}
 		}
-		return Api.makeItem(Material.BOOK, 1, 0, enchants.get(enchant), lore);
+		return Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, enchants.get(enchant), lore);
 	}
 	public static String powerPicker(String en, String C){
 		Random r = new Random();
