@@ -199,6 +199,12 @@ public class Api{
 		}
 		return false;
 	}
+	public static boolean hasASkyBlock(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("ASkyBlock")!=null){
+			return true;
+		}
+		return false;
+	}
 	public static boolean inTerritory(Player player){
 		Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
 		if(factions!=null){
@@ -220,7 +226,7 @@ public class Api{
 				return true;
 			}
 		}
-		if(ASkyBlockSupport.hasASkyBlock()){
+		if(hasASkyBlock()){
 			if(ASkyBlockSupport.inTerritory(player)){
 				return true;
 			}

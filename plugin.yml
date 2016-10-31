@@ -1,8 +1,8 @@
 name: CrazyEnchantments
 author: BadBones69
 main: me.BadBones69.CrazyEnchantments.Main
-version: 1.6.5.2
-softdepend: [Factions, WorldEdit, SilkSpawners, Feudal]
+version: 1.6.5.3
+softdepend: [Factions, WorldEdit, SilkSpawners, Feudal, ASkyBlock]
 website: https://www.spigotmc.org/resources/16470/
 description: >
              A Plugin full of Crazy Enchantments.
