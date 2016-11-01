@@ -17,7 +17,7 @@ Enchantments:
         - '&3Gives you speed, strength and'
         - '&3Jump boost to take down your enemies.'
     EnchantOptions: #Customizing Options for each enchantment.
-      ItemsEnchantable: 'Armor' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
+      ItemsEnchantable: 'Armor' #You can pick from Armor, Boots, Helmet, Axe, Sword, Weapons(Swords & Axes), and Bow.
       ArmorOptions: #Options that only effect Armor Enchantments.
         PowerIncrease: 1 #How many times the Potion Effects go up each lvl.
         PotionEffects: #Potion types that will be applied.
@@ -41,7 +41,7 @@ Enchantments:
         - '&3Shoot an enemy with this and'
         - '&3It has a chance to poison them.'
     EnchantOptions: #Customizing Options for each enchantment.
-      ItemsEnchantable: 'Bows' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
+      ItemsEnchantable: 'Bow' #You can pick from Armor, Boots, Helmet, Axe, Sword, Weapons(Swords & Axes), and Bow.
       BowOptions: #Options that only effect Bow Enchantments.
         OnHit: #When the arrow Hits.
           #Remove the # to use the Exploding option.
@@ -71,7 +71,7 @@ Enchantments:
         - '&3Gives you a chance to'
         - '&3Do a lot more damage.'
     EnchantOptions: #Customizing Options for each enchantment.
-      ItemsEnchantable: 'Weapons' #You can pick from Armor, Boots, Helmets, Axes, Swords, Weapons(Swords & Axes), and Bows.
+      ItemsEnchantable: 'Weapons' #You can pick from Armor, Boots, Helmet, Axe, Sword, Weapons(Swords & Axes), and Bow.
       WeaponOptions: #Options that only effect Sword and Axe Enchantments.
         #Remove the # to use the Damager options.
         #Damager: #The player with the sword.
