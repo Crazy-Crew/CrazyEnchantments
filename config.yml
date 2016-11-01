@@ -2,7 +2,7 @@ Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   Enchantment-Book-Item: '340'
-  GUISize: 27 #The size of the GUI, Must be a factor of 9
+  GUISize: 54 #The size of the GUI, Must be a factor of 9
   Clouds: True #Enable and Disable the Clouds for the Wings Enchantment
   EnchantmentBookLore:
     - '&7Drag book and drop on Item.'
@@ -39,13 +39,13 @@ Settings:
       - ''
       - '&eCost: &e&l$1000'
   BlackSmith: #Options for the Black Smith
-    InGUI: False #In the GUI.
-    Slot: 1 #Slot it is in.
-    Item: '61' #Item that shows in the GUI
+    InGUI: True #In the GUI.
+    Slot: 24 #Slot it is in.
+    Item: '145' #Item that shows in the GUI
     Glowing: False #Is it enchanted
-    Name: '&8&lThe Black Smith' #Name of the Item in the GUI
+    Name: '&7&lThe &b&lBlack &9&lSmith' #Name of the Item in the GUI
     Lore: #Lore on the item.
-      - '&b>>&7&lClick to open&b<<'
+      - '&b>>&7&nClick to open&b<<'
     GUIName: '&8&lThe Black Smith' #Name of the Black Smith's GUI
     Results:
       None: '&c&lNo Results' #Name of the item when there are no results in the Black Smith
@@ -65,12 +65,20 @@ Settings:
         Book-Upgrade: 5 #Leveling up a books power
   Tinker: #Settings for Info item in the GUI
     InGUI: True #Toggle whether it is in the /CE GUI or not
-    Slot: 5 #Slot it is in
-    Item: '145' #Item it is
+    Slot: 22 #Slot it is in
+    Item: '399' #Item it is
     Glowing: False #Whether it glows like its enchanted
-    Name: '&7&lThe &4&lCrazy &c&lTinkerer' #Name of the Item
+    Name: '&7&lThe &b&lCrazy &9&lTinkerer' #Name of the Item
     Lore: #Lore of the item
-      - '&b>>&7&lClick to open&b<<'
+      - '&b>>&7&nClick to open&b<<'
+  Info: #Settings for Info item in the GUI
+    InGUI: True #Toggle whether it is in the /CE GUI or not
+    Slot: 23 #Slot it is in
+    Item: '345' #Item it is
+    Glowing: True #Whether it glows like its enchanted
+    Name: '&eInfo on the Enchantments' #Name of the Item
+    Lore: #Lore of the item
+      - '&b>>&7&nClick to view&b<<'
   Dust: #Settings for the Magical Dust
     MysteryDust:
       Item: '289' #Item mystery dust is
@@ -85,8 +93,8 @@ Settings:
       GUILore: #Lore in the GUI.
         - '&eCost: &a&l$50'
         - '&7Dust allows you to bring'
-        - '&7Up your &aSuccess Rate'
-      Slot: 4 #Slot number it is in
+        - '&7up your &aSuccess Rate&7.'
+      Slot: 25 #Slot number it is in
       Item: '353' #Item the dust is
       Name: '&aMagical Angel Dust' #Name of the dust
       Lore: #Lore for the dust
@@ -102,9 +110,9 @@ Settings:
       GUILore: #Lore in the GUI.
         - '&eCost: &a&l$50'
         - '&7Dust allows you to bring'
-        - '&7Down your &4Destroy Rate'
-      Slot: 6 #Slot number it is in
-      Item: '353' #Item the dust is
+        - '&7down your &4Destroy Rate&7.'
+      Slot: 34 #Slot number it is in
+      Item: '331' #Item the dust is
       Name: '&eMagical Fixing Dust' #Name of the dust
       Lore: #Lore for the dust
         - '&c-%Percent%% Destroy Rate'
@@ -113,14 +121,6 @@ Settings:
       PercentRange: #Range the destroy rate will be.
         Max: 10 #Max percent
         Min: 2 #Minimum percent
-  Info: #Settings for Info item in the GUI
-    InGUI: True #Toggle whether it is in the /CE GUI or not
-    Slot: 23 #Slot it is in
-    Item: '131' #Item it is
-    Glowing: True #Whether it glows like its enchanted
-    Name: '&e&lEnchantment Info' #Name of the Item
-    Lore: #Lore of the item
-      - '&b>>&7&lClick to view&b<<'
   BlackScroll: #Settings for the black scrolls
     Item: '351' #The item the black scroll can be
     Name: '&8&l&nBlack Scroll' #The name of the black scroll
@@ -131,11 +131,13 @@ Settings:
       - '&7Drag and drop it on the item and BLAMO. It takes a random enchantment off,'
       - '&7And turns it into a normal enchantment book. Easy way to add new better enchantments.'
       - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments.'
-    InGUI: False #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
-    GUIName: '&7&lBlack Scrolls Shop'
-    Slot: 11 #Slot you can buy the scroll at
+    InGUI: True #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    GUIName: '&7Black Scroll'
+    Slot: 21 #Slot you can buy the scroll at
     Lore: #Lore of the item in the GUI
-      - '&c&lCost: &a&l$50'
+      - '&eCost: &a&l$50'
+      - '&7Black Scrolls allow you to'
+      - '&7take off random enchantments.'
     SuccessChance: #Controls what the success chance will be when they get the book from the Black Scroll
       Max: 75 #The Max percent
       Min: 35 #The Minimum percent
@@ -152,11 +154,13 @@ Settings:
       - '&7White Scrolls add a &b&lPROTECTED &7lore to your item to stop it from,'
       - '&7Destroying your precious item. If the book tries to break your item it removes,'
       - '&7The &b&lPROTECTED &7lore from your item and must add a new White Scroll to the item.'
-    InGUI: False #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
-    GUIName: '&e&lWhite Scrolls Shop'
-    Slot: 17 #Slot you can buy the scroll at
+    InGUI: True #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    GUIName: '&7White Scroll'
+    Slot: 30 #Slot you can buy the scroll at
     Lore: #Lore of the scroll in the GUI
-      - '&c&lCost: &a&l$50'
+      - '&eCost: &a&l$50'
+      - '&7White Scrolls allow you to'
+      - '&7protect items from breaking.'
     ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: True #Turn on an off the Max amount of enchantments
@@ -219,30 +223,58 @@ Settings:
       Line4: '&c&lCost: &a&l$50'
       Buy-Message: '&7You have just bought a &e&lWhite Scroll&7.'
   GUICustomization: #This allows you to customize unclickable items into you GUI.
-    - 'Slot:1, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:2, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:3, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:7, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:8, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:9, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:10, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:18, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:19, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:20, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:21, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:22, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:24, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:25, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:26, Item:160:0, Name: , Lore:&7Border'
-    - 'Slot:27, Item:160:0, Name: , Lore:&7Border'
+    - 'Slot:1, Item:160:15, Name: '
+    - 'Slot:2, Item:160:15, Name: '
+    - 'Slot:3, Item:160:15, Name: '
+    - 'Slot:4, Item:160:15, Name: '
+    - 'Slot:5, Item:160:15, Name: '
+    - 'Slot:6, Item:160:15, Name: '
+    - 'Slot:7, Item:160:15, Name: '
+    - 'Slot:8, Item:160:15, Name: '
+    - 'Slot:9, Item:160:15, Name: '
+    - 'Slot:10, Item:160:15, Name: '
+    - 'Slot:18, Item:160:15, Name: '
+    - 'Slot:19, Item:160:15, Name: '
+    - 'Slot:27, Item:160:15, Name: '
+    - 'Slot:28, Item:160:15, Name: '
+    - 'Slot:36, Item:160:15, Name: '
+    - 'Slot:37, Item:160:15, Name: '
+    - 'Slot:45, Item:160:15, Name: '
+    - 'Slot:46, Item:160:15, Name: '
+    - 'Slot:47, Item:160:15, Name: '
+    - 'Slot:48, Item:160:15, Name: '
+    - 'Slot:49, Item:160:15, Name: '
+    - 'Slot:50, Item:160:15, Name: '
+    - 'Slot:51, Item:160:15, Name: '
+    - 'Slot:52, Item:160:15, Name: '
+    - 'Slot:53, Item:160:15, Name: '
+    - 'Slot:54, Item:160:15, Name: '
+    - 'Slot:11, Item:160:0, Name: '
+    - 'Slot:12, Item:160:0, Name: '
+    - 'Slot:13, Item:160:0, Name: '
+    - 'Slot:14, Item:160:0, Name: '
+    - 'Slot:15, Item:160:0, Name: '
+    - 'Slot:16, Item:160:0, Name: '
+    - 'Slot:17, Item:160:0, Name: '
+    - 'Slot:20, Item:160:0, Name: '
+    - 'Slot:26, Item:160:0, Name: '
+    - 'Slot:29, Item:160:0, Name: '
+    - 'Slot:35, Item:160:0, Name: '
+    - 'Slot:38, Item:160:0, Name: '
+    - 'Slot:39, Item:160:0, Name: '
+    - 'Slot:40, Item:160:0, Name: '
+    - 'Slot:41, Item:160:0, Name: '
+    - 'Slot:42, Item:160:0, Name: '
+    - 'Slot:43, Item:160:0, Name: '
+    - 'Slot:44, Item:160:0, Name: '
 Categories: #You can make as many different categories as you want
-  T1: #Name of the category
-    Name: '&c&l&nTier 1' #Name in the GUI
-    Slot: 12 #The Slot number the item will be in
+  Common: #Name of the category
+    Name: '&a&l&nCommon' #Name in the GUI
+    Slot: 31 #The Slot number the item will be in
     InGUI: True #Toggle if its in the GUI or not.
     Lore: #The lore of the Item
-      - '&eCost: &6&l20 XP'
-    Item: '266' #The id for the item
+      - '&eCost: &6&l20 &6XP Levels'
+    Item: '160:5' #The id for the item
     Money/XP: XP #Can be either Money or XP that players can use to by books
     Lvl/Total: Lvl #You can choose Lvl or Total, Lvl uses XP lvls and Total uses the total XP the player has
     Cost: 20 #How much the Books cost
@@ -275,13 +307,13 @@ Categories: #You can make as many different categories as you want
       LvlRange: #The range of lvls that can be found in the Category.
         Max: 2
         Min: 1
-  T2:
-    Name: '&c&l&nTier 2'
-    Slot: 14
+  Rare:
+    Name: '&9&l&nRare'
+    Slot: 32
     InGUI: True
     Lore:
-      - '&eCost: &6&l40 XP'
-    Item: '264'
+      - '&eCost: &6&l40 &6XP Levels'
+    Item: '160:11'
     Money/XP: XP
     Lvl/Total: Lvl
     Cost: 40
@@ -314,13 +346,13 @@ Categories: #You can make as many different categories as you want
       LvlRange:
         Max: 3
         Min: 2
-  T3:
-    Name: '&c&l&nTier 3'
-    Slot: 16
+  Legendary:
+    Name: '&4&l&nLegendary'
+    Slot: 33
     InGUI: True
     Lore:
-      - '&eCost: &6&l60 XP'
-    Item: '388'
+      - '&eCost: &6&l60 &6XP Levels'
+    Item: '160:14'
     Money/XP: XP
     Lvl/Total: Lvl
     Cost: 60

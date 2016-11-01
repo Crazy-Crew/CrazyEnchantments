@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import ca.thederpygolems.armorequip.ArmorEquipEvent.EquipMethod;
+import me.BadBones69.CrazyEnchantments.Api;
 
 /**
  * @Author Borlea
@@ -139,6 +140,16 @@ public class ArmorListener implements Listener{
 						}
 					}
 				}, 0);
+			}else{
+				if(Api.getVersion()<1101){
+					EquipMethod method = EquipMethod.DRAG;
+					if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = EquipMethod.HOTBAR_SWAP;
+					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), method, newArmorType, oldArmorPiece, newArmorPiece);
+					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+					if(armorEquipEvent.isCancelled()){
+						e.setCancelled(true);
+					}
+				}
 			}
 		}
 	}

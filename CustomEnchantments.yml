@@ -7,9 +7,9 @@ Enchantments:
     BookColor: '&b&l' #The color of the enchantment on the book
     MaxPower: 5 #Max lvl the enchantment goes up to
     Categories: #All the categories the Enchantment can be found in
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
     Info:
       Name: '&e&lCyborg'
       Description:
@@ -31,9 +31,9 @@ Enchantments:
     BookColor: '&b&l' #The color of the enchantment on the book
     MaxPower: 5 #Max lvl the enchantment goes up to
     Categories: #All the categories the Enchantment can be found in
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
     Info:
       Name: '&e&lSniper'
       Description:
@@ -61,9 +61,9 @@ Enchantments:
     BookColor: '&b&l' #The color of the enchantment on the book
     MaxPower: 5 #Max lvl the enchantment goes up to
     Categories: #All the categories the Enchantment can be found in
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
     Info:
       Name: '&e&lSlice'
       Description:

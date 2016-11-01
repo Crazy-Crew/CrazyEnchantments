@@ -12,9 +12,9 @@ Enchantments:
         - '&3Gives night vision'
         - '&3When they are put on'
     Categories: #All the categories the Enchantment can be found in
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   BurnShield:
     Enabled: True
     Name: 'BurnShield'
@@ -28,9 +28,9 @@ Enchantments:
         - '&3Gives fire resistance'
         - '&3When they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Piercing:
     Enabled: True
     Name: 'Piercing'
@@ -44,9 +44,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Deal double the damage'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   OverLoad:
     Enabled: True
     Name: 'OverLoad'
@@ -60,9 +60,9 @@ Enchantments:
         - '&3Gives Health Boost'
         - '&3When they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   SelfDestruct:
     Enabled: True
     Name: 'SelfDestruct'
@@ -76,9 +76,9 @@ Enchantments:
         - '&3When the user dies'
         - '&3Their body will explode'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Springs:
     Enabled: True
     Name: 'Springs'
@@ -92,9 +92,9 @@ Enchantments:
         - '&3Gives small Jump Boost'
         - '&3When they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Gears:
     Enabled: True
     Name: 'Gears'
@@ -108,9 +108,9 @@ Enchantments:
         - '&3Gives a Speed Boost'
         - '&3When they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Hulk:
     Enabled: True
     Name: 'Hulk'
@@ -124,9 +124,9 @@ Enchantments:
         - '&3Gives Strength, Damage Resistance,'
         - '&3and Slowness when they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Mermaid:
     Enabled: True
     Name: 'Mermaid'
@@ -140,9 +140,9 @@ Enchantments:
         - '&3Gives Water Breathing'
         - '&3When they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Ninja:
     Enabled: True
     Name: 'Ninja'
@@ -156,9 +156,9 @@ Enchantments:
         - '&3Gives Speed and Health Boost'
         - '&3When they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Vampire:
     Enabled: True
     Name: 'Vampire'
@@ -172,9 +172,9 @@ Enchantments:
         - '&3Has a chance to heal'
         - '&3The user by 1 heart'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   LifeSteal:
     Enabled: True
     Name: 'LifeSteal'
@@ -188,9 +188,9 @@ Enchantments:
         - '&3Has a chance to steal'
         - '&3Health from the opponent'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Doctor:
     Enabled: True
     Name: 'Doctor'
@@ -204,9 +204,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Heal a player when hit'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Boom:
     Enabled: True
     Name: 'Boom'
@@ -220,9 +220,9 @@ Enchantments:
         - '&3Has a chance to spawn'
         - '&3TnT where the arrow lands'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Venom:
     Enabled: True
     Name: 'Venom'
@@ -236,9 +236,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3The opponent poison'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   DoubleDamage:
     Enabled: True
     Name: 'DoubleDamage'
@@ -252,9 +252,9 @@ Enchantments:
         - '&3Has a chance to '
         - '&3Deal double the damage'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   SlowMo:
     Enabled: True
     Name: 'SlowMo'
@@ -268,9 +268,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3The opponent slowness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Blindness:
     Enabled: True
     Name: 'Blindness'
@@ -284,9 +284,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3The opponent blindness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Viper:
     Enabled: True
     Name: 'Viper'
@@ -300,9 +300,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3The opponent poison'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   AntiGravity:
     Enabled: True
     Name: 'AntiGravity'
@@ -316,9 +316,9 @@ Enchantments:
         - '&3Gives a stronger jump boost'
         - '&3When they are put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   FastTurn:
     Enabled: True
     Name: 'FastTurn'
@@ -332,9 +332,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Deal more damage'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   LightWeight:
     Enabled: True
     Name: 'LightWeight'
@@ -348,9 +348,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Give the user haste'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Blessed:
     Enabled: True
     Name: 'Blessed'
@@ -364,9 +364,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Remove all bad effect'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   FeedMe:
     Enabled: True
     Name: 'FeedMe'
@@ -380,9 +380,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Feed you while fighting'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Dizzy:
     Enabled: True
     Name: 'Dizzy'
@@ -396,9 +396,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your opponent confusion'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Berserk:
     Enabled: True
     Name: 'Berserk'
@@ -412,9 +412,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3You strength and mining fatigue'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Cursed:
     Enabled: True
     Name: 'Cursed'
@@ -428,9 +428,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your opponent mining fatigue'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Rekt:
     Enabled: True
     Name: 'Rekt'
@@ -444,9 +444,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Deal double the damage'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Enlightened:
     Enabled: True
     Name: 'Enlightened'
@@ -460,9 +460,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Heal you when being attacked'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Freeze:
     Enabled: True
     Name: 'Freeze'
@@ -476,9 +476,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your attacker slowness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Fortify:
     Enabled: True
     Name: 'Fortify'
@@ -492,9 +492,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your attacker weakness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Molten:
     Enabled: True
     Name: 'Molten'
@@ -508,9 +508,9 @@ Enchantments:
         - '&3Has a chance to set'
         - '&3Your attacker on fire'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   PainGiver:
     Enabled: True
     Name: 'PainGiver'
@@ -524,9 +524,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your attacker poison'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Savior:
     Enabled: True
     Name: 'Savior'
@@ -540,9 +540,9 @@ Enchantments:
         - '&3Has a chance to cut'
         - '&3Your incoming damage in haft'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Nursery:
     Enabled: True
     Name: 'Nursery'
@@ -556,9 +556,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Heal you when walking'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   AutoSmelt:
     Enabled: True
     Name: 'AutoSmelt'
@@ -572,9 +572,9 @@ Enchantments:
         - '&3Has a chance to auto smelt'
         - '&3Ores and give more ingots'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Experience:
     Enabled: True
     Name: 'Experience'
@@ -588,9 +588,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Twice or more xp from mining'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Telepathy:
     Enabled: True
     Name: 'Telepathy'
@@ -604,9 +604,9 @@ Enchantments:
         - '&3Will automatically send'
         - '&3Mined items to your inventory'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Haste:
     Enabled: True
     Name: 'Haste'
@@ -620,9 +620,9 @@ Enchantments:
         - '&3Gives haste when'
         - '&3Holding the item in your hand'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Oxygenate:
     Enabled: True
     Name: 'Oxygenate'
@@ -636,9 +636,9 @@ Enchantments:
         - '&3Gives water breathing'
         - '&3When holding item in your hand'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   IceFreeze:
     Enabled: True
     Name: 'IceFreeze'
@@ -652,9 +652,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your opponent slowness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Lightning:
     Enabled: True
     Name: 'Lightning'
@@ -668,9 +668,9 @@ Enchantments:
         - '&3Has a chance to strike'
         - '&3Lightning where the arrow lands'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Decapitation:
     Enabled: True
     Name: 'Decapitation'
@@ -684,9 +684,9 @@ Enchantments:
         - '&3Has a chance to drop'
         - '&3The player head on death'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Confusion:
     Enabled: True
     Name: 'Confusion'
@@ -700,9 +700,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your opponent confusion'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Disarmer:
     Enabled: True
     Name: 'Disarmer'
@@ -716,9 +716,9 @@ Enchantments:
         - '&3Has a chance to take a'
         - '&3Random piece of armor off'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Execute:
     Enabled: True
     Name: 'Execute'
@@ -732,9 +732,9 @@ Enchantments:
         - '&3Has a chance to get strength'
         - '&3When opponent is low on health'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Headless:
     Enabled: True
     Name: 'Headless'
@@ -748,9 +748,9 @@ Enchantments:
         - '&3Has a chance to drop'
         - '&3Players head on death'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Inquisitive:
     Enabled: True
     Name: 'Inquisitive'
@@ -764,9 +764,9 @@ Enchantments:
         - '&3Will double or more XP'
         - '&3Based on the enchantment Lvl'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Insomnia:
     Enabled: True
     Name: 'Insomnia'
@@ -780,9 +780,9 @@ Enchantments:
         - '&3Gives confusion, mining fatigue, and slowness'
         - '&3But has a high chance of doing double the damage'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Nutrition:
     Enabled: True
     Name: 'Nutrition'
@@ -796,9 +796,9 @@ Enchantments:
         - '&3Has a chance to'
         - '&3Feed you in a fight'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Obliterate:
     Enabled: True
     Name: 'Obliterate'
@@ -812,9 +812,9 @@ Enchantments:
         - '&3Has a chance to send'
         - '&3Your opponent flying backwards'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Paralyze:
     Enabled: True
     Name: 'Paralyze'
@@ -828,9 +828,9 @@ Enchantments:
         - '&3Has a chance to give your'
         - '&3Opponent High mining fatigue and High slowness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   SkillSwipe:
     Enabled: True
     Name: 'SkillSwipe'
@@ -844,9 +844,9 @@ Enchantments:
         - '&3Has a chance to steal xp'
         - '&3From your opponent while fighting'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Snare:
     Enabled: True
     Name: 'Snare'
@@ -860,9 +860,9 @@ Enchantments:
         - '&3Has a chance to give your'
         - '&3Opponent slowness and mining fatigue'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Trap:
     Enabled: True
     Name: 'Trap'
@@ -876,9 +876,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your opponent high slowness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Wither:
     Enabled: True
     Name: 'Wither'
@@ -892,9 +892,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your opponent high wither'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Rage:
     Enabled: True
     Name: 'Rage'
@@ -908,9 +908,9 @@ Enchantments:
         - '&3Attacks will get stronger'
         - '&3As long as you keep attacking'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Valor:
     Enabled: True
     Name: 'Valor'
@@ -924,9 +924,9 @@ Enchantments:
         - '&3Gives damage resistance'
         - '&3Based on your enchantment lvl'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   SmokeBomb:
     Enabled: True
     Name: 'SmokeBomb'
@@ -940,9 +940,9 @@ Enchantments:
         - '&3Has a chance to Blind and'
         - '&3Slow your attacker so you can escape'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Drunk:
     Enabled: True
     Name: 'Drunk'
@@ -956,9 +956,9 @@ Enchantments:
         - '&3Gives strength, mining fatigue,'
         - '&3And slowness when put on'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Voodoo:
     Enabled: True
     Name: 'Voodoo'
@@ -972,9 +972,9 @@ Enchantments:
         - '&3Has a chance to give'
         - '&3Your attacker weakness'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   MultiArrow:
     Enabled: True
     Name: 'MultiArrow'
@@ -988,9 +988,9 @@ Enchantments:
         - '&3Has a chance to shoot'
         - '&3Multiple arrows at once.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Recover:
     Enabled: True
     Name: 'Recover'
@@ -1004,9 +1004,9 @@ Enchantments:
         - '&3When you kill a player'
         - '&3You get absorption and regen.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Cactus:
     Enabled: True
     Name: 'Cactus'
@@ -1020,9 +1020,9 @@ Enchantments:
         - '&3Has a chance to damage'
         - '&3The player that damages you.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Rocket:
     Enabled: True
     Name: 'Rocket'
@@ -1036,9 +1036,9 @@ Enchantments:
         - '&3If low on health there is a chance'
         - '&3You will blast off backwards to escape.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Angel:
     Enabled: True
     Name: 'Angel'
@@ -1052,9 +1052,9 @@ Enchantments:
         - '&3Heals near by Faction Members'
         - '&3When you are wearing item.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   HellForged:
     Enabled: True
     Name: 'HellForged'
@@ -1068,9 +1068,9 @@ Enchantments:
         - '&3Has a chance to fix up'
         - '&3Your items as you walk.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Commander:
     Enabled: True
     Name: 'Commander'
@@ -1084,9 +1084,9 @@ Enchantments:
         - '&3Gives nearby Faction Members'
         - '&3Haste when wearing item.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   StormCaller:
     Enabled: True
     Name: 'StormCaller'
@@ -1100,9 +1100,9 @@ Enchantments:
         - '&3Has a chance to strike your enemy'
         - '&3Down with a lightning strike.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Leadership:
     Enabled: True
     Name: 'Leadership'
@@ -1116,9 +1116,9 @@ Enchantments:
         - '&3Your attacks are stronger when'
         - '&3You have allies around you.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Implants:
     Enabled: True
     Name: 'Implants'
@@ -1132,9 +1132,9 @@ Enchantments:
         - '&3While moving your hunger will'
         - '&3Start to go up while equipped.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Wings:
     Enabled: True
     Name: 'Wings'
@@ -1148,9 +1148,9 @@ Enchantments:
         - '&3Allows you to fly in your'
         - '&3Own territory and gives particles.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Blast:
     Enabled: True
     Name: 'Blast'
@@ -1164,9 +1164,9 @@ Enchantments:
         - '&3Breaks blocks in a small radius'
         - '&3Depending on the power of the enchantment.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
   Furnace:
     Enabled: True
     Name: 'Furnace'
@@ -1180,6 +1180,6 @@ Enchantments:
         - '&3Always smelts ores into'
         - '&3items instead of blocks.'
     Categories:
-      - 'T1'
-      - 'T2'
-      - 'T3'
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
