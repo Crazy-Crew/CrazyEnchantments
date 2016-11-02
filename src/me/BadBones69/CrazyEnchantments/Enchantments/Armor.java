@@ -371,7 +371,7 @@ public class Armor implements Listener{
 		}
 	}
 	@EventHandler
-	public void onMovment(PlayerMoveEvent e){
+	public void onMovement(PlayerMoveEvent e){
 		Player player = e.getPlayer();
 		int X = e.getFrom().getBlockX();
 		int Y = e.getFrom().getBlockY();
