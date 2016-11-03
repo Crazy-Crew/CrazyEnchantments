@@ -20,7 +20,9 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class ProtectionCrystal implements Listener{
+	
 	HashMap<Player, ArrayList<ItemStack>> PlayersItems = new HashMap<Player, ArrayList<ItemStack>>();
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		FileConfiguration config = Main.settings.getConfig();
@@ -58,6 +60,7 @@ public class ProtectionCrystal implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e){
 		FileConfiguration config = Main.settings.getConfig();
@@ -84,6 +87,7 @@ public class ProtectionCrystal implements Listener{
 		e.getDrops().addAll(drops);
 		PlayersItems.put(player, items);
 	}
+	
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent e){
 		Player player = e.getPlayer();
@@ -95,6 +99,7 @@ public class ProtectionCrystal implements Listener{
 			PlayersItems.remove(player);
 		}
 	}
+	
 	public static ItemStack getCrystals(int amount){
 		FileConfiguration config = Main.settings.getConfig();
 		String id = config.getString("Settings.ProtectionCrystal.Item");
@@ -104,6 +109,7 @@ public class ProtectionCrystal implements Listener{
 		ItemStack item = Api.addGlow(Api.makeItem(id, amount, name, lore), toggle);
 		return item;
 	}
+	
 	public static ItemStack removeProtection(ItemStack item){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
@@ -113,4 +119,5 @@ public class ProtectionCrystal implements Listener{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 }

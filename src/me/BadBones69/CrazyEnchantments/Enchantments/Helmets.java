@@ -15,60 +15,62 @@ import org.bukkit.potion.PotionEffectType;
 
 import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Helmets implements Listener{
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	
 	int time = 99999999*20;
+	
 	@EventHandler(priority = EventPriority.MONITOR)
  	public void onEquip(ArmorEquipEvent e){
 		Player player = e.getPlayer();
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
-		if(CE.hasEnchantments(NewItem)){
-			if(CE.hasEnchantment(NewItem, CEnchantments.GLOWING)){
+		if(Main.CE.hasEnchantments(NewItem)){
+			if(Main.CE.hasEnchantment(NewItem, CEnchantments.GLOWING)){
 				if(CEnchantments.GLOWING.isEnabled()){
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, CE.getPower(NewItem, CEnchantments.GLOWING)-1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, Main.CE.getPower(NewItem, CEnchantments.GLOWING)-1));
 					}
 				}
 			}
-			if(CE.hasEnchantment(NewItem, CEnchantments.MERMAID)){
+			if(Main.CE.hasEnchantment(NewItem, CEnchantments.MERMAID)){
 				if(CEnchantments.MERMAID.isEnabled()){
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, CE.getPower(NewItem, CEnchantments.MERMAID)-1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, Main.CE.getPower(NewItem, CEnchantments.MERMAID)-1));
 					}
 				}
 			}
 		}
-		if(CE.hasEnchantments(OldItem)){
-			if(CE.hasEnchantment(OldItem, CEnchantments.GLOWING)){
+		if(Main.CE.hasEnchantments(OldItem)){
+			if(Main.CE.hasEnchantment(OldItem, CEnchantments.GLOWING)){
 				if(CEnchantments.GLOWING.isEnabled()){
 					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 				}
 			}
-			if(CE.hasEnchantment(OldItem, CEnchantments.MERMAID)){
+			if(Main.CE.hasEnchantment(OldItem, CEnchantments.MERMAID)){
 				if(CEnchantments.MERMAID.isEnabled()){
 					player.removePotionEffect(PotionEffectType.WATER_BREATHING);
 				}
 			}
 		}
 	}
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMovment(PlayerMoveEvent e){
 		Player player = e.getPlayer();
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
-			if(CE.hasEnchantments(armor)){
-				if(CE.hasEnchantment(armor, CEnchantments.COMMANDER)){
+			if(Main.CE.hasEnchantments(armor)){
+				if(Main.CE.hasEnchantment(armor, CEnchantments.COMMANDER)){
 					if(CEnchantments.COMMANDER.isEnabled()){
 						if(Api.hasFactions()){
-							int radius = 4+CE.getPower(armor, CEnchantments.COMMANDER);
+							int radius = 4+Main.CE.getPower(armor, CEnchantments.COMMANDER);
 							ArrayList<Player> players = new ArrayList<Player>();
 							for(Entity en : player.getNearbyEntities(radius, radius, radius)){
 								if(en instanceof Player){
@@ -93,4 +95,5 @@ public class Helmets implements Listener{
 			}
 		}
 	}
+	
 }

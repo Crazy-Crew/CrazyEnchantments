@@ -22,6 +22,7 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 
 public class DustControl implements Listener{
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
@@ -75,6 +76,7 @@ public class DustControl implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
 	public void openDust(PlayerInteractEvent e){
 		Player player = e.getPlayer();
@@ -103,6 +105,7 @@ public class DustControl implements Listener{
 			}
 		}
 	}
+	
 	private static void setLore(ItemStack item, int percent, String rate){
 		ItemMeta m = item.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
@@ -150,6 +153,7 @@ public class DustControl implements Listener{
 		m.setLore(lore);
 		item.setItemMeta(m);
 	}
+	
 	public static ItemStack getDust(String Dust, int amount){
 		String id = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Item");
 		String name = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Name");
@@ -162,6 +166,7 @@ public class DustControl implements Listener{
 		}
 		return Api.makeItem(id, amount, name, lore);
 	}
+	
 	public static ItemStack getDust(String Dust,int amount, int percent){
 		String id = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Item");
 		String name = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Name");
@@ -171,12 +176,22 @@ public class DustControl implements Listener{
 		}
 		return Api.makeItem(id, amount, name, lore);
 	}
-	String pickDust(){
+	
+	private String pickDust(){
 		Random r = new Random();
-		int i = r.nextInt(2);
-		if(i==0)return "SuccessDust";
-		return "DestroyDust";
+		List<String> dusts = new ArrayList<String>();
+		if(Main.settings.getConfig().getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success")){
+			dusts.add("SuccessDust");
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Destroy")){
+			dusts.add("DestroyDust");
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Failed")){
+			dusts.add("FailedDust");
+		}
+		return dusts.get(r.nextInt(dusts.size()));
 	}
+	
 	public static Integer getPercent(String dust, ItemStack item){
 		List<String> lore = item.getItemMeta().getLore();
 		List<String> L = Main.settings.getConfig().getStringList("Settings.Dust."+dust+".Lore");
@@ -199,4 +214,5 @@ public class DustControl implements Listener{
 		}
 		return Integer.parseInt(arg);
 	}
+	
 }

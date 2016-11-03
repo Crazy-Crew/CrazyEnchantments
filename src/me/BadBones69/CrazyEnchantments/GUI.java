@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,20 +13,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
+import me.BadBones69.CrazyEnchantments.Controlers.EnchantmentControl;
+import me.BadBones69.CrazyEnchantments.Controlers.LostBook;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
 
 public class GUI implements Listener{
-	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
-	static CustomEnchantments CustomE = CustomEnchantments.getInstance();
+	
 	static void openGUI(Player player){
 		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Api.getInvName());
 		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
@@ -145,6 +141,7 @@ public class GUI implements Listener{
 		}
 		player.openInventory(inv);
 	}
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		ItemStack item = e.getCurrentItem();
@@ -195,7 +192,7 @@ public class GUI implements Listener{
 										}
 									}
 								}
-								player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
+								player.getInventory().addItem(Api.addGlow(EnchantmentControl.pick(cat)));
 								return;
 							}
 						}
@@ -236,7 +233,7 @@ public class GUI implements Listener{
 										}
 									}
 								}
-								player.getInventory().addItem(Api.getLostBook(cat, 1));
+								player.getInventory().addItem(LostBook.getLostBook(cat, 1));
 								return;
 							}
 						}
@@ -449,129 +446,7 @@ public class GUI implements Listener{
 			}
 		}
 	}
-	@EventHandler
-	public void addEnchantment(InventoryClickEvent e){
-		Inventory inv = e.getInventory();
-		Player player = (Player) e.getWhoClicked();
-		if(inv != null){
-			if(e.getCursor() != null&&e.getCurrentItem() != null){
-				ItemStack c = e.getCursor();
-				ItemStack item  = e.getCurrentItem();
-				if(c.hasItemMeta()){
-					if(c.getItemMeta().hasDisplayName()){
-						if(c.getType()!=Main.CE.getEnchantmentBookItem().getType())return;
-						String name = c.getItemMeta().getDisplayName();
-						String enchant = "Glowing";
-						String enchantColor = "&7";
-						EnchantmentType type = EnchantmentType.ALL;
-						for(CEnchantments en : CE.getEnchantments()){
-							if(name.contains(Api.color(en.getBookColor()+en.getCustomName()))){
-								enchant = en.getCustomName();
-								enchantColor = en.getEnchantmentColor();
-								type = en.getType();
-							}
-						}
-						for(String en : CustomE.getEnchantments()){
-							if(name.contains(Api.color(CustomE.getBookColor(en)+CustomE.getCustomName(en)))){
-								enchant = CustomE.getCustomName(en);
-								enchantColor = CustomE.getEnchantmentColor(en);
-								type = CustomE.getType(en);
-							}
-						}
-						if(type.getItems().contains(item.getType())){
-							if(c.getAmount() == 1){
-								boolean success = Api.successChance(c);
-								boolean destroy = Api.destroyChance(c);
-								if(item.getItemMeta().hasLore()){
-									for(String l : item.getItemMeta().getLore()){
-										if(l.contains(enchant)){
-											return;
-										}
-									}
-								}
-								if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-									int limit = 0;
-									int total = Api.getEnchAmount(item);
-									for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
-										String perm = Permission.getPermission();
-										if(perm.startsWith("crazyenchantments.limit.")){
-											perm=perm.replace("crazyenchantments.limit.", "");
-											if(Api.isInt(perm)){
-												if(limit<Integer.parseInt(perm)){
-													limit = Integer.parseInt(perm);
-												}
-											}
-										}
-									}
-									if(!player.hasPermission("crazyenchantments.bypass")){
-										if(total>=limit){
-											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
-											return;
-										}
-									}
-								}
-								e.setCancelled(true);
-								if(success||player.getGameMode() == GameMode.CREATIVE){
-									name = Api.removeColor(name);
-									String[] breakdown = name.split(" ");
-									String color = "&7";
-									color = enchantColor;
-									String enchantment = enchant;
-									String lvl = breakdown[1];
-									String full = Api.color(color+enchantment+" "+lvl);
-									player.setItemOnCursor(new ItemStack(Material.AIR));
-									e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
-									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Works")));
-									try{
-										if(Api.getVersion()>=191){
-											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
-										}else{
-											player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
-										}
-									}catch(Exception ex){}
-									return;
-								}
-								if(destroy){
-									if(Api.isProtected(item)){
-										e.setCurrentItem(Api.removeProtected(item));
-										player.setItemOnCursor(new ItemStack(Material.AIR));
-										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
-										try{
-											if(Api.getVersion()>=191){
-												player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-											}else{
-												player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-											}
-										}catch(Exception ex){}
-										return;
-									}else{
-										player.setItemOnCursor(new ItemStack(Material.AIR));
-										e.setCurrentItem(new ItemStack(Material.AIR));
-										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
-									}
-									player.updateInventory();
-									return;
-								}
-								if(!success&&!destroy){
-									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
-									player.setItemOnCursor(new ItemStack(Material.AIR));
-									try{
-										if(Api.getVersion()>=191){
-											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-										}else{
-											player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-										}
-									}catch(Exception ex){}
-									player.updateInventory();
-									return;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+	
 	@EventHandler
 	public void infoClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
@@ -708,6 +583,7 @@ public class GUI implements Listener{
 			}
 		}
 	}
+	
 	public static void openInfo(Player player){
 		Inventory inv = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
 		inv.addItem(Api.makeItem(Material.GOLD_HELMET, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name"), 
@@ -732,6 +608,7 @@ public class GUI implements Listener{
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Other.Lore")));
 		player.openInventory(inv);
 	}
+	
 	public static ArrayList<ItemStack> getInfo(String type){
 		FileConfiguration enchants = Main.settings.getEnchs();
 		FileConfiguration customEnchants = Main.settings.getCustomEnchs();
@@ -748,7 +625,7 @@ public class GUI implements Listener{
 			if(enchants.getBoolean("Enchantments."+en+".Enabled")){
 				String name = enchants.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
-				EnchantmentType enchantType = CE.getFromName(en).getType();
+				EnchantmentType enchantType = Main.CE.getFromName(en).getType();
 				ItemStack i = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
@@ -762,11 +639,11 @@ public class GUI implements Listener{
 				if(enchantType == EnchantmentType.WEAPONS)misc.add(i);
 			}
 		}
-		for(String enchantment : CustomE.getEnchantments()){
-			if(CustomE.isEnabled(enchantment)){
+		for(String enchantment : Main.CustomE.getEnchantments()){
+			if(Main.CustomE.isEnabled(enchantment)){
 				String name = customEnchants.getString("Enchantments."+enchantment+".Info.Name");
-				List<String> desc = CustomE.getDiscription(enchantment);
-				EnchantmentType enchantType = CustomE.getType(enchantment);
+				List<String> desc = Main.CustomE.getDiscription(enchantment);
+				EnchantmentType enchantType = Main.CustomE.getType(enchantment);
 				ItemStack i = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
@@ -791,9 +668,11 @@ public class GUI implements Listener{
 		if(type.equalsIgnoreCase("Misc"))return misc;
 		return null;
 	}
+	
 	boolean inGUI(int slot, int max){
 		//The last slot in the tinker is 54
 		if(slot<max)return true;
 		return false;
 	}
+	
 }

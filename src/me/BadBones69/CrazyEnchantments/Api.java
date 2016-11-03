@@ -28,8 +28,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.MultiSupport.ASkyBlockSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
@@ -44,12 +42,9 @@ import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R2;
 import me.BadBones69.CrazyEnchantments.MultiSupport.WorldGuard;
 
 public class Api{
-	static CrazyEnchantments CE = CrazyEnchantments.getInstance();
-	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-	@SuppressWarnings("static-access")
-	public Api(Plugin plugin){
-		this.plugin = plugin;
-	}
+	
+	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
+	
 	public static String color(String msg){
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
@@ -625,53 +620,18 @@ public class Api{
 	}
 	public static int getEnchAmount(ItemStack item){
 		int amount = 0;
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasLore()){
-				for(String lore : item.getItemMeta().getLore()){
-					for(CEnchantments en : CE.getEnchantments()){
-						if(lore.contains(en.getCustomName())){
-							amount++;
-						}
-					}
-				}
-			}
-		}
+		amount += Main.CE.getItemEnchantments(item).size();
+		amount += Main.CustomE.getItemEnchantments(item).size();
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.IncludeVanillaEnchantments")){
 			if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")){
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasEnchants()){
-						amount=amount+item.getItemMeta().getEnchants().size();
+						amount=+ item.getItemMeta().getEnchants().size();
 					}
 				}
 			}
 		}
 		return amount;
-	}
-	public static boolean successChance(ItemStack item){
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasLore()){
-				int percent = getPercent("%success_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
-				if(randomPicker(percent, 100)){
-					return true;
-				}else{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	public static boolean destroyChance(ItemStack item){
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasLore()){
-				int percent = getPercent("%destroy_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
-				if(randomPicker(percent, 100)){
-					return true;
-				}else{
-					return false;
-				}
-			}
-		}
-		return false;
 	}
 	public static Integer getPercent(String Argument, ItemStack item, List<String> Msg){
 		List<String> lore = item.getItemMeta().getLore();
@@ -707,6 +667,9 @@ public class Api{
 	}
 	public static boolean randomPicker(int max){
 		Random number = new Random();
+		if(max <= 0){
+			return true;
+		}
 		int chance = 1 + number.nextInt(max);
 		if(chance == 1){
 			return true;
@@ -714,10 +677,12 @@ public class Api{
 		return false;
 	}
 	public static boolean randomPicker(int min, int max){
-		if(max==min)return true;
+		if(max == min || max <= min || max <= 0){
+			return true;
+		}
 		Random number = new Random();
 		int chance = 1 + number.nextInt(max);
-		if(chance>=1&&chance<=min){
+		if(chance >= 1 && chance <= min){
 			return true;
 		}
 		return false;
@@ -741,16 +706,6 @@ public class Api{
 	    	}
 	    }
 	    return entities;
-	}
-	public static ItemStack getLostBook(String cat, int amount){
-		String id = Main.settings.getConfig().getString("Settings.LostBook.Item");
-		String name = Main.settings.getConfig().getString("Settings.LostBook.Name");
-		List<String> lore = new ArrayList<String>();
-		String tn = Main.settings.getConfig().getString("Categories."+cat+".Name");
-		for(String l : Main.settings.getConfig().getStringList("Settings.LostBook.Lore")){
-			lore.add(l.replaceAll("%Category%", tn).replaceAll("%category%", tn));
-		}
-		return makeItem(id, amount, name, lore);
 	}
 	public static void fireWork(Location loc, ArrayList<Color> colors) {
 		Firework fw = loc.getWorld().spawn(loc, Firework.class);

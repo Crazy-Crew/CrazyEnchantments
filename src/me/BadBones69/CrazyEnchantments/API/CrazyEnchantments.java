@@ -14,6 +14,7 @@ import me.BadBones69.CrazyEnchantments.Main;
 public class CrazyEnchantments {
 	
 	public static CrazyEnchantments instance = new CrazyEnchantments();
+	
 	ArrayList<Material> BlockList = new ArrayList<Material>();
 	
 	int rageMaxLevel;

@@ -7,6 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 public class DisarmerUseEvent extends Event implements Cancellable{
+	
 	Player Player;
 	Player Damager;
 	ItemStack It;
@@ -62,4 +63,5 @@ public class DisarmerUseEvent extends Event implements Cancellable{
 	public void setCancelled(boolean cancel) {
 		Cancel=cancel;
 	}
+	
 }

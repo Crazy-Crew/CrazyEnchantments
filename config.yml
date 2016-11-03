@@ -1,19 +1,19 @@
 Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
-  Enchantment-Book-Item: '340'
+  Enchantment-Book-Item: '340' #The item that the enchantment book is.
   GUISize: 54 #The size of the GUI, Must be a factor of 9
   Clouds: True #Enable and Disable the Clouds for the Wings Enchantment
-  EnchantmentBookLore:
+  EnchantmentBookLore: #The lore on the enchantments books.
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
     - '%Description%'
     - '&4%Destroy_Rate%% Destroy Chance'
     - '&a%Success_Rate%% Success Chance'
-  LostBook:
-    Item: '340'
-    Name: '&8&l&nA Lost Book'
-    Lore:
+  LostBook: #Lost book options.
+    Item: '340' #The item the lost books is.
+    Name: '&8&l&nA Lost %Category%&8&l&n Book' #The name of the lost books.
+    Lore: #The lore of the lost books.
       - '&7This book has been lost for centuries'
       - '&7It is said to be an enchantment book from %Category%'
       - '&7But you must clean it off to find out what kind it is.'
@@ -87,6 +87,10 @@ Settings:
         - '&a1-%Percent%% &7will be on a'
         - '&aMagical AngelDust &7or &eMagical Fixing &7Dust'
         - '&7&l(&6&l!&7&l) &7Right click'
+      Dust-Toggle:
+        Success: True #Toggle wether you can get success dust from Mystery Dust.
+        Destroy: True #Toggle wether you can get destroy dust from Mystery Dust.
+        Failed: True #Toggle wether you can get failed dust from Mystery Dust.
     SuccessDust:
       InGUI: True #If you can buy it in the /CE Gui
       GUIName: '&aMagical Angel Dust' #Name of the item in the GUI
@@ -121,6 +125,13 @@ Settings:
       PercentRange: #Range the destroy rate will be.
         Max: 10 #Max percent
         Min: 2 #Minimum percent
+    FailedDust:
+      Item: '289' #Item the dust is
+      Name: '&7Failed Dust' #Name of the dust
+      Lore: #Lore for the dust
+        - '&7This dust has failed.'
+        - '&7It is now useless unless you'
+        - '&7needed to make TnT or a throwable potion.'
   BlackScroll: #Settings for the black scrolls
     Item: '351' #The item the black scroll can be
     Name: '&8&l&nBlack Scroll' #The name of the black scroll
@@ -166,6 +177,7 @@ Settings:
     MaxAmountOfEnchantmentsToggle: True #Turn on an off the Max amount of enchantments
     IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
     MaxRageLevel: 4 #The max amount rage can stack when fighting.
+    Right-Click-Book-Description: True #Toggles wether when you right click the enchantment book if it messages the player the description or not.
     Wings: #Options for the Wings Enchantment.
       Regions: #All world guard regions the Wings enchantment can work in.
         - 'Free_Fly'
@@ -203,7 +215,7 @@ Settings:
       Line2: '&b&lShop:' #Line 2 of the sign
       Line3: '&2&l%Category%' #Line 3 of the sign
       Line4: '&c&lCost: &6&l%Cost%XP' #Line 4 of the sign
-      Buy-Message: '&7You have just bought a &8Custom Enchantment Book&7.'
+      Buy-Message: '&7You have just bought an enchantment book, and it is %BookName%&7.'
     BlackScrollStyle: 
       Cost: 50 #How much to buy a black scroll
       Money/XP: Money #Use money or xp

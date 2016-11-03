@@ -264,3 +264,30 @@ Tinker:
     Furnace:
       Items: 20
       Book: 5
+    Blizzard:
+      Items: 20
+      Book: 5
+    AcidRain:
+      Items: 20
+      Book: 5
+    SandStorm:
+      Items: 20
+      Book: 5
+    Radiant:
+      Items: 20
+      Book: 5
+    Intimidate:
+      Items: 20
+      Book: 5
+    Pull:
+      Items: 20
+      Book: 5
+    Tamer:
+      Items: 20
+      Book: 5
+    Guards:
+      Items: 20
+      Book: 5
+    Necromancer:
+      Items: 20
+      Book: 5

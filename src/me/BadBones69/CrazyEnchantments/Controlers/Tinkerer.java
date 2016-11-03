@@ -24,16 +24,12 @@ import org.bukkit.plugin.Plugin;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 
 public class Tinkerer implements Listener{
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-	@SuppressWarnings("static-access")
-	public Tinkerer(Plugin plugin){
-		this.plugin = plugin;
-	}
+	
 	public static void openTinker(Player player){
 		Inventory inv = Bukkit.createInventory(null, 54, Api.color(Main.settings.getTinker().getString("Settings.GUIName")));
 		inv.setItem(0, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, Main.settings.getTinker().getString("Settings.TradeButton")));
@@ -43,6 +39,7 @@ public class Tinkerer implements Listener{
 		inv.setItem(8, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, Main.settings.getTinker().getString("Settings.TradeButton")));
 		player.openInventory(inv);
 	}
+	
 	@EventHandler
 	public void onXPUse(PlayerInteractEvent e){
 		Player player = e.getPlayer();
@@ -75,6 +72,7 @@ public class Tinkerer implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
@@ -122,8 +120,8 @@ public class Tinkerer implements Listener{
 								}
 								if(It.getType()!=Material.STAINED_GLASS_PANE){// Adding/Taking Items
 									if(It.getType()==Main.CE.getEnchantmentBookItem().getType()){// Adding a book
-										for(CEnchantments en : CE.getEnchantments()){
-											if(It.getItemMeta().getDisplayName().contains(Api.color(CE.getBookColor(en)+en.getCustomName()))){
+										for(CEnchantments en : Main.CE.getEnchantments()){
+											if(It.getItemMeta().getDisplayName().contains(Api.color(Main.CE.getBookColor(en)+en.getCustomName()))){
 												if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
 													e.setCurrentItem(new ItemStack(Material.AIR));
 													player.getInventory().addItem(It);
@@ -193,6 +191,7 @@ public class Tinkerer implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInvClose(final InventoryCloseEvent e){
 		final Inventory inv = e.getInventory();
@@ -221,7 +220,8 @@ public class Tinkerer implements Listener{
 			}
 		}, 0);
 	}
-	ItemStack getBottle(ItemStack item){
+	
+	private ItemStack getBottle(ItemStack item){
 		String id = Main.settings.getTinker().getString("Settings.BottleOptions.Item");
 		String name = Main.settings.getTinker().getString("Settings.BottleOptions.Name");
 		List<String> lore = new ArrayList<String>();
@@ -230,7 +230,8 @@ public class Tinkerer implements Listener{
 		}
 		return Api.makeItem(id, 1, name, lore);
 	}
-	HashMap<Integer, Integer> getSlot(){
+	
+	private HashMap<Integer, Integer> getSlot(){
 		HashMap<Integer, Integer> slots = new HashMap<Integer, Integer>();
 		slots.put(1, 5);
 		slots.put(2, 6);
@@ -257,18 +258,20 @@ public class Tinkerer implements Listener{
 		slots.put(48, 53);
 		return slots;
 	}
-	boolean inTinker(int slot){
+	
+	private boolean inTinker(int slot){
 		//The last slot in the tinker is 54
 		if(slot<54)return true;
 		return false;
 	}
-	int getTotalXP(ItemStack item){
+	
+	private int getTotalXP(ItemStack item){
 		int total=0;
 		if(EnchantmentType.ALL.getItems().contains(item.getType())||item.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
-						for(CEnchantments en : CE.getEnchantments()){
+						for(CEnchantments en : Main.CE.getEnchantments()){
 							if(lore.contains(en.getCustomName())){
 								total+=Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+en.getName()+".Items");
 							}
@@ -284,7 +287,8 @@ public class Tinkerer implements Listener{
 		}
 		return total;
 	}
-	Integer getXP(ItemStack item){
+	
+	private Integer getXP(ItemStack item){
 		List<String> lore = item.getItemMeta().getLore();
 		List<String> L = Main.settings.getTinker().getStringList("Settings.BottleOptions.Lore");
 		String arg = "";
@@ -306,4 +310,5 @@ public class Tinkerer implements Listener{
 		}
 		return Integer.parseInt(arg);
 	}
+	
 }

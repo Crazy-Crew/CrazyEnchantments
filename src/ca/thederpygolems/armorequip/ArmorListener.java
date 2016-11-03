@@ -34,12 +34,11 @@ import me.BadBones69.CrazyEnchantments.Api;
  */
 public class ArmorListener implements Listener{
 	
-	Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
+	private Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	
 	private final List<String> blockedMaterials;
 
-	public ArmorListener(Plugin plugin){
-		this.plugin = plugin;
+	public ArmorListener(){
 		this.blockedMaterials = getBlocks();
 	}
 

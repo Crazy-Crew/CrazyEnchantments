@@ -15,12 +15,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.Api;
-import me.BadBones69.CrazyEnchantments.ECControl;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class SignControl implements Listener{
+	
 	@EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
 		if(e.getClickedBlock()==null)return;
@@ -119,10 +120,12 @@ public class SignControl implements Listener{
 									Api.takeTotalXP(player, config.getInt("Categories."+cat+".Cost"));
 								}
 							}
+							ItemStack item = Api.addGlow(EnchantmentControl.pick(cat));
 							if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")){
-								player.sendMessage(Api.color(Api.getPrefix()+config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")));
+								player.sendMessage(Api.color(Api.getPrefix()+config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
+								.replaceAll("%BookName%", item.getItemMeta().getDisplayName()).replaceAll("%bookname%", item.getItemMeta().getDisplayName())));
 							}
-							player.getInventory().addItem(Api.addGlow(ECControl.pick(cat)));
+							player.getInventory().addItem(item);
 							return;
 						}
 					}
@@ -130,6 +133,7 @@ public class SignControl implements Listener{
 			}
 		}
     }
+	
 	@EventHandler
 	public void onBreak(BlockBreakEvent e){
 		Location Loc = e.getBlock().getLocation();
@@ -147,6 +151,7 @@ public class SignControl implements Listener{
 			}
 		}
 	}
+	
 	private String placeHolders(String msg, String cat){
 		msg=Api.color(msg);
 		msg=msg.replaceAll("%category%", cat).replaceAll("%Category%", cat);
@@ -154,6 +159,7 @@ public class SignControl implements Listener{
 		msg=msg.replaceAll("%xp%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%XP%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
 		return msg;
 	}
+	
 	@EventHandler
 	public void onSignMake(SignChangeEvent e){
 		Player player = e.getPlayer();
@@ -246,4 +252,5 @@ public class SignControl implements Listener{
 			}
 		}
 	}
+	
 }

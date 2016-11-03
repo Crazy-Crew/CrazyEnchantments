@@ -538,7 +538,7 @@ Enchantments:
       Description:
         - '&c&lArmor Only'
         - '&3Has a chance to cut'
-        - '&3Your incoming damage in haft'
+        - '&3Your incoming damage in half'
     Categories:
       - 'Common'
       - 'Rare'
@@ -1179,6 +1179,166 @@ Enchantments:
         - '&c&lPickaxes Only'
         - '&3Always smelts ores into'
         - '&3items instead of blocks.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Blizzard:
+    Enabled: True
+    Name: 'Blizzard'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lBlizzard'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives players within'
+        - '&33 blocks slowness for a short time.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  AcidRain:
+    Enabled: True
+    Name: 'AcidRain'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lAcidRain'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives players within 3'
+        - '&3blocks poison for a short time.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  SandStorm:
+    Enabled: True
+    Name: 'SandStorm'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lSandStorm'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives players within 3'
+        - '&3blocks blindness for a short time.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Radiant:
+    Enabled: True
+    Name: 'Radiant'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lRadiant'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Sets players within 3'
+        - '&3blocks on fire for a short time.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Intimidate:
+    Enabled: True
+    Name: 'Intimidate'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lIntimidate'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Gives players within'
+        - '&33 blocks weakness for a short time.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Pull:
+    Enabled: True
+    Name: 'Pull'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lPull'
+      Description:
+        - '&c&lBow Only'
+        - '&3Has a chance to send'
+        - '&3the player you hit flying at you.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Tamer:
+    Enabled: True
+    Name: 'Tamer'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Info:
+      Name: '&e&lTamer'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Spawns wolfs to help'
+        - '&3when you are in trouble.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Guards:
+    Enabled: True
+    Name: 'Guards'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lGuards'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Spawns in iron golems'
+        - '&3when you are in trouble.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Infestation:
+    Enabled: True
+    Name: 'Infestation'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Info:
+      Name: '&e&lInfestation'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Spawns in endermites and silverfish'
+        - '&3when you are in trouble.'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Necromancer:
+    Enabled: True
+    Name: 'Necromancer'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Info:
+      Name: '&e&lNecromancer'
+      Description:
+        - '&c&lArmor Only'
+        - '&3Spawns in zombies'
+        - '&3when you are in trouble.'
     Categories:
       - 'Common'
       - 'Rare'

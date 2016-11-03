@@ -22,8 +22,11 @@ import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CustomEBook;
 import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Events.AuraListener;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
+import me.BadBones69.CrazyEnchantments.Controlers.EnchantmentControl;
+import me.BadBones69.CrazyEnchantments.Controlers.LostBook;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
 import me.BadBones69.CrazyEnchantments.Controlers.SignControl;
@@ -41,35 +44,39 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Main extends JavaPlugin implements Listener{
+	
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static Economy econ = null;
 	public static EconomyResponse r;
 	public static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
+	
 	@Override
 	public void onEnable(){
 		PluginManager pm = Bukkit.getServer().getPluginManager();
 		//==========================================================================\\
 		pm.registerEvents(this, this);
 		pm.registerEvents(new GUI(), this);
-		pm.registerEvents(new Tinkerer(this), this);
-		pm.registerEvents(new ECControl(), this);
-		pm.registerEvents(new BlackSmith(this), this);
+		pm.registerEvents(new LostBook(), this);
+		pm.registerEvents(new EnchantmentControl(), this);
 		pm.registerEvents(new SignControl(), this);
 		pm.registerEvents(new DustControl(), this);
-		pm.registerEvents(new ArmorListener(this), this);
+		pm.registerEvents(new Tinkerer(), this);
+		pm.registerEvents(new AuraListener(), this);
 		pm.registerEvents(new ScrollControl(), this);
+		pm.registerEvents(new BlackSmith(), this);
+		pm.registerEvents(new ArmorListener(), this);
 		pm.registerEvents(new ProtectionCrystal(), this);
 		pm.registerEvents(new CustomEnchantments(), this);
 		//==========================================================================\\
 		pm.registerEvents(new Bows(), this);
 		pm.registerEvents(new Axes(), this);
-		pm.registerEvents(new Boots(this), this);
 		pm.registerEvents(new Tools(), this);
 		pm.registerEvents(new Helmets(), this);
 		pm.registerEvents(new PickAxes(), this);
-		pm.registerEvents(new Armor(this), this);
-		pm.registerEvents(new Swords(this), this);
+		pm.registerEvents(new Boots(), this);
+		pm.registerEvents(new Armor(), this);
+		pm.registerEvents(new Swords(), this);
 		if(pm.getPlugin("SilkSpawners")!=null){
 			pm.registerEvents(new SilkSpawners(), this);
 		}
@@ -88,6 +95,12 @@ public class Main extends JavaPlugin implements Listener{
 			System.out.println("Error Submitting stats!");
 		}
 	}
+	
+	@Override
+	public void onDisable(){
+		Swords.removeAllies();
+	}
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
 		if(commandLable.equalsIgnoreCase("BlackSmith")||commandLable.equalsIgnoreCase("BSmith")
 				||commandLable.equalsIgnoreCase("BlackS")||commandLable.equalsIgnoreCase("BS")){
@@ -134,7 +147,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Api.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
 					sender.sendMessage(Api.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
-					sender.sendMessage(Api.color("&b/CE Scroll <Player> <Scroll> <Amount> - &9Gives a player scrolls."));
+					sender.sendMessage(Api.color("&b/CE Scroll <Scroll> [Amount] [Player] - &9Gives a player scrolls."));
 					sender.sendMessage(Api.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
 					sender.sendMessage(Api.color("&b/CE Dust <Success/Destroy> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Api.color("&b/CE Book <Enchantment> [Lvl] [Amount] [Player] - &9Gives a player a Enchantment Book."));
@@ -221,9 +234,9 @@ public class Main extends JavaPlugin implements Listener{
 							if(cat.equalsIgnoreCase(C)){
 								cat=C;
 								if(Api.isInvFull(player)){
-									player.getWorld().dropItemNaturally(player.getLocation(), Api.getLostBook(cat, amount));
+									player.getWorld().dropItemNaturally(player.getLocation(), LostBook.getLostBook(cat, amount));
 								}else{
-									player.getInventory().addItem(Api.getLostBook(cat, amount));
+									player.getInventory().addItem(LostBook.getLostBook(cat, amount));
 								}
 								return true;
 							}
@@ -273,7 +286,7 @@ public class Main extends JavaPlugin implements Listener{
 				}
 				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> [Amount] [Player] [Percent]
 					if(!Api.hasPermission(sender, "Admin", true))return true;
-					if(args.length>=2){// /CE Dust <Success/Destroy> <Amount> [Player] [Percent]
+					if(args.length>=2){
 						Player player = Api.getPlayer(sender.getName());
 						int amount = 1;
 						int percent = 0;
@@ -333,29 +346,38 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Dust <Success/Destroy> <Amount> [Player] [Percent]"));
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Player> <Scroll> <Amount>
-					if(args.length!=4){
-						sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
-						return true;
-					}
+				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Scroll> [Amount] [Player]
 					if(!Api.hasPermission(sender, "Admin", true))return true;
-					String name = args[1];
-					if(!Api.isInt(args[3])){
-						sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
-								.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3])));
-						return true;
+					if(args.length >= 2){
+						int i = 1;
+						String name = sender.getName();
+						if(args.length >= 3){
+							if(!Api.isInt(args[2]) || (Api.isInt(args[2]))){
+								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
+										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+								return true;
+							}
+							i = Integer.parseInt(args[2]);
+						}
+						if(args.length >= 4){
+							name = args[3];
+							if(!Api.isOnline(name, sender))return true;
+						}else{
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+								return true;
+							}
+						}
+						if(args[1].equalsIgnoreCase("B") || args[1].equalsIgnoreCase("Black") || args[1].equalsIgnoreCase("BlackScroll")){
+							Api.getPlayer(name).getInventory().addItem(Api.BlackScroll(i));
+							return true;
+						}
+						if(args[1].equalsIgnoreCase("W") || args[1].equalsIgnoreCase("White") || args[1].equalsIgnoreCase("WhiteScroll")){
+							Api.getPlayer(name).getInventory().addItem(Api.addWhiteScroll(i));
+							return true;
+						}
 					}
-					int i = Integer.parseInt(args[3]);
-					if(!Api.isOnline(name, sender))return true;
-					if(args[2].equalsIgnoreCase("Black")||args[2].equalsIgnoreCase("BlackScroll")){
-						Api.getPlayer(name).getInventory().addItem(Api.BlackScroll(i));
-						return true;
-					}
-					if(args[2].equalsIgnoreCase("White")||args[2].equalsIgnoreCase("WhiteScroll")){
-						Api.getPlayer(name).getInventory().addItem(Api.addWhiteScroll(i));
-						return true;
-					}
-					sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Scroll <Player> <Scroll> <Amount>"));
+					sender.sendMessage(Api.getPrefix()+Api.color("&c/CE Scroll <Scroll> [Amount] [Player]"));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Remove")){
@@ -547,6 +569,7 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		return false;
 	}
+	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
 		final Player player = e.getPlayer();
@@ -563,6 +586,7 @@ public class Main extends JavaPlugin implements Listener{
 			}
 		}, 1*20);
 	}
+	
 	private boolean setupEconomy(){
         if (getServer().getPluginManager().getPlugin("Vault") == null){
             return false;

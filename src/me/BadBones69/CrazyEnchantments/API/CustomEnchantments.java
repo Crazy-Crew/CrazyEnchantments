@@ -24,6 +24,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class CustomEnchantments implements Listener{
+	
 	List<String> CustomEnchants = new ArrayList<String>();
 	HashMap<String, List<String>> Discription = new HashMap<String, List<String>>();
 	HashMap<String, String> Name = new HashMap<String, String>();
@@ -31,10 +32,13 @@ public class CustomEnchantments implements Listener{
 	HashMap<String, String> EnchantmentColor = new HashMap<String, String>();
 	HashMap<String, Boolean> Toggle = new HashMap<String, Boolean>();
 	HashMap<String, EnchantmentType> Type = new HashMap<String, EnchantmentType>();
+	
 	static CustomEnchantments instance = new CustomEnchantments();
+	
 	public static CustomEnchantments getInstance() {
 		return instance;
 	}
+	
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
 		if(Main.settings.getCustomEnchs().contains("Enchantments")){
@@ -93,6 +97,7 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e){
 		if(Main.settings.getCustomEnchs().contains("Enchantments")){
@@ -202,8 +207,10 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 	}
+
 	HashMap<Projectile, Integer> Power = new HashMap<Projectile, Integer>();
 	HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
+	
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
 		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
@@ -217,6 +224,7 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
@@ -246,6 +254,7 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
  	public void onHit(EntityDamageByEntityEvent e){
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
@@ -297,27 +306,35 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 	}
+	
 	public List<String> getEnchantments(){
 		return instance.CustomEnchants;
 	}
+	
 	public String getCustomName(String enchantment){
 		return instance.Name.get(enchantment);
 	}
+	
 	public String getBookColor(String enchantment){
 		return instance.BookColor.get(enchantment);
 	}
+	
 	public String getEnchantmentColor(String enchantment){
 		return instance.EnchantmentColor.get(enchantment);
 	}
+	
 	public EnchantmentType getType(String enchantment){
 		return instance.Type.get(enchantment);
 	}
+	
 	public Boolean isEnabled(String enchantment){
 		return instance.Toggle.get(enchantment);
 	}
+	
 	public List<String> getDiscription(String enchantment){
 		return instance.Discription.get(enchantment);
 	}
+	
 	public boolean hasEnchantments(ItemStack item){
 		if(item!=null){
 			if(item.hasItemMeta()){
@@ -334,6 +351,7 @@ public class CustomEnchantments implements Listener{
 		}
 		return false;
 	}
+	
 	public boolean hasEnchantment(ItemStack item, String enchantment){
 		if(item!=null){
 			if(item.hasItemMeta()){
@@ -348,6 +366,7 @@ public class CustomEnchantments implements Listener{
 		}
 		return false;
 	}
+	
 	public ItemStack addEnchantment(ItemStack item, String enchant, Integer level){
 		List<String> newLore = new ArrayList<String>();
 		ItemMeta meta = item.getItemMeta();
@@ -369,6 +388,7 @@ public class CustomEnchantments implements Listener{
 		item.setItemMeta(meta);
 		return item;
 	}
+	
 	public ItemStack removeEnchantment(ItemStack item, String enchant){
 		List<String> newLore = new ArrayList<String>();
 		ItemMeta meta = item.getItemMeta();
@@ -381,6 +401,25 @@ public class CustomEnchantments implements Listener{
 		item.setItemMeta(meta);
 		return item;
 	}
+	
+	public ArrayList<String> getItemEnchantments(ItemStack item){
+		ArrayList<String> enchantments = new ArrayList<String>();
+		if(item!=null){
+			if(item.hasItemMeta()){
+				if(item.getItemMeta().hasLore()){
+					for(String lore : item.getItemMeta().getLore()){
+						for(String enchantment : getEnchantments()){
+							if(lore.contains(getCustomName(enchantment))){
+								enchantments.add(enchantment);
+							}
+						}
+					}
+				}
+			}
+		}
+		return enchantments;
+	}
+	
 	public Integer getBookPower(ItemStack book, String enchant){
 		String line = book.getItemMeta().getDisplayName().replace(getCustomName(enchant)+" ", "");
 		line = Api.removeColor(line);
@@ -397,6 +436,7 @@ public class CustomEnchantments implements Listener{
 		if(line.equalsIgnoreCase("X"))return 10;
 		return 1;
 	}
+	
 	public Integer getPower(ItemStack item, String enchant){
 		String line = "";
 		for(String lore : item.getItemMeta().getLore()){
@@ -420,6 +460,7 @@ public class CustomEnchantments implements Listener{
 		if(line.equalsIgnoreCase("X"))return 10;
 		return 1;
 	}
+	
 	private String convertPower(Integer i){
 		if(i<=0)return "I";
 		if(i==1)return "I";
@@ -434,6 +475,7 @@ public class CustomEnchantments implements Listener{
 		if(i==10)return "X";
 		return i+"";
 	}
+	
 	public void update(){
 		CustomEnchants.clear();
 		Name.clear();

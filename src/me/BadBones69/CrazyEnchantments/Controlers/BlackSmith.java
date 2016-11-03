@@ -23,10 +23,7 @@ import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 public class BlackSmith implements Listener{
 	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-	@SuppressWarnings("static-access")
-	public BlackSmith(Plugin plugin){
-		this.plugin = plugin;
-	}
+
 	public static void openBlackSmith(Player player){
 		Inventory inv = Bukkit.createInventory(null, 27, Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")));
 		List<Integer> other = new ArrayList<Integer>();
@@ -58,6 +55,7 @@ public class BlackSmith implements Listener{
 		}
 		player.openInventory(inv);
 	}
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		List<Integer> result = new ArrayList<Integer>();
@@ -241,6 +239,7 @@ public class BlackSmith implements Listener{
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onInvClose(final InventoryCloseEvent e){
 		final Inventory inv = e.getInventory();
@@ -271,7 +270,8 @@ public class BlackSmith implements Listener{
 			}
 		}, 0);
 	}
-	ItemStack getUpgradedItem(ItemStack master, ItemStack sub){
+	
+	private ItemStack getUpgradedItem(ItemStack master, ItemStack sub){
 		ItemStack item = master.clone();
 		if(master.getType()==Main.CE.getEnchantmentBookItem().getType()&&sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Api.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Api.removeColor(sub.getItemMeta().getDisplayName()))){
@@ -394,7 +394,8 @@ public class BlackSmith implements Listener{
 		}
 		return item;
 	}
-	int getUpgradeCost(ItemStack master, ItemStack sub){
+	
+	private int getUpgradeCost(ItemStack master, ItemStack sub){
 		int total = 0;
 		if(master.getType()==Main.CE.getEnchantmentBookItem().getType()&&sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Api.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Api.removeColor(sub.getItemMeta().getDisplayName()))){
@@ -518,7 +519,8 @@ public class BlackSmith implements Listener{
 		}
 		return total;
 	}
-	boolean hasCustomEnchantment(ItemStack item){
+	
+	private boolean hasCustomEnchantment(ItemStack item){
 		if(item.hasItemMeta()){
 			if(item.getItemMeta().hasLore()){
 				for(String lore : item.getItemMeta().getLore()){
@@ -537,9 +539,11 @@ public class BlackSmith implements Listener{
 		}
 		return false;
 	}
-	boolean inBlackSmith(int slot){
+	
+	private boolean inBlackSmith(int slot){
 		//The last slot in the tinker is 54
 		if(slot<27)return true;
 		return false;
 	}
+	
 }

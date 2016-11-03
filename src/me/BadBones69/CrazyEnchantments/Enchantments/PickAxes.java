@@ -22,15 +22,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class PickAxes implements Listener{
 	
 	HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<Player, HashMap<Block, BlockFace>>();
-	
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockClick(PlayerInteractEvent e){
@@ -38,8 +36,8 @@ public class PickAxes implements Listener{
 		if(e.getAction()==Action.LEFT_CLICK_BLOCK){
 			ItemStack item = Api.getItemInHand(player);
 			Block block = e.getClickedBlock();
-			if(CE.hasEnchantments(item)){
-				if(CE.hasEnchantment(item, CEnchantments.BLAST)){
+			if(Main.CE.hasEnchantments(item)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.BLAST)){
 					if(CEnchantments.BLAST.isEnabled()){
 						HashMap<Block, BlockFace> blockFace = new HashMap<Block, BlockFace>();
 						blockFace.put(block, e.getBlockFace());
@@ -57,9 +55,9 @@ public class PickAxes implements Listener{
 		Player player = e.getPlayer();
 		if(!Api.canBreakBlock(player, block))return;
 		ItemStack item = Api.getItemInHand(player);
-		if(CE.hasEnchantments(item)){
+		if(Main.CE.hasEnchantments(item)){
 			if(player.getGameMode() != GameMode.CREATIVE){
-				if(CE.hasEnchantment(item, CEnchantments.AUTOSMELT)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT)){
 					if(CEnchantments.AUTOSMELT.isEnabled()){
 						if(getOres().containsKey(block.getType())){
 							if(Api.randomPicker(2)){
@@ -68,7 +66,7 @@ public class PickAxes implements Listener{
 								if(!event.isCancelled()){
 									e.setCancelled(true);
 									int drop = 0;
-									drop+=CE.getPower(item, CEnchantments.AUTOSMELT);
+									drop+=Main.CE.getPower(item, CEnchantments.AUTOSMELT);
 									if(item.getItemMeta().hasEnchants()){
 										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 											drop+=item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
@@ -85,14 +83,14 @@ public class PickAxes implements Listener{
 						}
 					}
 				}
-				if(CE.hasEnchantment(item, CEnchantments.FURNACE)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE)){
 					if(CEnchantments.FURNACE.isEnabled()){
 						if(getOres().containsKey(block.getType())){
 							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
 								e.setCancelled(true);
-								int drop = 0;
+								int drop = 1;
 								if(item.getItemMeta().hasEnchants()){
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 										drop+=item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
@@ -111,10 +109,10 @@ public class PickAxes implements Listener{
 						}
 					}
 				}
-				if(CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
 					if(CEnchantments.EXPERIENCE.isEnabled()){
 						if(getOres().containsKey(block.getType())){
-						int power = CE.getPower(item, CEnchantments.EXPERIENCE);
+						int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
 							if(Api.randomPicker(2)){
 								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
 								Bukkit.getPluginManager().callEvent(event);
@@ -128,12 +126,12 @@ public class PickAxes implements Listener{
 					}
 				}
 			}
-			if(CE.hasEnchantment(item, CEnchantments.BLAST)){
+			if(Main.CE.hasEnchantment(item, CEnchantments.BLAST)){
 				if(CEnchantments.BLAST.isEnabled()){
 					if(blocks.containsKey(player)){
 						if(blocks.get(player).containsKey(block)){
-							for(Block b : getBlocks(block.getLocation(), blocks.get(player).get(block), (CE.getPower(item, CEnchantments.BLAST)-1))){
-								if(CE.getBlockList().contains(b.getType())){
+							for(Block b : getBlocks(block.getLocation(), blocks.get(player).get(block), (Main.CE.getPower(item, CEnchantments.BLAST)-1))){
+								if(Main.CE.getBlockList().contains(b.getType())){
 									if(Api.canBreakBlock(player, b)&&Api.allowsBreak(b.getLocation())){
 										if(player.getGameMode() == GameMode.CREATIVE){
 											b.setType(Material.AIR);

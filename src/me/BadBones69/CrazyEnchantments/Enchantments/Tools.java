@@ -17,15 +17,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Tools implements Listener{
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
+
 	private HashMap<Player, HashMap<String, Boolean>> effect = new HashMap<Player, HashMap<String, Boolean>>();
 	private HashMap<Player, HashMap<String, Boolean>> hadEnchant = new HashMap<Player, HashMap<String, Boolean>>();
 	int time = 99999999*20;
+	
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
 		Player player = e.getPlayer();
@@ -35,13 +36,13 @@ public class Tools implements Listener{
 		Trigger.put("Oxygenate", false);
 		Boolean Haste = false;
 		Boolean Ox = false;
-		if(CE.hasEnchantments(item)){
-			if(CE.hasEnchantment(item, CEnchantments.HASTE)){
+		if(Main.CE.hasEnchantments(item)){
+			if(Main.CE.hasEnchantment(item, CEnchantments.HASTE)){
 				if(CEnchantments.HASTE.isEnabled()){
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
-						int power = CE.getPower(item, CEnchantments.HASTE);
+						int power = Main.CE.getPower(item, CEnchantments.HASTE);
 						Trigger.put("Haste", true);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power-1));
 						Haste=true;
@@ -49,7 +50,7 @@ public class Tools implements Listener{
 					}
 				}
 			}
-			if(CE.hasEnchantment(item, CEnchantments.OXYGENATE)){
+			if(Main.CE.hasEnchantment(item, CEnchantments.OXYGENATE)){
 				if(CEnchantments.OXYGENATE.isEnabled()){
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
 					Bukkit.getPluginManager().callEvent(event);
@@ -83,6 +84,7 @@ public class Tools implements Listener{
 			effect.remove(player);
 		}
 	}
+	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e){
 		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
@@ -91,8 +93,8 @@ public class Tools implements Listener{
 		if(!Api.canBreakBlock(player, block))return;
 		if(player.getGameMode()!=GameMode.CREATIVE){
 			ItemStack item = Api.getItemInHand(player);
-			if(CE.hasEnchantments(item)){
-				if(CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
+			if(Main.CE.hasEnchantments(item)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
 					if(CEnchantments.TELEPATHY.isEnabled()){
 						Boolean T = false;
 						if(item.getItemMeta().hasEnchants()){
@@ -126,4 +128,5 @@ public class Tools implements Listener{
 			}
 		}
 	}
+	
 }
