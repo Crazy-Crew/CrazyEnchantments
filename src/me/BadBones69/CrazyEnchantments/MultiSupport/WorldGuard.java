@@ -18,7 +18,7 @@ public class WorldGuard {
 	}
 	public static boolean allowsBreak(Location loc){
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(loc.getWorld()).getApplicableRegions(loc);
-		if (set.queryState(null, DefaultFlag.BLOCK_BREAK)==StateFlag.State.DENY || set.queryState(null, DefaultFlag.BUILD)==StateFlag.State.DENY){
+		if (set.queryState(null, DefaultFlag.BLOCK_BREAK)==StateFlag.State.DENY){
 			return false;
 		}
 		return true;
