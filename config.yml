@@ -183,6 +183,12 @@ Settings:
         - 'Free_Fly'
         - 'SafeZone'
   SignOptions: #Options for the Signs.
+    CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
+      Line1: '&b&lCrazy Enchant' #Line 1 of the sign
+      Line2: '&b&lShop:' #Line 2 of the sign
+      Line3: '&2&l%Category%' #Line 3 of the sign
+      Line4: '&c&lCost: &6&l%Cost%XP' #Line 4 of the sign
+      Buy-Message: '&7You have just bought an enchantment book, and it is %BookName%&7 from the %Category%&7 tier.'
     ProtectionCrystalStyle: 
       Cost: 1000 #How much to buy it
       Money/XP: Money #Use money or xp
@@ -210,12 +216,6 @@ Settings:
       Line3: '&e&lMagical Fixing Dust'
       Line4: '&c&lCost: &a&l$50'
       Buy-Message: '&7You have just bought a &eMagical Fixing Dust&7.'
-    CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
-      Line1: '&b&lCrazy Enchant' #Line 1 of the sign
-      Line2: '&b&lShop:' #Line 2 of the sign
-      Line3: '&2&l%Category%' #Line 3 of the sign
-      Line4: '&c&lCost: &6&l%Cost%XP' #Line 4 of the sign
-      Buy-Message: '&7You have just bought an enchantment book, and it is %BookName%&7.'
     BlackScrollStyle: 
       Cost: 50 #How much to buy a black scroll
       Money/XP: Money #Use money or xp

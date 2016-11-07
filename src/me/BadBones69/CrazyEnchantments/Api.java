@@ -252,6 +252,11 @@ public class Api{
 					return false;
 				}
 			}
+			if(hasASkyBlock()){
+				if(ASkyBlockSupport.isFriendly(player, other)){
+					return true;
+				}
+			}
 		}
 		return false;
 	}

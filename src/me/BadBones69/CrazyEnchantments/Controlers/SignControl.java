@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
@@ -95,35 +96,39 @@ public class SignControl implements Listener{
 					}
 					for(String cat : config.getConfigurationSection("Categories").getKeys(false)){
 						if(type.equalsIgnoreCase(cat)){
-							if(config.contains("Categories."+cat+".Money/XP")&&config.getString("Categories."+cat+".Money/XP").equalsIgnoreCase("Money")){
-								if(Api.getMoney(player)<config.getInt("Categories."+cat+".Cost")){
-									String money = config.getInt("Categories."+cat+".Cost") - Api.getMoney(player)+"";
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
-									return;
-								}
-								Main.econ.withdrawPlayer(player, config.getInt("Categories."+cat+".Cost"));
-							}else{
-								if(config.getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
-									if(Api.getXPLvl(player)<config.getInt("Categories."+cat+".Cost")){
-										String xp = config.getInt("Categories."+cat+".Cost") - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+							if(player.getGameMode() != GameMode.CREATIVE){
+								if(config.contains("Categories."+cat+".Money/XP")&&config.getString("Categories."+cat+".Money/XP").equalsIgnoreCase("Money")){
+									if(Api.getMoney(player)<config.getInt("Categories."+cat+".Cost")){
+										String money = config.getInt("Categories."+cat+".Cost") - Api.getMoney(player)+"";
+										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
 										return;
 									}
-									Api.takeLvlXP(player, config.getInt("Categories."+cat+".Cost"));
-								}
-								if(config.getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
-									if(player.getTotalExperience()<config.getInt("Categories."+cat+".Cost")){
-										String xp = config.getInt("Categories."+cat+".Cost") - player.getTotalExperience()+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-										return;
+									Main.econ.withdrawPlayer(player, config.getInt("Categories."+cat+".Cost"));
+								}else{
+									if(config.getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
+										if(Api.getXPLvl(player)<config.getInt("Categories."+cat+".Cost")){
+											String xp = config.getInt("Categories."+cat+".Cost") - Api.getXPLvl(player)+"";
+											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+											return;
+										}
+										Api.takeLvlXP(player, config.getInt("Categories."+cat+".Cost"));
 									}
-									Api.takeTotalXP(player, config.getInt("Categories."+cat+".Cost"));
+									if(config.getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
+										if(player.getTotalExperience()<config.getInt("Categories."+cat+".Cost")){
+											String xp = config.getInt("Categories."+cat+".Cost") - player.getTotalExperience()+"";
+											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+											return;
+										}
+										Api.takeTotalXP(player, config.getInt("Categories."+cat+".Cost"));
+									}
 								}
 							}
 							ItemStack item = Api.addGlow(EnchantmentControl.pick(cat));
+							String C = config.getString("Categories." + cat + ".Name");
 							if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")){
 								player.sendMessage(Api.color(Api.getPrefix()+config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
-								.replaceAll("%BookName%", item.getItemMeta().getDisplayName()).replaceAll("%bookname%", item.getItemMeta().getDisplayName())));
+								.replaceAll("%BookName%", item.getItemMeta().getDisplayName()).replaceAll("%bookname%", item.getItemMeta().getDisplayName())
+								.replaceAll("%Category%", C).replaceAll("%category%", C)));
 							}
 							player.getInventory().addItem(item);
 							return;

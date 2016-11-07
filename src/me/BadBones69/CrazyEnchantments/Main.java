@@ -98,7 +98,7 @@ public class Main extends JavaPlugin implements Listener{
 	
 	@Override
 	public void onDisable(){
-		Swords.removeAllies();
+		Armor.removeAllies();
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
@@ -352,7 +352,7 @@ public class Main extends JavaPlugin implements Listener{
 						int i = 1;
 						String name = sender.getName();
 						if(args.length >= 3){
-							if(!Api.isInt(args[2]) || (Api.isInt(args[2]))){
+							if(!Api.isInt(args[2])){
 								sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Not-A-Number")
 										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 								return true;

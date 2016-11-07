@@ -140,7 +140,7 @@ public class ArmorListener implements Listener{
 					}
 				}, 0);
 			}else{
-				if(Api.getVersion()<1101){
+				if(Api.getVersion()<1101 && (ArmorType.matchType(oldArmorPiece) != null && e.getRawSlot() == ArmorType.matchType(oldArmorPiece).getSlot())){
 					EquipMethod method = EquipMethod.DRAG;
 					if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = EquipMethod.HOTBAR_SWAP;
 					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), method, newArmorType, oldArmorPiece, newArmorPiece);

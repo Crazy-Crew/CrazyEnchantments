@@ -120,39 +120,57 @@ public class Tinkerer implements Listener{
 								}
 								if(It.getType()!=Material.STAINED_GLASS_PANE){// Adding/Taking Items
 									if(It.getType()==Main.CE.getEnchantmentBookItem().getType()){// Adding a book
+										Boolean custom = false;
+										Boolean toggle = false;
+										String enchant = "";
 										for(CEnchantments en : Main.CE.getEnchantments()){
 											if(It.getItemMeta().getDisplayName().contains(Api.color(Main.CE.getBookColor(en)+en.getCustomName()))){
-												if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
-													e.setCurrentItem(new ItemStack(Material.AIR));
-													player.getInventory().addItem(It);
-													inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
-													try{
-														if(Api.getVersion()>=191){
-															player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
-														}else{
-															player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
-														}
-													}catch(Exception ex){}
-												}else{// Clicking in their inventory
-													if(player.getOpenInventory().getTopInventory().firstEmpty()==-1){
-														player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
-														return;
+												enchant = en.getName();
+												toggle = true;
+											}
+										}
+										for(String en : Main.CustomE.getEnchantments()){
+											if(It.getItemMeta().getDisplayName().contains(Api.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
+												enchant = en;
+												custom = true;
+												toggle = true;
+											}
+										}
+										if(toggle){
+											if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
+												e.setCurrentItem(new ItemStack(Material.AIR));
+												player.getInventory().addItem(It);
+												inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
+												try{
+													if(Api.getVersion()>=191){
+														player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
+													}else{
+														player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 													}
-													e.setCurrentItem(new ItemStack(Material.AIR));
-													inv.setItem(getSlot().get(inv.firstEmpty()), DustControl.getDust("MysteryDust", 1, Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+en.getName()+".Book")));
-													inv.setItem(inv.firstEmpty(), It);
-													try{
-														if(Api.getVersion()>=191){
-															player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
-														}else{
-															player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
-														}
-													}catch(Exception ex){}
+												}catch(Exception ex){}
+											}else{// Clicking in their inventory
+												if(player.getOpenInventory().getTopInventory().firstEmpty()==-1){
+													player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
+													return;
 												}
+												e.setCurrentItem(new ItemStack(Material.AIR));
+												if(custom){
+													inv.setItem(getSlot().get(inv.firstEmpty()), DustControl.getDust("MysteryDust", 1, Main.settings.getTinker().getInt("Tinker.Custom-Enchantments."+enchant+".Book")));
+												}else{
+													inv.setItem(getSlot().get(inv.firstEmpty()), DustControl.getDust("MysteryDust", 1, Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+enchant+".Book")));
+												}
+												inv.setItem(inv.firstEmpty(), It);
+												try{
+													if(Api.getVersion()>=191){
+														player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
+													}else{
+														player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+													}
+												}catch(Exception ex){}
 											}
 										}
 									}
-									if(getTotalXP(e.getCurrentItem())>0){// Adding an item
+									if(getTotalXP(It)>0){// Adding an item
 										if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
 											if(getSlot().containsKey(e.getRawSlot())){
 												e.setCurrentItem(new ItemStack(Material.AIR));
@@ -268,19 +286,22 @@ public class Tinkerer implements Listener{
 	private int getTotalXP(ItemStack item){
 		int total=0;
 		if(EnchantmentType.ALL.getItems().contains(item.getType())||item.getType()==Main.CE.getEnchantmentBookItem().getType()){
-			if(item.hasItemMeta()){
-				if(item.getItemMeta().hasLore()){
-					for(String lore : item.getItemMeta().getLore()){
-						for(CEnchantments en : Main.CE.getEnchantments()){
-							if(lore.contains(en.getCustomName())){
-								total+=Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+en.getName()+".Items");
-							}
-						}
+			if(Main.CE.hasEnchantments(item)){
+				for(CEnchantments en : Main.CE.getItemEnchantments(item)){
+					total += Main.settings.getTinker().getInt("Tinker.Crazy-Enchantments."+en.getName()+".Items");
+				}
+			}
+			if(Main.CustomE.hasEnchantments(item)){
+				for(String en : Main.CustomE.getItemEnchantments(item)){
+					if(Main.settings.getTinker().contains("Tinker.Custom-Enchantments." + en)){
+						total += Main.settings.getTinker().getInt("Tinker.Custom-Enchantments." + en + ".Items");
 					}
 				}
+			}
+			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasEnchants()){
 					for(Enchantment en : item.getEnchantments().keySet()){
-						total+=Main.settings.getTinker().getInt("Tinker.Vanilla-Enchantments."+en.getName());
+						total += Main.settings.getTinker().getInt("Tinker.Vanilla-Enchantments."+en.getName());
 					}
 				}
 			}

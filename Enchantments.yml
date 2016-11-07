@@ -1188,7 +1188,7 @@ Enchantments:
     Name: 'Blizzard'
     Color: '&7'
     BookColor: '&b&l'
-    MaxPower: 3
+    MaxPower: 1
     Info:
       Name: '&e&lBlizzard'
       Description:
@@ -1220,7 +1220,7 @@ Enchantments:
     Name: 'SandStorm'
     Color: '&7'
     BookColor: '&b&l'
-    MaxPower: 3
+    MaxPower: 1
     Info:
       Name: '&e&lSandStorm'
       Description:
@@ -1252,7 +1252,7 @@ Enchantments:
     Name: 'Intimidate'
     Color: '&7'
     BookColor: '&b&l'
-    MaxPower: 3
+    MaxPower: 2
     Info:
       Name: '&e&lIntimidate'
       Description:

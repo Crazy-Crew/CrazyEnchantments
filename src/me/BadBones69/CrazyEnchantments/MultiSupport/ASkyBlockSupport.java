@@ -12,4 +12,13 @@ public class ASkyBlockSupport {
 		return api.playerIsOnIsland(player);
 	}
 	
+	public static Boolean isFriendly(Player player, Player other){
+		if(api.inTeam(player.getUniqueId()) && api.inTeam(other.getUniqueId())){
+			if(api.getTeamMembers(player.getUniqueId()).contains(other.getUniqueId())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }
