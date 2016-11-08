@@ -21,7 +21,7 @@ import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Helmets implements Listener{
 	
-	int time = 99999999*20;
+	int time = Integer.MAX_VALUE;
 	
 	@EventHandler(priority = EventPriority.MONITOR)
  	public void onEquip(ArmorEquipEvent e){
