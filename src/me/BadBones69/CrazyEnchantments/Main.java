@@ -86,6 +86,7 @@ public class Main extends JavaPlugin implements Listener{
 		Boots.onStart();
 		CE.load();
 		CustomE.update();
+		CEnchantments.load();
 		if(!setupEconomy()){
 	   		saveDefaultConfig();
 	    }
@@ -167,6 +168,7 @@ public class Main extends JavaPlugin implements Listener{
 					CE.load();
 					CustomE.update();
 					Boots.onStart();
+					CEnchantments.load();
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
 					return true;
 				}

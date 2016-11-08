@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 import org.bukkit.Material;
 
+import me.BadBones69.CrazyEnchantments.Main;
+
 public enum EnchantmentType{
 	ARMOR("Armor", isArmor()), AXE("Axe", isAxe()), BOW("Bow", isBow()), BOOTS("Boots", isBoots()),
 	HELMET("Helmet", isHelmet()), SWORD("Sword", isSword()), WEAPONS("Weapons", isWeapon()),
 	PICKAXE("PickAxe", isPickAxe()), TOOL("Tool", isTool()), ALL("All", isAll());
 	
-	CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	String name;
 	ArrayList<Material> items;
 	
@@ -45,7 +46,7 @@ public enum EnchantmentType{
 	 */
 	public ArrayList<CEnchantments> getEnchantmnets(){
 		ArrayList<CEnchantments> en = new ArrayList<CEnchantments>();
-		for(CEnchantments e : CE.getEnchantments()){
+		for(CEnchantments e : Main.CE.getEnchantments()){
 			if(e.getType()==getFromName(name)){
 				en.add(e);
 			}

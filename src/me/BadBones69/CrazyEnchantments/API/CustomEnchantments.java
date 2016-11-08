@@ -25,15 +25,15 @@ import me.BadBones69.CrazyEnchantments.Main;
 
 public class CustomEnchantments implements Listener{
 	
-	List<String> CustomEnchants = new ArrayList<String>();
-	HashMap<String, List<String>> Discription = new HashMap<String, List<String>>();
-	HashMap<String, String> Name = new HashMap<String, String>();
-	HashMap<String, String> BookColor = new HashMap<String, String>();
-	HashMap<String, String> EnchantmentColor = new HashMap<String, String>();
-	HashMap<String, Boolean> Toggle = new HashMap<String, Boolean>();
-	HashMap<String, EnchantmentType> Type = new HashMap<String, EnchantmentType>();
+	private List<String> CustomEnchants = new ArrayList<String>();
+	private HashMap<String, List<String>> Discription = new HashMap<String, List<String>>();
+	private HashMap<String, String> Name = new HashMap<String, String>();
+	private HashMap<String, String> BookColor = new HashMap<String, String>();
+	private HashMap<String, String> EnchantmentColor = new HashMap<String, String>();
+	private HashMap<String, Boolean> Toggle = new HashMap<String, Boolean>();
+	private HashMap<String, EnchantmentType> Type = new HashMap<String, EnchantmentType>();
 	
-	static CustomEnchantments instance = new CustomEnchantments();
+	private static CustomEnchantments instance = new CustomEnchantments();
 	
 	public static CustomEnchantments getInstance() {
 		return instance;

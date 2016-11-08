@@ -1,5 +1,6 @@
 package me.BadBones69.CrazyEnchantments.API;
 
+import java.util.HashMap;
 import java.util.List;
 
 import me.BadBones69.CrazyEnchantments.Main;
@@ -101,12 +102,12 @@ public enum CEnchantments {
 	HELLFORGED("HellForged", EnchantmentType.ALL);
 	
 	String Name;
-	String CustomName;
-	String BookColor;
-	String EnchantmentColor;
 	EnchantmentType Type;
-	Boolean Toggle;
-	List<String> Discription;
+	private static HashMap<CEnchantments, String> customNames = new HashMap<CEnchantments, String>();
+	private static HashMap<CEnchantments, String> bookColors = new HashMap<CEnchantments, String>();
+	private static HashMap<CEnchantments, String> enchantColors = new HashMap<CEnchantments, String>();
+	private static HashMap<CEnchantments, Boolean> active = new HashMap<CEnchantments, Boolean>();
+	private static HashMap<CEnchantments, List<String>> enchantDesc = new HashMap<CEnchantments, List<String>>();
 	
 	/**
 	 * 
@@ -116,12 +117,19 @@ public enum CEnchantments {
 	private CEnchantments(String name, EnchantmentType type){
 		Name=name;
 		Type=type;
-		if(Main.settings.getEnchs().contains("Enchantments."+name)){
-			CustomName = Main.settings.getEnchs().getString("Enchantments."+name+".Name");
-			Discription = Main.settings.getEnchs().getStringList("Enchantments."+name+".Info.Description");
-			BookColor = Main.settings.getEnchs().getString("Enchantments."+name+".BookColor");
-			EnchantmentColor = Main.settings.getEnchs().getString("Enchantments."+name+".Color");
-			Toggle = Main.settings.getEnchs().getBoolean("Enchantments."+name+".Enabled");
+	}
+	
+	/**
+	 * Loads all the enchantments data.
+	 */
+	public static void load(){
+		for(CEnchantments en : values()){
+			String name = en.getName();
+			customNames.put(en, Main.settings.getEnchs().getString("Enchantments."+name+".Name"));
+			bookColors.put(en, Main.settings.getEnchs().getString("Enchantments."+name+".BookColor"));
+			enchantColors.put(en, Main.settings.getEnchs().getString("Enchantments."+name+".Color"));
+			active.put(en, Main.settings.getEnchs().getBoolean("Enchantments."+name+".Enabled"));
+			enchantDesc.put(en, Main.settings.getEnchs().getStringList("Enchantments."+name+".Info.Description"));
 		}
 	}
 	
@@ -138,7 +146,7 @@ public enum CEnchantments {
 	 * @return The custom name in the Enchantment.yml.
 	 */
 	public String getCustomName(){
-		return CustomName;
+		return customNames.get(this);
 	}
 	
 	/**
@@ -146,7 +154,7 @@ public enum CEnchantments {
 	 * @return The description of the enchantment in the Enchantments.yml.
 	 */
 	public List<String> getDiscription(){
-		return Discription;
+		return enchantDesc.get(this);
 	}
 	
 	/**
@@ -154,7 +162,7 @@ public enum CEnchantments {
 	 * @return Return the color that goes on the Enchantment Book.
 	 */
 	public String getBookColor(){
-		return BookColor;
+		return bookColors.get(this);
 	}
 	
 	/**
@@ -162,7 +170,7 @@ public enum CEnchantments {
 	 * @return Returns the color that goes on the Enchanted Item.
 	 */
 	public String getEnchantmentColor(){
-		return EnchantmentColor;
+		return enchantColors.get(this);
 	}
 	
 	/**
@@ -178,6 +186,6 @@ public enum CEnchantments {
 	 * @return True if the enchantment is enabled and false if not.
 	 */
 	public Boolean isEnabled(){
-		return Toggle;
+		return active.get(this);
 	}
 }
