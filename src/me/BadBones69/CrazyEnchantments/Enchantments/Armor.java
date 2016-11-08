@@ -48,7 +48,7 @@ public class Armor implements Listener{
 	private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<Player, HashMap<CEnchantments, Calendar>>();
 	private HashMap<Player, Calendar> mobTimer = new HashMap<Player, Calendar>();
 	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<Player, ArrayList<LivingEntity>>();
-	private int time = 99999999*20;
+	private int time = Integer.MAX_VALUE;
 	
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
