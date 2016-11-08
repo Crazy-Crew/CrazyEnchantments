@@ -29,7 +29,7 @@ public class Boots implements Listener{
 	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	
 	public static ArrayList<Player> Flying = new ArrayList<Player>();
-	private int time = 99999999*20;
+	private int time = Integer.MAX_VALUE;
 	
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
