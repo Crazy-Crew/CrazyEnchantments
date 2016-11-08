@@ -25,7 +25,7 @@ public class Tools implements Listener{
 
 	private HashMap<Player, HashMap<String, Boolean>> effect = new HashMap<Player, HashMap<String, Boolean>>();
 	private HashMap<Player, HashMap<String, Boolean>> hadEnchant = new HashMap<Player, HashMap<String, Boolean>>();
-	int time = 99999999*20;
+	int time = Integer.MAX_VALUE;
 	
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
