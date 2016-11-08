@@ -7,7 +7,8 @@ import org.bukkit.Material;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public enum EnchantmentType{
-	ARMOR("Armor", isArmor()), AXE("Axe", isAxe()), BOW("Bow", isBow()), BOOTS("Boots", isBoots()),
+	ARMOR("Armor", isArmor()), CHESTPLATE("Chestplate", isChestplate()), LEGGINGS("Leggings", isLeggings()),
+	AXE("Axe", isAxe()), BOW("Bow", isBow()), BOOTS("Boots", isBoots()),
 	HELMET("Helmet", isHelmet()), SWORD("Sword", isSword()), WEAPONS("Weapons", isWeapon()),
 	PICKAXE("PickAxe", isPickAxe()), TOOL("Tool", isTool()), ALL("All", isAll());
 	
@@ -99,6 +100,26 @@ public enum EnchantmentType{
 		ma.add(Material.DIAMOND_CHESTPLATE);
 		ma.add(Material.DIAMOND_LEGGINGS);
 		ma.add(Material.DIAMOND_BOOTS);
+		return ma;
+	}
+	
+	private static ArrayList<Material> isChestplate(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.add(Material.LEATHER_CHESTPLATE);
+		ma.add(Material.IRON_CHESTPLATE);
+		ma.add(Material.CHAINMAIL_CHESTPLATE);
+		ma.add(Material.GOLD_CHESTPLATE);
+		ma.add(Material.DIAMOND_CHESTPLATE);
+		return ma;
+	}
+	
+	private static ArrayList<Material> isLeggings(){
+		ArrayList<Material> ma = new ArrayList<Material>();
+		ma.add(Material.LEATHER_LEGGINGS);
+		ma.add(Material.IRON_LEGGINGS);
+		ma.add(Material.CHAINMAIL_LEGGINGS);
+		ma.add(Material.GOLD_LEGGINGS);
+		ma.add(Material.DIAMOND_LEGGINGS);
 		return ma;
 	}
 	
