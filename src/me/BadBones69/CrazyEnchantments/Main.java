@@ -16,16 +16,19 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import ca.thederpygolems.armorequip.ArmorListener;
 import me.BadBones69.CrazyEnchantments.API.CEBook;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CustomEBook;
 import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
+import me.BadBones69.CrazyEnchantments.API.GKitz;
+import me.BadBones69.CrazyEnchantments.API.Events.ArmorListener;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraListener;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
 import me.BadBones69.CrazyEnchantments.Controlers.EnchantmentControl;
+import me.BadBones69.CrazyEnchantments.Controlers.GKitzGUI;
+import me.BadBones69.CrazyEnchantments.Controlers.ShopGUI;
 import me.BadBones69.CrazyEnchantments.Controlers.LostBook;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
@@ -56,7 +59,9 @@ public class Main extends JavaPlugin implements Listener{
 		PluginManager pm = Bukkit.getServer().getPluginManager();
 		//==========================================================================\\
 		pm.registerEvents(this, this);
-		pm.registerEvents(new GUI(), this);
+		pm.registerEvents(new ShopGUI(), this);
+		pm.registerEvents(new GKitz(), this);
+		pm.registerEvents(new GKitzGUI(), this);
 		pm.registerEvents(new LostBook(), this);
 		pm.registerEvents(new EnchantmentControl(), this);
 		pm.registerEvents(new SignControl(), this);
@@ -85,8 +90,9 @@ public class Main extends JavaPlugin implements Listener{
 		Api.hasUpdate();
 		Boots.onStart();
 		CE.load();
-		CustomE.update();
 		CEnchantments.load();
+		CustomE.update();
+		GKitz.load();
 		if(!setupEconomy()){
 	   		saveDefaultConfig();
 	    }
@@ -100,6 +106,7 @@ public class Main extends JavaPlugin implements Listener{
 	@Override
 	public void onDisable(){
 		Armor.removeAllies();
+		GKitz.unload();
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
@@ -133,7 +140,7 @@ public class Main extends JavaPlugin implements Listener{
 				}
 				Player player = (Player)sender;
 				if(!Api.hasPermission(sender, "Access", true))return true;
-				GUI.openGUI(player);
+				ShopGUI.openGUI(player);
 				return true;
 			}
 			if(args.length>=1){
@@ -143,6 +150,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Api.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Api.color("&b/Tinker - &9Opens up the Tinkerer."));
 					sender.sendMessage(Api.color("&b/BlackSmith - &9Opens up the Black Smith."));
+					sender.sendMessage(Api.color("&b/GKitz [Kit] [Player] - &9Open the GKitz GUI or get a GKit."));
 					sender.sendMessage(Api.color("&b/CE Help - &9Shows all CE Commands."));
 					sender.sendMessage(Api.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Api.color("&b/CE Reload - &9Reloads the Config.yml."));
@@ -164,11 +172,14 @@ public class Main extends JavaPlugin implements Listener{
 					settings.reloadSigns();
 					settings.reloadTinker();
 					settings.reloadBlockList();
+					settings.reloadGKitz();
+					settings.reloadData();
 					settings.setup(this);
 					CE.load();
+					CEnchantments.load();
 					CustomE.update();
 					Boots.onStart();
-					CEnchantments.load();
+					GKitz.load();
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Config-Reload")));
 					return true;
 				}
@@ -180,7 +191,7 @@ public class Main extends JavaPlugin implements Listener{
 						}
 						Player player = (Player)sender;
 						if(!Api.hasPermission(sender, "Info", true))return true;
-						GUI.openInfo(player);
+						ShopGUI.openInfo(player);
 						return true;
 					}else{
 						String ench = args[1];
@@ -206,7 +217,7 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 				}
-				if(args[0].equalsIgnoreCase("LostBook")||args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
+				if(args[0].equalsIgnoreCase("LostBook") || args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
 					if(!Api.hasPermission(sender, "Admin", true))return true;
 					if(args.length>=2){// /CE LostBook <Category> [Amount] [Player]
 						if(args.length<=3){
@@ -568,6 +579,71 @@ public class Main extends JavaPlugin implements Listener{
 				}
 			}
 			sender.sendMessage(Api.getPrefix()+Api.color("&cDo /CE Help for more info."));
+			return true;
+		}
+		if(commandLable.equalsIgnoreCase("gkitz") || commandLable.equalsIgnoreCase("gkit")){// /GKitz [Kit] [Player]
+			if(args.length == 0){
+				if(!(sender instanceof Player)){
+					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
+					return true;
+				}
+				GKitzGUI.openGUI((Player) sender);
+				return true;
+			}
+			if(args.length >= 1){
+				String kit = "";
+				Player player = null;
+				if(GKitz.isGKit(args[0])){
+					kit = GKitz.getGKitName(args[0]);
+				}else{
+					sender.sendMessage(Api.getPrefix() + Api.color(settings.getMsg().getString("Messages.Not-A-GKit").replaceAll("%Kit%", args[0]).replaceAll("%kit%", args[0])));
+					return true;
+				}
+				if(args.length >= 2){
+					if(!Api.hasPermission(sender, "Admin", true)){
+						return true;
+					}else{
+						if(!Api.isOnline(args[1], sender)){
+							return true;
+						}else{
+							player = Api.getPlayer(args[1]);
+						}
+					}
+				}else{
+					if(!(sender instanceof Player)){
+						sender.sendMessage(Api.getPrefix() + Api.color(settings.getMsg().getString("Messages.Players-Only")));
+						return true;
+					}else{
+						player = (Player) sender;
+					}
+				}
+				if(GKitz.hasGKitPermission(player, kit)){
+					if(GKitz.canGetGKit(player, kit)){
+						GKitz.giveKit(player, kit);
+						player.sendMessage(Api.getPrefix() + Api.color(settings.getMsg().getString("Messages.Received-GKit")
+								.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
+						if(!player.getName().equalsIgnoreCase(sender.getName())){
+							sender.sendMessage(Api.getPrefix() + Api.color(settings.getMsg().getString("Messages.Given-GKit")
+									.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))
+									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
+						}
+						if(args.length == 1){
+							GKitz.addCooldown(player, kit);
+						}
+					}else{
+						sender.sendMessage(Api.getPrefix() + GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), settings.getMsg().getString("Messages.Still-In-Cooldown")
+								.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
+						return true;
+					}
+				}else{
+					sender.sendMessage(Api.getPrefix() + Api.color(settings.getMsg().getString("Messages.No-GKit-Permission")
+							.replaceAll("%Kit%", kit).replaceAll("%kit%", kit)));
+					return true;
+				}
+				return true;
+			}
+			sender.sendMessage(Api.getPrefix()+Api.color("&c/GKitz [Kit] [Player]"));
+			return true;
 		}
 		return false;
 	}

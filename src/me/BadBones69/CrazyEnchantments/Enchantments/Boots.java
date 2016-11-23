@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -17,11 +18,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.ParticleEffect;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Boots implements Listener{
@@ -100,8 +101,9 @@ public class Boots implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onFly(PlayerToggleFlightEvent e){
+		if(e.isCancelled())return;
 		Player player = e.getPlayer();
 		if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
 			ItemStack boots = player.getEquipment().getBoots();

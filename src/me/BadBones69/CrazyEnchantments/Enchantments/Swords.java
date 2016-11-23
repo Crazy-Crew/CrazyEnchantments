@@ -32,8 +32,9 @@ public class Swords implements Listener{
 	private HashMap<Player, Integer> num = new HashMap<Player, Integer>();
 	private HashMap<Player, Integer> reset = new HashMap<Player, Integer>();
 	
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(e.isCancelled())return;
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
@@ -49,7 +50,7 @@ public class Swords implements Listener{
 								if(e.getEntity() instanceof Player){
 									Player player = (Player) e.getEntity();
 									int slot = Api.percentPick(4, 1);
-									if(Api.randomPicker((13-Main.CE.getPower(It, CEnchantments.DISARMER)))){
+									if(Api.randomPicker((31-Main.CE.getPower(It, CEnchantments.DISARMER)))){
 										if(slot == 1){
 											if(player.getEquipment().getHelmet() != null){
 												ItemStack item = player.getEquipment().getHelmet();

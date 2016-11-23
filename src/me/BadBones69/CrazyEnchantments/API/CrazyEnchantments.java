@@ -41,7 +41,7 @@ public class CrazyEnchantments {
 	 * @return Returns the color of the enchantment that goes on books.
 	 */
 	public String getBookColor(CEnchantments enchantment){
-		return Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".BookColor");
+		return Api.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".BookColor"));
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class CrazyEnchantments {
 	 * @return Returns the color of the enchantment that goes on an item.
 	 */
 	public String getEnchantmentColor(CEnchantments enchantment){
-		return Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".Color");
+		return Api.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".Color"));
 	}
 	
 	/**
@@ -72,6 +72,20 @@ public class CrazyEnchantments {
 			enchs.add(en);
 		}
 		return enchs;
+	}
+	
+	/**
+	 * 
+	 * @param enchantment Enchantment that is being checked
+	 * @return Returns true if its real and false if not
+	 */
+	public Boolean isEnchantment(String enchantment){
+		for(CEnchantments en : getEnchantments()){
+			if(enchantment.equalsIgnoreCase(en.getName()) || enchantment.equalsIgnoreCase(en.getCustomName())){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -102,7 +116,7 @@ public class CrazyEnchantments {
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
 						for(CEnchantments enchantment : getEnchantments()){
-							if(lore.contains(enchantment.getCustomName())){
+							if(lore.startsWith(enchantment.getEnchantmentColor() + enchantment.getCustomName())){
 								return true;
 							}
 						}
@@ -124,7 +138,7 @@ public class CrazyEnchantments {
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
-						if(lore.contains(enchantment.getCustomName())){
+						if(lore.startsWith(enchantment.getEnchantmentColor() + enchantment.getCustomName())){
 							return true;
 						}
 					}
@@ -212,8 +226,7 @@ public class CrazyEnchantments {
 	 * @return The power the enchantment has.
 	 */
 	public Integer getBookPower(ItemStack book, CEnchantments enchant){
-		String line = book.getItemMeta().getDisplayName().replace(enchant.getCustomName()+" ", "");
-		line = Api.removeColor(line);
+		String line = book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName()+" ", "");
 		if(Api.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
 		if(line.equalsIgnoreCase("II"))return 2;
@@ -242,8 +255,7 @@ public class CrazyEnchantments {
 				break;
 			}
 		}
-		line = line.replace(enchant.getCustomName()+" ", "");
-		line = Api.removeColor(line);
+		line = line.replace(enchant.getEnchantmentColor() + enchant.getCustomName()+" ", "");
 		if(Api.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
 		if(line.equalsIgnoreCase("II"))return 2;
@@ -264,7 +276,9 @@ public class CrazyEnchantments {
 	public void load(){
 		BlockList.clear();
 		for(String id : Main.settings.getBlockList().getStringList("Block-List")){
-			BlockList.add(Api.makeItem(id, 1).getType());
+			try{
+				BlockList.add(Api.makeItem(id, 1).getType());
+			}catch(Exception e){}
 		}
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.MaxRageLevel")){
 			rageMaxLevel = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxRageLevel");

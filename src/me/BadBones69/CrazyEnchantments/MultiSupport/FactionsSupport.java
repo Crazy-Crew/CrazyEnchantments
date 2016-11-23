@@ -12,7 +12,11 @@ import com.massivecraft.massivecore.ps.PS;
 import me.BadBones69.CrazyEnchantments.Api;
 
 public class FactionsSupport {
+	
 	public static boolean isFriendly(Player player, Player other){
+		if(MPlayer.get(player) == null || MPlayer.get(player).getFaction() == null){
+			return false;
+		}
 		Faction p = MPlayer.get(player).getFaction();
 		if(MPlayer.get(other) == null || MPlayer.get(other).getFaction() == null){
 			return false;
@@ -26,6 +30,7 @@ public class FactionsSupport {
 		if(p==o)return true;
 		return false;
 	}
+	
 	public static boolean isFriendly(Faction player, Faction other){
 		Rel r = player.getRelationTo(other);
 		if(Api.removeColor(other.getName()).equalsIgnoreCase("Wilderness")){
@@ -35,6 +40,7 @@ public class FactionsSupport {
 		if(player==other)return true;
 		return false;
 	}
+	
 	public static boolean inTerritory(Player P){
 		MPlayer player = MPlayer.get(P);
 		if(Api.removeColor(player.getFaction().getName()).equalsIgnoreCase("Wilderness")){
@@ -45,6 +51,7 @@ public class FactionsSupport {
 		}
 		return false;
 	}
+	
 	public static boolean canBreakBlock(Player player, Block block){
 		Faction P = MPlayer.get(player).getFaction();
 		Faction B = BoardColl.get().getFactionAt(PS.valueOf(block.getLocation()));
@@ -53,4 +60,5 @@ public class FactionsSupport {
 		}
 		return false;
 	}
+	
 }

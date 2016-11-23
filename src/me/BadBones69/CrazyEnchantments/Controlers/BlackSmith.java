@@ -19,6 +19,7 @@ import org.bukkit.plugin.Plugin;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Version;
 
 public class BlackSmith implements Listener{
 	
@@ -36,7 +37,7 @@ public class BlackSmith implements Listener{
 		result.add(25);result.add(26);result.add(27);
 		for(int i:other)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 7, " "));
 		for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, " "));
-		if(Api.getVersion()<181){
+		if(Version.getVersion().getVersionInteger()<181){
 			ItemStack item = Api.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
 			if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
 				for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
@@ -71,7 +72,7 @@ public class BlackSmith implements Listener{
 					ItemStack item = e.getCurrentItem();
 					if(!inBlackSmith(e.getRawSlot())){// Click In Players Inventory
 						if(item.getAmount()!=1)return;
-						if(hasCustomEnchantment(item)||item.getType()==Main.CE.getEnchantmentBookItem().getType()){
+						if(Main.CE.hasEnchantments(item) || item.getType()==Main.CE.getEnchantmentBookItem().getType()){
 							if(item.getType()==Main.CE.getEnchantmentBookItem().getType()){
 								if(!item.hasItemMeta())return;
 								if(!item.getItemMeta().hasDisplayName())return;
@@ -92,8 +93,8 @@ public class BlackSmith implements Listener{
 								e.setCurrentItem(new ItemStack(Material.AIR));
 								inv.setItem(10, item);
 								try{
-									if(Api.getVersion()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-									if(Api.getVersion()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 								}catch(Exception ex){}
 							}else{
 								e.setCurrentItem(new ItemStack(Material.AIR));
@@ -102,8 +103,8 @@ public class BlackSmith implements Listener{
 								}
 								inv.setItem(13, item);
 								try{
-									if(Api.getVersion()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-									if(Api.getVersion()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 								}catch(Exception ex){}
 								if(getUpgradeCost(inv.getItem(10), inv.getItem(13))>0){
 									inv.setItem(16, Api.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13)),
@@ -111,7 +112,7 @@ public class BlackSmith implements Listener{
 											.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
 									for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
 								}else{
-									if(Api.getVersion()<181){
+									if(Version.getVersion().getVersionInteger()<181){
 										ItemStack it = Api.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
 										if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
 											for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
@@ -136,7 +137,7 @@ public class BlackSmith implements Listener{
 						if(e.getRawSlot()==10||e.getRawSlot()==13){
 							e.setCurrentItem(new ItemStack(Material.AIR));
 							player.getInventory().addItem(item);
-							if(Api.getVersion()<181){
+							if(Version.getVersion().getVersionInteger()<181){
 								ItemStack it = Api.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
 								if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
 									for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
@@ -155,8 +156,8 @@ public class BlackSmith implements Listener{
 							}
 							for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, " "));
 							try{
-								if(Api.getVersion()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-								if(Api.getVersion()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+								if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+								if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 							}catch(Exception ex){}
 						}
 						if(e.getRawSlot()==16){
@@ -197,13 +198,13 @@ public class BlackSmith implements Listener{
 									inv.setItem(10, new ItemStack(Material.AIR));
 									inv.setItem(13, new ItemStack(Material.AIR));
 									try{
-										if(Api.getVersion()>=191){
+										if(Version.getVersion().getVersionInteger()>=191){
 											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
 										}else{
 											player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
 										}
 									}catch(Exception ex){}
-									if(Api.getVersion()<181){
+									if(Version.getVersion().getVersionInteger()<181){
 										ItemStack it = Api.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
 										if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
 											for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
@@ -223,14 +224,14 @@ public class BlackSmith implements Listener{
 									for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, " "));
 								}else{
 									try{
-										if(Api.getVersion()>=191)player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
-										if(Api.getVersion()<191)player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
+										if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
+										if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
 									}catch(Exception ex){}
 								}
 							}else{
 								try{
-									if(Api.getVersion()>=191)player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
-									if(Api.getVersion()<191)player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
+									if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
+									if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
 								}catch(Exception ex){}
 							}
 						}
@@ -400,22 +401,21 @@ public class BlackSmith implements Listener{
 		if(master.getType()==Main.CE.getEnchantmentBookItem().getType()&&sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Api.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Api.removeColor(sub.getItemMeta().getDisplayName()))){
 				for(CEnchantments en : Main.CE.getEnchantments()){
-					String ench = en.getCustomName();
-					if(master.getItemMeta().getDisplayName().contains(ench)){
+					if(master.getItemMeta().getDisplayName().startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						int power = Main.CE.getBookPower(master, en);
 						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
-						if(power+1<=max){
-							total+=Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
+						if(power + 1 <= max){
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
 						}
 					}
 				}
 				for(String en : Main.CustomE.getEnchantments()){
 					String ench = Main.CustomE.getCustomName(en);
-					if(master.getItemMeta().getDisplayName().contains(ench)){
+					if(master.getItemMeta().getDisplayName().startsWith(Main.CustomE.getEnchantmentColor(ench) + Main.CustomE.getCustomName(ench))){
 						int power = Main.CustomE.getBookPower(master, en);
 						int max = Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
-						if(power+1<=max){
-							total+=Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
+						if(power + 1 <= max){
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
 						}
 					}
 				}
@@ -518,26 +518,6 @@ public class BlackSmith implements Listener{
 			}
 		}
 		return total;
-	}
-	
-	private boolean hasCustomEnchantment(ItemStack item){
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasLore()){
-				for(String lore : item.getItemMeta().getLore()){
-					for(CEnchantments en : Main.CE.getEnchantments()){
-						if(lore.contains(en.getCustomName())){
-							return true;
-						}
-					}
-					for(String en : Main.CustomE.getEnchantments()){
-						if(lore.contains(Main.CustomE.getCustomName(en))){
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
 	}
 	
 	private boolean inBlackSmith(int slot){

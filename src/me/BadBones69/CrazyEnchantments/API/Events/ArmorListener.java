@@ -1,4 +1,4 @@
-package ca.thederpygolems.armorequip;
+package me.BadBones69.CrazyEnchantments.API.Events;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,8 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import ca.thederpygolems.armorequip.ArmorEquipEvent.EquipMethod;
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.API.Version;
+import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent.EquipMethod;
 
 /**
  * @Author Borlea
@@ -140,7 +140,7 @@ public class ArmorListener implements Listener{
 					}
 				}, 0);
 			}else{
-				if(Api.getVersion()<1101 && (ArmorType.matchType(oldArmorPiece) != null && e.getRawSlot() == ArmorType.matchType(oldArmorPiece).getSlot())){
+				if(Version.getVersion().getVersionInteger()<1101 && (ArmorType.matchType(oldArmorPiece) != null && e.getRawSlot() == ArmorType.matchType(oldArmorPiece).getSlot())){
 					EquipMethod method = EquipMethod.DRAG;
 					if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = EquipMethod.HOTBAR_SWAP;
 					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), method, newArmorType, oldArmorPiece, newArmorPiece);
@@ -288,6 +288,7 @@ public class ArmorListener implements Listener{
 		blocks.add("WALL_SIGN");
 		blocks.add("SIGN");
 		blocks.add("DRAGON_EGG");
+		blocks.add("LEVER");
 		return blocks;
 	}
 

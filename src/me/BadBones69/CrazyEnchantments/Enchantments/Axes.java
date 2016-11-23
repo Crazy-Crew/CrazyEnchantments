@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -21,8 +22,9 @@ import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Axes implements Listener{
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(e.isCancelled())return;
 		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;

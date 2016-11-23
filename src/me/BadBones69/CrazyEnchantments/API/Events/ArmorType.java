@@ -1,4 +1,4 @@
-package ca.thederpygolems.armorequip;
+package me.BadBones69.CrazyEnchantments.API.Events;
 
 import org.bukkit.inventory.ItemStack;
 

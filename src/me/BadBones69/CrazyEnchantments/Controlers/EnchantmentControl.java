@@ -21,6 +21,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
+import me.BadBones69.CrazyEnchantments.API.Version;
 
 public class EnchantmentControl implements Listener{
 	
@@ -130,7 +131,7 @@ public class EnchantmentControl implements Listener{
 									e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
 									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Works")));
 									try{
-										if(Api.getVersion()>=191){
+										if(Version.getVersion().getVersionInteger()>=191){
 											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
 										}else{
 											player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
@@ -144,7 +145,7 @@ public class EnchantmentControl implements Listener{
 										player.setItemOnCursor(new ItemStack(Material.AIR));
 										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
 										try{
-											if(Api.getVersion()>=191){
+											if(Version.getVersion().getVersionInteger()>=191){
 												player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 											}else{
 												player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -163,7 +164,7 @@ public class EnchantmentControl implements Listener{
 									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
 									player.setItemOnCursor(new ItemStack(Material.AIR));
 									try{
-										if(Api.getVersion()>=191){
+										if(Version.getVersion().getVersionInteger()>=191){
 											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 										}else{
 											player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);

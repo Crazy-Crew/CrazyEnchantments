@@ -1,5 +1,6 @@
 package me.BadBones69.CrazyEnchantments.Enchantments;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -9,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -85,8 +87,9 @@ public class Tools implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent e){
+		if(e.isCancelled())return;
 		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
@@ -96,22 +99,29 @@ public class Tools implements Listener{
 			if(Main.CE.hasEnchantments(item)){
 				if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
 					if(CEnchantments.TELEPATHY.isEnabled()){
-						Boolean T = false;
+						Boolean T = false;// If the item has silk touch or not.
 						if(item.getItemMeta().hasEnchants()){
 							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
-								if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners")!=null){
-									if(block.getType()==Material.MOB_SPAWNER){
-										T=true;
+								if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners") != null){
+									if(block.getType() == Material.MOB_SPAWNER){
+										T = true;
 									}
 								}
 							}
 						}
-						if(!T){
+						if(!T){//Does not have silk touch
 							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
 								e.setCancelled(true);
 								for(ItemStack i : block.getDrops()){
+									if(getItems().contains(block.getType())){
+										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
+											if(Api.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
+												i.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+											}
+										}
+									}
 									if(!Api.isInvFull(player)){
 										player.getInventory().addItem(i);
 									}else{
@@ -127,6 +137,23 @@ public class Tools implements Listener{
 				}
 			}
 		}
+	}
+	
+	private ArrayList<Material> getItems(){
+		ArrayList<Material> items = new ArrayList<Material>();
+		items.add(Material.COAL_ORE);
+		items.add(Material.IRON_ORE);
+		items.add(Material.GOLD_ORE);
+		items.add(Material.DIAMOND_ORE);
+		items.add(Material.EMERALD_ORE);
+		items.add(Material.REDSTONE_ORE);
+		items.add(Material.LAPIS_ORE);
+		items.add(Material.LONG_GRASS);
+		items.add(Material.NETHER_WARTS);
+		items.add(Material.GLOWSTONE);
+		items.add(Material.GRAVEL);
+		items.add(Material.LEAVES);
+		return items;
 	}
 	
 }

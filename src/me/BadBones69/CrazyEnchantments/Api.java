@@ -28,11 +28,13 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import me.BadBones69.CrazyEnchantments.API.Version;
 import me.BadBones69.CrazyEnchantments.MultiSupport.ASkyBlockSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FactionsUUID;
 import me.BadBones69.CrazyEnchantments.MultiSupport.FeudalSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_10_R1;
+import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_11_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
@@ -57,73 +59,71 @@ public class Api{
 			player.sendMessage(color(msg));
 		}
 	}
-	public static Integer getVersion(){
-		String ver = Bukkit.getServer().getClass().getPackage().getName();
-		ver = ver.substring(ver.lastIndexOf('.')+1);
-		ver=ver.replaceAll("_", "").replaceAll("R", "").replaceAll("v", "");
-		return Integer.parseInt(ver);
-	}
 	public static ItemStack addGlow(ItemStack item) {
-		if(getVersion()==1101){
+		Version ver = Version.getVersion();
+		switch(ver){
+		case v1_11_R1:
+			return NMS_v1_11_R1.addGlow(item);
+		case v1_10_R1:
 			return NMS_v1_10_R1.addGlow(item);
-		}
-		if(getVersion()==192){
+		case v1_9_R2:
 			return NMS_v1_9_R2.addGlow(item);
-		}
-		if(getVersion()==191){
+		case v1_9_R1:
 			return NMS_v1_9_R1.addGlow(item);
-		}
-		if(getVersion()==183){
+		case v1_8_R3:
 			return NMS_v1_8_R3.addGlow(item);
-		}
-		if(getVersion()==182){
+		case v1_8_R2:
 			return NMS_v1_8_R2.addGlow(item);
-		}
-		if(getVersion()==181){
+		case v1_8_R1:
 			return NMS_v1_8_R1.addGlow(item);
-		}
-		if(getVersion()==174){
+		case v1_7_R4:
 			return NMS_v1_7_R4.addGlow(item);
-		}else{
+		case TOO_NEW:
+			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too new. "
+					+ "Please update or remove this plugin to stop further Errors.");
+			return item;
+		case TOO_OLD:
 			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too far out of date. "
 					+ "Please update or remove this plugin to stop further Errors.");
 			return item;
 		}
+		return item;
     }
 	public static ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle){
-			if(getVersion()==1101){
+			Version ver = Version.getVersion();
+			switch(ver){
+			case v1_11_R1:
+				return NMS_v1_11_R1.addGlow(item);
+			case v1_10_R1:
 				return NMS_v1_10_R1.addGlow(item);
-			}
-			if(getVersion()==192){
+			case v1_9_R2:
 				return NMS_v1_9_R2.addGlow(item);
-			}
-			if(getVersion()==191){
+			case v1_9_R1:
 				return NMS_v1_9_R1.addGlow(item);
-			}
-			if(getVersion()==183){
+			case v1_8_R3:
 				return NMS_v1_8_R3.addGlow(item);
-			}
-			if(getVersion()==182){
+			case v1_8_R2:
 				return NMS_v1_8_R2.addGlow(item);
-			}
-			if(getVersion()==181){
+			case v1_8_R1:
 				return NMS_v1_8_R1.addGlow(item);
-			}
-			if(getVersion()==174){
+			case v1_7_R4:
 				return NMS_v1_7_R4.addGlow(item);
-			}else{
+			case TOO_NEW:
+				Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too new. "
+						+ "Please update or remove this plugin to stop further Errors.");
+				return item;
+			case TOO_OLD:
 				Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too far out of date. "
 						+ "Please update or remove this plugin to stop further Errors.");
 				return item;
 			}
-		}else{
-			return item;
 		}
+		return item;
     }
 	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(Player player){
-		if(getVersion()>=191){
+		if(Version.getVersion().getVersionInteger()>=191){
 			return player.getInventory().getItemInMainHand();
 		}else{
 			return player.getItemInHand();
@@ -131,14 +131,14 @@ public class Api{
 	}
 	@SuppressWarnings("deprecation")
 	public static void setItemInHand(Player player, ItemStack item){
-		if(Api.getVersion()>=191){
+		if(Version.getVersion().getVersionInteger()>=191){
 			player.getInventory().setItemInMainHand(item);
 		}else{
 			player.setItemInHand(item);
 		}
 	}
 	public static String getPower(Integer i){
-		if(i<=0)return "I";
+		if(i==0)return "I";
 		if(i==1)return "I";
 		if(i==2)return "II";
 		if(i==3)return "III";
@@ -146,7 +146,7 @@ public class Api{
 		if(i==5)return "V";
 		if(i==6)return "VI";
 		if(i==7)return "VII";
-		if(i==8)return "VIII";
+		if(i==8)return "VII";
 		if(i==9)return "IX";
 		if(i==10)return "X";
 		return i+"";
@@ -369,7 +369,19 @@ public class Api{
 		}
 		Material m = Material.matchMaterial(type);
 		ItemStack item = new ItemStack(m, amount, (short) ty);
+		return item;
+	}
+	public static ItemStack makeItem(String type, int amount, String name){
+		int ty = 0;
+		if(type.contains(":")){
+			String[] b = type.split(":");
+			type = b[0];
+			ty = Integer.parseInt(b[1]);
+		}
+		Material m = Material.matchMaterial(type);
+		ItemStack item = new ItemStack(m, amount, (short) ty);
 		ItemMeta me = item.getItemMeta();
+		me.setDisplayName(color(name));
 		item.setItemMeta(me);
 		return item;
 	}
@@ -388,6 +400,24 @@ public class Api{
 		for(String L:lore)l.add(color(L));
 		me.setLore(l);
 		item.setItemMeta(me);
+		return item;
+	}
+	public static ItemStack makeItem(String type, int amount, String name, List<String> lore, Map<Enchantment, Integer> enchants){
+		ArrayList<String> l = new ArrayList<String>();
+		int ty = 0;
+		if(type.contains(":")){
+			String[] b = type.split(":");
+			type = b[0];
+			ty = Integer.parseInt(b[1]);
+		}
+		Material m = Material.matchMaterial(type);
+		ItemStack item = new ItemStack(m, amount, (short) ty);
+		ItemMeta me = item.getItemMeta();
+		me.setDisplayName(color(name));
+		for(String L:lore)l.add(color(L));
+		me.setLore(l);
+		item.setItemMeta(me);
+		item.addUnsafeEnchantments(enchants);
 		return item;
 	}
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore, List<String> lore2){
@@ -522,7 +552,7 @@ public class Api{
 		}
 	}
 	public static void takeTotalXP(Player player, int amount){
-		if(getVersion()>=181){
+		if(Version.getVersion().getVersionInteger()>=181){
 			int total = getTotalExperience(player) - amount;
 			player.setTotalExperience(0);
 	        player.setTotalExperience(total);

@@ -13,10 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class Helmets implements Listener{

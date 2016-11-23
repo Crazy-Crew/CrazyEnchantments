@@ -25,6 +25,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
+import me.BadBones69.CrazyEnchantments.API.Version;
 
 public class Tinkerer implements Listener{
 	
@@ -58,7 +59,7 @@ public class Tinkerer implements Listener{
 									Api.takeLvlXP(player, -getXP(item));
 								}
 								try{
-									if(Api.getVersion()>=191){
+									if(Version.getVersion().getVersionInteger()>=191){
 										player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
 									}else{
 										player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
@@ -109,7 +110,7 @@ public class Tinkerer implements Listener{
 										if(total!=0)Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+player.getName()+" "+total);
 										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Tinker-Sold-Msg")));
 										try{
-											if(Api.getVersion()>=191){
+											if(Version.getVersion().getVersionInteger()>=191){
 												player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_TRADING"), 1, 1);
 											}else{
 												player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_YES"), 1, 1);
@@ -142,7 +143,7 @@ public class Tinkerer implements Listener{
 												player.getInventory().addItem(It);
 												inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
 												try{
-													if(Api.getVersion()>=191){
+													if(Version.getVersion().getVersionInteger()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
 													}else{
 														player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
@@ -161,7 +162,7 @@ public class Tinkerer implements Listener{
 												}
 												inv.setItem(inv.firstEmpty(), It);
 												try{
-													if(Api.getVersion()>=191){
+													if(Version.getVersion().getVersionInteger()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
 													}else{
 														player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
@@ -177,7 +178,7 @@ public class Tinkerer implements Listener{
 												player.getInventory().addItem(It);
 												inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
 												try{
-													if(Api.getVersion()>=191){
+													if(Version.getVersion().getVersionInteger()>=191){
 														player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
 													}else{
 														player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
@@ -193,7 +194,7 @@ public class Tinkerer implements Listener{
 											inv.setItem(getSlot().get(inv.firstEmpty()), getBottle(It));
 											inv.setItem(inv.firstEmpty(), It);
 											try{
-												if(Api.getVersion()>=191){
+												if(Version.getVersion().getVersionInteger()>=191){
 													player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK "), 1, 1);
 												}else{
 													player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);

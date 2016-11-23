@@ -19,9 +19,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 
 public class CustomEnchantments implements Listener{
 	
@@ -309,6 +309,15 @@ public class CustomEnchantments implements Listener{
 	
 	public List<String> getEnchantments(){
 		return instance.CustomEnchants;
+	}
+	
+	public Boolean isEnchantment(String enchantment){
+		for(String en : getEnchantments()){
+			if(enchantment.equalsIgnoreCase(en) || enchantment.equalsIgnoreCase(getCustomName(en))){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String getCustomName(String enchantment){

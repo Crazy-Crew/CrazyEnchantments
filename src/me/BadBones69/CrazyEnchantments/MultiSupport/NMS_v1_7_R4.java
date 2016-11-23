@@ -7,6 +7,7 @@ import net.minecraft.server.v1_7_R4.NBTTagCompound;
 import net.minecraft.server.v1_7_R4.NBTTagList;
 
 public class NMS_v1_7_R4 {
+	
 	public static ItemStack addGlow(ItemStack item){
 		if(item.hasItemMeta()){
 			if(item.getItemMeta().hasEnchants())return item;
@@ -24,4 +25,5 @@ public class NMS_v1_7_R4 {
         nmsStack.setTag(tag);
         return CraftItemStack.asCraftMirror(nmsStack);
 	}
+	
 }

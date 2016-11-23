@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -35,8 +36,9 @@ public class Bows implements Listener{
 	private HashMap<Projectile, CEnchantments> Enchant = new HashMap<Projectile, CEnchantments>();
 	private ArrayList<Entity> Explode = new ArrayList<Entity>();
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBowShoot(final EntityShootBowEvent e){
+		if(e.isCancelled())return;
 		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		ItemStack item = e.getBow();
 		if(Main.CE.hasEnchantments(item)){
@@ -122,6 +124,7 @@ public class Bows implements Listener{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
 		if(!Api.allowsPVP(e.getEntity().getLocation()))return;

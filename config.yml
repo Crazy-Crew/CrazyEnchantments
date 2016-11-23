@@ -87,6 +87,9 @@ Settings:
         - '&a1-%Percent%% &7will be on a'
         - '&aMagical AngelDust &7or &eMagical Fixing &7Dust'
         - '&7&l(&6&l!&7&l) &7Right click'
+      Firework:
+        Toggle: True #Toggle if the firework happens on open.
+        Colors: 'Black, Gray, Lime' #The colors the firework will be.
       Dust-Toggle:
         Success: True #Toggle wether you can get success dust from Mystery Dust.
         Destroy: True #Toggle wether you can get destroy dust from Mystery Dust.

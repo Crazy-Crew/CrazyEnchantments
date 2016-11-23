@@ -1,0 +1,92 @@
+Settings:
+  GUI-Size: 27 #Must be a factor of 9.
+  Inventory-Name: '&8List of all GKitz'
+  GUI-Customization: #This allows you to customize unclickable items into you GUI.
+    - 'Slot:1, Item:160:15, Name: '
+    - 'Slot:2, Item:160:15, Name: '
+    - 'Slot:3, Item:160:15, Name: '
+    - 'Slot:4, Item:160:15, Name: '
+    - 'Slot:5, Item:160:15, Name: '
+    - 'Slot:6, Item:160:15, Name: '
+    - 'Slot:7, Item:160:15, Name: '
+    - 'Slot:8, Item:160:15, Name: '
+    - 'Slot:9, Item:160:15, Name: '
+    - 'Slot:10, Item:160:15, Name: '
+    - 'Slot:11, Item:160:7, Name: '
+    - 'Slot:13, Item:160:7, Name: '
+    - 'Slot:15, Item:160:7, Name: '
+    - 'Slot:17, Item:160:7, Name: '
+    - 'Slot:18, Item:160:15, Name: '
+    - 'Slot:19, Item:160:15, Name: '
+    - 'Slot:20, Item:160:15, Name: '
+    - 'Slot:21, Item:160:15, Name: '
+    - 'Slot:22, Item:160:15, Name: '
+    - 'Slot:23, Item:160:15, Name: '
+    - 'Slot:24, Item:160:15, Name: '
+    - 'Slot:25, Item:160:15, Name: '
+    - 'Slot:26, Item:160:15, Name: '
+    - 'Slot:27, Item:160:15, Name: '
+###################################
+#             Items: Options
+# Item: <ID:MD> - You can choose the item with its id and meta data.
+# Amount: <Number> - Choose how many of the item you get.
+# Name: <Name> - The display name that goes on the item.
+# Lore: <Line 1>,<Line 2>,<Line 3>,<Line 4> - The lore that will go under the enchantments. Split lines with a ','
+# Enchantments:<Enchantment>:<Level> - Choose vanilla enchantments here. Split each enchantment with a ','
+# CustomEnchantments: <Custom Enchantment>:<Level> - Choose crazy/custom enchantments here. Split enchantments with a ','
+# To chose a random level for the crazy/custom enchantments use like this 'CustomEnchantments:<Custom Enchantment>:<Min Level>-<Max Level>'
+# Example of this is shows here.
+# CustomEnchantments:Overload:1-5,Hulk:1-5 << this will add Hulk and Overload and pick a random level from 1-5 and set it as the power.
+###################################
+GKitz: #GKit optons.
+  Hero: #Name of the GKit.
+    Display: #All the display option in the gui.
+      Slot: 12 #Slot the item is located at in the gui.
+      Item: '160:1' #The item that is displayed for the GKit.
+      Name: '&6&lThe Hero GKit' #Display name of the GKit.
+      Lore: #The lore that goes on the display item.
+        - '&7A kit that used to be worn'
+        - '&7into battle by a great hero.'
+        - ''
+        - '&7Cooldown: &624 Hours'
+        - '&7&l(&6&l!&7&l) &7Right click to preview'
+    Cooldown: '24h' #Cooldown for the GKit. Available options d - Day, h - Hour, m - Minute, s - Second
+    Items: #The items that are given the players. 
+      - 'Item:310, Amount:1, Name:&6&lHero Helmet, Enchantments:PROTECTION_ENVIRONMENTAL:4,OXYGEN:3,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&aA special helmet worn by a great hero.,&aTake special care of this.'
+      - 'Item:311, Amount:1, Name:&6&lHero Chestplate, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&aA special chestplate worn by a great hero.,&aTake special care of this.'
+      - 'Item:312, Amount:1, Name:&6&lHero Leggings, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&aA special leggings worn by a great hero.,&aTake special care of this.'
+      - 'Item:313, Amount:1, Name:&6&lHero Boots, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&aA special boots worn by a great hero.,&aTake special care of this.'
+  PeaceKeeper:
+    Display:
+      Slot: 14
+      Item: '160:11'
+      Name: '&9&lThe Peace Keeper GKit'
+      Lore:
+        - '&7A kit that used to be worn'
+        - '&7into battle by a peace keeper.'
+        - ''
+        - '&7Cooldown: &624 Hours'
+        - '&7&l(&9&l!&7&l) &7Right click to preview'
+    Cooldown: '24h'
+    Items:
+      - 'Item:310, Amount:1, Name:&9&lPeace Keeper Helmet, Enchantments:PROTECTION_ENVIRONMENTAL:4,OXYGEN:3,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&9A special helmet worn by a peace keeper.,&9Take special care of this.'
+      - 'Item:311, Amount:1, Name:&9&lPeace Keeper Chestplate, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&9A special chestplate worn by a peace keeper.,&9Take special care of this.'
+      - 'Item:312, Amount:1, Name:&9&lPeace Keeper Leggings, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&9A special leggings worn by a peace keeper.,&9Take special care of this.'
+      - 'Item:313, Amount:1, Name:&9&lPeace Keeper Boots, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&9A special boots worn by a peace keeper.,&9Take special care of this.'
+  Villan:
+    Display:
+      Slot: 16
+      Item: '160:14'
+      Name: '&4&lThe Villan GKit'
+      Lore:
+        - '&7A kit that used to be worn'
+        - '&7into battle by a evil villan.'
+        - ''
+        - '&7Cooldown: &624 Hours'
+        - '&7&l(&4&l!&7&l) &7Right click to preview'
+    Cooldown: '24h'
+    Items:
+      - 'Item:310, Amount:1, Name:&4&lVillan Helmet, Enchantments:PROTECTION_ENVIRONMENTAL:4,OXYGEN:3,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&cA special helmet worn by a evil villan.,&cTake special care of this.'
+      - 'Item:311, Amount:1, Name:&4&lVillan Chestplate, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special chestplate worn by a evil villan.,&cTake special care of this.'
+      - 'Item:312, Amount:1, Name:&4&lVillan Leggings, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special leggings worn by a evil villan.,&cTake special care of this.'
+      - 'Item:313, Amount:1, Name:&4&lVillan Boots, Enchantments:PROTECTION_ENVIRONMENTAL:4,THORNS:3,WATER_WORKER:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&cA special boots worn by a evil villan.,&cTake special care of this.'

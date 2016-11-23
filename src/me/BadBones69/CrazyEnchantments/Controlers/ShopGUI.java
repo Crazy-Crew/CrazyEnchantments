@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments;
+package me.BadBones69.CrazyEnchantments.Controlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +14,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
-import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
-import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
-import me.BadBones69.CrazyEnchantments.Controlers.EnchantmentControl;
-import me.BadBones69.CrazyEnchantments.Controlers.LostBook;
-import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
-import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
+import me.BadBones69.CrazyEnchantments.API.Version;
 
-public class GUI implements Listener{
+public class ShopGUI implements Listener{
 	
-	static void openGUI(Player player){
+	public static void openGUI(Player player){
 		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Api.getInvName());
 		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
 			for(String custom : Main.settings.getConfig().getStringList("Settings.GUICustomization")){
@@ -200,9 +197,9 @@ public class GUI implements Listener{
 							if(name.equals(Api.color(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Name")))){
 								if(Api.isInvFull(player)){
 									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-										player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+										player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
 									}else{
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 									}
 									return;
 								}
@@ -210,7 +207,7 @@ public class GUI implements Listener{
 									if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Money/XP").equalsIgnoreCase("Money")){
 										if(Api.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
 											String money = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Api.getMoney(player)+"";
-											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
+											player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
 											return;
 										}
 										Main.econ.withdrawPlayer(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
@@ -218,7 +215,7 @@ public class GUI implements Listener{
 										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Lvl")){
 											if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
 												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Api.getXPLvl(player)+"";
-												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+												player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 												return;
 											}
 											Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
@@ -226,7 +223,7 @@ public class GUI implements Listener{
 										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Total")){
 											if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
 												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - player.getTotalExperience()+"";
-												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+												player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 												return;
 											}
 											Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
@@ -254,9 +251,9 @@ public class GUI implements Listener{
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.GUIName")))){
 							if(Api.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
@@ -264,7 +261,7 @@ public class GUI implements Listener{
 							if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Money/XP").equalsIgnoreCase("Money")){
 								if(Api.getMoney(player)<price){
 									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
@@ -272,7 +269,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
 									if(Api.getXPLvl(player)<price){
 										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeLvlXP(player, price);
@@ -280,7 +277,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeTotalXP(player, price);
@@ -292,9 +289,9 @@ public class GUI implements Listener{
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName")))){
 							if(Api.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
@@ -302,7 +299,7 @@ public class GUI implements Listener{
 							if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Money/XP").equalsIgnoreCase("Money")){
 								if(Api.getMoney(player)<price){
 									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
@@ -310,7 +307,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
 									if(Api.getXPLvl(player)<price){
 										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeLvlXP(player, price);
@@ -318,7 +315,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeTotalXP(player, price);
@@ -330,9 +327,9 @@ public class GUI implements Listener{
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName")))){
 							if(Api.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
@@ -340,7 +337,7 @@ public class GUI implements Listener{
 							if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Money/XP").equalsIgnoreCase("Money")){
 								if(Api.getMoney(player)<price){
 									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
@@ -348,7 +345,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
 									if(Api.getXPLvl(player)<price){
 										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeLvlXP(player, price);
@@ -356,7 +353,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeTotalXP(player, price);
@@ -368,9 +365,9 @@ public class GUI implements Listener{
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.GUIName")))){
 							if(Api.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
@@ -378,7 +375,7 @@ public class GUI implements Listener{
 							if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Money/XP").equalsIgnoreCase("Money")){
 								if(Api.getMoney(player)<price){
 									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
@@ -386,7 +383,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
 									if(Api.getXPLvl(player)<price){
 										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeLvlXP(player, price);
@@ -394,7 +391,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeTotalXP(player, price);
@@ -406,9 +403,9 @@ public class GUI implements Listener{
 						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName")))){
 							if(Api.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
@@ -416,7 +413,7 @@ public class GUI implements Listener{
 							if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Money/XP").equalsIgnoreCase("Money")){
 								if(Api.getMoney(player)<price){
 									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
@@ -424,7 +421,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
 									if(Api.getXPLvl(player)<price){
 										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeLvlXP(player, price);
@@ -432,7 +429,7 @@ public class GUI implements Listener{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
 									Api.takeTotalXP(player, price);
@@ -481,7 +478,7 @@ public class GUI implements Listener{
 									for(ItemStack i : getInfo(type)){
 										in.addItem(i);
 									}
-									if(Api.getVersion()<181){
+									if(Version.getVersion().getVersionInteger()<181){
 										in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 									}else{
 										in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
@@ -510,7 +507,7 @@ public class GUI implements Listener{
 								in.setItem(15, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"),
 										1, Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust")));
-								if(Api.getVersion()<181){
+								if(Version.getVersion().getVersionInteger()<181){
 									ItemStack left = Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left"));
 									ItemStack right = Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right"));
 									in.setItem(0, left);
@@ -667,12 +664,6 @@ public class GUI implements Listener{
 		if(type.equalsIgnoreCase("Tool"))return tools;
 		if(type.equalsIgnoreCase("Misc"))return misc;
 		return null;
-	}
-	
-	boolean inGUI(int slot, int max){
-		//The last slot in the tinker is 54
-		if(slot<max)return true;
-		return false;
 	}
 	
 }

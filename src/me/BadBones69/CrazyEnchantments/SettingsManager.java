@@ -24,6 +24,12 @@ public class SettingsManager {
 
 	FileConfiguration config;
 	File cfile;
+	
+	FileConfiguration gkitz;
+	File gfile;
+	
+	FileConfiguration data;
+	File dfile;
 
 	FileConfiguration enchs;
 	File efile;
@@ -58,6 +64,31 @@ public class SettingsManager {
          	}
 		}
 		config = YamlConfiguration.loadConfiguration(cfile);
+		
+		gfile = new File(p.getDataFolder(), "GKitz.yml");
+		if (!gfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/GKitz.yml");
+         		InputStream E = getClass().getResourceAsStream("/GKitz.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		gkitz = YamlConfiguration.loadConfiguration(gfile);
+		
+		dfile = new File(p.getDataFolder(), "Data.yml");
+		if (!dfile.exists()) {
+			try{
+        		File en = new File(p.getDataFolder(), "/Data.yml");
+         		InputStream E = getClass().getResourceAsStream("/Data.yml");
+         		copyFile(E, en);
+         	}catch (Exception e) {
+         		e.printStackTrace();
+         	}
+		}
+		data = YamlConfiguration.loadConfiguration(dfile);
+		
 		efile = new File(p.getDataFolder(), "Enchantments.yml");
 		if (!efile.exists()) {
 			try{
@@ -131,6 +162,12 @@ public class SettingsManager {
 		blocklist = YamlConfiguration.loadConfiguration(blfile);
 		
 	}
+	public FileConfiguration getGKitz() {
+		return gkitz;
+	}
+	public FileConfiguration getData() {
+		return data;
+	}
 	public FileConfiguration getBlockList() {
 		return blocklist;
 	}
@@ -148,6 +185,22 @@ public class SettingsManager {
 	}
 	public FileConfiguration getMsg() {
 		return msg;
+	}
+	public void saveGKitz() {
+		try {
+			gkitz.save(gfile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save GKitz.yml!");
+		}
+	}
+	public void saveData() {
+		try {
+			data.save(dfile);
+		} catch (IOException e) {
+			Bukkit.getServer().getLogger()
+					.severe(ChatColor.RED + "Could not save Data.yml!");
+		}
 	}
 	public void saveBlockList() {
 		try {
@@ -196,6 +249,12 @@ public class SettingsManager {
 			Bukkit.getServer().getLogger()
 					.severe(ChatColor.RED + "Could not save Messages.yml!");
 		}
+	}
+	public void reloadGKitz() {
+		gkitz = YamlConfiguration.loadConfiguration(gfile);
+	}
+	public void reloadData() {
+		data = YamlConfiguration.loadConfiguration(dfile);
 	}
 	public void reloadBlockList() {
 		blocklist = YamlConfiguration.loadConfiguration(blfile);

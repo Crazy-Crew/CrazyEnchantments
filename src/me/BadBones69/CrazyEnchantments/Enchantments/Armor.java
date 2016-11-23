@@ -17,6 +17,7 @@ import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -31,11 +32,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import ca.thederpygolems.armorequip.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.AngelUseEvent;
+import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraActiveEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.HellForgedUseEvent;
@@ -174,8 +175,10 @@ public class Armor implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
+		if(e.isCancelled())return;
 		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
 		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
@@ -582,7 +585,7 @@ public class Armor implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
  	public void onDeath(PlayerDeathEvent e){
 		Player player = e.getEntity();
 		Player killer = player.getKiller();
@@ -619,7 +622,7 @@ public class Armor implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerFallDamage(EntityDamageEvent e){
 		if(e.getEntity() instanceof Player){
 			if(e.getCause() == DamageCause.FALL){
@@ -636,9 +639,11 @@ public class Armor implements Listener{
 			LivingEntity en = (LivingEntity) e.getEntity();
 			for(Player player : mobs.keySet()){
 				if(mobs.get(player).contains(en)){
-					if(player.getName() != null && e.getTarget().getName() != null){
-						if(player.getName().equals(e.getTarget().getName())){
-							e.setCancelled(true);
+					if(player != null && e.getTarget() != null){
+						if(player.getName() != null && e.getTarget().getName() != null){
+							if(player.getName().equals(e.getTarget().getName())){
+								e.setCancelled(true);
+							}
 						}
 					}
 				}

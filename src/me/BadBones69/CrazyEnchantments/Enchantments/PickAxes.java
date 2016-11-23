@@ -32,6 +32,7 @@ public class PickAxes implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockClick(PlayerInteractEvent e){
+		if(e.isCancelled())return;
 		Player player = e.getPlayer();
 		if(e.getAction()==Action.LEFT_CLICK_BLOCK){
 			ItemStack item = Api.getItemInHand(player);
@@ -48,8 +49,9 @@ public class PickAxes implements Listener{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent e){
+		if(e.isCancelled())return;
 		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
@@ -149,8 +151,7 @@ public class PickAxes implements Listener{
 		}
 	}
 	
-	@SuppressWarnings("incomplete-switch")
-	List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth){
+	private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth){
 		Location loc2 = loc.clone();
 		switch(blockFace){
 		case SOUTH:
@@ -177,6 +178,8 @@ public class PickAxes implements Listener{
 			loc.add(1, depth, 1);
 			loc2.add(-1, 0, -1);
 			break;
+		default:
+			break;
 		}
 		List<Block> blocks = new ArrayList<Block>();
 		int topBlockX = (loc.getBlockX() < loc2.getBlockX() ? loc2.getBlockX() : loc.getBlockX());
@@ -195,7 +198,8 @@ public class PickAxes implements Listener{
 		}
 		return blocks;
 	}
-	HashMap<Material, Material> getOres(){
+	
+	private HashMap<Material, Material> getOres(){
 		HashMap<Material, Material> ores = new HashMap<Material, Material>();
 		ores.put(Material.COAL_ORE, Material.COAL);
 		ores.put(Material.IRON_ORE, Material.IRON_INGOT);
@@ -206,4 +210,5 @@ public class PickAxes implements Listener{
 		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK,1,(short)4).getType());
 		return ores;
 	}
+	
 }

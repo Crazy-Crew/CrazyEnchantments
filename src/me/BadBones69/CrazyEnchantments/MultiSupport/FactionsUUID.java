@@ -12,6 +12,7 @@ import com.massivecraft.factions.struct.Relation;
 import me.BadBones69.CrazyEnchantments.Api;
 
 public class FactionsUUID {
+	
 	public static boolean isFriendly(Player player, Player other){
 		Faction p = FPlayers.getInstance().getByPlayer(player).getFaction();
 		if(FPlayers.getInstance().getByPlayer(other) == null || FPlayers.getInstance().getByPlayer(other).getFaction() == null){
@@ -24,6 +25,7 @@ public class FactionsUUID {
 		if(r.isAlly())return true;
 		return false;
 	}
+	
 	public static boolean inTerritory(Player P){
 		if(Api.removeColor(FPlayers.getInstance().getByPlayer(P).getFaction().getTag()).equalsIgnoreCase("Wilderness"))return false;
 		if(FPlayers.getInstance().getByPlayer(P).isInOwnTerritory()){
@@ -34,6 +36,7 @@ public class FactionsUUID {
 		}
 		return false;
 	}
+	
 	public static boolean canBreakBlock(Player player, Block block){
 		Faction P = FPlayers.getInstance().getByPlayer(player).getFaction();
 		FLocation loc = new FLocation(block.getLocation());
@@ -43,4 +46,5 @@ public class FactionsUUID {
 		}
 		return false;
 	}
+	
 }

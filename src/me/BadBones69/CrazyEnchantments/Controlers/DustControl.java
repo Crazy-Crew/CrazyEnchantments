@@ -5,8 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.Version;
 
 public class DustControl implements Listener{
 	
@@ -80,23 +83,46 @@ public class DustControl implements Listener{
 	@EventHandler
 	public void openDust(PlayerInteractEvent e){
 		Player player = e.getPlayer();
+		FileConfiguration config = Main.settings.getConfig();
 		if(e.getAction()==Action.RIGHT_CLICK_AIR||e.getAction()==Action.RIGHT_CLICK_BLOCK){
 			if(Api.getItemInHand(player)!=null){
 				ItemStack item = Api.getItemInHand(player);
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()&&item.getItemMeta().hasLore()){
-						if(item.getType()==Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.MysteryDust.Item"), 1, "", Arrays.asList("")).getType()){
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.MysteryDust.Name")))){
+						if(item.getType()==Api.makeItem(config.getString("Settings.Dust.MysteryDust.Item"), 1, "", Arrays.asList("")).getType()){
+							if(item.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.Dust.MysteryDust.Name")))){
 								e.setCancelled(true);
 								Api.setItemInHand(player, Api.removeItem(item));
 								player.getInventory().addItem(getDust(pickDust(), 1, Api.percentPick(getPercent("MysteryDust", item)+1, 1)));
 								try{
-									if(Api.getVersion()>=191){
+									if(Version.getVersion().getVersionInteger()>=191){
 										player.playSound(player.getLocation(), Sound.valueOf("BLOCK_LAVA_POP"), 1, 1);
 									}else{
 										player.playSound(player.getLocation(), Sound.valueOf("LAVA_POP"), 1, 1);
 									}
-								}catch(Exception ex){}	
+								}catch(Exception ex){}
+								if(config.contains("Settings.Dust.MysteryDust.Firework.Toggle")){
+									if(config.contains("Settings.Dust.MysteryDust.Firework.Colors")){
+										if(config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")){
+											ArrayList<Color> colors = new ArrayList<Color>();
+											String Cs = config.getString("Settings.Dust.MysteryDust.Firework.Colors");
+											if(Cs.contains(", ")){
+												for(String color : Cs.split(", ")){
+													Color c = Api.getColor(color);
+													if(c != null){
+														colors.add(c);
+													}
+												}
+											}else{
+												Color c = Api.getColor(Cs);
+												if(c != null){
+													colors.add(c);
+												}
+											}
+											Api.fireWork(player.getLocation().add(0, 1, 0), colors);
+										}
+									}
+								}
 								return;
 							}
 						}

@@ -8,6 +8,7 @@ import us.forseth11.feudal.kingdoms.Kingdom;
 import us.forseth11.feudal.kingdoms.Land;
 
 public class FeudalSupport{
+	
 	public static boolean isFrendly(Player player, Player other){
 		Kingdom p = Feudal.getPlayerKingdom(player.getUniqueId().toString());
 		if(Feudal.getPlayerKingdom(other.getUniqueId().toString()) == null){
@@ -22,6 +23,7 @@ public class FeudalSupport{
 		}
 		return false;
 	}
+	
 	public static boolean isFrendly(Kingdom p, Kingdom o){
 		if(p==null||o==null){
 			return false;
@@ -37,6 +39,7 @@ public class FeudalSupport{
 		}
 		return false;
 	}
+	
 	public static boolean inTerritory(Player player){
 		Kingdom p = Feudal.getPlayerKingdom(player.getUniqueId().toString());
 		if(p==null){
@@ -47,6 +50,7 @@ public class FeudalSupport{
 		}
 		return false;
 	}
+	
 	public static boolean canBreakBlock(Player player, Block block){
 		Kingdom p = Feudal.getPlayerKingdom(player.getUniqueId().toString());
 		Land land = new Land(block.getLocation());
@@ -56,4 +60,5 @@ public class FeudalSupport{
 		}
 		return false;
 	}
+	
 }
