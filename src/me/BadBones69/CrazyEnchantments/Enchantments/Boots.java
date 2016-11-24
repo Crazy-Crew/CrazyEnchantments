@@ -7,7 +7,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -101,9 +100,8 @@ public class Boots implements Listener{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler
 	public void onFly(PlayerToggleFlightEvent e){
-		if(e.isCancelled())return;
 		Player player = e.getPlayer();
 		if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
 			ItemStack boots = player.getEquipment().getBoots();
@@ -130,7 +128,7 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(!(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation()))){
+					if(!(Api.inTerritory(player) || Api.inWingsRegion(player.getLocation()))){
 						if(player.isFlying()){
 							if(player.getGameMode()!=GameMode.CREATIVE){
 								player.setFlying(false);

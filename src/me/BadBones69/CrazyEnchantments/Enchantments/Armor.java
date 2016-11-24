@@ -821,10 +821,12 @@ public class Armor implements Listener{
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable(){
 			@Override
 			public void run() {
-				for(LivingEntity en : mobs.get(player)){
-					en.remove();
+				if(mobs.containsKey(player)){
+					for(LivingEntity en : mobs.get(player)){
+						en.remove();
+					}
+					mobs.remove(player);
 				}
-				mobs.remove(player);
 			}
 		}, 1*60*20);
 	}

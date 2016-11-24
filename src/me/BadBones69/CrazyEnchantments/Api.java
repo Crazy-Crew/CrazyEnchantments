@@ -309,9 +309,10 @@ public class Api{
 	public static boolean inWingsRegion(Location loc){
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")){
 			for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")){
-				if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null&&Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-					if(WorldGuard.inRegion(rg, loc))return true;
-					if(!WorldGuard.inRegion(rg, loc))return false;
+				if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit") != null && Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
+					if(WorldGuard.inRegion(rg, loc)){
+						return true;
+					}
 				}
 			}
 		}
