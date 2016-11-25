@@ -581,7 +581,8 @@ public class Main extends JavaPlugin implements Listener{
 			sender.sendMessage(Api.getPrefix()+Api.color("&cDo /CE Help for more info."));
 			return true;
 		}
-		if(commandLable.equalsIgnoreCase("gkitz") || commandLable.equalsIgnoreCase("gkit")){// /GKitz [Kit] [Player]
+		if(commandLable.equalsIgnoreCase("gkitz") || commandLable.equalsIgnoreCase("gkits") ||
+				commandLable.equalsIgnoreCase("gkit")){// /GKitz [Kit] [Player]
 			if(args.length == 0){
 				if(!(sender instanceof Player)){
 					sender.sendMessage(Api.getPrefix()+Api.color(settings.getMsg().getString("Messages.Players-Only")));
@@ -620,6 +621,7 @@ public class Main extends JavaPlugin implements Listener{
 				if(GKitz.hasGKitPermission(player, kit)){
 					if(GKitz.canGetGKit(player, kit)){
 						GKitz.giveKit(player, kit);
+						GKitz.runKitCommands(player, kit);
 						player.sendMessage(Api.getPrefix() + Api.color(settings.getMsg().getString("Messages.Received-GKit")
 								.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
 						if(!player.getName().equalsIgnoreCase(sender.getName())){

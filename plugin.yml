@@ -1,7 +1,7 @@
 name: CrazyEnchantments
 author: BadBones69
 main: me.BadBones69.CrazyEnchantments.Main
-version: 1.7.1.1
+version: 1.7.1.2
 softdepend: [Factions, WorldEdit, SilkSpawners, Feudal, ASkyBlock]
 website: https://www.spigotmc.org/resources/16470/
 description: >
@@ -16,6 +16,6 @@ commands:
   blacksmith:
     description: Opens the Black Smith GUI.
     aliases: [bsmith, blacks, bs]
-  gkitz:
+  gkit:
     description: Opens the GKitz GUI.
-    aliases: [gkit]
+    aliases: [gkitz, gkits]

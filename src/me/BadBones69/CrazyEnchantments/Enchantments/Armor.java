@@ -21,11 +21,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -774,6 +776,34 @@ public class Armor implements Listener{
 				e.setDroppedExp(0);
 				e.getDrops().clear();
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onAllyDespawn(ChunkUnloadEvent e){
+		if(e.getChunk().getEntities().length > 0){
+			for(Entity en : e.getChunk().getEntities()){
+				if(en instanceof LivingEntity){
+					LivingEntity En = (LivingEntity) en;
+					for(Player player : mobs.keySet()){
+						if(mobs.get(player).contains(En)){
+							mobs.get(player).remove(En);
+							En.remove();
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerLeave(PlayerQuitEvent e){
+		Player player = e.getPlayer();
+		if(mobs.containsKey(player)){
+			for(LivingEntity en : mobs.get(player)){
+				en.remove();
+			}
+			mobs.remove(player);
 		}
 	}
 	

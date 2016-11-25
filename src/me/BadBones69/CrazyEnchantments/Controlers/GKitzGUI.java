@@ -103,9 +103,10 @@ public class GKitzGUI implements Listener{
 											if(GKitz.hasGKitPermission(player, kit)){
 												if(GKitz.canGetGKit(player, kit)){
 													GKitz.giveKit(player, kit);
+													GKitz.addCooldown(player, kit);
+													GKitz.runKitCommands(player, kit);
 													player.sendMessage(Api.getPrefix() + Api.color(msg.getString("Messages.Received-GKit")
 															.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
-													GKitz.addCooldown(player, kit);
 													return;
 												}else{
 													player.sendMessage(Api.getPrefix() + GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), msg.getString("Messages.Still-In-Cooldown")

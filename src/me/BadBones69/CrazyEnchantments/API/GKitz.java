@@ -3,6 +3,7 @@ package me.BadBones69.CrazyEnchantments.API;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -23,6 +24,7 @@ public class GKitz implements Listener{
 	private static ArrayList<String> gkitz = new ArrayList<String>();
 	private static HashMap<String, String> names = new HashMap<String, String>();
 	private static HashMap<String, String> times = new HashMap<String, String>();
+	private static HashMap<String, List<String>> commands = new HashMap<String, List<String>>();
 	private static HashMap<String, ArrayList<ItemStack>> items = new HashMap<String, ArrayList<ItemStack>>();
 	private static HashMap<Player, HashMap<String, Calendar>> cooldown = new HashMap<Player, HashMap<String, Calendar>>();
 	
@@ -34,12 +36,16 @@ public class GKitz implements Listener{
 		names.clear();
 		times.clear();
 		items.clear();
+		commands.clear();
 		cooldown.clear();
 		FileConfiguration file = Main.settings.getGKitz();
 		for(String kit : file.getConfigurationSection("GKitz").getKeys(false)){
 			gkitz.add(kit);
 			names.put(kit, Api.color(file.getString("GKitz." + kit + ".Display.Name")));
 			times.put(kit, file.getString("GKitz." + kit + ".Cooldown"));
+			if(file.contains("GKitz." + kit + ".Commands")){
+				commands.put(kit, file.getStringList("GKitz." + kit + ".Commands"));
+			}
 		}
 		reloadKits();
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
@@ -395,6 +401,19 @@ public class GKitz implements Listener{
 				player.getWorld().dropItem(player.getLocation(), item);
 			}else{
 				player.getInventory().addItem(item);
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param player Player you wish to send the commands to
+	 * @param kit GKit you wish to use
+	 */
+	public static void runKitCommands(Player player, String kit){
+		if(commands.containsKey(kit)){
+			for(String cmd : commands.get(kit)){
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName()));
 			}
 		}
 	}

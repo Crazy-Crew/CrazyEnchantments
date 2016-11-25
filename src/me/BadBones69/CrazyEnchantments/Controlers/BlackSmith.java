@@ -72,41 +72,70 @@ public class BlackSmith implements Listener{
 					ItemStack item = e.getCurrentItem();
 					if(!inBlackSmith(e.getRawSlot())){// Click In Players Inventory
 						if(item.getAmount()!=1)return;
-						if(Main.CE.hasEnchantments(item) || item.getType()==Main.CE.getEnchantmentBookItem().getType()){
-							if(item.getType()==Main.CE.getEnchantmentBookItem().getType()){
+						if(Main.CE.hasEnchantments(item) || item.getType() == Main.CE.getEnchantmentBookItem().getType()){
+							if(item.getType() == Main.CE.getEnchantmentBookItem().getType()){//Is a book.
 								if(!item.hasItemMeta())return;
 								if(!item.getItemMeta().hasDisplayName())return;
 								boolean T=false;
 								for(CEnchantments en : Main.CE.getEnchantments()){
-									if(item.getItemMeta().getDisplayName().contains(en.getCustomName())){
-										T=true;
+									if(item.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
+										T = true;
 									}
 								}
 								for(String en : Main.CustomE.getEnchantments()){
-									if(item.getItemMeta().getDisplayName().contains(Main.CustomE.getCustomName(en))){
-										T=true;
+									if(item.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))){
+										T = true;
 									}
 								}
-								if(!T)return;
+								if(!T){
+									return;
+								}
 							}
-							if(inv.getItem(10)==null){
+							if(inv.getItem(10) == null){
 								e.setCurrentItem(new ItemStack(Material.AIR));
 								inv.setItem(10, item);
 								try{
-									if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-									if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger() >= 191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger() < 191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 								}catch(Exception ex){}
+								if(inv.getItem(13) != null){
+									if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
+										inv.setItem(16, Api.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13)),
+												Main.settings.getConfig().getString("Settings.BlackSmith.Results.Found")
+												.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
+										for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
+									}else{
+										if(Version.getVersion().getVersionInteger()<181){
+											ItemStack it = Api.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
+											if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+												for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+													it = Api.addLore(it, line);
+												}
+											}
+											inv.setItem(16, it);
+										}else{
+											ItemStack it = Api.makeItem(Material.BARRIER, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
+											if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+												for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+													it = Api.addLore(it, line);
+												}
+											}
+											inv.setItem(16, it);
+										}
+										for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, " "));
+									}
+								}
 							}else{
 								e.setCurrentItem(new ItemStack(Material.AIR));
-								if(inv.getItem(13)!=null){
+								if(inv.getItem(13) != null){
 									e.setCurrentItem(inv.getItem(13));
 								}
 								inv.setItem(13, item);
 								try{
-									if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-									if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger() >= 191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+									if(Version.getVersion().getVersionInteger() < 191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
 								}catch(Exception ex){}
-								if(getUpgradeCost(inv.getItem(10), inv.getItem(13))>0){
+								if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
 									inv.setItem(16, Api.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13)),
 											Main.settings.getConfig().getString("Settings.BlackSmith.Results.Found")
 											.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
@@ -224,14 +253,22 @@ public class BlackSmith implements Listener{
 									for(int i:result)inv.setItem(i-1, Api.makeItem(Material.STAINED_GLASS_PANE, 1, 14, " "));
 								}else{
 									try{
-										if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
-										if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
+										if(Version.getVersion().getVersionInteger() >= 191){
+											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
+										}
+										if(Version.getVersion().getVersionInteger() < 191){
+											player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
+										}
 									}catch(Exception ex){}
 								}
 							}else{
 								try{
-									if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
-									if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
+									if(Version.getVersion().getVersionInteger() >= 191){
+										player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_NO"), 1, 1);
+									}
+									if(Version.getVersion().getVersionInteger() < 191){
+										player.playSound(player.getLocation(), Sound.valueOf("VILLAGER_NO"), 1, 1);
+									}
 								}catch(Exception ex){}
 							}
 						}
@@ -274,66 +311,62 @@ public class BlackSmith implements Listener{
 	
 	private ItemStack getUpgradedItem(ItemStack master, ItemStack sub){
 		ItemStack item = master.clone();
-		if(master.getType()==Main.CE.getEnchantmentBookItem().getType()&&sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
+		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType() == Main.CE.getEnchantmentBookItem().getType()){
 			if(Api.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Api.removeColor(sub.getItemMeta().getDisplayName()))){
 				for(CEnchantments en : Main.CE.getEnchantments()){
-					String ench = en.getCustomName();
-					if(master.getItemMeta().getDisplayName().contains(ench)){
+					if(master.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 						int power = Main.CE.getBookPower(master, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
-						if(power+1<=max){
-							item=Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, en.getBookColor()+ench+" "+Api.getPower(power+1), master.getItemMeta().getLore()));
+						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
+						if(power + 1 <= max){
+							item = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, en.getBookColor() + en.getCustomName() + " " + Api.getPower(power+1), master.getItemMeta().getLore()));
 						}
 					}
 				}
 				for(String en : Main.CustomE.getEnchantments()){
-					String ench = Main.CustomE.getCustomName(en);
-					if(master.getItemMeta().getDisplayName().contains(ench)){
+					if(master.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))){
 						int power = Main.CustomE.getBookPower(master, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
-						if(power+1<=max){
-							item=Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, Main.CustomE.getBookColor(en)+ench+" "+Api.getPower(power+1), master.getItemMeta().getLore()));
+						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
+						if(power + 1 <= max){
+							item = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en) + " " + Api.getPower(power+1), master.getItemMeta().getLore()));
 						}
 					}
 				}
 			}
 		}
-		if(master.getType()!=Main.CE.getEnchantmentBookItem().getType()&&sub.getType()!=Main.CE.getEnchantmentBookItem().getType()){
+		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() && sub.getType() != Main.CE.getEnchantmentBookItem().getType()){
 			List<String> d = new ArrayList<String>();//Dup Enchantments
 			List<String> n = new ArrayList<String>();//New Enchantments
 			List<String> m = new ArrayList<String>();//Master's Enchantments
 			List<String> s = new ArrayList<String>();//Sub's Enchantments
 			for(CEnchantments en : Main.CE.getEnchantments()){
-				String ench = en.getCustomName();
 				for(String lore : master.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						m.add(lore);
 					}
 				}
 				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						s.add(lore);
 					}
 				}
 			}
 			for(String en : Main.CustomE.getEnchantments()){
-				String ench = Main.CustomE.getCustomName(en);
 				for(String lore : master.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						m.add(lore);
 					}
 				}
 				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						s.add(lore);
 					}
 				}
 			}
 			for(String l : s){
-				boolean T=false;
+				boolean T = false;
 				for(String lore : m){
 					if(l.contains(Api.removeColor(lore))){
-						T=true;
+						T = true;
 						d.add(l);
 					}
 				}
@@ -343,43 +376,43 @@ public class BlackSmith implements Listener{
 			}
 			for(String l : d){
 				for(CEnchantments en : Main.CE.getEnchantments()){
-					String ench = en.getCustomName();
-					if(l.contains(ench)){
+					if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						int power = Main.CE.getPower(item, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
-						if(power+1<=max){
-							item=Api.replaceLore(item, l,en.getEnchantmentColor()+ench+" "+Api.getPower(power+1));
+						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
+						if(power + 1 <= max){
+							item = Api.replaceLore(item, l,en.getEnchantmentColor() + en.getCustomName() + " " + Api.getPower(power+1));
 						}
 					}
 				}
 			}
 			for(String l : d){
 				for(String en : Main.CustomE.getEnchantments()){
-					String ench = Main.CustomE.getCustomName(en);
-					if(l.contains(ench)){
+					if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						int power = Main.CustomE.getPower(item, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
-						if(power+1<=max){
-							item=Api.replaceLore(item, l,Main.CustomE.getEnchantmentColor(en)+ench+" "+Api.getPower(power+1));
+						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
+						if(power + 1 <= max){
+							item = Api.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en) + " " + Api.getPower(power+1));
 						}
 					}
 				}
 			}
 			for(String lore : n){
-				boolean T=false;
+				boolean T = false;
 				for(CEnchantments en : Main.CE.getEnchantments()){
-					String ench = en.getCustomName();
-					if(lore.contains(ench)){
+					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						for(String l : item.getItemMeta().getLore()){
-							if(l.contains(ench))T=true;
+							if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
+								T = true;
+							}
 						}
 					}
 				}
 				for(String en : Main.CustomE.getEnchantments()){
-					String ench = Main.CustomE.getCustomName(en);
-					if(lore.contains(ench)){
+					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						for(String l : item.getItemMeta().getLore()){
-							if(l.contains(ench))T=true;
+							if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
+								T = true;
+							}
 						}
 					}
 				}
@@ -387,7 +420,7 @@ public class BlackSmith implements Listener{
 					int maxEnchants = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
 					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
 						if(Api.getEnchAmount(item)<maxEnchants){
-							item=Api.addLore(item, lore);
+							item = Api.addLore(item, lore);
 						}
 					}
 				}
@@ -398,10 +431,10 @@ public class BlackSmith implements Listener{
 	
 	private int getUpgradeCost(ItemStack master, ItemStack sub){
 		int total = 0;
-		if(master.getType()==Main.CE.getEnchantmentBookItem().getType()&&sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
+		if(master.getType() == Main.CE.getEnchantmentBookItem().getType()&&sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Api.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Api.removeColor(sub.getItemMeta().getDisplayName()))){
 				for(CEnchantments en : Main.CE.getEnchantments()){
-					if(master.getItemMeta().getDisplayName().startsWith(en.getEnchantmentColor() + en.getCustomName())){
+					if(master.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 						int power = Main.CE.getBookPower(master, en);
 						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
 						if(power + 1 <= max){
@@ -410,10 +443,9 @@ public class BlackSmith implements Listener{
 					}
 				}
 				for(String en : Main.CustomE.getEnchantments()){
-					String ench = Main.CustomE.getCustomName(en);
-					if(master.getItemMeta().getDisplayName().startsWith(Main.CustomE.getEnchantmentColor(ench) + Main.CustomE.getCustomName(ench))){
+					if(master.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))){
 						int power = Main.CustomE.getBookPower(master, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
+						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
 						if(power + 1 <= max){
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
 						}
@@ -421,34 +453,32 @@ public class BlackSmith implements Listener{
 				}
 			}
 		}
-		if(master.getType()!=Main.CE.getEnchantmentBookItem().getType()||sub.getType()!=Main.CE.getEnchantmentBookItem().getType()){
+		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() || sub.getType() != Main.CE.getEnchantmentBookItem().getType()){
 			ItemStack item = master.clone();
 			List<String> d = new ArrayList<String>();//Dup Enchantments
 			List<String> n = new ArrayList<String>();//New Enchantments
 			List<String> m = new ArrayList<String>();//Master's Enchantments
 			List<String> s = new ArrayList<String>();//Sub's Enchantments
 			for(CEnchantments en : Main.CE.getEnchantments()){
-				String ench = en.getCustomName();
 				for(String lore : master.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(en.getBookColor() + en.getCustomName())){
 						m.add(lore);
 					}
 				}
 				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(en.getBookColor() + en.getCustomName())){
 						s.add(lore);
 					}
 				}
 			}
 			for(String en : Main.CustomE.getEnchantments()){
-				String ench = Main.CustomE.getCustomName(en);
 				for(String lore : master.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						m.add(lore);
 					}
 				}
 				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.contains(ench)){
+					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						s.add(lore);
 					}
 				}
@@ -457,7 +487,7 @@ public class BlackSmith implements Listener{
 				boolean T=false;
 				for(String lore : m){
 					if(l.contains(Api.removeColor(lore))){
-						T=true;
+						T = true;
 						d.add(l);
 					}
 				}
@@ -467,24 +497,22 @@ public class BlackSmith implements Listener{
 			}
 			for(String l : d){
 				for(CEnchantments en : Main.CE.getEnchantments()){
-					String ench = en.getCustomName();
-					if(l.contains(ench)){
+					if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						int power = Main.CE.getPower(item, en);
 						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
-						if(power+1<=max){
-							item=Api.replaceLore(item, l, Main.CE.getEnchantmentColor(en)+ench+" "+Api.getPower(power+1));
-							total+=Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+						if(power + 1 <= max){
+							item = Api.replaceLore(item, l, Main.CE.getEnchantmentColor(en) + en.getCustomName() + " " + Api.getPower(power+1));
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}
 					}
 				}
 				for(String en : Main.CustomE.getEnchantments()){
-					String ench = Main.CustomE.getCustomName(en);
-					if(l.contains(ench)){
+					if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						int power = Main.CustomE.getPower(item, en);
 						int max = Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
-						if(power+1<=max){
-							item=Api.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en)+ench+" "+Api.getPower(power+1));
-							total+=Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+						if(power + 1 <= max){
+							item = Api.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en)+Main.CustomE.getCustomName(en)+" "+Api.getPower(power+1));
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}
 					}
 				}
@@ -492,26 +520,28 @@ public class BlackSmith implements Listener{
 			for(String lore : n){
 				boolean T=false;
 				for(CEnchantments en : Main.CE.getEnchantments()){
-					String ench = en.getCustomName();
-					if(lore.contains(ench)){
+					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						for(String l : item.getItemMeta().getLore()){
-							if(l.contains(ench))T=true;
+							if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
+								T = true;
+							}
 						}
 					}
 				}
 				for(String en : Main.CustomE.getEnchantments()){
-					String ench = Main.CustomE.getCustomName(en);
-					if(lore.contains(ench)){
+					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						for(String l : item.getItemMeta().getLore()){
-							if(l.contains(ench))T=true;
+							if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
+								T = true;
+							}
 						}
 					}
 				}
 				if(!T){
 					int maxEnchants = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
 					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-						if(Api.getEnchAmount(item)<maxEnchants){
-							total+=Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
+						if(Api.getEnchAmount(item) < maxEnchants){
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
 						}
 					}
 				}
