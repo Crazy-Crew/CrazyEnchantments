@@ -109,7 +109,7 @@ public class GKitz implements Listener{
 							}
 						}else{
 							if(d.contains(":")){
-								if(Enchantment.getByName(d.split(",")[0]) != null){
+								if(Enchantment.getByName(d.split(":")[0]) != null){
 									item.addEnchantment(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
 								}
 							}else{
@@ -274,7 +274,7 @@ public class GKitz implements Listener{
 						}
 					}else{
 						if(d.contains(":")){
-							if(Enchantment.getByName(d.split(",")[0]) != null){
+							if(Enchantment.getByName(d.split(":")[0]) != null){
 								enchantments.put(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
 							}
 						}else{

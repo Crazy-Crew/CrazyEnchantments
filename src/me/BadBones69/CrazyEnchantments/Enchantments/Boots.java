@@ -181,7 +181,7 @@ public class Boots implements Listener{
 	}
 	
 	public static void onStart(){
-		if(!Main.settings.getConfig().contains("Settings.Clouds")){
+		if(Main.settings.getConfig().contains("Settings.Clouds")){
 			if(Main.settings.getConfig().getBoolean("Settings.Clouds")){
 				Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 					@Override

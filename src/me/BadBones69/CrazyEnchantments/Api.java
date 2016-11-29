@@ -146,7 +146,7 @@ public class Api{
 		if(i==5)return "V";
 		if(i==6)return "VI";
 		if(i==7)return "VII";
-		if(i==8)return "VII";
+		if(i==8)return "VIII";
 		if(i==9)return "IX";
 		if(i==10)return "X";
 		return i+"";

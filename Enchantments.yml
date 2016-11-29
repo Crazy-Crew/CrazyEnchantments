@@ -1,6 +1,6 @@
 Enchantments:
   Glowing: #Enchantment
-    Enabled: True #Wither or not an enchantment is active
+    Enabled: True #Wether or not an enchantment is active
     Name: 'Glowing' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
