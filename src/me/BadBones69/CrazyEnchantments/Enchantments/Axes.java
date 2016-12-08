@@ -19,15 +19,16 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Axes implements Listener{
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(e.isCancelled())return;
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
-		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
+		if(Support.isFriendly(e.getDamager(), e.getEntity()))return;
 		if(e.getEntity() instanceof LivingEntity){
 			LivingEntity en = (LivingEntity) e.getEntity();
 			if(e.getDamager() instanceof Player){
@@ -119,7 +120,7 @@ public class Axes implements Listener{
 	
 	@EventHandler
 	public void onPlayerDamage(PlayerDeathEvent e){
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
 			Player player = e.getEntity();

@@ -618,7 +618,7 @@ public class Main extends JavaPlugin implements Listener{
 						player = (Player) sender;
 					}
 				}
-				if(GKitz.hasGKitPermission(player, kit)){
+				if(GKitz.hasGKitPermission(player, kit) || args.length >= 2){
 					if(GKitz.canGetGKit(player, kit)){
 						GKitz.giveKit(player, kit);
 						GKitz.runKitCommands(player, kit);

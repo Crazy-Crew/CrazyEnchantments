@@ -26,7 +26,7 @@ public class WorldGuard {
 		return true;
 	}
 	
-	public static boolean allowsExplotions(Location loc){
+	public static boolean allowsExplosions(Location loc){
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(loc.getWorld()).getApplicableRegions(loc);
 		if (set.queryState(null, DefaultFlag.OTHER_EXPLOSION)==StateFlag.State.DENY || set.queryState(null, DefaultFlag.TNT)==StateFlag.State.DENY){
 			return false;

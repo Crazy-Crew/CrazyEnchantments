@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class CustomEnchantments implements Listener{
 	
@@ -108,7 +109,7 @@ public class CustomEnchantments implements Listener{
 					LivingEntity damaged = (LivingEntity) e.getEntity();
 					ItemStack item = Api.getItemInHand(damager);
 					if(!e.getEntity().isDead()){
-						if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+						if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 						if(hasEnchantments(item)){
 							for(String ench : getEnchantments()){
 								if(hasEnchantment(item, ench)){
@@ -213,7 +214,7 @@ public class CustomEnchantments implements Listener{
 	
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 		ItemStack item = e.getBow();
 		if(hasEnchantments(item)){
 			for(String ench : CustomEnchants){
@@ -228,8 +229,8 @@ public class CustomEnchantments implements Listener{
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Api.allowsExplotions(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsExplotions(e.getEntity().getLocation()))return;
 		if(Power.containsKey(e.getEntity())){
 			String ench = Enchant.get(e.getEntity());
 			if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.BowOptions.OnHit.Ground.Explode")){
@@ -258,7 +259,7 @@ public class CustomEnchantments implements Listener{
 	@EventHandler
  	public void onHit(EntityDamageByEntityEvent e){
 		if(!Main.settings.getCustomEnchs().contains("Enchantments"))return;
-		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
+		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getDamager() instanceof Arrow){
 			if(!(e.getEntity() instanceof LivingEntity))return;
 			Projectile arrow = (Projectile) e.getDamager();

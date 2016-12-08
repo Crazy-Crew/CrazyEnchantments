@@ -17,12 +17,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.ParticleEffect;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Boots implements Listener{
 	
@@ -66,7 +66,7 @@ public class Boots implements Listener{
 			}
 			if(Main.CE.hasEnchantment(NewItem, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
+					if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
 						if(player.getGameMode()!=GameMode.CREATIVE){
 							player.setAllowFlight(true);
 						}
@@ -103,7 +103,7 @@ public class Boots implements Listener{
 	@EventHandler
 	public void onFly(PlayerToggleFlightEvent e){
 		Player player = e.getPlayer();
-		if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
+		if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
 			ItemStack boots = player.getEquipment().getBoots();
 			if(Main.CE.hasEnchantments(boots)){
 				if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
@@ -128,7 +128,7 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(!(Api.inTerritory(player) || Api.inWingsRegion(player.getLocation()))){
+					if(!(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation()))){
 						if(player.isFlying()){
 							if(player.getGameMode()!=GameMode.CREATIVE){
 								player.setFlying(false);
@@ -156,7 +156,7 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Api.inTerritory(player)||Api.inWingsRegion(player.getLocation())){
+					if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
 						player.setAllowFlight(true);
 						Flying.add(player);
 					}

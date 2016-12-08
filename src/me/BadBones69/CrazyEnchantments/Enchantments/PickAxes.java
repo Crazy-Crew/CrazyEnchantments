@@ -25,6 +25,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class PickAxes implements Listener{
 	
@@ -52,10 +53,10 @@ public class PickAxes implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent e){
 		if(e.isCancelled())return;
-		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
+		if(!Support.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(!Api.canBreakBlock(player, block))return;
+		if(!Support.canBreakBlock(player, block))return;
 		ItemStack item = Api.getItemInHand(player);
 		if(Main.CE.hasEnchantments(item)){
 			if(player.getGameMode() != GameMode.CREATIVE){
@@ -134,7 +135,7 @@ public class PickAxes implements Listener{
 						if(blocks.get(player).containsKey(block)){
 							for(Block b : getBlocks(block.getLocation(), blocks.get(player).get(block), (Main.CE.getPower(item, CEnchantments.BLAST)-1))){
 								if(Main.CE.getBlockList().contains(b.getType())){
-									if(Api.canBreakBlock(player, b)&&Api.allowsBreak(b.getLocation())){
+									if(Support.canBreakBlock(player, b)&&Support.allowsBreak(b.getLocation())){
 										if(player.getGameMode() == GameMode.CREATIVE){
 											b.setType(Material.AIR);
 										}else{

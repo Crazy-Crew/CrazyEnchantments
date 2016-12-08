@@ -13,11 +13,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Helmets implements Listener{
 	
@@ -69,13 +69,13 @@ public class Helmets implements Listener{
 			if(Main.CE.hasEnchantments(armor)){
 				if(Main.CE.hasEnchantment(armor, CEnchantments.COMMANDER)){
 					if(CEnchantments.COMMANDER.isEnabled()){
-						if(Api.hasFactions()){
+						if(Support.hasFactions()){
 							int radius = 4+Main.CE.getPower(armor, CEnchantments.COMMANDER);
 							ArrayList<Player> players = new ArrayList<Player>();
 							for(Entity en : player.getNearbyEntities(radius, radius, radius)){
 								if(en instanceof Player){
 									Player o = (Player) en;
-									if(Api.isFriendly(player, o)){
+									if(Support.isFriendly(player, o)){
 										players.add(o);
 									}
 								}

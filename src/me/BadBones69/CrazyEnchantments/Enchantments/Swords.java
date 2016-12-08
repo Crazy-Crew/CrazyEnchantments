@@ -23,6 +23,7 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.DisarmerUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Swords implements Listener{
 	
@@ -35,9 +36,9 @@ public class Swords implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(e.isCancelled())return;
-		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
+		if(Support.isFriendly(e.getDamager(), e.getEntity()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
 				final Player damager = (Player) e.getDamager();
@@ -289,8 +290,8 @@ public class Swords implements Listener{
 										Location loc = en.getLocation();
 										loc.getWorld().strikeLightningEffect(loc);
 										for(LivingEntity En : Api.getNearbyEntities(loc, 2D, damager)){
-											if(Api.allowsPVP(En.getLocation())){
-												if(!Api.isFriendly(damager, En)){
+											if(Support.allowsPVP(En.getLocation())){
+												if(!Support.isFriendly(damager, En)){
 													En.damage(5D);
 												}
 											}
@@ -365,8 +366,8 @@ public class Swords implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDeath(PlayerDeathEvent e){
-		if(Api.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(Support.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
 			Player player = e.getEntity();
@@ -394,7 +395,7 @@ public class Swords implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent e){
-		if(Api.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
+		if(Support.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
 			ItemStack item = Api.getItemInHand(damager);

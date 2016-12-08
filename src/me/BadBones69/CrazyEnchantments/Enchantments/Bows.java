@@ -28,6 +28,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Bows implements Listener{
 
@@ -39,7 +40,7 @@ public class Bows implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBowShoot(final EntityShootBowEvent e){
 		if(e.isCancelled())return;
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 		ItemStack item = e.getBow();
 		if(Main.CE.hasEnchantments(item)){
 			if(Main.CE.hasEnchantment(item, CEnchantments.BOOM)){
@@ -127,7 +128,7 @@ public class Bows implements Listener{
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 		if(Arrow.containsKey(e.getEntity())){
 			Entity arrow = e.getEntity();
 			if(Enchant.get(arrow)==CEnchantments.BOOM){
@@ -148,8 +149,8 @@ public class Bows implements Listener{
 					if(Api.randomPicker(5)){
 						loc.getWorld().strikeLightningEffect(loc);
 						for(LivingEntity en : Api.getNearbyEntities(loc, 2D, arrow)){
-							if(Api.allowsPVP(en.getLocation())){
-								if(!Api.isFriendly(P.get(arrow), en)){
+							if(Support.allowsPVP(en.getLocation())){
+								if(!Support.isFriendly(P.get(arrow), en)){
 									if(!P.get(arrow).getName().equalsIgnoreCase(en.getName())){
 										en.damage(5D);
 									}
@@ -165,15 +166,15 @@ public class Bows implements Listener{
 	
 	@EventHandler
  	public void onArrowDamage(EntityDamageByEntityEvent e){
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getDamager() instanceof Arrow){
 			if(e.getEntity() instanceof LivingEntity){
 				LivingEntity en = (LivingEntity) e.getEntity();
 				Projectile arrow = (Projectile) e.getDamager();
 				if(Arrow.containsKey(arrow)){
 					ItemStack item = Arrow.get(arrow);
-					if(Api.isFriendly(P.get(e.getDamager()), e.getEntity())){
+					if(Support.isFriendly(P.get(e.getDamager()), e.getEntity())){
 						if(Enchant.get(arrow)==CEnchantments.DOCTOR){
 							if(CEnchantments.DOCTOR.isEnabled()){
 								int heal = 2+Main.CE.getPower(Arrow.get(arrow), CEnchantments.DOCTOR);
@@ -201,7 +202,7 @@ public class Bows implements Listener{
 							}
 						}
 					}
-					if(!Api.isFriendly(P.get(arrow), e.getEntity())){
+					if(!Support.isFriendly(P.get(arrow), e.getEntity())){
 						if(Enchant.get(arrow)==CEnchantments.PULL){
 							if(CEnchantments.PULL.isEnabled()){
 								if(Api.randomPicker(5 - Main.CE.getPower(Arrow.get(arrow), CEnchantments.PULL))){

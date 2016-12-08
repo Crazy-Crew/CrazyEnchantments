@@ -42,6 +42,7 @@ import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraActiveEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.HellForgedUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Armor implements Listener{
 	
@@ -181,9 +182,9 @@ public class Armor implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(e.isCancelled())return;
-		if(Api.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(!Api.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Api.allowsPVP(e.getDamager().getLocation()))return;
+		if(Support.isFriendly(e.getDamager(), e.getEntity()))return;
+		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
+		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getDamager() instanceof LivingEntity){
 			if(e.getEntity() instanceof Player){
 				final Player player = (Player) e.getEntity();
@@ -341,8 +342,8 @@ public class Armor implements Listener{
 										Location loc = damager.getLocation();
 										loc.getWorld().strikeLightningEffect(loc);
 										for(LivingEntity en : Api.getNearbyEntities(loc, 2D, damager)){
-											if(Api.allowsPVP(en.getLocation())){
-												if(!Api.isFriendly(player, en)){
+											if(Support.allowsPVP(en.getLocation())){
+												if(!Support.isFriendly(player, en)){
 													en.damage(5D);
 												}
 											}
@@ -360,13 +361,13 @@ public class Armor implements Listener{
 							if(Main.CE.hasEnchantment(armor, CEnchantments.LEADERSHIP)){
 								if(CEnchantments.LEADERSHIP.isEnabled()){
 									if(Api.randomPicker(12)){
-										if(Api.hasFactions()||Api.hasFeudal()){
+										if(Support.hasFactions()||Support.hasFeudal()){
 											int radius = 4+Main.CE.getPower(armor, CEnchantments.LEADERSHIP);
 											int players = 0;
 											for(Entity en : damager.getNearbyEntities(radius, radius, radius)){
 												if(en instanceof Player){
 													Player o = (Player) en;
-													if(Api.isFriendly(damager, o)){
+													if(Support.isFriendly(damager, o)){
 														players++;
 													}
 												}
@@ -395,8 +396,8 @@ public class Armor implements Listener{
 		Player other = e.getOther();
 		CEnchantments enchant = e.getEnchantment();
 		int power = e.getPower();
-		if(Api.allowsPVP(other.getLocation())){
-			if(!Api.isFriendly(player, other)){
+		if(Support.allowsPVP(other.getLocation())){
+			if(!Support.isFriendly(player, other)){
 				Calendar cal = Calendar.getInstance();
 				HashMap<CEnchantments, Calendar> eff = new HashMap<CEnchantments, Calendar>();
 				if(timer.containsKey(other)){
@@ -521,12 +522,12 @@ public class Armor implements Listener{
 					}
 					if(Main.CE.hasEnchantment(armor, CEnchantments.ANGEL)){
 						if(CEnchantments.ANGEL.isEnabled()){
-							if(Api.hasFactions()||Api.hasFeudal()){
+							if(Support.hasFactions()||Support.hasFeudal()){
 								int radius = 4+Main.CE.getPower(armor, CEnchantments.ANGEL);
 								for(Entity en : player.getNearbyEntities(radius, radius, radius)){
 									if(en instanceof Player){
 										Player o = (Player) en;
-										if(Api.isFriendly(player, o)){
+										if(Support.isFriendly(player, o)){
 											AngelUseEvent event = new AngelUseEvent(player, armor);
 											Bukkit.getPluginManager().callEvent(event);
 											if(!event.isCancelled()){
@@ -591,7 +592,7 @@ public class Armor implements Listener{
  	public void onDeath(PlayerDeathEvent e){
 		Player player = e.getEntity();
 		Player killer = player.getKiller();
-		if(!Api.allowsPVP(player.getLocation()))return;
+		if(!Support.allowsPVP(player.getLocation()))return;
 		for(ItemStack item : player.getEquipment().getArmorContents()){
 			if(Main.CE.hasEnchantments(item)){
 				if(Main.CE.hasEnchantment(item, CEnchantments.SELFDESTRUCT)){
@@ -658,8 +659,8 @@ public class Armor implements Listener{
 		if(e.getEntity() instanceof Player && e.getDamager() instanceof LivingEntity){// Player gets attacked
 			Player player = (Player) e.getEntity();
 			LivingEntity en = (LivingEntity) e.getDamager();
-			if(!Api.isFriendly(player, en)){
-				if(Api.allowsPVP(player.getLocation()) && Api.allowsPVP(en.getLocation())){
+			if(!Support.isFriendly(player, en)){
+				if(Support.allowsPVP(player.getLocation()) && Support.allowsPVP(en.getLocation())){
 					if(!mobs.containsKey(player)){
 						for(ItemStack item : player.getEquipment().getArmorContents()){
 							if(Main.CE.hasEnchantments(item)){// Spawn allies when getting attacked
@@ -717,8 +718,8 @@ public class Armor implements Listener{
 					return;
 				}
 			}
-			if(!Api.isFriendly(player, en)){
-				if(Api.allowsPVP(player.getLocation()) && Api.allowsPVP(en.getLocation())){
+			if(!Support.isFriendly(player, en)){
+				if(Support.allowsPVP(player.getLocation()) && Support.allowsPVP(en.getLocation())){
 					if(!mobs.containsKey(player)){
 						for(ItemStack item : player.getEquipment().getArmorContents()){
 							if(Main.CE.hasEnchantments(item)){// Spawn allies when attacking

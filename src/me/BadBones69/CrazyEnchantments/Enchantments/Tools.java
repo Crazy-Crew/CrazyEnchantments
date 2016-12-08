@@ -22,6 +22,7 @@ import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Tools implements Listener{
 
@@ -90,10 +91,10 @@ public class Tools implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent e){
 		if(e.isCancelled())return;
-		if(!Api.allowsBreak(e.getPlayer().getLocation()))return;
+		if(!Support.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(!Api.canBreakBlock(player, block))return;
+		if(!Support.canBreakBlock(player, block))return;
 		if(player.getGameMode()!=GameMode.CREATIVE){
 			ItemStack item = Api.getItemInHand(player);
 			if(Main.CE.hasEnchantments(item)){
