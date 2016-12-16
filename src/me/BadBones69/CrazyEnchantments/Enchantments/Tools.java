@@ -18,11 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
-import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Tools implements Listener{
 
@@ -33,7 +32,7 @@ public class Tools implements Listener{
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
 		Player player = e.getPlayer();
-		ItemStack item = Api.getItemInHand(player);
+		ItemStack item = Methods.getItemInHand(player);
 		HashMap<String, Boolean> Trigger = new HashMap<String, Boolean>();
 		Trigger.put("Haste", false);
 		Trigger.put("Oxygenate", false);
@@ -88,15 +87,13 @@ public class Tools implements Listener{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
 		if(e.isCancelled())return;
-		if(!Support.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(!Support.canBreakBlock(player, block))return;
 		if(player.getGameMode()!=GameMode.CREATIVE){
-			ItemStack item = Api.getItemInHand(player);
+			ItemStack item = Methods.getItemInHand(player);
 			if(Main.CE.hasEnchantments(item)){
 				if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
 					if(CEnchantments.TELEPATHY.isEnabled()){
@@ -114,24 +111,21 @@ public class Tools implements Listener{
 							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
-								e.setCancelled(true);
 								for(ItemStack i : block.getDrops()){
 									if(getItems().contains(block.getType())){
 										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
-											if(Api.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
+											if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 												i.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 											}
 										}
 									}
-									if(!Api.isInvFull(player)){
+									if(!Methods.isInvFull(player)){
 										player.getInventory().addItem(i);
 									}else{
 										block.getWorld().dropItemNaturally(block.getLocation(), i);
 									}
 								}
 								block.setType(Material.AIR);
-								int dur = item.getDurability()+1;
-								item.setDurability((short)dur);
 							}
 						}
 					}

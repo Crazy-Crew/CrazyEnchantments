@@ -14,7 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.API.Version;
@@ -22,7 +22,7 @@ import me.BadBones69.CrazyEnchantments.API.Version;
 public class ShopGUI implements Listener{
 	
 	public static void openGUI(Player player){
-		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Api.getInvName());
+		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Methods.getInvName());
 		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
 			for(String custom : Main.settings.getConfig().getStringList("Settings.GUICustomization")){
 				String name = "";
@@ -52,17 +52,17 @@ public class ShopGUI implements Listener{
 					}
 				}
 				slot--;
-				inv.setItem(slot, Api.makeItem(item, 1, name, lore));
+				inv.setItem(slot, Methods.makeItem(item, 1, name, lore));
 			}
 		}
 		for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
 			if(Main.settings.getConfig().contains("Categories."+cat+".InGUI")){
 				if(Main.settings.getConfig().getBoolean("Categories."+cat+".InGUI")){
-					inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
+					inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Methods.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
 							Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
 				}
 			}else{
-				inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Api.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
+				inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Methods.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
 						Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
 			}
 			FileConfiguration config = Main.settings.getConfig();
@@ -73,9 +73,9 @@ public class ShopGUI implements Listener{
 					String name = config.getString("Categories."+cat+".LostBook.Name");
 					List<String> lore = config.getStringList("Categories."+cat+".LostBook.Lore");
 					if(config.getBoolean("Categories."+cat+".LostBook.Glowing")){
-						inv.setItem(slot-1, Api.addGlow(Api.makeItem(id, 1, name, lore)));
+						inv.setItem(slot-1, Methods.addGlow(Methods.makeItem(id, 1, name, lore)));
 					}else{
-						inv.setItem(slot-1, Api.makeItem(id, 1, name, lore));
+						inv.setItem(slot-1, Methods.makeItem(id, 1, name, lore));
 					}
 				}
 			}
@@ -85,56 +85,56 @@ public class ShopGUI implements Listener{
 			String id = Main.settings.getConfig().getString("Settings.ProtectionCrystal.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.ProtectionCrystal.GUILore");
 			int slot = Main.settings.getConfig().getInt("Settings.ProtectionCrystal.Slot")-1;
-			inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.ProtectionCrystal.Glowing")));
+			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.ProtectionCrystal.Glowing")));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.InGUI")){
 			String name = Main.settings.getConfig().getString("Settings.BlackSmith.Name");
 			String id = Main.settings.getConfig().getString("Settings.BlackSmith.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackSmith.Lore");
 			int slot = Main.settings.getConfig().getInt("Settings.BlackSmith.Slot")-1;
-			inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.BlackSmith.Glowing")));
+			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.BlackSmith.Glowing")));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.Tinker.InGUI")){
 			String name = Main.settings.getConfig().getString("Settings.Tinker.Name");
 			String id = Main.settings.getConfig().getString("Settings.Tinker.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.Tinker.Lore");
 			int slot = Main.settings.getConfig().getInt("Settings.Tinker.Slot")-1;
-			inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.Tinker.Glowing")));
+			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.Tinker.Glowing")));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.Info.InGUI")){
 			String name = Main.settings.getConfig().getString("Settings.Info.Name");
 			String id = Main.settings.getConfig().getString("Settings.Info.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.Info.Lore");
 			int slot = Main.settings.getConfig().getInt("Settings.Info.Slot")-1;
-			inv.setItem(slot, Api.addGlow(Api.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.Info.Glowing")));
+			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.Info.Glowing")));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.Dust.SuccessDust.InGUI")){
 			String name = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName");
 			String id = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.SuccessDust.GUILore");
 			int slot = Main.settings.getConfig().getInt("Settings.Dust.SuccessDust.Slot")-1;
-			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.Dust.DestroyDust.InGUI")){
 			String name = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName");
 			String id = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.DestroyDust.GUILore");
 			int slot = Main.settings.getConfig().getInt("Settings.Dust.DestroyDust.Slot")-1;
-			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.InGUI")){
 			String name = Main.settings.getConfig().getString("Settings.BlackScroll.GUIName");
 			String id = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackScroll.Lore");
 			int slot = Main.settings.getConfig().getInt("Settings.BlackScroll.Slot")-1;
-			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.WhiteScroll.InGUI")){
 			String name = Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName");
 			String id = Main.settings.getConfig().getString("Settings.WhiteScroll.Item");
 			List<String> lore = Main.settings.getConfig().getStringList("Settings.WhiteScroll.Lore");
 			int slot = Main.settings.getConfig().getInt("Settings.WhiteScroll.Slot")-1;
-			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
 		}
 		player.openInventory(inv);
 	}
@@ -145,7 +145,7 @@ public class ShopGUI implements Listener{
 		Inventory inv = e.getInventory();
 		Player player = (Player) e.getWhoClicked();
 		if(inv!=null){
-			if(inv.getName().equals(Api.getInvName())){
+			if(inv.getName().equals(Methods.getInvName())){
 				e.setCancelled(true);
 				if(e.getRawSlot()>=inv.getSize())return;
 				if(item==null)return;
@@ -153,80 +153,80 @@ public class ShopGUI implements Listener{
 					if(item.getItemMeta().hasDisplayName()){
 						String name = item.getItemMeta().getDisplayName();
 						for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-							if(name.equals(Api.color(Main.settings.getConfig().getString("Categories."+cat+".Name")))){
-								if(Api.isInvFull(player)){
+							if(name.equals(Methods.color(Main.settings.getConfig().getString("Categories."+cat+".Name")))){
+								if(Methods.isInvFull(player)){
 									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-										player.sendMessage(Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+										player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 									}else{
-										player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+										player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 									}
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE){
 									if(Main.settings.getConfig().contains("Categories."+cat+".Money/XP")&&Main.settings.getConfig().getString("Categories."+cat+".Money/XP").equalsIgnoreCase("Money")){
-										if(Api.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
-											String money = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Api.getMoney(player)+"";
-											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
+										if(Methods.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
+											String money = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Methods.getMoney(player)+"";
+											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
 											return;
 										}
 										Main.econ.withdrawPlayer(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
 									}else{
 										if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
-											if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
-												String xp = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Api.getXPLvl(player)+"";
-												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+											if(Methods.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
+												String xp = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Methods.getXPLvl(player)+"";
+												player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 												return;
 											}
-											Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
+											Methods.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
 										}
 										if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
 											if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
 												String xp = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - player.getTotalExperience()+"";
-												player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+												player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 												return;
 											}
-											Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
+											Methods.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
 										}
 									}
 								}
-								player.getInventory().addItem(Api.addGlow(EnchantmentControl.pick(cat)));
+								player.getInventory().addItem(Methods.addGlow(EnchantmentControl.pick(cat)));
 								return;
 							}
 						}
 						for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-							if(name.equals(Api.color(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Name")))){
-								if(Api.isInvFull(player)){
+							if(name.equals(Methods.color(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Name")))){
+								if(Methods.isInvFull(player)){
 									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-										player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 									}else{
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 									}
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE){
 									if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Money/XP").equalsIgnoreCase("Money")){
-										if(Api.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
-											String money = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Api.getMoney(player)+"";
-											player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
+										if(Methods.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
+											String money = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Methods.getMoney(player)+"";
+											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
 											return;
 										}
 										Main.econ.withdrawPlayer(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
 									}else{
 										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Lvl")){
-											if(Api.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
-												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Api.getXPLvl(player)+"";
-												player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+											if(Methods.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
+												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Methods.getXPLvl(player)+"";
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 												return;
 											}
-											Api.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
+											Methods.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
 										}
 										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Total")){
 											if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
 												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - player.getTotalExperience()+"";
-												player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 												return;
 											}
-											Api.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
+											Methods.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
 										}
 									}
 								}
@@ -234,208 +234,208 @@ public class ShopGUI implements Listener{
 								return;
 							}
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
-							if(!Api.hasPermission(player, "BlackSmith", true))return;
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
+							if(!Methods.hasPermission(player, "BlackSmith", true))return;
 							BlackSmith.openBlackSmith(player);
 							return;
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
-							if(!Api.hasPermission(player, "Tinker", true))return;
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
+							if(!Methods.hasPermission(player, "Tinker", true))return;
 							Tinkerer.openTinker(player);
 							return;
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Info.Name")))){
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Info.Name")))){
 							openInfo(player);
 							return;
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.GUIName")))){
-							if(Api.isInvFull(player)){
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.GUIName")))){
+							if(Methods.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
 							int price = Main.settings.getConfig().getInt("Settings.SignOptions.ProtectionCrystalStyle.Cost");
 							if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Money/XP").equalsIgnoreCase("Money")){
-								if(Api.getMoney(player)<price){
-									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+								if(Methods.getMoney(player)<price){
+									double needed = price-Methods.getMoney(player);
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
 							}else{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-									if(Api.getXPLvl(player)<price){
-										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									if(Methods.getXPLvl(player)<price){
+										String xp = price - Methods.getXPLvl(player)+"";
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeLvlXP(player, price);
+									Methods.takeLvlXP(player, price);
 								}
 								if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeTotalXP(player, price);
+									Methods.takeTotalXP(player, price);
 								}
 							}
 							player.getInventory().addItem(ProtectionCrystal.getCrystals(1));
 							return;
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName")))){
-							if(Api.isInvFull(player)){
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName")))){
+							if(Methods.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
 							int price = Main.settings.getConfig().getInt("Settings.SignOptions.DestroyDustStyle.Cost");
 							if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Money/XP").equalsIgnoreCase("Money")){
-								if(Api.getMoney(player)<price){
-									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+								if(Methods.getMoney(player)<price){
+									double needed = price-Methods.getMoney(player);
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
 							}else{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-									if(Api.getXPLvl(player)<price){
-										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									if(Methods.getXPLvl(player)<price){
+										String xp = price - Methods.getXPLvl(player)+"";
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeLvlXP(player, price);
+									Methods.takeLvlXP(player, price);
 								}
 								if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeTotalXP(player, price);
+									Methods.takeTotalXP(player, price);
 								}
 							}
 							player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));
 							return;
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName")))){
-							if(Api.isInvFull(player)){
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName")))){
+							if(Methods.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
 							int price = Main.settings.getConfig().getInt("Settings.SignOptions.SuccessDustStyle.Cost");
 							if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Money/XP").equalsIgnoreCase("Money")){
-								if(Api.getMoney(player)<price){
-									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+								if(Methods.getMoney(player)<price){
+									double needed = price-Methods.getMoney(player);
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
 							}else{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-									if(Api.getXPLvl(player)<price){
-										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									if(Methods.getXPLvl(player)<price){
+										String xp = price - Methods.getXPLvl(player)+"";
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeLvlXP(player, price);
+									Methods.takeLvlXP(player, price);
 								}
 								if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeTotalXP(player, price);
+									Methods.takeTotalXP(player, price);
 								}
 							}
 							player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));
 							return;
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.GUIName")))){
-							if(Api.isInvFull(player)){
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.GUIName")))){
+							if(Methods.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
 							int price = Main.settings.getConfig().getInt("Settings.SignOptions.BlackScrollStyle.Cost");
 							if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Money/XP").equalsIgnoreCase("Money")){
-								if(Api.getMoney(player)<price){
-									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+								if(Methods.getMoney(player)<price){
+									double needed = price-Methods.getMoney(player);
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
 							}else{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-									if(Api.getXPLvl(player)<price){
-										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									if(Methods.getXPLvl(player)<price){
+										String xp = price - Methods.getXPLvl(player)+"";
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeLvlXP(player, price);
+									Methods.takeLvlXP(player, price);
 								}
 								if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeTotalXP(player, price);
+									Methods.takeTotalXP(player, price);
 								}
 							}
-							player.getInventory().addItem(Api.BlackScroll(1));
+							player.getInventory().addItem(Methods.BlackScroll(1));
 							return;
 						}
-						if(name.equalsIgnoreCase(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName")))){
-							if(Api.isInvFull(player)){
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName")))){
+							if(Methods.isInvFull(player)){
 								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Api.getPrefix() + Api.color("&cYour inventory is to full. Please open up some space to buy that."));
+									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 								}else{
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								}
 								return;
 							}
 							int price = Main.settings.getConfig().getInt("Settings.SignOptions.WhiteScrollStyle.Cost");
 							if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Money/XP").equalsIgnoreCase("Money")){
-								if(Api.getMoney(player)<price){
-									double needed = price-Api.getMoney(player);
-									player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+								if(Methods.getMoney(player)<price){
+									double needed = price-Methods.getMoney(player);
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
 									return;
 								}
 								Main.econ.withdrawPlayer(player, price);
 							}else{
 								if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-									if(Api.getXPLvl(player)<price){
-										String xp = price - Api.getXPLvl(player)+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+									if(Methods.getXPLvl(player)<price){
+										String xp = price - Methods.getXPLvl(player)+"";
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeLvlXP(player, price);
+									Methods.takeLvlXP(player, price);
 								}
 								if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
 									if(player.getTotalExperience()<price){
 										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 										return;
 									}
-									Api.takeTotalXP(player, price);
+									Methods.takeTotalXP(player, price);
 								}
 							}
-							player.getInventory().addItem(Api.addWhiteScroll(1));
+							player.getInventory().addItem(Methods.addWhiteScroll(1));
 							return;
 						}
 					}
@@ -448,14 +448,14 @@ public class ShopGUI implements Listener{
 	public void infoClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
 		if(inv!=null){
-			if(inv.getName().equals(Api.color("&c&lEnchantment Info"))){
+			if(inv.getName().equals(Methods.color("&c&lEnchantment Info"))){
 				e.setCancelled(true);
 				if(e.getCurrentItem()!=null){
 					ItemStack item = e.getCurrentItem();
 					if(item.hasItemMeta()){
 						if(item.getItemMeta().hasDisplayName()){
 							Player player = (Player) e.getWhoClicked();
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")))||item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")))){
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")))||item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left")))){
 								openInfo((Player)player);
 								return;
 							}
@@ -470,53 +470,53 @@ public class ShopGUI implements Listener{
 							types.add("Tool");
 							types.add("Misc");
 							for(String type : types){
-								if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info."+type+".Name")))){
+								if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info."+type+".Name")))){
 									int size=getInfo(type).size()+1;
 									int slots=9;
 									for(;size>9;size-=9)slots+=9;
-									Inventory in = Bukkit.createInventory(null, slots, Api.color("&c&lEnchantment Info"));
+									Inventory in = Bukkit.createInventory(null, slots, Methods.color("&c&lEnchantment Info"));
 									for(ItemStack i : getInfo(type)){
 										in.addItem(i);
 									}
 									if(Version.getVersion().getVersionInteger()<181){
-										in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+										in.setItem(slots-1, Methods.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 									}else{
-										in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+										in.setItem(slots-1, Methods.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 									}
 									player.openInventory(in);
 									return;
 								}
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name")))){
-								Inventory in = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
-								in.setItem(2, Api.makeItem(Main.settings.getConfig().getString("Settings.BlackScroll.Item"),
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name")))){
+								Inventory in = Bukkit.createInventory(null, 18, Methods.color("&c&lEnchantment Info"));
+								in.setItem(2, Methods.makeItem(Main.settings.getConfig().getString("Settings.BlackScroll.Item"),
 										1, Main.settings.getConfig().getString("Settings.BlackScroll.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll")));
-								in.setItem(11, Api.makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"),
+								in.setItem(11, Methods.makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"),
 										1, Main.settings.getConfig().getString("Settings.WhiteScroll.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll")));
-								in.setItem(4, Api.makeItem(Main.settings.getConfig().getString("Settings.Tinker.Item"),
+								in.setItem(4, Methods.makeItem(Main.settings.getConfig().getString("Settings.Tinker.Item"),
 										1, Main.settings.getConfig().getString("Settings.Tinker.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker")));
-								in.setItem(13, Api.makeItem(Main.settings.getConfig().getString("Settings.BlackSmith.Item"),
+								in.setItem(13, Methods.makeItem(Main.settings.getConfig().getString("Settings.BlackSmith.Item"),
 										1, Main.settings.getConfig().getString("Settings.BlackSmith.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.BlackSmith")));
-								in.setItem(6, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"),
+								in.setItem(6, Methods.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"),
 										1, Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust")));
-								in.setItem(15, Api.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"),
+								in.setItem(15, Methods.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"),
 										1, Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust")));
 								if(Version.getVersion().getVersionInteger()<181){
-									ItemStack left = Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left"));
-									ItemStack right = Api.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right"));
+									ItemStack left = Methods.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left"));
+									ItemStack right = Methods.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right"));
 									in.setItem(0, left);
 									in.setItem(8, right);
 									in.setItem(9, left);
 									in.setItem(17, right);
 								}else{
-									ItemStack left = Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left"));
-									ItemStack right = Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right"));
+									ItemStack left = Methods.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Left"));
+									ItemStack right = Methods.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right"));
 									in.setItem(0, left);
 									in.setItem(8, right);
 									in.setItem(9, left);
@@ -525,51 +525,51 @@ public class ShopGUI implements Listener{
 								player.openInventory(in);
 								return;
 							}
-							String bar = Api.color("&a&m------------------------------------------------");
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
+							String bar = Methods.color("&a&m------------------------------------------------");
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
 								player.closeInventory();
 								player.sendMessage(bar);
-								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.BlackSmith"))player.sendMessage(Api.color(lore));
+								player.sendMessage(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.BlackSmith"))player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
 								player.closeInventory();
 								player.sendMessage(bar);
-								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll"))player.sendMessage(Api.color(lore));
+								player.sendMessage(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll"))player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
 								player.closeInventory();
 								player.sendMessage(bar);
-								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll"))player.sendMessage(Api.color(lore));
+								player.sendMessage(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.White-Scroll"))player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
 								player.closeInventory();
 								player.sendMessage(bar);
-								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Tinker.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker"))player.sendMessage(Api.color(lore));
+								player.sendMessage(Methods.color(Main.settings.getConfig().getString("Settings.Tinker.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Tinker"))player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")))){
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")))){
 								player.closeInventory();
 								player.sendMessage(bar);
-								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust"))player.sendMessage(Api.color(lore));
+								player.sendMessage(Methods.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Success-Dust"))player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
 								return;
 							}
-							if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")))){
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")))){
 								player.closeInventory();
 								player.sendMessage(bar);
-								player.sendMessage(Api.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")));
-								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust"))player.sendMessage(Api.color(lore));
+								player.sendMessage(Methods.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")));
+								for(String lore : Main.settings.getMsg().getStringList("Messages.InfoGUI.Destroy-Dust"))player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
 								return;
 							}
@@ -582,26 +582,26 @@ public class ShopGUI implements Listener{
 	}
 	
 	public static void openInfo(Player player){
-		Inventory inv = Bukkit.createInventory(null, 18, Api.color("&c&lEnchantment Info"));
-		inv.addItem(Api.makeItem(Material.GOLD_HELMET, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name"), 
+		Inventory inv = Bukkit.createInventory(null, 18, Methods.color("&c&lEnchantment Info"));
+		inv.addItem(Methods.makeItem(Material.GOLD_HELMET, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Helmets.Lore")));
-		inv.addItem(Api.makeItem(Material.GOLD_BOOTS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Boots.Name"), 
+		inv.addItem(Methods.makeItem(Material.GOLD_BOOTS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Boots.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Boots.Lore")));
-		inv.addItem(Api.makeItem(Material.GOLD_CHESTPLATE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Armor.Name"), 
+		inv.addItem(Methods.makeItem(Material.GOLD_CHESTPLATE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Armor.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Armor.Lore")));
-		inv.addItem(Api.makeItem(Material.BOW, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Bow.Name"), 
+		inv.addItem(Methods.makeItem(Material.BOW, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Bow.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Bow.Lore")));
-		inv.addItem(Api.makeItem(Material.GOLD_SWORD, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Sword.Name"), 
+		inv.addItem(Methods.makeItem(Material.GOLD_SWORD, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Sword.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Sword.Lore")));
-		inv.addItem(Api.makeItem(Material.GOLD_AXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Axe.Name"), 
+		inv.addItem(Methods.makeItem(Material.GOLD_AXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Axe.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Axe.Lore")));
-		inv.addItem(Api.makeItem(Material.GOLD_HOE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Tool.Name"), 
+		inv.addItem(Methods.makeItem(Material.GOLD_HOE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Tool.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Tool.Lore")));
-		inv.addItem(Api.makeItem(Material.GOLD_PICKAXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Pickaxe.Name"), 
+		inv.addItem(Methods.makeItem(Material.GOLD_PICKAXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Pickaxe.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Pickaxe.Lore")));
-		inv.addItem(Api.makeItem(Material.COMPASS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Misc.Name"), 
+		inv.addItem(Methods.makeItem(Material.COMPASS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Misc.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Misc.Lore")));
-		inv.setItem(13, Api.makeItem(Material.EYE_OF_ENDER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name"), 
+		inv.setItem(13, Methods.makeItem(Material.EYE_OF_ENDER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Other.Lore")));
 		player.openInventory(inv);
 	}
@@ -623,7 +623,7 @@ public class ShopGUI implements Listener{
 				String name = enchants.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
 				EnchantmentType enchantType = Main.CE.getFromName(en).getType();
-				ItemStack i = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
+				ItemStack i = Methods.addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
 				if(enchantType == EnchantmentType.AXE)axes.add(i);
@@ -641,7 +641,7 @@ public class ShopGUI implements Listener{
 				String name = customEnchants.getString("Enchantments."+enchantment+".Info.Name");
 				List<String> desc = Main.CustomE.getDiscription(enchantment);
 				EnchantmentType enchantType = Main.CustomE.getType(enchantment);
-				ItemStack i = Api.addGlow(Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
+				ItemStack i = Methods.addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
 				if(enchantType == EnchantmentType.AXE)axes.add(i);

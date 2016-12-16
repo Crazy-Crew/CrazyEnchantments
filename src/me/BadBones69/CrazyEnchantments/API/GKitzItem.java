@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class GKitzItem {
@@ -120,7 +120,7 @@ public class GKitzItem {
 	 * @return Returns a fully finished item.
 	 */
 	public ItemStack build(){
-		ItemStack item = Api.makeItem(type, amount, name);
+		ItemStack item = Methods.makeItem(type, amount, name);
 		for(CEnchantments en : ceEnchantments.keySet()){
 			Main.CE.addEnchantment(item, en, ceEnchantments.get(en));
 		}
@@ -133,7 +133,7 @@ public class GKitzItem {
 			item.addUnsafeEnchantment(en, enchantments.get(en));
 		}
 		for(String l : lore){
-			Api.addLore(item, l);
+			Methods.addLore(item, l);
 		}
 		return item;
 	}

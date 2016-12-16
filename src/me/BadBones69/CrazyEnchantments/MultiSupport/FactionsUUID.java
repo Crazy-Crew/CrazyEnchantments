@@ -9,7 +9,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.struct.Relation;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 
 public class FactionsUUID {
 	
@@ -20,14 +20,14 @@ public class FactionsUUID {
 		}
 		Faction o = FPlayers.getInstance().getByPlayer(other).getFaction();
 		Relation r = FPlayers.getInstance().getByPlayer(player).getRelationTo(FPlayers.getInstance().getByPlayer(other));
-		if(Api.removeColor(o.getTag()).equalsIgnoreCase("Wilderness"))return false;
+		if(Methods.removeColor(o.getTag()).equalsIgnoreCase("Wilderness"))return false;
 		if(p==o)return true;
 		if(r.isAlly())return true;
 		return false;
 	}
 	
 	public static boolean inTerritory(Player P){
-		if(Api.removeColor(FPlayers.getInstance().getByPlayer(P).getFaction().getTag()).equalsIgnoreCase("Wilderness"))return false;
+		if(Methods.removeColor(FPlayers.getInstance().getByPlayer(P).getFaction().getTag()).equalsIgnoreCase("Wilderness"))return false;
 		if(FPlayers.getInstance().getByPlayer(P).isInOwnTerritory()){
 			return true;
 		}
@@ -41,7 +41,7 @@ public class FactionsUUID {
 		Faction P = FPlayers.getInstance().getByPlayer(player).getFaction();
 		FLocation loc = new FLocation(block.getLocation());
 		Faction B = Board.getInstance().getFactionAt(loc);
-		if(Api.removeColor(B.getTag()).equalsIgnoreCase("Wilderness")||P==B){
+		if(Methods.removeColor(B.getTag()).equalsIgnoreCase("Wilderness")||P==B){
 			return true;
 		}
 		return false;

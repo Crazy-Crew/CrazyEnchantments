@@ -11,7 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class LostBook implements Listener{
@@ -28,29 +28,29 @@ public class LostBook implements Listener{
 					Set<String> categories = Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false);
 					for(String C : categories){
 						String name = Main.settings.getConfig().getString("Categories."+C+".Name");
-						if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.LostBook.Name").replaceAll("%Category%", name).replaceAll("%category%", name)))){
+						if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.LostBook.Name").replaceAll("%Category%", name).replaceAll("%category%", name)))){
 							category = C;
 							toggle = true;
 						}
 					}
-					if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.LostBook.Name")))){
+					if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.LostBook.Name")))){
 						for(String C : categories){
-							if(Api.color(Main.settings.getConfig().getString("Categories."+C+".Name")).equalsIgnoreCase(EnchantmentControl.getCategory(item))){
+							if(Methods.color(Main.settings.getConfig().getString("Categories."+C+".Name")).equalsIgnoreCase(EnchantmentControl.getCategory(item))){
 								category = C;
 								toggle = true;
 							}
 						}
 					}
 					if(toggle){
-						if(Api.isInvFull(player)){
-							player.sendMessage(Api.getPrefix() + Api.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+						if(Methods.isInvFull(player)){
+							player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 							return;
 						}
-						Api.removeItem(item, player);
-						ItemStack book = Api.addGlow(EnchantmentControl.pick(category));
+						Methods.removeItem(item, player);
+						ItemStack book = Methods.addGlow(EnchantmentControl.pick(category));
 						player.getInventory().addItem(book);
 						player.updateInventory();
-						player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Clean-Lost-Book")
+						player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Clean-Lost-Book")
 								.replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
 						if(Main.settings.getConfig().contains("Categories."+category+".LostBook.FireworkToggle")){
 							if(Main.settings.getConfig().contains("Categories."+category+".LostBook.FireworkColors")){
@@ -59,18 +59,18 @@ public class LostBook implements Listener{
 									String Cs = Main.settings.getConfig().getString("Categories."+category+".LostBook.FireworkColors");
 									if(Cs.contains(", ")){
 										for(String color : Cs.split(", ")){
-											Color c = Api.getColor(color);
+											Color c = Methods.getColor(color);
 											if(c != null){
 												colors.add(c);
 											}
 										}
 									}else{
-										Color c = Api.getColor(Cs);
+										Color c = Methods.getColor(Cs);
 										if(c != null){
 											colors.add(c);
 										}
 									}
-									Api.fireWork(player.getLocation().add(0, 1, 0), colors);
+									Methods.fireWork(player.getLocation().add(0, 1, 0), colors);
 								}
 							}
 						}
@@ -90,7 +90,7 @@ public class LostBook implements Listener{
 		for(String l : Main.settings.getConfig().getStringList("Settings.LostBook.Lore")){
 			lore.add(l.replaceAll("%Category%", tn).replaceAll("%category%", tn));
 		}
-		return Api.makeItem(id, amount, name, lore);
+		return Methods.makeItem(id, amount, name, lore);
 	}
 	
 }

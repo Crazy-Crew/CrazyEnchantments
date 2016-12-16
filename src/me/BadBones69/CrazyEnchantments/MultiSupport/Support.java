@@ -47,6 +47,13 @@ public class Support {
 		}
 		return false;
 	}
+	public static boolean hasSpartan(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("Spartan")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean inTerritory(Player player){
 		if(hasFactions()){
 			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");

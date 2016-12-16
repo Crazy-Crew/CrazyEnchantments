@@ -1,5 +1,5 @@
 Enchantments:
-  Glowing: #Enchantment
+  Glowing: #Do not change these lines. If so you will get errors in console.
     Enabled: True #Wether or not an enchantment is active
     Name: 'Glowing' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item

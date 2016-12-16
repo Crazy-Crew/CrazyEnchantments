@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
@@ -57,7 +57,7 @@ public class CustomEnchantments implements Listener{
 							int time = 55555;
 							String[] b = po.split(", ");
 							for(String B : b){
-								for(String P : Api.getPotions()){
+								for(String P : Methods.getPotions()){
 									if(B.contains(P+":")){
 										potion = PotionEffectType.getByName(P);
 										amp = Integer.parseInt(B.replaceAll(P+":", ""));
@@ -83,7 +83,7 @@ public class CustomEnchantments implements Listener{
 							PotionEffectType potion = PotionEffectType.NIGHT_VISION;
 							String[] b = po.split(", ");
 							for(String B : b){
-								for(String P : Api.getPotions()){
+								for(String P : Methods.getPotions()){
 									if(B.contains(P+":")){
 										potion = PotionEffectType.getByName(P);
 									}
@@ -107,7 +107,7 @@ public class CustomEnchantments implements Listener{
 				if(e.getDamager() instanceof Player){
 					Player damager = (Player) e.getDamager();
 					LivingEntity damaged = (LivingEntity) e.getEntity();
-					ItemStack item = Api.getItemInHand(damager);
+					ItemStack item = Methods.getItemInHand(damager);
 					if(!e.getEntity().isDead()){
 						if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 						if(hasEnchantments(item)){
@@ -116,7 +116,7 @@ public class CustomEnchantments implements Listener{
 									//Damager Potion Control
 									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease")){
 										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
-											int power = getPower(Api.getItemInHand(damager), ench);
+											int power = getPower(Methods.getItemInHand(damager), ench);
 											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease");
 											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
 												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -125,7 +125,7 @@ public class CustomEnchantments implements Listener{
 												int cha = 100;
 												String[] b = po.split(", ");
 												for(String B : b){
-													for(String P : Api.getPotions()){
+													for(String P : Methods.getPotions()){
 														if(B.contains(P)){
 															potion = PotionEffectType.getByName(P);
 															amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
@@ -152,7 +152,7 @@ public class CustomEnchantments implements Listener{
 									//Damaged Potion Control
 									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease")){
 										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
-											int power = getPower(Api.getItemInHand(damager), ench);
+											int power = getPower(Methods.getItemInHand(damager), ench);
 											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease");
 											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
 												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
@@ -161,7 +161,7 @@ public class CustomEnchantments implements Listener{
 												int cha = 100;
 												String[] b = po.split(", ");
 												for(String B : b){
-													for(String P : Api.getPotions()){
+													for(String P : Methods.getPotions()){
 														if(B.contains(P)){
 															potion = PotionEffectType.getByName(P);
 															amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
@@ -192,7 +192,7 @@ public class CustomEnchantments implements Listener{
 										int cha = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Chance");
 										int power = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.PowerIncrease");
 										int multi = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Multiplyer");
-										double damage = e.getDamage()*(multi+(getPower(Api.getItemInHand(damager), ench)+power));
+										double damage = e.getDamage()*(multi+(getPower(Methods.getItemInHand(damager), ench)+power));
 										for(int counter = 1; counter<=1; counter++){
 											chance = 1 + number.nextInt(99);
 											if(chance <= cha){
@@ -275,7 +275,7 @@ public class CustomEnchantments implements Listener{
 						int cha = 100;
 						String[] b = po.split(", ");
 						for(String B : b){
-							for(String P : Api.getPotions()){
+							for(String P : Methods.getPotions()){
 								if(B.contains(P)){
 									potion = PotionEffectType.getByName(P);
 									amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
@@ -385,14 +385,14 @@ public class CustomEnchantments implements Listener{
 				newLore.addAll(item.getItemMeta().getLore());
 			}
 		}
-		newLore.add(Api.color(getEnchantmentColor(enchant)+getCustomName(enchant)+" "+convertPower(level)));
-		if(newLore.contains(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
-			newLore.remove(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
-			newLore.add(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+		newLore.add(Methods.color(getEnchantmentColor(enchant)+getCustomName(enchant)+" "+convertPower(level)));
+		if(newLore.contains(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
+			newLore.remove(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+			newLore.add(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 		}
-		if(newLore.contains(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
-			newLore.remove(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
-			newLore.add(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+		if(newLore.contains(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
+			newLore.remove(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+			newLore.add(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
 		}
 		meta.setLore(newLore);
 		item.setItemMeta(meta);
@@ -432,8 +432,8 @@ public class CustomEnchantments implements Listener{
 	
 	public Integer getBookPower(ItemStack book, String enchant){
 		String line = book.getItemMeta().getDisplayName().replace(getCustomName(enchant)+" ", "");
-		line = Api.removeColor(line);
-		if(Api.isInt(line))return Integer.parseInt(line);
+		line = Methods.removeColor(line);
+		if(Methods.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
 		if(line.equalsIgnoreCase("II"))return 2;
 		if(line.equalsIgnoreCase("III"))return 3;
@@ -456,8 +456,8 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 		line = line.replace(getCustomName(enchant)+" ", "");
-		line = Api.removeColor(line);
-		if(Api.isInt(line))return Integer.parseInt(line);
+		line = Methods.removeColor(line);
+		if(Methods.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
 		if(line.equalsIgnoreCase("II"))return 2;
 		if(line.equalsIgnoreCase("III"))return 3;

@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEBook;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
@@ -33,14 +33,14 @@ public class ScrollControl implements Listener{
 			if(item!=null&&c!=null){
 				if(c.hasItemMeta()){
 					if(c.getItemMeta().hasDisplayName()){
-						if(c.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
+						if(c.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name")))){
 							if(c.getAmount()==1){
-								if(!Api.isProtected(item)){
+								if(!Methods.isProtected(item)){
 									ArrayList<Material> types = new ArrayList<Material>();
 									types.addAll(EnchantmentType.ALL.getItems());
 									if(types.contains(item.getType())){
 										e.setCancelled(true);
-										e.setCurrentItem(Api.addLore(item, Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+										e.setCurrentItem(Methods.addLore(item, Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 										player.setItemOnCursor(new ItemStack(Material.AIR));
 										player.updateInventory();
 										return;
@@ -53,7 +53,7 @@ public class ScrollControl implements Listener{
 				if(item.hasItemMeta()){
 					if(c.hasItemMeta()){
 						if(item.getItemMeta().hasLore()&&c.getItemMeta().hasDisplayName()){
-							if(c.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
+							if(c.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
 								if(c.getAmount()==1){
 									ArrayList<String> customEnchants = new ArrayList<String>();
 									HashMap<String, Integer> lvl = new HashMap<String, Integer>();
@@ -110,8 +110,8 @@ public class ScrollControl implements Listener{
 			ItemStack item = e.getItem();
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
-					if(item.getItemMeta().getDisplayName().equals(Api.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
-						player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Right-Click-Black-Scroll")));
+					if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
+						player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Right-Click-Black-Scroll")));
 					}
 				}
 			}

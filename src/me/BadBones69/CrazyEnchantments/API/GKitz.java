@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class GKitz implements Listener{
@@ -41,7 +41,7 @@ public class GKitz implements Listener{
 		FileConfiguration file = Main.settings.getGKitz();
 		for(String kit : file.getConfigurationSection("GKitz").getKeys(false)){
 			gkitz.add(kit);
-			names.put(kit, Api.color(file.getString("GKitz." + kit + ".Display.Name")));
+			names.put(kit, Methods.color(file.getString("GKitz." + kit + ".Display.Name")));
 			times.put(kit, file.getString("GKitz." + kit + ".Cooldown"));
 			if(file.contains("GKitz." + kit + ".Commands")){
 				commands.put(kit, file.getStringList("GKitz." + kit + ".Commands"));
@@ -75,7 +75,7 @@ public class GKitz implements Listener{
 					if(d.startsWith("Item:")){
 						item.setItem(d.replace("Item:", ""));
 					}else if(d.startsWith("Amount:")){
-						if(Api.isInt(d.replace("Amount:", ""))){
+						if(Methods.isInt(d.replace("Amount:", ""))){
 							item.setAmount(Integer.parseInt(d.replace("Amount:", "")));
 						}
 					}
@@ -101,9 +101,19 @@ public class GKitz implements Listener{
 									if(Enchantment.getByName(D.split(":")[0]) != null){
 										item.addEnchantment(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
 									}
+									for(Enchantment en : Enchantment.values()){
+										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+											item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
+										}
+									}
 								}else{
 									if(Enchantment.getByName(D) != null){
 										item.addEnchantment(Enchantment.getByName(D), 1);
+									}
+									for(Enchantment en : Enchantment.values()){
+										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+											item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
+										}
 									}
 								}
 							}
@@ -112,9 +122,19 @@ public class GKitz implements Listener{
 								if(Enchantment.getByName(d.split(":")[0]) != null){
 									item.addEnchantment(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
 								}
+								for(Enchantment en : Enchantment.values()){
+									if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+										item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
+									}
+								}
 							}else{
 								if(Enchantment.getByName(d) != null){
 									item.addEnchantment(Enchantment.getByName(d), 1);
+								}
+								for(Enchantment en : Enchantment.values()){
+									if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+										item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
+									}
 								}
 							}
 						}
@@ -243,7 +263,7 @@ public class GKitz implements Listener{
 					type = d;
 				}else if(d.startsWith("Amount:")){
 					d = d.replace("Amount:", "");
-					if(Api.isInt(d)){
+					if(Methods.isInt(d)){
 						amount = Integer.parseInt(d);
 					}
 				}else if(d.startsWith("Name:")){
@@ -291,7 +311,7 @@ public class GKitz implements Listener{
 				}
 			}
 			lore.addAll(0, customEnchantments);
-			items.add(Api.makeItem(type, amount, name, lore, enchantments));
+			items.add(Methods.makeItem(type, amount, name, lore, enchantments));
 		}
 		return items;
 	}
@@ -397,7 +417,7 @@ public class GKitz implements Listener{
 	 */
 	public static void giveKit(Player player, String kit){
 		for(ItemStack item : getGKit(kit)){
-			if(Api.isInvFull(player)){
+			if(Methods.isInvFull(player)){
 				player.getWorld().dropItem(player.getLocation(), item);
 			}else{
 				player.getInventory().addItem(item);
@@ -488,7 +508,7 @@ public class GKitz implements Listener{
 		for(;total>3600;total-=3600,H++);
 		for(;total>60;total-=60,M++);
 		S+=total;
-		return Api.color(msg.replaceAll("%Day%", D + "").replaceAll("%day%", D + "")
+		return Methods.color(msg.replaceAll("%Day%", D + "").replaceAll("%day%", D + "")
 				.replaceAll("%Hour%", H + "").replaceAll("%hour%", H + "")
 				.replaceAll("%Minute%", M + "").replaceAll("%minute%", M + "")
 				.replaceAll("%Second%", S + "").replaceAll("%second%", S + ""));

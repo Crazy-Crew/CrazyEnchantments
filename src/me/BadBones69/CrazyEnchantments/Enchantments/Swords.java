@@ -18,11 +18,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.DisarmerUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.SpartanSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Swords implements Listener{
@@ -33,25 +34,23 @@ public class Swords implements Listener{
 	private HashMap<Player, Integer> num = new HashMap<Player, Integer>();
 	private HashMap<Player, Integer> reset = new HashMap<Player, Integer>();
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(e.isCancelled())return;
 		if(Support.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getEntity() instanceof LivingEntity){
 			if(e.getDamager() instanceof Player){
 				final Player damager = (Player) e.getDamager();
 				LivingEntity en = (LivingEntity) e.getEntity();
-				ItemStack It = Api.getItemInHand(damager);
+				ItemStack It = Methods.getItemInHand(damager);
 				if(!e.getEntity().isDead()){
 					if(Main.CE.hasEnchantments(It)){
 						if(Main.CE.hasEnchantment(It, CEnchantments.DISARMER)){
 							if(CEnchantments.DISARMER.isEnabled()){
 								if(e.getEntity() instanceof Player){
 									Player player = (Player) e.getEntity();
-									int slot = Api.percentPick(4, 1);
-									if(Api.randomPicker((31-Main.CE.getPower(It, CEnchantments.DISARMER)))){
+									int slot = Methods.percentPick(4, 1);
+									if(Methods.randomPicker((31-Main.CE.getPower(It, CEnchantments.DISARMER)))){
 										if(slot == 1){
 											if(player.getEquipment().getHelmet() != null){
 												ItemStack item = player.getEquipment().getHelmet();
@@ -109,7 +108,7 @@ public class Swords implements Listener{
 										Bukkit.getScheduler().cancelTask(reset.get(damager));
 										if(multi.get(damager)<=Main.CE.getMaxRageLevel())multi.put(damager, multi.get(damager) + (Main.CE.getPower(It, CEnchantments.RAGE)*0.1));
 										if(multi.get(damager).intValue() == num.get(damager)){
-											damager.sendMessage(Api.color("&3You are now doing &a" + num.get(damager) + "x &3Damage."));
+											damager.sendMessage(Methods.color("&3You are now doing &a" + num.get(damager) + "x &3Damage."));
 											num.put(damager, num.get(damager)+1);
 										}
 										e.setDamage(e.getDamage() * multi.get(damager));
@@ -117,13 +116,13 @@ public class Swords implements Listener{
 									if(!multi.containsKey(damager)){
 										multi.put(damager, 1.0);
 										num.put(damager, 2);
-										damager.sendMessage(Api.color("&aYour Rage is Building."));
+										damager.sendMessage(Methods.color("&aYour Rage is Building."));
 									}
 									reset.put(damager, Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 										@Override
 										public void run() {
 											multi.remove(damager);
-											damager.sendMessage(Api.color("&cYour Rage has Cooled Down."));
+											damager.sendMessage(Methods.color("&cYour Rage has Cooled Down."));
 										}
 									}, 4*20));
 								}
@@ -139,13 +138,13 @@ public class Swords implements Listener{
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()){
 											if(player.getTotalExperience()>=amount){
-												Api.takeTotalXP(player, amount);
-												Api.takeTotalXP(damager, -amount);
+												Methods.takeTotalXP(player, amount);
+												Methods.takeTotalXP(damager, -amount);
 												return;
 											}
 											if(player.getTotalExperience()<amount){
 												player.setTotalExperience(0);
-												Api.takeTotalXP(damager, -amount);
+												Methods.takeTotalXP(damager, -amount);
 												return;
 											}
 										}
@@ -156,7 +155,7 @@ public class Swords implements Listener{
 						if(Main.CE.hasEnchantment(It, CEnchantments.LIFESTEAL)){
 							if(CEnchantments.LIFESTEAL.isEnabled()){
 								int steal = Main.CE.getPower(It, CEnchantments.LIFESTEAL);
-								if(Api.randomPicker(5)){
+								if(Methods.randomPicker(5)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.LIFESTEAL, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -172,17 +171,18 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.NUTRITION)){
 							if(CEnchantments.NUTRITION.isEnabled()){
-								if(Api.randomPicker(8)){
+								if(Methods.randomPicker(8)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.NUTRITION, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
+										if(Support.hasSpartan()){
+											SpartanSupport.cancelFastEat(damager);
+										}
 										if(damager.getSaturation()+(2*Main.CE.getPower(It, CEnchantments.NUTRITION))<=20){
 											damager.setSaturation(damager.getSaturation()+(2*Main.CE.getPower(It, CEnchantments.NUTRITION)));
-											return;
 										}
 										if(damager.getSaturation()+(2*Main.CE.getPower(It, CEnchantments.NUTRITION))>=20){
 											damager.setSaturation(20);
-											return;
 										}
 									}
 								}
@@ -190,7 +190,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.VAMPIRE)){
 							if(CEnchantments.VAMPIRE.isEnabled()){
-								if(Api.randomPicker(20-Main.CE.getPower(It, CEnchantments.VAMPIRE))){
+								if(Methods.randomPicker(20-Main.CE.getPower(It, CEnchantments.VAMPIRE))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.VAMPIRE, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -206,7 +206,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.BLINDNESS)){
 							if(CEnchantments.BLINDNESS.isEnabled()){
-								if(Api.randomPicker(20-Main.CE.getPower(It, CEnchantments.BLINDNESS))){
+								if(Methods.randomPicker(20-Main.CE.getPower(It, CEnchantments.BLINDNESS))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLINDNESS, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -217,7 +217,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.CONFUSION)){
 							if(CEnchantments.CONFUSION.isEnabled()){
-								if(Api.randomPicker(7)){
+								if(Methods.randomPicker(7)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CONFUSION, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -228,7 +228,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.DOUBLEDAMAGE)){
 							if(CEnchantments.DOUBLEDAMAGE.isEnabled()){
-								if(Api.randomPicker((20-Main.CE.getPower(It, CEnchantments.DOUBLEDAMAGE)))){
+								if(Methods.randomPicker((20-Main.CE.getPower(It, CEnchantments.DOUBLEDAMAGE)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DOUBLEDAMAGE, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -250,7 +250,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.FASTTURN)){
 							if(CEnchantments.FASTTURN.isEnabled()){
-								if(Api.randomPicker((20-Main.CE.getPower(It, CEnchantments.FASTTURN)))){
+								if(Methods.randomPicker((20-Main.CE.getPower(It, CEnchantments.FASTTURN)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FASTTURN, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -261,7 +261,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.LIGHTWEIGHT)){
 							if(CEnchantments.LIGHTWEIGHT.isEnabled()){
-								if(Api.randomPicker(8)){
+								if(Methods.randomPicker(8)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.LIGHTWEIGHT, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -272,10 +272,20 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.OBLITERATE)){
 							if(CEnchantments.OBLITERATE.isEnabled()){
-								if(Api.randomPicker(11-Main.CE.getPower(It, CEnchantments.OBLITERATE))){
+								if(Methods.randomPicker(11-Main.CE.getPower(It, CEnchantments.OBLITERATE))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.OBLITERATE, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
+										if(Support.hasSpartan()){
+											if(e.getEntity() instanceof Player){
+												SpartanSupport.cancelSpeed((Player)e.getEntity());
+												SpartanSupport.cancelFly((Player)e.getEntity());
+												SpartanSupport.cancelClip((Player)e.getEntity());
+												SpartanSupport.cancelNormalMovements((Player)e.getEntity());
+												SpartanSupport.cancelNoFall((Player)e.getEntity());
+												SpartanSupport.cancelJesus((Player)e.getEntity());
+											}
+										}
 										e.getEntity().setVelocity(damager.getLocation().getDirection().multiply(2).setY(1.25));
 									}
 								}
@@ -283,13 +293,13 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.PARALYZE)){
 							if(CEnchantments.PARALYZE.isEnabled()){
-								if(Api.randomPicker(13-Main.CE.getPower(It, CEnchantments.PARALYZE))){
+								if(Methods.randomPicker(13-Main.CE.getPower(It, CEnchantments.PARALYZE))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.PARALYZE, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
 										Location loc = en.getLocation();
 										loc.getWorld().strikeLightningEffect(loc);
-										for(LivingEntity En : Api.getNearbyEntities(loc, 2D, damager)){
+										for(LivingEntity En : Methods.getNearbyEntities(loc, 2D, damager)){
 											if(Support.allowsPVP(En.getLocation())){
 												if(!Support.isFriendly(damager, En)){
 													En.damage(5D);
@@ -304,7 +314,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.SLOWMO)){
 							if(CEnchantments.SLOWMO.isEnabled()){
-								if(Api.randomPicker(20-Main.CE.getPower(It, CEnchantments.SLOWMO))){
+								if(Methods.randomPicker(20-Main.CE.getPower(It, CEnchantments.SLOWMO))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.SLOWMO, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -315,7 +325,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.SNARE)){
 							if(CEnchantments.SNARE.isEnabled()){
-								if(Api.randomPicker(11-(Main.CE.getPower(It, CEnchantments.SNARE)))){
+								if(Methods.randomPicker(11-(Main.CE.getPower(It, CEnchantments.SNARE)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.SNARE, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -327,7 +337,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.TRAP)){
 							if(CEnchantments.TRAP.isEnabled()){
-								if(Api.randomPicker(11-(Main.CE.getPower(It, CEnchantments.TRAP)))){
+								if(Methods.randomPicker(11-(Main.CE.getPower(It, CEnchantments.TRAP)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.TRAP, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -338,7 +348,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.VIPER)){
 							if(CEnchantments.VIPER.isEnabled()){
-								if(Api.randomPicker(10)){
+								if(Methods.randomPicker(10)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.VIPER, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -349,7 +359,7 @@ public class Swords implements Listener{
 						}
 						if(Main.CE.hasEnchantment(It, CEnchantments.WITHER)){
 							if(CEnchantments.WITHER.isEnabled()){
-								if(Api.randomPicker(11-(Main.CE.getPower(It, CEnchantments.WITHER)))){
+								if(Methods.randomPicker(11-(Main.CE.getPower(It, CEnchantments.WITHER)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.WITHER, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -371,16 +381,16 @@ public class Swords implements Listener{
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
 			Player player = e.getEntity();
-			ItemStack item = Api.getItemInHand(damager);
+			ItemStack item = Methods.getItemInHand(damager);
 			if(Main.CE.hasEnchantments(item)){
 				if(Main.CE.hasEnchantment(item, CEnchantments.HEADLESS)){
 					if(CEnchantments.HEADLESS.isEnabled()){
 						int power = Main.CE.getPower(item, CEnchantments.HEADLESS);
-						if(Api.randomPicker(11-power)){
+						if(Methods.randomPicker(11-power)){
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.HEADLESS, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
-								ItemStack head = Api.makeItem("397:3", 1);
+								ItemStack head = Methods.makeItem("397:3", 1);
 								SkullMeta m = (SkullMeta) head.getItemMeta();
 								m.setOwner(player.getName());
 								head.setItemMeta(m);
@@ -398,11 +408,11 @@ public class Swords implements Listener{
 		if(Support.isFriendly(e.getEntity().getKiller(), e.getEntity()))return;
 		if(e.getEntity().getKiller() instanceof Player){
 			Player damager = (Player) e.getEntity().getKiller();
-			ItemStack item = Api.getItemInHand(damager);
+			ItemStack item = Methods.getItemInHand(damager);
 			if(Main.CE.hasEnchantments(item)){
 				if(Main.CE.hasEnchantment(item, CEnchantments.INQUISITIVE)){
 					if(CEnchantments.INQUISITIVE.isEnabled()){
-						if(Api.randomPicker(3)){
+						if(Methods.randomPicker(3)){
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.INQUISITIVE, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){

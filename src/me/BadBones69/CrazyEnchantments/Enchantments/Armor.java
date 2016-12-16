@@ -34,7 +34,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.AngelUseEvent;
@@ -42,6 +42,7 @@ import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraActiveEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.HellForgedUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.SpartanSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Armor implements Listener{
@@ -179,12 +180,10 @@ public class Armor implements Listener{
 	}
 	
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(e.isCancelled())return;
 		if(Support.isFriendly(e.getDamager(), e.getEntity()))return;
-		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
 		if(e.getDamager() instanceof LivingEntity){
 			if(e.getEntity() instanceof Player){
 				final Player player = (Player) e.getEntity();
@@ -194,7 +193,7 @@ public class Armor implements Listener{
 						if(Main.CE.hasEnchantment(armor, CEnchantments.ROCKET)){
 							if(CEnchantments.ROCKET.isEnabled()){
 								if(player.getHealth() <= 8){
-									if(Api.randomPicker((8-Main.CE.getPower(armor, CEnchantments.ROCKET)))){
+									if(Methods.randomPicker((8-Main.CE.getPower(armor, CEnchantments.ROCKET)))){
 										EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET, armor);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()){
@@ -218,7 +217,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.ENLIGHTENED)){
 							if(CEnchantments.ENLIGHTENED.isEnabled()){
-								if(Api.randomPicker(10)){
+								if(Methods.randomPicker(10)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -235,7 +234,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.FORTIFY)){
 							if(CEnchantments.FORTIFY.isEnabled()){
-								if(Api.randomPicker(12)){
+								if(Methods.randomPicker(12)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FORTIFY, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -246,7 +245,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.FREEZE)){
 							if(CEnchantments.FREEZE.isEnabled()){
-								if(Api.randomPicker(10)){
+								if(Methods.randomPicker(10)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FREEZE, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -257,7 +256,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.MOLTEN)){
 							if(CEnchantments.MOLTEN.isEnabled()){
-								if(Api.randomPicker(12)){
+								if(Methods.randomPicker(12)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MOLTEN, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -268,7 +267,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.PAINGIVER)){
 							if(CEnchantments.PAINGIVER.isEnabled()){
-								if(Api.randomPicker(10)){
+								if(Methods.randomPicker(10)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.PAINGIVER, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -279,7 +278,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.SAVIOR)){
 							if(CEnchantments.SAVIOR.isEnabled()){
-								if(Api.randomPicker((9-Main.CE.getPower(armor, CEnchantments.SAVIOR)))){
+								if(Methods.randomPicker((9-Main.CE.getPower(armor, CEnchantments.SAVIOR)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SAVIOR, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -290,7 +289,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.SMOKEBOMB)){
 							if(CEnchantments.SMOKEBOMB.isEnabled()){
-								if(Api.randomPicker((11-Main.CE.getPower(armor, CEnchantments.SMOKEBOMB)))){
+								if(Methods.randomPicker((11-Main.CE.getPower(armor, CEnchantments.SMOKEBOMB)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SMOKEBOMB, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -302,7 +301,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.VOODOO)){
 							if(CEnchantments.VOODOO.isEnabled()){
-								if(Api.randomPicker(7)){
+								if(Methods.randomPicker(7)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.VOODOO, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -313,7 +312,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.INSOMNIA)){
 							if(CEnchantments.INSOMNIA.isEnabled()){
-								if(Api.randomPicker(3)){
+								if(Methods.randomPicker(3)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.INSOMNIA, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -324,7 +323,7 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.CACTUS)){
 							if(CEnchantments.CACTUS.isEnabled()){
-								if(Api.randomPicker(4)){
+								if(Methods.randomPicker(4)){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.CACTUS, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
@@ -335,13 +334,13 @@ public class Armor implements Listener{
 						}
 						if(Main.CE.hasEnchantment(armor, CEnchantments.STORMCALLER)){
 							if(CEnchantments.STORMCALLER.isEnabled()){
-								if(Api.randomPicker((12-Main.CE.getPower(armor, CEnchantments.STORMCALLER)))){
+								if(Methods.randomPicker((12-Main.CE.getPower(armor, CEnchantments.STORMCALLER)))){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
 										Location loc = damager.getLocation();
 										loc.getWorld().strikeLightningEffect(loc);
-										for(LivingEntity en : Api.getNearbyEntities(loc, 2D, damager)){
+										for(LivingEntity en : Methods.getNearbyEntities(loc, 2D, damager)){
 											if(Support.allowsPVP(en.getLocation())){
 												if(!Support.isFriendly(player, en)){
 													en.damage(5D);
@@ -360,7 +359,7 @@ public class Armor implements Listener{
 						if(Main.CE.hasEnchantments(armor)){
 							if(Main.CE.hasEnchantment(armor, CEnchantments.LEADERSHIP)){
 								if(CEnchantments.LEADERSHIP.isEnabled()){
-									if(Api.randomPicker(12)){
+									if(Methods.randomPicker(12)){
 										if(Support.hasFactions()||Support.hasFeudal()){
 											int radius = 4+Main.CE.getPower(armor, CEnchantments.LEADERSHIP);
 											int players = 0;
@@ -418,7 +417,7 @@ public class Armor implements Listener{
 					if(CEnchantments.ACIDRAIN.isEnabled()){
 						if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
 								|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-							if(Api.randomPicker(45)){
+							if(Methods.randomPicker(45)){
 								other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4*20, 1));
 								int time = 35 - (power * 5);
 								//time > 0 ? time : 0
@@ -434,7 +433,7 @@ public class Armor implements Listener{
 					if(CEnchantments.SANDSTORM.isEnabled()){
 						if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
 								|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-							if(Api.randomPicker(38)){
+							if(Methods.randomPicker(38)){
 								other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10*20, 0));
 								int time = 35 - (power * 5);
 								//time > 0 ? time : 0
@@ -450,7 +449,7 @@ public class Armor implements Listener{
 					if(CEnchantments.RADIANT.isEnabled()){
 						if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
 								|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-							if(Api.randomPicker(25)){
+							if(Methods.randomPicker(25)){
 								other.setFireTicks(5 * 20);
 								int time = 20 - (power * 5);
 								//time > 0 ? time : 0
@@ -485,7 +484,7 @@ public class Armor implements Listener{
 					if(Main.CE.hasEnchantment(armor, CEnchantments.NURSERY)){
 						if(CEnchantments.NURSERY.isEnabled()){
 							int heal = 1;
-							if(Api.randomPicker((25-Main.CE.getPower(armor, CEnchantments.NURSERY)))){
+							if(Methods.randomPicker((25-Main.CE.getPower(armor, CEnchantments.NURSERY)))){
 								if(player.getMaxHealth()>player.getHealth()){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY, armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -504,11 +503,14 @@ public class Armor implements Listener{
 					if(Main.CE.hasEnchantment(armor, CEnchantments.IMPLANTS)){
 						if(CEnchantments.IMPLANTS.isEnabled()){
 							int food = 1;
-							if(Api.randomPicker((25-Main.CE.getPower(armor, CEnchantments.IMPLANTS)))){
+							if(Methods.randomPicker((25-Main.CE.getPower(armor, CEnchantments.IMPLANTS)))){
 								if(player.getFoodLevel()<20){
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
+										if(Support.hasSpartan()){
+											SpartanSupport.cancelFastEat(player);
+										}
 										if(player.getFoodLevel()+food<=20){
 											player.setFoodLevel(player.getFoodLevel()+food);
 										}
@@ -542,7 +544,7 @@ public class Armor implements Listener{
 					if(Main.CE.hasEnchantment(armor, CEnchantments.HELLFORGED)){
 						if(CEnchantments.HELLFORGED.isEnabled()){
 							if(armor.getDurability()>0){
-								if(Api.randomPicker(15)){
+								if(Methods.randomPicker(15)){
 									int dur = armor.getDurability()-Main.CE.getPower(armor, CEnchantments.HELLFORGED);
 									if(armor.getDurability()>0){
 										HellForgedUseEvent event = new HellForgedUseEvent(player, armor);
@@ -566,7 +568,7 @@ public class Armor implements Listener{
 					if(Main.CE.hasEnchantment(item, CEnchantments.HELLFORGED)){
 						if(CEnchantments.HELLFORGED.isEnabled()){
 							if(item.getDurability()>0){
-								if(Api.randomPicker(12)){
+								if(Methods.randomPicker(12)){
 									int dur = item.getDurability()-Main.CE.getPower(item, CEnchantments.HELLFORGED);
 									if(item.getDurability()>0){
 										HellForgedUseEvent event = new HellForgedUseEvent(player, item);
@@ -838,7 +840,7 @@ public class Armor implements Listener{
 				default:
 					break;
 			}
-			en.setCustomName(Api.color("&6" + player.getName() + "'s " + en.getName()));
+			en.setCustomName(Methods.color("&6" + player.getName() + "'s " + en.getName()));
 			en.setCustomNameVisible(true);
 			if(!mobs.containsKey(player)){
 				ArrayList<LivingEntity> E = new ArrayList<LivingEntity>();

@@ -16,7 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class ProtectionCrystal implements Listener{
@@ -31,7 +31,7 @@ public class ProtectionCrystal implements Listener{
 		if(inv!=null){
 			ItemStack c = e.getCursor();
 			ItemStack item = e.getCurrentItem();
-			String protection = Api.color(config.getString("Settings.ProtectionCrystal.Protected"));
+			String protection = Methods.color(config.getString("Settings.ProtectionCrystal.Protected"));
 			if(item!=null&&c!=null){
 				if(item.getAmount()==1&&c.getAmount()==1){
 					if(item.hasItemMeta()){
@@ -47,11 +47,11 @@ public class ProtectionCrystal implements Listener{
 					}
 					if(c.hasItemMeta()){
 						if(c.getItemMeta().hasDisplayName()){
-							if(c.getItemMeta().getDisplayName().equals(Api.color(config.getString("Settings.ProtectionCrystal.Name")))){
+							if(c.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.ProtectionCrystal.Name")))){
 								if(c.getType()==getCrystals(1).getType()){
 									e.setCancelled(true);
 									player.setItemOnCursor(new ItemStack(Material.AIR));
-									e.setCurrentItem(Api.addLore(item, protection));
+									e.setCurrentItem(Methods.addLore(item, protection));
 								}
 							}
 						}
@@ -72,7 +72,7 @@ public class ProtectionCrystal implements Listener{
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
-						if(lore.contains(Api.color(config.getString("Settings.ProtectionCrystal.Protected")))){
+						if(lore.contains(Methods.color(config.getString("Settings.ProtectionCrystal.Protected")))){
 							T=true;
 							items.add(item);
 						}
@@ -91,10 +91,10 @@ public class ProtectionCrystal implements Listener{
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent e){
 		Player player = e.getPlayer();
-		String protection = Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected"));
+		String protection = Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected"));
 		if(PlayersItems.containsKey(player)){
 			for(ItemStack item : PlayersItems.get(player)){
-				player.getInventory().addItem(Api.removeLore(item, protection));
+				player.getInventory().addItem(Methods.removeLore(item, protection));
 			}
 			PlayersItems.remove(player);
 		}
@@ -106,7 +106,7 @@ public class ProtectionCrystal implements Listener{
 		String name = config.getString("Settings.ProtectionCrystal.Name");
 		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
 		Boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
-		ItemStack item = Api.addGlow(Api.makeItem(id, amount, name, lore), toggle);
+		ItemStack item = Methods.addGlow(Methods.makeItem(id, amount, name, lore), toggle);
 		return item;
 	}
 	
@@ -114,7 +114,7 @@ public class ProtectionCrystal implements Listener{
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
 		lore.addAll(m.getLore());
-		lore.remove(Api.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+		lore.remove(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;

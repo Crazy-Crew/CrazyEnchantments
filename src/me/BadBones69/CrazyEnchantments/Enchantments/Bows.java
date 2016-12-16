@@ -24,10 +24,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.SpartanSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Bows implements Listener{
@@ -37,10 +38,9 @@ public class Bows implements Listener{
 	private HashMap<Projectile, CEnchantments> Enchant = new HashMap<Projectile, CEnchantments>();
 	private ArrayList<Entity> Explode = new ArrayList<Entity>();
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBowShoot(final EntityShootBowEvent e){
 		if(e.isCancelled())return;
-		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 		ItemStack item = e.getBow();
 		if(Main.CE.hasEnchantments(item)){
 			if(Main.CE.hasEnchantment(item, CEnchantments.BOOM)){
@@ -95,7 +95,7 @@ public class Bows implements Listener{
 			if(Main.CE.hasEnchantment(item, CEnchantments.MULTIARROW)){
 				if(CEnchantments.MULTIARROW.isEnabled()){
 					int power = Main.CE.getPower(item, CEnchantments.MULTIARROW);
-					if(Api.randomPicker(3)){
+					if(Methods.randomPicker(3)){
 						if(e.getEntity() instanceof Player){
 							EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.MULTIARROW, item);
 							Bukkit.getPluginManager().callEvent(event);
@@ -128,12 +128,11 @@ public class Bows implements Listener{
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onland(ProjectileHitEvent e) {
-		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
 		if(Arrow.containsKey(e.getEntity())){
 			Entity arrow = e.getEntity();
 			if(Enchant.get(arrow)==CEnchantments.BOOM){
 				if(CEnchantments.BOOM.isEnabled()){
-					if(Api.randomPicker(6-Main.CE.getPower(Arrow.get(arrow), CEnchantments.BOOM))){
+					if(Methods.randomPicker(6-Main.CE.getPower(Arrow.get(arrow), CEnchantments.BOOM))){
 						TNTPrimed tnt = arrow.getWorld().spawn(arrow.getLocation(), TNTPrimed.class);
 						tnt.setFuseTicks(0);
 						tnt.getWorld().playEffect(tnt.getLocation(), Effect.EXPLOSION_LARGE, 1);
@@ -146,9 +145,9 @@ public class Bows implements Listener{
 			if(Enchant.get(arrow)==CEnchantments.LIGHTNING){
 				if(CEnchantments.LIGHTNING.isEnabled()){
 					Location loc = arrow.getLocation();
-					if(Api.randomPicker(5)){
+					if(Methods.randomPicker(5)){
 						loc.getWorld().strikeLightningEffect(loc);
-						for(LivingEntity en : Api.getNearbyEntities(loc, 2D, arrow)){
+						for(LivingEntity en : Methods.getNearbyEntities(loc, 2D, arrow)){
 							if(Support.allowsPVP(en.getLocation())){
 								if(!Support.isFriendly(P.get(arrow), en)){
 									if(!P.get(arrow).getName().equalsIgnoreCase(en.getName())){
@@ -164,10 +163,9 @@ public class Bows implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
  	public void onArrowDamage(EntityDamageByEntityEvent e){
-		if(!Support.allowsPVP(e.getEntity().getLocation()))return;
-		if(!Support.allowsPVP(e.getDamager().getLocation()))return;
+		if(e.isCancelled())return;
 		if(e.getDamager() instanceof Arrow){
 			if(e.getEntity() instanceof LivingEntity){
 				LivingEntity en = (LivingEntity) e.getEntity();
@@ -205,12 +203,20 @@ public class Bows implements Listener{
 					if(!Support.isFriendly(P.get(arrow), e.getEntity())){
 						if(Enchant.get(arrow)==CEnchantments.PULL){
 							if(CEnchantments.PULL.isEnabled()){
-								if(Api.randomPicker(5 - Main.CE.getPower(Arrow.get(arrow), CEnchantments.PULL))){
+								if(Methods.randomPicker(5 - Main.CE.getPower(Arrow.get(arrow), CEnchantments.PULL))){
 									Vector v = P.get(arrow).getLocation().toVector().subtract(en.getLocation().toVector()).normalize().multiply(3).setY(2);
 									if(en instanceof Player){
 										EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PULL, item);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()){
+											if(Support.hasSpartan()){
+												SpartanSupport.cancelSpeed((Player)e.getEntity());
+												SpartanSupport.cancelFly((Player)e.getEntity());
+												SpartanSupport.cancelClip((Player)e.getEntity());
+												SpartanSupport.cancelNormalMovements((Player)e.getEntity());
+												SpartanSupport.cancelNoFall((Player)e.getEntity());
+												SpartanSupport.cancelJesus((Player)e.getEntity());
+											}
 											en.setVelocity(v);
 										}
 									}else{
@@ -221,7 +227,7 @@ public class Bows implements Listener{
 						}
 						if(Enchant.get(arrow)==CEnchantments.ICEFREEZE){
 							if(CEnchantments.ICEFREEZE.isEnabled()){
-								if(Api.randomPicker(5)){
+								if(Methods.randomPicker(5)){
 									if(en instanceof Player){
 										EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.ICEFREEZE, item);
 										Bukkit.getPluginManager().callEvent(event);
@@ -236,7 +242,7 @@ public class Bows implements Listener{
 						}
 						if(Enchant.get(arrow)==CEnchantments.PIERCING){
 							if(CEnchantments.PIERCING.isEnabled()){
-								if(Api.randomPicker(20-Main.CE.getPower(Arrow.get(arrow), CEnchantments.PIERCING))){
+								if(Methods.randomPicker(20-Main.CE.getPower(Arrow.get(arrow), CEnchantments.PIERCING))){
 									if(en instanceof Player){
 										EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PIERCING, item);
 										Bukkit.getPluginManager().callEvent(event);
@@ -251,7 +257,7 @@ public class Bows implements Listener{
 						}
 						if(Enchant.get(arrow)==CEnchantments.VENOM){
 							if(CEnchantments.VENOM.isEnabled()){
-								if(Api.randomPicker(10)){
+								if(Methods.randomPicker(10)){
 									if(en instanceof Player){
 										EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.VENOM, item);
 										Bukkit.getPluginManager().callEvent(event);

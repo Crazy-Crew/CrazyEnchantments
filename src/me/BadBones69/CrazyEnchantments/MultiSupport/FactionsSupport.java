@@ -9,7 +9,7 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 
 public class FactionsSupport {
 	
@@ -23,7 +23,7 @@ public class FactionsSupport {
 		}
 		Faction o = MPlayer.get(other).getFaction();
 		Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));
-		if(Api.removeColor(o.getName()).equalsIgnoreCase("Wilderness")){
+		if(Methods.removeColor(o.getName()).equalsIgnoreCase("Wilderness")){
 			return false;
 		}
 		if(r.isFriend())return true;
@@ -33,7 +33,7 @@ public class FactionsSupport {
 	
 	public static boolean isFriendly(Faction player, Faction other){
 		Rel r = player.getRelationTo(other);
-		if(Api.removeColor(other.getName()).equalsIgnoreCase("Wilderness")){
+		if(Methods.removeColor(other.getName()).equalsIgnoreCase("Wilderness")){
 			return false;
 		}
 		if(r.isFriend())return true;
@@ -43,7 +43,7 @@ public class FactionsSupport {
 	
 	public static boolean inTerritory(Player P){
 		MPlayer player = MPlayer.get(P);
-		if(Api.removeColor(player.getFaction().getName()).equalsIgnoreCase("Wilderness")){
+		if(Methods.removeColor(player.getFaction().getName()).equalsIgnoreCase("Wilderness")){
 			return false;
 		}
 		if(player.isInOwnTerritory()){
@@ -55,7 +55,7 @@ public class FactionsSupport {
 	public static boolean canBreakBlock(Player player, Block block){
 		Faction P = MPlayer.get(player).getFaction();
 		Faction B = BoardColl.get().getFactionAt(PS.valueOf(block.getLocation()));
-		if(Api.removeColor(B.getName()).equalsIgnoreCase("Wilderness")||P==B){
+		if(Methods.removeColor(B.getName()).equalsIgnoreCase("Wilderness")||P==B){
 			return true;
 		}
 		return false;

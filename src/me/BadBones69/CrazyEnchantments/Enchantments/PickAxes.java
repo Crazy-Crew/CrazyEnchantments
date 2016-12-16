@@ -21,8 +21,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
@@ -35,8 +35,8 @@ public class PickAxes implements Listener{
 	public void onBlockClick(PlayerInteractEvent e){
 		if(e.isCancelled())return;
 		Player player = e.getPlayer();
-		if(e.getAction()==Action.LEFT_CLICK_BLOCK){
-			ItemStack item = Api.getItemInHand(player);
+		if(e.getAction() == Action.LEFT_CLICK_BLOCK){
+			ItemStack item = Methods.getItemInHand(player);
 			Block block = e.getClickedBlock();
 			if(Main.CE.hasEnchantments(item)){
 				if(Main.CE.hasEnchantment(item, CEnchantments.BLAST)){
@@ -50,26 +50,23 @@ public class PickAxes implements Listener{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
 		if(e.isCancelled())return;
-		if(!Support.allowsBreak(e.getPlayer().getLocation()))return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(!Support.canBreakBlock(player, block))return;
-		ItemStack item = Api.getItemInHand(player);
+		ItemStack item = Methods.getItemInHand(player);
 		if(Main.CE.hasEnchantments(item)){
 			if(player.getGameMode() != GameMode.CREATIVE){
 				if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT)){
 					if(CEnchantments.AUTOSMELT.isEnabled()){
 						if(getOres().containsKey(block.getType())){
-							if(Api.randomPicker(2)){
+							if(Methods.randomPicker(2)){
 								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
 								Bukkit.getPluginManager().callEvent(event);
 								if(!event.isCancelled()){
-									e.setCancelled(true);
 									int drop = 0;
-									drop+=Main.CE.getPower(item, CEnchantments.AUTOSMELT);
+									drop += Main.CE.getPower(item, CEnchantments.AUTOSMELT);
 									if(item.getItemMeta().hasEnchants()){
 										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 											drop+=item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
@@ -77,10 +74,8 @@ public class PickAxes implements Listener{
 									}
 									block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
 									ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-									orb.setExperience(Api.percentPick(7, 3));
+									orb.setExperience(Methods.percentPick(7, 3));
 									block.setType(Material.AIR);
-									int dur = item.getDurability()+1;
-									item.setDurability((short)dur);
 								}
 							}
 						}
@@ -92,7 +87,6 @@ public class PickAxes implements Listener{
 							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
-								e.setCancelled(true);
 								int drop = 1;
 								if(item.getItemMeta().hasEnchants()){
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
@@ -100,14 +94,12 @@ public class PickAxes implements Listener{
 									}
 								}
 								if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE){
-									drop+=Api.percentPick(4, 1);
+									drop+=Methods.percentPick(4, 1);
 								}
 								block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
 								ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-								orb.setExperience(Api.percentPick(7, 3));
+								orb.setExperience(Methods.percentPick(7, 3));
 								block.setType(Material.AIR);
-								int dur = item.getDurability()+1;
-								item.setDurability((short)dur);
 							}
 						}
 					}
@@ -116,13 +108,11 @@ public class PickAxes implements Listener{
 					if(CEnchantments.EXPERIENCE.isEnabled()){
 						if(getOres().containsKey(block.getType())){
 						int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
-							if(Api.randomPicker(2)){
+							if(Methods.randomPicker(2)){
 								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
 								Bukkit.getPluginManager().callEvent(event);
 								if(!event.isCancelled()){
 									e.setExpToDrop(e.getExpToDrop()+(power+2));
-									int dur = item.getDurability()+1;
-									item.setDurability((short)dur);
 								}
 							}
 						}
@@ -135,6 +125,7 @@ public class PickAxes implements Listener{
 						if(blocks.get(player).containsKey(block)){
 							for(Block b : getBlocks(block.getLocation(), blocks.get(player).get(block), (Main.CE.getPower(item, CEnchantments.BLAST)-1))){
 								if(Main.CE.getBlockList().contains(b.getType())){
+									//This stops players from breaking blocks that mite be in protected areas.
 									if(Support.canBreakBlock(player, b)&&Support.allowsBreak(b.getLocation())){
 										if(player.getGameMode() == GameMode.CREATIVE){
 											b.setType(Material.AIR);

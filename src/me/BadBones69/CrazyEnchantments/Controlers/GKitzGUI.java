@@ -14,7 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.GKitz;
 import me.BadBones69.CrazyEnchantments.API.Version;
@@ -23,7 +23,7 @@ public class GKitzGUI implements Listener{
 	
 	public static void openGUI(Player player){
 		FileConfiguration gkitz = Main.settings.getGKitz();
-		Inventory inv = Bukkit.createInventory(null, gkitz.getInt("Settings.GUI-Size"), Api.color(gkitz.getString("Settings.Inventory-Name")));
+		Inventory inv = Bukkit.createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
 		if(gkitz.contains("Settings.GUI-Customization")){
 			for(String custom : gkitz.getStringList("Settings.GUI-Customization")){
 				String name = "";
@@ -53,7 +53,7 @@ public class GKitzGUI implements Listener{
 					}
 				}
 				slot--;
-				inv.setItem(slot, Api.makeItem(item, 1, name, lore));
+				inv.setItem(slot, Methods.makeItem(item, 1, name, lore));
 			}
 		}
 		for(String kit : GKitz.getGKitz()){
@@ -61,7 +61,7 @@ public class GKitzGUI implements Listener{
 			String id = gkitz.getString("GKitz." + kit + ".Display.Item");
 			String name = gkitz.getString("GKitz." + kit + ".Display.Name");
 			List<String> lore = gkitz.getStringList("GKitz." + kit + ".Display.Lore");
-			inv.setItem(slot, Api.makeItem(id, 1, name, lore));
+			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
 		}
 		player.openInventory(inv);
 	}
@@ -74,7 +74,7 @@ public class GKitzGUI implements Listener{
 			FileConfiguration msg = Main.settings.getMsg();
 			Player player = (Player) e.getWhoClicked();
 			ItemStack item = e.getCurrentItem();
-			if(inv.getName().equals(Api.color(gkitz.getString("Settings.Inventory-Name")))){
+			if(inv.getName().equals(Methods.color(gkitz.getString("Settings.Inventory-Name")))){
 				e.setCancelled(true);
 				if(e.getRawSlot() < inv.getSize()){
 					if(item != null){
@@ -94,9 +94,9 @@ public class GKitzGUI implements Listener{
 												in.addItem(it);
 											}
 											if(Version.getVersion().getVersionInteger()<181){
-												in.setItem(slots-1, Api.makeItem(Material.FEATHER, 1, 0, msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+												in.setItem(slots-1, Methods.makeItem(Material.FEATHER, 1, 0, msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 											}else{
-												in.setItem(slots-1, Api.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+												in.setItem(slots-1, Methods.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 											}
 											player.openInventory(in);
 										}else{
@@ -105,16 +105,16 @@ public class GKitzGUI implements Listener{
 													GKitz.giveKit(player, kit);
 													GKitz.addCooldown(player, kit);
 													GKitz.runKitCommands(player, kit);
-													player.sendMessage(Api.getPrefix() + Api.color(msg.getString("Messages.Received-GKit")
+													player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Received-GKit")
 															.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
 													return;
 												}else{
-													player.sendMessage(Api.getPrefix() + GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), msg.getString("Messages.Still-In-Cooldown")
+													player.sendMessage(Methods.getPrefix() + GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), msg.getString("Messages.Still-In-Cooldown")
 															.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
 													return;
 												}
 											}else{
-												player.sendMessage(Api.getPrefix() + Api.color(msg.getString("Messages.No-GKit-Permission")
+												player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.No-GKit-Permission")
 														.replaceAll("%Kit%", kit).replaceAll("%kit%", kit)));
 												return;
 											}
@@ -127,14 +127,14 @@ public class GKitzGUI implements Listener{
 				}
 			}
 			for(String kit : GKitz.getGKitz()){
-				if(inv.getName().equals(Api.color(GKitz.getGKitDisplayName(kit)))){
+				if(inv.getName().equals(Methods.color(GKitz.getGKitDisplayName(kit)))){
 					e.setCancelled(true);
 					if(e.getRawSlot() < inv.getSize()){
 						if(item != null){
 							if(item.hasItemMeta()){
 								if(item.getItemMeta().hasDisplayName()){
 									String name = item.getItemMeta().getDisplayName();
-									if(name.equals(Api.color(msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")))){
+									if(name.equals(Methods.color(msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")))){
 										openGUI(player);
 									}
 								}

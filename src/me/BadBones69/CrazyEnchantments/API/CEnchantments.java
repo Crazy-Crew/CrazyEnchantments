@@ -3,7 +3,7 @@ package me.BadBones69.CrazyEnchantments.API;
 import java.util.HashMap;
 import java.util.List;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public enum CEnchantments {
@@ -163,7 +163,7 @@ public enum CEnchantments {
 	 * @return Return the color that goes on the Enchantment Book.
 	 */
 	public String getBookColor(){
-		return Api.color(bookColors.get(this));
+		return Methods.color(bookColors.get(this));
 	}
 	
 	/**
@@ -171,7 +171,7 @@ public enum CEnchantments {
 	 * @return Returns the color that goes on the Enchanted Item.
 	 */
 	public String getEnchantmentColor(){
-		return Api.color(enchantColors.get(this));
+		return Methods.color(enchantColors.get(this));
 	}
 	
 	/**

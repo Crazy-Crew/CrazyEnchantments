@@ -6,7 +6,7 @@ import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class CustomEBook {
@@ -88,15 +88,15 @@ public class CustomEBook {
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			if(l.contains("%Description%")||l.contains("%description%")){
 				for(String m : CustomE.getDiscription(enchantment)){
-					lore.add(Api.color(m));
+					lore.add(Methods.color(m));
 				}
 			}else{
-				lore.add(Api.color(l)
+				lore.add(Methods.color(l)
 						.replaceAll("%Destroy_Rate%", destory_rate+"").replaceAll("%destroy_rate%", destory_rate+"")
 						.replaceAll("%Success_Rate%", success_rate+"").replaceAll("%success_Rate%", success_rate+""));
 			}
 		}
-		return Api.makeItem(item, amount, name, lore);
+		return Methods.makeItem(item, amount, name, lore);
 	}
 	
 	private String convertPower(Integer i){

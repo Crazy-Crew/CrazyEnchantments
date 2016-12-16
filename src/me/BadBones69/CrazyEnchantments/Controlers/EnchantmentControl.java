@@ -17,7 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
@@ -73,14 +73,14 @@ public class EnchantmentControl implements Listener{
 						String enchantColor = "&7";
 						EnchantmentType type = EnchantmentType.ALL;
 						for(CEnchantments en : Main.CE.getEnchantments()){
-							if(name.contains(Api.color(en.getBookColor()+en.getCustomName()))){
+							if(name.contains(Methods.color(en.getBookColor()+en.getCustomName()))){
 								enchant = en.getCustomName();
 								enchantColor = en.getEnchantmentColor();
 								type = en.getType();
 							}
 						}
 						for(String en : Main.CustomE.getEnchantments()){
-							if(name.contains(Api.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
+							if(name.contains(Methods.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
 								enchant = Main.CustomE.getCustomName(en);
 								enchantColor = Main.CustomE.getEnchantmentColor(en);
 								type = Main.CustomE.getType(en);
@@ -99,12 +99,12 @@ public class EnchantmentControl implements Listener{
 								}
 								if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
 									int limit = 0;
-									int total = Api.getEnchAmount(item);
+									int total = Methods.getEnchAmount(item);
 									for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
 										String perm = Permission.getPermission();
 										if(perm.startsWith("crazyenchantments.limit.")){
 											perm=perm.replace("crazyenchantments.limit.", "");
-											if(Api.isInt(perm)){
+											if(Methods.isInt(perm)){
 												if(limit<Integer.parseInt(perm)){
 													limit = Integer.parseInt(perm);
 												}
@@ -113,23 +113,23 @@ public class EnchantmentControl implements Listener{
 									}
 									if(!player.hasPermission("crazyenchantments.bypass")){
 										if(total>=limit){
-											player.sendMessage(Api.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
+											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
 											return;
 										}
 									}
 								}
 								e.setCancelled(true);
 								if(success||player.getGameMode() == GameMode.CREATIVE){
-									name = Api.removeColor(name);
+									name = Methods.removeColor(name);
 									String[] breakdown = name.split(" ");
 									String color = "&7";
 									color = enchantColor;
 									String enchantment = enchant;
 									String lvl = breakdown[1];
-									String full = Api.color(color+enchantment+" "+lvl);
+									String full = Methods.color(color+enchantment+" "+lvl);
 									player.setItemOnCursor(new ItemStack(Material.AIR));
-									e.setCurrentItem(Api.addGlow(Api.addLore(item, full)));
-									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Works")));
+									e.setCurrentItem(Methods.addGlow(Methods.addLore(item, full)));
+									player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Book-Works")));
 									try{
 										if(Version.getVersion().getVersionInteger()>=191){
 											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
@@ -140,10 +140,10 @@ public class EnchantmentControl implements Listener{
 									return;
 								}
 								if(destroy){
-									if(Api.isProtected(item)){
-										e.setCurrentItem(Api.removeProtected(item));
+									if(Methods.isProtected(item)){
+										e.setCurrentItem(Methods.removeProtected(item));
 										player.setItemOnCursor(new ItemStack(Material.AIR));
-										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
+										player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
 										try{
 											if(Version.getVersion().getVersionInteger()>=191){
 												player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
@@ -155,13 +155,13 @@ public class EnchantmentControl implements Listener{
 									}else{
 										player.setItemOnCursor(new ItemStack(Material.AIR));
 										e.setCurrentItem(new ItemStack(Material.AIR));
-										player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
+										player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Item-Destroyed")));
 									}
 									player.updateInventory();
 									return;
 								}
 								if(!success&&!destroy){
-									player.sendMessage(Api.getPrefix()+Api.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
+									player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
 									player.setItemOnCursor(new ItemStack(Material.AIR));
 									try{
 										if(Version.getVersion().getVersionInteger()>=191){
@@ -186,28 +186,28 @@ public class EnchantmentControl implements Listener{
 		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description") || !Main.settings.getConfig().contains("Settings.EnchantmentOptions.Right-Click-Book-Description")){
 			if(e.getItem()!=null){
 				ItemStack item = e.getItem();
-				if(item.getType()!=Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1).getType())return;
+				if(item.getType()!=Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1).getType())return;
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
 						String name = "";
 						Player player = e.getPlayer();
 						List<String> desc = new ArrayList<String>();
 						for(CEnchantments en : Main.CE.getEnchantments()){
-							if(item.getItemMeta().getDisplayName().contains(Api.color(en.getBookColor()+en.getCustomName()))){
+							if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor()+en.getCustomName()))){
 								name = Main.settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
 								desc = Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
 							}
 						}
 						for(String en : Main.CustomE.getEnchantments()){
-							if(item.getItemMeta().getDisplayName().contains(Api.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
+							if(item.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
 								name = Main.settings.getCustomEnchs().getString("Enchantments."+en+".Info.Name");
 								desc = Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Info.Description");
 							}
 						}
 						if(name.length()>0){
-							player.sendMessage(Api.color(name));
+							player.sendMessage(Methods.color(name));
 						}
-						for(String msg : desc)player.sendMessage(Api.color(msg));
+						for(String msg : desc)player.sendMessage(Methods.color(msg));
 						return;
 					}
 				}
@@ -226,22 +226,22 @@ public class EnchantmentControl implements Listener{
 			if(l.contains("%Description%")||l.contains("%description%")){
 				if(Main.CE.getFromName(enchant)!=null){
 					for(String m : Main.CE.getFromName(enchant).getDiscription()){
-						lore.add(Api.color(m));
+						lore.add(Methods.color(m));
 					}
 				}else{
 					if(Main.CustomE.getEnchantments().contains(enchant)){
 						for(String m : Main.CustomE.getDiscription(enchant)){
-							lore.add(Api.color(m));
+							lore.add(Methods.color(m));
 						}
 					}
 				}
 			}else{
-				lore.add(Api.color(l)
-						.replaceAll("%Destroy_Rate%", Api.percentPick(Dmax, Dmin)+"").replaceAll("%destroy_rate%", Api.percentPick(Dmax, Dmin)+"")
-						.replaceAll("%Success_Rate%", Api.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Api.percentPick(Smax, Smin)+""));
+				lore.add(Methods.color(l)
+						.replaceAll("%Destroy_Rate%", Methods.percentPick(Dmax, Dmin)+"").replaceAll("%destroy_rate%", Methods.percentPick(Dmax, Dmin)+"")
+						.replaceAll("%Success_Rate%", Methods.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Methods.percentPick(Smax, Smin)+""));
 			}
 		}
-		return Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, enchants.get(enchant), lore);
+		return Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, enchants.get(enchant), lore);
 	}
 	
 	public static String powerPicker(String en, String C){
@@ -295,7 +295,7 @@ public class EnchantmentControl implements Listener{
 		String arg = "";
 		int i = 0;
 		for(String l : L){
-			l = Api.color(l);
+			l = Methods.color(l);
 			String lo = lore.get(i);
 			if(l.contains("%Category%")){
 				String[] b = l.split("%Category%");
@@ -315,8 +315,8 @@ public class EnchantmentControl implements Listener{
 	private boolean successChance(ItemStack item){
 		if(item.hasItemMeta()){
 			if(item.getItemMeta().hasLore()){
-				int percent = Api.getPercent("%success_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
-				if(Api.randomPicker(percent, 100)){
+				int percent = Methods.getPercent("%success_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
+				if(Methods.randomPicker(percent, 100)){
 					return true;
 				}else{
 					return false;
@@ -329,8 +329,8 @@ public class EnchantmentControl implements Listener{
 	private boolean destroyChance(ItemStack item){
 		if(item.hasItemMeta()){
 			if(item.getItemMeta().hasLore()){
-				int percent = Api.getPercent("%destroy_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
-				if(Api.randomPicker(percent, 100)){
+				int percent = Methods.getPercent("%destroy_rate%", item, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
+				if(Methods.randomPicker(percent, 100)){
 					return true;
 				}else{
 					return false;

@@ -22,6 +22,7 @@ import me.BadBones69.CrazyEnchantments.ParticleEffect;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.MultiSupport.SpartanSupport;
 import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
 
 public class Boots implements Listener{
@@ -108,6 +109,9 @@ public class Boots implements Listener{
 			if(Main.CE.hasEnchantments(boots)){
 				if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 					if(CEnchantments.WINGS.isEnabled()){
+						if(Support.hasSpartan()){
+							SpartanSupport.cancelFly(player);
+						}
 						if(e.isFlying()){
 							e.setCancelled(true);
 							player.setFlying(true);
@@ -157,6 +161,9 @@ public class Boots implements Listener{
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
+						if(Support.hasSpartan()){
+							SpartanSupport.cancelFly(player);
+						}
 						player.setAllowFlight(true);
 						Flying.add(player);
 					}

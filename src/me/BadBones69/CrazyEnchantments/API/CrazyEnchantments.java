@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.BadBones69.CrazyEnchantments.Api;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public class CrazyEnchantments {
@@ -32,7 +32,7 @@ public class CrazyEnchantments {
 	 * @return Returns the item the enchantment book will be.
 	 */
 	public ItemStack getEnchantmentBookItem(){
-		return Api.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1);
+		return Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1);
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class CrazyEnchantments {
 	 * @return Returns the color of the enchantment that goes on books.
 	 */
 	public String getBookColor(CEnchantments enchantment){
-		return Api.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".BookColor"));
+		return Methods.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".BookColor"));
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class CrazyEnchantments {
 	 * @return Returns the color of the enchantment that goes on an item.
 	 */
 	public String getEnchantmentColor(CEnchantments enchantment){
-		return Api.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".Color"));
+		return Methods.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".Color"));
 	}
 	
 	/**
@@ -227,7 +227,7 @@ public class CrazyEnchantments {
 	 */
 	public Integer getBookPower(ItemStack book, CEnchantments enchant){
 		String line = book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName()+" ", "");
-		if(Api.isInt(line))return Integer.parseInt(line);
+		if(Methods.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
 		if(line.equalsIgnoreCase("II"))return 2;
 		if(line.equalsIgnoreCase("III"))return 3;
@@ -256,7 +256,7 @@ public class CrazyEnchantments {
 			}
 		}
 		line = line.replace(enchant.getEnchantmentColor() + enchant.getCustomName()+" ", "");
-		if(Api.isInt(line))return Integer.parseInt(line);
+		if(Methods.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
 		if(line.equalsIgnoreCase("II"))return 2;
 		if(line.equalsIgnoreCase("III"))return 3;
@@ -277,7 +277,7 @@ public class CrazyEnchantments {
 		BlockList.clear();
 		for(String id : Main.settings.getBlockList().getStringList("Block-List")){
 			try{
-				BlockList.add(Api.makeItem(id, 1).getType());
+				BlockList.add(Methods.makeItem(id, 1).getType());
 			}catch(Exception e){}
 		}
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.MaxRageLevel")){

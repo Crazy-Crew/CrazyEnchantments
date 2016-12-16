@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -37,7 +38,7 @@ import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R3;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R1;
 import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R2;
 
-public class Api{
+public class Methods{
 	
 	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	
@@ -489,7 +490,7 @@ public class Api{
 			String oldVersion = plugin.getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
-				Bukkit.getConsoleSender().sendMessage(Api.getPrefix()+Api.color("&cYour server is running &7v"+oldVersion+"&c and the newest is &7v"+newVersion+"&c."));
+				Bukkit.getConsoleSender().sendMessage(Methods.getPrefix()+Methods.color("&cYour server is running &7v"+oldVersion+"&c and the newest is &7v"+newVersion+"&c."));
 			}
 		}
 		catch(Exception e) {
@@ -505,7 +506,7 @@ public class Api{
 			String oldVersion = plugin.getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
-				player.sendMessage(Api.getPrefix()+Api.color("&cYour server is running &7v"+oldVersion+"&c and the newest is &7v"+newVersion+"&c."));
+				player.sendMessage(Methods.getPrefix()+Methods.color("&cYour server is running &7v"+oldVersion+"&c and the newest is &7v"+newVersion+"&c."));
 			}
 		}
 		catch(Exception e) {
@@ -531,7 +532,7 @@ public class Api{
 		List<String> lore = item.getItemMeta().getLore();
 		String arg = "100";
 		for(String oLine : Msg){
-			oLine = Api.color(oLine).toLowerCase();
+			oLine = Methods.color(oLine).toLowerCase();
 			if(oLine.contains(Argument.toLowerCase())){
 				String[] b = oLine.split(Argument.toLowerCase());
 				for(String iline : lore){
@@ -552,7 +553,7 @@ public class Api{
 	}
 	public static Boolean hasArgument(String Argument, List<String> Msg){
 		for(String l : Msg){
-			l = Api.color(l).toLowerCase();
+			l = Methods.color(l).toLowerCase();
 			if(l.contains(Argument.toLowerCase())){
 				return true;
 			}
@@ -640,4 +641,42 @@ public class Api{
 		if (color.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
 		return null;
 	}
+	
+	public static String getEnchantmentName(Enchantment en){
+		HashMap<String, String> enchants = new HashMap<String, String>();
+		enchants.put("ARROW_DAMAGE", "Power");
+		enchants.put("ARROW_FIRE", "Flame");
+		enchants.put("ARROW_INFINITE", "Infinity");
+		enchants.put("ARROW_KNOCKBACK", "Punch");
+		enchants.put("DAMAGE_ALL", "Sharpness");
+		enchants.put("DAMAGE_ARTHROPODS", "Bane_Of_Arthropods");
+		enchants.put("DAMAGE_UNDEAD", "Smite");
+		enchants.put("DEPTH_STRIDER", "Depth_Strider");
+		enchants.put("DIG_SPEED", "Efficiency");
+		enchants.put("DURABILITY", "Unbreaking");
+		enchants.put("FIRE_ASPECT", "Fire_Aspect");
+		enchants.put("KNOCKBACK", "KnockBack");
+		enchants.put("LOOT_BONUS_BLOCKS", "Fortune");
+		enchants.put("LOOT_BONUS_MOBS", "Looting");
+		enchants.put("LUCK", "Luck_Of_The_Sea");
+		enchants.put("LURE", "Lure");
+		enchants.put("OXYGEN", "Respiration");
+		enchants.put("PROTECTION_ENVIRONMENTAL", "Protection");
+		enchants.put("PROTECTION_EXPLOSIONS", "Blast_Protection");
+		enchants.put("PROTECTION_FALL", "Feather_Falling");
+		enchants.put("PROTECTION_FIRE", "Fire_Protection");
+		enchants.put("PROTECTION_PROJECTILE", "Projectile_Protection");
+		enchants.put("SILK_TOUCH", "Silk_Touch");
+		enchants.put("THORNS", "Thorns");
+		enchants.put("WATER_WORKER", "Aqua_Affinity");
+		enchants.put("BINDING_CURSE", "Curse_Of_Binding");
+		enchants.put("MENDING", "Mending");
+		enchants.put("FROST_WALKER", "Frost_Walker");
+		enchants.put("VANISHING_CURSE", "Curse_Of_Vanishing");
+		if(enchants.get(en.getName()) == null){
+			return null;
+		}
+		return enchants.get(en.getName());
+	}
+	
 }
