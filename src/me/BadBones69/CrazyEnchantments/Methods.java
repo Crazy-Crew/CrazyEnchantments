@@ -639,7 +639,7 @@ public class Methods{
 		if (color.equalsIgnoreCase("TEAL")) return Color.TEAL;
 		if (color.equalsIgnoreCase("WHITE")) return Color.WHITE;
 		if (color.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
-		return null;
+		return Color.WHITE;
 	}
 	
 	public static String getEnchantmentName(Enchantment en){
@@ -674,7 +674,7 @@ public class Methods{
 		enchants.put("FROST_WALKER", "Frost_Walker");
 		enchants.put("VANISHING_CURSE", "Curse_Of_Vanishing");
 		if(enchants.get(en.getName()) == null){
-			return null;
+			return "None Found";
 		}
 		return enchants.get(en.getName());
 	}
