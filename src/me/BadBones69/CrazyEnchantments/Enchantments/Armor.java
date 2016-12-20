@@ -824,10 +824,12 @@ public class Armor implements Listener{
 				case IRON_GOLEM:
 					en.setMaxHealth(200);
 					en.setHealth(200);
+					en.setCanPickupItems(false);
 					break;
 				case ZOMBIE:
 					en.setMaxHealth(45);
 					en.setHealth(45);
+					en.setCanPickupItems(false);
 					break;
 				case ENDERMITE:
 					en.setMaxHealth(10);
