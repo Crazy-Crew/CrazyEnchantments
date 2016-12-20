@@ -156,6 +156,9 @@ public class CrazyEnchantments {
 	 * @return
 	 */
 	public ItemStack addEnchantment(ItemStack item, CEnchantments enchant, Integer level){
+		if(hasEnchantment(item, enchant)){
+			removeEnchantment(item, enchant);
+		}
 		List<String> newLore = new ArrayList<String>();
 		ItemMeta meta = item.getItemMeta();
 		if(item.hasItemMeta()){

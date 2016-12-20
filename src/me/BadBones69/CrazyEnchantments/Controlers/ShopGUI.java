@@ -80,61 +80,62 @@ public class ShopGUI implements Listener{
 				}
 			}
 		}
-		if(Main.settings.getConfig().getBoolean("Settings.ProtectionCrystal.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.ProtectionCrystal.GUIName");
-			String id = Main.settings.getConfig().getString("Settings.ProtectionCrystal.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.ProtectionCrystal.GUILore");
-			int slot = Main.settings.getConfig().getInt("Settings.ProtectionCrystal.Slot")-1;
-			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.ProtectionCrystal.Glowing")));
+		ArrayList<String> options = new ArrayList<String>();
+		options.add("GKitz");
+		options.add("BlackSmith");
+		options.add("Tinker");
+		options.add("Info");
+		for(String op : options){
+			if(Main.settings.getConfig().contains("Settings." + op)){
+				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")){
+					String name = Main.settings.getConfig().getString("Settings." + op + ".Name");
+					String id = Main.settings.getConfig().getString("Settings." + op + ".Item");
+					List<String> lore = Main.settings.getConfig().getStringList("Settings." + op + ".Lore");
+					int slot = Main.settings.getConfig().getInt("Settings." + op + ".Slot")-1;
+					boolean glowing = false;
+					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
+						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
+					}
+					inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), glowing));
+				}
+			}
 		}
-		if(Main.settings.getConfig().getBoolean("Settings.BlackSmith.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.BlackSmith.Name");
-			String id = Main.settings.getConfig().getString("Settings.BlackSmith.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackSmith.Lore");
-			int slot = Main.settings.getConfig().getInt("Settings.BlackSmith.Slot")-1;
-			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.BlackSmith.Glowing")));
+		options.clear();
+		options.add("ProtectionCrystal");
+		options.add("Dust.SuccessDust");
+		options.add("Dust.DestroyDust");
+		for(String op : options){
+			if(Main.settings.getConfig().contains("Settings." + op)){
+				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")){
+					String name = Main.settings.getConfig().getString("Settings." + op + ".GUIName");
+					String id = Main.settings.getConfig().getString("Settings." + op + ".Item");
+					List<String> lore = Main.settings.getConfig().getStringList("Settings." + op + ".GUILore");
+					int slot = Main.settings.getConfig().getInt("Settings." + op + ".Slot")-1;
+					boolean glowing = false;
+					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
+						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
+					}
+					inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), glowing));
+				}
+			}
 		}
-		if(Main.settings.getConfig().getBoolean("Settings.Tinker.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.Tinker.Name");
-			String id = Main.settings.getConfig().getString("Settings.Tinker.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.Tinker.Lore");
-			int slot = Main.settings.getConfig().getInt("Settings.Tinker.Slot")-1;
-			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.Tinker.Glowing")));
-		}
-		if(Main.settings.getConfig().getBoolean("Settings.Info.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.Info.Name");
-			String id = Main.settings.getConfig().getString("Settings.Info.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.Info.Lore");
-			int slot = Main.settings.getConfig().getInt("Settings.Info.Slot")-1;
-			inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), Main.settings.getConfig().getBoolean("Settings.Info.Glowing")));
-		}
-		if(Main.settings.getConfig().getBoolean("Settings.Dust.SuccessDust.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName");
-			String id = Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.SuccessDust.GUILore");
-			int slot = Main.settings.getConfig().getInt("Settings.Dust.SuccessDust.Slot")-1;
-			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
-		}
-		if(Main.settings.getConfig().getBoolean("Settings.Dust.DestroyDust.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName");
-			String id = Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.Dust.DestroyDust.GUILore");
-			int slot = Main.settings.getConfig().getInt("Settings.Dust.DestroyDust.Slot")-1;
-			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
-		}
-		if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.BlackScroll.GUIName");
-			String id = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.BlackScroll.Lore");
-			int slot = Main.settings.getConfig().getInt("Settings.BlackScroll.Slot")-1;
-			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
-		}
-		if(Main.settings.getConfig().getBoolean("Settings.WhiteScroll.InGUI")){
-			String name = Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName");
-			String id = Main.settings.getConfig().getString("Settings.WhiteScroll.Item");
-			List<String> lore = Main.settings.getConfig().getStringList("Settings.WhiteScroll.Lore");
-			int slot = Main.settings.getConfig().getInt("Settings.WhiteScroll.Slot")-1;
-			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
+		options.clear();
+		options.add("BlackScroll");
+		options.add("WhiteScroll");
+		for(String op : options){
+			if(Main.settings.getConfig().contains("Settings." + op)){
+				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")){
+					String name = Main.settings.getConfig().getString("Settings." + op + ".GUIName");
+					String id = Main.settings.getConfig().getString("Settings." + op + ".Item");
+					List<String> lore = Main.settings.getConfig().getStringList("Settings." + op + ".Lore");
+					int slot = Main.settings.getConfig().getInt("Settings." + op + ".Slot")-1;
+					boolean glowing = false;
+					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
+						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
+					}
+					inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), glowing));
+				}
+			}
 		}
 		player.openInventory(inv);
 	}
@@ -221,7 +222,7 @@ public class ShopGUI implements Listener{
 											Methods.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
 										}
 										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Total")){
-											if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
+											if(player.getTotalExperience() < Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
 												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - player.getTotalExperience()+"";
 												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
 												return;
@@ -233,6 +234,11 @@ public class ShopGUI implements Listener{
 								player.getInventory().addItem(LostBook.getLostBook(cat, 1));
 								return;
 							}
+						}
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.GKitz.Name")))){
+							if(!Methods.hasPermission(player, "gkitz", true))return;
+							GKitzGUI.openGUI(player);
+							return;
 						}
 						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
 							if(!Methods.hasPermission(player, "BlackSmith", true))return;

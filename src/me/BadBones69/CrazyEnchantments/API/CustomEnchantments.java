@@ -22,7 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
-import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class CustomEnchantments implements Listener{
 	
@@ -378,6 +378,9 @@ public class CustomEnchantments implements Listener{
 	}
 	
 	public ItemStack addEnchantment(ItemStack item, String enchant, Integer level){
+		if(hasEnchantment(item, enchant)){
+			removeEnchantment(item, enchant);
+		}
 		List<String> newLore = new ArrayList<String>();
 		ItemMeta meta = item.getItemMeta();
 		if(item.hasItemMeta()){

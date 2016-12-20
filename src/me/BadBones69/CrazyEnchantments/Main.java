@@ -42,7 +42,7 @@ import me.BadBones69.CrazyEnchantments.Enchantments.Helmets;
 import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords;
 import me.BadBones69.CrazyEnchantments.Enchantments.Tools;
-import me.BadBones69.CrazyEnchantments.MultiSupport.SilkSpawners;
+import me.BadBones69.CrazyEnchantments.multisupport.SilkSpawners;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 

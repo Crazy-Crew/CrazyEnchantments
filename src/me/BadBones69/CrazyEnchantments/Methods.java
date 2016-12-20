@@ -29,14 +29,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import me.BadBones69.CrazyEnchantments.API.Version;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_10_R1;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_11_R1;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_7_R4;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R1;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R2;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_8_R3;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R1;
-import me.BadBones69.CrazyEnchantments.MultiSupport.NMS_v1_9_R2;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_10_R1;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_11_R1;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_7_R4;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R1;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R2;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R3;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R1;
+import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R2;
 
 public class Methods{
 	

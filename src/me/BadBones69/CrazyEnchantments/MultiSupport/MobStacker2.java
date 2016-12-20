@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.MultiSupport;
+package me.BadBones69.CrazyEnchantments.multisupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;

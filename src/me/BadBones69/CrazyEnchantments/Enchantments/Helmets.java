@@ -17,7 +17,7 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
-import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class Helmets implements Listener{
 	

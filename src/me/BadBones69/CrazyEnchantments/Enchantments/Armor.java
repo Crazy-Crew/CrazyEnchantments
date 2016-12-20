@@ -34,16 +34,16 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.AngelUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraActiveEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.HellForgedUseEvent;
-import me.BadBones69.CrazyEnchantments.MultiSupport.SpartanSupport;
-import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
+import me.BadBones69.CrazyEnchantments.multisupport.SpartanSupport;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class Armor implements Listener{
 	
@@ -826,11 +826,13 @@ public class Armor implements Listener{
 					en.setMaxHealth(200);
 					en.setHealth(200);
 					Support.noStack(en);
+					en.setCanPickupItems(false);
 					break;
 				case ZOMBIE:
 					en.setMaxHealth(45);
 					en.setHealth(45);
 					Support.noStack(en);
+					en.setCanPickupItems(false);
 					break;
 				case ENDERMITE:
 					en.setMaxHealth(10);

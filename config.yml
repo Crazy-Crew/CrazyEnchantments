@@ -3,7 +3,7 @@ Settings:
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   Enchantment-Book-Item: '340' #The item that the enchantment book is.
   GUISize: 54 #The size of the GUI, Must be a factor of 9
-  Clouds: True #Enable and Disable the Clouds for the Wings Enchantment
+  Clouds: true #Enable and Disable the Clouds for the Wings Enchantment
   EnchantmentBookLore: #The lore on the enchantments books.
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
@@ -18,11 +18,19 @@ Settings:
       - '&7It is said to be an enchantment book from %Category%'
       - '&7But you must clean it off to find out what kind it is.'
       - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
+  GKitz: #GKitz gui option.
+    InGUI: false #If you can open the gkitz gui from the main /ce gui.
+    Slot: 1 #The slot it will be in.
+    Item: '311' #The item it is.
+    Glowing: true #If the item has a glowing effect.
+    Name: '&c&lGKitz' #The name of the item.
+    Lore: #The lore of the item.
+      - '&b>>&7&nClick to open&b<<'
   ProtectionCrystal:
-    InGUI: False #If its in the GUI.
+    InGUI: false #If its in the GUI.
     Slot: 1 #Slot it is in
     Item: '388' #Item it is
-    Glowing: True #If it is enchanted
+    Glowing: true #If it is enchanted
     Protected: '&6Ancient Protection'
     Name: '&5&lProtection &b&lCrystal' #Name of the item
     Lore: #Lore of the item
@@ -39,10 +47,10 @@ Settings:
       - ''
       - '&eCost: &e&l$1000'
   BlackSmith: #Options for the Black Smith
-    InGUI: True #In the GUI.
+    InGUI: true #In the GUI.
     Slot: 24 #Slot it is in.
     Item: '145' #Item that shows in the GUI
-    Glowing: False #Is it enchanted
+    Glowing: false #Is it enchanted
     Name: '&7&lThe &b&lBlack &9&lSmith' #Name of the Item in the GUI
     Lore: #Lore on the item.
       - '&b>>&7&nClick to open&b<<'
@@ -64,18 +72,18 @@ Settings:
         Add-Enchantment: 3 #When it adds an enchantment to the item from another item
         Book-Upgrade: 5 #Leveling up a books power
   Tinker: #Settings for Info item in the GUI
-    InGUI: True #Toggle whether it is in the /CE GUI or not
+    InGUI: true #Toggle whether it is in the /CE GUI or not
     Slot: 22 #Slot it is in
     Item: '399' #Item it is
-    Glowing: False #Whether it glows like its enchanted
+    Glowing: false #Whether it glows like its enchanted
     Name: '&7&lThe &b&lCrazy &9&lTinkerer' #Name of the Item
     Lore: #Lore of the item
       - '&b>>&7&nClick to open&b<<'
   Info: #Settings for Info item in the GUI
-    InGUI: True #Toggle whether it is in the /CE GUI or not
+    InGUI: true #Toggle whether it is in the /CE GUI or not
     Slot: 23 #Slot it is in
     Item: '345' #Item it is
-    Glowing: True #Whether it glows like its enchanted
+    Glowing: true #Whether it glows like its enchanted
     Name: '&eInfo on the Enchantments' #Name of the Item
     Lore: #Lore of the item
       - '&b>>&7&nClick to view&b<<'
@@ -88,14 +96,14 @@ Settings:
         - '&aMagical AngelDust &7or &eMagical Fixing &7Dust'
         - '&7&l(&6&l!&7&l) &7Right click'
       Firework:
-        Toggle: True #Toggle if the firework happens on open.
+        Toggle: true #Toggle if the firework happens on open.
         Colors: 'Black, Gray, Lime' #The colors the firework will be.
       Dust-Toggle:
-        Success: True #Toggle wether you can get success dust from Mystery Dust.
-        Destroy: True #Toggle wether you can get destroy dust from Mystery Dust.
-        Failed: True #Toggle wether you can get failed dust from Mystery Dust.
+        Success: true #Toggle wether you can get success dust from Mystery Dust.
+        Destroy: true #Toggle wether you can get destroy dust from Mystery Dust.
+        Failed: true #Toggle wether you can get failed dust from Mystery Dust.
     SuccessDust:
-      InGUI: True #If you can buy it in the /CE Gui
+      InGUI: true #If you can buy it in the /CE Gui
       GUIName: '&aMagical Angel Dust' #Name of the item in the GUI
       GUILore: #Lore in the GUI.
         - '&eCost: &a&l$50'
@@ -112,7 +120,7 @@ Settings:
         Max: 30 #Max percent
         Min: 2 #Minimum percent
     DestroyDust:
-      InGUI: True #If you can buy it in the /CE Gui
+      InGUI: true #If you can buy it in the /CE Gui
       GUIName: '&eMagical Fixing Dust' #Name of the item in the GUI
       GUILore: #Lore in the GUI.
         - '&eCost: &a&l$50'
@@ -145,7 +153,7 @@ Settings:
       - '&7Drag and drop it on the item and BLAMO. It takes a random enchantment off,'
       - '&7And turns it into a normal enchantment book. Easy way to add new better enchantments.'
       - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments.'
-    InGUI: True #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    InGUI: true #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
     GUIName: '&7Black Scroll'
     Slot: 21 #Slot you can buy the scroll at
     Lore: #Lore of the item in the GUI
@@ -168,7 +176,7 @@ Settings:
       - '&7White Scrolls add a &b&lPROTECTED &7lore to your item to stop it from,'
       - '&7Destroying your precious item. If the book tries to break your item it removes,'
       - '&7The &b&lPROTECTED &7lore from your item and must add a new White Scroll to the item.'
-    InGUI: True #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    InGUI: true #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
     GUIName: '&7White Scroll'
     Slot: 30 #Slot you can buy the scroll at
     Lore: #Lore of the scroll in the GUI
@@ -177,10 +185,10 @@ Settings:
       - '&7protect items from breaking.'
     ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
   EnchantmentOptions: #Options for enchanted books.
-    MaxAmountOfEnchantmentsToggle: True #Turn on an off the Max amount of enchantments
-    IncludeVanillaEnchantments: False #Count Vanilla enchantments also?
+    MaxAmountOfEnchantmentsToggle: true #Turn on an off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
+    IncludeVanillaEnchantments: false #Count Vanilla enchantments also?
     MaxRageLevel: 4 #The max amount rage can stack when fighting.
-    Right-Click-Book-Description: True #Toggles wether when you right click the enchantment book if it messages the player the description or not.
+    Right-Click-Book-Description: true #Toggles wether when you right click the enchantment book if it messages the player the description or not.
     Wings: #Options for the Wings Enchantment.
       Regions: #All world guard regions the Wings enchantment can work in.
         - 'Free_Fly'
@@ -286,7 +294,7 @@ Categories: #You can make as many different categories as you want
   Common: #Name of the category
     Name: '&a&l&nCommon' #Name in the GUI
     Slot: 31 #The Slot number the item will be in
-    InGUI: True #Toggle if its in the GUI or not.
+    InGUI: true #Toggle if its in the GUI or not.
     Lore: #The lore of the Item
       - '&eCost: &6&l20 &6XP Levels'
     Item: '160:5' #The id for the item
@@ -294,10 +302,10 @@ Categories: #You can make as many different categories as you want
     Lvl/Total: Lvl #You can choose Lvl or Total, Lvl uses XP lvls and Total uses the total XP the player has
     Cost: 20 #How much the Books cost
     LostBook: #Controls the Lost Book shop for this tier
-      InGUI: False #If it shows in the /CE Gui
+      InGUI: false #If it shows in the /CE Gui
       Slot: 1 #Slot it will be in
       Item: '340' #The item that is showen in the GUI
-      Glowing: False #Is it enchanted
+      Glowing: false #Is it enchanted
       Name: '&8&l&nLost&c&l Tier1 &8&l&nBooks' #Name of the item
       Lore: #Lore on the item
         - '&7These are lost books that are'
@@ -309,7 +317,7 @@ Categories: #You can make as many different categories as you want
       Money/XP: Money #Costs money or XP
       Lvl/Total: Lvl #If XP then Levels or Total XP
       Cost: 1000 #The Price of the book
-      FireworkToggle: True #Toggle on and off if when opening a lost book a firework effect happens
+      FireworkToggle: true #Toggle on and off if when opening a lost book a firework effect happens
       FireworkColors: 'Red, White, Blue' #The colors of the firework
     EnchOptions: #Enchantment Options
       SuccessPercent: #The range for the success rate that the enchantment will have
@@ -318,14 +326,14 @@ Categories: #You can make as many different categories as you want
       DestroyPercent: #The range for the destroy rate that the enchantment will have
         Max: 10 #The max destroy rate
         Min: 0 #The min destroy rate
-      MaxLvlToggle: True #Turn on and off Max Level cap
+      MaxLvlToggle: true #Turn on and off Max Level cap
       LvlRange: #The range of lvls that can be found in the Category.
         Max: 2
         Min: 1
   Rare:
     Name: '&9&l&nRare'
     Slot: 32
-    InGUI: True
+    InGUI: true
     Lore:
       - '&eCost: &6&l40 &6XP Levels'
     Item: '160:11'
@@ -333,10 +341,10 @@ Categories: #You can make as many different categories as you want
     Lvl/Total: Lvl
     Cost: 40
     LostBook:
-      InGUI: False
+      InGUI: false
       Slot: 2
       Item: '340'
-      Glowing: False
+      Glowing: false
       Name: '&8&l&nLost&c&l Tier2 &8&l&nBooks'
       Lore:
         - '&7These are lost books that are'
@@ -348,7 +356,7 @@ Categories: #You can make as many different categories as you want
       Money/XP: Money
       Lvl/Total: Lvl
       Cost: 2000
-      FireworkToggle: True
+      FireworkToggle: true
       FireworkColors: 'Black, Yellow'
     EnchOptions:
       SuccessPercent:
@@ -357,14 +365,14 @@ Categories: #You can make as many different categories as you want
       DestroyPercent:
         Max: 25
         Min: 10
-      MaxLvlToggle: True
+      MaxLvlToggle: true
       LvlRange:
         Max: 3
         Min: 2
   Legendary:
     Name: '&4&l&nLegendary'
     Slot: 33
-    InGUI: True
+    InGUI: true
     Lore:
       - '&eCost: &6&l60 &6XP Levels'
     Item: '160:14'
@@ -372,10 +380,10 @@ Categories: #You can make as many different categories as you want
     Lvl/Total: Lvl
     Cost: 60
     LostBook:
-      InGUI: False
+      InGUI: false
       Slot: 3
       Item: '340'
-      Glowing: False
+      Glowing: false
       Name: '&8&l&nLost&c&l Tier3 &8&l&nBooks'
       Lore:
         - '&7These are lost books that are'
@@ -387,7 +395,7 @@ Categories: #You can make as many different categories as you want
       Money/XP: Money
       Lvl/Total: Lvl
       Cost: 3000
-      FireworkToggle: True
+      FireworkToggle: true
       FireworkColors: 'White, Gray'
     EnchOptions:
       SuccessPercent:
@@ -396,7 +404,7 @@ Categories: #You can make as many different categories as you want
       DestroyPercent:
         Max: 35
         Min: 15
-      MaxLvlToggle: True
+      MaxLvlToggle: true
       LvlRange:
         Max: 5
         Min: 3

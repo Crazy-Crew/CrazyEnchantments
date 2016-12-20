@@ -499,15 +499,15 @@ public class GKitz implements Listener{
 	 */
 	public static String getCooldownLeft(Calendar cal, String msg){
 		Calendar C = Calendar.getInstance();
-		int total = ((int) (cal.getTimeInMillis()/1000)-(int) (C.getTimeInMillis()/1000));
+		int total = ((int) (cal.getTimeInMillis()/1000) - (int) (C.getTimeInMillis()/1000));
 		int D = 0;
 		int H = 0;
 		int M = 0;
 		int S = 0;
-		for(;total>86400;total-=86400,D++);
-		for(;total>3600;total-=3600,H++);
-		for(;total>60;total-=60,M++);
-		S+=total;
+		for(;total > 86400; total -= 86400 ,D++);
+		for(;total > 3600; total -= 3600, H++);
+		for(;total > 60; total -= 60, M++);
+		S += total;
 		return Methods.color(msg.replaceAll("%Day%", D + "").replaceAll("%day%", D + "")
 				.replaceAll("%Hour%", H + "").replaceAll("%hour%", H + "")
 				.replaceAll("%Minute%", M + "").replaceAll("%minute%", M + "")

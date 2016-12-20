@@ -1,6 +1,7 @@
 package me.BadBones69.CrazyEnchantments.Controlers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -14,8 +15,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.GKitz;
 import me.BadBones69.CrazyEnchantments.API.Version;
 
@@ -60,7 +61,14 @@ public class GKitzGUI implements Listener{
 			int slot = gkitz.getInt("GKitz." + kit + ".Display.Slot") - 1;
 			String id = gkitz.getString("GKitz." + kit + ".Display.Item");
 			String name = gkitz.getString("GKitz." + kit + ".Display.Name");
-			List<String> lore = gkitz.getStringList("GKitz." + kit + ".Display.Lore");
+			List<String> lore = new ArrayList<String>();
+			for(String l : gkitz.getStringList("GKitz." + kit + ".Display.Lore")){
+				if(GKitz.canGetGKit(player, kit)){
+					lore.add(GKitz.getCooldownLeft(Calendar.getInstance(), l));
+				}else{
+					lore.add(GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), l));
+				}
+			}
 			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
 		}
 		player.openInventory(inv);

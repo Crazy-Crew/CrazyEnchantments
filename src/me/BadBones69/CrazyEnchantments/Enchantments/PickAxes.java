@@ -25,7 +25,7 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
-import me.BadBones69.CrazyEnchantments.MultiSupport.Support;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class PickAxes implements Listener{
 	

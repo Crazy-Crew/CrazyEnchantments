@@ -49,6 +49,7 @@ GKitz: #GKit optons.
         - '&7into battle by a great hero.'
         - ''
         - '&7Cooldown: &624 Hours'
+        - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
         - '&7&l(&6&l!&7&l) &7Right click to preview'
     Cooldown: '24h' #Cooldown for the GKit. Available options d - Day, h - Hour, m - Minute, s - Second
     Items: #The items that are given the players. 
@@ -68,6 +69,7 @@ GKitz: #GKit optons.
         - '&7into battle by a peace keeper.'
         - ''
         - '&7Cooldown: &624 Hours'
+        - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
         - '&7&l(&9&l!&7&l) &7Right click to preview'
     Cooldown: '24h'
     Items:
@@ -87,6 +89,7 @@ GKitz: #GKit optons.
         - '&7into battle by a evil villan.'
         - ''
         - '&7Cooldown: &624 Hours'
+        - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
         - '&7&l(&4&l!&7&l) &7Right click to preview'
     Cooldown: '24h'
     Items:
