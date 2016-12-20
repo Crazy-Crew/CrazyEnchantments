@@ -820,22 +820,27 @@ public class Armor implements Listener{
 				case WOLF:
 					en.setMaxHealth(16);
 					en.setHealth(16);
+					Support.noStack(en);
 					break;
 				case IRON_GOLEM:
 					en.setMaxHealth(200);
 					en.setHealth(200);
+					Support.noStack(en);
 					break;
 				case ZOMBIE:
 					en.setMaxHealth(45);
 					en.setHealth(45);
+					Support.noStack(en);
 					break;
 				case ENDERMITE:
 					en.setMaxHealth(10);
 					en.setHealth(10);
+					Support.noStack(en);
 					break;
 				case SILVERFISH:
 					en.setMaxHealth(10);
 					en.setHealth(10);
+					Support.noStack(en);
 					break;
 				default:
 					break;
