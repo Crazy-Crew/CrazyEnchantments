@@ -53,6 +53,18 @@ public class Support {
 		}
 		return false;
 	}
+	public static boolean hasMobStacker() {
+		if(Bukkit.getServer().getPluginManager().getPlugin("MobStacker")!=null){
+			return true;
+		}
+		return false;
+	}
+	public static boolean hasMobStacker2() {
+		if(Bukkit.getServer().getPluginManager().getPlugin("MobStacker2")!=null){
+			return true;
+		}
+		return false;
+	}
 	
 	public static boolean inTerritory(Player player){
 		if(hasFactions()){
@@ -183,5 +195,14 @@ public class Support {
 		}
 		return false;
 	}
-	
+	public static void noStack(Entity en) {
+		if (hasMobStacker()) {
+			MobStacker.noStack(en);
+			return;
+		}
+		if (hasMobStacker2()) {
+			MobStacker2.noStack(en);
+			return;
+		}
+	}
 }
