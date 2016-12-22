@@ -900,6 +900,10 @@ public class Armor implements Listener{
 		}
 	}
 	
+	public static HashMap<Player, ArrayList<LivingEntity>> getAllies(){
+		return mobs;
+	}
+	
 	public static void removeAllies(){
 		for(Player player : mobs.keySet()){
 			for(LivingEntity ally : mobs.get(player)){

@@ -29,6 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import me.BadBones69.CrazyEnchantments.API.Version;
+import me.BadBones69.CrazyEnchantments.Controlers.FireworkDamageAPI;
 import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_10_R1;
 import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_11_R1;
 import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_7_R4;
@@ -308,7 +309,12 @@ public class Methods{
 		return color(Main.settings.getConfig().getString("Settings.Prefix"));
 	}
 	public static double getMoney(Player player){
-		return Main.econ.getBalance(player);
+		try{
+			return Main.econ.getBalance(player);
+		}catch(Exception e){
+			Bukkit.getLogger().log(Level.WARNING, "[Crazy Enchantments]>> Couldn't find the money for " + player.getName() + ".");
+			return 0D;
+		}
 	}
 	public static boolean isInt(String s) {
 	    try {
@@ -612,6 +618,7 @@ public class Methods{
 				.build());
 		fm.setPower(0);
 		fw.setFireworkMeta(fm);
+		FireworkDamageAPI.addFirework(fw);
 		detonate(fw);
 	}
 	private static void detonate(final Firework f) {

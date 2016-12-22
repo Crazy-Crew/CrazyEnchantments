@@ -66,6 +66,13 @@ public class Support {
 		return false;
 	}
 	
+	public static boolean hasStackMob() {
+		if(Bukkit.getServer().getPluginManager().getPlugin("StackMob")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean inTerritory(Player player){
 		if(hasFactions()){
 			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");

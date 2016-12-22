@@ -27,11 +27,12 @@ import me.BadBones69.CrazyEnchantments.API.Events.AuraListener;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
 import me.BadBones69.CrazyEnchantments.Controlers.EnchantmentControl;
+import me.BadBones69.CrazyEnchantments.Controlers.FireworkDamageAPI;
 import me.BadBones69.CrazyEnchantments.Controlers.GKitzGUI;
-import me.BadBones69.CrazyEnchantments.Controlers.ShopGUI;
 import me.BadBones69.CrazyEnchantments.Controlers.LostBook;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
 import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
+import me.BadBones69.CrazyEnchantments.Controlers.ShopGUI;
 import me.BadBones69.CrazyEnchantments.Controlers.SignControl;
 import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
 import me.BadBones69.CrazyEnchantments.Enchantments.Armor;
@@ -43,6 +44,8 @@ import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes;
 import me.BadBones69.CrazyEnchantments.Enchantments.Swords;
 import me.BadBones69.CrazyEnchantments.Enchantments.Tools;
 import me.BadBones69.CrazyEnchantments.multisupport.SilkSpawners;
+import me.BadBones69.CrazyEnchantments.multisupport.StackMobSupport;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
@@ -73,6 +76,7 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new ArmorListener(), this);
 		pm.registerEvents(new ProtectionCrystal(), this);
 		pm.registerEvents(new CustomEnchantments(), this);
+		pm.registerEvents(new FireworkDamageAPI(this), this);		
 		//==========================================================================\\
 		pm.registerEvents(new Bows(), this);
 		pm.registerEvents(new Axes(), this);
@@ -84,6 +88,9 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new Swords(), this);
 		if(pm.getPlugin("SilkSpawners")!=null){
 			pm.registerEvents(new SilkSpawners(), this);
+		}
+		if(Support.hasStackMob()){
+			pm.registerEvents(new StackMobSupport(), this);
 		}
 		//==========================================================================\\
 		settings.setup(this);
