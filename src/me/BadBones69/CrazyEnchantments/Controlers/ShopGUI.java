@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
+import me.BadBones69.CrazyEnchantments.API.InfoType;
 import me.BadBones69.CrazyEnchantments.API.Version;
 
 public class ShopGUI implements Listener{
@@ -190,7 +191,7 @@ public class ShopGUI implements Listener{
 										}
 									}
 								}
-								player.getInventory().addItem(Methods.addGlow(EnchantmentControl.pick(cat)));
+								player.getInventory().addItem(EnchantmentControl.pick(cat));
 								return;
 							}
 						}
@@ -475,32 +476,10 @@ public class ShopGUI implements Listener{
 								openInfo((Player)player);
 								return;
 							}
-							List<String> types = new ArrayList<String>();
-							types.add("Helmets");
-							types.add("Boots");
-							types.add("Armor");
-							types.add("Sword");
-							types.add("Axe");
-							types.add("Bow");
-							types.add("Pickaxe");
-							types.add("Tool");
-							types.add("Misc");
-							for(String type : types){
+							for(InfoType ty : InfoType.getTypes()){
+								String type = ty.getName();
 								if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info."+type+".Name")))){
-									int size=getInfo(type).size()+1;
-									int slots=9;
-									for(;size>9;size-=9)slots+=9;
-									Inventory in = Bukkit.createInventory(null, slots, Methods.color("&c&lEnchantment Info"));
-									for(ItemStack i : getInfo(type)){
-										in.addItem(i);
-									}
-									if(Version.getVersion().getVersionInteger()<181){
-										in.setItem(slots-1, Methods.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-									}else{
-										in.setItem(slots-1, Methods.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
-									}
-									player.openInventory(in);
-									return;
+									openInfo(player, ty);
 								}
 							}
 							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name")))){
@@ -620,6 +599,23 @@ public class ShopGUI implements Listener{
 		inv.setItem(13, Methods.makeItem(Material.EYE_OF_ENDER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name"), 
 				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Other.Lore")));
 		player.openInventory(inv);
+	}
+	
+	public static void openInfo(Player player, InfoType type){
+		int size=getInfo(type.getName()).size()+1;
+		int slots=9;
+		for(;size>9;size-=9)slots+=9;
+		Inventory in = Bukkit.createInventory(null, slots, Methods.color("&c&lEnchantment Info"));
+		for(ItemStack i : getInfo(type.getName())){
+			in.addItem(i);
+		}
+		if(Version.getVersion().getVersionInteger()<181){
+			in.setItem(slots-1, Methods.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+		}else{
+			in.setItem(slots-1, Methods.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
+		}
+		player.openInventory(in);
+		return;
 	}
 	
 	public static ArrayList<ItemStack> getInfo(String type){

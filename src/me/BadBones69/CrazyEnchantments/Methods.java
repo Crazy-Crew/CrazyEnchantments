@@ -263,6 +263,26 @@ public class Methods{
 		item.setItemMeta(me);
 		return item;
 	}
+	public static ItemStack makeItem(String type, int amount, String name, List<String> lore, Boolean glowing){
+		ArrayList<String> l = new ArrayList<String>();
+		int ty = 0;
+		if(type.contains(":")){
+			String[] b = type.split(":");
+			type = b[0];
+			ty = Integer.parseInt(b[1]);
+		}
+		Material m = Material.matchMaterial(type);
+		ItemStack item = new ItemStack(m, amount, (short) ty);
+		ItemMeta me = item.getItemMeta();
+		me.setDisplayName(color(name));
+		for(String L:lore)l.add(color(L));
+		me.setLore(l);
+		item.setItemMeta(me);
+		if(glowing){
+			item = addGlow(item);
+		}
+		return item;
+	}
 	public static ItemStack makeItem(String type, int amount, String name, List<String> lore, Map<Enchantment, Integer> enchants){
 		ArrayList<String> l = new ArrayList<String>();
 		int ty = 0;

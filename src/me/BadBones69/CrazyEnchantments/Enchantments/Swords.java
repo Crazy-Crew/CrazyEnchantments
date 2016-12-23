@@ -108,7 +108,8 @@ public class Swords implements Listener{
 										Bukkit.getScheduler().cancelTask(reset.get(damager));
 										if(multi.get(damager)<=Main.CE.getMaxRageLevel())multi.put(damager, multi.get(damager) + (Main.CE.getPower(It, CEnchantments.RAGE)*0.1));
 										if(multi.get(damager).intValue() == num.get(damager)){
-											damager.sendMessage(Methods.color("&3You are now doing &a" + num.get(damager) + "x &3Damage."));
+											damager.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Rage.Rage-Up")
+													.replaceAll("%Level%", num.get(damager) + "").replaceAll("%level%", num.get(damager) + "")));
 											num.put(damager, num.get(damager)+1);
 										}
 										e.setDamage(e.getDamage() * multi.get(damager));
@@ -116,13 +117,13 @@ public class Swords implements Listener{
 									if(!multi.containsKey(damager)){
 										multi.put(damager, 1.0);
 										num.put(damager, 2);
-										damager.sendMessage(Methods.color("&aYour Rage is Building."));
+										damager.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Rage.Building")));
 									}
 									reset.put(damager, Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 										@Override
 										public void run() {
 											multi.remove(damager);
-											damager.sendMessage(Methods.color("&cYour Rage has Cooled Down."));
+											damager.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Rage.Cooled-Down")));
 										}
 									}, 4*20));
 								}

@@ -22,6 +22,7 @@ import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CustomEBook;
 import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
 import me.BadBones69.CrazyEnchantments.API.GKitz;
+import me.BadBones69.CrazyEnchantments.API.InfoType;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorListener;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraListener;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
@@ -201,6 +202,12 @@ public class Main extends JavaPlugin implements Listener{
 						ShopGUI.openInfo(player);
 						return true;
 					}else{
+						for(InfoType type : InfoType.getTypes()){
+							if(args[1].equalsIgnoreCase(type.getName())){
+								ShopGUI.openInfo((Player)sender, type);
+								return true;
+							}
+						}
 						String ench = args[1];
 						for(CEnchantments en : CE.getEnchantments()){
 							if(en.getName().equalsIgnoreCase(ench)||en.getCustomName().equalsIgnoreCase(ench)){
@@ -575,12 +582,12 @@ public class Main extends JavaPlugin implements Listener{
 						CustomEBook book = new CustomEBook(ench, lvl, amount);
 						book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
 						book.setSuccessRate(Methods.percentPick(Smax, Smin));
-						player.getInventory().addItem(Methods.addGlow(book.buildBook()));
+						player.getInventory().addItem(book.buildBook());
 					}else{
 						CEBook book = new CEBook(CE.getFromName(ench), lvl, amount);
 						book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
 						book.setSuccessRate(Methods.percentPick(Smax, Smin));
-						player.getInventory().addItem(Methods.addGlow(book.buildBook()));
+						player.getInventory().addItem(book.buildBook());
 					}
 					return true;
 				}

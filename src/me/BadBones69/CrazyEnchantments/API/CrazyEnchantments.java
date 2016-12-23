@@ -98,6 +98,7 @@ public class CrazyEnchantments {
 			if(en.getName().equalsIgnoreCase(name)){
 				return en;
 			}
+//			Bukkit.broadcastMessage(en.getName());  // This is for debugging configs
 			if(en.getCustomName().equalsIgnoreCase(name)){
 				return en;
 			}

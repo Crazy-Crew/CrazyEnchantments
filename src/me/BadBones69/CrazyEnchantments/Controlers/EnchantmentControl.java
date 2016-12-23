@@ -241,7 +241,13 @@ public class EnchantmentControl implements Listener{
 						.replaceAll("%Success_Rate%", Methods.percentPick(Smax, Smin)+"").replaceAll("%success_Rate%", Methods.percentPick(Smax, Smin)+""));
 			}
 		}
-		return Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, enchants.get(enchant), lore);
+		ItemStack item = Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, enchants.get(enchant), lore);
+		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")){
+			if(Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing")){
+				item = Methods.addGlow(item);
+			}
+		}
+		return item;
 	}
 	
 	public static String powerPicker(String en, String C){

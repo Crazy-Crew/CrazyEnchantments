@@ -2,6 +2,7 @@ Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   Enchantment-Book-Item: '340' #The item that the enchantment book is.
+  Enchantment-Book-Glowing: true #Toggle on or off if the book will have an enchanted look.
   GUISize: 54 #The size of the GUI, Must be a factor of 9
   Clouds: true #Enable and Disable the Clouds for the Wings Enchantment
   EnchantmentBookLore: #The lore on the enchantments books.

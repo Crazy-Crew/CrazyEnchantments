@@ -35,6 +35,10 @@ Messages:
   Given-GKit: '&7You have just given &6%Player%&7 a %Kit%&7 GKit.'
   Received-GKit: '&7You have just received a %Kit%&7 GKit.'
   No-GKit-Permission: '&cYou do not have permission to use the %Kit% GKit.'
+  Rage:
+    Building: '&aKeep it up, your rage is building.'
+    Cooled-Down: '&cYour Rage has Cooled Down.'
+    Rage-Up: '&3You are now doing &a%Level%x &3Damage.'
   InfoGUI:
     Categories-Info:
       Back:
