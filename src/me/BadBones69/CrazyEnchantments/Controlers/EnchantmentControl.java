@@ -185,7 +185,7 @@ public class EnchantmentControl implements Listener{
 	public void onDescriptionSend(PlayerInteractEvent e){
 		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description") || !Main.settings.getConfig().contains("Settings.EnchantmentOptions.Right-Click-Book-Description")){
 			if(e.getItem()!=null){
-				ItemStack item = e.getItem();
+				ItemStack item = Methods.getItemInHand(e.getPlayer());
 				if(item.getType()!=Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1).getType())return;
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){

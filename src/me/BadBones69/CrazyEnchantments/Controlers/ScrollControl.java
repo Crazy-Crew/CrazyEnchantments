@@ -10,12 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEBook;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CustomEBook;
@@ -48,6 +49,11 @@ public class ScrollControl implements Listener{
 								}
 							}
 						}
+					}
+				}
+				if(inv.getType() == InventoryType.CRAFTING){
+					if(e.getRawSlot() < 9){
+						return;
 					}
 				}
 				if(item.hasItemMeta()){

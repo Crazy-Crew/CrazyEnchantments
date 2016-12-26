@@ -22,7 +22,7 @@ public class LostBook implements Listener{
 		Player player = e.getPlayer();
 		if(e.getItem()!=null){
 			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
-				ItemStack item = e.getItem();
+				ItemStack item = Methods.getItemInHand(player);
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
 						boolean toggle = false;
