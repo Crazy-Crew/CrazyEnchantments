@@ -706,4 +706,14 @@ public class Methods{
 		return enchants.get(en.getName());
 	}
 	
+	public static void noStack(Entity en) {
+		if (Bukkit.getPluginManager().isPluginEnabled("MobStacker2")) {
+			MobStacker2.noStack(en);
+			return;
+		}
+		if (Bukkit.getPluginManager().isPluginEnabled("MobStacker")) {
+			MobStacker.noStack(en);
+			return;
+		}
+	}
 }
