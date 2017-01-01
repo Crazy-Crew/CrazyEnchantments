@@ -384,7 +384,6 @@ public class CustomEnchantments implements Listener{
 		List<String> newLore = new ArrayList<String>();
 		List<String> lores = new ArrayList<String>();
 		HashMap<String, String> enchantments = new HashMap<String, String>();
-		ItemMeta meta = item.getItemMeta();
 		for(CEnchantments en : Main.CE.getItemEnchantments(item)){
 			enchantments.put(en.getName(), Methods.color(en.getEnchantmentColor() + en.getCustomName() + " " +  convertPower(Main.CE.getPower(item, en))));
 			Main.CE.removeEnchantment(item, en);
@@ -393,6 +392,7 @@ public class CustomEnchantments implements Listener{
 			enchantments.put(en, Methods.color(getEnchantmentColor(en) + getCustomName(en) + " " + convertPower(getPower(item, en))));
 			removeEnchantment(item, en);
 		}
+		ItemMeta meta = item.getItemMeta();
 		if(meta != null){
 			if(meta.hasLore()){
 				for(String l : item.getItemMeta().getLore()){
