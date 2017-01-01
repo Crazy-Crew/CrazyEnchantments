@@ -1,9 +1,9 @@
 package me.BadBones69.CrazyEnchantments.API;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -98,7 +98,6 @@ public class CrazyEnchantments {
 			if(en.getName().equalsIgnoreCase(name)){
 				return en;
 			}
-//			Bukkit.broadcastMessage(en.getName());  // This is for debugging configs
 			if(en.getCustomName().equalsIgnoreCase(name)){
 				return en;
 			}
@@ -161,24 +160,32 @@ public class CrazyEnchantments {
 			removeEnchantment(item, enchant);
 		}
 		List<String> newLore = new ArrayList<String>();
+		List<String> lores = new ArrayList<String>();
+		HashMap<String, String> enchantments = new HashMap<String, String>();
+		for(CEnchantments en : getItemEnchantments(item)){
+			enchantments.put(en.getName(), Methods.color(en.getEnchantmentColor() + en.getCustomName() + " " +  convertPower(getPower(item, en))));
+			removeEnchantment(item, en);
+		}
+		for(String en : Main.CustomE.getItemEnchantments(item)){
+			enchantments.put(en, Methods.color(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en) + " " + convertPower(Main.CustomE.getPower(item, en))));
+			Main.CustomE.removeEnchantment(item, en);
+		}
 		ItemMeta meta = item.getItemMeta();
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasLore()){
-				newLore.addAll(item.getItemMeta().getLore());
+		if(meta != null){
+			if(meta.hasLore()){
+				for(String l : item.getItemMeta().getLore()){
+					lores.add(l);
+				}
 			}
 		}
-		newLore.add(color(enchant.getEnchantmentColor()+enchant.getCustomName()+" "+convertPower(level)));
-		if(newLore.contains(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
-			newLore.remove(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
-			newLore.add(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+		enchantments.put(enchant.getName(), Methods.color(enchant.getEnchantmentColor() + enchant.getCustomName() + " " + convertPower(level)));
+		for(String en : enchantments.keySet()){
+			newLore.add(enchantments.get(en));
 		}
-		if(newLore.contains(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
-			newLore.remove(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
-			newLore.add(color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
-		}
+		newLore.addAll(lores);
 		meta.setLore(newLore);
 		item.setItemMeta(meta);
-		return item;
+		return Methods.addGlow(item);
 	}
 	
 	/**
@@ -211,9 +218,9 @@ public class CrazyEnchantments {
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
-						for(CEnchantments enchantment : getEnchantments()){
-							if(lore.contains(enchantment.getCustomName())){
-								enchantments.add(enchantment);
+						for(CEnchantments en : getEnchantments()){
+							if(lore.contains(en.getCustomName())){
+								enchantments.add(en);
 							}
 						}
 					}
@@ -322,7 +329,4 @@ public class CrazyEnchantments {
 		return i+"";
 	}
 	
-	private String color(String msg){
-		return ChatColor.translateAlternateColorCodes('&', msg);
-	}
 }

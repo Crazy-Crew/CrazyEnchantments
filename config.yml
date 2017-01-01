@@ -190,6 +190,9 @@ Settings:
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also?
     MaxRageLevel: 4 #The max amount rage can stack when fighting.
     Right-Click-Book-Description: true #Toggles wether when you right click the enchantment book if it messages the player the description or not.
+    Armor-Upgrade: #Having this enabled will allow players to try and add a higher level of an enchantment onto an item with a lower level of the enchantment.
+      Toggle: true #Toggle on or off the ability to upgrade the enchantments.
+      Enchantment-Break: true #If the book's destroy rate happens the item doesn't break but instead the current lower version of the enchantment is destroyed. If false then the item will be destroyed instead.
     Wings: #Options for the Wings Enchantment.
       Regions: #All world guard regions the Wings enchantment can work in.
         - 'Free_Fly'

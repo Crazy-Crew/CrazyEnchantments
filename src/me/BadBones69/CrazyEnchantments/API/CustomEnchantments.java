@@ -382,21 +382,29 @@ public class CustomEnchantments implements Listener{
 			removeEnchantment(item, enchant);
 		}
 		List<String> newLore = new ArrayList<String>();
+		List<String> lores = new ArrayList<String>();
+		HashMap<String, String> enchantments = new HashMap<String, String>();
 		ItemMeta meta = item.getItemMeta();
-		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasLore()){
-				newLore.addAll(item.getItemMeta().getLore());
+		if(meta != null){
+			if(meta.hasLore()){
+				for(CEnchantments en : Main.CE.getItemEnchantments(item)){
+					enchantments.put(en.getName(), Methods.color(en.getEnchantmentColor() + en.getCustomName() + " " +  convertPower(Main.CE.getPower(item, en))));
+					Main.CE.removeEnchantment(item, en);
+				}
+				for(String en : getItemEnchantments(item)){
+					enchantments.put(en, Methods.color(getEnchantmentColor(en) + getCustomName(en) + " " + convertPower(getPower(item, en))));
+					removeEnchantment(item, en);
+				}
+				for(String l : item.getItemMeta().getLore()){
+					lores.add(l);
+				}
 			}
 		}
-		newLore.add(Methods.color(getEnchantmentColor(enchant)+getCustomName(enchant)+" "+convertPower(level)));
-		if(newLore.contains(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")))){
-			newLore.remove(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
-			newLore.add(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
+		enchantments.put(enchant, Methods.color(getEnchantmentColor(enchant) + getCustomName(enchant) + " " + convertPower(level)));
+		for(String en : enchantments.keySet()){
+			newLore.add(enchantments.get(en));
 		}
-		if(newLore.contains(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
-			newLore.remove(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
-			newLore.add(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
-		}
+		newLore.addAll(lores);
 		meta.setLore(newLore);
 		item.setItemMeta(meta);
 		return item;

@@ -69,33 +69,109 @@ public class EnchantmentControl implements Listener{
 					if(c.getItemMeta().hasDisplayName()){
 						if(c.getType()!=Main.CE.getEnchantmentBookItem().getType())return;
 						String name = c.getItemMeta().getDisplayName();
+						CEnchantments en = CEnchantments.GLOWING;
 						String enchant = "Glowing";
-						String enchantColor = "&7";
+						Boolean custom = true;
 						EnchantmentType type = EnchantmentType.ALL;
-						for(CEnchantments en : Main.CE.getEnchantments()){
-							if(name.contains(Methods.color(en.getBookColor()+en.getCustomName()))){
-								enchant = en.getCustomName();
-								enchantColor = en.getEnchantmentColor();
-								type = en.getType();
+						for(CEnchantments ench : Main.CE.getEnchantments()){
+							if(name.contains(Methods.color(ench.getBookColor()+ench.getCustomName()))){
+								en = ench;
+								enchant = ench.getName();
+								type = ench.getType();
+								custom = false;
 							}
 						}
-						for(String en : Main.CustomE.getEnchantments()){
-							if(name.contains(Methods.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
-								enchant = Main.CustomE.getCustomName(en);
-								enchantColor = Main.CustomE.getEnchantmentColor(en);
-								type = Main.CustomE.getType(en);
+						for(String ench : Main.CustomE.getEnchantments()){
+							if(name.contains(Methods.color(Main.CustomE.getBookColor(ench)+Main.CustomE.getCustomName(ench)))){
+								enchant = Main.CustomE.getCustomName(ench);
+								type = Main.CustomE.getType(ench);
+								custom = true;
 							}
 						}
 						if(type.getItems().contains(item.getType())){
 							if(c.getAmount() == 1){
 								boolean success = successChance(c);
 								boolean destroy = destroyChance(c);
-								if(item.getItemMeta().hasLore()){
-									for(String l : item.getItemMeta().getLore()){
-										if(l.contains(enchant)){
-											return;
+								Boolean toggle = false;
+								Boolean lowerLvl = false;
+								if(custom){
+									if(Main.CustomE.hasEnchantment(item, enchant)){
+										toggle = true;
+										if(Main.CustomE.getPower(item, enchant) < Main.CustomE.getBookPower(c, enchant)){
+											lowerLvl = true;
 										}
 									}
+								}else{
+									if(Main.CE.hasEnchantment(item, en)){
+										toggle = true;
+										if(Main.CE.getPower(item, en) < Main.CE.getBookPower(c, en)){
+											lowerLvl = true;
+										}
+									}
+								}
+								if(toggle){
+									if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle")){
+										if(lowerLvl){
+											e.setCancelled(true);
+											if(success){
+												String n = "Glowing";
+												String l = "0";
+												if(custom){
+													e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, Main.CustomE.getBookPower(c, enchant)));
+													n = enchant;
+													l = Main.CustomE.getBookPower(c, enchant) + "";
+												}else{
+													e.setCurrentItem(Main.CE.addEnchantment(item, en, Main.CE.getBookPower(c, en)));
+													n = en.getName();
+													l = Main.CE.getBookPower(c, en) + "";
+												}
+												player.setItemOnCursor(new ItemStack(Material.AIR));
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Enchantment-Upgrade.Success")
+														.replaceAll("%Enchantment%", n).replaceAll("%enchantment%", n)
+														.replaceAll("%Level%", l).replaceAll("%level%", l)));
+												try{
+													if(Version.getVersion().getVersionInteger()>=191){
+														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
+													}else{
+														player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
+													}
+												}catch(Exception ex){}
+												return;
+											}else if(destroy){
+												if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")){
+													if(custom){
+														Main.CustomE.removeEnchantment(item, enchant);
+													}else{
+														Main.CE.removeEnchantment(item, en);
+													}
+												}else{
+													e.setCurrentItem(new ItemStack(Material.AIR));
+												}
+												player.setItemOnCursor(new ItemStack(Material.AIR));
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Enchantment-Upgrade.Destroyed")));
+												try{
+													if(Version.getVersion().getVersionInteger()>=191){
+														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+													}else{
+														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+													}
+												}catch(Exception ex){}
+												return;
+											}else{
+												player.setItemOnCursor(new ItemStack(Material.AIR));
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Enchantment-Upgrade.Failed")));
+												try{
+													if(Version.getVersion().getVersionInteger()>=191){
+														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+													}else{
+														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+													}
+												}catch(Exception ex){}
+												return;
+											}
+										}
+									}
+									return;
 								}
 								if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
 									int limit = 0;
@@ -103,16 +179,16 @@ public class EnchantmentControl implements Listener{
 									for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
 										String perm = Permission.getPermission();
 										if(perm.startsWith("crazyenchantments.limit.")){
-											perm=perm.replace("crazyenchantments.limit.", "");
+											perm = perm.replace("crazyenchantments.limit.", "");
 											if(Methods.isInt(perm)){
-												if(limit<Integer.parseInt(perm)){
+												if(limit < Integer.parseInt(perm)){
 													limit = Integer.parseInt(perm);
 												}
 											}
 										}
 									}
 									if(!player.hasPermission("crazyenchantments.bypass")){
-										if(total>=limit){
+										if(total >= limit){
 											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));
 											return;
 										}
@@ -123,7 +199,11 @@ public class EnchantmentControl implements Listener{
 									name = Methods.removeColor(name);
 									String[] breakdown = name.split(" ");
 									String color = "&7";
-									color = enchantColor;
+									if(custom){
+										color = Main.CustomE.getEnchantmentColor(enchant);
+									}else{
+										color = en.getEnchantmentColor();
+									}
 									String enchantment = enchant;
 									String lvl = breakdown[1];
 									String full = Methods.color(color+enchantment+" "+lvl);

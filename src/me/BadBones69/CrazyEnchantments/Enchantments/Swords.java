@@ -105,7 +105,9 @@ public class Swords implements Listener{
 								Bukkit.getPluginManager().callEvent(event);
 								if(!event.isCancelled()){
 									if(multi.containsKey(damager)){
-										Bukkit.getScheduler().cancelTask(reset.get(damager));
+										if(reset.get(damager) != null){
+											Bukkit.getScheduler().cancelTask(reset.get(damager));
+										}
 										if(multi.get(damager)<=Main.CE.getMaxRageLevel())multi.put(damager, multi.get(damager) + (Main.CE.getPower(It, CEnchantments.RAGE)*0.1));
 										if(multi.get(damager).intValue() == num.get(damager)){
 											damager.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Rage.Rage-Up")

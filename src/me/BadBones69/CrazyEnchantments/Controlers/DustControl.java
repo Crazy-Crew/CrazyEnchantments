@@ -29,25 +29,40 @@ public class DustControl implements Listener{
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
-		if(inv!=null){
-			if(e.getCurrentItem()!=null){
-				if(e.getCursor()!=null){
+		if(inv != null){
+			if(e.getCurrentItem() != null){
+				if(e.getCursor() != null){
 					ItemStack book = e.getCurrentItem();
 					ItemStack dust = e.getCursor();
-					if(book.getAmount()!=1||dust.getAmount()!=1)return;
-					if(book.hasItemMeta()&&dust.hasItemMeta()){
-						if(book.getItemMeta().hasLore()&&dust.getItemMeta().hasLore()){
-							if(book.getItemMeta().hasDisplayName()&&dust.getItemMeta().hasDisplayName()){
-								if(book.getType()==Main.CE.getEnchantmentBookItem().getType()){
+					if(book.getAmount() != 1 || dust.getAmount() != 1)return;
+					if(book.hasItemMeta() && dust.hasItemMeta()){
+						if(book.getItemMeta().hasLore() && dust.getItemMeta().hasLore()){
+							if(book.getItemMeta().hasDisplayName() && dust.getItemMeta().hasDisplayName()){
+								if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
+									Boolean toggle = false;
+									String name = book.getItemMeta().getDisplayName();
+									for(CEnchantments en : Main.CE.getEnchantments()){
+										if(name.contains(Methods.color(en.getBookColor()+en.getCustomName()))){
+											toggle = true;
+										}
+									}
+									for(String en : Main.CustomE.getEnchantments()){
+										if(name.contains(Methods.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
+											toggle = true;
+										}
+									}
+									if(!toggle){
+										return;
+									}
 									if(dust.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Name")))){
-										if(dust.getType()==Methods.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"), 1, "", Arrays.asList("")).getType()){
+										if(dust.getType() == Methods.makeItem(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.Item"), 1, "", Arrays.asList("")).getType()){
 											int per = getPercent("SuccessDust", dust);
 											if(Methods.hasArgument("%Success_Rate%", Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"))){
 												int total = Methods.getPercent("%Success_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
-												if(total>=100)return;
+												if(total >= 100)return;
 												per += total;
-												if(per<0)per=0;
-												if(per>100)per=100;
+												if(per < 0)per=0;
+												if(per > 100)per=100;
 												e.setCancelled(true);
 												setLore(book, per, "Success");
 												e.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
@@ -56,14 +71,14 @@ public class DustControl implements Listener{
 										}
 									}
 									if(dust.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Name")))){
-										if(dust.getType()==Methods.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"), 1, "", Arrays.asList("")).getType()){
+										if(dust.getType() == Methods.makeItem(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.Item"), 1, "", Arrays.asList("")).getType()){
 											int per = getPercent("DestroyDust", dust);
 											if(Methods.hasArgument("%Destroy_Rate%", Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"))){
 												int total = Methods.getPercent("%Destroy_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
-												if(total<=0)return;
+												if(total <= 0)return;
 												per = total-per;
-												if(per<0)per=0;
-												if(per>100)per=100;
+												if(per < 0)per = 0;
+												if(per > 100)per = 100;
 												e.setCancelled(true);
 												setLore(book, per, "Destroy");
 												e.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));

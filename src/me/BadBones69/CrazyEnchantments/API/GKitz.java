@@ -286,9 +286,19 @@ public class GKitz implements Listener{
 								if(Enchantment.getByName(D.split(":")[0]) != null){
 									enchantments.put(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
 								}
+								for(Enchantment en : Enchantment.values()){
+									if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+										enchantments.put(en, Integer.parseInt(D.split(":")[1]));
+									}
+								}
 							}else{
 								if(Enchantment.getByName(D) != null){
 									enchantments.put(Enchantment.getByName(D), 1);
+								}
+								for(Enchantment en : Enchantment.values()){
+									if(Methods.getEnchantmentName(en).equalsIgnoreCase(D)){
+										enchantments.put(en, 1);
+									}
 								}
 							}
 						}
@@ -297,9 +307,19 @@ public class GKitz implements Listener{
 							if(Enchantment.getByName(d.split(":")[0]) != null){
 								enchantments.put(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
 							}
+							for(Enchantment en : Enchantment.values()){
+								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+									enchantments.put(en, Integer.parseInt(d.split(":")[1]));
+								}
+							}
 						}else{
 							if(Enchantment.getByName(d) != null){
 								enchantments.put(Enchantment.getByName(d), 1);
+							}
+						}
+						for(Enchantment en : Enchantment.values()){
+							if(Methods.getEnchantmentName(en).equalsIgnoreCase(d)){
+								enchantments.put(en, 1);
 							}
 						}
 					}

@@ -16,6 +16,7 @@ public class CustomEBook {
 	String enchantment;
 	int amount;
 	int power;
+	boolean glowing;
 	int destory_rate;
 	int success_rate;
 	
@@ -29,6 +30,11 @@ public class CustomEBook {
 		this.enchantment = enchantment;
 		this.amount = amount;
 		this.power = power;
+		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")){
+			this.glowing = Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing");
+		}else{
+			this.glowing = false;
+		}
 		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
 		int Smin = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
 		int Dmax = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
@@ -43,6 +49,14 @@ public class CustomEBook {
 	 */
 	public void setEnchantemnt(String enchantment){
 		this.enchantment = enchantment;
+	}
+	
+	/**
+	 * 
+	 * @param toggle Toggle on or off the glowing effect.
+	 */
+	public void setGlowing(Boolean toggle){
+		this.glowing = toggle;
 	}
 	
 	/**
@@ -96,7 +110,7 @@ public class CustomEBook {
 						.replaceAll("%Success_Rate%", success_rate+"").replaceAll("%success_Rate%", success_rate+""));
 			}
 		}
-		return Methods.makeItem(item, amount, name, lore);
+		return Methods.makeItem(item, amount, name, lore, glowing);
 	}
 	
 	private String convertPower(Integer i){
