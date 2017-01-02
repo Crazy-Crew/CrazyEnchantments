@@ -76,7 +76,7 @@ public class EnchantmentControl implements Listener{
 						for(CEnchantments ench : Main.CE.getEnchantments()){
 							if(name.contains(Methods.color(ench.getBookColor()+ench.getCustomName()))){
 								en = ench;
-								enchant = ench.getName();
+								enchant = ench.getCustomName();
 								type = ench.getType();
 								custom = false;
 							}
@@ -113,21 +113,18 @@ public class EnchantmentControl implements Listener{
 									if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle")){
 										if(lowerLvl){
 											e.setCancelled(true);
-											if(success){
-												String n = "Glowing";
+											if(success || player.getGameMode() == GameMode.CREATIVE){
 												String l = "0";
 												if(custom){
 													e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, Main.CustomE.getBookPower(c, enchant)));
-													n = enchant;
 													l = Main.CustomE.getBookPower(c, enchant) + "";
 												}else{
 													e.setCurrentItem(Main.CE.addEnchantment(item, en, Main.CE.getBookPower(c, en)));
-													n = en.getName();
 													l = Main.CE.getBookPower(c, en) + "";
 												}
 												player.setItemOnCursor(new ItemStack(Material.AIR));
 												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Enchantment-Upgrade.Success")
-														.replaceAll("%Enchantment%", n).replaceAll("%enchantment%", n)
+														.replaceAll("%Enchantment%", enchant).replaceAll("%enchantment%", enchant)
 														.replaceAll("%Level%", l).replaceAll("%level%", l)));
 												try{
 													if(Version.getVersion().getVersionInteger()>=191){
