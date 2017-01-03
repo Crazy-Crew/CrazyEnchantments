@@ -26,6 +26,7 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.API.Version;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class Tinkerer implements Listener{
 	
@@ -214,23 +215,24 @@ public class Tinkerer implements Listener{
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onInvClose(final InventoryCloseEvent e){
 		final Inventory inv = e.getInventory();
+		final Player player = (Player) e.getPlayer();
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
-				if(inv!=null){
+				if(inv != null){
 					if(inv.getName().equals(Methods.color(Main.settings.getTinker().getString("Settings.GUIName")))){
-						Boolean dead = e.getPlayer().isDead();
 						for(int slot : getSlot().keySet()){
-							if(inv.getItem(slot)!=null){
+							if(inv.getItem(slot) != null){
 								if(inv.getItem(slot).getType()!=Material.AIR){
-									if(dead){
-										e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
+									if(player.isDead()){
+										player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
 									}else{
-										if(Methods.isInvFull(((Player)e.getPlayer()))){
-											e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
+										if(Methods.isInvFull(player)){
+											player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
 										}else{
-											e.getPlayer().getInventory().addItem(inv.getItem(slot));
+											player.getInventory().addItem(inv.getItem(slot));
 										}
 									}
+									inv.clear();
 								}
 							}
 						}
@@ -247,7 +249,11 @@ public class Tinkerer implements Listener{
 		for(String l : Main.settings.getTinker().getStringList("Settings.BottleOptions.Lore")){
 			lore.add(l.replaceAll("%Total%", getTotalXP(item)+"").replaceAll("%total%", getTotalXP(item)+""));
 		}
-		return Methods.makeItem(id, 1, name, lore);
+		ItemStack it = Methods.makeItem(id, 1, name, lore);
+		if(Support.hasMegaSkills()){
+			it = Methods.makeItem(Material.EXP_BOTTLE, 1, 0, "&6Enhanced Exp - &a&l" + getTotalXP(item) + " EXP");
+		}
+		return it;
 	}
 	
 	private HashMap<Integer, Integer> getSlot(){

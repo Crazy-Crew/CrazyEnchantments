@@ -300,6 +300,7 @@ public class BlackSmith implements Listener{
 											e.getPlayer().getInventory().addItem(inv.getItem(slot));
 										}
 									}
+									inv.clear();
 								}
 							}
 						}

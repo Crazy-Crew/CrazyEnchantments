@@ -73,6 +73,13 @@ public class Support {
 		return false;
 	}
 	
+	public static boolean hasMegaSkills() {
+		if(Bukkit.getServer().getPluginManager().getPlugin("MegaSkills")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean inTerritory(Player player){
 		if(hasFactions()){
 			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
