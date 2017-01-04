@@ -17,8 +17,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.API.Version;
@@ -173,6 +173,13 @@ public class EnchantmentControl implements Listener{
 								if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
 									int limit = 0;
 									int total = Methods.getEnchAmount(item);
+									for(int i = 1; i < 100; i++){
+										if(player.hasPermission("crazyenchantments.limit." + i)){
+											if(limit < i){
+												limit = i;
+											}
+										}
+									}
 									for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
 										String perm = Permission.getPermission();
 										if(perm.startsWith("crazyenchantments.limit.")){

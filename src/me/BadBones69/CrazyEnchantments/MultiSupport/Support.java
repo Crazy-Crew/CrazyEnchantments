@@ -47,6 +47,12 @@ public class Support {
 		}
 		return false;
 	}
+	public static boolean hasSilkSpawner(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners")!=null){
+			return true;
+		}
+		return false;
+	}
 	public static boolean hasSpartan(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Spartan")!=null){
 			return true;

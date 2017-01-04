@@ -23,6 +23,7 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class Tools implements Listener{
 
@@ -90,9 +91,11 @@ public class Tools implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
-		if(e.isCancelled())return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
+		if(e.isCancelled() || block.getType() == Material.AIR){
+			return;
+		}
 		if(player.getGameMode()!=GameMode.CREATIVE){
 			ItemStack item = Methods.getItemInHand(player);
 			if(Main.CE.hasEnchantments(item)){
@@ -101,7 +104,7 @@ public class Tools implements Listener{
 						Boolean T = false;// If the item has silk touch or not.
 						if(item.getItemMeta().hasEnchants()){
 							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
-								if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners") != null){
+								if(Support.hasSilkSpawner()){
 									if(block.getType() == Material.MOB_SPAWNER){
 										T = true;
 									}
@@ -157,13 +160,18 @@ public class Tools implements Listener{
 									}
 								}
 								for(Material m : drops.keySet()){
+									ItemStack i = new ItemStack(m, drops.get(m));
+									if(m == Material.INK_SACK){
+										i = new ItemStack(m, drops.get(m), (short) 4);
+									}
 									if(Methods.isInvFull(player)){
-										player.getWorld().dropItem(player.getLocation(), new ItemStack(m, drops.get(m)));
+										player.getWorld().dropItem(player.getLocation(), i);
 									}else{
-										player.getInventory().addItem(new ItemStack(m, drops.get(m)));
+										player.getInventory().addItem(i);
 									}
 								}
 								block.setType(Material.AIR);
+								Methods.removeDurability(item, player);
 							}
 						}
 					}
@@ -180,7 +188,7 @@ public class Tools implements Listener{
 		ores.put(Material.DIAMOND_ORE, Material.DIAMOND);
 		ores.put(Material.EMERALD_ORE, Material.EMERALD);
 		ores.put(Material.REDSTONE_ORE, Material.REDSTONE);
-		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK,1,(short)4).getType());
+		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK, 1, (short) 4).getType());
 		return ores;
 	}
 	

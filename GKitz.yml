@@ -43,6 +43,7 @@ GKitz: #GKit optons.
     Display: #All the display option in the gui.
       Slot: 12 #Slot the item is located at in the gui.
       Item: '160:1' #The item that is displayed for the GKit.
+      Glowing: true #Toggle on or off if the item has an enchanted effect.
       Name: '&6&lThe Hero GKit' #Display name of the GKit.
       Lore: #The lore that goes on the display item.
         - '&7A kit that used to be worn'
@@ -63,6 +64,7 @@ GKitz: #GKit optons.
     Display:
       Slot: 14
       Item: '160:11'
+      Glowing: true
       Name: '&9&lThe Peace Keeper GKit'
       Lore:
         - '&7A kit that used to be worn'
@@ -79,23 +81,24 @@ GKitz: #GKit optons.
       - 'Item:313, Amount:1, Name:&9&lPeace Keeper Boots, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&9A special boots worn by a peace keeper.,&9Take special care of this.'
     Commands:
       - 'ce book overload 5 1 %Player%'
-  Villan:
+  Villain:
     Display:
       Slot: 16
       Item: '160:14'
-      Name: '&4&lThe Villan GKit'
+      Glowing: true
+      Name: '&4&lThe Villain GKit'
       Lore:
         - '&7A kit that used to be worn'
-        - '&7into battle by a evil villan.'
+        - '&7into battle by a evil villain.'
         - ''
         - '&7Cooldown: &624 Hours'
         - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
         - '&7&l(&4&l!&7&l) &7Right click to preview'
     Cooldown: '24h'
     Items:
-      - 'Item:310, Amount:1, Name:&4&lVillan Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&cA special helmet worn by a evil villan.,&cTake special care of this.'
-      - 'Item:311, Amount:1, Name:&4&lVillan Chestplate, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special chestplate worn by a evil villan.,&cTake special care of this.'
-      - 'Item:312, Amount:1, Name:&4&lVillan Leggings, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special leggings worn by a evil villan.,&cTake special care of this.'
-      - 'Item:313, Amount:1, Name:&4&lVillan Boots, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&cA special boots worn by a evil villan.,&cTake special care of this.'
+      - 'Item:310, Amount:1, Name:&4&lVillain Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&cA special helmet worn by a evil villain.,&cTake special care of this.'
+      - 'Item:311, Amount:1, Name:&4&lVillain Chestplate, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special chestplate worn by a evil villain.,&cTake special care of this.'
+      - 'Item:312, Amount:1, Name:&4&lVillain Leggings, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special leggings worn by a evil villain.,&cTake special care of this.'
+      - 'Item:313, Amount:1, Name:&4&lVillain Boots, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&cA special boots worn by a evil villain.,&cTake special care of this.'
     Commands:
       - 'ce book overload 5 1 %Player%'

@@ -98,12 +98,28 @@ public class GKitz implements Listener{
 						if(d.contains(",")){
 							for(String D : d.split(",")){
 								if(D.contains(":")){
-									if(Enchantment.getByName(D.split(":")[0]) != null){
-										item.addEnchantment(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
-									}
-									for(Enchantment en : Enchantment.values()){
-										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
-											item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
+									if(D.contains("-")){
+										Integer min = Integer.parseInt(D.split(":")[1].split("-")[0]);
+										Integer max = Integer.parseInt(D.split(":")[1].split("-")[1]);
+										int level = levelPick(max, min);
+										if(level > 0){
+											if(Enchantment.getByName(D.split(":")[0]) != null){
+												item.addEnchantment(Enchantment.getByName(D.split(":")[0]), level);
+											}
+											for(Enchantment en : Enchantment.values()){
+												if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+													item.addEnchantment(en, level);
+												}
+											}
+										}
+									}else{
+										if(Enchantment.getByName(D.split(":")[0]) != null){
+											item.addEnchantment(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
+										}
+										for(Enchantment en : Enchantment.values()){
+											if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+												item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
+											}
 										}
 									}
 								}else{
@@ -119,12 +135,28 @@ public class GKitz implements Listener{
 							}
 						}else{
 							if(d.contains(":")){
-								if(Enchantment.getByName(d.split(":")[0]) != null){
-									item.addEnchantment(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
-								}
-								for(Enchantment en : Enchantment.values()){
-									if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
-										item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
+								if(d.contains("-")){
+									Integer min = Integer.parseInt(d.split(":")[1].split("-")[0]);
+									Integer max = Integer.parseInt(d.split(":")[1].split("-")[1]);
+									int level = levelPick(max, min);
+									if(level > 0){
+										if(Enchantment.getByName(d.split(":")[0]) != null){
+											item.addEnchantment(Enchantment.getByName(d.split(":")[0]), level);
+										}
+										for(Enchantment en : Enchantment.values()){
+											if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+												item.addEnchantment(en, level);
+											}
+										}
+									}
+								}else{
+									if(Enchantment.getByName(d.split(":")[0]) != null){
+										item.addEnchantment(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
+									}
+									for(Enchantment en : Enchantment.values()){
+										if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+											item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
+										}
 									}
 								}
 							}else{
@@ -166,27 +198,11 @@ public class GKitz implements Listener{
 										}
 									}
 								}else{
-									if(d.contains("-")){
-										String enchant = D;
-										Integer min = Integer.parseInt(D.split("-")[0]);
-										Integer max = Integer.parseInt(D.split("-")[1]);
-										int level = levelPick(max, min);
-										if(Main.CE.isEnchantment(enchant)){
-											if(level > 0){
-												item.addCEEnchantment(Main.CE.getFromName(enchant), level);
-											}
-										}else if(Main.CustomE.isEnchantment(enchant)){
-											if(level > 0){
-												item.addCustomEnchantment(enchant, level);
-											}
-										}
-									}else{
-										String enchant = D;
-										if(Main.CE.isEnchantment(enchant)){
-											item.addCEEnchantment(Main.CE.getFromName(enchant), 1);
-										}else if(Main.CustomE.isEnchantment(enchant)){
-											item.addCustomEnchantment(enchant, 1);
-										}
+									String enchant = D;
+									if(Main.CE.isEnchantment(enchant)){
+										item.addCEEnchantment(Main.CE.getFromName(enchant), 1);
+									}else if(Main.CustomE.isEnchantment(enchant)){
+										item.addCustomEnchantment(enchant, 1);
 									}
 								}
 							}
@@ -215,27 +231,11 @@ public class GKitz implements Listener{
 									}
 								}
 							}else{
-								if(d.contains("-")){
-									String enchant = d;
-									Integer min = Integer.parseInt(d.split("-")[0]);
-									Integer max = Integer.parseInt(d.split("-")[1]);
-									int level = levelPick(max, min);
-									if(Main.CE.isEnchantment(enchant)){
-										if(level > 0){
-											item.addCEEnchantment(Main.CE.getFromName(enchant), level);
-										}
-									}else if(Main.CustomE.isEnchantment(enchant)){
-										if(level > 0){
-											item.addCustomEnchantment(enchant, level);
-										}
-									}
-								}else{
-									String enchant = d;
-									if(Main.CE.isEnchantment(enchant)){
-										item.addCEEnchantment(Main.CE.getFromName(enchant), 1);
-									}else if(Main.CustomE.isEnchantment(enchant)){
-										item.addCustomEnchantment(enchant, 1);
-									}
+								String enchant = d;
+								if(Main.CE.isEnchantment(enchant)){
+									item.addCEEnchantment(Main.CE.getFromName(enchant), 1);
+								}else if(Main.CustomE.isEnchantment(enchant)){
+									item.addCustomEnchantment(enchant, 1);
 								}
 							}
 						}
@@ -283,12 +283,16 @@ public class GKitz implements Listener{
 					if(d.contains(",")){
 						for(String D : d.split(",")){
 							if(D.contains(":")){
-								if(Enchantment.getByName(D.split(":")[0]) != null){
-									enchantments.put(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
-								}
-								for(Enchantment en : Enchantment.values()){
-									if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
-										enchantments.put(en, Integer.parseInt(D.split(":")[1]));
+								if(D.contains("-")){
+									customEnchantments.add("&7" + D.replaceAll(":", " "));
+								}else{
+									if(Enchantment.getByName(D.split(":")[0]) != null){
+										enchantments.put(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
+									}
+									for(Enchantment en : Enchantment.values()){
+										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+											enchantments.put(en, Integer.parseInt(D.split(":")[1]));
+										}
 									}
 								}
 							}else{
@@ -316,10 +320,10 @@ public class GKitz implements Listener{
 							if(Enchantment.getByName(d) != null){
 								enchantments.put(Enchantment.getByName(d), 1);
 							}
-						}
-						for(Enchantment en : Enchantment.values()){
-							if(Methods.getEnchantmentName(en).equalsIgnoreCase(d)){
-								enchantments.put(en, 1);
+							for(Enchantment en : Enchantment.values()){
+								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d)){
+									enchantments.put(en, 1);
+								}
 							}
 						}
 					}

@@ -85,6 +85,7 @@ public class PickAxes implements Listener{
 										}
 									}
 									block.setType(Material.AIR);
+									Methods.removeDurability(item, player);
 								}
 							}
 						}
@@ -117,6 +118,7 @@ public class PickAxes implements Listener{
 									}
 								}
 								block.setType(Material.AIR);
+								Methods.removeDurability(item, player);
 							}
 						}
 					}
@@ -226,16 +228,21 @@ public class PickAxes implements Listener{
 											}else{
 												b.breakNaturally();
 											}
+											Methods.removeDurability(item, player);
 										}
 									}
 								}
 							}
 							if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
 								for(Material m : drops.keySet()){
+									ItemStack i = new ItemStack(m, drops.get(m));
+									if(m == Material.INK_SACK){
+										i = new ItemStack(m, drops.get(m), (short) 4);
+									}
 									if(Methods.isInvFull(player)){
-										player.getWorld().dropItem(player.getLocation(), new ItemStack(m, drops.get(m)));
+										player.getWorld().dropItem(player.getLocation(), i);
 									}else{
-										player.getInventory().addItem(new ItemStack(m, drops.get(m)));
+										player.getInventory().addItem(i);
 									}
 								}
 							}

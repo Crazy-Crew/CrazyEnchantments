@@ -19,7 +19,7 @@ import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class SilkSpawners implements Listener{
 	
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBreak(SilkSpawnersSpawnerBreakEvent e){
 		if(e.isCancelled())return;
 		Player player = e.getPlayer();
@@ -44,6 +44,7 @@ public class SilkSpawners implements Listener{
 									block.getWorld().dropItemNaturally(block.getLocation(), it);
 								}
 								block.setType(Material.AIR);
+								e.setCancelled(true);
 							}
 						}
 					}

@@ -90,26 +90,33 @@ public class Tinkerer implements Listener{
 								// Recycling things
 								if(It.getItemMeta().hasDisplayName()){
 									if(It.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getTinker().getString("Settings.TradeButton")))){
-										int total=0;
+										int total = 0;
+										Boolean toggle = false;
 										for(int slot : getSlot().keySet()){
 											if(inv.getItem(getSlot().get(slot))!=null){
 												if(Main.settings.getTinker().getString("Settings.Money/XP").equalsIgnoreCase("Money")){
 													ItemStack item = inv.getItem(slot);
-													total=total+getTotalXP(item);
+													total = total + getTotalXP(item);
+													toggle = true;
 												}else{
 													if(Methods.isInvFull(((Player)player))){
 														player.getWorld().dropItem(player.getLocation(), inv.getItem(getSlot().get(slot)));
 													}else{
 														player.getInventory().addItem(inv.getItem(getSlot().get(slot)));
 													}
+													toggle = true;
 												}
 											}
 											e.getInventory().setItem(slot, new ItemStack(Material.AIR));
 											e.getInventory().setItem(getSlot().get(slot), new ItemStack(Material.AIR));
 										}
 										player.closeInventory();
-										if(total!=0)Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+player.getName()+" "+total);
-										player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Tinker-Sold-Msg")));
+										if(total != 0){
+											Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+player.getName()+" "+total);
+										}
+										if(toggle){
+											player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Tinker-Sold-Msg")));
+										}
 										try{
 											if(Version.getVersion().getVersionInteger()>=191){
 												player.playSound(player.getLocation(), Sound.valueOf("ENTITY_VILLAGER_TRADING"), 1, 1);

@@ -14,8 +14,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.API.InfoType;
 import me.BadBones69.CrazyEnchantments.API.Version;
@@ -33,19 +33,19 @@ public class ShopGUI implements Listener{
 				String[] b = custom.split(", ");
 				for(String i : b){
 					if(i.contains("Item:")){
-						i=i.replace("Item:", "");
-						item=i;
+						i = i.replace("Item:", "");
+						item = i;
 					}
 					if(i.contains("Name:")){
-						i=i.replace("Name:", "");
-						name=i;
+						i = i.replace("Name:", "");
+						name = i;
 					}
 					if(i.contains("Slot:")){
-						i=i.replace("Slot:", "");
-						slot=Integer.parseInt(i);
+						i = i.replace("Slot:", "");
+						slot = Integer.parseInt(i);
 					}
 					if(i.contains("Lore:")){
-						i=i.replace("Lore:", "");
+						i = i.replace("Lore:", "");
 						String[] d = i.split("_");
 						for(String l : d){
 							lore.add(l);
@@ -464,10 +464,10 @@ public class ShopGUI implements Listener{
 	@EventHandler
 	public void infoClick(InventoryClickEvent e){
 		Inventory inv = e.getInventory();
-		if(inv!=null){
-			if(inv.getName().equals(Methods.color("&c&lEnchantment Info"))){
+		if(inv != null){
+			if(inv.getName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Inventory.Name")))){
 				e.setCancelled(true);
-				if(e.getCurrentItem()!=null){
+				if(e.getCurrentItem() != null){
 					ItemStack item = e.getCurrentItem();
 					if(item.hasItemMeta()){
 						if(item.getItemMeta().hasDisplayName()){
@@ -577,39 +577,28 @@ public class ShopGUI implements Listener{
 	}
 	
 	public static void openInfo(Player player){
-		Inventory inv = Bukkit.createInventory(null, 18, Methods.color("&c&lEnchantment Info"));
-		inv.addItem(Methods.makeItem(Material.GOLD_HELMET, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Helmets.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Helmets.Lore")));
-		inv.addItem(Methods.makeItem(Material.GOLD_BOOTS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Boots.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Boots.Lore")));
-		inv.addItem(Methods.makeItem(Material.GOLD_CHESTPLATE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Armor.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Armor.Lore")));
-		inv.addItem(Methods.makeItem(Material.BOW, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Bow.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Bow.Lore")));
-		inv.addItem(Methods.makeItem(Material.GOLD_SWORD, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Sword.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Sword.Lore")));
-		inv.addItem(Methods.makeItem(Material.GOLD_AXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Axe.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Axe.Lore")));
-		inv.addItem(Methods.makeItem(Material.GOLD_HOE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Tool.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Tool.Lore")));
-		inv.addItem(Methods.makeItem(Material.GOLD_PICKAXE, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Pickaxe.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Pickaxe.Lore")));
-		inv.addItem(Methods.makeItem(Material.COMPASS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Misc.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Misc.Lore")));
-		inv.setItem(13, Methods.makeItem(Material.EYE_OF_ENDER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name"), 
-				Main.settings.getMsg().getStringList("Messages.InfoGUI.Categories-Info.Other.Lore")));
+		FileConfiguration msg = Main.settings.getMsg();
+		Inventory inv = Bukkit.createInventory(null, msg.getInt("Messages.InfoGUI.Inventory.Size"), Methods.color(msg.getString("Messages.InfoGUI.Inventory.Name")));
+		ArrayList<String> options = new ArrayList<String>();
+		options.add("Helmets");options.add("Boots");
+		options.add("Armor");options.add("Bow");options.add("Sword");options.add("Axe");
+		options.add("Tool");options.add("Pickaxe");options.add("Misc");options.add("Other");
+		for(String o : options){
+			inv.setItem(msg.getInt("Messages.InfoGUI.Categories-Info." + o + ".Slot") - 1, Methods.makeItem(msg.getString("Messages.InfoGUI.Categories-Info." + o + ".Item"), 1,
+					msg.getString("Messages.InfoGUI.Categories-Info." + o + ".Name"), msg.getStringList("Messages.InfoGUI.Categories-Info." + o + ".Lore")));
+		}
 		player.openInventory(inv);
 	}
 	
 	public static void openInfo(Player player, InfoType type){
-		int size=getInfo(type.getName()).size()+1;
-		int slots=9;
-		for(;size>9;size-=9)slots+=9;
+		int size = getInfo(type.getName()).size()+1;
+		int slots = 9;
+		for(;size > 9; size -= 9)slots += 9;
 		Inventory in = Bukkit.createInventory(null, slots, Methods.color("&c&lEnchantment Info"));
 		for(ItemStack i : getInfo(type.getName())){
 			in.addItem(i);
 		}
-		if(Version.getVersion().getVersionInteger()<181){
+		if(Version.getVersion().getVersionInteger() < 181){
 			in.setItem(slots-1, Methods.makeItem(Material.FEATHER, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));
 		}else{
 			in.setItem(slots-1, Methods.makeItem(Material.PRISMARINE_CRYSTALS, 1, 0, Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Back.Right")));

@@ -60,6 +60,10 @@ public class GKitzGUI implements Listener{
 		for(String kit : GKitz.getGKitz()){
 			int slot = gkitz.getInt("GKitz." + kit + ".Display.Slot") - 1;
 			String id = gkitz.getString("GKitz." + kit + ".Display.Item");
+			Boolean glowing = false;
+			if(gkitz.contains("GKitz." + kit + ".Display.Glowing")){
+				glowing = gkitz.getBoolean("GKitz." + kit + ".Display.Glowing");
+			}
 			String name = gkitz.getString("GKitz." + kit + ".Display.Name");
 			List<String> lore = new ArrayList<String>();
 			for(String l : gkitz.getStringList("GKitz." + kit + ".Display.Lore")){
@@ -69,7 +73,7 @@ public class GKitzGUI implements Listener{
 					lore.add(GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), l));
 				}
 			}
-			inv.setItem(slot, Methods.makeItem(id, 1, name, lore));
+			inv.setItem(slot, Methods.makeItem(id, 1, name, lore, glowing));
 		}
 		player.openInventory(inv);
 	}

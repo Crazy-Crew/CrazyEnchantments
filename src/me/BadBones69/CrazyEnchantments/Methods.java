@@ -706,4 +706,26 @@ public class Methods{
 		return enchants.get(en.getName());
 	}
 	
+	public static void removeDurability(ItemStack item, Player player){
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasEnchants()){
+				if(item.getItemMeta().hasEnchant(Enchantment.DURABILITY)){
+					if(Methods.randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.DURABILITY))){
+						if(item.getType().getMaxDurability() < item.getDurability()){
+							player.getInventory().remove(item);
+						}else{
+							item.setDurability((short) ((short) item.getDurability() + 1));
+						}
+					}
+					return;
+				}
+			}
+		}
+		if(item.getType().getMaxDurability() < item.getDurability()){
+			player.getInventory().remove(item);
+		}else{
+			item.setDurability((short) ((short) item.getDurability() + 1));
+		}
+	}
+	
 }
