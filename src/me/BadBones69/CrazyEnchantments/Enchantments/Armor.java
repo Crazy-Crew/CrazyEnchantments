@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Endermite;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -37,6 +38,7 @@ import org.bukkit.util.Vector;
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.AngelUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraActiveEvent;
@@ -60,120 +62,42 @@ public class Armor implements Listener{
 		Player player = e.getPlayer();
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
-		if(Main.CE.hasEnchantments(NewItem)){
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.BURNSHIELD)){
-				if(CEnchantments.BURNSHIELD.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.BURNSHIELD, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, time, 0));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.DRUNK)){
-				if(CEnchantments.DRUNK.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.DRUNK, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						int power = Main.CE.getPower(NewItem, CEnchantments.DRUNK);
-						player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, time, power-1));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time, power-1));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time, power));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.HULK)){
-				if(CEnchantments.HULK.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HULK, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, time, Main.CE.getPower(NewItem, CEnchantments.HULK)-1));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time, Main.CE.getPower(NewItem, CEnchantments.HULK)-1));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time, Main.CE.getPower(NewItem, CEnchantments.HULK)));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.VALOR)){
-				if(CEnchantments.VALOR.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.VALOR, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time, Main.CE.getPower(NewItem, CEnchantments.VALOR)-1));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.OVERLOAD)){
-				if(CEnchantments.OVERLOAD.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OVERLOAD, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, time, Main.CE.getPower(NewItem, CEnchantments.OVERLOAD)));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.NINJA)){
-				if(CEnchantments.NINJA.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NINJA, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, time, Main.CE.getPower(NewItem, CEnchantments.NINJA)-1));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, time, Main.CE.getPower(NewItem, CEnchantments.NINJA)-1));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.INSOMNIA)){
-				if(CEnchantments.INSOMNIA.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.INSOMNIA, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, time, 0));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time, 0));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time, 1));
+		CrazyEnchantments CE = Main.CE;
+		if(CE.hasEnchantments(OldItem)){// Removing the potion effects.
+			for(CEnchantments ench : CE.getEnchantmentPotions().keySet()){
+				if(CE.hasEnchantment(OldItem, ench)){
+					if(ench.isEnabled()){
+						HashMap<PotionEffectType, Integer> effects = CE.getUpdatedEffects(player, new ItemStack(Material.AIR), OldItem, ench);
+						for(PotionEffectType type : effects.keySet()){
+							if(effects.get(type) < 0){
+								player.removePotionEffect(type);
+							}else{
+								player.removePotionEffect(type);
+								player.addPotionEffect(new PotionEffect(type, time, effects.get(type)));
+							}
+						}
 					}
 				}
 			}
 		}
-		if(Main.CE.hasEnchantments(OldItem)){
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.BURNSHIELD)){
-				if(CEnchantments.BURNSHIELD.isEnabled()){
-					player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.DRUNK)){
-				if(CEnchantments.DRUNK.isEnabled()){
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-					player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-					player.removePotionEffect(PotionEffectType.SLOW);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.HULK)){
-				if(CEnchantments.HULK.isEnabled()){
-					player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE);
-					player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-					player.removePotionEffect(PotionEffectType.SLOW);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.VALOR)){
-				if(CEnchantments.VALOR.isEnabled()){
-					player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.OVERLOAD)){
-				if(CEnchantments.OVERLOAD.isEnabled()){
-					player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.NINJA)){
-				if(CEnchantments.NINJA.isEnabled()){
-					player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
-					player.removePotionEffect(PotionEffectType.SPEED);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.INSOMNIA)){
-				if(CEnchantments.INSOMNIA.isEnabled()){
-					player.removePotionEffect(PotionEffectType.CONFUSION);
-					player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-					player.removePotionEffect(PotionEffectType.SLOW);
+		if(CE.hasEnchantments(NewItem)){// Adding the potion effects.
+			for(CEnchantments ench : CE.getEnchantmentPotions().keySet()){
+				if(CE.hasEnchantment(NewItem, ench)){
+					if(ench.isEnabled()){
+						EnchantmentUseEvent event = new EnchantmentUseEvent(player, ench, NewItem);
+						Bukkit.getPluginManager().callEvent(event);
+						if(!event.isCancelled()){
+							HashMap<PotionEffectType, Integer> effects = CE.getUpdatedEffects(player, NewItem, OldItem, ench);
+							for(PotionEffectType type : effects.keySet()){
+								if(effects.get(type) < 0){
+									player.removePotionEffect(type);
+								}else{
+									player.removePotionEffect(type);
+									player.addPotionEffect(new PotionEffect(type, time, effects.get(type)));
+								}
+							}
+						}
+					}
 				}
 			}
 		}

@@ -89,11 +89,15 @@ public class Tools implements Listener{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
 		if(e.isCancelled() || block.getType() == Material.AIR){
+			return;
+		}
+		if(block.getType().toString().toLowerCase().contains("shulker_box") || block.getType().toString().toLowerCase().contains("chest")){
 			return;
 		}
 		if(player.getGameMode()!=GameMode.CREATIVE){
@@ -115,7 +119,7 @@ public class Tools implements Listener{
 							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
-								HashMap<Material, Integer> drops = new HashMap<Material, Integer>();
+								HashMap<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
 								for(ItemStack drop : block.getDrops()){
 									if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(block.getType())){
 										drop.setType(getOres().get(block.getType()));
@@ -154,16 +158,22 @@ public class Tools implements Listener{
 									}
 									int amount = drop.getAmount();
 									if(drops.containsKey(drop.getType())){
-										drops.put(drop.getType(), drops.get(drop.getType()) + amount);
+										drops.put(drop, drops.get(drop.getType()) + amount);
 									}else{
-										drops.put(drop.getType(), amount);
+										drops.put(drop, amount);
 									}
 								}
-								for(Material m : drops.keySet()){
-									ItemStack i = new ItemStack(m, drops.get(m));
-									if(m == Material.INK_SACK){
-										i = new ItemStack(m, drops.get(m), (short) 4);
+								if(item.getItemMeta().hasEnchants()){
+									if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
+										drops.clear();
+										drops.put(new ItemStack(block.getType(), 1, block.getData()), 1);
 									}
+								}
+								for(ItemStack i : drops.keySet()){
+									if(i.getType() == Material.INK_SACK){
+										i.setType((new ItemStack(Material.INK_SACK, 1, (short) 4)).getType());
+									}
+									i.setAmount(drops.get(i));
 									if(Methods.isInvFull(player)){
 										player.getWorld().dropItem(player.getLocation(), i);
 									}else{

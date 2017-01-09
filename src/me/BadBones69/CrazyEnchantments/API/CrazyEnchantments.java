@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
@@ -111,7 +113,7 @@ public class CrazyEnchantments {
 	 * @return True if it has enchantments / False if it doesn't have enchantments.
 	 */
 	public Boolean hasEnchantments(ItemStack item){
-		if(item!=null){
+		if(item != null){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
@@ -134,7 +136,7 @@ public class CrazyEnchantments {
 	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
 	 */
 	public Boolean hasEnchantment(ItemStack item, CEnchantments enchantment){
-		if(item!=null){
+		if(item != null){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
@@ -146,6 +148,142 @@ public class CrazyEnchantments {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param player The player you want to check if they have the enchantment on their armor.
+	 * @param include The item you want to include.
+	 * @param exclude The item you want to exclude.
+	 * @param enchantment The enchantment you are checking.
+	 * @return True if a piece of armor has the enchantment and false if not.
+	 */
+	public Boolean playerHasEnchantmentOn(Player player, ItemStack include, ItemStack exclude, CEnchantments enchantment){
+		for(ItemStack armor : player.getEquipment().getArmorContents()){
+			if(!armor.isSimilar(exclude)){
+				if(hasEnchantment(armor, enchantment)){
+					return true;
+				}
+			}
+		}
+		if(hasEnchantment(include, enchantment)){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param player The player you want to check if they have the enchantment on their armor.
+	 * @param item The item you want to exclude.
+	 * @param enchantment The enchantment you are checking.
+	 * @return True if a piece of armor has the enchantment and false if not.
+	 */
+	public Boolean playerHasEnchantmentOnExclude(Player player, ItemStack item, CEnchantments enchantment){
+		for(ItemStack armor : player.getEquipment().getArmorContents()){
+			if(!armor.isSimilar(item)){
+				if(hasEnchantment(armor, enchantment)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param player The player you want to check if they have the enchantment on their armor.
+	 * @param item The item you want to include.
+	 * @param enchantment The enchantment you are checking.
+	 * @return True if a piece of armor has the enchantment and false if not.
+	 */
+	public Boolean playerHasEnchantmentOnInclude(Player player, ItemStack item, CEnchantments enchantment){
+		for(ItemStack armor : player.getEquipment().getArmorContents()){
+			if(hasEnchantment(armor, enchantment)){
+				return true;
+			}
+		}
+		if(hasEnchantment(item, enchantment)){
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param player The player you want to get the highest level of an enchantment from.
+	 * @param include The item you want to include.
+	 * @param exclude The item you want to exclude.
+	 * @param enchantment The enchantment you are checking.
+	 * @return The highest level of the enchantment that the player currently has.
+	 */
+	public Integer getHighestEnchantmentLevel(Player player, ItemStack include, ItemStack exclude, CEnchantments enchantment){
+		int highest = 0;
+		for(ItemStack armor : player.getEquipment().getArmorContents()){
+			if(!armor.isSimilar(exclude)){
+				if(hasEnchantment(armor, enchantment)){
+					int level = getPower(armor, enchantment);
+					if(highest < level){
+						highest = level;
+					}
+				}
+			}
+		}
+		if(hasEnchantment(include, enchantment)){
+			int level = getPower(include, enchantment);
+			if(highest < level){
+				highest = level;
+			}
+		}
+		return highest;
+	}
+	
+	/**
+	 * 
+	 * @param player The player you want to get the highest level of an enchantment from.
+	 * @param item The item you want to exclude.
+	 * @param enchantment The enchantment you are checking.
+	 * @return The highest level of the enchantment that the player currently has.
+	 */
+	public Integer getHighestEnchantmentLevelExclude(Player player, ItemStack item, CEnchantments enchantment){
+		int highest = 0;
+		for(ItemStack armor : player.getEquipment().getArmorContents()){
+			if(!armor.isSimilar(item)){
+				if(hasEnchantment(armor, enchantment)){
+					int level = getPower(armor, enchantment);
+					if(highest < level){
+						highest = level;
+					}
+				}
+			}
+		}
+		return highest;
+	}
+	
+	/**
+	 * 
+	 * @param player The player you want to get the highest level of an enchantment from.
+	 * @param item The item you want to include.
+	 * @param enchantment The enchantment you are checking.
+	 * @return The highest level of the enchantment that the player currently has.
+	 */
+	public Integer getHighestEnchantmentLevelInclude(Player player, ItemStack item, CEnchantments enchantment){
+		int highest = 0;
+		for(ItemStack armor : player.getEquipment().getArmorContents()){
+			if(hasEnchantment(armor, enchantment)){
+				int level = getPower(armor, enchantment);
+				if(highest < level){
+					highest = level;
+				}
+			}
+		}
+		if(hasEnchantment(item, enchantment)){
+			int level = getPower(item, enchantment);
+			if(highest < level){
+				highest = level;
+			}
+		}
+		return highest;
 	}
 	
 	/**
@@ -228,6 +366,91 @@ public class CrazyEnchantments {
 			}
 		}
 		return enchantments;
+	}
+	
+	/**
+	 * 
+	 * @param enchantment The enchantment you want the max level effects from.
+	 * @return The list of all the max potion effects based on all the armor on the player.
+	 */
+	public HashMap<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack include, ItemStack exclude, CEnchantments enchantment){
+		HashMap<PotionEffectType, Integer> effects = new HashMap<PotionEffectType, Integer>();
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		for(ItemStack armor : player.getEquipment().getArmorContents()){
+			items.add(armor);
+		}
+		if(include == null){
+			include = new ItemStack(Material.AIR);
+		}
+		if(exclude == null){
+			exclude = new ItemStack(Material.AIR);
+		}
+		items.add(include);
+		for(CEnchantments ench : getEnchantmentPotions().keySet()){
+			for(ItemStack armor : items){
+				if(armor != null){
+					if(!armor.isSimilar(exclude)){
+						if(hasEnchantment(armor, ench)){
+							int power = getPower(armor, ench);
+							for(PotionEffectType type : getEnchantmentPotions().get(enchantment).keySet()){
+								if(getEnchantmentPotions().get(ench).containsKey(type)){
+									if(effects.containsKey(type)){
+										int updated = effects.get(type);
+										if(updated < (power + getEnchantmentPotions().get(ench).get(type))){
+											effects.put(type, power + getEnchantmentPotions().get(ench).get(type));
+										}
+									}else{
+										effects.put(type, power + getEnchantmentPotions().get(ench).get(type));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for(PotionEffectType type : getEnchantmentPotions().get(enchantment).keySet()){
+			if(!effects.containsKey(type)){
+				effects.put(type, -1);
+			}
+		}
+		return effects;
+	}
+	
+	/**
+	 * 
+	 * @return All the effects for each enchantment that needs it.
+	 */
+	public HashMap<CEnchantments, HashMap<PotionEffectType, Integer>> getEnchantmentPotions(){
+		HashMap<CEnchantments, HashMap<PotionEffectType, Integer>> enchants = new HashMap<CEnchantments, HashMap<PotionEffectType, Integer>>();
+		enchants.put(CEnchantments.BURNSHIELD, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.BURNSHIELD).put(PotionEffectType.FIRE_RESISTANCE, -1);
+		
+		enchants.put(CEnchantments.DRUNK, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.DRUNK).put(PotionEffectType.INCREASE_DAMAGE, -1);
+		enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW_DIGGING, -1);
+		enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW, 0);
+		
+		enchants.put(CEnchantments.HULK, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.HULK).put(PotionEffectType.INCREASE_DAMAGE, -1);
+		enchants.get(CEnchantments.HULK).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
+		enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOW, 0);
+		
+		enchants.put(CEnchantments.VALOR, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.VALOR).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
+		
+		enchants.put(CEnchantments.OVERLOAD, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.OVERLOAD).put(PotionEffectType.HEALTH_BOOST, 0);
+		
+		enchants.put(CEnchantments.NINJA, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.NINJA).put(PotionEffectType.HEALTH_BOOST, -1);
+		enchants.get(CEnchantments.NINJA).put(PotionEffectType.SPEED, -1);
+		
+		enchants.put(CEnchantments.INSOMNIA, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.CONFUSION, -1);
+		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW_DIGGING, -1);
+		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW,0);
+		return enchants;
 	}
 
 	/**

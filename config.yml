@@ -103,6 +103,9 @@ Settings:
         Success: true #Toggle wether you can get success dust from Mystery Dust.
         Destroy: true #Toggle wether you can get destroy dust from Mystery Dust.
         Failed: true #Toggle wether you can get failed dust from Mystery Dust.
+      PercentRange: #Range the mystery rate will be.
+        Max: 30 #Max percent
+        #Min will always be 1.
     SuccessDust:
       InGUI: true #If you can buy it in the /CE Gui
       GUIName: '&aMagical Angel Dust' #Name of the item in the GUI

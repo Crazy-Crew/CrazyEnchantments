@@ -50,6 +50,7 @@ public class PickAxes implements Listener{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
 		if(e.isCancelled())return;
@@ -143,9 +144,11 @@ public class PickAxes implements Listener{
 				if(CEnchantments.BLAST.isEnabled()){
 					if(blocks.containsKey(player)){
 						if(blocks.get(player).containsKey(block)){
-							HashMap<Material, Integer> drops = new HashMap<Material, Integer>();
+							HashMap<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
 							int xp = 0;
-							for(Block b : getBlocks(block.getLocation(), blocks.get(player).get(block), (Main.CE.getPower(item, CEnchantments.BLAST)-1))){
+							Boolean fortune = false;
+							List<Block> B = getBlocks(block.getLocation(), blocks.get(player).get(block), (Main.CE.getPower(item, CEnchantments.BLAST)-1));
+							for(Block b : B){
 								if(Main.CE.getBlockList().contains(b.getType())){
 									//This stops players from breaking blocks that mite be in protected areas.
 									if(Support.canBreakBlock(player, b) && Support.allowsBreak(b.getLocation())){
@@ -160,6 +163,7 @@ public class PickAxes implements Listener{
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 																drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																fortune = true;
 															}
 														}
 													}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())){
@@ -169,6 +173,7 @@ public class PickAxes implements Listener{
 															if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 																if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 																	drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																	fortune = true;
 																}
 															}
 														}
@@ -177,15 +182,21 @@ public class PickAxes implements Listener{
 															if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 																if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 																	drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																	fortune = true;
 																}
 															}
 														}
 													}
+													if(item.getItemMeta().hasEnchants()){
+														if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
+															drop = new ItemStack(b.getType(), 1, b.getData());
+														}
+													}
 													int amount = drop.getAmount();
-													if(drops.containsKey(drop.getType())){
-														drops.put(drop.getType(), drops.get(drop.getType()) + amount);
+													if(drops.containsKey(drop)){
+														drops.put(drop, drops.get(drop) + amount);
 													}else{
-														drops.put(drop.getType(), amount);
+														drops.put(drop, amount);
 													}
 												}
 											}else{
@@ -194,6 +205,7 @@ public class PickAxes implements Listener{
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 																drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																fortune = true;
 															}
 														}
 														b.getWorld().dropItem(b.getLocation(), new ItemStack(getOres().get(b.getType()), drop.getAmount()));
@@ -206,6 +218,7 @@ public class PickAxes implements Listener{
 															if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 																if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 																	drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																	fortune = true;
 																}
 															}
 														}
@@ -223,6 +236,17 @@ public class PickAxes implements Listener{
 													}
 												}
 											}
+											if(!fortune){
+												for(ItemStack drop : b.getDrops()){
+													if(getItems().contains(b.getType())){
+														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
+															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
+																drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+															}
+														}
+													}
+												}
+											}
 											if(toggle){
 												b.setType(Material.AIR);
 											}else{
@@ -233,17 +257,15 @@ public class PickAxes implements Listener{
 									}
 								}
 							}
-							if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
-								for(Material m : drops.keySet()){
-									ItemStack i = new ItemStack(m, drops.get(m));
-									if(m == Material.INK_SACK){
-										i = new ItemStack(m, drops.get(m), (short) 4);
-									}
-									if(Methods.isInvFull(player)){
-										player.getWorld().dropItem(player.getLocation(), i);
-									}else{
-										player.getInventory().addItem(i);
-									}
+							for(ItemStack i : drops.keySet()){
+								if(i.getType() == Material.INK_SACK){
+									i.setType((new ItemStack(Material.INK_SACK, 1, (short) 4)).getType());
+								}
+								i.setAmount(drops.get(i));
+								if(Methods.isInvFull(player)){
+									player.getWorld().dropItem(player.getLocation(), i);
+								}else{
+									player.getInventory().addItem(i);
 								}
 							}
 							if(xp > 0){

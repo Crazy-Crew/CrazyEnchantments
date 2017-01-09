@@ -208,7 +208,18 @@ public class DustControl implements Listener{
 		return Methods.makeItem(id, amount, name, lore);
 	}
 	
-	public static ItemStack getDust(String Dust,int amount, int percent){
+	public static ItemStack getMysteryDust(int amount){
+		String id = Main.settings.getConfig().getString("Settings.Dust.MysteryDust.Item");
+		String name = Main.settings.getConfig().getString("Settings.Dust.MysteryDust.Name");
+		List<String> lore = new ArrayList<String>();
+		int max = Main.settings.getConfig().getInt("Settings.Dust.MysteryDust.PercentRange.Max");
+		for(String l : Main.settings.getConfig().getStringList("Settings.Dust.MysteryDust.Lore")){
+			lore.add(l.replaceAll("%Percent%", max+"").replaceAll("%percent%", max+""));
+		}
+		return Methods.makeItem(id, amount, name, lore);
+	}
+	
+	public static ItemStack getDust(String Dust, int amount, int percent){
 		String id = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Item");
 		String name = Main.settings.getConfig().getString("Settings.Dust."+Dust+".Name");
 		List<String> lore = new ArrayList<String>();

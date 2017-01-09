@@ -20,6 +20,8 @@ Messages:
   Give-Success-Dust: '&7You have given &a%Amount% &7Success Dust to &6%Player%&7.'
   Get-Destroy-Dust: '&7You have gained &a%Amount% &7Destroy Dust.'
   Give-Destroy-Dust: '&7You have given &a%Amount% &7Destroy Dust to &6%Player%&7.'
+  Get-Mystery-Dust: '&7You have gained &a%Amount% &7Mystery Dust.'
+  Give-Mystery-Dust: '&7You have given &a%Amount% &7Mystery Dust to &6%Player%&7.'
   Not-A-Category: '&6%Category% &cis not a category.'
   Clean-Lost-Book: '&7You have just cleaned a lost book and found %Found%&7.'
   Book-Works: '&aYour item loved this book and accepted it.'

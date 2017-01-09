@@ -483,7 +483,7 @@ public class ShopGUI implements Listener{
 								}
 							}
 							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Categories-Info.Other.Name")))){
-								Inventory in = Bukkit.createInventory(null, 18, Methods.color("&c&lEnchantment Info"));
+								Inventory in = Bukkit.createInventory(null, 18, Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Inventory.Name")));
 								in.setItem(2, Methods.makeItem(Main.settings.getConfig().getString("Settings.BlackScroll.Item"),
 										1, Main.settings.getConfig().getString("Settings.BlackScroll.Name"),
 										Main.settings.getMsg().getStringList("Messages.InfoGUI.Black-Scroll")));
@@ -594,7 +594,7 @@ public class ShopGUI implements Listener{
 		int size = getInfo(type.getName()).size()+1;
 		int slots = 9;
 		for(;size > 9; size -= 9)slots += 9;
-		Inventory in = Bukkit.createInventory(null, slots, Methods.color("&c&lEnchantment Info"));
+		Inventory in = Bukkit.createInventory(null, slots, Methods.color(Main.settings.getMsg().getString("Messages.InfoGUI.Inventory.Name")));
 		for(ItemStack i : getInfo(type.getName())){
 			in.addItem(i);
 		}

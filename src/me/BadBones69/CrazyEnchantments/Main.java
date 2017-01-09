@@ -166,7 +166,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Methods.color("&b/CE Scroll <Scroll> [Amount] [Player] - &9Gives a player scrolls."));
 					sender.sendMessage(Methods.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
-					sender.sendMessage(Methods.color("&b/CE Dust <Success/Destroy> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
+					sender.sendMessage(Methods.color("&b/CE Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Methods.color("&b/CE Book <Enchantment> [Lvl] [Amount] [Player] - &9Gives a player a Enchantment Book."));
 					sender.sendMessage(Methods.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
 					return true;
@@ -311,7 +311,7 @@ public class Main extends JavaPlugin implements Listener{
 							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy> [Amount] [Player] [Percent]
+				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent]
 					if(!Methods.hasPermission(sender, "Admin", true))return true;
 					if(args.length>=2){
 						Player player = Methods.getPlayer(sender.getName());
@@ -365,6 +365,19 @@ public class Main extends JavaPlugin implements Listener{
 							player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
+									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
+									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
+							return true;
+						}
+						if(args[1].equalsIgnoreCase("Mystery")||args[1].equalsIgnoreCase("M")){
+							if(args.length>=5){
+								player.getInventory().addItem(DustControl.getDust("MysteryDust", amount, percent));
+							}else{
+								player.getInventory().addItem(DustControl.getMysteryDust(amount));
+							}
+							player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Mystery-Dust")
+									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
+							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Mystery-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;

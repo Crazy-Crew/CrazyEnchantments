@@ -10,7 +10,9 @@ public class NMS_v1_11_R1 {
 	
 	public static ItemStack addGlow(ItemStack item){
 		if(item.hasItemMeta()){
-			if(item.getItemMeta().hasEnchants())return item;
+			if(item.getItemMeta().hasEnchants()){
+				return item;
+			}
 		}
 		net.minecraft.server.v1_11_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tag = null;
