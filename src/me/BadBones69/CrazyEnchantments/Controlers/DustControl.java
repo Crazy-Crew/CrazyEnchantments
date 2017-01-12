@@ -36,10 +36,6 @@ public class DustControl implements Listener{
 					ItemStack book = e.getCurrentItem();
 					ItemStack dust = e.getCursor();
 					if(book.getAmount() == 1){
-						if(player.getGameMode() == GameMode.CREATIVE && dust.getAmount() != 1){
-							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));
-							return;
-						}
 						if(book.hasItemMeta() && dust.hasItemMeta()){
 							if(book.getItemMeta().hasLore() && dust.getItemMeta().hasLore()){
 								if(book.getItemMeta().hasDisplayName() && dust.getItemMeta().hasDisplayName()){
@@ -65,6 +61,10 @@ public class DustControl implements Listener{
 												if(Methods.hasArgument("%Success_Rate%", Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"))){
 													int total = Methods.getPercent("%Success_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
 													if(total >= 100)return;
+													if(player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1){
+														player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));
+														return;
+													}
 													per += total;
 													if(per < 0)per=0;
 													if(per > 100)per=100;
@@ -82,6 +82,10 @@ public class DustControl implements Listener{
 												if(Methods.hasArgument("%Destroy_Rate%", Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"))){
 													int total = Methods.getPercent("%Destroy_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore"));
 													if(total <= 0)return;
+													if(player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1){
+														player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));
+														return;
+													}
 													per = total-per;
 													if(per < 0)per = 0;
 													if(per > 100)per = 100;

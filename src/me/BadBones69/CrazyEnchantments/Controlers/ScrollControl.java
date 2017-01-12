@@ -46,11 +46,11 @@ public class ScrollControl implements Listener{
 						return;
 					}
 				}
-				if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() != 1){
-					player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
-					return;
-				}
 				if(scroll.isSimilar(getTransmogScroll(1))){
+					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1){
+						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+						return;
+					}
 					if(Main.CE.hasEnchantments(item) || Main.CustomE.hasEnchantments(item)){
 						if(item.isSimilar(orderEnchantments(item.clone()))){
 							return;
@@ -63,6 +63,10 @@ public class ScrollControl implements Listener{
 					}
 				}
 				if(scroll.isSimilar(getWhiteScroll(1))){
+					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1){
+						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+						return;
+					}
 					if(!Methods.isProtected(item)){
 						ArrayList<Material> types = new ArrayList<Material>();
 						types.addAll(EnchantmentType.ALL.getItems());
@@ -75,6 +79,10 @@ public class ScrollControl implements Listener{
 					}
 				}
 				if(scroll.isSimilar(getBlackScroll(1))){
+					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1){
+						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+						return;
+					}
 					ArrayList<String> customEnchants = new ArrayList<String>();
 					HashMap<String, Integer> lvl = new HashMap<String, Integer>();
 					ArrayList<CEnchantments> enchants = new ArrayList<CEnchantments>();

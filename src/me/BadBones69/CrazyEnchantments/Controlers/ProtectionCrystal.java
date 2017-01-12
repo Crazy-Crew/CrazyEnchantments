@@ -38,16 +38,16 @@ public class ProtectionCrystal implements Listener{
 			if(c == null) c = new ItemStack(Material.AIR);
 			if(item.getType() != Material.AIR && c.getType() != Material.AIR){
 				if(item.getAmount() == 1){
-					if(player.getGameMode() == GameMode.CREATIVE && c.getAmount() != 1){
-						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the crystals for them to work."));
-						return;
-					}
 					if(!getCrystals().isSimilar(item)){
 						if(!isProtected(item)){
 							if(c.hasItemMeta()){
 								if(c.getItemMeta().hasDisplayName()){
 									if(c.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.ProtectionCrystal.Name")))){
 										if(c.getType() == getCrystals().getType()){
+											if(player.getGameMode() == GameMode.CREATIVE && c.getAmount() > 1){
+												player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the crystals for them to work."));
+												return;
+											}
 											e.setCancelled(true);
 											player.setItemOnCursor(Methods.removeItem(c));
 											e.setCurrentItem(Methods.addLore(item, protection));
