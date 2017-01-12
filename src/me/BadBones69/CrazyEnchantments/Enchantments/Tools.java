@@ -146,6 +146,12 @@ public class Tools implements Listener{
 												}
 											}
 										}
+										if(getXPOres().contains(block.getType())){
+											if(!Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+												ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+												orb.setExperience(Methods.percentPick(7, 3));
+											}
+										}
 									}
 									if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
 										if(Methods.randomPicker(2)){
@@ -188,6 +194,16 @@ public class Tools implements Listener{
 				}
 			}
 		}
+	}
+	
+	private ArrayList<Material> getXPOres(){
+		ArrayList<Material> ores = new ArrayList<Material>();
+		ores.add(Material.COAL_ORE);
+		ores.add(Material.DIAMOND_ORE);
+		ores.add(Material.EMERALD_ORE);
+		ores.add(Material.REDSTONE_ORE);
+		ores.add(Material.LAPIS_ORE);
+		return ores;
 	}
 	
 	private HashMap<Material, Material> getOres(){

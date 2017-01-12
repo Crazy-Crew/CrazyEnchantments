@@ -6,8 +6,8 @@ import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 
 public class CustomEBook {
 	

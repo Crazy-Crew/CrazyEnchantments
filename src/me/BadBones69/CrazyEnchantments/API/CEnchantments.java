@@ -3,8 +3,8 @@ package me.BadBones69.CrazyEnchantments.API;
 import java.util.HashMap;
 import java.util.List;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 
 public enum CEnchantments {
 	

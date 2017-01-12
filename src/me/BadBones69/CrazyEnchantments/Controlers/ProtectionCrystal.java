@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,42 +18,42 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 
 public class ProtectionCrystal implements Listener{
 	
-	HashMap<Player, ArrayList<ItemStack>> PlayersItems = new HashMap<Player, ArrayList<ItemStack>>();
+	private HashMap<Player, ArrayList<ItemStack>> PlayersItems = new HashMap<Player, ArrayList<ItemStack>>();
 	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
 		FileConfiguration config = Main.settings.getConfig();
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
-		if(inv!=null){
+		if(inv != null){
 			ItemStack c = e.getCursor();
 			ItemStack item = e.getCurrentItem();
 			String protection = Methods.color(config.getString("Settings.ProtectionCrystal.Protected"));
-			if(item!=null&&c!=null){
-				if(item.getAmount()==1&&c.getAmount()==1){
-					if(item.hasItemMeta()){
-						if(item.hasItemMeta()){
-							if(item.getItemMeta().hasLore()){
-								for(String lore : item.getItemMeta().getLore()){
-									if(lore.contains(protection)){
-										return;
-									}
-								}
-							}
-						}
+			if(item == null) item = new ItemStack(Material.AIR);
+			if(c == null) c = new ItemStack(Material.AIR);
+			if(item.getType() != Material.AIR && c.getType() != Material.AIR){
+				if(item.getAmount() == 1){
+					if(player.getGameMode() == GameMode.CREATIVE && c.getAmount() != 1){
+						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the crystals for them to work."));
+						return;
 					}
-					if(c.hasItemMeta()){
-						if(c.getItemMeta().hasDisplayName()){
-							if(c.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.ProtectionCrystal.Name")))){
-								if(c.getType()==getCrystals(1).getType()){
-									e.setCancelled(true);
-									player.setItemOnCursor(new ItemStack(Material.AIR));
-									e.setCurrentItem(Methods.addLore(item, protection));
+					if(!getCrystals().isSimilar(item)){
+						if(!isProtected(item)){
+							if(c.hasItemMeta()){
+								if(c.getItemMeta().hasDisplayName()){
+									if(c.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.ProtectionCrystal.Name")))){
+										if(c.getType() == getCrystals().getType()){
+											e.setCancelled(true);
+											player.setItemOnCursor(Methods.removeItem(c));
+											e.setCurrentItem(Methods.addLore(item, protection));
+											player.updateInventory();
+										}
+									}
 								}
 							}
 						}
@@ -61,25 +63,19 @@ public class ProtectionCrystal implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDeath(PlayerDeathEvent e){
-		FileConfiguration config = Main.settings.getConfig();
 		Player player = e.getEntity();
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 		for(ItemStack item : e.getDrops()){
-			boolean T = false;
-			if(item.hasItemMeta()){
-				if(item.getItemMeta().hasLore()){
-					for(String lore : item.getItemMeta().getLore()){
-						if(lore.contains(Methods.color(config.getString("Settings.ProtectionCrystal.Protected")))){
-							T=true;
-							items.add(item);
-						}
-					}
+			if(isProtected(item)){
+				if(isSuccessfull(player)){
+					items.add(item);
+				}else{
+					drops.add(item);
 				}
-			}
-			if(!T){
+			}else{
 				drops.add(item);
 			}
 		}
@@ -98,6 +94,46 @@ public class ProtectionCrystal implements Listener{
 			}
 			PlayersItems.remove(player);
 		}
+	}
+	
+	public static Boolean isProtected(ItemStack item){
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasLore()){
+				for(String lore : item.getItemMeta().getLore()){
+					if(lore.contains(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static Boolean isSuccessfull(Player player){
+		if(player.hasPermission("crazyenchantments.bypass")){
+			return true;
+		}
+		FileConfiguration config = Main.settings.getConfig();
+		if(config.contains("Settings.ProtectionCrystal.Chance")){
+			if(config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")){
+				if(Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance"), 100)){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public static ItemStack getCrystals(){
+		FileConfiguration config = Main.settings.getConfig();
+		String id = config.getString("Settings.ProtectionCrystal.Item");
+		String name = config.getString("Settings.ProtectionCrystal.Name");
+		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
+		Boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
+		ItemStack item = Methods.addGlow(Methods.makeItem(id, 1, name, lore), toggle);
+		return item;
 	}
 	
 	public static ItemStack getCrystals(int amount){

@@ -158,18 +158,27 @@ public class ArmorListener implements Listener{
 					}
 				}, 0);
 			}else{
-				if(Version.getVersion().getVersionInteger() < Version.v1_10_R1.getVersionInteger()){
+				if(Version.getVersion().getVersionInteger() < Version.v1_10_R1.getVersionInteger()){// 1.9 and under
 					if(e.getHotbarButton() >= 0){
-						newArmorPiece = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
+						if(e.getSlot() > 8){
+							newArmorPiece = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
+						}else{
+							newArmorPiece = e.getWhoClicked().getInventory().getItem(e.getSlot());
+						}
+						if(newArmorPiece == null){
+							newArmorPiece = new ItemStack(Material.AIR);
+						}
 						if(ArmorType.matchType(oldArmorPiece) != null || oldArmorPiece.getType() == Material.AIR){
 							if(ArmorType.matchType(newArmorPiece) != null){
 								if(e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()){
 									if(oldArmorPiece.getType() == Material.AIR){
 										return;
 									}
-									if(ArmorType.matchType(newArmorPiece) != ArmorType.matchType(oldArmorPiece)){
-										newArmorPiece = new ItemStack(Material.AIR);
-									}
+								}
+							}
+							if(ArmorType.matchType(newArmorPiece) != null){
+								if(e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()){
+									return;
 								}
 							}
 							EquipMethod method = EquipMethod.DRAG;
@@ -184,9 +193,8 @@ public class ArmorListener implements Listener{
 							return;
 						}
 					}
-				}
-				if(Version.getVersion().getVersionInteger() >= Version.v1_10_R1.getVersionInteger()){
-					if(e.getHotbarButton() >= 0){
+				}else{
+					if(e.getHotbarButton() >= 0){// 1.10+
 						newArmorPiece = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
 						if(ArmorType.matchType(oldArmorPiece) != null || oldArmorPiece.getType() == Material.AIR){
 							if(ArmorType.matchType(newArmorPiece) != null || newArmorPiece == null){

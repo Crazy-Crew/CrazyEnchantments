@@ -151,7 +151,7 @@ public class Main extends JavaPlugin implements Listener{
 				ShopGUI.openGUI(player);
 				return true;
 			}
-			if(args.length>=1){
+			if(args.length >= 1){
 				if(args[0].equalsIgnoreCase("Help")){
 					if(!Methods.hasPermission(sender, "Access", true))return true;
 					sender.sendMessage(Methods.color("&2&l&nCrazy Enchantments"));
@@ -164,7 +164,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Methods.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
 					sender.sendMessage(Methods.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
-					sender.sendMessage(Methods.color("&b/CE Scroll <Scroll> [Amount] [Player] - &9Gives a player scrolls."));
+					sender.sendMessage(Methods.color("&b/CE Scroll <Black/White/Transmog> [Amount] [Player] - &9Gives a player scrolls."));
 					sender.sendMessage(Methods.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
 					sender.sendMessage(Methods.color("&b/CE Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Methods.color("&b/CE Book <Enchantment> [Lvl] [Amount] [Player] - &9Gives a player a Enchantment Book."));
@@ -409,11 +409,15 @@ public class Main extends JavaPlugin implements Listener{
 							}
 						}
 						if(args[1].equalsIgnoreCase("B") || args[1].equalsIgnoreCase("Black") || args[1].equalsIgnoreCase("BlackScroll")){
-							Methods.getPlayer(name).getInventory().addItem(Methods.BlackScroll(i));
+							Methods.getPlayer(name).getInventory().addItem(ScrollControl.getBlackScroll(i));
 							return true;
 						}
 						if(args[1].equalsIgnoreCase("W") || args[1].equalsIgnoreCase("White") || args[1].equalsIgnoreCase("WhiteScroll")){
-							Methods.getPlayer(name).getInventory().addItem(Methods.addWhiteScroll(i));
+							Methods.getPlayer(name).getInventory().addItem(ScrollControl.getWhiteScroll(i));
+							return true;
+						}
+						if(args[1].equalsIgnoreCase("T") || args[1].equalsIgnoreCase("Transmog") || args[1].equalsIgnoreCase("Transmogscroll")){
+							Methods.getPlayer(name).getInventory().addItem(ScrollControl.getTransmogScroll(i));
 							return true;
 						}
 					}

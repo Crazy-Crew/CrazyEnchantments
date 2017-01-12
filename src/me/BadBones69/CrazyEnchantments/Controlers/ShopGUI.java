@@ -123,6 +123,7 @@ public class ShopGUI implements Listener{
 		options.clear();
 		options.add("BlackScroll");
 		options.add("WhiteScroll");
+		options.add("TransmogScroll");
 		for(String op : options){
 			if(Main.settings.getConfig().contains("Settings." + op)){
 				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")){
@@ -412,7 +413,7 @@ public class ShopGUI implements Listener{
 									}
 								}
 							}
-							player.getInventory().addItem(Methods.BlackScroll(1));
+							player.getInventory().addItem(ScrollControl.getBlackScroll(1));
 							return;
 						}
 						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName")))){
@@ -452,7 +453,47 @@ public class ShopGUI implements Listener{
 									}
 								}
 							}
-							player.getInventory().addItem(Methods.addWhiteScroll(1));
+							player.getInventory().addItem(ScrollControl.getWhiteScroll(1));
+							return;
+						}
+						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.TransmogScroll.GUIName")))){
+							if(Methods.isInvFull(player)){
+								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
+								}else{
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+								}
+								return;
+							}
+							int price = Main.settings.getConfig().getInt("Settings.SignOptions.TransmogScrollStyle.Cost");
+							if(player.getGameMode() != GameMode.CREATIVE){
+								if(Main.settings.getConfig().getString("Settings.SignOptions.TransmogScrollStyle.Money/XP").equalsIgnoreCase("Money")){
+									if(Methods.getMoney(player)<price){
+										double needed = price-Methods.getMoney(player);
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+										return;
+									}
+									Main.econ.withdrawPlayer(player, price);
+								}else{
+									if(Main.settings.getConfig().getString("Settings.SignOptions.TransmogScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
+										if(Methods.getXPLvl(player)<price){
+											String xp = price - Methods.getXPLvl(player)+"";
+											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+											return;
+										}
+										Methods.takeLvlXP(player, price);
+									}
+									if(Main.settings.getConfig().getString("Settings.SignOptions.TransmogScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
+										if(player.getTotalExperience()<price){
+											String xp = price - player.getTotalExperience()+"";
+											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+											return;
+										}
+										Methods.takeTotalXP(player, price);
+									}
+								}
+							}
+							player.getInventory().addItem(ScrollControl.getTransmogScroll(1));
 							return;
 						}
 					}

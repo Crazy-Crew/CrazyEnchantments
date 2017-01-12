@@ -18,8 +18,8 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 
 public class SignControl implements Listener{
 	
@@ -53,6 +53,7 @@ public class SignControl implements Listener{
 					types.add("SuccessDust");
 					types.add("BlackScroll");
 					types.add("WhiteScroll");
+					types.add("TransmogScroll");
 					for(String ty : types){
 						if(ty.equalsIgnoreCase(type)){
 							int price = config.getInt("Settings.SignOptions."+ty+"Style.Cost");
@@ -88,8 +89,9 @@ public class SignControl implements Listener{
 								case "ProtectionCrystal": player.getInventory().addItem(ProtectionCrystal.getCrystals(1));break;
 								case "DestroyDust": player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));break;
 								case "SuccessDust": player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));break;
-								case "BlackScroll": player.getInventory().addItem(Methods.BlackScroll(1));break;
-								case "WhiteScroll": player.getInventory().addItem(Methods.addWhiteScroll(1));break;
+								case "BlackScroll": player.getInventory().addItem(ScrollControl.getBlackScroll(1));break;
+								case "WhiteScroll": player.getInventory().addItem(ScrollControl.getWhiteScroll(1));break;
+								case "TransmogScroll": player.getInventory().addItem(ScrollControl.getTransmogScroll(1));break;
 							}
 							return;
 						}
@@ -158,10 +160,10 @@ public class SignControl implements Listener{
 	}
 	
 	private String placeHolders(String msg, String cat){
-		msg=Methods.color(msg);
-		msg=msg.replaceAll("%category%", cat).replaceAll("%Category%", cat);
-		msg=msg.replaceAll("%cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%Cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
-		msg=msg.replaceAll("%xp%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%XP%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
+		msg = Methods.color(msg);
+		msg = msg.replaceAll("%category%", cat).replaceAll("%Category%", cat);
+		msg = msg.replaceAll("%cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%Cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
+		msg = msg.replaceAll("%xp%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%XP%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
 		return msg;
 	}
 	
@@ -169,7 +171,8 @@ public class SignControl implements Listener{
 	public void onSignMake(SignChangeEvent e){
 		Player player = e.getPlayer();
 		Location loc = e.getBlock().getLocation();
-		int size = Main.settings.getSigns().getConfigurationSection("Locations").getKeys(false).size()+1;
+		FileConfiguration signs = Main.settings.getSigns();
+		int size = signs.getConfigurationSection("Locations").getKeys(false).size()+1;
 		String line1 = e.getLine(0);
 		String line2 = e.getLine(1);
 		if(Methods.hasPermission(player, "Sign", false)){
@@ -180,79 +183,36 @@ public class SignControl implements Listener{
 						e.setLine(1, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line2"),cat));
 						e.setLine(2, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line3"),cat));
 						e.setLine(3, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line4"),cat));
-						Main.settings.getSigns().set("Locations."+size+".Type", cat);
-						Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
-						Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
-						Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
-						Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
+						signs.set("Locations." + size + ".Type", cat);
+						signs.set("Locations." + size + ".World", loc.getWorld().getName());
+						signs.set("Locations." + size + ".X", loc.getBlockX());
+						signs.set("Locations." + size + ".Y", loc.getBlockY());
+						signs.set("Locations." + size + ".Z", loc.getBlockZ());
 						Main.settings.saveSigns();
 						return;
 					}
 				}
-				if(line2.equalsIgnoreCase("{ProtectCrystal}")){
-					e.setLine(0, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Line1")));
-					e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Line2")));
-					e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Line3")));
-					e.setLine(3, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Line4")));
-					Main.settings.getSigns().set("Locations."+size+".Type", "ProtectionCrystal");
-					Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
-					Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
-					Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
-					Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
-					Main.settings.saveSigns();
-					return;
-				}
-				if(line2.equalsIgnoreCase("{SuccessDust}")){
-					e.setLine(0, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line1")));
-					e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line2")));
-					e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line3")));
-					e.setLine(3, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Line4")));
-					Main.settings.getSigns().set("Locations."+size+".Type", "SuccessDust");
-					Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
-					Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
-					Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
-					Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
-					Main.settings.saveSigns();
-					return;
-				}
-				if(line2.equalsIgnoreCase("{DestroyDust}")){
-					e.setLine(0, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line1")));
-					e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line2")));
-					e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line3")));
-					e.setLine(3, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Line4")));
-					Main.settings.getSigns().set("Locations."+size+".Type", "DestroyDust");
-					Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
-					Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
-					Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
-					Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
-					Main.settings.saveSigns();
-					return;
-				}
-				if(line2.equalsIgnoreCase("{BlackScroll}")){
-					e.setLine(0, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Line1")));
-					e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Line2")));
-					e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Line3")));
-					e.setLine(3, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Line4")));
-					Main.settings.getSigns().set("Locations."+size+".Type", "BlackScroll");
-					Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
-					Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
-					Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
-					Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
-					Main.settings.saveSigns();
-					return;
-				}
-				if(line2.equalsIgnoreCase("{WhiteScroll}")){
-					e.setLine(0, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Line1")));
-					e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Line2")));
-					e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Line3")));
-					e.setLine(3, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Line4")));
-					Main.settings.getSigns().set("Locations."+size+".Type", "WhiteScroll");
-					Main.settings.getSigns().set("Locations."+size+".World", loc.getWorld().getName());
-					Main.settings.getSigns().set("Locations."+size+".X", loc.getBlockX());
-					Main.settings.getSigns().set("Locations."+size+".Y", loc.getBlockY());
-					Main.settings.getSigns().set("Locations."+size+".Z", loc.getBlockZ());
-					Main.settings.saveSigns();
-					return;
+				ArrayList<String> types = new ArrayList<String>();
+				types.add("ProtectionCrystal");
+				types.add("DestroyDust");
+				types.add("SuccessDust");
+				types.add("BlackScroll");
+				types.add("WhiteScroll");
+				types.add("TransmogScroll");
+				for(String type : types){
+					if(line2.equalsIgnoreCase("{" + type + "}")){
+						e.setLine(0, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line1")));
+						e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line2")));
+						e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line3")));
+						e.setLine(3, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line4")));
+						signs.set("Locations." + size + ".Type", type);
+						signs.set("Locations." + size + ".World", loc.getWorld().getName());
+						signs.set("Locations." + size + ".X", loc.getBlockX());
+						signs.set("Locations." + size + ".Y", loc.getBlockY());
+						signs.set("Locations." + size + ".Z", loc.getBlockZ());
+						Main.settings.saveSigns();
+						return;
+					}
 				}
 			}
 		}

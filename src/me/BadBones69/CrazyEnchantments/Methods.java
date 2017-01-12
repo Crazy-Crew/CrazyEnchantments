@@ -396,14 +396,14 @@ public class Methods{
 		}
 	}
 	public static ItemStack removeItem(ItemStack item){
+		ItemStack i = item.clone();
 		if(item.getAmount() <= 1){
-			return new ItemStack(Material.AIR);
+			i = new ItemStack(Material.AIR);
 		}
 		else{
-			ItemStack i = item;
 			i.setAmount(item.getAmount() - 1);
-			return i;
 		}
+		return i;
 	}
 	public static String getInvName(){
 		return color(Main.settings.getConfig().getString("Settings.InvName"));
@@ -463,21 +463,6 @@ public class Methods{
 			}
 		}
 		return false;
-	}
-	public static ItemStack BlackScroll(int i){
-		String name = color(Main.settings.getConfig().getString("Settings.BlackScroll.Name"));
-		String type = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
-		int ty=0;
-		if(type.contains(":")){
-			String[] b = type.split(":");
-			type = b[0];
-			ty = Integer.parseInt(b[1]);
-		}
-		Material m = Material.matchMaterial(type);
-		return makeItem(m, i, ty, name, Main.settings.getConfig().getStringList("Settings.BlackScroll.Item-Lore"));
-	}
-	public static ItemStack addWhiteScroll(int amount){
-		return makeItem(Main.settings.getConfig().getString("Settings.WhiteScroll.Item"), amount, Main.settings.getConfig().getString("Settings.WhiteScroll.Name"), Main.settings.getConfig().getStringList("Settings.WhiteScroll.Item-Lore"));
 	}
 	public static ItemStack addLore(ItemStack item, String i){
 		ArrayList<String> lore = new ArrayList<String>();

@@ -13,6 +13,12 @@ public class KingdomSupport {
     public static boolean isFriendly(Player player, Player other){
         KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
         KingdomPlayer ko = GameManagement.getPlayerManager().getSession(other);
+        if(kp == null || ko == null){
+        	return false;
+        }
+        if(kp.getKingdom() == null || ko.getKingdom() == null){
+        	return false;
+        }
         if(kp.getKingdom() == ko.getKingdom()){
         	return true;
         }

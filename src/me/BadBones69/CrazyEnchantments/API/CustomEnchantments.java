@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,8 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.Main;
+import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
 import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
@@ -326,11 +327,11 @@ public class CustomEnchantments implements Listener{
 	}
 	
 	public String getBookColor(String enchantment){
-		return instance.BookColor.get(enchantment);
+		return Methods.color(instance.BookColor.get(enchantment));
 	}
 	
 	public String getEnchantmentColor(String enchantment){
-		return instance.EnchantmentColor.get(enchantment);
+		return Methods.color(instance.EnchantmentColor.get(enchantment));
 	}
 	
 	public EnchantmentType getType(String enchantment){
@@ -375,6 +376,37 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param enchantment The enchantment you want to check.
+	 * @return All the categories the enchantment is in.
+	 */
+	public ArrayList<String> getEnchantmentCategories(String enchantment){
+		ArrayList<String> cats = new ArrayList<String>();
+		for(String c : Main.settings.getCustomEnchs().getStringList("Enchantments." + enchantment + ".Categories")){
+			for(String C : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+				if(c.equalsIgnoreCase(C)){
+					cats.add(C);
+				}
+			}
+		}
+		return cats;
+	}
+	
+	/**
+	 * 
+	 * @param category The category you want the rarity from.
+	 * @return The level of the category's rarity.
+	 */
+	public Integer getCategoryRarity(String category){
+		int rarity = 0;
+		FileConfiguration config = Main.settings.getConfig();
+		if(config.contains("Categories." + category)){
+			rarity = config.getInt("Categories." + category + ".Rarity");
+		}
+		return rarity;
 	}
 	
 	public ItemStack addEnchantment(ItemStack item, String enchant, Integer level){
@@ -482,7 +514,7 @@ public class CustomEnchantments implements Listener{
 		return 1;
 	}
 	
-	private String convertPower(Integer i){
+	public String convertPower(Integer i){
 		if(i<=0)return "I";
 		if(i==1)return "I";
 		if(i==2)return "II";

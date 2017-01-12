@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -148,6 +149,37 @@ public class CrazyEnchantments {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param enchantment The enchantment you want to check.
+	 * @return All the categories the enchantment is in.
+	 */
+	public ArrayList<String> getEnchantmentCategories(CEnchantments enchantment){
+		ArrayList<String> cats = new ArrayList<String>();
+		for(String c : Main.settings.getEnchs().getStringList("Enchantments." + enchantment.getName() + ".Categories")){
+			for(String C : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+				if(c.equalsIgnoreCase(C)){
+					cats.add(C);
+				}
+			}
+		}
+		return cats;
+	}
+	
+	/**
+	 * 
+	 * @param category The category you want the rarity from.
+	 * @return The level of the category's rarity.
+	 */
+	public Integer getCategoryRarity(String category){
+		int rarity = 0;
+		FileConfiguration config = Main.settings.getConfig();
+		if(config.contains("Categories." + category)){
+			rarity = config.getInt("Categories." + category + ".Rarity");
+		}
+		return rarity;
 	}
 	
 	/**
@@ -385,6 +417,9 @@ public class CrazyEnchantments {
 		if(exclude == null){
 			exclude = new ItemStack(Material.AIR);
 		}
+		if(exclude.isSimilar(include)){
+			exclude = new ItemStack(Material.AIR);
+		}
 		items.add(include);
 		for(CEnchantments ench : getEnchantmentPotions().keySet()){
 			for(ItemStack armor : items){
@@ -537,7 +572,7 @@ public class CrazyEnchantments {
 		return rageMaxLevel;
 	}
 	
-	private String convertPower(Integer i){
+	public String convertPower(Integer i){
 		if(i<=0)return "I";
 		if(i==1)return "I";
 		if(i==2)return "II";

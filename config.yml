@@ -1,9 +1,9 @@
 Settings:
-  Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the msgs
+  Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the messages
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   Enchantment-Book-Item: '340' #The item that the enchantment book is.
   Enchantment-Book-Glowing: true #Toggle on or off if the book will have an enchanted look.
-  GUISize: 54 #The size of the GUI, Must be a factor of 9
+  GUISize: 54 #The size of the GUI, must be a factor of 9
   Clouds: true #Enable and Disable the Clouds for the Wings Enchantment
   EnchantmentBookLore: #The lore on the enchantments books.
     - '&7Drag book and drop on Item.'
@@ -19,8 +19,8 @@ Settings:
       - '&7It is said to be an enchantment book from %Category%'
       - '&7But you must clean it off to find out what kind it is.'
       - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
-  GKitz: #GKitz gui option.
-    InGUI: false #If you can open the gkitz gui from the main /ce gui.
+  GKitz: #GKitz GUI option.
+    InGUI: false #If you can open the GKitz GUI from the main /ce gui.
     Slot: 1 #The slot it will be in.
     Item: '311' #The item it is.
     Glowing: true #If the item has a glowing effect.
@@ -32,7 +32,10 @@ Settings:
     Slot: 1 #Slot it is in
     Item: '388' #Item it is
     Glowing: true #If it is enchanted
-    Protected: '&6Ancient Protection'
+    Protected: '&6Ancient Protection' #The lore that goes on the item that is protected.
+    Chance: #The option to allow the protection to fail.
+      Toggle: false #Toggle if the protection has a chance of failing.
+      Success-Chance: 75 #The chance that the protection will work.
     Name: '&5&lProtection &b&lCrystal' #Name of the item
     Lore: #Lore of the item
       - '&7A rare crystal that is said to'
@@ -100,14 +103,14 @@ Settings:
         Toggle: true #Toggle if the firework happens on open.
         Colors: 'Black, Gray, Lime' #The colors the firework will be.
       Dust-Toggle:
-        Success: true #Toggle wether you can get success dust from Mystery Dust.
-        Destroy: true #Toggle wether you can get destroy dust from Mystery Dust.
-        Failed: true #Toggle wether you can get failed dust from Mystery Dust.
+        Success: true #Toggle whether you can get success dust from Mystery Dust.
+        Destroy: true #Toggle whether you can get destroy dust from Mystery Dust.
+        Failed: true #Toggle whether you can get failed dust from Mystery Dust.
       PercentRange: #Range the mystery rate will be.
         Max: 30 #Max percent
         #Min will always be 1.
     SuccessDust:
-      InGUI: true #If you can buy it in the /CE Gui
+      InGUI: true #If you can buy it in the /CE GUI
       GUIName: '&aMagical Angel Dust' #Name of the item in the GUI
       GUILore: #Lore in the GUI.
         - '&eCost: &a&l$50'
@@ -124,7 +127,7 @@ Settings:
         Max: 30 #Max percent
         Min: 2 #Minimum percent
     DestroyDust:
-      InGUI: true #If you can buy it in the /CE Gui
+      InGUI: true #If you can buy it in the /CE GUI
       GUIName: '&eMagical Fixing Dust' #Name of the item in the GUI
       GUILore: #Lore in the GUI.
         - '&eCost: &a&l$50'
@@ -146,19 +149,20 @@ Settings:
       Lore: #Lore for the dust
         - '&7This dust has failed.'
         - '&7It is now useless unless you'
-        - '&7needed to make TnT or a throwable potion.'
+        - '&7needed to make TNT or a throwable potion.'
   BlackScroll: #Settings for the black scrolls
     Item: '351' #The item the black scroll can be
     Name: '&8&l&nBlack Scroll' #The name of the black scroll
     Item-Lore: #The lore that will be on the black scroll.
-      - '&7Do you have an enchantment on your item you dont want?'
+      - '&7Do you have an enchantment on your item you don’’t want?'
       - '&7Well Black Scrolls are here to help you remove that enchantment.'
       - '&7All you need to do is put the Black Scroll on your cursor and then.'
       - '&7Drag and drop it on the item and BLAMO. It takes a random enchantment off,'
       - '&7And turns it into a normal enchantment book. Easy way to add new better enchantments.'
       - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments.'
-    InGUI: true #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&7Black Scroll'
+    Glowing: false #If the item is glowing.
     Slot: 21 #Slot you can buy the scroll at
     Lore: #Lore of the item in the GUI
       - '&eCost: &a&l$50'
@@ -174,25 +178,43 @@ Settings:
     Item: '339' #The item the white scroll is.
     Name: '&e&lWhite Scroll' #The name of the white scrolls.
     Item-Lore: #The lore that will be on the white scroll.
-      - '&7Have a item that is precious to you and dont want it to,'
+      - '&7Have a item that is precious to you and don’’t want it to,'
       - '&7Break because of Destroy Rate? Well this scroll allows you to,'
       - '&7Protect or precious item and not let it break. Well your in luck,'
       - '&7White Scrolls add a &b&lPROTECTED &7lore to your item to stop it from,'
       - '&7Destroying your precious item. If the book tries to break your item it removes,'
       - '&7The &b&lPROTECTED &7lore from your item and must add a new White Scroll to the item.'
-    InGUI: true #Toggle being able to buy in the /CE Gui. Cost is controlled in the SignOptions section
+    InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&7White Scroll'
+    Glowing: false #If the item is glowing.
     Slot: 30 #Slot you can buy the scroll at
     Lore: #Lore of the scroll in the GUI
       - '&eCost: &a&l$50'
       - '&7White Scrolls allow you to'
       - '&7protect items from breaking.'
     ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
+  TransmogScroll:
+    Item: '406' #The item the scroll is.
+    Name: '&d&lTransmog Scroll' #The name of the scroll.
+    Item-Lore: #The lore that will be on the scroll.
+      - '&7This scroll allows you to organize'
+      - '&7your enchantments and tell you how many'
+      - '&7enchantments you currently have on the item.'
+    InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
+    GUIName: '&dTransmog Scroll'
+    Glowing: false #If the item is glowing.
+    Slot: 30 #Slot you can buy the scroll at
+    Lore: #Lore of the scroll in the GUI
+      - '&eCost: &a&l$50'
+      - '&7This scroll allows you to organize'
+      - '&7your enchantments and tell you how many'
+      - '&7enchantments you currently have on the item.'
+    Amount-of-Enchantments: ' &7[&6&n%Amount%&7]' #The suffix that will be added at the end of the item's name.
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: true #Turn on an off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also?
     MaxRageLevel: 4 #The max amount rage can stack when fighting.
-    Right-Click-Book-Description: true #Toggles wether when you right click the enchantment book if it messages the player the description or not.
+    Right-Click-Book-Description: true #Toggles whether when you right click the enchantment book if it messages the player the description or not.
     Armor-Upgrade: #Having this enabled will allow players to try and add a higher level of an enchantment onto an item with a lower level of the enchantment.
       Toggle: true #Toggle on or off the ability to upgrade the enchantments.
       Enchantment-Break: true #If the book's destroy rate happens the item doesn't break but instead the current lower version of the enchantment is destroyed. If false then the item will be destroyed instead.
@@ -252,6 +274,15 @@ Settings:
       Line3: '&f&lWhite &b&lScrolls'
       Line4: '&c&lCost: &a&l$50'
       Buy-Message: '&7You have just bought a &e&lWhite Scroll&7.'
+    TransmogScrollStyle:
+      Cost: 50
+      Money/XP: Money
+      Lvl/Total: XP
+      Line1: '&b&lCrazy Enchant'
+      Line2: '&b&lShop:'
+      Line3: '&d&lTransmog &b&lScrolls'
+      Line4: '&c&lCost: &a&l$50'
+      Buy-Message: '&7You have just bought a &d&lTransmog Scroll&7.'
   GUICustomization: #This allows you to customize unclickable items into you GUI.
     - 'Slot:1, Item:160:15, Name: '
     - 'Slot:2, Item:160:15, Name: '
@@ -308,10 +339,11 @@ Categories: #You can make as many different categories as you want
     Money/XP: XP #Can be either Money or XP that players can use to by books
     Lvl/Total: Lvl #You can choose Lvl or Total, Lvl uses XP lvls and Total uses the total XP the player has
     Cost: 20 #How much the Books cost
+    Rarity: 1 #This allows the enchantments to be ordered with the Transmog Scrolls. The higher the number the more rare it is. Try and have each category have different rarities.
     LostBook: #Controls the Lost Book shop for this tier
       InGUI: false #If it shows in the /CE Gui
       Slot: 1 #Slot it will be in
-      Item: '340' #The item that is showen in the GUI
+      Item: '340' #The item that is shown in the GUI
       Glowing: false #Is it enchanted
       Name: '&8&l&nLost&c&l Tier1 &8&l&nBooks' #Name of the item
       Lore: #Lore on the item
@@ -347,6 +379,7 @@ Categories: #You can make as many different categories as you want
     Money/XP: XP
     Lvl/Total: Lvl
     Cost: 40
+    Rarity: 2
     LostBook:
       InGUI: false
       Slot: 2
@@ -386,6 +419,7 @@ Categories: #You can make as many different categories as you want
     Money/XP: XP
     Lvl/Total: Lvl
     Cost: 60
+    Rarity: 3
     LostBook:
       InGUI: false
       Slot: 3
