@@ -200,7 +200,7 @@ Settings:
       - '&7This scroll allows you to organize'
       - '&7your enchantments and tell you how many'
       - '&7enchantments you currently have on the item.'
-    InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
+    InGUI: false #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&dTransmog Scroll'
     Glowing: false #If the item is glowing.
     Slot: 30 #Slot you can buy the scroll at

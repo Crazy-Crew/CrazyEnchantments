@@ -518,10 +518,14 @@ public class CrazyEnchantments {
 	 */
 	public Integer getPower(ItemStack item, CEnchantments enchant){
 		String line = "";
-		for(String lore : item.getItemMeta().getLore()){
-			if(lore.contains(enchant.getCustomName())){
-				line = lore;
-				break;
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasLore()){
+				for(String lore : item.getItemMeta().getLore()){
+					if(lore.contains(enchant.getCustomName())){
+						line = lore;
+						break;
+					}
+				}
 			}
 		}
 		line = line.replace(enchant.getEnchantmentColor() + enchant.getCustomName()+" ", "");

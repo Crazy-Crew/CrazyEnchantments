@@ -239,10 +239,10 @@ public class Tinkerer implements Listener{
 											player.getInventory().addItem(inv.getItem(slot));
 										}
 									}
-									inv.clear();
 								}
 							}
 						}
+						inv.clear();
 					}
 				}
 			}

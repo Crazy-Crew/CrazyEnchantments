@@ -87,7 +87,7 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new Boots(), this);
 		pm.registerEvents(new Armor(), this);
 		pm.registerEvents(new Swords(), this);
-		if(pm.getPlugin("SilkSpawners")!=null){
+		if(pm.getPlugin("SilkSpawners") != null){
 			pm.registerEvents(new SilkSpawners(), this);
 		}
 		if(Support.hasStackMob()){
@@ -383,7 +383,7 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 					}
-					sender.sendMessage(Methods.getPrefix()+Methods.color("&c/CE Dust <Success/Destroy> <Amount> [Player] [Percent]"));
+					sender.sendMessage(Methods.getPrefix()+Methods.color("&c/CE Dust <Success/Destroy/Mystery> <Amount> [Player] [Percent]"));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Scroll> [Amount] [Player]
@@ -421,7 +421,7 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 					}
-					sender.sendMessage(Methods.getPrefix()+Methods.color("&c/CE Scroll <Scroll> [Amount] [Player]"));
+					sender.sendMessage(Methods.getPrefix()+Methods.color("&c/CE Scroll <White/Black/Transmog> [Amount] [Player]"));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Remove")){

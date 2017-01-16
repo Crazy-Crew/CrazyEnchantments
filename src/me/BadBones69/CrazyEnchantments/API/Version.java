@@ -47,4 +47,23 @@ public enum Version {
 		return this.versionInteger;
 	}
 	
+	/**
+	 * This checks if the current version is older, newer, or is the checked version.
+	 * @param version The version you are checking.
+	 * @return -1 if older, 0 if the same, and 1 if newer.
+	 */
+	public Integer comparedTo(Version version){
+		int resault = -1;
+		int current = this.getVersionInteger();
+		int check = version.getVersionInteger();
+		if(current > check){
+			resault = 1;
+		}else if(current == check){
+			resault = 0;
+		}else if(current < check){
+			resault = -1;
+		}
+		return resault;
+	}
+	
 }

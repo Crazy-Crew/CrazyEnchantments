@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -54,7 +56,13 @@ public class EnchantmentControl implements Listener{
 				}
 			}
 		}
-		return enchantments.get(number.nextInt(enchantments.size()));
+		try{
+			return enchantments.get(number.nextInt(enchantments.size()));
+		}catch(Exception e){
+			Bukkit.getLogger().log(Level.SEVERE, Methods.color("&c[Crazy Enchantments]>> The category " + cat + " has no enchantments."
+					+ " &7Please add enchantments to the category in the Enchantments.yml. If you do not wish to have the category feel free to delete it from the Config.yml."));
+			return enchantments.get(number.nextInt(enchantments.size()));
+		}
 	}
 	
 	@EventHandler
@@ -62,7 +70,7 @@ public class EnchantmentControl implements Listener{
 		Inventory inv = e.getInventory();
 		Player player = (Player) e.getWhoClicked();
 		if(inv != null){
-			if(e.getCursor() != null&&e.getCurrentItem() != null){
+			if(e.getCursor() != null && e.getCurrentItem() != null){
 				ItemStack c = e.getCursor();
 				ItemStack item  = e.getCurrentItem();
 				if(c.hasItemMeta()){
@@ -105,7 +113,7 @@ public class EnchantmentControl implements Listener{
 							}
 						}
 						if(type.getItems().contains(item.getType())){
-							if(c.getAmount() == 1){
+							if(c.getAmount() == 1 && item.getAmount() == 1){
 								boolean success = successChance(c);
 								boolean destroy = destroyChance(c);
 								Boolean toggle = false;

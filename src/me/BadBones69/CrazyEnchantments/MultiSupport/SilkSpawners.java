@@ -19,6 +19,8 @@ import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
 
 public class SilkSpawners implements Listener{
 	
+	SilkUtil su = SilkUtil.hookIntoSilkSpanwers();
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBreak(SilkSpawnersSpawnerBreakEvent e){
 		if(e.isCancelled())return;
@@ -31,20 +33,22 @@ public class SilkSpawners implements Listener{
 					if(Main.CE.hasEnchantments(item)){
 						if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
 							if(CEnchantments.TELEPATHY.isEnabled()){
-								EnchantmentUseEvent useEnchant = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-								Bukkit.getPluginManager().callEvent(useEnchant);
-								if(useEnchant.isCancelled()){
-									return;
+								String mobName = su.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
+								if (player.hasPermission("silkspawners.silkdrop." + mobName)){
+									EnchantmentUseEvent useEnchant = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
+									Bukkit.getPluginManager().callEvent(useEnchant);
+									if(useEnchant.isCancelled()){
+										return;
+									}
+									ItemStack it = su.newSpawnerItem(e.getEntityID(), su.getCustomSpawnerName(su.getCreatureName(e.getEntityID())), 1, false);
+									if(!Methods.isInvFull(player)){
+										player.getInventory().addItem(it);
+									}else{
+										block.getWorld().dropItemNaturally(block.getLocation(), it);
+									}
+									block.setType(Material.AIR);
+									e.setCancelled(true);
 								}
-								SilkUtil su = SilkUtil.hookIntoSilkSpanwers();
-								ItemStack it = su.newSpawnerItem(e.getEntityID(), su.getCustomSpawnerName(su.getCreatureName(e.getEntityID())), 1, false);
-								if(!Methods.isInvFull(player)){
-									player.getInventory().addItem(it);
-								}else{
-									block.getWorld().dropItemNaturally(block.getLocation(), it);
-								}
-								block.setType(Material.AIR);
-								e.setCancelled(true);
 							}
 						}
 					}

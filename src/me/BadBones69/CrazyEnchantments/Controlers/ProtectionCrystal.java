@@ -69,14 +69,16 @@ public class ProtectionCrystal implements Listener{
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 		for(ItemStack item : e.getDrops()){
-			if(isProtected(item)){
-				if(isSuccessfull(player)){
-					items.add(item);
+			if(item != null){
+				if(isProtected(item)){
+					if(isSuccessfull(player)){
+						items.add(item);
+					}else{
+						drops.add(item);
+					}
 				}else{
 					drops.add(item);
 				}
-			}else{
-				drops.add(item);
 			}
 		}
 		e.getDrops().clear();
