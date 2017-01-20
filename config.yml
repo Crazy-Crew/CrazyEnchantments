@@ -19,6 +19,34 @@ Settings:
       - '&7It is said to be an enchantment book from %Category%'
       - '&7But you must clean it off to find out what kind it is.'
       - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
+  Scrambler:
+    Item: '175' #The item it will be.
+    Glowing: true #If it has the glowing effect.
+    Name: '&e&lThe Grand Scrambler' #The name of the item.
+    Lore: #The lore of the item.
+      - '&7The &e&lThe Grand Scrambler &7will allow'
+      - '&7you to re-roll the destroy and success rates.'
+      - '&7Drag and drop it on an enchantment book'
+      - '&7to get a new destroy and success rate.'
+    GUI: #Options for the GUI.
+      Name: '&8Rolling the &eScrambler' #Name of the GUI.
+      Toggle: true #If the GUI will show. Warning>> This may cause lag if a lot of players are using it all the time.
+      Pointer: #The pointer in the middle of the GUI.
+        Item: '76' #The item the pointer is.
+        Name: '&c&lPointer' #The name of the pointer.
+        Lore: #The lore on the pointer.
+          - '&7What ever percents the item lands on'
+          - '&7will be the new percents on your book.'
+    InGUI: false #If you can buy it in the GUI.
+    Slot: 1 #The slot the item will be in.
+    GUIName: '&e&lThe Grand Scrambler' #Name of the item in the GUI.
+    GUILore: #The lore of the item in the GUI.
+      - '&7The &e&lThe Grand Scrambler &7will allow'
+      - '&7you to re-roll the destroy and success rates.'
+      - '&7Drag and drop it on an enchantment book'
+      - '&7to get a new destroy and success rate.'
+      - ''
+      - '&eCost: &e&l$1000'
   GKitz: #GKitz GUI option.
     InGUI: false #If you can open the GKitz GUI from the main /ce gui.
     Slot: 1 #The slot it will be in.
@@ -154,12 +182,12 @@ Settings:
     Item: '351' #The item the black scroll can be
     Name: '&8&l&nBlack Scroll' #The name of the black scroll
     Item-Lore: #The lore that will be on the black scroll.
-      - '&7Do you have an enchantment on your item you don’’t want?'
-      - '&7Well Black Scrolls are here to help you remove that enchantment.'
-      - '&7All you need to do is put the Black Scroll on your cursor and then.'
-      - '&7Drag and drop it on the item and BLAMO. It takes a random enchantment off,'
-      - '&7And turns it into a normal enchantment book. Easy way to add new better enchantments.'
+      - '&7Have a custom enchantment you don''t want?'
+      - '&7Drag and drop this on an item with a custom enchantment'
+      - '&7and it will remove a random enchantment for you.'
       - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments.'
+    Chance-Toggle: false #Toggle on and off if the black scrolls have a chance of failing.
+    Chance: 75 #The chance that the black scroll will work.
     InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&7Black Scroll'
     Glowing: false #If the item is glowing.
@@ -178,12 +206,9 @@ Settings:
     Item: '339' #The item the white scroll is.
     Name: '&e&lWhite Scroll' #The name of the white scrolls.
     Item-Lore: #The lore that will be on the white scroll.
-      - '&7Have a item that is precious to you and don’’t want it to,'
-      - '&7Break because of Destroy Rate? Well this scroll allows you to,'
-      - '&7Protect or precious item and not let it break. Well your in luck,'
-      - '&7White Scrolls add a &b&lPROTECTED &7lore to your item to stop it from,'
-      - '&7Destroying your precious item. If the book tries to break your item it removes,'
-      - '&7The &b&lPROTECTED &7lore from your item and must add a new White Scroll to the item.'
+      - '&7Want to protect an item from a book''s destroy rate?'
+      - '&7Drag and drop this on an enchant-able item'
+      - '&7and it will protect the item from the destroy rate.'
     InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&7White Scroll'
     Glowing: false #If the item is glowing.
@@ -210,15 +235,20 @@ Settings:
       - '&7your enchantments and tell you how many'
       - '&7enchantments you currently have on the item.'
     Amount-of-Enchantments: ' &7[&6&n%Amount%&7]' #The suffix that will be added at the end of the item's name.
+    Amount-Toggle: true #If the amount is added to the suffix of the item's name.
+    Count-Vanilla-Enchantments: true #If it counts the vanilla enchantments in the amount.
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: true #Turn on an off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also?
     MaxRageLevel: 4 #The max amount rage can stack when fighting.
     Right-Click-Book-Description: true #Toggles whether when you right click the enchantment book if it messages the player the description or not.
+    UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Armor-Upgrade: #Having this enabled will allow players to try and add a higher level of an enchantment onto an item with a lower level of the enchantment.
       Toggle: true #Toggle on or off the ability to upgrade the enchantments.
       Enchantment-Break: true #If the book's destroy rate happens the item doesn't break but instead the current lower version of the enchantment is destroyed. If false then the item will be destroyed instead.
     Wings: #Options for the Wings Enchantment.
+      Enemy-Toggle: true #This toggles on and off the wings enchantment when an enemy is # away from the player.
+      Distance: 25 #How far away the enemy has to be to toggle off the enchantment.
       Regions: #All world guard regions the Wings enchantment can work in.
         - 'Free_Fly'
         - 'SafeZone'
@@ -238,6 +268,15 @@ Settings:
       Line3: '&5&lProtection &b&lCrystal'
       Line4: '&c&lCost: &a&l$1000'
       Buy-Message: '&7You have just bought a &5&lProtection &b&lCrystal.' #Message when buying an item.
+    ScramblerStyle: 
+      Cost: 1000 #How much to buy it
+      Money/XP: Money #Use money or xp
+      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
+      Line1: '&b&lCrazy Enchant'
+      Line2: '&b&lShop:'
+      Line3: '&e&lScrambler'
+      Line4: '&c&lCost: &a&l$1000'
+      Buy-Message: '&7You have just bought a &e&lThe Grand Scrambler&7.' #Message when buying an item.
     SuccessDustStyle: 
       Cost: 50 #How much to buy a Magical Dust
       Money/XP: Money #Use money or xp

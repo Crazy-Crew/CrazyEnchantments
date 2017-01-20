@@ -24,6 +24,28 @@ public class CustomEBook {
 	 * 
 	 * @param enchantment Enchantment you want.
 	 * @param power Tier of the enchantment.
+	 */
+	public CustomEBook(String enchantment, Integer power){
+		this.enchantment = enchantment;
+		this.amount = 1;
+		this.power = power;
+		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")){
+			this.glowing = Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing");
+		}else{
+			this.glowing = false;
+		}
+		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
+		int Smin = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
+		int Dmax = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
+		int Dmin = Main.settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
+		this.destory_rate = percentPick(Dmax, Dmin);
+		this.success_rate = percentPick(Smax, Smin);
+	}
+	
+	/**
+	 * 
+	 * @param enchantment Enchantment you want.
+	 * @param power Tier of the enchantment.
 	 * @param amount Amount of books you want.
 	 */
 	public CustomEBook(String enchantment, Integer power, Integer amount){

@@ -379,6 +379,23 @@ public class CustomEnchantments implements Listener{
 	}
 	
 	/**
+	 * Get the highest category rarity the enchantment is in.
+	 * @param enchantment The enchantment you are checking.
+	 * @return The highest category based on the rarities.
+	 */
+	public String getHighestEnchantmentCategory(String enchantment){
+		String top = "";
+		int rarity = 0;
+		for(String cat : getEnchantmentCategories(enchantment)){
+			if(getCategoryRarity(cat) >= rarity){
+				rarity = getCategoryRarity(cat);
+				top = cat;
+			}
+		}
+		return top;
+	}
+	
+	/**
 	 * 
 	 * @param enchantment The enchantment you want to check.
 	 * @return All the categories the enchantment is in.
@@ -471,6 +488,50 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 		return enchantments;
+	}
+	
+	/**
+	 * Check if an itemstack is a enchantment book.
+	 * @param book The item you are checking.
+	 * @return True if it is and false if not.
+	 */
+	public Boolean isEnchantmentBook(ItemStack book){
+		if(book != null){
+			if(book.hasItemMeta()){
+				if(book.getItemMeta().hasDisplayName()){
+					if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
+						for(String en : getEnchantments()){
+							if(book.getItemMeta().getDisplayName().startsWith(getBookColor(en) + getCustomName(en))){
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Get the enchantment from an enchantment book.
+	 * @param book The book you want the enchantment from.
+	 * @return The enchantment the book is.
+	 */
+	public String getEnchantmentBookEnchantmnet(ItemStack book){
+		if(book != null){
+			if(book.hasItemMeta()){
+				if(book.getItemMeta().hasDisplayName()){
+					if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
+						for(String en : getEnchantments()){
+							if(book.getItemMeta().getDisplayName().startsWith(getBookColor(en) + getCustomName(en))){
+								return en;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	public Integer getBookPower(ItemStack book, String enchant){

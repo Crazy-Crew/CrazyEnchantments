@@ -32,6 +32,7 @@ import me.BadBones69.CrazyEnchantments.Controlers.FireworkDamageAPI;
 import me.BadBones69.CrazyEnchantments.Controlers.GKitzGUI;
 import me.BadBones69.CrazyEnchantments.Controlers.LostBook;
 import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
+import me.BadBones69.CrazyEnchantments.Controlers.Scrambler;
 import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
 import me.BadBones69.CrazyEnchantments.Controlers.ShopGUI;
 import me.BadBones69.CrazyEnchantments.Controlers.SignControl;
@@ -76,6 +77,7 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new BlackSmith(), this);
 		pm.registerEvents(new ArmorListener(), this);
 		pm.registerEvents(new ProtectionCrystal(), this);
+		pm.registerEvents(new Scrambler(), this);
 		pm.registerEvents(new CustomEnchantments(), this);
 		pm.registerEvents(new FireworkDamageAPI(this), this);		
 		//==========================================================================\\
@@ -166,6 +168,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
 					sender.sendMessage(Methods.color("&b/CE Scroll <Black/White/Transmog> [Amount] [Player] - &9Gives a player scrolls."));
 					sender.sendMessage(Methods.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
+					sender.sendMessage(Methods.color("&b/CE Scrambler [Amount] [Player] - &9Gives a player Scramblers."));
 					sender.sendMessage(Methods.color("&b/CE Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
 					sender.sendMessage(Methods.color("&b/CE Book <Enchantment> [Lvl] [Amount] [Player] - &9Gives a player a Enchantment Book."));
 					sender.sendMessage(Methods.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
@@ -275,7 +278,43 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.getPrefix()+Methods.color("&c/CE LostBook <Category> [Amount] [Player]"));
 					return true;
 				}
-				if(args[0].equalsIgnoreCase("Crystal")||args[0].equalsIgnoreCase("C")){// /CE Crystal [Amount] [Player]
+				if(args[0].equalsIgnoreCase("Scrambler") || args[0].equalsIgnoreCase("S")){// /CE Scrambler [Amount] [Player]
+					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					int amount = 1;
+					if(args.length<=2){
+						if(!(sender instanceof Player)){
+							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+							return true;
+						}
+					}
+					if(args.length>=2){
+						if(!Methods.isInt(args[1])){
+							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+									.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
+							return true;
+						}
+						amount=Integer.parseInt(args[1]);
+					}
+					Player player = null;
+					if(args.length>=3){
+						if(!Methods.isOnline(args[2], sender))return true;
+						player=Methods.getPlayer(args[2]);
+					}else{
+						player = (Player) sender;
+					}
+					if(Methods.isInvFull(player)){
+						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Inventory-Full")));
+						return true;
+					}
+					player.getInventory().addItem(Scrambler.getScramblers(amount));
+					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Scrambler-Crystal")
+							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
+							.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
+					player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Scrambler-Crystal")
+							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
+					return true;
+				}
+				if(args[0].equalsIgnoreCase("Crystal") || args[0].equalsIgnoreCase("C")){// /CE Crystal [Amount] [Player]
 					if(!Methods.hasPermission(sender, "Admin", true))return true;
 					int amount = 1;
 					if(args.length<=2){

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -104,20 +105,22 @@ public class Boots implements Listener{
 	@EventHandler
 	public void onFly(PlayerToggleFlightEvent e){
 		Player player = e.getPlayer();
-		if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
-			ItemStack boots = player.getEquipment().getBoots();
-			if(Main.CE.hasEnchantments(boots)){
-				if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
-					if(CEnchantments.WINGS.isEnabled()){
-						if(Support.hasSpartan()){
-							SpartanSupport.cancelFly(player);
-						}
-						if(e.isFlying()){
-							e.setCancelled(true);
-							player.setFlying(true);
-							Flying.add(player);
-						}else{
-							Flying.remove(player);
+		ItemStack boots = player.getEquipment().getBoots();
+		if(Main.CE.hasEnchantments(boots)){
+			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
+				if(CEnchantments.WINGS.isEnabled()){
+					if(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation())){
+						if(!areEnemiesNearBy(player)){
+							if(Support.hasSpartan()){
+								SpartanSupport.cancelFly(player);
+							}
+							if(e.isFlying()){
+								e.setCancelled(true);
+								player.setFlying(true);
+								Flying.add(player);
+							}else{
+								Flying.remove(player);
+							}
 						}
 					}
 				}
@@ -132,17 +135,27 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(!(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation()))){
+					if(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation())){
+						if(!areEnemiesNearBy(player)){
+							if(!player.getAllowFlight()){
+								player.setAllowFlight(true);
+							}
+						}else{
+							if(player.isFlying()){
+								if(player.getGameMode() != GameMode.CREATIVE){
+									player.setFlying(false);
+									player.setAllowFlight(false);
+									Flying.remove(player);
+								}
+							}
+						}
+					}else{
 						if(player.isFlying()){
-							if(player.getGameMode()!=GameMode.CREATIVE){
+							if(player.getGameMode() != GameMode.CREATIVE){
 								player.setFlying(false);
 								player.setAllowFlight(false);
 								Flying.remove(player);
 							}
-						}
-					}else{
-						if(!player.getAllowFlight()){
-							player.setAllowFlight(true);
 						}
 					}
 					if(player.isFlying()){
@@ -160,12 +173,14 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
-						if(Support.hasSpartan()){
-							SpartanSupport.cancelFly(player);
+					if(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation())){
+						if(!areEnemiesNearBy(player)){
+							if(Support.hasSpartan()){
+								SpartanSupport.cancelFly(player);
+							}
+							player.setAllowFlight(true);
+							Flying.add(player);
 						}
-						player.setAllowFlight(true);
-						Flying.add(player);
 					}
 				}
 			}
@@ -218,6 +233,29 @@ public class Boots implements Listener{
 				}, 1, 1);
 			}
 		}
+	}
+	
+	private Boolean areEnemiesNearBy(Player player){
+		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Enemy-Toggle")){
+			for(Player p : getNearByPlayers(player, Main.settings.getConfig().getInt("Settings.EnchantmentOptions.Wings.Distance"))){
+				if(!Support.isFriendly(player, p)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private ArrayList<Player> getNearByPlayers(Player player, int radius){
+		ArrayList<Player> players = new ArrayList<Player>();
+		for(Entity en : player.getNearbyEntities(radius, radius, radius)){
+			if(en instanceof Player){
+				if((Player)en != player){
+					players.add((Player) en);
+				}
+			}
+		}
+		return players;
 	}
 	
 }

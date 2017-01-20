@@ -152,6 +152,23 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * Get the highest category rarity the enchantment is in.
+	 * @param enchantment The enchantment you are checking.
+	 * @return The highest category based on the rarities.
+	 */
+	public String getHighestEnchantmentCategory(CEnchantments enchantment){
+		String top = "";
+		int rarity = 0;
+		for(String cat : getEnchantmentCategories(enchantment)){
+			if(getCategoryRarity(cat) >= rarity){
+				rarity = getCategoryRarity(cat);
+				top = cat;
+			}
+		}
+		return top;
+	}
+	
+	/**
 	 * 
 	 * @param enchantment The enchantment you want to check.
 	 * @return All the categories the enchantment is in.
@@ -367,9 +384,11 @@ public class CrazyEnchantments {
 	public ItemStack removeEnchantment(ItemStack item, CEnchantments enchant){
 		List<String> newLore = new ArrayList<String>();
 		ItemMeta meta = item.getItemMeta();
-		for(String lore : item.getItemMeta().getLore()){
-			if(!lore.contains(enchant.getCustomName())){
-				newLore.add(lore);
+		if(meta.hasLore()){
+			for(String lore : item.getItemMeta().getLore()){
+				if(!lore.contains(enchant.getCustomName())){
+					newLore.add(lore);
+				}
 			}
 		}
 		meta.setLore(newLore);
@@ -427,6 +446,11 @@ public class CrazyEnchantments {
 					if(!armor.isSimilar(exclude)){
 						if(hasEnchantment(armor, ench)){
 							int power = getPower(armor, ench);
+							if(!Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")){
+								if(power > getMaxPower(ench)){
+									power = getMaxPower(ench);
+								}
+							}
 							for(PotionEffectType type : getEnchantmentPotions().get(enchantment).keySet()){
 								if(getEnchantmentPotions().get(ench).containsKey(type)){
 									if(effects.containsKey(type)){
@@ -487,6 +511,50 @@ public class CrazyEnchantments {
 		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW,0);
 		return enchants;
 	}
+	
+	/**
+	 * Check if an itemstack is a enchantment book.
+	 * @param book The item you are checking.
+	 * @return True if it is and false if not.
+	 */
+	public Boolean isEnchantmentBook(ItemStack book){
+		if(book != null){
+			if(book.hasItemMeta()){
+				if(book.getItemMeta().hasDisplayName()){
+					if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
+						for(CEnchantments en : Main.CE.getEnchantments()){
+							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Get the enchantment from an enchantment book.
+	 * @param book The book you want the enchantment from.
+	 * @return The enchantment the book is.
+	 */
+	public CEnchantments getEnchantmentBookEnchantmnet(ItemStack book){
+		if(book != null){
+			if(book.hasItemMeta()){
+				if(book.getItemMeta().hasDisplayName()){
+					if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
+						for(CEnchantments en : Main.CE.getEnchantments()){
+							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
+								return en;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * 
@@ -517,6 +585,7 @@ public class CrazyEnchantments {
 	 * @return The power the enchantment has.
 	 */
 	public Integer getPower(ItemStack item, CEnchantments enchant){
+		int power = 0;
 		String line = "";
 		if(item.hasItemMeta()){
 			if(item.getItemMeta().hasLore()){
@@ -529,18 +598,23 @@ public class CrazyEnchantments {
 			}
 		}
 		line = line.replace(enchant.getEnchantmentColor() + enchant.getCustomName()+" ", "");
-		if(Methods.isInt(line))return Integer.parseInt(line);
-		if(line.equalsIgnoreCase("I"))return 1;
-		if(line.equalsIgnoreCase("II"))return 2;
-		if(line.equalsIgnoreCase("III"))return 3;
-		if(line.equalsIgnoreCase("IV"))return 4;
-		if(line.equalsIgnoreCase("V"))return 5;
-		if(line.equalsIgnoreCase("VI"))return 6;
-		if(line.equalsIgnoreCase("VII"))return 7;
-		if(line.equalsIgnoreCase("VIII"))return 8;
-		if(line.equalsIgnoreCase("IX"))return 9;
-		if(line.equalsIgnoreCase("X"))return 10;
-		return 1;
+		if(Methods.isInt(line))power = Integer.parseInt(line);
+		if(line.equalsIgnoreCase("I"))power = 1;
+		if(line.equalsIgnoreCase("II"))power = 2;
+		if(line.equalsIgnoreCase("III"))power = 3;
+		if(line.equalsIgnoreCase("IV"))power = 4;
+		if(line.equalsIgnoreCase("V"))power = 5;
+		if(line.equalsIgnoreCase("VI"))power = 6;
+		if(line.equalsIgnoreCase("VII"))power = 7;
+		if(line.equalsIgnoreCase("VIII"))power = 8;
+		if(line.equalsIgnoreCase("IX"))power = 9;
+		if(line.equalsIgnoreCase("X"))power = 10;
+		if(!Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")){
+			if(power > getMaxPower(enchant)){
+				power = getMaxPower(enchant);
+			}
+		}
+		return power;
 	}
 	
 	/**
@@ -574,6 +648,15 @@ public class CrazyEnchantments {
 	 */
 	public Integer getMaxRageLevel(){
 		return rageMaxLevel;
+	}
+	
+	/**
+	 * Gets the max enchantment level of an enchantment.
+	 * @param enchant The enchantment you want to get.
+	 * @return The max enchantment level.
+	 */
+	public Integer getMaxPower(CEnchantments enchant){
+		return Main.settings.getEnchs().getInt("Enchantments." + enchant.getName() + ".MaxPower");
 	}
 	
 	public String convertPower(Integer i){

@@ -49,6 +49,7 @@ public class SignControl implements Listener{
 					}
 					List<String> types = new ArrayList<String>();
 					types.add("ProtectionCrystal");
+					types.add("Scrambler");
 					types.add("DestroyDust");
 					types.add("SuccessDust");
 					types.add("BlackScroll");
@@ -86,12 +87,20 @@ public class SignControl implements Listener{
 								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions."+ty+"Style.Buy-Message")));
 							}
 							switch(ty){
-								case "ProtectionCrystal": player.getInventory().addItem(ProtectionCrystal.getCrystals(1));break;
-								case "DestroyDust": player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));break;
-								case "SuccessDust": player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));break;
-								case "BlackScroll": player.getInventory().addItem(ScrollControl.getBlackScroll(1));break;
-								case "WhiteScroll": player.getInventory().addItem(ScrollControl.getWhiteScroll(1));break;
-								case "TransmogScroll": player.getInventory().addItem(ScrollControl.getTransmogScroll(1));break;
+								case "ProtectionCrystal": player.getInventory().addItem(ProtectionCrystal.getCrystals());
+									break;
+								case "Scrambler": player.getInventory().addItem(Scrambler.getScramblers());
+									break;
+								case "DestroyDust": player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));
+									break;
+								case "SuccessDust": player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));
+									break;
+								case "BlackScroll": player.getInventory().addItem(ScrollControl.getBlackScroll(1));
+									break;
+								case "WhiteScroll": player.getInventory().addItem(ScrollControl.getWhiteScroll(1));
+									break;
+								case "TransmogScroll": player.getInventory().addItem(ScrollControl.getTransmogScroll(1));
+									break;
 							}
 							return;
 						}
@@ -194,6 +203,7 @@ public class SignControl implements Listener{
 				}
 				ArrayList<String> types = new ArrayList<String>();
 				types.add("ProtectionCrystal");
+				types.add("Scrambler");
 				types.add("DestroyDust");
 				types.add("SuccessDust");
 				types.add("BlackScroll");

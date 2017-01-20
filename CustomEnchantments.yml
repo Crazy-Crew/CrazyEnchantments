@@ -5,17 +5,22 @@ Enchantments:
     Name: 'Cyborg' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
-    MaxPower: 5 #Max lvl the enchantment goes up to
+    MaxPower: 1 #Max lvl the enchantment goes up to
     Categories: #All the categories the Enchantment can be found in
       - 'Common'
       - 'Rare'
       - 'Legendary'
     Info:
-      Name: '&e&lCyborg'
+      Name: '&e&lCyborg &7(&bI&7)'
       Description:
-        - '&c&lArmor Only'
         - '&3Gives you speed, strength and'
-        - '&3Jump boost to take down your enemies.'
+        - '&3jump boost to take down your enemies.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
     EnchantOptions: #Customizing Options for each enchantment.
       ItemsEnchantable: 'Armor' #You can pick from Armor, Boots, Helmet, Axe, Sword, Weapons(Swords & Axes), and Bow.
       ArmorOptions: #Options that only effect Armor Enchantments.
@@ -35,11 +40,16 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
     Info:
-      Name: '&e&lSniper'
+      Name: '&e&lSniper &7(&bI-&bV&7)'
       Description:
-        - '&c&lBows Only'
         - '&3Shoot an enemy with this and'
-        - '&3It has a chance to poison them.'
+        - '&3it has a chance to poison them.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
     EnchantOptions: #Customizing Options for each enchantment.
       ItemsEnchantable: 'Bow' #You can pick from Armor, Boots, Helmet, Axe, Sword, Weapons(Swords & Axes), and Bow.
       BowOptions: #Options that only effect Bow Enchantments.
@@ -59,17 +69,22 @@ Enchantments:
     Name: 'Slice' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
-    MaxPower: 5 #Max lvl the enchantment goes up to
+    MaxPower: 2 #Max lvl the enchantment goes up to
     Categories: #All the categories the Enchantment can be found in
       - 'Common'
       - 'Rare'
       - 'Legendary'
     Info:
-      Name: '&e&lSlice'
+      Name: '&e&lSlice &7(&bI-&bII&7)'
       Description:
-        - '&c&lWeapons Only'
         - '&3Gives you a chance to'
-        - '&3Do a lot more damage.'
+        - '&3do a lot more damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aWeapons'
     EnchantOptions: #Customizing Options for each enchantment.
       ItemsEnchantable: 'Weapons' #You can pick from Armor, Boots, Helmet, Axe, Sword, Weapons(Swords & Axes), and Bow.
       WeaponOptions: #Options that only effect Sword and Axe Enchantments.

@@ -105,6 +105,7 @@ public class ShopGUI implements Listener{
 		options.add("ProtectionCrystal");
 		options.add("Dust.SuccessDust");
 		options.add("Dust.DestroyDust");
+		options.add("Scrambler");
 		for(String op : options){
 			if(Main.settings.getConfig().contains("Settings." + op)){
 				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")){
@@ -151,7 +152,7 @@ public class ShopGUI implements Listener{
 			if(inv.getName().equals(Methods.getInvName())){
 				e.setCancelled(true);
 				if(e.getRawSlot()>=inv.getSize())return;
-				if(item==null)return;
+				if(item == null)return;
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
 						String name = item.getItemMeta().getDisplayName();
@@ -256,245 +257,121 @@ public class ShopGUI implements Listener{
 							openInfo(player);
 							return;
 						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.GUIName")))){
-							if(Methods.isInvFull(player)){
-								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-								}else{
-									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+						List<String> options = new ArrayList<String>();
+						options.add("BlackScroll");
+						options.add("WhiteScroll");
+						options.add("TransmogScroll");
+						options.add("ProtectionCrystal");
+						options.add("Scrambler");
+						for(String o : options){
+							if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings." + o + ".GUIName")))){
+								if(Methods.isInvFull(player)){
+									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
+									}else{
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									}
+									return;
+								}
+								int price = Main.settings.getConfig().getInt("Settings.SignOptions." + o + "Style.Cost");
+								if(player.getGameMode() != GameMode.CREATIVE){
+									if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Money/XP").equalsIgnoreCase("Money")){
+										if(Methods.getMoney(player)<price){
+											double needed = price-Methods.getMoney(player);
+											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+											return;
+										}
+										Main.econ.withdrawPlayer(player, price);
+									}else{
+										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Lvl")){
+											if(Methods.getXPLvl(player)<price){
+												String xp = price - Methods.getXPLvl(player)+"";
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Methods.takeLvlXP(player, price);
+										}
+										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Total")){
+											if(player.getTotalExperience()<price){
+												String xp = price - player.getTotalExperience()+"";
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Methods.takeTotalXP(player, price);
+										}
+									}
+								}
+								switch(o){
+									case "BlackScroll":
+										player.getInventory().addItem(ScrollControl.getBlackScroll(1));
+										break;
+									case "WhiteScroll":
+										player.getInventory().addItem(ScrollControl.getWhiteScroll(1));
+										break;
+									case "TransmogScroll":
+										player.getInventory().addItem(ScrollControl.getTransmogScroll(1));
+										break;
+									case "ProtectionCrystal":
+										player.getInventory().addItem(ProtectionCrystal.getCrystals());
+										break;
+									case "Scrambler":
+										player.getInventory().addItem(Scrambler.getScramblers());
+										break;
 								}
 								return;
 							}
-							int price = Main.settings.getConfig().getInt("Settings.SignOptions.ProtectionCrystalStyle.Cost");
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Money/XP").equalsIgnoreCase("Money")){
-									if(Methods.getMoney(player)<price){
-										double needed = price-Methods.getMoney(player);
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
-										return;
-									}
-									Main.econ.withdrawPlayer(player, price);
-								}else{
-									if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Methods.getXPLvl(player)<price){
-											String xp = price - Methods.getXPLvl(player)+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeLvlXP(player, price);
-									}
-									if(Main.settings.getConfig().getString("Settings.SignOptions.ProtectionCrystalStyle.Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<price){
-											String xp = price - player.getTotalExperience()+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeTotalXP(player, price);
-									}
-								}
-							}
-							player.getInventory().addItem(ProtectionCrystal.getCrystals(1));
-							return;
 						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Dust.DestroyDust.GUIName")))){
-							if(Methods.isInvFull(player)){
-								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-								}else{
-									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+						options.clear();
+						options.add("DestroyDust");
+						options.add("SuccessDust");
+						for(String o : options){
+							if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Dust." + o + ".GUIName")))){
+								if(Methods.isInvFull(player)){
+									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
+									}else{
+										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+									}
+									return;
+								}
+								int price = Main.settings.getConfig().getInt("Settings.SignOptions." + o + "Style.Cost");
+								if(player.getGameMode() != GameMode.CREATIVE){
+									if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Money/XP").equalsIgnoreCase("Money")){
+										if(Methods.getMoney(player)<price){
+											double needed = price-Methods.getMoney(player);
+											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+											return;
+										}
+										Main.econ.withdrawPlayer(player, price);
+									}else{
+										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Lvl")){
+											if(Methods.getXPLvl(player)<price){
+												String xp = price - Methods.getXPLvl(player)+"";
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Methods.takeLvlXP(player, price);
+										}
+										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Total")){
+											if(player.getTotalExperience()<price){
+												String xp = price - player.getTotalExperience()+"";
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
+												return;
+											}
+											Methods.takeTotalXP(player, price);
+										}
+									}
+								}
+								switch(o){
+									case "DestroyDust":
+										player.getInventory().addItem(DustControl.getDust("Destroy", 1));
+										break;
+									case "SuccessDust":
+										player.getInventory().addItem(DustControl.getDust("Success", 1));
+										break;
 								}
 								return;
 							}
-							int price = Main.settings.getConfig().getInt("Settings.SignOptions.DestroyDustStyle.Cost");
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Money/XP").equalsIgnoreCase("Money")){
-									if(Methods.getMoney(player)<price){
-										double needed = price-Methods.getMoney(player);
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
-										return;
-									}
-									Main.econ.withdrawPlayer(player, price);
-								}else{
-									if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Methods.getXPLvl(player)<price){
-											String xp = price - Methods.getXPLvl(player)+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeLvlXP(player, price);
-									}
-									if(Main.settings.getConfig().getString("Settings.SignOptions.DestroyDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<price){
-											String xp = price - player.getTotalExperience()+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeTotalXP(player, price);
-									}
-								}
-							}
-							player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));
-							return;
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Dust.SuccessDust.GUIName")))){
-							if(Methods.isInvFull(player)){
-								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-								}else{
-									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
-								}
-								return;
-							}
-							int price = Main.settings.getConfig().getInt("Settings.SignOptions.SuccessDustStyle.Cost");
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Money/XP").equalsIgnoreCase("Money")){
-									if(Methods.getMoney(player)<price){
-										double needed = price-Methods.getMoney(player);
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
-										return;
-									}
-									Main.econ.withdrawPlayer(player, price);
-								}else{
-									if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Methods.getXPLvl(player)<price){
-											String xp = price - Methods.getXPLvl(player)+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeLvlXP(player, price);
-									}
-									if(Main.settings.getConfig().getString("Settings.SignOptions.SuccessDustStyle.Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<price){
-											String xp = price - player.getTotalExperience()+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeTotalXP(player, price);
-									}
-								}
-							}
-							player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));
-							return;
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.GUIName")))){
-							if(Methods.isInvFull(player)){
-								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-								}else{
-									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
-								}
-								return;
-							}
-							int price = Main.settings.getConfig().getInt("Settings.SignOptions.BlackScrollStyle.Cost");
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Money/XP").equalsIgnoreCase("Money")){
-									if(Methods.getMoney(player)<price){
-										double needed = price-Methods.getMoney(player);
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
-										return;
-									}
-									Main.econ.withdrawPlayer(player, price);
-								}else{
-									if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Methods.getXPLvl(player)<price){
-											String xp = price - Methods.getXPLvl(player)+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeLvlXP(player, price);
-									}
-									if(Main.settings.getConfig().getString("Settings.SignOptions.BlackScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<price){
-											String xp = price - player.getTotalExperience()+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeTotalXP(player, price);
-									}
-								}
-							}
-							player.getInventory().addItem(ScrollControl.getBlackScroll(1));
-							return;
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.GUIName")))){
-							if(Methods.isInvFull(player)){
-								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-								}else{
-									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
-								}
-								return;
-							}
-							int price = Main.settings.getConfig().getInt("Settings.SignOptions.WhiteScrollStyle.Cost");
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Money/XP").equalsIgnoreCase("Money")){
-									if(Methods.getMoney(player)<price){
-										double needed = price-Methods.getMoney(player);
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
-										return;
-									}
-									Main.econ.withdrawPlayer(player, price);
-								}else{
-									if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Methods.getXPLvl(player)<price){
-											String xp = price - Methods.getXPLvl(player)+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeLvlXP(player, price);
-									}
-									if(Main.settings.getConfig().getString("Settings.SignOptions.WhiteScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<price){
-											String xp = price - player.getTotalExperience()+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeTotalXP(player, price);
-									}
-								}
-							}
-							player.getInventory().addItem(ScrollControl.getWhiteScroll(1));
-							return;
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.TransmogScroll.GUIName")))){
-							if(Methods.isInvFull(player)){
-								if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-									player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-								}else{
-									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
-								}
-								return;
-							}
-							int price = Main.settings.getConfig().getInt("Settings.SignOptions.TransmogScrollStyle.Cost");
-							if(player.getGameMode() != GameMode.CREATIVE){
-								if(Main.settings.getConfig().getString("Settings.SignOptions.TransmogScrollStyle.Money/XP").equalsIgnoreCase("Money")){
-									if(Methods.getMoney(player)<price){
-										double needed = price-Methods.getMoney(player);
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
-										return;
-									}
-									Main.econ.withdrawPlayer(player, price);
-								}else{
-									if(Main.settings.getConfig().getString("Settings.SignOptions.TransmogScrollStyle.Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Methods.getXPLvl(player)<price){
-											String xp = price - Methods.getXPLvl(player)+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeLvlXP(player, price);
-									}
-									if(Main.settings.getConfig().getString("Settings.SignOptions.TransmogScrollStyle.Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<price){
-											String xp = price - player.getTotalExperience()+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeTotalXP(player, price);
-									}
-								}
-							}
-							player.getInventory().addItem(ScrollControl.getTransmogScroll(1));
-							return;
 						}
 					}
 				}

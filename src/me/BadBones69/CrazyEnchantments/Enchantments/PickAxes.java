@@ -239,12 +239,21 @@ public class PickAxes implements Listener{
 											if(!fortune){
 												for(ItemStack drop : b.getDrops()){
 													if(getItems().contains(b.getType())){
-														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
-															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+														if(item.getItemMeta().hasEnchants()){
+															if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
+																if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
+																	drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																}
 															}
 														}
 													}
+													if(item.getItemMeta().hasEnchants()){
+														if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
+															drop = new ItemStack(b.getType(), 1, b.getData());
+														}
+													}
+													b.getWorld().dropItem(b.getLocation(), drop);
+													toggle = true;
 												}
 											}
 											if(toggle){

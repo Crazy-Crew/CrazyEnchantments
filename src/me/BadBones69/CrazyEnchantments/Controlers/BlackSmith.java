@@ -432,7 +432,7 @@ public class BlackSmith implements Listener{
 	
 	private int getUpgradeCost(ItemStack master, ItemStack sub){
 		int total = 0;
-		if(master.getType() == Main.CE.getEnchantmentBookItem().getType()&&sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
+		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Methods.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(sub.getItemMeta().getDisplayName()))){
 				for(CEnchantments en : Main.CE.getEnchantments()){
 					if(master.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){

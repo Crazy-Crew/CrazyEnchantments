@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -110,6 +111,12 @@ public class ScrollControl implements Listener{
 					if(i){
 						e.setCancelled(true);
 						player.setItemOnCursor(Methods.removeItem(scroll));
+						if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.Chance-Toggle")){
+							if(!Methods.randomPicker(Main.settings.getConfig().getInt("Settings.BlackScroll.Chance"), 100)){
+								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Black-Scroll-Unsuccessful")));
+								return;
+							}
+						}
 						if(custom){
 							String enchantment = pickCustomEnchant(customEnchants);
 							e.setCurrentItem(Main.CustomE.removeEnchantment(item, enchantment));
@@ -197,7 +204,7 @@ public class ScrollControl implements Listener{
 			}
 		}
 		m.setLore(lore);
-		String name = item.getType().toString();
+		String name = Methods.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replaceAll("_", " ").toLowerCase()));
 		String enchs = Main.settings.getConfig().getString("Settings.TransmogScroll.Amount-of-Enchantments");
 		if(m.hasDisplayName()){
 			name = m.getDisplayName();
@@ -208,8 +215,12 @@ public class ScrollControl implements Listener{
 			}
 		}
 		int amount = order.size();
-		amount += item.getEnchantments().size();
-		m.setDisplayName(name + Methods.color(enchs.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
+		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")){
+			amount += item.getEnchantments().size();
+		}
+		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Amount-Toggle")){
+			m.setDisplayName(name + Methods.color(enchs.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
+		}
 		item.setItemMeta(m);
 		return item;
 	}
