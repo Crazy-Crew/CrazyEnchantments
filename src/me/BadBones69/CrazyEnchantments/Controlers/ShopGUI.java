@@ -364,10 +364,10 @@ public class ShopGUI implements Listener{
 								}
 								switch(o){
 									case "DestroyDust":
-										player.getInventory().addItem(DustControl.getDust("Destroy", 1));
+										player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));
 										break;
 									case "SuccessDust":
-										player.getInventory().addItem(DustControl.getDust("Success", 1));
+										player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));
 										break;
 								}
 								return;
