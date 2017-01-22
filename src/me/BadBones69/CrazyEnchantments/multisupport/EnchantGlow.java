@@ -56,6 +56,12 @@ public class EnchantGlow extends EnchantmentWrapper {
 		if (glow != null){
 			return glow;
 		}
+		for(Enchantment ench : Enchantment.values()){
+			if(ench.getName().equalsIgnoreCase("Glow")){
+				glow = ench;
+				return ench;
+			}
+		}
 		try{
 			Field f = Enchantment.class.getDeclaredField("acceptingNew");
 			f.setAccessible(true);
