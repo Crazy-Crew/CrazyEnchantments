@@ -31,12 +31,9 @@ import org.bukkit.plugin.Plugin;
 
 import me.BadBones69.CrazyEnchantments.API.Version;
 import me.BadBones69.CrazyEnchantments.Controlers.FireworkDamageAPI;
+import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
 import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_10_R1;
 import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_11_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_7_R4;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R2;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R3;
 import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R1;
 import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R2;
 
@@ -57,64 +54,11 @@ public class Methods{
 		}
 	}
 	public static ItemStack addGlow(ItemStack item) {
-		Version ver = Version.getVersion();
-		switch(ver){
-		case v1_11_R1:
-			return NMS_v1_11_R1.addGlow(item);
-		case v1_10_R1:
-			return NMS_v1_10_R1.addGlow(item);
-		case v1_9_R2:
-			return NMS_v1_9_R2.addGlow(item);
-		case v1_9_R1:
-			return NMS_v1_9_R1.addGlow(item);
-		case v1_8_R3:
-			return NMS_v1_8_R3.addGlow(item);
-		case v1_8_R2:
-			return NMS_v1_8_R2.addGlow(item);
-		case v1_8_R1:
-			return NMS_v1_8_R1.addGlow(item);
-		case v1_7_R4:
-			return NMS_v1_7_R4.addGlow(item);
-		case TOO_NEW:
-			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too new. "
-					+ "Please update or remove this plugin to stop further Errors.");
-			return item;
-		case TOO_OLD:
-			Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too far out of date. "
-					+ "Please update or remove this plugin to stop further Errors.");
-			return item;
-		}
-		return item;
+		return EnchantGlow.addGlow(item);
     }
 	public static ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle){
-			Version ver = Version.getVersion();
-			switch(ver){
-			case v1_11_R1:
-				return NMS_v1_11_R1.addGlow(item);
-			case v1_10_R1:
-				return NMS_v1_10_R1.addGlow(item);
-			case v1_9_R2:
-				return NMS_v1_9_R2.addGlow(item);
-			case v1_9_R1:
-				return NMS_v1_9_R1.addGlow(item);
-			case v1_8_R3:
-				return NMS_v1_8_R3.addGlow(item);
-			case v1_8_R2:
-				return NMS_v1_8_R2.addGlow(item);
-			case v1_8_R1:
-				return NMS_v1_8_R1.addGlow(item);
-			case v1_7_R4:
-				return NMS_v1_7_R4.addGlow(item);
-			case TOO_NEW:
-				Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too new. "
-						+ "Please update or remove this plugin to stop further Errors.");
-				return item;
-			case TOO_OLD:
-				Bukkit.getLogger().log(Level.SEVERE, "[Crazy Enchantments]>> Your server is too far out of date. "
-						+ "Please update or remove this plugin to stop further Errors.");
-				return item;
-			}
+			item = EnchantGlow.addGlow(item);
 		}
 		return item;
     }
@@ -654,9 +598,18 @@ public class Methods{
 						}
 					}
 				}
+				if(isInt(arg)){
+					break;
+				}else{
+					continue;
+				}
 			}
 		}
-		return Integer.parseInt(arg);
+		int percent = 100;
+		if(isInt(arg)){
+			percent = Integer.parseInt(arg);
+		}
+		return percent;
 	}
 	public static Boolean hasArgument(String Argument, List<String> Msg){
 		for(String l : Msg){
