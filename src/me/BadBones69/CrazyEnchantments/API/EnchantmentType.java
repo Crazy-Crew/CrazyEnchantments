@@ -7,10 +7,19 @@ import org.bukkit.Material;
 import me.BadBones69.CrazyEnchantments.Main;
 
 public enum EnchantmentType{
-	ARMOR("Armor", isArmor()), CHESTPLATE("Chestplate", isChestplate()), LEGGINGS("Leggings", isLeggings()),
-	AXE("Axe", isAxe()), BOW("Bow", isBow()), BOOTS("Boots", isBoots()),
-	HELMET("Helmet", isHelmet()), SWORD("Sword", isSword()), WEAPONS("Weapons", isWeapon()),
-	PICKAXE("PickAxe", isPickAxe()), TOOL("Tool", isTool()), ALL("All", isAll());
+	
+	ARMOR("Armor", isArmor()), 
+	HELMET("Helmet", isHelmet()), 
+	CHESTPLATE("Chestplate", isChestplate()), 
+	LEGGINGS("Leggings", isLeggings()),
+	BOOTS("Boots", isBoots()),
+	BOW("Bow", isBow()), 
+	AXE("Axe", isAxe()), 
+	SWORD("Sword", isSword()), 
+	WEAPONS("Weapons", isWeapon()),
+	PICKAXE("PickAxe", isPickAxe()), 
+	TOOL("Tool", isTool()), 
+	ALL("All", isAll());
 	
 	String name;
 	ArrayList<Material> items;
@@ -21,8 +30,8 @@ public enum EnchantmentType{
 	 * @param items Items in the enchantment type.
 	 */
 	private EnchantmentType(String name, ArrayList<Material> items){
-		this.name=name;
-		this.items=items;
+		this.name = name;
+		this.items = items;
 	}
 	
 	/**
@@ -48,7 +57,7 @@ public enum EnchantmentType{
 	public ArrayList<CEnchantments> getEnchantmnets(){
 		ArrayList<CEnchantments> en = new ArrayList<CEnchantments>();
 		for(CEnchantments e : Main.CE.getEnchantments()){
-			if(e.getType()==getFromName(name)){
+			if(e.getType() == getFromName(name)){
 				en.add(e);
 			}
 		}

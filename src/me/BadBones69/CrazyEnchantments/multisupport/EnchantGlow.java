@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
  * 
  * Got from here 
  * https://github.com/Sothatsit/UsefulSnippets/blob/master/UsefulSnippets/src/me/sothatsit/usefulsnippets/EnchantGlow.java
+ * Had to edit it to not error with other plugins.
  *
  */
 
@@ -44,20 +45,20 @@ public class EnchantGlow extends EnchantmentWrapper {
 
 	@Override
 	public String getName() {
-		return "Glow";
+		return "Crazy_Glow";
 	}
 
 	@Override
 	public int getStartLevel() {
 		return 1;
 	}
-
+	
 	public static Enchantment getGlow() {
 		if (glow != null){
 			return glow;
 		}
 		for(Enchantment ench : Enchantment.values()){
-			if(ench.getName().equalsIgnoreCase("Glow")){
+			if((ench + "").toLowerCase().contains("crazy_glow")){
 				glow = ench;
 				return ench;
 			}
@@ -69,7 +70,7 @@ public class EnchantGlow extends EnchantmentWrapper {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		glow = new EnchantGlow(255);
+		glow = new EnchantGlow(169);
 		Enchantment.registerEnchantment(glow);
 		return glow;
 	}
