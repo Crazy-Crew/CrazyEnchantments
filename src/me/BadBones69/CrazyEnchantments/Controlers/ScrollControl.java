@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,6 +30,7 @@ import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
 import me.BadBones69.CrazyEnchantments.API.CustomEBook;
 import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
+import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
 
 public class ScrollControl implements Listener{
 	
@@ -216,7 +218,11 @@ public class ScrollControl implements Listener{
 		}
 		int amount = order.size();
 		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")){
-			amount += item.getEnchantments().size();
+			for(Enchantment ench : item.getEnchantments().keySet()){
+				if(ench != EnchantGlow.getGlow()){
+					amount ++;
+				}
+			}
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Amount-Toggle")){
 			m.setDisplayName(name + Methods.color(enchs.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
