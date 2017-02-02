@@ -35,7 +35,7 @@ public class EnchantGlow extends EnchantmentWrapper {
 
 	@Override
 	public EnchantmentTarget getItemTarget() {
-		return null;
+		return EnchantmentTarget.ALL;
 	}
 
 	@Override

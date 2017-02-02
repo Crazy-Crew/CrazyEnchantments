@@ -19,6 +19,7 @@ import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.API.InfoType;
 import me.BadBones69.CrazyEnchantments.API.Version;
+import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
 
 public class ShopGUI implements Listener{
 	
@@ -74,7 +75,7 @@ public class ShopGUI implements Listener{
 					String name = config.getString("Categories."+cat+".LostBook.Name");
 					List<String> lore = config.getStringList("Categories."+cat+".LostBook.Lore");
 					if(config.getBoolean("Categories."+cat+".LostBook.Glowing")){
-						inv.setItem(slot-1, Methods.addGlow(Methods.makeItem(id, 1, name, lore)));
+						inv.setItem(slot-1, addGlow(Methods.makeItem(id, 1, name, lore)));
 					}else{
 						inv.setItem(slot-1, Methods.makeItem(id, 1, name, lore));
 					}
@@ -97,7 +98,7 @@ public class ShopGUI implements Listener{
 					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
 						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
 					}
-					inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), glowing));
+					inv.setItem(slot, addGlow(Methods.makeItem(id, 1, name, lore), glowing));
 				}
 			}
 		}
@@ -117,7 +118,7 @@ public class ShopGUI implements Listener{
 					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
 						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
 					}
-					inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), glowing));
+					inv.setItem(slot, addGlow(Methods.makeItem(id, 1, name, lore), glowing));
 				}
 			}
 		}
@@ -136,12 +137,22 @@ public class ShopGUI implements Listener{
 					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
 						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
 					}
-					inv.setItem(slot, Methods.addGlow(Methods.makeItem(id, 1, name, lore), glowing));
+					inv.setItem(slot, addGlow(Methods.makeItem(id, 1, name, lore), glowing));
 				}
 			}
 		}
 		player.openInventory(inv);
 	}
+	
+	private static ItemStack addGlow(ItemStack item) {
+		return EnchantGlow.addGlow(item);
+    }
+	private static ItemStack addGlow(ItemStack item, boolean toggle) {
+		if(toggle){
+			item = EnchantGlow.addGlow(item);
+		}
+		return item;
+    }
 	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
@@ -542,7 +553,7 @@ public class ShopGUI implements Listener{
 				String name = enchants.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
 				EnchantmentType enchantType = Main.CE.getFromName(en).getType();
-				ItemStack i = Methods.addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
+				ItemStack i = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
 				if(enchantType == EnchantmentType.AXE)axes.add(i);
@@ -560,7 +571,7 @@ public class ShopGUI implements Listener{
 				String name = customEnchants.getString("Enchantments."+enchantment+".Info.Name");
 				List<String> desc = Main.CustomE.getDiscription(enchantment);
 				EnchantmentType enchantType = Main.CustomE.getType(enchantment);
-				ItemStack i = Methods.addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
+				ItemStack i = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);
 				if(enchantType == EnchantmentType.AXE)axes.add(i);

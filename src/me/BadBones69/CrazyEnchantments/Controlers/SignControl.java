@@ -134,7 +134,8 @@ public class SignControl implements Listener{
 									}
 								}
 							}
-							ItemStack item = Methods.addGlow(EnchantmentControl.pick(cat));
+							ItemStack item = EnchantmentControl.pick(cat);
+							item = Methods.addGlow(item);
 							String C = config.getString("Categories." + cat + ".Name");
 							if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")){
 								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")

@@ -134,7 +134,8 @@ public class ProtectionCrystal implements Listener{
 		String name = config.getString("Settings.ProtectionCrystal.Name");
 		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
 		Boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
-		ItemStack item = Methods.addGlow(Methods.makeItem(id, 1, name, lore), toggle);
+		ItemStack item = Methods.makeItem(id, 1, name, lore);
+		item = Methods.addGlow(item, toggle);
 		return item;
 	}
 	
@@ -144,7 +145,8 @@ public class ProtectionCrystal implements Listener{
 		String name = config.getString("Settings.ProtectionCrystal.Name");
 		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
 		Boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
-		ItemStack item = Methods.addGlow(Methods.makeItem(id, amount, name, lore), toggle);
+		ItemStack item = Methods.makeItem(id, amount, name, lore);
+		item = Methods.addGlow(item, toggle);
 		return item;
 	}
 	
