@@ -419,7 +419,7 @@ public class Swords implements Listener{
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.INQUISITIVE, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
-								e.setDroppedExp(e.getDroppedExp()*Main.CE.getPower(item, CEnchantments.INQUISITIVE));
+								e.setDroppedExp(e.getDroppedExp() * (Main.CE.getPower(item, CEnchantments.INQUISITIVE) + 1));
 							}
 						}
 					}

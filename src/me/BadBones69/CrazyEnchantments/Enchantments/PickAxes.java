@@ -75,7 +75,11 @@ public class PickAxes implements Listener{
 											drop += item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
 										}
 									}
-									block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
+									ItemStack i = new ItemStack(getOres().get(block.getType()), drop);
+									if(i.getType() == Material.INK_SACK){
+										i = new ItemStack(getOres().get(block.getType()), drop, (short) 4);
+									}
+									block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), i);
 									if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
 										if(Methods.randomPicker(2)){
 											int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
@@ -105,10 +109,15 @@ public class PickAxes implements Listener{
 										drop += item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
 									}
 								}
-								if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE){
-									drop+=Methods.percentPick(4, 1);
+								if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE ||
+										block.getType() == Material.LAPIS_ORE){
+									drop += Methods.percentPick(4, 1);
 								}
-								block.getWorld().dropItem(block.getLocation(), new ItemStack(getOres().get(block.getType()), drop));
+								ItemStack i = new ItemStack(getOres().get(block.getType()), drop);
+								if(i.getType() == Material.INK_SACK){
+									i = new ItemStack(getOres().get(block.getType()), drop, (short) 4);
+								}
+								block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), i);
 								if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
 									if(Methods.randomPicker(2)){
 										int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
