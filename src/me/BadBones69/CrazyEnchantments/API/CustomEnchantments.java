@@ -346,6 +346,18 @@ public class CustomEnchantments implements Listener{
 		return instance.Discription.get(enchantment);
 	}
 	
+	public String getFromName(String name){
+		for(String en : getEnchantments()){
+			if(en.equalsIgnoreCase(name)){
+				return en;
+			}
+			if(en.equalsIgnoreCase(name)){
+				return en;
+			}
+		}
+		return null;
+	}
+	
 	public boolean hasEnchantments(ItemStack item){
 		if(item!=null){
 			if(item.hasItemMeta()){

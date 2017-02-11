@@ -319,76 +319,78 @@ public class Armor implements Listener{
 		Player other = e.getOther();
 		CEnchantments enchant = e.getEnchantment();
 		int power = e.getPower();
-		if(Support.allowsPVP(other.getLocation())){
-			if(!Support.isFriendly(player, other)){
-				Calendar cal = Calendar.getInstance();
-				HashMap<CEnchantments, Calendar> eff = new HashMap<CEnchantments, Calendar>();
-				if(timer.containsKey(other)){
-					eff = timer.get(other);
+		if(!Methods.hasPermission(other, "aurabypass", false)){
+			if(Support.allowsPVP(other.getLocation())){
+				if(!Support.isFriendly(player, other)){
+					Calendar cal = Calendar.getInstance();
+					HashMap<CEnchantments, Calendar> eff = new HashMap<CEnchantments, Calendar>();
+					if(timer.containsKey(other)){
+						eff = timer.get(other);
+					}
+					switch(enchant){
+					case BLIZZARD:
+						if(CEnchantments.BLIZZARD.isEnabled()){
+							other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, power - 1));
+						}
+						break;
+					case INTIMIDATE:
+						if(CEnchantments.INTIMIDATE.isEnabled()){
+							other.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3*20, power - 1));
+						}
+						break;
+					case ACIDRAIN:
+						if(CEnchantments.ACIDRAIN.isEnabled()){
+							if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
+									|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
+								if(Methods.randomPicker(45)){
+									other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4*20, 1));
+									int time = 35 - (power * 5);
+									//time > 0 ? time : 0
+									//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
+									Calendar c = cal;
+									c.add(Calendar.SECOND, time > 0 ? time : 5);
+									eff.put(enchant, c);
+								}
+							}
+						}
+						break;
+					case SANDSTORM:
+						if(CEnchantments.SANDSTORM.isEnabled()){
+							if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
+									|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
+								if(Methods.randomPicker(38)){
+									other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10*20, 0));
+									int time = 35 - (power * 5);
+									//time > 0 ? time : 0
+									//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
+									Calendar c = cal;
+									c.add(Calendar.SECOND, time > 0 ? time : 5);
+									eff.put(enchant, c);
+								}
+							}
+						}
+						break;
+					case RADIANT:
+						if(CEnchantments.RADIANT.isEnabled()){
+							if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
+									|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
+								if(Methods.randomPicker(25)){
+									other.setFireTicks(5 * 20);
+									int time = 20 - (power * 5);
+									//time > 0 ? time : 0
+									//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
+									Calendar c = cal;
+									c.add(Calendar.SECOND, time > 0 ? time : 0);
+									eff.put(enchant, c);
+								}
+							}
+						}
+						break;
+					default:
+						break;
+					}
+					timer.put(other, eff);
 				}
-				switch(enchant){
-				case BLIZZARD:
-					if(CEnchantments.BLIZZARD.isEnabled()){
-						other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, power - 1));
-					}
-					break;
-				case INTIMIDATE:
-					if(CEnchantments.INTIMIDATE.isEnabled()){
-						other.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3*20, power - 1));
-					}
-					break;
-				case ACIDRAIN:
-					if(CEnchantments.ACIDRAIN.isEnabled()){
-						if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
-								|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-							if(Methods.randomPicker(45)){
-								other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4*20, 1));
-								int time = 35 - (power * 5);
-								//time > 0 ? time : 0
-								//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
-								Calendar c = cal;
-								c.add(Calendar.SECOND, time > 0 ? time : 5);
-								eff.put(enchant, c);
-							}
-						}
-					}
-					break;
-				case SANDSTORM:
-					if(CEnchantments.SANDSTORM.isEnabled()){
-						if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
-								|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-							if(Methods.randomPicker(38)){
-								other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10*20, 0));
-								int time = 35 - (power * 5);
-								//time > 0 ? time : 0
-								//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
-								Calendar c = cal;
-								c.add(Calendar.SECOND, time > 0 ? time : 5);
-								eff.put(enchant, c);
-							}
-						}
-					}
-					break;
-				case RADIANT:
-					if(CEnchantments.RADIANT.isEnabled()){
-						if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
-								|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-							if(Methods.randomPicker(25)){
-								other.setFireTicks(5 * 20);
-								int time = 20 - (power * 5);
-								//time > 0 ? time : 0
-								//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
-								Calendar c = cal;
-								c.add(Calendar.SECOND, time > 0 ? time : 0);
-								eff.put(enchant, c);
-							}
-						}
-					}
-					break;
-				default:
-					break;
-				}
-				timer.put(other, eff);
 			}
 		}
 	}

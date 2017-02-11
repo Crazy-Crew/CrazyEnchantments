@@ -26,6 +26,8 @@ import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.API.Version;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
 import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class Tinkerer implements Listener{
@@ -54,10 +56,8 @@ public class Tinkerer implements Listener{
 							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getTinker().getString("Settings.BottleOptions.Name")))){
 								e.setCancelled(true);
 								Methods.setItemInHand(player, Methods.removeItem(item));
-								if(Main.settings.getTinker().getString("Settings.Lvl/Total").equalsIgnoreCase("Total")){
-									Methods.takeTotalXP(player, -getXP(item));
-								}else{
-									Methods.takeLvlXP(player, -getXP(item));
+								if(Currency.isCurrency(Main.settings.getTinker().getString("Settings.Currency"))){
+									CurrencyAPI.giveCurrency(player, Currency.getCurrency(Main.settings.getTinker().getString("Settings.Currency")), getXP(item));
 								}
 								try{
 									if(Version.getVersion().getVersionInteger()>=191){
@@ -94,7 +94,7 @@ public class Tinkerer implements Listener{
 										Boolean toggle = false;
 										for(int slot : getSlot().keySet()){
 											if(inv.getItem(getSlot().get(slot))!=null){
-												if(Main.settings.getTinker().getString("Settings.Money/XP").equalsIgnoreCase("Money")){
+												if(Currency.getCurrency(Main.settings.getTinker().getString("Settings.Currency")) == Currency.VAULT){
 													ItemStack item = inv.getItem(slot);
 													total = total + getTotalXP(item);
 													toggle = true;

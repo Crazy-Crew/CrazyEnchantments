@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -409,14 +408,6 @@ public class Methods{
 	public static String getPrefix(){
 		return color(Main.settings.getConfig().getString("Settings.Prefix"));
 	}
-	public static double getMoney(Player player){
-		try{
-			return Main.econ.getBalance(player);
-		}catch(Exception e){
-			Bukkit.getLogger().log(Level.WARNING, "[Crazy Enchantments]>> Couldn't find the money for " + player.getName() + ".");
-			return 0D;
-		}
-	}
 	public static boolean isInt(String s) {
 	    try {
 	        Integer.parseInt(s);
@@ -488,52 +479,6 @@ public class Methods{
 	}
 	public static String getInvName(){
 		return color(Main.settings.getConfig().getString("Settings.InvName"));
-	}
-	public static int getXPLvl(Player player){
-		return player.getLevel();
-	}
-	public static void takeLvlXP(Player player, int amount){
-		player.setLevel(player.getLevel() - amount);
-	}
-	public static int getTotalExperience(Player player){// https://www.spigotmc.org/threads/72804
-		int experience = 0;
-		int level = player.getLevel();
-		if(level >= 0 && level <= 15) {
-			experience = (int) Math.ceil(Math.pow(level, 2) + (6 * level));
-			int requiredExperience = 2 * level + 7;
-			double currentExp = Double.parseDouble(Float.toString(player.getExp()));
-			experience += Math.ceil(currentExp * requiredExperience);
-			return experience;
-		} else if(level > 15 && level <= 30) {
-			experience = (int) Math.ceil((2.5 * Math.pow(level, 2) - (40.5 * level) + 360));
-			int requiredExperience = 5 * level - 38;
-			double currentExp = Double.parseDouble(Float.toString(player.getExp()));
-			experience += Math.ceil(currentExp * requiredExperience);
-			return experience;
-		} else {
-			experience = (int) Math.ceil(((4.5 * Math.pow(level, 2) - (162.5 * level) + 2220)));
-			int requiredExperience = 9 * level - 158;
-			double currentExp = Double.parseDouble(Float.toString(player.getExp()));
-			experience += Math.ceil(currentExp * requiredExperience);
-			return experience;       
-		}
-	}
-	public static void takeTotalXP(Player player, int amount){
-		if(Version.getVersion().getVersionInteger()>=181){
-			int total = getTotalExperience(player) - amount;
-			player.setTotalExperience(0);
-	        player.setTotalExperience(total);
-	        player.setLevel(0);
-	        player.setExp(0);
-	        for(;total > player.getExpToLevel();){
-	            total -= player.getExpToLevel();
-	            player.setLevel(player.getLevel()+1);
-	        }
-	        float xp = (float)total / (float)player.getExpToLevel();
-	        player.setExp(xp);
-		}else{
-			player.giveExp(-amount);
-		}
 	}
 	public static boolean isProtected(ItemStack i){
 		if(i.hasItemMeta()){

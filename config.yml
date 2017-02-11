@@ -46,7 +46,7 @@ Settings:
       - '&7Drag and drop it on an enchantment book'
       - '&7to get a new destroy and success rate.'
       - ''
-      - '&eCost: &e&l$1000'
+      - '&eCost: &e&l$800'
   GKitz: #GKitz GUI option.
     InGUI: false #If you can open the GKitz GUI from the main /ce gui.
     Slot: 1 #The slot it will be in.
@@ -77,7 +77,7 @@ Settings:
       - '&7protect items from getting lost'
       - '&7while the owners away in the after life.'
       - ''
-      - '&eCost: &e&l$1000'
+      - '&eCost: &e&l$500'
   BlackSmith: #Options for the Black Smith
     InGUI: true #In the GUI.
     Slot: 24 #Slot it is in.
@@ -141,7 +141,7 @@ Settings:
       InGUI: true #If you can buy it in the /CE GUI
       GUIName: '&aMagical Angel Dust' #Name of the item in the GUI
       GUILore: #Lore in the GUI.
-        - '&eCost: &a&l$50'
+        - '&eCost: &a&l$500'
         - '&7Dust allows you to bring'
         - '&7up your &aSuccess Rate&7.'
       Slot: 25 #Slot number it is in
@@ -158,7 +158,7 @@ Settings:
       InGUI: true #If you can buy it in the /CE GUI
       GUIName: '&eMagical Fixing Dust' #Name of the item in the GUI
       GUILore: #Lore in the GUI.
-        - '&eCost: &a&l$50'
+        - '&eCost: &a&l$500'
         - '&7Dust allows you to bring'
         - '&7down your &4Destroy Rate&7.'
       Slot: 34 #Slot number it is in
@@ -193,7 +193,7 @@ Settings:
     Glowing: false #If the item is glowing.
     Slot: 21 #Slot you can buy the scroll at
     Lore: #Lore of the item in the GUI
-      - '&eCost: &a&l$50'
+      - '&eCost: &a&l$1000'
       - '&7Black Scrolls allow you to'
       - '&7take off random enchantments.'
     SuccessChance: #Controls what the success chance will be when they get the book from the Black Scroll
@@ -214,7 +214,7 @@ Settings:
     Glowing: false #If the item is glowing.
     Slot: 30 #Slot you can buy the scroll at
     Lore: #Lore of the scroll in the GUI
-      - '&eCost: &a&l$50'
+      - '&eCost: &a&l$2000'
       - '&7White Scrolls allow you to'
       - '&7protect items from breaking.'
     ProtectedName: '&b&lPROTECTED' #The lore that is added to protect an item.
@@ -230,7 +230,7 @@ Settings:
     Glowing: false #If the item is glowing.
     Slot: 30 #Slot you can buy the scroll at
     Lore: #Lore of the scroll in the GUI
-      - '&eCost: &a&l$50'
+      - '&eCost: &a&l$200'
       - '&7This scroll allows you to organize'
       - '&7your enchantments and tell you how many'
       - '&7enchantments you currently have on the item.'
@@ -252,6 +252,28 @@ Settings:
       Regions: #All world guard regions the Wings enchantment can work in.
         - 'Free_Fly'
         - 'SafeZone'
+  Costs: #This is where you set the cost of stuff in the shop GUI. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
+    Scrambler: #The item that is being bought.
+      Cost: 800 #How much the item will cost.
+      Currency: Vault #The currency that will be taken when bought.
+    ProtectionCrystal:
+      Cost: 500
+      Currency: Vault
+    TransmogScroll:
+      Cost: 200
+      Currency: Vault
+    BlackScroll:
+      Cost: 1000
+      Currency: Vault
+    WhiteScroll:
+      Cost: 2000
+      Currency: Vault
+    SuccessDust:
+      Cost: 500
+      Currency: Vault
+    DestroyDust:
+      Cost: 500
+      Currency: Vault
   SignOptions: #Options for the Signs.
     CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
       Line1: '&b&lCrazy Enchant' #Line 1 of the sign
@@ -260,67 +282,46 @@ Settings:
       Line4: '&c&lCost: &6&l%Cost%XP' #Line 4 of the sign
       Buy-Message: '&7You have just bought an enchantment book, and it is %BookName%&7 from the %Category%&7 tier.'
     ProtectionCrystalStyle: 
-      Cost: 1000 #How much to buy it
-      Money/XP: Money #Use money or xp
-      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&5&lProtection &b&lCrystal'
-      Line4: '&c&lCost: &a&l$1000'
+      Line4: '&c&lCost: &a&l$500'
       Buy-Message: '&7You have just bought a &5&lProtection &b&lCrystal.' #Message when buying an item.
     ScramblerStyle: 
-      Cost: 1000 #How much to buy it
-      Money/XP: Money #Use money or xp
-      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&e&lScrambler'
-      Line4: '&c&lCost: &a&l$1000'
+      Line4: '&c&lCost: &a&l$800'
       Buy-Message: '&7You have just bought a &e&lThe Grand Scrambler&7.' #Message when buying an item.
     SuccessDustStyle: 
-      Cost: 50 #How much to buy a Magical Dust
-      Money/XP: Money #Use money or xp
-      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&e&lMagical Angel Dust'
-      Line4: '&c&lCost: &a&l$50'
+      Line4: '&c&lCost: &a&l$500'
       Buy-Message: '&7You have just bought a &aMagical Angel Dust&7.'
     DestroyDustStyle: 
-      Cost: 50 #How much to buy a Magical Dust
-      Money/XP: Money #Use money or xp
-      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&e&lMagical Fixing Dust'
-      Line4: '&c&lCost: &a&l$50'
+      Line4: '&c&lCost: &a&l$500'
       Buy-Message: '&7You have just bought a &eMagical Fixing Dust&7.'
     BlackScrollStyle: 
-      Cost: 50 #How much to buy a black scroll
-      Money/XP: Money #Use money or xp
-      Lvl/Total: XP #If using xp you can choose to use Lvls or Total xp
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&4&lBlack &8&lScrolls'
-      Line4: '&c&lCost: &a&l$50'
+      Line4: '&c&lCost: &a&l$1000'
       Buy-Message: '&7You have just bought a &8&l&nBlack Scroll&7.'
     WhiteScrollStyle:
-      Cost: 50
-      Money/XP: Money
-      Lvl/Total: XP
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&f&lWhite &b&lScrolls'
-      Line4: '&c&lCost: &a&l$50'
+      Line4: '&c&lCost: &a&l$2000'
       Buy-Message: '&7You have just bought a &e&lWhite Scroll&7.'
     TransmogScrollStyle:
-      Cost: 50
-      Money/XP: Money
-      Lvl/Total: XP
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&d&lTransmog &b&lScrolls'
-      Line4: '&c&lCost: &a&l$50'
+      Line4: '&c&lCost: &a&l$200'
       Buy-Message: '&7You have just bought a &d&lTransmog Scroll&7.'
   GUICustomization: #This allows you to customize unclickable items into you GUI.
     - 'Slot:1, Item:160:15, Name: '
@@ -375,9 +376,8 @@ Categories: #You can make as many different categories as you want
     Lore: #The lore of the Item
       - '&eCost: &6&l20 &6XP Levels'
     Item: '160:5' #The id for the item
-    Money/XP: XP #Can be either Money or XP that players can use to by books
-    Lvl/Total: Lvl #You can choose Lvl or Total, Lvl uses XP lvls and Total uses the total XP the player has
-    Cost: 20 #How much the Books cost
+    Cost: 20 #How much each book will cost to buy.
+    Currency: XP_Level #The currency you wish to use. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
     Rarity: 1 #This allows the enchantments to be ordered with the Transmog Scrolls. The higher the number the more rare it is. Try and have each category have different rarities.
     LostBook: #Controls the Lost Book shop for this tier
       InGUI: false #If it shows in the /CE Gui
@@ -392,9 +392,8 @@ Categories: #You can make as many different categories as you want
         - '&7Will you be the one to clean the books?'
         - ''
         - '&c&lCost: &6&l$1000'
-      Money/XP: Money #Costs money or XP
-      Lvl/Total: Lvl #If XP then Levels or Total XP
-      Cost: 1000 #The Price of the book
+      Cost: 1000
+      Currency: Vault
       FireworkToggle: true #Toggle on and off if when opening a lost book a firework effect happens
       FireworkColors: 'Red, White, Blue' #The colors of the firework
     EnchOptions: #Enchantment Options
@@ -415,9 +414,8 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l40 &6XP Levels'
     Item: '160:11'
-    Money/XP: XP
-    Lvl/Total: Lvl
     Cost: 40
+    Currency: XP_Level
     Rarity: 2
     LostBook:
       InGUI: false
@@ -432,9 +430,8 @@ Categories: #You can make as many different categories as you want
         - '&7Will you be the one to clean the books?'
         - ''
         - '&c&lCost: &6&l$2000'
-      Money/XP: Money
-      Lvl/Total: Lvl
       Cost: 2000
+      Currency: Vault
       FireworkToggle: true
       FireworkColors: 'Black, Yellow'
     EnchOptions:
@@ -455,9 +452,8 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l60 &6XP Levels'
     Item: '160:14'
-    Money/XP: XP
-    Lvl/Total: Lvl
     Cost: 60
+    Currency: XP_Level
     Rarity: 3
     LostBook:
       InGUI: false
@@ -472,9 +468,8 @@ Categories: #You can make as many different categories as you want
         - '&7Will you be the one to clean the books?'
         - ''
         - '&c&lCost: &6&l$3000'
-      Money/XP: Money
-      Lvl/Total: Lvl
       Cost: 3000
+      Currency: Vault
       FireworkToggle: true
       FireworkColors: 'White, Gray'
     EnchOptions:

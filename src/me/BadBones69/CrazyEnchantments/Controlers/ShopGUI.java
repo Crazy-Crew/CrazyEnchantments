@@ -19,6 +19,8 @@ import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
 import me.BadBones69.CrazyEnchantments.API.InfoType;
 import me.BadBones69.CrazyEnchantments.API.Version;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
 import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
 
 public class ShopGUI implements Listener{
@@ -159,6 +161,7 @@ public class ShopGUI implements Listener{
 		ItemStack item = e.getCurrentItem();
 		Inventory inv = e.getInventory();
 		Player player = (Player) e.getWhoClicked();
+		FileConfiguration config = Main.settings.getConfig();
 		if(inv!=null){
 			if(inv.getName().equals(Methods.getInvName())){
 				e.setCancelled(true);
@@ -167,8 +170,8 @@ public class ShopGUI implements Listener{
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
 						String name = item.getItemMeta().getDisplayName();
-						for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-							if(name.equals(Methods.color(Main.settings.getConfig().getString("Categories."+cat+".Name")))){
+						for(String cat : config.getConfigurationSection("Categories").getKeys(false)){
+							if(name.equals(Methods.color(config.getString("Categories."+cat+".Name")))){
 								if(Methods.isInvFull(player)){
 									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
 										player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
@@ -178,29 +181,28 @@ public class ShopGUI implements Listener{
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE){
-									if(Main.settings.getConfig().contains("Categories."+cat+".Money/XP")&&Main.settings.getConfig().getString("Categories."+cat+".Money/XP").equalsIgnoreCase("Money")){
-										if(Methods.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
-											String money = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Methods.getMoney(player)+"";
-											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
+									if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))){
+										Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
+										int cost = config.getInt("Categories." + cat + ".Cost");
+										if(CurrencyAPI.canBuy(player, currency, cost)){
+											CurrencyAPI.takeCurrency(player, currency, cost);
+										}else{
+											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+											switch(currency){
+												case VAULT:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+													break;
+												case XP_LEVEL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+												case XP_TOTAL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+											}
 											return;
-										}
-										Main.econ.withdrawPlayer(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
-									}else{
-										if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
-											if(Methods.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
-												String xp = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - Methods.getXPLvl(player)+"";
-												player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
-										}
-										if(Main.settings.getConfig().getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
-											if(player.getTotalExperience()<Main.settings.getConfig().getInt("Categories."+cat+".Cost")){
-												String xp = Main.settings.getConfig().getInt("Categories."+cat+".Cost") - player.getTotalExperience()+"";
-												player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".Cost"));
 										}
 									}
 								}
@@ -208,8 +210,8 @@ public class ShopGUI implements Listener{
 								return;
 							}
 						}
-						for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-							if(name.equals(Methods.color(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Name")))){
+						for(String cat : config.getConfigurationSection("Categories").getKeys(false)){
+							if(name.equals(Methods.color(config.getString("Categories." + cat + ".LostBook.Name")))){
 								if(Methods.isInvFull(player)){
 									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
 										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
@@ -219,54 +221,34 @@ public class ShopGUI implements Listener{
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE){
-									if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Money/XP").equalsIgnoreCase("Money")){
-										if(Methods.getMoney(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
-											String money = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Methods.getMoney(player)+"";
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
+									if(Currency.isCurrency(config.getString("Categories." + cat + ".LostBook.Currency"))){
+										Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".LostBook.Currency"));
+										int cost = config.getInt("Categories." + cat + ".LostBook.Cost");
+										if(CurrencyAPI.canBuy(player, currency, cost)){
+											CurrencyAPI.takeCurrency(player, currency, cost);
+										}else{
+											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+											switch(currency){
+												case VAULT:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+													break;
+												case XP_LEVEL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+												case XP_TOTAL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+											}
 											return;
-										}
-										Main.econ.withdrawPlayer(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
-									}else{
-										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Lvl")){
-											if(Methods.getXPLvl(player)<Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
-												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - Methods.getXPLvl(player)+"";
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeLvlXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
-										}
-										if(Main.settings.getConfig().getString("Categories."+cat+".LostBook.Lvl/Total").equalsIgnoreCase("Total")){
-											if(player.getTotalExperience() < Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost")){
-												String xp = Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost") - player.getTotalExperience()+"";
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeTotalXP(player, Main.settings.getConfig().getInt("Categories."+cat+".LostBook.Cost"));
 										}
 									}
 								}
 								player.getInventory().addItem(LostBook.getLostBook(cat, 1));
 								return;
 							}
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.GKitz.Name")))){
-							if(!Methods.hasPermission(player, "gkitz", true))return;
-							GKitzGUI.openGUI(player);
-							return;
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.Name")))){
-							if(!Methods.hasPermission(player, "BlackSmith", true))return;
-							BlackSmith.openBlackSmith(player);
-							return;
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Tinker.Name")))){
-							if(!Methods.hasPermission(player, "Tinker", true))return;
-							Tinkerer.openTinker(player);
-							return;
-						}
-						if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Info.Name")))){
-							openInfo(player);
-							return;
 						}
 						List<String> options = new ArrayList<String>();
 						options.add("BlackScroll");
@@ -275,40 +257,34 @@ public class ShopGUI implements Listener{
 						options.add("ProtectionCrystal");
 						options.add("Scrambler");
 						for(String o : options){
-							if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings." + o + ".GUIName")))){
+							if(name.equalsIgnoreCase(Methods.color(config.getString("Settings." + o + ".GUIName")))){
 								if(Methods.isInvFull(player)){
-									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-									}else{
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
-									}
+									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 									return;
 								}
-								int price = Main.settings.getConfig().getInt("Settings.SignOptions." + o + "Style.Cost");
 								if(player.getGameMode() != GameMode.CREATIVE){
-									if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Money/XP").equalsIgnoreCase("Money")){
-										if(Methods.getMoney(player)<price){
-											double needed = price-Methods.getMoney(player);
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									if(Currency.isCurrency(config.getString("Settings.Costs." + o + ".Currency"))){
+										Currency currency = Currency.getCurrency(config.getString("Settings.Costs." + o + ".Currency"));
+										int cost = config.getInt("Settings.Costs." + o + ".Cost");
+										if(CurrencyAPI.canBuy(player, currency, cost)){
+											CurrencyAPI.takeCurrency(player, currency, cost);
+										}else{
+											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+											switch(currency){
+												case VAULT:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+													break;
+												case XP_LEVEL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+												case XP_TOTAL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+											}
 											return;
-										}
-										Main.econ.withdrawPlayer(player, price);
-									}else{
-										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Lvl")){
-											if(Methods.getXPLvl(player)<price){
-												String xp = price - Methods.getXPLvl(player)+"";
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeLvlXP(player, price);
-										}
-										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Total")){
-											if(player.getTotalExperience()<price){
-												String xp = price - player.getTotalExperience()+"";
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeTotalXP(player, price);
 										}
 									}
 								}
@@ -336,7 +312,7 @@ public class ShopGUI implements Listener{
 						options.add("DestroyDust");
 						options.add("SuccessDust");
 						for(String o : options){
-							if(name.equalsIgnoreCase(Methods.color(Main.settings.getConfig().getString("Settings.Dust." + o + ".GUIName")))){
+							if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Dust." + o + ".GUIName")))){
 								if(Methods.isInvFull(player)){
 									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
 										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
@@ -345,31 +321,29 @@ public class ShopGUI implements Listener{
 									}
 									return;
 								}
-								int price = Main.settings.getConfig().getInt("Settings.SignOptions." + o + "Style.Cost");
 								if(player.getGameMode() != GameMode.CREATIVE){
-									if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Money/XP").equalsIgnoreCase("Money")){
-										if(Methods.getMoney(player)<price){
-											double needed = price-Methods.getMoney(player);
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
+									if(Currency.isCurrency(config.getString("Settings.Costs." + o + ".Currency"))){
+										Currency currency = Currency.getCurrency(config.getString("Settings.Costs." + o + ".Currency"));
+										int cost = config.getInt("Settings.Costs." + o + ".Cost");
+										if(CurrencyAPI.canBuy(player, currency, cost)){
+											CurrencyAPI.takeCurrency(player, currency, cost);
+										}else{
+											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+											switch(currency){
+												case VAULT:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+													break;
+												case XP_LEVEL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+												case XP_TOTAL:
+													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+													break;
+											}
 											return;
-										}
-										Main.econ.withdrawPlayer(player, price);
-									}else{
-										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Lvl")){
-											if(Methods.getXPLvl(player)<price){
-												String xp = price - Methods.getXPLvl(player)+"";
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeLvlXP(player, price);
-										}
-										if(Main.settings.getConfig().getString("Settings.SignOptions." + o + "Style.Lvl/Total").equalsIgnoreCase("Total")){
-											if(player.getTotalExperience()<price){
-												String xp = price - player.getTotalExperience()+"";
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-												return;
-											}
-											Methods.takeTotalXP(player, price);
 										}
 									}
 								}
@@ -383,6 +357,25 @@ public class ShopGUI implements Listener{
 								}
 								return;
 							}
+						}
+						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.GKitz.Name")))){
+							if(!Methods.hasPermission(player, "gkitz", true))return;
+							GKitzGUI.openGUI(player);
+							return;
+						}
+						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.BlackSmith.Name")))){
+							if(!Methods.hasPermission(player, "BlackSmith", true))return;
+							BlackSmith.openBlackSmith(player);
+							return;
+						}
+						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Tinker.Name")))){
+							if(!Methods.hasPermission(player, "Tinker", true))return;
+							Tinkerer.openTinker(player);
+							return;
+						}
+						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Info.Name")))){
+							openInfo(player);
+							return;
 						}
 					}
 				}

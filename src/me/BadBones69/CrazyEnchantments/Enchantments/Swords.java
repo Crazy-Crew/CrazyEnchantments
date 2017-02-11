@@ -23,6 +23,8 @@ import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.DisarmerUseEvent;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
 import me.BadBones69.CrazyEnchantments.multisupport.SpartanSupport;
 import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
@@ -140,15 +142,12 @@ public class Swords implements Listener{
 										EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.SKILLSWIPE, It);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()){
-											if(player.getTotalExperience()>=amount){
-												Methods.takeTotalXP(player, amount);
-												Methods.takeTotalXP(damager, -amount);
-												return;
-											}
-											if(player.getTotalExperience()<amount){
+											if(CurrencyAPI.getCurrency(player, Currency.XP_TOTAL) >= amount){
+												CurrencyAPI.takeCurrency(player, Currency.XP_TOTAL, amount);
+												CurrencyAPI.giveCurrency(damager, Currency.XP_TOTAL, amount);
+											}else{
 												player.setTotalExperience(0);
-												Methods.takeTotalXP(damager, -amount);
-												return;
+												CurrencyAPI.giveCurrency(damager, Currency.XP_TOTAL, amount);
 											}
 										}
 									}

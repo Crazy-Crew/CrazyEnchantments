@@ -4,16 +4,17 @@ import java.io.IOException;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.BadBones69.CrazyEnchantments.API.CEBook;
@@ -25,6 +26,7 @@ import me.BadBones69.CrazyEnchantments.API.GKitz;
 import me.BadBones69.CrazyEnchantments.API.InfoType;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorListener;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraListener;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
 import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
 import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
 import me.BadBones69.CrazyEnchantments.Controlers.EnchantmentControl;
@@ -48,13 +50,11 @@ import me.BadBones69.CrazyEnchantments.Enchantments.Tools;
 import me.BadBones69.CrazyEnchantments.multisupport.SilkSpawners;
 import me.BadBones69.CrazyEnchantments.multisupport.StackMobSupport;
 import me.BadBones69.CrazyEnchantments.multisupport.Support;
-import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Main extends JavaPlugin implements Listener{
 	
 	public static SettingsManager settings = SettingsManager.getInstance();
-	public static Economy econ = null;
 	public static EconomyResponse r;
 	public static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
@@ -89,7 +89,7 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new Boots(), this);
 		pm.registerEvents(new Armor(), this);
 		pm.registerEvents(new Swords(), this);
-		if(pm.getPlugin("SilkSpawners") != null){
+		if(Support.hasSilkSpawner()){
 			pm.registerEvents(new SilkSpawners(), this);
 		}
 		if(Support.hasStackMob()){
@@ -103,9 +103,7 @@ public class Main extends JavaPlugin implements Listener{
 		CEnchantments.load();
 		CustomE.update();
 		GKitz.load();
-		if(!setupEconomy()){
-	   		saveDefaultConfig();
-	    }
+		CurrencyAPI.loadCurrency();
 		try{
 			Metrics metrics = new Metrics(this); metrics.start();
 		}catch (IOException e) {
@@ -120,10 +118,12 @@ public class Main extends JavaPlugin implements Listener{
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
+		FileConfiguration config = settings.getConfig();
+		FileConfiguration msg = settings.getMsg();
 		if(commandLable.equalsIgnoreCase("BlackSmith")||commandLable.equalsIgnoreCase("BSmith")
 				||commandLable.equalsIgnoreCase("BlackS")||commandLable.equalsIgnoreCase("BS")){
 			if(!(sender instanceof Player)){
-				sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+				sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 				return true;
 			}
 			if(!Methods.hasPermission(sender, "BlackSmith", true))return true;
@@ -133,7 +133,7 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		if(commandLable.equalsIgnoreCase("Tinkerer")||commandLable.equalsIgnoreCase("Tinker")){
 			if(!(sender instanceof Player)){
-				sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+				sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 				return true;
 			}
 			if(!Methods.hasPermission(sender, "Tinker", true))return true;
@@ -145,7 +145,7 @@ public class Main extends JavaPlugin implements Listener{
 				||commandLable.equalsIgnoreCase("Enchanter")){
 			if(args.length == 0){
 				if(!(sender instanceof Player)){
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 					return true;
 				}
 				Player player = (Player)sender;
@@ -166,6 +166,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Methods.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
 					sender.sendMessage(Methods.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
+					sender.sendMessage(Methods.color("&b/CE Spawn <Enchantment> [Level:#/World:<World>/X:#/Y:#/Z:#] - &9Drops an enchantment book where you tell it to."));
 					sender.sendMessage(Methods.color("&b/CE Scroll <Black/White/Transmog> [Amount] [Player] - &9Gives a player scrolls."));
 					sender.sendMessage(Methods.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
 					sender.sendMessage(Methods.color("&b/CE Scrambler [Amount] [Player] - &9Gives a player Scramblers."));
@@ -191,13 +192,13 @@ public class Main extends JavaPlugin implements Listener{
 					CustomE.update();
 					Boots.onStart();
 					GKitz.load();
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Config-Reload")));
+					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Config-Reload")));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Info")){
 					if(args.length==1){
 						if(!(sender instanceof Player)){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 							return true;
 						}
 						Player player = (Player)sender;
@@ -217,7 +218,7 @@ public class Main extends JavaPlugin implements Listener{
 								String name = settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
 								List<String> desc = settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
 								sender.sendMessage(Methods.color(name));
-								for(String msg : desc)sender.sendMessage(Methods.color(msg));
+								for(String m : desc)sender.sendMessage(Methods.color(m));
 								return true;
 							}
 						}
@@ -226,27 +227,98 @@ public class Main extends JavaPlugin implements Listener{
 								String name = settings.getCustomEnchs().getString("Enchantments."+enchantment+".Info.Name");
 								List<String> desc = settings.getCustomEnchs().getStringList("Enchantments."+enchantment+".Info.Description");
 								sender.sendMessage(Methods.color(name));
-								for(String msg : desc)sender.sendMessage(Methods.color(msg));
+								for(String m : desc)sender.sendMessage(Methods.color(m));
 								return true;
 							}
 						}
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
+				}
+				if(args[0].equalsIgnoreCase("Spawn")){// /CE Spawn <Enchantment> [Level:#/World:<World>/X:#/Y:#/Z:#]
+					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(args.length >= 2){
+						CEnchantments enchant = null;
+						String cEnchant = null;
+						Boolean isCustom = false;
+						Location loc = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
+						int level = 1;
+						if(CE.isEnchantment(args[1])){
+							enchant = CE.getFromName(args[1]);
+							isCustom = false;
+						}else if(CustomE.isEnchantment(args[1])){
+							cEnchant = CustomE.getFromName(args[1]);
+							isCustom = true;
+						}else{
+							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+							return true;
+						}
+						if(sender instanceof Player){
+							loc = ((Player)sender).getLocation();
+						}
+						for(String arg : args){
+							arg = arg.toLowerCase();
+							if(arg.startsWith("level:")){
+								arg = arg.replaceAll("level:", "");
+								if(Methods.isInt(arg)){
+									level = Integer.parseInt(arg);
+								}
+							}
+							if(arg.startsWith("world:")){
+								arg = arg.replaceAll("world:", "");
+								if(Bukkit.getWorld(arg) != null){
+									loc.setWorld(Bukkit.getWorld(arg));
+								}
+							}
+							if(arg.startsWith("x:")){
+								arg = arg.replaceAll("x:", "");
+								if(Methods.isInt(arg)){
+									loc.setX(Integer.parseInt(arg));
+								}
+							}
+							if(arg.startsWith("y:")){
+								arg = arg.replaceAll("y:", "");
+								if(Methods.isInt(arg)){
+									loc.setY(Integer.parseInt(arg));
+								}
+							}
+							if(arg.startsWith("z:")){
+								arg = arg.replaceAll("z:", "");
+								if(Methods.isInt(arg)){
+									loc.setZ(Integer.parseInt(arg));
+								}
+							}
+						}
+						ItemStack book;
+						if(isCustom){
+							book = new CustomEBook(cEnchant, level).buildBook();
+						}else{
+							book = new CEBook(enchant, level).buildBook();
+						}
+						loc.getWorld().dropItemNaturally(loc, book);
+						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Spawned-Book")
+								.replaceAll("%World%", loc.getWorld().getName()).replaceAll("%world%", loc.getWorld().getName())
+								.replaceAll("%X%", loc.getBlockX() + "").replaceAll("%x%", loc.getBlockX() + "")
+								.replaceAll("%Y%", loc.getBlockY() + "").replaceAll("%y%", loc.getBlockY() + "")
+								.replaceAll("%Z%", loc.getBlockZ() + "").replaceAll("%z%", loc.getBlockZ() + "")));
+						return true;
+					}
+					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/CE Spawn <Enchantment> [Level:#/World:<World>/X:#/Y:#/Z:#]"));
+					return true;
 				}
 				if(args[0].equalsIgnoreCase("LostBook") || args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
 					if(!Methods.hasPermission(sender, "Admin", true))return true;
 					if(args.length>=2){// /CE LostBook <Category> [Amount] [Player]
 						if(args.length<=3){
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 								return true;
 							}
 						}
 						int amount = 1;
 						if(args.length>=3){
 							if(!Methods.isInt(args[2])){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 								return true;
 							}
@@ -260,7 +332,7 @@ public class Main extends JavaPlugin implements Listener{
 							player = (Player) sender;
 						}
 						String cat = args[1];
-						for(String C : settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+						for(String C : config.getConfigurationSection("Categories").getKeys(false)){
 							if(cat.equalsIgnoreCase(C)){
 								cat=C;
 								if(Methods.isInvFull(player)){
@@ -271,7 +343,7 @@ public class Main extends JavaPlugin implements Listener{
 								return true;
 							}
 						}
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Category")
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Category")
 								.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
 						return true;
 					}
@@ -283,13 +355,13 @@ public class Main extends JavaPlugin implements Listener{
 					int amount = 1;
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 							return true;
 						}
 					}
 					if(args.length>=2){
 						if(!Methods.isInt(args[1])){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
 							return true;
 						}
@@ -303,14 +375,14 @@ public class Main extends JavaPlugin implements Listener{
 						player = (Player) sender;
 					}
 					if(Methods.isInvFull(player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Inventory-Full")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Inventory-Full")));
 						return true;
 					}
 					player.getInventory().addItem(Scrambler.getScramblers(amount));
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Scrambler-Crystal")
+					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Give-Scrambler-Crystal")
 							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 							.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-					player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Scrambler-Crystal")
+					player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Get-Scrambler-Crystal")
 							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 					return true;
 				}
@@ -319,13 +391,13 @@ public class Main extends JavaPlugin implements Listener{
 					int amount = 1;
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 							return true;
 						}
 					}
 					if(args.length>=2){
 						if(!Methods.isInt(args[1])){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
 							return true;
 						}
@@ -339,14 +411,14 @@ public class Main extends JavaPlugin implements Listener{
 						player = (Player) sender;
 					}
 					if(Methods.isInvFull(player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Inventory-Full")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Inventory-Full")));
 						return true;
 					}
 					player.getInventory().addItem(ProtectionCrystal.getCrystals(amount));
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Protection-Crystal")
+					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Give-Protection-Crystal")
 							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 							.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-					player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Protection-Crystal")
+					player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Get-Protection-Crystal")
 							.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
 					return true;
 				}
@@ -358,13 +430,13 @@ public class Main extends JavaPlugin implements Listener{
 						int percent = 0;
 						if(args.length==2){
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 								return true;
 							}
 						}
 						if(args.length>=3){
 							if(!Methods.isInt(args[2])){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 								return true;
 							}
@@ -376,7 +448,7 @@ public class Main extends JavaPlugin implements Listener{
 						}
 						if(args.length>=5){
 							if(!Methods.isInt(args[4])){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 										.replaceAll("%Arg%", args[4]).replaceAll("%arg%", args[4])));
 								return true;
 							}
@@ -388,9 +460,9 @@ public class Main extends JavaPlugin implements Listener{
 							}else{
 								player.getInventory().addItem(DustControl.getDust("SuccessDust", amount));
 							}
-							player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Success-Dust")
+							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Get-Success-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Success-Dust")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Give-Success-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
@@ -401,9 +473,9 @@ public class Main extends JavaPlugin implements Listener{
 							}else{
 								player.getInventory().addItem(DustControl.getDust("DestroyDust", amount));
 							}
-							player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Destroy-Dust")
+							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Get-Destroy-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Destroy-Dust")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Give-Destroy-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
@@ -414,9 +486,9 @@ public class Main extends JavaPlugin implements Listener{
 							}else{
 								player.getInventory().addItem(DustControl.getMysteryDust(amount));
 							}
-							player.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Get-Mystery-Dust")
+							player.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Get-Mystery-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")));
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Give-Mystery-Dust")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Give-Mystery-Dust")
 									.replaceAll("%Amount%", amount+"").replaceAll("%amount%", amount+"")
 									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 							return true;
@@ -432,7 +504,7 @@ public class Main extends JavaPlugin implements Listener{
 						String name = sender.getName();
 						if(args.length >= 3){
 							if(!Methods.isInt(args[2])){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 										.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 								return true;
 							}
@@ -443,7 +515,7 @@ public class Main extends JavaPlugin implements Listener{
 							if(!Methods.isOnline(name, sender))return true;
 						}else{
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 								return true;
 							}
 						}
@@ -465,7 +537,7 @@ public class Main extends JavaPlugin implements Listener{
 				}
 				if(args[0].equalsIgnoreCase("Remove")){
 					if(!(sender instanceof Player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 						return true;
 					}
 					if(args.length!=2){
@@ -492,11 +564,11 @@ public class Main extends JavaPlugin implements Listener{
 						}
 					}
 					if(!T){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
 					if(Methods.getItemInHand(player).getType()==Material.AIR){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Doesnt-Have-Item-In-Hand")));
 						return true;
 					}
 					ItemStack item = Methods.getItemInHand(player);
@@ -504,27 +576,27 @@ public class Main extends JavaPlugin implements Listener{
 					if(customEnchant){
 						if(CustomE.hasEnchantment(item, ench)){
 							Methods.setItemInHand(player, CustomE.removeEnchantment(item, ench));
-							String msg = Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Remove-Enchantment")
+							String m = Methods.getPrefix()+Methods.color(msg.getString("Messages.Remove-Enchantment")
 									.replaceAll("%Enchantment%", CustomE.getCustomName(ench)).replaceAll("%enchantment%", CustomE.getCustomName(ench)));
-							player.sendMessage(msg);
+							player.sendMessage(m);
 							return true;
 						}
 					}else{
 						if(CE.hasEnchantment(item, en)){
 							Methods.setItemInHand(player, CE.removeEnchantment(item, en));
-							String msg = Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Remove-Enchantment")
+							String m = Methods.getPrefix()+Methods.color(msg.getString("Messages.Remove-Enchantment")
 									.replaceAll("%Enchantment%", en.getCustomName()).replaceAll("%enchantment%", en.getCustomName()));
-							player.sendMessage(msg);
+							player.sendMessage(m);
 							return true;
 						}
 					}
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Doesnt-Have-Enchantment")
+					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Doesnt-Have-Enchantment")
 							.replaceAll("%Enchantment%", enchantment).replaceAll("%enchantment%", enchantment)));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Add")){
 					if(!(sender instanceof Player)){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 						return true;
 					}
 					if(args.length<=1){
@@ -540,7 +612,7 @@ public class Main extends JavaPlugin implements Listener{
 					String lvl = "1";
 					if(args.length>=3){
 						if(!Methods.isInt(args[2])){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 							return true;
 						}
@@ -560,11 +632,11 @@ public class Main extends JavaPlugin implements Listener{
 						}
 					}
 					if(!T){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
 					if(Methods.getItemInHand(player).getType() == Material.AIR){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Doesnt-Have-Item-In-Hand")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Doesnt-Have-Item-In-Hand")));
 						return false;
 					}
 					if(customEnchant){
@@ -581,7 +653,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 							return true;
 						}
 					}
@@ -592,7 +664,7 @@ public class Main extends JavaPlugin implements Listener{
 					Player player = Methods.getPlayer(sender.getName());
 					if(args.length>=3){
 						if(!Methods.isInt(args[2])){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 							return true;
 						}
@@ -600,7 +672,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 					if(args.length>=4){
 						if(!Methods.isInt(args[3])){
-							sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-A-Number")
+							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3])));
 							return true;
 						}
@@ -626,14 +698,14 @@ public class Main extends JavaPlugin implements Listener{
 						}
 					}
 					if(!toggle){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
-					sender.sendMessage(Methods.color(Methods.getPrefix()+settings.getMsg().getString("Messages.Send-Enchantment-Book").replace("%Player%", player.getName()).replace("%player%", player.getName())));
-					int Smax = settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
-					int Smin = settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Min");
-					int Dmax = settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Max");
-					int Dmin = settings.getConfig().getInt("Settings.BlackScroll.DestroyChance.Min");
+					sender.sendMessage(Methods.color(Methods.getPrefix()+msg.getString("Messages.Send-Enchantment-Book").replace("%Player%", player.getName()).replace("%player%", player.getName())));
+					int Smax = config.getInt("Settings.BlackScroll.SuccessChance.Max");
+					int Smin = config.getInt("Settings.BlackScroll.SuccessChance.Min");
+					int Dmax = config.getInt("Settings.BlackScroll.DestroyChance.Max");
+					int Dmin = config.getInt("Settings.BlackScroll.DestroyChance.Min");
 					if(customEnchant){
 						CustomEBook book = new CustomEBook(ench, lvl, amount);
 						book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
@@ -655,7 +727,7 @@ public class Main extends JavaPlugin implements Listener{
 				commandLable.equalsIgnoreCase("gkit")){// /GKitz [Kit] [Player]
 			if(args.length == 0){
 				if(!(sender instanceof Player)){
-					sender.sendMessage(Methods.getPrefix()+Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 					return true;
 				}
 				GKitzGUI.openGUI((Player) sender);
@@ -667,7 +739,7 @@ public class Main extends JavaPlugin implements Listener{
 				if(GKitz.isGKit(args[0])){
 					kit = GKitz.getGKitName(args[0]);
 				}else{
-					sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Not-A-GKit").replaceAll("%Kit%", args[0]).replaceAll("%kit%", args[0])));
+					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-GKit").replaceAll("%Kit%", args[0]).replaceAll("%kit%", args[0])));
 					return true;
 				}
 				if(args.length >= 2){
@@ -682,7 +754,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 				}else{
 					if(!(sender instanceof Player)){
-						sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Players-Only")));
+						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
 						return true;
 					}else{
 						player = (Player) sender;
@@ -692,10 +764,10 @@ public class Main extends JavaPlugin implements Listener{
 					if(GKitz.canGetGKit(player, kit)){
 						GKitz.giveKit(player, kit);
 						GKitz.runKitCommands(player, kit);
-						player.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Received-GKit")
+						player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Received-GKit")
 								.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
 						if(!player.getName().equalsIgnoreCase(sender.getName())){
-							sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.Given-GKit")
+							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Given-GKit")
 									.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))
 									.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
 						}
@@ -703,12 +775,12 @@ public class Main extends JavaPlugin implements Listener{
 							GKitz.addCooldown(player, kit);
 						}
 					}else{
-						sender.sendMessage(Methods.getPrefix() + GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), settings.getMsg().getString("Messages.Still-In-Cooldown")
+						sender.sendMessage(Methods.getPrefix() + GKitz.getCooldownLeft(GKitz.getCooldown(player, kit), msg.getString("Messages.Still-In-Cooldown")
 								.replaceAll("%Kit%", GKitz.getGKitDisplayName(kit)).replaceAll("%kit%", GKitz.getGKitDisplayName(kit))));
 						return true;
 					}
 				}else{
-					sender.sendMessage(Methods.getPrefix() + Methods.color(settings.getMsg().getString("Messages.No-GKit-Permission")
+					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.No-GKit-Permission")
 							.replaceAll("%Kit%", kit).replaceAll("%kit%", kit)));
 					return true;
 				}
@@ -737,15 +809,4 @@ public class Main extends JavaPlugin implements Listener{
 		}, 1*20);
 	}
 	
-	private boolean setupEconomy(){
-        if (getServer().getPluginManager().getPlugin("Vault") == null){
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null){
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
-    }
 }

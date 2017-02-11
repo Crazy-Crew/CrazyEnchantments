@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,6 +21,8 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Version;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
 import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
 
 public class BlackSmith implements Listener{
@@ -66,8 +69,9 @@ public class BlackSmith implements Listener{
 		result.add(25);result.add(26);result.add(27);
 		Player player=(Player)e.getWhoClicked();
 		Inventory inv = e.getInventory();
+		FileConfiguration config = Main.settings.getConfig();
 		if(inv!=null){
-			if(inv.getName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")))){
+			if(inv.getName().equals(Methods.color(config.getString("Settings.BlackSmith.GUIName")))){
 				e.setCancelled(true);
 				if(e.getCurrentItem()!=null){
 					ItemStack item = e.getCurrentItem();
@@ -102,22 +106,22 @@ public class BlackSmith implements Listener{
 								if(inv.getItem(13) != null){
 									if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
 										inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13)),
-												Main.settings.getConfig().getString("Settings.BlackSmith.Results.Found")
+												config.getString("Settings.BlackSmith.Results.Found")
 												.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
 										for(int i:result)inv.setItem(i-1, Methods.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
 									}else{
 										if(Version.getVersion().getVersionInteger()<181){
-											ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-											if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-												for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+											ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+											if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+												for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 													it = Methods.addLore(it, line);
 												}
 											}
 											inv.setItem(16, it);
 										}else{
-											ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-											if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-												for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+											ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+											if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+												for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 													it = Methods.addLore(it, line);
 												}
 											}
@@ -138,22 +142,22 @@ public class BlackSmith implements Listener{
 								}catch(Exception ex){}
 								if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
 									inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13)),
-											Main.settings.getConfig().getString("Settings.BlackSmith.Results.Found")
+											config.getString("Settings.BlackSmith.Results.Found")
 											.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
 									for(int i:result)inv.setItem(i-1, Methods.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
 								}else{
 									if(Version.getVersion().getVersionInteger()<181){
-										ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-										if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-											for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+										ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+										if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+											for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 												it = Methods.addLore(it, line);
 											}
 										}
 										inv.setItem(16, it);
 									}else{
-										ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-										if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-											for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+										ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+										if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+											for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 												it = Methods.addLore(it, line);
 											}
 										}
@@ -168,17 +172,17 @@ public class BlackSmith implements Listener{
 							e.setCurrentItem(new ItemStack(Material.AIR));
 							player.getInventory().addItem(item);
 							if(Version.getVersion().getVersionInteger()<181){
-								ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-								if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-									for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+								ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+								if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+									for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 										it = Methods.addLore(it, line);
 									}
 								}
 								inv.setItem(16, it);
 							}else{
-								ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-								if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-									for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+								ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+								if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+									for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 										it = Methods.addLore(it, line);
 									}
 								}
@@ -195,33 +199,28 @@ public class BlackSmith implements Listener{
 								if(getUpgradeCost(inv.getItem(10), inv.getItem(13))>0){
 									int cost = getUpgradeCost(inv.getItem(10), inv.getItem(13));
 									if(player.getGameMode()!=GameMode.CREATIVE){
-										if(Main.settings.getConfig().getString("Settings.BlackSmith.Transaction.Money/XP").equalsIgnoreCase("XP")){
-											if(Main.settings.getConfig().getString("Settings.BlackSmith.Transaction.Lvl/Total").equalsIgnoreCase("Total")){
-												int total = Methods.getTotalExperience(player);
-												cost++;
-												if(total<cost){
-													player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
-															.replaceAll("%XP%", cost-total+"").replaceAll("%xp%", cost-total+"")));
-													return;
-												}
-												Methods.takeTotalXP(player, cost);
+										if(Currency.isCurrency(config.getString("Settings.BlackSmith.Transaction.Currency"))){
+											Currency currency = Currency.getCurrency(config.getString("Settings.BlackSmith.Transaction.Currency"));
+											if(CurrencyAPI.canBuy(player, currency, cost)){
+												CurrencyAPI.takeCurrency(player, currency, cost);
 											}else{
-												int total = Methods.getXPLvl(player);
-												if(total<cost){
-													player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
-															.replaceAll("%XP%", cost-total+"").replaceAll("%xp%", cost-total+"")));
-													return;
+												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+												switch(currency){
+													case VAULT:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+																.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+														break;
+													case XP_LEVEL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+																.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+													case XP_TOTAL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+																.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
 												}
-												Methods.takeLvlXP(player, cost);
-											}
-										}else{
-											int total = (int) Methods.getMoney(player);
-											if(total<cost){
-												player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
-														.replaceAll("%Money_Needed%", cost-total+"").replaceAll("%money_needed%", cost-total+"")));
 												return;
 											}
-											Main.econ.withdrawPlayer(player, cost);
 										}
 									}
 									player.getInventory().addItem(getUpgradedItem(inv.getItem(10),inv.getItem(13)));
@@ -235,17 +234,17 @@ public class BlackSmith implements Listener{
 										}
 									}catch(Exception ex){}
 									if(Version.getVersion().getVersionInteger()<181){
-										ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-										if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-											for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+										ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+										if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+											for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 												it = Methods.addLore(it, line);
 											}
 										}
 										inv.setItem(16, it);
 									}else{
-										ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, Main.settings.getConfig().getString("Settings.BlackSmith.Results.None"));
-										if(Main.settings.getConfig().contains("Settings.BlackSmith.Results.Not-Found-Lore")){
-											for(String line : Main.settings.getConfig().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
+										ItemStack it = Methods.makeItem(Material.BARRIER, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
+										if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
+											for(String line : config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore")){
 												it = Methods.addLore(it, line);
 											}
 										}
@@ -301,10 +300,10 @@ public class BlackSmith implements Listener{
 											e.getPlayer().getInventory().addItem(inv.getItem(slot));
 										}
 									}
-									inv.clear();
 								}
 							}
 						}
+						inv.clear();
 					}
 				}
 			}

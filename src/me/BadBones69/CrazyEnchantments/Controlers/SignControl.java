@@ -20,6 +20,8 @@ import org.bukkit.inventory.ItemStack;
 
 import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
+import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
 
 public class SignControl implements Listener{
 	
@@ -47,46 +49,46 @@ public class SignControl implements Listener{
 						}
 						return;
 					}
-					List<String> types = new ArrayList<String>();
-					types.add("ProtectionCrystal");
-					types.add("Scrambler");
-					types.add("DestroyDust");
-					types.add("SuccessDust");
-					types.add("BlackScroll");
-					types.add("WhiteScroll");
-					types.add("TransmogScroll");
-					for(String ty : types){
-						if(ty.equalsIgnoreCase(type)){
-							int price = config.getInt("Settings.SignOptions."+ty+"Style.Cost");
-							if(config.getString("Settings.SignOptions."+ty+"Style.Money/XP").equalsIgnoreCase("Money")){
-								if(Methods.getMoney(player)<price){
-									double needed = price-Methods.getMoney(player);
-									player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed+"").replace("%money_needed%", needed+"")));
-									return;
-								}
-								Main.econ.withdrawPlayer(player, price);
-							}else{
-								if(config.getString("Settings.SignOptions."+ty+"Style.Lvl/Total").equalsIgnoreCase("Lvl")){
-									if(Methods.getXPLvl(player)<price){
-										String xp = price - Methods.getXPLvl(player)+"";
-										player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
+					List<String> options = new ArrayList<String>();
+					options.add("ProtectionCrystal");
+					options.add("Scrambler");
+					options.add("DestroyDust");
+					options.add("SuccessDust");
+					options.add("BlackScroll");
+					options.add("WhiteScroll");
+					options.add("TransmogScroll");
+					for(String o : options){
+						if(o.equalsIgnoreCase(type)){
+							if(player.getGameMode() != GameMode.CREATIVE){
+								if(Currency.isCurrency(config.getString("Settings.Costs." + o + ".Currency"))){
+									Currency currency = Currency.getCurrency(config.getString("Settings.Costs." + o + ".Currency"));
+									int cost = config.getInt("Settings.Costs." + o + ".Cost");
+									if(CurrencyAPI.canBuy(player, currency, cost)){
+										CurrencyAPI.takeCurrency(player, currency, cost);
+									}else{
+										String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+										switch(currency){
+											case VAULT:
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+												break;
+											case XP_LEVEL:
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+												break;
+											case XP_TOTAL:
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+												break;
+										}
 										return;
 									}
-									Methods.takeLvlXP(player, price);
-								}
-								if(config.getString("Settings.SignOptions."+ty+"Style.Lvl/Total").equalsIgnoreCase("Total")){
-									if(player.getTotalExperience()<price){
-										String xp = price - player.getTotalExperience()+"";
-										player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-										return;
-									}
-									Methods.takeTotalXP(player, price);
 								}
 							}
-							if(config.contains("Settings.SignOptions."+ty+"Style.Buy-Message")){
-								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions."+ty+"Style.Buy-Message")));
+							if(config.contains("Settings.SignOptions."+o+"Style.Buy-Message")){
+								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions."+o+"Style.Buy-Message")));
 							}
-							switch(ty){
+							switch(o){
 								case "ProtectionCrystal": player.getInventory().addItem(ProtectionCrystal.getCrystals());
 									break;
 								case "Scrambler": player.getInventory().addItem(Scrambler.getScramblers());
@@ -108,29 +110,28 @@ public class SignControl implements Listener{
 					for(String cat : config.getConfigurationSection("Categories").getKeys(false)){
 						if(type.equalsIgnoreCase(cat)){
 							if(player.getGameMode() != GameMode.CREATIVE){
-								if(config.contains("Categories."+cat+".Money/XP")&&config.getString("Categories."+cat+".Money/XP").equalsIgnoreCase("Money")){
-									if(Methods.getMoney(player)<config.getInt("Categories."+cat+".Cost")){
-										String money = config.getInt("Categories."+cat+".Cost") - Methods.getMoney(player)+"";
-										player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money").replace("%Money_Needed%", money).replace("%money_needed%", money)));
+								if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))){
+									Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
+									int cost = config.getInt("Categories." + cat + ".Cost");
+									if(CurrencyAPI.canBuy(player, currency, cost)){
+										CurrencyAPI.takeCurrency(player, currency, cost);
+									}else{
+										String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+										switch(currency){
+											case VAULT:
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+												break;
+											case XP_LEVEL:
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+												break;
+											case XP_TOTAL:
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+												break;
+										}
 										return;
-									}
-									Main.econ.withdrawPlayer(player, config.getInt("Categories."+cat+".Cost"));
-								}else{
-									if(config.getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Lvl")){
-										if(Methods.getXPLvl(player)<config.getInt("Categories."+cat+".Cost")){
-											String xp = config.getInt("Categories."+cat+".Cost") - Methods.getXPLvl(player)+"";
-											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeLvlXP(player, config.getInt("Categories."+cat+".Cost"));
-									}
-									if(config.getString("Categories."+cat+".Lvl/Total").equalsIgnoreCase("Total")){
-										if(player.getTotalExperience()<config.getInt("Categories."+cat+".Cost")){
-											String xp = config.getInt("Categories."+cat+".Cost") - player.getTotalExperience()+"";
-											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP").replace("%XP%", xp).replace("%xp%", xp)));
-											return;
-										}
-										Methods.takeTotalXP(player, config.getInt("Categories."+cat+".Cost"));
 									}
 								}
 							}
@@ -163,7 +164,7 @@ public class SignControl implements Listener{
 			if(Loc.equals(loc)){
 				Main.settings.getSigns().set("Locations."+l, null);
 				Main.settings.saveSigns();
-				e.getPlayer().sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Break-Enchantment-Shop-Sign")));
+				e.getPlayer().sendMessage(Methods.color(Methods.getPrefix() + Main.settings.getMsg().getString("Messages.Break-Enchantment-Shop-Sign")));
 				return;
 			}
 		}

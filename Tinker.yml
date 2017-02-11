@@ -1,7 +1,6 @@
 Settings:
   GUIName: '&7&lThe &4&lCrazy &c&lTinkerer' #Name of the Tinker GUI
-  Money/XP: XP #Choose to get rewarded with money or XP
-  Lvl/Total: Total #XP will be either in Levels or Total XP.
+  Currency: XP_Total #The currency you wish to use.
   TradeButton: '&eClick to accept the trade' #The Red Buttons in the Tinkerer
   BottleOptions:
     Item: '384' #Item the XP bottles are

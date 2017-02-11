@@ -11,60 +11,76 @@ import me.BadBones69.CrazyEnchantments.Main;
 
 public class Support {
 	
+	public static boolean hasVault(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("Vault")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean hasWorldEdit(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasWorldGuard(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasFactions(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasFeudal(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Feudal")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasASkyBlock(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("ASkyBlock")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasKingdoms(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Kingdoms")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasSilkSpawner(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasSpartan(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Spartan")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasMobStacker() {
 		if(Bukkit.getServer().getPluginManager().getPlugin("MobStacker")!=null){
 			return true;
 		}
 		return false;
 	}
+	
 	public static boolean hasMobStacker2() {
 		if(Bukkit.getServer().getPluginManager().getPlugin("MobStacker2")!=null){
 			return true;
@@ -119,6 +135,7 @@ public class Support {
 		}
 		return false;
 	}
+	
 	public static boolean isFriendly(Entity P, Entity O){
 		if(P instanceof Player&&O instanceof Player){
 			Player player = (Player) P;
@@ -152,6 +169,7 @@ public class Support {
 		}
 		return false;
 	}
+	
 	public static boolean canBreakBlock(Player player, Block block){
 		if(hasFactions()){
 			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
@@ -182,6 +200,7 @@ public class Support {
 		}
 		return true;
 	}
+	
 	public static boolean allowsPVP(Location loc){
 		if(hasWorldEdit() && hasWorldGuard()){
 			if(WorldGuard.allowsPVP(loc))return true;
@@ -189,6 +208,7 @@ public class Support {
 		}
 		return true;
 	}
+	
 	public static boolean allowsBreak(Location loc){
 		if(hasWorldEdit() && hasWorldGuard()){
 			if(WorldGuard.allowsBreak(loc))return true;
@@ -196,6 +216,7 @@ public class Support {
 		}
 		return true;
 	}
+	
 	public static boolean allowsExplotions(Location loc){
 		if(hasWorldEdit() && hasWorldGuard()){
 			if(WorldGuard.allowsExplosions(loc))return true;
@@ -203,6 +224,7 @@ public class Support {
 		}
 		return true;
 	}
+	
 	public static boolean inWingsRegion(Location loc){
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")){
 			for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")){
@@ -215,6 +237,7 @@ public class Support {
 		}
 		return false;
 	}
+	
 	public static void noStack(Entity en) {
 		if (hasMobStacker()) {
 			MobStacker.noStack(en);
@@ -225,4 +248,5 @@ public class Support {
 			return;
 		}
 	}
+	
 }
