@@ -97,8 +97,7 @@ Settings:
         - '&7the enchantments on them.'
       Found: '&c&lCost: &6&l%Cost%XP' #The lore at the bottom of the item
     Transaction: #Options for the pricing
-      Money/XP: XP #Costs XP or Money
-      Lvl/Total: Lvl #Uses Total xp or xp Levels
+      Currency: XP_Level
       Costs: #Cost options
         Power-Up: 5 #When a enchantment levels up 1 on an item
         Add-Enchantment: 3 #When it adds an enchantment to the item from another item
