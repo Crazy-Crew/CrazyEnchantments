@@ -79,7 +79,9 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new ProtectionCrystal(), this);
 		pm.registerEvents(new Scrambler(), this);
 		pm.registerEvents(new CustomEnchantments(), this);
-		pm.registerEvents(new FireworkDamageAPI(this), this);		
+		try{
+			pm.registerEvents(new FireworkDamageAPI(this), this);	
+		}catch(Exception e){}
 		//==========================================================================\\
 		pm.registerEvents(new Bows(), this);
 		pm.registerEvents(new Axes(), this);

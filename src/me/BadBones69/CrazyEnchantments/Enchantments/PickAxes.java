@@ -355,6 +355,7 @@ public class PickAxes implements Listener{
 		ores.put(Material.DIAMOND_ORE, Material.DIAMOND);
 		ores.put(Material.EMERALD_ORE, Material.EMERALD);
 		ores.put(Material.REDSTONE_ORE, Material.REDSTONE);
+		ores.put(Material.GLOWING_REDSTONE_ORE, Material.REDSTONE);
 		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK,1,(short)4).getType());
 		return ores;
 	}
@@ -366,6 +367,7 @@ public class PickAxes implements Listener{
 		items.add(Material.DIAMOND_ORE);
 		items.add(Material.EMERALD_ORE);
 		items.add(Material.REDSTONE_ORE);
+		items.add(Material.GLOWING_REDSTONE_ORE);
 		items.add(Material.LAPIS_ORE);
 		items.add(Material.LONG_GRASS);
 		items.add(Material.NETHER_WARTS);

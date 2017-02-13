@@ -98,6 +98,7 @@ public class CrazyEnchantments {
 	 */
 	public CEnchantments getFromName(String name){
 		for(CEnchantments en : getEnchantments()){
+			//Bukkit.broadcastMessage(en.getName()); //This is used for Debugging.
 			if(en.getName().equalsIgnoreCase(name)){
 				return en;
 			}
