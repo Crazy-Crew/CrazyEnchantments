@@ -11,6 +11,8 @@ import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import me.BadBones69.CrazyEnchantments.API.Version;
+
 public class FireworkDamageAPI implements Listener{
 	
 	private Plugin plugin;
@@ -33,7 +35,9 @@ public class FireworkDamageAPI implements Listener{
 	 * @param firework The firework you want to add.
 	 */
 	public static void addFirework(Entity firework){
-		fireworks.add(firework);
+		if(Version.getVersion().comparedTo(Version.v1_11_R1) >= 0){
+			fireworks.add(firework);
+		}
 	}
 	
 	/**

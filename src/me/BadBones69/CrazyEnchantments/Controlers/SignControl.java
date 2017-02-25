@@ -186,7 +186,7 @@ public class SignControl implements Listener{
 		int size = signs.getConfigurationSection("Locations").getKeys(false).size()+1;
 		String line1 = e.getLine(0);
 		String line2 = e.getLine(1);
-		if(Methods.hasPermission(player, "Sign", false)){
+		if(Methods.hasPermission(player, "sign", false)){
 			if(line1.equalsIgnoreCase("{CrazyEnchant}")){
 				for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
 					if(line2.equalsIgnoreCase("{"+cat+"}")){

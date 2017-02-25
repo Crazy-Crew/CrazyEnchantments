@@ -24,6 +24,7 @@ import me.BadBones69.CrazyEnchantments.API.CustomEBook;
 import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
 import me.BadBones69.CrazyEnchantments.API.GKitz;
 import me.BadBones69.CrazyEnchantments.API.InfoType;
+import me.BadBones69.CrazyEnchantments.API.Version;
 import me.BadBones69.CrazyEnchantments.API.Events.ArmorListener;
 import me.BadBones69.CrazyEnchantments.API.Events.AuraListener;
 import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
@@ -50,12 +51,10 @@ import me.BadBones69.CrazyEnchantments.Enchantments.Tools;
 import me.BadBones69.CrazyEnchantments.multisupport.SilkSpawners;
 import me.BadBones69.CrazyEnchantments.multisupport.StackMobSupport;
 import me.BadBones69.CrazyEnchantments.multisupport.Support;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Main extends JavaPlugin implements Listener{
 	
 	public static SettingsManager settings = SettingsManager.getInstance();
-	public static EconomyResponse r;
 	public static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
 	
@@ -80,7 +79,9 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new Scrambler(), this);
 		pm.registerEvents(new CustomEnchantments(), this);
 		try{
-			pm.registerEvents(new FireworkDamageAPI(this), this);	
+			if(Version.getVersion().comparedTo(Version.v1_11_R1) >= 0){
+				pm.registerEvents(new FireworkDamageAPI(this), this);
+			}
 		}catch(Exception e){}
 		//==========================================================================\\
 		pm.registerEvents(new Bows(), this);
@@ -128,7 +129,7 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 				return true;
 			}
-			if(!Methods.hasPermission(sender, "BlackSmith", true))return true;
+			if(!Methods.hasPermission(sender, "blacksmith", true))return true;
 			Player player = (Player) sender;
 			BlackSmith.openBlackSmith(player);
 			return true;
@@ -138,26 +139,26 @@ public class Main extends JavaPlugin implements Listener{
 				sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 				return true;
 			}
-			if(!Methods.hasPermission(sender, "Tinker", true))return true;
+			if(!Methods.hasPermission(sender, "tinker", true))return true;
 			Player player = (Player) sender;
 			Tinkerer.openTinker(player);
 			return true;
 		}
 		if(commandLable.equalsIgnoreCase("CE")||commandLable.equalsIgnoreCase("CrazyEnchantments")
-				||commandLable.equalsIgnoreCase("Enchanter")){
+				||commandLable.equalsIgnoreCase("enchanter")){
 			if(args.length == 0){
 				if(!(sender instanceof Player)){
 					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 					return true;
 				}
 				Player player = (Player)sender;
-				if(!Methods.hasPermission(sender, "Access", true))return true;
+				if(!Methods.hasPermission(sender, "access", true))return true;
 				ShopGUI.openGUI(player);
 				return true;
 			}
 			if(args.length >= 1){
 				if(args[0].equalsIgnoreCase("Help")){
-					if(!Methods.hasPermission(sender, "Access", true))return true;
+					if(!Methods.hasPermission(sender, "access", true))return true;
 					sender.sendMessage(Methods.color("&2&l&nCrazy Enchantments"));
 					sender.sendMessage(Methods.color("&b/CE - &9Opens the GUI."));
 					sender.sendMessage(Methods.color("&b/Tinker - &9Opens up the Tinkerer."));
@@ -178,7 +179,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Reload")){
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "reload", true))return true;
 					settings.reloadConfig();
 					settings.reloadEnchs();
 					settings.reloadMsg();
@@ -204,7 +205,7 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 						Player player = (Player)sender;
-						if(!Methods.hasPermission(sender, "Info", true))return true;
+						if(!Methods.hasPermission(sender, "info", true))return true;
 						ShopGUI.openInfo(player);
 						return true;
 					}else{
@@ -238,7 +239,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 				}
 				if(args[0].equalsIgnoreCase("Spawn")){// /CE Spawn <Enchantment> [Level:#/World:<World>/X:#/Y:#/Z:#]
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "spawn", true))return true;
 					if(args.length >= 2){
 						CEnchantments enchant = null;
 						String cEnchant = null;
@@ -309,7 +310,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("LostBook") || args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "lostbook", true))return true;
 					if(args.length>=2){// /CE LostBook <Category> [Amount] [Player]
 						if(args.length<=3){
 							if(!(sender instanceof Player)){
@@ -353,7 +354,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Scrambler") || args[0].equalsIgnoreCase("S")){// /CE Scrambler [Amount] [Player]
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "scrambler", true))return true;
 					int amount = 1;
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
@@ -389,7 +390,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Crystal") || args[0].equalsIgnoreCase("C")){// /CE Crystal [Amount] [Player]
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "crystal", true))return true;
 					int amount = 1;
 					if(args.length<=2){
 						if(!(sender instanceof Player)){
@@ -425,7 +426,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Dust")){// /CE Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent]
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "dust", true))return true;
 					if(args.length>=2){
 						Player player = Methods.getPlayer(sender.getName());
 						int amount = 1;
@@ -500,7 +501,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Scroll")){// /CE Scroll <Scroll> [Amount] [Player]
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "scroll", true))return true;
 					if(args.length >= 2){
 						int i = 1;
 						String name = sender.getName();
@@ -547,7 +548,7 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					Player player = (Player) sender;
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "remove", true))return true;
 					boolean T=false;
 					boolean customEnchant = false;
 					String ench = "Glowing";
@@ -606,7 +607,7 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					Player player = (Player) sender;
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "add", true))return true;
 					boolean T = false;
 					boolean customEnchant = false;
 					String ench = "Glowing";
@@ -659,7 +660,7 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 					}
-					if(!Methods.hasPermission(sender, "Admin", true))return true;
+					if(!Methods.hasPermission(sender, "book", true))return true;
 					String ench = args[1];
 					int lvl = 1;
 					int amount = 1;
@@ -732,6 +733,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 					return true;
 				}
+				if(!Methods.hasPermission(sender, "access", true))return true;
 				GKitzGUI.openGUI((Player) sender);
 				return true;
 			}
@@ -745,7 +747,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 				if(args.length >= 2){
-					if(!Methods.hasPermission(sender, "Admin", true)){
+					if(!Methods.hasPermission(sender, "gkitz", true)){
 						return true;
 					}else{
 						if(!Methods.isOnline(args[1], sender)){

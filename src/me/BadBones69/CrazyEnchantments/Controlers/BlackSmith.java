@@ -99,13 +99,10 @@ public class BlackSmith implements Listener{
 							if(inv.getItem(10) == null){
 								e.setCurrentItem(new ItemStack(Material.AIR));
 								inv.setItem(10, item);
-								try{
-									if(Version.getVersion().getVersionInteger() >= 191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-									if(Version.getVersion().getVersionInteger() < 191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
-								}catch(Exception ex){}
+								playClick(player);
 								if(inv.getItem(13) != null){
 									if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
-										inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13)),
+										inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13), true),
 												config.getString("Settings.BlackSmith.Results.Found")
 												.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
 										for(int i:result)inv.setItem(i-1, Methods.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
@@ -136,12 +133,9 @@ public class BlackSmith implements Listener{
 									e.setCurrentItem(inv.getItem(13));
 								}
 								inv.setItem(13, item);
-								try{
-									if(Version.getVersion().getVersionInteger() >= 191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-									if(Version.getVersion().getVersionInteger() < 191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
-								}catch(Exception ex){}
+								playClick(player);
 								if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
-									inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13)),
+									inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13), true),
 											config.getString("Settings.BlackSmith.Results.Found")
 											.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
 									for(int i:result)inv.setItem(i-1, Methods.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
@@ -189,10 +183,7 @@ public class BlackSmith implements Listener{
 								inv.setItem(16, it);
 							}
 							for(int i:result)inv.setItem(i-1, Methods.makeItem(Material.STAINED_GLASS_PANE, 1, 14, " "));
-							try{
-								if(Version.getVersion().getVersionInteger()>=191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-								if(Version.getVersion().getVersionInteger()<191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
-							}catch(Exception ex){}
+							playClick(player);
 						}
 						if(e.getRawSlot()==16){
 							if(inv.getItem(10)!=null&&inv.getItem(13)!=null){
@@ -223,7 +214,7 @@ public class BlackSmith implements Listener{
 											}
 										}
 									}
-									player.getInventory().addItem(getUpgradedItem(inv.getItem(10),inv.getItem(13)));
+									player.getInventory().addItem(getUpgradedItem(inv.getItem(10),inv.getItem(13), false));
 									inv.setItem(10, new ItemStack(Material.AIR));
 									inv.setItem(13, new ItemStack(Material.AIR));
 									try{
@@ -310,7 +301,7 @@ public class BlackSmith implements Listener{
 		}, 0);
 	}
 	
-	private ItemStack getUpgradedItem(ItemStack master, ItemStack sub){
+	private ItemStack getUpgradedItem(ItemStack master, ItemStack sub, boolean glowing){
 		ItemStack item = master.clone();
 		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType() == Main.CE.getEnchantmentBookItem().getType()){
 			if(Methods.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(sub.getItemMeta().getDisplayName()))){
@@ -319,7 +310,7 @@ public class BlackSmith implements Listener{
 						int power = Main.CE.getBookPower(master, en);
 						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max){
-							item = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, en.getBookColor() + en.getCustomName() + " " + Methods.getPower(power+1), master.getItemMeta().getLore()));
+							item = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, en.getBookColor() + en.getCustomName() + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
 						}
 					}
 				}
@@ -328,7 +319,7 @@ public class BlackSmith implements Listener{
 						int power = Main.CustomE.getBookPower(master, en);
 						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
 						if(power + 1 <= max){
-							item = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1), master.getItemMeta().getLore()));
+							item = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
 						}
 					}
 				}
@@ -551,14 +542,25 @@ public class BlackSmith implements Listener{
 		return total;
 	}
 	
-	private static ItemStack addGlow(ItemStack item) {
-		return EnchantGlow.addGlow(item);
+	private static ItemStack addGlow(ItemStack item, boolean toggle) {
+		if(toggle){
+			return EnchantGlow.addGlow(item);
+		}else{
+			return Methods.addGlow(item);
+		}
     }
 	
 	private boolean inBlackSmith(int slot){
 		//The last slot in the tinker is 54
 		if(slot<27)return true;
 		return false;
+	}
+	
+	private void playClick(Player player){
+		try{
+			if(Version.getVersion().getVersionInteger() >= 191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+			if(Version.getVersion().getVersionInteger() < 191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+		}catch(Exception ex){}
 	}
 	
 }

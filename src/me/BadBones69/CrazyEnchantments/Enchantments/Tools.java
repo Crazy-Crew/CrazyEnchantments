@@ -24,7 +24,6 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class Tools implements Listener{
 
@@ -62,7 +61,7 @@ public class Tools implements Listener{
 					if(!event.isCancelled()){
 						Trigger.put("Oxygenate", true);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
-						Ox=true;
+						Ox = true;
 						hadEnchant.put(player, Trigger);
 					}
 				}
@@ -108,10 +107,8 @@ public class Tools implements Listener{
 					if(CEnchantments.TELEPATHY.isEnabled()){
 						if(item.getItemMeta().hasEnchants()){
 							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
-								if(Support.hasSilkSpawner()){
-									if(block.getType() == Material.MOB_SPAWNER){
-										return;
-									}
+								if(block.getType() == Material.MOB_SPAWNER){
+									return;
 								}
 							}
 						}

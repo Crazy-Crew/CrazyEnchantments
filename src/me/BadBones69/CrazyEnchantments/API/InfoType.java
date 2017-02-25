@@ -2,9 +2,15 @@ package me.BadBones69.CrazyEnchantments.API;
 
 public enum InfoType {
 	
-	HELMETS("Helmets"), BOOTS("Boots"), ARMOR("Armor"),
-	SWORD("Sword"), AXE("Axe"), BOW("Bow"), PICKAXE("Pickaxe"), 
-	TOOL("Tool"), MISC("Misc");
+	HELMETS("Helmets"),
+	BOOTS("Boots"),
+	ARMOR("Armor"),
+	SWORD("Sword"),
+	AXE("Axe"),
+	BOW("Bow"),
+	PICKAXE("Pickaxe"), 
+	TOOL("Tool"),
+	MISC("Misc");
 	
 	private String Name;
 	

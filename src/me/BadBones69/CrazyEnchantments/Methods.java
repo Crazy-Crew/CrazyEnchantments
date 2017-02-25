@@ -46,15 +46,45 @@ public class Methods{
 	public static String color(String msg){
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
+	
 	public static String removeColor(String msg){
 		msg = ChatColor.stripColor(msg);
 		return msg;
 	}
+	
 	public static void sendMultiMessage(Player player, List<String> messages){
 		for(String msg : messages){
 			player.sendMessage(color(msg));
 		}
 	}
+	
+	public static boolean hasPermission(Player player, String perm, Boolean toggle){
+		if(player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")){
+			return true;
+		}else{
+			if(toggle){
+				player.sendMessage(getPrefix() + color(Main.settings.getMsg().getString("Messages.No-Perm")));
+			}
+			return false;
+		}
+	}
+	
+	public static boolean hasPermission(CommandSender sender, String perm, Boolean toggle){
+		if(sender instanceof Player){
+			Player player = (Player) sender;
+			if(player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")){
+				return true;
+			}else{
+				if(toggle){
+					player.sendMessage(getPrefix() + color(Main.settings.getMsg().getString("Messages.No-Perm")));
+				}
+				return false;
+			}
+		}else{
+			return true;
+		}
+	}
+	
 	public static ItemStack addGlow(ItemStack item) {
 		switch(Version.getVersion()){
 			case v1_11_R1:
@@ -434,30 +464,6 @@ public class Methods{
 		p.sendMessage(getPrefix()+color(Main.settings.getMsg().getString("Messages.Not-Online")));
 		return false;
 	}
-	public static boolean hasPermission(Player player, String perm, Boolean toggle){
-		if(!player.hasPermission("CrazyEnchantments." + perm)){
-			if(toggle){
-				player.sendMessage(getPrefix() + color(Main.settings.getMsg().getString("Messages.No-Perm")));
-			}
-			return false;
-		}
-		return true;
-	}
-	public static boolean hasPermission(CommandSender sender, String perm, Boolean toggle){
-		if(sender instanceof Player){
-			Player player = (Player) sender;
-			if(!player.hasPermission("CrazyEnchantments." + perm)){
-				if(toggle){
-					player.sendMessage(getPrefix() + color(Main.settings.getMsg().getString("Messages.No-Perm")));
-				}
-				return false;
-			}else{
-				return true;
-			}
-		}else{
-			return true;
-		}
-	}
 	public static void removeItem(ItemStack item, Player player){
 		if(item.getAmount() <= 1){
 			player.getInventory().removeItem(item);
@@ -746,6 +752,28 @@ public class Methods{
 		}else{
 			item.setDurability((short) ((short) item.getDurability() + 1));
 		}
+	}
+	
+	public static boolean isSimilar(ItemStack one, ItemStack two){
+		if(one.getType() == two.getType()){
+			if(one.hasItemMeta()){
+				if(one.getItemMeta().hasDisplayName()){
+					if(one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())){
+						if(one.getItemMeta().hasLore()){
+							int i = 0;
+							for(String lore : one.getItemMeta().getLore()){
+								if(!lore.equals(two.getItemMeta().getLore().get(i))){
+									return false;
+								}
+								i++;
+							}
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 }

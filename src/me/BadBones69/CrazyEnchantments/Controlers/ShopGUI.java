@@ -364,12 +364,12 @@ public class ShopGUI implements Listener{
 							return;
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.BlackSmith.Name")))){
-							if(!Methods.hasPermission(player, "BlackSmith", true))return;
+							if(!Methods.hasPermission(player, "blacksmith", true))return;
 							BlackSmith.openBlackSmith(player);
 							return;
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Tinker.Name")))){
-							if(!Methods.hasPermission(player, "Tinker", true))return;
+							if(!Methods.hasPermission(player, "tinker", true))return;
 							Tinkerer.openTinker(player);
 							return;
 						}

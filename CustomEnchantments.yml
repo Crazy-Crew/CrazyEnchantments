@@ -13,8 +13,8 @@ Enchantments:
     Info:
       Name: '&e&lCyborg &7(&bI&7)'
       Description:
-        - '&3Gives you speed, strength and'
-        - '&3jump boost to take down your enemies.'
+        - '&7Gives you speed, strength and'
+        - '&7jump boost to take down your enemies.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -42,8 +42,8 @@ Enchantments:
     Info:
       Name: '&e&lSniper &7(&bI-&bV&7)'
       Description:
-        - '&3Shoot an enemy with this and'
-        - '&3it has a chance to poison them.'
+        - '&7Shoot an enemy with this and'
+        - '&7it has a chance to poison them.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -77,8 +77,8 @@ Enchantments:
     Info:
       Name: '&e&lSlice &7(&bI-&bII&7)'
       Description:
-        - '&3Gives you a chance to'
-        - '&3do a lot more damage.'
+        - '&7Gives you a chance to'
+        - '&7do a lot more damage.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'

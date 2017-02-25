@@ -31,14 +31,13 @@ public class ProtectionCrystal implements Listener{
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
 		if(inv != null){
-			ItemStack c = e.getCursor();
-			ItemStack item = e.getCurrentItem();
-			String protection = Methods.color(config.getString("Settings.ProtectionCrystal.Protected"));
+			ItemStack c = e.getCursor();// The Crystal.
+			ItemStack item = e.getCurrentItem();// The item your adding the protection to.
 			if(item == null) item = new ItemStack(Material.AIR);
 			if(c == null) c = new ItemStack(Material.AIR);
 			if(item.getType() != Material.AIR && c.getType() != Material.AIR){
 				if(item.getAmount() == 1){
-					if(!getCrystals().isSimilar(item)){
+					if(!Methods.isSimilar(getCrystals(), item)){
 						if(!isProtected(item)){
 							if(c.hasItemMeta()){
 								if(c.getItemMeta().hasDisplayName()){
@@ -50,7 +49,7 @@ public class ProtectionCrystal implements Listener{
 											}
 											e.setCancelled(true);
 											player.setItemOnCursor(Methods.removeItem(c));
-											e.setCurrentItem(Methods.addLore(item, protection));
+											e.setCurrentItem(Methods.addLore(item, Methods.color(config.getString("Settings.ProtectionCrystal.Protected"))));
 											player.updateInventory();
 										}
 									}
