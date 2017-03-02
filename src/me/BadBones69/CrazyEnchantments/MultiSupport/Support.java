@@ -46,6 +46,13 @@ public class Support {
 		return false;
 	}
 	
+	public static boolean hasAcidIsland(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("AcidIsland")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean hasASkyBlock(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("ASkyBlock")!=null){
 			return true;
@@ -128,6 +135,11 @@ public class Support {
 				return true;
 			}
 		}
+		if(hasAcidIsland()){
+			if(AcidIslandSupport.inTerritory(player)){
+				return true;
+			}
+		}
 		if(hasKingdoms()){
 			if(KingdomSupport.inTerritory(player)){
 				return true;
@@ -158,6 +170,11 @@ public class Support {
 			}
 			if(hasASkyBlock()){
 				if(ASkyBlockSupport.isFriendly(player, other)){
+					return true;
+				}
+			}
+			if(hasAcidIsland()){
+				if(AcidIslandSupport.isFriendly(player, other)){
 					return true;
 				}
 			}

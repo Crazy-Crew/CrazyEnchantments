@@ -144,7 +144,7 @@ public class Tools implements Listener{
 									}
 									if(getXPOres().contains(block.getType())){
 										if(!Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
-											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3));
 										}
 									}
@@ -153,7 +153,7 @@ public class Tools implements Listener{
 									if(Methods.randomPicker(2)){
 										int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
 										if(getOres().containsKey(block.getType())){
-											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3) * power);
 										}
 									}

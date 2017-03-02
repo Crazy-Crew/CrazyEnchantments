@@ -149,6 +149,7 @@ public class ShopGUI implements Listener{
 	private static ItemStack addGlow(ItemStack item) {
 		return EnchantGlow.addGlow(item);
     }
+	
 	private static ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle){
 			item = EnchantGlow.addGlow(item);
@@ -171,83 +172,87 @@ public class ShopGUI implements Listener{
 					if(item.getItemMeta().hasDisplayName()){
 						String name = item.getItemMeta().getDisplayName();
 						for(String cat : config.getConfigurationSection("Categories").getKeys(false)){
-							if(name.equals(Methods.color(config.getString("Categories."+cat+".Name")))){
-								if(Methods.isInvFull(player)){
-									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-										player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-									}else{
-										player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
-									}
-									return;
-								}
-								if(player.getGameMode() != GameMode.CREATIVE){
-									if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))){
-										Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
-										int cost = config.getInt("Categories." + cat + ".Cost");
-										if(CurrencyAPI.canBuy(player, currency, cost)){
-											CurrencyAPI.takeCurrency(player, currency, cost);
+							if(Main.settings.getConfig().getBoolean("Categories." + cat + ".InGUI")){
+								if(name.equals(Methods.color(config.getString("Categories." + cat + ".Name")))){
+									if(Methods.isInvFull(player)){
+										if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+											player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 										}else{
-											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-											switch(currency){
-												case VAULT:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
-															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
-													break;
-												case XP_LEVEL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
-															.replace("%XP%", needed).replace("%xp%", needed)));
-													break;
-												case XP_TOTAL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
-															.replace("%XP%", needed).replace("%xp%", needed)));
-													break;
+											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+										}
+										return;
+									}
+									if(player.getGameMode() != GameMode.CREATIVE){
+										if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))){
+											Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
+											int cost = config.getInt("Categories." + cat + ".Cost");
+											if(CurrencyAPI.canBuy(player, currency, cost)){
+												CurrencyAPI.takeCurrency(player, currency, cost);
+											}else{
+												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+												switch(currency){
+													case VAULT:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+																.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+														break;
+													case XP_LEVEL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+																.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+													case XP_TOTAL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+																.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+												}
+												return;
 											}
-											return;
 										}
 									}
+									player.getInventory().addItem(EnchantmentControl.pick(cat));
+									return;
 								}
-								player.getInventory().addItem(EnchantmentControl.pick(cat));
-								return;
 							}
 						}
 						for(String cat : config.getConfigurationSection("Categories").getKeys(false)){
-							if(name.equals(Methods.color(config.getString("Categories." + cat + ".LostBook.Name")))){
-								if(Methods.isInvFull(player)){
-									if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
-										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-									}else{
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
-									}
-									return;
-								}
-								if(player.getGameMode() != GameMode.CREATIVE){
-									if(Currency.isCurrency(config.getString("Categories." + cat + ".LostBook.Currency"))){
-										Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".LostBook.Currency"));
-										int cost = config.getInt("Categories." + cat + ".LostBook.Cost");
-										if(CurrencyAPI.canBuy(player, currency, cost)){
-											CurrencyAPI.takeCurrency(player, currency, cost);
+							if(Main.settings.getConfig().getBoolean("Categories." + cat + ".LostBook.InGUI")){
+								if(name.equals(Methods.color(config.getString("Categories." + cat + ".LostBook.Name")))){
+									if(Methods.isInvFull(player)){
+										if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+											player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 										}else{
-											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-											switch(currency){
-												case VAULT:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
-															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
-													break;
-												case XP_LEVEL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
-															.replace("%XP%", needed).replace("%xp%", needed)));
-													break;
-												case XP_TOTAL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
-															.replace("%XP%", needed).replace("%xp%", needed)));
-													break;
+											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+										}
+										return;
+									}
+									if(player.getGameMode() != GameMode.CREATIVE){
+										if(Currency.isCurrency(config.getString("Categories." + cat + ".LostBook.Currency"))){
+											Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".LostBook.Currency"));
+											int cost = config.getInt("Categories." + cat + ".LostBook.Cost");
+											if(CurrencyAPI.canBuy(player, currency, cost)){
+												CurrencyAPI.takeCurrency(player, currency, cost);
+											}else{
+												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+												switch(currency){
+													case VAULT:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+																.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+														break;
+													case XP_LEVEL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+																.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+													case XP_TOTAL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+																.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+												}
+												return;
 											}
-											return;
 										}
 									}
+									player.getInventory().addItem(LostBook.getLostBook(cat, 1));
+									return;
 								}
-								player.getInventory().addItem(LostBook.getLostBook(cat, 1));
-								return;
 							}
 						}
 						List<String> options = new ArrayList<String>();
