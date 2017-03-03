@@ -25,6 +25,9 @@ import me.BadBones69.CrazyEnchantments.Main;
 import me.BadBones69.CrazyEnchantments.Methods;
 import me.BadBones69.CrazyEnchantments.API.CEnchantments;
 import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.BadBones69.CrazyEnchantments.multisupport.NoCheatPlusSupport;
+import me.BadBones69.CrazyEnchantments.multisupport.SpartanSupport;
+import me.BadBones69.CrazyEnchantments.multisupport.Support;
 
 public class PickAxes implements Listener{
 	
@@ -63,6 +66,14 @@ public class PickAxes implements Listener{
 						blocks.remove(player);
 						HashMap<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
 						int xp = 0;
+						if(Support.hasNoCheatPlus()){
+							NoCheatPlusSupport.exemptPlayer(player);
+						}
+						if(Support.hasSpartan()){
+							SpartanSupport.cancelNucker(player);
+							SpartanSupport.cancelNoSwing(player);
+							SpartanSupport.cancelBlockReach(player);
+						}
 						for(Block b : getBlocks(block.getLocation(), face, (Main.CE.getPower(item, CEnchantments.BLAST)-1))){
 							if(Main.CE.getBlockList().contains(b.getType())){
 								BlockBreakEvent event = new BlockBreakEvent(b, player);
@@ -180,6 +191,9 @@ public class PickAxes implements Listener{
 									}
 								}
 							}
+						}
+						if(Support.hasNoCheatPlus()){
+							NoCheatPlusSupport.unexemptPlayer(player);
 						}
 						for(ItemStack i : drops.keySet()){
 							if(i.getType() == Material.INK_SACK){

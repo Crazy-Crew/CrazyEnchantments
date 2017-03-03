@@ -7,6 +7,18 @@ import me.vagdedes.spartan.system.Enums.HackType;
 
 public class SpartanSupport {
 	
+	public static void cancelNucker(Player player){
+		API.cancelCheck(player, HackType.Nuker, 40);
+	}
+	
+	public static void cancelNoSwing(Player player){
+		API.cancelCheck(player, HackType.NoSwing, 40);
+	}
+	
+	public static void cancelBlockReach(Player player){
+		API.cancelCheck(player, HackType.BlockReach, 40);
+	}
+	
 	public static void cancelFastEat(Player player){
 		API.cancelCheck(player, HackType.FastEat, 40);
 	}

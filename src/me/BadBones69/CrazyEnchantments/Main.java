@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -549,10 +550,19 @@ public class Main extends JavaPlugin implements Listener{
 					}
 					Player player = (Player) sender;
 					if(!Methods.hasPermission(sender, "remove", true))return true;
-					boolean T=false;
+					boolean T = false;
+					boolean isVanilla = false;
 					boolean customEnchant = false;
 					String ench = "Glowing";
+					Enchantment enchant = Enchantment.LUCK;
 					CEnchantments en = null;
+					for(Enchantment enc : Enchantment.values()){
+						if(args[1].equalsIgnoreCase(enc.getName()) || args[1].equalsIgnoreCase(Methods.getEnchantmentName(enc))){
+							T = true;
+							isVanilla = true;
+							enchant = enc;
+						}
+					}
 					for(CEnchantments En : CE.getEnchantments()){
 						if(En.getCustomName().equalsIgnoreCase(args[1])){
 							en = En;
@@ -576,7 +586,11 @@ public class Main extends JavaPlugin implements Listener{
 					}
 					ItemStack item = Methods.getItemInHand(player);
 					String enchantment = args[1];
-					if(customEnchant){
+					if(isVanilla){
+						ItemStack it = Methods.getItemInHand(player).clone();
+						it.removeEnchantment(enchant);
+						Methods.setItemInHand(player, it);
+					}else if(customEnchant){
 						if(CustomE.hasEnchantment(item, ench)){
 							Methods.setItemInHand(player, CustomE.removeEnchantment(item, ench));
 							String m = Methods.getPrefix()+Methods.color(msg.getString("Messages.Remove-Enchantment")
@@ -609,6 +623,8 @@ public class Main extends JavaPlugin implements Listener{
 					Player player = (Player) sender;
 					if(!Methods.hasPermission(sender, "add", true))return true;
 					boolean T = false;
+					boolean isVanilla = false;
+					Enchantment enchant = Enchantment.LUCK;
 					boolean customEnchant = false;
 					String ench = "Glowing";
 					CEnchantments en = null;
@@ -620,6 +636,13 @@ public class Main extends JavaPlugin implements Listener{
 							return true;
 						}
 						lvl = args[2];
+					}
+					for(Enchantment enc : Enchantment.values()){
+						if(args[1].equalsIgnoreCase(enc.getName()) || args[1].equalsIgnoreCase(Methods.getEnchantmentName(enc))){
+							T = true;
+							isVanilla = true;
+							enchant = enc;
+						}
 					}
 					for(CEnchantments i : CE.getEnchantments()){
 						if(i.getCustomName().equalsIgnoreCase(args[1])){
@@ -642,7 +665,11 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Doesnt-Have-Item-In-Hand")));
 						return false;
 					}
-					if(customEnchant){
+					if(isVanilla){
+						ItemStack it = Methods.getItemInHand(player).clone();
+						it.addUnsafeEnchantment(enchant, Integer.parseInt(lvl));
+						Methods.setItemInHand(player, it);
+					}else if(customEnchant){
 						Methods.setItemInHand(player, Methods.addGlow(CustomE.addEnchantment(Methods.getItemInHand(player), ench, Integer.parseInt(lvl))));
 					}else{
 						Methods.setItemInHand(player, Methods.addGlow(CE.addEnchantment(Methods.getItemInHand(player), en, Integer.parseInt(lvl))));

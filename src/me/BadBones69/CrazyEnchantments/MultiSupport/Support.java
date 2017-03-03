@@ -11,6 +11,13 @@ import me.BadBones69.CrazyEnchantments.Main;
 
 public class Support {
 	
+	public static boolean hasNoCheatPlus(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("NoCheatPlus")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean hasVault(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("Vault")!=null){
 			return true;
