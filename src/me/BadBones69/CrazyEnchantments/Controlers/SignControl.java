@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,10 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 
 public class SignControl implements Listener{
 	

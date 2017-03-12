@@ -1,10 +1,10 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 
 import org.bukkit.Material;
 
-import me.BadBones69.CrazyEnchantments.Main;
+import me.badbones69.crazyenchantments.Main;
 
 public enum EnchantmentType{
 	

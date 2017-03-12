@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import org.bukkit.Bukkit;
 

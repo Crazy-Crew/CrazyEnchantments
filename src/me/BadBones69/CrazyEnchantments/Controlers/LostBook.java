@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public class LostBook implements Listener{
 	

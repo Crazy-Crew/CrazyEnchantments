@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.Main;
+import me.badbones69.crazyenchantments.Main;
 
 public class Support {
 	

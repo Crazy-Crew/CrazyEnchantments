@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,14 +18,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEBook;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CustomEBook;
-import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
-import me.BadBones69.CrazyEnchantments.API.Version;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEBook;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CustomEBook;
+import me.badbones69.crazyenchantments.api.CustomEnchantments;
+import me.badbones69.crazyenchantments.api.Version;
 
 public class Scrambler implements Listener{
 	

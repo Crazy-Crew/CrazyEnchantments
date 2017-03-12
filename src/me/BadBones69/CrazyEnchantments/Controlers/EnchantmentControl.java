@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +19,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
-import me.BadBones69.CrazyEnchantments.API.Version;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.EnchantmentType;
+import me.badbones69.crazyenchantments.api.Version;
 
 public class EnchantmentControl implements Listener{
 	

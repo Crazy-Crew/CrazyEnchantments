@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments;
+package me.badbones69.crazyenchantments;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,40 +18,40 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.BadBones69.CrazyEnchantments.API.CEBook;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CustomEBook;
-import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
-import me.BadBones69.CrazyEnchantments.API.GKitz;
-import me.BadBones69.CrazyEnchantments.API.InfoType;
-import me.BadBones69.CrazyEnchantments.API.Version;
-import me.BadBones69.CrazyEnchantments.API.Events.ArmorListener;
-import me.BadBones69.CrazyEnchantments.API.Events.AuraListener;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
-import me.BadBones69.CrazyEnchantments.Controlers.BlackSmith;
-import me.BadBones69.CrazyEnchantments.Controlers.DustControl;
-import me.BadBones69.CrazyEnchantments.Controlers.EnchantmentControl;
-import me.BadBones69.CrazyEnchantments.Controlers.FireworkDamageAPI;
-import me.BadBones69.CrazyEnchantments.Controlers.GKitzGUI;
-import me.BadBones69.CrazyEnchantments.Controlers.LostBook;
-import me.BadBones69.CrazyEnchantments.Controlers.ProtectionCrystal;
-import me.BadBones69.CrazyEnchantments.Controlers.Scrambler;
-import me.BadBones69.CrazyEnchantments.Controlers.ScrollControl;
-import me.BadBones69.CrazyEnchantments.Controlers.ShopGUI;
-import me.BadBones69.CrazyEnchantments.Controlers.SignControl;
-import me.BadBones69.CrazyEnchantments.Controlers.Tinkerer;
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor;
-import me.BadBones69.CrazyEnchantments.Enchantments.Axes;
-import me.BadBones69.CrazyEnchantments.Enchantments.Boots;
-import me.BadBones69.CrazyEnchantments.Enchantments.Bows;
-import me.BadBones69.CrazyEnchantments.Enchantments.Helmets;
-import me.BadBones69.CrazyEnchantments.Enchantments.PickAxes;
-import me.BadBones69.CrazyEnchantments.Enchantments.Swords;
-import me.BadBones69.CrazyEnchantments.Enchantments.Tools;
-import me.BadBones69.CrazyEnchantments.multisupport.SilkSpawners;
-import me.BadBones69.CrazyEnchantments.multisupport.StackMobSupport;
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.api.CEBook;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CustomEBook;
+import me.badbones69.crazyenchantments.api.CustomEnchantments;
+import me.badbones69.crazyenchantments.api.GKitz;
+import me.badbones69.crazyenchantments.api.InfoType;
+import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.events.ArmorListener;
+import me.badbones69.crazyenchantments.api.events.AuraListener;
+import me.badbones69.crazyenchantments.controlers.BlackSmith;
+import me.badbones69.crazyenchantments.controlers.DustControl;
+import me.badbones69.crazyenchantments.controlers.EnchantmentControl;
+import me.badbones69.crazyenchantments.controlers.FireworkDamageAPI;
+import me.badbones69.crazyenchantments.controlers.GKitzGUI;
+import me.badbones69.crazyenchantments.controlers.LostBook;
+import me.badbones69.crazyenchantments.controlers.ProtectionCrystal;
+import me.badbones69.crazyenchantments.controlers.Scrambler;
+import me.badbones69.crazyenchantments.controlers.ScrollControl;
+import me.badbones69.crazyenchantments.controlers.ShopGUI;
+import me.badbones69.crazyenchantments.controlers.SignControl;
+import me.badbones69.crazyenchantments.controlers.Tinkerer;
+import me.badbones69.crazyenchantments.enchantments.Armor;
+import me.badbones69.crazyenchantments.enchantments.Axes;
+import me.badbones69.crazyenchantments.enchantments.Boots;
+import me.badbones69.crazyenchantments.enchantments.Bows;
+import me.badbones69.crazyenchantments.enchantments.Helmets;
+import me.badbones69.crazyenchantments.enchantments.PickAxes;
+import me.badbones69.crazyenchantments.enchantments.Swords;
+import me.badbones69.crazyenchantments.enchantments.Tools;
+import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
+import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
+import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class Main extends JavaPlugin implements Listener{
 	
@@ -590,6 +590,7 @@ public class Main extends JavaPlugin implements Listener{
 						ItemStack it = Methods.getItemInHand(player).clone();
 						it.removeEnchantment(enchant);
 						Methods.setItemInHand(player, it);
+						return true;
 					}else if(customEnchant){
 						if(CustomE.hasEnchantment(item, ench)){
 							Methods.setItemInHand(player, CustomE.removeEnchantment(item, ench));
@@ -834,7 +835,13 @@ public class Main extends JavaPlugin implements Listener{
 						+ "&7It is running version &av"+Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments").getDescription().getVersion()+"&7."));
 				}
 				if(player.isOp()){
-					Methods.hasUpdate(player);
+					if(settings.getConfig().contains("Settings.Update-Checker")){
+						if(settings.getConfig().getBoolean("Settings.Update-Checker")){
+							Methods.hasUpdate(player);
+						}
+					}else{
+						Methods.hasUpdate(player);
+					}
 				}
 			}
 		}, 1*20);

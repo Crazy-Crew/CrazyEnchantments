@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,7 +9,7 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Methods;
 
 public class FactionsSupport {
 	

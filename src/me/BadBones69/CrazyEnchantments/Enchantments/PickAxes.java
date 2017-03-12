@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Enchantments;
+package me.badbones69.crazyenchantments.enchantments;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,13 +21,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
-import me.BadBones69.CrazyEnchantments.multisupport.NoCheatPlusSupport;
-import me.BadBones69.CrazyEnchantments.multisupport.SpartanSupport;
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.multisupport.NoCheatPlusSupport;
+import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
+import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class PickAxes implements Listener{
 	
@@ -74,6 +74,10 @@ public class PickAxes implements Listener{
 							SpartanSupport.cancelNoSwing(player);
 							SpartanSupport.cancelBlockReach(player);
 						}
+						Boolean damage = true;
+						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Blast-Full-Durability")){
+							damage = Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
+						}
 						for(Block b : getBlocks(block.getLocation(), face, (Main.CE.getPower(item, CEnchantments.BLAST)-1))){
 							if(Main.CE.getBlockList().contains(b.getType())){
 								BlockBreakEvent event = new BlockBreakEvent(b, player);
@@ -114,7 +118,11 @@ public class PickAxes implements Listener{
 												}
 												if(item.getItemMeta().hasEnchants()){
 													if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
-														drop = new ItemStack(b.getType(), 1, b.getData());
+														if(b.getType() == Material.GLOWING_REDSTONE_ORE){
+															drop = new ItemStack(Material.REDSTONE_ORE, 1, block.getData());
+														}else{
+															drop = new ItemStack(b.getType(), 1, block.getData());
+														}
 													}
 												}
 												int amount = drop.getAmount();
@@ -122,6 +130,10 @@ public class PickAxes implements Listener{
 													drops.put(drop, drops.get(drop) + amount);
 												}else{
 													drops.put(drop, amount);
+												}
+												if(drop.getType() == Material.GLOWING_REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE
+														|| drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE){
+													break;
 												}
 											}
 										}else{
@@ -165,11 +177,19 @@ public class PickAxes implements Listener{
 														}
 														if(item.getItemMeta().hasEnchants()){
 															if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
-																drop = new ItemStack(b.getType(), 1, b.getData());
+																if(b.getType() == Material.GLOWING_REDSTONE_ORE){
+																	drop = new ItemStack(Material.REDSTONE_ORE, 1, block.getData());
+																}else{
+																	drop = new ItemStack(b.getType(), 1, block.getData());
+																}
 															}
 														}
 														b.getWorld().dropItem(b.getLocation(), drop);
 														toggle = true;
+														if(drop.getType() == Material.GLOWING_REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE
+																|| drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE){
+															break;
+														}
 													}
 												}
 											}
@@ -187,10 +207,15 @@ public class PickAxes implements Listener{
 										}else{
 											b.breakNaturally();
 										}
-										Methods.removeDurability(item, player);
+										if(damage){
+											Methods.removeDurability(item, player);
+										}
 									}
 								}
 							}
+						}
+						if(!damage){
+							Methods.removeDurability(item, player);
 						}
 						if(Support.hasNoCheatPlus()){
 							NoCheatPlusSupport.unexemptPlayer(player);
@@ -377,8 +402,6 @@ public class PickAxes implements Listener{
 		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK,1,(short)4).getType());
 		return ores;
 	}
-	
-	
 	
 	private ArrayList<Material> getItems(){
 		ArrayList<Material> items = new ArrayList<Material>();

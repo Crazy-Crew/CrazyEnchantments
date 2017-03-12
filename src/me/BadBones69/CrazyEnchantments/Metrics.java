@@ -25,7 +25,7 @@
  * authors and contributors and should not be interpreted as representing official policies,
  * either expressed or implied, of anybody else.
  */
-package me.BadBones69.CrazyEnchantments;
+package me.badbones69.crazyenchantments;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments;
+package me.badbones69.crazyenchantments;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,16 +28,16 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.API.Version;
-import me.BadBones69.CrazyEnchantments.Controlers.FireworkDamageAPI;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_10_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_11_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_7_R4;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R2;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R3;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R2;
+import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.controlers.FireworkDamageAPI;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_10_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_11_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_7_R4;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_8_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_8_R2;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_8_R3;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_9_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_9_R2;
 
 public class Methods{
 	

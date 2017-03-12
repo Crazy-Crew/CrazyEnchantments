@@ -1,9 +1,9 @@
-package me.BadBones69.CrazyEnchantments.API.currencyapi;
+package me.badbones69.crazyenchantments.api.currencyapi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support;
 import net.milkbowl.vault.economy.Economy;
 
 public class VaultSupport {

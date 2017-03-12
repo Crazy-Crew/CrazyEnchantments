@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,15 +22,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEBook;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CustomEBook;
-import me.BadBones69.CrazyEnchantments.API.CustomEnchantments;
-import me.BadBones69.CrazyEnchantments.API.EnchantmentType;
-import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEBook;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CustomEBook;
+import me.badbones69.crazyenchantments.api.CustomEnchantments;
+import me.badbones69.crazyenchantments.api.EnchantmentType;
+import me.badbones69.crazyenchantments.multisupport.EnchantGlow;
 
 public class ScrollControl implements Listener{
 	

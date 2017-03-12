@@ -1,10 +1,10 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.HashMap;
 import java.util.List;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public enum CEnchantments {
 	

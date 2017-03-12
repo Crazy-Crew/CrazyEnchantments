@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.BadBones69.CrazyEnchantments.API.Version;
+import me.badbones69.crazyenchantments.api.Version;
 
 public class FireworkDamageAPI implements Listener{
 	

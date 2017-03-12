@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,10 +20,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class CustomEnchantments implements Listener{
 	

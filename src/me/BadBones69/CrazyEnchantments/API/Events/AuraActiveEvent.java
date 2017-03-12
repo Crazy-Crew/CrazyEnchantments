@@ -1,10 +1,10 @@
-package me.BadBones69.CrazyEnchantments.API.Events;
+package me.badbones69.crazyenchantments.api.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.badbones69.crazyenchantments.api.CEnchantments;
 
 public class AuraActiveEvent extends Event{
 	

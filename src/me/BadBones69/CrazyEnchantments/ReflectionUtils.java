@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments;
+package me.badbones69.crazyenchantments;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

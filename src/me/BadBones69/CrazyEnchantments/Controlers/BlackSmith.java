@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.Version;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
-import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.multisupport.EnchantGlow;
 
 public class BlackSmith implements Listener{
 	

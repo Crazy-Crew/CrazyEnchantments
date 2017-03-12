@@ -1,8 +1,9 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -18,12 +19,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public class ProtectionCrystal implements Listener{
 	
-	private HashMap<Player, ArrayList<ItemStack>> PlayersItems = new HashMap<Player, ArrayList<ItemStack>>();
+	private HashMap<UUID, ArrayList<ItemStack>> playersItems = new HashMap<UUID, ArrayList<ItemStack>>();
 	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e){
@@ -82,18 +83,18 @@ public class ProtectionCrystal implements Listener{
 		}
 		e.getDrops().clear();
 		e.getDrops().addAll(drops);
-		PlayersItems.put(player, items);
+		playersItems.put(player.getUniqueId(), items);
 	}
 	
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent e){
 		Player player = e.getPlayer();
 		String protection = Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected"));
-		if(PlayersItems.containsKey(player)){
-			for(ItemStack item : PlayersItems.get(player)){
+		if(playersItems.containsKey(player.getUniqueId())){
+			for(ItemStack item : playersItems.get(player.getUniqueId())){
 				player.getInventory().addItem(Methods.removeLore(item, protection));
 			}
-			PlayersItems.remove(player);
+			playersItems.remove(player.getUniqueId());
 		}
 	}
 	

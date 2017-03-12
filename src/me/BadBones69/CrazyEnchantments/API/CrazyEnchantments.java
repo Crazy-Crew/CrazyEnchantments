@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public class CrazyEnchantments {
 	
@@ -98,10 +98,16 @@ public class CrazyEnchantments {
 	 */
 	public CEnchantments getFromName(String name){
 		for(CEnchantments en : getEnchantments()){
-			//Bukkit.broadcastMessage(en.getName()); //This is used for Debugging.
 			if(en.getName().equalsIgnoreCase(name)){
 				return en;
 			}
+		/*	try{
+				if(en.getCustomName().equalsIgnoreCase(name)){
+					return en;
+				}
+			}catch(Exception e){
+				Bukkit.broadcastMessage("Enchantment failed to load: " + en.getName()); //This is used for Debugging.
+			} */
 			if(en.getCustomName().equalsIgnoreCase(name)){
 				return en;
 			}

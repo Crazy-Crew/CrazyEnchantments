@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API.Events;
+package me.badbones69.crazyenchantments.api.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -6,7 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.badbones69.crazyenchantments.api.CEnchantments;
 
 public class EnchantmentUseEvent extends Event implements Cancellable{
 	Player Player;

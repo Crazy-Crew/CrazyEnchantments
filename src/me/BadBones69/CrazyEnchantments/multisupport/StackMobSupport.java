@@ -1,10 +1,10 @@
-package me.BadBones69.CrazyEnchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import me.BadBones69.CrazyEnchantments.Enchantments.Armor;
+import me.badbones69.crazyenchantments.enchantments.Armor;
 import uk.antiperson.stackmob.api.events.EntityStackEvent;
 
 public class StackMobSupport implements Listener{

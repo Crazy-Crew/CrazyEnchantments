@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API.Events;
+package me.badbones69.crazyenchantments.api.events;
 
 import java.util.ArrayList;
 
@@ -11,8 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.api.CEnchantments;
 
 public class AuraListener implements Listener{
 	
