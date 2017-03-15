@@ -21,8 +21,8 @@ public enum EnchantmentType{
 	TOOL("Tool", isTool()), 
 	ALL("All", isAll());
 	
-	String name;
-	ArrayList<Material> items;
+	private String name;
+	private ArrayList<Material> items;
 	
 	/**\
 	 * 

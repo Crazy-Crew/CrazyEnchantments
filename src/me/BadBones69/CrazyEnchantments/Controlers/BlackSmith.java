@@ -491,9 +491,9 @@ public class BlackSmith implements Listener{
 				for(CEnchantments en : Main.CE.getEnchantments()){
 					if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						int power = Main.CE.getPower(item, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
+						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l, Main.CE.getEnchantmentColor(en) + en.getCustomName() + " " + Methods.getPower(power+1));
+							item = Methods.replaceLore(item, l, en.getEnchantmentColor() + en.getCustomName() + " " + Methods.getPower(power+1));
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}
 					}
@@ -501,16 +501,16 @@ public class BlackSmith implements Listener{
 				for(String en : Main.CustomE.getEnchantments()){
 					if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						int power = Main.CustomE.getPower(item, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
+						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
 						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en)+Main.CustomE.getCustomName(en)+" "+Methods.getPower(power+1));
+							item = Methods.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1));
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}
 					}
 				}
 			}
 			for(String lore : n){
-				boolean T=false;
+				boolean T = false;
 				for(CEnchantments en : Main.CE.getEnchantments()){
 					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						for(String l : item.getItemMeta().getLore()){

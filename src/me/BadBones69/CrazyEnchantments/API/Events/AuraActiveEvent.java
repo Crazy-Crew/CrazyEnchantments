@@ -8,10 +8,11 @@ import me.badbones69.crazyenchantments.api.CEnchantments;
 
 public class AuraActiveEvent extends Event{
 	
-	private Player Player;
 	private Player Other;
-	private CEnchantments Enchant;
+	private Player Player;
 	private Integer Power;
+	private CEnchantments Enchant;
+	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 * This event fires when a player walks near another player with an aura enchantment on.
@@ -59,8 +60,6 @@ public class AuraActiveEvent extends Event{
 		return Power;
 	}
 	
-	private static final HandlerList handlers = new HandlerList();
-
 	public HandlerList getHandlers() {
 		return handlers;
 	}

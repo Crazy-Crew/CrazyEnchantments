@@ -133,13 +133,13 @@ public class Tinkerer implements Listener{
 										Boolean toggle = false;
 										String enchant = "";
 										for(CEnchantments en : Main.CE.getEnchantments()){
-											if(It.getItemMeta().getDisplayName().contains(Methods.color(Main.CE.getBookColor(en)+en.getCustomName()))){
+											if(It.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))){
 												enchant = en.getName();
 												toggle = true;
 											}
 										}
 										for(String en : Main.CustomE.getEnchantments()){
-											if(It.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
+											if(It.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en)))){
 												enchant = en;
 												custom = true;
 												toggle = true;

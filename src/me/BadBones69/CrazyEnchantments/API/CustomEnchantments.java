@@ -525,6 +525,19 @@ public class CustomEnchantments implements Listener{
 	}
 	
 	/**
+	 * This method converts an ItemStack into a CustomEBook.
+	 * @param book The ItemStack you are converting.
+	 * @return The ItemStack but as a CustomEBook.
+	 */
+	public CustomEBook convertToCEBook(ItemStack book){
+		CustomEBook ceBook = new CustomEBook(getEnchantmentBookEnchantmnet(book), getBookPower(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
+		ceBook.setSuccessRate(Methods.getPercent("%Success_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setDestoryRate(Methods.getPercent("%Destroy_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setGlowing(Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing"));
+		return ceBook;
+	}
+	
+	/**
 	 * Get the enchantment from an enchantment book.
 	 * @param book The book you want the enchantment from.
 	 * @return The enchantment the book is.
@@ -620,4 +633,5 @@ public class CustomEnchantments implements Listener{
 			Type.put(ench, EnchantmentType.getFromName(Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable")));
 		}
 	}
+
 }

@@ -102,8 +102,8 @@ public enum CEnchantments {
 //	----------------All----------------  \\
 	HELLFORGED("HellForged", EnchantmentType.ALL);
 	
-	String Name;
-	EnchantmentType Type;
+	private String Name;
+	private EnchantmentType Type;
 	private static HashMap<CEnchantments, String> customNames = new HashMap<CEnchantments, String>();
 	private static HashMap<CEnchantments, String> bookColors = new HashMap<CEnchantments, String>();
 	private static HashMap<CEnchantments, String> enchantColors = new HashMap<CEnchantments, String>();
@@ -116,8 +116,8 @@ public enum CEnchantments {
 	 * @param type Type of items it goes on.
 	 */
 	private CEnchantments(String name, EnchantmentType type){
-		Name=name;
-		Type=type;
+		Name = name;
+		Type = type;
 	}
 	
 	/**
@@ -126,11 +126,11 @@ public enum CEnchantments {
 	public static void load(){
 		for(CEnchantments en : values()){
 			String name = en.getName();
-			customNames.put(en, Main.settings.getEnchs().getString("Enchantments."+name+".Name"));
-			bookColors.put(en, Main.settings.getEnchs().getString("Enchantments."+name+".BookColor"));
-			enchantColors.put(en, Main.settings.getEnchs().getString("Enchantments."+name+".Color"));
-			active.put(en, Main.settings.getEnchs().getBoolean("Enchantments."+name+".Enabled"));
-			enchantDesc.put(en, Main.settings.getEnchs().getStringList("Enchantments."+name+".Info.Description"));
+			customNames.put(en, Main.settings.getEnchs().getString("Enchantments." + name + ".Name"));
+			bookColors.put(en, Main.settings.getEnchs().getString("Enchantments." + name + ".BookColor"));
+			enchantColors.put(en, Main.settings.getEnchs().getString("Enchantments." + name + ".Color"));
+			active.put(en, Main.settings.getEnchs().getBoolean("Enchantments." + name + ".Enabled"));
+			enchantDesc.put(en, Main.settings.getEnchs().getStringList("Enchantments." + name + ".Info.Description"));
 		}
 	}
 	

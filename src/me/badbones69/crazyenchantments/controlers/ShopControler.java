@@ -21,9 +21,10 @@ import me.badbones69.crazyenchantments.api.InfoType;
 import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
 import me.badbones69.crazyenchantments.multisupport.EnchantGlow;
 
-public class ShopGUI implements Listener{
+public class ShopControler implements Listener{
 	
 	public static void openGUI(Player player){
 		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Methods.getInvName());
@@ -182,10 +183,12 @@ public class ShopGUI implements Listener{
 										}
 										return;
 									}
+									Currency currency = null;
+									int cost = 0;
 									if(player.getGameMode() != GameMode.CREATIVE){
 										if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))){
-											Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
-											int cost = config.getInt("Categories." + cat + ".Cost");
+											currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
+											cost = config.getInt("Categories." + cat + ".Cost");
 											if(CurrencyAPI.canBuy(player, currency, cost)){
 												CurrencyAPI.takeCurrency(player, currency, cost);
 											}else{
@@ -208,7 +211,16 @@ public class ShopGUI implements Listener{
 											}
 										}
 									}
-									player.getInventory().addItem(EnchantmentControl.pick(cat));
+									ItemStack book = EnchantmentControl.pick(cat);
+									boolean isCustom = Main.CustomE.isEnchantmentBook(book);
+									BuyBookEvent event;
+									if(isCustom){
+										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, null, Main.CustomE.convertToCEBook(book));
+									}else{
+										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book), null);
+									}
+									Bukkit.getPluginManager().callEvent(event);
+									player.getInventory().addItem(book);
 									return;
 								}
 							}
@@ -365,7 +377,7 @@ public class ShopGUI implements Listener{
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.GKitz.Name")))){
 							if(!Methods.hasPermission(player, "gkitz", true))return;
-							GKitzGUI.openGUI(player);
+							GKitzControler.openGUI(player);
 							return;
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.BlackSmith.Name")))){

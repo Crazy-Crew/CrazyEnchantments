@@ -11,6 +11,13 @@ import me.badbones69.crazyenchantments.Main;
 
 public class Support {
 	
+	public static boolean hasDakata(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("DakataAntiCheat")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean hasNoCheatPlus(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("NoCheatPlus")!=null){
 			return true;

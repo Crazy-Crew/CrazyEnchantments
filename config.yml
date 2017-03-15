@@ -1,6 +1,7 @@
 Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the messages
   Update-Checker: true #Toggle on and off if you get a update message when you join if there is a new update.
+  Player-Info-Backup-Message: true #Toggle this on and off if you wish to see when the players data gets backed up.
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   Enchantment-Book-Item: '340' #The item that the enchantment book is.
   Enchantment-Book-Glowing: true #Toggle on or off if the book will have an enchanted look.

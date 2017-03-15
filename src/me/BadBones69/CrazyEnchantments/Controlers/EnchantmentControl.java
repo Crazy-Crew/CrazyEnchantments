@@ -27,7 +27,7 @@ import me.badbones69.crazyenchantments.api.Version;
 
 public class EnchantmentControl implements Listener{
 	
-	static HashMap<String, String> enchants = new HashMap<String, String>();
+	private static HashMap<String, String> enchants = new HashMap<String, String>();
 	
 	public static String Enchants(String cat){
 		Random number = new Random();
@@ -98,7 +98,7 @@ public class EnchantmentControl implements Listener{
 						Boolean custom = true;
 						EnchantmentType type = EnchantmentType.ALL;
 						for(CEnchantments ench : Main.CE.getEnchantments()){
-							if(name.contains(Methods.color(ench.getBookColor()+ench.getCustomName()))){
+							if(name.contains(Methods.color(ench.getBookColor() + ench.getCustomName()))){
 								en = ench;
 								enchant = ench.getCustomName();
 								type = ench.getType();
@@ -106,7 +106,7 @@ public class EnchantmentControl implements Listener{
 							}
 						}
 						for(String ench : Main.CustomE.getEnchantments()){
-							if(name.contains(Methods.color(Main.CustomE.getBookColor(ench)+Main.CustomE.getCustomName(ench)))){
+							if(name.contains(Methods.color(Main.CustomE.getBookColor(ench) + Main.CustomE.getCustomName(ench)))){
 								enchant = Main.CustomE.getCustomName(ench);
 								type = Main.CustomE.getType(ench);
 								custom = true;
@@ -151,7 +151,7 @@ public class EnchantmentControl implements Listener{
 														.replaceAll("%Enchantment%", enchant).replaceAll("%enchantment%", enchant)
 														.replaceAll("%Level%", l).replaceAll("%level%", l)));
 												try{
-													if(Version.getVersion().getVersionInteger()>=191){
+													if(Version.getVersion().getVersionInteger() >= 191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
 													}else{
 														player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
@@ -182,7 +182,7 @@ public class EnchantmentControl implements Listener{
 												}
 												player.setItemOnCursor(new ItemStack(Material.AIR));
 												try{
-													if(Version.getVersion().getVersionInteger()>=191){
+													if(Version.getVersion().getVersionInteger() >= 191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 													}else{
 														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -193,7 +193,7 @@ public class EnchantmentControl implements Listener{
 												player.setItemOnCursor(new ItemStack(Material.AIR));
 												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Enchantment-Upgrade.Failed")));
 												try{
-													if(Version.getVersion().getVersionInteger()>=191){
+													if(Version.getVersion().getVersionInteger() >= 191){
 														player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 													}else{
 														player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -245,7 +245,7 @@ public class EnchantmentControl implements Listener{
 									player.setItemOnCursor(new ItemStack(Material.AIR));
 									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Book-Works")));
 									try{
-										if(Version.getVersion().getVersionInteger()>=191){
+										if(Version.getVersion().getVersionInteger() >= 191){
 											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
 										}else{
 											player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
@@ -259,7 +259,7 @@ public class EnchantmentControl implements Listener{
 										player.setItemOnCursor(new ItemStack(Material.AIR));
 										player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Item-Was-Protected")));
 										try{
-											if(Version.getVersion().getVersionInteger()>=191){
+											if(Version.getVersion().getVersionInteger() >= 191){
 												player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 											}else{
 												player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -274,11 +274,11 @@ public class EnchantmentControl implements Listener{
 									player.updateInventory();
 									return;
 								}
-								if(!success&&!destroy){
+								if(!success && !destroy){
 									player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Book-Failed")));
 									player.setItemOnCursor(new ItemStack(Material.AIR));
 									try{
-										if(Version.getVersion().getVersionInteger()>=191){
+										if(Version.getVersion().getVersionInteger() >= 191){
 											player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
 										}else{
 											player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
@@ -330,10 +330,10 @@ public class EnchantmentControl implements Listener{
 	}
 	
 	public static ItemStack pick(String cat){
-		int Smax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Max");
-		int Smin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.SuccessPercent.Min");
-		int Dmax = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Max");
-		int Dmin = Main.settings.getConfig().getInt("Categories."+cat+".EnchOptions.DestroyPercent.Min");
+		int Smax = Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Max");
+		int Smin = Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Min");
+		int Dmax = Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max");
+		int Dmin = Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min");
 		ArrayList<String> lore = new ArrayList<String>();
 		String enchant = Enchants(cat);
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){

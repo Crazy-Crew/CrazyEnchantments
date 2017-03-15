@@ -31,7 +31,7 @@ import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class PickAxes implements Listener{
 	
-	HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<Player, HashMap<Block, BlockFace>>();
+	private HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<Player, HashMap<Block, BlockFace>>();
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockClick(PlayerInteractEvent e){
@@ -119,9 +119,9 @@ public class PickAxes implements Listener{
 												if(item.getItemMeta().hasEnchants()){
 													if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
 														if(b.getType() == Material.GLOWING_REDSTONE_ORE){
-															drop = new ItemStack(Material.REDSTONE_ORE, 1, block.getData());
+															drop = new ItemStack(Material.REDSTONE_ORE, 1, b.getData());
 														}else{
-															drop = new ItemStack(b.getType(), 1, block.getData());
+															drop = new ItemStack(b.getType(), 1, b.getData());
 														}
 													}
 												}
@@ -178,9 +178,9 @@ public class PickAxes implements Listener{
 														if(item.getItemMeta().hasEnchants()){
 															if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
 																if(b.getType() == Material.GLOWING_REDSTONE_ORE){
-																	drop = new ItemStack(Material.REDSTONE_ORE, 1, block.getData());
+																	drop = new ItemStack(Material.REDSTONE_ORE, 1, b.getData());
 																}else{
-																	drop = new ItemStack(b.getType(), 1, block.getData());
+																	drop = new ItemStack(b.getType(), 1, b.getData());
 																}
 															}
 														}

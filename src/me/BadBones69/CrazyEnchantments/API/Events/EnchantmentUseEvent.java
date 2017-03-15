@@ -9,10 +9,11 @@ import org.bukkit.inventory.ItemStack;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 
 public class EnchantmentUseEvent extends Event implements Cancellable{
-	Player Player;
-	CEnchantments Enchant;
-	Boolean Cancel;
-	ItemStack Item;
+	
+	private Player Player;
+	private CEnchantments Enchant;
+	private Boolean Cancel;
+	private ItemStack Item;
 
 	public EnchantmentUseEvent(Player player, CEnchantments enchant, ItemStack item) {
 		Player = player;
