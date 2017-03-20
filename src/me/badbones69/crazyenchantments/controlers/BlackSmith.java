@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.Version;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
-import me.BadBones69.CrazyEnchantments.multisupport.EnchantGlow;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.multisupport.EnchantGlow;
 
 public class BlackSmith implements Listener{
 	
@@ -491,9 +491,9 @@ public class BlackSmith implements Listener{
 				for(CEnchantments en : Main.CE.getEnchantments()){
 					if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						int power = Main.CE.getPower(item, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
+						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l, Main.CE.getEnchantmentColor(en) + en.getCustomName() + " " + Methods.getPower(power+1));
+							item = Methods.replaceLore(item, l, en.getEnchantmentColor() + en.getCustomName() + " " + Methods.getPower(power+1));
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}
 					}
@@ -501,16 +501,16 @@ public class BlackSmith implements Listener{
 				for(String en : Main.CustomE.getEnchantments()){
 					if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
 						int power = Main.CustomE.getPower(item, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
+						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
 						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en)+Main.CustomE.getCustomName(en)+" "+Methods.getPower(power+1));
+							item = Methods.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1));
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}
 					}
 				}
 			}
 			for(String lore : n){
-				boolean T=false;
+				boolean T = false;
 				for(CEnchantments en : Main.CE.getEnchantments()){
 					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
 						for(String l : item.getItemMeta().getLore()){

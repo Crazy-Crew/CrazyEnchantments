@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.multisupport.nms;
+package me.badbones69.crazyenchantments.multisupport.nms;
 
 import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;

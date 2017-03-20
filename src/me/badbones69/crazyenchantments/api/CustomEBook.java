@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,19 +6,19 @@ import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public class CustomEBook {
 	
-	CustomEnchantments CustomE = CustomEnchantments.getInstance();
+	private CustomEnchantments CustomE = CustomEnchantments.getInstance();
 	
-	String enchantment;
-	int amount;
-	int power;
-	boolean glowing;
-	int destory_rate;
-	int success_rate;
+	private int power;
+	private int amount;
+	private boolean glowing;
+	private int destory_rate;
+	private int success_rate;
+	private String enchantment;
 	
 	/**
 	 * 
@@ -26,9 +26,9 @@ public class CustomEBook {
 	 * @param power Tier of the enchantment.
 	 */
 	public CustomEBook(String enchantment, Integer power){
-		this.enchantment = enchantment;
 		this.amount = 1;
 		this.power = power;
+		this.enchantment = enchantment;
 		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")){
 			this.glowing = Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing");
 		}else{
@@ -49,9 +49,9 @@ public class CustomEBook {
 	 * @param amount Amount of books you want.
 	 */
 	public CustomEBook(String enchantment, Integer power, Integer amount){
-		this.enchantment = enchantment;
-		this.amount = amount;
 		this.power = power;
+		this.amount = amount;
+		this.enchantment = enchantment;
 		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")){
 			this.glowing = Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing");
 		}else{
@@ -74,11 +74,27 @@ public class CustomEBook {
 	}
 	
 	/**
+	 * Gets the custom enchantment.
+	 * @return Custom Enchantment as a string.
+	 */
+	public String getEnchantemnt(){
+		return this.enchantment;
+	}
+	
+	/**
 	 * 
 	 * @param toggle Toggle on or off the glowing effect.
 	 */
 	public void setGlowing(Boolean toggle){
 		this.glowing = toggle;
+	}
+	
+	/**
+	 * If the item is glowing or not.
+	 * @return Turn if it glowing and false if not.
+	 */
+	public Boolean getGlowing(){
+		return this.glowing;
 	}
 	
 	/**
@@ -90,11 +106,27 @@ public class CustomEBook {
 	}
 	
 	/**
+	 * Get the amount it will be as an ItemStack.
+	 * @return The amount the ItemStack will be.
+	 */
+	public int getAmount(){
+		return this.amount;
+	}
+	
+	/**
 	 * 
 	 * @param power Set the tier of the enchantment.
 	 */
 	public void setPower(Integer power){
 		this.power = power;
+	}
+	
+	/**
+	 * Get the power of the enchantment.
+	 * @return The power of the enchantment.
+	 */
+	public int getPower(){
+		return this.power;
 	}
 	
 	/**
@@ -106,11 +138,27 @@ public class CustomEBook {
 	}
 	
 	/**
+	 * Get the destroy rate that will be on the book.
+	 * @return The destroy rate that will be on the book.
+	 */
+	public int getDestoryRate(){
+		return this.destory_rate;
+	}
+	
+	/**
 	 * 
 	 * @param success_rate Set the success rate on the book.
 	 */
 	public void setSuccessRate(Integer success_rate){
 		this.success_rate = success_rate;
+	}
+	
+	/**
+	 * Get the success rate that will be on the book.
+	 * @return The success rate that will be on the boom.
+	 */
+	public int getSuccessRate(){
+		return this.success_rate;
 	}
 	
 	/**

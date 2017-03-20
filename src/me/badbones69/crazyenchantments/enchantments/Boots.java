@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Enchantments;
+package me.badbones69.crazyenchantments.enchantments;
 
 import java.util.ArrayList;
 
@@ -18,13 +18,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.ParticleEffect;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
-import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
-import me.BadBones69.CrazyEnchantments.multisupport.SpartanSupport;
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.ParticleEffect;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
+import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class Boots implements Listener{
 	
@@ -203,8 +203,8 @@ public class Boots implements Listener{
 	}
 	
 	public static void onStart(){
-		if(Main.settings.getConfig().contains("Settings.Clouds")){
-			if(Main.settings.getConfig().getBoolean("Settings.Clouds")){
+		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Clouds")){
+			if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")){
 				Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
 					@Override
 					public void run() {
@@ -213,16 +213,10 @@ public class Boots implements Listener{
 								Location l = player.getLocation().subtract(0, .25, 0);
 								if(player.isFlying()){
 									ItemStack boots = player.getEquipment().getBoots();
-									if(boots!=null){
-										if(boots.hasItemMeta()){
-											if(boots.getItemMeta().hasLore()){
-												for(String lore : boots.getItemMeta().getLore()){
-													if(lore.contains(CEnchantments.WINGS.getCustomName())){
-														if(CEnchantments.WINGS.isEnabled()){
-															ParticleEffect.CLOUD.display((float) .25, (float) 0, (float) .25, 0, 10, l, 100);
-														}
-													}
-												}
+									if(boots != null){
+										if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
+											if(CEnchantments.WINGS.isEnabled()){
+												ParticleEffect.CLOUD.display((float) .25, (float) 0, (float) .25, 0, 10, l, 100);
 											}
 										}
 									}

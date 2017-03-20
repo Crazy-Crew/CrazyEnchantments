@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API.Events;
+package me.badbones69.crazyenchantments.api.events;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +23,8 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.API.Version;
-import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent.EquipMethod;
+import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 
 /**
  * @Author Borlea
@@ -45,6 +45,7 @@ public class ArmorListener implements Listener{
 	@EventHandler
 	public final void onInventoryClick(final InventoryClickEvent e){
 		boolean shift = false, numberkey = false;
+		Player player = (Player) e.getWhoClicked();
 		if(e.isCancelled()) return;
 		if(e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT)){
 			shift = true;
@@ -52,7 +53,8 @@ public class ArmorListener implements Listener{
 		if(e.getClick().equals(ClickType.NUMBER_KEY)){
 			numberkey = true;
 		}
-		if((e.getSlotType() != SlotType.ARMOR || e.getSlotType() != SlotType.QUICKBAR) && !(e.getInventory().getType().equals(InventoryType.CRAFTING)||e.getInventory().getType().equals(InventoryType.PLAYER))){
+		if((e.getSlotType() != SlotType.ARMOR || e.getSlotType() != SlotType.QUICKBAR) && 
+				!(e.getInventory().getType().equals(InventoryType.CRAFTING)||e.getInventory().getType().equals(InventoryType.PLAYER))){
 			return;
 		}
 		if(!(e.getWhoClicked() instanceof Player)){
@@ -66,6 +68,13 @@ public class ArmorListener implements Listener{
 			// Used for drag and drop checking to make sure you aren't trying to place a helmet in the boots place.
 			return;
 		}
+		
+		if(e.getInventory().getType() == InventoryType.CRAFTING){
+			// Stops the activation when a player shift clicks from their small crafting option.
+			if(e.getRawSlot() >= 0 && e.getRawSlot() <= 4){
+				return;
+			}
+		}
 		if(shift){
 			newArmorType = ArmorType.matchType(e.getCurrentItem());
 			if(newArmorType != null){
@@ -77,7 +86,7 @@ public class ArmorListener implements Listener{
 						newArmorType.equals(ArmorType.CHESTPLATE) && (equipping ? e.getWhoClicked().getInventory().getChestplate() == null : e.getWhoClicked().getInventory().getChestplate() != null) || 
 						newArmorType.equals(ArmorType.LEGGINGS) && (equipping ? e.getWhoClicked().getInventory().getLeggings() == null : e.getWhoClicked().getInventory().getLeggings() != null) || 
 						newArmorType.equals(ArmorType.BOOTS) && (equipping ? e.getWhoClicked().getInventory().getBoots() == null : e.getWhoClicked().getInventory().getBoots() != null)){
-					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), EquipMethod.SHIFT_CLICK, newArmorType, 
+					ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, EquipMethod.SHIFT_CLICK, newArmorType, 
 							equipping ? null : e.getCurrentItem(), equipping ? e.getCurrentItem() : null);
 					Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 					if(armorEquipEvent.isCancelled()){
@@ -120,7 +129,7 @@ public class ArmorListener implements Listener{
 					method = EquipMethod.HOTBAR_SWAP;
 				}
 				final ItemStack It = newArmorPiece.clone();
-				final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), method, newArmorType, oldArmorPiece, newArmorPiece);
+				final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 					@Override
 					public void run() {
@@ -176,16 +185,21 @@ public class ArmorListener implements Listener{
 									}
 								}
 							}
-							if(ArmorType.matchType(newArmorPiece) != null){
-								if(e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()){
-									return;
-								}
-							}
 							EquipMethod method = EquipMethod.DRAG;
 							if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey){
 								method = EquipMethod.HOTBAR_SWAP;
 							}
-							ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), method, newArmorType, oldArmorPiece, newArmorPiece);
+							if(ArmorType.matchType(newArmorPiece) != null){
+								if(e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()){
+									ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, null, oldArmorPiece, new ItemStack(Material.AIR));
+									Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+									if(armorEquipEvent.isCancelled()){
+										e.setCancelled(true);
+									}
+									return;
+								}
+							}
+							ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
 							Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 							if(armorEquipEvent.isCancelled()){
 								e.setCancelled(true);
@@ -193,8 +207,8 @@ public class ArmorListener implements Listener{
 							return;
 						}
 					}
-				}else{
-					if(e.getHotbarButton() >= 0){// 1.10+
+				}else{// 1.10+
+					if(e.getHotbarButton() >= 0){
 						newArmorPiece = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
 						if(ArmorType.matchType(oldArmorPiece) != null || oldArmorPiece.getType() == Material.AIR){
 							if(ArmorType.matchType(newArmorPiece) != null || newArmorPiece == null){
@@ -212,7 +226,7 @@ public class ArmorListener implements Listener{
 								if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey){
 									method = EquipMethod.HOTBAR_SWAP;
 								}
-								ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) e.getWhoClicked(), method, newArmorType, oldArmorPiece, newArmorPiece);
+								ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
 								Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 								if(armorEquipEvent.isCancelled()){
 									e.setCancelled(true);

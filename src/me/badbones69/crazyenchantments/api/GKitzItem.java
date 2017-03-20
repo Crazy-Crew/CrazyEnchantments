@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,30 +6,30 @@ import java.util.HashMap;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public class GKitzItem {
 	
-	private HashMap<CEnchantments, Integer> ceEnchantments;
-	private HashMap<Enchantment, Integer> enchantments;
-	private HashMap<String, Integer> cEnchantments;
-	private ArrayList<String> lore;
 	private String type;
 	private String name;
 	private Integer amount;
+	private ArrayList<String> lore;
+	private HashMap<String, Integer> cEnchantments;
+	private HashMap<Enchantment, Integer> enchantments;
+	private HashMap<CEnchantments, Integer> ceEnchantments;
 	
 	/**
 	 * Make an empty gkit item.
 	 */
 	public GKitzItem(){
-		ceEnchantments = new HashMap<CEnchantments, Integer>();
-		enchantments = new HashMap<Enchantment, Integer>();
-		cEnchantments = new HashMap<String, Integer>();
-		lore = new ArrayList<String>();
-		type = "299";
 		name = "";
 		amount = 1;
+		type = "299";
+		lore = new ArrayList<String>();
+		cEnchantments = new HashMap<String, Integer>();
+		enchantments = new HashMap<Enchantment, Integer>();
+		ceEnchantments = new HashMap<CEnchantments, Integer>();
 	}
 	
 	/**

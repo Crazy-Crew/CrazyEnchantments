@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,17 +6,17 @@ import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public class CEBook {
 	
-	CEnchantments enchantment;
-	int amount;
-	int power;
-	boolean glowing;
-	int destory_rate;
-	int success_rate;
+	private CEnchantments enchantment;
+	private int amount;
+	private int power;
+	private boolean glowing;
+	private int destory_rate;
+	private int success_rate;
 	
 	/**
 	 * 
@@ -72,11 +72,27 @@ public class CEBook {
 	}
 	
 	/**
+	 * Get the CEEnchantment.
+	 * @return The CEEnchantment.
+	 */
+	public CEnchantments getEnchantment(){
+		return this.enchantment;
+	}
+	
+	/**
 	 * 
 	 * @param toggle Toggle on or off the glowing effect.
 	 */
 	public void setGlowing(Boolean toggle){
 		this.glowing = toggle;
+	}
+	
+	/**
+	 * If the item will be glowing or not.
+	 * @return Ture if glowing and false if not.
+	 */
+	public Boolean getGlowing(){
+		return this.glowing;
 	}
 	
 	/**
@@ -88,11 +104,27 @@ public class CEBook {
 	}
 	
 	/**
+	 * Get the amount of the item.
+	 * @return The amount that it will be as an ItemStack.
+	 */
+	public int getAmount(){
+		return this.amount;
+	}
+	
+	/**
 	 * 
 	 * @param power Set the tier of the enchantment.
 	 */
 	public void setPower(Integer power){
 		this.power = power;
+	}
+	
+	/**
+	 * Get the power of the book.
+	 * @return The power of the book.
+	 */
+	public int getPower(){
+		return this.power;
 	}
 	
 	/**
@@ -104,11 +136,27 @@ public class CEBook {
 	}
 	
 	/**
+	 * Get the destroy rate on the book.
+	 * @return Destroy rate of the book.
+	 */
+	public int getDestoryRate(){
+		return this.destory_rate;
+	}
+	
+	/**
 	 * 
 	 * @param success_rate Set the success rate on the book.
 	 */
 	public void setSuccessRate(Integer success_rate){
 		this.success_rate = success_rate;
+	}
+	
+	/**
+	 * Get the success rate on the book.
+	 * @return The success rate of the book.
+	 */
+	public int getSuccessRate(){
+		return this.success_rate;
 	}
 	
 	/**

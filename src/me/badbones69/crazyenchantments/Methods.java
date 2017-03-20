@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments;
+package me.badbones69.crazyenchantments;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,16 +28,16 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import me.BadBones69.CrazyEnchantments.API.Version;
-import me.BadBones69.CrazyEnchantments.Controlers.FireworkDamageAPI;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_10_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_11_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_7_R4;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R2;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_8_R3;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R1;
-import me.BadBones69.CrazyEnchantments.multisupport.nms.NMS_v1_9_R2;
+import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.controlers.FireworkDamageAPI;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_10_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_11_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_7_R4;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_8_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_8_R2;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_8_R3;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_9_R1;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_9_R2;
 
 public class Methods{
 	
@@ -107,6 +107,7 @@ public class Methods{
 				return item;
 		}
     }
+	
 	public static ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle){
 			switch(Version.getVersion()){
@@ -132,6 +133,7 @@ public class Methods{
 		}
 		return item;
     }
+	
 	@SuppressWarnings("deprecation")
 	public static ItemStack getItemInHand(Player player){
 		if(Version.getVersion().getVersionInteger()>=191){
@@ -140,6 +142,7 @@ public class Methods{
 			return player.getItemInHand();
 		}
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static void setItemInHand(Player player, ItemStack item){
 		if(Version.getVersion().getVersionInteger()>=191){
@@ -148,6 +151,7 @@ public class Methods{
 			player.setItemInHand(item);
 		}
 	}
+	
 	public static String getPower(Integer i){
 		if(i==0)return "I";
 		if(i==1)return "I";
@@ -162,6 +166,7 @@ public class Methods{
 		if(i==10)return "X";
 		return i+"";
 	}
+	
 	public static ArrayList<String> getPotions(){
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("ABSORPTION");
@@ -193,6 +198,7 @@ public class Methods{
 		list.add("WITHER");
 		return list;
 	}
+	
 	public static ItemStack removeLore(ItemStack item, String i){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
@@ -205,6 +211,7 @@ public class Methods{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack replaceLore(ItemStack item, String oldlore, String newlore){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
@@ -219,6 +226,7 @@ public class Methods{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack makeItem(Material material, int amount, int type, String name){
 		ItemStack item = new ItemStack(material, amount, (short) type);
 		ItemMeta m = item.getItemMeta();
@@ -226,6 +234,7 @@ public class Methods{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore){
 		ArrayList<String> l = new ArrayList<String>();
 		ItemStack item = new ItemStack(material, amount, (short) type);
@@ -236,6 +245,7 @@ public class Methods{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static ItemStack makeItem(String type, int amount){
 		int ty = 0;
@@ -266,6 +276,7 @@ public class Methods{
 		}
 		return item;
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static ItemStack makeItem(String type, int amount, String name){
 		int ty = 0;
@@ -299,6 +310,7 @@ public class Methods{
 		item.setItemMeta(me);
 		return item;
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static ItemStack makeItem(String type, int amount, String name, List<String> lore){
 		ArrayList<String> l = new ArrayList<String>();
@@ -335,6 +347,7 @@ public class Methods{
 		item.setItemMeta(me);
 		return item;
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static ItemStack makeItem(String type, int amount, String name, List<String> lore, Boolean glowing){
 		ArrayList<String> l = new ArrayList<String>();
@@ -374,6 +387,7 @@ public class Methods{
 		}
 		return item;
 	}
+	
 	@SuppressWarnings("deprecation")
 	public static ItemStack makeItem(String type, int amount, String name, List<String> lore, Map<Enchantment, Integer> enchants){
 		ArrayList<String> l = new ArrayList<String>();
@@ -411,6 +425,7 @@ public class Methods{
 		item.addUnsafeEnchantments(enchants);
 		return item;
 	}
+	
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore, List<String> lore2){
 		ArrayList<String> l = new ArrayList<String>();
 		ItemStack item = new ItemStack(material, amount, (short) type);
@@ -422,6 +437,7 @@ public class Methods{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack makeItem(Material material, int amount, int type, String name, List<String> lore, Map<Enchantment, Integer> enchants){
 		ItemStack item = new ItemStack(material, amount, (short) type);
 		ItemMeta m = item.getItemMeta();
@@ -431,13 +447,16 @@ public class Methods{
 		item.addUnsafeEnchantments(enchants);
 		return item;
 	}
+	
 	public static String percentPicker(){
 		Random i = new Random();
 		return Integer.toString(i.nextInt(100));
 	}
+	
 	public static String getPrefix(){
 		return color(Main.settings.getConfig().getString("Settings.Prefix"));
 	}
+	
 	public static boolean isInt(String s) {
 	    try {
 	        Integer.parseInt(s);
@@ -446,15 +465,19 @@ public class Methods{
 	    }
 	    return true;
 	}
+	
 	public static Player getPlayer(String name){
 		return Bukkit.getServer().getPlayer(name);
 	}
+	
 	public static Location getLoc(Player player){
 		return player.getLocation();
 	}
+	
 	public static void runCMD(Player player, String CMD){
 		player.performCommand(CMD);
 	}
+	
 	public static boolean isOnline(String name, CommandSender p){
 		for(Player player : Bukkit.getServer().getOnlinePlayers()){
 			if(player.getName().equalsIgnoreCase(name)){
@@ -464,6 +487,7 @@ public class Methods{
 		p.sendMessage(getPrefix()+color(Main.settings.getMsg().getString("Messages.Not-Online")));
 		return false;
 	}
+	
 	public static void removeItem(ItemStack item, Player player){
 		if(item.getAmount() <= 1){
 			player.getInventory().removeItem(item);
@@ -473,6 +497,7 @@ public class Methods{
 			i.setAmount(item.getAmount() - 1);
 		}
 	}
+	
 	public static ItemStack removeItem(ItemStack item){
 		ItemStack i = item.clone();
 		if(item.getAmount() <= 1){
@@ -483,9 +508,11 @@ public class Methods{
 		}
 		return i;
 	}
+	
 	public static String getInvName(){
 		return color(Main.settings.getConfig().getString("Settings.InvName"));
 	}
+	
 	public static boolean isProtected(ItemStack i){
 		if(i.hasItemMeta()){
 			if(i.getItemMeta().hasLore()){
@@ -496,6 +523,7 @@ public class Methods{
 		}
 		return false;
 	}
+	
 	public static ItemStack addLore(ItemStack item, String i){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
@@ -515,6 +543,7 @@ public class Methods{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static ItemStack removeProtected(ItemStack item){
 		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
@@ -524,6 +553,7 @@ public class Methods{
 		item.setItemMeta(m);
 		return item;
 	}
+	
 	public static void hasUpdate(){
 		try {
 			HttpURLConnection c = (HttpURLConnection)new URL("http://www.spigotmc.org/api/general.php").openConnection();
@@ -533,13 +563,13 @@ public class Methods{
 			String oldVersion = plugin.getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
-				Bukkit.getConsoleSender().sendMessage(Methods.getPrefix()+Methods.color("&cYour server is running &7v"+oldVersion+"&c and the newest is &7v"+newVersion+"&c."));
+				Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
 			}
-		}
-		catch(Exception e) {
+		}catch(Exception e) {
 			return;
 		}
 	}
+	
 	public static void hasUpdate(Player player){
 		try {
 			HttpURLConnection c = (HttpURLConnection)new URL("http://www.spigotmc.org/api/general.php").openConnection();
@@ -549,13 +579,13 @@ public class Methods{
 			String oldVersion = plugin.getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
-				player.sendMessage(Methods.getPrefix()+Methods.color("&cYour server is running &7v"+oldVersion+"&c and the newest is &7v"+newVersion+"&c."));
+				player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
 			}
-		}
-		catch(Exception e) {
+		}catch(Exception e) {
 			return;
 		}
 	}
+	
 	public static int getEnchAmount(ItemStack item){
 		int amount = 0;
 		amount += Main.CE.getItemEnchantments(item).size();
@@ -571,6 +601,7 @@ public class Methods{
 		}
 		return amount;
 	}
+	
 	public static Integer getPercent(String Argument, ItemStack item, List<String> Msg){
 		List<String> lore = item.getItemMeta().getLore();
 		String arg = "100";
@@ -603,6 +634,7 @@ public class Methods{
 		}
 		return percent;
 	}
+	
 	public static Boolean hasArgument(String Argument, List<String> Msg){
 		for(String l : Msg){
 			l = Methods.color(l).toLowerCase();
@@ -612,6 +644,7 @@ public class Methods{
 		}
 		return false;
 	}
+	
 	public static boolean randomPicker(int max){
 		Random number = new Random();
 		if(max <= 0){
@@ -623,6 +656,7 @@ public class Methods{
 		}
 		return false;
 	}
+	
 	public static boolean randomPicker(int min, int max){
 		if(max == min || max <= min || max <= 0){
 			return true;
@@ -634,16 +668,19 @@ public class Methods{
 		}
 		return false;
 	}
+	
 	public static Integer percentPick(int max, int min){
 		Random i = new Random();
 		return min+i.nextInt(max-min);
 	}
+	
 	public static boolean isInvFull(Player player){
 		if(player.getInventory().firstEmpty()==-1){
 			return true;
 		}
 		return false;
 	}
+	
 	public static List<LivingEntity> getNearbyEntities(Location loc, double radius, Entity ent) {
 	    List<Entity> out = ent.getNearbyEntities(radius, radius, radius);
 	    List<LivingEntity> entities = new ArrayList<LivingEntity>();
@@ -654,6 +691,7 @@ public class Methods{
 	    }
 	    return entities;
 	}
+	
 	public static void fireWork(Location loc, ArrayList<Color> colors) {
 		Firework fw = loc.getWorld().spawn(loc, Firework.class);
 		FireworkMeta fm = fw.getFireworkMeta();
@@ -667,6 +705,7 @@ public class Methods{
 		FireworkDamageAPI.addFirework(fw);
 		detonate(fw);
 	}
+	
 	private static void detonate(final Firework f) {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
@@ -674,6 +713,7 @@ public class Methods{
 			}
 		}, 2);
 	}
+	
 	public static Color getColor(String color) {
 		if (color.equalsIgnoreCase("AQUA")) return Color.AQUA;
 		if (color.equalsIgnoreCase("BLACK")) return Color.BLACK;

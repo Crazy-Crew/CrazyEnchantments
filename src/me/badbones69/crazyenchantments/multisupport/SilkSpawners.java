@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -12,10 +12,10 @@ import org.bukkit.inventory.ItemStack;
 
 import de.dustplanet.silkspawners.events.SilkSpawnersSpawnerBreakEvent;
 import de.dustplanet.util.SilkUtil;
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 
 public class SilkSpawners implements Listener{
 	

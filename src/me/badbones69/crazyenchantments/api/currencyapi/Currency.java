@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API.currencyapi;
+package me.badbones69.crazyenchantments.api.currencyapi;
 
 public enum Currency {
 	

@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,10 +20,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class CustomEnchantments implements Listener{
 	
@@ -525,6 +525,19 @@ public class CustomEnchantments implements Listener{
 	}
 	
 	/**
+	 * This method converts an ItemStack into a CustomEBook.
+	 * @param book The ItemStack you are converting.
+	 * @return The ItemStack but as a CustomEBook.
+	 */
+	public CustomEBook convertToCEBook(ItemStack book){
+		CustomEBook ceBook = new CustomEBook(getEnchantmentBookEnchantmnet(book), getBookPower(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
+		ceBook.setSuccessRate(Methods.getPercent("%Success_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setDestoryRate(Methods.getPercent("%Destroy_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setGlowing(Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing"));
+		return ceBook;
+	}
+	
+	/**
 	 * Get the enchantment from an enchantment book.
 	 * @param book The book you want the enchantment from.
 	 * @return The enchantment the book is.
@@ -620,4 +633,9 @@ public class CustomEnchantments implements Listener{
 			Type.put(ench, EnchantmentType.getFromName(Main.settings.getCustomEnchs().getString("Enchantments."+ench+".EnchantOptions.ItemsEnchantable")));
 		}
 	}
+<<<<<<< Updated upstream:src/me/badbones69/crazyenchantments/api/CustomEnchantments.java
 }
+=======
+
+}
+>>>>>>> Stashed changes:src/me/BadBones69/CrazyEnchantments/API/CustomEnchantments.java

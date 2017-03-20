@@ -1,26 +1,29 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 
 public class CrazyEnchantments {
 	
+	private int rageMaxLevel;
+	private ArrayList<GKitz> gkitz = new ArrayList<GKitz>();
+	private ArrayList<CEPlayer> players = new ArrayList<CEPlayer>();
+	private ArrayList<Material> blockList = new ArrayList<Material>();
 	public static CrazyEnchantments instance = new CrazyEnchantments();
-	
-	ArrayList<Material> BlockList = new ArrayList<Material>();
-	
-	int rageMaxLevel;
 	
 	/**
 	 * 
@@ -31,38 +34,144 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * Loads the following info: Blast block list, Max rage level.
+	 */
+	public void load(){
+		blockList.clear();
+		for(String id : Main.settings.getBlockList().getStringList("Block-List")){
+			try{
+				blockList.add(Methods.makeItem(id, 1).getType());
+			}catch(Exception e){}
+		}
+		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.MaxRageLevel")){
+			rageMaxLevel = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxRageLevel");
+		}else{
+			rageMaxLevel = 4;
+		}
+		FileConfiguration file = Main.settings.getGKitz();
+		for(String kit : file.getConfigurationSection("GKitz").getKeys(false)){
+			int slot = file.getInt("GKitz." + kit + ".Display.Slot");
+			String time = file.getString("GKitz." + kit + ".Cooldown");
+			ItemStack displayItem = Methods.makeItem(file.getString("GKitz." + kit + ".Display.Item"), 1, file.getString("GKitz." + kit + ".Display.Name"),
+					file.getStringList("GKitz." + kit + ".Display.Lore"), file.getBoolean("GKitz." + kit + ".Display.Glowing"));
+			ArrayList<String> commands = (ArrayList<String>) file.getStringList("GKitz." + kit + ".Commands");
+			ArrayList<String> itemStrings = (ArrayList<String>) file.getStringList("GKitz." + kit + ".Items");
+			gkitz.add(new GKitz(kit, slot, time, displayItem, getInfoGKit(itemStrings), commands, getKitItems(itemStrings), itemStrings));
+		}
+	}
+	
+	/**
+	 * Only needs used when the player joines the server.
+	 * This plugin does it automaticly, so there is no need to use it unless you have to.
+	 * @param player The player you wish to load.
+	 */
+	public void loadCEPlayer(Player player){
+		FileConfiguration data = Main.settings.getData();
+		String uuid = player.getUniqueId().toString();
+		int souls = 0;
+		boolean isActive = false;
+		if(data.contains("Players." + uuid)){
+			if(data.contains("Players." + uuid + ".Souls-Information")){
+				souls = data.getInt("Players." + uuid + ".Souls-Information.Souls");
+				isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
+			}
+		}
+		ArrayList<Cooldown> cooldowns = new ArrayList<Cooldown>();
+		for(GKitz kit : getGKitz()){
+			if(data.contains("Players." + uuid + ".GKitz." + kit.getName())){
+				Calendar cooldown = Calendar.getInstance();
+				cooldown.setTimeInMillis(data.getLong("Players." + uuid + ".GKitz." + kit.getName()));
+				cooldowns.add(new Cooldown(kit, cooldown));
+			}
+		}
+		players.add(new CEPlayer(player, souls, isActive, cooldowns));
+	}
+	
+	/**
+	 * Only needs used when the player leaves the server.
+	 * This plugin removes the player automaticly, so don't use this method unless needed for some reason.
+	 * @param player Player you wish to remove.
+	 */
+	public void unloadCEPlayer(Player player){
+		FileConfiguration data = Main.settings.getData();
+		String uuid = player.getUniqueId().toString();
+		CEPlayer p = getCEPlayer(player);
+		if(p != null){
+			if(p.getSouls() > 0){
+				data.set("Players." + uuid + ".Name", player.getName());
+				data.set("Players." + uuid + ".Souls-Information.Souls", p.getSouls());
+				data.set("Players." + uuid + ".Souls-Information.Is-Active", p.isSoulsActive());
+			}
+			for(Cooldown cooldown : p.getCooldowns()){
+				data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
+			}
+			Main.settings.saveData();
+		}
+		players.remove(p);
+	}
+	
+	/**
+	 * This backup all the players data stored by this plugin.
+	 * @param player The player you wish to backup.
+	 */
+	public void backupCEPlayer(Player player){
+		FileConfiguration data = Main.settings.getData();
+		String uuid = player.getUniqueId().toString();
+		CEPlayer p = getCEPlayer(player);
+		if(p != null){
+			if(p.getSouls() > 0){
+				data.set("Players." + uuid + ".Name", player.getName());
+				data.set("Players." + uuid + ".Souls-Information.Souls", p.getSouls());
+				data.set("Players." + uuid + ".Souls-Information.Is-Active", p.isSoulsActive());
+			}
+			for(Cooldown cooldown : p.getCooldowns()){
+				data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
+			}
+			Main.settings.saveData();
+		}
+	}
+	
+	public GKitz getGKit(String kit){
+		for(GKitz k : getGKitz()){
+			if(k.getName().equalsIgnoreCase(kit)){
+				return k;
+			}
+		}
+		return null;
+	}
+	
+	public ArrayList<GKitz> getGKitz(){
+		return gkitz;
+	}
+	
+	/**
+	 * This converts a normal Player into a CEPlayer that is loaded.
+	 * @param player The player you want to get as a CEPlayer.
+	 * @return The player but as a CEPlayer. Will return null if not found.
+	 */
+	public CEPlayer getCEPlayer(Player player){
+		for(CEPlayer p : getCEPlayers()){
+			if(p.getPlayer() == player){
+				return p;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * This gets all the CEPlayer's that are loaded.
+	 * @return All CEPlayer's that are loading and in a list.
+	 */
+	public ArrayList<CEPlayer> getCEPlayers(){
+		return players;
+	}
+	
+	/**
 	 * 
 	 * @return Returns the item the enchantment book will be.
 	 */
 	public ItemStack getEnchantmentBookItem(){
 		return Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1);
-	}
-	
-	/**
-	 * 
-	 * @param enchantment The enchantment you wish to get the color from.
-	 * @return Returns the color of the enchantment that goes on books.
-	 */
-	public String getBookColor(CEnchantments enchantment){
-		return Methods.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".BookColor"));
-	}
-	
-	/**
-	 * 
-	 * @param enchantment The enchantment you wish to get the color from.
-	 * @return Returns the color of the enchantment that goes on an item.
-	 */
-	public String getEnchantmentColor(CEnchantments enchantment){
-		return Methods.color(Main.settings.getEnchs().getString("Enchantments."+enchantment.getName()+".Color"));
-	}
-	
-	/**
-	 * 
-	 * @param enchantment The enchantment you wish to check.
-	 * @return True if enchantment is enabled / False if the enchantment is disabled.
-	 */
-	public Boolean isEnchantmentEnabled(CEnchantments enchantment){
-		return Main.settings.getEnchs().getBoolean("Enchantments."+enchantment.getName()+".Enabbled");
 	}
 	
 	/**
@@ -98,10 +207,16 @@ public class CrazyEnchantments {
 	 */
 	public CEnchantments getFromName(String name){
 		for(CEnchantments en : getEnchantments()){
-			//Bukkit.broadcastMessage(en.getName()); //This is used for Debugging.
 			if(en.getName().equalsIgnoreCase(name)){
 				return en;
 			}
+//			try{
+//				if(en.getCustomName().equalsIgnoreCase(name)){
+//					return en;
+//				}
+//			}catch(Exception e){
+//				Bukkit.broadcastMessage("Enchantment failed to load: " + en.getName()); //This is used for Debugging.
+//			}
 			if(en.getCustomName().equalsIgnoreCase(name)){
 				return en;
 			}
@@ -404,13 +519,15 @@ public class CrazyEnchantments {
 	 */
 	public ArrayList<CEnchantments> getItemEnchantments(ItemStack item){
 		ArrayList<CEnchantments> enchantments = new ArrayList<CEnchantments>();
-		if(item!=null){
+		if(item != null){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
 						for(CEnchantments en : getEnchantments()){
-							if(lore.contains(en.getCustomName())){
-								enchantments.add(en);
+							if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
+								if(!enchantments.contains(en)){
+									enchantments.add(en);
+								}
 							}
 						}
 					}
@@ -514,7 +631,7 @@ public class CrazyEnchantments {
 	}
 	
 	/**
-	 * Check if an itemstack is a enchantment book.
+	 * Check if an itemstack is an enchantment book.
 	 * @param book The item you are checking.
 	 * @return True if it is and false if not.
 	 */
@@ -522,8 +639,8 @@ public class CrazyEnchantments {
 		if(book != null){
 			if(book.hasItemMeta()){
 				if(book.getItemMeta().hasDisplayName()){
-					if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
-						for(CEnchantments en : Main.CE.getEnchantments()){
+					if(book.getType() == getEnchantmentBookItem().getType()){
+						for(CEnchantments en : getEnchantments()){
 							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 								return true;
 							}
@@ -536,6 +653,19 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * This method converts an ItemStack into a CEBook.
+	 * @param book The ItemStack you are converting.
+	 * @return The ItemStack but as a CEBook.
+	 */
+	public CEBook convertToCEBook(ItemStack book){
+		CEBook ceBook = new CEBook(getEnchantmentBookEnchantmnet(book), getBookPower(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
+		ceBook.setSuccessRate(Methods.getPercent("%Success_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setDestoryRate(Methods.getPercent("%Destroy_Rate%", book, Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setGlowing(Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing"));
+		return ceBook;
+	}
+	
+	/**
 	 * Get the enchantment from an enchantment book.
 	 * @param book The book you want the enchantment from.
 	 * @return The enchantment the book is.
@@ -544,8 +674,8 @@ public class CrazyEnchantments {
 		if(book != null){
 			if(book.hasItemMeta()){
 				if(book.getItemMeta().hasDisplayName()){
-					if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
-						for(CEnchantments en : Main.CE.getEnchantments()){
+					if(book.getType() == getEnchantmentBookItem().getType()){
+						for(CEnchantments en : getEnchantments()){
 							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 								return en;
 							}
@@ -619,28 +749,11 @@ public class CrazyEnchantments {
 	}
 	
 	/**
-	 * Loads the block list for blast.
-	 */
-	public void load(){
-		BlockList.clear();
-		for(String id : Main.settings.getBlockList().getStringList("Block-List")){
-			try{
-				BlockList.add(Methods.makeItem(id, 1).getType());
-			}catch(Exception e){}
-		}
-		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.MaxRageLevel")){
-			rageMaxLevel = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxRageLevel");
-		}else{
-			rageMaxLevel = 4;
-		}
-	}
-	
-	/**
 	 * 
 	 * @return The block list for blast.
 	 */
 	public ArrayList<Material> getBlockList(){
-		return BlockList;
+		return blockList;
 	}
 	
 	/**
@@ -660,6 +773,11 @@ public class CrazyEnchantments {
 		return Main.settings.getEnchs().getInt("Enchantments." + enchant.getName() + ".MaxPower");
 	}
 	
+	/**
+	 * This converts an integer into a roman numeral if its between 1-10 other wise it will just be the number as a string.
+	 * @param i The integer you want to convert.
+	 * @return The integer as a roman numeral if between 1-10 other wise the number as a string.
+	 */
 	public String convertPower(Integer i){
 		if(i<=0)return "I";
 		if(i==1)return "I";
@@ -675,4 +793,288 @@ public class CrazyEnchantments {
 		return i+"";
 	}
 	
+<<<<<<< Updated upstream:src/me/badbones69/crazyenchantments/api/CrazyEnchantments.java
 }
+=======
+	/**
+	 * Reloads all the kit items.
+	 */
+	public ArrayList<ItemStack> getKitItems(ArrayList<String> itemStrings){
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		for(String i : itemStrings){
+			GKitzItem item = new GKitzItem();
+			for(String d : i.split(", ")){
+				if(d.startsWith("Item:")){
+					item.setItem(d.replace("Item:", ""));
+				}else if(d.startsWith("Amount:")){
+					if(Methods.isInt(d.replace("Amount:", ""))){
+						item.setAmount(Integer.parseInt(d.replace("Amount:", "")));
+					}
+				}
+				else if(d.startsWith("Name:")){
+					item.setName(d.replace("Name:", ""));
+				}
+				else if(d.startsWith("Lore:")){
+					d = d.replace("Lore:", "");
+					ArrayList<String> lore = new ArrayList<String>();
+					if(d.contains(",")){
+						for(String D : d.split(",")){
+							lore.add(D);
+						}
+					}else{
+						lore.add(d);
+					}
+					item.setLore(lore);
+				}else if(d.startsWith("Enchantments:")){
+					d = d.replace("Enchantments:", "");
+					if(d.contains(",")){
+						for(String D : d.split(",")){
+							if(D.contains(":")){
+								if(D.contains("-")){
+									Integer min = Integer.parseInt(D.split(":")[1].split("-")[0]);
+									Integer max = Integer.parseInt(D.split(":")[1].split("-")[1]);
+									int level = pickLevel(max, min);
+									if(level > 0){
+										if(Enchantment.getByName(D.split(":")[0]) != null){
+											item.addEnchantment(Enchantment.getByName(D.split(":")[0]), level);
+										}
+										for(Enchantment en : Enchantment.values()){
+											if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+												item.addEnchantment(en, level);
+											}
+										}
+									}
+								}else{
+									if(Enchantment.getByName(D.split(":")[0]) != null){
+										item.addEnchantment(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
+									}
+									for(Enchantment en : Enchantment.values()){
+										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+											item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
+										}
+									}
+								}
+							}else{
+								if(Enchantment.getByName(D) != null){
+									item.addEnchantment(Enchantment.getByName(D), 1);
+								}
+								for(Enchantment en : Enchantment.values()){
+									if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+										item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
+									}
+								}
+							}
+						}
+					}else{
+						if(d.contains(":")){
+							if(d.contains("-")){
+								Integer min = Integer.parseInt(d.split(":")[1].split("-")[0]);
+								Integer max = Integer.parseInt(d.split(":")[1].split("-")[1]);
+								int level = pickLevel(max, min);
+								if(level > 0){
+									if(Enchantment.getByName(d.split(":")[0]) != null){
+										item.addEnchantment(Enchantment.getByName(d.split(":")[0]), level);
+									}
+									for(Enchantment en : Enchantment.values()){
+										if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+											item.addEnchantment(en, level);
+										}
+									}
+								}
+							}else{
+								if(Enchantment.getByName(d.split(":")[0]) != null){
+									item.addEnchantment(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
+								}
+								for(Enchantment en : Enchantment.values()){
+									if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+										item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
+									}
+								}
+							}
+						}else{
+							if(Enchantment.getByName(d) != null){
+								item.addEnchantment(Enchantment.getByName(d), 1);
+							}
+							for(Enchantment en : Enchantment.values()){
+								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+									item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
+								}
+							}
+						}
+					}
+				}else if(d.startsWith("CustomEnchantments:")){
+					d = d.replace("CustomEnchantments:", "");
+					if(d.contains(",")){
+						for(String D : d.split(",")){
+							if(D.contains(":")){
+								if(D.contains("-")){
+									String enchant = D.split(":")[0];
+									Integer min = Integer.parseInt(D.split(":")[1].split("-")[0]);
+									Integer max = Integer.parseInt(D.split(":")[1].split("-")[1]);
+									int level = pickLevel(max, min);
+									if(isEnchantment(enchant)){
+										if(level > 0){
+											item.addCEEnchantment(getFromName(enchant), level);
+										}
+									}else if(Main.CustomE.isEnchantment(enchant)){
+										if(level > 0){
+											item.addCustomEnchantment(enchant, level);
+										}
+									}
+								}else{
+									String enchant = D.split(":")[0];
+									if(isEnchantment(enchant)){
+										item.addCEEnchantment(getFromName(enchant), Integer.parseInt(D.split(":")[1]));
+									}else if(Main.CustomE.isEnchantment(enchant)){
+										item.addCustomEnchantment(enchant, Integer.parseInt(d.split(":")[1]));
+									}
+								}
+							}else{
+								String enchant = D;
+								if(isEnchantment(enchant)){
+									item.addCEEnchantment(getFromName(enchant), 1);
+								}else if(Main.CustomE.isEnchantment(enchant)){
+									item.addCustomEnchantment(enchant, 1);
+								}
+							}
+						}
+					}else{
+						if(d.contains(":")){
+							if(d.contains("-")){
+								String enchant = d.split(":")[0];
+								Integer min = Integer.parseInt(d.split(":")[1].split("-")[0]);
+								Integer max = Integer.parseInt(d.split(":")[1].split("-")[1]);
+								int level = pickLevel(max, min);
+								if(isEnchantment(enchant)){
+									if(level > 0){
+										item.addCEEnchantment(getFromName(enchant), level);
+									}
+								}else if(Main.CustomE.isEnchantment(enchant)){
+									if(level > 0){
+										item.addCustomEnchantment(enchant, level);
+									}
+								}
+							}else{
+								String enchant = d.split(":")[0];
+								if(isEnchantment(enchant)){
+									item.addCEEnchantment(getFromName(enchant), Integer.parseInt(d.split(":")[1]));
+								}else if(Main.CustomE.isEnchantment(enchant)){
+									item.addCustomEnchantment(enchant, Integer.parseInt(d.split(":")[1]));
+								}
+							}
+						}else{
+							String enchant = d;
+							if(isEnchantment(enchant)){
+								item.addCEEnchantment(getFromName(enchant), 1);
+							}else if(Main.CustomE.isEnchantment(enchant)){
+								item.addCustomEnchantment(enchant, 1);
+							}
+						}
+					}
+				}
+			}
+			items.add(item.build());
+		}
+		return items;
+	}
+	
+	private ArrayList<ItemStack> getInfoGKit(ArrayList<String> itemStrings){
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		for(String i : itemStrings){
+			String type = "";
+			int amount = 0;
+			String name = "";
+			ArrayList<String> lore = new ArrayList<String>();
+			ArrayList<String> customEnchantments = new ArrayList<String>();
+			HashMap<Enchantment, Integer> enchantments = new HashMap<Enchantment, Integer>();
+			for(String d : i.split(", ")){
+				if(d.startsWith("Item:")){
+					d = d.replace("Item:", "");
+					type = d;
+				}else if(d.startsWith("Amount:")){
+					d = d.replace("Amount:", "");
+					if(Methods.isInt(d)){
+						amount = Integer.parseInt(d);
+					}
+				}else if(d.startsWith("Name:")){
+					d = d.replaceAll("Name:", "");
+					name = d;
+				}else if(d.startsWith("Lore:")){
+					d = d.replace("Lore:", "");
+					if(d.contains(",")){
+						for(String D : d.split(",")){
+							lore.add(D);
+						}
+					}else{
+						lore.add(d);
+					}
+				}else if(d.startsWith("Enchantments:")){
+					d = d.replace("Enchantments:", "");
+					if(d.contains(",")){
+						for(String D : d.split(",")){
+							if(D.contains(":")){
+								if(D.contains("-")){
+									customEnchantments.add("&7" + D.replaceAll(":", " "));
+								}else{
+									if(Enchantment.getByName(D.split(":")[0]) != null){
+										enchantments.put(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
+									}
+									for(Enchantment en : Enchantment.values()){
+										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
+											enchantments.put(en, Integer.parseInt(D.split(":")[1]));
+										}
+									}
+								}
+							}else{
+								if(Enchantment.getByName(D) != null){
+									enchantments.put(Enchantment.getByName(D), 1);
+								}
+								for(Enchantment en : Enchantment.values()){
+									if(Methods.getEnchantmentName(en).equalsIgnoreCase(D)){
+										enchantments.put(en, 1);
+									}
+								}
+							}
+						}
+					}else{
+						if(d.contains(":")){
+							if(Enchantment.getByName(d.split(":")[0]) != null){
+								enchantments.put(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
+							}
+							for(Enchantment en : Enchantment.values()){
+								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
+									enchantments.put(en, Integer.parseInt(d.split(":")[1]));
+								}
+							}
+						}else{
+							if(Enchantment.getByName(d) != null){
+								enchantments.put(Enchantment.getByName(d), 1);
+							}
+							for(Enchantment en : Enchantment.values()){
+								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d)){
+									enchantments.put(en, 1);
+								}
+							}
+						}
+					}
+				}else if(d.startsWith("CustomEnchantments:")){
+					d = d.replace("CustomEnchantments:", "");
+					for(String D : d.split(",")){
+						customEnchantments.add("&7" + D.replaceAll(":", " "));
+					}
+				}
+			}
+			lore.addAll(0, customEnchantments);
+			items.add(Methods.makeItem(type, amount, name, lore, enchantments));
+		}
+		return items;
+	}
+	
+	private static Integer pickLevel(int max, int min){
+		max++;
+		Random i = new Random();
+		return min+i.nextInt(max-min);
+	}
+	
+}
+>>>>>>> Stashed changes:src/me/BadBones69/CrazyEnchantments/API/CrazyEnchantments.java

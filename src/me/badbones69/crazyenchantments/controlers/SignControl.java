@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Controlers;
+package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,11 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.Currency;
-import me.BadBones69.CrazyEnchantments.API.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
 
 public class SignControl implements Listener{
 	
@@ -109,10 +110,12 @@ public class SignControl implements Listener{
 					}
 					for(String cat : config.getConfigurationSection("Categories").getKeys(false)){
 						if(type.equalsIgnoreCase(cat)){
+							Currency currency = null;
+							int cost = 0;
 							if(player.getGameMode() != GameMode.CREATIVE){
 								if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))){
-									Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
-									int cost = config.getInt("Categories." + cat + ".Cost");
+									currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
+									cost = config.getInt("Categories." + cat + ".Cost");
 									if(CurrencyAPI.canBuy(player, currency, cost)){
 										CurrencyAPI.takeCurrency(player, currency, cost);
 									}else{
@@ -135,15 +138,23 @@ public class SignControl implements Listener{
 									}
 								}
 							}
-							ItemStack item = EnchantmentControl.pick(cat);
-							item = Methods.addGlow(item);
+							ItemStack book = EnchantmentControl.pick(cat);
+							book = Methods.addGlow(book);
 							String C = config.getString("Categories." + cat + ".Name");
 							if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")){
-								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
-								.replaceAll("%BookName%", item.getItemMeta().getDisplayName()).replaceAll("%bookname%", item.getItemMeta().getDisplayName())
+								player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
+								.replaceAll("%BookName%", book.getItemMeta().getDisplayName()).replaceAll("%bookname%", book.getItemMeta().getDisplayName())
 								.replaceAll("%Category%", C).replaceAll("%category%", C)));
 							}
-							player.getInventory().addItem(item);
+							boolean isCustom = Main.CustomE.isEnchantmentBook(book);
+							BuyBookEvent event;
+							if(isCustom){
+								event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, null, Main.CustomE.convertToCEBook(book));
+							}else{
+								event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book), null);
+							}
+							Bukkit.getPluginManager().callEvent(event);
+							player.getInventory().addItem(book);
 							return;
 						}
 					}

@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

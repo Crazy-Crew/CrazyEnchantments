@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.Enchantments;
+package me.badbones69.crazyenchantments.enchantments;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,17 +35,17 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import me.BadBones69.CrazyEnchantments.Main;
-import me.BadBones69.CrazyEnchantments.Methods;
-import me.BadBones69.CrazyEnchantments.API.CEnchantments;
-import me.BadBones69.CrazyEnchantments.API.CrazyEnchantments;
-import me.BadBones69.CrazyEnchantments.API.Events.AngelUseEvent;
-import me.BadBones69.CrazyEnchantments.API.Events.ArmorEquipEvent;
-import me.BadBones69.CrazyEnchantments.API.Events.AuraActiveEvent;
-import me.BadBones69.CrazyEnchantments.API.Events.EnchantmentUseEvent;
-import me.BadBones69.CrazyEnchantments.API.Events.HellForgedUseEvent;
-import me.BadBones69.CrazyEnchantments.multisupport.SpartanSupport;
-import me.BadBones69.CrazyEnchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.events.AngelUseEvent;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.api.events.AuraActiveEvent;
+import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
+import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
+import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class Armor implements Listener{
 	

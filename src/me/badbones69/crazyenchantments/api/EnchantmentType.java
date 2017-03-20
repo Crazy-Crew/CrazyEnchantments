@@ -1,10 +1,10 @@
-package me.BadBones69.CrazyEnchantments.API;
+package me.badbones69.crazyenchantments.api;
 
 import java.util.ArrayList;
 
 import org.bukkit.Material;
 
-import me.BadBones69.CrazyEnchantments.Main;
+import me.badbones69.crazyenchantments.Main;
 
 public enum EnchantmentType{
 	
@@ -21,8 +21,8 @@ public enum EnchantmentType{
 	TOOL("Tool", isTool()), 
 	ALL("All", isAll());
 	
-	String name;
-	ArrayList<Material> items;
+	private String name;
+	private ArrayList<Material> items;
 	
 	/**\
 	 * 

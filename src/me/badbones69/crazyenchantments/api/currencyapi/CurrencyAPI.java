@@ -1,8 +1,8 @@
-package me.BadBones69.CrazyEnchantments.API.currencyapi;
+package me.badbones69.crazyenchantments.api.currencyapi;
 
 import org.bukkit.entity.Player;
 
-import me.BadBones69.CrazyEnchantments.API.Version;
+import me.badbones69.crazyenchantments.api.Version;
 
 public class CurrencyAPI {
 	

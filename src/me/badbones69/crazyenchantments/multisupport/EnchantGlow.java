@@ -1,4 +1,4 @@
-package me.BadBones69.CrazyEnchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport;
 
 import java.lang.reflect.Field;
 
