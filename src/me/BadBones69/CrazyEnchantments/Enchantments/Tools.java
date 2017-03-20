@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -27,66 +28,16 @@ import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 
 public class Tools implements Listener{
 
-	private HashMap<Player, HashMap<String, Boolean>> effect = new HashMap<Player, HashMap<String, Boolean>>();
-	private HashMap<Player, HashMap<String, Boolean>> hadEnchant = new HashMap<Player, HashMap<String, Boolean>>();
-	private int time = Integer.MAX_VALUE;
+	private int time = 5 * 20;
 	
 	@EventHandler
 	public void onMove(PlayerMoveEvent e){
-		Player player = e.getPlayer();
-		ItemStack item = Methods.getItemInHand(player);
-		HashMap<String, Boolean> Trigger = new HashMap<String, Boolean>();
-		Trigger.put("Haste", false);
-		Trigger.put("Oxygenate", false);
-		Boolean Haste = false;
-		Boolean Ox = false;
-		if(Main.CE.hasEnchantments(item)){
-			if(Main.CE.hasEnchantment(item, CEnchantments.HASTE)){
-				if(CEnchantments.HASTE.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						int power = Main.CE.getPower(item, CEnchantments.HASTE);
-						Trigger.put("Haste", true);
-						player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power-1));
-						Haste=true;
-						hadEnchant.put(player, Trigger);
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(item, CEnchantments.OXYGENATE)){
-				if(CEnchantments.OXYGENATE.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						Trigger.put("Oxygenate", true);
-						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
-						Ox = true;
-						hadEnchant.put(player, Trigger);
-					}
-				}
-			}
-		}
-		if(!Ox){
-			Trigger.put("Oxygenate", false);
-		}
-		if(!Haste){
-			Trigger.put("Haste", false);
-		}
-		effect.put(player, Trigger);
-		if(effect.containsKey(player)&&hadEnchant.containsKey(player)){
-			if(!effect.get(player).get("Haste")&&hadEnchant.get(player).get("Haste")){
-				player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-				Trigger.put("Haste", false);
-				hadEnchant.put(player, Trigger);
-			}
-			if(!effect.get(player).get("Oxygenate")&&hadEnchant.get(player).get("Oxygenate")){
-				player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-				Trigger.put("Oxygenate", false);
-				hadEnchant.put(player, Trigger);
-			}
-			effect.remove(player);
-		}
+		updateEffects(e.getPlayer());
+	}
+	
+	@EventHandler
+	public void onPlayerClick(PlayerInteractEvent e){
+		updateEffects(e.getPlayer());
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -97,6 +48,7 @@ public class Tools implements Listener{
 		if(e.isCancelled() || block.getType() == Material.AIR){
 			return;
 		}
+		updateEffects(player);
 		if(block.getType().toString().toLowerCase().contains("shulker_box") || block.getType().toString().toLowerCase().contains("chest")){
 			return;
 		}
@@ -217,9 +169,37 @@ public class Tools implements Listener{
 		}
 	}
 	
+	private void updateEffects(Player player){
+		ItemStack item = Methods.getItemInHand(player);
+		if(Main.CE.hasEnchantments(item)){
+			if(Main.CE.hasEnchantment(item, CEnchantments.HASTE)){
+				if(CEnchantments.HASTE.isEnabled()){
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()){
+						int power = Main.CE.getPower(item, CEnchantments.HASTE);
+						player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+						player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power -1));
+					}
+				}
+			}
+			if(Main.CE.hasEnchantment(item, CEnchantments.OXYGENATE)){
+				if(CEnchantments.OXYGENATE.isEnabled()){
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()){
+						player.removePotionEffect(PotionEffectType.WATER_BREATHING);
+						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
+					}
+				}
+			}
+		}
+	}
+	
 	private ArrayList<Material> getXPOres(){
 		ArrayList<Material> ores = new ArrayList<Material>();
 		ores.add(Material.COAL_ORE);
+		ores.add(Material.QUARTZ_ORE);
 		ores.add(Material.DIAMOND_ORE);
 		ores.add(Material.EMERALD_ORE);
 		ores.add(Material.REDSTONE_ORE);
@@ -231,6 +211,7 @@ public class Tools implements Listener{
 	private HashMap<Material, Material> getOres(){
 		HashMap<Material, Material> ores = new HashMap<Material, Material>();
 		ores.put(Material.COAL_ORE, Material.COAL);
+		ores.put(Material.QUARTZ_ORE, Material.QUARTZ);
 		ores.put(Material.IRON_ORE, Material.IRON_INGOT);
 		ores.put(Material.GOLD_ORE, Material.GOLD_INGOT);
 		ores.put(Material.DIAMOND_ORE, Material.DIAMOND);
@@ -244,6 +225,7 @@ public class Tools implements Listener{
 	private ArrayList<Material> getItems(){
 		ArrayList<Material> items = new ArrayList<Material>();
 		items.add(Material.COAL_ORE);
+		items.add(Material.QUARTZ_ORE);
 		items.add(Material.DIAMOND_ORE);
 		items.add(Material.EMERALD_ORE);
 		items.add(Material.REDSTONE_ORE);

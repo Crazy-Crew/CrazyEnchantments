@@ -21,6 +21,7 @@ public class CEPlayer {
 	 * @param player The player.
 	 * @param souls How many souls they have.
 	 * @param soulsActive If the soul uses is active.
+	 * @param cooldowns The cooldowns the player has.
 	 */
 	public CEPlayer(Player player, int souls, boolean soulsActive, ArrayList<Cooldown> cooldowns){
 		this.souls = souls;

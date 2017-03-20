@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDispenseEvent;
@@ -35,7 +36,6 @@ import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 public class ArmorListener implements Listener{
 	
 	private Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-	
 	private final List<String> blockedMaterials;
 
 	public ArmorListener(){
@@ -210,26 +210,28 @@ public class ArmorListener implements Listener{
 				}else{// 1.10+
 					if(e.getHotbarButton() >= 0){
 						newArmorPiece = e.getWhoClicked().getInventory().getItem(e.getHotbarButton());
-						if(ArmorType.matchType(oldArmorPiece) != null || oldArmorPiece.getType() == Material.AIR){
-							if(ArmorType.matchType(newArmorPiece) != null || newArmorPiece == null){
-								if(ArmorType.matchType(oldArmorPiece) != null){
-									if(e.getRawSlot() != ArmorType.matchType(oldArmorPiece).getSlot()){
-										return;
+						if(oldArmorPiece != null){
+							if(ArmorType.matchType(oldArmorPiece) != null || oldArmorPiece.getType() == Material.AIR){
+								if(ArmorType.matchType(newArmorPiece) != null || newArmorPiece == null){
+									if(ArmorType.matchType(oldArmorPiece) != null){
+										if(e.getRawSlot() != ArmorType.matchType(oldArmorPiece).getSlot()){
+											return;
+										}
 									}
-								}
-								if(ArmorType.matchType(newArmorPiece) != null){
-									if(e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()){
-										return;
+									if(ArmorType.matchType(newArmorPiece) != null){
+										if(e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()){
+											return;
+										}
 									}
-								}
-								EquipMethod method = EquipMethod.DRAG;
-								if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey){
-									method = EquipMethod.HOTBAR_SWAP;
-								}
-								ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
-								Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
-								if(armorEquipEvent.isCancelled()){
-									e.setCancelled(true);
+									EquipMethod method = EquipMethod.DRAG;
+									if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey){
+										method = EquipMethod.HOTBAR_SWAP;
+									}
+									ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
+									Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+									if(armorEquipEvent.isCancelled()){
+										e.setCancelled(true);
+									}
 								}
 							}
 						}
@@ -239,10 +241,13 @@ public class ArmorListener implements Listener{
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void playerInteractEvent(PlayerInteractEvent e){
 		if(e.getAction() == Action.PHYSICAL) return;
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if(e.getAction() != Action.RIGHT_CLICK_AIR){
+				if(e.isCancelled()) return;
+			}
 			final Player player = e.getPlayer();
 			if(e.getClickedBlock() != null && e.getAction() == Action.RIGHT_CLICK_BLOCK){// Having both of these checks is useless, might as well do it though.
 				// Some blocks have actions when you right click them which stops the client from equipping the armor in hand.

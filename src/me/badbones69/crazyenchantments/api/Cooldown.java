@@ -11,8 +11,8 @@ public class Cooldown {
 	
 	/**
 	 * 
-	 * @param gkit
-	 * @param cooldown
+	 * @param gkit The gkit this is tied to.
+	 * @param cooldown When the cooldown ends.
 	 */
 	public Cooldown(GKitz gkit, Calendar cooldown){
 		this.gkit = gkit;

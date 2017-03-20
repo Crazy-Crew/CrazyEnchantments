@@ -456,7 +456,7 @@ public class CrazyEnchantments {
 	 * @param item Item you want to add the enchantment to.
 	 * @param enchant Enchantment you want added.
 	 * @param level Tier of the enchantment.
-	 * @return
+	 * @return The item with the enchantment on it.
 	 */
 	public ItemStack addEnchantment(ItemStack item, CEnchantments enchant, Integer level){
 		if(hasEnchantment(item, enchant)){
@@ -539,6 +539,9 @@ public class CrazyEnchantments {
 	
 	/**
 	 * 
+	 * @param player The player you are adding it to.
+	 * @param include Include an item.
+	 * @param exclude Exclude an item.
 	 * @param enchantment The enchantment you want the max level effects from.
 	 * @return The list of all the max potion effects based on all the armor on the player.
 	 */
@@ -794,7 +797,9 @@ public class CrazyEnchantments {
 	}
 	
 	/**
-	 * Reloads all the kit items.
+	 * Reloads the gkit items.
+	 * @param itemStrings The items as a string.
+	 * @return A list of all the ItemStacks.
 	 */
 	public ArrayList<ItemStack> getKitItems(ArrayList<String> itemStrings){
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();

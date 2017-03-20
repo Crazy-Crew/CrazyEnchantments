@@ -65,14 +65,18 @@ public class GKitzControler implements Listener{
 			ItemStack displayItem = kit.getDisplayItem().clone();
 			ItemMeta m = displayItem.getItemMeta();
 			List<String> lore = new ArrayList<String>();
-			for(String l : displayItem.getItemMeta().getLore()){
-				if(p.canUseGKit(kit)){
-					lore.add(new Cooldown(kit, Calendar.getInstance()).getCooldownLeft(l));
-				}else{
-					if(p.hasGkitPermission(kit)){
-						lore.add(p.getCooldown(kit).getCooldownLeft(l));
-					}else{
-						lore.add(new Cooldown(kit, Calendar.getInstance()).getCooldownLeft(l));
+			if(displayItem.hasItemMeta()){
+				if(displayItem.getItemMeta().hasLore()){
+					for(String l : displayItem.getItemMeta().getLore()){
+						if(p.canUseGKit(kit)){
+							lore.add(new Cooldown(kit, Calendar.getInstance()).getCooldownLeft(l));
+						}else{
+							if(p.hasGkitPermission(kit)){
+								lore.add(p.getCooldown(kit).getCooldownLeft(l));
+							}else{
+								lore.add(new Cooldown(kit, Calendar.getInstance()).getCooldownLeft(l));
+							}
+						}
 					}
 				}
 			}

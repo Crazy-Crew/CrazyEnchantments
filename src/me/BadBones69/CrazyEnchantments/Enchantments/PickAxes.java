@@ -393,6 +393,7 @@ public class PickAxes implements Listener{
 	private HashMap<Material, Material> getOres(){
 		HashMap<Material, Material> ores = new HashMap<Material, Material>();
 		ores.put(Material.COAL_ORE, Material.COAL);
+		ores.put(Material.QUARTZ_ORE, Material.QUARTZ);
 		ores.put(Material.IRON_ORE, Material.IRON_INGOT);
 		ores.put(Material.GOLD_ORE, Material.GOLD_INGOT);
 		ores.put(Material.DIAMOND_ORE, Material.DIAMOND);
@@ -406,6 +407,7 @@ public class PickAxes implements Listener{
 	private ArrayList<Material> getItems(){
 		ArrayList<Material> items = new ArrayList<Material>();
 		items.add(Material.COAL_ORE);
+		items.add(Material.QUARTZ_ORE);
 		items.add(Material.DIAMOND_ORE);
 		items.add(Material.EMERALD_ORE);
 		items.add(Material.REDSTONE_ORE);

@@ -18,13 +18,15 @@ public class GKitz{
 	private ArrayList<String> itemStrings;
 	
 	/**
-	 * 
-	 * @param name
-	 * @param slot
-	 * @param cooldown
-	 * @param displayItem
-	 * @param commands
-	 * @param items
+	 * Create a new gkit.
+	 * @param name The name of the gkit.
+	 * @param slot The slot it will be on in the GUI.
+	 * @param cooldown The cooldown that will be tied to it.
+	 * @param displayItem The display item that will be in the GUI.
+	 * @param preview The preview items.
+	 * @param commands The commands that will be run.
+	 * @param items The items that will be given.
+	 * @param itemStrings The items as a string.
 	 */
 	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview, ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings){
 		this.name = name;
