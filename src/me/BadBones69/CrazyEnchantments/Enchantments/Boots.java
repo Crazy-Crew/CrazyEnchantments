@@ -21,6 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.ParticleEffect;
 import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
@@ -69,8 +70,14 @@ public class Boots implements Listener{
 			if(Main.CE.hasEnchantment(NewItem, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
-						if(player.getGameMode()!=GameMode.CREATIVE){
-							player.setAllowFlight(true);
+						if(player.getGameMode() != GameMode.CREATIVE){
+							if(Version.getVersion().comparedTo(Version.v1_8_R1) >= 1){
+								if(player.getGameMode() != GameMode.ADVENTURE){
+									player.setAllowFlight(true);
+								}
+							}else{
+								player.setAllowFlight(true);
+							}
 						}
 					}
 				}
@@ -95,7 +102,13 @@ public class Boots implements Listener{
 			if(Main.CE.hasEnchantment(OldItem, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(player.getGameMode()!=GameMode.CREATIVE){
-						player.setAllowFlight(false);
+						if(Version.getVersion().comparedTo(Version.v1_8_R1) >= 1){
+							if(player.getGameMode() != GameMode.ADVENTURE){
+								player.setAllowFlight(false);
+							}
+						}else{
+							player.setAllowFlight(false);
+						}
 					}
 				}
 			}
@@ -143,18 +156,34 @@ public class Boots implements Listener{
 						}else{
 							if(player.isFlying()){
 								if(player.getGameMode() != GameMode.CREATIVE){
-									player.setFlying(false);
-									player.setAllowFlight(false);
-									Flying.remove(player);
+									if(Version.getVersion().comparedTo(Version.v1_8_R1) >= 1){
+										if(player.getGameMode() != GameMode.ADVENTURE){
+											player.setFlying(false);
+											player.setAllowFlight(false);
+											Flying.remove(player);
+										}
+									}else{
+										player.setFlying(false);
+										player.setAllowFlight(false);
+										Flying.remove(player);
+									}
 								}
 							}
 						}
 					}else{
 						if(player.isFlying()){
 							if(player.getGameMode() != GameMode.CREATIVE){
-								player.setFlying(false);
-								player.setAllowFlight(false);
-								Flying.remove(player);
+								if(Version.getVersion().comparedTo(Version.v1_8_R1) >= 1){
+									if(player.getGameMode() != GameMode.ADVENTURE){
+										player.setFlying(false);
+										player.setAllowFlight(false);
+										Flying.remove(player);
+									}
+								}else{
+									player.setFlying(false);
+									player.setAllowFlight(false);
+									Flying.remove(player);
+								}
 							}
 						}
 					}

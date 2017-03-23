@@ -19,18 +19,17 @@ import me.badbones69.crazyenchantments.Methods;
 
 public class CrazyEnchantments {
 	
-	private int rageMaxLevel;
-	private ArrayList<GKitz> gkitz = new ArrayList<GKitz>();
-	private ArrayList<CEPlayer> players = new ArrayList<CEPlayer>();
-	private ArrayList<Material> blockList = new ArrayList<Material>();
-	public static CrazyEnchantments instance = new CrazyEnchantments();
+	private static int rageMaxLevel;
+	private static ArrayList<GKitz> gkitz = new ArrayList<GKitz>();
+	private static ArrayList<CEPlayer> players = new ArrayList<CEPlayer>();
+	private static ArrayList<Material> blockList = new ArrayList<Material>();
 	
 	/**
 	 * 
 	 * @return The instance of CrazyEnchantments.
 	 */
 	public static CrazyEnchantments getInstance() {
-		return instance;
+		return Main.CE;
 	}
 	
 	/**
@@ -38,6 +37,7 @@ public class CrazyEnchantments {
 	 */
 	public void load(){
 		blockList.clear();
+		gkitz.clear();
 		for(String id : Main.settings.getBlockList().getStringList("Block-List")){
 			try{
 				blockList.add(Methods.makeItem(id, 1).getType());

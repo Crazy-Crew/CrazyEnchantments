@@ -210,8 +210,8 @@ public class CustomEnchantments implements Listener{
 		}
 	}
 
-	HashMap<Projectile, Integer> Power = new HashMap<Projectile, Integer>();
-	HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
+	private HashMap<Projectile, Integer> Power = new HashMap<Projectile, Integer>();
+	private HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
 	
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
