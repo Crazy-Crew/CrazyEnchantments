@@ -60,14 +60,12 @@ import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class Main extends JavaPlugin implements Listener{
 	
-	private static Main main;
-	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CrazyEnchantments CE = CrazyEnchantments.getInstance();
+	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
 	
 	@Override
 	public void onEnable(){
-		main = this;
 		settings.setup(this);
 		Methods.hasUpdate();
 		Boots.onStart();
@@ -143,7 +141,6 @@ public class Main extends JavaPlugin implements Listener{
 	
 	@Override
 	public void onDisable(){
-		main = null;
 		Armor.removeAllies();
 		for(Player player : Bukkit.getOnlinePlayers()){
 			CE.unloadCEPlayer(player);
@@ -855,10 +852,6 @@ public class Main extends JavaPlugin implements Listener{
 			return true;
 		}
 		return false;
-	}
-	
-	public static Main getPlugin(){
-		return main;
 	}
 	
 	@EventHandler

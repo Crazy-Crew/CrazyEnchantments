@@ -20,16 +20,17 @@ import me.badbones69.crazyenchantments.Methods;
 public class CrazyEnchantments {
 	
 	private static int rageMaxLevel;
-	private static ArrayList<GKitz> gkitz = new ArrayList<GKitz>();
-	private static ArrayList<CEPlayer> players = new ArrayList<CEPlayer>();
-	private static ArrayList<Material> blockList = new ArrayList<Material>();
+	private ArrayList<GKitz> gkitz = new ArrayList<GKitz>();
+	private ArrayList<CEPlayer> players = new ArrayList<CEPlayer>();
+	private ArrayList<Material> blockList = new ArrayList<Material>();
+	private static CrazyEnchantments instance = new CrazyEnchantments();
 	
 	/**
 	 * 
 	 * @return The instance of CrazyEnchantments.
 	 */
 	public static CrazyEnchantments getInstance() {
-		return Main.CE;
+		return instance;
 	}
 	
 	/**
