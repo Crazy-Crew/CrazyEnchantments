@@ -671,7 +671,11 @@ public class Methods{
 	
 	public static Integer percentPick(int max, int min){
 		Random i = new Random();
-		return min+i.nextInt(max-min);
+		if (max == min){
+			return max;
+		}else{
+			return min+i.nextInt(max-min);
+		}
 	}
 	
 	public static boolean isInvFull(Player player){
