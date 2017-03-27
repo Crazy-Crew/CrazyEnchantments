@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
+import me.badbones69.crazyenchantments.api.events.ArmorType;
 
 public class CEPlayer {
 	
@@ -103,8 +107,51 @@ public class CEPlayer {
 		this.soulsActive = soulsActive;
 	}
 	
+	/**
+	 * Give a player a gkit.
+	 * @param kit The gkit you wish to give them.
+	 */
 	public void giveGKit(GKitz kit){
 		for(ItemStack item : kit.getItems()){
+			if(kit.canAutoEquipt()){
+				if(item.getType().toString().toLowerCase().contains("helmet")){
+					if(player.getEquipment().getHelmet() == null || player.getEquipment().getHelmet().getType() == Material.AIR){
+						ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.HELMET, new ItemStack(Material.AIR), item);
+						Bukkit.getPluginManager().callEvent(event);
+						if(!event.isCancelled()){
+							player.getEquipment().setHelmet(item);
+						}
+						continue;
+					}
+				}else if(item.getType().toString().toLowerCase().contains("chestplate")){
+					if(player.getEquipment().getChestplate() == null || player.getEquipment().getChestplate().getType() == Material.AIR){
+						ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.CHESTPLATE, new ItemStack(Material.AIR), item);
+						Bukkit.getPluginManager().callEvent(event);
+						if(!event.isCancelled()){
+							player.getEquipment().setChestplate(item);
+						}
+						continue;
+					}
+				}else if(item.getType().toString().toLowerCase().contains("leggings")){
+					if(player.getEquipment().getLeggings() == null || player.getEquipment().getLeggings().getType() == Material.AIR){
+						ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.LEGGINGS, new ItemStack(Material.AIR), item);
+						Bukkit.getPluginManager().callEvent(event);
+						if(!event.isCancelled()){
+							player.getEquipment().setLeggings(item);
+						}
+						continue;
+					}
+				}else if(item.getType().toString().toLowerCase().contains("boots")){
+					if(player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR){
+						ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
+						Bukkit.getPluginManager().callEvent(event);
+						if(!event.isCancelled()){
+							player.getEquipment().setBoots(item);
+						}
+						continue;
+					}
+				}
+			}
 			if(Methods.isInvFull(player)){
 				player.getWorld().dropItemNaturally(player.getLocation(), item);
 			}else{
@@ -117,6 +164,11 @@ public class CEPlayer {
 		}
 	}
 	
+	/**
+	 * If the player has permission to use the gkit.
+	 * @param kit The gkit you are checking.
+	 * @return Ture if they can use it and false if they can't.
+	 */
 	public Boolean hasGkitPermission(GKitz kit){
 		if(player.hasPermission("crazyenchantments.bypass")){
 			return true;
@@ -125,6 +177,11 @@ public class CEPlayer {
 		}
 	}
 	
+	/**
+	 * If the player can use the gkit. Checks their cooldowns and permissions.
+	 * @param kit The gkit you want to check.
+	 * @return Ture if they dont have a cooldown and they have permission.
+	 */
 	public Boolean canUseGKit(GKitz kit){
 		if(player.hasPermission("crazyenchantments.bypass")){
 			return true;
@@ -142,10 +199,19 @@ public class CEPlayer {
 		return true;
 	}
 	
+	/**
+	 * Get all the cooldowns the player has.
+	 * @return The cooldowns the player has.
+	 */
 	public ArrayList<Cooldown> getCooldowns(){
 		return this.cooldowns;
 	}
 	
+	/**
+	 * Get a cooldown of a gkit.
+	 * @param kit The gkit you are checking.
+	 * @return The cooldown object the player has.
+	 */
 	public Cooldown getCooldown(GKitz kit){
 		for(Cooldown cooldown : cooldowns){
 			if(cooldown.getGKitz() == kit){
@@ -155,10 +221,25 @@ public class CEPlayer {
 		return null;
 	}
 	
+	/**
+	 * Add a cooldown to a player.
+	 * @param cooldown The cooldown you are adding.
+	 */
 	public void addCooldown(Cooldown cooldown){
+		ArrayList<Cooldown> cooldowns = new ArrayList<Cooldown>();
+		for(Cooldown c : getCooldowns()){
+			if(c.getGKitz().getName().equalsIgnoreCase(cooldown.getGKitz().getName())){
+				cooldowns.add(c);
+			}
+		}
+		this.cooldowns.removeAll(cooldowns);
 		this.cooldowns.add(cooldown);
 	}
 	
+	/**
+	 * Add a cooldown of a gkit to a player.
+	 * @param kit The gkit you want to get the cooldown for.
+	 */
 	public void addCooldown(GKitz kit){
 		Calendar cooldown = Calendar.getInstance();
 		for(String i : kit.getCooldown().split(" ")){
@@ -175,11 +256,29 @@ public class CEPlayer {
 				cooldown.add(Calendar.SECOND, Integer.parseInt(i.replaceAll("S", "").replaceAll("s", "")));
 			}
 		}
-		cooldowns.add(new Cooldown(kit, cooldown));
+		addCooldown(new Cooldown(kit, cooldown));
 	}
 	
+	/**
+	 * Remove a cooldown from a player.
+	 * @param cooldown The cooldown you want to remove.
+	 */
 	public void removeCooldown(Cooldown cooldown){
 		this.cooldowns.remove(cooldown);
+	}
+	
+	/**
+	 * Remove a cooldown from a player.
+	 * @param kit The gkit cooldown you want to remove.
+	 */
+	public void removeCooldown(GKitz kit){
+		ArrayList<Cooldown> cooldowns = new ArrayList<Cooldown>();
+		for(Cooldown c : getCooldowns()){
+			if(c.getGKitz().getName().equalsIgnoreCase(kit.getName())){
+				cooldowns.add(c);
+			}
+		}
+		this.cooldowns.removeAll(cooldowns);
 	}
 	
 }

@@ -38,7 +38,6 @@ import org.bukkit.util.Vector;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.AuraActiveEvent;
@@ -62,12 +61,11 @@ public class Armor implements Listener{
 		Player player = e.getPlayer();
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
-		CrazyEnchantments CE = Main.CE;
-		if(CE.hasEnchantments(OldItem)){// Removing the potion effects.
-			for(CEnchantments ench : CE.getEnchantmentPotions().keySet()){
-				if(CE.hasEnchantment(OldItem, ench)){
+		if(Main.CE.hasEnchantments(OldItem)){// Removing the potion effects.
+			for(CEnchantments ench : Main.CE.getEnchantmentPotions().keySet()){
+				if(Main.CE.hasEnchantment(OldItem, ench)){
 					if(ench.isEnabled()){
-						HashMap<PotionEffectType, Integer> effects = CE.getUpdatedEffects(player, new ItemStack(Material.AIR), OldItem, ench);
+						HashMap<PotionEffectType, Integer> effects = Main.CE.getUpdatedEffects(player, new ItemStack(Material.AIR), OldItem, ench);
 						for(PotionEffectType type : effects.keySet()){
 							if(effects.get(type) < 0){
 								player.removePotionEffect(type);
@@ -80,14 +78,14 @@ public class Armor implements Listener{
 				}
 			}
 		}
-		if(CE.hasEnchantments(NewItem)){// Adding the potion effects.
-			for(CEnchantments ench : CE.getEnchantmentPotions().keySet()){
-				if(CE.hasEnchantment(NewItem, ench)){
+		if(Main.CE.hasEnchantments(NewItem)){// Adding the potion effects.
+			for(CEnchantments ench : Main.CE.getEnchantmentPotions().keySet()){
+				if(Main.CE.hasEnchantment(NewItem, ench)){
 					if(ench.isEnabled()){
 						EnchantmentUseEvent event = new EnchantmentUseEvent(player, ench, NewItem);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()){
-							HashMap<PotionEffectType, Integer> effects = CE.getUpdatedEffects(player, NewItem, OldItem, ench);
+							HashMap<PotionEffectType, Integer> effects = Main.CE.getUpdatedEffects(player, NewItem, OldItem, ench);
 							for(PotionEffectType type : effects.keySet()){
 								if(effects.get(type) < 0){
 									player.removePotionEffect(type);

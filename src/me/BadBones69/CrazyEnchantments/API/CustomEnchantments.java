@@ -59,7 +59,7 @@ public class CustomEnchantments implements Listener{
 							String[] b = po.split(", ");
 							for(String B : b){
 								for(String P : Methods.getPotions()){
-									if(B.contains(P+":")){
+									if(B.toLowerCase().startsWith(P.toLowerCase()+":")){
 										potion = PotionEffectType.getByName(P);
 										amp = Integer.parseInt(B.replaceAll(P+":", ""));
 									}
@@ -85,7 +85,7 @@ public class CustomEnchantments implements Listener{
 							String[] b = po.split(", ");
 							for(String B : b){
 								for(String P : Methods.getPotions()){
-									if(B.contains(P+":")){
+									if(B.toLowerCase().startsWith(P.toLowerCase()+":")){
 										potion = PotionEffectType.getByName(P);
 									}
 								}
@@ -127,7 +127,7 @@ public class CustomEnchantments implements Listener{
 												String[] b = po.split(", ");
 												for(String B : b){
 													for(String P : Methods.getPotions()){
-														if(B.contains(P)){
+														if(B.toLowerCase().startsWith(P.toLowerCase())){
 															potion = PotionEffectType.getByName(P);
 															amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
 														}
@@ -163,7 +163,7 @@ public class CustomEnchantments implements Listener{
 												String[] b = po.split(", ");
 												for(String B : b){
 													for(String P : Methods.getPotions()){
-														if(B.contains(P)){
+														if(B.toLowerCase().startsWith(P.toLowerCase())){
 															potion = PotionEffectType.getByName(P);
 															amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
 														}

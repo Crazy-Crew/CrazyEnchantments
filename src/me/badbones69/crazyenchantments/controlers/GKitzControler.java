@@ -23,7 +23,6 @@ import me.badbones69.crazyenchantments.api.Cooldown;
 import me.badbones69.crazyenchantments.api.GKitz;
 import me.badbones69.crazyenchantments.api.Version;
 
-
 public class GKitzControler implements Listener{
 	
 	public static void openGUI(Player player){

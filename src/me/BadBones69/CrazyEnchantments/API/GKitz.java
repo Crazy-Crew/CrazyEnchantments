@@ -11,6 +11,7 @@ public class GKitz{
 	private int slot;
 	private String name;
 	private String cooldown;
+	private Boolean autoEquip;
 	private ItemStack displayItem;
 	private ArrayList<String> commands;
 	private ArrayList<ItemStack> items;
@@ -27,14 +28,17 @@ public class GKitz{
 	 * @param commands The commands that will be run.
 	 * @param items The items that will be given.
 	 * @param itemStrings The items as a string.
+	 * @param autoEquip This is if the armor equipts when given.
 	 */
-	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview, ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings){
+	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview,
+			ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings, Boolean autoEquip){
 		this.name = name;
 		this.slot = slot;
 		this.items = items;
 		this.preview = preview;
 		this.cooldown = cooldown;
 		this.commands = commands;
+		this.autoEquip = autoEquip;
 		this.displayItem = displayItem;
 		this.itemStrings = itemStrings;
 	}
@@ -70,6 +74,10 @@ public class GKitz{
 	
 	public ArrayList<String> getItemStrings(){
 		return this.itemStrings;
+	}
+	
+	public Boolean canAutoEquipt(){
+		return this.autoEquip;
 	}
 	
 }

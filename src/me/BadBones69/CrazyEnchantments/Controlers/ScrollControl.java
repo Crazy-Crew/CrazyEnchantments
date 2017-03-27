@@ -26,7 +26,6 @@ import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEBook;
 import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.CustomEnchantments;
 import me.badbones69.crazyenchantments.api.EnchantmentType;
@@ -155,13 +154,12 @@ public class ScrollControl implements Listener{
 	}
 	
 	public static ItemStack orderEnchantments(ItemStack item){
-		CrazyEnchantments CE = Main.CE;
 		CustomEnchantments customE = Main.CustomE;
 		HashMap<String, Integer> enchants = new HashMap<String, Integer>();
 		HashMap<String, Integer> categories = new HashMap<String, Integer>();
 		List<String> order = new ArrayList<String>();
 		ArrayList<String> enchantments = new ArrayList<String>();
-		for(CEnchantments en : CE.getItemEnchantments(item)){
+		for(CEnchantments en : Main.CE.getItemEnchantments(item)){
 			enchantments.add(en.getName());
 		}
 		for(String en : customE.getItemEnchantments(item)){
@@ -169,15 +167,15 @@ public class ScrollControl implements Listener{
 		}
 		for(String ench : enchantments){
 			int top = 0;
-			if(CE.isEnchantment(ench) || customE.isEnchantment(ench)){
-				if(CE.isEnchantment(ench)){
-					for(String cat : CE.getEnchantmentCategories(CE.getFromName(ench))){
-						if(top < CE.getCategoryRarity(cat)){
-							top = CE.getCategoryRarity(cat);
+			if(Main.CE.isEnchantment(ench) || customE.isEnchantment(ench)){
+				if(Main.CE.isEnchantment(ench)){
+					for(String cat : Main.CE.getEnchantmentCategories(Main.CE.getFromName(ench))){
+						if(top < Main.CE.getCategoryRarity(cat)){
+							top = Main.CE.getCategoryRarity(cat);
 						}
 					}
-					enchants.put(ench, CE.getPower(item, CE.getFromName(ench)));
-					CE.removeEnchantment(item, CE.getFromName(ench));
+					enchants.put(ench, Main.CE.getPower(item, Main.CE.getFromName(ench)));
+					Main.CE.removeEnchantment(item, Main.CE.getFromName(ench));
 				}else if(customE.isEnchantment(ench)){
 					for(String cat : customE.getEnchantmentCategories(ench)){
 						if(top < customE.getCategoryRarity(cat)){
@@ -195,9 +193,9 @@ public class ScrollControl implements Listener{
 		ItemMeta m = item.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
 		for(String ench : order){
-			if(CE.isEnchantment(ench)){
-				CEnchantments en = CE.getFromName(ench);
-				lore.add(en.getEnchantmentColor() + en.getCustomName() + " " + CE.convertPower(enchants.get(ench)));
+			if(Main.CE.isEnchantment(ench)){
+				CEnchantments en = Main.CE.getFromName(ench);
+				lore.add(en.getEnchantmentColor() + en.getCustomName() + " " + Main.CE.convertPower(enchants.get(ench)));
 			}else if(customE.isEnchantment(ench)){
 				lore.add(customE.getEnchantmentColor(ench) + customE.getCustomName(ench) + " " + customE.convertPower(enchants.get(ench)));
 			}

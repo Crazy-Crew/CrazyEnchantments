@@ -22,7 +22,6 @@ import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEBook;
 import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.CustomEnchantments;
 import me.badbones69.crazyenchantments.api.Version;
@@ -36,7 +35,6 @@ public class Scrambler implements Listener{
 	public void onReRoll(InventoryClickEvent e){
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
-		CrazyEnchantments CE = Main.CE;
 		CustomEnchantments CustomE = Main.CustomE;
 		if(inv != null){
 			ItemStack book = e.getCurrentItem();
@@ -45,7 +43,7 @@ public class Scrambler implements Listener{
 				if(book.getType() != Material.AIR && sc.getType() != Material.AIR){
 					if(book.getAmount() == 1 && sc.getAmount() == 1){
 						if(getScramblers().isSimilar(sc)){
-							if(CE.isEnchantmentBook(book) || CustomE.isEnchantmentBook(book)){
+							if(Main.CE.isEnchantmentBook(book) || CustomE.isEnchantmentBook(book)){
 								e.setCancelled(true);
 								player.setItemOnCursor(new ItemStack(Material.AIR));
 								if(Main.settings.getConfig().getBoolean("Settings.Scrambler.GUI.Toggle")){
@@ -69,12 +67,11 @@ public class Scrambler implements Listener{
 	 */
 	public static ItemStack getNewScrambledBook(ItemStack book){
 		ItemStack newBook = new ItemStack(Material.AIR);
-		CrazyEnchantments CE = Main.CE;
 		CustomEnchantments CustomE = Main.CustomE;
-		if(CE.isEnchantmentBook(book)){
-			CEnchantments en = CE.getEnchantmentBookEnchantmnet(book);
-			String cat = CE.getHighestEnchantmentCategory(en);
-			int lvl = CE.getBookPower(book, en);
+		if(Main.CE.isEnchantmentBook(book)){
+			CEnchantments en = Main.CE.getEnchantmentBookEnchantmnet(book);
+			String cat = Main.CE.getHighestEnchantmentCategory(en);
+			int lvl = Main.CE.getBookPower(book, en);
 			CEBook eBook = new CEBook(en, lvl);
 			int D = Methods.percentPick(Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max"), 
 					Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min"));

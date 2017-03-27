@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.11.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/Joe/Plugins/Spigot/Spigot%201.11%20JavaDoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.10.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/Joe/Desktop/Stuff/Spigot/Spigot%201.10%20JavaDoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.9.4.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.9.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.8.8.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.8.3.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.8.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.7.10.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/worldguard-6.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/worldedit-bukkit-6.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Vault.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/MassiveCore.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Factions.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/SilkSpawners.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Feudal.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/ASkyBlock.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Kingdoms.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/GriefPrevention.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/GLib.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spartan.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/CoreProtect_2.14.2.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/StackMob.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/FactionsUUID-1.6.9.5.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/AcidIsland.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/NoCheatPlus.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/DakataAntiCheat.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
