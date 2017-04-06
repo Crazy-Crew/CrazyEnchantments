@@ -23,7 +23,6 @@ import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
-import me.badbones69.crazyenchantments.multisupport.EnchantGlow;
 
 public class BlackSmith implements Listener{
 	
@@ -310,7 +309,7 @@ public class BlackSmith implements Listener{
 						int power = Main.CE.getBookPower(master, en);
 						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max){
-							item = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, en.getBookColor() + en.getCustomName() + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
+							item = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, en.getBookColor() + en.getCustomName() + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
 						}
 					}
 				}
@@ -319,7 +318,7 @@ public class BlackSmith implements Listener{
 						int power = Main.CustomE.getBookPower(master, en);
 						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
 						if(power + 1 <= max){
-							item = addGlow(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
+							item = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
 						}
 					}
 				}
@@ -541,14 +540,6 @@ public class BlackSmith implements Listener{
 		}
 		return total;
 	}
-	
-	private static ItemStack addGlow(ItemStack item, boolean toggle) {
-		if(toggle){
-			return EnchantGlow.addGlow(item);
-		}else{
-			return Methods.addGlow(item);
-		}
-    }
 	
 	private boolean inBlackSmith(int slot){
 		//The last slot in the tinker is 54

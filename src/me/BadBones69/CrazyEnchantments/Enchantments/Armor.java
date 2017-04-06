@@ -467,17 +467,17 @@ public class Armor implements Listener{
 					}
 					if(Main.CE.hasEnchantment(armor, CEnchantments.HELLFORGED)){
 						if(CEnchantments.HELLFORGED.isEnabled()){
-							if(armor.getDurability()>0){
+							if(armor.getDurability() > 0){
 								if(Methods.randomPicker(15)){
-									int dur = armor.getDurability()-Main.CE.getPower(armor, CEnchantments.HELLFORGED);
-									if(armor.getDurability()>0){
+									int durribility = armor.getDurability() - Main.CE.getPower(armor, CEnchantments.HELLFORGED);
+									if(armor.getDurability() > 0){
 										HellForgedUseEvent event = new HellForgedUseEvent(player, armor);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()){
-											if(dur>0){
-												armor.setDurability((short)dur);
+											if(durribility > 0){
+												armor.setDurability((short) durribility);
 											}else{
-												armor.setDurability((short)0);
+												armor.setDurability((short) 0);
 											}
 										}
 									}
@@ -491,15 +491,15 @@ public class Armor implements Listener{
 				if(Main.CE.hasEnchantments(item)){
 					if(Main.CE.hasEnchantment(item, CEnchantments.HELLFORGED)){
 						if(CEnchantments.HELLFORGED.isEnabled()){
-							if(item.getDurability()>0){
+							if(item.getDurability() > 0){
 								if(Methods.randomPicker(12)){
-									int dur = item.getDurability()-Main.CE.getPower(item, CEnchantments.HELLFORGED);
-									if(item.getDurability()>0){
+									int durribility = item.getDurability() - Main.CE.getPower(item, CEnchantments.HELLFORGED);
+									if(item.getDurability() > 0){
 										HellForgedUseEvent event = new HellForgedUseEvent(player, item);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()){
-											if(dur>0){
-												item.setDurability((short)dur);
+											if(durribility > 0){
+												item.setDurability((short)durribility);
 											}else{
 												item.setDurability((short)0);
 											}

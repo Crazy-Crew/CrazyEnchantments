@@ -128,6 +128,9 @@ public class Main extends JavaPlugin implements Listener{
 		}catch (IOException e) {
 			System.out.println("Error Submitting stats!");
 		}
+		try {
+			new MCUpdate(this, true);
+		} catch (IOException e) {}
 		new BukkitRunnable(){
 			@Override
 			public void run() {
@@ -769,10 +772,10 @@ public class Main extends JavaPlugin implements Listener{
 						return true;
 					}
 					sender.sendMessage(Methods.color(Methods.getPrefix()+msg.getString("Messages.Send-Enchantment-Book").replace("%Player%", player.getName()).replace("%player%", player.getName())));
-					int Smax = config.getInt("Settings.BlackScroll.SuccessChanCrazyEnchantments.Max");
-					int Smin = config.getInt("Settings.BlackScroll.SuccessChanCrazyEnchantments.Min");
-					int Dmax = config.getInt("Settings.BlackScroll.DestroyChanCrazyEnchantments.Max");
-					int Dmin = config.getInt("Settings.BlackScroll.DestroyChanCrazyEnchantments.Min");
+					int Smax = config.getInt("Settings.BlackScroll.SuccessChance.Max");
+					int Smin = config.getInt("Settings.BlackScroll.SuccessChance.Min");
+					int Dmax = config.getInt("Settings.BlackScroll.DestroyChance.Max");
+					int Dmin = config.getInt("Settings.BlackScroll.DestroyChance.Min");
 					if(customEnchant){
 						CustomEBook book = new CustomEBook(ench, lvl, amount);
 						book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
@@ -864,7 +867,7 @@ public class Main extends JavaPlugin implements Listener{
 					CEPlayer p = CE.getCEPlayer(player);
 					String name = kit.getDisplayItem().getItemMeta().getDisplayName();
 					if(p.hasGkitPermission(kit) || args.length >= 2){
-						if(p.canUseGKit(kit)){
+						if(p.canUseGKit(kit) || sender.hasPermission("crazyenchantments.admin")){
 							p.giveGKit(kit);
 							player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Received-GKit")
 									.replaceAll("%Kit%", name).replaceAll("%kit%", name)));
@@ -889,7 +892,7 @@ public class Main extends JavaPlugin implements Listener{
 					return true;
 				}
 			}
-			sender.sendMessage(Methods.getPrefix()+Methods.color("&c/GKitz [Kit] [Player]"));
+			sender.sendMessage(Methods.getPrefix() + Methods.color("&c/GKitz [Kit] [Player]"));
 			return true;
 		}
 		return false;
@@ -904,7 +907,7 @@ public class Main extends JavaPlugin implements Listener{
 				player.setMaxHealth(20);
 			}
 		}
-		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable(){
+		new BukkitRunnable(){
 			@Override
 			public void run() {
 				if(player.getName().equals("BadBones69")){
@@ -921,7 +924,7 @@ public class Main extends JavaPlugin implements Listener{
 					}
 				}
 			}
-		}, 1*20);
+		}.runTaskLaterAsynchronously(this, 20);
 	}
 	
 	@EventHandler

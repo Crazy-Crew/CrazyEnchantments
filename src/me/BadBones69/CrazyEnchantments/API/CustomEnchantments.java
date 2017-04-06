@@ -34,6 +34,8 @@ public class CustomEnchantments implements Listener{
 	private HashMap<String, String> EnchantmentColor = new HashMap<String, String>();
 	private HashMap<String, Boolean> Toggle = new HashMap<String, Boolean>();
 	private HashMap<String, EnchantmentType> Type = new HashMap<String, EnchantmentType>();
+	private HashMap<Projectile, Integer> Power = new HashMap<Projectile, Integer>();
+	private HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
 	
 	private static CustomEnchantments instance = new CustomEnchantments();
 	
@@ -50,28 +52,30 @@ public class CustomEnchantments implements Listener{
 			if(hasEnchantments(NewItem)){
 				for(String ench : getEnchantments()){
 					if(hasEnchantment(NewItem, ench)){
-						int power = getPower(NewItem, ench);
-						int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.ArmorOptions.PowerIncrease");
-						for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
-							PotionEffectType potion = PotionEffectType.NIGHT_VISION;
-							int amp = 0;
-							int time = 55555;
-							String[] b = po.split(", ");
-							for(String B : b){
-								for(String P : Methods.getPotions()){
-									if(B.toLowerCase().startsWith(P.toLowerCase()+":")){
-										potion = PotionEffectType.getByName(P);
-										amp = Integer.parseInt(B.replaceAll(P+":", ""));
+						if(isEnabled(ench)){
+							int power = getPower(NewItem, ench);
+							int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.ArmorOptions.PowerIncrease");
+							for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
+								PotionEffectType potion = PotionEffectType.NIGHT_VISION;
+								int amp = 0;
+								int time = 55555;
+								String[] b = po.split(", ");
+								for(String B : b){
+									for(String P : Methods.getPotions()){
+										if(B.toLowerCase().startsWith(P.toLowerCase()+":")){
+											potion = PotionEffectType.getByName(P);
+											amp = Integer.parseInt(B.replaceAll(P+":", ""));
+										}
+									}
+									if(B.toUpperCase().contains("Time:".toUpperCase())){
+										time = Integer.parseInt(B.replaceAll("Time:", ""));
 									}
 								}
-								if(B.toUpperCase().contains("Time:".toUpperCase())){
-									time = Integer.parseInt(B.replaceAll("Time:", ""));
+								if(power==1){
+									player.addPotionEffect(new PotionEffect(potion, time*20, amp-1));
+								}else{
+									player.addPotionEffect(new PotionEffect(potion, time*20, amp+((power-1)*add)-1));
 								}
-							}
-							if(power==1){
-								player.addPotionEffect(new PotionEffect(potion, time*20, amp-1));
-							}else{
-								player.addPotionEffect(new PotionEffect(potion, time*20, amp+((power-1)*add)-1));
 							}
 						}
 					}
@@ -80,18 +84,20 @@ public class CustomEnchantments implements Listener{
 			if(hasEnchantments(OldItem)){
 				for(String ench : getEnchantments()){
 					if(hasEnchantment(OldItem, ench)){
-						for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
-							PotionEffectType potion = PotionEffectType.NIGHT_VISION;
-							String[] b = po.split(", ");
-							for(String B : b){
-								for(String P : Methods.getPotions()){
-									if(B.toLowerCase().startsWith(P.toLowerCase()+":")){
-										potion = PotionEffectType.getByName(P);
+						if(isEnabled(ench)){
+							for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.ArmorOptions.PotionEffects")){
+								PotionEffectType potion = PotionEffectType.NIGHT_VISION;
+								String[] b = po.split(", ");
+								for(String B : b){
+									for(String P : Methods.getPotions()){
+										if(B.toLowerCase().startsWith(P.toLowerCase()+":")){
+											potion = PotionEffectType.getByName(P);
+										}
 									}
 								}
-							}
-							if(player.hasPotionEffect(potion)){
-								player.removePotionEffect(potion);
+								if(player.hasPotionEffect(potion)){
+									player.removePotionEffect(potion);
+								}
 							}
 						}
 					}
@@ -114,90 +120,92 @@ public class CustomEnchantments implements Listener{
 						if(hasEnchantments(item)){
 							for(String ench : getEnchantments()){
 								if(hasEnchantment(item, ench)){
-									//Damager Potion Control
-									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease")){
-										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
-											int power = getPower(Methods.getItemInHand(damager), ench);
-											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease");
-											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
-												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
-												int amp = 0;
-												int time = 55555;
-												int cha = 100;
-												String[] b = po.split(", ");
-												for(String B : b){
-													for(String P : Methods.getPotions()){
-														if(B.toLowerCase().startsWith(P.toLowerCase())){
-															potion = PotionEffectType.getByName(P);
-															amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
+									if(isEnabled(ench)){
+										//Damager Potion Control
+										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease")){
+											if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
+												int power = getPower(Methods.getItemInHand(damager), ench);
+												int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PowerIncrease");
+												for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damager.PotionEffects")){
+													PotionEffectType potion = PotionEffectType.NIGHT_VISION;
+													int amp = 0;
+													int time = 55555;
+													int cha = 100;
+													String[] b = po.split(", ");
+													for(String B : b){
+														for(String P : Methods.getPotions()){
+															if(B.toLowerCase().startsWith(P.toLowerCase())){
+																potion = PotionEffectType.getByName(P);
+																amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
+															}
+														}
+														if(B.toUpperCase().contains("Time:".toUpperCase())){
+															time = Integer.parseInt(B.replaceAll("Time:", ""));
+														}
+														if(B.toUpperCase().contains("Chance:".toUpperCase())){
+															cha = Integer.parseInt(B.replaceAll("Chance:", ""));
 														}
 													}
-													if(B.toUpperCase().contains("Time:".toUpperCase())){
-														time = Integer.parseInt(B.replaceAll("Time:", ""));
-													}
-													if(B.toUpperCase().contains("Chance:".toUpperCase())){
-														cha = Integer.parseInt(B.replaceAll("Chance:", ""));
-													}
-												}
-												Random number = new Random();
-												int chance;
-												for(int counter = 1; counter<=1; counter++){
-													chance = 1 + number.nextInt(99);
-													if(chance <= cha){
-														damager.addPotionEffect(new PotionEffect(potion, time*20, amp+(power*add)));
+													Random number = new Random();
+													int chance;
+													for(int counter = 1; counter<=1; counter++){
+														chance = 1 + number.nextInt(99);
+														if(chance <= cha){
+															damager.addPotionEffect(new PotionEffect(potion, time*20, amp+(power*add)));
+														}
 													}
 												}
 											}
 										}
-									}
-									//Damaged Potion Control
-									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease")){
-										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
-											int power = getPower(Methods.getItemInHand(damager), ench);
-											int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease");
-											for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
-												PotionEffectType potion = PotionEffectType.NIGHT_VISION;
-												int amp = 0;
-												int time = 55555;
-												int cha = 100;
-												String[] b = po.split(", ");
-												for(String B : b){
-													for(String P : Methods.getPotions()){
-														if(B.toLowerCase().startsWith(P.toLowerCase())){
-															potion = PotionEffectType.getByName(P);
-															amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
+										//Damaged Potion Control
+										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease")){
+											if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
+												int power = getPower(Methods.getItemInHand(damager), ench);
+												int add = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PowerIncrease");
+												for(String po : Main.settings.getCustomEnchs().getStringList("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.PotionEffects")){
+													PotionEffectType potion = PotionEffectType.NIGHT_VISION;
+													int amp = 0;
+													int time = 55555;
+													int cha = 100;
+													String[] b = po.split(", ");
+													for(String B : b){
+														for(String P : Methods.getPotions()){
+															if(B.toLowerCase().startsWith(P.toLowerCase())){
+																potion = PotionEffectType.getByName(P);
+																amp = Integer.parseInt(B.replaceAll(P.toString()+":", ""));
+															}
+														}
+														if(B.toUpperCase().contains("Time:".toUpperCase())){
+															time = Integer.parseInt(B.replaceAll("Time:", ""));
+														}
+														if(B.toUpperCase().contains("Chance:".toUpperCase())){
+															cha = Integer.parseInt(B.replaceAll("Chance:", ""));
 														}
 													}
-													if(B.toUpperCase().contains("Time:".toUpperCase())){
-														time = Integer.parseInt(B.replaceAll("Time:", ""));
-													}
-													if(B.toUpperCase().contains("Chance:".toUpperCase())){
-														cha = Integer.parseInt(B.replaceAll("Chance:", ""));
-													}
-												}
-												Random number = new Random();
-												int chance;
-												for(int counter = 1; counter<=1; counter++){
-													chance = 1 + number.nextInt(99);
-													if(chance <= cha){
-														damaged.addPotionEffect(new PotionEffect(potion, time*20, amp+(power*add)));
+													Random number = new Random();
+													int chance;
+													for(int counter = 1; counter<=1; counter++){
+														chance = 1 + number.nextInt(99);
+														if(chance <= cha){
+															damaged.addPotionEffect(new PotionEffect(potion, time*20, amp+(power*add)));
+														}
 													}
 												}
 											}
 										}
-									}
-									//Damaged Damage Multiplyer Control.
-									if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer")){
-										Random number = new Random();
-										int chance;
-										int cha = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Chance");
-										int power = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.PowerIncrease");
-										int multi = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Multiplyer");
-										double damage = e.getDamage()*(multi+(getPower(Methods.getItemInHand(damager), ench)+power));
-										for(int counter = 1; counter<=1; counter++){
-											chance = 1 + number.nextInt(99);
-											if(chance <= cha){
-												e.setDamage(damage);
+										//Damaged Damage Multiplyer Control.
+										if(Main.settings.getCustomEnchs().contains("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer")){
+											Random number = new Random();
+											int chance;
+											int cha = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Chance");
+											int power = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.PowerIncrease");
+											int multi = Main.settings.getCustomEnchs().getInt("Enchantments."+ench+".EnchantOptions.WeaponOptions.Damaged.DamageMultiplyer.Multiplyer");
+											double damage = e.getDamage()*(multi+(getPower(Methods.getItemInHand(damager), ench)+power));
+											for(int counter = 1; counter<=1; counter++){
+												chance = 1 + number.nextInt(99);
+												if(chance <= cha){
+													e.setDamage(damage);
+												}
 											}
 										}
 									}
@@ -209,9 +217,6 @@ public class CustomEnchantments implements Listener{
 			}
 		}
 	}
-
-	private HashMap<Projectile, Integer> Power = new HashMap<Projectile, Integer>();
-	private HashMap<Projectile, String> Enchant = new HashMap<Projectile, String>();
 	
 	@EventHandler
 	public void onBowShoot(EntityShootBowEvent e){
@@ -220,8 +225,10 @@ public class CustomEnchantments implements Listener{
 		if(hasEnchantments(item)){
 			for(String ench : CustomEnchants){
 				if(hasEnchantment(item, ench)){
-					Power.put((Projectile) e.getProjectile(), getPower(e.getBow(), ench));
-					Enchant.put((Projectile) e.getProjectile(), ench);
+					if(isEnabled(ench)){
+						Power.put((Projectile) e.getProjectile(), getPower(e.getBow(), ench));
+						Enchant.put((Projectile) e.getProjectile(), ench);
+					}
 				}
 			}
 		}

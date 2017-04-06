@@ -29,7 +29,6 @@ import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.CustomEnchantments;
 import me.badbones69.crazyenchantments.api.EnchantmentType;
-import me.badbones69.crazyenchantments.multisupport.EnchantGlow;
 
 public class ScrollControl implements Listener{
 	
@@ -219,9 +218,11 @@ public class ScrollControl implements Listener{
 		int amount = order.size();
 		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")){
 			for(Enchantment ench : item.getEnchantments().keySet()){
-				if(ench != EnchantGlow.getGlow()){
-					amount ++;
-				}
+				try{
+					if(Methods.getEnchantments().contains(ench.getName())){
+						amount ++;
+					}
+				}catch(Exception e){}
 			}
 		}
 		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Amount-Toggle")){

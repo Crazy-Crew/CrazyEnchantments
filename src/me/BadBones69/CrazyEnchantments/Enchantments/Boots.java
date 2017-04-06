@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.ParticleEffect;
@@ -234,7 +235,7 @@ public class Boots implements Listener{
 	public static void onStart(){
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Clouds")){
 			if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")){
-				Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+				new BukkitRunnable(){
 					@Override
 					public void run() {
 						for(Player player : Bukkit.getServer().getOnlinePlayers()){
@@ -253,7 +254,7 @@ public class Boots implements Listener{
 							}
 						}
 					}
-				}, 1, 1);
+				}.runTaskTimerAsynchronously(plugin, 1, 1);
 			}
 		}
 	}
