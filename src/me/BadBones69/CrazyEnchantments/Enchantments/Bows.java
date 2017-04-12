@@ -144,6 +144,7 @@ public class Bows implements Listener{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
  	public void onArrowDamage(EntityDamageByEntityEvent e){
 		if(e.getDamager() instanceof Arrow){

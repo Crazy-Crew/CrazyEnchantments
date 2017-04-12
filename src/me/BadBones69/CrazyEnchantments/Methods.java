@@ -810,8 +810,19 @@ public class Methods{
 		return enchants.get(en.getName());
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static void removeDurability(ItemStack item, Player player){
 		if(item.hasItemMeta()){
+			try{
+				if(item.getItemMeta().isUnbreakable()){
+					return;
+				}
+			}catch(NoSuchMethodError e){}
+			try{
+				if(item.getItemMeta().spigot().isUnbreakable()){
+					return;
+				}
+			}catch(NoSuchMethodError e){}
 			if(item.getItemMeta().hasEnchants()){
 				if(item.getItemMeta().hasEnchant(Enchantment.DURABILITY)){
 					if(Methods.randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.DURABILITY))){

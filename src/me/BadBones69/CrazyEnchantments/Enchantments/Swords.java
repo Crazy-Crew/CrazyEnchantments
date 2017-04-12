@@ -36,6 +36,7 @@ public class Swords implements Listener{
 	private HashMap<Player, Integer> num = new HashMap<Player, Integer>();
 	private HashMap<Player, Integer> reset = new HashMap<Player, Integer>();
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e){
 		if(e.isCancelled())return;

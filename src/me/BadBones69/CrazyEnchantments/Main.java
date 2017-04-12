@@ -65,6 +65,7 @@ public class Main extends JavaPlugin implements Listener{
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable(){
 		settings.setup(this);
@@ -123,11 +124,6 @@ public class Main extends JavaPlugin implements Listener{
 			pm.registerEvents(new DakataAntiCheatSupport(), this);
 		}
 		//==========================================================================\\
-		try{
-			Metrics metrics = new Metrics(this); metrics.start();
-		}catch (IOException e) {
-			System.out.println("Error Submitting stats!");
-		}
 		try {
 			new MCUpdate(this, true);
 		} catch (IOException e) {}
@@ -898,6 +894,7 @@ public class Main extends JavaPlugin implements Listener{
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
 		final Player player = e.getPlayer();

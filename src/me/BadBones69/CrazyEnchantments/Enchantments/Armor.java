@@ -393,6 +393,7 @@ public class Armor implements Listener{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMovement(PlayerMoveEvent e){
 		Player player = e.getPlayer();
@@ -734,6 +735,7 @@ public class Armor implements Listener{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void spawnAllies(final Player player, LivingEntity enemy, EntityType mob, Integer amount){
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.MINUTE, 2);
