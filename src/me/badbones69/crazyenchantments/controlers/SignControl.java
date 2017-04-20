@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -52,7 +53,7 @@ public class SignControl implements Listener{
 						return;
 					}
 					List<String> options = new ArrayList<String>();
-					options.add("Crystal");
+					options.add("ProtectionCrystal");
 					options.add("Scrambler");
 					options.add("DestroyDust");
 					options.add("SuccessDust");
@@ -87,8 +88,8 @@ public class SignControl implements Listener{
 									}
 								}
 							}
-							if(config.contains("Settings.SignOptions."+o+"Style.Buy-Message")){
-								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions."+o+"Style.Buy-Message")));
+							if(config.contains("Settings.SignOptions." + o + "Style.Buy-Message")){
+								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions." + o + "Style.Buy-Message")));
 							}
 							switch(o){
 								case "Crystal": player.getInventory().addItem(ProtectionCrystal.getCrystals());
@@ -210,16 +211,17 @@ public class SignControl implements Listener{
 						return;
 					}
 				}
-				ArrayList<String> types = new ArrayList<String>();
-				types.add("Crystal");
-				types.add("Scrambler");
-				types.add("DestroyDust");
-				types.add("SuccessDust");
-				types.add("BlackScroll");
-				types.add("WhiteScroll");
-				types.add("TransmogScroll");
-				for(String type : types){
+				HashMap<String, String> types = new HashMap<String, String>();
+				types.put("Crystal", "ProtectionCrystal");
+				types.put("Scrambler", "Scrambler");
+				types.put("DestroyDust", "DestroyDust");
+				types.put("SuccessDust", "SuccessDust");
+				types.put("BlackScroll", "BlackScroll");
+				types.put("WhiteScroll", "WhiteScroll");
+				types.put("TransmogScroll", "TransmogScroll");
+				for(String type : types.keySet()){
 					if(line2.equalsIgnoreCase("{" + type + "}")){
+						type = types.get(type);
 						e.setLine(0, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line1")));
 						e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line2")));
 						e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line3")));
