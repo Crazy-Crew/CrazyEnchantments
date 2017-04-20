@@ -137,35 +137,45 @@ public class Methods{
     }
 	
 	public static ItemStack addGlowHide(ItemStack item){
-        if(item != null){
-	        if(item.hasItemMeta()){
-	            if(item.getItemMeta().hasEnchants()){
-	                return item;
-	            }
+		ItemStack it = item.clone();
+		try {
+	        if(item != null){
+		        if(item.hasItemMeta()){
+		            if(item.getItemMeta().hasEnchants()){
+		                return item;
+		            }
+		        }
+		        item.addUnsafeEnchantment(Enchantment.LUCK, 1);
+		        ItemMeta  meta = item.getItemMeta();
+		        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		        item.setItemMeta(meta);
 	        }
-	        item.addUnsafeEnchantment(Enchantment.LUCK, 1);
-	        ItemMeta  meta = item.getItemMeta();
-	        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-	        item.setItemMeta(meta);
-        }
-        return item;
+	        return item;
+		}catch(NoClassDefFoundError e){
+			return it;
+		}
     }
 	
 	public static ItemStack addGlowHide(ItemStack item, boolean toggle){
-		if (toggle) {
-			if (item != null) {
-				if (item.hasItemMeta()) {
-					if (item.getItemMeta().hasEnchants()) {
-						return item;
+		ItemStack it = item.clone();
+		try {
+			if (toggle) {
+				if (item != null) {
+					if (item.hasItemMeta()) {
+						if (item.getItemMeta().hasEnchants()) {
+							return item;
+						}
 					}
+					item.addUnsafeEnchantment(Enchantment.LUCK, 1);
+					ItemMeta meta = item.getItemMeta();
+					meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+					item.setItemMeta(meta);
 				}
-				item.addUnsafeEnchantment(Enchantment.LUCK, 1);
-				ItemMeta meta = item.getItemMeta();
-				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-				item.setItemMeta(meta);
-		       }
+			}
+			return item;
+		}catch(NoClassDefFoundError e){
+			return it;
 		}
-        return item;
     }
 	
 	@SuppressWarnings("deprecation")

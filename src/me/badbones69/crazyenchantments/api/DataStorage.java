@@ -32,18 +32,18 @@ public class DataStorage {
 		}else{
 			rageMaxLevel = 4;
 		}
-		FileConfiguration file = Main.settings.getGKitz();
-		for(String kit : file.getConfigurationSection("GKitz").getKeys(false)){
-			int slot = file.getInt("GKitz." + kit + ".Display.Slot");
-			String time = file.getString("GKitz." + kit + ".Cooldown");
+		FileConfiguration gkit = Main.settings.getGKitz();
+		for(String kit : gkit.getConfigurationSection("GKitz").getKeys(false)){
+			int slot = gkit.getInt("GKitz." + kit + ".Display.Slot");
+			String time = gkit.getString("GKitz." + kit + ".Cooldown");
 			Boolean autoEquip = false;
-			if(file.contains("GKitz." + kit + ".Auto-Equip")){
-				autoEquip = file.getBoolean("GKitz." + kit + ".Auto-Equip");
+			if(gkit.contains("GKitz." + kit + ".Auto-Equip")){
+				autoEquip = gkit.getBoolean("GKitz." + kit + ".Auto-Equip");
 			}
-			ItemStack displayItem = Methods.makeItem(file.getString("GKitz." + kit + ".Display.Item"), 1, file.getString("GKitz." + kit + ".Display.Name"),
-					file.getStringList("GKitz." + kit + ".Display.Lore"), file.getBoolean("GKitz." + kit + ".Display.Glowing"));
-			ArrayList<String> commands = (ArrayList<String>) file.getStringList("GKitz." + kit + ".Commands");
-			ArrayList<String> itemStrings = (ArrayList<String>) file.getStringList("GKitz." + kit + ".Items");
+			ItemStack displayItem = Methods.makeItem(gkit.getString("GKitz." + kit + ".Display.Item"), 1, gkit.getString("GKitz." + kit + ".Display.Name"),
+					gkit.getStringList("GKitz." + kit + ".Display.Lore"), gkit.getBoolean("GKitz." + kit + ".Display.Glowing"));
+			ArrayList<String> commands = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Commands");
+			ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
 			gkitz.add(new GKitz(kit, slot, time, displayItem, getInfoGKit(itemStrings), commands, getKitItems(itemStrings), itemStrings, autoEquip));
 		}
 	}

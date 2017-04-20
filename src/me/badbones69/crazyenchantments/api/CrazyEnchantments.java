@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.potion.PotionEffectType;
 
 import me.badbones69.crazyenchantments.Main;
@@ -88,6 +89,26 @@ public class CrazyEnchantments {
 				data.set("Players." + uuid + ".Souls-Information.Is-Active", p.isSoulsActive());
 			}
 			for(Cooldown cooldown : p.getCooldowns()){
+				data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
+			}
+			Main.settings.saveData();
+		}
+	}
+	
+	/**
+	 * This backup all the players data stored by this plugin.
+	 * @param player The player you wish to backup.
+	 */
+	public void backupCEPlayer(CEPlayer player){
+		FileConfiguration data = Main.settings.getData();
+		String uuid = player.getPlayer().getUniqueId().toString();
+		if(player != null){
+			if(player.getSouls() > 0){
+				data.set("Players." + uuid + ".Name", player.getPlayer().getName());
+				data.set("Players." + uuid + ".Souls-Information.Souls", player.getSouls());
+				data.set("Players." + uuid + ".Souls-Information.Is-Active", player.isSoulsActive());
+			}
+			for(Cooldown cooldown : player.getCooldowns()){
 				data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
 			}
 			Main.settings.saveData();
@@ -660,6 +681,34 @@ public class CrazyEnchantments {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Get a players max amount of enchantments.
+	 * @param player The player you are checking.
+	 * @return The max amount of enchantments a player can have on an item.
+	 */
+	public Integer getPlayerMaxEnchantments(Player player){
+		int limit = 0;
+		for(int i = 1; i < 100; i++){
+			if(player.hasPermission("crazyenchantments.limit." + i)){
+				if(limit < i){
+					limit = i;
+				}
+			}
+		}
+		for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
+			String perm = Permission.getPermission().toLowerCase();
+			if(perm.startsWith("crazyenchantments.limit.")){
+				perm = perm.replace("crazyenchantments.limit.", "");
+				if(Methods.isInt(perm)){
+					if(limit < Integer.parseInt(perm)){
+						limit = Integer.parseInt(perm);
+					}
+				}
+			}
+		}
+		return limit;
 	}
 
 	/**

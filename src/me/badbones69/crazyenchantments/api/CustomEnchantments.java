@@ -566,6 +566,10 @@ public class CustomEnchantments implements Listener{
 		return null;
 	}
 	
+	public Integer getMaxPower(String enchant){
+		return Main.settings.getCustomEnchs().getInt("Enchantments." + enchant + ".MaxPower");
+	}
+	
 	public Integer getBookPower(ItemStack book, String enchant){
 		String line = book.getItemMeta().getDisplayName().replace(getCustomName(enchant)+" ", "");
 		line = Methods.removeColor(line);

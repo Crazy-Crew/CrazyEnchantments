@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.controlers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -100,10 +101,10 @@ public class BlackSmith implements Listener{
 								inv.setItem(10, item);
 								playClick(player);
 								if(inv.getItem(13) != null){
-									if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
-										inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13), true),
+									if(getUpgradeCost(player, inv.getItem(10), inv.getItem(13)) > 0){
+										inv.setItem(16, Methods.addLore(getUpgradedItem(player, inv.getItem(10), inv.getItem(13), true),
 												config.getString("Settings.BlackSmith.Results.Found")
-												.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
+												.replaceAll("%Cost%", getUpgradeCost(player, inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(player, inv.getItem(10), inv.getItem(13))+"")));
 										for(int i:result)inv.setItem(i-1, Methods.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
 									}else{
 										if(Version.getVersion().getVersionInteger()<181){
@@ -133,10 +134,10 @@ public class BlackSmith implements Listener{
 								}
 								inv.setItem(13, item);
 								playClick(player);
-								if(getUpgradeCost(inv.getItem(10), inv.getItem(13)) > 0){
-									inv.setItem(16, Methods.addLore(getUpgradedItem(inv.getItem(10), inv.getItem(13), true),
+								if(getUpgradeCost(player, inv.getItem(10), inv.getItem(13)) > 0){
+									inv.setItem(16, Methods.addLore(getUpgradedItem(player, inv.getItem(10), inv.getItem(13), true),
 											config.getString("Settings.BlackSmith.Results.Found")
-											.replaceAll("%Cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(inv.getItem(10), inv.getItem(13))+"")));
+											.replaceAll("%Cost%", getUpgradeCost(player, inv.getItem(10), inv.getItem(13))+"").replaceAll("%cost%", getUpgradeCost(player, inv.getItem(10), inv.getItem(13))+"")));
 									for(int i:result)inv.setItem(i-1, Methods.makeItem(Material.STAINED_GLASS_PANE, 1, 5, " "));
 								}else{
 									if(Version.getVersion().getVersionInteger()<181){
@@ -186,8 +187,8 @@ public class BlackSmith implements Listener{
 						}
 						if(e.getRawSlot()==16){
 							if(inv.getItem(10)!=null&&inv.getItem(13)!=null){
-								if(getUpgradeCost(inv.getItem(10), inv.getItem(13))>0){
-									int cost = getUpgradeCost(inv.getItem(10), inv.getItem(13));
+								if(getUpgradeCost(player, inv.getItem(10), inv.getItem(13))>0){
+									int cost = getUpgradeCost(player, inv.getItem(10), inv.getItem(13));
 									if(player.getGameMode()!=GameMode.CREATIVE){
 										if(Currency.isCurrency(config.getString("Settings.BlackSmith.Transaction.Currency"))){
 											Currency currency = Currency.getCurrency(config.getString("Settings.BlackSmith.Transaction.Currency"));
@@ -213,7 +214,7 @@ public class BlackSmith implements Listener{
 											}
 										}
 									}
-									player.getInventory().addItem(getUpgradedItem(inv.getItem(10),inv.getItem(13), false));
+									player.getInventory().addItem(getUpgradedItem(player, inv.getItem(10),inv.getItem(13), false));
 									inv.setItem(10, new ItemStack(Material.AIR));
 									inv.setItem(13, new ItemStack(Material.AIR));
 									try{
@@ -300,7 +301,7 @@ public class BlackSmith implements Listener{
 		}, 0);
 	}
 	
-	private ItemStack getUpgradedItem(ItemStack master, ItemStack sub, boolean glowing){
+	private ItemStack getUpgradedItem(Player player, ItemStack master, ItemStack sub, boolean glowing){
 		ItemStack item = master.clone();
 		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType() == Main.CE.getEnchantmentBookItem().getType()){
 			if(Methods.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(sub.getItemMeta().getDisplayName()))){
@@ -324,110 +325,98 @@ public class BlackSmith implements Listener{
 				}
 			}
 		}
-		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() && sub.getType() != Main.CE.getEnchantmentBookItem().getType()){
-			List<String> d = new ArrayList<String>();//Dup Enchantments
-			List<String> n = new ArrayList<String>();//New Enchantments
-			List<String> m = new ArrayList<String>();//Master's Enchantments
-			List<String> s = new ArrayList<String>();//Sub's Enchantments
-			for(CEnchantments en : Main.CE.getEnchantments()){
-				for(String lore : master.getItemMeta().getLore()){
-					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-						m.add(lore);
-					}
-				}
-				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-						s.add(lore);
-					}
-				}
-			}
-			for(String en : Main.CustomE.getEnchantments()){
-				for(String lore : master.getItemMeta().getLore()){
-					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						m.add(lore);
-					}
-				}
-				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						s.add(lore);
-					}
-				}
-			}
-			for(String l : s){
-				boolean T = false;
-				for(String lore : m){
-					if(l.contains(Methods.removeColor(lore))){
-						T = true;
-						d.add(l);
-					}
-				}
-				if(!T){
-					n.add(l);
-				}
-			}
-			for(String l : d){
-				for(CEnchantments en : Main.CE.getEnchantments()){
-					if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-						int power = Main.CE.getPower(item, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
-						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l,en.getEnchantmentColor() + en.getCustomName() + " " + Methods.getPower(power+1));
+		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() || sub.getType() != Main.CE.getEnchantmentBookItem().getType()){
+			HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
+			HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
+			HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
+			for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
+				if(Main.CE.hasEnchantment(sub, enchant)){
+					if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
+						if(!dupEnchants.containsKey(enchant.getName())){
+							dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
+						}
+					}else{
+						if(Main.CE.getPower(master, enchant) < Main.CE.getPower(sub, enchant)){
+							higherEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
 						}
 					}
 				}
 			}
-			for(String l : d){
-				for(String en : Main.CustomE.getEnchantments()){
-					if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						int power = Main.CustomE.getPower(item, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
-						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1));
+			for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
+				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+					if(!Main.CE.hasEnchantment(master, enchant)){
+						newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
+					}
+				}
+			}
+			for(String enchant : Main.CustomE.getItemEnchantments(master)){
+				if(Main.CustomE.hasEnchantment(sub, enchant)){
+					if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
+						if(!dupEnchants.containsKey(enchant)){
+							dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
+						}
+					}else{
+						if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
+							higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
 						}
 					}
 				}
 			}
-			for(String lore : n){
-				boolean T = false;
-				for(CEnchantments en : Main.CE.getEnchantments()){
-					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-						for(String l : item.getItemMeta().getLore()){
-							if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-								T = true;
-							}
+			for(String enchant : Main.CustomE.getItemEnchantments(sub)){
+				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+					if(!Main.CustomE.hasEnchantment(master, enchant)){
+						newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+					}
+
+				}
+			}
+			for(String enchant : dupEnchants.keySet()){
+				if(Main.CE.isEnchantment(enchant)){
+					int power = dupEnchants.get(enchant);
+					int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
+					if(power + 1 <= max){
+						item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), power + 1);
+					}
+				}else if(Main.CustomE.isEnchantment(enchant)){
+					int power = dupEnchants.get(enchant);
+					int max = Main.CustomE.getMaxPower(enchant);
+					if(power + 1 <= max){
+						item = Main.CustomE.addEnchantment(item, enchant, power + 1);
+					}
+				}
+			}
+			int maxEnchants = Main.CE.getPlayerMaxEnchantments(player);
+			for(String enchant : newEnchants.keySet()){
+				if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+					if((Methods.getEnchAmount(item)+ 1) <= maxEnchants){
+						if(Main.CE.isEnchantment(enchant)){
+							item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), newEnchants.get(enchant));
+						}else if(Main.CustomE.isEnchantment(enchant)){
+							item = Main.CustomE.addEnchantment(item, enchant, newEnchants.get(enchant));
 						}
 					}
 				}
-				for(String en : Main.CustomE.getEnchantments()){
-					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						for(String l : item.getItemMeta().getLore()){
-							if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-								T = true;
-							}
-						}
-					}
-				}
-				if(!T){
-					int maxEnchants = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
-					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-						if(Methods.getEnchAmount(item)<maxEnchants){
-							item = Methods.addLore(item, lore);
-						}
-					}
+			}
+			for(String enchant : higherEnchants.keySet()){
+				if(Main.CE.isEnchantment(enchant)){
+					item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), higherEnchants.get(enchant));
+				}else if(Main.CustomE.isEnchantment(enchant)){
+					item = Main.CustomE.addEnchantment(item, enchant, higherEnchants.get(enchant));
 				}
 			}
 		}
 		return item;
 	}
 	
-	private int getUpgradeCost(ItemStack master, ItemStack sub){
+	private int getUpgradeCost(Player player, ItemStack master, ItemStack sub){
 		int total = 0;
+		//Is 2 books
 		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Methods.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(sub.getItemMeta().getDisplayName()))){
 				for(CEnchantments en : Main.CE.getEnchantments()){
 					if(master.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 						int power = Main.CE.getBookPower(master, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments."+en.getName()+".MaxPower");
+						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max){
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
 						}
@@ -444,98 +433,77 @@ public class BlackSmith implements Listener{
 				}
 			}
 		}
+		//Is 2 items
 		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() || sub.getType() != Main.CE.getEnchantmentBookItem().getType()){
 			ItemStack item = master.clone();
-			List<String> d = new ArrayList<String>();//Dup Enchantments
-			List<String> n = new ArrayList<String>();//New Enchantments
-			List<String> m = new ArrayList<String>();//Master's Enchantments
-			List<String> s = new ArrayList<String>();//Sub's Enchantments
-			for(CEnchantments en : Main.CE.getEnchantments()){
-				for(String lore : master.getItemMeta().getLore()){
-					if(lore.startsWith(en.getBookColor() + en.getCustomName())){
-						m.add(lore);
-					}
-				}
-				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.startsWith(en.getBookColor() + en.getCustomName())){
-						s.add(lore);
-					}
-				}
-			}
-			for(String en : Main.CustomE.getEnchantments()){
-				for(String lore : master.getItemMeta().getLore()){
-					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						m.add(lore);
-					}
-				}
-				for(String lore : sub.getItemMeta().getLore()){
-					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						s.add(lore);
-					}
-				}
-			}
-			for(String l : s){
-				boolean T=false;
-				for(String lore : m){
-					if(l.contains(Methods.removeColor(lore))){
-						T = true;
-						d.add(l);
-					}
-				}
-				if(!T){
-					n.add(l);
-				}
-			}
-			for(String l : d){
-				for(CEnchantments en : Main.CE.getEnchantments()){
-					if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-						int power = Main.CE.getPower(item, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
-						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l, en.getEnchantmentColor() + en.getCustomName() + " " + Methods.getPower(power+1));
-							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+			HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
+			HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
+			HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
+			for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
+				if(Main.CE.hasEnchantment(sub, enchant)){
+					if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
+						if(!dupEnchants.containsKey(enchant.getName())){
+							dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
 						}
-					}
-				}
-				for(String en : Main.CustomE.getEnchantments()){
-					if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						int power = Main.CustomE.getPower(item, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
-						if(power + 1 <= max){
-							item = Methods.replaceLore(item, l, Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1));
-							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+					}else{
+						if(Main.CE.getPower(master, enchant) < Main.CE.getPower(sub, enchant)){
+							higherEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
 						}
 					}
 				}
 			}
-			for(String lore : n){
-				boolean T = false;
-				for(CEnchantments en : Main.CE.getEnchantments()){
-					if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-						for(String l : item.getItemMeta().getLore()){
-							if(l.startsWith(en.getEnchantmentColor() + en.getCustomName())){
-								T = true;
-							}
+			for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
+				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+					if(!Main.CE.hasEnchantment(master, enchant)){
+						newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
+					}
+				}
+			}
+			for(String enchant : Main.CustomE.getItemEnchantments(master)){
+				if(Main.CustomE.hasEnchantment(sub, enchant)){
+					if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
+						if(!dupEnchants.containsKey(enchant)){
+							dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
+						}
+					}else{
+						if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
+							higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
 						}
 					}
 				}
-				for(String en : Main.CustomE.getEnchantments()){
-					if(lore.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-						for(String l : item.getItemMeta().getLore()){
-							if(l.startsWith(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en))){
-								T = true;
-							}
-						}
+			}
+			for(String enchant : Main.CustomE.getItemEnchantments(sub)){
+				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+					if(!Main.CustomE.hasEnchantment(master, enchant)){
+						newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
 					}
 				}
-				if(!T){
-					int maxEnchants = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxAmountOfEnchantments");
-					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-						if(Methods.getEnchAmount(item) < maxEnchants){
-							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
-						}
+			}
+			for(String enchant : dupEnchants.keySet()){
+				if(Main.CE.isEnchantment(enchant)){
+					int power = dupEnchants.get(enchant);
+					int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
+					if(power + 1 <= max){
+						total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+					}
+				}else if(Main.CustomE.isEnchantment(enchant)){
+					int power = dupEnchants.get(enchant);
+					int max = Main.CustomE.getMaxPower(enchant);
+					if(power + 1 <= max){
+						total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 					}
 				}
+			}
+			int maxEnchants = Main.CE.getPlayerMaxEnchantments(player);
+			for(int i = 0; i < newEnchants.size(); i++){
+				if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+					if((Methods.getEnchAmount(item) + i + 1) <= maxEnchants){
+						total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
+					}
+				}
+			}
+			for(int i = 0; i < higherEnchants.size(); i++){
+				total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 			}
 		}
 		return total;
@@ -549,8 +517,11 @@ public class BlackSmith implements Listener{
 	
 	private void playClick(Player player){
 		try{
-			if(Version.getVersion().getVersionInteger() >= 191)player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
-			if(Version.getVersion().getVersionInteger() < 191)player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+			if(Version.getVersion().getVersionInteger() >= 191){
+				player.playSound(player.getLocation(), Sound.valueOf("UI_BUTTON_CLICK"), 1, 1);
+			}else{
+				player.playSound(player.getLocation(), Sound.valueOf("CLICK"), 1, 1);
+			}
 		}catch(Exception ex){}
 	}
 	

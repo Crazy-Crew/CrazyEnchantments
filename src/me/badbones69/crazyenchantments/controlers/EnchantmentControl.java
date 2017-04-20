@@ -17,7 +17,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
@@ -206,26 +205,8 @@ public class EnchantmentControl implements Listener{
 									return;
 								}
 								if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-									int limit = 0;
+									int limit = Main.CE.getPlayerMaxEnchantments(player);
 									int total = Methods.getEnchAmount(item);
-									for(int i = 1; i < 100; i++){
-										if(player.hasPermission("crazyenchantments.limit." + i)){
-											if(limit < i){
-												limit = i;
-											}
-										}
-									}
-									for(PermissionAttachmentInfo Permission : player.getEffectivePermissions()){
-										String perm = Permission.getPermission().toLowerCase();
-										if(perm.startsWith("crazyenchantments.limit.")){
-											perm = perm.replace("crazyenchantments.limit.", "");
-											if(Methods.isInt(perm)){
-												if(limit < Integer.parseInt(perm)){
-													limit = Integer.parseInt(perm);
-												}
-											}
-										}
-									}
 									if(!player.hasPermission("crazyenchantments.bypass")){
 										if(total >= limit){
 											player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Hit-Enchantment-Max")));

@@ -11,6 +11,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -35,11 +36,11 @@ public class SignControl implements Listener{
 		if(e.getClickedBlock().getState() instanceof Sign){
 			FileConfiguration config = Main.settings.getConfig();
 			for(String l : Main.settings.getSigns().getConfigurationSection("Locations").getKeys(false)){
-				String type = Main.settings.getSigns().getString("Locations."+l+".Type");;
-				World world = Bukkit.getWorld(Main.settings.getSigns().getString("Locations."+l+".World"));
-				int x = Main.settings.getSigns().getInt("Locations."+l+".X");
-				int y = Main.settings.getSigns().getInt("Locations."+l+".Y");
-				int z = Main.settings.getSigns().getInt("Locations."+l+".Z");
+				String type = Main.settings.getSigns().getString("Locations." + l + ".Type");;
+				World world = Bukkit.getWorld(Main.settings.getSigns().getString("Locations." + l + ".World"));
+				int x = Main.settings.getSigns().getInt("Locations." + l + ".X");
+				int y = Main.settings.getSigns().getInt("Locations." + l + ".Y");
+				int z = Main.settings.getSigns().getInt("Locations." + l + ".Z");
 				Location loc = new Location(world,x,y,z);
 				if(Loc.equals(loc)){
 					if(Methods.isInvFull(player)){
@@ -51,7 +52,7 @@ public class SignControl implements Listener{
 						return;
 					}
 					List<String> options = new ArrayList<String>();
-					options.add("ProtectionCrystal");
+					options.add("Crystal");
 					options.add("Scrambler");
 					options.add("DestroyDust");
 					options.add("SuccessDust");
@@ -90,7 +91,7 @@ public class SignControl implements Listener{
 								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions."+o+"Style.Buy-Message")));
 							}
 							switch(o){
-								case "ProtectionCrystal": player.getInventory().addItem(ProtectionCrystal.getCrystals());
+								case "Crystal": player.getInventory().addItem(ProtectionCrystal.getCrystals());
 									break;
 								case "Scrambler": player.getInventory().addItem(Scrambler.getScramblers());
 									break;
@@ -163,30 +164,25 @@ public class SignControl implements Listener{
 		}
     }
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBreak(BlockBreakEvent e){
-		Location Loc = e.getBlock().getLocation();
-		for(String l : Main.settings.getSigns().getConfigurationSection("Locations").getKeys(false)){
-			World world = Bukkit.getWorld(Main.settings.getSigns().getString("Locations."+l+".World"));
-			int x = Main.settings.getSigns().getInt("Locations."+l+".X");
-			int y = Main.settings.getSigns().getInt("Locations."+l+".Y");
-			int z = Main.settings.getSigns().getInt("Locations."+l+".Z");
-			Location loc = new Location(world,x,y,z);
-			if(Loc.equals(loc)){
-				Main.settings.getSigns().set("Locations."+l, null);
-				Main.settings.saveSigns();
-				e.getPlayer().sendMessage(Methods.color(Methods.getPrefix() + Main.settings.getMsg().getString("Messages.Break-Enchantment-Shop-Sign")));
-				return;
+		if(!e.isCancelled()){
+			Player player = e.getPlayer();
+			Location Loc = e.getBlock().getLocation();
+			for(String l : Main.settings.getSigns().getConfigurationSection("Locations").getKeys(false)){
+				World world = Bukkit.getWorld(Main.settings.getSigns().getString("Locations." + l + ".World"));
+				int x = Main.settings.getSigns().getInt("Locations." + l + ".X");
+				int y = Main.settings.getSigns().getInt("Locations." + l + ".Y");
+				int z = Main.settings.getSigns().getInt("Locations." + l + ".Z");
+				Location loc = new Location(world, x, y, z);
+				if(Loc.equals(loc)){
+					Main.settings.getSigns().set("Locations." + l, null);
+					Main.settings.saveSigns();
+					player.sendMessage(Methods.color(Methods.getPrefix() + Main.settings.getMsg().getString("Messages.Break-Enchantment-Shop-Sign")));
+					return;
+				}
 			}
 		}
-	}
-	
-	private String placeHolders(String msg, String cat){
-		msg = Methods.color(msg);
-		msg = msg.replaceAll("%category%", cat).replaceAll("%Category%", cat);
-		msg = msg.replaceAll("%cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%Cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
-		msg = msg.replaceAll("%xp%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%XP%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
-		return msg;
 	}
 	
 	@EventHandler
@@ -200,11 +196,11 @@ public class SignControl implements Listener{
 		if(Methods.hasPermission(player, "sign", false)){
 			if(line1.equalsIgnoreCase("{CrazyEnchant}")){
 				for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-					if(line2.equalsIgnoreCase("{"+cat+"}")){
-						e.setLine(0, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line1"),cat));
-						e.setLine(1, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line2"),cat));
-						e.setLine(2, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line3"),cat));
-						e.setLine(3, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line4"),cat));
+					if(line2.equalsIgnoreCase("{" + cat + "}")){
+						e.setLine(0, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line1"), cat));
+						e.setLine(1, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line2"), cat));
+						e.setLine(2, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line3"), cat));
+						e.setLine(3, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line4"), cat));
 						signs.set("Locations." + size + ".Type", cat);
 						signs.set("Locations." + size + ".World", loc.getWorld().getName());
 						signs.set("Locations." + size + ".X", loc.getBlockX());
@@ -215,7 +211,7 @@ public class SignControl implements Listener{
 					}
 				}
 				ArrayList<String> types = new ArrayList<String>();
-				types.add("ProtectionCrystal");
+				types.add("Crystal");
 				types.add("Scrambler");
 				types.add("DestroyDust");
 				types.add("SuccessDust");
@@ -239,6 +235,14 @@ public class SignControl implements Listener{
 				}
 			}
 		}
+	}
+	
+	private String placeHolders(String msg, String cat){
+		msg = Methods.color(msg);
+		msg = msg.replaceAll("%category%", cat).replaceAll("%Category%", cat);
+		msg = msg.replaceAll("%cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%Cost%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
+		msg = msg.replaceAll("%xp%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"").replaceAll("%XP%", Main.settings.getConfig().getInt("Categories."+cat+".Cost")+"");
+		return msg;
 	}
 	
 }

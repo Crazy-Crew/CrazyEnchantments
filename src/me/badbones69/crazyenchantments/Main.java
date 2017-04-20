@@ -130,8 +130,8 @@ public class Main extends JavaPlugin implements Listener{
 		new BukkitRunnable(){
 			@Override
 			public void run() {
-				for(CEPlayer p : CE.getCEPlayers()){
-					CE.backupCEPlayer(p.getPlayer());
+				for(CEPlayer player : CE.getCEPlayers()){
+					CE.backupCEPlayer(player);
 				}
 				if(settings.getConfig().contains("Settings.Player-Info-Backup-Message")){
 					if(settings.getConfig().getBoolean("Settings.Player-Info-Backup-Message")){
