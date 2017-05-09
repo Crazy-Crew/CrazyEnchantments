@@ -24,9 +24,9 @@ import org.bukkit.util.Vector;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.ParticleEffect;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 
@@ -98,18 +98,7 @@ public class Bows implements Listener{
 				if(Enchant.get(arrow).contains(CEnchantments.BOOM)){
 					if(CEnchantments.BOOM.isEnabled()){
 						if(Methods.randomPicker(6-Main.CE.getPower(Arrow.get(arrow), CEnchantments.BOOM))){
-							ParticleEffect.FLAME.display(0, 0, 0, 1, 200, arrow.getLocation().add(0,1,0), 100);
-							ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, arrow.getLocation().add(0,1,0), 100);
-							ParticleEffect.CLOUD.display((float).4, (float).5, (float).4, 1, 30, arrow.getLocation().add(0,1,0), 100);
-							for(LivingEntity en : Methods.getNearbyEntities(arrow.getLocation(), 3D, arrow)){
-								if(Support.allowsPVP(en.getLocation())){
-									if(!Support.isFriendly(P.get(arrow), en)){
-										if(!P.get(arrow).getName().equalsIgnoreCase(en.getName())){
-											en.damage(5D);
-										}
-									}
-								}
-							}
+							Methods.explode(P.get(arrow), arrow);
 							arrow.remove();
 						}
 					}
@@ -119,7 +108,7 @@ public class Bows implements Listener{
 						Location loc = arrow.getLocation();
 						if(Methods.randomPicker(5)){
 							loc.getWorld().strikeLightningEffect(loc);
-							for(LivingEntity en : Methods.getNearbyEntities(loc, 2D, arrow)){
+							for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, arrow)){
 								if(Support.allowsPVP(en.getLocation())){
 									if(!Support.isFriendly(P.get(arrow), en)){
 										if(!P.get(arrow).getName().equalsIgnoreCase(en.getName())){
@@ -191,14 +180,18 @@ public class Bows implements Listener{
 											if(en instanceof Player){
 												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PULL, item);
 												Bukkit.getPluginManager().callEvent(event);
+												Player player = (Player) e.getEntity();
 												if(!event.isCancelled()){
 													if(Support.hasSpartan()){
-														SpartanSupport.cancelSpeed((Player)e.getEntity());
-														SpartanSupport.cancelFly((Player)e.getEntity());
-														SpartanSupport.cancelClip((Player)e.getEntity());
-														SpartanSupport.cancelNormalMovements((Player)e.getEntity());
-														SpartanSupport.cancelNoFall((Player)e.getEntity());
-														SpartanSupport.cancelJesus((Player)e.getEntity());
+														SpartanSupport.cancelSpeed(player);
+														SpartanSupport.cancelFly(player);
+														SpartanSupport.cancelClip(player);
+														SpartanSupport.cancelNormalMovements(player);
+														SpartanSupport.cancelNoFall(player);
+														SpartanSupport.cancelJesus(player);
+													}
+													if(Support.hasAAC()){
+														AACSupport.exemptPlayerTime(player);
 													}
 													en.setVelocity(v);
 												}

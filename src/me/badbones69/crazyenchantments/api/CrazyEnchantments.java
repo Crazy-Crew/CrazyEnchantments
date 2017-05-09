@@ -285,13 +285,25 @@ public class CrazyEnchantments {
 	public ArrayList<String> getEnchantmentCategories(CEnchantments enchantment){
 		ArrayList<String> cats = new ArrayList<String>();
 		for(String c : Main.settings.getEnchs().getStringList("Enchantments." + enchantment.getName() + ".Categories")){
-			for(String C : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+			for(String C : getCategories()){
 				if(c.equalsIgnoreCase(C)){
 					cats.add(C);
 				}
 			}
 		}
 		return cats;
+	}
+	
+	/**
+	 * Get all the categories that can be used.
+	 * @return List of all the categories.
+	 */
+	public ArrayList<String> getCategories(){
+		ArrayList<String> categories = new ArrayList<String>();
+		for(String category : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
+			categories.add(category);
+		}
+		return categories;
 	}
 	
 	/**
@@ -554,7 +566,8 @@ public class CrazyEnchantments {
 			exclude = new ItemStack(Material.AIR);
 		}
 		items.add(include);
-		for(CEnchantments ench : getEnchantmentPotions().keySet()){
+		HashMap<CEnchantments,HashMap<PotionEffectType,Integer>> armorEffects = getEnchantmentPotions();
+		for(CEnchantments ench : armorEffects.keySet()){
 			for(ItemStack armor : items){
 				if(armor != null){
 					if(!armor.isSimilar(exclude)){
@@ -565,15 +578,15 @@ public class CrazyEnchantments {
 									power = getMaxPower(ench);
 								}
 							}
-							for(PotionEffectType type : getEnchantmentPotions().get(enchantment).keySet()){
-								if(getEnchantmentPotions().get(ench).containsKey(type)){
+							for(PotionEffectType type : armorEffects.get(enchantment).keySet()){
+								if(armorEffects.get(ench).containsKey(type)){
 									if(effects.containsKey(type)){
 										int updated = effects.get(type);
-										if(updated < (power + getEnchantmentPotions().get(ench).get(type))){
-											effects.put(type, power + getEnchantmentPotions().get(ench).get(type));
+										if(updated < (power + armorEffects.get(ench).get(type))){
+											effects.put(type, power + armorEffects.get(ench).get(type));
 										}
 									}else{
-										effects.put(type, power + getEnchantmentPotions().get(ench).get(type));
+										effects.put(type, power + armorEffects.get(ench).get(type));
 									}
 								}
 							}
@@ -582,7 +595,7 @@ public class CrazyEnchantments {
 				}
 			}
 		}
-		for(PotionEffectType type : getEnchantmentPotions().get(enchantment).keySet()){
+		for(PotionEffectType type : armorEffects.get(enchantment).keySet()){
 			if(!effects.containsKey(type)){
 				effects.put(type, -1);
 			}
@@ -623,6 +636,15 @@ public class CrazyEnchantments {
 		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.CONFUSION, -1);
 		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW_DIGGING, -1);
 		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW,0);
+		
+		enchants.put(CEnchantments.ANTIGRAVITY, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.ANTIGRAVITY).put(PotionEffectType.JUMP, 1);
+		
+		enchants.put(CEnchantments.GEARS, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.GEARS).put(PotionEffectType.SPEED, -1);
+		
+		enchants.put(CEnchantments.SPRINGS, new HashMap<PotionEffectType, Integer>());
+		enchants.get(CEnchantments.SPRINGS).put(PotionEffectType.JUMP, -1);
 		return enchants;
 	}
 	

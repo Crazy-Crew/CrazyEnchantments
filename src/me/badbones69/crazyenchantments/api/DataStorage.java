@@ -357,8 +357,7 @@ public class DataStorage {
 	
 	private static Integer pickLevel(int max, int min){
 		max++;
-		Random i = new Random();
-		return min+i.nextInt(max-min);
+		return min + new Random().nextInt(max - min);
 	}
 	
 }

@@ -91,8 +91,20 @@ public class ProtectionCrystal implements Listener{
 		Player player = e.getPlayer();
 		String protection = Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected"));
 		if(playersItems.containsKey(player.getUniqueId())){
-			for(ItemStack item : playersItems.get(player.getUniqueId())){
-				player.getInventory().addItem(Methods.removeLore(item, protection));
+			if(Main.settings.getConfig().contains("Settings.ProtectionCrystal.Lose-Protection-On-Death")){
+				if(Main.settings.getConfig().getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death")){
+					for(ItemStack item : playersItems.get(player.getUniqueId())){
+						player.getInventory().addItem(Methods.removeLore(item, protection));
+					}
+				}else{
+					for(ItemStack item : playersItems.get(player.getUniqueId())){
+						player.getInventory().addItem(item);
+					}
+				}
+			}else{
+				for(ItemStack item : playersItems.get(player.getUniqueId())){
+					player.getInventory().addItem(Methods.removeLore(item, protection));
+				}
 			}
 			playersItems.remove(player.getUniqueId());
 		}

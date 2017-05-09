@@ -15,8 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.badbones69.crazyenchantments.Main;
@@ -24,7 +22,6 @@ import me.badbones69.crazyenchantments.ParticleEffect;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
-import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 
@@ -33,7 +30,6 @@ public class Boots implements Listener{
 	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	
 	public static ArrayList<Player> Flying = new ArrayList<Player>();
-	private int time = Integer.MAX_VALUE;
 	
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
@@ -41,36 +37,9 @@ public class Boots implements Listener{
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
 		if(Main.CE.hasEnchantments(NewItem)){
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.ANTIGRAVITY)){
-				if(CEnchantments.ANTIGRAVITY.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ANTIGRAVITY, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, 1+Main.CE.getPower(NewItem, CEnchantments.ANTIGRAVITY)));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.GEARS)){
-				if(CEnchantments.GEARS.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GEARS, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, time, Main.CE.getPower(NewItem, CEnchantments.GEARS)-1));
-					}
-				}
-			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.SPRINGS)){
-				if(CEnchantments.SPRINGS.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SPRINGS, NewItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time, Main.CE.getPower(NewItem, CEnchantments.SPRINGS)-1));
-					}
-				}
-			}
 			if(Main.CE.hasEnchantment(NewItem, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Support.inTerritory(player)||Support.inWingsRegion(player.getLocation())){
+					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(player.getGameMode() != GameMode.CREATIVE){
 							if(Version.getVersion().comparedTo(Version.v1_8_R1) >= 1){
 								if(player.getGameMode() != GameMode.ADVENTURE){
@@ -85,21 +54,6 @@ public class Boots implements Listener{
 			}
 		}
 		if(Main.CE.hasEnchantments(OldItem)){
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.ANTIGRAVITY)){
-				if(CEnchantments.ANTIGRAVITY.isEnabled()){
-					player.removePotionEffect(PotionEffectType.JUMP);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.GEARS)){
-				if(CEnchantments.GEARS.isEnabled()){
-					player.removePotionEffect(PotionEffectType.SPEED);
-				}
-			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.SPRINGS)){
-				if(CEnchantments.SPRINGS.isEnabled()){
-					player.removePotionEffect(PotionEffectType.JUMP);
-				}
-			}
 			if(Main.CE.hasEnchantment(OldItem, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(player.getGameMode()!=GameMode.CREATIVE){
@@ -123,7 +77,7 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation())){
+					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
 							if(Support.hasSpartan()){
 								SpartanSupport.cancelFly(player);
@@ -149,7 +103,7 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation())){
+					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
 							if(!player.getAllowFlight()){
 								player.setAllowFlight(true);
@@ -203,7 +157,7 @@ public class Boots implements Listener{
 		if(Main.CE.hasEnchantments(boots)){
 			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
 				if(CEnchantments.WINGS.isEnabled()){
-					if(Support.inTerritory(player) || Support.inWingsRegion(player.getLocation())){
+					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
 							if(Support.hasSpartan()){
 								SpartanSupport.cancelFly(player);

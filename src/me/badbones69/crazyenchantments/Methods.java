@@ -32,6 +32,9 @@ import org.bukkit.plugin.Plugin;
 
 import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.controlers.FireworkDamageAPI;
+import me.badbones69.crazyenchantments.multisupport.AACSupport;
+import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
+import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_10_R1;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_11_R1;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_7_R4;
@@ -58,6 +61,17 @@ public class Methods{
 		for(String msg : messages){
 			player.sendMessage(color(msg));
 		}
+	}
+	
+	public static Integer getRandomNumber(String range){
+		int number = 1;
+		String[] split = range.split("-");
+		if(isInt(split[0]) && isInt(split[1])){
+				int max = Integer.parseInt(split[1]) + 1;
+				int min = Integer.parseInt(split[0]);
+				number = min + new Random().nextInt(max - min);
+		}
+		return number;
 	}
 	
 	public static boolean hasPermission(Player player, String perm, Boolean toggle){
@@ -729,7 +743,7 @@ public class Methods{
 		return false;
 	}
 	
-	public static List<LivingEntity> getNearbyEntities(Location loc, double radius, Entity ent) {
+	public static List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity ent) {
 	    List<Entity> out = ent.getNearbyEntities(radius, radius, radius);
 	    List<LivingEntity> entities = new ArrayList<LivingEntity>();
 	    for(Entity en : out){
@@ -738,6 +752,10 @@ public class Methods{
 	    	}
 	    }
 	    return entities;
+	}
+	
+	public static List<Entity> getNearbyEntitiess(Location loc, double radius, Entity ent) {
+	    return ent.getNearbyEntities(radius, radius, radius);
 	}
 	
 	public static void fireWork(Location loc, ArrayList<Color> colors) {
@@ -907,6 +925,78 @@ public class Methods{
 		enchants.put("FROST_WALKER", "Frost_Walker");
 		enchants.put("VANISHING_CURSE", "Curse_Of_Vanishing");
 		return enchants.keySet();
+	}
+	
+	public static void explode(Entity player){
+		ParticleEffect.FLAME.display(0, 0, 0, 1, 200, player.getLocation().add(0,1,0), 100);
+		ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, player.getLocation().add(0,1,0), 100);
+		ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, player.getLocation().add(0,1,0), 100);
+		for(Entity e : Methods.getNearbyEntitiess(player.getLocation(), 3D, player)){
+			if(Support.allowsPVP(e.getLocation())){
+				if(e.getType() == EntityType.DROPPED_ITEM){
+					e.remove();
+				}else{
+					if(e instanceof LivingEntity){
+						LivingEntity en = (LivingEntity) e;
+						if(!Support.isFriendly(player, en)){
+							if(!player.getName().equalsIgnoreCase(e.getName())){
+								en.damage(5D);
+								if(en instanceof Player){
+									if(Support.hasSpartan()){
+										SpartanSupport.cancelSpeed((Player) player);
+										SpartanSupport.cancelFly((Player) player);
+										SpartanSupport.cancelClip((Player) player);
+										SpartanSupport.cancelNormalMovements((Player) player);
+										SpartanSupport.cancelNoFall((Player) player);
+										SpartanSupport.cancelJesus((Player) player);
+									}
+									if(Support.hasAAC()){
+										AACSupport.exemptPlayerTime((Player) player);
+									}
+								}
+								en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public static void explode(Entity player, Entity arrow){
+		ParticleEffect.FLAME.display(0, 0, 0, 1, 200, arrow.getLocation().add(0,1,0), 100);
+		ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, arrow.getLocation().add(0,1,0), 100);
+		ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, arrow.getLocation().add(0,1,0), 100);
+		for(Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)){
+			if(Support.allowsPVP(e.getLocation())){
+				if(e.getType() == EntityType.DROPPED_ITEM){
+					e.remove();
+				}else{
+					if(e instanceof LivingEntity){
+						LivingEntity en = (LivingEntity) e;
+						if(!Support.isFriendly(player, en)){
+							if(!player.getName().equalsIgnoreCase(e.getName())){
+								en.damage(5D);
+								if(en instanceof Player){
+									if(Support.hasSpartan()){
+										SpartanSupport.cancelSpeed((Player) player);
+										SpartanSupport.cancelFly((Player) player);
+										SpartanSupport.cancelClip((Player) player);
+										SpartanSupport.cancelNormalMovements((Player) player);
+										SpartanSupport.cancelNoFall((Player) player);
+										SpartanSupport.cancelJesus((Player) player);
+									}
+									if(Support.hasAAC()){
+										AACSupport.exemptPlayerTime((Player) player);
+									}
+								}
+								en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 }

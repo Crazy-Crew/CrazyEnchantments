@@ -383,7 +383,7 @@ public class CustomEnchantments implements Listener{
 	}
 	
 	public boolean hasEnchantment(ItemStack item, String enchantment){
-		if(item!=null){
+		if(item != null){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){

@@ -19,7 +19,7 @@ import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 
 public class SilkSpawners implements Listener{
 	
-	SilkUtil su = SilkUtil.hookIntoSilkSpanwers();
+	private SilkUtil su = SilkUtil.hookIntoSilkSpanwers();
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBreak(SilkSpawnersSpawnerBreakEvent e){

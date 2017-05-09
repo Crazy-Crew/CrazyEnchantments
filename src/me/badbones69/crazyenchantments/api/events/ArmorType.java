@@ -24,7 +24,12 @@ public enum ArmorType{
 	 * @return The parsed ArmorType. (null if none were found.)
 	 */
 	public final static ArmorType matchType(final ItemStack itemStack){
-		if(itemStack == null) { return null; }
+		if(itemStack == null) {
+			return null; 
+		}
+		if(itemStack.getType().name().toLowerCase().contains("skull")){
+			return HELMET;
+		}
 		switch (itemStack.getType()){
 			case DIAMOND_HELMET:
 			case GOLD_HELMET:

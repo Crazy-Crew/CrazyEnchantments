@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.controlers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -92,7 +93,7 @@ public class SignControl implements Listener{
 								player.sendMessage(Methods.color(Methods.getPrefix()+config.getString("Settings.SignOptions." + o + "Style.Buy-Message")));
 							}
 							switch(o){
-								case "Crystal": player.getInventory().addItem(ProtectionCrystal.getCrystals());
+								case "ProtectionCrystal": player.getInventory().addItem(ProtectionCrystal.getCrystals());
 									break;
 								case "Scrambler": player.getInventory().addItem(Scrambler.getScramblers());
 									break;
@@ -191,7 +192,15 @@ public class SignControl implements Listener{
 		Player player = e.getPlayer();
 		Location loc = e.getBlock().getLocation();
 		FileConfiguration signs = Main.settings.getSigns();
-		int size = signs.getConfigurationSection("Locations").getKeys(false).size()+1;
+		String id = new Random().nextInt(Integer.MAX_VALUE) + "";
+		for(int i = 0; i < 200; i++){
+			if(signs.contains("Locations." + id)){
+				id = new Random().nextInt(Integer.MAX_VALUE) + "";
+				continue;
+			}else{
+				break;
+			}
+		}
 		String line1 = e.getLine(0);
 		String line2 = e.getLine(1);
 		if(Methods.hasPermission(player, "sign", false)){
@@ -202,11 +211,11 @@ public class SignControl implements Listener{
 						e.setLine(1, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line2"), cat));
 						e.setLine(2, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line3"), cat));
 						e.setLine(3, placeHolders(Main.settings.getConfig().getString("Settings.SignOptions.CategoryShopStyle.Line4"), cat));
-						signs.set("Locations." + size + ".Type", cat);
-						signs.set("Locations." + size + ".World", loc.getWorld().getName());
-						signs.set("Locations." + size + ".X", loc.getBlockX());
-						signs.set("Locations." + size + ".Y", loc.getBlockY());
-						signs.set("Locations." + size + ".Z", loc.getBlockZ());
+						signs.set("Locations." + id + ".Type", cat);
+						signs.set("Locations." + id + ".World", loc.getWorld().getName());
+						signs.set("Locations." + id + ".X", loc.getBlockX());
+						signs.set("Locations." + id + ".Y", loc.getBlockY());
+						signs.set("Locations." + id + ".Z", loc.getBlockZ());
 						Main.settings.saveSigns();
 						return;
 					}
@@ -226,11 +235,11 @@ public class SignControl implements Listener{
 						e.setLine(1, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line2")));
 						e.setLine(2, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line3")));
 						e.setLine(3, Methods.color(Main.settings.getConfig().getString("Settings.SignOptions." + type + "Style.Line4")));
-						signs.set("Locations." + size + ".Type", type);
-						signs.set("Locations." + size + ".World", loc.getWorld().getName());
-						signs.set("Locations." + size + ".X", loc.getBlockX());
-						signs.set("Locations." + size + ".Y", loc.getBlockY());
-						signs.set("Locations." + size + ".Z", loc.getBlockZ());
+						signs.set("Locations." + id + ".Type", type);
+						signs.set("Locations." + id + ".World", loc.getWorld().getName());
+						signs.set("Locations." + id + ".X", loc.getBlockX());
+						signs.set("Locations." + id + ".Y", loc.getBlockY());
+						signs.set("Locations." + id + ".Z", loc.getBlockZ());
 						Main.settings.saveSigns();
 						return;
 					}

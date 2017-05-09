@@ -35,6 +35,7 @@ import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.events.ArmorListener;
 import me.badbones69.crazyenchantments.api.events.AuraListener;
 import me.badbones69.crazyenchantments.controlers.BlackSmith;
+import me.badbones69.crazyenchantments.controlers.CommandChecker;
 import me.badbones69.crazyenchantments.controlers.DustControl;
 import me.badbones69.crazyenchantments.controlers.EnchantmentControl;
 import me.badbones69.crazyenchantments.controlers.FireworkDamageAPI;
@@ -54,6 +55,7 @@ import me.badbones69.crazyenchantments.enchantments.Helmets;
 import me.badbones69.crazyenchantments.enchantments.PickAxes;
 import me.badbones69.crazyenchantments.enchantments.Swords;
 import me.badbones69.crazyenchantments.enchantments.Tools;
+import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
 import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
@@ -100,6 +102,7 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new ProtectionCrystal(), this);
 		pm.registerEvents(new Scrambler(), this);
 		pm.registerEvents(new CustomEnchantments(), this);
+		pm.registerEvents(new CommandChecker(), this);
 		try{
 			if(Version.getVersion().comparedTo(Version.v1_11_R1) >= 0){
 				pm.registerEvents(new FireworkDamageAPI(this), this);
@@ -114,6 +117,9 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new Boots(), this);
 		pm.registerEvents(new Armor(), this);
 		pm.registerEvents(new Swords(), this);
+		if(Support.hasAAC()){
+			pm.registerEvents(new AACSupport(), this);
+		}
 		if(Support.hasSilkSpawner()){
 			pm.registerEvents(new SilkSpawners(), this);
 		}
@@ -202,12 +208,12 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Methods.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
 					sender.sendMessage(Methods.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
-					sender.sendMessage(Methods.color("&b/CE Spawn <Enchantment> [Level:#/World:<World>/X:#/Y:#/Z:#] - &9Drops an enchantment book where you tell it to."));
+					sender.sendMessage(Methods.color("&b/CE Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#] - &9Drops an enchantment book where you tell it to."));
 					sender.sendMessage(Methods.color("&b/CE Scroll <Black/White/Transmog> [Amount] [Player] - &9Gives a player scrolls."));
 					sender.sendMessage(Methods.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
 					sender.sendMessage(Methods.color("&b/CE Scrambler [Amount] [Player] - &9Gives a player Scramblers."));
 					sender.sendMessage(Methods.color("&b/CE Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
-					sender.sendMessage(Methods.color("&b/CE Book <Enchantment> [Lvl] [Amount] [Player] - &9Gives a player a Enchantment Book."));
+					sender.sendMessage(Methods.color("&b/CE Book <Enchantment> [Lvl/Min-Max] [Amount] [Player] - &9Gives a player a Enchantment Book."));
 					sender.sendMessage(Methods.color("&b/CE LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
 					return true;
 				}
@@ -279,6 +285,7 @@ public class Main extends JavaPlugin implements Listener{
 					if(args.length >= 2){
 						CEnchantments enchant = null;
 						String cEnchant = null;
+						String category = null;
 						Boolean isCustom = false;
 						Location loc = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
 						int level = 1;
@@ -289,8 +296,15 @@ public class Main extends JavaPlugin implements Listener{
 							cEnchant = CustomE.getFromName(args[1]);
 							isCustom = true;
 						}else{
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
-							return true;
+							for(String cat : CE.getCategories()){
+								if(cat.equalsIgnoreCase(args[1])){
+									category = cat;
+								}
+							}
+							if(category == null){
+								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+								return true;
+							}
 						}
 						if(sender instanceof Player){
 							loc = ((Player)sender).getLocation();
@@ -301,6 +315,8 @@ public class Main extends JavaPlugin implements Listener{
 								arg = arg.replaceAll("level:", "");
 								if(Methods.isInt(arg)){
 									level = Integer.parseInt(arg);
+								}else if(arg.contains("-")){
+									level = Methods.getRandomNumber(arg);
 								}
 							}
 							if(arg.startsWith("world:")){
@@ -331,8 +347,10 @@ public class Main extends JavaPlugin implements Listener{
 						ItemStack book;
 						if(isCustom){
 							book = new CustomEBook(cEnchant, level).buildBook();
-						}else{
+						}else if(category == null){
 							book = new CEBook(enchant, level).buildBook();
+						}else{
+							book = LostBook.getLostBook(category, 1);
 						}
 						loc.getWorld().dropItemNaturally(loc, book);
 						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Spawned-Book")
@@ -342,7 +360,7 @@ public class Main extends JavaPlugin implements Listener{
 								.replaceAll("%Z%", loc.getBlockZ() + "").replaceAll("%z%", loc.getBlockZ() + "")));
 						return true;
 					}
-					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/CE Spawn <Enchantment> [Level:#/World:<World>/X:#/Y:#/Z:#]"));
+					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/CE Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#]"));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("LostBook") || args[0].equalsIgnoreCase("LB")){// /CE LostBook <Category> [Amount] [Player]
@@ -469,7 +487,7 @@ public class Main extends JavaPlugin implements Listener{
 						int percent = 0;
 						if(args.length==2){
 							if(!(sender instanceof Player)){
-								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
+								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
 								return true;
 							}
 						}
@@ -484,6 +502,11 @@ public class Main extends JavaPlugin implements Listener{
 						if(args.length>=4){
 							if(!Methods.isOnline(args[3], sender))return true;
 							player = Methods.getPlayer(args[3]);
+						}else{
+							if(!(sender instanceof Player)){
+								sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
+								return true;
+							}
 						}
 						if(args.length>=5){
 							if(!Methods.isInt(args[4])){
@@ -652,7 +675,7 @@ public class Main extends JavaPlugin implements Listener{
 						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Players-Only")));
 						return true;
 					}
-					if(args.length<=1){
+					if(args.length <= 1){
 						sender.sendMessage(Methods.getPrefix()+Methods.color("&c/CE Add <Enchantment> [LvL]"));
 						return true;
 					}
@@ -665,7 +688,7 @@ public class Main extends JavaPlugin implements Listener{
 					String ench = "Glowing";
 					CEnchantments en = null;
 					String lvl = "1";
-					if(args.length>=3){
+					if(args.length >= 3){
 						if(!Methods.isInt(args[2])){
 							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
@@ -694,11 +717,11 @@ public class Main extends JavaPlugin implements Listener{
 						}
 					}
 					if(!T){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
 					if(Methods.getItemInHand(player).getType() == Material.AIR){
-						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Doesnt-Have-Item-In-Hand")));
+						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Doesnt-Have-Item-In-Hand")));
 						return false;
 					}
 					if(isVanilla){
@@ -729,12 +752,15 @@ public class Main extends JavaPlugin implements Listener{
 					int amount = 1;
 					Player player = Methods.getPlayer(sender.getName());
 					if(args.length >= 3){
-						if(!Methods.isInt(args[2])){
+						if(Methods.isInt(args[2])){
+							lvl = Integer.parseInt(args[2]);
+						}else if(args[2].contains("-")){
+							lvl = Methods.getRandomNumber(args[2]);
+						}else{
 							sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-A-Number")
 									.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
 							return true;
 						}
-						lvl = Integer.parseInt(args[2]);
 					}
 					if(args.length >= 4){
 						if(!Methods.isInt(args[3])){
@@ -926,7 +952,12 @@ public class Main extends JavaPlugin implements Listener{
 	
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e){
-		CE.unloadCEPlayer(e.getPlayer());
+		new BukkitRunnable(){
+			@Override
+			public void run() {
+				CE.unloadCEPlayer(e.getPlayer());
+			}
+		}.runTaskAsynchronously(this);
 	}
 	
 }

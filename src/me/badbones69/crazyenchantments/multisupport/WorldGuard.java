@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -38,6 +39,26 @@ public class WorldGuard {
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(loc.getWorld()).getApplicableRegions(loc);
 		for(ProtectedRegion region : set){
 			if(regionName.equalsIgnoreCase(region.getId())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static Boolean isMember(Player player){
+		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation());
+		for(ProtectedRegion region : set.getRegions()){
+			if(region.getMembers().contains(player.getUniqueId())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static Boolean isOwner(Player player){
+		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation());
+		for(ProtectedRegion region : set.getRegions()){
+			if(region.getOwners().contains(player.getUniqueId())){
 				return true;
 			}
 		}

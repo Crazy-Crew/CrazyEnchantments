@@ -21,160 +21,159 @@ import org.bukkit.scheduler.BukkitTask;
 
 public class MCUpdate implements Listener {
 
-    private final static String VERSION = "1.0";
+	private final static String VERSION = "1.0";
 
-    private static final String BASE_URL = "http://report.mcupdate.org";
+	private static final String BASE_URL = "http://report.mcupdate.org";
 
-    /**
-     * Server received information.
-     */
-    private static String updateMessage = "";
-    private static boolean upToDate = true;
+	/**
+	 * Server received information.
+	 */
+	private static String updateMessage = "";
+	private static boolean upToDate = true;
 
-    private Plugin pl;
+	private Plugin pl;
 
-    /**
-     * Interval of time to ping (seconds)
-     */
-    private int PING_INTERVAL;
+	/**
+	 * Interval of time to ping (seconds)
+	 */
+	private int PING_INTERVAL;
 
-    /**
-     * The scheduled task
-     */
-    private volatile BukkitTask task = null;
+	/**
+	 * The scheduled task
+	 */
+	private volatile BukkitTask task = null;
 
-    public MCUpdate(Plugin plugin, boolean startTask) throws IOException
-    {
-        if (plugin != null)
-        {
-            this.pl = plugin;
-            //I should add a custom configuration for MCUpdate itself
-            Bukkit.getPluginManager().registerEvents(this, plugin);
-            setPingInterval(900);
-            if (startTask)
-            {
-                start();
-            }
-        }
-    }
-
-    private boolean start() {
-        // Is MCUpdate already running?
-        if (task == null) {
-            // Begin hitting the server with glorious data
-            task = pl.getServer().getScheduler().runTaskTimerAsynchronously(pl, () -> {
-                report();
-		if (!upToDate) {
-                    pl.getServer().getConsoleSender().sendMessage(format(updateMessage));
+	public MCUpdate(Plugin plugin, boolean startTask) throws IOException {
+		if (plugin != null) {
+			this.pl = plugin;
+			// I should add a custom configuration for MCUpdate itself
+			Bukkit.getPluginManager().registerEvents(this, plugin);
+			setPingInterval(900);
+			if (startTask) {
+				start();
+			}
 		}
-            }, 0, PING_INTERVAL * 20);
-        }
-        return true;
-    }
+	}
 
-    private int getOnlinePlayers() {
-        try {
-            Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
-            if (onlinePlayerMethod.getReturnType().equals(Collection.class)) {
-                return ((Collection<?>) onlinePlayerMethod.invoke(Bukkit.getServer())).size();
-            } else {
-                return ((Player[]) onlinePlayerMethod.invoke(Bukkit.getServer())).length;
-            }
-        } catch (Exception ex) {
-        }
-        return 0;
-    }
+	private boolean start() {
+		// Is MCUpdate already running?
+		if (task == null) {
+			// Begin hitting the server with glorious data
+			task = pl.getServer().getScheduler().runTaskTimerAsynchronously(pl, () -> {
+				report();
+				if (!upToDate) {
+					pl.getServer().getConsoleSender().sendMessage(format(updateMessage));
+				}
+			}, 0, PING_INTERVAL * 20);
+		}
+		return true;
+	}
 
-    private void report() {
-        String ver = pl.getDescription().getVersion();
-        String name = pl.getDescription().getName();
-        int playersOnline = this.getOnlinePlayers();
-        boolean onlineMode = pl.getServer().getOnlineMode();
-        String serverVersion = pl.getServer().getVersion();
+	private int getOnlinePlayers() {
+		try {
+			Method onlinePlayerMethod = Server.class.getMethod("getOnlinePlayers");
+			if (onlinePlayerMethod.getReturnType().equals(Collection.class)) {
+				return ((Collection<?>) onlinePlayerMethod.invoke(Bukkit.getServer())).size();
+			} else {
+				return ((Player[]) onlinePlayerMethod.invoke(Bukkit.getServer())).length;
+			}
+		} catch (Exception ex) {
+		}
+		return 0;
+	}
 
-        String osname = System.getProperty("os.name");
-        String osarch = System.getProperty("os.arch");
-        String osversion = System.getProperty("os.version");
-        String java_version = System.getProperty("java.version");
-        int coreCount = Runtime.getRuntime().availableProcessors();
+	private void report() {
+		String ver = pl.getDescription().getVersion();
+		String name = pl.getDescription().getName();
+		int playersOnline = this.getOnlinePlayers();
+		boolean onlineMode = pl.getServer().getOnlineMode();
+		String serverVersion = pl.getServer().getVersion();
 
-        String report = "{ \"report\": {";
-        report += toJson("plugin", name) + ",";
-        report += toJson("version", ver) + ",";
-        report += toJson("playersonline", playersOnline + "") + ",";
-        report += toJson("onlinemode", onlineMode + "") + ",";
-        report += toJson("serverversion", serverVersion) + ",";
+		String osname = System.getProperty("os.name");
+		String osarch = System.getProperty("os.arch");
+		String osversion = System.getProperty("os.version");
+		String java_version = System.getProperty("java.version");
+		int coreCount = Runtime.getRuntime().availableProcessors();
 
-        report += toJson("osname", osname) + ",";
-        report += toJson("osarch", osarch) + ",";
-        report += toJson("osversion", osversion) + ",";
-        report += toJson("javaversion", java_version) + ",";
-        report += toJson("corecount", coreCount + "") + "";
+		String report = "{ \"report\": {";
+		report += toJson("plugin", name) + ",";
+		report += toJson("version", ver) + ",";
+		report += toJson("playersonline", playersOnline + "") + ",";
+		report += toJson("onlinemode", onlineMode + "") + ",";
+		report += toJson("serverversion", serverVersion) + ",";
 
-        report += "} }";
+		report += toJson("osname", osname) + ",";
+		report += toJson("osarch", osarch) + ",";
+		report += toJson("osversion", osversion) + ",";
+		report += toJson("javaversion", java_version) + ",";
+		report += toJson("corecount", coreCount + "") + "";
 
-        byte[] data = report.getBytes();
+		report += "} }";
 
-        try  {
+		byte[] data = report.getBytes();
 
-            URL url = new URL(BASE_URL);
-            URLConnection c = url.openConnection();
-            c.setConnectTimeout(2500);
-            c.setReadTimeout(3500);
+		try {
 
-            c.addRequestProperty("User-Agent", "MCUPDATE/" + VERSION);
-            c.addRequestProperty("Content-Type", "application/json");
-            c.addRequestProperty("Content-Length", Integer.toString(data.length));
-            c.addRequestProperty("Accept", "application/json");
-            c.addRequestProperty("Connection", "close");
+			URL url = new URL(BASE_URL);
+			URLConnection c = url.openConnection();
+			c.setConnectTimeout(2500);
+			c.setReadTimeout(3500);
 
-            c.setDoOutput(true);
+			c.addRequestProperty("User-Agent", "MCUPDATE/" + VERSION);
+			c.addRequestProperty("Content-Type", "application/json");
+			c.addRequestProperty("Content-Length", Integer.toString(data.length));
+			c.addRequestProperty("Accept", "application/json");
+			c.addRequestProperty("Connection", "close");
 
-            OutputStream os = c.getOutputStream();
-            os.write(data);
-            os.flush();
+			c.setDoOutput(true);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
-            String endData = br.readLine().trim();
+			OutputStream os = c.getOutputStream();
+			os.write(data);
+			os.flush();
 
-            String serverMessage = getString(endData, "message");
-            String cVersion = getString(endData, "pl_Version");
-            updateMessage = getString(endData, "update_Message");
+			BufferedReader br = new BufferedReader(new InputStreamReader(c.getInputStream()));
+			String endData = br.readLine().trim();
 
-            if (!serverMessage.equals("ERROR")) {
-                if (!ver.equals(cVersion)) {
-                    upToDate = false;
-                }
-            }
-            br.close();
+			String serverMessage = getString(endData, "message");
+			String cVersion = getString(endData, "pl_Version");
+			updateMessage = getString(endData, "update_Message");
 
-        } catch (IOException ignored) {
-        }
-    }
+			if (serverMessage != null) {
+				if (!serverMessage.equals("ERROR")) {
+					if (!ver.equals(cVersion)) {
+						upToDate = false;
+					}
+				}
+			}
+			br.close();
 
-    private String getString(String data, String key) {
-        String dat = data.replace("{ \"Response\": {\"", "");
-        dat = dat.replace("\"} }", "");
-        List<String> list = Arrays.asList(dat.split("\",\""));
+		} catch (IOException ignored) {
+		}
+	}
 
-        for (String stub : list) {
-            List<String> list2 = Arrays.asList(stub.split("\":\""));
-            if (key.equals(list2.get(0))) {
-                return list2.get(1);
-            }
-        }
-        return null;
-    }
+	private String getString(String data, String key) {
+		String dat = data.replace("{ \"Response\": {\"", "");
+		dat = dat.replace("\"} }", "");
+		List<String> list = Arrays.asList(dat.split("\",\""));
 
-    private static String toJson(String key, String value) {
-        return "\"" + key + "\":\"" + value + "\"";
-    }
+		for (String stub : list) {
+			List<String> list2 = Arrays.asList(stub.split("\":\""));
+			if (key.equals(list2.get(0))) {
+				return list2.get(1);
+			}
+		}
+		return null;
+	}
 
-    private static String format(String format) {
-        return ChatColor.translateAlternateColorCodes('&', format);
-    }
+	private static String toJson(String key, String value) {
+		return "\"" + key + "\":\"" + value + "\"";
+	}
 
-    public void setPingInterval(int PING_INTERVAL) {
-        this.PING_INTERVAL = PING_INTERVAL;
-    }
+	private static String format(String format) {
+		return ChatColor.translateAlternateColorCodes('&', format);
+	}
+
+	public void setPingInterval(int PING_INTERVAL) {
+		this.PING_INTERVAL = PING_INTERVAL;
+	}
 }

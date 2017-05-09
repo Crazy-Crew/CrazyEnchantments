@@ -28,7 +28,7 @@ public class EnchantmentControl implements Listener{
 	
 	private static HashMap<String, String> enchants = new HashMap<String, String>();
 	
-	public static String Enchants(String cat){
+	public static String getRandomEnchantment(String cat){
 		Random number = new Random();
 		List<String> enchantments = new ArrayList<String>();
 		for(CEnchantments en : Main.CE.getEnchantments()){
@@ -106,7 +106,7 @@ public class EnchantmentControl implements Listener{
 						}
 						for(String ench : Main.CustomE.getEnchantments()){
 							if(name.contains(Methods.color(Main.CustomE.getBookColor(ench) + Main.CustomE.getCustomName(ench)))){
-								enchant = Main.CustomE.getCustomName(ench);
+								enchant = ench;
 								type = Main.CustomE.getType(ench);
 								custom = true;
 							}
@@ -215,13 +215,13 @@ public class EnchantmentControl implements Listener{
 									}
 								}
 								e.setCancelled(true);
-								if(success||player.getGameMode() == GameMode.CREATIVE){
+								if(success || player.getGameMode() == GameMode.CREATIVE){
 									name = Methods.removeColor(name);
 									Integer lvl = convertPower(name.split(" ")[1]);
 									if(custom){
-										Main.CustomE.addEnchantment(item, enchant, lvl);
+										e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, lvl));
 									}else{
-										Main.CE.addEnchantment(item, en, lvl);
+										e.setCurrentItem(Main.CE.addEnchantment(item, en, lvl));
 									}
 									player.setItemOnCursor(new ItemStack(Material.AIR));
 									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Book-Works")));
@@ -316,7 +316,7 @@ public class EnchantmentControl implements Listener{
 		int Dmax = Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max");
 		int Dmin = Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min");
 		ArrayList<String> lore = new ArrayList<String>();
-		String enchant = Enchants(cat);
+		String enchant = getRandomEnchantment(cat);
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			if(l.contains("%Description%")||l.contains("%description%")){
 				if(Main.CE.getFromName(enchant)!=null){

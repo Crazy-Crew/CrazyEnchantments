@@ -43,6 +43,8 @@ import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
+import me.badbones69.crazyenchantments.controlers.ProtectionCrystal;
+import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 
@@ -118,6 +120,9 @@ public class Armor implements Listener{
 									if(Methods.randomPicker((8-Main.CE.getPower(armor, CEnchantments.ROCKET)))){
 										EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET, armor);
 										Bukkit.getPluginManager().callEvent(event);
+										if(Support.hasAAC()){
+											AACSupport.exemptPlayerTime(player);
+										}
 										if(!event.isCancelled()){
 											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 												public void run(){
@@ -262,7 +267,7 @@ public class Armor implements Listener{
 									if(!event.isCancelled()){
 										Location loc = damager.getLocation();
 										loc.getWorld().strikeLightningEffect(loc);
-										for(LivingEntity en : Methods.getNearbyEntities(loc, 2D, damager)){
+										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, damager)){
 											if(Support.allowsPVP(en.getLocation())){
 												if(!Support.isFriendly(player, en)){
 													en.damage(5D);
@@ -527,8 +532,19 @@ public class Armor implements Listener{
 						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT, item);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()){
-							Location loc = e.getEntity().getLocation();
-							loc.getWorld().createExplosion(loc, Main.CE.getPower(item, CEnchantments.SELFDESTRUCT));
+							Methods.explode(player);
+							ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+							for(ItemStack drop : e.getDrops()){
+								if(drop != null){
+									if(ProtectionCrystal.isProtected(drop)){
+										if(ProtectionCrystal.isSuccessfull(player)){
+											items.add(drop);
+										}
+									}
+								}
+							}
+							e.getDrops().clear();
+							e.getDrops().addAll(items);
 						}
 					}
 				}
@@ -581,117 +597,111 @@ public class Armor implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onAllySpawn(EntityDamageByEntityEvent e){
-		if(e.getEntity() instanceof Player && e.getDamager() instanceof LivingEntity){// Player gets attacked
-			Player player = (Player) e.getEntity();
-			LivingEntity en = (LivingEntity) e.getDamager();
-			if(!Support.isFriendly(player, en)){
-				if(Support.allowsPVP(player.getLocation()) && Support.allowsPVP(en.getLocation())){
-					if(!mobs.containsKey(player)){
-						for(ItemStack item : player.getEquipment().getArmorContents()){
-							if(Main.CE.hasEnchantments(item)){// Spawn allies when getting attacked
-								if(!mobTimer.containsKey(player) || (mobTimer.containsKey(player) && Calendar.getInstance().after(mobTimer.get(player)))){
-									if(Main.CE.hasEnchantment(item, CEnchantments.TAMER)){
-										if(CEnchantments.TAMER.isEnabled()){
+		if(!e.isCancelled()){
+			if(e.getEntity() instanceof Player && e.getDamager() instanceof LivingEntity){// Player gets attacked
+				Player player = (Player) e.getEntity();
+				LivingEntity en = (LivingEntity) e.getDamager();
+				if(!mobs.containsKey(player)){
+					for(ItemStack item : player.getEquipment().getArmorContents()){
+						if(Main.CE.hasEnchantments(item)){// Spawn allies when getting attacked
+							if(!mobTimer.containsKey(player) || (mobTimer.containsKey(player) && Calendar.getInstance().after(mobTimer.get(player)))){
+								if(Main.CE.hasEnchantment(item, CEnchantments.TAMER)){
+									if(CEnchantments.TAMER.isEnabled()){
+										if(!mobs.containsKey(player)){
+											int power = Main.CE.getPower(item, CEnchantments.TAMER);
+											spawnAllies(player, en, EntityType.WOLF, power);
+										}
+									}
+								}
+								if(Main.CE.hasEnchantment(item, CEnchantments.GUARDS)){
+									if(CEnchantments.GUARDS.isEnabled()){
+										if(!mobs.containsKey(player)){
+											int power = Main.CE.getPower(item, CEnchantments.GUARDS);
+											spawnAllies(player, en, EntityType.IRON_GOLEM, power);
+										}
+									}
+								}
+								if(en instanceof Player){
+									if(Main.CE.hasEnchantment(item, CEnchantments.NECROMANCER)){
+										if(CEnchantments.NECROMANCER.isEnabled()){
 											if(!mobs.containsKey(player)){
-												int power = Main.CE.getPower(item, CEnchantments.TAMER);
-												spawnAllies(player, en, EntityType.WOLF, power);
+												int power = Main.CE.getPower(item, CEnchantments.NECROMANCER);
+												spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
 											}
 										}
 									}
-									if(Main.CE.hasEnchantment(item, CEnchantments.GUARDS)){
-										if(CEnchantments.GUARDS.isEnabled()){
+									if(Main.CE.hasEnchantment(item, CEnchantments.INFESTATION)){
+										if(CEnchantments.INFESTATION.isEnabled()){
 											if(!mobs.containsKey(player)){
-												int power = Main.CE.getPower(item, CEnchantments.GUARDS);
-												spawnAllies(player, en, EntityType.IRON_GOLEM, power);
-											}
-										}
-									}
-									if(en instanceof Player){
-										if(Main.CE.hasEnchantment(item, CEnchantments.NECROMANCER)){
-											if(CEnchantments.NECROMANCER.isEnabled()){
-												if(!mobs.containsKey(player)){
-													int power = Main.CE.getPower(item, CEnchantments.NECROMANCER);
-													spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
-												}
-											}
-										}
-										if(Main.CE.hasEnchantment(item, CEnchantments.INFESTATION)){
-											if(CEnchantments.INFESTATION.isEnabled()){
-												if(!mobs.containsKey(player)){
-													int power = Main.CE.getPower(item, CEnchantments.INFESTATION);
-													spawnAllies(player, en, EntityType.ENDERMITE, power * 3);
-													spawnAllies(player, en, EntityType.SILVERFISH, power * 3);
-												}
+												int power = Main.CE.getPower(item, CEnchantments.INFESTATION);
+												spawnAllies(player, en, EntityType.ENDERMITE, power * 3);
+												spawnAllies(player, en, EntityType.SILVERFISH, power * 3);
 											}
 										}
 									}
 								}
 							}
 						}
-					}else{
-						attackEnemy(player, en);
+					}
+				}else{
+					attackEnemy(player, en);
+				}
+			}
+			if(e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player){// Player attacks
+				Player player = (Player) e.getDamager();
+				LivingEntity en = (LivingEntity) e.getEntity();
+				if(mobs.containsKey(player)){// If player hurts ally
+					if(mobs.get(player).contains(en)){
+						e.setCancelled(true);
+						return;
 					}
 				}
-			}
-		}
-		if(e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player){// Player attacks
-			Player player = (Player) e.getDamager();
-			LivingEntity en = (LivingEntity) e.getEntity();
-			if(mobs.containsKey(player)){// If player hurts ally
-				if(mobs.get(player).contains(en)){
-					e.setCancelled(true);
-					return;
-				}
-			}
-			if(!Support.isFriendly(player, en)){
-				if(Support.allowsPVP(player.getLocation()) && Support.allowsPVP(en.getLocation())){
-					if(!mobs.containsKey(player)){
-						for(ItemStack item : player.getEquipment().getArmorContents()){
-							if(Main.CE.hasEnchantments(item)){// Spawn allies when attacking
-								if(!mobTimer.containsKey(player) || (mobTimer.containsKey(player) && Calendar.getInstance().after(mobTimer.get(player)))){
-									if(Main.CE.hasEnchantment(item, CEnchantments.TAMER)){
+				if(!mobs.containsKey(player)){
+					for(ItemStack item : player.getEquipment().getArmorContents()){
+						if(Main.CE.hasEnchantments(item)){// Spawn allies when attacking
+							if(!mobTimer.containsKey(player) || (mobTimer.containsKey(player) && Calendar.getInstance().after(mobTimer.get(player)))){
+								if(Main.CE.hasEnchantment(item, CEnchantments.TAMER)){
+									if(CEnchantments.INFESTATION.isEnabled()){
+										if(!mobs.containsKey(player)){
+											int power = Main.CE.getPower(item, CEnchantments.TAMER);
+											spawnAllies(player, en, EntityType.WOLF, power);
+										}
+									}
+								}
+								if(Main.CE.hasEnchantment(item, CEnchantments.GUARDS)){
+									if(CEnchantments.INFESTATION.isEnabled()){
+										if(!mobs.containsKey(player)){
+											int power = Main.CE.getPower(item, CEnchantments.GUARDS);
+											spawnAllies(player, en, EntityType.IRON_GOLEM, power);
+										}
+									}
+								}
+								if(en instanceof Player){
+									if(Main.CE.hasEnchantment(item, CEnchantments.NECROMANCER)){
 										if(CEnchantments.INFESTATION.isEnabled()){
 											if(!mobs.containsKey(player)){
-												int power = Main.CE.getPower(item, CEnchantments.TAMER);
-												spawnAllies(player, en, EntityType.WOLF, power);
+												int power = Main.CE.getPower(item, CEnchantments.NECROMANCER);
+												spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
 											}
 										}
 									}
-									if(Main.CE.hasEnchantment(item, CEnchantments.GUARDS)){
+									if(Main.CE.hasEnchantment(item, CEnchantments.INFESTATION)){
 										if(CEnchantments.INFESTATION.isEnabled()){
 											if(!mobs.containsKey(player)){
-												int power = Main.CE.getPower(item, CEnchantments.GUARDS);
-												spawnAllies(player, en, EntityType.IRON_GOLEM, power);
-											}
-										}
-									}
-									if(en instanceof Player){
-										if(Main.CE.hasEnchantment(item, CEnchantments.NECROMANCER)){
-											if(CEnchantments.INFESTATION.isEnabled()){
-												if(!mobs.containsKey(player)){
-													int power = Main.CE.getPower(item, CEnchantments.NECROMANCER);
-													spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
-												}
-											}
-										}
-										if(Main.CE.hasEnchantment(item, CEnchantments.INFESTATION)){
-											if(CEnchantments.INFESTATION.isEnabled()){
-												if(!mobs.containsKey(player)){
-													int power = Main.CE.getPower(item, CEnchantments.INFESTATION);
-													spawnAllies(player, en, EntityType.ENDERMITE, power * 3);
-													spawnAllies(player, en, EntityType.SILVERFISH, power * 3);
-												}
+												int power = Main.CE.getPower(item, CEnchantments.INFESTATION);
+												spawnAllies(player, en, EntityType.ENDERMITE, power * 3);
+												spawnAllies(player, en, EntityType.SILVERFISH, power * 3);
 											}
 										}
 									}
 								}
 							}
 						}
-					}else{
-						attackEnemy(player, en);
 					}
+				}else{
+					attackEnemy(player, en);
 				}
 			}
 		}

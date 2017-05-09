@@ -11,6 +11,20 @@ import me.badbones69.crazyenchantments.Main;
 
 public class Support {
 	
+	public static boolean hasEpicSpawners(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("EpicSpawners")!=null){
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean hasAAC(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("AAC")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean hasDakata(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("DakataAntiCheat")!=null){
 			return true;
@@ -256,12 +270,27 @@ public class Support {
 		return true;
 	}
 	
-	public static boolean inWingsRegion(Location loc){
+	public static boolean inWingsRegion(Player player){
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")){
 			for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")){
 				if(hasWorldEdit() && hasWorldGuard()){
-					if(WorldGuard.inRegion(rg, loc)){
+					if(WorldGuard.inRegion(rg, player.getLocation())){
 						return true;
+					}else{
+						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Members-Can-Fly")){
+							if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Members-Can-Fly")){
+								if(WorldGuard.isMember(player)){
+									return true;
+								}
+							}
+						}
+						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")){
+							if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")){
+								if(WorldGuard.isOwner(player)){
+									return true;
+								}
+							}
+						}
 					}
 				}
 			}

@@ -36,5 +36,7 @@
 	<classpathentry kind="lib" path="/Users/Joe/Plugins/AcidIsland.jar"/>
 	<classpathentry kind="lib" path="/Users/Joe/Plugins/NoCheatPlus.jar"/>
 	<classpathentry kind="lib" path="/Users/Joe/Plugins/DakataAntiCheat.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/AAC API.jar"/>
+	<classpathentry kind="lib" path="/Users/Joe/Plugins/EpicSpawners.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

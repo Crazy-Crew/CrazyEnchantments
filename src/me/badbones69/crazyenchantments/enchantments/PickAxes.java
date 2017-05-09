@@ -25,6 +25,7 @@ import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
@@ -73,6 +74,9 @@ public class PickAxes implements Listener{
 							SpartanSupport.cancelNucker(player);
 							SpartanSupport.cancelNoSwing(player);
 							SpartanSupport.cancelBlockReach(player);
+						}
+						if(Support.hasAAC()){
+							AACSupport.exemptPlayer(player);
 						}
 						Boolean damage = true;
 						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Blast-Full-Durability")){
@@ -220,6 +224,9 @@ public class PickAxes implements Listener{
 						if(Support.hasNoCheatPlus()){
 							NoCheatPlusSupport.unexemptPlayer(player);
 						}
+						if(Support.hasAAC()){
+							AACSupport.unexemptPlayer(player);
+						}
 						for(ItemStack i : drops.keySet()){
 							if(i.getType() == Material.INK_SACK){
 								i.setType((new ItemStack(Material.INK_SACK, 1, (short) 4)).getType());
@@ -326,13 +333,15 @@ public class PickAxes implements Listener{
 				if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE) && 
 						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST) || Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY))){
 					if(CEnchantments.EXPERIENCE.isEnabled()){
-						if(getOres().containsKey(block.getType())){
-						int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
-							if(Methods.randomPicker(2)){
-								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
-								Bukkit.getPluginManager().callEvent(event);
-								if(!event.isCancelled()){
-									e.setExpToDrop(e.getExpToDrop()+(power+2));
+						if(!hasSilkTouch(item)){
+							if(getOres().containsKey(block.getType())){
+								int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
+								if(Methods.randomPicker(2)){
+									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
+									Bukkit.getPluginManager().callEvent(event);
+									if(!event.isCancelled()){
+										e.setExpToDrop(e.getExpToDrop()+(power+2));
+									}
 								}
 							}
 						}
@@ -340,6 +349,15 @@ public class PickAxes implements Listener{
 				}
 			}
 		}
+	}
+	
+	private Boolean hasSilkTouch(ItemStack item){
+		if(item.hasItemMeta()){
+			if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth){

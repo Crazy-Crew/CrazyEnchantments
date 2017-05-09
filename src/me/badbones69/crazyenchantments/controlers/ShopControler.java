@@ -6,11 +6,14 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,7 +29,8 @@ import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
 public class ShopControler implements Listener{
 	
 	public static void openGUI(Player player){
-		Inventory inv = Bukkit.createInventory(null, Main.settings.getConfig().getInt("Settings.GUISize"), Methods.getInvName());
+		int size = Main.settings.getConfig().getInt("Settings.GUISize");
+		Inventory inv = Bukkit.createInventory(null, size, Methods.getInvName());
 		if(Main.settings.getConfig().contains("Settings.GUICustomization")){
 			for(String custom : Main.settings.getConfig().getStringList("Settings.GUICustomization")){
 				String name = "";
@@ -41,6 +45,9 @@ public class ShopControler implements Listener{
 					}
 					if(i.contains("Name:")){
 						i = i.replace("Name:", "");
+						for(Currency c : Currency.values()){
+							i = i.replaceAll("%" + c.getName().toLowerCase() +"%", CurrencyAPI.getCurrency(player, c) + "");
+						}
 						name = i;
 					}
 					if(i.contains("Slot:")){
@@ -49,34 +56,49 @@ public class ShopControler implements Listener{
 					}
 					if(i.contains("Lore:")){
 						i = i.replace("Lore:", "");
-						String[] d = i.split("_");
+						String[] d = i.split(",");
 						for(String l : d){
+							for(Currency c : Currency.values()){
+								l = l.replaceAll("%" + c.getName().toLowerCase() +"%", CurrencyAPI.getCurrency(player, c) + "");
+							}
 							lore.add(l);
 						}
 					}
+				}
+				if(slot > size){
+					continue;
 				}
 				slot--;
 				inv.setItem(slot, Methods.makeItem(item, 1, name, lore));
 			}
 		}
 		for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)){
-			if(Main.settings.getConfig().contains("Categories."+cat+".InGUI")){
-				if(Main.settings.getConfig().getBoolean("Categories."+cat+".InGUI")){
-					inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Methods.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
-							Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
+			if(Main.settings.getConfig().contains("Categories." + cat + ".InGUI")){
+				if(Main.settings.getConfig().getBoolean("Categories." + cat + ".InGUI")){
+					if(Main.settings.getConfig().getInt("Categories." + cat + ".Slot") > size){
+						continue;
+					}
+					inv.setItem(Main.settings.getConfig().getInt("Categories." + cat + ".Slot")-1, Methods.makeItem(Main.settings.getConfig().getString("Categories." + cat + ".Item"), 1, 
+							Main.settings.getConfig().getString("Categories." + cat + ".Name"), Main.settings.getConfig().getStringList("Categories." + cat + ".Lore")));
 				}
 			}else{
-				inv.setItem(Main.settings.getConfig().getInt("Categories."+cat+".Slot")-1, Methods.makeItem(Main.settings.getConfig().getString("Categories."+cat+".Item"), 1, 
-						Main.settings.getConfig().getString("Categories."+cat+".Name"), Main.settings.getConfig().getStringList("Categories."+cat+".Lore")));
+				if(Main.settings.getConfig().getInt("Categories." + cat + ".Slot") > size){
+					continue;
+				}
+				inv.setItem(Main.settings.getConfig().getInt("Categories." + cat + ".Slot")-1, Methods.makeItem(Main.settings.getConfig().getString("Categories." + cat + ".Item"), 1, 
+						Main.settings.getConfig().getString("Categories." + cat + ".Name"), Main.settings.getConfig().getStringList("Categories." + cat + ".Lore")));
 			}
 			FileConfiguration config = Main.settings.getConfig();
-			if(config.contains("Categories."+cat+".LostBook")){
-				if(config.getBoolean("Categories."+cat+".LostBook.InGUI")){
-					int slot = config.getInt("Categories."+cat+".LostBook.Slot");
-					String id = config.getString("Categories."+cat+".LostBook.Item");
-					String name = config.getString("Categories."+cat+".LostBook.Name");
-					List<String> lore = config.getStringList("Categories."+cat+".LostBook.Lore");
-					if(config.getBoolean("Categories."+cat+".LostBook.Glowing")){
+			if(config.contains("Categories." + cat + ".LostBook")){
+				if(config.getBoolean("Categories." + cat + ".LostBook.InGUI")){
+					int slot = config.getInt("Categories." + cat + ".LostBook.Slot");
+					String id = config.getString("Categories." + cat + ".LostBook.Item");
+					String name = config.getString("Categories." + cat + ".LostBook.Name");
+					List<String> lore = config.getStringList("Categories." + cat + ".LostBook.Lore");
+					if(slot > size){
+						continue;
+					}
+					if(config.getBoolean("Categories." + cat + ".LostBook.Glowing")){
 						inv.setItem(slot-1, Methods.addGlowHide(Methods.makeItem(id, 1, name, lore)));
 					}else{
 						inv.setItem(slot-1, Methods.makeItem(id, 1, name, lore));
@@ -100,6 +122,9 @@ public class ShopControler implements Listener{
 					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
 						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
 					}
+					if(slot > size){
+						continue;
+					}
 					inv.setItem(slot, Methods.addGlowHide(Methods.makeItem(id, 1, name, lore), glowing));
 				}
 			}
@@ -120,6 +145,9 @@ public class ShopControler implements Listener{
 					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
 						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
 					}
+					if(slot > size){
+						continue;
+					}
 					inv.setItem(slot, Methods.addGlowHide(Methods.makeItem(id, 1, name, lore), glowing));
 				}
 			}
@@ -138,6 +166,9 @@ public class ShopControler implements Listener{
 					boolean glowing = false;
 					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")){
 						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
+					}
+					if(slot > size){
+						continue;
 					}
 					inv.setItem(slot, Methods.addGlowHide(Methods.makeItem(id, 1, name, lore), glowing));
 				}
@@ -499,6 +530,24 @@ public class ShopControler implements Listener{
 					}
 				}
 				return;
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onEnchantmentTableClick(PlayerInteractEvent e){
+		Player player = e.getPlayer();
+		Block block = e.getClickedBlock();
+		if(block != null){
+			if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
+				if(block.getType() == Material.ENCHANTMENT_TABLE){
+					if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")){
+						if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")){
+							e.setCancelled(true);
+							openGUI(player);
+						}
+					}
+				}
 			}
 		}
 	}

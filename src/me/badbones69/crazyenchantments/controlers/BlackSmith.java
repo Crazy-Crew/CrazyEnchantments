@@ -326,82 +326,84 @@ public class BlackSmith implements Listener{
 			}
 		}
 		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() || sub.getType() != Main.CE.getEnchantmentBookItem().getType()){
-			HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
-			HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
-			HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
-			for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
-				if(Main.CE.hasEnchantment(sub, enchant)){
-					if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
-						if(!dupEnchants.containsKey(enchant.getName())){
-							dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
-						}
-					}else{
-						if(Main.CE.getPower(master, enchant) < Main.CE.getPower(sub, enchant)){
-							higherEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
-						}
-					}
-				}
-			}
-			for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
-				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
-					if(!Main.CE.hasEnchantment(master, enchant)){
-						newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
-					}
-				}
-			}
-			for(String enchant : Main.CustomE.getItemEnchantments(master)){
-				if(Main.CustomE.hasEnchantment(sub, enchant)){
-					if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
-						if(!dupEnchants.containsKey(enchant)){
-							dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
-						}
-					}else{
-						if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
-							higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+			if(master.getType() == sub.getType()){
+				HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
+				HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
+				HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
+				for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
+					if(Main.CE.hasEnchantment(sub, enchant)){
+						if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
+							if(!dupEnchants.containsKey(enchant.getName())){
+								dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
+							}
+						}else{
+							if(Main.CE.getPower(master, enchant) < Main.CE.getPower(sub, enchant)){
+								higherEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
+							}
 						}
 					}
 				}
-			}
-			for(String enchant : Main.CustomE.getItemEnchantments(sub)){
-				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
-					if(!Main.CustomE.hasEnchantment(master, enchant)){
-						newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
-					}
-
-				}
-			}
-			for(String enchant : dupEnchants.keySet()){
-				if(Main.CE.isEnchantment(enchant)){
-					int power = dupEnchants.get(enchant);
-					int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
-					if(power + 1 <= max){
-						item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), power + 1);
-					}
-				}else if(Main.CustomE.isEnchantment(enchant)){
-					int power = dupEnchants.get(enchant);
-					int max = Main.CustomE.getMaxPower(enchant);
-					if(power + 1 <= max){
-						item = Main.CustomE.addEnchantment(item, enchant, power + 1);
-					}
-				}
-			}
-			int maxEnchants = Main.CE.getPlayerMaxEnchantments(player);
-			for(String enchant : newEnchants.keySet()){
-				if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-					if((Methods.getEnchAmount(item)+ 1) <= maxEnchants){
-						if(Main.CE.isEnchantment(enchant)){
-							item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), newEnchants.get(enchant));
-						}else if(Main.CustomE.isEnchantment(enchant)){
-							item = Main.CustomE.addEnchantment(item, enchant, newEnchants.get(enchant));
+				for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
+					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+						if(!Main.CE.hasEnchantment(master, enchant)){
+							newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
 						}
 					}
 				}
-			}
-			for(String enchant : higherEnchants.keySet()){
-				if(Main.CE.isEnchantment(enchant)){
-					item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), higherEnchants.get(enchant));
-				}else if(Main.CustomE.isEnchantment(enchant)){
-					item = Main.CustomE.addEnchantment(item, enchant, higherEnchants.get(enchant));
+				for(String enchant : Main.CustomE.getItemEnchantments(master)){
+					if(Main.CustomE.hasEnchantment(sub, enchant)){
+						if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
+							if(!dupEnchants.containsKey(enchant)){
+								dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
+							}
+						}else{
+							if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
+								higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+							}
+						}
+					}
+				}
+				for(String enchant : Main.CustomE.getItemEnchantments(sub)){
+					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+						if(!Main.CustomE.hasEnchantment(master, enchant)){
+							newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+						}
+	
+					}
+				}
+				for(String enchant : dupEnchants.keySet()){
+					if(Main.CE.isEnchantment(enchant)){
+						int power = dupEnchants.get(enchant);
+						int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
+						if(power + 1 <= max){
+							item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), power + 1);
+						}
+					}else if(Main.CustomE.isEnchantment(enchant)){
+						int power = dupEnchants.get(enchant);
+						int max = Main.CustomE.getMaxPower(enchant);
+						if(power + 1 <= max){
+							item = Main.CustomE.addEnchantment(item, enchant, power + 1);
+						}
+					}
+				}
+				int maxEnchants = Main.CE.getPlayerMaxEnchantments(player);
+				for(String enchant : newEnchants.keySet()){
+					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+						if((Methods.getEnchAmount(item)+ 1) <= maxEnchants){
+							if(Main.CE.isEnchantment(enchant)){
+								item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), newEnchants.get(enchant));
+							}else if(Main.CustomE.isEnchantment(enchant)){
+								item = Main.CustomE.addEnchantment(item, enchant, newEnchants.get(enchant));
+							}
+						}
+					}
+				}
+				for(String enchant : higherEnchants.keySet()){
+					if(Main.CE.isEnchantment(enchant)){
+						item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), higherEnchants.get(enchant));
+					}else if(Main.CustomE.isEnchantment(enchant)){
+						item = Main.CustomE.addEnchantment(item, enchant, higherEnchants.get(enchant));
+					}
 				}
 			}
 		}
@@ -435,75 +437,77 @@ public class BlackSmith implements Listener{
 		}
 		//Is 2 items
 		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() || sub.getType() != Main.CE.getEnchantmentBookItem().getType()){
-			ItemStack item = master.clone();
-			HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
-			HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
-			HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
-			for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
-				if(Main.CE.hasEnchantment(sub, enchant)){
-					if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
-						if(!dupEnchants.containsKey(enchant.getName())){
-							dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
-						}
-					}else{
-						if(Main.CE.getPower(master, enchant) < Main.CE.getPower(sub, enchant)){
-							higherEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
-						}
-					}
-				}
-			}
-			for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
-				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
-					if(!Main.CE.hasEnchantment(master, enchant)){
-						newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
-					}
-				}
-			}
-			for(String enchant : Main.CustomE.getItemEnchantments(master)){
-				if(Main.CustomE.hasEnchantment(sub, enchant)){
-					if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
-						if(!dupEnchants.containsKey(enchant)){
-							dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
-						}
-					}else{
-						if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
-							higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+			if(master.getType() == sub.getType()){
+				ItemStack item = master.clone();
+				HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
+				HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
+				HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
+				for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
+					if(Main.CE.hasEnchantment(sub, enchant)){
+						if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
+							if(!dupEnchants.containsKey(enchant.getName())){
+								dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
+							}
+						}else{
+							if(Main.CE.getPower(master, enchant) < Main.CE.getPower(sub, enchant)){
+								higherEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
+							}
 						}
 					}
 				}
-			}
-			for(String enchant : Main.CustomE.getItemEnchantments(sub)){
-				if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
-					if(!Main.CustomE.hasEnchantment(master, enchant)){
-						newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+				for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
+					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+						if(!Main.CE.hasEnchantment(master, enchant)){
+							newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
+						}
 					}
 				}
-			}
-			for(String enchant : dupEnchants.keySet()){
-				if(Main.CE.isEnchantment(enchant)){
-					int power = dupEnchants.get(enchant);
-					int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
-					if(power + 1 <= max){
-						total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
-					}
-				}else if(Main.CustomE.isEnchantment(enchant)){
-					int power = dupEnchants.get(enchant);
-					int max = Main.CustomE.getMaxPower(enchant);
-					if(power + 1 <= max){
-						total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+				for(String enchant : Main.CustomE.getItemEnchantments(master)){
+					if(Main.CustomE.hasEnchantment(sub, enchant)){
+						if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
+							if(!dupEnchants.containsKey(enchant)){
+								dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
+							}
+						}else{
+							if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
+								higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+							}
+						}
 					}
 				}
-			}
-			int maxEnchants = Main.CE.getPlayerMaxEnchantments(player);
-			for(int i = 0; i < newEnchants.size(); i++){
-				if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
-					if((Methods.getEnchAmount(item) + i + 1) <= maxEnchants){
-						total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
+				for(String enchant : Main.CustomE.getItemEnchantments(sub)){
+					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
+						if(!Main.CustomE.hasEnchantment(master, enchant)){
+							newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
+						}
 					}
 				}
-			}
-			for(int i = 0; i < higherEnchants.size(); i++){
-				total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+				for(String enchant : dupEnchants.keySet()){
+					if(Main.CE.isEnchantment(enchant)){
+						int power = dupEnchants.get(enchant);
+						int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
+						if(power + 1 <= max){
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+						}
+					}else if(Main.CustomE.isEnchantment(enchant)){
+						int power = dupEnchants.get(enchant);
+						int max = Main.CustomE.getMaxPower(enchant);
+						if(power + 1 <= max){
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+						}
+					}
+				}
+				int maxEnchants = Main.CE.getPlayerMaxEnchantments(player);
+				for(int i = 0; i < newEnchants.size(); i++){
+					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
+						if((Methods.getEnchAmount(item) + i + 1) <= maxEnchants){
+							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
+						}
+					}
+				}
+				for(int i = 0; i < higherEnchants.size(); i++){
+					total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+				}
 			}
 		}
 		return total;
