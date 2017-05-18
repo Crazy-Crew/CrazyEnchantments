@@ -83,9 +83,11 @@ public class Boots implements Listener{
 								SpartanSupport.cancelFly(player);
 							}
 							if(e.isFlying()){
-								e.setCancelled(true);
-								player.setFlying(true);
-								Flying.add(player);
+								if(player.getAllowFlight()){
+									e.setCancelled(true);
+									player.setFlying(true);
+									Flying.add(player);
+								}
 							}else{
 								Flying.remove(player);
 							}
