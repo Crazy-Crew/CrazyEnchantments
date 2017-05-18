@@ -179,7 +179,7 @@ public class Tinkerer implements Listener{
 											}
 										}
 									}
-									if(getTotalXP(It)>0){// Adding an item
+									if(getTotalXP(It)>0 && It.getType() != Main.CE.getEnchantmentBookItem().getType()){// Adding an item
 										if(inTinker(e.getRawSlot())){// Clicking in the Tinkers
 											if(getSlot().containsKey(e.getRawSlot())){
 												e.setCurrentItem(new ItemStack(Material.AIR));
