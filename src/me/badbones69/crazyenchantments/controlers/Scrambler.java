@@ -24,7 +24,7 @@ import me.badbones69.crazyenchantments.api.CEBook;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.CustomEnchantments;
-import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class Scrambler implements Listener{
 	

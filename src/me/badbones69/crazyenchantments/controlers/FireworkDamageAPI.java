@@ -11,7 +11,7 @@ import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class FireworkDamageAPI implements Listener{
 	
