@@ -136,8 +136,8 @@ public class MCUpdate implements Listener {
 	 * Set if the updater uses the internal update checker.
 	 * 
 	 * @param checkUpdate
-	 *            True if you want to use the internal update checker and false if
-	 *            not.
+	 *            True if you want to use the internal update checker and false
+	 *            if not.
 	 */
 	public void checkUpdate(Boolean checkUpdate) {
 		this.checkUpdate = checkUpdate;
