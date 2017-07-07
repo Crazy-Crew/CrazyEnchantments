@@ -11,6 +11,13 @@ import me.badbones69.crazyenchantments.Main;
 
 public class Support {
 	
+	public static boolean hasTowny(){
+		if(Bukkit.getServer().getPluginManager().getPlugin("Towny")!=null){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean hasEpicSpawners(){
 		if(Bukkit.getServer().getPluginManager().getPlugin("EpicSpawners")!=null){
 			return true;

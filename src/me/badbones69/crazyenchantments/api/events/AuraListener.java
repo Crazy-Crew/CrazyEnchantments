@@ -10,42 +10,59 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 
 public class AuraListener implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerMoveEvent(PlayerMoveEvent e){
-		for(ItemStack item : e.getPlayer().getEquipment().getArmorContents()){
+		new BukkitRunnable(){
 			Player player = e.getPlayer();
 			ArrayList<Player> players = getNearByPlayers(player, 3);
-			if(Main.CE.hasEnchantments(item)){
-				for(CEnchantments enchant : getAuraEnchantments()){
-					if(Main.CE.hasEnchantment(item, enchant)){
-						int power = Main.CE.getPower(item, enchant);
-						if(players.size() > 0){
-							for(Player other : players){
-								Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, other, enchant, power));
+			@Override
+			public void run() {
+				for(ItemStack item : e.getPlayer().getEquipment().getArmorContents()){// The player moving.
+					if(Main.CE.hasEnchantments(item)){
+						for(CEnchantments enchant : getAuraEnchantments()){
+							if(Main.CE.hasEnchantment(item, Main.CE.getEnchantmentFromName(enchant.getName()))){
+								int power = Main.CE.getPower(item, Main.CE.getEnchantmentFromName(enchant.getName()));
+								if(players.size() > 0){
+									for(Player other : players){
+										new BukkitRunnable(){
+											@Override
+											public void run() {
+												Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, other, enchant, power));
+											}
+										}.runTask(Methods.getPlugin());
+									}
+								}
+							}
+						}
+					}
+				}
+				for(Player other : players){
+					for(ItemStack item : other.getEquipment().getArmorContents()){// The other players moving.
+						if(Main.CE.hasEnchantments(item)){
+							for(CEnchantments enchant : getAuraEnchantments()){
+								if(Main.CE.hasEnchantment(item, Main.CE.getEnchantmentFromName(enchant.getName()))){
+									new BukkitRunnable(){
+										@Override
+										public void run() {
+											Bukkit.getPluginManager().callEvent(new AuraActiveEvent(other, player, enchant, 
+													Main.CE.getPower(item, Main.CE.getEnchantmentFromName(enchant.getName()))));
+										}
+									}.runTask(Methods.getPlugin());
+								}
 							}
 						}
 					}
 				}
 			}
-		}
-		for(Player player : getNearByPlayers(e.getPlayer(), 3)){
-			for(ItemStack item : player.getEquipment().getArmorContents()){
-				if(Main.CE.hasEnchantments(item)){
-					for(CEnchantments enchant : getAuraEnchantments()){
-						if(Main.CE.hasEnchantment(item, enchant)){
-							int power = Main.CE.getPower(item, enchant);
-							Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, e.getPlayer(), enchant, power));
-						}
-					}
-				}
-			}
-		}
+		}.runTaskAsynchronously(Methods.getPlugin());
 	}
 	
 	private ArrayList<CEnchantments> getAuraEnchantments(){

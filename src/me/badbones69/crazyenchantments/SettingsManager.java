@@ -20,34 +20,34 @@ public class SettingsManager {
 		return instance;
 	}
 
-	Plugin p;
+	private Plugin p;
 
-	FileConfiguration config;
-	File cfile;
+	private FileConfiguration config;
+	private File cfile;
 	
-	FileConfiguration gkitz;
-	File gfile;
+	private FileConfiguration gkitz;
+	private File gfile;
 	
-	FileConfiguration data;
-	File dfile;
+	private FileConfiguration data;
+	private File dfile;
 
-	FileConfiguration enchs;
-	File efile;
+	private FileConfiguration enchs;
+	private File efile;
 	
-	FileConfiguration msg;
-	File mfile;
+	private FileConfiguration msg;
+	private File mfile;
 	
-	FileConfiguration cenchs;
-	File cefile;
+	private FileConfiguration cenchs;
+	private File cefile;
 	
-	FileConfiguration signs;
-	File sfile;
+	private FileConfiguration signs;
+	private File sfile;
 	
-	FileConfiguration tinker;
-	File tfile;
+	private FileConfiguration tinker;
+	private File tfile;
 	
-	FileConfiguration blocklist;
-	File blfile;
+	private FileConfiguration blocklist;
+	private File blfile;
 	
 	public void setup(Plugin p) {
 		if (!p.getDataFolder().exists()) {
@@ -162,30 +162,39 @@ public class SettingsManager {
 		blocklist = YamlConfiguration.loadConfiguration(blfile);
 		
 	}
+
 	public FileConfiguration getGKitz() {
 		return gkitz;
 	}
+
 	public FileConfiguration getData() {
 		return data;
 	}
+
 	public FileConfiguration getBlockList() {
 		return blocklist;
 	}
+
 	public FileConfiguration getTinker() {
 		return tinker;
 	}
+
 	public FileConfiguration getSigns() {
 		return signs;
 	}
+
 	public FileConfiguration getCustomEnchs() {
 		return cenchs;
 	}
-	public FileConfiguration getEnchs() {
+
+	public FileConfiguration getEnchantments() {
 		return enchs;
 	}
+
 	public FileConfiguration getMsg() {
 		return msg;
 	}
+
 	public void saveGKitz() {
 		try {
 			gkitz.save(gfile);
@@ -194,6 +203,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save GKitz.yml!");
 		}
 	}
+
 	public void saveData() {
 		try {
 			data.save(dfile);
@@ -202,6 +212,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save Data.yml!");
 		}
 	}
+
 	public void saveBlockList() {
 		try {
 			blocklist.save(blfile);
@@ -210,6 +221,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save BlockList.yml!");
 		}
 	}
+
 	public void saveTinker() {
 		try {
 			tinker.save(tfile);
@@ -218,6 +230,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save Tinker.yml!");
 		}
 	}
+
 	public void saveSigns() {
 		try {
 			signs.save(sfile);
@@ -226,6 +239,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save Signs.yml!");
 		}
 	}
+
 	public void saveCustomEnchs() {
 		try {
 			cenchs.save(cefile);
@@ -234,6 +248,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save CustomEnchantments.yml!");
 		}
 	}
+
 	public void saveEnchs() {
 		try {
 			enchs.save(efile);
@@ -242,6 +257,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save Enchantments.yml!");
 		}
 	}
+
 	public void saveMsg() {
 		try {
 			msg.save(mfile);
@@ -250,30 +266,39 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save Messages.yml!");
 		}
 	}
+
 	public void reloadGKitz() {
 		gkitz = YamlConfiguration.loadConfiguration(gfile);
 	}
+
 	public void reloadData() {
 		data = YamlConfiguration.loadConfiguration(dfile);
 	}
+
 	public void reloadBlockList() {
 		blocklist = YamlConfiguration.loadConfiguration(blfile);
 	}
+
 	public void reloadTinker() {
 		tinker = YamlConfiguration.loadConfiguration(tfile);
 	}
+
 	public void reloadSigns() {
 		signs = YamlConfiguration.loadConfiguration(sfile);
 	}
+
 	public void reloadMsg() {
 		msg = YamlConfiguration.loadConfiguration(mfile);
 	}
+
 	public void reloadCustomEnchs() {
 		cenchs = YamlConfiguration.loadConfiguration(cefile);
 	}
+
 	public void reloadEnchs() {
 		enchs = YamlConfiguration.loadConfiguration(efile);
 	}
+
 	public FileConfiguration getConfig() {
 		return config;
 	}
@@ -294,6 +319,7 @@ public class SettingsManager {
 	public PluginDescriptionFile getDesc() {
 		return p.getDescription();
 	}
+
 	public static void copyFile(InputStream in, File out) throws Exception { // https://bukkit.org/threads/extracting-file-from-jar.16962/
         InputStream fis = in;
         FileOutputStream fos = new FileOutputStream(out);
@@ -314,4 +340,5 @@ public class SettingsManager {
             }
         }
     }
+
 }
