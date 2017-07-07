@@ -16,19 +16,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.CEnchantment;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class BlackSmith implements Listener{
 	
-	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-
 	public static void openBlackSmith(Player player){
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")));
 		List<Integer> other = new ArrayList<Integer>();
@@ -82,13 +79,8 @@ public class BlackSmith implements Listener{
 								if(!item.hasItemMeta())return;
 								if(!item.getItemMeta().hasDisplayName())return;
 								boolean T=false;
-								for(CEnchantments en : Main.CE.getEnchantments()){
+								for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 									if(item.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
-										T = true;
-									}
-								}
-								for(String en : Main.CustomE.getEnchantments()){
-									if(item.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))){
 										T = true;
 									}
 								}
@@ -272,7 +264,7 @@ public class BlackSmith implements Listener{
 	@EventHandler
 	public void onInvClose(final InventoryCloseEvent e){
 		final Inventory inv = e.getInventory();
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Methods.getPlugin(), new Runnable() {
 			public void run() {
 				if(inv!=null){
 					if(inv.getName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")))){
@@ -305,21 +297,12 @@ public class BlackSmith implements Listener{
 		ItemStack item = master.clone();
 		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType() == Main.CE.getEnchantmentBookItem().getType()){
 			if(Methods.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(sub.getItemMeta().getDisplayName()))){
-				for(CEnchantments en : Main.CE.getEnchantments()){
+				for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 					if(master.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 						int power = Main.CE.getBookPower(master, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
+						int max = Main.settings.getEnchantments().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max){
 							item = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, en.getBookColor() + en.getCustomName() + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
-						}
-					}
-				}
-				for(String en : Main.CustomE.getEnchantments()){
-					if(master.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))){
-						int power = Main.CustomE.getBookPower(master, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
-						if(power + 1 <= max){
-							item = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en) + " " + Methods.getPower(power+1), master.getItemMeta().getLore()), glowing);
 						}
 					}
 				}
@@ -330,7 +313,7 @@ public class BlackSmith implements Listener{
 				HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
 				HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
 				HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
-				for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
+				for(CEnchantment enchant : Main.CE.getItemEnchantments(master)){
 					if(Main.CE.hasEnchantment(sub, enchant)){
 						if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
 							if(!dupEnchants.containsKey(enchant.getName())){
@@ -343,46 +326,19 @@ public class BlackSmith implements Listener{
 						}
 					}
 				}
-				for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
+				for(CEnchantment enchant : Main.CE.getItemEnchantments(sub)){
 					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
 						if(!Main.CE.hasEnchantment(master, enchant)){
 							newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
 						}
 					}
 				}
-				for(String enchant : Main.CustomE.getItemEnchantments(master)){
-					if(Main.CustomE.hasEnchantment(sub, enchant)){
-						if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
-							if(!dupEnchants.containsKey(enchant)){
-								dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
-							}
-						}else{
-							if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
-								higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
-							}
-						}
-					}
-				}
-				for(String enchant : Main.CustomE.getItemEnchantments(sub)){
-					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
-						if(!Main.CustomE.hasEnchantment(master, enchant)){
-							newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
-						}
-	
-					}
-				}
 				for(String enchant : dupEnchants.keySet()){
-					if(Main.CE.isEnchantment(enchant)){
+					if(Main.CE.getEnchantmentFromName(enchant) != null){
 						int power = dupEnchants.get(enchant);
-						int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
+						int max = Main.CE.getEnchantmentFromName(enchant).getMaxLevel();
 						if(power + 1 <= max){
-							item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), power + 1);
-						}
-					}else if(Main.CustomE.isEnchantment(enchant)){
-						int power = dupEnchants.get(enchant);
-						int max = Main.CustomE.getMaxPower(enchant);
-						if(power + 1 <= max){
-							item = Main.CustomE.addEnchantment(item, enchant, power + 1);
+							item = Main.CE.addEnchantment(item, Main.CE.getEnchantmentFromName(enchant), power + 1);
 						}
 					}
 				}
@@ -390,19 +346,15 @@ public class BlackSmith implements Listener{
 				for(String enchant : newEnchants.keySet()){
 					if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")){
 						if((Methods.getEnchAmount(item)+ 1) <= maxEnchants){
-							if(Main.CE.isEnchantment(enchant)){
-								item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), newEnchants.get(enchant));
-							}else if(Main.CustomE.isEnchantment(enchant)){
-								item = Main.CustomE.addEnchantment(item, enchant, newEnchants.get(enchant));
+							if(Main.CE.getEnchantmentFromName(enchant) != null){
+								item = Main.CE.addEnchantment(item, Main.CE.getEnchantmentFromName(enchant), newEnchants.get(enchant));
 							}
 						}
 					}
 				}
 				for(String enchant : higherEnchants.keySet()){
-					if(Main.CE.isEnchantment(enchant)){
-						item = Main.CE.addEnchantment(item, Main.CE.getFromName(enchant), higherEnchants.get(enchant));
-					}else if(Main.CustomE.isEnchantment(enchant)){
-						item = Main.CustomE.addEnchantment(item, enchant, higherEnchants.get(enchant));
+					if(Main.CE.getEnchantmentFromName(enchant) != null){
+						item = Main.CE.addEnchantment(item, Main.CE.getEnchantmentFromName(enchant), higherEnchants.get(enchant));
 					}
 				}
 			}
@@ -415,19 +367,10 @@ public class BlackSmith implements Listener{
 		//Is 2 books
 		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Methods.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(sub.getItemMeta().getDisplayName()))){
-				for(CEnchantments en : Main.CE.getEnchantments()){
+				for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 					if(master.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 						int power = Main.CE.getBookPower(master, en);
-						int max = Main.settings.getEnchs().getInt("Enchantments." + en.getName() + ".MaxPower");
-						if(power + 1 <= max){
-							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
-						}
-					}
-				}
-				for(String en : Main.CustomE.getEnchantments()){
-					if(master.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))){
-						int power = Main.CustomE.getBookPower(master, en);
-						int max = Main.settings.getCustomEnchs().getInt("Enchantments." + en + ".MaxPower");
+						int max = Main.settings.getEnchantments().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max){
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
 						}
@@ -442,7 +385,7 @@ public class BlackSmith implements Listener{
 				HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
 				HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
 				HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
-				for(CEnchantments enchant : Main.CE.getItemEnchantments(master)){
+				for(CEnchantment enchant : Main.CE.getItemEnchantments(master)){
 					if(Main.CE.hasEnchantment(sub, enchant)){
 						if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)){
 							if(!dupEnchants.containsKey(enchant.getName())){
@@ -455,43 +398,17 @@ public class BlackSmith implements Listener{
 						}
 					}
 				}
-				for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)){
+				for(CEnchantment enchant : Main.CE.getItemEnchantments(sub)){
 					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
 						if(!Main.CE.hasEnchantment(master, enchant)){
 							newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
 						}
 					}
 				}
-				for(String enchant : Main.CustomE.getItemEnchantments(master)){
-					if(Main.CustomE.hasEnchantment(sub, enchant)){
-						if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)){
-							if(!dupEnchants.containsKey(enchant)){
-								dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
-							}
-						}else{
-							if(Main.CustomE.getPower(master, enchant) < Main.CustomE.getPower(sub, enchant)){
-								higherEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
-							}
-						}
-					}
-				}
-				for(String enchant : Main.CustomE.getItemEnchantments(sub)){
-					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)){
-						if(!Main.CustomE.hasEnchantment(master, enchant)){
-							newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
-						}
-					}
-				}
 				for(String enchant : dupEnchants.keySet()){
-					if(Main.CE.isEnchantment(enchant)){
+					if(Main.CE.getEnchantmentFromName(enchant) != null){
 						int power = dupEnchants.get(enchant);
-						int max = Main.CE.getMaxPower(Main.CE.getFromName(enchant));
-						if(power + 1 <= max){
-							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
-						}
-					}else if(Main.CustomE.isEnchantment(enchant)){
-						int power = dupEnchants.get(enchant);
-						int max = Main.CustomE.getMaxPower(enchant);
+						int max = Main.CE.getEnchantmentFromName(enchant).getMaxLevel();
 						if(power + 1 <= max){
 							total += Main.settings.getConfig().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
 						}

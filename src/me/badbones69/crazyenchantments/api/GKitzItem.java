@@ -15,9 +15,8 @@ public class GKitzItem {
 	private String name;
 	private Integer amount;
 	private ArrayList<String> lore;
-	private HashMap<String, Integer> cEnchantments;
 	private HashMap<Enchantment, Integer> enchantments;
-	private HashMap<CEnchantments, Integer> ceEnchantments;
+	private HashMap<CEnchantment, Integer> ceEnchantments;
 	
 	/**
 	 * Make an empty gkit item.
@@ -27,9 +26,8 @@ public class GKitzItem {
 		amount = 1;
 		type = "299";
 		lore = new ArrayList<String>();
-		cEnchantments = new HashMap<String, Integer>();
 		enchantments = new HashMap<Enchantment, Integer>();
-		ceEnchantments = new HashMap<CEnchantments, Integer>();
+		ceEnchantments = new HashMap<CEnchantment, Integer>();
 	}
 	
 	/**
@@ -37,7 +35,7 @@ public class GKitzItem {
 	 * @param enchant Crazy Enchantment
 	 * @param level Level of the enchantment
 	 */
-	public void addCEEnchantment(CEnchantments enchant, Integer level){
+	public void addCEEnchantment(CEnchantment enchant, Integer level){
 		ceEnchantments.put(enchant, level);
 	}
 	
@@ -47,23 +45,6 @@ public class GKitzItem {
 	 */
 	public void removeCEEnchantment(CEnchantments enchant){
 		ceEnchantments.remove(enchant);
-	}
-	
-	/**
-	 * 
-	 * @param enchant Custom Enchantment
-	 * @param level Level of the enchantment
-	 */
-	public void addCustomEnchantment(String enchant, Integer level){
-		cEnchantments.put(enchant, level);
-	}
-	
-	/**
-	 * 
-	 * @param enchant Custom Enchantment
-	 */
-	public void removeCustomEnchantment(String enchant){
-		cEnchantments.remove(enchant);
 	}
 	
 	/**
@@ -121,13 +102,8 @@ public class GKitzItem {
 	 */
 	public ItemStack build(){
 		ItemStack item = Methods.makeItem(type, amount, name);
-		for(CEnchantments en : ceEnchantments.keySet()){
+		for(CEnchantment en : ceEnchantments.keySet()){
 			Main.CE.addEnchantment(item, en, ceEnchantments.get(en));
-		}
-		for(String en : cEnchantments.keySet()){
-			if(Main.CustomE.isEnchantment(en)){
-				Main.CustomE.addEnchantment(item, en, cEnchantments.get(en));
-			}
 		}
 		for(Enchantment en : enchantments.keySet()){
 			item.addUnsafeEnchantment(en, enchantments.get(en));

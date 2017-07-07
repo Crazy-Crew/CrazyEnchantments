@@ -28,22 +28,23 @@ public class LostBook implements Listener{
 						boolean toggle = false;
 						String category = null;
 						Set<String> categories = Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false);
-						for(String C : categories){
-							String name = Main.settings.getConfig().getString("Categories."+C+".Name");
+						for(String cat : categories){
+							String name = Main.settings.getConfig().getString("Categories." + cat + ".Name");
 							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.LostBook.Name").replaceAll("%Category%", name).replaceAll("%category%", name)))){
-								category = C;
+								category = cat;
 								toggle = true;
 							}
 						}
 						if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.LostBook.Name")))){
-							for(String C : categories){
-								if(Methods.color(Main.settings.getConfig().getString("Categories."+C+".Name")).equalsIgnoreCase(EnchantmentControl.getCategory(item))){
-									category = C;
+							for(String cat : categories){
+								if(Methods.color(Main.settings.getConfig().getString("Categories."+cat+".Name")).equalsIgnoreCase(EnchantmentControl.getCategory(item))){
+									category = cat;
 									toggle = true;
 								}
 							}
 						}
 						if(toggle){
+							e.setCancelled(true);
 							if(Methods.isInvFull(player)){
 								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
 								return;
