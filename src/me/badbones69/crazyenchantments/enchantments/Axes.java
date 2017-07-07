@@ -35,22 +35,22 @@ public class Axes implements Listener{
 				ItemStack item = Methods.getItemInHand(damager);
 				if(!e.getEntity().isDead()){
 					if(Main.CE.hasEnchantments(item)){
-						if(Main.CE.hasEnchantment(item, CEnchantments.BERSERK)){
+						if(Main.CE.hasEnchantment(item, CEnchantments.BERSERK.getEnchantment())){
 							if(CEnchantments.BERSERK.isEnabled()){
 								if(Methods.randomPicker(12)){
-									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK, item);
+									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (Main.CE.getPower(item, CEnchantments.BERSERK)+5)*20, 1));
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (Main.CE.getPower(item, CEnchantments.BERSERK)+5)*20, 0));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (Main.CE.getPower(item, CEnchantments.BERSERK.getEnchantment())+5)*20, 1));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (Main.CE.getPower(item, CEnchantments.BERSERK.getEnchantment())+5)*20, 0));
 									}
 								}
 							}
 						}
-						if(Main.CE.hasEnchantment(item, CEnchantments.BLESSED)){
+						if(Main.CE.hasEnchantment(item, CEnchantments.BLESSED.getEnchantment())){
 							if(CEnchantments.BLESSED.isEnabled()){
-								if(Methods.randomPicker((12-Main.CE.getPower(item, CEnchantments.BLESSED)))){
-									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLESSED, item);
+								if(Methods.randomPicker((12-Main.CE.getPower(item, CEnchantments.BLESSED.getEnchantment())))){
+									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
 										removeBadPotions(damager);
@@ -58,12 +58,12 @@ public class Axes implements Listener{
 								}
 							}
 						}
-						if(Main.CE.hasEnchantment(item, CEnchantments.FEEDME)){
+						if(Main.CE.hasEnchantment(item, CEnchantments.FEEDME.getEnchantment())){
 							if(CEnchantments.FEEDME.isEnabled()){
-								int food = 2*Main.CE.getPower(item, CEnchantments.FEEDME);
+								int food = 2*Main.CE.getPower(item, CEnchantments.FEEDME.getEnchantment());
 								if(Methods.randomPicker(10)){
 									if(damager.getFoodLevel()<20){
-										EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FEEDME, item);
+										EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FEEDME.getEnchantment(), item);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()){
 											if(Support.hasSpartan()){
@@ -80,11 +80,11 @@ public class Axes implements Listener{
 								}
 							}
 						}
-						if(Main.CE.hasEnchantment(item, CEnchantments.REKT)){
+						if(Main.CE.hasEnchantment(item, CEnchantments.REKT.getEnchantment())){
 							if(CEnchantments.REKT.isEnabled()){
 								double damage = e.getDamage()*2;
-								if(Methods.randomPicker((20-Main.CE.getPower(item, CEnchantments.REKT)))){
-									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.REKT, item);
+								if(Methods.randomPicker((20-Main.CE.getPower(item, CEnchantments.REKT.getEnchantment())))){
+									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
 										e.setDamage(damage);
@@ -92,24 +92,24 @@ public class Axes implements Listener{
 								}
 							}
 						}
-						if(Main.CE.hasEnchantment(item, CEnchantments.CURSED)){
+						if(Main.CE.hasEnchantment(item, CEnchantments.CURSED.getEnchantment())){
 							if(CEnchantments.CURSED.isEnabled()){
 								if(Methods.randomPicker(10)){
-									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CURSED, item);
+									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (Main.CE.getPower(item, CEnchantments.CURSED)+9)*20, 1));
+										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (Main.CE.getPower(item, CEnchantments.CURSED.getEnchantment())+9)*20, 1));
 									}
 								}
 							}
 						}
-						if(Main.CE.hasEnchantment(item, CEnchantments.DIZZY)){
+						if(Main.CE.hasEnchantment(item, CEnchantments.DIZZY.getEnchantment())){
 							if(CEnchantments.DIZZY.isEnabled()){
 								if(Methods.randomPicker(10)){
-									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DIZZY, item);
+									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (Main.CE.getPower(item, CEnchantments.DIZZY)+9)*20, 0));
+										en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (Main.CE.getPower(item, CEnchantments.DIZZY.getEnchantment())+9)*20, 0));
 									}
 								}
 							}
@@ -128,11 +128,11 @@ public class Axes implements Listener{
 			Player player = e.getEntity();
 			ItemStack item = Methods.getItemInHand(damager);
 			if(Main.CE.hasEnchantments(item)){
-				if(Main.CE.hasEnchantment(item, CEnchantments.DECAPITATION)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.DECAPITATION.getEnchantment())){
 					if(CEnchantments.DECAPITATION.isEnabled()){
-						int power = Main.CE.getPower(item, CEnchantments.DECAPITATION);
+						int power = Main.CE.getPower(item, CEnchantments.DECAPITATION.getEnchantment());
 						if(Methods.randomPicker(11-power)){
-							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION, item);
+							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
 								ItemStack head = Methods.makeItem("397:3", 1);
@@ -164,4 +164,5 @@ public class Axes implements Listener{
 			}
 		}
 	}
+	
 }

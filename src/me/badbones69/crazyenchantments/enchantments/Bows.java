@@ -45,7 +45,7 @@ public class Bows implements Listener{
 			ArrayList<CEnchantments> enchants = new ArrayList<CEnchantments>();
 			for(CEnchantments ench : getEnchantments()){
 				Projectile arrow = (Projectile) e.getProjectile();
-				if(Main.CE.hasEnchantment(bow, ench)){
+				if(Main.CE.hasEnchantment(bow, ench.getEnchantment())){
 					if(ench.isEnabled()){
 						Arrow.put(arrow, bow);
 						P.put(arrow, e.getEntity());
@@ -57,12 +57,12 @@ public class Bows implements Listener{
 			if(hasEnchantments){
 				Enchant.put((Projectile) e.getProjectile(), enchants);
 			}
-			if(Main.CE.hasEnchantment(bow, CEnchantments.MULTIARROW)){
+			if(Main.CE.hasEnchantment(bow, CEnchantments.MULTIARROW.getEnchantment())){
 				if(CEnchantments.MULTIARROW.isEnabled()){
-					int power = Main.CE.getPower(bow, CEnchantments.MULTIARROW);
+					int power = Main.CE.getPower(bow, CEnchantments.MULTIARROW.getEnchantment());
 					if(Methods.randomPicker(3)){
 						if(e.getEntity() instanceof Player){
-							EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.MULTIARROW, bow);
+							EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.MULTIARROW.getEnchantment(), bow);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
 								for(int i=1;i<=power;i++){
@@ -97,7 +97,7 @@ public class Bows implements Listener{
 				final Entity arrow = e.getEntity();
 				if(Enchant.get(arrow).contains(CEnchantments.BOOM)){
 					if(CEnchantments.BOOM.isEnabled()){
-						if(Methods.randomPicker(6-Main.CE.getPower(Arrow.get(arrow), CEnchantments.BOOM))){
+						if(Methods.randomPicker(6-Main.CE.getPower(Arrow.get(arrow), CEnchantments.BOOM.getEnchantment()))){
 							Methods.explode(P.get(arrow), arrow);
 							arrow.remove();
 						}
@@ -146,10 +146,10 @@ public class Bows implements Listener{
 						if(Support.isFriendly(P.get(e.getDamager()), e.getEntity())){
 							if(Enchant.get(arrow).contains(CEnchantments.DOCTOR)){
 								if(CEnchantments.DOCTOR.isEnabled()){
-									int heal = 1 + Main.CE.getPower(Arrow.get(arrow), CEnchantments.DOCTOR);
+									int heal = 1 + Main.CE.getPower(Arrow.get(arrow), CEnchantments.DOCTOR.getEnchantment());
 									if (en.getHealth() < en.getMaxHealth()) {
 										if (en instanceof Player) {
-											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, item);
+											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR.getEnchantment(), item);
 											Bukkit.getPluginManager().callEvent(event);
 											if (!event.isCancelled()) {
 												if (en.getHealth() + heal < en.getMaxHealth()) {
@@ -175,10 +175,10 @@ public class Bows implements Listener{
 							if(!Support.isFriendly(P.get(arrow), e.getEntity())){
 								if(Enchant.get(arrow).contains(CEnchantments.PULL)){
 									if(CEnchantments.PULL.isEnabled()){
-										if(Methods.randomPicker(5 - Main.CE.getPower(Arrow.get(arrow), CEnchantments.PULL))){
+										if(Methods.randomPicker(5 - Main.CE.getPower(Arrow.get(arrow), CEnchantments.PULL.getEnchantment()))){
 											Vector v = P.get(arrow).getLocation().toVector().subtract(en.getLocation().toVector()).normalize().multiply(3).setY(2);
 											if(en instanceof Player){
-												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PULL, item);
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PULL.getEnchantment(), item);
 												Bukkit.getPluginManager().callEvent(event);
 												Player player = (Player) e.getEntity();
 												if(!event.isCancelled()){
@@ -205,7 +205,7 @@ public class Bows implements Listener{
 									if(CEnchantments.ICEFREEZE.isEnabled()){
 										if(Methods.randomPicker(5)){
 											if(en instanceof Player){
-												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.ICEFREEZE, item);
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.ICEFREEZE.getEnchantment(), item);
 												Bukkit.getPluginManager().callEvent(event);
 												if(!event.isCancelled()){
 													en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 1));
@@ -218,9 +218,9 @@ public class Bows implements Listener{
 								}
 								if(Enchant.get(arrow).contains(CEnchantments.PIERCING)){
 									if(CEnchantments.PIERCING.isEnabled()){
-										if(Methods.randomPicker(20-Main.CE.getPower(Arrow.get(arrow), CEnchantments.PIERCING))){
+										if(Methods.randomPicker(20-Main.CE.getPower(Arrow.get(arrow), CEnchantments.PIERCING.getEnchantment()))){
 											if(en instanceof Player){
-												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PIERCING, item);
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PIERCING.getEnchantment(), item);
 												Bukkit.getPluginManager().callEvent(event);
 												if(!event.isCancelled()){
 													e.setDamage(e.getDamage() *2);
@@ -235,13 +235,13 @@ public class Bows implements Listener{
 									if(CEnchantments.VENOM.isEnabled()){
 										if(Methods.randomPicker(10)){
 											if(en instanceof Player){
-												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.VENOM, item);
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.VENOM.getEnchantment(), item);
 												Bukkit.getPluginManager().callEvent(event);
 												if(!event.isCancelled()){
-													en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2*20, Main.CE.getPower(Arrow.get(arrow), CEnchantments.VENOM)-1));
+													en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2*20, Main.CE.getPower(Arrow.get(arrow), CEnchantments.VENOM.getEnchantment())-1));
 												}
 											}else{
-												en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2*20, Main.CE.getPower(Arrow.get(arrow), CEnchantments.VENOM)-1));
+												en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2*20, Main.CE.getPower(Arrow.get(arrow), CEnchantments.VENOM.getEnchantment())-1));
 											}
 										}
 									}

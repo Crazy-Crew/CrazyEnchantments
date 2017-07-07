@@ -11,7 +11,7 @@ import me.badbones69.crazyenchantments.Methods;
 
 public class CEBook {
 	
-	private CEnchantments enchantment;
+	private CEnchantment enchantment;
 	private int amount;
 	private int power;
 	private boolean glowing;
@@ -23,7 +23,7 @@ public class CEBook {
 	 * @param enchantment Enchantment you want.
 	 * @param power Tier of the enchantment.
 	 */
-	public CEBook(CEnchantments enchantment, Integer power){
+	public CEBook(CEnchantment enchantment, Integer power){
 		this.enchantment = enchantment;
 		this.amount = 1;
 		this.power = power;
@@ -46,7 +46,7 @@ public class CEBook {
 	 * @param power Tier of the enchantment.
 	 * @param amount Amount of books you want.
 	 */
-	public CEBook(CEnchantments enchantment, Integer power, Integer amount){
+	public CEBook(CEnchantment enchantment, Integer power, Integer amount){
 		this.enchantment = enchantment;
 		this.amount = amount;
 		this.power = power;
@@ -67,7 +67,7 @@ public class CEBook {
 	 * 
 	 * @param enchantment Set the enchantment.
 	 */
-	public void setEnchantment(CEnchantments enchantment){
+	public void setEnchantment(CEnchantment enchantment){
 		this.enchantment = enchantment;
 	}
 	
@@ -75,7 +75,7 @@ public class CEBook {
 	 * Get the CEEnchantment.
 	 * @return The CEEnchantment.
 	 */
-	public CEnchantments getEnchantment(){
+	public CEnchantment getEnchantment(){
 		return this.enchantment;
 	}
 	
@@ -169,7 +169,7 @@ public class CEBook {
 		List<String> lore = new ArrayList<String>();
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			if(l.contains("%Description%")||l.contains("%description%")){
-				for(String m : enchantment.getDiscription()){
+				for(String m : enchantment.getInfoDescription()){
 					lore.add(Methods.color(m));
 				}
 			}else{

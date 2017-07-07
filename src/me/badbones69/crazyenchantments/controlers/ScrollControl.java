@@ -25,9 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEBook;
-import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.CustomEBook;
-import me.badbones69.crazyenchantments.api.CustomEnchantments;
+import me.badbones69.crazyenchantments.api.CEnchantment;
 import me.badbones69.crazyenchantments.api.EnchantmentType;
 
 public class ScrollControl implements Listener{
@@ -52,7 +50,7 @@ public class ScrollControl implements Listener{
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
 					}
-					if(Main.CE.hasEnchantments(item) || Main.CustomE.hasEnchantments(item)){
+					if(Main.CE.hasEnchantments(item)){
 						if(item.isSimilar(orderEnchantments(item.clone()))){
 							return;
 						}
@@ -86,27 +84,15 @@ public class ScrollControl implements Listener{
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
 					}
-					ArrayList<String> customEnchants = new ArrayList<String>();
 					HashMap<String, Integer> lvl = new HashMap<String, Integer>();
-					ArrayList<CEnchantments> enchants = new ArrayList<CEnchantments>();
+					ArrayList<CEnchantment> enchants = new ArrayList<CEnchantment>();
 					Boolean i = false;
-					Boolean custom = false;
 					if(Main.CE.hasEnchantments(item)){
-						for(CEnchantments en : Main.CE.getEnchantments()){
+						for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 							if(Main.CE.hasEnchantment(item, en)){
 								enchants.add(en);
 								lvl.put(en.getName(), Main.CE.getPower(item, en));
 								i = true;
-							}
-						}
-					}
-					if(Main.CustomE.hasEnchantments(item)){
-						for(String en : Main.CustomE.getEnchantments()){
-							if(Main.CustomE.hasEnchantment(item, en)){
-								customEnchants.add(en);
-								lvl.put(en, Main.CustomE.getPower(item, en));
-								i = true;
-								custom = true;
 							}
 						}
 					}
@@ -119,17 +105,10 @@ public class ScrollControl implements Listener{
 								return;
 							}
 						}
-						if(custom){
-							String enchantment = pickCustomEnchant(customEnchants);
-							e.setCurrentItem(Main.CustomE.removeEnchantment(item, enchantment));
-							CustomEBook book = new CustomEBook(enchantment, lvl.get(enchantment), 1);
-							player.getInventory().addItem(book.buildBook());
-						}else{
-							CEnchantments enchantment = pickEnchant(enchants);
-							e.setCurrentItem(Main.CE.removeEnchantment(item, enchantment));
-							CEBook book = new CEBook(enchantment, lvl.get(enchantment.getName()), 1);
-							player.getInventory().addItem(book.buildBook());
-						}
+						CEnchantment enchantment = pickEnchant(enchants);
+						e.setCurrentItem(Main.CE.removeEnchantment(item, enchantment));
+						CEBook book = new CEBook(enchantment, lvl.get(enchantment.getName()), 1);
+						player.getInventory().addItem(book.buildBook());
 						player.updateInventory();
 					}
 				}
@@ -153,37 +132,23 @@ public class ScrollControl implements Listener{
 	}
 	
 	public static ItemStack orderEnchantments(ItemStack item){
-		CustomEnchantments customE = Main.CustomE;
 		HashMap<String, Integer> enchants = new HashMap<String, Integer>();
 		HashMap<String, Integer> categories = new HashMap<String, Integer>();
 		List<String> order = new ArrayList<String>();
 		ArrayList<String> enchantments = new ArrayList<String>();
-		for(CEnchantments en : Main.CE.getItemEnchantments(item)){
+		for(CEnchantment en : Main.CE.getItemEnchantments(item)){
 			enchantments.add(en.getName());
-		}
-		for(String en : customE.getItemEnchantments(item)){
-			enchantments.add(en);
 		}
 		for(String ench : enchantments){
 			int top = 0;
-			if(Main.CE.isEnchantment(ench) || customE.isEnchantment(ench)){
-				if(Main.CE.isEnchantment(ench)){
-					for(String cat : Main.CE.getEnchantmentCategories(Main.CE.getFromName(ench))){
-						if(top < Main.CE.getCategoryRarity(cat)){
-							top = Main.CE.getCategoryRarity(cat);
-						}
+			if(Main.CE.getEnchantmentFromName(ench) != null){
+				for(String cat : Main.CE.getEnchantmentFromName(ench).getCategories()){
+					if(top < Main.CE.getCategoryRarity(cat)){
+						top = Main.CE.getCategoryRarity(cat);
 					}
-					enchants.put(ench, Main.CE.getPower(item, Main.CE.getFromName(ench)));
-					Main.CE.removeEnchantment(item, Main.CE.getFromName(ench));
-				}else if(customE.isEnchantment(ench)){
-					for(String cat : customE.getEnchantmentCategories(ench)){
-						if(top < customE.getCategoryRarity(cat)){
-							top = customE.getCategoryRarity(cat);
-						}
-					}
-					enchants.put(ench, customE.getPower(item, ench));
-					customE.removeEnchantment(item, ench);
 				}
+				enchants.put(ench, Main.CE.getPower(item, Main.CE.getEnchantmentFromName(ench)));
+				Main.CE.removeEnchantment(item, Main.CE.getEnchantmentFromName(ench));
 			}
 			categories.put(ench, top);
 			order.add(ench);
@@ -192,11 +157,9 @@ public class ScrollControl implements Listener{
 		ItemMeta m = item.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
 		for(String ench : order){
-			if(Main.CE.isEnchantment(ench)){
-				CEnchantments en = Main.CE.getFromName(ench);
-				lore.add(en.getEnchantmentColor() + en.getCustomName() + " " + Main.CE.convertPower(enchants.get(ench)));
-			}else if(customE.isEnchantment(ench)){
-				lore.add(customE.getEnchantmentColor(ench) + customE.getCustomName(ench) + " " + customE.convertPower(enchants.get(ench)));
+			if(Main.CE.getEnchantmentFromName(ench) != null){
+				CEnchantment en = Main.CE.getEnchantmentFromName(ench);
+				lore.add(en.getColor() + en.getCustomName() + " " + Main.CE.convertPower(enchants.get(ench)));
 			}
 		}
 		if(m.hasLore()){
@@ -262,13 +225,9 @@ public class ScrollControl implements Listener{
 		return Methods.makeItem(id, amount, name, Main.settings.getConfig().getStringList("Settings.TransmogScroll.Item-Lore"));
 	}
 	
-	private CEnchantments pickEnchant(List<CEnchantments> enchants){
+	private CEnchantment pickEnchant(List<CEnchantment> enchants){
 		Random i = new Random();
 		return enchants.get(i.nextInt(enchants.size()));
 	}
 	
-	private String pickCustomEnchant(List<String> enchants){
-		Random i = new Random();
-		return enchants.get(i.nextInt(enchants.size()));
-	}
 }
