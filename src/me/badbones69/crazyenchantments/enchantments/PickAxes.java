@@ -42,7 +42,7 @@ public class PickAxes implements Listener{
 			ItemStack item = Methods.getItemInHand(player);
 			Block block = e.getClickedBlock();
 			if(Main.CE.hasEnchantments(item)){
-				if(Main.CE.hasEnchantment(item, CEnchantments.BLAST)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.BLAST.getEnchantment())){
 					if(CEnchantments.BLAST.isEnabled()){
 						HashMap<Block, BlockFace> blockFace = new HashMap<Block, BlockFace>();
 						blockFace.put(block, e.getBlockFace());
@@ -60,7 +60,7 @@ public class PickAxes implements Listener{
 		Block block = e.getBlock();
 		ItemStack item = Methods.getItemInHand(player);
 		if(blocks.containsKey(player)){
-			if(Main.CE.hasEnchantment(item, CEnchantments.BLAST)){
+			if(Main.CE.hasEnchantment(item, CEnchantments.BLAST.getEnchantment())){
 				if(CEnchantments.BLAST.isEnabled()){
 					if(blocks.get(player).containsKey(block)){
 						BlockFace face = blocks.get(player).get(block);
@@ -82,7 +82,7 @@ public class PickAxes implements Listener{
 						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Blast-Full-Durability")){
 							damage = Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 						}
-						for(Block b : getBlocks(block.getLocation(), face, (Main.CE.getPower(item, CEnchantments.BLAST)-1))){
+						for(Block b : getBlocks(block.getLocation(), face, (Main.CE.getPower(item, CEnchantments.BLAST.getEnchantment())-1))){
 							if(Main.CE.getBlockList().contains(b.getType())){
 								BlockBreakEvent event = new BlockBreakEvent(b, player);
 								Bukkit.getPluginManager().callEvent(event);
@@ -92,19 +92,19 @@ public class PickAxes implements Listener{
 										b.setType(Material.AIR);
 									}else{
 										boolean toggle = true; //True means its air and false means it breaks normaly.
-										if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
+										if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())){
 											for(ItemStack drop : b.getDrops()){
-												if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(b.getType())){
+												if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE.getEnchantment()) && getOres().containsKey(b.getType())){
 													drop.setType(getOres().get(b.getType()));
 													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 															drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 														}
 													}
-												}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())){
+												}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT.getEnchantment()) && getOres().containsKey(b.getType())){
 													if(Methods.randomPicker(2)){
 														drop.setType(getOres().get(b.getType()));
-														drop.setAmount(1 + Main.CE.getPower(item, CEnchantments.AUTOSMELT));
+														drop.setAmount(1 + Main.CE.getPower(item, CEnchantments.AUTOSMELT.getEnchantment()));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 																drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
@@ -142,7 +142,7 @@ public class PickAxes implements Listener{
 											}
 										}else{
 											Boolean fortune = false;
-											if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(b.getType())){
+											if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE.getEnchantment()) && getOres().containsKey(b.getType())){
 												for(ItemStack drop : b.getDrops()){
 													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
@@ -152,11 +152,11 @@ public class PickAxes implements Listener{
 													}
 													b.getWorld().dropItem(b.getLocation(), new ItemStack(getOres().get(b.getType()), drop.getAmount()));
 												}
-											}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())){
+											}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT.getEnchantment()) && getOres().containsKey(b.getType())){
 												for(ItemStack drop : b.getDrops()){
 													if(Methods.randomPicker(2)){
 														drop.setType(getOres().get(b.getType()));
-														drop.setAmount(Main.CE.getPower(item, CEnchantments.AUTOSMELT));
+														drop.setAmount(Main.CE.getPower(item, CEnchantments.AUTOSMELT.getEnchantment()));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 																drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
@@ -198,9 +198,9 @@ public class PickAxes implements Listener{
 												}
 											}
 										}
-										if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+										if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE.getEnchantment())){
 											if(Methods.randomPicker(2)){
-												int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
+												int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE.getEnchantment());
 												if(getOres().containsKey(b.getType())){
 													xp += Methods.percentPick(7, 3) * power;
 												}
@@ -256,17 +256,17 @@ public class PickAxes implements Listener{
 		ItemStack item = Methods.getItemInHand(player);
 		if(Main.CE.hasEnchantments(item)){
 			if(player.getGameMode() != GameMode.CREATIVE){
-				if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT)  && 
-						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST) || Main.CE.hasEnchantment(item, CEnchantments.FURNACE) ||
-						Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY))){
+				if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT.getEnchantment())  && 
+						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST.getEnchantment()) || Main.CE.hasEnchantment(item, CEnchantments.FURNACE.getEnchantment()) ||
+						Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment()))){
 					if(CEnchantments.AUTOSMELT.isEnabled()){
 						if(getOres().containsKey(block.getType())){
 							if(Methods.randomPicker(2)){
-								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
+								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT.getEnchantment(), item);
 								Bukkit.getPluginManager().callEvent(event);
 								if(!event.isCancelled()){
 									int drop = 0;
-									drop += Main.CE.getPower(item, CEnchantments.AUTOSMELT);
+									drop += Main.CE.getPower(item, CEnchantments.AUTOSMELT.getEnchantment());
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 										if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 											drop += item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
@@ -277,9 +277,9 @@ public class PickAxes implements Listener{
 										i = new ItemStack(getOres().get(block.getType()), drop, (short) 4);
 									}
 									block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), i);
-									if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+									if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE.getEnchantment())){
 										if(Methods.randomPicker(2)){
-											int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
+											int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE.getEnchantment());
 											if(getOres().containsKey(block.getType())){
 												ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
 												orb.setExperience(Methods.percentPick(7, 3) * power);
@@ -293,11 +293,11 @@ public class PickAxes implements Listener{
 						}
 					}
 				}
-				if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE ) && 
-						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST) || Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY))){
+				if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE.getEnchantment()) && 
+						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST.getEnchantment()) || Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment()))){
 					if(CEnchantments.FURNACE.isEnabled()){
 						if(getOres().containsKey(block.getType())){
-							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
+							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE.getEnchantment(), item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()){
 								int drop = 1;
@@ -315,9 +315,9 @@ public class PickAxes implements Listener{
 									i = new ItemStack(getOres().get(block.getType()), drop, (short) 4);
 								}
 								block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), i);
-								if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+								if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE.getEnchantment())){
 									if(Methods.randomPicker(2)){
-										int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
+										int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE.getEnchantment());
 										if(getOres().containsKey(block.getType())){
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3) * power);
@@ -330,14 +330,14 @@ public class PickAxes implements Listener{
 						}
 					}
 				}
-				if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE) && 
-						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST) || Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY))){
+				if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE.getEnchantment()) && 
+						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST.getEnchantment()) || Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment()))){
 					if(CEnchantments.EXPERIENCE.isEnabled()){
 						if(!hasSilkTouch(item)){
 							if(getOres().containsKey(block.getType())){
-								int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
+								int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE.getEnchantment());
 								if(Methods.randomPicker(2)){
-									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
+									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
 										e.setExpToDrop(e.getExpToDrop()+(power+2));

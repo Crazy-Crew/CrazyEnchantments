@@ -46,8 +46,6 @@ import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_9_R2;
 
 public class Methods{
 	
-	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-	
 	public static String color(String msg){
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
@@ -55,6 +53,10 @@ public class Methods{
 	public static String removeColor(String msg){
 		msg = ChatColor.stripColor(msg);
 		return msg;
+	}
+	
+	public static Plugin getPlugin(){
+		return Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	}
 	
 	public static void sendMultiMessage(Player player, List<String> messages){
@@ -618,7 +620,7 @@ public class Methods{
 			c.setDoOutput(true);
 			c.setRequestMethod("POST");
 			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes("UTF-8"));
-			String oldVersion = plugin.getDescription().getVersion();
+			String oldVersion = getPlugin().getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
 				Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
@@ -634,7 +636,7 @@ public class Methods{
 			c.setDoOutput(true);
 			c.setRequestMethod("POST");
 			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes("UTF-8"));
-			String oldVersion = plugin.getDescription().getVersion();
+			String oldVersion = getPlugin().getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
 				player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
@@ -647,7 +649,6 @@ public class Methods{
 	public static int getEnchAmount(ItemStack item){
 		int amount = 0;
 		amount += Main.CE.getItemEnchantments(item).size();
-		amount += Main.CustomE.getItemEnchantments(item).size();
 		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.IncludeVanillaEnchantments")){
 			if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")){
 				if(item.hasItemMeta()){
@@ -780,7 +781,7 @@ public class Methods{
 	}
 	
 	private static void detonate(final Firework f) {
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), new Runnable() {
 			public void run() {
 				f.detonate();
 			}

@@ -5,7 +5,6 @@ import org.bukkit.event.HandlerList;
 
 import me.badbones69.crazyenchantments.api.CEBook;
 import me.badbones69.crazyenchantments.api.CEPlayer;
-import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 
 public class BuyBookEvent extends Event{
@@ -14,7 +13,6 @@ public class BuyBookEvent extends Event{
 	private CEBook book;
 	private CEPlayer player;
 	private Currency currency;
-	private CustomEBook customBook;
 	private static final HandlerList handlers = new HandlerList();
 	
 	/**
@@ -25,12 +23,11 @@ public class BuyBookEvent extends Event{
 	 * @param book CEBook being bought.
 	 * @param customBook CustomEBook being bought.
 	 */
-	public BuyBookEvent(CEPlayer player, Currency currency, int price, CEBook book, CustomEBook customBook){
+	public BuyBookEvent(CEPlayer player, Currency currency, int price, CEBook book){
 		this.book = book;
 		this.price = price;
 		this.player = player;
 		this.currency = currency;
-		this.customBook = customBook;
 	}
 	
 	/**
@@ -63,14 +60,6 @@ public class BuyBookEvent extends Event{
 	 */
 	public CEBook getBook(){
 		return this.book;
-	}
-	
-	/**
-	 * The CustomEBook the player bought.
-	 * @return The CuustomEBook being bought. This maybe null if the player bought a CEBook.
-	 */
-	public CustomEBook getCustomBook(){
-		return this.customBook;
 	}
 	
 	public HandlerList getHandlers() {

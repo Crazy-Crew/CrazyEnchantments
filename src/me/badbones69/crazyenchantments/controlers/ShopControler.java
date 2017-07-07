@@ -231,13 +231,8 @@ public class ShopControler implements Listener{
 										}
 									}
 									ItemStack book = EnchantmentControl.pick(cat);
-									boolean isCustom = Main.CustomE.isEnchantmentBook(book);
 									BuyBookEvent event;
-									if(isCustom){
-										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, null, Main.CustomE.convertToCEBook(book));
-									}else{
-										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book), null);
-									}
+									event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book));
 									Bukkit.getPluginManager().callEvent(event);
 									player.getInventory().addItem(book);
 									return;
@@ -584,8 +579,7 @@ public class ShopControler implements Listener{
 	}
 	
 	public static ArrayList<ItemStack> getInfo(String type){
-		FileConfiguration enchants = Main.settings.getEnchs();
-		FileConfiguration customEnchants = Main.settings.getCustomEnchs();
+		FileConfiguration enchants = Main.settings.getEnchantments();
 		ArrayList<ItemStack> swords = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> axes = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> bows = new ArrayList<ItemStack>();
@@ -599,25 +593,7 @@ public class ShopControler implements Listener{
 			if(enchants.getBoolean("Enchantments."+en+".Enabled")){
 				String name = enchants.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
-				EnchantmentType enchantType = Main.CE.getFromName(en).getType();
-				ItemStack i = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
-				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
-				if(enchantType == EnchantmentType.SWORD)swords.add(i);
-				if(enchantType == EnchantmentType.AXE)axes.add(i);
-				if(enchantType == EnchantmentType.BOW)bows.add(i);
-				if(enchantType == EnchantmentType.HELMET)helmets.add(i);
-				if(enchantType == EnchantmentType.BOOTS)boots.add(i);
-				if(enchantType == EnchantmentType.PICKAXE)picks.add(i);
-				if(enchantType == EnchantmentType.TOOL)tools.add(i);
-				if(enchantType == EnchantmentType.ALL)misc.add(i);
-				if(enchantType == EnchantmentType.WEAPONS)misc.add(i);
-			}
-		}
-		for(String enchantment : Main.CustomE.getEnchantments()){
-			if(Main.CustomE.isEnabled(enchantment)){
-				String name = customEnchants.getString("Enchantments."+enchantment+".Info.Name");
-				List<String> desc = Main.CustomE.getDiscription(enchantment);
-				EnchantmentType enchantType = Main.CustomE.getType(enchantment);
+				EnchantmentType enchantType = Main.CE.getEnchantmentFromName(en).getEnchantmentType();
 				ItemStack i = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
 				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
 				if(enchantType == EnchantmentType.SWORD)swords.add(i);

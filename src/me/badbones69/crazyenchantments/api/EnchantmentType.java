@@ -24,7 +24,7 @@ public enum EnchantmentType{
 	private String name;
 	private ArrayList<Material> items;
 	
-	/**\
+	/**
 	 * 
 	 * @param name Name of the type.
 	 * @param items Items in the enchantment type.
@@ -54,10 +54,10 @@ public enum EnchantmentType{
 	 * 
 	 * @return List of all Enchantments in the Type.
 	 */
-	public ArrayList<CEnchantments> getEnchantmnets(){
-		ArrayList<CEnchantments> en = new ArrayList<CEnchantments>();
-		for(CEnchantments e : Main.CE.getEnchantments()){
-			if(e.getType() == getFromName(name)){
+	public ArrayList<CEnchantment> getEnchantmnets(){
+		ArrayList<CEnchantment> en = new ArrayList<CEnchantment>();
+		for(CEnchantment e : Main.CE.getRegisteredEnchantments()){
+			if(e.getEnchantmentType() == getFromName(name)){
 				en.add(e);
 			}
 		}

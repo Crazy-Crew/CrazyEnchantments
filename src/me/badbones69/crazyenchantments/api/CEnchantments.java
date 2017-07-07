@@ -1,6 +1,5 @@
 package me.badbones69.crazyenchantments.api;
 
-import java.util.HashMap;
 import java.util.List;
 
 import me.badbones69.crazyenchantments.Main;
@@ -102,13 +101,8 @@ public enum CEnchantments {
 //	----------------All----------------  \\
 	HELLFORGED("HellForged", EnchantmentType.ALL);
 	
-	private String Name;
-	private EnchantmentType Type;
-	private static HashMap<CEnchantments, String> customNames = new HashMap<CEnchantments, String>();
-	private static HashMap<CEnchantments, String> bookColors = new HashMap<CEnchantments, String>();
-	private static HashMap<CEnchantments, String> enchantColors = new HashMap<CEnchantments, String>();
-	private static HashMap<CEnchantments, Boolean> active = new HashMap<CEnchantments, Boolean>();
-	private static HashMap<CEnchantments, List<String>> enchantDesc = new HashMap<CEnchantments, List<String>>();
+	private String name;
+	private EnchantmentType type;
 	
 	/**
 	 * 
@@ -116,22 +110,8 @@ public enum CEnchantments {
 	 * @param type Type of items it goes on.
 	 */
 	private CEnchantments(String name, EnchantmentType type){
-		Name = name;
-		Type = type;
-	}
-	
-	/**
-	 * Loads all the enchantments data.
-	 */
-	public static void load(){
-		for(CEnchantments en : values()){
-			String name = en.getName();
-			customNames.put(en, Main.settings.getEnchs().getString("Enchantments." + name + ".Name"));
-			bookColors.put(en, Main.settings.getEnchs().getString("Enchantments." + name + ".BookColor"));
-			enchantColors.put(en, Main.settings.getEnchs().getString("Enchantments." + name + ".Color"));
-			active.put(en, Main.settings.getEnchs().getBoolean("Enchantments." + name + ".Enabled"));
-			enchantDesc.put(en, Main.settings.getEnchs().getStringList("Enchantments." + name + ".Info.Description"));
-		}
+		this.name = name;
+		this.type = type;
 	}
 	
 	/**
@@ -139,7 +119,7 @@ public enum CEnchantments {
 	 * @return The name of the enchantment.
 	 */
 	public String getName(){
-		return Name;
+		return name;
 	}
 	
 	/**
@@ -147,7 +127,7 @@ public enum CEnchantments {
 	 * @return The custom name in the Enchantment.yml.
 	 */
 	public String getCustomName(){
-		return customNames.get(this);
+		return getEnchantment().getCustomName();
 	}
 	
 	/**
@@ -155,7 +135,7 @@ public enum CEnchantments {
 	 * @return The description of the enchantment in the Enchantments.yml.
 	 */
 	public List<String> getDiscription(){
-		return enchantDesc.get(this);
+		return getEnchantment().getInfoDescription();
 	}
 	
 	/**
@@ -163,7 +143,7 @@ public enum CEnchantments {
 	 * @return Return the color that goes on the Enchantment Book.
 	 */
 	public String getBookColor(){
-		return Methods.color(bookColors.get(this));
+		return Methods.color(getEnchantment().getBookColor());
 	}
 	
 	/**
@@ -171,7 +151,7 @@ public enum CEnchantments {
 	 * @return Returns the color that goes on the Enchanted Item.
 	 */
 	public String getEnchantmentColor(){
-		return Methods.color(enchantColors.get(this));
+		return Methods.color(getEnchantment().getColor());
 	}
 	
 	/**
@@ -179,7 +159,11 @@ public enum CEnchantments {
 	 * @return The type the enchantment is.
 	 */
 	public EnchantmentType getType(){
-		return Type;
+		if(getEnchantment() == null || getEnchantment().getEnchantmentType() == null){
+			return type;
+		}else{
+			return getEnchantment().getEnchantmentType();
+		}
 	}
 	
 	/**
@@ -187,6 +171,29 @@ public enum CEnchantments {
 	 * @return True if the enchantment is enabled and false if not.
 	 */
 	public Boolean isEnabled(){
-		return active.get(this);
+		return getEnchantment().isActivated();
 	}
+	
+	/**
+	 * Get the enchantment that this is tied to.
+	 * @return The enchantment this is tied to.
+	 */
+	public CEnchantment getEnchantment(){
+		return Main.CE.getEnchantmentFromName(name);
+	}
+	
+	/**
+	 * Get a CEnchantments from the enchantment name.
+	 * @param enchant The name of the enchantment.
+	 * @return Returns the CEnchantments but if not found it will be null.
+	 */
+	public static CEnchantments getFromName(String enchant){
+		for(CEnchantments ench : values()){
+			if(ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)){
+				return ench;
+			}
+		}
+		return null;
+	}
+	
 }
