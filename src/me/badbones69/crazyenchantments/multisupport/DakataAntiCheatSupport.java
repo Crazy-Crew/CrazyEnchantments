@@ -20,7 +20,7 @@ public class DakataAntiCheatSupport implements Listener{
 		if(cheatType == CheatType.AUTOCLICKER || cheatType == CheatType.INVALIDBLOCK_BREAK || cheatType == CheatType.NOBREAKDELAY
 				|| cheatType == CheatType.REACH_BLOCK){
 			if(item != null){
-				if(Main.CE.hasEnchantments(item) || Main.CustomE.hasEnchantments(item)){
+				if(Main.CE.hasEnchantments(item)){
 					e.setCancelled(true);
 				}
 			}
