@@ -288,7 +288,7 @@ public class Armor implements Listener{
 								if(CEnchantments.LEADERSHIP.isEnabled()){
 									if(Methods.randomPicker(12)){
 										if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
-											int radius = 4+Main.CE.getPower(armor, CEnchantments.LEADERSHIP);
+											int radius = 4+Main.CE.getPower(armor, CEnchantments.LEADERSHIP.getEnchantment());
 											int players = 0;
 											for(Entity en : damager.getNearbyEntities(radius, radius, radius)){
 												if(en instanceof Player){
@@ -455,7 +455,7 @@ public class Armor implements Listener{
 					if(Main.CE.hasEnchantment(armor, CEnchantments.ANGEL.getEnchantment())){
 						if(CEnchantments.ANGEL.isEnabled()){
 							if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
-								int radius = 4+Main.CE.getPower(armor, CEnchantments.ANGEL);
+								int radius = 4+Main.CE.getPower(armor, CEnchantments.ANGEL.getEnchantment());
 								for(Entity en : player.getNearbyEntities(radius, radius, radius)){
 									if(en instanceof Player){
 										Player o = (Player) en;
