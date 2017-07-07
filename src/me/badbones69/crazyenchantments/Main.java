@@ -30,7 +30,6 @@ import me.badbones69.crazyenchantments.api.CustomEnchantments;
 import me.badbones69.crazyenchantments.api.DataStorage;
 import me.badbones69.crazyenchantments.api.GKitz;
 import me.badbones69.crazyenchantments.api.InfoType;
-import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.events.ArmorListener;
 import me.badbones69.crazyenchantments.api.events.AuraListener;
@@ -60,6 +59,7 @@ import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
 import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class Main extends JavaPlugin implements Listener{
 	
@@ -131,7 +131,11 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		//==========================================================================\\
 		try {
-			new MCUpdate(this, true);
+			if(settings.getConfig().contains("Settings.Update-Checker")){
+				new MCUpdate(this, true).checkUpdate(settings.getConfig().getBoolean("Settings.Update-Checker"));
+			}else{
+				new MCUpdate(this, true);
+			}
 		} catch (IOException e) {}
 		new BukkitRunnable(){
 			@Override

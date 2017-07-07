@@ -24,8 +24,8 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 /**
  * @Author Borlea

@@ -20,10 +20,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.ParticleEffect;
 import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class Boots implements Listener{
 	

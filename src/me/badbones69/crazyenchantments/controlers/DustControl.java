@@ -22,7 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class DustControl implements Listener{
 	
