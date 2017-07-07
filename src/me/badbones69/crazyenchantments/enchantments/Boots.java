@@ -38,7 +38,7 @@ public class Boots implements Listener{
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
 		if(Main.CE.hasEnchantments(NewItem)){
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.WINGS)){
+			if(Main.CE.hasEnchantment(NewItem, CEnchantments.WINGS.getEnchantment())){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(player.getGameMode() != GameMode.CREATIVE){
@@ -55,7 +55,7 @@ public class Boots implements Listener{
 			}
 		}
 		if(Main.CE.hasEnchantments(OldItem)){
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.WINGS)){
+			if(Main.CE.hasEnchantment(OldItem, CEnchantments.WINGS.getEnchantment())){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(player.getGameMode()!=GameMode.CREATIVE){
 						if(Version.getVersion().comparedTo(Version.v1_8_R1) >= 1){
@@ -76,7 +76,7 @@ public class Boots implements Listener{
 		Player player = e.getPlayer();
 		ItemStack boots = player.getEquipment().getBoots();
 		if(Main.CE.hasEnchantments(boots)){
-			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
+			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS.getEnchantment())){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
@@ -104,7 +104,7 @@ public class Boots implements Listener{
 		Player player = e.getPlayer();
 		ItemStack boots = player.getEquipment().getBoots();
 		if(Main.CE.hasEnchantments(boots)){
-			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
+			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS.getEnchantment())){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
@@ -158,7 +158,7 @@ public class Boots implements Listener{
 		Player player = e.getPlayer();
 		ItemStack boots = player.getEquipment().getBoots();
 		if(Main.CE.hasEnchantments(boots)){
-			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
+			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS.getEnchantment())){
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
@@ -179,7 +179,7 @@ public class Boots implements Listener{
 		Player player = e.getPlayer();
 		ItemStack boots = player.getEquipment().getBoots();
 		if(Main.CE.hasEnchantments(boots)){
-			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
+			if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS.getEnchantment())){
 				if(CEnchantments.WINGS.isEnabled()){
 					player.setFlying(false);
 					player.setAllowFlight(false);
@@ -201,7 +201,7 @@ public class Boots implements Listener{
 								if(player.isFlying()){
 									ItemStack boots = player.getEquipment().getBoots();
 									if(boots != null){
-										if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS)){
+										if(Main.CE.hasEnchantment(boots, CEnchantments.WINGS.getEnchantment())){
 											if(CEnchantments.WINGS.isEnabled()){
 												ParticleEffect.CLOUD.display((float) .25, (float) 0, (float) .25, 0, 10, l, 100);
 											}

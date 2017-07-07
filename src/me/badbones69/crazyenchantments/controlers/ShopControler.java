@@ -19,9 +19,12 @@ import org.bukkit.inventory.ItemStack;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.EnchantmentType;
+import me.badbones69.crazyenchantments.api.InfoType;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class ShopControler implements Listener{
 	
@@ -79,13 +82,8 @@ public class ShopControler implements Listener{
 										}
 									}
 									ItemStack book = EnchantmentControl.pick(cat);
-									boolean isCustom = Main.CustomE.isEnchantmentBook(book);
 									BuyBookEvent event;
-									if(isCustom){
-										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, null, Main.CustomE.convertToCEBook(book));
-									}else{
-										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book), null);
-									}
+									event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book));
 									Bukkit.getPluginManager().callEvent(event);
 									player.getInventory().addItem(book);
 									return;

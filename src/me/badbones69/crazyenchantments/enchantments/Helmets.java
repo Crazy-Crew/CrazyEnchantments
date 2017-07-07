@@ -29,32 +29,32 @@ public class Helmets implements Listener{
 		ItemStack NewItem = e.getNewArmorPiece();
 		ItemStack OldItem = e.getOldArmorPiece();
 		if(Main.CE.hasEnchantments(NewItem)){
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.GLOWING)){
+			if(Main.CE.hasEnchantment(NewItem, CEnchantments.GLOWING.getEnchantment())){
 				if(CEnchantments.GLOWING.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, NewItem);
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING.getEnchantment(), NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, Main.CE.getPower(NewItem, CEnchantments.GLOWING)-1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, Main.CE.getPower(NewItem, CEnchantments.GLOWING.getEnchantment())-1));
 					}
 				}
 			}
-			if(Main.CE.hasEnchantment(NewItem, CEnchantments.MERMAID)){
+			if(Main.CE.hasEnchantment(NewItem, CEnchantments.MERMAID.getEnchantment())){
 				if(CEnchantments.MERMAID.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, NewItem);
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID.getEnchantment(), NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
-						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, Main.CE.getPower(NewItem, CEnchantments.MERMAID)-1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, Main.CE.getPower(NewItem, CEnchantments.MERMAID.getEnchantment())-1));
 					}
 				}
 			}
 		}
 		if(Main.CE.hasEnchantments(OldItem)){
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.GLOWING)){
+			if(Main.CE.hasEnchantment(OldItem, CEnchantments.GLOWING.getEnchantment())){
 				if(CEnchantments.GLOWING.isEnabled()){
 					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 				}
 			}
-			if(Main.CE.hasEnchantment(OldItem, CEnchantments.MERMAID)){
+			if(Main.CE.hasEnchantment(OldItem, CEnchantments.MERMAID.getEnchantment())){
 				if(CEnchantments.MERMAID.isEnabled()){
 					player.removePotionEffect(PotionEffectType.WATER_BREATHING);
 				}
@@ -67,7 +67,7 @@ public class Helmets implements Listener{
 		Player player = e.getPlayer();
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
 			if(Main.CE.hasEnchantments(armor)){
-				if(Main.CE.hasEnchantment(armor, CEnchantments.COMMANDER)){
+				if(Main.CE.hasEnchantment(armor, CEnchantments.COMMANDER.getEnchantment())){
 					if(CEnchantments.COMMANDER.isEnabled()){
 						int radius = 4+Main.CE.getPower(armor, CEnchantments.COMMANDER);
 						ArrayList<Player> players = new ArrayList<Player>();

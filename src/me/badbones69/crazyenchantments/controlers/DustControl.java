@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.CEnchantment;
 import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class DustControl implements Listener{
@@ -42,13 +42,8 @@ public class DustControl implements Listener{
 									if(book.getType() == Main.CE.getEnchantmentBookItem().getType()){
 										Boolean toggle = false;
 										String name = book.getItemMeta().getDisplayName();
-										for(CEnchantments en : Main.CE.getEnchantments()){
+										for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 											if(name.contains(Methods.color(en.getBookColor()+en.getCustomName()))){
-												toggle = true;
-											}
-										}
-										for(String en : Main.CustomE.getEnchantments()){
-											if(name.contains(Methods.color(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en)))){
 												toggle = true;
 											}
 										}
@@ -163,29 +158,18 @@ public class DustControl implements Listener{
 	private static void setLore(ItemStack item, int percent, String rate){
 		ItemMeta m = item.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
-		CEnchantments enchantment = null;
-		for(CEnchantments en : Main.CE.getEnchantments()){
+		CEnchantment enchantment = null;
+		for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 			String ench = en.getCustomName();
 			if(item.getItemMeta().getDisplayName().contains(ench)){
 				enchantment = en;
-			}
-		}
-		String cEnchantment = "";
-		for(String en : Main.CustomE.getEnchantments()){
-			String ench = Main.CustomE.getCustomName(en);
-			if(item.getItemMeta().getDisplayName().contains(ench)){
-				cEnchantment = en;
 			}
 		}
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			Boolean line = true;
 			if(l.contains("%Description%")||l.contains("%description%")){
 				if(enchantment != null){
-					for(String L : enchantment.getDiscription()){
-						lore.add(Methods.color(L));
-					}
-				}else{
-					for(String L : Main.CustomE.getDiscription(cEnchantment)){
+					for(String L : enchantment.getInfoDescription()){
 						lore.add(Methods.color(L));
 					}
 				}

@@ -149,13 +149,8 @@ public class SignControl implements Listener{
 								.replaceAll("%BookName%", book.getItemMeta().getDisplayName()).replaceAll("%bookname%", book.getItemMeta().getDisplayName())
 								.replaceAll("%Category%", C).replaceAll("%category%", C)));
 							}
-							boolean isCustom = Main.CustomE.isEnchantmentBook(book);
 							BuyBookEvent event;
-							if(isCustom){
-								event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, null, Main.CustomE.convertToCEBook(book));
-							}else{
-								event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book), null);
-							}
+							event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book));
 							Bukkit.getPluginManager().callEvent(event);
 							player.getInventory().addItem(book);
 							return;

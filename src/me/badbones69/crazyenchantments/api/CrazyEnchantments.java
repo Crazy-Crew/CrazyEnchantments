@@ -172,56 +172,6 @@ public class CrazyEnchantments {
 	
 	/**
 	 * 
-	 * @return List of all the enum enchantments.
-	 */
-	public ArrayList<CEnchantments> getEnchantments(){
-		ArrayList<CEnchantments> enchs = new ArrayList<CEnchantments>();
-		for(CEnchantments en : CEnchantments.values()){
-			enchs.add(en);
-		}
-		return enchs;
-	}
-	
-	/**
-	 * 
-	 * @param enchantment Enchantment that is being checked
-	 * @return Returns true if its real and false if not
-	 */
-	public Boolean isEnchantment(String enchantment){
-		for(CEnchantments en : getEnchantments()){
-			if(enchantment.equalsIgnoreCase(en.getName()) || enchantment.equalsIgnoreCase(en.getCustomName())){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * 
-	 * @param name The name or custom name of the enchantment.
-	 * @return The enchantment.
-	 */
-	public CEnchantments getFromName(String name){
-		for(CEnchantments en : getEnchantments()){
-			if(en.getName().equalsIgnoreCase(name)){
-				return en;
-			}
-//			try{
-//				if(en.getCustomName().equalsIgnoreCase(name)){
-//					return en;
-//				}
-//			}catch(Exception e){
-//				Bukkit.broadcastMessage("Enchantment failed to load: " + en.getName()); //This is used for Debugging.
-//			}
-			if(en.getCustomName().equalsIgnoreCase(name)){
-				return en;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * 
 	 * @param item Item you want to check to see if it has enchantments.
 	 * @return True if it has enchantments / False if it doesn't have enchantments.
 	 */
@@ -230,8 +180,8 @@ public class CrazyEnchantments {
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
-						for(CEnchantments enchantment : getEnchantments()){
-							if(lore.startsWith(enchantment.getEnchantmentColor() + enchantment.getCustomName())){
+						for(CEnchantment enchantment : getRegisteredEnchantments()){
+							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())){
 								return true;
 							}
 						}
@@ -248,12 +198,12 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you want to check if the item has.
 	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
 	 */
-	public Boolean hasEnchantment(ItemStack item, CEnchantments enchantment){
+	public Boolean hasEnchantment(ItemStack item, CEnchantment enchantment){
 		if(item != null){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
-						if(lore.startsWith(enchantment.getEnchantmentColor() + enchantment.getCustomName())){
+						if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())){
 							return true;
 						}
 					}
@@ -268,33 +218,16 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest category based on the rarities.
 	 */
-	public String getHighestEnchantmentCategory(CEnchantments enchantment){
+	public String getHighestEnchantmentCategory(CEnchantment enchantment){
 		String top = "";
 		int rarity = 0;
-		for(String cat : getEnchantmentCategories(enchantment)){
+		for(String cat : enchantment.getCategories()){
 			if(getCategoryRarity(cat) >= rarity){
 				rarity = getCategoryRarity(cat);
 				top = cat;
 			}
 		}
 		return top;
-	}
-	
-	/**
-	 * 
-	 * @param enchantment The enchantment you want to check.
-	 * @return All the categories the enchantment is in.
-	 */
-	public ArrayList<String> getEnchantmentCategories(CEnchantments enchantment){
-		ArrayList<String> cats = new ArrayList<String>();
-		for(String c : Main.settings.getEnchs().getStringList("Enchantments." + enchantment.getName() + ".Categories")){
-			for(String C : getCategories()){
-				if(c.equalsIgnoreCase(C)){
-					cats.add(C);
-				}
-			}
-		}
-		return cats;
 	}
 	
 	/**
@@ -331,7 +264,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public Boolean playerHasEnchantmentOn(Player player, ItemStack include, ItemStack exclude, CEnchantments enchantment){
+	public Boolean playerHasEnchantmentOn(Player player, ItemStack include, ItemStack exclude, CEnchantment enchantment){
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
 			if(!armor.isSimilar(exclude)){
 				if(hasEnchantment(armor, enchantment)){
@@ -352,7 +285,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public Boolean playerHasEnchantmentOnExclude(Player player, ItemStack item, CEnchantments enchantment){
+	public Boolean playerHasEnchantmentOnExclude(Player player, ItemStack item, CEnchantment enchantment){
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
 			if(!armor.isSimilar(item)){
 				if(hasEnchantment(armor, enchantment)){
@@ -370,7 +303,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public Boolean playerHasEnchantmentOnInclude(Player player, ItemStack item, CEnchantments enchantment){
+	public Boolean playerHasEnchantmentOnInclude(Player player, ItemStack item, CEnchantment enchantment){
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
 			if(hasEnchantment(armor, enchantment)){
 				return true;
@@ -390,7 +323,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public Integer getHighestEnchantmentLevel(Player player, ItemStack include, ItemStack exclude, CEnchantments enchantment){
+	public Integer getHighestEnchantmentLevel(Player player, ItemStack include, ItemStack exclude, CEnchantment enchantment){
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
 			if(!armor.isSimilar(exclude)){
@@ -418,7 +351,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public Integer getHighestEnchantmentLevelExclude(Player player, ItemStack item, CEnchantments enchantment){
+	public Integer getHighestEnchantmentLevelExclude(Player player, ItemStack item, CEnchantment enchantment){
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
 			if(!armor.isSimilar(item)){
@@ -440,7 +373,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public Integer getHighestEnchantmentLevelInclude(Player player, ItemStack item, CEnchantments enchantment){
+	public Integer getHighestEnchantmentLevelInclude(Player player, ItemStack item, CEnchantment enchantment){
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()){
 			if(hasEnchantment(armor, enchantment)){
@@ -466,20 +399,16 @@ public class CrazyEnchantments {
 	 * @param level Tier of the enchantment.
 	 * @return The item with the enchantment on it.
 	 */
-	public ItemStack addEnchantment(ItemStack item, CEnchantments enchant, Integer level){
+	public ItemStack addEnchantment(ItemStack item, CEnchantment enchant, Integer level){
 		if(hasEnchantment(item, enchant)){
 			removeEnchantment(item, enchant);
 		}
 		List<String> newLore = new ArrayList<String>();
 		List<String> lores = new ArrayList<String>();
 		HashMap<String, String> enchantments = new HashMap<String, String>();
-		for(CEnchantments en : getItemEnchantments(item)){
-			enchantments.put(en.getName(), Methods.color(en.getEnchantmentColor() + en.getCustomName() + " " +  convertPower(getPower(item, en))));
+		for(CEnchantment en : getItemEnchantments(item)){
+			enchantments.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " +  convertPower(getPower(item, en))));
 			removeEnchantment(item, en);
-		}
-		for(String en : Main.CustomE.getItemEnchantments(item)){
-			enchantments.put(en, Methods.color(Main.CustomE.getEnchantmentColor(en) + Main.CustomE.getCustomName(en) + " " + convertPower(Main.CustomE.getPower(item, en))));
-			Main.CustomE.removeEnchantment(item, en);
 		}
 		ItemMeta meta = item.getItemMeta();
 		if(meta != null){
@@ -489,7 +418,7 @@ public class CrazyEnchantments {
 				}
 			}
 		}
-		enchantments.put(enchant.getName(), Methods.color(enchant.getEnchantmentColor() + enchant.getCustomName() + " " + convertPower(level)));
+		enchantments.put(enchant.getName(), Methods.color(enchant.getColor() + enchant.getCustomName() + " " + convertPower(level)));
 		for(String en : enchantments.keySet()){
 			newLore.add(enchantments.get(en));
 		}
@@ -505,7 +434,7 @@ public class CrazyEnchantments {
 	 * @param enchant Enchantment you want removed.
 	 * @return Item with out the enchantment.
 	 */
-	public ItemStack removeEnchantment(ItemStack item, CEnchantments enchant){
+	public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant){
 		List<String> newLore = new ArrayList<String>();
 		ItemMeta meta = item.getItemMeta();
 		if(meta.hasLore()){
@@ -525,14 +454,14 @@ public class CrazyEnchantments {
 	 * @param item Item you want to get the enchantments from.
 	 * @return A list of enchantments the item has.
 	 */
-	public ArrayList<CEnchantments> getItemEnchantments(ItemStack item){
-		ArrayList<CEnchantments> enchantments = new ArrayList<CEnchantments>();
+	public ArrayList<CEnchantment> getItemEnchantments(ItemStack item){
+		ArrayList<CEnchantment> enchantments = new ArrayList<CEnchantment>();
 		if(item != null){
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasLore()){
 					for(String lore : item.getItemMeta().getLore()){
-						for(CEnchantments en : getEnchantments()){
-							if(lore.startsWith(en.getEnchantmentColor() + en.getCustomName())){
+						for(CEnchantment en : getRegisteredEnchantments()){
+							if(lore.startsWith(en.getColor() + en.getCustomName())){
 								if(!enchantments.contains(en)){
 									enchantments.add(en);
 								}
@@ -595,16 +524,16 @@ public class CrazyEnchantments {
 			exclude = new ItemStack(Material.AIR);
 		}
 		items.add(include);
-		HashMap<CEnchantments,HashMap<PotionEffectType,Integer>> armorEffects = getEnchantmentPotions();
+		HashMap<CEnchantments, HashMap<PotionEffectType, Integer>> armorEffects = getEnchantmentPotions();
 		for(CEnchantments ench : armorEffects.keySet()){
 			for(ItemStack armor : items){
 				if(armor != null){
 					if(!armor.isSimilar(exclude)){
-						if(hasEnchantment(armor, ench)){
-							int power = getPower(armor, ench);
+						if(hasEnchantment(armor, getEnchantmentFromName(ench.getName()))){
+							int power = getPower(armor, getEnchantmentFromName(ench.getName()));
 							if(!Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")){
-								if(power > getMaxPower(ench)){
-									power = getMaxPower(ench);
+								if(power > getEnchantmentFromName(ench.getName()).getMaxLevel()){
+									power = getEnchantmentFromName(ench.getName()).getMaxLevel();
 								}
 							}
 							for(PotionEffectType type : armorEffects.get(enchantment).keySet()){
@@ -687,7 +616,7 @@ public class CrazyEnchantments {
 			if(book.hasItemMeta()){
 				if(book.getItemMeta().hasDisplayName()){
 					if(book.getType() == getEnchantmentBookItem().getType()){
-						for(CEnchantments en : getEnchantments()){
+						for(CEnchantment en : getRegisteredEnchantments()){
 							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 								return true;
 							}
@@ -717,12 +646,12 @@ public class CrazyEnchantments {
 	 * @param book The book you want the enchantment from.
 	 * @return The enchantment the book is.
 	 */
-	public CEnchantments getEnchantmentBookEnchantmnet(ItemStack book){
+	public CEnchantment getEnchantmentBookEnchantmnet(ItemStack book){
 		if(book != null){
 			if(book.hasItemMeta()){
 				if(book.getItemMeta().hasDisplayName()){
 					if(book.getType() == getEnchantmentBookItem().getType()){
-						for(CEnchantments en : getEnchantments()){
+						for(CEnchantment en : getRegisteredEnchantments()){
 							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
 								return en;
 							}
@@ -768,7 +697,7 @@ public class CrazyEnchantments {
 	 * @param enchant The enchantment you want the power from.
 	 * @return The power the enchantment has.
 	 */
-	public Integer getBookPower(ItemStack book, CEnchantments enchant){
+	public Integer getBookPower(ItemStack book, CEnchantment enchant){
 		String line = book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName()+" ", "");
 		if(Methods.isInt(line))return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))return 1;
@@ -790,7 +719,7 @@ public class CrazyEnchantments {
 	 * @param enchant The enchantment you want the power from.
 	 * @return The power the enchantment has.
 	 */
-	public Integer getPower(ItemStack item, CEnchantments enchant){
+	public Integer getPower(ItemStack item, CEnchantment enchant){
 		int power = 0;
 		String line = "";
 		if(item.hasItemMeta()){
@@ -803,7 +732,7 @@ public class CrazyEnchantments {
 				}
 			}
 		}
-		line = line.replace(enchant.getEnchantmentColor() + enchant.getCustomName()+" ", "");
+		line = line.replace(enchant.getColor() + enchant.getCustomName()+" ", "");
 		if(Methods.isInt(line))power = Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I"))power = 1;
 		if(line.equalsIgnoreCase("II"))power = 2;
@@ -816,8 +745,8 @@ public class CrazyEnchantments {
 		if(line.equalsIgnoreCase("IX"))power = 9;
 		if(line.equalsIgnoreCase("X"))power = 10;
 		if(!Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")){
-			if(power > getMaxPower(enchant)){
-				power = getMaxPower(enchant);
+			if(power > enchant.getMaxLevel()){
+				power = enchant.getMaxLevel();
 			}
 		}
 		return power;
@@ -837,15 +766,6 @@ public class CrazyEnchantments {
 	 */
 	public Integer getMaxRageLevel(){
 		return DataStorage.getRageMaxLevel();
-	}
-	
-	/**
-	 * Gets the max enchantment level of an enchantment.
-	 * @param enchant The enchantment you want to get.
-	 * @return The max enchantment level.
-	 */
-	public Integer getMaxPower(CEnchantments enchant){
-		return Main.settings.getEnchs().getInt("Enchantments." + enchant.getName() + ".MaxPower");
 	}
 	
 	/**
@@ -875,6 +795,28 @@ public class CrazyEnchantments {
 	 */
 	public ArrayList<ItemStack> getKitItems(ArrayList<String> itemStrings){
 		return DataStorage.getKitItems(itemStrings);
+	}
+	
+	/**
+	 * Get a CEnchantment enchantment from the name.
+	 * @param enchantment The name of the enchantment.
+	 * @return The enchantment as a CEnchantment but if not found will be null.
+	 */
+	public CEnchantment getEnchantmentFromName(String enchantment){
+		for(CEnchantment enchant : DataStorage.getRegisteredEnchantments()){
+			if(enchant.getName().equalsIgnoreCase(enchantment)){
+				return enchant;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Get all the registered enchantments.
+	 * @return List of all registered enchantments.
+	 */
+	public ArrayList<CEnchantment> getRegisteredEnchantments(){
+		return DataStorage.getRegisteredEnchantments();
 	}
 	
 	/**

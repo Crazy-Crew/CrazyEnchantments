@@ -1,10 +1,24 @@
+#Enchantment Types:
+# - Armor ~ All armor
+# - Helmet
+# - Chestplate
+# - Leggings
+# - Boots
+# - Bow
+# - Axe
+# - Sword
+# - Weapons ~ Swords and Axes
+# - PickAxe
+# - Tool ~ Pickaxes, Axes, Shovels, and Hoes
+# - All ~ All items listed here
 Enchantments:
-  Glowing: #Do not change these lines. If so you will get errors in console.
+  Glowing: #Do not change these line.
     Enabled: True #Wether or not an enchantment is active
     Name: 'Glowing' #The in-game name of the enchantment
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
     MaxPower: 1 #Max lvl the enchantment goes up to
+    Enchantment-Type: 'Helmet' #The type of items that can be enchanted with the enchantment.
     Info: #Info for the enchantment
       Name: '&e&lGlowing &7(&bI&7)' #Name for the GUI
       Description: #The description of what it does
@@ -20,12 +34,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  BurnShield:
+  BurnShield: #Do not change these line.
     Enabled: True
     Name: 'BurnShield'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lBurn Shield &7(&bI&7)'
       Description:
@@ -41,12 +56,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Piercing:
+  Piercing: #Do not change these line.
     Enabled: True
     Name: 'Piercing'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lPiercing &7(&bI-&bIII&7)' 
       Description:
@@ -62,12 +78,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  OverLoad:
+  OverLoad: #Do not change these line.
     Enabled: True
     Name: 'OverLoad'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lOverload &7(&bI-&bV&7)'
       Description:
@@ -83,12 +100,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SelfDestruct:
+  SelfDestruct: #Do not change these line.
     Enabled: True
     Name: 'SelfDestruct'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lSelf Destruct &7(&bI-&bV&7)'
       Description:
@@ -104,12 +122,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Springs:
+  Springs: #Do not change these line.
     Enabled: True
     Name: 'Springs'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lSprings &7(&bI-&bV&7)'
       Description:
@@ -125,12 +144,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Gears:
+  Gears: #Do not change these line.
     Enabled: True
     Name: 'Gears'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lGears &7(&bI-&bIII&7)'
       Description:
@@ -146,12 +166,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Hulk:
+  Hulk: #Do not change these line.
     Enabled: True
     Name: 'Hulk'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lHulk &7(&bI-&bII&7)'
       Description:
@@ -167,12 +188,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Mermaid:
+  Mermaid: #Do not change these line.
     Enabled: True
     Name: 'Mermaid'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Helmet'
     Info:
       Name: '&e&lMermaid &7(&bI-&bIII&7)'
       Description:
@@ -188,12 +210,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Ninja:
+  Ninja: #Do not change these line.
     Enabled: True
     Name: 'Ninja'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lNinja &7(&bI-&bII&7)'
       Description:
@@ -209,12 +232,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Vampire:
+  Vampire: #Do not change these line.
     Enabled: True
     Name: 'Vampire'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lVampire &7(&bI-&bV&7)'
       Description:
@@ -230,12 +254,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  LifeSteal:
+  LifeSteal: #Do not change these line.
     Enabled: True
     Name: 'LifeSteal'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lLife Steal &7(&bI-&bV&7)'
       Description:
@@ -251,12 +276,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Doctor:
+  Doctor: #Do not change these line.
     Enabled: True
     Name: 'Doctor'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lDoctor &7(&bI-&bIII&7)'
       Description:
@@ -272,12 +298,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Boom:
+  Boom: #Do not change these line.
     Enabled: True
     Name: 'Boom'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lBoom &7(&bI-&bIII&7)'
       Description:
@@ -293,12 +320,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Venom:
+  Venom: #Do not change these line.
     Enabled: True
     Name: 'Venom'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lVenom &7(&bI-&bV&7)'
       Description:
@@ -314,12 +342,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  DoubleDamage:
+  DoubleDamage: #Do not change these line.
     Enabled: True
     Name: 'DoubleDamage'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lDouble Damage &7(&bI-&bIII&7)'
       Description:
@@ -335,12 +364,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SlowMo:
+  SlowMo: #Do not change these line.
     Enabled: True
     Name: 'SlowMo'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lSlowMo &7(&bI-&bIII&7)'
       Description:
@@ -356,12 +386,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blindness:
+  Blindness: #Do not change these line.
     Enabled: True
     Name: 'Blindness'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lBlindness &7(&bI-&bII&7)'
       Description:
@@ -377,12 +408,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Viper:
+  Viper: #Do not change these line.
     Enabled: True
     Name: 'Viper'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lViper &7(&bI-&bIII&7)'
       Description:
@@ -398,12 +430,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  AntiGravity:
+  AntiGravity: #Do not change these line.
     Enabled: True
     Name: 'AntiGravity'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lAnti-Gravity &7(&bI-&bIII&7)'
       Description:
@@ -419,12 +452,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  FastTurn:
+  FastTurn: #Do not change these line.
     Enabled: True
     Name: 'FastTurn'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lFast Turn &7(&bI-&bII&7)'
       Description:
@@ -440,12 +474,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  LightWeight:
+  LightWeight: #Do not change these line.
     Enabled: True
     Name: 'LightWeight'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lLight Weight &7(&bI-&bIII&7)'
       Description:
@@ -461,12 +496,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blessed:
+  Blessed: #Do not change these line.
     Enabled: True
     Name: 'Blessed'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
     Info:
       Name: '&e&lBlessed &7(&bI-&bIII&7)'
       Description:
@@ -482,12 +518,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  FeedMe:
+  FeedMe: #Do not change these line.
     Enabled: True
     Name: 'FeedMe'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Axe'
     Info:
       Name: '&e&lFeedMe &7(&bI-&bV&7)'
       Description:
@@ -503,12 +540,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Dizzy:
+  Dizzy: #Do not change these line.
     Enabled: True
     Name: 'Dizzy'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
     Info:
       Name: '&e&lDizzy &7(&bI-&bIII&7)'
       Description:
@@ -524,12 +562,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Berserk:
+  Berserk: #Do not change these line.
     Enabled: True
     Name: 'Berserk'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
     Info:
       Name: '&e&lBerserk &7(&bI-&bIII&7)'
       Description:
@@ -545,12 +584,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Cursed:
+  Cursed: #Do not change these line.
     Enabled: True
     Name: 'Cursed'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
     Info:
       Name: '&e&lCursed &7(&bI-&bIII&7)'
       Description:
@@ -566,12 +606,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Rekt:
+  Rekt: #Do not change these line.
     Enabled: True
     Name: 'Rekt'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
     Info:
       Name: '&e&lRekt &7(&bI-&bIII&7)'
       Description:
@@ -587,12 +628,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Enlightened:
+  Enlightened: #Do not change these line.
     Enabled: True
     Name: 'Enlightened'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lEnlightened &7(&bI-&bV&7)'
       Description:
@@ -608,12 +650,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Freeze:
+  Freeze: #Do not change these line.
     Enabled: True
     Name: 'Freeze'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lFreeze &7(&bI-&bII&7)'
       Description:
@@ -629,12 +672,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Fortify:
+  Fortify: #Do not change these line.
     Enabled: True
     Name: 'Fortify'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lFortify &7(&bI-&bIII&7)'
       Description:
@@ -650,12 +694,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Molten:
+  Molten: #Do not change these line.
     Enabled: True
     Name: 'Molten'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lMolten &7(&bI-&bV&7)'
       Description:
@@ -671,12 +716,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  PainGiver:
+  PainGiver: #Do not change these line.
     Enabled: True
     Name: 'PainGiver'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lPain Giver &7(&bI-&bIV&7)'
       Description:
@@ -692,12 +738,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Savior:
+  Savior: #Do not change these line.
     Enabled: True
     Name: 'Savior'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lSavior &7(&bI-&bV&7)'
       Description:
@@ -713,12 +760,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Nursery:
+  Nursery: #Do not change these line.
     Enabled: True
     Name: 'Nursery'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lNursery &7(&bI-&bV&7)'
       Description:
@@ -734,12 +782,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  AutoSmelt:
+  AutoSmelt: #Do not change these line.
     Enabled: True
     Name: 'AutoSmelt'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'PickAxe'
     Info:
       Name: '&e&lAuto Smelt &7(&bI-&bV&7)'
       Description:
@@ -755,12 +804,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Experience:
+  Experience: #Do not change these line.
     Enabled: True
     Name: 'Experience'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'PickAxe'
     Info:
       Name: '&e&lExperience &7(&bI-&bIII&7)'
       Description:
@@ -776,12 +826,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Telepathy:
+  Telepathy: #Do not change these line.
     Enabled: True
     Name: 'Telepathy'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Tool'
     Info:
       Name: '&e&lTelepathy &7(&bI&7)'
       Description:
@@ -797,12 +848,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Haste:
+  Haste: #Do not change these line.
     Enabled: True
     Name: 'Haste'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Tool'
     Info:
       Name: '&e&lHaste &7(&bI-&bIII&7)'
       Description:
@@ -818,12 +870,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Oxygenate:
+  Oxygenate: #Do not change these line.
     Enabled: True
     Name: 'Oxygenate'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Tool'
     Info:
       Name: '&e&lOxygenate &7(&bI&7)'
       Description:
@@ -839,12 +892,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  IceFreeze:
+  IceFreeze: #Do not change these line.
     Enabled: True
     Name: 'IceFreeze'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lIce Freeze &7(&bI&7)'
       Description:
@@ -860,12 +914,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Lightning:
+  Lightning: #Do not change these line.
     Enabled: True
     Name: 'Lightning'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lLightning &7(&bI&7)'
       Description:
@@ -881,12 +936,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Decapitation:
+  Decapitation: #Do not change these line.
     Enabled: True
     Name: 'Decapitation'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Axe'
     Info:
       Name: '&e&lDecapitation &7(&bI-&bV&7)'
       Description:
@@ -902,12 +958,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Confusion:
+  Confusion: #Do not change these line.
     Enabled: True
     Name: 'Confusion'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lConfusion &7(&bI-&bIV&7)'
       Description:
@@ -923,12 +980,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Disarmer:
+  Disarmer: #Do not change these line.
     Enabled: True
     Name: 'Disarmer'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lDisarmer &7(&bI-&bIII&7)'
       Description:
@@ -944,12 +1002,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Execute:
+  Execute: #Do not change these line.
     Enabled: True
     Name: 'Execute'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lExecute &7(&bI-&bV&7)'
       Description:
@@ -965,12 +1024,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Headless:
+  Headless: #Do not change these line.
     Enabled: True
     Name: 'Headless'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lHeadless &7(&bI-&bV&7)'
       Description:
@@ -986,12 +1046,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Inquisitive:
+  Inquisitive: #Do not change these line.
     Enabled: True
     Name: 'Inquisitive'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lInquisitive &7(&bI-&bV&7)'
       Description:
@@ -1007,12 +1068,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Insomnia:
+  Insomnia: #Do not change these line.
     Enabled: True
     Name: 'Insomnia'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lInsomnia &7(&bI&7)'
       Description:
@@ -1028,12 +1090,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Nutrition:
+  Nutrition: #Do not change these line.
     Enabled: True
     Name: 'Nutrition'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lNutrition &7(&bI-&bIII&7)'
       Description:
@@ -1049,12 +1112,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Obliterate:
+  Obliterate: #Do not change these line.
     Enabled: True
     Name: 'Obliterate'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lObliterate &7(&bI-&bIII&7)'
       Description:
@@ -1070,12 +1134,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Paralyze:
+  Paralyze: #Do not change these line.
     Enabled: True
     Name: 'Paralyze'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lParalyze &7(&bI-&bIII&7)'
       Description:
@@ -1091,12 +1156,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SkillSwipe:
+  SkillSwipe: #Do not change these line.
     Enabled: True
     Name: 'SkillSwipe'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lSkill Swipe &7(&bI-&bV&7)'
       Description:
@@ -1112,12 +1178,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Snare:
+  Snare: #Do not change these line.
     Enabled: True
     Name: 'Snare'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lSnare &7(&bI-&bIII&7)'
       Description:
@@ -1133,12 +1200,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Trap:
+  Trap: #Do not change these line.
     Enabled: True
     Name: 'Trap'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lTrap &7(&bI-&bII&7)'
       Description:
@@ -1154,12 +1222,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Wither:
+  Wither: #Do not change these line.
     Enabled: True
     Name: 'Wither'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lWither &7(&bI-&bIII&7)'
       Description:
@@ -1175,12 +1244,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Rage:
+  Rage: #Do not change these line.
     Enabled: True
     Name: 'Rage'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lRage &7(&bI-&bIII&7)'
       Description:
@@ -1196,12 +1266,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Valor:
+  Valor: #Do not change these line.
     Enabled: True
     Name: 'Valor'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lValor &7(&bI-&bII&7)'
       Description:
@@ -1217,12 +1288,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SmokeBomb:
+  SmokeBomb: #Do not change these line.
     Enabled: True
     Name: 'SmokeBomb'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lSmoke Bomb &7(&bI-&bIII&7)'
       Description:
@@ -1238,12 +1310,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Drunk:
+  Drunk: #Do not change these line.
     Enabled: True
     Name: 'Drunk'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lDrunk &7(&bI-&bIII&7)'
       Description:
@@ -1259,12 +1332,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Voodoo:
+  Voodoo: #Do not change these line.
     Enabled: True
     Name: 'Voodoo'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lVoodoo &7(&bI-&bIII&7)'
       Description:
@@ -1280,12 +1354,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  MultiArrow:
+  MultiArrow: #Do not change these line.
     Enabled: True
     Name: 'MultiArrow'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lMultiArrow &7(&bI-&bV&7)'
       Description:
@@ -1301,12 +1376,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Recover:
+  Recover: #Do not change these line.
     Enabled: True
     Name: 'Recover'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lRecover &7(&bI&7)'
       Description:
@@ -1322,12 +1398,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Cactus:
+  Cactus: #Do not change these line.
     Enabled: True
     Name: 'Cactus'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lCactus &7(&bI-&bIII&7)'
       Description:
@@ -1343,12 +1420,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Rocket:
+  Rocket: #Do not change these line.
     Enabled: True
     Name: 'Rocket'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lRocket &7(&bI-&bIII&7)'
       Description:
@@ -1364,12 +1442,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Angel:
+  Angel: #Do not change these line.
     Enabled: True
     Name: 'Angel'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lAngel &7(&bI-&bV&7)'
       Description:
@@ -1385,12 +1464,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  HellForged:
+  HellForged: #Do not change these line.
     Enabled: True
     Name: 'HellForged'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
+    Enchantment-Type: 'All'
     Info:
       Name: '&e&lHellForged &7(&bI-&bIV&7)'
       Description:
@@ -1406,12 +1486,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Commander:
+  Commander: #Do not change these line.
     Enabled: True
     Name: 'Commander'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Helmet'
     Info:
       Name: '&e&lCommander &7(&bI-&bV&7)'
       Description:
@@ -1427,12 +1508,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  StormCaller:
+  StormCaller: #Do not change these line.
     Enabled: True
     Name: 'StormCaller'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lStormCaller &7(&bI-&bV&7)'
       Description:
@@ -1448,12 +1530,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Leadership:
+  Leadership: #Do not change these line.
     Enabled: True
     Name: 'Leadership'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lLeadership &7(&bI-&bV&7)'
       Description:
@@ -1469,12 +1552,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Implants:
+  Implants: #Do not change these line.
     Enabled: True
     Name: 'Implants'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Helmet'
     Info:
       Name: '&e&lImplants &7(&bI-&bV&7)'
       Description:
@@ -1490,12 +1574,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Wings:
+  Wings: #Do not change these line.
     Enabled: True
     Name: 'Wings'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lWings &7(&bI&7)'
       Description:
@@ -1511,12 +1596,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blast:
+  Blast: #Do not change these line.
     Enabled: True
     Name: 'Blast'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'PickAxe'
     Info:
       Name: '&e&lBlast &7(&bI-&bIII&7)'
       Description:
@@ -1532,12 +1618,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Furnace:
+  Furnace: #Do not change these line.
     Enabled: True
     Name: 'Furnace'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'PickAxe'
     Info:
       Name: '&e&lFurnace &7(&bI&7)'
       Description:
@@ -1553,12 +1640,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blizzard:
+  Blizzard: #Do not change these line.
     Enabled: True
     Name: 'Blizzard'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lBlizzard &7(&bI&7)'
       Description:
@@ -1574,12 +1662,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  AcidRain:
+  AcidRain: #Do not change these line.
     Enabled: True
     Name: 'AcidRain'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lAcidRain &7(&bI-&bIII&7)'
       Description:
@@ -1595,12 +1684,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SandStorm:
+  SandStorm: #Do not change these line.
     Enabled: True
     Name: 'SandStorm'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lSandStorm &7(&bI&7)'
       Description:
@@ -1616,12 +1706,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Radiant:
+  Radiant: #Do not change these line.
     Enabled: True
     Name: 'Radiant'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lRadiant &7(&bI-&bIII&7)'
       Description:
@@ -1637,12 +1728,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Intimidate:
+  Intimidate: #Do not change these line.
     Enabled: True
     Name: 'Intimidate'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lIntimidate &7(&bI-&bII&7)'
       Description:
@@ -1658,12 +1750,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Pull:
+  Pull: #Do not change these line.
     Enabled: True
     Name: 'Pull'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lPull &7(&bI-&bIII&7)'
       Description:
@@ -1679,12 +1772,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Tamer:
+  Tamer: #Do not change these line.
     Enabled: True
     Name: 'Tamer'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lTamer &7(&bI-&bV&7)'
       Description:
@@ -1700,12 +1794,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Guards:
+  Guards: #Do not change these line.
     Enabled: True
     Name: 'Guards'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lGuards &7(&bI-&bIII&7)'
       Description:
@@ -1721,12 +1816,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Infestation:
+  Infestation: #Do not change these line.
     Enabled: True
     Name: 'Infestation'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lInfestation &7(&bI-&bII&7)'
       Description:
@@ -1742,12 +1838,13 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Necromancer:
+  Necromancer: #Do not change these line.
     Enabled: True
     Name: 'Necromancer'
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lNecromancer &7(&bI-&bIII&7)'
       Description:

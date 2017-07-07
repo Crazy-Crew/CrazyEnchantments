@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CEnchantment;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.EnchantmentType;
 import me.badbones69.crazyenchantments.multisupport.Version;
@@ -33,26 +34,13 @@ public class EnchantmentControl implements Listener{
 	public static String getRandomEnchantment(String cat){
 		Random number = new Random();
 		List<String> enchantments = new ArrayList<String>();
-		for(CEnchantments en : Main.CE.getEnchantments()){
-			for(String C : Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Categories")){
+		for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
+			for(String C : Main.settings.getEnchantments().getStringList("Enchantments."+en.getName()+".Categories")){
 				if(cat.equalsIgnoreCase(C)){
-					if(en.isEnabled()){
-						String power = powerPicker(en.getName(), cat);
+					if(en.isActivated()){
+						String power = powerPicker(en, cat);
 						enchants.put(en.getName(), en.getBookColor()+en.getCustomName()+" "+power);
 						enchantments.add(en.getName());
-					}
-				}
-			}
-		}
-		if(Main.settings.getCustomEnchs().contains("Enchantments")){
-			for(String en : Main.CustomE.getEnchantments()){
-				for(String C : Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Categories")){
-					if(cat.equalsIgnoreCase(C)){
-						if(Main.CustomE.isEnabled(en)){
-							String power = powerPicker(en, cat);
-							enchants.put(en, Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)+" "+power);
-							enchantments.add(en);
-						}
 					}
 				}
 			}
@@ -80,13 +68,8 @@ public class EnchantmentControl implements Listener{
 							return;
 						}
 						Boolean t = false;
-						for(CEnchantments en : Main.CE.getEnchantments()){
+						for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 							if(c.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())){
-								t = true;
-							}
-						}
-						for(String en : Main.CustomE.getEnchantments()){
-							if(c.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))){
 								t = true;
 							}
 						}
@@ -94,23 +77,14 @@ public class EnchantmentControl implements Listener{
 							return;
 						}
 						String name = c.getItemMeta().getDisplayName();
-						CEnchantments en = CEnchantments.GLOWING;
+						CEnchantment en = CEnchantment.getCEnchantmentFromName(CEnchantments.GLOWING.getName());
 						String enchant = "Glowing";
-						Boolean custom = true;
 						EnchantmentType type = EnchantmentType.ALL;
-						for(CEnchantments ench : Main.CE.getEnchantments()){
+						for(CEnchantment ench : Main.CE.getRegisteredEnchantments()){
 							if(name.contains(Methods.color(ench.getBookColor() + ench.getCustomName()))){
 								en = ench;
 								enchant = ench.getCustomName();
-								type = ench.getType();
-								custom = false;
-							}
-						}
-						for(String ench : Main.CustomE.getEnchantments()){
-							if(name.contains(Methods.color(Main.CustomE.getBookColor(ench) + Main.CustomE.getCustomName(ench)))){
-								enchant = ench;
-								type = Main.CustomE.getType(ench);
-								custom = true;
+								type = ench.getEnchantmentType();
 							}
 						}
 						if(type.getItems().contains(item.getType())){
@@ -119,19 +93,10 @@ public class EnchantmentControl implements Listener{
 								boolean destroy = destroyChance(c);
 								Boolean toggle = false;
 								Boolean lowerLvl = false;
-								if(custom){
-									if(Main.CustomE.hasEnchantment(item, enchant)){
-										toggle = true;
-										if(Main.CustomE.getPower(item, enchant) < Main.CustomE.getBookPower(c, enchant)){
-											lowerLvl = true;
-										}
-									}
-								}else{
-									if(Main.CE.hasEnchantment(item, en)){
-										toggle = true;
-										if(Main.CE.getPower(item, en) < Main.CE.getBookPower(c, en)){
-											lowerLvl = true;
-										}
+								if(Main.CE.hasEnchantment(item, en)){
+									toggle = true;
+									if(Main.CE.getPower(item, en) < Main.CE.getBookPower(c, en)){
+										lowerLvl = true;
 									}
 								}
 								if(toggle){
@@ -140,13 +105,8 @@ public class EnchantmentControl implements Listener{
 											e.setCancelled(true);
 											if(success || player.getGameMode() == GameMode.CREATIVE){
 												String l = "0";
-												if(custom){
-													e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, Main.CustomE.getBookPower(c, enchant)));
-													l = Main.CustomE.getBookPower(c, enchant) + "";
-												}else{
-													e.setCurrentItem(Main.CE.addEnchantment(item, en, Main.CE.getBookPower(c, en)));
-													l = Main.CE.getBookPower(c, en) + "";
-												}
+												e.setCurrentItem(Main.CE.addEnchantment(item, en, Main.CE.getBookPower(c, en)));
+												l = Main.CE.getBookPower(c, en) + "";
 												player.setItemOnCursor(new ItemStack(Material.AIR));
 												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Enchantment-Upgrade.Success")
 														.replaceAll("%Enchantment%", enchant).replaceAll("%enchantment%", enchant)
@@ -165,12 +125,8 @@ public class EnchantmentControl implements Listener{
 														e.setCurrentItem(Methods.removeProtected(item));
 														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Item-Was-Protected")));
 													}else{
-														if(custom){
-															Main.CustomE.removeEnchantment(item, enchant);
-														}else{
-															Main.CE.removeEnchantment(item, en);
-														}
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Enchantment-Upgrade.Destroyed")));
+														Main.CE.removeEnchantment(item, en);
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Enchantment-Upgrade.Destroyed")));
 													}
 												}else{
 													if(Methods.isProtected(item)){
@@ -220,11 +176,7 @@ public class EnchantmentControl implements Listener{
 								if(success || player.getGameMode() == GameMode.CREATIVE){
 									name = Methods.removeColor(name);
 									Integer lvl = convertPower(name.split(" ")[1]);
-									if(custom){
-										e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, lvl));
-									}else{
-										e.setCurrentItem(Main.CE.addEnchantment(item, en, lvl));
-									}
+									e.setCurrentItem(Main.CE.addEnchantment(item, en, lvl));
 									player.setItemOnCursor(new ItemStack(Material.AIR));
 									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Book-Works")));
 									try{
@@ -289,16 +241,10 @@ public class EnchantmentControl implements Listener{
 						String name = "";
 						Player player = e.getPlayer();
 						List<String> desc = new ArrayList<String>();
-						for(CEnchantments en : Main.CE.getEnchantments()){
+						for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
 							if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor()+en.getCustomName()))){
-								name = Main.settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
-								desc = Main.settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
-							}
-						}
-						for(String en : Main.CustomE.getEnchantments()){
-							if(item.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en)+Main.CustomE.getCustomName(en)))){
-								name = Main.settings.getCustomEnchs().getString("Enchantments."+en+".Info.Name");
-								desc = Main.settings.getCustomEnchs().getStringList("Enchantments."+en+".Info.Description");
+								name = Main.settings.getEnchantments().getString("Enchantments."+en.getName()+".Info.Name");
+								desc = Main.settings.getEnchantments().getStringList("Enchantments."+en.getName()+".Info.Description");
 							}
 						}
 						if(name.length()>0){
@@ -336,15 +282,9 @@ public class EnchantmentControl implements Listener{
 		String enchant = getRandomEnchantment(cat);
 		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
 			if(l.contains("%Description%")||l.contains("%description%")){
-				if(Main.CE.getFromName(enchant)!=null){
-					for(String m : Main.CE.getFromName(enchant).getDiscription()){
+				if(Main.CE.getEnchantmentFromName(enchant) != null){
+					for(String m : Main.CE.getEnchantmentFromName(enchant).getInfoDescription()){
 						lore.add(Methods.color(m));
-					}
-				}else{
-					if(Main.CustomE.getEnchantments().contains(enchant)){
-						for(String m : Main.CustomE.getDiscription(enchant)){
-							lore.add(Methods.color(m));
-						}
 					}
 				}
 			}else{
@@ -362,18 +302,12 @@ public class EnchantmentControl implements Listener{
 		return item;
 	}
 	
-	public static String powerPicker(String en, String C){
+	public static String powerPicker(CEnchantment en, String C){
 		Random r = new Random();
-		int ench = 5; //Max set by the enchantment
-		if(Main.settings.getEnchs().contains("Enchantments."+en)){
-			ench=Main.settings.getEnchs().getInt("Enchantments."+en+".MaxPower");
-		}
-		if(Main.settings.getCustomEnchs().contains("Enchantments."+en)){
-			ench=Main.settings.getCustomEnchs().getInt("Enchantments."+en+".MaxPower");
-		}
+		int ench = en.getMaxLevel(); //Max set by the enchantment
 		int max = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
 		int min = Main.settings.getConfig().getInt("Categories."+C+".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
-		int i = 1+r.nextInt(ench);
+		int i = 1 + r.nextInt(ench);
 		if(Main.settings.getConfig().contains("Categories."+C+".EnchOptions.MaxLvlToggle")){
 			if(Main.settings.getConfig().getBoolean("Categories."+C+".EnchOptions.MaxLvlToggle")){
 				if(i>max){

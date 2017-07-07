@@ -20,34 +20,34 @@ public class SettingsManager {
 		return instance;
 	}
 
-	Plugin p;
+	private Plugin p;
 
-	FileConfiguration config;
-	File cfile;
+	private FileConfiguration config;
+	private File cfile;
 	
-	FileConfiguration gkitz;
-	File gfile;
+	private FileConfiguration gkitz;
+	private File gfile;
 	
-	FileConfiguration data;
-	File dfile;
+	private FileConfiguration data;
+	private File dfile;
 
-	FileConfiguration enchs;
-	File efile;
+	private FileConfiguration enchs;
+	private File efile;
 	
-	FileConfiguration msg;
-	File mfile;
+	private FileConfiguration msg;
+	private File mfile;
 	
-	FileConfiguration cenchs;
-	File cefile;
+	private FileConfiguration cenchs;
+	private File cefile;
 	
-	FileConfiguration signs;
-	File sfile;
+	private FileConfiguration signs;
+	private File sfile;
 	
-	FileConfiguration tinker;
-	File tfile;
+	private FileConfiguration tinker;
+	private File tfile;
 	
-	FileConfiguration blocklist;
-	File blfile;
+	private FileConfiguration blocklist;
+	private File blfile;
 	
 	public void setup(Plugin p) {
 		if (!p.getDataFolder().exists()) {
@@ -294,4 +294,5 @@ public class SettingsManager {
             }
         }
     }
+
 }

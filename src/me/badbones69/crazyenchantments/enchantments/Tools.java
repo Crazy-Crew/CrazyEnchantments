@@ -54,7 +54,7 @@ public class Tools implements Listener{
 		if(player.getGameMode() != GameMode.CREATIVE){
 			ItemStack item = Methods.getItemInHand(player);
 			if(Main.CE.hasEnchantments(item)){
-				if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY) && !Main.CE.hasEnchantment(item, CEnchantments.BLAST)){
+				if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment()) && !Main.CE.hasEnchantment(item, CEnchantments.BLAST.getEnchantment())){
 					if(CEnchantments.TELEPATHY.isEnabled()){
 						if(item.getItemMeta().hasEnchants()){
 							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
@@ -63,22 +63,22 @@ public class Tools implements Listener{
 								}
 							}
 						}
-						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
+						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()){
 							HashMap<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
 							for(ItemStack drop : block.getDrops()){
-								if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(block.getType())){
+								if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE.getEnchantment()) && getOres().containsKey(block.getType())){
 									drop.setType(getOres().get(block.getType()));
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 										if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 											drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 										}
 									}
-								}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(block.getType())){
+								}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT.getEnchantment()) && getOres().containsKey(block.getType())){
 									if(Methods.randomPicker(2)){
 										drop.setType(getOres().get(block.getType()));
-										drop.setAmount(1 + Main.CE.getPower(item, CEnchantments.AUTOSMELT));
+										drop.setAmount(1 + Main.CE.getPower(item, CEnchantments.AUTOSMELT.getEnchantment()));
 										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 											if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 												drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
@@ -96,7 +96,7 @@ public class Tools implements Listener{
 									if(item.getItemMeta().hasEnchants()){
 										if(!item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
 											if(getXPOres().contains(block.getType())){
-												if(!Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+												if(!Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE.getEnchantment())){
 													ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 													orb.setExperience(Methods.percentPick(7, 3));
 												}
@@ -104,16 +104,16 @@ public class Tools implements Listener{
 										}
 									}else{
 										if(getXPOres().contains(block.getType())){
-											if(!Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+											if(!Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE.getEnchantment())){
 												ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 												orb.setExperience(Methods.percentPick(7, 3));
 											}
 										}
 									}
 								}
-								if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
+								if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE.getEnchantment())){
 									if(Methods.randomPicker(2)){
-										int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE);
+										int power = Main.CE.getPower(item, CEnchantments.EXPERIENCE.getEnchantment());
 										if(getOres().containsKey(block.getType())){
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3) * power);
@@ -179,20 +179,20 @@ public class Tools implements Listener{
 	private void updateEffects(Player player){
 		ItemStack item = Methods.getItemInHand(player);
 		if(Main.CE.hasEnchantments(item)){
-			if(Main.CE.hasEnchantment(item, CEnchantments.HASTE)){
+			if(Main.CE.hasEnchantment(item, CEnchantments.HASTE.getEnchantment())){
 				if(CEnchantments.HASTE.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE.getEnchantment(), item);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
-						int power = Main.CE.getPower(item, CEnchantments.HASTE);
+						int power = Main.CE.getPower(item, CEnchantments.HASTE.getEnchantment());
 						player.removePotionEffect(PotionEffectType.FAST_DIGGING);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power -1));
 					}
 				}
 			}
-			if(Main.CE.hasEnchantment(item, CEnchantments.OXYGENATE)){
+			if(Main.CE.hasEnchantment(item, CEnchantments.OXYGENATE.getEnchantment())){
 				if(CEnchantments.OXYGENATE.isEnabled()){
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE.getEnchantment(), item);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
 						player.removePotionEffect(PotionEffectType.WATER_BREATHING);
