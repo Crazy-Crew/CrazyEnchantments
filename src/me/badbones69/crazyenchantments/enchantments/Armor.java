@@ -454,8 +454,8 @@ public class Armor implements Listener{
 					}
 					if(Main.CE.hasEnchantment(armor, CEnchantments.ANGEL.getEnchantment())){
 						if(CEnchantments.ANGEL.isEnabled()){
-							if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
 								int radius = 4+Main.CE.getPower(armor, CEnchantments.ANGEL.getEnchantment());
+							if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
 								for(Entity en : player.getNearbyEntities(radius, radius, radius)){
 									if(en instanceof Player){
 										Player o = (Player) en;
