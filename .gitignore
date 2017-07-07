@@ -5,3 +5,4 @@ Notes.txt
 *.prefs
 
 *.class
+bin/
