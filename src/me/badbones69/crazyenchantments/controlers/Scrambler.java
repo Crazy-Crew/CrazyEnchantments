@@ -16,26 +16,21 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEBook;
-import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.CustomEBook;
-import me.badbones69.crazyenchantments.api.CustomEnchantments;
-import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.api.CEnchantment;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class Scrambler implements Listener{
 	
 	public static HashMap<Player, Integer> roll = new HashMap<Player, Integer>();
-	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	
 	@EventHandler
 	public void onReRoll(InventoryClickEvent e){
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
-		CustomEnchantments CustomE = Main.CustomE;
 		if(inv != null){
 			ItemStack book = e.getCurrentItem();
 			ItemStack sc = e.getCursor();
@@ -43,7 +38,7 @@ public class Scrambler implements Listener{
 				if(book.getType() != Material.AIR && sc.getType() != Material.AIR){
 					if(book.getAmount() == 1 && sc.getAmount() == 1){
 						if(getScramblers().isSimilar(sc)){
-							if(Main.CE.isEnchantmentBook(book) || CustomE.isEnchantmentBook(book)){
+							if(Main.CE.isEnchantmentBook(book)){
 								e.setCancelled(true);
 								player.setItemOnCursor(new ItemStack(Material.AIR));
 								if(Main.settings.getConfig().getBoolean("Settings.Scrambler.GUI.Toggle")){
@@ -67,24 +62,11 @@ public class Scrambler implements Listener{
 	 */
 	public static ItemStack getNewScrambledBook(ItemStack book){
 		ItemStack newBook = new ItemStack(Material.AIR);
-		CustomEnchantments CustomE = Main.CustomE;
 		if(Main.CE.isEnchantmentBook(book)){
-			CEnchantments en = Main.CE.getEnchantmentBookEnchantmnet(book);
+			CEnchantment en = Main.CE.getEnchantmentBookEnchantmnet(book);
 			String cat = Main.CE.getHighestEnchantmentCategory(en);
 			int lvl = Main.CE.getBookPower(book, en);
 			CEBook eBook = new CEBook(en, lvl);
-			int D = Methods.percentPick(Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max"), 
-					Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min"));
-			int S = Methods.percentPick(Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Max"), 
-					Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Min"));
-			eBook.setDestoryRate(D);
-			eBook.setSuccessRate(S);
-			newBook = eBook.buildBook();
-		}else{
-			String en = CustomE.getEnchantmentBookEnchantmnet(book);
-			int lvl = CustomE.getBookPower(book, en);
-			String cat = CustomE.getHighestEnchantmentCategory(en);
-			CustomEBook eBook = new CustomEBook(en, lvl);
 			int D = Methods.percentPick(Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max"), 
 					Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min"));
 			int S = Methods.percentPick(Main.settings.getConfig().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Max"), 
@@ -157,7 +139,7 @@ public class Scrambler implements Listener{
 	}
 	
 	private static void startScrambler(final Player player, final Inventory inv, final ItemStack book){
-		roll.put(player, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+		roll.put(player, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Methods.getPlugin(), new Runnable(){
 			int time = 1;
 			int full = 0;
 			int open = 0;

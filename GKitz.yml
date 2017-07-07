@@ -32,11 +32,11 @@ Settings:
 # Amount: <Number> - Choose how many of the item you get.
 # Name: <Name> - The display name that goes on the item.
 # Lore: <Line 1>,<Line 2>,<Line 3>,<Line 4> - The lore that will go under the enchantments. Split lines with a ','
-# Enchantments:<Enchantment>:<Level> - Choose vanilla enchantments here. Split each enchantment with a ','
-# CustomEnchantments: <Custom Enchantment>:<Level> - Choose crazy/custom enchantments here. Split enchantments with a ','
-# To chose a random level for the crazy/custom enchantments use like this 'CustomEnchantments:<Custom Enchantment>:<Min Level>-<Max Level>'
+# <Enchantment>:<Level> - Choose vanilla enchantments here.
+# <Custom Enchantment>:<Level> - Choose crazy/custom enchantments here.
+# To chose a random level for the crazy/custom enchantments use like this '<Custom Enchantment>:<Min Level>-<Max Level>'
 # Example of this is shows here.
-# CustomEnchantments:Overload:1-5,Hulk:1-5 << this will add Hulk and Overload and pick a random level from 1-5 and set it as the power.
+# Overload:1-5, Hulk:1-5 << this will add Hulk and Overload and pick a random level from 1-5 and set it as the power.
 ###################################
 GKitz: #GKit optons.
   Hero: #Name of the GKit.
@@ -54,10 +54,10 @@ GKitz: #GKit optons.
         - '&7&l(&6&l!&7&l) &7Right click to preview'
     Cooldown: '24h' #Cooldown for the GKit. Available options d - Day, h - Hour, m - Minute, s - Second
     Items: #The items that are given the players. 
-      - 'Item:310, Amount:1, Name:&6&lHero Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&aA special helmet worn by a great hero.,&aTake special care of this.'
-      - 'Item:311, Amount:1, Name:&6&lHero Chestplate, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&aA special chestplate worn by a great hero.,&aTake special care of this.'
-      - 'Item:312, Amount:1, Name:&6&lHero Leggings, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&aA special leggings worn by a great hero.,&aTake special care of this.'
-      - 'Item:313, Amount:1, Name:&6&lHero Boots, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&aA special boots worn by a great hero.,&aTake special care of this.'
+      - 'Item:310, Amount:1, Name:&6&lHero Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:&aA special helmet worn by a great hero.,&aTake special care of this.'
+      - 'Item:311, Amount:1, Name:&6&lHero Chestplate, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&aA special chestplate worn by a great hero.,&aTake special care of this.'
+      - 'Item:312, Amount:1, Name:&6&lHero Leggings, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&aA special leggings worn by a great hero.,&aTake special care of this.'
+      - 'Item:313, Amount:1, Name:&6&lHero Boots, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:&aA special boots worn by a great hero.,&aTake special care of this.'
     Commands: #Is used if you wish to use commands to give other things to players.
       - 'ce book overload 5 1 %Player%'
   PeaceKeeper:
@@ -75,10 +75,10 @@ GKitz: #GKit optons.
         - '&7&l(&9&l!&7&l) &7Right click to preview'
     Cooldown: '24h'
     Items:
-      - 'Item:310, Amount:1, Name:&9&lPeace Keeper Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&9A special helmet worn by a peace keeper.,&9Take special care of this.'
-      - 'Item:311, Amount:1, Name:&9&lPeace Keeper Chestplate, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&9A special chestplate worn by a peace keeper.,&9Take special care of this.'
-      - 'Item:312, Amount:1, Name:&9&lPeace Keeper Leggings, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&9A special leggings worn by a peace keeper.,&9Take special care of this.'
-      - 'Item:313, Amount:1, Name:&9&lPeace Keeper Boots, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&9A special boots worn by a peace keeper.,&9Take special care of this.'
+      - 'Item:310, Amount:1, Name:&9&lPeace Keeper Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:&9A special helmet worn by a peace keeper.,&9Take special care of this.'
+      - 'Item:311, Amount:1, Name:&9&lPeace Keeper Chestplate, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&9A special chestplate worn by a peace keeper.,&9Take special care of this.'
+      - 'Item:312, Amount:1, Name:&9&lPeace Keeper Leggings, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&9A special leggings worn by a peace keeper.,&9Take special care of this.'
+      - 'Item:313, Amount:1, Name:&9&lPeace Keeper Boots, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:&9A special boots worn by a peace keeper.,&9Take special care of this.'
     Commands:
       - 'ce book overload 5 1 %Player%'
   Villain:
@@ -96,9 +96,9 @@ GKitz: #GKit optons.
         - '&7&l(&4&l!&7&l) &7Right click to preview'
     Cooldown: '24h'
     Items:
-      - 'Item:310, Amount:1, Name:&4&lVillain Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-5,Glowing:0-1,Implants:0-5, Lore:&cA special helmet worn by a evil villain.,&cTake special care of this.'
-      - 'Item:311, Amount:1, Name:&4&lVillain Chestplate, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special chestplate worn by a evil villain.,&cTake special care of this.'
-      - 'Item:312, Amount:1, Name:&4&lVillain Leggings, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5, Lore:&cA special leggings worn by a evil villain.,&cTake special care of this.'
-      - 'Item:313, Amount:1, Name:&4&lVillain Boots, Enchantments:Protection:4,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:0-5,Hulk:2-5,Gears:0-3,Rocket:1,Anti-Gravity:0-5, Lore:&cA special boots worn by a evil villain.,&cTake special care of this.'
+      - 'Item:310, Amount:1, Name:&4&lVillain Helmet, Protection:4, Respiration:3, Thorns:3, Aqua_Affinity:1, Overload:1-5, Hulk:2-5, Glowing:0-1, Implants:0-5, Lore:&cA special helmet worn by a evil villain.,&cTake special care of this.'
+      - 'Item:311, Amount:1, Name:&4&lVillain Chestplate, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&cA special chestplate worn by a evil villain.,&cTake special care of this.'
+      - 'Item:312, Amount:1, Name:&4&lVillain Leggings, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&cA special leggings worn by a evil villain.,&cTake special care of this.'
+      - 'Item:313, Amount:1, Name:&4&lVillain Boots, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:&cA special boots worn by a evil villain.,&cTake special care of this.'
     Commands:
       - 'ce book overload 5 1 %Player%'

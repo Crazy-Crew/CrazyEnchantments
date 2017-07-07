@@ -10,7 +10,9 @@ Settings:
   EnchantmentBookLore: #The lore on the enchantments books.
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
+    - ''
     - '%Description%'
+    - ''
     - '&4%Destroy_Rate%% Destroy Chance'
     - '&a%Success_Rate%% Success Chance'
   LostBook: #Lost book options.

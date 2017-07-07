@@ -15,13 +15,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 public class MCUpdate implements Listener {
 
-	private final static String VERSION = "1.0";
+	private final static String VERSION = "1.1";
 
 	private static final String BASE_URL = "http://report.mcupdate.org";
 
@@ -30,6 +32,7 @@ public class MCUpdate implements Listener {
 	 */
 	private static String updateMessage = "";
 	private static boolean upToDate = true;
+	private boolean checkUpdate = true;
 
 	private Plugin pl;
 
@@ -43,30 +46,139 @@ public class MCUpdate implements Listener {
 	 */
 	private volatile BukkitTask task = null;
 
-	public MCUpdate(Plugin plugin, boolean startTask) throws IOException {
+	/**
+	 * Start up the MCUpdater.
+	 * 
+	 * @param plugin
+	 *            The plugin using this.
+	 * @throws IOException
+	 */
+	public MCUpdate(Plugin plugin) throws IOException {
 		if (plugin != null) {
 			this.pl = plugin;
 			// I should add a custom configuration for MCUpdate itself
 			Bukkit.getPluginManager().registerEvents(this, plugin);
 			setPingInterval(900);
-			if (startTask) {
-				start();
+		}
+	}
+
+	/**
+	 * 
+	 * Start up the MCUpdater.
+	 * 
+	 * @param plugin
+	 *            The plugin using this.
+	 * @param activate
+	 *            Toggle if it starts the MCUpdater when used.
+	 * @throws IOException
+	 */
+	public MCUpdate(Plugin plugin, Boolean activate) throws IOException {
+		if (plugin != null) {
+			this.pl = plugin;
+			// I should add a custom configuration for MCUpdate itself
+			Bukkit.getPluginManager().registerEvents(this, plugin);
+			setPingInterval(900);
+			if (activate) {
+				startLogging();
 			}
 		}
 	}
 
-	private boolean start() {
+	/**
+	 * Call when you wan't to start the updater.
+	 * 
+	 * @return True if everything starts and false if it doesn't start.
+	 */
+	public boolean startLogging() {
 		// Is MCUpdate already running?
 		if (task == null) {
 			// Begin hitting the server with glorious data
 			task = pl.getServer().getScheduler().runTaskTimerAsynchronously(pl, () -> {
 				report();
 				if (!upToDate) {
-					pl.getServer().getConsoleSender().sendMessage(format(updateMessage));
+					if (checkUpdate) {
+						pl.getServer().getConsoleSender().sendMessage(format(updateMessage));
+					}
 				}
 			}, 0, PING_INTERVAL * 20);
 		}
 		return true;
+	}
+
+	/**
+	 * Call when you want to stop the updater.
+	 * 
+	 * @return True if it successfully stoped and false if couldn't.
+	 */
+	public boolean stopLogging() {
+		if (task != null) {
+			try {
+				task.cancel();
+				return true;
+			} catch (Exception e) {
+			}
+		} else {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if MCUpdate is logging information.
+	 * 
+	 * @return True if it is logging info and false if not.
+	 */
+	public Boolean isLogging() {
+		return task != null;
+	}
+
+	/**
+	 * Set if the updater uses the internal update checker.
+	 * 
+	 * @param checkUpdate
+	 *            True if you want to use the internal update checker and false
+	 *            if not.
+	 */
+	public void checkUpdate(Boolean checkUpdate) {
+		this.checkUpdate = checkUpdate;
+	}
+
+	/**
+	 * Checks if the internal updater is active.
+	 * 
+	 * @return True if the internal updater is activated and false if not.
+	 */
+	public Boolean needsUpdated() {
+		return checkUpdate;
+	}
+
+	/**
+	 * Set the rate the information is sent to MCUpdate.org.
+	 * 
+	 * @param PING_INTERVAL
+	 *            The rate at which the data is sent in seconds.
+	 */
+	public void setPingInterval(int PING_INTERVAL) {
+		this.PING_INTERVAL = PING_INTERVAL;
+	}
+
+	/**
+	 * Get the rate which the data is sent to MCUpdate.org.
+	 * 
+	 * @return The rate the data is sent in seconds.
+	 */
+	public int getPingInterval() {
+		return PING_INTERVAL;
+	}
+
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		Player p = e.getPlayer();
+		if (p.isOp() && !upToDate) {
+			if (checkUpdate) {
+				p.sendMessage(format(updateMessage));
+			}
+		}
 	}
 
 	private int getOnlinePlayers() {
@@ -140,14 +252,16 @@ public class MCUpdate implements Listener {
 
 			if (serverMessage != null) {
 				if (!serverMessage.equals("ERROR")) {
-					if (!ver.equals(cVersion)) {
-						upToDate = false;
+					if (cVersion != null) {
+						if (!ver.equals(cVersion)) {
+							upToDate = false;
+						}
 					}
 				}
 			}
 			br.close();
 
-		} catch (IOException ignored) {
+		} catch (Exception ignored) {
 		}
 	}
 
@@ -170,10 +284,11 @@ public class MCUpdate implements Listener {
 	}
 
 	private static String format(String format) {
-		return ChatColor.translateAlternateColorCodes('&', format);
+		if (format != null) {
+			return ChatColor.translateAlternateColorCodes('&', format);
+		} else {
+			return "";
+		}
 	}
 
-	public void setPingInterval(int PING_INTERVAL) {
-		this.PING_INTERVAL = PING_INTERVAL;
-	}
 }

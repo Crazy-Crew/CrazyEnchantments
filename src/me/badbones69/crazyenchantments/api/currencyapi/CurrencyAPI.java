@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.api.currencyapi;
 
 import org.bukkit.entity.Player;
 
-import me.badbones69.crazyenchantments.api.Version;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class CurrencyAPI {
 	
@@ -13,14 +13,16 @@ public class CurrencyAPI {
 	 * @return The amount that the player has of that currency.
 	 */
 	public static int getCurrency(Player player, Currency currency){
-		switch(currency){
-			case VAULT:
-				return (int) VaultSupport.getVault().getBalance(player);
-			case XP_LEVEL:
-				return player.getLevel();
-			case XP_TOTAL:
-				return getTotalExperience(player);
-		}
+		try{
+			switch(currency){
+				case VAULT:
+					return (int) VaultSupport.getVault().getBalance(player);
+				case XP_LEVEL:
+					return player.getLevel();
+				case XP_TOTAL:
+					return getTotalExperience(player);
+			}
+		}catch(Exception e){}catch(NoClassDefFoundError e){}
 		return 0;
 	}
 	
@@ -31,17 +33,19 @@ public class CurrencyAPI {
 	 * @param amount The amount you want to take.
 	 */
 	public static void takeCurrency(Player player, Currency currency, int amount){
-		switch(currency){
-			case VAULT:
-				VaultSupport.getVault().withdrawPlayer(player, amount);
-				break;
-			case XP_LEVEL:
-				player.setLevel(player.getLevel() - amount);
-				break;
-			case XP_TOTAL:
-				takeTotalXP(player, amount);
-				break;
-		}
+		try{
+			switch(currency){
+				case VAULT:
+					VaultSupport.getVault().withdrawPlayer(player, amount);
+					break;
+				case XP_LEVEL:
+					player.setLevel(player.getLevel() - amount);
+					break;
+				case XP_TOTAL:
+					takeTotalXP(player, amount);
+					break;
+			}
+		}catch(Exception e){}catch(NoClassDefFoundError e){}
 	}
 	
 	/**
@@ -51,17 +55,19 @@ public class CurrencyAPI {
 	 * @param amount The amount you are giving to the player.
 	 */
 	public static void giveCurrency(Player player, Currency currency, int amount){
-		switch(currency){
-			case VAULT:
-				VaultSupport.getVault().depositPlayer(player, amount);
-				break;
-			case XP_LEVEL:
-				player.setLevel(player.getLevel() + amount);
-				break;
-			case XP_TOTAL:
-				takeTotalXP(player, -amount);
-				break;
-		}
+		try{
+			switch(currency){
+				case VAULT:
+					VaultSupport.getVault().depositPlayer(player, amount);
+					break;
+				case XP_LEVEL:
+					player.setLevel(player.getLevel() + amount);
+					break;
+				case XP_TOTAL:
+					takeTotalXP(player, -amount);
+					break;
+			}
+		}catch(Exception e){}catch(NoClassDefFoundError e){}
 	}
 	
 	/**

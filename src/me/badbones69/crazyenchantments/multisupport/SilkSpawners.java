@@ -31,11 +31,11 @@ public class SilkSpawners implements Listener{
 				if(player.getGameMode() != GameMode.CREATIVE){
 					ItemStack item = Methods.getItemInHand(player);
 					if(Main.CE.hasEnchantments(item)){
-						if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
+						if(Main.CE.hasEnchantment(item, Main.CE.getEnchantmentFromName(CEnchantments.TELEPATHY.getName()))){
 							if(CEnchantments.TELEPATHY.isEnabled()){
 								String mobName = su.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
 								if (player.hasPermission("silkspawners.silkdrop." + mobName)){
-									EnchantmentUseEvent useEnchant = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
+									EnchantmentUseEvent useEnchant = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(useEnchant);
 									if(useEnchant.isCancelled()){
 										return;

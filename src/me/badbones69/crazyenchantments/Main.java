@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -23,14 +24,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.badbones69.crazyenchantments.api.CEBook;
 import me.badbones69.crazyenchantments.api.CEPlayer;
+import me.badbones69.crazyenchantments.api.CEnchantment;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.CustomEnchantments;
 import me.badbones69.crazyenchantments.api.DataStorage;
 import me.badbones69.crazyenchantments.api.GKitz;
 import me.badbones69.crazyenchantments.api.InfoType;
-import me.badbones69.crazyenchantments.api.Version;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.events.ArmorListener;
 import me.badbones69.crazyenchantments.api.events.AuraListener;
@@ -57,15 +57,16 @@ import me.badbones69.crazyenchantments.enchantments.Swords;
 import me.badbones69.crazyenchantments.enchantments.Tools;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
+import me.badbones69.crazyenchantments.multisupport.EpicSpawnersSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
 import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class Main extends JavaPlugin implements Listener{
 	
 	public static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static SettingsManager settings = SettingsManager.getInstance();
-	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -73,9 +74,7 @@ public class Main extends JavaPlugin implements Listener{
 		settings.setup(this);
 		Methods.hasUpdate();
 		Boots.onStart();
-		CEnchantments.load();
 		DataStorage.load();
-		CustomE.update();
 		CurrencyAPI.loadCurrency();
 		for(Player player : Bukkit.getOnlinePlayers()){
 			CE.loadCEPlayer(player);
@@ -122,6 +121,9 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		if(Support.hasSilkSpawner()){
 			pm.registerEvents(new SilkSpawners(), this);
+		}
+		if(Support.hasEpicSpawners()){
+			pm.registerEvents(new EpicSpawnersSupport(), this);
 		}
 		if(Support.hasStackMob()){
 			pm.registerEvents(new StackMobSupport(), this);
@@ -204,6 +206,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.color("&b/GKitz [Kit] [Player] - &9Open the GKitz GUI or get a GKit."));
 					sender.sendMessage(Methods.color("&b/GKitz Reset <Kit> [Player] - &9Reset a players gkit cooldown."));
 					sender.sendMessage(Methods.color("&b/CE Help - &9Shows all CE Commands."));
+					sender.sendMessage(Methods.color("&b/CE Debug - &9Does a small debug for some errors."));
 					sender.sendMessage(Methods.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Methods.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Methods.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
@@ -229,15 +232,32 @@ public class Main extends JavaPlugin implements Listener{
 					settings.reloadGKitz();
 					settings.reloadData();
 					settings.setup(this);
-					CEnchantments.load();
 					DataStorage.load();
-					CustomE.update();
 					Boots.onStart();
 					for(Player player : Bukkit.getOnlinePlayers()){
 						CE.unloadCEPlayer(player);
 						CE.loadCEPlayer(player);
 					}
 					sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Config-Reload")));
+					return true;
+				}
+				if(args[0].equalsIgnoreCase("Debug")){
+					ArrayList<String> broken = new ArrayList<String>();
+					for(CEnchantments enchantment : CEnchantments.values()){
+						if(!settings.getEnchantments().contains("Enchantments." + enchantment.getName())){
+							broken.add(enchantment.getName());
+						}
+					}
+					if(broken.isEmpty()){
+						sender.sendMessage(Methods.getPrefix() + Methods.color("&aAll enchantments loaded."));
+					}else{
+						int i = 1;
+						sender.sendMessage(Methods.getPrefix() + Methods.color("&cBroken Enchantments:"));
+						for(String broke : broken){
+							sender.sendMessage(Methods.color("&c#" + i + ": &6" + broke));
+							i++;
+						}
+					}
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Info")){
@@ -258,19 +278,10 @@ public class Main extends JavaPlugin implements Listener{
 							}
 						}
 						String ench = args[1];
-						for(CEnchantments en : CE.getEnchantments()){
-							if(en.getName().equalsIgnoreCase(ench)||en.getCustomName().equalsIgnoreCase(ench)){
-								String name = settings.getEnchs().getString("Enchantments."+en.getName()+".Info.Name");
-								List<String> desc = settings.getEnchs().getStringList("Enchantments."+en.getName()+".Info.Description");
-								sender.sendMessage(Methods.color(name));
-								for(String m : desc)sender.sendMessage(Methods.color(m));
-								return true;
-							}
-						}
-						for(String enchantment : CustomE.getEnchantments()){
-							if(enchantment.equalsIgnoreCase(ench)||CustomE.getCustomName(enchantment).equalsIgnoreCase(ench)){
-								String name = settings.getCustomEnchs().getString("Enchantments."+enchantment+".Info.Name");
-								List<String> desc = settings.getCustomEnchs().getStringList("Enchantments."+enchantment+".Info.Description");
+						for(CEnchantment en : CE.getRegisteredEnchantments()){
+							if(en.getName().equalsIgnoreCase(ench) || en.getCustomName().equalsIgnoreCase(ench)){
+								String name = settings.getEnchantments().getString("Enchantments."+en.getName()+".Info.Name");
+								List<String> desc = settings.getEnchantments().getStringList("Enchantments."+en.getName()+".Info.Description");
 								sender.sendMessage(Methods.color(name));
 								for(String m : desc)sender.sendMessage(Methods.color(m));
 								return true;
@@ -283,18 +294,12 @@ public class Main extends JavaPlugin implements Listener{
 				if(args[0].equalsIgnoreCase("Spawn")){// /CE Spawn <Enchantment> [Level:#/World:<World>/X:#/Y:#/Z:#]
 					if(!Methods.hasPermission(sender, "spawn", true))return true;
 					if(args.length >= 2){
-						CEnchantments enchant = null;
-						String cEnchant = null;
+						CEnchantment enchant = null;
 						String category = null;
-						Boolean isCustom = false;
 						Location loc = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
 						int level = 1;
-						if(CE.isEnchantment(args[1])){
-							enchant = CE.getFromName(args[1]);
-							isCustom = false;
-						}else if(CustomE.isEnchantment(args[1])){
-							cEnchant = CustomE.getFromName(args[1]);
-							isCustom = true;
+						if(CE.getEnchantmentFromName(args[1]) != null){
+							enchant = CE.getEnchantmentFromName(args[1]);
 						}else{
 							for(String cat : CE.getCategories()){
 								if(cat.equalsIgnoreCase(args[1])){
@@ -345,9 +350,7 @@ public class Main extends JavaPlugin implements Listener{
 							}
 						}
 						ItemStack book;
-						if(isCustom){
-							book = new CustomEBook(cEnchant, level).buildBook();
-						}else if(category == null){
+						if(category == null){
 							book = new CEBook(enchant, level).buildBook();
 						}else{
 							book = LostBook.getLostBook(category, 1);
@@ -610,10 +613,8 @@ public class Main extends JavaPlugin implements Listener{
 					if(!Methods.hasPermission(sender, "remove", true))return true;
 					boolean T = false;
 					boolean isVanilla = false;
-					boolean customEnchant = false;
-					String ench = "Glowing";
 					Enchantment enchant = Enchantment.LUCK;
-					CEnchantments en = null;
+					CEnchantment en = null;
 					for(Enchantment enc : Enchantment.values()){
 						if(args[1].equalsIgnoreCase(enc.getName()) || args[1].equalsIgnoreCase(Methods.getEnchantmentName(enc))){
 							T = true;
@@ -621,16 +622,9 @@ public class Main extends JavaPlugin implements Listener{
 							enchant = enc;
 						}
 					}
-					for(CEnchantments En : CE.getEnchantments()){
+					for(CEnchantment En : CE.getRegisteredEnchantments()){
 						if(En.getCustomName().equalsIgnoreCase(args[1])){
 							en = En;
-							T=true;
-						}
-					}
-					for(String i : CustomE.getEnchantments()){
-						if(CustomE.getCustomName(i).equalsIgnoreCase(args[1])){
-							ench = i;
-							customEnchant = true;
 							T = true;
 						}
 					}
@@ -649,14 +643,6 @@ public class Main extends JavaPlugin implements Listener{
 						it.removeEnchantment(enchant);
 						Methods.setItemInHand(player, it);
 						return true;
-					}else if(customEnchant){
-						if(CustomE.hasEnchantment(item, ench)){
-							Methods.setItemInHand(player, CustomE.removeEnchantment(item, ench));
-							String m = Methods.getPrefix()+Methods.color(msg.getString("Messages.Remove-Enchantment")
-									.replaceAll("%Enchantment%", CustomE.getCustomName(ench)).replaceAll("%enchantment%", CustomE.getCustomName(ench)));
-							player.sendMessage(m);
-							return true;
-						}
 					}else{
 						if(CE.hasEnchantment(item, en)){
 							Methods.setItemInHand(player, CE.removeEnchantment(item, en));
@@ -684,9 +670,7 @@ public class Main extends JavaPlugin implements Listener{
 					boolean T = false;
 					boolean isVanilla = false;
 					Enchantment enchant = Enchantment.LUCK;
-					boolean customEnchant = false;
-					String ench = "Glowing";
-					CEnchantments en = null;
+					CEnchantment en = null;
 					String lvl = "1";
 					if(args.length >= 3){
 						if(!Methods.isInt(args[2])){
@@ -703,17 +687,10 @@ public class Main extends JavaPlugin implements Listener{
 							enchant = enc;
 						}
 					}
-					for(CEnchantments i : CE.getEnchantments()){
+					for(CEnchantment i : CE.getRegisteredEnchantments()){
 						if(i.getCustomName().equalsIgnoreCase(args[1])){
 							T = true;
 							en = i;
-						}
-					}
-					for(String i : CustomE.getEnchantments()){
-						if(CustomE.getCustomName(i).equalsIgnoreCase(args[1])){
-							ench = i;
-							customEnchant = true;
-							T = true;
 						}
 					}
 					if(!T){
@@ -728,8 +705,6 @@ public class Main extends JavaPlugin implements Listener{
 						ItemStack it = Methods.getItemInHand(player).clone();
 						it.addUnsafeEnchantment(enchant, Integer.parseInt(lvl));
 						Methods.setItemInHand(player, it);
-					}else if(customEnchant){
-						Methods.setItemInHand(player, Methods.addGlow(CustomE.addEnchantment(Methods.getItemInHand(player), ench, Integer.parseInt(lvl))));
 					}else{
 						Methods.setItemInHand(player, Methods.addGlow(CE.addEnchantment(Methods.getItemInHand(player), en, Integer.parseInt(lvl))));
 					}
@@ -747,7 +722,7 @@ public class Main extends JavaPlugin implements Listener{
 						}
 					}
 					if(!Methods.hasPermission(sender, "book", true))return true;
-					String ench = args[1];
+					CEnchantment ench = CE.getEnchantmentFromName(args[1]);
 					int lvl = 1;
 					int amount = 1;
 					Player player = Methods.getPlayer(sender.getName());
@@ -774,22 +749,7 @@ public class Main extends JavaPlugin implements Listener{
 						if(!Methods.isOnline(args[4], sender))return true;
 						player = Methods.getPlayer(args[4]);
 					}
-					boolean toggle = false;
-					boolean customEnchant = false;
-					for(CEnchantments en : CE.getEnchantments()){
-						if(ench.equalsIgnoreCase(en.getCustomName())){
-							ench=en.getName();
-							toggle=true;
-						}
-					}
-					for(String i : CustomE.getEnchantments()){
-						if(CustomE.getCustomName(i).equalsIgnoreCase(args[1])){
-							ench = i;
-							customEnchant = true;
-							toggle = true;
-						}
-					}
-					if(!toggle){
+					if(ench == null){
 						sender.sendMessage(Methods.getPrefix()+Methods.color(msg.getString("Messages.Not-An-Enchantment")));
 						return true;
 					}
@@ -798,17 +758,10 @@ public class Main extends JavaPlugin implements Listener{
 					int Smin = config.getInt("Settings.BlackScroll.SuccessChance.Min");
 					int Dmax = config.getInt("Settings.BlackScroll.DestroyChance.Max");
 					int Dmin = config.getInt("Settings.BlackScroll.DestroyChance.Min");
-					if(customEnchant){
-						CustomEBook book = new CustomEBook(ench, lvl, amount);
-						book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
-						book.setSuccessRate(Methods.percentPick(Smax, Smin));
-						player.getInventory().addItem(book.buildBook());
-					}else{
-						CEBook book = new CEBook(CE.getFromName(ench), lvl, amount);
-						book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
-						book.setSuccessRate(Methods.percentPick(Smax, Smin));
-						player.getInventory().addItem(book.buildBook());
-					}
+					CEBook book = new CEBook(ench, lvl, amount);
+					book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
+					book.setSuccessRate(Methods.percentPick(Smax, Smin));
+					player.getInventory().addItem(book.buildBook());
 					return true;
 				}
 			}
@@ -952,12 +905,7 @@ public class Main extends JavaPlugin implements Listener{
 	
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e){
-		new BukkitRunnable(){
-			@Override
-			public void run() {
-				CE.unloadCEPlayer(e.getPlayer());
-			}
-		}.runTaskAsynchronously(this);
+		CE.unloadCEPlayer(e.getPlayer());
 	}
 	
 }
