@@ -18,10 +18,12 @@ public class DataStorage {
 	private static ArrayList<GKitz> gkitz = new ArrayList<GKitz>();
 	private static ArrayList<CEPlayer> players = new ArrayList<CEPlayer>();
 	private static ArrayList<Material> blockList = new ArrayList<Material>();
+	private static ArrayList<CEnchantment> registeredEnchantments = new ArrayList<CEnchantment>();
 	
 	public static void load(){
 		blockList.clear();
 		gkitz.clear();
+		registeredEnchantments.clear();
 		for(String id : Main.settings.getBlockList().getStringList("Block-List")){
 			try{
 				blockList.add(Methods.makeItem(id, 1).getType());
@@ -31,6 +33,26 @@ public class DataStorage {
 			rageMaxLevel = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxRageLevel");
 		}else{
 			rageMaxLevel = 4;
+		}
+		FileConfiguration enchants = Main.settings.getEnchantments();
+		for(CEnchantments enchant : CEnchantments.values()){
+			String name = enchant.getName();
+			if(enchants.contains("Enchantments." + name)){// To make sure the enchantment isn't broken.
+				CEnchantment en = new CEnchantment(name)
+						.setCustomName(enchants.getString("Enchantments." + name + ".Name"))
+						.setActivated(enchants.getBoolean("Enchantments." + name + ".Enabled"))
+						.setColor(enchants.getString("Enchantments." + name + ".Color"))
+						.setBookColor(enchants.getString("Enchantments." + name + ".BookColor"))
+						.setMaxLevel(enchants.getInt("Enchantments." + name + ".MaxPower"))
+						.setEnchantmentType(enchant.getType())
+						.setInfoName(enchants.getString("Enchantments." + name + ".Info.Name"))
+						.setInfoDescription(enchants.getStringList("Enchantments." + name + ".Info.Description"))
+						.setCategories(enchants.getStringList("Enchantments." + name + ".Categories"));
+				if(enchants.contains("Enchantments." + name + ".Enchantment-Type")){// Sets the custom type set in the enchantments.yml.
+					en.setEnchantmentType(EnchantmentType.getFromName(enchants.getString("Enchantments." + name + ".Enchantment-Type")));
+				}
+				en.registerEnchantment();
+			}
 		}
 		FileConfiguration gkit = Main.settings.getGKitz();
 		for(String kit : gkit.getConfigurationSection("GKitz").getKeys(false)){
@@ -114,59 +136,25 @@ public class DataStorage {
 					}else{
 						lore.add(d);
 					}
-				}else if(d.startsWith("Enchantments:")){
-					d = d.replace("Enchantments:", "");
-					if(d.contains(",")){
-						for(String D : d.split(",")){
-							if(D.contains(":")){
-								if(D.contains("-")){
-									customEnchantments.add("&7" + D.replaceAll(":", " "));
-								}else{
-									if(Enchantment.getByName(D.split(":")[0]) != null){
-										enchantments.put(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
-									}
-									for(Enchantment en : Enchantment.values()){
-										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
-											enchantments.put(en, Integer.parseInt(D.split(":")[1]));
-										}
-									}
-								}
+				}else{
+					for(Enchantment en : Enchantment.values()){
+						if(d.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
+								Enchantment.getByName(d.split(":")[0]) != null){
+							String power = d.split(":")[1];
+							if(power.contains("-")){
+								customEnchantments.add("&7" + d.split(":")[0] + " " + power);
 							}else{
-								if(Enchantment.getByName(D) != null){
-									enchantments.put(Enchantment.getByName(D), 1);
-								}
-								for(Enchantment en : Enchantment.values()){
-									if(Methods.getEnchantmentName(en).equalsIgnoreCase(D)){
-										enchantments.put(en, 1);
-									}
-								}
+								enchantments.put(en, Integer.parseInt(power));
 							}
-						}
-					}else{
-						if(d.contains(":")){
-							if(Enchantment.getByName(d.split(":")[0]) != null){
-								enchantments.put(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
-							}
-							for(Enchantment en : Enchantment.values()){
-								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
-									enchantments.put(en, Integer.parseInt(d.split(":")[1]));
-								}
-							}
-						}else{
-							if(Enchantment.getByName(d) != null){
-								enchantments.put(Enchantment.getByName(d), 1);
-							}
-							for(Enchantment en : Enchantment.values()){
-								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d)){
-									enchantments.put(en, 1);
-								}
-							}
+							break;
 						}
 					}
-				}else if(d.startsWith("CustomEnchantments:")){
-					d = d.replace("CustomEnchantments:", "");
-					for(String D : d.split(",")){
-						customEnchantments.add("&7" + D.replaceAll(":", " "));
+					for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
+						if(d.split(":")[0].equalsIgnoreCase(en.getName()) ||
+								d.split(":")[0].equalsIgnoreCase(en.getCustomName())){
+							customEnchantments.add(en.getColor() + en.getCustomName() + " " + d.split(":")[1]);
+							break;
+						}
 					}
 				}
 			}
@@ -202,150 +190,37 @@ public class DataStorage {
 						lore.add(d);
 					}
 					item.setLore(lore);
-				}else if(d.startsWith("Enchantments:")){
-					d = d.replace("Enchantments:", "");
-					if(d.contains(",")){
-						for(String D : d.split(",")){
-							if(D.contains(":")){
-								if(D.contains("-")){
-									Integer min = Integer.parseInt(D.split(":")[1].split("-")[0]);
-									Integer max = Integer.parseInt(D.split(":")[1].split("-")[1]);
-									int level = pickLevel(max, min);
-									if(level > 0){
-										if(Enchantment.getByName(D.split(":")[0]) != null){
-											item.addEnchantment(Enchantment.getByName(D.split(":")[0]), level);
-										}
-										for(Enchantment en : Enchantment.values()){
-											if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
-												item.addEnchantment(en, level);
-											}
-										}
-									}
-								}else{
-									if(Enchantment.getByName(D.split(":")[0]) != null){
-										item.addEnchantment(Enchantment.getByName(D.split(":")[0]), Integer.parseInt(D.split(":")[1]));
-									}
-									for(Enchantment en : Enchantment.values()){
-										if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
-											item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
-										}
-									}
-								}
-							}else{
-								if(Enchantment.getByName(D) != null){
-									item.addEnchantment(Enchantment.getByName(D), 1);
-								}
-								for(Enchantment en : Enchantment.values()){
-									if(Methods.getEnchantmentName(en).equalsIgnoreCase(D.split(":")[0])){
-										item.addEnchantment(en, Integer.parseInt(D.split(":")[1]));
-									}
-								}
-							}
-						}
-					}else{
-						if(d.contains(":")){
-							if(d.contains("-")){
-								Integer min = Integer.parseInt(d.split(":")[1].split("-")[0]);
-								Integer max = Integer.parseInt(d.split(":")[1].split("-")[1]);
-								int level = pickLevel(max, min);
+				}else{
+					for(Enchantment en : Enchantment.values()){
+						if(d.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
+								Enchantment.getByName(d.split(":")[0]) != null){
+							String power = d.split(":")[1];
+							if(power.contains("-")){
+								int level = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
+										Integer.parseInt(d.split(":")[1].split("-")[1]));
 								if(level > 0){
-									if(Enchantment.getByName(d.split(":")[0]) != null){
-										item.addEnchantment(Enchantment.getByName(d.split(":")[0]), level);
-									}
-									for(Enchantment en : Enchantment.values()){
-										if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
-											item.addEnchantment(en, level);
-										}
-									}
+									item.addEnchantment(en, level);
 								}
 							}else{
-								if(Enchantment.getByName(d.split(":")[0]) != null){
-									item.addEnchantment(Enchantment.getByName(d.split(":")[0]), Integer.parseInt(d.split(":")[1]));
-								}
-								for(Enchantment en : Enchantment.values()){
-									if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
-										item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
-									}
-								}
+								item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
 							}
-						}else{
-							if(Enchantment.getByName(d) != null){
-								item.addEnchantment(Enchantment.getByName(d), 1);
-							}
-							for(Enchantment en : Enchantment.values()){
-								if(Methods.getEnchantmentName(en).equalsIgnoreCase(d.split(":")[0])){
-									item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
-								}
-							}
+							break;
 						}
 					}
-				}else if(d.startsWith("CustomEnchantments:")){
-					d = d.replace("CustomEnchantments:", "");
-					if(d.contains(",")){
-						for(String D : d.split(",")){
-							if(D.contains(":")){
-								if(D.contains("-")){
-									String enchant = D.split(":")[0];
-									Integer min = Integer.parseInt(D.split(":")[1].split("-")[0]);
-									Integer max = Integer.parseInt(D.split(":")[1].split("-")[1]);
-									int level = pickLevel(max, min);
-									if(Main.CE.isEnchantment(enchant)){
-										if(level > 0){
-											item.addCEEnchantment(Main.CE.getFromName(enchant), level);
-										}
-									}else if(Main.CustomE.isEnchantment(enchant)){
-										if(level > 0){
-											item.addCustomEnchantment(enchant, level);
-										}
-									}
-								}else{
-									String enchant = D.split(":")[0];
-									if(Main.CE.isEnchantment(enchant)){
-										item.addCEEnchantment(Main.CE.getFromName(enchant), Integer.parseInt(D.split(":")[1]));
-									}else if(Main.CustomE.isEnchantment(enchant)){
-										item.addCustomEnchantment(enchant, Integer.parseInt(d.split(":")[1]));
-									}
+					for(CEnchantment en : Main.CE.getRegisteredEnchantments()){
+						if(d.split(":")[0].equalsIgnoreCase(en.getName()) ||
+								d.split(":")[0].equalsIgnoreCase(en.getCustomName())){
+							String power = d.split(":")[1];
+							if(power.contains("-")){
+								int level = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
+										Integer.parseInt(d.split(":")[1].split("-")[1]));
+								if(level > 0){
+									item.addCEEnchantment(en, level);
 								}
 							}else{
-								String enchant = D;
-								if(Main.CE.isEnchantment(enchant)){
-									item.addCEEnchantment(Main.CE.getFromName(enchant), 1);
-								}else if(Main.CustomE.isEnchantment(enchant)){
-									item.addCustomEnchantment(enchant, 1);
-								}
+								item.addCEEnchantment(en, Integer.parseInt(d.split(":")[1]));
 							}
-						}
-					}else{
-						if(d.contains(":")){
-							if(d.contains("-")){
-								String enchant = d.split(":")[0];
-								Integer min = Integer.parseInt(d.split(":")[1].split("-")[0]);
-								Integer max = Integer.parseInt(d.split(":")[1].split("-")[1]);
-								int level = pickLevel(max, min);
-								if(Main.CE.isEnchantment(enchant)){
-									if(level > 0){
-										item.addCEEnchantment(Main.CE.getFromName(enchant), level);
-									}
-								}else if(Main.CustomE.isEnchantment(enchant)){
-									if(level > 0){
-										item.addCustomEnchantment(enchant, level);
-									}
-								}
-							}else{
-								String enchant = d.split(":")[0];
-								if(Main.CE.isEnchantment(enchant)){
-									item.addCEEnchantment(Main.CE.getFromName(enchant), Integer.parseInt(d.split(":")[1]));
-								}else if(Main.CustomE.isEnchantment(enchant)){
-									item.addCustomEnchantment(enchant, Integer.parseInt(d.split(":")[1]));
-								}
-							}
-						}else{
-							String enchant = d;
-							if(Main.CE.isEnchantment(enchant)){
-								item.addCEEnchantment(Main.CE.getFromName(enchant), 1);
-							}else if(Main.CustomE.isEnchantment(enchant)){
-								item.addCustomEnchantment(enchant, 1);
-							}
+							break;
 						}
 					}
 				}
@@ -355,9 +230,21 @@ public class DataStorage {
 		return items;
 	}
 	
-	private static Integer pickLevel(int max, int min){
+	private static Integer pickLevel(int min, int max){
 		max++;
 		return min + new Random().nextInt(max - min);
+	}
+	
+	public static ArrayList<CEnchantment> getRegisteredEnchantments(){
+		return new ArrayList<CEnchantment>(registeredEnchantments);
+	}
+	
+	public static void registerEnchantment(CEnchantment enchantment){
+		registeredEnchantments.add(enchantment);
+	}
+	
+	public static void unregisterEnchantment(CEnchantment enchantment){
+		registeredEnchantments.remove(enchantment);
 	}
 	
 }
