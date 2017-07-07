@@ -187,7 +187,7 @@ public class SettingsManager {
 		return cenchs;
 	}
 
-	public FileConfiguration getEnchs() {
+	public FileConfiguration getEnchantments() {
 		return enchs;
 	}
 
