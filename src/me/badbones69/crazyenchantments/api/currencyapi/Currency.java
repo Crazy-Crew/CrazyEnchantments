@@ -2,8 +2,8 @@ package me.badbones69.crazyenchantments.api.currencyapi;
 
 public enum Currency {
 	
-	VAULT("Vault"),
-	XP_LEVEL("XP_Level"),
+	VAULT("Vault"), 
+	XP_LEVEL("XP_Level"), 
 	XP_TOTAL("XP_Total");
 	
 	private String name;
