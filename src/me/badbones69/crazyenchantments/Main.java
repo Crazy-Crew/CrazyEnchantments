@@ -956,12 +956,7 @@ public class Main extends JavaPlugin implements Listener{
 	
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e){
-		new BukkitRunnable(){
-			@Override
-			public void run() {
-				CE.unloadCEPlayer(e.getPlayer());
-			}
-		}.runTaskAsynchronously(this);
+		CE.unloadCEPlayer(e.getPlayer());
 	}
 	
 }
