@@ -44,10 +44,5 @@
 	<classpathentry kind="lib" path="/Users/Joe/Plugins/EpicSpawners.jar"/>
 	<classpathentry kind="lib" path="/Users/Joe/Plugins/GLib.jar"/>
 	<classpathentry kind="lib" path="/Users/Joe/Plugins/Towny.jar"/>
-	<classpathentry kind="lib" path="/Users/Joe/Plugins/Spigot/Spigot 1.11.2.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/Users/Joe/Plugins/Spigot/Spigot%201.11.2%20JavaDoc.jar!/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
