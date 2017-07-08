@@ -668,15 +668,22 @@ public class Methods{
 			if(oLine.contains(Argument.toLowerCase())){
 				String[] b = oLine.split(Argument.toLowerCase());
 				for(String iline : lore){
+					Boolean toggle = false;// Checks to make sure the lore is the same.
 					if(b.length>=1){
 						if(iline.toLowerCase().startsWith(b[0])){
 							arg = iline.toLowerCase().replace(b[0], "");
+							toggle = true;
 						}
 					}
-					if(b.length>=2){
+					if(b.length >= 2){
 						if(iline.toLowerCase().endsWith(b[1])){
 							arg = arg.toLowerCase().replace(b[1], "");
+						}else{
+							toggle = false;
 						}
+					}
+					if(toggle) {
+						break;
 					}
 				}
 				if(isInt(arg)){
