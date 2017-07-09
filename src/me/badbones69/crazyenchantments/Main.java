@@ -27,7 +27,6 @@ import me.badbones69.crazyenchantments.api.CEPlayer;
 import me.badbones69.crazyenchantments.api.CEnchantment;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.CustomEnchantments;
 import me.badbones69.crazyenchantments.api.DataStorage;
 import me.badbones69.crazyenchantments.api.GKitz;
 import me.badbones69.crazyenchantments.api.InfoType;
@@ -58,7 +57,6 @@ import me.badbones69.crazyenchantments.enchantments.Swords;
 import me.badbones69.crazyenchantments.enchantments.Tools;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
-import me.badbones69.crazyenchantments.multisupport.EpicSpawnersSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
 import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
@@ -102,7 +100,6 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new ArmorListener(), this);
 		pm.registerEvents(new ProtectionCrystal(), this);
 		pm.registerEvents(new Scrambler(), this);
-		pm.registerEvents(new CustomEnchantments(), this);
 		pm.registerEvents(new CommandChecker(), this);
 		try{
 			if(Version.getVersion().comparedTo(Version.v1_11_R1) >= 0){
@@ -228,7 +225,6 @@ public class Main extends JavaPlugin implements Listener{
 					settings.reloadConfig();
 					settings.reloadEnchs();
 					settings.reloadMessages();
-					settings.reloadCustomEnchs();
 					settings.reloadSigns();
 					settings.reloadTinker();
 					settings.reloadBlockList();

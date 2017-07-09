@@ -173,8 +173,7 @@ public class InfoGUIControl implements Listener{
 	}
 	
 	public static ArrayList<ItemStack> getInfo(String type){
-		FileConfiguration enchants = Main.settings.getEnchs();
-		FileConfiguration customEnchants = Main.settings.getCustomEnchs();
+		FileConfiguration enchants = Main.settings.getEnchantments();
 		ArrayList<ItemStack> swords = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> axes = new ArrayList<ItemStack>();
 		ArrayList<ItemStack> bows = new ArrayList<ItemStack>();
@@ -188,49 +187,51 @@ public class InfoGUIControl implements Listener{
 			if(enchants.getBoolean("Enchantments."+en+".Enabled")){
 				String name = enchants.getString("Enchantments."+en+".Info.Name");
 				List<String> desc = enchants.getStringList("Enchantments."+en+".Info.Description");
-				EnchantmentType enchantType = Main.CE.getFromName(en).getType();
+				EnchantmentType enchantType = Main.CE.getEnchantmentFromName(en).getEnchantmentType();
 				ItemStack i = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
-				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
-				if(enchantType == EnchantmentType.SWORD)swords.add(i);
-				if(enchantType == EnchantmentType.AXE)axes.add(i);
-				if(enchantType == EnchantmentType.BOW)bows.add(i);
-				if(enchantType == EnchantmentType.HELMET)helmets.add(i);
-				if(enchantType == EnchantmentType.BOOTS)boots.add(i);
-				if(enchantType == EnchantmentType.PICKAXE)picks.add(i);
-				if(enchantType == EnchantmentType.TOOL)tools.add(i);
-				if(enchantType == EnchantmentType.ALL)misc.add(i);
-				if(enchantType == EnchantmentType.WEAPONS)misc.add(i);
+				if(enchantType == EnchantmentType.ARMOR) {
+					armor.add(i);
+				}else if(enchantType == EnchantmentType.SWORD) {
+					swords.add(i);
+				}else if(enchantType == EnchantmentType.AXE) {
+					axes.add(i);
+				}else if(enchantType == EnchantmentType.BOW) {
+					bows.add(i);
+				}else if(enchantType == EnchantmentType.HELMET) {
+					helmets.add(i);
+				}else if(enchantType == EnchantmentType.BOOTS) {
+					boots.add(i);
+				}else if(enchantType == EnchantmentType.PICKAXE) {
+					picks.add(i);
+				}else if(enchantType == EnchantmentType.TOOL) {
+					tools.add(i);
+				}else if(enchantType == EnchantmentType.ALL) {
+					misc.add(i);
+				}else if(enchantType == EnchantmentType.WEAPONS) {
+					misc.add(i);
+				}
 			}
 		}
-		for(String enchantment : Main.CustomE.getEnchantments()){
-			if(Main.CustomE.isEnabled(enchantment)){
-				String name = customEnchants.getString("Enchantments."+enchantment+".Info.Name");
-				List<String> desc = Main.CustomE.getDiscription(enchantment);
-				EnchantmentType enchantType = Main.CustomE.getType(enchantment);
-				ItemStack i = Methods.addGlowHide(Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1, name, desc));
-				if(enchantType == EnchantmentType.ARMOR)armor.add(i);
-				if(enchantType == EnchantmentType.SWORD)swords.add(i);
-				if(enchantType == EnchantmentType.AXE)axes.add(i);
-				if(enchantType == EnchantmentType.BOW)bows.add(i);
-				if(enchantType == EnchantmentType.HELMET)helmets.add(i);
-				if(enchantType == EnchantmentType.BOOTS)boots.add(i);
-				if(enchantType == EnchantmentType.PICKAXE)picks.add(i);
-				if(enchantType == EnchantmentType.TOOL)tools.add(i);
-				if(enchantType == EnchantmentType.ALL)misc.add(i);
-				if(enchantType == EnchantmentType.WEAPONS)misc.add(i);
-			}
+		if(type.equalsIgnoreCase("Armor")) {
+			return armor;
+		}else if(type.equalsIgnoreCase("Sword")) {
+			return swords;
+		}else if(type.equalsIgnoreCase("Helmets")) {
+			return helmets;
+		}else if(type.equalsIgnoreCase("Boots")) {
+			return boots;
+		}else if(type.equalsIgnoreCase("Bow")) {
+			return bows;
+		}else if(type.equalsIgnoreCase("Axe")) {
+			return axes;
+		}else if(type.equalsIgnoreCase("Pickaxe")) {
+			return picks;
+		}else if(type.equalsIgnoreCase("Tool")) {
+			return tools;
+		}else if(type.equalsIgnoreCase("Misc")) {
+			return misc;
 		}
-		if(type.equalsIgnoreCase("Armor"))return armor;
-		if(type.equalsIgnoreCase("Sword"))return swords;
-		if(type.equalsIgnoreCase("Helmets"))return helmets;
-		if(type.equalsIgnoreCase("Boots"))return boots;
-		if(type.equalsIgnoreCase("Bow"))return bows;
-		if(type.equalsIgnoreCase("Axe"))return axes;
-		if(type.equalsIgnoreCase("Pickaxe"))return picks;
-		if(type.equalsIgnoreCase("Tool"))return tools;
-		if(type.equalsIgnoreCase("Misc"))return misc;
 		return null;
 	}
-	
 	
 }

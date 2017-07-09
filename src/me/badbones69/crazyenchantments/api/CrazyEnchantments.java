@@ -482,7 +482,7 @@ public class CrazyEnchantments {
 		if(player != null) {
 			for(CEnchantments ench : getEnchantmentPotions().keySet()){
 				for(ItemStack armor : player.getEquipment().getArmorContents()) {
-					if(hasEnchantment(armor, ench)){
+					if(hasEnchantment(armor, ench.getEnchantment())){
 						if(ench.isEnabled()){
 							HashMap<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
 							for(PotionEffectType type : effects.keySet()){

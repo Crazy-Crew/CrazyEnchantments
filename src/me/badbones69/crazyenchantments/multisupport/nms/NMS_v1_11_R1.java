@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 import net.minecraft.server.v1_11_R1.NBTTagList;
 import net.minecraft.server.v1_11_R1.NBTTagCompound;
 
-
 public class NMS_v1_11_R1{
 	
 	public static ItemStack addGlow(ItemStack item){

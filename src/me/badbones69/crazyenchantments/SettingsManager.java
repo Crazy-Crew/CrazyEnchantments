@@ -37,9 +37,6 @@ public class SettingsManager {
 	private FileConfiguration msg;
 	private File mfile;
 	
-	private FileConfiguration cenchs;
-	private File cefile;
-	
 	private FileConfiguration signs;
 	private File sfile;
 	
@@ -113,18 +110,6 @@ public class SettingsManager {
 		}
 		msg = YamlConfiguration.loadConfiguration(mfile);
 		
-		cefile = new File(p.getDataFolder(), "CustomEnchantments.yml");
-		if (!cefile.exists()) {
-			try{
-        		File en = new File(p.getDataFolder(), "/CustomEnchantments.yml");
-         		InputStream E = getClass().getResourceAsStream("/CustomEnchantments.yml");
-         		copyFile(E, en);
-         	}catch (Exception e) {
-         		e.printStackTrace();
-         	}
-		}
-		cenchs = YamlConfiguration.loadConfiguration(cefile);
-		
 		sfile = new File(p.getDataFolder(), "Signs.yml");
 		if (!sfile.exists()) {
 			try{
@@ -183,10 +168,6 @@ public class SettingsManager {
 		return signs;
 	}
 
-	public FileConfiguration getCustomEnchs() {
-		return cenchs;
-	}
-
 	public FileConfiguration getEnchantments() {
 		return enchs;
 	}
@@ -213,7 +194,7 @@ public class SettingsManager {
 		}
 	}
 
-	public void saveEnchs() {
+	public void saveEnchantments() {
 		try {
 			enchs.save(efile);
 		} catch (IOException e) {
@@ -243,10 +224,6 @@ public class SettingsManager {
 
 	public void reloadMessages() {
 		msg = YamlConfiguration.loadConfiguration(mfile);
-	}
-
-	public void reloadCustomEnchs() {
-		cenchs = YamlConfiguration.loadConfiguration(cefile);
 	}
 
 	public void reloadEnchs() {

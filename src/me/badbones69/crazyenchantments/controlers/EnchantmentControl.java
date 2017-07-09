@@ -126,7 +126,7 @@ public class EnchantmentControl implements Listener{
 														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Item-Was-Protected")));
 													}else{
 														Main.CE.removeEnchantment(item, en);
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Enchantment-Upgrade.Destroyed")));
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Enchantment-Upgrade.Destroyed")));
 													}
 												}else{
 													if(Methods.isProtected(item)){
