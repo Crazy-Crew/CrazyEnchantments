@@ -28,7 +28,7 @@ import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.Support;
 
 public class PickAxes implements Listener{
 	
@@ -67,15 +67,15 @@ public class PickAxes implements Listener{
 						blocks.remove(player);
 						HashMap<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
 						int xp = 0;
-						if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()){
+						if(Support.hasNoCheatPlus()){
 							NoCheatPlusSupport.exemptPlayer(player);
 						}
-						if(SupportedPlugins.SPARTAN.isPluginLoaded()){
+						if(Support.hasSpartan()){
 							SpartanSupport.cancelNucker(player);
 							SpartanSupport.cancelNoSwing(player);
 							SpartanSupport.cancelBlockReach(player);
 						}
-						if(SupportedPlugins.AAC.isPluginLoaded()){
+						if(Support.hasAAC()){
 							AACSupport.exemptPlayer(player);
 						}
 						Boolean damage = true;
@@ -98,7 +98,7 @@ public class PickAxes implements Listener{
 													drop.setType(getOres().get(b.getType()));
 													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-															drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+															drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 														}
 													}
 												}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT.getEnchantment()) && getOres().containsKey(b.getType())){
@@ -107,7 +107,7 @@ public class PickAxes implements Listener{
 														drop.setAmount(1 + Main.CE.getPower(item, CEnchantments.AUTOSMELT.getEnchantment()));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 															}
 														}
 													}
@@ -115,7 +115,7 @@ public class PickAxes implements Listener{
 													if(getItems().contains(b.getType())){
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 															}
 														}
 													}
@@ -159,7 +159,7 @@ public class PickAxes implements Listener{
 														drop.setAmount(Main.CE.getPower(item, CEnchantments.AUTOSMELT.getEnchantment()));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 																fortune = true;
 															}
 														}
@@ -173,7 +173,7 @@ public class PickAxes implements Listener{
 															if(item.getItemMeta().hasEnchants()){
 																if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 																	if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																		drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																		drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 																		toggle = false;
 																	}
 																}
@@ -221,10 +221,10 @@ public class PickAxes implements Listener{
 						if(!damage){
 							Methods.removeDurability(item, player);
 						}
-						if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()){
+						if(Support.hasNoCheatPlus()){
 							NoCheatPlusSupport.unexemptPlayer(player);
 						}
-						if(SupportedPlugins.AAC.isPluginLoaded()){
+						if(Support.hasAAC()){
 							AACSupport.unexemptPlayer(player);
 						}
 						for(ItemStack i : drops.keySet()){
@@ -269,7 +269,7 @@ public class PickAxes implements Listener{
 									drop += Main.CE.getPower(item, CEnchantments.AUTOSMELT.getEnchantment());
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 										if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-											drop += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
+											drop += item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
 										}
 									}
 									ItemStack i = new ItemStack(getOres().get(block.getType()), drop);
@@ -303,7 +303,7 @@ public class PickAxes implements Listener{
 								int drop = 1;
 								if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 									if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-										drop += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
+										drop += item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
 									}
 								}
 								if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE ||

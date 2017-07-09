@@ -40,6 +40,40 @@ public class Tools implements Listener{
 		updateEffects(e.getPlayer());
 	}
 	
+//	Will be added when I can figure out a way of working with Epic Spawners so we don't duplicate spawners.
+//	@EventHandler(priority = EventPriority.HIGHEST)
+//	public void onSpawnerBreak(BlockBreakEvent e){
+//		Block block = e.getBlock();
+//		Player player = e.getPlayer();
+//		if(e.isCancelled() || block.getType() == Material.AIR ||
+//				block.getType().toString().toLowerCase().contains("shulker_box") ||
+//				block.getType().toString().toLowerCase().contains("chest")){
+//			return;
+//		}
+//		if(player.getGameMode() != GameMode.CREATIVE){
+//			ItemStack item = Methods.getItemInHand(player);
+//			if(Main.CE.hasEnchantments(item)){
+//				if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY) && !Main.CE.hasEnchantment(item, CEnchantments.BLAST)){
+//					if(CEnchantments.TELEPATHY.isEnabled()){
+//						if(item.getItemMeta().hasEnchants()){
+//							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)){
+//								if(Support.hasEpicSpawners()){
+//									e.setCancelled(true);
+//									ItemStack spawner = EpicSpawnersSupport.getSpawner(block);
+//									if(Methods.isInvFull(player)){
+//										player.getWorld().dropItem(player.getLocation(), spawner);
+//									}else{
+//										player.getInventory().addItem(spawner);
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e){
