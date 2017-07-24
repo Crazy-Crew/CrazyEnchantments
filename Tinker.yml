@@ -20,6 +20,8 @@ Tinker:
     WATER_WORKER: 15
     THORNS: 35
     DEPTH_STRIDER: 15
+    FROST_WALKER: 30
+    VANISHING_CURSE: 25
     #Sword/Axe Enchantments
     DAMAGE_ALL: 20
     DAMAGE_UNDEAD: 10
@@ -27,6 +29,9 @@ Tinker:
     KNOCKBACK: 20
     FIRE_ASPECT: 25
     LOOT_BONUS_MOBS: 15
+    BINDING_CURSE: 25
+    MENDING: 25
+    SWEEPING: 35
     #Tool Enchantments
     DIG_SPEED: 20
     SILK_TOUCH: 35

@@ -39,6 +39,7 @@ import me.badbones69.crazyenchantments.controlers.DustControl;
 import me.badbones69.crazyenchantments.controlers.EnchantmentControl;
 import me.badbones69.crazyenchantments.controlers.FireworkDamageAPI;
 import me.badbones69.crazyenchantments.controlers.GKitzControler;
+import me.badbones69.crazyenchantments.controlers.InfoGUIControl;
 import me.badbones69.crazyenchantments.controlers.LostBook;
 import me.badbones69.crazyenchantments.controlers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controlers.Scrambler;
@@ -58,7 +59,7 @@ import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
 import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
-import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class Main extends JavaPlugin implements Listener{
@@ -89,6 +90,7 @@ public class Main extends JavaPlugin implements Listener{
 		//==========================================================================\\
 		pm.registerEvents(this, this);
 		pm.registerEvents(new ShopControler(), this);
+		pm.registerEvents(new InfoGUIControl(), this);
 		pm.registerEvents(new GKitzControler(), this);
 		pm.registerEvents(new LostBook(), this);
 		pm.registerEvents(new EnchantmentControl(), this);
@@ -117,16 +119,16 @@ public class Main extends JavaPlugin implements Listener{
 		pm.registerEvents(new Boots(), this);
 		pm.registerEvents(new Armor(), this);
 		pm.registerEvents(new Swords(), this);
-		if(Support.hasAAC()){
+		if(SupportedPlugins.AAC.isPluginLoaded()){
 			pm.registerEvents(new AACSupport(), this);
 		}
-		if(Support.hasSilkSpawner()){
+		if(SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()){
 			pm.registerEvents(new SilkSpawners(), this);
 		}
-		if(Support.hasStackMob()){
+		if(SupportedPlugins.STACK_MOB.isPluginLoaded()){
 			pm.registerEvents(new StackMobSupport(), this);
 		}
-		if(Support.hasDakata()){
+		if(SupportedPlugins.DAKATA.isPluginLoaded()){
 			pm.registerEvents(new DakataAntiCheatSupport(), this);
 		}
 		//==========================================================================\\
@@ -164,7 +166,7 @@ public class Main extends JavaPlugin implements Listener{
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args){
 		FileConfiguration config = settings.getConfig();
-		FileConfiguration msg = settings.getMsg();
+		FileConfiguration msg = settings.getMessages();
 		if(commandLable.equalsIgnoreCase("BlackSmith")||commandLable.equalsIgnoreCase("BSmith")
 				||commandLable.equalsIgnoreCase("BlackS")||commandLable.equalsIgnoreCase("BS")){
 			if(!(sender instanceof Player)){
@@ -211,7 +213,7 @@ public class Main extends JavaPlugin implements Listener{
 					sender.sendMessage(Methods.color("&b/CE Info [Enchantment] - &9Shows info on all Enchantmnets."));
 					sender.sendMessage(Methods.color("&b/CE Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Methods.color("&b/CE Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
-					sender.sendMessage(Methods.color("&b/CE Add <Enchantment> [LvL] - &9Adds and enchantment to the item in your hand."));
+					sender.sendMessage(Methods.color("&b/CE Add <Enchantment> [LvL] - &9Adds an enchantment to the item in your hand."));
 					sender.sendMessage(Methods.color("&b/CE Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#] - &9Drops an enchantment book where you tell it to."));
 					sender.sendMessage(Methods.color("&b/CE Scroll <Black/White/Transmog> [Amount] [Player] - &9Gives a player scrolls."));
 					sender.sendMessage(Methods.color("&b/CE Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
@@ -225,7 +227,7 @@ public class Main extends JavaPlugin implements Listener{
 					if(!Methods.hasPermission(sender, "reload", true))return true;
 					settings.reloadConfig();
 					settings.reloadEnchs();
-					settings.reloadMsg();
+					settings.reloadMessages();
 					settings.reloadCustomEnchs();
 					settings.reloadSigns();
 					settings.reloadTinker();
@@ -252,12 +254,12 @@ public class Main extends JavaPlugin implements Listener{
 						}
 						Player player = (Player)sender;
 						if(!Methods.hasPermission(sender, "info", true))return true;
-						ShopControler.openInfo(player);
+						InfoGUIControl.openInfo(player);
 						return true;
 					}else{
 						for(InfoType type : InfoType.getTypes()){
 							if(args[1].equalsIgnoreCase(type.getName())){
-								ShopControler.openInfo((Player)sender, type);
+								InfoGUIControl.openInfo((Player)sender, type);
 								return true;
 							}
 						}

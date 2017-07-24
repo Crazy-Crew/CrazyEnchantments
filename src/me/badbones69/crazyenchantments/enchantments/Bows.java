@@ -29,6 +29,7 @@ import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 
 public class Bows implements Listener{
 
@@ -71,7 +72,12 @@ public class Bows implements Listener{
 									arrow.setBounce(false);
 									Vector v = new Vector(Vec(), 0, Vec());
 									arrow.setVelocity(e.getProjectile().getVelocity().add(v));
-									if(((Arrow)e.getProjectile()).isCritical())arrow.setCritical(true);
+									if(((Arrow)e.getProjectile()).isCritical()) {
+										arrow.setCritical(true);
+									}
+									if(((Arrow)e.getProjectile()).getFireTicks() > 0) {
+										arrow.setFireTicks(((Arrow)e.getProjectile()).getFireTicks());
+									}
 								}
 							}
 						}else{
@@ -81,7 +87,12 @@ public class Bows implements Listener{
 								arrow.setBounce(false);
 								Vector v = new Vector(Vec(), 0, Vec());
 								arrow.setVelocity(e.getProjectile().getVelocity().add(v));
-								if(((Arrow)e.getProjectile()).isCritical())arrow.setCritical(true);
+								if(((Arrow)e.getProjectile()).isCritical()) {
+									arrow.setCritical(true);
+								}
+								if(((Arrow)e.getProjectile()).getFireTicks() > 0) {
+									arrow.setFireTicks(((Arrow)e.getProjectile()).getFireTicks());
+								}
 							}
 						}
 					}
@@ -182,7 +193,7 @@ public class Bows implements Listener{
 												Bukkit.getPluginManager().callEvent(event);
 												Player player = (Player) e.getEntity();
 												if(!event.isCancelled()){
-													if(Support.hasSpartan()){
+													if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 														SpartanSupport.cancelSpeed(player);
 														SpartanSupport.cancelFly(player);
 														SpartanSupport.cancelClip(player);
@@ -190,7 +201,7 @@ public class Bows implements Listener{
 														SpartanSupport.cancelNoFall(player);
 														SpartanSupport.cancelJesus(player);
 													}
-													if(Support.hasAAC()){
+													if(SupportedPlugins.AAC.isPluginLoaded()){
 														AACSupport.exemptPlayerTime(player);
 													}
 													en.setVelocity(v);
@@ -253,7 +264,6 @@ public class Bows implements Listener{
 			}
 		}
 	}
-	
 	
 	private ArrayList<CEnchantments> getEnchantments(){
 		ArrayList<CEnchantments> enchants = new ArrayList<CEnchantments>();

@@ -164,7 +164,11 @@ public class BlackSmith implements Listener{
 					}else{// Click In the Black Smith
 						if(e.getRawSlot()==10||e.getRawSlot()==13){
 							e.setCurrentItem(new ItemStack(Material.AIR));
-							player.getInventory().addItem(item);
+							if(Methods.isInvFull(player)){
+								player.getWorld().dropItem(player.getLocation(), item);
+							}else{
+								player.getInventory().addItem(item);
+							}
 							if(Version.getVersion().getVersionInteger()<181){
 								ItemStack it = Methods.makeItem(Material.STAINED_CLAY, 1, 0, config.getString("Settings.BlackSmith.Results.None"));
 								if(config.contains("Settings.BlackSmith.Results.Not-Found-Lore")){
@@ -198,15 +202,15 @@ public class BlackSmith implements Listener{
 												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 												switch(currency){
 													case VAULT:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Money")
 																.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
 														break;
 													case XP_LEVEL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-XP-Lvls")
 																.replace("%XP%", needed).replace("%xp%", needed)));
 														break;
 													case XP_TOTAL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Total-XP")
 																.replace("%XP%", needed).replace("%xp%", needed)));
 														break;
 												}
@@ -214,7 +218,11 @@ public class BlackSmith implements Listener{
 											}
 										}
 									}
-									player.getInventory().addItem(getUpgradedItem(player, inv.getItem(10),inv.getItem(13), false));
+									if(Methods.isInvFull(player)){
+										player.getWorld().dropItem(player.getLocation(), getUpgradedItem(player, inv.getItem(10),inv.getItem(13), false));
+									}else{
+										player.getInventory().addItem(getUpgradedItem(player, inv.getItem(10),inv.getItem(13), false));
+									}
 									inv.setItem(10, new ItemStack(Material.AIR));
 									inv.setItem(13, new ItemStack(Material.AIR));
 									try{

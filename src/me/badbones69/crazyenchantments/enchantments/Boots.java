@@ -24,6 +24,7 @@ import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 
 public class Boots implements Listener{
 	
@@ -79,7 +80,7 @@ public class Boots implements Listener{
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
-							if(Support.hasSpartan()){
+							if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 								SpartanSupport.cancelFly(player);
 							}
 							if(e.isFlying()){
@@ -161,7 +162,7 @@ public class Boots implements Listener{
 				if(CEnchantments.WINGS.isEnabled()){
 					if(Support.inTerritory(player) || Support.inWingsRegion(player)){
 						if(!areEnemiesNearBy(player)){
-							if(Support.hasSpartan()){
+							if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 								SpartanSupport.cancelFly(player);
 							}
 							player.setAllowFlight(true);

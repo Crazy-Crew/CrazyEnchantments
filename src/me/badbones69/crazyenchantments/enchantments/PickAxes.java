@@ -28,7 +28,7 @@ import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
-import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 
 public class PickAxes implements Listener{
 	
@@ -67,15 +67,15 @@ public class PickAxes implements Listener{
 						blocks.remove(player);
 						HashMap<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
 						int xp = 0;
-						if(Support.hasNoCheatPlus()){
+						if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()){
 							NoCheatPlusSupport.exemptPlayer(player);
 						}
-						if(Support.hasSpartan()){
+						if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 							SpartanSupport.cancelNucker(player);
 							SpartanSupport.cancelNoSwing(player);
 							SpartanSupport.cancelBlockReach(player);
 						}
-						if(Support.hasAAC()){
+						if(SupportedPlugins.AAC.isPluginLoaded()){
 							AACSupport.exemptPlayer(player);
 						}
 						Boolean damage = true;
@@ -221,10 +221,10 @@ public class PickAxes implements Listener{
 						if(!damage){
 							Methods.removeDurability(item, player);
 						}
-						if(Support.hasNoCheatPlus()){
+						if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()){
 							NoCheatPlusSupport.unexemptPlayer(player);
 						}
-						if(Support.hasAAC()){
+						if(SupportedPlugins.AAC.isPluginLoaded()){
 							AACSupport.unexemptPlayer(player);
 						}
 						for(ItemStack i : drops.keySet()){

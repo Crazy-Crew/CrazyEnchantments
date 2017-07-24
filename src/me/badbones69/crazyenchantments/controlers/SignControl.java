@@ -46,10 +46,10 @@ public class SignControl implements Listener{
 				Location loc = new Location(world,x,y,z);
 				if(Loc.equals(loc)){
 					if(Methods.isInvFull(player)){
-						if(!Main.settings.getMsg().contains("Messages.Inventory-Full")){
+						if(!Main.settings.getMessages().contains("Messages.Inventory-Full")){
 							player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 						}else{
-							player.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+							player.sendMessage(Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
 						}
 						return;
 					}
@@ -73,15 +73,15 @@ public class SignControl implements Listener{
 										String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 										switch(currency){
 											case VAULT:
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Money")
 														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
 												break;
 											case XP_LEVEL:
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-XP-Lvls")
 														.replace("%XP%", needed).replace("%xp%", needed)));
 												break;
 											case XP_TOTAL:
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Total-XP")
 														.replace("%XP%", needed).replace("%xp%", needed)));
 												break;
 										}
@@ -125,15 +125,15 @@ public class SignControl implements Listener{
 										String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 										switch(currency){
 											case VAULT:
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Money")
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Money")
 														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
 												break;
 											case XP_LEVEL:
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-XP-Lvls")
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-XP-Lvls")
 														.replace("%XP%", needed).replace("%xp%", needed)));
 												break;
 											case XP_TOTAL:
-												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Need-More-Total-XP")
+												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Total-XP")
 														.replace("%XP%", needed).replace("%xp%", needed)));
 												break;
 										}
@@ -180,7 +180,7 @@ public class SignControl implements Listener{
 				if(Loc.equals(loc)){
 					Main.settings.getSigns().set("Locations." + l, null);
 					Main.settings.saveSigns();
-					player.sendMessage(Methods.color(Methods.getPrefix() + Main.settings.getMsg().getString("Messages.Break-Enchantment-Shop-Sign")));
+					player.sendMessage(Methods.color(Methods.getPrefix() + Main.settings.getMessages().getString("Messages.Break-Enchantment-Shop-Sign")));
 					return;
 				}
 			}

@@ -1201,9 +1201,9 @@ Enchantments:
     Name: 'Valor'
     Color: '&7'
     BookColor: '&b&l'
-    MaxPower: 3
+    MaxPower: 2
     Info:
-      Name: '&e&lValor &7(&bI-&bIII&7)'
+      Name: '&e&lValor &7(&bI-&bII&7)'
       Description:
         - '&7Gives damage resistance'
         - '&7based on your enchantment level.'

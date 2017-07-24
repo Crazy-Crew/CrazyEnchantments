@@ -5,12 +5,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.badbones69.crazyenchantments.Main;
@@ -543,6 +546,32 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * Force an update of a players armor potion effects.
+	 * @param player The player you are updating the effects of.
+	 */
+	public void updatePlayerEffects(Player player) {
+		if(player != null) {
+			for(CEnchantments ench : getEnchantmentPotions().keySet()){
+				for(ItemStack armor : player.getEquipment().getArmorContents()) {
+					if(hasEnchantment(armor, ench)){
+						if(ench.isEnabled()){
+							HashMap<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
+							for(PotionEffectType type : effects.keySet()){
+								if(effects.get(type) < 0){
+									player.removePotionEffect(type);
+								}else{
+									player.removePotionEffect(type);
+									player.addPotionEffect(new PotionEffect(type, Integer.MAX_VALUE, effects.get(type)));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
 	 * 
 	 * @param player The player you are adding it to.
 	 * @param include Include an item.
@@ -846,6 +875,14 @@ public class CrazyEnchantments {
 	 */
 	public ArrayList<ItemStack> getKitItems(ArrayList<String> itemStrings){
 		return DataStorage.getKitItems(itemStrings);
+	}
+	
+	/**
+	 * Gets the plugin.
+	 * @return The plugin as a Plugin object.
+	 */
+	public Plugin getPlugin() {
+		return Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 	}
 	
 }

@@ -121,6 +121,7 @@ public class DustControl implements Listener{
 								e.setCancelled(true);
 								Methods.setItemInHand(player, Methods.removeItem(item));
 								player.getInventory().addItem(getDust(pickDust(), 1, Methods.percentPick(getPercent("MysteryDust", item)+1, 1)));
+								player.updateInventory();
 								try{
 									if(Version.getVersion().getVersionInteger()>=191){
 										player.playSound(player.getLocation(), Sound.valueOf("BLOCK_LAVA_POP"), 1, 1);

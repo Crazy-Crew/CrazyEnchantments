@@ -56,6 +56,7 @@ Messages:
       Name: '&c&lEnchantment Info'
     Categories-Info:
       Back:
+        Item: 399
         Right: '&7&l<<&b&lBack'
         Left: '&b&lBack&7&l>>'
       Helmets:
