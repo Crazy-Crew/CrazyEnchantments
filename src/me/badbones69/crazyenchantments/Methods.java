@@ -63,6 +63,10 @@ public class Methods{
 		}
 	}
 	
+	public static Integer getRandomNumber(int range) {
+		return ((new Random().nextInt(range - 1)) + 1);
+	}
+	
 	public static Integer getRandomNumber(String range){
 		int number = 1;
 		String[] split = range.split("-");
