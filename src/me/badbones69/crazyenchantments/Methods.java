@@ -35,6 +35,7 @@ import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_10_R1;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_11_R1;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_7_R4;
@@ -79,7 +80,7 @@ public class Methods{
 			return true;
 		}else{
 			if(toggle){
-				player.sendMessage(getPrefix() + color(Main.settings.getMsg().getString("Messages.No-Perm")));
+				player.sendMessage(getPrefix() + color(Main.settings.getMessages().getString("Messages.No-Perm")));
 			}
 			return false;
 		}
@@ -92,7 +93,7 @@ public class Methods{
 				return true;
 			}else{
 				if(toggle){
-					player.sendMessage(getPrefix() + color(Main.settings.getMsg().getString("Messages.No-Perm")));
+					player.sendMessage(getPrefix() + color(Main.settings.getMessages().getString("Messages.No-Perm")));
 				}
 				return false;
 			}
@@ -542,7 +543,7 @@ public class Methods{
 				return true;
 			}
 		}
-		p.sendMessage(getPrefix()+color(Main.settings.getMsg().getString("Messages.Not-Online")));
+		p.sendMessage(getPrefix()+color(Main.settings.getMessages().getString("Messages.Not-Online")));
 		return false;
 	}
 	
@@ -949,7 +950,7 @@ public class Methods{
 							if(!player.getName().equalsIgnoreCase(e.getName())){
 								en.damage(5D);
 								if(en instanceof Player){
-									if(Support.hasSpartan()){
+									if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 										SpartanSupport.cancelSpeed((Player) player);
 										SpartanSupport.cancelFly((Player) player);
 										SpartanSupport.cancelClip((Player) player);
@@ -957,7 +958,7 @@ public class Methods{
 										SpartanSupport.cancelNoFall((Player) player);
 										SpartanSupport.cancelJesus((Player) player);
 									}
-									if(Support.hasAAC()){
+									if(SupportedPlugins.AAC.isPluginLoaded()){
 										AACSupport.exemptPlayerTime((Player) player);
 									}
 								}
@@ -985,7 +986,7 @@ public class Methods{
 							if(!player.getName().equalsIgnoreCase(e.getName())){
 								en.damage(5D);
 								if(en instanceof Player){
-									if(Support.hasSpartan()){
+									if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 										SpartanSupport.cancelSpeed((Player) player);
 										SpartanSupport.cancelFly((Player) player);
 										SpartanSupport.cancelClip((Player) player);
@@ -993,7 +994,7 @@ public class Methods{
 										SpartanSupport.cancelNoFall((Player) player);
 										SpartanSupport.cancelJesus((Player) player);
 									}
-									if(Support.hasAAC()){
+									if(SupportedPlugins.AAC.isPluginLoaded()){
 										AACSupport.exemptPlayerTime((Player) player);
 									}
 								}

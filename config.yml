@@ -391,6 +391,7 @@ Categories: #You can make as many different categories as you want
     Lore: #The lore of the Item
       - '&eCost: &6&l20 &6XP Levels'
     Item: '160:5' #The id for the item
+    Glowing: true #If the item is glowing in the GUI.
     Cost: 20 #How much each book will cost to buy.
     Currency: XP_Level #The currency you wish to use. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
     Rarity: 1 #This allows the enchantments to be ordered with the Transmog Scrolls. The higher the number the more rare it is. Try and have each category have different rarities.
@@ -429,6 +430,7 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l40 &6XP Levels'
     Item: '160:11'
+    Glowing: true
     Cost: 40
     Currency: XP_Level
     Rarity: 2
@@ -467,6 +469,7 @@ Categories: #You can make as many different categories as you want
     Lore:
       - '&eCost: &6&l60 &6XP Levels'
     Item: '160:14'
+    Glowing: true
     Cost: 60
     Currency: XP_Level
     Rarity: 3

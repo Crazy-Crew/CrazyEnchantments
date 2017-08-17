@@ -177,6 +177,9 @@ public class ArmorListener implements Listener{
 						if(newArmorPiece == null){
 							newArmorPiece = new ItemStack(Material.AIR);
 						}
+						if(oldArmorPiece == null){
+							oldArmorPiece = new ItemStack(Material.AIR);
+						}
 						if(ArmorType.matchType(oldArmorPiece) != null || oldArmorPiece.getType() == Material.AIR){
 							if(ArmorType.matchType(newArmorPiece) != null){
 								if(e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()){

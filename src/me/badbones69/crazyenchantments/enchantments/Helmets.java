@@ -69,24 +69,22 @@ public class Helmets implements Listener{
 			if(Main.CE.hasEnchantments(armor)){
 				if(Main.CE.hasEnchantment(armor, CEnchantments.COMMANDER)){
 					if(CEnchantments.COMMANDER.isEnabled()){
-						if(Support.hasFactions()){
-							int radius = 4+Main.CE.getPower(armor, CEnchantments.COMMANDER);
-							ArrayList<Player> players = new ArrayList<Player>();
-							for(Entity en : player.getNearbyEntities(radius, radius, radius)){
-								if(en instanceof Player){
-									Player o = (Player) en;
-									if(Support.isFriendly(player, o)){
-										players.add(o);
-									}
+						int radius = 4+Main.CE.getPower(armor, CEnchantments.COMMANDER);
+						ArrayList<Player> players = new ArrayList<Player>();
+						for(Entity en : player.getNearbyEntities(radius, radius, radius)){
+							if(en instanceof Player){
+								Player o = (Player) en;
+								if(Support.isFriendly(player, o)){
+									players.add(o);
 								}
 							}
-							if(players.size()>0){
-								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
-								Bukkit.getPluginManager().callEvent(event);
-								if(!event.isCancelled()){
-									for(Player P : players){
-										P.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3*20, 1));
-									}
+						}
+						if(players.size()>0){
+							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
+							Bukkit.getPluginManager().callEvent(event);
+							if(!event.isCancelled()){
+								for(Player P : players){
+									P.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3*20, 1));
 								}
 							}
 						}

@@ -162,38 +162,39 @@ public class SettingsManager {
 		blocklist = YamlConfiguration.loadConfiguration(blfile);
 		
 	}
+
 	public FileConfiguration getGKitz() {
 		return gkitz;
 	}
+
 	public FileConfiguration getData() {
 		return data;
 	}
+
 	public FileConfiguration getBlockList() {
 		return blocklist;
 	}
+
 	public FileConfiguration getTinker() {
 		return tinker;
 	}
+
 	public FileConfiguration getSigns() {
 		return signs;
 	}
+
 	public FileConfiguration getCustomEnchs() {
 		return cenchs;
 	}
+
 	public FileConfiguration getEnchs() {
 		return enchs;
 	}
-	public FileConfiguration getMsg() {
+
+	public FileConfiguration getMessages() {
 		return msg;
 	}
-	public void saveGKitz() {
-		try {
-			gkitz.save(gfile);
-		} catch (IOException e) {
-			Bukkit.getServer().getLogger()
-					.severe(ChatColor.RED + "Could not save GKitz.yml!");
-		}
-	}
+
 	public void saveData() {
 		try {
 			data.save(dfile);
@@ -202,22 +203,7 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save Data.yml!");
 		}
 	}
-	public void saveBlockList() {
-		try {
-			blocklist.save(blfile);
-		} catch (IOException e) {
-			Bukkit.getServer().getLogger()
-					.severe(ChatColor.RED + "Could not save BlockList.yml!");
-		}
-	}
-	public void saveTinker() {
-		try {
-			tinker.save(tfile);
-		} catch (IOException e) {
-			Bukkit.getServer().getLogger()
-					.severe(ChatColor.RED + "Could not save Tinker.yml!");
-		}
-	}
+
 	public void saveSigns() {
 		try {
 			signs.save(sfile);
@@ -226,54 +212,47 @@ public class SettingsManager {
 					.severe(ChatColor.RED + "Could not save Signs.yml!");
 		}
 	}
-	public void saveCustomEnchs() {
-		try {
-			cenchs.save(cefile);
-		} catch (IOException e) {
-			Bukkit.getServer().getLogger()
-					.severe(ChatColor.RED + "Could not save CustomEnchantments.yml!");
-		}
-	}
+
 	public void saveEnchs() {
 		try {
 			enchs.save(efile);
 		} catch (IOException e) {
-			Bukkit.getServer().getLogger()
-					.severe(ChatColor.RED + "Could not save Enchantments.yml!");
+			Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save Enchantments.yml!");
 		}
 	}
-	public void saveMsg() {
-		try {
-			msg.save(mfile);
-		} catch (IOException e) {
-			Bukkit.getServer().getLogger()
-					.severe(ChatColor.RED + "Could not save Messages.yml!");
-		}
-	}
+	
 	public void reloadGKitz() {
 		gkitz = YamlConfiguration.loadConfiguration(gfile);
 	}
+
 	public void reloadData() {
 		data = YamlConfiguration.loadConfiguration(dfile);
 	}
+
 	public void reloadBlockList() {
 		blocklist = YamlConfiguration.loadConfiguration(blfile);
 	}
+
 	public void reloadTinker() {
 		tinker = YamlConfiguration.loadConfiguration(tfile);
 	}
+
 	public void reloadSigns() {
 		signs = YamlConfiguration.loadConfiguration(sfile);
 	}
-	public void reloadMsg() {
+
+	public void reloadMessages() {
 		msg = YamlConfiguration.loadConfiguration(mfile);
 	}
+
 	public void reloadCustomEnchs() {
 		cenchs = YamlConfiguration.loadConfiguration(cefile);
 	}
+
 	public void reloadEnchs() {
 		enchs = YamlConfiguration.loadConfiguration(efile);
 	}
+
 	public FileConfiguration getConfig() {
 		return config;
 	}
@@ -294,6 +273,7 @@ public class SettingsManager {
 	public PluginDescriptionFile getDesc() {
 		return p.getDescription();
 	}
+
 	public static void copyFile(InputStream in, File out) throws Exception { // https://bukkit.org/threads/extracting-file-from-jar.16962/
         InputStream fis = in;
         FileOutputStream fos = new FileOutputStream(out);

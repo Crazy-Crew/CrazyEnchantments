@@ -27,6 +27,7 @@ import me.badbones69.crazyenchantments.api.events.DisarmerUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 
 public class Swords implements Listener{
 	
@@ -113,7 +114,7 @@ public class Swords implements Listener{
 										}
 										if(multi.get(damager)<=Main.CE.getMaxRageLevel())multi.put(damager, multi.get(damager) + (Main.CE.getPower(It, CEnchantments.RAGE)*0.1));
 										if(multi.get(damager).intValue() == num.get(damager)){
-											damager.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Rage.Rage-Up")
+											damager.sendMessage(Methods.color(Main.settings.getMessages().getString("Messages.Rage.Rage-Up")
 													.replaceAll("%Level%", num.get(damager) + "").replaceAll("%level%", num.get(damager) + "")));
 											num.put(damager, num.get(damager)+1);
 										}
@@ -122,13 +123,13 @@ public class Swords implements Listener{
 									if(!multi.containsKey(damager)){
 										multi.put(damager, 1.0);
 										num.put(damager, 2);
-										damager.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Rage.Building")));
+										damager.sendMessage(Methods.color(Main.settings.getMessages().getString("Messages.Rage.Building")));
 									}
 									reset.put(damager, Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable(){
 										@Override
 										public void run() {
 											multi.remove(damager);
-											damager.sendMessage(Methods.color(Main.settings.getMsg().getString("Messages.Rage.Cooled-Down")));
+											damager.sendMessage(Methods.color(Main.settings.getMessages().getString("Messages.Rage.Cooled-Down")));
 										}
 									}, 4*20));
 								}
@@ -178,7 +179,7 @@ public class Swords implements Listener{
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.NUTRITION, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										if(Support.hasSpartan()){
+										if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 											SpartanSupport.cancelFastEat(damager);
 										}
 										if(damager.getSaturation()+(2*Main.CE.getPower(It, CEnchantments.NUTRITION))<=20){
@@ -279,7 +280,7 @@ public class Swords implements Listener{
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.OBLITERATE, It);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										if(Support.hasSpartan()){
+										if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 											if(e.getEntity() instanceof Player){
 												SpartanSupport.cancelSpeed((Player)e.getEntity());
 												SpartanSupport.cancelFly((Player)e.getEntity());

@@ -27,7 +27,7 @@ import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.EnchantmentType;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
-import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class Tinkerer implements Listener{
@@ -112,10 +112,10 @@ public class Tinkerer implements Listener{
 										}
 										player.closeInventory();
 										if(total != 0){
-											Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give "+player.getName()+" "+total);
+											Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give " + player.getName() + " " + total);
 										}
 										if(toggle){
-											player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Tinker-Sold-Msg")));
+											player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMessages().getString("Messages.Tinker-Sold-Msg")));
 										}
 										try{
 											if(Version.getVersion().getVersionInteger()>=191){
@@ -159,7 +159,7 @@ public class Tinkerer implements Listener{
 												}catch(Exception ex){}
 											}else{// Clicking in their inventory
 												if(player.getOpenInventory().getTopInventory().firstEmpty()==-1){
-													player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
+													player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMessages().getString("Messages.Tinker-Inventory-Full")));
 													return;
 												}
 												e.setCurrentItem(new ItemStack(Material.AIR));
@@ -195,7 +195,7 @@ public class Tinkerer implements Listener{
 											}
 										}else{// Clicking in their inventory
 											if(player.getOpenInventory().getTopInventory().firstEmpty()==-1){
-												player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Tinker-Inventory-Full")));
+												player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMessages().getString("Messages.Tinker-Inventory-Full")));
 												return;
 											}
 											e.setCurrentItem(new ItemStack(Material.AIR));
@@ -257,7 +257,7 @@ public class Tinkerer implements Listener{
 			lore.add(l.replaceAll("%Total%", getTotalXP(item)+"").replaceAll("%total%", getTotalXP(item)+""));
 		}
 		ItemStack it = Methods.makeItem(id, 1, name, lore);
-		if(Support.hasMegaSkills()){
+		if(SupportedPlugins.MEGA_SKILLS.isPluginLoaded()){
 			it = Methods.makeItem(Material.EXP_BOTTLE, 1, 0, "&6Enhanced Exp - &a&l" + getTotalXP(item) + " EXP");
 		}
 		return it;
@@ -298,7 +298,7 @@ public class Tinkerer implements Listener{
 	}
 	
 	private int getTotalXP(ItemStack item){
-		int total=0;
+		int total = 0;
 		if(EnchantmentType.ALL.getItems().contains(item.getType())||item.getType()==Main.CE.getEnchantmentBookItem().getType()){
 			if(Main.CE.hasEnchantments(item)){
 				for(CEnchantments en : Main.CE.getItemEnchantments(item)){

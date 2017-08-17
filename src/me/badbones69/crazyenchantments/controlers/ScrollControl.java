@@ -115,7 +115,7 @@ public class ScrollControl implements Listener{
 						player.setItemOnCursor(Methods.removeItem(scroll));
 						if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.Chance-Toggle")){
 							if(!Methods.randomPicker(Main.settings.getConfig().getInt("Settings.BlackScroll.Chance"), 100)){
-								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Black-Scroll-Unsuccessful")));
+								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Black-Scroll-Unsuccessful")));
 								return;
 							}
 						}
@@ -145,7 +145,7 @@ public class ScrollControl implements Listener{
 			if(item.hasItemMeta()){
 				if(item.getItemMeta().hasDisplayName()){
 					if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
-						player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Right-Click-Black-Scroll")));
+						player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMessages().getString("Messages.Right-Click-Black-Scroll")));
 					}
 				}
 			}

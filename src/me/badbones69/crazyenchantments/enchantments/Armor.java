@@ -47,6 +47,7 @@ import me.badbones69.crazyenchantments.controlers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 
 public class Armor implements Listener{
 	
@@ -56,7 +57,6 @@ public class Armor implements Listener{
 	private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<Player, HashMap<CEnchantments, Calendar>>();
 	private HashMap<Player, Calendar> mobTimer = new HashMap<Player, Calendar>();
 	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<Player, ArrayList<LivingEntity>>();
-	private int time = Integer.MAX_VALUE;
 	
 	@EventHandler
  	public void onEquip(ArmorEquipEvent e){
@@ -73,7 +73,7 @@ public class Armor implements Listener{
 								player.removePotionEffect(type);
 							}else{
 								player.removePotionEffect(type);
-								player.addPotionEffect(new PotionEffect(type, time, effects.get(type)));
+								player.addPotionEffect(new PotionEffect(type, Integer.MAX_VALUE, effects.get(type)));
 							}
 						}
 					}
@@ -93,7 +93,7 @@ public class Armor implements Listener{
 									player.removePotionEffect(type);
 								}else{
 									player.removePotionEffect(type);
-									player.addPotionEffect(new PotionEffect(type, time, effects.get(type)));
+									player.addPotionEffect(new PotionEffect(type, Integer.MAX_VALUE, effects.get(type)));
 								}
 							}
 						}
@@ -120,7 +120,7 @@ public class Armor implements Listener{
 									if(Methods.randomPicker((8-Main.CE.getPower(armor, CEnchantments.ROCKET)))){
 										EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET, armor);
 										Bukkit.getPluginManager().callEvent(event);
-										if(Support.hasAAC()){
+										if(SupportedPlugins.AAC.isPluginLoaded()){
 											AACSupport.exemptPlayerTime(player);
 										}
 										if(!event.isCancelled()){
@@ -287,7 +287,7 @@ public class Armor implements Listener{
 							if(Main.CE.hasEnchantment(armor, CEnchantments.LEADERSHIP)){
 								if(CEnchantments.LEADERSHIP.isEnabled()){
 									if(Methods.randomPicker(12)){
-										if(Support.hasFactions()||Support.hasFeudal()){
+										if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
 											int radius = 4+Main.CE.getPower(armor, CEnchantments.LEADERSHIP);
 											int players = 0;
 											for(Entity en : damager.getNearbyEntities(radius, radius, radius)){
@@ -438,7 +438,7 @@ public class Armor implements Listener{
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS, armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()){
-										if(Support.hasSpartan()){
+										if(SupportedPlugins.SPARTAN.isPluginLoaded()){
 											SpartanSupport.cancelFastEat(player);
 										}
 										if(player.getFoodLevel()+food<=20){
@@ -454,7 +454,7 @@ public class Armor implements Listener{
 					}
 					if(Main.CE.hasEnchantment(armor, CEnchantments.ANGEL)){
 						if(CEnchantments.ANGEL.isEnabled()){
-							if(Support.hasFactions()||Support.hasFeudal()){
+							if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
 								int radius = 4+Main.CE.getPower(armor, CEnchantments.ANGEL);
 								for(Entity en : player.getNearbyEntities(radius, radius, radius)){
 									if(en instanceof Player){

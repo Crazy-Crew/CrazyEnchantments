@@ -11,165 +11,44 @@ import me.badbones69.crazyenchantments.Main;
 
 public class Support {
 	
-	public static boolean hasEpicSpawners(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("EpicSpawners")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasAAC(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("AAC")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasDakata(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("DakataAntiCheat")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasNoCheatPlus(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("NoCheatPlus")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasVault(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("Vault")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasWorldEdit(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("WorldEdit")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasWorldGuard(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("WorldGuard")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasFactions(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("Factions")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasFeudal(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("Feudal")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasAcidIsland(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("AcidIsland")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasASkyBlock(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("ASkyBlock")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasKingdoms(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("Kingdoms")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasSilkSpawner(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("SilkSpawners")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasSpartan(){
-		if(Bukkit.getServer().getPluginManager().getPlugin("Spartan")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasMobStacker() {
-		if(Bukkit.getServer().getPluginManager().getPlugin("MobStacker")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasMobStacker2() {
-		if(Bukkit.getServer().getPluginManager().getPlugin("MobStacker2")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasStackMob() {
-		if(Bukkit.getServer().getPluginManager().getPlugin("StackMob")!=null){
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean hasMegaSkills() {
-		if(Bukkit.getServer().getPluginManager().getPlugin("MegaSkills")!=null){
-			return true;
-		}
-		return false;
-	}
-	
 	public static boolean inTerritory(Player player){
-		if(hasFactions()){
-			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
-			if(factions.getDescription().getAuthors().contains("drtshock")){
-				if(FactionsUUID.inTerritory(player)){
-					return true;
-				}
-			}
-			if(factions.getDescription().getWebsite()!=null){
-				if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-					if(FactionsSupport.inTerritory(player)){
-						return true;
-					}
-				}
+		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
+			if(FactionsUUID.inTerritory(player)){
+				return true;
 			}
 		}
-		if(hasFeudal()){
+		if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()){
+			if(FactionsSupport.inTerritory(player)){
+				return true;
+			}
+		}
+		if(SupportedPlugins.FEUDAL.isPluginLoaded()){
 			if(FeudalSupport.inTerritory(player)){
 				return true;
 			}
 		}
-		if(hasASkyBlock()){
+		if(SupportedPlugins.ASKYBLOCK.isPluginLoaded()){
 			if(ASkyBlockSupport.inTerritory(player)){
 				return true;
 			}
 		}
-		if(hasAcidIsland()){
+		if(SupportedPlugins.ACID_ISLAND.isPluginLoaded()){
 			if(AcidIslandSupport.inTerritory(player)){
 				return true;
 			}
 		}
-		if(hasKingdoms()){
+		if(SupportedPlugins.KINGDOMS.isPluginLoaded()){
 			if(KingdomSupport.inTerritory(player)){
+				return true;
+			}
+		}
+		if(SupportedPlugins.TOWNY.isPluginLoaded()) {
+			if(TownySupport.inTerritory(player)) {
+				return true;
+			}
+		}
+		if(SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded()) {
+			if(LegacyFactionsSupport.inTerritory(player)) {
 				return true;
 			}
 		}
@@ -177,37 +56,46 @@ public class Support {
 	}
 	
 	public static boolean isFriendly(Entity P, Entity O){
-		if(P instanceof Player&&O instanceof Player){
+		if(P instanceof Player && O instanceof Player){
 			Player player = (Player) P;
 			Player other = (Player) O;
-			if(hasFactions()){
-				Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
-				if(factions.getDescription().getAuthors().contains("drtshock")){
-					if(FactionsUUID.isFriendly(player, other))return true;
-				}
-				if(factions.getDescription().getWebsite()!=null){
-					if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-						if(FactionsSupport.isFriendly(player, other))return true;
+			if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
+					if(FactionsUUID.isFriendly(player, other)) {
+						return true;
 					}
-				}
 			}
-			if(hasFeudal()){
+			if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()){
+					if(FactionsSupport.isFriendly(player, other)) {
+						return true;
+					}
+			}
+			if(SupportedPlugins.FEUDAL.isPluginLoaded()){
 				if(FeudalSupport.isFrendly(player, other)){
 					return true;
 				}
 			}
-			if(hasASkyBlock()){
+			if(SupportedPlugins.ASKYBLOCK.isPluginLoaded()){
 				if(ASkyBlockSupport.isFriendly(player, other)){
 					return true;
 				}
 			}
-			if(hasAcidIsland()){
+			if(SupportedPlugins.ACID_ISLAND.isPluginLoaded()){
 				if(AcidIslandSupport.isFriendly(player, other)){
 					return true;
 				}
 			}
-			if(hasKingdoms()){
+			if(SupportedPlugins.KINGDOMS.isPluginLoaded()){
 				if(KingdomSupport.isFriendly(player, other)){
+					return true;
+				}
+			}
+			if(SupportedPlugins.TOWNY.isPluginLoaded()){
+				if(TownySupport.isFriendly(player, other)){
+					return true;
+				}
+			}
+			if(SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded()){
+				if(LegacyFactionsSupport.isFriendly(player, other)){
 					return true;
 				}
 			}
@@ -216,64 +104,67 @@ public class Support {
 	}
 	
 	public static boolean canBreakBlock(Player player, Block block){
-		if(hasFactions()){
-			Plugin factions = Bukkit.getServer().getPluginManager().getPlugin("Factions");
-			if(player!=null){
-				if(factions.getDescription().getAuthors().contains("drtshock")){
-					if(FactionsUUID.canBreakBlock(player, block))return true;
-					if(!FactionsUUID.canBreakBlock(player, block))return false;
-				}
-				if(factions.getDescription().getWebsite()!=null){
-					if(factions.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-						if(FactionsSupport.canBreakBlock(player, block))return true;
-						if(!FactionsSupport.canBreakBlock(player, block))return false;
-					}
+		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
+			if(player != null){
+				if(!FactionsUUID.canBreakBlock(player, block)) {
+					return false;
 				}
 			}
 		}
-		if(hasFeudal()){
-			if(FeudalSupport.canBreakBlock(player, block)){
-				return true;
-			}else{
+		if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()){
+			if(!FactionsSupport.canBreakBlock(player, block)) {
 				return false;
 			}
 		}
-		if(hasKingdoms()){
-			if(KingdomSupport.canBreakBlock(player, block)){
-				return true;
+		if(SupportedPlugins.FEUDAL.isPluginLoaded()){
+			if(!FeudalSupport.canBreakBlock(player, block)){
+				return false;
+			}
+		}
+		if(SupportedPlugins.KINGDOMS.isPluginLoaded()){
+			if(!KingdomSupport.canBreakBlock(player, block)){
+				return false;
+			}
+		}
+		if(SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded()) {
+			if(!LegacyFactionsSupport.canBreakBlock(player, block)) {
+				return false;
 			}
 		}
 		return true;
 	}
 	
 	public static boolean allowsPVP(Location loc){
-		if(hasWorldEdit() && hasWorldGuard()){
-			if(WorldGuard.allowsPVP(loc))return true;
-			if(!WorldGuard.allowsPVP(loc))return false;
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
+			if(WorldGuard.allowsPVP(loc)) {
+				return true;
+			}
 		}
 		return true;
 	}
 	
 	public static boolean allowsBreak(Location loc){
-		if(hasWorldEdit() && hasWorldGuard()){
-			if(WorldGuard.allowsBreak(loc))return true;
-			if(!WorldGuard.allowsBreak(loc))return false;
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
+			if(WorldGuard.allowsBreak(loc)) {
+				return true;
+			}
 		}
 		return true;
 	}
 	
 	public static boolean allowsExplotions(Location loc){
-		if(hasWorldEdit() && hasWorldGuard()){
-			if(WorldGuard.allowsExplosions(loc))return true;
-			if(!WorldGuard.allowsExplosions(loc))return false;
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
+			if(WorldGuard.allowsExplosions(loc)) {
+				return true;
+			}
 		}
 		return true;
 	}
 	
 	public static boolean inWingsRegion(Player player){
-		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")){
-			for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")){
-				if(hasWorldEdit() && hasWorldGuard()){
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
+			if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")){
+				for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")){
 					if(WorldGuard.inRegion(rg, player.getLocation())){
 						return true;
 					}else{
@@ -299,14 +190,70 @@ public class Support {
 	}
 	
 	public static void noStack(Entity en) {
-		if (hasMobStacker()) {
+		if (SupportedPlugins.MOB_STACKER.isPluginLoaded()) {
 			MobStacker.noStack(en);
 			return;
 		}
-		if (hasMobStacker2()) {
+		if (SupportedPlugins.MOB_STACKER_2.isPluginLoaded()) {
 			MobStacker2.noStack(en);
 			return;
 		}
+	}
+	
+	public enum SupportedPlugins{
+		
+		LEGACY_FACTIONS("LegacyFactions"),
+		TOWNY("Towny"),
+		EPIC_SPAWNERS("EpicSpawners"),
+		AAC("AAC"),
+		DAKATA("DakataAntiCheat"),
+		NO_CHEAT_PLUS("NoCheatPlus"),
+		VAULT("Vault"),
+		WORLD_EDIT("WorldEdit"),
+		WORLD_GUARD("WorldGuard"),
+		FACTIONS_MASSIVE_CRAFT("Factions"),
+		FACTIONS_UUID("Factions"),
+		FEUDAL("Feudal"),
+		ACID_ISLAND("AcidIsland"),
+		ASKYBLOCK("ASkyBlock"),
+		KINGDOMS("Kingdoms"),
+		SILK_SPAWNERS("SilkSpawners"),
+		SPARTAN("Spartan"),
+		MOB_STACKER("MobStacker"),
+		MOB_STACKER_2("MobStacker2"),
+		STACK_MOB("StackMob"),
+		MEGA_SKILLS("MegaSkills");
+		
+		private String name;
+		
+		private SupportedPlugins(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public Boolean isPluginLoaded() {
+			Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(name);
+			if(this == SupportedPlugins.FACTIONS_MASSIVE_CRAFT) {
+				if(plugin != null) {
+					if(plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+						return true;
+					}
+				}
+				return false;
+			}else if(this == SupportedPlugins.FACTIONS_UUID){
+				if(plugin != null) {
+					if(plugin.getDescription().getAuthors().contains("drtshock")){
+						return true;
+					}
+				}
+				return false;
+			}
+			return plugin != null;
+		}
+		
 	}
 	
 }

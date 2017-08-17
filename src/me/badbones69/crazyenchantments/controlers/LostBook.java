@@ -45,14 +45,14 @@ public class LostBook implements Listener{
 						}
 						if(toggle){
 							if(Methods.isInvFull(player)){
-								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMsg().getString("Messages.Inventory-Full")));
+								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
 								return;
 							}
 							Methods.removeItem(item, player);
 							ItemStack book = EnchantmentControl.pick(category);
 							player.getInventory().addItem(book);
 							player.updateInventory();
-							player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMsg().getString("Messages.Clean-Lost-Book")
+							player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMessages().getString("Messages.Clean-Lost-Book")
 									.replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
 							if(Main.settings.getConfig().contains("Categories."+category+".LostBook.FireworkToggle")){
 								if(Main.settings.getConfig().contains("Categories."+category+".LostBook.FireworkColors")){

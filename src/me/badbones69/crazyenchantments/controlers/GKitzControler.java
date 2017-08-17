@@ -92,7 +92,7 @@ public class GKitzControler implements Listener{
 		Inventory inv = e.getInventory();
 		if(inv != null){
 			FileConfiguration gkitz = Main.settings.getGKitz();
-			FileConfiguration msg = Main.settings.getMsg();
+			FileConfiguration msg = Main.settings.getMessages();
 			Player player = (Player) e.getWhoClicked();
 			CEPlayer p = Main.CE.getCEPlayer(player);
 			ItemStack item = e.getCurrentItem();
