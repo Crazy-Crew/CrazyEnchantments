@@ -98,7 +98,7 @@ public class PickAxes implements Listener{
 													drop.setType(getOres().get(b.getType()));
 													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-															drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+															drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
 														}
 													}
 												}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())){
@@ -107,7 +107,7 @@ public class PickAxes implements Listener{
 														drop.setAmount(1 + Main.CE.getPower(item, CEnchantments.AUTOSMELT));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
 															}
 														}
 													}
@@ -115,7 +115,7 @@ public class PickAxes implements Listener{
 													if(getItems().contains(b.getType())){
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
 															}
 														}
 													}
@@ -159,7 +159,7 @@ public class PickAxes implements Listener{
 														drop.setAmount(Main.CE.getPower(item, CEnchantments.AUTOSMELT));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
 																fortune = true;
 															}
 														}
@@ -173,7 +173,7 @@ public class PickAxes implements Listener{
 															if(item.getItemMeta().hasEnchants()){
 																if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 																	if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																		drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																		drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
 																		toggle = false;
 																	}
 																}
@@ -269,7 +269,7 @@ public class PickAxes implements Listener{
 									drop += Main.CE.getPower(item, CEnchantments.AUTOSMELT);
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 										if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-											drop += item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
+											drop += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
 										}
 									}
 									ItemStack i = new ItemStack(getOres().get(block.getType()), drop);
@@ -303,7 +303,7 @@ public class PickAxes implements Listener{
 								int drop = 1;
 								if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 									if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-										drop += item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
+										drop += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
 									}
 								}
 								if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE ||
