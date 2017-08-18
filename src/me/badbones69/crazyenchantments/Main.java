@@ -57,6 +57,7 @@ import me.badbones69.crazyenchantments.enchantments.Swords;
 import me.badbones69.crazyenchantments.enchantments.Tools;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
+import me.badbones69.crazyenchantments.multisupport.EpicSpawnersSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
 import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
