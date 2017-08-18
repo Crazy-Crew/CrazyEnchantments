@@ -128,6 +128,9 @@ public class Main extends JavaPlugin implements Listener{
 		if(SupportedPlugins.DAKATA.isPluginLoaded()){
 			pm.registerEvents(new DakataAntiCheatSupport(), this);
 		}
+		if(SupportedPlugins.EPIC_SPAWNERS.isPluginLoaded()) {
+			pm.registerEvents(new EpicSpawnersSupport(), this);
+		}
 		//==========================================================================\\
 		try {
 			if(settings.getConfig().contains("Settings.Update-Checker")){

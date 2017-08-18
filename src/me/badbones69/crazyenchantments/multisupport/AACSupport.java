@@ -18,17 +18,30 @@ public class AACSupport implements Listener{
 	private static Plugin plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 	
 	public static void exemptPlayer(Player player){
-		if(!exempted.contains(player.getUniqueId())){
-			exempted.add(player.getUniqueId());
+		if(player != null) {
+			if(player.getUniqueId() != null) {
+				if(!exempted.contains(player.getUniqueId())){
+					exempted.add(player.getUniqueId());
+				}
+			}
 		}
 	}
 	
 	public static void unexemptPlayer(Player player){
-		exempted.remove(player.getUniqueId());
+		if(player != null) { 
+			if(player.getUniqueId() != null) { 
+				exempted.remove(player.getUniqueId()); 
+			} 
+		} 
 	}
 	
 	public static Boolean isExempted(Player player){
-		return exempted.contains(player.getUniqueId());
+		if(player != null) { 
+			if(player.getUniqueId() != null) { 
+				return exempted.contains(player.getUniqueId()); 
+			} 
+		} 
+		return false; 
 	}
 	
 	public static void exemptPlayerTime(Player player){
