@@ -238,15 +238,21 @@ public class Support {
 			Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(name);
 			if(this == SupportedPlugins.FACTIONS_MASSIVE_CRAFT) {
 				if(plugin != null) {
-					if(plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
-						return true;
+					if(plugin.getDescription() != null) {
+						if(plugin.getDescription().getWebsite() != null) {
+							if(plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+								return true;
+							}
+						}
 					}
 				}
 				return false;
 			}else if(this == SupportedPlugins.FACTIONS_UUID){
 				if(plugin != null) {
-					if(plugin.getDescription().getAuthors().contains("drtshock")){
-						return true;
+					if(plugin.getDescription().getAuthors() != null){
+						if(plugin.getDescription().getAuthors().contains("drtshock")) {
+							return true;
+						}
 					}
 				}
 				return false;
