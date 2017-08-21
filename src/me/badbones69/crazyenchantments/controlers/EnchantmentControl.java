@@ -286,6 +286,7 @@ public class EnchantmentControl implements Listener{
 				if(item.getType()!=Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1).getType())return;
 				if(item.hasItemMeta()){
 					if(item.getItemMeta().hasDisplayName()){
+						e.setCancelled(true);
 						String name = "";
 						Player player = e.getPlayer();
 						List<String> desc = new ArrayList<String>();

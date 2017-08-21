@@ -47,9 +47,10 @@ Messages:
     Destroyed: '&cYour upgrade failed and the lower level enchantment was lost.'
     Failed: '&cThe book failed to upgrade to the item.'
   Rage:
-    Building: '&aKeep it up, your rage is building.'
-    Cooled-Down: '&cYour Rage has Cooled Down.'
-    Rage-Up: '&3You are now doing &a%Level%x &3Damage.'
+    Building: '&7[&c&lRage&7]: &aKeep it up, your rage is building.'
+    Cooled-Down: '&7[&c&lRage&7]: &cYour Rage has just cooled down.'
+    Rage-Up: '&7[&c&lRage&7]: &7You are now doing &a%Level%x &7Damage.'
+    Damaged: '&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!'
   InfoGUI:
     Inventory:
       Size: 18

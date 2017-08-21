@@ -187,7 +187,7 @@ public class Bows implements Listener{
 								if(Enchant.get(arrow).contains(CEnchantments.PULL)){
 									if(CEnchantments.PULL.isEnabled()){
 										if(Methods.randomPicker(5 - Main.CE.getPower(Arrow.get(arrow), CEnchantments.PULL))){
-											Vector v = P.get(arrow).getLocation().toVector().subtract(en.getLocation().toVector()).normalize().multiply(3).setY(2);
+											Vector v = P.get(arrow).getLocation().toVector().subtract(en.getLocation().toVector()).normalize().multiply(3);
 											if(en instanceof Player){
 												EnchantmentUseEvent event = new EnchantmentUseEvent((Player)e.getEntity(), CEnchantments.PULL, item);
 												Bukkit.getPluginManager().callEvent(event);

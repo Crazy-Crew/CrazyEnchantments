@@ -95,7 +95,7 @@ public class PickAxes implements Listener{
 										if(Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY)){
 											for(ItemStack drop : b.getDrops()){
 												if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(b.getType())){
-													drop.setType(getOres().get(b.getType()));
+													drop = getOres().get(b.getType());
 													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 															drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
@@ -103,7 +103,7 @@ public class PickAxes implements Listener{
 													}
 												}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())){
 													if(Methods.randomPicker(2)){
-														drop.setType(getOres().get(b.getType()));
+														drop = getOres().get(b.getType());
 														drop.setAmount(1 + Main.CE.getPower(item, CEnchantments.AUTOSMELT));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
@@ -115,7 +115,7 @@ public class PickAxes implements Listener{
 													if(getItems().contains(b.getType())){
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
-																drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS))); 
 															}
 														}
 													}
@@ -144,18 +144,19 @@ public class PickAxes implements Listener{
 											Boolean fortune = false;
 											if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(b.getType())){
 												for(ItemStack drop : b.getDrops()){
+													drop = getOres().get(b.getType());
 													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
 															drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 															fortune = true;
 														}
 													}
-													b.getWorld().dropItem(b.getLocation(), new ItemStack(getOres().get(b.getType()), drop.getAmount()));
+													b.getWorld().dropItem(b.getLocation(), getOres(drop.getAmount()).get(b.getType()));
 												}
 											}else if(Main.CE.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())){
 												for(ItemStack drop : b.getDrops()){
 													if(Methods.randomPicker(2)){
-														drop.setType(getOres().get(b.getType()));
+														drop = getOres().get(b.getType());
 														drop.setAmount(Main.CE.getPower(item, CEnchantments.AUTOSMELT));
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)){
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)){
@@ -272,10 +273,7 @@ public class PickAxes implements Listener{
 											drop += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
 										}
 									}
-									ItemStack i = new ItemStack(getOres().get(block.getType()), drop);
-									if(i.getType() == Material.INK_SACK){
-										i = new ItemStack(getOres().get(block.getType()), drop, (short) 4);
-									}
+									ItemStack i = getOres(drop).get(block.getType());
 									block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), i);
 									if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
 										if(Methods.randomPicker(2)){
@@ -293,7 +291,7 @@ public class PickAxes implements Listener{
 						}
 					}
 				}
-				if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE ) && 
+				if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && 
 						!(Main.CE.hasEnchantment(item, CEnchantments.BLAST) || Main.CE.hasEnchantment(item, CEnchantments.TELEPATHY))){
 					if(CEnchantments.FURNACE.isEnabled()){
 						if(getOres().containsKey(block.getType())){
@@ -310,10 +308,7 @@ public class PickAxes implements Listener{
 										block.getType() == Material.LAPIS_ORE){
 									drop += Methods.percentPick(4, 1);
 								}
-								ItemStack i = new ItemStack(getOres().get(block.getType()), drop);
-								if(i.getType() == Material.INK_SACK){
-									i = new ItemStack(getOres().get(block.getType()), drop, (short) 4);
-								}
+								ItemStack i = getOres(drop).get(block.getType());
 								block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), i);
 								if(Main.CE.hasEnchantment(item, CEnchantments.EXPERIENCE)){
 									if(Methods.randomPicker(2)){
@@ -408,18 +403,32 @@ public class PickAxes implements Listener{
 		return blocks;
 	}
 	
-	private HashMap<Material, Material> getOres(){
-		HashMap<Material, Material> ores = new HashMap<Material, Material>();
-		ores.put(Material.COAL_ORE, Material.COAL);
-		ores.put(Material.QUARTZ_ORE, Material.QUARTZ);
-		ores.put(Material.IRON_ORE, Material.IRON_INGOT);
-		ores.put(Material.GOLD_ORE, Material.GOLD_INGOT);
-		ores.put(Material.DIAMOND_ORE, Material.DIAMOND);
-		ores.put(Material.EMERALD_ORE, Material.EMERALD);
-		ores.put(Material.REDSTONE_ORE, Material.REDSTONE);
-		ores.put(Material.GLOWING_REDSTONE_ORE, Material.REDSTONE);
-		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK,1,(short)4).getType());
-		return ores;
+	private HashMap<Material, ItemStack> getOres(){ 
+		HashMap<Material, ItemStack> ores = new HashMap<Material, ItemStack>(); 
+		ores.put(Material.COAL_ORE, new ItemStack(Material.COAL)); 
+		ores.put(Material.QUARTZ_ORE, new ItemStack(Material.QUARTZ)); 
+		ores.put(Material.IRON_ORE, new ItemStack(Material.IRON_INGOT)); 
+		ores.put(Material.GOLD_ORE, new ItemStack(Material.GOLD_INGOT)); 
+		ores.put(Material.DIAMOND_ORE, new ItemStack(Material.DIAMOND)); 
+		ores.put(Material.EMERALD_ORE, new ItemStack(Material.EMERALD)); 
+		ores.put(Material.REDSTONE_ORE, new ItemStack(Material.REDSTONE)); 
+		ores.put(Material.GLOWING_REDSTONE_ORE, new ItemStack(Material.REDSTONE)); 
+		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK, 1, (short)4)); 
+		return ores; 
+	}
+	
+	private HashMap<Material, ItemStack> getOres(int amount){ 
+		HashMap<Material, ItemStack> ores = new HashMap<Material, ItemStack>(); 
+		ores.put(Material.COAL_ORE, new ItemStack(Material.COAL, amount)); 
+		ores.put(Material.QUARTZ_ORE, new ItemStack(Material.QUARTZ, amount)); 
+		ores.put(Material.IRON_ORE, new ItemStack(Material.IRON_INGOT, amount)); 
+		ores.put(Material.GOLD_ORE, new ItemStack(Material.GOLD_INGOT, amount)); 
+		ores.put(Material.DIAMOND_ORE, new ItemStack(Material.DIAMOND, amount)); 
+		ores.put(Material.EMERALD_ORE, new ItemStack(Material.EMERALD, amount)); 
+		ores.put(Material.REDSTONE_ORE, new ItemStack(Material.REDSTONE, amount)); 
+		ores.put(Material.GLOWING_REDSTONE_ORE, new ItemStack(Material.REDSTONE, amount)); 
+		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK, amount, (short)4)); 
+		return ores; 
 	}
 	
 	private ArrayList<Material> getItems(){

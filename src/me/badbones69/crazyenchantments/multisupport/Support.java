@@ -136,8 +136,8 @@ public class Support {
 	
 	public static boolean allowsPVP(Location loc){
 		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
-			if(WorldGuard.allowsPVP(loc)) {
-				return true;
+			if(!WorldGuard.allowsPVP(loc)) {
+				return false;
 			}
 		}
 		return true;
@@ -145,8 +145,8 @@ public class Support {
 	
 	public static boolean allowsBreak(Location loc){
 		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
-			if(WorldGuard.allowsBreak(loc)) {
-				return true;
+			if(!WorldGuard.allowsBreak(loc)) {
+				return false;
 			}
 		}
 		return true;
@@ -154,8 +154,8 @@ public class Support {
 	
 	public static boolean allowsExplotions(Location loc){
 		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
-			if(WorldGuard.allowsExplosions(loc)) {
-				return true;
+			if(!WorldGuard.allowsExplosions(loc)) {
+				return false;
 			}
 		}
 		return true;
@@ -192,11 +192,12 @@ public class Support {
 	public static void noStack(Entity en) {
 		if (SupportedPlugins.MOB_STACKER.isPluginLoaded()) {
 			MobStacker.noStack(en);
-			return;
 		}
 		if (SupportedPlugins.MOB_STACKER_2.isPluginLoaded()) {
 			MobStacker2.noStack(en);
-			return;
+		}
+		if(SupportedPlugins.STACK_MOB.isPluginLoaded()) {
+			StackMobSupport.preventStacking(en);
 		}
 	}
 	

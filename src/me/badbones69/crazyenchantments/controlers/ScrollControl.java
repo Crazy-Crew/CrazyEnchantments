@@ -140,14 +140,13 @@ public class ScrollControl implements Listener{
 	@EventHandler
 	public void onClick(PlayerInteractEvent e){
 		Player player = e.getPlayer();
-		if(e.getItem()!=null){
-			ItemStack item = e.getItem();
-			if(item.hasItemMeta()){
-				if(item.getItemMeta().hasDisplayName()){
-					if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name")))){
-						player.sendMessage(Methods.getPrefix()+Methods.color(Main.settings.getMessages().getString("Messages.Right-Click-Black-Scroll")));
-					}
-				}
+		ItemStack item = Methods.getItemInHand(player);
+		if(item != null) {
+			if(Methods.isSimilar(item, getBlackScroll(1))) {
+				e.setCancelled(true);
+				player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Right-Click-Black-Scroll")));
+			}else if(Methods.isSimilar(item, getWhiteScroll(1)) || Methods.isSimilar(item, getTransmogScroll(1))){
+				e.setCancelled(true);
 			}
 		}
 	}

@@ -14,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -107,6 +108,16 @@ public class ProtectionCrystal implements Listener{
 				}
 			}
 			playersItems.remove(player.getUniqueId());
+		}
+	}
+	
+	@EventHandler
+	public void onCrystalClick(PlayerInteractEvent e) {
+		ItemStack item = Methods.getItemInHand(e.getPlayer());
+		if(item != null) {
+			if(Methods.isSimilar(item, getCrystals())) {
+				e.setCancelled(true);
+			}
 		}
 	}
 	
