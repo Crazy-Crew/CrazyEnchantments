@@ -15,6 +15,7 @@ import me.badbones69.crazyenchantments.Methods;
 public class DataStorage {
 	
 	private static int rageMaxLevel;
+	private static Boolean breakRageOnDamage;
 	private static ArrayList<GKitz> gkitz = new ArrayList<GKitz>();
 	private static ArrayList<CEPlayer> players = new ArrayList<CEPlayer>();
 	private static ArrayList<Material> blockList = new ArrayList<Material>();
@@ -31,6 +32,11 @@ public class DataStorage {
 			rageMaxLevel = Main.settings.getConfig().getInt("Settings.EnchantmentOptions.MaxRageLevel");
 		}else{
 			rageMaxLevel = 4;
+		}
+		if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Break-Rage-On-Damage")){
+			breakRageOnDamage = Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
+		}else{
+			breakRageOnDamage = true;
 		}
 		FileConfiguration gkit = Main.settings.getGKitz();
 		for(String kit : gkit.getConfigurationSection("GKitz").getKeys(false)){
@@ -54,6 +60,14 @@ public class DataStorage {
 	
 	public static void setRageMaxLevel(int level){
 		rageMaxLevel = level;
+	}
+	
+	public static Boolean isBreakRageOnDamageOn(){
+		return breakRageOnDamage;
+	}
+	
+	public static void setBreakRageOnDamage(Boolean toggle){
+		breakRageOnDamage = toggle;
 	}
 	
 	public static ArrayList<Material> getBlockList(){

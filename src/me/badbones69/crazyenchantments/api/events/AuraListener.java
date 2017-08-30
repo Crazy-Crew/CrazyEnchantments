@@ -18,29 +18,33 @@ public class AuraListener implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerMoveEvent(PlayerMoveEvent e){
-		for(ItemStack item : e.getPlayer().getEquipment().getArmorContents()){
-			Player player = e.getPlayer();
-			ArrayList<Player> players = getNearByPlayers(player, 3);
-			if(Main.CE.hasEnchantments(item)){
-				for(CEnchantments enchant : getAuraEnchantments()){
-					if(Main.CE.hasEnchantment(item, enchant)){
-						int power = Main.CE.getPower(item, enchant);
-						if(players.size() > 0){
-							for(Player other : players){
-								Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, other, enchant, power));
+		if(!e.isCancelled()) {
+			if((e.getFrom().getBlockX() != e.getTo().getBlockX()) || (e.getFrom().getBlockY() != e.getTo().getBlockY()) || (e.getFrom().getBlockZ() != e.getTo().getBlockZ())) {
+				for(ItemStack item : e.getPlayer().getEquipment().getArmorContents()){
+					Player player = e.getPlayer();
+					ArrayList<Player> players = getNearByPlayers(player, 3);
+					if(Main.CE.hasEnchantments(item)){
+						for(CEnchantments enchant : getAuraEnchantments()){
+							if(Main.CE.hasEnchantment(item, enchant)){
+								int power = Main.CE.getPower(item, enchant);
+								if(players.size() > 0){
+									for(Player other : players){
+										Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, other, enchant, power));
+									}
+								}
 							}
 						}
 					}
 				}
-			}
-		}
-		for(Player player : getNearByPlayers(e.getPlayer(), 3)){
-			for(ItemStack item : player.getEquipment().getArmorContents()){
-				if(Main.CE.hasEnchantments(item)){
-					for(CEnchantments enchant : getAuraEnchantments()){
-						if(Main.CE.hasEnchantment(item, enchant)){
-							int power = Main.CE.getPower(item, enchant);
-							Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, e.getPlayer(), enchant, power));
+				for(Player player : getNearByPlayers(e.getPlayer(), 3)){
+					for(ItemStack item : player.getEquipment().getArmorContents()){
+						if(Main.CE.hasEnchantments(item)){
+							for(CEnchantments enchant : getAuraEnchantments()){
+								if(Main.CE.hasEnchantment(item, enchant)){
+									int power = Main.CE.getPower(item, enchant);
+									Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, e.getPlayer(), enchant, power));
+								}
+							}
 						}
 					}
 				}

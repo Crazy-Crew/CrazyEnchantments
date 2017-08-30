@@ -1,6 +1,9 @@
 package me.badbones69.crazyenchantments.api.events;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+
+import me.badbones69.crazyenchantments.multisupport.Version;
 
 /**
  * @Author Borlea
@@ -9,11 +12,12 @@ import org.bukkit.inventory.ItemStack;
  * Jul 30, 2015 6:46:16 PM
  */
 public enum ArmorType{
+	
 	HELMET(5), CHESTPLATE(6), LEGGINGS(7), BOOTS(8);
 
 	private final int slot;
 
-	ArmorType(int slot){
+	private ArmorType(int slot){
 		this.slot = slot;
 	}
 
@@ -29,6 +33,11 @@ public enum ArmorType{
 		}
 		if(itemStack.getType().name().toLowerCase().contains("skull")){
 			return HELMET;
+		}
+		if(Version.getVersion().comparedTo(Version.v1_9_R1) >= 0) {
+			if(itemStack.getType() == Material.valueOf("ELYTRA")) {
+				return CHESTPLATE;
+			}
 		}
 		switch (itemStack.getType()){
 			case DIAMOND_HELMET:
@@ -63,4 +72,5 @@ public enum ArmorType{
 	public int getSlot(){
 		return slot;
 	}
+	
 }

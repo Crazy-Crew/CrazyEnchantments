@@ -345,11 +345,9 @@ public class Armor implements Listener{
 						if(CEnchantments.ACIDRAIN.isEnabled()){
 							if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
 									|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-								if(Methods.randomPicker(45)){
+								if(Methods.randomPicker(15)){
 									other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4*20, 1));
 									int time = 35 - (power * 5);
-									//time > 0 ? time : 0
-									//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
 									Calendar c = cal;
 									c.add(Calendar.SECOND, time > 0 ? time : 5);
 									eff.put(enchant, c);
@@ -361,11 +359,9 @@ public class Armor implements Listener{
 						if(CEnchantments.SANDSTORM.isEnabled()){
 							if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
 									|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-								if(Methods.randomPicker(38)){
+								if(Methods.randomPicker(10)){
 									other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10*20, 0));
 									int time = 35 - (power * 5);
-									//time > 0 ? time : 0
-									//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
 									Calendar c = cal;
 									c.add(Calendar.SECOND, time > 0 ? time : 5);
 									eff.put(enchant, c);
@@ -377,11 +373,9 @@ public class Armor implements Listener{
 						if(CEnchantments.RADIANT.isEnabled()){
 							if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant))
 									|| (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))){
-								if(Methods.randomPicker(25)){
+								if(Methods.randomPicker(5)){
 									other.setFireTicks(5 * 20);
 									int time = 20 - (power * 5);
-									//time > 0 ? time : 0
-									//Means if "time" is less then 0 put the time as "time" other wise set it to 0.
 									Calendar c = cal;
 									c.add(Calendar.SECOND, time > 0 ? time : 0);
 									eff.put(enchant, c);

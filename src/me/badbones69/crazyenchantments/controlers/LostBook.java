@@ -44,6 +44,7 @@ public class LostBook implements Listener{
 							}
 						}
 						if(toggle){
+							e.setCancelled(true);
 							if(Methods.isInvFull(player)){
 								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
 								return;

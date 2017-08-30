@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.api.CEnchantments;
@@ -29,6 +30,13 @@ public class CommandChecker implements Listener{
 					}
 				}
 			}
+		}else if(e.getMessage().toLowerCase().equalsIgnoreCase("/heal")) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					Main.CE.updatePlayerEffects(player);
+				}
+			}.runTaskLater(Main.CE.getPlugin(), 5);
 		}
 	}
 	

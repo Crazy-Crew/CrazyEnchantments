@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -249,6 +250,16 @@ public class Scrambler implements Listener{
 		Inventory inv = e.getInventory();
 		if(inv != null){
 			if(inv.getName().equals(Methods.color(Main.settings.getConfig().getString("Settings.Scrambler.GUI.Name")))){
+				e.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onScramblerClick(PlayerInteractEvent e) {
+		ItemStack item = Methods.getItemInHand(e.getPlayer());
+		if(item != null) {
+			if(Methods.isSimilar(item, getScramblers())) {
 				e.setCancelled(true);
 			}
 		}

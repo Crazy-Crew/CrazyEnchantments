@@ -28,14 +28,13 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 import me.badbones69.crazyenchantments.controlers.FireworkDamageAPI;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_10_R1;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_11_R1;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_7_R4;
@@ -46,8 +45,6 @@ import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_9_R1;
 import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_9_R2;
 
 public class Methods{
-	
-	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	
 	public static String color(String msg){
 		return ChatColor.translateAlternateColorCodes('&', msg);
@@ -65,7 +62,10 @@ public class Methods{
 	}
 	
 	public static Integer getRandomNumber(int range) {
-		return ((new Random().nextInt(range - 1)) + 1);
+		if(range == 0) {
+			range++;
+		}
+		return new Random().nextInt(range) + 1;
 	}
 	
 	public static Integer getRandomNumber(String range){
@@ -623,7 +623,7 @@ public class Methods{
 			c.setDoOutput(true);
 			c.setRequestMethod("POST");
 			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes("UTF-8"));
-			String oldVersion = plugin.getDescription().getVersion();
+			String oldVersion = Main.CE.getPlugin().getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
 				Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
@@ -639,7 +639,7 @@ public class Methods{
 			c.setDoOutput(true);
 			c.setRequestMethod("POST");
 			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes("UTF-8"));
-			String oldVersion = plugin.getDescription().getVersion();
+			String oldVersion = Main.CE.getPlugin().getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
 				player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
@@ -785,7 +785,7 @@ public class Methods{
 	}
 	
 	private static void detonate(final Firework f) {
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.CE.getPlugin(), new Runnable() {
 			public void run() {
 				f.detonate();
 			}
@@ -885,10 +885,10 @@ public class Methods{
 	
 	public static boolean isSimilar(ItemStack one, ItemStack two){
 		if(one.getType() == two.getType()){
-			if(one.hasItemMeta()){
-				if(one.getItemMeta().hasDisplayName()){
+			if(one.hasItemMeta() && two.hasItemMeta()){
+				if(one.getItemMeta().hasDisplayName() && two.getItemMeta().hasDisplayName()){
 					if(one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())){
-						if(one.getItemMeta().hasLore()){
+						if(one.getItemMeta().hasLore() && two.getItemMeta().hasLore()){
 							int i = 0;
 							for(String lore : one.getItemMeta().getLore()){
 								if(!lore.equals(two.getItemMeta().getLore().get(i))){
@@ -976,9 +976,9 @@ public class Methods{
 	}
 	
 	public static void explode(Entity player, Entity arrow){
-		ParticleEffect.FLAME.display(0, 0, 0, 1, 200, arrow.getLocation().add(0,1,0), 100);
-		ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, arrow.getLocation().add(0,1,0), 100);
-		ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, arrow.getLocation().add(0,1,0), 100);
+		ParticleEffect.FLAME.display(0, 0, 0, 1, 200, arrow.getLocation(), 100);
+		ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, arrow.getLocation(), 100);
+		ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, arrow.getLocation(), 100);
 		for(Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)){
 			if(Support.allowsPVP(e.getLocation())){
 				if(e.getType() == EntityType.DROPPED_ITEM){

@@ -106,52 +106,55 @@ public class DustControl implements Listener{
 			}
 		}
 	}
-	
+ 	
 	@EventHandler
 	public void openDust(PlayerInteractEvent e){
 		Player player = e.getPlayer();
 		FileConfiguration config = Main.settings.getConfig();
-		if(e.getAction()==Action.RIGHT_CLICK_AIR||e.getAction()==Action.RIGHT_CLICK_BLOCK){
-			if(Methods.getItemInHand(player)!=null){
+		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if(Methods.getItemInHand(player) != null){
 				ItemStack item = Methods.getItemInHand(player);
-				if(item.hasItemMeta()){
-					if(item.getItemMeta().hasDisplayName()&&item.getItemMeta().hasLore()){
-						if(item.getType()==Methods.makeItem(config.getString("Settings.Dust.MysteryDust.Item"), 1, "", Arrays.asList("")).getType()){
-							if(item.getItemMeta().getDisplayName().equals(Methods.color(config.getString("Settings.Dust.MysteryDust.Name")))){
-								e.setCancelled(true);
-								Methods.setItemInHand(player, Methods.removeItem(item));
-								player.getInventory().addItem(getDust(pickDust(), 1, Methods.percentPick(getPercent("MysteryDust", item)+1, 1)));
-								player.updateInventory();
-								try{
-									if(Version.getVersion().getVersionInteger()>=191){
-										player.playSound(player.getLocation(), Sound.valueOf("BLOCK_LAVA_POP"), 1, 1);
-									}else{
-										player.playSound(player.getLocation(), Sound.valueOf("LAVA_POP"), 1, 1);
-									}
-								}catch(Exception ex){}
-								if(config.contains("Settings.Dust.MysteryDust.Firework.Toggle")){
-									if(config.contains("Settings.Dust.MysteryDust.Firework.Colors")){
-										if(config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")){
-											ArrayList<Color> colors = new ArrayList<Color>();
-											String Cs = config.getString("Settings.Dust.MysteryDust.Firework.Colors");
-											if(Cs.contains(", ")){
-												for(String color : Cs.split(", ")){
-													Color c = Methods.getColor(color);
-													if(c != null){
-														colors.add(c);
-													}
-												}
-											}else{
-												Color c = Methods.getColor(Cs);
-												if(c != null){
-													colors.add(c);
-												}
+				if(hasPercent("SuccessDust", item)) {
+					if(Methods.isSimilar(item, getDust("SuccessDust", 1, getPercent("SuccessDust", item)))) {
+						e.setCancelled(true);
+					}
+				}else if(hasPercent("DestroyDust", item)){
+					if(Methods.isSimilar(item, getDust("DestroyDust", 1, getPercent("DestroyDust", item)))) {
+						e.setCancelled(true);
+					}
+				}else if(hasPercent("MysteryDust", item)) {
+					if(Methods.isSimilar(item, getDust("MysteryDust", 1, getPercent("MysteryDust", item)))) {
+						e.setCancelled(true);
+						Methods.setItemInHand(player, Methods.removeItem(item));
+						player.getInventory().addItem(getDust(pickDust(), 1, Methods.percentPick(getPercent("MysteryDust", item)+1, 1)));
+						player.updateInventory();
+						try{
+							if(Version.getVersion().getVersionInteger()>=191){
+								player.playSound(player.getLocation(), Sound.valueOf("BLOCK_LAVA_POP"), 1, 1);
+							}else{
+								player.playSound(player.getLocation(), Sound.valueOf("LAVA_POP"), 1, 1);
+							}
+						}catch(Exception ex){}
+						if(config.contains("Settings.Dust.MysteryDust.Firework.Toggle")){
+							if(config.contains("Settings.Dust.MysteryDust.Firework.Colors")){
+								if(config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")){
+									ArrayList<Color> colors = new ArrayList<Color>();
+									String Cs = config.getString("Settings.Dust.MysteryDust.Firework.Colors");
+									if(Cs.contains(", ")){
+										for(String color : Cs.split(", ")){
+											Color c = Methods.getColor(color);
+											if(c != null){
+												colors.add(c);
 											}
-											Methods.fireWork(player.getLocation().add(0, 1, 0), colors);
+										}
+									}else{
+										Color c = Methods.getColor(Cs);
+										if(c != null){
+											colors.add(c);
 										}
 									}
+									Methods.fireWork(player.getLocation().add(0, 1, 0), colors);
 								}
-								return;
 							}
 						}
 					}
@@ -257,27 +260,82 @@ public class DustControl implements Listener{
 		return dusts.get(r.nextInt(dusts.size()));
 	}
 	
-	public static Integer getPercent(String dust, ItemStack item){
-		List<String> lore = item.getItemMeta().getLore();
-		List<String> L = Main.settings.getConfig().getStringList("Settings.Dust."+dust+".Lore");
+	public static Boolean hasPercent(String dust, ItemStack item){
 		String arg = "";
-		int i = 0;
-		for(String l : L){
-			l = Methods.color(l);
-			String lo = lore.get(i);
-			if(l.contains("%Percent%")){
-				String[] b = l.split("%Percent%");
-				if(b.length>=1)arg = lo.replace(b[0], "");
-				if(b.length>=2)arg = arg.replace(b[1], "");
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				List<String> lore = item.getItemMeta().getLore();
+				List<String> L = Main.settings.getConfig().getStringList("Settings.Dust." + dust + ".Lore");
+				int i = 0;
+				if(lore != null && L != null) {
+					if(lore.size() == L.size()) {
+						for(String l : L){
+							l = Methods.color(l);
+							String lo = lore.get(i);
+							if(l.contains("%Percent%")){
+								String[] b = l.split("%Percent%");
+								if(b.length>=1) {
+									arg = lo.replace(b[0], "");
+								}
+								if(b.length>=2) {
+									arg = arg.replace(b[1], "");
+								}
+								break;
+							}
+							if(l.contains("%percent%")){
+								String[] b = l.split("%percent%");
+								if(b.length>=1)arg = lo.replace(b[0], "");
+								if(b.length>=2)arg = arg.replace(b[1], "");
+								break;
+							}
+							i++;
+						}
+					}
+				}
 			}
-			if(l.contains("%percent%")){
-				String[] b = l.split("%percent%");
-				if(b.length>=1)arg = lo.replace(b[0], "");
-				if(b.length>=2)arg = arg.replace(b[1], "");
-			}
-			i++;
 		}
-		return Integer.parseInt(arg);
+		return Methods.isInt(arg);
+	}
+	
+	public static Integer getPercent(String dust, ItemStack item){
+		String arg = "";
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				List<String> lore = item.getItemMeta().getLore();
+				List<String> L = Main.settings.getConfig().getStringList("Settings.Dust." + dust + ".Lore");
+				int i = 0;
+				if(lore != null && L != null) {
+					if(lore.size() == L.size()) {
+						for(String l : L){
+							l = Methods.color(l);
+							String lo = lore.get(i);
+							if(l.contains("%Percent%")){
+								String[] b = l.split("%Percent%");
+								if(b.length>=1) {
+									arg = lo.replace(b[0], "");
+								}
+								if(b.length>=2) {
+									arg = arg.replace(b[1], "");
+								}
+								break;
+							}
+							if(l.contains("%percent%")){
+								String[] b = l.split("%percent%");
+								if(b.length>=1)arg = lo.replace(b[0], "");
+								if(b.length>=2)arg = arg.replace(b[1], "");
+								break;
+							}
+							i++;
+						}
+					}
+				}
+			}
+		}
+		if(Methods.isInt(arg)) {
+			return Integer.parseInt(arg);
+		}else {
+			return 0;
+		}
 	}
 	
 }
