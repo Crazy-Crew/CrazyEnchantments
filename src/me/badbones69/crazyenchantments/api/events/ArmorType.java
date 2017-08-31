@@ -11,27 +11,27 @@ import me.badbones69.crazyenchantments.multisupport.Version;
  * @Website http://thederpygolems.ca/
  * Jul 30, 2015 6:46:16 PM
  */
-public enum ArmorType{
+public enum ArmorType {
 	
 	HELMET(5), CHESTPLATE(6), LEGGINGS(7), BOOTS(8);
-
+	
 	private final int slot;
-
-	private ArmorType(int slot){
+	
+	private ArmorType(int slot) {
 		this.slot = slot;
 	}
-
+	
 	/**
 	 * Attempts to match the ArmorType for the specified ItemStack.
 	 *
 	 * @param itemStack The ItemStack to parse the type of.
 	 * @return The parsed ArmorType. (null if none were found.)
 	 */
-	public final static ArmorType matchType(final ItemStack itemStack){
+	public final static ArmorType matchType(final ItemStack itemStack) {
 		if(itemStack == null) {
-			return null; 
+			return null;
 		}
-		if(itemStack.getType().name().toLowerCase().contains("skull")){
+		if(itemStack.getType().name().toLowerCase().contains("skull")) {
 			return HELMET;
 		}
 		if(Version.getVersion().comparedTo(Version.v1_9_R1) >= 0) {
@@ -39,7 +39,7 @@ public enum ArmorType{
 				return CHESTPLATE;
 			}
 		}
-		switch (itemStack.getType()){
+		switch(itemStack.getType()) {
 			case DIAMOND_HELMET:
 			case GOLD_HELMET:
 			case IRON_HELMET:
@@ -68,8 +68,8 @@ public enum ArmorType{
 				return null;
 		}
 	}
-
-	public int getSlot(){
+	
+	public int getSlot() {
 		return slot;
 	}
 	

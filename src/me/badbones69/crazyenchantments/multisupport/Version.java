@@ -17,7 +17,7 @@ public enum Version {
 	private Integer versionInteger;
 	public static Version currentVersion;
 	
-	private Version(int versionInteger){
+	private Version(int versionInteger) {
 		this.versionInteger = versionInteger;
 	}
 	
@@ -25,24 +25,20 @@ public enum Version {
 	 * 
 	 * @return Get the server's Minecraft version.
 	 */
-	public static Version getVersion(){
-		if(currentVersion == null){
+	public static Version getVersion() {
+		if(currentVersion == null) {
 			String ver = Bukkit.getServer().getClass().getPackage().getName();
-			int v = Integer.parseInt(ver
-					.substring(ver.lastIndexOf('.') + 1)
-					.replaceAll("_", "")
-					.replaceAll("R", "")
-					.replaceAll("v", ""));
-			for(Version version : values()){
-				if(version.getVersionInteger() == v){
+			int v = Integer.parseInt(ver.substring(ver.lastIndexOf('.') + 1).replaceAll("_", "").replaceAll("R", "").replaceAll("v", ""));
+			for(Version version : values()) {
+				if(version.getVersionInteger() == v) {
 					currentVersion = version;
 					break;
 				}
 			}
-			if(v > Version.getLatestVersion().getVersionInteger()){
+			if(v > Version.getLatestVersion().getVersionInteger()) {
 				currentVersion = Version.getLatestVersion();
 			}
-			if(currentVersion == null){
+			if(currentVersion == null) {
 				currentVersion = Version.TOO_NEW;
 			}
 		}
@@ -53,7 +49,7 @@ public enum Version {
 	 * 
 	 * @return The server's minecraft version as an integer.
 	 */
-	public Integer getVersionInteger(){
+	public Integer getVersionInteger() {
 		return this.versionInteger;
 	}
 	
@@ -61,16 +57,16 @@ public enum Version {
 	 * Get the latest version allowed by the Version class.
 	 * @return The latest version.
 	 */
-	public static Version getLatestVersion(){
-		if(latest == null){
+	public static Version getLatestVersion() {
+		if(latest == null) {
 			Version v = Version.TOO_OLD;
-			for(Version version : values()){
-				if(version.comparedTo(v) == 1){
+			for(Version version : values()) {
+				if(version.comparedTo(v) == 1) {
 					v = version;
 				}
 			}
 			return v;
-		}else{
+		}else {
 			return latest;
 		}
 	}
@@ -80,15 +76,15 @@ public enum Version {
 	 * @param version The version you are checking.
 	 * @return -1 if older, 0 if the same, and 1 if newer.
 	 */
-	public Integer comparedTo(Version version){
+	public Integer comparedTo(Version version) {
 		int resault = -1;
 		int current = this.getVersionInteger();
 		int check = version.getVersionInteger();
-		if(current > check || check == -2){// check is newer then current
+		if(current > check || check == -2) {// check is newer then current
 			resault = 1;
-		}else if(current == check){// check is the same as current
+		}else if(current == check) {// check is the same as current
 			resault = 0;
-		}else if(current < check || check == -1){// check is older then current
+		}else if(current < check || check == -1) {// check is older then current
 			resault = -1;
 		}
 		return resault;

@@ -10,27 +10,27 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 
 public class TownySupport {
 	
-	public static Boolean inTerritory(Player player){
+	public static Boolean inTerritory(Player player) {
 		try {
 			TownBlock block = WorldCoord.parseWorldCoord(player).getTownBlock();
 			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
-			if(playerUser.hasTown()){
-				if(playerUser.getTown().hasTownBlock(block)){
+			if(playerUser.hasTown()) {
+				if(playerUser.getTown().hasTownBlock(block)) {
 					return true;
 				}
 			}
-		} catch (NotRegisteredException e) {}
+		}catch(NotRegisteredException e) {}
 		return false;
 	}
 	
-	public static Boolean isFriendly(Player player, Player other){
-		try{
+	public static Boolean isFriendly(Player player, Player other) {
+		try {
 			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
 			Resident otherUser = TownyUniverse.getDataSource().getResident(other.getName());
-			if(playerUser.getTown().getName().equalsIgnoreCase(otherUser.getTown().getName())){
+			if(playerUser.getTown().getName().equalsIgnoreCase(otherUser.getTown().getName())) {
 				return true;
 			}
-		} catch (NotRegisteredException e) {}
+		}catch(NotRegisteredException e) {}
 		return false;
 	}
 	

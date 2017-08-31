@@ -12,18 +12,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 
-public class CommandChecker implements Listener{
+public class CommandChecker implements Listener {
 	
 	@EventHandler
-	public void onInventoryClear(PlayerCommandPreprocessEvent e){
+	public void onInventoryClear(PlayerCommandPreprocessEvent e) {
 		Player player = e.getPlayer();
-		if(e.getMessage().toLowerCase().equalsIgnoreCase("/ci") || e.getMessage().toLowerCase().equalsIgnoreCase("/clear")
-				|| e.getMessage().toLowerCase().equalsIgnoreCase("/cearinventory")){
-			for(CEnchantments ench : Main.CE.getEnchantmentPotions().keySet()){
-				if(ench.isEnabled()){
-					for(ItemStack armor : player.getEquipment().getArmorContents()){
-						if(armor != null){
-							for(PotionEffectType type : Main.CE.getUpdatedEffects(player, new ItemStack(Material.AIR), new ItemStack(Material.AIR), ench).keySet()){
+		if(e.getMessage().toLowerCase().equalsIgnoreCase("/ci") || e.getMessage().toLowerCase().equalsIgnoreCase("/clear") || e.getMessage().toLowerCase().equalsIgnoreCase("/cearinventory")) {
+			for(CEnchantments ench : Main.CE.getEnchantmentPotions().keySet()) {
+				if(ench.isEnabled()) {
+					for(ItemStack armor : player.getEquipment().getArmorContents()) {
+						if(armor != null) {
+							for(PotionEffectType type : Main.CE.getUpdatedEffects(player, new ItemStack(Material.AIR), new ItemStack(Material.AIR), ench).keySet()) {
 								player.removePotionEffect(type);
 							}
 						}

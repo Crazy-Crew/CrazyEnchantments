@@ -8,13 +8,13 @@ import org.bukkit.inventory.ItemStack;
 
 import me.badbones69.crazyenchantments.api.CEnchantments;
 
-public class EnchantmentUseEvent extends Event implements Cancellable{
+public class EnchantmentUseEvent extends Event implements Cancellable {
 	
 	private Player Player;
 	private CEnchantments Enchant;
 	private Boolean Cancel;
 	private ItemStack Item;
-
+	
 	public EnchantmentUseEvent(Player player, CEnchantments enchant, ItemStack item) {
 		Player = player;
 		Enchant = enchant;
@@ -26,7 +26,7 @@ public class EnchantmentUseEvent extends Event implements Cancellable{
 	 * 
 	 * @return The player that uses the enchantment.
 	 */
-	public Player getPlayer(){
+	public Player getPlayer() {
 		return Player;
 	}
 	
@@ -34,7 +34,7 @@ public class EnchantmentUseEvent extends Event implements Cancellable{
 	 * 
 	 * @return The enchantment that is used.
 	 */
-	public CEnchantments getEnchantment(){
+	public CEnchantments getEnchantment() {
 		return Enchant;
 	}
 	
@@ -42,27 +42,27 @@ public class EnchantmentUseEvent extends Event implements Cancellable{
 	 * 
 	 * @return The item that uses the enchantment.
 	 */
-	public ItemStack getItem(){
+	public ItemStack getItem() {
 		return Item;
 	}
-
+	
 	private static final HandlerList handlers = new HandlerList();
-
+	
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-
+	
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}
-
+	
 	@Override
 	public boolean isCancelled() {
 		return Cancel;
 	}
-
+	
 	@Override
 	public void setCancelled(boolean cancel) {
-		Cancel=cancel;
+		Cancel = cancel;
 	}
 }

@@ -14,15 +14,15 @@ public enum InfoType {
 	
 	private String Name;
 	
-	private InfoType(String name){
+	private InfoType(String name) {
 		Name = name;
 	}
 	
-	public String getName(){
+	public String getName() {
 		return Name;
 	}
 	
-	public static InfoType[] getTypes(){
+	public static InfoType[] getTypes() {
 		return values();
 	}
 	

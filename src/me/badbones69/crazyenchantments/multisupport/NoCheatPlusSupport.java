@@ -6,11 +6,11 @@ import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
 
 public class NoCheatPlusSupport {
 	
-	public static void exemptPlayer(Player player){
+	public static void exemptPlayer(Player player) {
 		NCPExemptionManager.exemptPermanently(player);
 	}
 	
-	public static void unexemptPlayer(Player player){
+	public static void unexemptPlayer(Player player) {
 		NCPExemptionManager.unexempt(player);
 	}
 	

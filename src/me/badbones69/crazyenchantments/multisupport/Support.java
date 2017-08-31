@@ -11,34 +11,34 @@ import me.badbones69.crazyenchantments.Main;
 
 public class Support {
 	
-	public static boolean inTerritory(Player player){
-		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
-			if(FactionsUUID.inTerritory(player)){
+	public static boolean inTerritory(Player player) {
+		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+			if(FactionsUUID.inTerritory(player)) {
 				return true;
 			}
 		}
-		if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()){
-			if(FactionsSupport.inTerritory(player)){
+		if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) {
+			if(FactionsSupport.inTerritory(player)) {
 				return true;
 			}
 		}
-		if(SupportedPlugins.FEUDAL.isPluginLoaded()){
-			if(FeudalSupport.inTerritory(player)){
+		if(SupportedPlugins.FEUDAL.isPluginLoaded()) {
+			if(FeudalSupport.inTerritory(player)) {
 				return true;
 			}
 		}
-		if(SupportedPlugins.ASKYBLOCK.isPluginLoaded()){
-			if(ASkyBlockSupport.inTerritory(player)){
+		if(SupportedPlugins.ASKYBLOCK.isPluginLoaded()) {
+			if(ASkyBlockSupport.inTerritory(player)) {
 				return true;
 			}
 		}
-		if(SupportedPlugins.ACID_ISLAND.isPluginLoaded()){
-			if(AcidIslandSupport.inTerritory(player)){
+		if(SupportedPlugins.ACID_ISLAND.isPluginLoaded()) {
+			if(AcidIslandSupport.inTerritory(player)) {
 				return true;
 			}
 		}
-		if(SupportedPlugins.KINGDOMS.isPluginLoaded()){
-			if(KingdomSupport.inTerritory(player)){
+		if(SupportedPlugins.KINGDOMS.isPluginLoaded()) {
+			if(KingdomSupport.inTerritory(player)) {
 				return true;
 			}
 		}
@@ -55,47 +55,47 @@ public class Support {
 		return false;
 	}
 	
-	public static boolean isFriendly(Entity P, Entity O){
-		if(P instanceof Player && O instanceof Player){
+	public static boolean isFriendly(Entity P, Entity O) {
+		if(P instanceof Player && O instanceof Player) {
 			Player player = (Player) P;
 			Player other = (Player) O;
-			if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
-					if(FactionsUUID.isFriendly(player, other)) {
-						return true;
-					}
-			}
-			if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()){
-					if(FactionsSupport.isFriendly(player, other)) {
-						return true;
-					}
-			}
-			if(SupportedPlugins.FEUDAL.isPluginLoaded()){
-				if(FeudalSupport.isFrendly(player, other)){
+			if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+				if(FactionsUUID.isFriendly(player, other)) {
 					return true;
 				}
 			}
-			if(SupportedPlugins.ASKYBLOCK.isPluginLoaded()){
-				if(ASkyBlockSupport.isFriendly(player, other)){
+			if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) {
+				if(FactionsSupport.isFriendly(player, other)) {
 					return true;
 				}
 			}
-			if(SupportedPlugins.ACID_ISLAND.isPluginLoaded()){
-				if(AcidIslandSupport.isFriendly(player, other)){
+			if(SupportedPlugins.FEUDAL.isPluginLoaded()) {
+				if(FeudalSupport.isFrendly(player, other)) {
 					return true;
 				}
 			}
-			if(SupportedPlugins.KINGDOMS.isPluginLoaded()){
-				if(KingdomSupport.isFriendly(player, other)){
+			if(SupportedPlugins.ASKYBLOCK.isPluginLoaded()) {
+				if(ASkyBlockSupport.isFriendly(player, other)) {
 					return true;
 				}
 			}
-			if(SupportedPlugins.TOWNY.isPluginLoaded()){
-				if(TownySupport.isFriendly(player, other)){
+			if(SupportedPlugins.ACID_ISLAND.isPluginLoaded()) {
+				if(AcidIslandSupport.isFriendly(player, other)) {
 					return true;
 				}
 			}
-			if(SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded()){
-				if(LegacyFactionsSupport.isFriendly(player, other)){
+			if(SupportedPlugins.KINGDOMS.isPluginLoaded()) {
+				if(KingdomSupport.isFriendly(player, other)) {
+					return true;
+				}
+			}
+			if(SupportedPlugins.TOWNY.isPluginLoaded()) {
+				if(TownySupport.isFriendly(player, other)) {
+					return true;
+				}
+			}
+			if(SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded()) {
+				if(LegacyFactionsSupport.isFriendly(player, other)) {
 					return true;
 				}
 			}
@@ -103,26 +103,26 @@ public class Support {
 		return false;
 	}
 	
-	public static boolean canBreakBlock(Player player, Block block){
-		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()){
-			if(player != null){
+	public static boolean canBreakBlock(Player player, Block block) {
+		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+			if(player != null) {
 				if(!FactionsUUID.canBreakBlock(player, block)) {
 					return false;
 				}
 			}
 		}
-		if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()){
+		if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) {
 			if(!FactionsSupport.canBreakBlock(player, block)) {
 				return false;
 			}
 		}
-		if(SupportedPlugins.FEUDAL.isPluginLoaded()){
-			if(!FeudalSupport.canBreakBlock(player, block)){
+		if(SupportedPlugins.FEUDAL.isPluginLoaded()) {
+			if(!FeudalSupport.canBreakBlock(player, block)) {
 				return false;
 			}
 		}
-		if(SupportedPlugins.KINGDOMS.isPluginLoaded()){
-			if(!KingdomSupport.canBreakBlock(player, block)){
+		if(SupportedPlugins.KINGDOMS.isPluginLoaded()) {
+			if(!KingdomSupport.canBreakBlock(player, block)) {
 				return false;
 			}
 		}
@@ -134,8 +134,8 @@ public class Support {
 		return true;
 	}
 	
-	public static boolean allowsPVP(Location loc){
-		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
+	public static boolean allowsPVP(Location loc) {
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
 			if(!WorldGuard.allowsPVP(loc)) {
 				return false;
 			}
@@ -143,8 +143,8 @@ public class Support {
 		return true;
 	}
 	
-	public static boolean allowsBreak(Location loc){
-		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
+	public static boolean allowsBreak(Location loc) {
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
 			if(!WorldGuard.allowsBreak(loc)) {
 				return false;
 			}
@@ -152,8 +152,8 @@ public class Support {
 		return true;
 	}
 	
-	public static boolean allowsExplotions(Location loc){
-		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
+	public static boolean allowsExplotions(Location loc) {
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
 			if(!WorldGuard.allowsExplosions(loc)) {
 				return false;
 			}
@@ -161,23 +161,23 @@ public class Support {
 		return true;
 	}
 	
-	public static boolean inWingsRegion(Player player){
-		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()){
-			if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")){
-				for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")){
-					if(WorldGuard.inRegion(rg, player.getLocation())){
+	public static boolean inWingsRegion(Player player) {
+		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
+			if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Regions")) {
+				for(String rg : Main.settings.getConfig().getStringList("Settings.EnchantmentOptions.Wings.Regions")) {
+					if(WorldGuard.inRegion(rg, player.getLocation())) {
 						return true;
-					}else{
-						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Members-Can-Fly")){
-							if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Members-Can-Fly")){
-								if(WorldGuard.isMember(player)){
+					}else {
+						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
+							if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
+								if(WorldGuard.isMember(player)) {
 									return true;
 								}
 							}
 						}
-						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")){
-							if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")){
-								if(WorldGuard.isOwner(player)){
+						if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
+							if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
+								if(WorldGuard.isOwner(player)) {
 									return true;
 								}
 							}
@@ -190,10 +190,10 @@ public class Support {
 	}
 	
 	public static void noStack(Entity en) {
-		if (SupportedPlugins.MOB_STACKER.isPluginLoaded()) {
+		if(SupportedPlugins.MOB_STACKER.isPluginLoaded()) {
 			MobStacker.noStack(en);
 		}
-		if (SupportedPlugins.MOB_STACKER_2.isPluginLoaded()) {
+		if(SupportedPlugins.MOB_STACKER_2.isPluginLoaded()) {
 			MobStacker2.noStack(en);
 		}
 		if(SupportedPlugins.STACK_MOB.isPluginLoaded()) {
@@ -201,28 +201,28 @@ public class Support {
 		}
 	}
 	
-	public enum SupportedPlugins{
+	public enum SupportedPlugins {
 		
-		LEGACY_FACTIONS("LegacyFactions"),
-		TOWNY("Towny"),
-		EPIC_SPAWNERS("EpicSpawners"),
-		AAC("AAC"),
-		DAKATA("DakataAntiCheat"),
-		NO_CHEAT_PLUS("NoCheatPlus"),
-		VAULT("Vault"),
-		WORLD_EDIT("WorldEdit"),
-		WORLD_GUARD("WorldGuard"),
-		FACTIONS_MASSIVE_CRAFT("Factions"),
-		FACTIONS_UUID("Factions"),
-		FEUDAL("Feudal"),
-		ACID_ISLAND("AcidIsland"),
-		ASKYBLOCK("ASkyBlock"),
-		KINGDOMS("Kingdoms"),
-		SILK_SPAWNERS("SilkSpawners"),
-		SPARTAN("Spartan"),
-		MOB_STACKER("MobStacker"),
-		MOB_STACKER_2("MobStacker2"),
-		STACK_MOB("StackMob"),
+		LEGACY_FACTIONS("LegacyFactions"), 
+		TOWNY("Towny"), 
+		EPIC_SPAWNERS("EpicSpawners"), 
+		AAC("AAC"), 
+		DAKATA("DakataAntiCheat"), 
+		NO_CHEAT_PLUS("NoCheatPlus"), 
+		VAULT("Vault"), 
+		WORLD_EDIT("WorldEdit"), 
+		WORLD_GUARD("WorldGuard"), 
+		FACTIONS_MASSIVE_CRAFT("Factions"), 
+		FACTIONS_UUID("Factions"), 
+		FEUDAL("Feudal"), 
+		ACID_ISLAND("AcidIsland"), 
+		ASKYBLOCK("ASkyBlock"), 
+		KINGDOMS("Kingdoms"), 
+		SILK_SPAWNERS("SilkSpawners"), 
+		SPARTAN("Spartan"), 
+		MOB_STACKER("MobStacker"), 
+		MOB_STACKER_2("MobStacker2"), 
+		STACK_MOB("StackMob"), 
 		MEGA_SKILLS("MegaSkills");
 		
 		private String name;
@@ -241,16 +241,16 @@ public class Support {
 				if(plugin != null) {
 					if(plugin.getDescription() != null) {
 						if(plugin.getDescription().getWebsite() != null) {
-							if(plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")){
+							if(plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions")) {
 								return true;
 							}
 						}
 					}
 				}
 				return false;
-			}else if(this == SupportedPlugins.FACTIONS_UUID){
+			}else if(this == SupportedPlugins.FACTIONS_UUID) {
 				if(plugin != null) {
-					if(plugin.getDescription().getAuthors() != null){
+					if(plugin.getDescription().getAuthors() != null) {
 						if(plugin.getDescription().getAuthors().contains("drtshock")) {
 							return true;
 						}

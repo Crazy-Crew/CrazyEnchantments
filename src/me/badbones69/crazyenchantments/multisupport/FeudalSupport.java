@@ -7,55 +7,55 @@ import us.forseth11.feudal.core.Feudal;
 import us.forseth11.feudal.kingdoms.Kingdom;
 import us.forseth11.feudal.kingdoms.Land;
 
-public class FeudalSupport{
+public class FeudalSupport {
 	
-	public static boolean isFrendly(Player player, Player other){
+	public static boolean isFrendly(Player player, Player other) {
 		Kingdom p = Feudal.getPlayerKingdom(player.getUniqueId().toString());
-		if(Feudal.getPlayerKingdom(other.getUniqueId().toString()) == null){
+		if(Feudal.getPlayerKingdom(other.getUniqueId().toString()) == null) {
 			return false;
 		}
 		Kingdom o = Feudal.getPlayerKingdom(other.getUniqueId().toString());
-		if(p==null||o==null){
+		if(p == null || o == null) {
 			return false;
 		}
-		if(isFrendly(p, o)){
+		if(isFrendly(p, o)) {
 			return true;
 		}
 		return false;
 	}
 	
-	public static boolean isFrendly(Kingdom p, Kingdom o){
-		if(p==null||o==null){
+	public static boolean isFrendly(Kingdom p, Kingdom o) {
+		if(p == null || o == null) {
 			return false;
 		}
-		if(p.isEnemied(o)){
+		if(p.isEnemied(o)) {
 			return false;
 		}
-		if(p.isAllied(o)){
+		if(p.isAllied(o)) {
 			return true;
 		}
-		if(p==o){
+		if(p == o) {
 			return true;
 		}
 		return false;
 	}
 	
-	public static boolean inTerritory(Player player){
+	public static boolean inTerritory(Player player) {
 		Kingdom p = Feudal.getPlayerKingdom(player.getUniqueId().toString());
-		if(p==null){
+		if(p == null) {
 			return false;
 		}
-		if(p.isOnLand(player.getLocation())){
+		if(p.isOnLand(player.getLocation())) {
 			return true;
 		}
 		return false;
 	}
 	
-	public static boolean canBreakBlock(Player player, Block block){
+	public static boolean canBreakBlock(Player player, Block block) {
 		Kingdom p = Feudal.getPlayerKingdom(player.getUniqueId().toString());
 		Land land = new Land(block.getLocation());
 		Kingdom b = Feudal.getLandKingdom(land);
-		if(p==b || b==null){
+		if(p == b || b == null) {
 			return true;
 		}
 		return false;

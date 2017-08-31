@@ -25,13 +25,13 @@ public class CustomEBook {
 	 * @param enchantment Enchantment you want.
 	 * @param power Tier of the enchantment.
 	 */
-	public CustomEBook(String enchantment, Integer power){
+	public CustomEBook(String enchantment, Integer power) {
 		this.amount = 1;
 		this.power = power;
 		this.enchantment = enchantment;
-		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")){
+		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")) {
 			this.glowing = Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing");
-		}else{
+		}else {
 			this.glowing = false;
 		}
 		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
@@ -48,13 +48,13 @@ public class CustomEBook {
 	 * @param power Tier of the enchantment.
 	 * @param amount Amount of books you want.
 	 */
-	public CustomEBook(String enchantment, Integer power, Integer amount){
+	public CustomEBook(String enchantment, Integer power, Integer amount) {
 		this.power = power;
 		this.amount = amount;
 		this.enchantment = enchantment;
-		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")){
+		if(Main.settings.getConfig().contains("Settings.Enchantment-Book-Glowing")) {
 			this.glowing = Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing");
-		}else{
+		}else {
 			this.glowing = false;
 		}
 		int Smax = Main.settings.getConfig().getInt("Settings.BlackScroll.SuccessChance.Max");
@@ -69,7 +69,7 @@ public class CustomEBook {
 	 * 
 	 * @param enchantment Set the enchantment.
 	 */
-	public void setEnchantemnt(String enchantment){
+	public void setEnchantemnt(String enchantment) {
 		this.enchantment = enchantment;
 	}
 	
@@ -77,7 +77,7 @@ public class CustomEBook {
 	 * Gets the custom enchantment.
 	 * @return Custom Enchantment as a string.
 	 */
-	public String getEnchantemnt(){
+	public String getEnchantemnt() {
 		return this.enchantment;
 	}
 	
@@ -85,7 +85,7 @@ public class CustomEBook {
 	 * 
 	 * @param toggle Toggle on or off the glowing effect.
 	 */
-	public void setGlowing(Boolean toggle){
+	public void setGlowing(Boolean toggle) {
 		this.glowing = toggle;
 	}
 	
@@ -93,7 +93,7 @@ public class CustomEBook {
 	 * If the item is glowing or not.
 	 * @return Turn if it glowing and false if not.
 	 */
-	public Boolean getGlowing(){
+	public Boolean getGlowing() {
 		return this.glowing;
 	}
 	
@@ -101,7 +101,7 @@ public class CustomEBook {
 	 * 
 	 * @param amount Set the amount of books.
 	 */
-	public void setAmount(Integer amount){
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 	
@@ -109,7 +109,7 @@ public class CustomEBook {
 	 * Get the amount it will be as an ItemStack.
 	 * @return The amount the ItemStack will be.
 	 */
-	public int getAmount(){
+	public int getAmount() {
 		return this.amount;
 	}
 	
@@ -117,7 +117,7 @@ public class CustomEBook {
 	 * 
 	 * @param power Set the tier of the enchantment.
 	 */
-	public void setPower(Integer power){
+	public void setPower(Integer power) {
 		this.power = power;
 	}
 	
@@ -125,7 +125,7 @@ public class CustomEBook {
 	 * Get the power of the enchantment.
 	 * @return The power of the enchantment.
 	 */
-	public int getPower(){
+	public int getPower() {
 		return this.power;
 	}
 	
@@ -133,7 +133,7 @@ public class CustomEBook {
 	 * 
 	 * @param destory_rate Set the destroy rate on the book.
 	 */
-	public void setDestoryRate(Integer destory_rate){
+	public void setDestoryRate(Integer destory_rate) {
 		this.destory_rate = destory_rate;
 	}
 	
@@ -141,7 +141,7 @@ public class CustomEBook {
 	 * Get the destroy rate that will be on the book.
 	 * @return The destroy rate that will be on the book.
 	 */
-	public int getDestoryRate(){
+	public int getDestoryRate() {
 		return this.destory_rate;
 	}
 	
@@ -149,7 +149,7 @@ public class CustomEBook {
 	 * 
 	 * @param success_rate Set the success rate on the book.
 	 */
-	public void setSuccessRate(Integer success_rate){
+	public void setSuccessRate(Integer success_rate) {
 		this.success_rate = success_rate;
 	}
 	
@@ -157,7 +157,7 @@ public class CustomEBook {
 	 * Get the success rate that will be on the book.
 	 * @return The success rate that will be on the boom.
 	 */
-	public int getSuccessRate(){
+	public int getSuccessRate() {
 		return this.success_rate;
 	}
 	
@@ -165,45 +165,43 @@ public class CustomEBook {
 	 * 
 	 * @return Return the book as an ItemStack.
 	 */
-	public ItemStack buildBook(){
+	public ItemStack buildBook() {
 		String item = Main.settings.getConfig().getString("Settings.Enchantment-Book-Item");
 		String name = CustomE.getBookColor(enchantment) + CustomE.getCustomName(enchantment) + " " + convertPower(power);
 		List<String> lore = new ArrayList<String>();
-		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")){
-			if(l.contains("%Description%")||l.contains("%description%")){
-				for(String m : CustomE.getDiscription(enchantment)){
+		for(String l : Main.settings.getConfig().getStringList("Settings.EnchantmentBookLore")) {
+			if(l.contains("%Description%") || l.contains("%description%")) {
+				for(String m : CustomE.getDiscription(enchantment)) {
 					lore.add(Methods.color(m));
 				}
-			}else{
-				lore.add(Methods.color(l)
-						.replaceAll("%Destroy_Rate%", destory_rate+"").replaceAll("%destroy_rate%", destory_rate+"")
-						.replaceAll("%Success_Rate%", success_rate+"").replaceAll("%success_Rate%", success_rate+""));
+			}else {
+				lore.add(Methods.color(l).replaceAll("%Destroy_Rate%", destory_rate + "").replaceAll("%destroy_rate%", destory_rate + "").replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_Rate%", success_rate + ""));
 			}
 		}
 		return Methods.makeItem(item, amount, name, lore, glowing);
 	}
 	
-	private String convertPower(Integer i){
-		if(i==0)return "I";
-		if(i==1)return "I";
-		if(i==2)return "II";
-		if(i==3)return "III";
-		if(i==4)return "IV";
-		if(i==5)return "V";
-		if(i==6)return "VI";
-		if(i==7)return "VII";
-		if(i==8)return "VII";
-		if(i==9)return "IX";
-		if(i==10)return "X";
-		return i+"";
+	private String convertPower(Integer i) {
+		if(i == 0) return "I";
+		if(i == 1) return "I";
+		if(i == 2) return "II";
+		if(i == 3) return "III";
+		if(i == 4) return "IV";
+		if(i == 5) return "V";
+		if(i == 6) return "VI";
+		if(i == 7) return "VII";
+		if(i == 8) return "VII";
+		if(i == 9) return "IX";
+		if(i == 10) return "X";
+		return i + "";
 	}
 	
-	private Integer percentPick(int max, int min){
+	private Integer percentPick(int max, int min) {
 		Random i = new Random();
-		if (max == min){
+		if(max == min) {
 			return max;
-		}else{
-			return min+i.nextInt(max-min);
+		}else {
+			return min + i.nextInt(max - min);
 		}
 	}
 }

@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 
 import me.badbones69.crazyenchantments.api.CEnchantments;
 
-public class AuraActiveEvent extends Event{
+public class AuraActiveEvent extends Event {
 	
 	private Player Other;
 	private Player Player;
@@ -21,7 +21,7 @@ public class AuraActiveEvent extends Event{
 	 * @param enchantment The aura enchantment that is activated.
 	 * @param power The power of the aura enchantment.
 	 */
-	public AuraActiveEvent(Player player, Player other, CEnchantments enchantment, Integer power){
+	public AuraActiveEvent(Player player, Player other, CEnchantments enchantment, Integer power) {
 		Player = player;
 		Other = other;
 		Enchant = enchantment;
@@ -32,7 +32,7 @@ public class AuraActiveEvent extends Event{
 	 * Gets the player that is being effected by the aura enchantment.
 	 * @return The player with the enchantment.
 	 */
-	public Player getPlayer(){
+	public Player getPlayer() {
 		return Player;
 	}
 	
@@ -40,7 +40,7 @@ public class AuraActiveEvent extends Event{
 	 * The player being effected by the aura enchantment.
 	 * @return The player that is being targeted.
 	 */
-	public Player getOther(){
+	public Player getOther() {
 		return Other;
 	}
 	
@@ -48,7 +48,7 @@ public class AuraActiveEvent extends Event{
 	 * The aura enchantment that is on the player.
 	 * @return The aura enchantment being used.
 	 */
-	public CEnchantments getEnchantment(){
+	public CEnchantments getEnchantment() {
 		return Enchant;
 	}
 	
@@ -56,14 +56,14 @@ public class AuraActiveEvent extends Event{
 	 * The power of the aura enchantment.
 	 * @return The power of the aura enchantment that is being used.
 	 */
-	public Integer getPower(){
+	public Integer getPower() {
 		return Power;
 	}
 	
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-
+	
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}

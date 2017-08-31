@@ -10,14 +10,14 @@ public class VaultSupport {
 	
 	private static Economy vault = null;
 	
-	public static Economy getVault(){
+	public static Economy getVault() {
 		return vault;
 	}
 	
-	public static void loadVault(){
-		if(SupportedPlugins.VAULT.isPluginLoaded()){
+	public static void loadVault() {
+		if(SupportedPlugins.VAULT.isPluginLoaded()) {
 			RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-			if(rsp != null){
+			if(rsp != null) {
 				vault = rsp.getProvider();
 			}
 		}

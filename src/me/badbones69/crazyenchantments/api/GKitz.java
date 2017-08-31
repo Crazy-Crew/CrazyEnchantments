@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.badbones69.crazyenchantments.Main;
 
-public class GKitz{
+public class GKitz {
 	
 	private int slot;
 	private String name;
@@ -30,8 +30,7 @@ public class GKitz{
 	 * @param itemStrings The items as a string.
 	 * @param autoEquip This is if the armor equipts when given.
 	 */
-	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview,
-			ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings, Boolean autoEquip){
+	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview, ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings, Boolean autoEquip) {
 		this.name = name;
 		this.slot = slot;
 		this.items = items;
@@ -43,40 +42,40 @@ public class GKitz{
 		this.itemStrings = itemStrings;
 	}
 	
-	public String getName(){
+	public String getName() {
 		return this.name;
 	}
 	
-	public int getSlot(){
+	public int getSlot() {
 		return this.slot;
 	}
 	
-	public String getCooldown(){
+	public String getCooldown() {
 		return this.cooldown;
 	}
 	
-	public ItemStack getDisplayItem(){
+	public ItemStack getDisplayItem() {
 		return this.displayItem;
 	}
 	
-	public ArrayList<ItemStack> getPreviewItems(){
+	public ArrayList<ItemStack> getPreviewItems() {
 		return this.preview;
 	}
 	
-	public ArrayList<String> getCommands(){
+	public ArrayList<String> getCommands() {
 		return this.commands;
 	}
 	
-	public ArrayList<ItemStack> getItems(){
+	public ArrayList<ItemStack> getItems() {
 		this.items = Main.CE.getKitItems(itemStrings);
 		return this.items;
 	}
 	
-	public ArrayList<String> getItemStrings(){
+	public ArrayList<String> getItemStrings() {
 		return this.itemStrings;
 	}
 	
-	public Boolean canAutoEquipt(){
+	public Boolean canAutoEquipt() {
 		return this.autoEquip;
 	}
 	

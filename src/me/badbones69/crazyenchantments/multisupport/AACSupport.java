@@ -12,28 +12,28 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.konsolas.aac.api.PlayerViolationEvent;
 
-public class AACSupport implements Listener{
+public class AACSupport implements Listener {
 	
 	private static ArrayList<UUID> exempted = new ArrayList<UUID>();
 	private static Plugin plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 	
-	public static void exemptPlayer(Player player){
-		if(!exempted.contains(player.getUniqueId())){
+	public static void exemptPlayer(Player player) {
+		if(!exempted.contains(player.getUniqueId())) {
 			exempted.add(player.getUniqueId());
 		}
 	}
 	
-	public static void unexemptPlayer(Player player){
+	public static void unexemptPlayer(Player player) {
 		exempted.remove(player.getUniqueId());
 	}
 	
-	public static Boolean isExempted(Player player){
+	public static Boolean isExempted(Player player) {
 		return exempted.contains(player.getUniqueId());
 	}
 	
-	public static void exemptPlayerTime(Player player){
+	public static void exemptPlayerTime(Player player) {
 		exemptPlayer(player);
-		new BukkitRunnable(){
+		new BukkitRunnable() {
 			@Override
 			public void run() {
 				unexemptPlayer(player);
@@ -42,8 +42,8 @@ public class AACSupport implements Listener{
 	}
 	
 	@EventHandler
-	public void onViolation(PlayerViolationEvent e){
-		if(isExempted(e.getPlayer())){
+	public void onViolation(PlayerViolationEvent e) {
+		if(isExempted(e.getPlayer())) {
 			e.setCancelled(true);
 		}
 	}

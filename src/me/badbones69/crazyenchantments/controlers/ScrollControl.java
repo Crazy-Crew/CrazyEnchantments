@@ -30,30 +30,30 @@ import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.CustomEnchantments;
 import me.badbones69.crazyenchantments.api.EnchantmentType;
 
-public class ScrollControl implements Listener{
+public class ScrollControl implements Listener {
 	
 	@EventHandler
-	public void onScrollUse(InventoryClickEvent e){
+	public void onScrollUse(InventoryClickEvent e) {
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
 		ItemStack item = e.getCurrentItem();
 		ItemStack scroll = e.getCursor();
-		if(inv != null){
+		if(inv != null) {
 			if(item == null) item = new ItemStack(Material.AIR);
 			if(scroll == null) scroll = new ItemStack(Material.AIR);
-			if(item.getType() != Material.AIR && scroll.getType() != Material.AIR){
-				if(inv.getType() == InventoryType.CRAFTING){
-					if(e.getRawSlot() < 9){
+			if(item.getType() != Material.AIR && scroll.getType() != Material.AIR) {
+				if(inv.getType() == InventoryType.CRAFTING) {
+					if(e.getRawSlot() < 9) {
 						return;
 					}
 				}
-				if(scroll.isSimilar(getTransmogScroll(1))){
-					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1){
+				if(scroll.isSimilar(getTransmogScroll(1))) {
+					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
 					}
-					if(Main.CE.hasEnchantments(item) || Main.CustomE.hasEnchantments(item)){
-						if(item.isSimilar(orderEnchantments(item.clone()))){
+					if(Main.CE.hasEnchantments(item) || Main.CustomE.hasEnchantments(item)) {
+						if(item.isSimilar(orderEnchantments(item.clone()))) {
 							return;
 						}
 						e.setCancelled(true);
@@ -65,15 +65,15 @@ public class ScrollControl implements Listener{
 						return;
 					}
 				}
-				if(scroll.isSimilar(getWhiteScroll(1))){
-					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1){
+				if(scroll.isSimilar(getWhiteScroll(1))) {
+					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
 					}
-					if(!Methods.isProtected(item)){
+					if(!Methods.isProtected(item)) {
 						ArrayList<Material> types = new ArrayList<Material>();
 						types.addAll(EnchantmentType.ALL.getItems());
-						if(types.contains(item.getType())){
+						if(types.contains(item.getType())) {
 							e.setCancelled(true);
 							e.setCurrentItem(Methods.addLore(item, Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 							player.setItemOnCursor(Methods.removeItem(scroll));
@@ -81,8 +81,8 @@ public class ScrollControl implements Listener{
 						}
 					}
 				}
-				if(scroll.isSimilar(getBlackScroll(1))){
-					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1){
+				if(scroll.isSimilar(getBlackScroll(1))) {
+					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
 					}
@@ -91,18 +91,18 @@ public class ScrollControl implements Listener{
 					ArrayList<CEnchantments> enchants = new ArrayList<CEnchantments>();
 					Boolean i = false;
 					Boolean custom = false;
-					if(Main.CE.hasEnchantments(item)){
-						for(CEnchantments en : Main.CE.getEnchantments()){
-							if(Main.CE.hasEnchantment(item, en)){
+					if(Main.CE.hasEnchantments(item)) {
+						for(CEnchantments en : Main.CE.getEnchantments()) {
+							if(Main.CE.hasEnchantment(item, en)) {
 								enchants.add(en);
 								lvl.put(en.getName(), Main.CE.getPower(item, en));
 								i = true;
 							}
 						}
 					}
-					if(Main.CustomE.hasEnchantments(item)){
-						for(String en : Main.CustomE.getEnchantments()){
-							if(Main.CustomE.hasEnchantment(item, en)){
+					if(Main.CustomE.hasEnchantments(item)) {
+						for(String en : Main.CustomE.getEnchantments()) {
+							if(Main.CustomE.hasEnchantment(item, en)) {
 								customEnchants.add(en);
 								lvl.put(en, Main.CustomE.getPower(item, en));
 								i = true;
@@ -110,21 +110,21 @@ public class ScrollControl implements Listener{
 							}
 						}
 					}
-					if(i){
+					if(i) {
 						e.setCancelled(true);
 						player.setItemOnCursor(Methods.removeItem(scroll));
-						if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.Chance-Toggle")){
-							if(!Methods.randomPicker(Main.settings.getConfig().getInt("Settings.BlackScroll.Chance"), 100)){
+						if(Main.settings.getConfig().getBoolean("Settings.BlackScroll.Chance-Toggle")) {
+							if(!Methods.randomPicker(Main.settings.getConfig().getInt("Settings.BlackScroll.Chance"), 100)) {
 								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Black-Scroll-Unsuccessful")));
 								return;
 							}
 						}
-						if(custom){
+						if(custom) {
 							String enchantment = pickCustomEnchant(customEnchants);
 							e.setCurrentItem(Main.CustomE.removeEnchantment(item, enchantment));
 							CustomEBook book = new CustomEBook(enchantment, lvl.get(enchantment), 1);
 							player.getInventory().addItem(book.buildBook());
-						}else{
+						}else {
 							CEnchantments enchantment = pickEnchant(enchants);
 							e.setCurrentItem(Main.CE.removeEnchantment(item, enchantment));
 							CEBook book = new CEBook(enchantment, lvl.get(enchantment.getName()), 1);
@@ -138,45 +138,45 @@ public class ScrollControl implements Listener{
 	}
 	
 	@EventHandler
-	public void onClick(PlayerInteractEvent e){
+	public void onClick(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		ItemStack item = Methods.getItemInHand(player);
 		if(item != null) {
 			if(Methods.isSimilar(item, getBlackScroll(1))) {
 				e.setCancelled(true);
 				player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Right-Click-Black-Scroll")));
-			}else if(Methods.isSimilar(item, getWhiteScroll(1)) || Methods.isSimilar(item, getTransmogScroll(1))){
+			}else if(Methods.isSimilar(item, getWhiteScroll(1)) || Methods.isSimilar(item, getTransmogScroll(1))) {
 				e.setCancelled(true);
 			}
 		}
 	}
 	
-	public static ItemStack orderEnchantments(ItemStack item){
+	public static ItemStack orderEnchantments(ItemStack item) {
 		CustomEnchantments customE = Main.CustomE;
 		HashMap<String, Integer> enchants = new HashMap<String, Integer>();
 		HashMap<String, Integer> categories = new HashMap<String, Integer>();
 		List<String> order = new ArrayList<String>();
 		ArrayList<String> enchantments = new ArrayList<String>();
-		for(CEnchantments en : Main.CE.getItemEnchantments(item)){
+		for(CEnchantments en : Main.CE.getItemEnchantments(item)) {
 			enchantments.add(en.getName());
 		}
-		for(String en : customE.getItemEnchantments(item)){
+		for(String en : customE.getItemEnchantments(item)) {
 			enchantments.add(en);
 		}
-		for(String ench : enchantments){
+		for(String ench : enchantments) {
 			int top = 0;
-			if(Main.CE.isEnchantment(ench) || customE.isEnchantment(ench)){
-				if(Main.CE.isEnchantment(ench)){
-					for(String cat : Main.CE.getEnchantmentCategories(Main.CE.getFromName(ench))){
-						if(top < Main.CE.getCategoryRarity(cat)){
+			if(Main.CE.isEnchantment(ench) || customE.isEnchantment(ench)) {
+				if(Main.CE.isEnchantment(ench)) {
+					for(String cat : Main.CE.getEnchantmentCategories(Main.CE.getFromName(ench))) {
+						if(top < Main.CE.getCategoryRarity(cat)) {
 							top = Main.CE.getCategoryRarity(cat);
 						}
 					}
 					enchants.put(ench, Main.CE.getPower(item, Main.CE.getFromName(ench)));
 					Main.CE.removeEnchantment(item, Main.CE.getFromName(ench));
-				}else if(customE.isEnchantment(ench)){
-					for(String cat : customE.getEnchantmentCategories(ench)){
-						if(top < customE.getCategoryRarity(cat)){
+				}else if(customE.isEnchantment(ench)) {
+					for(String cat : customE.getEnchantmentCategories(ench)) {
+						if(top < customE.getCategoryRarity(cat)) {
 							top = customE.getCategoryRarity(cat);
 						}
 					}
@@ -190,83 +190,83 @@ public class ScrollControl implements Listener{
 		order = orderInts(order, categories);
 		ItemMeta m = item.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
-		for(String ench : order){
-			if(Main.CE.isEnchantment(ench)){
+		for(String ench : order) {
+			if(Main.CE.isEnchantment(ench)) {
 				CEnchantments en = Main.CE.getFromName(ench);
 				lore.add(en.getEnchantmentColor() + en.getCustomName() + " " + Main.CE.convertPower(enchants.get(ench)));
-			}else if(customE.isEnchantment(ench)){
+			}else if(customE.isEnchantment(ench)) {
 				lore.add(customE.getEnchantmentColor(ench) + customE.getCustomName(ench) + " " + customE.convertPower(enchants.get(ench)));
 			}
 		}
-		if(m.hasLore()){
-			for(String l : m.getLore()){
+		if(m.hasLore()) {
+			for(String l : m.getLore()) {
 				lore.add(l);
 			}
 		}
 		m.setLore(lore);
 		String name = Methods.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replaceAll("_", " ").toLowerCase()));
 		String enchs = Main.settings.getConfig().getString("Settings.TransmogScroll.Amount-of-Enchantments");
-		if(m.hasDisplayName()){
+		if(m.hasDisplayName()) {
 			name = m.getDisplayName();
-			for(int i = 0; i <= 100; i++){
-				if(m.getDisplayName().endsWith(Methods.color(enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "")))){
+			for(int i = 0; i <= 100; i++) {
+				if(m.getDisplayName().endsWith(Methods.color(enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "")))) {
 					name = m.getDisplayName().substring(0, m.getDisplayName().length() - (enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "")).length());
 				}
 			}
 		}
 		int amount = order.size();
-		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")){
-			for(Enchantment ench : item.getEnchantments().keySet()){
-				try{
-					if(Methods.getEnchantments().contains(ench.getName())){
-						amount ++;
+		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")) {
+			for(Enchantment ench : item.getEnchantments().keySet()) {
+				try {
+					if(Methods.getEnchantments().contains(ench.getName())) {
+						amount++;
 					}
-				}catch(Exception e){}
+				}catch(Exception e) {}
 			}
 		}
-		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Amount-Toggle")){
+		if(Main.settings.getConfig().getBoolean("Settings.TransmogScroll.Amount-Toggle")) {
 			m.setDisplayName(name + Methods.color(enchs.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
 		}
 		item.setItemMeta(m);
 		return item;
 	}
 	
-	public static List<String> orderInts(List<String> list, final Map<String, Integer> map){
-	    Collections.sort(list, new Comparator<String>() {
-	        @Override
-	        public int compare(String a1, String a2) {
-	        	Integer string1 = map.get(a1);
-	        	Integer string2 = map.get(a2);
-	            return string2.compareTo(string1);
-	        }
-	    });
-	    return list;
+	public static List<String> orderInts(List<String> list, final Map<String, Integer> map) {
+		Collections.sort(list, new Comparator<String>() {
+			@Override
+			public int compare(String a1, String a2) {
+				Integer string1 = map.get(a1);
+				Integer string2 = map.get(a2);
+				return string2.compareTo(string1);
+			}
+		});
+		return list;
 	}
 	
-	public static ItemStack getBlackScroll(int amount){
+	public static ItemStack getBlackScroll(int amount) {
 		String name = Methods.color(Main.settings.getConfig().getString("Settings.BlackScroll.Name"));
 		String id = Main.settings.getConfig().getString("Settings.BlackScroll.Item");
 		return Methods.makeItem(id, amount, name, Main.settings.getConfig().getStringList("Settings.BlackScroll.Item-Lore"));
 	}
 	
-	public static ItemStack getWhiteScroll(int amount){
+	public static ItemStack getWhiteScroll(int amount) {
 		String name = Methods.color(Main.settings.getConfig().getString("Settings.WhiteScroll.Name"));
 		String id = Main.settings.getConfig().getString("Settings.WhiteScroll.Item");
 		return Methods.makeItem(id, amount, name, Main.settings.getConfig().getStringList("Settings.WhiteScroll.Item-Lore"));
 	}
 	
-	public static ItemStack getTransmogScroll(int amount){
+	public static ItemStack getTransmogScroll(int amount) {
 		String name = Methods.color(Main.settings.getConfig().getString("Settings.TransmogScroll.Name"));
 		String id = Main.settings.getConfig().getString("Settings.TransmogScroll.Item");
 		return Methods.makeItem(id, amount, name, Main.settings.getConfig().getStringList("Settings.TransmogScroll.Item-Lore"));
 	}
 	
-	private CEnchantments pickEnchant(List<CEnchantments> enchants){
+	private CEnchantments pickEnchant(List<CEnchantments> enchants) {
 		Random i = new Random();
 		return enchants.get(i.nextInt(enchants.size()));
 	}
 	
-	private String pickCustomEnchant(List<String> enchants){
+	private String pickCustomEnchant(List<String> enchants) {
 		Random i = new Random();
 		return enchants.get(i.nextInt(enchants.size()));
 	}

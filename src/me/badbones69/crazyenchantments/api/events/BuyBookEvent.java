@@ -8,7 +8,7 @@ import me.badbones69.crazyenchantments.api.CEPlayer;
 import me.badbones69.crazyenchantments.api.CustomEBook;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 
-public class BuyBookEvent extends Event{
+public class BuyBookEvent extends Event {
 	
 	private int price;
 	private CEBook book;
@@ -25,7 +25,7 @@ public class BuyBookEvent extends Event{
 	 * @param book CEBook being bought.
 	 * @param customBook CustomEBook being bought.
 	 */
-	public BuyBookEvent(CEPlayer player, Currency currency, int price, CEBook book, CustomEBook customBook){
+	public BuyBookEvent(CEPlayer player, Currency currency, int price, CEBook book, CustomEBook customBook) {
 		this.book = book;
 		this.price = price;
 		this.player = player;
@@ -37,7 +37,7 @@ public class BuyBookEvent extends Event{
 	 * Get the player that buys the book.
 	 * @return The player that bought the book.
 	 */
-	public CEPlayer getPlayer(){
+	public CEPlayer getPlayer() {
 		return this.player;
 	}
 	
@@ -45,7 +45,7 @@ public class BuyBookEvent extends Event{
 	 * Get the currency being used.
 	 * @return The currency being used.
 	 */
-	public Currency getCurrency(){
+	public Currency getCurrency() {
 		return this.currency;
 	}
 	
@@ -53,7 +53,7 @@ public class BuyBookEvent extends Event{
 	 * Get the price they bought the book at.
 	 * @return The price they payed.
 	 */
-	public int getPrice(){
+	public int getPrice() {
 		return this.price;
 	}
 	
@@ -61,7 +61,7 @@ public class BuyBookEvent extends Event{
 	 * The CEBook that is being bought.
 	 * @return The CEBook that is being bought. This maybe null if they bought a CustomEBook instead.
 	 */
-	public CEBook getBook(){
+	public CEBook getBook() {
 		return this.book;
 	}
 	
@@ -69,14 +69,14 @@ public class BuyBookEvent extends Event{
 	 * The CustomEBook the player bought.
 	 * @return The CuustomEBook being bought. This maybe null if the player bought a CEBook.
 	 */
-	public CustomEBook getCustomBook(){
+	public CustomEBook getCustomBook() {
 		return this.customBook;
 	}
 	
 	public HandlerList getHandlers() {
 		return handlers;
 	}
-
+	
 	public static HandlerList getHandlerList() {
 		return handlers;
 	}

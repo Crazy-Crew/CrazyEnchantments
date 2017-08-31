@@ -22,7 +22,7 @@ public class GKitzItem {
 	/**
 	 * Make an empty gkit item.
 	 */
-	public GKitzItem(){
+	public GKitzItem() {
 		name = "";
 		amount = 1;
 		type = "299";
@@ -37,7 +37,7 @@ public class GKitzItem {
 	 * @param enchant Crazy Enchantment
 	 * @param level Level of the enchantment
 	 */
-	public void addCEEnchantment(CEnchantments enchant, Integer level){
+	public void addCEEnchantment(CEnchantments enchant, Integer level) {
 		ceEnchantments.put(enchant, level);
 	}
 	
@@ -45,7 +45,7 @@ public class GKitzItem {
 	 * 
 	 * @param enchant Crazy Enchantment
 	 */
-	public void removeCEEnchantment(CEnchantments enchant){
+	public void removeCEEnchantment(CEnchantments enchant) {
 		ceEnchantments.remove(enchant);
 	}
 	
@@ -54,7 +54,7 @@ public class GKitzItem {
 	 * @param enchant Custom Enchantment
 	 * @param level Level of the enchantment
 	 */
-	public void addCustomEnchantment(String enchant, Integer level){
+	public void addCustomEnchantment(String enchant, Integer level) {
 		cEnchantments.put(enchant, level);
 	}
 	
@@ -62,7 +62,7 @@ public class GKitzItem {
 	 * 
 	 * @param enchant Custom Enchantment
 	 */
-	public void removeCustomEnchantment(String enchant){
+	public void removeCustomEnchantment(String enchant) {
 		cEnchantments.remove(enchant);
 	}
 	
@@ -71,7 +71,7 @@ public class GKitzItem {
 	 * @param enchant Vanilla Enchantment
 	 * @param level Level of the enchantment
 	 */
-	public void addEnchantment(Enchantment enchant, Integer level){
+	public void addEnchantment(Enchantment enchant, Integer level) {
 		enchantments.put(enchant, level);
 	}
 	
@@ -79,7 +79,7 @@ public class GKitzItem {
 	 * 
 	 * @param enchant Vanilla Enchantment
 	 */
-	public void removeEnchantment(Enchantment enchant){
+	public void removeEnchantment(Enchantment enchant) {
 		enchantments.remove(enchant);
 	}
 	
@@ -87,7 +87,7 @@ public class GKitzItem {
 	 * 
 	 * @param id Item's ID
 	 */
-	public void setItem(String id){
+	public void setItem(String id) {
 		type = id;
 	}
 	
@@ -95,7 +95,7 @@ public class GKitzItem {
 	 * 
 	 * @param amount Amount of items
 	 */
-	public void setAmount(Integer amount){
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 	
@@ -103,7 +103,7 @@ public class GKitzItem {
 	 * 
 	 * @param name Name of the item
 	 */
-	public void setName(String name){
+	public void setName(String name) {
 		this.name = name;
 	}
 	
@@ -111,7 +111,7 @@ public class GKitzItem {
 	 * 
 	 * @param lore Lore of the item
 	 */
-	public void setLore(ArrayList<String> lore){
+	public void setLore(ArrayList<String> lore) {
 		this.lore = lore;
 	}
 	
@@ -119,20 +119,20 @@ public class GKitzItem {
 	 * 
 	 * @return Returns a fully finished item.
 	 */
-	public ItemStack build(){
+	public ItemStack build() {
 		ItemStack item = Methods.makeItem(type, amount, name);
-		for(CEnchantments en : ceEnchantments.keySet()){
+		for(CEnchantments en : ceEnchantments.keySet()) {
 			Main.CE.addEnchantment(item, en, ceEnchantments.get(en));
 		}
-		for(String en : cEnchantments.keySet()){
-			if(Main.CustomE.isEnchantment(en)){
+		for(String en : cEnchantments.keySet()) {
+			if(Main.CustomE.isEnchantment(en)) {
 				Main.CustomE.addEnchantment(item, en, cEnchantments.get(en));
 			}
 		}
-		for(Enchantment en : enchantments.keySet()){
+		for(Enchantment en : enchantments.keySet()) {
 			item.addUnsafeEnchantment(en, enchantments.get(en));
 		}
-		for(String l : lore){
+		for(String l : lore) {
 			Methods.addLore(item, l);
 		}
 		return item;
