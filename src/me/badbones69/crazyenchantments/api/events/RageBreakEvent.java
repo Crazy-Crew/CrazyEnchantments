@@ -9,16 +9,16 @@ import org.bukkit.inventory.ItemStack;
 
 public class RageBreakEvent extends Event implements Cancellable {
 	
-	private Player Player;
-	private Entity Damager;
-	private ItemStack It;
-	private Boolean Cancel;
+	private Player player;
+	private Entity damager;
+	private ItemStack weapon;
+	private Boolean cancel;
 	
-	public RageBreakEvent(Player player, Entity damager, ItemStack item) {
-		Player = player;
-		Damager = damager;
-		It = item;
-		Cancel = false;
+	public RageBreakEvent(Player player, Entity damager, ItemStack weapon) {
+		this.player = player;
+		this.damager = damager;
+		this.weapon = weapon;
+		cancel = false;
 	}
 	
 	/**
@@ -26,7 +26,7 @@ public class RageBreakEvent extends Event implements Cancellable {
 	 * @return The player that uses the enchantment.
 	 */
 	public Player getPlayer() {
-		return Player;
+		return player;
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class RageBreakEvent extends Event implements Cancellable {
 	 * @return The entity that is attacking the player.
 	 */
 	public Entity getDamager() {
-		return Damager;
+		return damager;
 	}
 	
 	/**
@@ -42,7 +42,7 @@ public class RageBreakEvent extends Event implements Cancellable {
 	 * @return The item that uses the enchantment.
 	 */
 	public ItemStack getItem() {
-		return It;
+		return weapon;
 	}
 	
 	private static final HandlerList handlers = new HandlerList();
@@ -55,14 +55,18 @@ public class RageBreakEvent extends Event implements Cancellable {
 		return handlers;
 	}
 	
+	/**
+	 * 
+	 * @return True if the event is canceled and false if not.
+	 */
 	@Override
 	public boolean isCancelled() {
-		return Cancel;
+		return cancel;
 	}
 	
 	@Override
 	public void setCancelled(boolean cancel) {
-		Cancel = cancel;
+		this.cancel = cancel;
 	}
 	
 }

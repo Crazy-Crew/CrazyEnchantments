@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.Inventory;
@@ -24,6 +25,9 @@ import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.EnchantmentType;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
+import me.badbones69.crazyenchantments.api.events.ArmorType;
 import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class EnchantmentControl implements Listener {
@@ -71,28 +75,28 @@ public class EnchantmentControl implements Listener {
 		Player player = (Player) e.getWhoClicked();
 		if(inv != null) {
 			if(e.getCursor() != null && e.getCurrentItem() != null) {
-				ItemStack c = e.getCursor();
+				ItemStack book = e.getCursor();
 				ItemStack item = e.getCurrentItem();
-				if(c.hasItemMeta()) {
-					if(c.getItemMeta().hasDisplayName()) {
-						if(c.getType() != Main.CE.getEnchantmentBookItem().getType()) {
+				if(book.hasItemMeta()) {
+					if(book.getItemMeta().hasDisplayName()) {
+						if(book.getType() != Main.CE.getEnchantmentBookItem().getType()) {
 							return;
 						}
 						Boolean t = false;
 						for(CEnchantments en : Main.CE.getEnchantments()) {
-							if(c.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
+							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
 								t = true;
 							}
 						}
 						for(String en : Main.CustomE.getEnchantments()) {
-							if(c.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))) {
+							if(book.getItemMeta().getDisplayName().startsWith(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en))) {
 								t = true;
 							}
 						}
 						if(!t) {
 							return;
 						}
-						String name = c.getItemMeta().getDisplayName();
+						String name = book.getItemMeta().getDisplayName();
 						CEnchantments en = CEnchantments.GLOWING;
 						String enchant = "Glowing";
 						Boolean custom = true;
@@ -113,22 +117,22 @@ public class EnchantmentControl implements Listener {
 							}
 						}
 						if(type.getItems().contains(item.getType())) {
-							if(c.getAmount() == 1 && item.getAmount() == 1) {
-								boolean success = successChance(c);
-								boolean destroy = destroyChance(c);
+							if(book.getAmount() == 1 && item.getAmount() == 1) {
+								boolean success = successChance(book);
+								boolean destroy = destroyChance(book);
 								Boolean toggle = false;
 								Boolean lowerLvl = false;
 								if(custom) {
 									if(Main.CustomE.hasEnchantment(item, enchant)) {
 										toggle = true;
-										if(Main.CustomE.getPower(item, enchant) < Main.CustomE.getBookPower(c, enchant)) {
+										if(Main.CustomE.getPower(item, enchant) < Main.CustomE.getBookPower(book, enchant)) {
 											lowerLvl = true;
 										}
 									}
 								}else {
 									if(Main.CE.hasEnchantment(item, en)) {
 										toggle = true;
-										if(Main.CE.getPower(item, en) < Main.CE.getBookPower(c, en)) {
+										if(Main.CE.getPower(item, en) < Main.CE.getBookPower(book, en)) {
 											lowerLvl = true;
 										}
 									}
@@ -140,11 +144,18 @@ public class EnchantmentControl implements Listener {
 											if(success || player.getGameMode() == GameMode.CREATIVE) {
 												String l = "0";
 												if(custom) {
-													e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, Main.CustomE.getBookPower(c, enchant)));
-													l = Main.CustomE.getBookPower(c, enchant) + "";
+													e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, Main.CustomE.getBookPower(book, enchant)));
+													l = Main.CustomE.getBookPower(book, enchant) + "";
 												}else {
-													e.setCurrentItem(Main.CE.addEnchantment(item, en, Main.CE.getBookPower(c, en)));
-													l = Main.CE.getBookPower(c, en) + "";
+													ItemStack newItem = Main.CE.addEnchantment(item, en, Main.CE.getBookPower(book, en));
+													if(e.getInventory().getType() == InventoryType.CRAFTING) {
+														if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
+															ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
+															Bukkit.getPluginManager().callEvent(event);
+														}
+													}
+													e.setCurrentItem(newItem);
+													l = Main.CE.getBookPower(book, en) + "";
 												}
 												player.setItemOnCursor(new ItemStack(Material.AIR));
 												player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Enchantment-Upgrade.Success").replaceAll("%Enchantment%", enchant).replaceAll("%enchantment%", enchant).replaceAll("%Level%", l).replaceAll("%level%", l)));
@@ -165,7 +176,14 @@ public class EnchantmentControl implements Listener {
 														if(custom) {
 															Main.CustomE.removeEnchantment(item, enchant);
 														}else {
-															Main.CE.removeEnchantment(item, en);
+															ItemStack newItem = Main.CE.removeEnchantment(item, en);
+															if(e.getInventory().getType() == InventoryType.CRAFTING) {
+																if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
+																	ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
+																	Bukkit.getPluginManager().callEvent(event);
+																}
+															}
+															e.setCurrentItem(newItem);
 														}
 														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Enchantment-Upgrade.Destroyed")));
 													}
@@ -174,7 +192,14 @@ public class EnchantmentControl implements Listener {
 														e.setCurrentItem(Methods.removeProtected(item));
 														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Item-Was-Protected")));
 													}else {
-														e.setCurrentItem(new ItemStack(Material.AIR));
+														ItemStack newItem = new ItemStack(Material.AIR);
+														if(e.getInventory().getType() == InventoryType.CRAFTING) {
+															if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
+																ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
+																Bukkit.getPluginManager().callEvent(event);
+															}
+														}
+														e.setCurrentItem(newItem);
 														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Item-Destroyed")));
 													}
 												}
@@ -220,7 +245,15 @@ public class EnchantmentControl implements Listener {
 									if(custom) {
 										e.setCurrentItem(Main.CustomE.addEnchantment(item, enchant, lvl));
 									}else {
-										e.setCurrentItem(Main.CE.addEnchantment(item, en, lvl));
+										ItemStack oldItem = item.clone();
+										ItemStack newItem = Main.CE.addEnchantment(item, en, lvl);
+										if(e.getInventory().getType() == InventoryType.CRAFTING) {
+											if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
+												ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), oldItem, newItem);
+												Bukkit.getPluginManager().callEvent(event);
+											}
+										}
+										e.setCurrentItem(newItem);
 									}
 									player.setItemOnCursor(new ItemStack(Material.AIR));
 									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Book-Works")));
@@ -247,8 +280,15 @@ public class EnchantmentControl implements Listener {
 										}catch(Exception ex) {}
 										return;
 									}else {
+										ItemStack newItem = new ItemStack(Material.AIR);
+										if(e.getInventory().getType() == InventoryType.CRAFTING) {
+											if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
+												ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
+												Bukkit.getPluginManager().callEvent(event);
+											}
+										}
+										e.setCurrentItem(newItem);
 										player.setItemOnCursor(new ItemStack(Material.AIR));
-										e.setCurrentItem(new ItemStack(Material.AIR));
 										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Item-Destroyed")));
 									}
 									player.updateInventory();
@@ -278,35 +318,30 @@ public class EnchantmentControl implements Listener {
 	@EventHandler
 	public void onDescriptionSend(PlayerInteractEvent e) {
 		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description") || !Main.settings.getConfig().contains("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
-			if(e.getItem() != null) {
-				ItemStack item = Methods.getItemInHand(e.getPlayer());
-				if(item.getType() != Methods.makeItem(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item"), 1).getType()) return;
-				if(item.hasItemMeta()) {
-					if(item.getItemMeta().hasDisplayName()) {
-						e.setCancelled(true);
-						String name = "";
-						Player player = e.getPlayer();
-						List<String> desc = new ArrayList<String>();
-						for(CEnchantments en : Main.CE.getEnchantments()) {
-							if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
-								name = Main.settings.getEnchs().getString("Enchantments." + en.getName() + ".Info.Name");
-								desc = Main.settings.getEnchs().getStringList("Enchantments." + en.getName() + ".Info.Description");
-							}
-						}
-						for(String en : Main.CustomE.getEnchantments()) {
-							if(item.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en)))) {
-								name = Main.settings.getCustomEnchs().getString("Enchantments." + en + ".Info.Name");
-								desc = Main.settings.getCustomEnchs().getStringList("Enchantments." + en + ".Info.Description");
-							}
-						}
-						if(name.length() > 0) {
-							player.sendMessage(Methods.color(name));
-						}
-						for(String msg : desc)
-							player.sendMessage(Methods.color(msg));
-						return;
+			ItemStack item = Methods.getItemInHand(e.getPlayer());
+			if(Main.CE.isEnchantmentBook(item)) {
+				e.setCancelled(true);
+				String name = "";
+				Player player = e.getPlayer();
+				List<String> desc = new ArrayList<String>();
+				for(CEnchantments en : Main.CE.getEnchantments()) {
+					if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
+						name = Main.settings.getEnchs().getString("Enchantments." + en.getName() + ".Info.Name");
+						desc = Main.settings.getEnchs().getStringList("Enchantments." + en.getName() + ".Info.Description");
 					}
 				}
+				for(String en : Main.CustomE.getEnchantments()) {
+					if(item.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en)))) {
+						name = Main.settings.getCustomEnchs().getString("Enchantments." + en + ".Info.Name");
+						desc = Main.settings.getCustomEnchs().getStringList("Enchantments." + en + ".Info.Description");
+					}
+				}
+				if(name.length() > 0) {
+					player.sendMessage(Methods.color(name));
+				}
+				for(String msg : desc)
+					player.sendMessage(Methods.color(msg));
+				return;
 			}
 		}
 	}

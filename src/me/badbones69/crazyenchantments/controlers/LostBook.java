@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Color;
+import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -17,7 +20,7 @@ import me.badbones69.crazyenchantments.Methods;
 
 public class LostBook implements Listener {
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBookClean(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		if(e.getItem() != null) {
@@ -76,6 +79,10 @@ public class LostBook implements Listener {
 									}
 								}
 							}
+							Sound sound = getSound(category);
+							if(sound != null) {
+								player.playSound(player.getLocation(), sound, 1, 1);
+							}
 							return;
 						}
 					}
@@ -84,16 +91,29 @@ public class LostBook implements Listener {
 		}
 	}
 	
-	public static ItemStack getLostBook(String cat, int amount) {
+	public static ItemStack getLostBook(String category, int amount) {
 		String id = Main.settings.getConfig().getString("Settings.LostBook.Item");
 		String name = Main.settings.getConfig().getString("Settings.LostBook.Name");
 		List<String> lore = new ArrayList<String>();
-		String tn = Main.settings.getConfig().getString("Categories." + cat + ".Name");
+		String tn = Main.settings.getConfig().getString("Categories." + category + ".Name");
 		name = name.replaceAll("%Category%", tn).replaceAll("%category%", tn);
 		for(String l : Main.settings.getConfig().getStringList("Settings.LostBook.Lore")) {
 			lore.add(l.replaceAll("%Category%", tn).replaceAll("%category%", tn));
 		}
 		return Methods.makeItem(id, amount, name, lore);
+	}
+	
+	private Sound getSound(String category) {
+		FileConfiguration config = Main.settings.getConfig();
+		if(config.contains("Categories." + category + ".LostBook.Sound-Toggle") && config.contains("Categories." + category + ".LostBook.Sound")) {
+			if(config.getBoolean("Categories." + category + ".LostBook.Sound-Toggle")) {
+				Sound sound = Sound.valueOf(config.getString("Categories." + category + ".LostBook.Sound"));
+				if(sound != null) {
+					return sound;
+				}
+			}
+		}
+		return null;
 	}
 	
 }
