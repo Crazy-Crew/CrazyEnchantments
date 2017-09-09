@@ -26,6 +26,7 @@ import me.badbones69.crazyenchantments.api.CEnchantments;
 import me.badbones69.crazyenchantments.api.DataStorage;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.events.RageBreakEvent;
 import me.badbones69.crazyenchantments.api.events.DisarmerUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
@@ -45,18 +46,23 @@ public class Swords implements Listener {
 			if(!Support.isFriendly(e.getDamager(), e.getEntity())) {
 				if(DataStorage.isBreakRageOnDamageOn()) {
 					if(e.getEntity() instanceof Player) {
-						UUID uuid = e.getEntity().getUniqueId();
-						if(multiplier.containsKey(uuid)) {
-							inRage.get(uuid).cancel();
-							multiplier.remove(uuid);
-							rageLevel.remove(uuid);
-							inRage.remove(uuid);
-							if(Main.settings.getMessages().contains("Messages.Rage.Damaged")) {
-								if(Main.settings.getMessages().getString("Messages.Rage.Damaged").length() > 0) {
-									e.getEntity().sendMessage(Methods.color(Main.settings.getMessages().getString("Messages.Rage.Damaged")));
+						Player player = (Player)e.getEntity();
+						RageBreakEvent event = new RageBreakEvent(player, e.getDamager(), Methods.getItemInHand(player));
+						Bukkit.getPluginManager().callEvent(event);
+						if(!event.isCancelled()) {
+							UUID uuid = e.getEntity().getUniqueId();
+							if(multiplier.containsKey(uuid)) {
+								inRage.get(uuid).cancel();
+								multiplier.remove(uuid);
+								rageLevel.remove(uuid);
+								inRage.remove(uuid);
+								if(Main.settings.getMessages().contains("Messages.Rage.Damaged")) {
+									if(Main.settings.getMessages().getString("Messages.Rage.Damaged").length() > 0) {
+										e.getEntity().sendMessage(Methods.color(Main.settings.getMessages().getString("Messages.Rage.Damaged")));
+									}
+								}else {
+									e.getEntity().sendMessage(Methods.color("&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"));
 								}
-							}else {
-								e.getEntity().sendMessage(Methods.color("&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"));
 							}
 						}
 					}
