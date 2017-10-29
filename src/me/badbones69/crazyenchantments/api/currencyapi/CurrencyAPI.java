@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.api.currencyapi;
 
 import org.bukkit.entity.Player;
 
+import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.multisupport.Version;
 
 public class CurrencyAPI {
@@ -42,7 +43,7 @@ public class CurrencyAPI {
 					player.setLevel(player.getLevel() - amount);
 					break;
 				case XP_TOTAL:
-					takeTotalXP(player, amount);
+					takeTotalExperience(player, amount);
 					break;
 			}
 		}catch(Exception e) {}catch(NoClassDefFoundError e) {}
@@ -64,7 +65,7 @@ public class CurrencyAPI {
 					player.setLevel(player.getLevel() + amount);
 					break;
 				case XP_TOTAL:
-					takeTotalXP(player, -amount);
+					takeTotalExperience(player, -amount);
 					break;
 			}
 		}catch(Exception e) {}catch(NoClassDefFoundError e) {}
@@ -81,7 +82,7 @@ public class CurrencyAPI {
 		return getCurrency(player, currency) >= cost;
 	}
 	
-	private static void takeTotalXP(Player player, int amount) {
+	private static void takeTotalExperience(Player player, int amount) {
 		if(Version.getVersion().getVersionInteger() >= 181) {
 			int total = getTotalExperience(player) - amount;
 			player.setTotalExperience(0);
@@ -95,6 +96,14 @@ public class CurrencyAPI {
 			float xp = (float) total / (float) player.getExpToLevel();
 			player.setExp(xp);
 		}else {
+			if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.EXP-Bug")) {
+				if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.EXP-Bug")) {
+					if(getTotalExperience(player) == amount) {
+						player.giveExp(-(amount - 1));
+						return;
+					}
+				}
+			}
 			player.giveExp(-amount);
 		}
 	}

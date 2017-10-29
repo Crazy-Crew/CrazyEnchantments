@@ -103,7 +103,7 @@ public class BlackSmith implements Listener {
 					if(!inBlackSmith(e.getRawSlot())) {// Click In Players Inventory
 						if(item.getAmount() != 1) return;
 						if(Main.CE.hasEnchantments(item) || item.getType() == Main.CE.getEnchantmentBookItem().getType()) {
-							if(item.getType() == Main.CE.getEnchantmentBookItem().getType()) {//Is a book.
+							if(item.getType() == Main.CE.getEnchantmentBookItem().getType()) {//Is a custom enchantment book.
 								if(!item.hasItemMeta()) return;
 								if(!item.getItemMeta().hasDisplayName()) return;
 								boolean T = false;
@@ -242,9 +242,9 @@ public class BlackSmith implements Listener {
 										}
 									}
 									if(Methods.isInvFull(player)) {
-										player.getWorld().dropItem(player.getLocation(), getUpgradedItem(player, inv.getItem(10), inv.getItem(13), false));
+										player.getWorld().dropItem(player.getLocation(), getUpgradedItem(player, inv.getItem(10), inv.getItem(13), true));
 									}else {
-										player.getInventory().addItem(getUpgradedItem(player, inv.getItem(10), inv.getItem(13), false));
+										player.getInventory().addItem(getUpgradedItem(player, inv.getItem(10), inv.getItem(13), true));
 									}
 									inv.setItem(10, new ItemStack(Material.AIR));
 									inv.setItem(13, new ItemStack(Material.AIR));
