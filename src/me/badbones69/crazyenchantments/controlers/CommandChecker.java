@@ -29,6 +29,12 @@ public class CommandChecker implements Listener {
 					}
 				}
 			}
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					Main.CE.updatePlayerEffects(player);
+				}
+			}.runTaskLater(Main.CE.getPlugin(), 5);
 		}else if(e.getMessage().toLowerCase().equalsIgnoreCase("/heal")) {
 			new BukkitRunnable() {
 				@Override

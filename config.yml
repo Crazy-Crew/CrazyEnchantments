@@ -37,7 +37,7 @@ Settings:
         Item: '76' #The item the pointer is.
         Name: '&c&lPointer' #The name of the pointer.
         Lore: #The lore on the pointer.
-          - '&7What ever percents the item lands on'
+          - '&7Whatever percents the item lands on'
           - '&7will be the new percents on your book.'
     InGUI: false #If you can buy it in the GUI.
     Slot: 1 #The slot the item will be in.
@@ -102,7 +102,7 @@ Settings:
     Transaction: #Options for the pricing
       Currency: XP_Level
       Costs: #Cost options
-        Power-Up: 5 #When a enchantment levels up 1 on an item
+        Power-Up: 5 #When an enchantment levels up 1 on an item
         Add-Enchantment: 3 #When it adds an enchantment to the item from another item
         Book-Upgrade: 5 #Leveling up a books power
   Tinker: #Settings for Info item in the GUI
@@ -247,12 +247,13 @@ Settings:
     Right-Click-Book-Description: true #Toggles whether when you right click the enchantment book if it messages the player the description or not.
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
-    Right-Click-Enchantment-Table: false #When set to true if a player right clicks a enchantment table it will open the /CE gui.
+    Right-Click-Enchantment-Table: false #When set to true if a player right clicks an enchantment table it will open the /CE gui.
+    EXP-Bug: false #Only needs to be true if player's XP sometimes glitches to 1Bill after buying an item will all their XP.
     Armor-Upgrade: #Having this enabled will allow players to try and add a higher level of an enchantment onto an item with a lower level of the enchantment.
       Toggle: true #Toggle on or off the ability to upgrade the enchantments.
       Enchantment-Break: true #If the book's destroy rate happens the item doesn't break but instead the current lower version of the enchantment is destroyed. If false then the item will be destroyed instead.
     Wings: #Options for the Wings Enchantment.
-      Clouds: true #Toggle if the wings enchantment shows particles under the players feet. Warning this option has been known to cause lag so toggle it off if you get lag.
+      Clouds: true #Toggle if the wings enchantment shows particles under the player's feet. Warning this option has been known to cause lag so toggle it off if you get lag.
       Enemy-Toggle: true #This toggles on and off the wings enchantment when an enemy is # away from the player.
       Distance: 25 #How far away the enemy has to be to toggle off the enchantment.
       Members-Can-Fly: true #Toggle if a player is a member of a world guard region if they can fly.
@@ -388,14 +389,14 @@ Categories: #You can make as many different categories as you want
   Common: #Name of the category
     Name: '&a&l&nCommon' #Name in the GUI
     Slot: 31 #The Slot number the item will be in
-    InGUI: true #Toggle if its in the GUI or not.
+    InGUI: true #Toggle if it's in the GUI or not.
     Lore: #The lore of the Item
       - '&eCost: &6&l20 &6XP Levels'
     Item: '160:5' #The id for the item
     Glowing: true #If the item is glowing in the GUI.
     Cost: 20 #How much each book will cost to buy.
     Currency: XP_Level #The currency you wish to use. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
-    Rarity: 1 #This allows the enchantments to be ordered with the Transmog Scrolls. The higher the number the more rare it is. Try and have each category have different rarities.
+    Rarity: 1 #This allows the enchantments to be ordered with the Transmog Scrolls. The higher the number the rarer it is. Try and have each category have different rarities.
     LostBook: #Controls the Lost Book shop for this tier
       InGUI: false #If it shows in the /CE Gui
       Slot: 1 #Slot it will be in
@@ -413,6 +414,13 @@ Categories: #You can make as many different categories as you want
       Currency: Vault
       FireworkToggle: true #Toggle on and off if when opening a lost book a firework effect happens
       FireworkColors: 'Red, White, Blue' #The colors of the firework
+      Sound-Toggle: false
+      Sound: 'BLOCK_ANVIL_PLACE'
+      ####################
+      ## Sound Options
+      ## 1.8 and lower players use these sounds: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html
+      ## 1.9 and up players use these sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+      ####################
     EnchOptions: #Enchantment Options
       SuccessPercent: #The range for the success rate that the enchantment will have
         Max: 90 #The max success rate
@@ -421,7 +429,7 @@ Categories: #You can make as many different categories as you want
         Max: 10 #The max destroy rate
         Min: 0 #The min destroy rate
       MaxLvlToggle: true #Turn on and off Max Level cap
-      LvlRange: #The range of lvls that can be found in the Category.
+      LvlRange: #The range of levels that can be found in the Category.
         Max: 2
         Min: 1
   Rare:
@@ -452,6 +460,8 @@ Categories: #You can make as many different categories as you want
       Currency: Vault
       FireworkToggle: true
       FireworkColors: 'Black, Yellow'
+      Sound-Toggle: false
+      Sound: 'BLOCK_ANVIL_PLACE'
     EnchOptions:
       SuccessPercent:
         Max: 70
@@ -491,6 +501,8 @@ Categories: #You can make as many different categories as you want
       Currency: Vault
       FireworkToggle: true
       FireworkColors: 'White, Gray'
+      Sound-Toggle: false
+      Sound: 'BLOCK_ANVIL_PLACE'
     EnchOptions:
       SuccessPercent:
         Max: 50

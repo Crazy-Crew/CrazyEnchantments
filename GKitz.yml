@@ -52,6 +52,7 @@ GKitz: #GKit optons.
         - '&7Cooldown: &624 Hours'
         - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
         - '&7&l(&6&l!&7&l) &7Right click to preview'
+    Auto-Equip: false #If armor is auto equipped onto the player if the slots are available.
     Cooldown: '24h' #Cooldown for the GKit. Available options d - Day, h - Hour, m - Minute, s - Second
     Items: #The items that are given the players. 
       - 'Item:310, Amount:1, Name:&6&lHero Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-3,Glowing:0-1,Implants:0-5, Lore:&aA special helmet worn by a great hero.,&aTake special care of this.'
@@ -73,6 +74,7 @@ GKitz: #GKit optons.
         - '&7Cooldown: &624 Hours'
         - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
         - '&7&l(&9&l!&7&l) &7Right click to preview'
+    Auto-Equip: false
     Cooldown: '24h'
     Items:
       - 'Item:310, Amount:1, Name:&9&lPeace Keeper Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-3,Glowing:0-1,Implants:0-5, Lore:&9A special helmet worn by a peace keeper.,&9Take special care of this.'
@@ -94,6 +96,7 @@ GKitz: #GKit optons.
         - '&7Cooldown: &624 Hours'
         - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
         - '&7&l(&4&l!&7&l) &7Right click to preview'
+    Auto-Equip: false
     Cooldown: '24h'
     Items:
       - 'Item:310, Amount:1, Name:&4&lVillain Helmet, Enchantments:Protection:4,Respiration:3,Thorns:3,Aqua_Affinity:1, CustomEnchantments:Overload:1-5,Hulk:2-3,Glowing:0-1,Implants:0-5, Lore:&cA special helmet worn by a evil villain.,&cTake special care of this.'

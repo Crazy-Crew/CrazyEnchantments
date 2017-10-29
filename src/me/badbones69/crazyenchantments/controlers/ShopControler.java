@@ -292,7 +292,7 @@ public class ShopControler implements Listener {
 						}
 					}
 				}
-				if(slot > size) {
+				if(slot > size || slot <= 0) {
 					continue;
 				}
 				slot--;
