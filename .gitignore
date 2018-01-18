@@ -1,10 +1,11 @@
-.DS_Store
 
-.gitattributes
+#Maven
+target
+dependency-reduced-pom.xml
 
-Notes.txt
+#IntelliJ
+.idea
+*.iml
+META-INF/
 
-*.prefs
-
-*.class
-bin/
+crazyenchantments/src/main/lib/
