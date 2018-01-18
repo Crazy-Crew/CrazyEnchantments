@@ -1,12 +1,12 @@
-package me.badbones69.crazyenchantments.api;
+package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
 public class GKitz {
-
+	
 	private int slot;
 	private String name;
 	private String cooldown;
@@ -16,7 +16,8 @@ public class GKitz {
 	private ArrayList<ItemStack> items;
 	private ArrayList<ItemStack> preview;
 	private ArrayList<String> itemStrings;
-
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	
 	/**
 	 * Create a new gkit.
 	 * @param name The name of the gkit.
@@ -29,7 +30,8 @@ public class GKitz {
 	 * @param itemStrings The items as a string.
 	 * @param autoEquip This is if the armor equipts when given.
 	 */
-	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview, ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings, Boolean autoEquip) {
+	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview,
+	ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings, Boolean autoEquip) {
 		this.name = name;
 		this.slot = slot;
 		this.items = items;
@@ -40,42 +42,41 @@ public class GKitz {
 		this.displayItem = displayItem;
 		this.itemStrings = itemStrings;
 	}
-
+	
 	public String getName() {
 		return this.name;
 	}
-
+	
 	public int getSlot() {
 		return this.slot;
 	}
-
+	
 	public String getCooldown() {
 		return this.cooldown;
 	}
-
+	
 	public ItemStack getDisplayItem() {
 		return this.displayItem;
 	}
-
+	
 	public ArrayList<ItemStack> getPreviewItems() {
 		return this.preview;
 	}
-
+	
 	public ArrayList<String> getCommands() {
 		return this.commands;
 	}
-
+	
 	public ArrayList<ItemStack> getItems() {
-		this.items = Main.CE.getKitItems(itemStrings);
 		return this.items;
 	}
-
+	
 	public ArrayList<String> getItemStrings() {
 		return this.itemStrings;
 	}
-
+	
 	public Boolean canAutoEquipt() {
 		return this.autoEquip;
 	}
-
+	
 }

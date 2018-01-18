@@ -13,14 +13,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 
 public class FireworkDamageAPI implements Listener {
-
+	
 	private Plugin plugin;
-	private static ArrayList<Entity> fireworks = new ArrayList<Entity>();
-
+	private static ArrayList<Entity> fireworks = new ArrayList<>();
+	
 	public FireworkDamageAPI(Plugin plugin) {
 		this.plugin = plugin;
 	}
-
+	
 	/**
 	 *
 	 * @return All the active fireworks.
@@ -28,7 +28,7 @@ public class FireworkDamageAPI implements Listener {
 	public static ArrayList<Entity> getFireworks() {
 		return fireworks;
 	}
-
+	
 	/**
 	 *
 	 * @param firework The firework you want to add.
@@ -38,7 +38,7 @@ public class FireworkDamageAPI implements Listener {
 			fireworks.add(firework);
 		}
 	}
-
+	
 	/**
 	 *
 	 * @param firework The firework you are removing.
@@ -48,7 +48,7 @@ public class FireworkDamageAPI implements Listener {
 			fireworks.remove(firework);
 		}
 	}
-
+	
 	@EventHandler
 	public void onPlayerDamage(EntityDamageEvent e) {
 		for(Entity en : e.getEntity().getNearbyEntities(5, 5, 5)) {
@@ -59,7 +59,7 @@ public class FireworkDamageAPI implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onFireworkExplode(FireworkExplodeEvent e) {
 		final Entity firework = e.getEntity();
@@ -72,5 +72,5 @@ public class FireworkDamageAPI implements Listener {
 			}.runTaskLater(plugin, 5);
 		}
 	}
-
+	
 }

@@ -8,7 +8,7 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.entity.Player;
 
 public class TownySupport {
-
+	
 	public static Boolean inTerritory(Player player) {
 		try {
 			TownBlock block = WorldCoord.parseWorldCoord(player).getTownBlock();
@@ -22,7 +22,7 @@ public class TownySupport {
 		}
 		return false;
 	}
-
+	
 	public static Boolean isFriendly(Player player, Player other) {
 		try {
 			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
@@ -34,5 +34,5 @@ public class TownySupport {
 		}
 		return false;
 	}
-
+	
 }

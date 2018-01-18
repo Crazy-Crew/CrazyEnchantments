@@ -9,31 +9,22 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class WorldGuard {
-
+	
 	public static boolean allowsPVP(Location loc) {
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(loc.getWorld()).getApplicableRegions(loc);
-		if(set.queryState(null, DefaultFlag.PVP) == StateFlag.State.DENY) {
-			return false;
-		}
-		return true;
+		return set.queryState(null, DefaultFlag.PVP) != StateFlag.State.DENY;
 	}
-
+	
 	public static boolean allowsBreak(Location loc) {
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(loc.getWorld()).getApplicableRegions(loc);
-		if(set.queryState(null, DefaultFlag.BLOCK_BREAK) == StateFlag.State.DENY) {
-			return false;
-		}
-		return true;
+		return set.queryState(null, DefaultFlag.BLOCK_BREAK) != StateFlag.State.DENY;
 	}
-
+	
 	public static boolean allowsExplosions(Location loc) {
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(loc.getWorld()).getApplicableRegions(loc);
-		if(set.queryState(null, DefaultFlag.OTHER_EXPLOSION) == StateFlag.State.DENY || set.queryState(null, DefaultFlag.TNT) == StateFlag.State.DENY) {
-			return false;
-		}
-		return true;
+		return set.queryState(null, DefaultFlag.OTHER_EXPLOSION) != StateFlag.State.DENY && set.queryState(null, DefaultFlag.TNT) != StateFlag.State.DENY;
 	}
-
+	
 	public static boolean inRegion(String regionName, Location loc) {
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(loc.getWorld()).getApplicableRegions(loc);
 		for(ProtectedRegion region : set) {
@@ -43,7 +34,7 @@ public class WorldGuard {
 		}
 		return false;
 	}
-
+	
 	public static Boolean isMember(Player player) {
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation());
 		for(ProtectedRegion region : set.getRegions()) {
@@ -53,7 +44,7 @@ public class WorldGuard {
 		}
 		return false;
 	}
-
+	
 	public static Boolean isOwner(Player player) {
 		ApplicableRegionSet set = WGBukkit.getPlugin().getRegionManager(player.getWorld()).getApplicableRegions(player.getLocation());
 		for(ProtectedRegion region : set.getRegions()) {
@@ -63,5 +54,5 @@ public class WorldGuard {
 		}
 		return false;
 	}
-
+	
 }

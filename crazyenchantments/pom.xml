@@ -6,7 +6,7 @@
     <parent>
         <artifactId>crazyenchantments-parent</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.7.9.3.4</version>
+        <version>1.8</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -23,47 +23,54 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_7_R4</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_8_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_8_R2</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_8_R3</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_9_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_9_R2</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_10_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_11_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_12_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>1.5.09-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/lib/mcMMO.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
@@ -104,13 +111,6 @@
             <version>5.0.1-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/lib/SilkSpawners.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.13.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/lib/Factions.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>us.forseth11.feudal.core</groupId>
@@ -249,8 +249,8 @@
                             <include>me.badbones69:*</include>
                         </includes>
                     </artifactSet>
-                    <finalName>${project.artifactId}[v${project.version}]</finalName>
-                    <!--<outputFile>/Users/Joe/Desktop/Stuff/Server/plugins/${project.artifactId}[v${project.version}].jar</outputFile>-->
+                    <!--<finalName>${project.artifactId}[v${project.version}]</finalName>-->
+                    <outputFile>/Users/Joe/Desktop/Stuff/Server/plugins/${project.artifactId}[v${project.version}].jar</outputFile>
                     <!--<outputFile>/Users/Joe/Plugins/Public Plugins/Crazy Enchantments/${project.artifactId}[v${project.version}].jar</outputFile>-->
                 </configuration>
                 <executions>

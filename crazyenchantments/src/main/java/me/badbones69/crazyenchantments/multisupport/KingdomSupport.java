@@ -9,62 +9,27 @@ import org.kingdoms.constants.player.KingdomPlayer;
 import org.kingdoms.manager.game.GameManagement;
 
 public class KingdomSupport {
-
+	
 	public static boolean isFriendly(Player player, Player other) {
 		KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
 		KingdomPlayer ko = GameManagement.getPlayerManager().getSession(other);
-		if(kp == null || ko == null) {
-			return false;
-		}
-		if(kp.getKingdom() == null || ko.getKingdom() == null) {
-			return false;
-		}
-		if(kp.getKingdom() == ko.getKingdom()) {
-			return true;
-		}
-		if(kp.getKingdom() != null) {
-			if(kp.getKingdom().isAllianceWith(ko.getKingdom())) {
-				return true;
-			}else {
-				return false;
-			}
-		}else {
-			return false;
-		}
+		return kp != null && ko != null && kp.getKingdom() != null && ko.getKingdom() != null && (kp.getKingdom() == ko.getKingdom() || kp.getKingdom() != null && kp.getKingdom().isAllianceWith(ko.getKingdom()));
 	}
-
+	
 	public static boolean inTerritory(Player P) {
 		KingdomPlayer kp = GameManagement.getPlayerManager().getSession(P);
 		SimpleLocation loc = new SimpleLocation(P.getLocation());
 		Land land = GameManagement.getLandManager().getOrLoadLand(loc.toSimpleChunk());
 		Kingdom kingdom = GameManagement.getKingdomManager().getOrLoadKingdom(land.getOwner());
-		if(kp.getKingdom() != null && kingdom != null) {
-			if(kingdom.equals(kp.getKingdom())) {
-				return true;
-			}else {
-				return false;
-			}
-		}else {
-			return false;
-		}
+		return kp.getKingdom() != null && kingdom != null && kingdom.equals(kp.getKingdom());
 	}
-
+	
 	public static boolean canBreakBlock(Player player, Block block) {
 		KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
 		SimpleLocation loc = new SimpleLocation(block.getLocation());
 		Land land = GameManagement.getLandManager().getOrLoadLand(loc.toSimpleChunk());
 		Kingdom kingdomland = GameManagement.getKingdomManager().getOrLoadKingdom(land.getOwner());
-		if(land.getOwner() == null) {
-			return true;
-		}
-		if(kp.isAdminMode()) {
-			return true;
-		}
-
-		if(kingdomland.equals(kp.getKingdom())) {
-			return true;
-		}else {
-			return false;
-		}
+		return land.getOwner() == null || kp.isAdminMode() || kingdomland.equals(kp.getKingdom());
+		
 	}
 }

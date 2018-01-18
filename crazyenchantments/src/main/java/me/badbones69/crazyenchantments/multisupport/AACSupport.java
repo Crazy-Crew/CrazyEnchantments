@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class AACSupport implements Listener {
-
-	private static ArrayList<UUID> exempted = new ArrayList<UUID>();
+	
+	private static ArrayList<UUID> exempted = new ArrayList<>();
 	private static Plugin plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
-
+	
 	public static void exemptPlayer(Player player) {
 		if(player != null) {
 			if(!exempted.contains(player.getUniqueId())) {
@@ -23,21 +23,17 @@ public class AACSupport implements Listener {
 			}
 		}
 	}
-
+	
 	public static void unexemptPlayer(Player player) {
 		if(player != null) {
 			exempted.remove(player.getUniqueId());
 		}
 	}
-
+	
 	public static Boolean isExempted(Player player) {
-		if(player != null) {
-			return exempted.contains(player.getUniqueId());
-		}else {
-			return false;
-		}
+		return player != null && exempted.contains(player.getUniqueId());
 	}
-
+	
 	public static void exemptPlayerTime(Player player) {
 		exemptPlayer(player);
 		new BukkitRunnable() {
@@ -47,12 +43,12 @@ public class AACSupport implements Listener {
 			}
 		}.runTaskLaterAsynchronously(plugin, 100);
 	}
-
+	
 	@EventHandler
 	public void onViolation(PlayerViolationEvent e) {
 		if(isExempted(e.getPlayer())) {
 			e.setCancelled(true);
 		}
 	}
-
+	
 }

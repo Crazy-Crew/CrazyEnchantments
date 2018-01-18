@@ -1,7 +1,8 @@
 package me.badbones69.crazyenchantments.controlers;
 
-import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Color;
 import org.bukkit.Sound;
@@ -16,10 +17,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class LostBook implements Listener {
-
+	
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBookClean(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
@@ -30,18 +32,18 @@ public class LostBook implements Listener {
 					if(item.getItemMeta().hasDisplayName()) {
 						boolean toggle = false;
 						String category = null;
-						Set<String> categories = Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false);
-						for(String C : categories) {
-							String name = Main.settings.getConfig().getString("Categories." + C + ".Name");
-							if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.LostBook.Name").replaceAll("%Category%", name).replaceAll("%category%", name)))) {
-								category = C;
+						List<String> categories = ce.getCategories();
+						for(String cat : categories) {
+							String name = Files.CONFIG.getFile().getString("Categories." + cat + ".Name");
+							if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.LostBook.Name").replaceAll("%Category%", name).replaceAll("%category%", name)))) {
+								category = cat;
 								toggle = true;
 							}
 						}
-						if(item.getItemMeta().getDisplayName().equals(Methods.color(Main.settings.getConfig().getString("Settings.LostBook.Name")))) {
-							for(String C : categories) {
-								if(Methods.color(Main.settings.getConfig().getString("Categories." + C + ".Name")).equalsIgnoreCase(EnchantmentControl.getCategory(item))) {
-									category = C;
+						if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.LostBook.Name")))) {
+							for(String cat : categories) {
+								if(Methods.color(Files.CONFIG.getFile().getString("Categories." + cat + ".Name")).equalsIgnoreCase(EnchantmentControl.getCategory(item))) {
+									category = cat;
 									toggle = true;
 								}
 							}
@@ -49,19 +51,20 @@ public class LostBook implements Listener {
 						if(toggle) {
 							e.setCancelled(true);
 							if(Methods.isInvFull(player)) {
-								player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
+								player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
 								return;
 							}
 							Methods.removeItem(item, player);
 							ItemStack book = EnchantmentControl.pick(category);
 							player.getInventory().addItem(book);
 							player.updateInventory();
-							player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Clean-Lost-Book").replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
-							if(Main.settings.getConfig().contains("Categories." + category + ".LostBook.FireworkToggle")) {
-								if(Main.settings.getConfig().contains("Categories." + category + ".LostBook.FireworkColors")) {
-									if(Main.settings.getConfig().getBoolean("Categories." + category + ".LostBook.FireworkToggle")) {
-										ArrayList<Color> colors = new ArrayList<Color>();
-										String Cs = Main.settings.getConfig().getString("Categories." + category + ".LostBook.FireworkColors");
+							player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Clean-Lost-Book")
+							.replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
+							if(Files.CONFIG.getFile().contains("Categories." + category + ".LostBook.FireworkToggle")) {
+								if(Files.CONFIG.getFile().contains("Categories." + category + ".LostBook.FireworkColors")) {
+									if(Files.CONFIG.getFile().getBoolean("Categories." + category + ".LostBook.FireworkToggle")) {
+										ArrayList<Color> colors = new ArrayList<>();
+										String Cs = Files.CONFIG.getFile().getString("Categories." + category + ".LostBook.FireworkColors");
 										if(Cs.contains(", ")) {
 											for(String color : Cs.split(", ")) {
 												Color c = Methods.getColor(color);
@@ -83,38 +86,32 @@ public class LostBook implements Listener {
 							if(sound != null) {
 								player.playSound(player.getLocation(), sound, 1, 1);
 							}
-							return;
 						}
 					}
 				}
 			}
 		}
 	}
-
-	public static ItemStack getLostBook(String category, int amount) {
-		String id = Main.settings.getConfig().getString("Settings.LostBook.Item");
-		String name = Main.settings.getConfig().getString("Settings.LostBook.Name");
-		List<String> lore = new ArrayList<String>();
-		String tn = Main.settings.getConfig().getString("Categories." + category + ".Name");
+	
+	public static ItemStack getLostBook(String cat, int amount) {
+		String id = Files.CONFIG.getFile().getString("Settings.LostBook.Item");
+		String name = Files.CONFIG.getFile().getString("Settings.LostBook.Name");
+		List<String> lore = new ArrayList<>();
+		String tn = Files.CONFIG.getFile().getString("Categories." + cat + ".Name");
 		name = name.replaceAll("%Category%", tn).replaceAll("%category%", tn);
-		for(String l : Main.settings.getConfig().getStringList("Settings.LostBook.Lore")) {
+		for(String l : Files.CONFIG.getFile().getStringList("Settings.LostBook.Lore")) {
 			lore.add(l.replaceAll("%Category%", tn).replaceAll("%category%", tn));
 		}
-		//		return Methods.makeItem(id, amount, name, lore);
 		return new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(lore).build();
 	}
-
+	
 	private Sound getSound(String category) {
-		FileConfiguration config = Main.settings.getConfig();
+		FileConfiguration config = Files.CONFIG.getFile();
 		if(config.contains("Categories." + category + ".LostBook.Sound-Toggle") && config.contains("Categories." + category + ".LostBook.Sound")) {
 			if(config.getBoolean("Categories." + category + ".LostBook.Sound-Toggle")) {
-				Sound sound = Sound.valueOf(config.getString("Categories." + category + ".LostBook.Sound"));
-				if(sound != null) {
-					return sound;
-				}
+				return Sound.valueOf(config.getString("Categories." + category + ".LostBook.Sound"));
 			}
 		}
 		return null;
 	}
-
 }

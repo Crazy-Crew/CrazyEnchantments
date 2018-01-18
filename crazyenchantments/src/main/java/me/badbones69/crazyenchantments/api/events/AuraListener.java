@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.api.events;
 
-import me.badbones69.crazyenchantments.Main;
-import me.badbones69.crazyenchantments.api.CEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -14,18 +14,20 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 public class AuraListener implements Listener {
-
+	
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerMoveEvent(PlayerMoveEvent e) {
 		if(!e.isCancelled()) {
 			if((e.getFrom().getBlockX() != e.getTo().getBlockX()) || (e.getFrom().getBlockY() != e.getTo().getBlockY()) || (e.getFrom().getBlockZ() != e.getTo().getBlockZ())) {
+				ArrayList<Player> players = getNearByPlayers(e.getPlayer(), 3);
 				for(ItemStack item : e.getPlayer().getEquipment().getArmorContents()) {
 					Player player = e.getPlayer();
-					ArrayList<Player> players = getNearByPlayers(player, 3);
-					if(Main.CE.hasEnchantments(item)) {
+					if(ce.hasEnchantments(item)) {
 						for(CEnchantments enchant : getAuraEnchantments()) {
-							if(Main.CE.hasEnchantment(item, enchant)) {
-								int power = Main.CE.getPower(item, enchant);
+							if(ce.hasEnchantment(item, ce.getEnchantmentFromName(enchant.getName()))) {
+								int power = ce.getPower(item, ce.getEnchantmentFromName(enchant.getName()));
 								if(players.size() > 0) {
 									for(Player other : players) {
 										Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, other, enchant, power));
@@ -35,13 +37,13 @@ public class AuraListener implements Listener {
 						}
 					}
 				}
-				for(Player player : getNearByPlayers(e.getPlayer(), 3)) {
-					for(ItemStack item : player.getEquipment().getArmorContents()) {
-						if(Main.CE.hasEnchantments(item)) {
+				for(Player other : players) {
+					for(ItemStack item : other.getEquipment().getArmorContents()) {// The other players moving.
+						if(ce.hasEnchantments(item)) {
 							for(CEnchantments enchant : getAuraEnchantments()) {
-								if(Main.CE.hasEnchantment(item, enchant)) {
-									int power = Main.CE.getPower(item, enchant);
-									Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, e.getPlayer(), enchant, power));
+								if(ce.hasEnchantment(item, ce.getEnchantmentFromName(enchant.getName()))) {
+									Bukkit.getPluginManager().callEvent(new AuraActiveEvent(other, e.getPlayer(), enchant,
+									ce.getPower(item, ce.getEnchantmentFromName(enchant.getName()))));
 								}
 							}
 						}
@@ -50,9 +52,9 @@ public class AuraListener implements Listener {
 			}
 		}
 	}
-
+	
 	private ArrayList<CEnchantments> getAuraEnchantments() {
-		ArrayList<CEnchantments> enchants = new ArrayList<CEnchantments>();
+		ArrayList<CEnchantments> enchants = new ArrayList<>();
 		enchants.add(CEnchantments.BLIZZARD);
 		enchants.add(CEnchantments.ACIDRAIN);
 		enchants.add(CEnchantments.SANDSTORM);
@@ -60,17 +62,17 @@ public class AuraListener implements Listener {
 		enchants.add(CEnchantments.INTIMIDATE);
 		return enchants;
 	}
-
+	
 	private ArrayList<Player> getNearByPlayers(Player player, int radius) {
-		ArrayList<Player> players = new ArrayList<Player>();
+		ArrayList<Player> players = new ArrayList<>();
 		for(Entity en : player.getNearbyEntities(radius, radius, radius)) {
 			if(en instanceof Player) {
-				if((Player) en != player) {
+				if(en != player) {
 					players.add((Player) en);
 				}
 			}
 		}
 		return players;
 	}
-
+	
 }

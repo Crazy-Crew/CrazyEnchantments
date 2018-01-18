@@ -1,7 +1,7 @@
-package me.badbones69.crazyenchantments.api;
+package me.badbones69.crazyenchantments.api.enums;
 
 public enum InfoType {
-
+	
 	HELMETS("Helmets"),
 	BOOTS("Boots"),
 	ARMOR("Armor"),
@@ -11,19 +11,19 @@ public enum InfoType {
 	PICKAXE("Pickaxe"),
 	TOOL("Tool"),
 	MISC("Misc");
-
+	
 	private String Name;
-
+	
 	private InfoType(String name) {
 		Name = name;
 	}
-
+	
 	public String getName() {
 		return Name;
 	}
-
+	
 	public static InfoType[] getTypes() {
 		return values();
 	}
-
+	
 }

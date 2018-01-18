@@ -1,11 +1,11 @@
 package me.badbones69.crazyenchantments.api.currencyapi;
 
-import me.badbones69.crazyenchantments.Main;
+import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.entity.Player;
 
 public class CurrencyAPI {
-
+	
 	/**
 	 * Get the amount that a player has from a spesific currency.
 	 * @param player The player you wish to get the amount from.
@@ -22,12 +22,11 @@ public class CurrencyAPI {
 				case XP_TOTAL:
 					return getTotalExperience(player);
 			}
-		}catch(Exception e) {
-		}catch(NoClassDefFoundError e) {
+		}catch(Exception | NoClassDefFoundError e) {
 		}
 		return 0;
 	}
-
+	
 	/**
 	 * Take an amount from a player's currency.
 	 * @param player The player you wish to take from.
@@ -47,11 +46,10 @@ public class CurrencyAPI {
 					takeTotalExperience(player, amount);
 					break;
 			}
-		}catch(Exception e) {
-		}catch(NoClassDefFoundError e) {
+		}catch(Exception | NoClassDefFoundError e) {
 		}
 	}
-
+	
 	/**
 	 * Give an amount to a player's currency.
 	 * @param player The player you are giving to.
@@ -71,11 +69,10 @@ public class CurrencyAPI {
 					takeTotalExperience(player, -amount);
 					break;
 			}
-		}catch(Exception e) {
-		}catch(NoClassDefFoundError e) {
+		}catch(Exception | NoClassDefFoundError e) {
 		}
 	}
-
+	
 	/**
 	 * Checks if the player has enought of a currency.
 	 * @param player The player you are checking.
@@ -86,7 +83,7 @@ public class CurrencyAPI {
 	public static Boolean canBuy(Player player, Currency currency, int cost) {
 		return getCurrency(player, currency) >= cost;
 	}
-
+	
 	private static void takeTotalExperience(Player player, int amount) {
 		if(Version.getCurrentVersion().getVersionInteger() >= 181) {
 			int total = getTotalExperience(player) - amount;
@@ -101,8 +98,8 @@ public class CurrencyAPI {
 			float xp = (float) total / (float) player.getExpToLevel();
 			player.setExp(xp);
 		}else {
-			if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.EXP-Bug")) {
-				if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.EXP-Bug")) {
+			if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.EXP-Bug")) {
+				if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.EXP-Bug")) {
 					if(getTotalExperience(player) == amount) {
 						player.giveExp(-(amount - 1));
 						return;
@@ -112,9 +109,9 @@ public class CurrencyAPI {
 			player.giveExp(-amount);
 		}
 	}
-
+	
 	private static int getTotalExperience(Player player) {// https://www.spigotmc.org/threads/72804
-		int experience = 0;
+		int experience;
 		int level = player.getLevel();
 		if(level >= 0 && level <= 15) {
 			experience = (int) Math.ceil(Math.pow(level, 2) + (6 * level));
@@ -136,12 +133,12 @@ public class CurrencyAPI {
 			return experience;
 		}
 	}
-
+	
 	/**
 	 * Loads the vault currency if it is on the server.
 	 */
 	public static void loadCurrency() {
 		VaultSupport.loadVault();
 	}
-
+	
 }

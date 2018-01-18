@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments;
+package me.badbones69.crazyenchantments.multisupport.particles;
 
 import org.bukkit.Bukkit;
 
@@ -26,10 +26,11 @@ import java.util.Map;
  * @version 1.1
  */
 public final class ReflectionUtils {
+	
 	// Prevent accidental construction
 	private ReflectionUtils() {
 	}
-
+	
 	/**
 	 * Returns the constructor of a given class with the given parameter types
 	 *
@@ -51,7 +52,7 @@ public final class ReflectionUtils {
 		}
 		throw new NoSuchMethodException("There is no such constructor in this class with the specified parameter types");
 	}
-
+	
 	/**
 	 * Returns the constructor of a desired class with the given parameter types
 	 *
@@ -61,13 +62,12 @@ public final class ReflectionUtils {
 	 * @return The constructor of the desired target class with the specified parameter types
 	 * @throws NoSuchMethodException If the desired constructor with the specified parameter types cannot be found
 	 * @throws ClassNotFoundException ClassNotFoundException If the desired target class with the specified name and package cannot be found
-	 * @see #getClass(String, PackageType)
 	 * @see #getConstructor(Class, Class...)
 	 */
 	public static Constructor<?> getConstructor(String className, PackageType packageType, Class<?>... parameterTypes) throws NoSuchMethodException, ClassNotFoundException {
 		return getConstructor(packageType.getClass(className), parameterTypes);
 	}
-
+	
 	/**
 	 * Returns an instance of a class with the given arguments
 	 *
@@ -83,7 +83,7 @@ public final class ReflectionUtils {
 	public static Object instantiateObject(Class<?> clazz, Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
 		return getConstructor(clazz, DataType.getPrimitive(arguments)).newInstance(arguments);
 	}
-
+	
 	/**
 	 * Returns an instance of a desired class with the given arguments
 	 *
@@ -97,13 +97,12 @@ public final class ReflectionUtils {
 	 * @throws InvocationTargetException If the desired constructor cannot be invoked
 	 * @throws NoSuchMethodException If the desired constructor with the specified arguments cannot be found
 	 * @throws ClassNotFoundException If the desired target class with the specified name and package cannot be found
-	 * @see #getClass(String, PackageType)
 	 * @see #instantiateObject(Class, Object...)
 	 */
 	public static Object instantiateObject(String className, PackageType packageType, Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		return instantiateObject(packageType.getClass(className), arguments);
 	}
-
+	
 	/**
 	 * Returns a method of a class with the given parameter types
 	 *
@@ -125,7 +124,7 @@ public final class ReflectionUtils {
 		}
 		throw new NoSuchMethodException("There is no such method in this class with the specified name and parameter types");
 	}
-
+	
 	/**
 	 * Returns a method of a desired class with the given parameter types
 	 *
@@ -136,13 +135,12 @@ public final class ReflectionUtils {
 	 * @return The method of the desired target class with the specified name and parameter types
 	 * @throws NoSuchMethodException If the desired method of the desired target class with the specified name and parameter types cannot be found
 	 * @throws ClassNotFoundException If the desired target class with the specified name and package cannot be found
-	 * @see #getClass(String, PackageType)
 	 * @see #getMethod(Class, String, Class...)
 	 */
 	public static Method getMethod(String className, PackageType packageType, String methodName, Class<?>... parameterTypes) throws NoSuchMethodException, ClassNotFoundException {
 		return getMethod(packageType.getClass(className), methodName, parameterTypes);
 	}
-
+	
 	/**
 	 * Invokes a method on an object with the given arguments
 	 *
@@ -160,7 +158,7 @@ public final class ReflectionUtils {
 	public static Object invokeMethod(Object instance, String methodName, Object... arguments) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
 		return getMethod(instance.getClass(), methodName, DataType.getPrimitive(arguments)).invoke(instance, arguments);
 	}
-
+	
 	/**
 	 * Invokes a method of the target class on an object with the given arguments
 	 *
@@ -179,7 +177,7 @@ public final class ReflectionUtils {
 	public static Object invokeMethod(Object instance, Class<?> clazz, String methodName, Object... arguments) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
 		return getMethod(clazz, methodName, DataType.getPrimitive(arguments)).invoke(instance, arguments);
 	}
-
+	
 	/**
 	 * Invokes a method of a desired class on an object with the given arguments
 	 *
@@ -194,13 +192,12 @@ public final class ReflectionUtils {
 	 * @throws InvocationTargetException If the desired method cannot be invoked on the target object
 	 * @throws NoSuchMethodException If the desired method of the desired target class with the specified name and arguments cannot be found
 	 * @throws ClassNotFoundException If the desired target class with the specified name and package cannot be found
-	 * @see #getClass(String, PackageType)
 	 * @see #invokeMethod(Object, Class, String, Object...)
 	 */
 	public static Object invokeMethod(Object instance, String className, PackageType packageType, String methodName, Object... arguments) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, ClassNotFoundException {
 		return invokeMethod(instance, packageType.getClass(className), methodName, arguments);
 	}
-
+	
 	/**
 	 * Returns a field of the target class with the given name
 	 *
@@ -216,7 +213,7 @@ public final class ReflectionUtils {
 		field.setAccessible(true);
 		return field;
 	}
-
+	
 	/**
 	 * Returns a field of a desired class with the given name
 	 *
@@ -233,7 +230,7 @@ public final class ReflectionUtils {
 	public static Field getField(String className, PackageType packageType, boolean declared, String fieldName) throws NoSuchFieldException, SecurityException, ClassNotFoundException {
 		return getField(packageType.getClass(className), declared, fieldName);
 	}
-
+	
 	/**
 	 * Returns the value of a field of the given class of an object
 	 *
@@ -251,7 +248,7 @@ public final class ReflectionUtils {
 	public static Object getValue(Object instance, Class<?> clazz, boolean declared, String fieldName) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		return getField(clazz, declared, fieldName).get(instance);
 	}
-
+	
 	/**
 	 * Returns the value of a field of a desired class of an object
 	 *
@@ -271,7 +268,7 @@ public final class ReflectionUtils {
 	public static Object getValue(Object instance, String className, PackageType packageType, boolean declared, String fieldName) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, ClassNotFoundException {
 		return getValue(instance, packageType.getClass(className), declared, fieldName);
 	}
-
+	
 	/**
 	 * Returns the value of a field with the given name of an object
 	 *
@@ -288,7 +285,7 @@ public final class ReflectionUtils {
 	public static Object getValue(Object instance, boolean declared, String fieldName) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		return getValue(instance, instance.getClass(), declared, fieldName);
 	}
-
+	
 	/**
 	 * Sets the value of a field of the given class of an object
 	 *
@@ -306,7 +303,7 @@ public final class ReflectionUtils {
 	public static void setValue(Object instance, Class<?> clazz, boolean declared, String fieldName, Object value) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		getField(clazz, declared, fieldName).set(instance, value);
 	}
-
+	
 	/**
 	 * Sets the value of a field of a desired class of an object
 	 *
@@ -326,7 +323,7 @@ public final class ReflectionUtils {
 	public static void setValue(Object instance, String className, PackageType packageType, boolean declared, String fieldName, Object value) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException, ClassNotFoundException {
 		setValue(instance, packageType.getClass(className), declared, fieldName, value);
 	}
-
+	
 	/**
 	 * Sets the value of a field with the given name of an object
 	 *
@@ -343,7 +340,7 @@ public final class ReflectionUtils {
 	public static void setValue(Object instance, boolean declared, String fieldName, Object value) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		setValue(instance, instance.getClass(), declared, fieldName, value);
 	}
-
+	
 	/**
 	 * Represents an enumeration of dynamic packages of NMS and CraftBukkit
 	 * <p>
@@ -354,9 +351,9 @@ public final class ReflectionUtils {
 	 */
 	public enum PackageType {
 		MINECRAFT_SERVER("net.minecraft.server." + getServerVersion()), CRAFTBUKKIT("org.bukkit.craftbukkit." + getServerVersion()), CRAFTBUKKIT_BLOCK(CRAFTBUKKIT, "block"), CRAFTBUKKIT_CHUNKIO(CRAFTBUKKIT, "chunkio"), CRAFTBUKKIT_COMMAND(CRAFTBUKKIT, "command"), CRAFTBUKKIT_CONVERSATIONS(CRAFTBUKKIT, "conversations"), CRAFTBUKKIT_ENCHANTMENS(CRAFTBUKKIT, "enchantments"), CRAFTBUKKIT_ENTITY(CRAFTBUKKIT, "entity"), CRAFTBUKKIT_EVENT(CRAFTBUKKIT, "event"), CRAFTBUKKIT_GENERATOR(CRAFTBUKKIT, "generator"), CRAFTBUKKIT_HELP(CRAFTBUKKIT, "help"), CRAFTBUKKIT_INVENTORY(CRAFTBUKKIT, "inventory"), CRAFTBUKKIT_MAP(CRAFTBUKKIT, "map"), CRAFTBUKKIT_METADATA(CRAFTBUKKIT, "metadata"), CRAFTBUKKIT_POTION(CRAFTBUKKIT, "potion"), CRAFTBUKKIT_PROJECTILES(CRAFTBUKKIT, "projectiles"), CRAFTBUKKIT_SCHEDULER(CRAFTBUKKIT, "scheduler"), CRAFTBUKKIT_SCOREBOARD(CRAFTBUKKIT, "scoreboard"), CRAFTBUKKIT_UPDATER(CRAFTBUKKIT, "updater"), CRAFTBUKKIT_UTIL(CRAFTBUKKIT, "util");
-
+		
 		private final String path;
-
+		
 		/**
 		 * Construct a new package type
 		 *
@@ -365,7 +362,7 @@ public final class ReflectionUtils {
 		private PackageType(String path) {
 			this.path = path;
 		}
-
+		
 		/**
 		 * Construct a new package type
 		 *
@@ -375,7 +372,7 @@ public final class ReflectionUtils {
 		private PackageType(PackageType parent, String path) {
 			this(parent + "." + path);
 		}
-
+		
 		/**
 		 * Returns the path of this package type
 		 *
@@ -384,7 +381,7 @@ public final class ReflectionUtils {
 		public String getPath() {
 			return path;
 		}
-
+		
 		/**
 		 * Returns the class with the given name
 		 *
@@ -395,13 +392,13 @@ public final class ReflectionUtils {
 		public Class<?> getClass(String className) throws ClassNotFoundException {
 			return Class.forName(this + "." + className);
 		}
-
+		
 		// Override for convenience
 		@Override
 		public String toString() {
 			return path;
 		}
-
+		
 		/**
 		 * Returns the version of your server
 		 *
@@ -411,7 +408,7 @@ public final class ReflectionUtils {
 			return Bukkit.getServer().getClass().getPackage().getName().substring(23);
 		}
 	}
-
+	
 	/**
 	 * Represents an enumeration of Java data types with corresponding classes
 	 * <p>
@@ -422,11 +419,11 @@ public final class ReflectionUtils {
 	 */
 	public enum DataType {
 		BYTE(byte.class, Byte.class), SHORT(short.class, Short.class), INTEGER(int.class, Integer.class), LONG(long.class, Long.class), CHARACTER(char.class, Character.class), FLOAT(float.class, Float.class), DOUBLE(double.class, Double.class), BOOLEAN(boolean.class, Boolean.class);
-
-		private static final Map<Class<?>, DataType> CLASS_MAP = new HashMap<Class<?>, DataType>();
+		
+		private static final Map<Class<?>, DataType> CLASS_MAP = new HashMap<>();
 		private final Class<?> primitive;
 		private final Class<?> reference;
-
+		
 		// Initialize map for quick class lookup
 		static {
 			for(DataType type : values()) {
@@ -434,7 +431,7 @@ public final class ReflectionUtils {
 				CLASS_MAP.put(type.reference, type);
 			}
 		}
-
+		
 		/**
 		 * Construct a new data type
 		 *
@@ -445,7 +442,7 @@ public final class ReflectionUtils {
 			this.primitive = primitive;
 			this.reference = reference;
 		}
-
+		
 		/**
 		 * Returns the primitive class of this data type
 		 *
@@ -454,7 +451,7 @@ public final class ReflectionUtils {
 		public Class<?> getPrimitive() {
 			return primitive;
 		}
-
+		
 		/**
 		 * Returns the reference class of this data type
 		 *
@@ -463,7 +460,7 @@ public final class ReflectionUtils {
 		public Class<?> getReference() {
 			return reference;
 		}
-
+		
 		/**
 		 * Returns the data type with the given primitive/reference class
 		 *
@@ -473,7 +470,7 @@ public final class ReflectionUtils {
 		public static DataType fromClass(Class<?> clazz) {
 			return CLASS_MAP.get(clazz);
 		}
-
+		
 		/**
 		 * Returns the primitive class of the data type with the given reference class
 		 *
@@ -484,7 +481,7 @@ public final class ReflectionUtils {
 			DataType type = fromClass(clazz);
 			return type == null ? clazz : type.getPrimitive();
 		}
-
+		
 		/**
 		 * Returns the reference class of the data type with the given primitive class
 		 *
@@ -495,7 +492,7 @@ public final class ReflectionUtils {
 			DataType type = fromClass(clazz);
 			return type == null ? clazz : type.getReference();
 		}
-
+		
 		/**
 		 * Returns the primitive class array of the given class array
 		 *
@@ -510,7 +507,7 @@ public final class ReflectionUtils {
 			}
 			return types;
 		}
-
+		
 		/**
 		 * Returns the reference class array of the given class array
 		 *
@@ -525,11 +522,11 @@ public final class ReflectionUtils {
 			}
 			return types;
 		}
-
+		
 		/**
 		 * Returns the primitive class array of the given object array
 		 *
-		 * @param object Given object array
+		 * @param objects Given object array
 		 * @return The primitive class array
 		 */
 		public static Class<?>[] getPrimitive(Object[] objects) {
@@ -540,11 +537,11 @@ public final class ReflectionUtils {
 			}
 			return types;
 		}
-
+		
 		/**
 		 * Returns the reference class array of the given object array
 		 *
-		 * @param object Given object array
+		 * @param objects Given object array
 		 * @return The reference class array
 		 */
 		public static Class<?>[] getReference(Object[] objects) {
@@ -555,7 +552,7 @@ public final class ReflectionUtils {
 			}
 			return types;
 		}
-
+		
 		/**
 		 * Compares two class arrays on equivalence
 		 *

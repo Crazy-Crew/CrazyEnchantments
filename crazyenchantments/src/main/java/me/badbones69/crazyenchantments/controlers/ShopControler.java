@@ -1,10 +1,11 @@
 package me.badbones69.crazyenchantments.controlers;
 
-import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
+import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -24,13 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShopControler implements Listener {
-
+	
+	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
 		ItemStack item = e.getCurrentItem();
 		Inventory inv = e.getInventory();
 		Player player = (Player) e.getWhoClicked();
-		FileConfiguration config = Main.settings.getConfig();
+		FileConfiguration config = Files.CONFIG.getFile();
 		if(inv != null) {
 			if(inv.getName().equals(Methods.getInvName())) {
 				e.setCancelled(true);
@@ -40,13 +43,13 @@ public class ShopControler implements Listener {
 					if(item.getItemMeta().hasDisplayName()) {
 						String name = item.getItemMeta().getDisplayName();
 						for(String cat : config.getConfigurationSection("Categories").getKeys(false)) {
-							if(Main.settings.getConfig().getBoolean("Categories." + cat + ".InGUI")) {
+							if(Files.CONFIG.getFile().getBoolean("Categories." + cat + ".InGUI")) {
 								if(name.equals(Methods.color(config.getString("Categories." + cat + ".Name")))) {
 									if(Methods.isInvFull(player)) {
-										if(!Main.settings.getMessages().contains("Messages.Inventory-Full")) {
+										if(!Files.MESSAGES.getFile().contains("Messages.Inventory-Full")) {
 											player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 										}else {
-											player.sendMessage(Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
+											player.sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
 										}
 										return;
 									}
@@ -60,29 +63,28 @@ public class ShopControler implements Listener {
 												CurrencyAPI.takeCurrency(player, currency, cost);
 											}else {
 												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-												switch(currency) {
-													case VAULT:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
-														break;
-													case XP_LEVEL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-XP-Lvls").replace("%XP%", needed).replace("%xp%", needed)));
-														break;
-													case XP_TOTAL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Total-XP").replace("%XP%", needed).replace("%xp%", needed)));
-														break;
+												if(currency != null) {
+													switch(currency) {
+														case VAULT:
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
+															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+															break;
+														case XP_LEVEL:
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+															break;
+														case XP_TOTAL:
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+															break;
+													}
 												}
 												return;
 											}
 										}
 									}
 									ItemStack book = EnchantmentControl.pick(cat);
-									boolean isCustom = Main.CustomE.isEnchantmentBook(book);
-									BuyBookEvent event;
-									if(isCustom) {
-										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, null, Main.CustomE.convertToCEBook(book));
-									}else {
-										event = new BuyBookEvent(Main.CE.getCEPlayer(player), currency, cost, Main.CE.convertToCEBook(book), null);
-									}
+									BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), currency, cost, ce.convertToCEBook(book));
 									Bukkit.getPluginManager().callEvent(event);
 									player.getInventory().addItem(book);
 									return;
@@ -90,13 +92,13 @@ public class ShopControler implements Listener {
 							}
 						}
 						for(String cat : config.getConfigurationSection("Categories").getKeys(false)) {
-							if(Main.settings.getConfig().getBoolean("Categories." + cat + ".LostBook.InGUI")) {
+							if(Files.CONFIG.getFile().getBoolean("Categories." + cat + ".LostBook.InGUI")) {
 								if(name.equals(Methods.color(config.getString("Categories." + cat + ".LostBook.Name")))) {
 									if(Methods.isInvFull(player)) {
-										if(!Main.settings.getMessages().contains("Messages.Inventory-Full")) {
+										if(!Files.MESSAGES.getFile().contains("Messages.Inventory-Full")) {
 											player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 										}else {
-											player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
+											player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
 										}
 										return;
 									}
@@ -108,16 +110,21 @@ public class ShopControler implements Listener {
 												CurrencyAPI.takeCurrency(player, currency, cost);
 											}else {
 												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-												switch(currency) {
-													case VAULT:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
-														break;
-													case XP_LEVEL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-XP-Lvls").replace("%XP%", needed).replace("%xp%", needed)));
-														break;
-													case XP_TOTAL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Total-XP").replace("%XP%", needed).replace("%xp%", needed)));
-														break;
+												if(currency != null) {
+													switch(currency) {
+														case VAULT:
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
+															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+															break;
+														case XP_LEVEL:
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+															break;
+														case XP_TOTAL:
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
+															.replace("%XP%", needed).replace("%xp%", needed)));
+															break;
+													}
 												}
 												return;
 											}
@@ -128,7 +135,7 @@ public class ShopControler implements Listener {
 								}
 							}
 						}
-						List<String> options = new ArrayList<String>();
+						List<String> options = new ArrayList<>();
 						options.add("BlackScroll");
 						options.add("WhiteScroll");
 						options.add("TransmogScroll");
@@ -137,7 +144,7 @@ public class ShopControler implements Listener {
 						for(String o : options) {
 							if(name.equalsIgnoreCase(Methods.color(config.getString("Settings." + o + ".GUIName")))) {
 								if(Methods.isInvFull(player)) {
-									player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
+									player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE) {
@@ -148,16 +155,21 @@ public class ShopControler implements Listener {
 											CurrencyAPI.takeCurrency(player, currency, cost);
 										}else {
 											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-											switch(currency) {
-												case VAULT:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
-													break;
-												case XP_LEVEL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-XP-Lvls").replace("%XP%", needed).replace("%xp%", needed)));
-													break;
-												case XP_TOTAL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Total-XP").replace("%XP%", needed).replace("%xp%", needed)));
-													break;
+											if(currency != null) {
+												switch(currency) {
+													case VAULT:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
+														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+														break;
+													case XP_LEVEL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+													case XP_TOTAL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+												}
 											}
 											return;
 										}
@@ -189,10 +201,10 @@ public class ShopControler implements Listener {
 						for(String o : options) {
 							if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Dust." + o + ".GUIName")))) {
 								if(Methods.isInvFull(player)) {
-									if(!Main.settings.getMessages().contains("Messages.Inventory-Full")) {
+									if(!Files.MESSAGES.getFile().contains("Messages.Inventory-Full")) {
 										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
 									}else {
-										player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Inventory-Full")));
+										player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
 									}
 									return;
 								}
@@ -204,16 +216,21 @@ public class ShopControler implements Listener {
 											CurrencyAPI.takeCurrency(player, currency, cost);
 										}else {
 											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-											switch(currency) {
-												case VAULT:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
-													break;
-												case XP_LEVEL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-XP-Lvls").replace("%XP%", needed).replace("%xp%", needed)));
-													break;
-												case XP_TOTAL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Main.settings.getMessages().getString("Messages.Need-More-Total-XP").replace("%XP%", needed).replace("%xp%", needed)));
-													break;
+											if(currency != null) {
+												switch(currency) {
+													case VAULT:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
+														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+														break;
+													case XP_LEVEL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+													case XP_TOTAL:
+														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
+														.replace("%XP%", needed).replace("%xp%", needed)));
+														break;
+												}
 											}
 											return;
 										}
@@ -247,23 +264,22 @@ public class ShopControler implements Listener {
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Info.Name")))) {
 							InfoGUIControl.openInfo(player);
-							return;
 						}
 					}
 				}
 			}
 		}
 	}
-
+	
 	public static void openGUI(Player player) {
-		int size = Main.settings.getConfig().getInt("Settings.GUISize");
+		int size = Files.CONFIG.getFile().getInt("Settings.GUISize");
 		Inventory inv = Bukkit.createInventory(null, size, Methods.getInvName());
-		if(Main.settings.getConfig().contains("Settings.GUICustomization")) {
-			for(String custom : Main.settings.getConfig().getStringList("Settings.GUICustomization")) {
+		if(Files.CONFIG.getFile().contains("Settings.GUICustomization")) {
+			for(String custom : Files.CONFIG.getFile().getStringList("Settings.GUICustomization")) {
 				String name = "";
 				String item = "1";
 				int slot = 0;
-				ArrayList<String> lore = new ArrayList<String>();
+				ArrayList<String> lore = new ArrayList<>();
 				String[] b = custom.split(", ");
 				for(String i : b) {
 					if(i.contains("Item:")) {
@@ -299,8 +315,8 @@ public class ShopControler implements Listener {
 				inv.setItem(slot, new ItemBuilder().setMaterial(item).setName(name).setLore(lore).build());
 			}
 		}
-		for(String cat : Main.settings.getConfig().getConfigurationSection("Categories").getKeys(false)) {
-			FileConfiguration config = Main.settings.getConfig();
+		for(String cat : Files.CONFIG.getFile().getConfigurationSection("Categories").getKeys(false)) {
+			FileConfiguration config = Files.CONFIG.getFile();
 			if(config.getBoolean("Categories." + cat + ".InGUI")) {
 				int slot = config.getInt("Categories." + cat + ".Slot");
 				if(slot > size) {
@@ -334,21 +350,21 @@ public class ShopControler implements Listener {
 				inv.setItem(slot - 1, new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setGlowing(glowing).build());
 			}
 		}
-		ArrayList<String> options = new ArrayList<String>();
+		ArrayList<String> options = new ArrayList<>();
 		options.add("GKitz");
 		options.add("BlackSmith");
 		options.add("Tinker");
 		options.add("Info");
 		for(String op : options) {
-			if(Main.settings.getConfig().contains("Settings." + op)) {
-				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")) {
-					String name = Main.settings.getConfig().getString("Settings." + op + ".Name");
-					String id = Main.settings.getConfig().getString("Settings." + op + ".Item");
-					List<String> lore = Main.settings.getConfig().getStringList("Settings." + op + ".Lore");
-					int slot = Main.settings.getConfig().getInt("Settings." + op + ".Slot") - 1;
+			if(Files.CONFIG.getFile().contains("Settings." + op)) {
+				if(Files.CONFIG.getFile().getBoolean("Settings." + op + ".InGUI")) {
+					String name = Files.CONFIG.getFile().getString("Settings." + op + ".Name");
+					String id = Files.CONFIG.getFile().getString("Settings." + op + ".Item");
+					List<String> lore = Files.CONFIG.getFile().getStringList("Settings." + op + ".Lore");
+					int slot = Files.CONFIG.getFile().getInt("Settings." + op + ".Slot") - 1;
 					boolean glowing = false;
-					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")) {
-						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
+					if(Files.CONFIG.getFile().contains("Settings." + op + ".Glowing")) {
+						glowing = Files.CONFIG.getFile().getBoolean("Settings." + op + ".Glowing");
 					}
 					if(slot > size) {
 						continue;
@@ -363,15 +379,15 @@ public class ShopControler implements Listener {
 		options.add("Dust.DestroyDust");
 		options.add("Scrambler");
 		for(String op : options) {
-			if(Main.settings.getConfig().contains("Settings." + op)) {
-				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")) {
-					String name = Main.settings.getConfig().getString("Settings." + op + ".GUIName");
-					String id = Main.settings.getConfig().getString("Settings." + op + ".Item");
-					List<String> lore = Main.settings.getConfig().getStringList("Settings." + op + ".GUILore");
-					int slot = Main.settings.getConfig().getInt("Settings." + op + ".Slot") - 1;
+			if(Files.CONFIG.getFile().contains("Settings." + op)) {
+				if(Files.CONFIG.getFile().getBoolean("Settings." + op + ".InGUI")) {
+					String name = Files.CONFIG.getFile().getString("Settings." + op + ".GUIName");
+					String id = Files.CONFIG.getFile().getString("Settings." + op + ".Item");
+					List<String> lore = Files.CONFIG.getFile().getStringList("Settings." + op + ".GUILore");
+					int slot = Files.CONFIG.getFile().getInt("Settings." + op + ".Slot") - 1;
 					boolean glowing = false;
-					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")) {
-						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
+					if(Files.CONFIG.getFile().contains("Settings." + op + ".Glowing")) {
+						glowing = Files.CONFIG.getFile().getBoolean("Settings." + op + ".Glowing");
 					}
 					if(slot > size) {
 						continue;
@@ -385,15 +401,15 @@ public class ShopControler implements Listener {
 		options.add("WhiteScroll");
 		options.add("TransmogScroll");
 		for(String op : options) {
-			if(Main.settings.getConfig().contains("Settings." + op)) {
-				if(Main.settings.getConfig().getBoolean("Settings." + op + ".InGUI")) {
-					String name = Main.settings.getConfig().getString("Settings." + op + ".GUIName");
-					String id = Main.settings.getConfig().getString("Settings." + op + ".Item");
-					List<String> lore = Main.settings.getConfig().getStringList("Settings." + op + ".Lore");
-					int slot = Main.settings.getConfig().getInt("Settings." + op + ".Slot") - 1;
+			if(Files.CONFIG.getFile().contains("Settings." + op)) {
+				if(Files.CONFIG.getFile().getBoolean("Settings." + op + ".InGUI")) {
+					String name = Files.CONFIG.getFile().getString("Settings." + op + ".GUIName");
+					String id = Files.CONFIG.getFile().getString("Settings." + op + ".Item");
+					List<String> lore = Files.CONFIG.getFile().getStringList("Settings." + op + ".Lore");
+					int slot = Files.CONFIG.getFile().getInt("Settings." + op + ".Slot") - 1;
 					boolean glowing = false;
-					if(Main.settings.getConfig().contains("Settings." + op + ".Glowing")) {
-						glowing = Main.settings.getConfig().getBoolean("Settings." + op + ".Glowing");
+					if(Files.CONFIG.getFile().contains("Settings." + op + ".Glowing")) {
+						glowing = Files.CONFIG.getFile().getBoolean("Settings." + op + ".Glowing");
 					}
 					if(slot > size) {
 						continue;
@@ -404,7 +420,7 @@ public class ShopControler implements Listener {
 		}
 		player.openInventory(inv);
 	}
-
+	
 	@EventHandler
 	public void onEnchantmentTableClick(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
@@ -412,8 +428,8 @@ public class ShopControler implements Listener {
 		if(block != null) {
 			if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				if(block.getType() == Material.ENCHANTMENT_TABLE) {
-					if(Main.settings.getConfig().contains("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")) {
-						if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")) {
+					if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")) {
+						if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")) {
 							e.setCancelled(true);
 							openGUI(player);
 						}
@@ -422,5 +438,5 @@ public class ShopControler implements Listener {
 			}
 		}
 	}
-
+	
 }

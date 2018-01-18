@@ -23,20 +23,19 @@ import java.util.List;
  *
  */
 public class ItemBuilder {
-
+	
 	private Material material;
 	private Short metaData;
 	private String name;
 	private List<String> lore;
 	private Integer amount;
-	private List<ItemFlag> flags;
 	private HashMap<Enchantment, Integer> enchantments;
 	private Boolean unbreakable;
 	private Boolean glowing;
 	private ItemStack referenceItem;
 	private HashMap<String, String> namePlaceholders;
 	private HashMap<String, String> lorePlaceholders;
-
+	
 	/**
 	 * The inishal starting point for making an item.
 	 */
@@ -46,14 +45,13 @@ public class ItemBuilder {
 		this.name = "";
 		this.lore = new ArrayList<>();
 		this.amount = 1;
-		this.flags = new ArrayList<>();
 		this.enchantments = new HashMap<>();
 		this.unbreakable = false;
 		this.glowing = false;
 		this.namePlaceholders = new HashMap<>();
 		this.lorePlaceholders = new HashMap<>();
 	}
-
+	
 	/**
 	 * Convert an ItemStack to an ItemBuilder to allow easier editing of the ItemStack.
 	 * @param item The ItemStack you wish to convert into an ItemBuilder.
@@ -67,14 +65,13 @@ public class ItemBuilder {
 		.setMetaData(item.getDurability())
 		.setEnchantments(new HashMap<>(item.getEnchantments()));
 		if(item.hasItemMeta()) {
-			itemBuilder.setFlags(new ArrayList<>(item.getItemMeta().getItemFlags()))
-			.setName(item.getItemMeta().getDisplayName())
+			itemBuilder.setName(item.getItemMeta().getDisplayName())
 			.setLore(item.getItemMeta().getLore())
-			.setUnbreakable(item.getItemMeta().isUnbreakable());
+			.setUnbreakable(item.getItemMeta().spigot().isUnbreakable());
 		}
 		return itemBuilder;
 	}
-
+	
 	/**
 	 * Get the type of item as a Material the builder is set to.
 	 * @return The type of material the builder is set to.
@@ -82,7 +79,7 @@ public class ItemBuilder {
 	public Material getMaterial() {
 		return material;
 	}
-
+	
 	/**
 	 * Set the type of item the builder is set to.
 	 * @param material The material you wish to set.
@@ -92,7 +89,7 @@ public class ItemBuilder {
 		this.material = material;
 		return this;
 	}
-
+	
 	/**
 	 * Set the type of item and its metadata in the builder.
 	 * @param string The string must be in this form: %Material% or %Material%:%MetaData%
@@ -112,7 +109,7 @@ public class ItemBuilder {
 		}
 		return this;
 	}
-
+	
 	/**
 	 * Get the metadata(Item Durrability) of the builder.
 	 * @return The metadata as a short.
@@ -120,7 +117,7 @@ public class ItemBuilder {
 	public Short getMetaData() {
 		return metaData;
 	}
-
+	
 	/**
 	 * Set the metadata of the builder.
 	 * @param metaData The metadata you wish to use.
@@ -130,7 +127,7 @@ public class ItemBuilder {
 		this.metaData = metaData;
 		return this;
 	}
-
+	
 	/**
 	 * Set the metadata of the builder.
 	 * @param metaData The metadata you wish to use.
@@ -140,7 +137,7 @@ public class ItemBuilder {
 		this.metaData = (short) metaData;
 		return this;
 	}
-
+	
 	/**
 	 * Get the name the of the item in the builder.
 	 * @return The name as a string that is already been color converted.
@@ -148,7 +145,7 @@ public class ItemBuilder {
 	public String getName() {
 		return name;
 	}
-
+	
 	/**
 	 * Set the name of the item in the builder. This will auto force color the name if it contains color code. (&a, &c, &7, etc...)
 	 * @param name The name of the item in the builder.
@@ -160,7 +157,7 @@ public class ItemBuilder {
 		}
 		return this;
 	}
-
+	
 	/**
 	 * Set the placeholders for the name of the item.
 	 * @param placeholders The palceholders that will be used.
@@ -170,7 +167,7 @@ public class ItemBuilder {
 		this.namePlaceholders = placeholders;
 		return this;
 	}
-
+	
 	/**
 	 * Add a placeholder to the name of the item.
 	 * @param placeholder The placeholder that will be replaced.
@@ -181,7 +178,7 @@ public class ItemBuilder {
 		this.namePlaceholders.put(placeholder, argument);
 		return this;
 	}
-
+	
 	/**
 	 * Remove a placeholder from the list.
 	 * @param placeholder The placeholder you wish to remove.
@@ -191,7 +188,7 @@ public class ItemBuilder {
 		this.namePlaceholders.remove(placeholder);
 		return this;
 	}
-
+	
 	/**
 	 * Get the item's name with all the placeholders added to it.
 	 * @return The name with all the placeholders in it.
@@ -203,7 +200,7 @@ public class ItemBuilder {
 		}
 		return newName;
 	}
-
+	
 	/**
 	 * Get the lore of the item in the builder.
 	 * @return The lore of the item in the builder. This will already be color coded.
@@ -211,7 +208,7 @@ public class ItemBuilder {
 	public List<String> getLore() {
 		return lore;
 	}
-
+	
 	/**
 	 * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
 	 * @param lore The lore of the item in the builder.
@@ -226,7 +223,7 @@ public class ItemBuilder {
 		}
 		return this;
 	}
-
+	
 	/**
 	 * Add a line to the current lore of the item. This will auto force color in the lore that contains color code. (&a, &c, &7, etc...)
 	 * @param lore The new line you wish to add.
@@ -238,7 +235,7 @@ public class ItemBuilder {
 		}
 		return this;
 	}
-
+	
 	/**
 	 * Set the placeholders that are in the lore of the item.
 	 * @param placeholders The placeholders that you wish to use.
@@ -248,7 +245,7 @@ public class ItemBuilder {
 		this.lorePlaceholders = placeholders;
 		return this;
 	}
-
+	
 	/**
 	 * Add a placeholder to the lore of the item.
 	 * @param placeholder The placeholder you wish to replace.
@@ -259,7 +256,7 @@ public class ItemBuilder {
 		this.lorePlaceholders.put(placeholder, argument);
 		return this;
 	}
-
+	
 	/**
 	 * Remove a placeholder from the lore.
 	 * @param placeholder The palceholder you wish to remove.
@@ -269,7 +266,7 @@ public class ItemBuilder {
 		this.lorePlaceholders.remove(placeholder);
 		return this;
 	}
-
+	
 	/**
 	 * Get the lore with all the placeholders added to it.
 	 * @return The lore with all placeholders in it.
@@ -284,7 +281,7 @@ public class ItemBuilder {
 		}
 		return newLore;
 	}
-
+	
 	/**
 	 * The amount of the item stack in the builder.
 	 * @return The amount that is set in the builder.
@@ -292,7 +289,7 @@ public class ItemBuilder {
 	public Integer getAmount() {
 		return amount;
 	}
-
+	
 	/**
 	 * Get the amount of the item stack in the builder.
 	 * @param amount The amount that is in the item stack.
@@ -302,47 +299,7 @@ public class ItemBuilder {
 		this.amount = amount;
 		return this;
 	}
-
-	/**
-	 * Get the flags that are set to the item in the builder.
-	 * @return The flags that are on the item in the builder.
-	 */
-	public List<ItemFlag> getFlags() {
-		return flags;
-	}
-
-	/**
-	 * Add a flag to the item in the builder.
-	 * @param flag The flag you wish to add.
-	 * @return The ItemBuilder with updated info.
-	 */
-	public ItemBuilder addFlags(ItemFlag flag) {
-		this.flags.add(flag);
-		return this;
-	}
-
-	/**
-	 * Remove a flag that is on the item in the builder.
-	 * @param flag The flag you wish to remove from the builder.
-	 * @return The ItemBuilder with updated info.
-	 */
-	public ItemBuilder removeFlags(ItemFlag flag) {
-		this.flags.remove(flag);
-		return this;
-	}
-
-	/**
-	 * Set the flags that will be on the item in the builder.
-	 * @param flags The flags you wish to add to the item in the builder.
-	 * @return The ItemBuilder with updated info.
-	 */
-	public ItemBuilder setFlags(List<ItemFlag> flags) {
-		if(flags != null) {
-			this.flags = flags;
-		}
-		return this;
-	}
-
+	
 	/**
 	 * Get the enchantments that are on the item in the builder.
 	 * @return The enchantments that are on the item in the builder.
@@ -350,7 +307,7 @@ public class ItemBuilder {
 	public HashMap<Enchantment, Integer> getEnchantments() {
 		return enchantments;
 	}
-
+	
 	/**
 	 * Add an enchantment to the item in the builder.
 	 * @param enchantment The enchantment you wish to add.
@@ -361,7 +318,7 @@ public class ItemBuilder {
 		this.enchantments.put(enchantment, level);
 		return this;
 	}
-
+	
 	/**
 	 * Remove an enchantment from the item in the builder.
 	 * @param enchantment The enchantment you wish to remove.
@@ -371,7 +328,7 @@ public class ItemBuilder {
 		this.enchantments.remove(enchantment);
 		return this;
 	}
-
+	
 	/**
 	 * Set a list of enchantments that will go onto the item in the builder. These can have unsafe levels.
 	 * It will also override any enchantments used in the "ItemBuilder#addEnchantment()" method.
@@ -384,7 +341,7 @@ public class ItemBuilder {
 		}
 		return this;
 	}
-
+	
 	/**
 	 * Check if the item in the builder is unbreakable.
 	 * @return The ItemBuilder with updated info.
@@ -392,7 +349,7 @@ public class ItemBuilder {
 	public Boolean isUnbreakable() {
 		return unbreakable;
 	}
-
+	
 	/**
 	 * Set if the item in the builder to be unbreakable or not.
 	 * @param unbreakable True will set it to be unbreakable and false will make it able to take damage.
@@ -402,7 +359,7 @@ public class ItemBuilder {
 		this.unbreakable = unbreakable;
 		return this;
 	}
-
+	
 	/**
 	 * Check if the item in the builder is glowing.
 	 * @return The ItemBuilder with updated info.
@@ -410,7 +367,7 @@ public class ItemBuilder {
 	public Boolean isGlowing() {
 		return glowing;
 	}
-
+	
 	/**
 	 * Set if the item in the builder to be glowing or not.
 	 * @param glowing True will set the item to have a glowing effect.
@@ -420,7 +377,7 @@ public class ItemBuilder {
 		this.glowing = glowing;
 		return this;
 	}
-
+	
 	/**
 	 * Builder the item from all the information that was given to the builder.
 	 * @return The result of all the info that was given to the builder as an ItemStack.
@@ -430,14 +387,13 @@ public class ItemBuilder {
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(getUpdatedName());
 		itemMeta.setLore(getUpdatedLore());
-		itemMeta.addItemFlags(flags.toArray(new ItemFlag[flags.size()]));
-		itemMeta.setUnbreakable(unbreakable);
+		itemMeta.spigot().setUnbreakable(unbreakable);
 		item.setItemMeta(itemMeta);
 		item.addUnsafeEnchantments(enchantments);
 		addGlow(item, glowing);
 		return item;
 	}
-
+	
 	/**
 	 * Sets the converted item as a reference to try and save NBT tags and stuff.
 	 * @param referenceItem The item that is being referenced. 
@@ -447,11 +403,11 @@ public class ItemBuilder {
 		this.referenceItem = referenceItem;
 		return this;
 	}
-
+	
 	private String color(String msg) {
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
-
+	
 	private ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle) {
 			switch(Version.getCurrentVersion()) {
@@ -490,5 +446,5 @@ public class ItemBuilder {
 		}
 		return item;
 	}
-
+	
 }

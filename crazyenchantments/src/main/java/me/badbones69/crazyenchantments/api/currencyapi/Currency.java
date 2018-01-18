@@ -1,17 +1,17 @@
 package me.badbones69.crazyenchantments.api.currencyapi;
 
 public enum Currency {
-
+	
 	VAULT("Vault"),
 	XP_LEVEL("XP_Level"),
 	XP_TOTAL("XP_Total");
-
+	
 	private String name;
-
+	
 	private Currency(String name) {
 		this.name = name;
 	}
-
+	
 	/**
 	 * Get the name of the currency.
 	 * @return The name of the currency.
@@ -19,7 +19,7 @@ public enum Currency {
 	public String getName() {
 		return name;
 	}
-
+	
 	/**
 	 * Checks if it is a compatable curency.
 	 * @param currency The currency name you are checking.
@@ -33,7 +33,7 @@ public enum Currency {
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Get a currceny enum.
 	 * @param currency The currency you want.
@@ -47,5 +47,5 @@ public enum Currency {
 		}
 		return null;
 	}
-
+	
 }

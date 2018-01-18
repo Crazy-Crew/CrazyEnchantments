@@ -1,7 +1,8 @@
 package me.badbones69.crazyenchantments.controlers;
 
-import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -24,12 +25,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProtectionCrystal implements Listener {
-
-	private HashMap<UUID, ArrayList<ItemStack>> playersItems = new HashMap<UUID, ArrayList<ItemStack>>();
-
+	
+	private HashMap<UUID, ArrayList<ItemStack>> playersItems = new HashMap<>();
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
-		FileConfiguration config = Main.settings.getConfig();
+		FileConfiguration config = Files.CONFIG.getFile();
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
 		if(inv != null) {
@@ -63,7 +65,7 @@ public class ProtectionCrystal implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		Player player = e.getEntity();
@@ -86,14 +88,14 @@ public class ProtectionCrystal implements Listener {
 		e.getDrops().addAll(drops);
 		playersItems.put(player.getUniqueId(), items);
 	}
-
+	
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent e) {
 		Player player = e.getPlayer();
-		String protection = Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected"));
+		String protection = Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
 		if(playersItems.containsKey(player.getUniqueId())) {
-			if(Main.settings.getConfig().contains("Settings.ProtectionCrystal.Lose-Protection-On-Death")) {
-				if(Main.settings.getConfig().getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death")) {
+			if(Files.CONFIG.getFile().contains("Settings.ProtectionCrystal.Lose-Protection-On-Death")) {
+				if(Files.CONFIG.getFile().getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death")) {
 					for(ItemStack item : playersItems.get(player.getUniqueId())) {
 						player.getInventory().addItem(Methods.removeLore(item, protection));
 					}
@@ -110,7 +112,7 @@ public class ProtectionCrystal implements Listener {
 			playersItems.remove(player.getUniqueId());
 		}
 	}
-
+	
 	@EventHandler
 	public void onCrystalClick(PlayerInteractEvent e) {
 		ItemStack item = Methods.getItemInHand(e.getPlayer());
@@ -120,12 +122,12 @@ public class ProtectionCrystal implements Listener {
 			}
 		}
 	}
-
+	
 	public static Boolean isProtected(ItemStack item) {
 		if(item.hasItemMeta()) {
 			if(item.getItemMeta().hasLore()) {
 				for(String lore : item.getItemMeta().getLore()) {
-					if(lore.contains(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")))) {
+					if(lore.contains(Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
 						return true;
 					}
 				}
@@ -133,26 +135,22 @@ public class ProtectionCrystal implements Listener {
 		}
 		return false;
 	}
-
+	
 	public static Boolean isSuccessfull(Player player) {
-		if(player.hasPermission("crazyenchantments.bypass")) {
+		if(player.hasPermission("crazyenchantments.bypass.protectioncrystal")) {
 			return true;
 		}
-		FileConfiguration config = Main.settings.getConfig();
+		FileConfiguration config = Files.CONFIG.getFile();
 		if(config.contains("Settings.ProtectionCrystal.Chance")) {
 			if(config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")) {
-				if(Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance"), 100)) {
-					return true;
-				}else {
-					return false;
-				}
+				return Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance"), 100);
 			}
 		}
 		return true;
 	}
-
+	
 	public static ItemStack getCrystals() {
-		FileConfiguration config = Main.settings.getConfig();
+		FileConfiguration config = Files.CONFIG.getFile();
 		String id = config.getString("Settings.ProtectionCrystal.Item");
 		String name = config.getString("Settings.ProtectionCrystal.Name");
 		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
@@ -161,9 +159,9 @@ public class ProtectionCrystal implements Listener {
 		item = Methods.addGlow(item, toggle);
 		return item;
 	}
-
+	
 	public static ItemStack getCrystals(int amount) {
-		FileConfiguration config = Main.settings.getConfig();
+		FileConfiguration config = Files.CONFIG.getFile();
 		String id = config.getString("Settings.ProtectionCrystal.Item");
 		String name = config.getString("Settings.ProtectionCrystal.Name");
 		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
@@ -172,15 +170,14 @@ public class ProtectionCrystal implements Listener {
 		item = Methods.addGlow(item, toggle);
 		return item;
 	}
-
+	
 	public static ItemStack removeProtection(ItemStack item) {
-		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
-		lore.addAll(m.getLore());
-		lore.remove(Methods.color(Main.settings.getConfig().getString("Settings.ProtectionCrystal.Protected")));
+		ArrayList<String> lore = new ArrayList<>(m.getLore());
+		lore.remove(Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
 	}
-
+	
 }

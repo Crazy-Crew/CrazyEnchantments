@@ -3,7 +3,7 @@ package me.badbones69.crazyenchantments.multisupport;
 import org.bukkit.Bukkit;
 
 public enum Version {
-
+	
 	TOO_OLD(-1),
 	v1_7_R1(171), v1_7_R2(172), v1_7_R3(173), v1_7_R4(174),
 	v1_8_R1(181), v1_8_R2(182), v1_8_R3(183),
@@ -12,15 +12,15 @@ public enum Version {
 	v1_11_R1(1111),
 	v1_12_R1(1121),
 	TOO_NEW(-2);
-
+	
 	private static Version latest;
 	private Integer versionInteger;
 	public static Version currentVersion;
-
+	
 	private Version(int versionInteger) {
 		this.versionInteger = versionInteger;
 	}
-
+	
 	/**
 	 *
 	 * @return Get the server's Minecraft version.
@@ -44,7 +44,7 @@ public enum Version {
 		}
 		return currentVersion;
 	}
-
+	
 	/**
 	 *
 	 * @return The server's minecraft version as an integer.
@@ -52,7 +52,7 @@ public enum Version {
 	public Integer getVersionInteger() {
 		return this.versionInteger;
 	}
-
+	
 	/**
 	 * Get the latest version allowed by the Version class.
 	 * @return The latest version.
@@ -70,7 +70,7 @@ public enum Version {
 			return latest;
 		}
 	}
-
+	
 	/**
 	 * This checks if the current version is older, newer, or is the checked version.
 	 * @param version The version you are checking.
@@ -89,44 +89,32 @@ public enum Version {
 		}
 		return resault;
 	}
-
+	
 	/**
 	 * Checks to see if the current version is newer then the checked version.
 	 * @param version The version you are checking.
 	 * @return True if newer then the checked version and false if the same or older.
 	 */
 	public Boolean isNewer(Version version) {
-		if(this.versionInteger > version.versionInteger || this.versionInteger == -2) {
-			return true;
-		}else {
-			return false;
-		}
+		return this.versionInteger > version.versionInteger || this.versionInteger == -2;
 	}
-
+	
 	/**
 	 * Checks to see if the current version is the same as the checked version.
 	 * @param version The version you are checking.
 	 * @return True if both the current and checked version is the same and false if otherwise.
 	 */
 	public Boolean isSame(Version version) {
-		if(this.versionInteger == version.versionInteger) {
-			return true;
-		}else {
-			return false;
-		}
+		return this.versionInteger.equals(version.versionInteger);
 	}
-
+	
 	/**
 	 * Checks to see if the current version is older then the checked version.
 	 * @param version The version you are checking.
 	 * @return True if older then the checked version and false if the same or newer.
 	 */
 	public Boolean isOlder(Version version) {
-		if(this.versionInteger < version.versionInteger || this.versionInteger == -1) {
-			return true;
-		}else {
-			return false;
-		}
+		return this.versionInteger < version.versionInteger || this.versionInteger == -1;
 	}
-
+	
 }

@@ -45,16 +45,6 @@ Tinker:
     #Fishing Pole Enchantments
     LUCK: 15
     LURE: 15
-  Custom-Enchantments: #Add your custom enchantments here to allow them to be tinkered
-    Cyborg:
-      Items: 20
-      Book: 5
-    Sniper:
-      Items: 20
-      Book: 5
-    Slice:
-      Items: 20
-      Book: 5
   Crazy-Enchantments:
     Glowing: #Enchantment name (Not custom name)
       Items: 20 #Amount of Xp(Lvl/Total) or Money

@@ -1,3 +1,25 @@
+# Enchantment Types:
+# - Armor ~ All armor
+# - Helmet
+# - Chestplate
+# - Leggings
+# - Boots
+# - Bow
+# - Axe
+# - Sword
+# - Weapons ~ Swords and Axes
+# - PickAxe
+# - Fishing-Rod
+# - Elytra
+# - Tool ~ Pickaxes, Axes, Shovels, and Hoes
+# - All ~ All items listed here
+##########
+# Chance System
+#
+# Chance-System:
+#   Base: # Starting chance.
+#   Increase: # The amount it goes up each level.
+##########
 Enchantments:
   Glowing: #Do not change these lines. If so you will get errors in console.
     Enabled: true #Wether or not an enchantment is active
@@ -5,6 +27,7 @@ Enchantments:
     Color: '&7' #The color of the enchantment on the item
     BookColor: '&b&l' #The color of the enchantment on the book
     MaxPower: 1 #Max lvl the enchantment goes up to
+    Enchantment-Type: 'Helmet' #The type of items that can be enchanted with the enchantment.
     Info: #Info for the enchantment
       Name: '&e&lGlowing &7(&bI&7)' #Name for the GUI
       Description: #The description of what it does
@@ -26,6 +49,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lBurn Shield &7(&bI&7)'
       Description:
@@ -47,6 +71,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lPiercing &7(&bI-&bIII&7)' 
       Description:
@@ -68,6 +96,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lOverload &7(&bI-&bV&7)'
       Description:
@@ -89,6 +118,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lSelf Destruct &7(&bI-&bV&7)'
       Description:
@@ -110,6 +140,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lSprings &7(&bI-&bV&7)'
       Description:
@@ -131,6 +162,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lGears &7(&bI-&bIII&7)'
       Description:
@@ -152,6 +184,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lHulk &7(&bI-&bII&7)'
       Description:
@@ -173,6 +206,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Helmet'
     Info:
       Name: '&e&lMermaid &7(&bI-&bIII&7)'
       Description:
@@ -194,6 +228,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lNinja &7(&bI-&bII&7)'
       Description:
@@ -215,6 +250,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lVampire &7(&bI-&bV&7)'
       Description:
@@ -236,6 +275,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lLife Steal &7(&bI-&bV&7)'
       Description:
@@ -257,6 +300,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
     Info:
       Name: '&e&lDoctor &7(&bI-&bIII&7)'
       Description:
@@ -278,6 +322,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 20
+      Increase: 10
     Info:
       Name: '&e&lBoom &7(&bI-&bIII&7)'
       Description:
@@ -299,6 +347,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lVenom &7(&bI-&bV&7)'
       Description:
@@ -320,6 +372,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 1
     Info:
       Name: '&e&lDouble Damage &7(&bI-&bIII&7)'
       Description:
@@ -341,6 +397,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lSlowMo &7(&bI-&bIII&7)'
       Description:
@@ -362,6 +422,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 1
     Info:
       Name: '&e&lBlindness &7(&bI-&bII&7)'
       Description:
@@ -383,6 +447,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lViper &7(&bI-&bIII&7)'
       Description:
@@ -404,6 +472,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lAnti-Gravity &7(&bI-&bIII&7)'
       Description:
@@ -425,6 +494,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lFast Turn &7(&bI-&bII&7)'
       Description:
@@ -446,6 +519,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lLight Weight &7(&bI-&bIII&7)'
       Description:
@@ -467,6 +544,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lBlessed &7(&bI-&bIII&7)'
       Description:
@@ -488,11 +569,15 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lFeedMe &7(&bI-&bV&7)'
       Description:
         - '&7Has a chance to'
-        - '&7feed you while fightning.'
+        - '&7feed you while fighting.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -509,6 +594,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lDizzy &7(&bI-&bIII&7)'
       Description:
@@ -530,6 +619,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 1
     Info:
       Name: '&e&lBerserk &7(&bI-&bIII&7)'
       Description:
@@ -551,6 +644,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lCursed &7(&bI-&bIII&7)'
       Description:
@@ -572,6 +669,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 5
+      Increase: 1
     Info:
       Name: '&e&lRekt &7(&bI-&bIII&7)'
       Description:
@@ -593,6 +694,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lEnlightened &7(&bI-&bV&7)'
       Description:
@@ -614,6 +719,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lFreeze &7(&bI-&bII&7)'
       Description:
@@ -635,6 +744,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lFortify &7(&bI-&bIII&7)'
       Description:
@@ -656,6 +769,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 1
     Info:
       Name: '&e&lMolten &7(&bI-&bV&7)'
       Description:
@@ -677,6 +794,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lPain Giver &7(&bI-&bIV&7)'
       Description:
@@ -698,6 +819,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lSavior &7(&bI-&bV&7)'
       Description:
@@ -719,6 +844,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lNursery &7(&bI-&bV&7)'
       Description:
@@ -740,6 +869,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'PickAxe'
+    Chance-System:
+      Base: 25
+      Increase: 25
     Info:
       Name: '&e&lAuto Smelt &7(&bI-&bV&7)'
       Description:
@@ -761,6 +894,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'PickAxe'
+    Chance-System:
+      Base: 25
+      Increase: 25
     Info:
       Name: '&e&lExperience &7(&bI-&bIII&7)'
       Description:
@@ -782,6 +919,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Tool'
     Info:
       Name: '&e&lTelepathy &7(&bI&7)'
       Description:
@@ -803,6 +941,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Tool'
     Info:
       Name: '&e&lHaste &7(&bI-&bIII&7)'
       Description:
@@ -824,6 +963,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Tool'
     Info:
       Name: '&e&lOxygenate &7(&bI&7)'
       Description:
@@ -845,6 +985,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
     Info:
       Name: '&e&lIce Freeze &7(&bI&7)'
       Description:
@@ -866,6 +1010,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
     Info:
       Name: '&e&lLightning &7(&bI&7)'
       Description:
@@ -887,6 +1035,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 10
     Info:
       Name: '&e&lDecapitation &7(&bI-&bV&7)'
       Description:
@@ -908,6 +1060,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lConfusion &7(&bI-&bIV&7)'
       Description:
@@ -929,6 +1085,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 1
     Info:
       Name: '&e&lDisarmer &7(&bI-&bIII&7)'
       Description:
@@ -950,6 +1110,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lExecute &7(&bI-&bV&7)'
       Description:
@@ -971,6 +1132,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 10
     Info:
       Name: '&e&lHeadless &7(&bI-&bV&7)'
       Description:
@@ -992,6 +1157,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 50
+      Increase: 25
     Info:
       Name: '&e&lInquisitive &7(&bI-&bV&7)'
       Description:
@@ -1013,6 +1182,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lInsomnia &7(&bI&7)'
       Description:
@@ -1034,6 +1207,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lNutrition &7(&bI-&bIII&7)'
       Description:
@@ -1055,6 +1232,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lObliterate &7(&bI-&bIII&7)'
       Description:
@@ -1076,6 +1257,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lParalyze &7(&bI-&bIII&7)'
       Description:
@@ -1097,6 +1282,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lSkill Swipe &7(&bI-&bV&7)'
       Description:
@@ -1118,6 +1307,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 3
     Info:
       Name: '&e&lSnare &7(&bI-&bIII&7)'
       Description:
@@ -1139,6 +1332,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lTrap &7(&bI-&bII&7)'
       Description:
@@ -1160,6 +1357,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 3
     Info:
       Name: '&e&lWither &7(&bI-&bIII&7)'
       Description:
@@ -1181,6 +1382,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Sword'
     Info:
       Name: '&e&lRage &7(&bI-&bIII&7)'
       Description:
@@ -1202,6 +1404,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lValor &7(&bI-&bII&7)'
       Description:
@@ -1223,6 +1426,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lSmoke Bomb &7(&bI-&bIII&7)'
       Description:
@@ -1244,6 +1451,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lDrunk &7(&bI-&bIII&7)'
       Description:
@@ -1265,6 +1473,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lVoodoo &7(&bI-&bIII&7)'
       Description:
@@ -1286,6 +1498,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
     Info:
       Name: '&e&lMultiArrow &7(&bI-&bV&7)'
       Description:
@@ -1307,6 +1523,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lRecover &7(&bI&7)'
       Description:
@@ -1328,6 +1545,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 25
+      Increase: 25
     Info:
       Name: '&e&lCactus &7(&bI-&bIII&7)'
       Description:
@@ -1349,6 +1570,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Boots'
+    Chance-System:
+      Base: 15
+      Increase: 5
     Info:
       Name: '&e&lRocket &7(&bI-&bIII&7)'
       Description:
@@ -1370,6 +1595,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lAngel &7(&bI-&bV&7)'
       Description:
@@ -1391,6 +1617,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
+    Enchantment-Type: 'All'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lHellForged &7(&bI-&bIV&7)'
       Description:
@@ -1412,6 +1642,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Helmet'
     Info:
       Name: '&e&lCommander &7(&bI-&bV&7)'
       Description:
@@ -1433,6 +1664,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
     Info:
       Name: '&e&lStormCaller &7(&bI-&bV&7)'
       Description:
@@ -1454,6 +1689,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lLeadership &7(&bI-&bV&7)'
       Description:
@@ -1475,6 +1711,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Helmet'
+    Chance-System:
+      Base: 5
+      Increase: 5
     Info:
       Name: '&e&lImplants &7(&bI-&bV&7)'
       Description:
@@ -1496,6 +1736,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Boots'
     Info:
       Name: '&e&lWings &7(&bI&7)'
       Description:
@@ -1517,6 +1758,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'PickAxe'
     Info:
       Name: '&e&lBlast &7(&bI-&bIII&7)'
       Description:
@@ -1538,6 +1780,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'PickAxe'
     Info:
       Name: '&e&lFurnace &7(&bI&7)'
       Description:
@@ -1559,6 +1802,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lBlizzard &7(&bI&7)'
       Description:
@@ -1580,6 +1824,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lAcidRain &7(&bI-&bIII&7)'
       Description:
@@ -1601,6 +1846,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lSandStorm &7(&bI&7)'
       Description:
@@ -1622,6 +1868,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lRadiant &7(&bI-&bIII&7)'
       Description:
@@ -1643,6 +1890,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lIntimidate &7(&bI-&bII&7)'
       Description:
@@ -1664,6 +1912,10 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
     Info:
       Name: '&e&lPull &7(&bI-&bIII&7)'
       Description:
@@ -1685,6 +1937,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lTamer &7(&bI-&bV&7)'
       Description:
@@ -1706,6 +1959,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lGuards &7(&bI-&bIII&7)'
       Description:
@@ -1727,6 +1981,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lInfestation &7(&bI-&bII&7)'
       Description:
@@ -1748,6 +2003,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
+    Enchantment-Type: 'Armor'
     Info:
       Name: '&e&lNecromancer &7(&bI-&bIII&7)'
       Description:

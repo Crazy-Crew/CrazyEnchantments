@@ -6,13 +6,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultSupport {
-
+	
 	private static Economy vault = null;
-
+	
 	public static Economy getVault() {
 		return vault;
 	}
-
+	
 	public static void loadVault() {
 		if(SupportedPlugins.VAULT.isPluginLoaded()) {
 			RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
@@ -21,5 +21,5 @@ public class VaultSupport {
 			}
 		}
 	}
-
+	
 }

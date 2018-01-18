@@ -1,7 +1,7 @@
 Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the messages
-  Update-Checker: true #Toggle on and off if you get a update message when you join if there is a new update.
-  Player-Info-Backup-Message: true #Toggle this on and off if you wish to see when the players data gets backed up.
+  Update-Checker: true #Toggle on and off if you get an update message when you join if there is a new update.
+  Player-Info-Backup-Message: true #Toggle this on and off if you wish to see when the player's data gets backed up.
   Reset-Players-Max-Health: true #This is for some servers that get a health duplication glitch from plugins like CombatTagPlus(v1.2.3 down)
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   Enchantment-Book-Item: '340' #The item that the enchantment book is.
@@ -10,7 +10,9 @@ Settings:
   EnchantmentBookLore: #The lore on the enchantments books.
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
+    - ''
     - '%Description%'
+    - ''
     - '&4%Destroy_Rate%% Destroy Chance'
     - '&a%Success_Rate%% Success Chance'
   LostBook: #Lost book options.
@@ -104,7 +106,7 @@ Settings:
       Costs: #Cost options
         Power-Up: 5 #When an enchantment levels up 1 on an item
         Add-Enchantment: 3 #When it adds an enchantment to the item from another item
-        Book-Upgrade: 5 #Leveling up a books power
+        Book-Upgrade: 5 #Leveling up the power of a book
   Tinker: #Settings for Info item in the GUI
     InGUI: true #Toggle whether it is in the /CE GUI or not
     Slot: 22 #Slot it is in
@@ -146,7 +148,7 @@ Settings:
         - '&eCost: &a&l$500'
         - '&7Dust allows you to bring'
         - '&7up your &aSuccess Rate&7.'
-      Slot: 25 #Slot number it is in
+      Slot: 25 #Slot number it is on
       Item: '353' #Item the dust is
       Name: '&aMagical Angel Dust' #Name of the dust
       Lore: #Lore for the dust
@@ -163,7 +165,7 @@ Settings:
         - '&eCost: &a&l$500'
         - '&7Dust allows you to bring'
         - '&7down your &4Destroy Rate&7.'
-      Slot: 34 #Slot number it is in
+      Slot: 34 #Slot number it is on
       Item: '331' #Item the dust is
       Name: '&eMagical Fixing Dust' #Name of the dust
       Lore: #Lore for the dust
@@ -241,10 +243,11 @@ Settings:
     Count-Vanilla-Enchantments: true #If it counts the vanilla enchantments in the amount.
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: true #Turn on an off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
-    IncludeVanillaEnchantments: false #Count Vanilla enchantments also?
+    IncludeVanillaEnchantments: false #Count Vanilla enchantments also.
+    Enchant-Stacked-Items: false #Turn on if you wish for enchantment books to enchant stacked items.
     MaxRageLevel: 4 #The max amount rage can stack when fighting.
     Break-Rage-On-Damage: true #If the player is damaged and has a rage building it will be broken if this is enabled.
-    Right-Click-Book-Description: true #Toggles whether when you right click the enchantment book if it messages the player the description or not.
+    Right-Click-Book-Description: true #Toggles whether when you right-click the enchantment book if it messages the player the description or not.
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
     Right-Click-Enchantment-Table: false #When set to true if a player right clicks an enchantment table it will open the /CE gui.
@@ -261,6 +264,11 @@ Settings:
       Regions: #All world guard regions the Wings enchantment can work in.
         - 'Free_Fly'
         - 'SafeZone'
+      Worlds: #The option to disable/enable wings in worlds.
+        Whitelisted: #If the player has wings enchantment in these worlds they will be able to fly anywhere regardless of regions/enemies.
+          - 'Hub_Example'
+        Blacklisted: #Wings will not work at all in these worlds regardless of regions.
+          - 'SkyBlock_Example'
   Costs: #This is where you set the cost of stuff in the shop GUI. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
     Scrambler: #The item that is being bought.
       Cost: 800 #How much the item will cost.
@@ -290,31 +298,31 @@ Settings:
       Line3: '&2&l%Category%' #Line 3 of the sign
       Line4: '&c&lCost: &6&l%Cost%XP' #Line 4 of the sign
       Buy-Message: '&7You have just bought an enchantment book, and it is %BookName%&7 from the %Category%&7 tier.'
-    ProtectionCrystalStyle: 
+    ProtectionCrystalStyle:
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&5&lProtection &b&lCrystal'
       Line4: '&c&lCost: &a&l$500'
       Buy-Message: '&7You have just bought a &5&lProtection &b&lCrystal.' #Message when buying an item.
-    ScramblerStyle: 
+    ScramblerStyle:
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&e&lScrambler'
       Line4: '&c&lCost: &a&l$800'
       Buy-Message: '&7You have just bought a &e&lThe Grand Scrambler&7.' #Message when buying an item.
-    SuccessDustStyle: 
+    SuccessDustStyle:
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&e&lMagical Angel Dust'
       Line4: '&c&lCost: &a&l$500'
       Buy-Message: '&7You have just bought a &aMagical Angel Dust&7.'
-    DestroyDustStyle: 
+    DestroyDustStyle:
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&e&lMagical Fixing Dust'
       Line4: '&c&lCost: &a&l$500'
       Buy-Message: '&7You have just bought a &eMagical Fixing Dust&7.'
-    BlackScrollStyle: 
+    BlackScrollStyle:
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
       Line3: '&4&lBlack &8&lScrolls'
@@ -337,7 +345,7 @@ Settings:
   # Item:<ID>:<MD> - The item that it will be. You can use meta data for the items.
   # Name:<Name> - The name that will go on the item.
   # Lore:<Line1>,<Line2>,<Line3>,<Line4> - The lore can use multiple lines by adding a , in-between letters. Example: "Lore:&7I am line1,&aI am line 2,&eI am line3"
-  #Placeholders can be used in the name and lore and they must be lowercase. 
+  #Placeholders can be used in the name and lore and they must be lowercase.
   #Placeholders: %vault% %xp_level% %xp_total%
   #####################
   GUICustomization: #This allows you to customize unclickable items into you GUI.
