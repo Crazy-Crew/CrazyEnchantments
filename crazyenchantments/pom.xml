@@ -6,7 +6,7 @@
     <parent>
         <artifactId>crazyenchantments-parent</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.7.9.3.4</version>
+        <version>1.7.9.3.5</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -23,47 +23,47 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_7_R4</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_8_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_8_R2</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_8_R3</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_9_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_9_R2</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_10_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_11_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_12_R1</artifactId>
-            <version>1.7.9.3.4</version>
+            <version>1.7.9.3.5</version>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>

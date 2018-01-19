@@ -431,7 +431,7 @@ public class ItemBuilder {
 		itemMeta.setDisplayName(getUpdatedName());
 		itemMeta.setLore(getUpdatedLore());
 		itemMeta.addItemFlags(flags.toArray(new ItemFlag[flags.size()]));
-		itemMeta.setUnbreakable(unbreakable);
+		itemMeta.spigot().setUnbreakable(unbreakable);
 		item.setItemMeta(itemMeta);
 		item.addUnsafeEnchantments(enchantments);
 		addGlow(item, glowing);
