@@ -31,8 +31,8 @@ public class BlackSmith implements Listener {
 
 	public static void openBlackSmith(Player player) {
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")));
-		List<Integer> other = new ArrayList<Integer>();
-		List<Integer> result = new ArrayList<Integer>();
+		List<Integer> other = new ArrayList<>();
+		List<Integer> result = new ArrayList<>();
 		other.add(1);
 		other.add(2);
 		other.add(3);
@@ -312,7 +312,7 @@ public class BlackSmith implements Listener {
 			public void run() {
 				if(inv != null) {
 					if(inv.getName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")))) {
-						List<Integer> slots = new ArrayList<Integer>();
+						List<Integer> slots = new ArrayList<>();
 						slots.add(10);
 						slots.add(13);
 						Boolean dead = e.getPlayer().isDead();
@@ -340,9 +340,6 @@ public class BlackSmith implements Listener {
 
 	private ItemStack getUpgradedItem(Player player, ItemStack master, ItemStack sub, boolean glowing) {
 		ItemStack item = master.clone();
-		if(Version.getCurrentVersion().isNewer(Version.v1_10_R1)){
-			glowing = false;
-		}
 		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType() == Main.CE.getEnchantmentBookItem().getType()) {
 			if(Methods.removeColor(master.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(sub.getItemMeta().getDisplayName()))) {
 				for(CEnchantments en : Main.CE.getEnchantments()) {
@@ -364,15 +361,14 @@ public class BlackSmith implements Listener {
 					}
 				}
 			}
-		}
-		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() || sub.getType() != Main.CE.getEnchantmentBookItem().getType()) {
+		}else {
 			if(master.getType() == sub.getType()) {
-				HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
-				HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
-				HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
+				HashMap<String, Integer> dupEnchants = new HashMap<>();
+				HashMap<String, Integer> newEnchants = new HashMap<>();
+				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantments enchant : Main.CE.getItemEnchantments(master)) {
 					if(Main.CE.hasEnchantment(sub, enchant)) {
-						if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)) {
+						if(Main.CE.getPower(master, enchant).equals(Main.CE.getPower(sub, enchant))) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
 								dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
 							}
@@ -384,7 +380,7 @@ public class BlackSmith implements Listener {
 					}
 				}
 				for(CEnchantments enchant : Main.CE.getItemEnchantments(sub)) {
-					if(!dupEnchants.containsKey(enchant) && !higherEnchants.containsKey(enchant)) {
+					if(!dupEnchants.containsKey(enchant.getName()) && !higherEnchants.containsKey(enchant.getName())) {
 						if(!Main.CE.hasEnchantment(master, enchant)) {
 							newEnchants.put(enchant.getName(), Main.CE.getPower(sub, enchant));
 						}
@@ -392,7 +388,7 @@ public class BlackSmith implements Listener {
 				}
 				for(String enchant : Main.CustomE.getItemEnchantments(master)) {
 					if(Main.CustomE.hasEnchantment(sub, enchant)) {
-						if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)) {
+						if(Main.CustomE.getPower(master, enchant).equals(Main.CustomE.getPower(sub, enchant))) {
 							if(!dupEnchants.containsKey(enchant)) {
 								dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
 							}
@@ -479,12 +475,12 @@ public class BlackSmith implements Listener {
 		if(master.getType() != Main.CE.getEnchantmentBookItem().getType() || sub.getType() != Main.CE.getEnchantmentBookItem().getType()) {
 			if(master.getType() == sub.getType()) {
 				ItemStack item = master.clone();
-				HashMap<String, Integer> dupEnchants = new HashMap<String, Integer>();
-				HashMap<String, Integer> newEnchants = new HashMap<String, Integer>();
-				HashMap<String, Integer> higherEnchants = new HashMap<String, Integer>();
+				HashMap<String, Integer> dupEnchants = new HashMap<>();
+				HashMap<String, Integer> newEnchants = new HashMap<>();
+				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantments enchant : Main.CE.getItemEnchantments(master)) {
 					if(Main.CE.hasEnchantment(sub, enchant)) {
-						if(Main.CE.getPower(master, enchant) == Main.CE.getPower(sub, enchant)) {
+						if(Main.CE.getPower(master, enchant).equals(Main.CE.getPower(sub, enchant))) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
 								dupEnchants.put(enchant.getName(), Main.CE.getPower(master, enchant));
 							}
@@ -504,7 +500,7 @@ public class BlackSmith implements Listener {
 				}
 				for(String enchant : Main.CustomE.getItemEnchantments(master)) {
 					if(Main.CustomE.hasEnchantment(sub, enchant)) {
-						if(Main.CustomE.getPower(master, enchant) == Main.CustomE.getPower(sub, enchant)) {
+						if(Main.CustomE.getPower(master, enchant).equals(Main.CustomE.getPower(sub, enchant))) {
 							if(!dupEnchants.containsKey(enchant)) {
 								dupEnchants.put(enchant, Main.CustomE.getPower(master, enchant));
 							}
