@@ -16,6 +16,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -323,31 +324,32 @@ public class EnchantmentControl implements Listener {
 
 	@EventHandler
 	public void onDescriptionSend(PlayerInteractEvent e) {
-		if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description") || !Main.settings.getConfig().contains("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
-			ItemStack item = Methods.getItemInHand(e.getPlayer());
-			if(Main.CE.isEnchantmentBook(item)) {
-				e.setCancelled(true);
-				String name = "";
-				Player player = e.getPlayer();
-				List<String> desc = new ArrayList<String>();
-				for(CEnchantments en : Main.CE.getEnchantments()) {
-					if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
-						name = Main.settings.getEnchs().getString("Enchantments." + en.getName() + ".Info.Name");
-						desc = Main.settings.getEnchs().getStringList("Enchantments." + en.getName() + ".Info.Description");
+		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if(Main.settings.getConfig().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description") || !Main.settings.getConfig().contains("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
+				ItemStack item = Methods.getItemInHand(e.getPlayer());
+				if(Main.CE.isEnchantmentBook(item)) {
+					e.setCancelled(true);
+					String name = "";
+					Player player = e.getPlayer();
+					List<String> desc = new ArrayList<String>();
+					for(CEnchantments en : Main.CE.getEnchantments()) {
+						if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
+							name = Main.settings.getEnchs().getString("Enchantments." + en.getName() + ".Info.Name");
+							desc = Main.settings.getEnchs().getStringList("Enchantments." + en.getName() + ".Info.Description");
+						}
 					}
-				}
-				for(String en : Main.CustomE.getEnchantments()) {
-					if(item.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en)))) {
-						name = Main.settings.getCustomEnchs().getString("Enchantments." + en + ".Info.Name");
-						desc = Main.settings.getCustomEnchs().getStringList("Enchantments." + en + ".Info.Description");
+					for(String en : Main.CustomE.getEnchantments()) {
+						if(item.getItemMeta().getDisplayName().contains(Methods.color(Main.CustomE.getBookColor(en) + Main.CustomE.getCustomName(en)))) {
+							name = Main.settings.getCustomEnchs().getString("Enchantments." + en + ".Info.Name");
+							desc = Main.settings.getCustomEnchs().getStringList("Enchantments." + en + ".Info.Description");
+						}
 					}
+					if(name.length() > 0) {
+						player.sendMessage(Methods.color(name));
+					}
+					for(String msg : desc)
+						player.sendMessage(Methods.color(msg));
 				}
-				if(name.length() > 0) {
-					player.sendMessage(Methods.color(name));
-				}
-				for(String msg : desc)
-					player.sendMessage(Methods.color(msg));
-				return;
 			}
 		}
 	}

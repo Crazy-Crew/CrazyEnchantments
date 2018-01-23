@@ -1,11 +1,12 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.nms.*;
+import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_7_R4;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -29,11 +30,11 @@ public class ItemBuilder {
 	private String name;
 	private List<String> lore;
 	private Integer amount;
-	private List<ItemFlag> flags;
 	private HashMap<Enchantment, Integer> enchantments;
 	private Boolean unbreakable;
 	private Boolean glowing;
 	private ItemStack referenceItem;
+	private EntityType entityType;
 	private HashMap<String, String> namePlaceholders;
 	private HashMap<String, String> lorePlaceholders;
 
@@ -46,7 +47,7 @@ public class ItemBuilder {
 		this.name = "";
 		this.lore = new ArrayList<>();
 		this.amount = 1;
-		this.flags = new ArrayList<>();
+		this.entityType = EntityType.BAT;
 		this.enchantments = new HashMap<>();
 		this.unbreakable = false;
 		this.glowing = false;
@@ -67,10 +68,12 @@ public class ItemBuilder {
 		.setMetaData(item.getDurability())
 		.setEnchantments(new HashMap<>(item.getEnchantments()));
 		if(item.hasItemMeta()) {
-			itemBuilder.setFlags(new ArrayList<>(item.getItemMeta().getItemFlags()))
-			.setName(item.getItemMeta().getDisplayName())
-			.setLore(item.getItemMeta().getLore())
-			.setUnbreakable(item.getItemMeta().isUnbreakable());
+			itemBuilder.setName(item.getItemMeta().getDisplayName())
+			.setLore(item.getItemMeta().getLore());
+			NBTItem nbt = new NBTItem(item);
+			if(nbt.hasKey("Unbreakable")) {
+				itemBuilder.setUnbreakable(nbt.getBoolean("Unbreakable"));
+			}
 		}
 		return itemBuilder;
 	}
@@ -108,7 +111,15 @@ public class ItemBuilder {
 		Material material = Material.matchMaterial(string); //Needs to be changed to getMaterial() for 1.13.
 		if(material != null) {
 			this.material = material;
-			this.metaData = metaData;
+			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+				if(material == Material.MONSTER_EGG) {
+					this.entityType = EntityType.fromId(metaData);
+				}else {
+					this.metaData = metaData;
+				}
+			}else {
+				this.metaData = metaData;
+			}
 		}
 		return this;
 	}
@@ -240,6 +251,24 @@ public class ItemBuilder {
 	}
 
 	/**
+	 * Sets the type of mob egg.
+	 * @param entityType The entity type the mob egg will be.
+	 * @return The ItemBuilder with updated info.
+	 */
+	public ItemBuilder setEntityType(EntityType entityType) {
+		this.entityType = entityType;
+		return this;
+	}
+
+	/**
+	 * Get the entity type of the mob egg.
+	 * @return The EntityType of the mob egg.
+	 */
+	public EntityType getEntityType() {
+		return entityType;
+	}
+
+	/**
 	 * Set the placeholders that are in the lore of the item.
 	 * @param placeholders The placeholders that you wish to use.
 	 * @return The ItemBuilder with updated info.
@@ -300,46 +329,6 @@ public class ItemBuilder {
 	 */
 	public ItemBuilder setAmount(Integer amount) {
 		this.amount = amount;
-		return this;
-	}
-
-	/**
-	 * Get the flags that are set to the item in the builder.
-	 * @return The flags that are on the item in the builder.
-	 */
-	public List<ItemFlag> getFlags() {
-		return flags;
-	}
-
-	/**
-	 * Add a flag to the item in the builder.
-	 * @param flag The flag you wish to add.
-	 * @return The ItemBuilder with updated info.
-	 */
-	public ItemBuilder addFlags(ItemFlag flag) {
-		this.flags.add(flag);
-		return this;
-	}
-
-	/**
-	 * Remove a flag that is on the item in the builder.
-	 * @param flag The flag you wish to remove from the builder.
-	 * @return The ItemBuilder with updated info.
-	 */
-	public ItemBuilder removeFlags(ItemFlag flag) {
-		this.flags.remove(flag);
-		return this;
-	}
-
-	/**
-	 * Set the flags that will be on the item in the builder.
-	 * @param flags The flags you wish to add to the item in the builder.
-	 * @return The ItemBuilder with updated info.
-	 */
-	public ItemBuilder setFlags(List<ItemFlag> flags) {
-		if(flags != null) {
-			this.flags = flags;
-		}
 		return this;
 	}
 
@@ -430,12 +419,18 @@ public class ItemBuilder {
 		ItemMeta itemMeta = item.getItemMeta();
 		itemMeta.setDisplayName(getUpdatedName());
 		itemMeta.setLore(getUpdatedLore());
-		itemMeta.addItemFlags(flags.toArray(new ItemFlag[flags.size()]));
-		itemMeta.spigot().setUnbreakable(unbreakable);
 		item.setItemMeta(itemMeta);
 		item.addUnsafeEnchantments(enchantments);
 		addGlow(item, glowing);
-		return item;
+		NBTItem nbt = new NBTItem(item);
+		if(unbreakable) {
+			nbt.setBoolean("Unbreakable", true);
+			nbt.setInteger("HideFlags", 4);
+		}
+		if(material == Material.MONSTER_EGG) {
+			nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
+		}
+		return nbt.getItem();
 	}
 
 	/**
@@ -455,18 +450,6 @@ public class ItemBuilder {
 	private ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle) {
 			switch(Version.getCurrentVersion()) {
-				case v1_10_R1:
-					return NMS_v1_10_R1.addGlow(item);
-				case v1_9_R2:
-					return NMS_v1_9_R2.addGlow(item);
-				case v1_9_R1:
-					return NMS_v1_9_R1.addGlow(item);
-				case v1_8_R3:
-					return NMS_v1_8_R3.addGlow(item);
-				case v1_8_R2:
-					return NMS_v1_8_R2.addGlow(item);
-				case v1_8_R1:
-					return NMS_v1_8_R1.addGlow(item);
 				case v1_7_R4:
 					return NMS_v1_7_R4.addGlow(item);
 				default:
@@ -479,7 +462,7 @@ public class ItemBuilder {
 							}
 							item.addUnsafeEnchantment(Enchantment.LUCK, 1);
 							ItemMeta meta = item.getItemMeta();
-							meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+							meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS);
 							item.setItemMeta(meta);
 						}
 						return item;

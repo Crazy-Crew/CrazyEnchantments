@@ -6,7 +6,7 @@ import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.nms.*;
+import me.badbones69.crazyenchantments.multisupport.nms.NMS_v1_7_R4;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -86,52 +86,20 @@ public class Methods {
 
 	public static ItemStack addGlow(ItemStack item) {
 		switch(Version.getCurrentVersion()) {
-			case v1_12_R1:
-				return addGlowHide(item);
-			case v1_11_R1:
-				return addGlowHide(item);
-			case v1_10_R1:
-				return NMS_v1_10_R1.addGlow(item);
-			case v1_9_R2:
-				return NMS_v1_9_R2.addGlow(item);
-			case v1_9_R1:
-				return NMS_v1_9_R1.addGlow(item);
-			case v1_8_R3:
-				return NMS_v1_8_R3.addGlow(item);
-			case v1_8_R2:
-				return NMS_v1_8_R2.addGlow(item);
-			case v1_8_R1:
-				return NMS_v1_8_R1.addGlow(item);
 			case v1_7_R4:
 				return NMS_v1_7_R4.addGlow(item);
 			default:
-				return item;
+				return addGlowHide(item);
 		}
 	}
 
 	public static ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle) {
 			switch(Version.getCurrentVersion()) {
-				case v1_12_R1:
-					return addGlowHide(item);
-				case v1_11_R1:
-					return addGlowHide(item);
-				case v1_10_R1:
-					return NMS_v1_10_R1.addGlow(item);
-				case v1_9_R2:
-					return NMS_v1_9_R2.addGlow(item);
-				case v1_9_R1:
-					return NMS_v1_9_R1.addGlow(item);
-				case v1_8_R3:
-					return NMS_v1_8_R3.addGlow(item);
-				case v1_8_R2:
-					return NMS_v1_8_R2.addGlow(item);
-				case v1_8_R1:
-					return NMS_v1_8_R1.addGlow(item);
 				case v1_7_R4:
 					return NMS_v1_7_R4.addGlow(item);
 				default:
-					return item;
+					return addGlowHide(item);
 			}
 		}
 		return item;
@@ -211,7 +179,7 @@ public class Methods {
 	}
 
 	public static ArrayList<String> getPotions() {
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		list.add("ABSORPTION");
 		list.add("BLINDNESS");
 		list.add("CONFUSION");
@@ -243,7 +211,7 @@ public class Methods {
 	}
 
 	public static ItemStack removeLore(ItemStack item, String i) {
-		ArrayList<String> lore = new ArrayList<String>();
+		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();
 		for(String l : item.getItemMeta().getLore()) {
 			if(!l.equals(i)) {
@@ -256,7 +224,7 @@ public class Methods {
 	}
 
 	public static ItemStack replaceLore(ItemStack item, String oldlore, String newlore) {
-		ArrayList<String> lore = new ArrayList<String>();
+		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();
 		for(String l : item.getItemMeta().getLore()) {
 			if(l.equals(oldlore)) {
@@ -315,8 +283,7 @@ public class Methods {
 			player.getInventory().removeItem(item);
 		}
 		if(item.getAmount() > 1) {
-			ItemStack i = item;
-			i.setAmount(item.getAmount() - 1);
+			item.setAmount(item.getAmount() - 1);
 		}
 	}
 
@@ -347,7 +314,7 @@ public class Methods {
 	}
 
 	public static ItemStack addLore(ItemStack item, String i) {
-		ArrayList<String> lore = new ArrayList<String>();
+		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();
 		if(item.getItemMeta().hasLore()) {
 			lore.addAll(item.getItemMeta().getLore());
@@ -367,9 +334,8 @@ public class Methods {
 	}
 
 	public static ItemStack removeProtected(ItemStack item) {
-		ArrayList<String> lore = new ArrayList<String>();
 		ItemMeta m = item.getItemMeta();
-		lore.addAll(m.getLore());
+		ArrayList<String> lore = new ArrayList<>(m.getLore());
 		lore.remove(color(Main.settings.getConfig().getString("Settings.WhiteScroll.ProtectedName")));
 		m.setLore(lore);
 		item.setItemMeta(m);
@@ -388,7 +354,6 @@ public class Methods {
 				Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
 			}
 		}catch(Exception e) {
-			return;
 		}
 	}
 
@@ -404,7 +369,6 @@ public class Methods {
 				player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
 			}
 		}catch(Exception e) {
-			return;
 		}
 	}
 
@@ -453,7 +417,6 @@ public class Methods {
 				if(isInt(arg)) {
 					break;
 				}else {
-					continue;
 				}
 			}
 		}
@@ -480,10 +443,7 @@ public class Methods {
 			return true;
 		}
 		int chance = 1 + number.nextInt(max);
-		if(chance == 1) {
-			return true;
-		}
-		return false;
+		return chance == 1;
 	}
 
 	public static boolean randomPicker(int min, int max) {
@@ -492,10 +452,7 @@ public class Methods {
 		}
 		Random number = new Random();
 		int chance = 1 + number.nextInt(max);
-		if(chance >= 1 && chance <= min) {
-			return true;
-		}
-		return false;
+		return chance >= 1 && chance <= min;
 	}
 
 	public static Integer percentPick(int max, int min) {
@@ -508,15 +465,12 @@ public class Methods {
 	}
 
 	public static boolean isInvFull(Player player) {
-		if(player.getInventory().firstEmpty() == -1) {
-			return true;
-		}
-		return false;
+		return player.getInventory().firstEmpty() == -1;
 	}
 
 	public static List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity ent) {
 		List<Entity> out = ent.getNearbyEntities(radius, radius, radius);
-		List<LivingEntity> entities = new ArrayList<LivingEntity>();
+		List<LivingEntity> entities = new ArrayList<>();
 		for(Entity en : out) {
 			if(en instanceof LivingEntity) {
 				entities.add((LivingEntity) en);
@@ -540,36 +494,52 @@ public class Methods {
 	}
 
 	private static void detonate(final Firework f) {
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.CE.getPlugin(), new Runnable() {
-			public void run() {
-				f.detonate();
-			}
-		}, 2);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Main.CE.getPlugin(), f::detonate, 2);
 	}
 
 	public static Color getColor(String color) {
-		if(color.equalsIgnoreCase("AQUA")) return Color.AQUA;
-		if(color.equalsIgnoreCase("BLACK")) return Color.BLACK;
-		if(color.equalsIgnoreCase("BLUE")) return Color.BLUE;
-		if(color.equalsIgnoreCase("FUCHSIA")) return Color.FUCHSIA;
-		if(color.equalsIgnoreCase("GRAY")) return Color.GRAY;
-		if(color.equalsIgnoreCase("GREEN")) return Color.GREEN;
-		if(color.equalsIgnoreCase("LIME")) return Color.LIME;
-		if(color.equalsIgnoreCase("MAROON")) return Color.MAROON;
-		if(color.equalsIgnoreCase("NAVY")) return Color.NAVY;
-		if(color.equalsIgnoreCase("OLIVE")) return Color.OLIVE;
-		if(color.equalsIgnoreCase("ORANGE")) return Color.ORANGE;
-		if(color.equalsIgnoreCase("PURPLE")) return Color.PURPLE;
-		if(color.equalsIgnoreCase("RED")) return Color.RED;
-		if(color.equalsIgnoreCase("SILVER")) return Color.SILVER;
-		if(color.equalsIgnoreCase("TEAL")) return Color.TEAL;
-		if(color.equalsIgnoreCase("WHITE")) return Color.WHITE;
-		if(color.equalsIgnoreCase("YELLOW")) return Color.YELLOW;
-		return Color.WHITE;
+		switch(color.toUpperCase()) {
+			case "AQUA":
+				return Color.AQUA;
+			case "BLACK":
+				return Color.BLACK;
+			case "BLUE":
+				return Color.BLUE;
+			case "FUCHSIA":
+				return Color.FUCHSIA;
+			case "GRAY":
+				return Color.GRAY;
+			case "GREEN":
+				return Color.GREEN;
+			case "LIME":
+				return Color.LIME;
+			case "MAROON":
+				return Color.MAROON;
+			case "NAVY":
+				return Color.NAVY;
+			case "OLIVE":
+				return Color.OLIVE;
+			case "ORANGE":
+				return Color.ORANGE;
+			case "PURPLE":
+				return Color.PURPLE;
+			case "RED":
+				return Color.RED;
+			case "SILVER":
+				return Color.SILVER;
+			case "TEAL":
+				return Color.TEAL;
+			case "WHITE":
+				return Color.WHITE;
+			case "YELLOW":
+				return Color.YELLOW;
+			default:
+				return Color.WHITE;
+		}
 	}
 
 	public static String getEnchantmentName(Enchantment en) {
-		HashMap<String, String> enchants = new HashMap<String, String>();
+		HashMap<String, String> enchants = new HashMap<>();
 		enchants.put("ARROW_DAMAGE", "Power");
 		enchants.put("ARROW_FIRE", "Flame");
 		enchants.put("ARROW_INFINITE", "Infinity");
@@ -626,7 +596,7 @@ public class Methods {
 						if(item.getType().getMaxDurability() < item.getDurability()) {
 							player.getInventory().remove(item);
 						}else {
-							item.setDurability((short) ((short) item.getDurability() + 1));
+							item.setDurability((short) (item.getDurability() + 1));
 						}
 					}
 					return;
@@ -636,7 +606,7 @@ public class Methods {
 		if(item.getType().getMaxDurability() < item.getDurability()) {
 			player.getInventory().remove(item);
 		}else {
-			item.setDurability((short) ((short) item.getDurability() + 1));
+			item.setDurability((short) (item.getDurability() + 1));
 		}
 	}
 
@@ -663,7 +633,7 @@ public class Methods {
 	}
 
 	public static Set<String> getEnchantments() {
-		HashMap<String, String> enchants = new HashMap<String, String>();
+		HashMap<String, String> enchants = new HashMap<>();
 		enchants.put("ARROW_DAMAGE", "Power");
 		enchants.put("ARROW_FIRE", "Flame");
 		enchants.put("ARROW_INFINITE", "Infinity");
