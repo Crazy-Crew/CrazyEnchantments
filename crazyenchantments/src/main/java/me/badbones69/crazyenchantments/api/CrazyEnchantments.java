@@ -3,7 +3,6 @@ package me.badbones69.crazyenchantments.api;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,13 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CrazyEnchantments {
-
+	
 	private static CrazyEnchantments instance = new CrazyEnchantments();
-
+	
 	public static CrazyEnchantments getInstance() {
 		return instance;
 	}
-
+	
 	/**
 	 * Only needs used when the player joines the server.
 	 * This plugin does it automaticly, so there is no need to use it unless you have to.
@@ -54,7 +53,7 @@ public class CrazyEnchantments {
 		}
 		DataStorage.addCEPlayer(new CEPlayer(player, souls, isActive, cooldowns));
 	}
-
+	
 	/**
 	 * Only needs used when the player leaves the server.
 	 * This plugin removes the player automaticly, so don't use this method unless needed for some reason.
@@ -77,7 +76,7 @@ public class CrazyEnchantments {
 		}
 		DataStorage.removeCEPlayer(p);
 	}
-
+	
 	/**
 	 * This backup all the players data stored by this plugin.
 	 * @param player The player you wish to backup.
@@ -98,7 +97,7 @@ public class CrazyEnchantments {
 			Main.settings.saveData();
 		}
 	}
-
+	
 	/**
 	 * This backup all the players data stored by this plugin.
 	 * @param player The player you wish to backup.
@@ -118,7 +117,7 @@ public class CrazyEnchantments {
 			Main.settings.saveData();
 		}
 	}
-
+	
 	/**
 	 * Get a GKit from its name.
 	 * @param kit The kit you wish to get.
@@ -132,7 +131,7 @@ public class CrazyEnchantments {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Get all loaded gkitz.
 	 * @return All of the loaded gkitz.
@@ -140,7 +139,7 @@ public class CrazyEnchantments {
 	public ArrayList<GKitz> getGKitz() {
 		return DataStorage.getGKitz();
 	}
-
+	
 	/**
 	 * This converts a normal Player into a CEPlayer that is loaded.
 	 * @param player The player you want to get as a CEPlayer.
@@ -154,7 +153,7 @@ public class CrazyEnchantments {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * This gets all the CEPlayer's that are loaded.
 	 * @return All CEPlayer's that are loading and in a list.
@@ -162,7 +161,7 @@ public class CrazyEnchantments {
 	public ArrayList<CEPlayer> getCEPlayers() {
 		return DataStorage.getCEPlayers();
 	}
-
+	
 	/**
 	 *
 	 * @return Returns the item the enchantment book will be.
@@ -170,7 +169,7 @@ public class CrazyEnchantments {
 	public ItemStack getEnchantmentBookItem() {
 		return new ItemBuilder().setMaterial(Main.settings.getConfig().getString("Settings.Enchantment-Book-Item")).build();
 	}
-
+	
 	/**
 	 *
 	 * @return List of all the enum enchantments.
@@ -182,7 +181,7 @@ public class CrazyEnchantments {
 		}
 		return enchs;
 	}
-
+	
 	/**
 	 *
 	 * @param enchantment Enchantment that is being checked
@@ -196,7 +195,7 @@ public class CrazyEnchantments {
 		}
 		return false;
 	}
-
+	
 	/**
 	 *
 	 * @param name The name or custom name of the enchantment.
@@ -220,7 +219,7 @@ public class CrazyEnchantments {
 		}
 		return null;
 	}
-
+	
 	/**
 	 *
 	 * @param item Item you want to check to see if it has enchantments.
@@ -242,7 +241,7 @@ public class CrazyEnchantments {
 		}
 		return false;
 	}
-
+	
 	/**
 	 *
 	 * @param item Item that you want to check if it has an enchantment.
@@ -263,7 +262,7 @@ public class CrazyEnchantments {
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Get the highest category rarity the enchantment is in.
 	 * @param enchantment The enchantment you are checking.
@@ -280,7 +279,7 @@ public class CrazyEnchantments {
 		}
 		return top;
 	}
-
+	
 	/**
 	 *
 	 * @param enchantment The enchantment you want to check.
@@ -297,7 +296,7 @@ public class CrazyEnchantments {
 		}
 		return cats;
 	}
-
+	
 	/**
 	 * Get all the categories that can be used.
 	 * @return List of all the categories.
@@ -309,7 +308,7 @@ public class CrazyEnchantments {
 		}
 		return categories;
 	}
-
+	
 	/**
 	 *
 	 * @param category The category you want the rarity from.
@@ -323,7 +322,7 @@ public class CrazyEnchantments {
 		}
 		return rarity;
 	}
-
+	
 	/**
 	 *
 	 * @param player The player you want to check if they have the enchantment on their armor.
@@ -345,7 +344,7 @@ public class CrazyEnchantments {
 		}
 		return false;
 	}
-
+	
 	/**
 	 *
 	 * @param player The player you want to check if they have the enchantment on their armor.
@@ -363,7 +362,7 @@ public class CrazyEnchantments {
 		}
 		return false;
 	}
-
+	
 	/**
 	 *
 	 * @param player The player you want to check if they have the enchantment on their armor.
@@ -382,7 +381,7 @@ public class CrazyEnchantments {
 		}
 		return false;
 	}
-
+	
 	/**
 	 *
 	 * @param player The player you want to get the highest level of an enchantment from.
@@ -411,7 +410,7 @@ public class CrazyEnchantments {
 		}
 		return highest;
 	}
-
+	
 	/**
 	 *
 	 * @param player The player you want to get the highest level of an enchantment from.
@@ -433,7 +432,7 @@ public class CrazyEnchantments {
 		}
 		return highest;
 	}
-
+	
 	/**
 	 *
 	 * @param player The player you want to get the highest level of an enchantment from.
@@ -459,7 +458,7 @@ public class CrazyEnchantments {
 		}
 		return highest;
 	}
-
+	
 	/**
 	 *
 	 * @param item Item you want to add the enchantment to.
@@ -493,15 +492,11 @@ public class CrazyEnchantments {
 			newLore.add(enchantments.get(en));
 		}
 		newLore.addAll(lores);
-		meta.setLore(newLore);
-		item.setItemMeta(meta);
-		if(Version.getCurrentVersion().isNewer(Version.v1_10_R1)) {
-			return item;
-		}else {
-			return Methods.addGlow(item);
-		}
+		ItemBuilder newItem = ItemBuilder.convertItemStack(item);
+		newItem.setLore(newLore);
+		return newItem.build();
 	}
-
+	
 	/**
 	 *
 	 * @param item Item you want to remove the enchantment from.
@@ -522,7 +517,7 @@ public class CrazyEnchantments {
 		item.setItemMeta(meta);
 		return item;
 	}
-
+	
 	/**
 	 *
 	 * @param item Item you want to get the enchantments from.
@@ -547,7 +542,7 @@ public class CrazyEnchantments {
 		}
 		return enchantments;
 	}
-
+	
 	/**
 	 * Force an update of a players armor potion effects.
 	 * @param player The player you are updating the effects of.
@@ -573,7 +568,7 @@ public class CrazyEnchantments {
 			}
 		}
 	}
-
+	
 	/**
 	 *
 	 * @param player The player you are adding it to.
@@ -634,7 +629,7 @@ public class CrazyEnchantments {
 		}
 		return effects;
 	}
-
+	
 	/**
 	 *
 	 * @return All the effects for each enchantment that needs it.
@@ -643,43 +638,43 @@ public class CrazyEnchantments {
 		HashMap<CEnchantments, HashMap<PotionEffectType, Integer>> enchants = new HashMap<CEnchantments, HashMap<PotionEffectType, Integer>>();
 		enchants.put(CEnchantments.BURNSHIELD, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.BURNSHIELD).put(PotionEffectType.FIRE_RESISTANCE, -1);
-
+		
 		enchants.put(CEnchantments.DRUNK, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.DRUNK).put(PotionEffectType.INCREASE_DAMAGE, -1);
 		enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW_DIGGING, -1);
 		enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW, 0);
-
+		
 		enchants.put(CEnchantments.HULK, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.HULK).put(PotionEffectType.INCREASE_DAMAGE, -1);
 		enchants.get(CEnchantments.HULK).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
 		enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOW, 0);
-
+		
 		enchants.put(CEnchantments.VALOR, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.VALOR).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
-
+		
 		enchants.put(CEnchantments.OVERLOAD, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.OVERLOAD).put(PotionEffectType.HEALTH_BOOST, 0);
-
+		
 		enchants.put(CEnchantments.NINJA, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.NINJA).put(PotionEffectType.HEALTH_BOOST, -1);
 		enchants.get(CEnchantments.NINJA).put(PotionEffectType.SPEED, -1);
-
+		
 		enchants.put(CEnchantments.INSOMNIA, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.CONFUSION, -1);
 		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW_DIGGING, -1);
 		enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW, 0);
-
+		
 		enchants.put(CEnchantments.ANTIGRAVITY, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.ANTIGRAVITY).put(PotionEffectType.JUMP, 1);
-
+		
 		enchants.put(CEnchantments.GEARS, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.GEARS).put(PotionEffectType.SPEED, -1);
-
+		
 		enchants.put(CEnchantments.SPRINGS, new HashMap<PotionEffectType, Integer>());
 		enchants.get(CEnchantments.SPRINGS).put(PotionEffectType.JUMP, -1);
 		return enchants;
 	}
-
+	
 	/**
 	 * Check if an itemstack is an enchantment book.
 	 * @param book The item you are checking.
@@ -701,7 +696,7 @@ public class CrazyEnchantments {
 		}
 		return false;
 	}
-
+	
 	/**
 	 * This method converts an ItemStack into a CEBook.
 	 * @param book The ItemStack you are converting.
@@ -714,7 +709,7 @@ public class CrazyEnchantments {
 		ceBook.setGlowing(Main.settings.getConfig().getBoolean("Settings.Enchantment-Book-Glowing"));
 		return ceBook;
 	}
-
+	
 	/**
 	 * Get the enchantment from an enchantment book.
 	 * @param book The book you want the enchantment from.
@@ -736,7 +731,7 @@ public class CrazyEnchantments {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Get a players max amount of enchantments.
 	 * @param player The player you are checking.
@@ -764,7 +759,7 @@ public class CrazyEnchantments {
 		}
 		return limit;
 	}
-
+	
 	/**
 	 *
 	 * @param book The book you are getting the power from.
@@ -786,7 +781,7 @@ public class CrazyEnchantments {
 		if(line.equalsIgnoreCase("X")) return 10;
 		return 1;
 	}
-
+	
 	/**
 	 *
 	 * @param item Item you are getting the power from.
@@ -825,7 +820,7 @@ public class CrazyEnchantments {
 		}
 		return power;
 	}
-
+	
 	/**
 	 *
 	 * @return The block list for blast.
@@ -833,7 +828,7 @@ public class CrazyEnchantments {
 	public ArrayList<Material> getBlockList() {
 		return DataStorage.getBlockList();
 	}
-
+	
 	/**
 	 *
 	 * @return The max rage stack level.
@@ -841,7 +836,7 @@ public class CrazyEnchantments {
 	public Integer getMaxRageLevel() {
 		return DataStorage.getRageMaxLevel();
 	}
-
+	
 	/**
 	 * Gets the max enchantment level of an enchantment.
 	 * @param enchant The enchantment you want to get.
@@ -850,7 +845,7 @@ public class CrazyEnchantments {
 	public Integer getMaxPower(CEnchantments enchant) {
 		return Main.settings.getEnchs().getInt("Enchantments." + enchant.getName() + ".MaxPower");
 	}
-
+	
 	/**
 	 * This converts an integer into a roman numeral if its between 1-10 other wise it will just be the number as a string.
 	 * @param i The integer you want to convert.
@@ -870,7 +865,7 @@ public class CrazyEnchantments {
 		if(i == 10) return "X";
 		return i + "";
 	}
-
+	
 	/**
 	 * Reloads the gkit items.
 	 * @param itemStrings The items as a string.
@@ -879,7 +874,7 @@ public class CrazyEnchantments {
 	public ArrayList<ItemStack> getKitItems(ArrayList<String> itemStrings) {
 		return DataStorage.getKitItems(itemStrings);
 	}
-
+	
 	/**
 	 * Gets the plugin.
 	 * @return The plugin as a Plugin object.
@@ -887,5 +882,5 @@ public class CrazyEnchantments {
 	public Plugin getPlugin() {
 		return Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 	}
-
+	
 }

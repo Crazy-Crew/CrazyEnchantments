@@ -727,7 +727,7 @@ public class Main extends JavaPlugin implements Listener {
 					boolean toggle = false;
 					boolean customEnchant = false;
 					for(CEnchantments en : CE.getEnchantments()) {
-						if(ench.equalsIgnoreCase(en.getCustomName())) {
+						if(ench.equalsIgnoreCase(en.getName()) || ench.equalsIgnoreCase(en.getCustomName())) {
 							ench = en.getName();
 							toggle = true;
 						}
