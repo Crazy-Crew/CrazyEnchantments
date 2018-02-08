@@ -54,6 +54,11 @@ public class Support {
 				return true;
 			}
 		}
+		if(SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
+			if(PlotSquaredSupport.inTerritory(player)) {
+				return true;
+			}
+		}
 		return SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() && LegacyFactionsSupport.inTerritory(player);
 	}
 	
@@ -109,6 +114,9 @@ public class Support {
 			if(SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
 				return GriefPreventionSupport.isFriendly(player, other);
 			}
+			if(SupportedPlugins.SIMPLE_CLANS.isPluginLoaded()) {
+				return SimpleClansSupport.isFriendly(player, other);
+			}
 		}
 		return false;
 	}
@@ -137,6 +145,11 @@ public class Support {
 			}
 			if(SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
 				if(!GriefPreventionSupport.canBreakBlock(player, block)) {
+					return false;
+				}
+			}
+			if(SupportedPlugins.PRECIOUS_STONES.isPluginLoaded()) {
+				if(!PreciousStonesSupport.canBreakBlock(player, block)) {
 					return false;
 				}
 			}
@@ -220,7 +233,10 @@ public class Support {
 		MOB_STACKER("MobStacker"),
 		MOB_STACKER_2("MobStacker2"),
 		STACK_MOB("StackMob"),
-		MEGA_SKILLS("MegaSkills");
+		MEGA_SKILLS("MegaSkills"),
+		SIMPLE_CLANS("SimpleClansSupport"),
+		PRECIOUS_STONES("PreciousStones"),
+		PLOT_SQUARED("PlotSquared");
 		
 		private String name;
 		
@@ -252,6 +268,10 @@ public class Support {
 				return false;
 			}
 			return plugin != null;
+		}
+		
+		public Plugin getPlugin() {
+			return Bukkit.getServer().getPluginManager().getPlugin(name);
 		}
 		
 	}

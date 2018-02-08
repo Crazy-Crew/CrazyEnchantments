@@ -1,12 +1,12 @@
-package me.badbones69.crazyenchantments.controlers;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
+import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
-import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -42,7 +42,7 @@ public class ScrollControl implements Listener {
 						return;
 					}
 				}
-				if(scroll.isSimilar(getTransmogScroll(1))) {
+				if(scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
 					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
@@ -60,7 +60,7 @@ public class ScrollControl implements Listener {
 						return;
 					}
 				}
-				if(scroll.isSimilar(getWhiteScroll(1))) {
+				if(scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) {
 					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
@@ -75,7 +75,7 @@ public class ScrollControl implements Listener {
 						}
 					}
 				}
-				if(scroll.isSimilar(getBlackScroll(1))) {
+				if(scroll.isSimilar(Scrolls.BlACK_SCROLL.getScroll())) {
 					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 						return;
@@ -117,10 +117,10 @@ public class ScrollControl implements Listener {
 		Player player = e.getPlayer();
 		ItemStack item = Methods.getItemInHand(player);
 		if(item != null) {
-			if(Methods.isSimilar(item, getBlackScroll(1))) {
+			if(Methods.isSimilar(item, Scrolls.BlACK_SCROLL.getScroll())) {
 				e.setCancelled(true);
 				player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Right-Click-Black-Scroll")));
-			}else if(Methods.isSimilar(item, getWhiteScroll(1)) || Methods.isSimilar(item, getTransmogScroll(1))) {
+			}else if(Methods.isSimilar(item, Scrolls.WHITE_SCROLL.getScroll()) || Methods.isSimilar(item, Scrolls.TRANSMOG_SCROLL.getScroll())) {
 				e.setCancelled(true);
 			}
 		}
@@ -196,24 +196,6 @@ public class ScrollControl implements Listener {
 			return string2.compareTo(string1);
 		});
 		return list;
-	}
-	
-	public static ItemStack getBlackScroll(int amount) {
-		String name = Methods.color(Files.CONFIG.getFile().getString("Settings.BlackScroll.Name"));
-		String id = Files.CONFIG.getFile().getString("Settings.BlackScroll.Item");
-		return new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(Files.CONFIG.getFile().getStringList("Settings.BlackScroll.Item-Lore")).build();
-	}
-	
-	public static ItemStack getWhiteScroll(int amount) {
-		String name = Methods.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.Name"));
-		String id = Files.CONFIG.getFile().getString("Settings.WhiteScroll.Item");
-		return new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(Files.CONFIG.getFile().getStringList("Settings.WhiteScroll.Item-Lore")).build();
-	}
-	
-	public static ItemStack getTransmogScroll(int amount) {
-		String name = Methods.color(Files.CONFIG.getFile().getString("Settings.TransmogScroll.Name"));
-		String id = Files.CONFIG.getFile().getString("Settings.TransmogScroll.Item");
-		return new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Item-Lore")).build();
 	}
 	
 	private CEnchantment pickEnchant(List<CEnchantment> enchants) {

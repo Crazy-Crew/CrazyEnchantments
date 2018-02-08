@@ -2,7 +2,9 @@ package me.badbones69.crazyenchantments.api;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
+import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.multisupport.Version;
@@ -113,6 +115,10 @@ public class CrazyEnchantments {
 			ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
 			gkitz.add(new GKitz(kit, slot, time, displayItem, getInfoGKit(itemStrings), commands, getKitItems(itemStrings), itemStrings, autoEquip));
 		}
+		//Loads the scrolls
+		Scrolls.loadScrolls();
+		//Loads the dust
+		Dust.loadDust();
 	}
 	
 	/**

@@ -1,9 +1,11 @@
-package me.badbones69.crazyenchantments.controlers;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.enums.Dust;
+import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -177,13 +179,13 @@ public class ShopControler implements Listener {
 								}
 								switch(o) {
 									case "BlackScroll":
-										player.getInventory().addItem(ScrollControl.getBlackScroll(1));
+										player.getInventory().addItem(Scrolls.BlACK_SCROLL.getScroll());
 										break;
 									case "WhiteScroll":
-										player.getInventory().addItem(ScrollControl.getWhiteScroll(1));
+										player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
 										break;
 									case "TransmogScroll":
-										player.getInventory().addItem(ScrollControl.getTransmogScroll(1));
+										player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
 										break;
 									case "ProtectionCrystal":
 										player.getInventory().addItem(ProtectionCrystal.getCrystals());
@@ -238,10 +240,10 @@ public class ShopControler implements Listener {
 								}
 								switch(o) {
 									case "DestroyDust":
-										player.getInventory().addItem(DustControl.getDust("DestroyDust", 1));
+										player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
 										break;
 									case "SuccessDust":
-										player.getInventory().addItem(DustControl.getDust("SuccessDust", 1));
+										player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
 										break;
 								}
 								return;

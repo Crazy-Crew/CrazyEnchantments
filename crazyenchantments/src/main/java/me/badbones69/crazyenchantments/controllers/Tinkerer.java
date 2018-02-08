@@ -1,9 +1,10 @@
-package me.badbones69.crazyenchantments.controlers;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
@@ -164,7 +165,7 @@ public class Tinkerer implements Listener {
 													return;
 												}
 												e.setCurrentItem(new ItemStack(Material.AIR));
-												inv.setItem(getSlot().get(inv.firstEmpty()), DustControl.getDust("MysteryDust", 1, Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchant + ".Book")));
+												inv.setItem(getSlot().get(inv.firstEmpty()), Dust.MYSTERY_DUST.getDust(Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchant + ".Book"), 1));
 												inv.setItem(inv.firstEmpty(), current);
 												try {
 													if(Version.getCurrentVersion().getVersionInteger() >= 191) {

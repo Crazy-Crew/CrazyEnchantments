@@ -10,23 +10,23 @@ import org.bukkit.inventory.ItemStack;
 
 public class EnchantmentUseEvent extends Event implements Cancellable {
 	
-	private Player Player;
-	private CEnchantment Enchant;
-	private Boolean Cancel;
-	private ItemStack Item;
+	private Player player;
+	private CEnchantment enchantment;
+	private Boolean cancel;
+	private ItemStack item;
 	
-	public EnchantmentUseEvent(Player player, CEnchantment enchant, ItemStack item) {
-		Player = player;
-		Enchant = enchant;
-		Cancel = false;
-		Item = item;
+	public EnchantmentUseEvent(Player player, CEnchantment enchantment, ItemStack item) {
+		this.player = player;
+		this.enchantment = enchantment;
+		cancel = false;
+		this.item = item;
 	}
 	
-	public EnchantmentUseEvent(Player player, CEnchantments enchant, ItemStack item) {
-		Player = player;
-		Enchant = enchant.getEnchantment();
-		Cancel = false;
-		Item = item;
+	public EnchantmentUseEvent(Player player, CEnchantments enchantments, ItemStack item) {
+		this.player = player;
+		enchantment = enchantments.getEnchantment();
+		cancel = false;
+		this.item = item;
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
 	 * @return The player that uses the enchantment.
 	 */
 	public Player getPlayer() {
-		return Player;
+		return player;
 	}
 	
 	/**
@@ -42,7 +42,7 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
 	 * @return The enchantment that is used.
 	 */
 	public CEnchantment getEnchantment() {
-		return Enchant;
+		return enchantment;
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
 	 * @return The item that uses the enchantment.
 	 */
 	public ItemStack getItem() {
-		return Item;
+		return item;
 	}
 	
 	private static final HandlerList handlers = new HandlerList();
@@ -65,12 +65,12 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
 	
 	@Override
 	public boolean isCancelled() {
-		return Cancel;
+		return cancel;
 	}
 	
 	@Override
 	public void setCancelled(boolean cancel) {
-		Cancel = cancel;
+		this.cancel = cancel;
 	}
 	
 }

@@ -17,18 +17,17 @@ public class GKitzItem {
 	private HashMap<Enchantment, Integer> enchantments;
 	private HashMap<CEnchantment, Integer> ceEnchantments;
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-	private HashMap<CEnchantments, Integer> ceEnchantments;
 	
 	/**
 	 * Make an empty gkit item.
 	 */
 	public GKitzItem() {
-		name = "";
-		amount = 1;
-		type = "299";
-		lore = new ArrayList<>();
-		enchantments = new HashMap<>();
-		ceEnchantments = new HashMap<>();
+		this.name = "";
+		this.amount = 1;
+		this.type = "299";
+		this.lore = new ArrayList<>();
+		this.enchantments = new HashMap<>();
+		this.ceEnchantments = new HashMap<>();
 	}
 	
 	/**

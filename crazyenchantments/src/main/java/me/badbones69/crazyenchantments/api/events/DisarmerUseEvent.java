@@ -8,16 +8,16 @@ import org.bukkit.inventory.ItemStack;
 
 public class DisarmerUseEvent extends Event implements Cancellable {
 	
-	private Player Player;
-	private Player Damager;
-	private ItemStack It;
-	private Boolean Cancel;
+	private Player player;
+	private Player damager;
+	private ItemStack item;
+	private Boolean cancel;
 	
 	public DisarmerUseEvent(Player player, Player damager, ItemStack item) {
-		Player = player;
-		Damager = damager;
-		It = item;
-		Cancel = false;
+		this.player = player;
+		this.damager = damager;
+		this.item = item;
+		cancel = false;
 	}
 	
 	/**
@@ -25,7 +25,7 @@ public class DisarmerUseEvent extends Event implements Cancellable {
 	 * @return The player that uses the enchantment.
 	 */
 	public Player getPlayer() {
-		return Player;
+		return player;
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class DisarmerUseEvent extends Event implements Cancellable {
 	 * @return The player that is attacking the player.
 	 */
 	public Player getDamager() {
-		return Damager;
+		return damager;
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class DisarmerUseEvent extends Event implements Cancellable {
 	 * @return The item that uses the enchantment.
 	 */
 	public ItemStack getItem() {
-		return It;
+		return item;
 	}
 	
 	private static final HandlerList handlers = new HandlerList();
@@ -56,12 +56,12 @@ public class DisarmerUseEvent extends Event implements Cancellable {
 	
 	@Override
 	public boolean isCancelled() {
-		return Cancel;
+		return cancel;
 	}
 	
 	@Override
 	public void setCancelled(boolean cancel) {
-		Cancel = cancel;
+		this.cancel = cancel;
 	}
 	
 }

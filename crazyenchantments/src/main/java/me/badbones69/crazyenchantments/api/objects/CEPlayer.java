@@ -3,7 +3,7 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
-import me.badbones69.crazyenchantments.api.events.ArmorType;
+import me.badbones69.crazyenchantments.api.enums.ArmorType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

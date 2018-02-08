@@ -1,12 +1,12 @@
-package me.badbones69.crazyenchantments.controlers;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.enums.ArmorType;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
-import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.api.events.*;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
-import me.badbones69.crazyenchantments.api.events.ArmorType;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -18,7 +18,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -98,11 +97,12 @@ public class EnchantmentControl implements Listener {
 								if(ce.enchantStackedItems() || item.getAmount() == 1) {
 									boolean success = successChance(book);
 									boolean destroy = destroyChance(book);
+									int bookPower = ce.getBookPower(book, enchantment);
 									Boolean toggle = false;
 									Boolean lowerLvl = false;
 									if(ce.hasEnchantment(item, enchantment)) {
 										toggle = true;
-										if(ce.getPower(item, enchantment) < ce.getBookPower(book, enchantment)) {
+										if(ce.getPower(item, enchantment) < bookPower) {
 											lowerLvl = true;
 										}
 									}
@@ -110,76 +110,91 @@ public class EnchantmentControl implements Listener {
 										if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle")) {
 											if(lowerLvl) {
 												e.setCancelled(true);
-												if(success || player.getGameMode() == GameMode.CREATIVE) {
-													String l;
-													e.setCurrentItem(ce.addEnchantment(item, enchantment, ce.getBookPower(book, enchantment)));
-													l = ce.getBookPower(book, enchantment) + "";
-													player.setItemOnCursor(new ItemStack(Material.AIR));
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Success")
-													.replaceAll("%Enchantment%", enchantment.getCustomName()).replaceAll("%enchantment%", enchantment.getCustomName())
-													.replaceAll("%Level%", l).replaceAll("%level%", l)));
-													try {
-														if(Version.getCurrentVersion().getVersionInteger() >= 191) {
-															player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
-														}else {
-															player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
+												PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, enchantment, bookPower, item, book, (player.getGameMode() == GameMode.CREATIVE),
+												success, getSuccessChance(book), destroy, getDestroyChance(book));
+												Bukkit.getPluginManager().callEvent(preBookApplyEvent);
+												if(!preBookApplyEvent.isCancelled()) {
+													if(success || player.getGameMode() == GameMode.CREATIVE) {
+														BookFailEvent bookApplyEvent = new BookFailEvent(player, enchantment, bookPower, item, book);
+														Bukkit.getPluginManager().callEvent(bookApplyEvent);
+														if(!bookApplyEvent.isCancelled()) {
+															e.setCurrentItem(ce.addEnchantment(item, enchantment, bookPower));
+															player.setItemOnCursor(new ItemStack(Material.AIR));
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Success")
+															.replaceAll("%Enchantment%", enchantment.getCustomName()).replaceAll("%enchantment%", enchantment.getCustomName())
+															.replaceAll("%Level%", bookPower + "").replaceAll("%level%", bookPower + "")));
+															try {
+																if(Version.getCurrentVersion().getVersionInteger() >= 191) {
+																	player.playSound(player.getLocation(), Sound.valueOf("ENTITY_PLAYER_LEVELUP"), 1, 1);
+																}else {
+																	player.playSound(player.getLocation(), Sound.valueOf("LEVEL_UP"), 1, 1);
+																}
+															}catch(Exception ex) {
+															}
 														}
-													}catch(Exception ex) {
-													}
-													return;
-												}else if(destroy) {
-													if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
-														if(Methods.isProtected(item)) {
-															e.setCurrentItem(Methods.removeProtected(item));
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Was-Protected")));
-														}else {
-															ItemStack newItem = ce.removeEnchantment(item, enchantment);
-															if(e.getInventory().getType() == InventoryType.CRAFTING) {
-																if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
-																	ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
-																	Bukkit.getPluginManager().callEvent(event);
+														return;
+													}else if(destroy) {
+														BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, enchantment, bookPower, item, book);
+														Bukkit.getPluginManager().callEvent(bookDestroyEvent);
+														if(!bookDestroyEvent.isCancelled()) {
+															if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
+																if(Methods.isProtected(item)) {
+																	e.setCurrentItem(Methods.removeProtected(item));
+																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Was-Protected")));
+																}else {
+																	ItemStack newItem = ce.removeEnchantment(item, enchantment);
+																	if(e.getInventory().getType() == InventoryType.CRAFTING) {
+																		if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
+																			ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
+																			Bukkit.getPluginManager().callEvent(event);
+																		}
+																	}
+																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Destroyed")));
+																}
+															}else {
+																if(Methods.isProtected(item)) {
+																	e.setCurrentItem(Methods.removeProtected(item));
+																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Was-Protected")));
+																}else {
+																	ItemStack newItem = new ItemStack(Material.AIR);
+																	e.setCurrentItem(newItem);
+																	if(e.getInventory().getType() == InventoryType.CRAFTING) {
+																		if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
+																			ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
+																			Bukkit.getPluginManager().callEvent(event);
+																		}
+																	}
+																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Destroyed")));
 																}
 															}
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Destroyed")));
+															player.setItemOnCursor(new ItemStack(Material.AIR));
+															try {
+																if(Version.getCurrentVersion().getVersionInteger() >= 191) {
+																	player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+																}else {
+																	player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
+																}
+															}catch(Exception ex) {
+															}
 														}
+														return;
 													}else {
-														if(Methods.isProtected(item)) {
-															e.setCurrentItem(Methods.removeProtected(item));
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Was-Protected")));
-														}else {
-															ItemStack newItem = new ItemStack(Material.AIR);
-															e.setCurrentItem(newItem);
-															if(e.getInventory().getType() == InventoryType.CRAFTING) {
-																if(e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
-																	ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
-																	Bukkit.getPluginManager().callEvent(event);
+														BookFailEvent bookFailEvent = new BookFailEvent(player, enchantment, bookPower, item, book);
+														Bukkit.getPluginManager().callEvent(bookFailEvent);
+														if(!bookFailEvent.isCancelled()) {
+															player.setItemOnCursor(new ItemStack(Material.AIR));
+															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Failed")));
+															try {
+																if(Version.getCurrentVersion().getVersionInteger() >= 191) {
+																	player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
+																}else {
+																	player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
 																}
+															}catch(Exception ex) {
 															}
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Destroyed")));
 														}
+														return;
 													}
-													player.setItemOnCursor(new ItemStack(Material.AIR));
-													try {
-														if(Version.getCurrentVersion().getVersionInteger() >= 191) {
-															player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-														}else {
-															player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-														}
-													}catch(Exception ex) {
-													}
-													return;
-												}else {
-													player.setItemOnCursor(new ItemStack(Material.AIR));
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Failed")));
-													try {
-														if(Version.getCurrentVersion().getVersionInteger() >= 191) {
-															player.playSound(player.getLocation(), Sound.valueOf("ENTITY_ITEM_BREAK"), 1, 1);
-														}else {
-															player.playSound(player.getLocation(), Sound.valueOf("ITEM_BREAK"), 1, 1);
-														}
-													}catch(Exception ex) {
-													}
-													return;
 												}
 											}
 										}
@@ -415,6 +430,15 @@ public class EnchantmentControl implements Listener {
 		return 1;
 	}
 	
+	private Integer getSuccessChance(ItemStack item) {
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				return Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
+			}
+		}
+		return 0;
+	}
+	
 	private boolean successChance(ItemStack item) {
 		if(item.hasItemMeta()) {
 			if(item.getItemMeta().hasLore()) {
@@ -423,6 +447,15 @@ public class EnchantmentControl implements Listener {
 			}
 		}
 		return true;
+	}
+	
+	private Integer getDestroyChance(ItemStack item) {
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				return Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
+			}
+		}
+		return 0;
 	}
 	
 	private boolean destroyChance(ItemStack item) {

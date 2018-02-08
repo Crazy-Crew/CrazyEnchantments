@@ -3,12 +3,14 @@ package me.badbones69.crazyenchantments;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.InfoType;
-import me.badbones69.crazyenchantments.api.events.ArmorListener;
-import me.badbones69.crazyenchantments.api.events.AuraListener;
+import me.badbones69.crazyenchantments.api.enums.Scrolls;
+import me.badbones69.crazyenchantments.controllers.ArmorListener;
+import me.badbones69.crazyenchantments.controllers.AuraListener;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
-import me.badbones69.crazyenchantments.controlers.*;
+import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
 import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
@@ -75,7 +77,7 @@ public class Main extends JavaPlugin implements Listener {
 			if(Version.getCurrentVersion().comparedTo(Version.v1_11_R1) >= 0) {
 				pm.registerEvents(new FireworkDamageAPI(this), this);
 			}
-		}catch(Exception e) {
+		}catch(Exception ignored) {
 		}
 		//==========================================================================\\
 		pm.registerEvents(new Bows(), this);
@@ -100,12 +102,12 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		//==========================================================================\\
 		try {
+			MassiveStats massiveStats = new MassiveStats(this);
+			massiveStats.start();
 			if(Files.CONFIG.getFile().contains("Settings.Update-Checker")) {
-				new MCUpdate(this, true).checkUpdate(Files.CONFIG.getFile().getBoolean("Settings.Update-Checker"));
-			}else {
-				new MCUpdate(this, true);
+				massiveStats.setListenerDisabled(Files.CONFIG.getFile().getBoolean("Settings.Update-Checker"));
 			}
-		}catch(Exception e) {
+		}catch(Exception ignored) {
 		}
 		new BukkitRunnable() {
 			@Override
@@ -113,13 +115,15 @@ public class Main extends JavaPlugin implements Listener {
 				for(CEPlayer player : ce.getCEPlayers()) {
 					ce.backupCEPlayer(player);
 				}
-				//				if(Files.CONFIG.getFile().contains("Settings.Player-Info-Backup-Message")) {
-				//					if(Files.CONFIG.getFile().getBoolean("Settings.Player-Info-Backup-Message")) {
-				//						Bukkit.getLogger().log(Level.INFO, "[Crazy Enchantments]>> All player data has been backed up. Next back up is in 5 minutes.");
-				//					}
-				//				}else {
-				//					Bukkit.getLogger().log(Level.INFO, "[Crazy Enchantments]>> All player data has been backed up. Next back up is in 5 minutes.");
-				//				}
+				//                              Removed due to spam.
+				//
+				// if(Files.CONFIG.getFile().contains("Settings.Player-Info-Backup-Message")) {
+				//     if(Files.CONFIG.getFile().getBoolean("Settings.Player-Info-Backup-Message")) {
+				//	       Bukkit.getLogger().log(Level.INFO, "[Crazy Enchantments]>> All player data has been backed up. Next back up is in 5 minutes.");
+				//     }
+				// }else {
+				//	   Bukkit.getLogger().log(Level.INFO, "[Crazy Enchantments]>> All player data has been backed up. Next back up is in 5 minutes.");
+				// }
 			}
 		}.runTaskTimerAsynchronously(this, 5 * 20 * 60, 5 * 20 * 60);
 	}
@@ -164,7 +168,7 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				Player player = (Player) sender;
-				if(!Methods.hasPermission(sender, "access", true)) return true;
+				if(!Methods.hasPermission(sender, "gui", true)) return true;
 				ShopControler.openGUI(player);
 				return true;
 			}else {
@@ -212,6 +216,7 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Debug")) {
+					if(!Methods.hasPermission(sender, "debug", true)) return true;
 					ArrayList<String> broken = new ArrayList<>();
 					for(CEnchantments enchantment : CEnchantments.values()) {
 						if(!Files.ENCHANTMENTS.getFile().contains("Enchantments." + enchantment.getName())) {
@@ -231,13 +236,13 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Info")) {
+					if(!Methods.hasPermission(sender, "info", true)) return true;
 					if(args.length == 1) {
 						if(!(sender instanceof Player)) {
 							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
 							return true;
 						}
 						Player player = (Player) sender;
-						if(!Methods.hasPermission(sender, "info", true)) return true;
 						InfoGUIControl.openInfo(player);
 						return true;
 					}else {
@@ -489,44 +494,20 @@ public class Main extends JavaPlugin implements Listener {
 							}
 							percent = Integer.parseInt(args[4]);
 						}
-						if(args[1].equalsIgnoreCase("Success") || args[1].equalsIgnoreCase("S")) {
-							if(args.length >= 5) {
-								player.getInventory().addItem(DustControl.getDust("SuccessDust", amount, percent));
-							}else {
-								player.getInventory().addItem(DustControl.getDust("SuccessDust", amount));
+						for(Dust dust : Dust.values()) {
+							if(dust.getKnownNames().contains(args[1].toLowerCase())) {
+								if(args.length >= 5) {
+									player.getInventory().addItem(dust.getDust(percent, amount));
+								}else {
+									player.getInventory().addItem(dust.getDust(amount));
+								}
+								player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Get-" + dust.getName() + "")
+								.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
+								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Give-" + dust.getName() + "")
+								.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")
+								.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
+								return true;
 							}
-							player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Get-Success-Dust")
-							.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Give-Success-Dust")
-							.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")
-							.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-							return true;
-						}
-						if(args[1].equalsIgnoreCase("Destroy") || args[1].equalsIgnoreCase("D")) {
-							if(args.length >= 5) {
-								player.getInventory().addItem(DustControl.getDust("DestroyDust", amount, percent));
-							}else {
-								player.getInventory().addItem(DustControl.getDust("DestroyDust", amount));
-							}
-							player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Get-Destroy-Dust")
-							.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Give-Destroy-Dust")
-							.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")
-							.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-							return true;
-						}
-						if(args[1].equalsIgnoreCase("Mystery") || args[1].equalsIgnoreCase("M")) {
-							if(args.length >= 5) {
-								player.getInventory().addItem(DustControl.getDust("MysteryDust", amount, percent));
-							}else {
-								player.getInventory().addItem(DustControl.getMysteryDust(amount));
-							}
-							player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Get-Mystery-Dust")
-							.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Give-Mystery-Dust")
-							.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")
-							.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-							return true;
 						}
 					}
 					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/ce Dust <Success/Destroy/Mystery> <Amount> [Player] [Percent]"));
@@ -554,17 +535,11 @@ public class Main extends JavaPlugin implements Listener {
 								return true;
 							}
 						}
-						if(args[1].equalsIgnoreCase("B") || args[1].equalsIgnoreCase("Black") || args[1].equalsIgnoreCase("BlackScroll")) {
-							Methods.getPlayer(name).getInventory().addItem(ScrollControl.getBlackScroll(i));
-							return true;
-						}
-						if(args[1].equalsIgnoreCase("W") || args[1].equalsIgnoreCase("White") || args[1].equalsIgnoreCase("WhiteScroll")) {
-							Methods.getPlayer(name).getInventory().addItem(ScrollControl.getWhiteScroll(i));
-							return true;
-						}
-						if(args[1].equalsIgnoreCase("T") || args[1].equalsIgnoreCase("Transmog") || args[1].equalsIgnoreCase("Transmogscroll")) {
-							Methods.getPlayer(name).getInventory().addItem(ScrollControl.getTransmogScroll(i));
-							return true;
+						for(Scrolls scroll : Scrolls.values()) {
+							if(scroll.getKnownNames().contains(args[1].toLowerCase())) {
+								Methods.getPlayer(name).getInventory().addItem(scroll.getScroll(i));
+								return true;
+							}
 						}
 					}
 					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/ce Scroll <White/Black/Transmog> [Amount] [Player]"));

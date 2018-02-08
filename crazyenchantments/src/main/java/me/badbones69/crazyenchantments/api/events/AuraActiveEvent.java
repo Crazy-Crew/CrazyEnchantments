@@ -7,24 +7,24 @@ import org.bukkit.event.HandlerList;
 
 public class AuraActiveEvent extends Event {
 	
-	private Player Other;
-	private Player Player;
-	private Integer Power;
-	private CEnchantments Enchant;
+	private Player other;
+	private Player player;
+	private Integer power;
+	private CEnchantments enchantment;
 	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 * This event fires when a player walks near another player with an aura enchantment on.
-	 * @param player Player that has the aura enchantment on.
+	 * @param player player that has the aura enchantment on.
 	 * @param other The player that will be effected by it.
 	 * @param enchantment The aura enchantment that is activated.
 	 * @param power The power of the aura enchantment.
 	 */
 	public AuraActiveEvent(Player player, Player other, CEnchantments enchantment, Integer power) {
-		Player = player;
-		Other = other;
-		Enchant = enchantment;
-		Power = power;
+		this.player = player;
+		this.other = other;
+		this.enchantment = enchantment;
+		this.power = power;
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class AuraActiveEvent extends Event {
 	 * @return The player with the enchantment.
 	 */
 	public Player getPlayer() {
-		return Player;
+		return player;
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class AuraActiveEvent extends Event {
 	 * @return The player that is being targeted.
 	 */
 	public Player getOther() {
-		return Other;
+		return other;
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class AuraActiveEvent extends Event {
 	 * @return The aura enchantment being used.
 	 */
 	public CEnchantments getEnchantment() {
-		return Enchant;
+		return enchantment;
 	}
 	
 	/**
@@ -56,7 +56,7 @@ public class AuraActiveEvent extends Event {
 	 * @return The power of the aura enchantment that is being used.
 	 */
 	public Integer getPower() {
-		return Power;
+		return power;
 	}
 	
 	public HandlerList getHandlers() {

@@ -7,7 +7,7 @@
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.8</version>
+    <version>1.8-Dev-Build-v1</version>
     <modules>
         <module>CrazyEnchantments</module>
         <module>V1_7_R4</module>
@@ -48,6 +48,10 @@
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>janmm14-public</id>
+            <url>https://repo.janmm14.de/repository/public/</url>
         </repository>
     </repositories>
 

@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.api.events;
 
+import me.badbones69.crazyenchantments.api.enums.ArmorType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
