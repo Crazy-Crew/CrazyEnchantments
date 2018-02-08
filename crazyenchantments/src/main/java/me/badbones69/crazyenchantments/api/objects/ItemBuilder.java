@@ -259,7 +259,7 @@ public class ItemBuilder {
 		this.entityType = entityType;
 		return this;
 	}
-
+	
 	/**
 	 * Get the entity type of the mob egg.
 	 * @return The EntityType of the mob egg.
@@ -267,7 +267,7 @@ public class ItemBuilder {
 	public EntityType getEntityType() {
 		return entityType;
 	}
-
+	
 	/**
 	 * Set the placeholders that are in the lore of the item.
 	 * @param placeholders The placeholders that you wish to use.

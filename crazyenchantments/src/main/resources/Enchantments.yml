@@ -2019,3 +2019,49 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
+  Sticky-Shot: #Do not change this line.
+    Enabled: true
+    Name: 'StickyShot'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 10
+      Increase: 10
+    Info:
+      Name: '&e&lStickyShot &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to spawn'
+        - '&7a web where the arrow lands.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBow'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  Disorder: #Do not change this line.
+    Enabled: true
+    Name: 'Disorder'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 1
+      Increase: 0
+    Info:
+      Name: '&e&lDisorder &7(&bI&7)'
+      Description:
+        - '&7Has a chance to reorder'
+        - '&7your enemie''s hot-bar.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Legendary'

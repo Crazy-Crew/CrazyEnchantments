@@ -2,7 +2,9 @@ package me.badbones69.crazyenchantments.api;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
+import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.multisupport.Version;
@@ -113,6 +115,10 @@ public class CrazyEnchantments {
 			ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
 			gkitz.add(new GKitz(kit, slot, time, displayItem, getInfoGKit(itemStrings), commands, getKitItems(itemStrings), itemStrings, autoEquip));
 		}
+		//Loads the scrolls
+		Scrolls.loadScrolls();
+		//Loads the dust
+		Dust.loadDust();
 	}
 	
 	/**
@@ -595,7 +601,7 @@ public class CrazyEnchantments {
 		List<String> newLore = new ArrayList<>();
 		List<String> lores = new ArrayList<>();
 		HashMap<String, String> enchantments = new HashMap<>();
-		for(CEnchantment en : getItemEnchantments(item)) {
+		for(CEnchantment en : getEnchantmentsOnItem(item)) {
 			enchantments.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " + convertPower(getPower(item, en))));
 			removeEnchantment(item, en);
 		}
@@ -647,7 +653,7 @@ public class CrazyEnchantments {
 	 * @param item Item you want to get the enchantments from.
 	 * @return A list of enchantments the item has.
 	 */
-	public ArrayList<CEnchantment> getItemEnchantments(ItemStack item) {
+	public ArrayList<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
 		ArrayList<CEnchantment> enchantments = new ArrayList<>();
 		if(item != null) {
 			if(item.hasItemMeta()) {
@@ -676,7 +682,7 @@ public class CrazyEnchantments {
 			for(CEnchantments ench : getEnchantmentPotions().keySet()) {
 				for(ItemStack armor : player.getEquipment().getArmorContents()) {
 					if(hasEnchantment(armor, ench.getEnchantment())) {
-						if(ench.isEnabled()) {
+						if(ench.isActivated()) {
 							HashMap<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
 							for(PotionEffectType type : effects.keySet()) {
 								if(effects.get(type) < 0) {

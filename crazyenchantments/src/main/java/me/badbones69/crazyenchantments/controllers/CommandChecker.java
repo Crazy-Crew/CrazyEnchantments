@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.controlers;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -20,7 +20,7 @@ public class CommandChecker implements Listener {
 		Player player = e.getPlayer();
 		if(e.getMessage().toLowerCase().equalsIgnoreCase("/ci") || e.getMessage().toLowerCase().equalsIgnoreCase("/clear") || e.getMessage().toLowerCase().equalsIgnoreCase("/cearinventory")) {
 			for(CEnchantments ench : ce.getEnchantmentPotions().keySet()) {
-				if(ench.isEnabled()) {
+				if(ench.isActivated()) {
 					for(ItemStack armor : player.getEquipment().getArmorContents()) {
 						if(armor != null) {
 							for(PotionEffectType type : ce.getUpdatedEffects(player, new ItemStack(Material.AIR), new ItemStack(Material.AIR), ench).keySet()) {

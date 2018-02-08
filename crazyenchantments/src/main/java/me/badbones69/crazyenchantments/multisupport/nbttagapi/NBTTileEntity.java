@@ -4,19 +4,19 @@ import org.bukkit.block.BlockState;
 
 public class NBTTileEntity extends NBTCompound {
 
-    private final BlockState tile;
+	private final BlockState tile;
 
-    public NBTTileEntity(BlockState tile) {
-        super(null, null);
-        this.tile = tile;
-    }
+	public NBTTileEntity(BlockState tile) {
+		super(null, null);
+		this.tile = tile;
+	}
 
-    protected Object getCompound() {
-        return NBTReflectionUtil.getTileEntityNBTTagCompound(tile);
-    }
+	protected Object getCompound() {
+		return NBTReflectionUtil.getTileEntityNBTTagCompound(tile);
+	}
 
-    protected void setCompound(Object compound) {
-        NBTReflectionUtil.setTileEntityNBTTagCompound(tile, compound);
-    }
+	protected void setCompound(Object compound) {
+		NBTReflectionUtil.setTileEntityNBTTagCompound(tile, compound);
+	}
 
 }

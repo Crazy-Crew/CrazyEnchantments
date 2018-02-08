@@ -4,7 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.*;
-import me.badbones69.crazyenchantments.controlers.ProtectionCrystal;
+import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
@@ -49,7 +49,7 @@ public class Armor implements Listener {
 		if(ce.hasEnchantments(OldItem)) {// Removing the potion effects.
 			for(CEnchantments ench : ce.getEnchantmentPotions().keySet()) {
 				if(ce.hasEnchantment(OldItem, ench.getEnchantment())) {
-					if(ench.isEnabled()) {
+					if(ench.isActivated()) {
 						HashMap<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, new ItemStack(Material.AIR), OldItem, ench);
 						for(PotionEffectType type : effects.keySet()) {
 							if(effects.get(type) < 0) {
@@ -66,7 +66,7 @@ public class Armor implements Listener {
 		if(ce.hasEnchantments(NewItem)) {// Adding the potion effects.
 			for(CEnchantments ench : ce.getEnchantmentPotions().keySet()) {
 				if(ce.hasEnchantment(NewItem, ench.getEnchantment())) {
-					if(ench.isEnabled()) {
+					if(ench.isActivated()) {
 						EnchantmentUseEvent event = new EnchantmentUseEvent(player, ench.getEnchantment(), NewItem);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()) {
@@ -98,7 +98,7 @@ public class Armor implements Listener {
 				for(ItemStack armor : player.getEquipment().getArmorContents()) {
 					if(ce.hasEnchantments(armor)) {
 						if(ce.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment())) {
-							if(CEnchantments.ROCKET.isEnabled()) {
+							if(CEnchantments.ROCKET.isActivated()) {
 								if(player.getHealth() <= 8) {
 									if(CEnchantments.ROCKET.chanceSuccessful(armor)) {
 										EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
@@ -120,7 +120,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.ENLIGHTENED)) {
-							if(CEnchantments.ENLIGHTENED.isEnabled()) {
+							if(CEnchantments.ENLIGHTENED.isActivated()) {
 								if(CEnchantments.ENLIGHTENED.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -137,7 +137,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.FORTIFY)) {
-							if(CEnchantments.FORTIFY.isEnabled()) {
+							if(CEnchantments.FORTIFY.isActivated()) {
 								if(CEnchantments.FORTIFY.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FORTIFY.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -148,7 +148,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.FREEZE)) {
-							if(CEnchantments.FREEZE.isEnabled()) {
+							if(CEnchantments.FREEZE.isActivated()) {
 								if(CEnchantments.FREEZE.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FREEZE.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -159,7 +159,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.MOLTEN)) {
-							if(CEnchantments.MOLTEN.isEnabled()) {
+							if(CEnchantments.MOLTEN.isActivated()) {
 								if(CEnchantments.MOLTEN.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MOLTEN.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -170,7 +170,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.PAINGIVER)) {
-							if(CEnchantments.PAINGIVER.isEnabled()) {
+							if(CEnchantments.PAINGIVER.isActivated()) {
 								if(CEnchantments.PAINGIVER.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.PAINGIVER.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -181,7 +181,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.SAVIOR)) {
-							if(CEnchantments.SAVIOR.isEnabled()) {
+							if(CEnchantments.SAVIOR.isActivated()) {
 								if(CEnchantments.SAVIOR.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SAVIOR.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -192,7 +192,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.SMOKEBOMB)) {
-							if(CEnchantments.SMOKEBOMB.isEnabled()) {
+							if(CEnchantments.SMOKEBOMB.isActivated()) {
 								if(CEnchantments.SMOKEBOMB.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SMOKEBOMB.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -204,7 +204,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.VOODOO)) {
-							if(CEnchantments.VOODOO.isEnabled()) {
+							if(CEnchantments.VOODOO.isActivated()) {
 								if(CEnchantments.VOODOO.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.VOODOO.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -215,7 +215,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.INSOMNIA)) {
-							if(CEnchantments.INSOMNIA.isEnabled()) {
+							if(CEnchantments.INSOMNIA.isActivated()) {
 								if(CEnchantments.INSOMNIA.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.INSOMNIA.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -226,7 +226,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.CACTUS)) {
-							if(CEnchantments.CACTUS.isEnabled()) {
+							if(CEnchantments.CACTUS.isActivated()) {
 								if(CEnchantments.CACTUS.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.CACTUS.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -237,7 +237,7 @@ public class Armor implements Listener {
 							}
 						}
 						if(ce.hasEnchantment(armor, CEnchantments.STORMCALLER)) {
-							if(CEnchantments.STORMCALLER.isEnabled()) {
+							if(CEnchantments.STORMCALLER.isActivated()) {
 								if(CEnchantments.STORMCALLER.chanceSuccessful(armor)) {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
@@ -262,7 +262,7 @@ public class Armor implements Listener {
 					for(ItemStack armor : damager.getEquipment().getArmorContents()) {
 						if(ce.hasEnchantments(armor)) {
 							if(ce.hasEnchantment(armor, CEnchantments.LEADERSHIP)) {
-								if(CEnchantments.LEADERSHIP.isEnabled()) {
+								if(CEnchantments.LEADERSHIP.isActivated()) {
 									if(CEnchantments.LEADERSHIP.chanceSuccessful(armor)) {
 										if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
 											int radius = 4 + ce.getPower(armor, CEnchantments.LEADERSHIP);
@@ -309,17 +309,17 @@ public class Armor implements Listener {
 					}
 					switch(enchant) {
 						case BLIZZARD:
-							if(CEnchantments.BLIZZARD.isEnabled()) {
+							if(CEnchantments.BLIZZARD.isActivated()) {
 								other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, power - 1));
 							}
 							break;
 						case INTIMIDATE:
-							if(CEnchantments.INTIMIDATE.isEnabled()) {
+							if(CEnchantments.INTIMIDATE.isActivated()) {
 								other.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3 * 20, power - 1));
 							}
 							break;
 						case ACIDRAIN:
-							if(CEnchantments.ACIDRAIN.isEnabled()) {
+							if(CEnchantments.ACIDRAIN.isActivated()) {
 								if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) || (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))) {
 									if(CEnchantments.ACIDRAIN.chanceSuccessful()) {
 										other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
@@ -331,7 +331,7 @@ public class Armor implements Listener {
 							}
 							break;
 						case SANDSTORM:
-							if(CEnchantments.SANDSTORM.isEnabled()) {
+							if(CEnchantments.SANDSTORM.isActivated()) {
 								if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) || (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))) {
 									if(CEnchantments.SANDSTORM.chanceSuccessful()) {
 										other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
@@ -343,7 +343,7 @@ public class Armor implements Listener {
 							}
 							break;
 						case RADIANT:
-							if(CEnchantments.RADIANT.isEnabled()) {
+							if(CEnchantments.RADIANT.isActivated()) {
 								if(!timer.containsKey(other) || (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) || (timer.containsKey(other) && timer.get(other).containsKey(enchant) && cal.after(timer.get(other).get(enchant)))) {
 									if(CEnchantments.RADIANT.chanceSuccessful()) {
 										other.setFireTicks(5 * 20);
@@ -377,7 +377,7 @@ public class Armor implements Listener {
 			for(ItemStack armor : player.getEquipment().getArmorContents()) {
 				if(ce.hasEnchantments(armor)) {
 					if(ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
-						if(CEnchantments.NURSERY.isEnabled()) {
+						if(CEnchantments.NURSERY.isActivated()) {
 							int heal = 1;
 							if(CEnchantments.NURSERY.chanceSuccessful(armor)) {
 								if(player.getMaxHealth() > player.getHealth()) {
@@ -396,7 +396,7 @@ public class Armor implements Listener {
 						}
 					}
 					if(ce.hasEnchantment(armor, CEnchantments.IMPLANTS)) {
-						if(CEnchantments.IMPLANTS.isEnabled()) {
+						if(CEnchantments.IMPLANTS.isActivated()) {
 							int food = 1;
 							if(CEnchantments.IMPLANTS.chanceSuccessful(armor)) {
 								if(player.getFoodLevel() < 20) {
@@ -418,7 +418,7 @@ public class Armor implements Listener {
 						}
 					}
 					if(ce.hasEnchantment(armor, CEnchantments.ANGEL)) {
-						if(CEnchantments.ANGEL.isEnabled()) {
+						if(CEnchantments.ANGEL.isActivated()) {
 							if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
 								int radius = 4 + ce.getPower(armor, CEnchantments.ANGEL);
 								for(Entity en : player.getNearbyEntities(radius, radius, radius)) {
@@ -437,7 +437,7 @@ public class Armor implements Listener {
 						}
 					}
 					if(ce.hasEnchantment(armor, CEnchantments.HELLFORGED)) {
-						if(CEnchantments.HELLFORGED.isEnabled()) {
+						if(CEnchantments.HELLFORGED.isActivated()) {
 							if(armor.getDurability() > 0) {
 								if(CEnchantments.HELLFORGED.chanceSuccessful(armor)) {
 									int durribility = armor.getDurability() - ce.getPower(armor, CEnchantments.HELLFORGED);
@@ -461,7 +461,7 @@ public class Armor implements Listener {
 			for(ItemStack item : player.getInventory().getContents()) {
 				if(ce.hasEnchantments(item)) {
 					if(ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
-						if(CEnchantments.HELLFORGED.isEnabled()) {
+						if(CEnchantments.HELLFORGED.isActivated()) {
 							if(item.getDurability() > 0) {
 								if(CEnchantments.HELLFORGED.chanceSuccessful(item)) {
 									int durribility = item.getDurability() - ce.getPower(item, CEnchantments.HELLFORGED);
@@ -493,7 +493,7 @@ public class Armor implements Listener {
 		for(ItemStack item : player.getEquipment().getArmorContents()) {
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
-					if(CEnchantments.SELFDESTRUCT.isEnabled()) {
+					if(CEnchantments.SELFDESTRUCT.isActivated()) {
 						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT.getEnchantment(), item);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()) {
@@ -518,7 +518,7 @@ public class Armor implements Listener {
 		for(ItemStack item : killer.getEquipment().getArmorContents()) {
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.RECOVER)) {
-					if(CEnchantments.RECOVER.isEnabled()) {
+					if(CEnchantments.RECOVER.isActivated()) {
 						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.RECOVER.getEnchantment(), item);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()) {
@@ -571,7 +571,7 @@ public class Armor implements Listener {
 						if(ce.hasEnchantments(item)) {// Spawn allies when getting attacked
 							if(!mobTimer.containsKey(player) || (mobTimer.containsKey(player) && Calendar.getInstance().after(mobTimer.get(player)))) {
 								if(ce.hasEnchantment(item, CEnchantments.TAMER)) {
-									if(CEnchantments.TAMER.isEnabled()) {
+									if(CEnchantments.TAMER.isActivated()) {
 										if(!mobs.containsKey(player)) {
 											int power = ce.getPower(item, CEnchantments.TAMER);
 											spawnAllies(player, en, EntityType.WOLF, power);
@@ -579,7 +579,7 @@ public class Armor implements Listener {
 									}
 								}
 								if(ce.hasEnchantment(item, CEnchantments.GUARDS)) {
-									if(CEnchantments.GUARDS.isEnabled()) {
+									if(CEnchantments.GUARDS.isActivated()) {
 										if(!mobs.containsKey(player)) {
 											int power = ce.getPower(item, CEnchantments.GUARDS);
 											spawnAllies(player, en, EntityType.IRON_GOLEM, power);
@@ -588,7 +588,7 @@ public class Armor implements Listener {
 								}
 								if(en instanceof Player) {
 									if(ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
-										if(CEnchantments.NECROMANCER.isEnabled()) {
+										if(CEnchantments.NECROMANCER.isActivated()) {
 											if(!mobs.containsKey(player)) {
 												int power = ce.getPower(item, CEnchantments.NECROMANCER);
 												spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
@@ -596,7 +596,7 @@ public class Armor implements Listener {
 										}
 									}
 									if(ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
-										if(CEnchantments.INFESTATION.isEnabled()) {
+										if(CEnchantments.INFESTATION.isActivated()) {
 											if(!mobs.containsKey(player)) {
 												int power = ce.getPower(item, CEnchantments.INFESTATION);
 												spawnAllies(player, en, EntityType.ENDERMITE, power * 3);
@@ -626,7 +626,7 @@ public class Armor implements Listener {
 						if(ce.hasEnchantments(item)) {// Spawn allies when attacking
 							if(!mobTimer.containsKey(player) || (mobTimer.containsKey(player) && Calendar.getInstance().after(mobTimer.get(player)))) {
 								if(ce.hasEnchantment(item, CEnchantments.TAMER)) {
-									if(CEnchantments.INFESTATION.isEnabled()) {
+									if(CEnchantments.INFESTATION.isActivated()) {
 										if(!mobs.containsKey(player)) {
 											int power = ce.getPower(item, CEnchantments.TAMER);
 											spawnAllies(player, en, EntityType.WOLF, power);
@@ -634,7 +634,7 @@ public class Armor implements Listener {
 									}
 								}
 								if(ce.hasEnchantment(item, CEnchantments.GUARDS)) {
-									if(CEnchantments.INFESTATION.isEnabled()) {
+									if(CEnchantments.INFESTATION.isActivated()) {
 										if(!mobs.containsKey(player)) {
 											int power = ce.getPower(item, CEnchantments.GUARDS);
 											spawnAllies(player, en, EntityType.IRON_GOLEM, power);
@@ -643,7 +643,7 @@ public class Armor implements Listener {
 								}
 								if(en instanceof Player) {
 									if(ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
-										if(CEnchantments.INFESTATION.isEnabled()) {
+										if(CEnchantments.INFESTATION.isActivated()) {
 											if(!mobs.containsKey(player)) {
 												int power = ce.getPower(item, CEnchantments.NECROMANCER);
 												spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
@@ -651,7 +651,7 @@ public class Armor implements Listener {
 										}
 									}
 									if(ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
-										if(CEnchantments.INFESTATION.isEnabled()) {
+										if(CEnchantments.INFESTATION.isActivated()) {
 											if(!mobs.containsKey(player)) {
 												int power = ce.getPower(item, CEnchantments.INFESTATION);
 												spawnAllies(player, en, EntityType.ENDERMITE, power * 3);

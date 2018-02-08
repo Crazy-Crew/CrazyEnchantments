@@ -18,7 +18,7 @@ public class RageBreakEvent extends Event implements Cancellable {
 		this.player = player;
 		this.damager = damager;
 		this.weapon = weapon;
-		cancel = false;
+		this.cancel = false;
 	}
 	
 	/**

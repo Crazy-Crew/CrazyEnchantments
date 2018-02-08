@@ -54,7 +54,7 @@ public class Tools implements Listener {
 			ItemStack item = Methods.getItemInHand(player);
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.TELEPATHY) && !ce.hasEnchantment(item, CEnchantments.BLAST)) {
-					if(CEnchantments.TELEPATHY.isEnabled()) {
+					if(CEnchantments.TELEPATHY.isActivated()) {
 						if(item.getItemMeta().hasEnchants()) {
 							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 								if(block.getType() == Material.MOB_SPAWNER) {
@@ -180,7 +180,7 @@ public class Tools implements Listener {
 		if(ce.hasEnchantments(item)) {
 			int time = 5 * 20;
 			if(ce.hasEnchantment(item, CEnchantments.HASTE)) {
-				if(CEnchantments.HASTE.isEnabled()) {
+				if(CEnchantments.HASTE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
@@ -191,7 +191,7 @@ public class Tools implements Listener {
 				}
 			}
 			if(ce.hasEnchantment(item, CEnchantments.OXYGENATE)) {
-				if(CEnchantments.OXYGENATE.isEnabled()) {
+				if(CEnchantments.OXYGENATE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {

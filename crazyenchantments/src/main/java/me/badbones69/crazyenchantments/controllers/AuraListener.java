@@ -1,7 +1,8 @@
-package me.badbones69.crazyenchantments.api.events;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
+import me.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

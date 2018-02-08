@@ -44,7 +44,7 @@ public class PickAxes implements Listener {
 			Block block = e.getClickedBlock();
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.BLAST)) {
-					if(CEnchantments.BLAST.isEnabled()) {
+					if(CEnchantments.BLAST.isActivated()) {
 						HashMap<Block, BlockFace> blockFace = new HashMap<>();
 						blockFace.put(block, e.getBlockFace());
 						blocks.put(player, blockFace);
@@ -62,7 +62,7 @@ public class PickAxes implements Listener {
 		ItemStack item = Methods.getItemInHand(player);
 		if(blocks.containsKey(player)) {
 			if(ce.hasEnchantment(item, CEnchantments.BLAST)) {
-				if(CEnchantments.BLAST.isEnabled()) {
+				if(CEnchantments.BLAST.isActivated()) {
 					if(blocks.get(player).containsKey(block)) {
 						BlockFace face = blocks.get(player).get(block);
 						blocks.remove(player);
@@ -246,7 +246,7 @@ public class PickAxes implements Listener {
 		if(ce.hasEnchantments(item)) {
 			if(player.getGameMode() != GameMode.CREATIVE) {
 				if(ce.hasEnchantment(item, CEnchantments.AUTOSMELT) && !(ce.hasEnchantment(item, CEnchantments.BLAST) || ce.hasEnchantment(item, CEnchantments.FURNACE) || ce.hasEnchantment(item, CEnchantments.TELEPATHY))) {
-					if(CEnchantments.AUTOSMELT.isEnabled()) {
+					if(CEnchantments.AUTOSMELT.isActivated()) {
 						if(getOres().containsKey(block.getType())) {
 							if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
 								EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
@@ -278,7 +278,7 @@ public class PickAxes implements Listener {
 					}
 				}
 				if(ce.hasEnchantment(item, CEnchantments.FURNACE) && !(ce.hasEnchantment(item, CEnchantments.BLAST) || ce.hasEnchantment(item, CEnchantments.TELEPATHY))) {
-					if(CEnchantments.FURNACE.isEnabled()) {
+					if(CEnchantments.FURNACE.isActivated()) {
 						if(getOres().containsKey(block.getType())) {
 							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
 							Bukkit.getPluginManager().callEvent(event);
@@ -310,7 +310,7 @@ public class PickAxes implements Listener {
 					}
 				}
 				if(ce.hasEnchantment(item, CEnchantments.EXPERIENCE) && !(ce.hasEnchantment(item, CEnchantments.BLAST) || ce.hasEnchantment(item, CEnchantments.TELEPATHY))) {
-					if(CEnchantments.EXPERIENCE.isEnabled()) {
+					if(CEnchantments.EXPERIENCE.isActivated()) {
 						if(!hasSilkTouch(item)) {
 							if(getOres().containsKey(block.getType())) {
 								int power = ce.getPower(item, CEnchantments.EXPERIENCE);

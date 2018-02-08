@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.controlers;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;

@@ -4,12 +4,15 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,40 +28,42 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Bows implements Listener {
 	
-	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-	private HashMap<Entity, Entity> P = new HashMap<>();
-	private HashMap<Entity, ItemStack> Arrow = new HashMap<>();
-	private HashMap<Entity, ArrayList<CEnchantments>> Enchant = new HashMap<>();
+	private CrazyEnchantments crazyEnchantments = CrazyEnchantments.getInstance();
+	private HashMap<Entity, Entity> shooter = new HashMap<>();
+	private HashMap<Entity, ItemStack> arrows = new HashMap<>();
+	private HashMap<Entity, ArrayList<CEnchantments>> attachedEnchantments = new HashMap<>();
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onBowShoot(final EntityShootBowEvent e) {
+	public void onBowShoot(EntityShootBowEvent e) {
 		if(e.isCancelled()) return;
 		ItemStack bow = e.getBow();
-		if(ce.hasEnchantments(bow)) {
+		if(crazyEnchantments.hasEnchantments(bow)) {
 			Boolean hasEnchantments = false;
 			ArrayList<CEnchantments> enchants = new ArrayList<>();
-			for(CEnchantments ench : getEnchantments()) {
-				if(e.getProjectile() instanceof Arrow) {
-					Projectile arrow = (Projectile) e.getProjectile();
-					if(ce.hasEnchantment(bow, ench)) {
-						if(ench.isEnabled()) {
-							Arrow.put(arrow, bow);
-							P.put(arrow, e.getEntity());
-							enchants.add(ench);
+			if(e.getProjectile() instanceof Arrow) {
+				Projectile arrow = (Projectile) e.getProjectile();
+				for(CEnchantment ench : crazyEnchantments.getEnchantmentsOnItem(bow)) {
+					if(ench.isActivated()) {
+						CEnchantments enchantment = CEnchantments.getFromName(ench.getName());
+						if(enchantment != null) {
+							arrows.put(arrow, bow);
+							shooter.put(arrow, e.getEntity());
+							enchants.add(enchantment);
 							hasEnchantments = true;
 						}
 					}
 				}
 			}
 			if(hasEnchantments) {
-				Enchant.put(e.getProjectile(), enchants);
+				attachedEnchantments.put(e.getProjectile(), enchants);
 			}
-			if(ce.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
-				if(CEnchantments.MULTIARROW.isEnabled()) {
-					int power = ce.getPower(bow, CEnchantments.MULTIARROW);
+			if(crazyEnchantments.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
+				if(CEnchantments.MULTIARROW.isActivated()) {
+					int power = crazyEnchantments.getPower(bow, CEnchantments.MULTIARROW);
 					if(CEnchantments.MULTIARROW.chanceSuccessful(bow)) {
 						if(e.getEntity() instanceof Player) {
 							EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.MULTIARROW, bow);
@@ -101,43 +106,71 @@ public class Bows implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onland(ProjectileHitEvent e) {
-		if(Arrow.containsKey(e.getEntity())) {
-			if(P.containsKey(e.getEntity())) {
-				final Entity arrow = e.getEntity();
-				if(Enchant.get(arrow).contains(CEnchantments.BOOM)) {
-					if(CEnchantments.BOOM.isEnabled()) {
-						if(CEnchantments.BOOM.chanceSuccessful(Arrow.get(arrow))) {
-							Methods.explode(P.get(arrow), arrow);
-							arrow.remove();
+		if(arrows.containsKey(e.getEntity())) {
+			if(shooter.containsKey(e.getEntity())) {
+				Entity arrow = e.getEntity();
+				List<CEnchantments> enchantments = attachedEnchantments.get(arrow);
+				if(enchantments != null) {
+					if(enchantments.contains(CEnchantments.BOOM)) {
+						if(CEnchantments.BOOM.isActivated()) {
+							if(CEnchantments.BOOM.chanceSuccessful(arrows.get(arrow))) {
+								Methods.explode(shooter.get(arrow), arrow);
+								arrow.remove();
+							}
 						}
 					}
-				}
-				if(Enchant.get(arrow).contains(CEnchantments.LIGHTNING)) {
-					if(CEnchantments.LIGHTNING.isEnabled()) {
-						Location loc = arrow.getLocation();
-						if(CEnchantments.LIGHTNING.chanceSuccessful(Arrow.get(arrow))) {
-							loc.getWorld().strikeLightningEffect(loc);
-							for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, arrow)) {
-								if(Support.allowsPVP(en.getLocation())) {
-									if(!Support.isFriendly(P.get(arrow), en)) {
-										if(!P.get(arrow).getName().equalsIgnoreCase(en.getName())) {
-											en.damage(5D);
+					if(enchantments.contains(CEnchantments.LIGHTNING)) {
+						if(CEnchantments.LIGHTNING.isActivated()) {
+							Location loc = arrow.getLocation();
+							if(CEnchantments.LIGHTNING.chanceSuccessful(arrows.get(arrow))) {
+								loc.getWorld().strikeLightningEffect(loc);
+								for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow)) {
+									if(Support.allowsPVP(entity.getLocation())) {
+										if(!Support.isFriendly(shooter.get(arrow), entity)) {
+											if(!shooter.get(arrow).getName().equalsIgnoreCase(entity.getName())) {
+												entity.damage(5D);
+											}
 										}
 									}
 								}
 							}
+							shooter.remove(arrow);
 						}
-						P.remove(arrow);
+					}
+					if(enchantments.contains(CEnchantments.STICKY_SHOT)) {
+						if(CEnchantments.STICKY_SHOT.isActivated()) {
+							if(CEnchantments.STICKY_SHOT.chanceSuccessful(arrows.get(arrow))) {
+								if(Support.allowsPVP(arrow.getLocation())) {
+									Block block = e.getHitBlock();
+									Entity entity = e.getHitEntity();
+									Boolean removeArrow = false;
+									if(block != null) {
+										Location location = block.getLocation().add(0, 1, 0);
+										if(location.getBlock().getType() == Material.AIR) {
+											setSpiderWeb(location);
+											removeArrow = true;
+										}
+									}else if(entity != null) {
+										Location location = entity.getLocation();
+										if(location.getBlock().getType() == Material.AIR) {
+											setSpiderWeb(location);
+											removeArrow = true;
+										}
+									}
+									if(removeArrow) {
+										arrow.remove();
+									}
+								}
+							}
+						}
 					}
 				}
 				new BukkitRunnable() {
 					@Override
 					public void run() {
-						if(Arrow.containsKey(arrow)) {
-							Arrow.remove(arrow);
-						}
+						arrows.remove(arrow);
 					}
-				}.runTaskLaterAsynchronously(Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments"), 5 * 20);
+				}.runTaskLaterAsynchronously(Methods.getPlugin(), 5 * 20);
 			}
 		}
 	}
@@ -149,13 +182,13 @@ public class Bows implements Listener {
 			if(e.getEntity() instanceof LivingEntity) {
 				LivingEntity en = (LivingEntity) e.getEntity();
 				Projectile arrow = (Projectile) e.getDamager();
-				if(Arrow.containsKey(arrow)) {
-					if(P.containsKey(arrow)) {
-						ItemStack item = Arrow.get(arrow);
-						if(Support.isFriendly(P.get(e.getDamager()), e.getEntity())) {
-							if(Enchant.get(arrow).contains(CEnchantments.DOCTOR)) {
-								if(CEnchantments.DOCTOR.isEnabled()) {
-									int heal = 1 + ce.getPower(Arrow.get(arrow), CEnchantments.DOCTOR);
+				if(arrows.containsKey(arrow)) {
+					if(shooter.containsKey(arrow)) {
+						ItemStack item = arrows.get(arrow);
+						if(Support.isFriendly(shooter.get(e.getDamager()), e.getEntity())) {
+							if(attachedEnchantments.get(arrow).contains(CEnchantments.DOCTOR)) {
+								if(CEnchantments.DOCTOR.isActivated()) {
+									int heal = 1 + crazyEnchantments.getPower(arrows.get(arrow), CEnchantments.DOCTOR);
 									if(en.getHealth() < en.getMaxHealth()) {
 										if(en instanceof Player) {
 											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, item);
@@ -181,11 +214,11 @@ public class Bows implements Listener {
 							}
 						}
 						if(!e.isCancelled()) {
-							if(!Support.isFriendly(P.get(arrow), e.getEntity())) {
-								if(Enchant.get(arrow).contains(CEnchantments.PULL)) {
-									if(CEnchantments.PULL.isEnabled()) {
+							if(!Support.isFriendly(shooter.get(arrow), e.getEntity())) {
+								if(attachedEnchantments.get(arrow).contains(CEnchantments.PULL)) {
+									if(CEnchantments.PULL.isActivated()) {
 										if(CEnchantments.PULL.chanceSuccessful(item)) {
-											Vector v = P.get(arrow).getLocation().toVector().subtract(en.getLocation().toVector()).normalize().multiply(3);
+											Vector v = shooter.get(arrow).getLocation().toVector().subtract(en.getLocation().toVector()).normalize().multiply(3);
 											if(en instanceof Player) {
 												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, item);
 												Bukkit.getPluginManager().callEvent(event);
@@ -210,8 +243,8 @@ public class Bows implements Listener {
 										}
 									}
 								}
-								if(Enchant.get(arrow).contains(CEnchantments.ICEFREEZE)) {
-									if(CEnchantments.ICEFREEZE.isEnabled()) {
+								if(attachedEnchantments.get(arrow).contains(CEnchantments.ICEFREEZE)) {
+									if(CEnchantments.ICEFREEZE.isActivated()) {
 										if(CEnchantments.ICEFREEZE.chanceSuccessful(item)) {
 											if(en instanceof Player) {
 												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.ICEFREEZE, item);
@@ -225,8 +258,8 @@ public class Bows implements Listener {
 										}
 									}
 								}
-								if(Enchant.get(arrow).contains(CEnchantments.PIERCING)) {
-									if(CEnchantments.PIERCING.isEnabled()) {
+								if(attachedEnchantments.get(arrow).contains(CEnchantments.PIERCING)) {
+									if(CEnchantments.PIERCING.isActivated()) {
 										if(CEnchantments.PIERCING.chanceSuccessful(item)) {
 											if(en instanceof Player) {
 												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PIERCING, item);
@@ -240,17 +273,17 @@ public class Bows implements Listener {
 										}
 									}
 								}
-								if(Enchant.get(arrow).contains(CEnchantments.VENOM)) {
-									if(CEnchantments.VENOM.isEnabled()) {
+								if(attachedEnchantments.get(arrow).contains(CEnchantments.VENOM)) {
+									if(CEnchantments.VENOM.isActivated()) {
 										if(CEnchantments.VENOM.chanceSuccessful(item)) {
 											if(en instanceof Player) {
 												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.VENOM, item);
 												Bukkit.getPluginManager().callEvent(event);
 												if(!event.isCancelled()) {
-													en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, ce.getPower(Arrow.get(arrow), CEnchantments.VENOM) - 1));
+													en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, crazyEnchantments.getPower(arrows.get(arrow), CEnchantments.VENOM) - 1));
 												}
 											}else {
-												en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, ce.getPower(Arrow.get(arrow), CEnchantments.VENOM) - 1));
+												en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, crazyEnchantments.getPower(arrows.get(arrow), CEnchantments.VENOM) - 1));
 											}
 										}
 									}
@@ -261,6 +294,16 @@ public class Bows implements Listener {
 				}
 			}
 		}
+	}
+	
+	private void setSpiderWeb(Location location) {
+		location.getBlock().setType(Material.WEB);
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				location.getBlock().setType(Material.AIR);
+			}
+		}.runTaskLater(Methods.getPlugin(), 100);
 	}
 	
 	private ArrayList<CEnchantments> getEnchantments() {

@@ -37,7 +37,7 @@ public class Boots implements Listener {
 		ItemStack OldItem = e.getOldArmorPiece();
 		if(ce.hasEnchantments(NewItem)) {
 			if(ce.hasEnchantment(NewItem, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isEnabled()) {
+				if(CEnchantments.WINGS.isActivated()) {
 					if((Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) && !ce.inBlacklistedWorld(player)) {
 						if(player.getGameMode() != GameMode.CREATIVE) {
 							if(Version.getCurrentVersion().comparedTo(Version.v1_8_R1) >= 1) {
@@ -54,7 +54,7 @@ public class Boots implements Listener {
 		}
 		if(ce.hasEnchantments(OldItem)) {
 			if(ce.hasEnchantment(OldItem, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isEnabled()) {
+				if(CEnchantments.WINGS.isActivated()) {
 					if(player.getGameMode() != GameMode.CREATIVE) {
 						if(Version.getCurrentVersion().comparedTo(Version.v1_8_R1) >= 1) {
 							if(player.getGameMode() != GameMode.ADVENTURE) {
@@ -75,7 +75,7 @@ public class Boots implements Listener {
 		ItemStack boots = player.getEquipment().getBoots();
 		if(ce.hasEnchantments(boots)) {
 			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isEnabled()) {
+				if(CEnchantments.WINGS.isActivated()) {
 					if((Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) && !ce.inBlacklistedWorld(player)) {
 						if(!areEnemiesNearBy(player)) {
 							if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
@@ -103,7 +103,7 @@ public class Boots implements Listener {
 		ItemStack boots = player.getEquipment().getBoots();
 		if(ce.hasEnchantments(boots)) {
 			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isEnabled()) {
+				if(CEnchantments.WINGS.isActivated()) {
 					if((Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) && !ce.inBlacklistedWorld(player)) {
 						if(!areEnemiesNearBy(player)) {
 							if(!player.getAllowFlight()) {
@@ -157,7 +157,7 @@ public class Boots implements Listener {
 		ItemStack boots = player.getEquipment().getBoots();
 		if(ce.hasEnchantments(boots)) {
 			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isEnabled()) {
+				if(CEnchantments.WINGS.isActivated()) {
 					if(Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) {
 						if(!areEnemiesNearBy(player)) {
 							if(!ce.inBlacklistedWorld(player)) {
@@ -180,7 +180,7 @@ public class Boots implements Listener {
 		ItemStack boots = player.getEquipment().getBoots();
 		if(ce.hasEnchantments(boots)) {
 			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isEnabled()) {
+				if(CEnchantments.WINGS.isActivated()) {
 					player.setFlying(false);
 					player.setAllowFlight(false);
 					flying.remove(player);
@@ -202,7 +202,7 @@ public class Boots implements Listener {
 									ItemStack boots = player.getEquipment().getBoots();
 									if(boots != null) {
 										if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-											if(CEnchantments.WINGS.isEnabled()) {
+											if(CEnchantments.WINGS.isActivated()) {
 												ParticleEffect.CLOUD.display((float) .25, (float) 0, (float) .25, 0, 10, l, 100);
 											}
 										}

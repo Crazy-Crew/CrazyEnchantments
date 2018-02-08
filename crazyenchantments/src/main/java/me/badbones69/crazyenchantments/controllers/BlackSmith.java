@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.controlers;
+package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
@@ -355,7 +355,7 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> dupEnchants = new HashMap<>();
 				HashMap<String, Integer> newEnchants = new HashMap<>();
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
-				for(CEnchantment enchant : ce.getItemEnchantments(mainItem)) {
+				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
 						if(ce.getPower(mainItem, enchant).equals(ce.getPower(subItem, enchant))) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
@@ -368,7 +368,7 @@ public class BlackSmith implements Listener {
 						}
 					}
 				}
-				for(CEnchantment enchant : ce.getItemEnchantments(subItem)) {
+				for(CEnchantment enchant : ce.getEnchantmentsOnItem(subItem)) {
 					if(!dupEnchants.containsKey(enchant.getName()) && !higherEnchants.containsKey(enchant.getName())) {
 						if(!ce.hasEnchantment(mainItem, enchant)) {
 							newEnchants.put(enchant.getName(), ce.getPower(subItem, enchant));
@@ -427,7 +427,7 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> dupEnchants = new HashMap<>();
 				HashMap<String, Integer> newEnchants = new HashMap<>();
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
-				for(CEnchantment enchant : ce.getItemEnchantments(mainItem)) {
+				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
 						if(ce.getPower(mainItem, enchant).equals(ce.getPower(subItem, enchant))) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
@@ -440,7 +440,7 @@ public class BlackSmith implements Listener {
 						}
 					}
 				}
-				for(CEnchantment enchant : ce.getItemEnchantments(subItem)) {
+				for(CEnchantment enchant : ce.getEnchantmentsOnItem(subItem)) {
 					if(!dupEnchants.containsKey(enchant.getName()) && !higherEnchants.containsKey(enchant.getName())) {
 						if(!ce.hasEnchantment(mainItem, enchant)) {
 							newEnchants.put(enchant.getName(), ce.getPower(subItem, enchant));

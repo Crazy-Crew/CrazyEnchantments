@@ -8,14 +8,14 @@ import org.bukkit.inventory.ItemStack;
 
 public class AngelUseEvent extends Event implements Cancellable {
 	
-	private Player Player;
-	private ItemStack It;
-	private Boolean Cancel;
+	private Player player;
+	private ItemStack item;
+	private Boolean cancel;
 	
 	public AngelUseEvent(Player player, ItemStack item) {
-		Player = player;
-		It = item;
-		Cancel = false;
+		this.player = player;
+		this.item = item;
+		this.cancel = false;
 	}
 	
 	/**
@@ -23,7 +23,7 @@ public class AngelUseEvent extends Event implements Cancellable {
 	 * @return The player that uses the enchantment.
 	 */
 	public Player getPlayer() {
-		return Player;
+		return player;
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class AngelUseEvent extends Event implements Cancellable {
 	 * @return The item the enchantment is on.
 	 */
 	public ItemStack getItem() {
-		return It;
+		return item;
 	}
 	
 	private static final HandlerList handlers = new HandlerList();
@@ -46,12 +46,12 @@ public class AngelUseEvent extends Event implements Cancellable {
 	
 	@Override
 	public boolean isCancelled() {
-		return Cancel;
+		return cancel;
 	}
 	
 	@Override
 	public void setCancelled(boolean cancel) {
-		Cancel = cancel;
+		this.cancel = cancel;
 	}
 	
 }

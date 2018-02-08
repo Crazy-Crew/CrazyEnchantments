@@ -30,7 +30,7 @@ public class Helmets implements Listener {
 		if(ce.hasEnchantments(NewItem)) {
 			int time = Integer.MAX_VALUE;
 			if(ce.hasEnchantment(NewItem, CEnchantments.GLOWING)) {
-				if(CEnchantments.GLOWING.isEnabled()) {
+				if(CEnchantments.GLOWING.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
@@ -39,7 +39,7 @@ public class Helmets implements Listener {
 				}
 			}
 			if(ce.hasEnchantment(NewItem, CEnchantments.MERMAID)) {
-				if(CEnchantments.MERMAID.isEnabled()) {
+				if(CEnchantments.MERMAID.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
@@ -50,12 +50,12 @@ public class Helmets implements Listener {
 		}
 		if(ce.hasEnchantments(OldItem)) {
 			if(ce.hasEnchantment(OldItem, CEnchantments.GLOWING)) {
-				if(CEnchantments.GLOWING.isEnabled()) {
+				if(CEnchantments.GLOWING.isActivated()) {
 					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 				}
 			}
 			if(ce.hasEnchantment(OldItem, CEnchantments.MERMAID)) {
-				if(CEnchantments.MERMAID.isEnabled()) {
+				if(CEnchantments.MERMAID.isActivated()) {
 					player.removePotionEffect(PotionEffectType.WATER_BREATHING);
 				}
 			}
@@ -68,7 +68,7 @@ public class Helmets implements Listener {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(ce.hasEnchantments(armor)) {
 				if(ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
-					if(CEnchantments.COMMANDER.isEnabled()) {
+					if(CEnchantments.COMMANDER.isActivated()) {
 						int radius = 4 + ce.getPower(armor, CEnchantments.COMMANDER);
 						ArrayList<Player> players = new ArrayList<>();
 						for(Entity en : player.getNearbyEntities(radius, radius, radius)) {

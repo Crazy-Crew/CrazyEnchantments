@@ -5,6 +5,7 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -102,7 +103,10 @@ public enum CEnchantments {
 	TELEPATHY("Telepathy", EnchantmentType.TOOL),
 	OXYGENATE("Oxygenate", EnchantmentType.TOOL),
 	//	----------------All----------------  \\
-	HELLFORGED("HellForged", EnchantmentType.ALL, 5, 5);
+	HELLFORGED("HellForged", EnchantmentType.ALL, 5, 5),
+	//	----------------New Enchantments----------------  \\
+	STICKY_SHOT("Sticky-Shot", EnchantmentType.BOW, 10, 10),
+	DISORDER("Disorder", EnchantmentType.SWORD, 1, 0);
 	
 	private String name;
 	private EnchantmentType type;
@@ -218,7 +222,7 @@ public enum CEnchantments {
 	 *
 	 * @return True if the enchantment is enabled and false if not.
 	 */
-	public Boolean isEnabled() {
+	public Boolean isActivated() {
 		return getEnchantment().isActivated();
 	}
 	
@@ -263,6 +267,7 @@ public enum CEnchantments {
 	public Boolean hasChanceSystem() {
 		return hasChanceSystem;
 	}
+	
 	/**
 	 * Get a CEnchantments from the enchantment name.
 	 * @param enchant The name of the enchantment.
@@ -275,6 +280,17 @@ public enum CEnchantments {
 			}
 		}
 		return null;
+	}
+	
+	public static List<CEnchantments> getFromeNames(List<CEnchantment> enchantments) {
+		List<CEnchantments> cEnchantments = new ArrayList<>();
+		for(CEnchantment cEnchantment : enchantments) {
+			CEnchantments enchantment = getFromName(cEnchantment.getName());
+			if(enchantment != null) {
+				cEnchantments.add(enchantment);
+			}
+		}
+		return cEnchantments;
 	}
 	
 }

@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.api.events;
+package me.badbones69.crazyenchantments.api.enums;
 
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Material;

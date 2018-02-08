@@ -18,12 +18,12 @@ import java.util.Stack;
 
 // TODO: finish codestyle cleanup -sgdc3
 public class NBTReflectionUtil {
-
+	
 	private static final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-
+	
 	@SuppressWarnings("rawtypes")
 	private static Class getCraftItemStack() {
-
+		
 		try {
 			Class clazz = Class.forName("org.bukkit.craftbukkit." + version + ".inventory.CraftItemStack");
 			return clazz;
@@ -33,7 +33,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	private static Class getCraftEntity() {
 		try {
@@ -45,7 +45,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getNBTBase() {
 		try {
@@ -57,7 +57,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getNBTTagString() {
 		try {
@@ -69,7 +69,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getNMSItemStack() {
 		try {
@@ -81,7 +81,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getNBTTagCompound() {
 		try {
@@ -93,7 +93,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getNBTCompressedStreamTools() {
 		try {
@@ -105,7 +105,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getMojangsonParser() {
 		try {
@@ -117,7 +117,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getTileEntity() {
 		try {
@@ -129,7 +129,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	@SuppressWarnings("rawtypes")
 	protected static Class getCraftWorld() {
 		try {
@@ -141,7 +141,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	public static Object getNewNBTTag() {
 		String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 		try {
@@ -154,7 +154,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	private static Object getNewBlockPosition(int x, int y, int z) {
 		String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 		try {
@@ -167,7 +167,7 @@ public class NBTReflectionUtil {
 			return null;
 		}
 	}
-
+	
 	public static Object setNBTTag(Object NBTTag, Object NMSItem) {
 		try {
 			Method method;
@@ -179,7 +179,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public static Object getNMSItemStack(ItemStack item) {
 		@SuppressWarnings("rawtypes")
@@ -194,7 +194,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public static Object getNMSEntity(Entity entity) {
 		@SuppressWarnings("rawtypes")
@@ -208,7 +208,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static Object parseNBT(String json) {
 		@SuppressWarnings("rawtypes")
@@ -222,7 +222,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static Object readNBTFile(FileInputStream stream) {
 		@SuppressWarnings("rawtypes")
@@ -236,7 +236,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static Object saveNBTFile(Object nbt, FileOutputStream stream) {
 		@SuppressWarnings("rawtypes")
@@ -250,7 +250,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static ItemStack getBukkitItemStack(Object item) {
 		@SuppressWarnings("rawtypes")
@@ -265,7 +265,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static Object getItemRootNBTTagCompound(Object nmsitem) {
 		@SuppressWarnings("rawtypes")
@@ -280,7 +280,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static Object convertNBTCompoundtoNMSItem(NBTCompound nbtcompound) {
 		@SuppressWarnings("rawtypes")
@@ -293,7 +293,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static NBTContainer convertNMSItemtoNBTCompound(Object nmsitem) {
 		@SuppressWarnings("rawtypes")
@@ -308,7 +308,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings({"unchecked"})
 	public static Object getEntityNBTTagCompound(Object nmsitem) {
 		@SuppressWarnings("rawtypes")
@@ -326,7 +326,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static Object setEntityNBTTag(Object NBTTag, Object NMSItem) {
 		try {
 			Method method;
@@ -338,7 +338,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static Object getTileEntityNBTTagCompound(BlockState tile) {
 		Method method;
 		try {
@@ -357,7 +357,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setTileEntityNBTTagCompound(BlockState tile, Object comp) {
 		Method method;
 		try {
@@ -371,7 +371,7 @@ public class NBTReflectionUtil {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public static Object getSubNBTTagCompound(Object compound, String name) {
 		@SuppressWarnings("rawtypes")
@@ -386,7 +386,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void addNBTTagCompound(NBTCompound comp, String name) {
 		if(name == null) {
 			remove(comp, name);
@@ -409,7 +409,7 @@ public class NBTReflectionUtil {
 		}
 		return;
 	}
-
+	
 	public static Boolean valideCompound(NBTCompound comp) {
 		Object root = comp.getCompound();
 		if(root == null) {
@@ -417,7 +417,7 @@ public class NBTReflectionUtil {
 		}
 		return (gettoCompount(root, comp)) != null;
 	}
-
+	
 	private static Object gettoCompount(Object nbttag, NBTCompound comp) {
 		Stack<String> structure = new Stack<>();
 		while(comp.getParent() != null) {
@@ -432,7 +432,7 @@ public class NBTReflectionUtil {
 		}
 		return nbttag;
 	}
-
+	
 	public static void addOtherNBTCompound(NBTCompound comp, NBTCompound nbtcompound) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -449,7 +449,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static void setString(NBTCompound comp, String key, String text) {
 		if(text == null) {
 			remove(comp, key);
@@ -470,7 +470,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static String getString(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -487,7 +487,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static String getContent(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -504,7 +504,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setInt(NBTCompound comp, String key, Integer i) {
 		if(i == null) {
 			remove(comp, key);
@@ -525,7 +525,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Integer getInt(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -542,7 +542,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setByteArray(NBTCompound comp, String key, byte[] b) {
 		if(b == null) {
 			remove(comp, key);
@@ -564,7 +564,7 @@ public class NBTReflectionUtil {
 		}
 		return;
 	}
-
+	
 	public static byte[] getByteArray(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -581,7 +581,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setIntArray(NBTCompound comp, String key, int[] i) {
 		if(i == null) {
 			remove(comp, key);
@@ -602,7 +602,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static int[] getIntArray(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -619,7 +619,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setFloat(NBTCompound comp, String key, Float f) {
 		if(f == null) {
 			remove(comp, key);
@@ -640,7 +640,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Float getFloat(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -657,7 +657,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setLong(NBTCompound comp, String key, Long f) {
 		if(f == null) {
 			remove(comp, key);
@@ -678,7 +678,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Long getLong(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -695,7 +695,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setShort(NBTCompound comp, String key, Short f) {
 		if(f == null) {
 			remove(comp, key);
@@ -716,7 +716,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Short getShort(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -733,7 +733,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setByte(NBTCompound comp, String key, Byte f) {
 		if(f == null) {
 			remove(comp, key);
@@ -754,7 +754,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Byte getByte(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -771,7 +771,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setDouble(NBTCompound comp, String key, Double d) {
 		if(d == null) {
 			remove(comp, key);
@@ -792,7 +792,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Double getDouble(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -809,7 +809,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static byte getType(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -826,7 +826,7 @@ public class NBTReflectionUtil {
 		}
 		return 0;
 	}
-
+	
 	public static void setBoolean(NBTCompound comp, String key, Boolean d) {
 		if(d == null) {
 			remove(comp, key);
@@ -847,7 +847,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Boolean getBoolean(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -864,7 +864,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void set(NBTCompound comp, String key, Object val) {
 		if(val == null) {
 			remove(comp, key);
@@ -888,7 +888,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static NBTList getList(NBTCompound comp, String key, NBTType type) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -905,7 +905,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	public static void setObject(NBTCompound comp, String key, Object value) {
 		if(!MinecraftVersion.hasGsonSupport()) return;
 		try {
@@ -915,7 +915,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static <T> T getObject(NBTCompound comp, String key, Class<T> type) {
 		if(!MinecraftVersion.hasGsonSupport()) return null;
 		String json = getString(comp, key);
@@ -924,7 +924,7 @@ public class NBTReflectionUtil {
 		}
 		return GsonWrapper.deserializeJson(json, type);
 	}
-
+	
 	public static void remove(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -941,7 +941,7 @@ public class NBTReflectionUtil {
 			ex.printStackTrace();
 		}
 	}
-
+	
 	public static Boolean hasKey(NBTCompound comp, String key) {
 		Object rootnbttag = comp.getCompound();
 		if(rootnbttag == null) {
@@ -958,7 +958,7 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public static Set<String> getKeys(NBTCompound comp) {
 		Object rootnbttag = comp.getCompound();
@@ -976,5 +976,5 @@ public class NBTReflectionUtil {
 		}
 		return null;
 	}
-
+	
 }

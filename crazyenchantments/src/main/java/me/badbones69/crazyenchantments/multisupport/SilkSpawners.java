@@ -32,7 +32,7 @@ public class SilkSpawners implements Listener {
 					ItemStack item = Methods.getItemInHand(player);
 					if(ce.hasEnchantments(item)) {
 						if(ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
-							if(CEnchantments.TELEPATHY.isEnabled()) {
+							if(CEnchantments.TELEPATHY.isActivated()) {
 								String mobName = su.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
 								if(player.hasPermission("silkspawners.silkdrop." + mobName)) {
 									EnchantmentUseEvent useEnchant = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
