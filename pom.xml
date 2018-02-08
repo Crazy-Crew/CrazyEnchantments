@@ -10,14 +10,6 @@
     <version>1.8</version>
     <modules>
         <module>CrazyEnchantments</module>
-        <module>V1_8_R1</module>
-        <module>V1_8_R2</module>
-        <module>V1_8_R3</module>
-        <module>V1_9_R1</module>
-        <module>V1_9_R2</module>
-        <module>V1_10_R1</module>
-        <module>V1_11_R1</module>
-        <module>V1_12_R1</module>
         <module>V1_7_R4</module>
     </modules>
 

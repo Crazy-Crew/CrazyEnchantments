@@ -26,53 +26,6 @@
             <version>1.8</version>
         </dependency>
         <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_8_R1</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_8_R2</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_8_R3</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_9_R1</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_9_R2</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_10_R1</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_11_R1</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>me.badbones69</groupId>
-            <artifactId>v1_12_R1</artifactId>
-            <version>1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.gmail.nossr50.mcMMO</groupId>
-            <artifactId>mcMMO</artifactId>
-            <version>1.5.09-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/lib/mcMMO.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-legacy</artifactId>
             <version>6.2.1-SNAPSHOT</version>

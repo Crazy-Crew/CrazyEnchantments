@@ -93,52 +93,20 @@ public class Methods {
 	
 	public static ItemStack addGlow(ItemStack item) {
 		switch(Version.getCurrentVersion()) {
-			case v1_12_R1:
-				return addGlowHide(item);
-			case v1_11_R1:
-				return addGlowHide(item);
-			case v1_10_R1:
-				return NMS_v1_10_R1.addGlow(item);
-			case v1_9_R2:
-				return NMS_v1_9_R2.addGlow(item);
-			case v1_9_R1:
-				return NMS_v1_9_R1.addGlow(item);
-			case v1_8_R3:
-				return NMS_v1_8_R3.addGlow(item);
-			case v1_8_R2:
-				return NMS_v1_8_R2.addGlow(item);
-			case v1_8_R1:
-				return NMS_v1_8_R1.addGlow(item);
 			case v1_7_R4:
 				return NMS_v1_7_R4.addGlow(item);
 			default:
-				return item;
+				return addGlowHide(item);
 		}
 	}
 	
 	public static ItemStack addGlow(ItemStack item, boolean toggle) {
 		if(toggle) {
 			switch(Version.getCurrentVersion()) {
-				case v1_12_R1:
-					return addGlowHide(item);
-				case v1_11_R1:
-					return addGlowHide(item);
-				case v1_10_R1:
-					return NMS_v1_10_R1.addGlow(item);
-				case v1_9_R2:
-					return NMS_v1_9_R2.addGlow(item);
-				case v1_9_R1:
-					return NMS_v1_9_R1.addGlow(item);
-				case v1_8_R3:
-					return NMS_v1_8_R3.addGlow(item);
-				case v1_8_R2:
-					return NMS_v1_8_R2.addGlow(item);
-				case v1_8_R1:
-					return NMS_v1_8_R1.addGlow(item);
 				case v1_7_R4:
 					return NMS_v1_7_R4.addGlow(item);
 				default:
-					return item;
+					return addGlowHide(item);
 			}
 		}
 		return item;

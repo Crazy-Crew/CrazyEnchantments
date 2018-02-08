@@ -17,6 +17,7 @@ public class GKitzItem {
 	private HashMap<Enchantment, Integer> enchantments;
 	private HashMap<CEnchantment, Integer> ceEnchantments;
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private HashMap<CEnchantments, Integer> ceEnchantments;
 	
 	/**
 	 * Make an empty gkit item.
@@ -105,9 +106,7 @@ public class GKitzItem {
 		for(CEnchantment en : ceEnchantments.keySet()) {
 			ce.addEnchantment(item, en, ceEnchantments.get(en));
 		}
-		for(Enchantment en : enchantments.keySet()) {
-			item.addUnsafeEnchantment(en, enchantments.get(en));
-		}
+		item.addUnsafeEnchantments(enchantments);
 		for(String l : lore) {
 			Methods.addLore(item, l);
 		}
