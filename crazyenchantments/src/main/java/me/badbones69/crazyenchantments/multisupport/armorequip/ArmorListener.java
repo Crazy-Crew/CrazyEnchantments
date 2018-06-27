@@ -1,7 +1,7 @@
-package me.badbones69.crazyenchantments.api.events;
+package me.badbones69.crazyenchantments.multisupport.armorequip;
 
-import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.armorequip.ArmorEquipEvent.EquipMethod;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -33,15 +33,15 @@ import java.util.List;
  * @since Jul 30, 2015 6:43:34 PM
  */
 public class ArmorListener implements Listener {
-
+	
 	private Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	private final List<String> blockedMaterials;
-
+	
 	public ArmorListener() {
 		this.blockedMaterials = getBlocks();
 	}
-
-	@EventHandler
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public final void onInventoryClick(final InventoryClickEvent e) {
 		boolean shift = false, numberkey = false;
 		Player player = (Player) e.getWhoClicked();
@@ -66,7 +66,7 @@ public class ArmorListener implements Listener {
 			// Used for drag and drop checking to make sure you aren't trying to place a helmet in the boots place.
 			return;
 		}
-
+		
 		if(e.getInventory().getType() == InventoryType.CRAFTING) {
 			// Stops the activation when a player shift clicks from their small crafting option.
 			if(e.getRawSlot() >= 0 && e.getRawSlot() <= 4) {
@@ -124,39 +124,36 @@ public class ArmorListener implements Listener {
 				}
 				final ItemStack It = newArmorPiece.clone();
 				final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-					@Override
-					public void run() {
-						ItemStack I = e.getWhoClicked().getInventory().getItem(e.getSlot());
+				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+					ItemStack I = e.getWhoClicked().getInventory().getItem(e.getSlot());
+					if(e.getInventory().getType().equals(InventoryType.PLAYER)) {
+						if(e.getSlot() == ArmorType.HELMET.getSlot()) {
+							I = e.getWhoClicked().getEquipment().getHelmet();
+						}
+						if(e.getSlot() == ArmorType.CHESTPLATE.getSlot()) {
+							I = e.getWhoClicked().getEquipment().getChestplate();
+						}
+						if(e.getSlot() == ArmorType.LEGGINGS.getSlot()) {
+							I = e.getWhoClicked().getEquipment().getLeggings();
+						}
+						if(e.getSlot() == ArmorType.BOOTS.getSlot()) {
+							I = e.getWhoClicked().getEquipment().getBoots();
+						}
+					}
+					if(I == null) {
+						if(e.getInventory().getType().equals(InventoryType.CRAFTING)) {
+							I = new ItemStack(Material.AIR, 0);
+						}
 						if(e.getInventory().getType().equals(InventoryType.PLAYER)) {
-							if(e.getSlot() == ArmorType.HELMET.getSlot()) {
-								I = e.getWhoClicked().getEquipment().getHelmet();
-							}
-							if(e.getSlot() == ArmorType.CHESTPLATE.getSlot()) {
-								I = e.getWhoClicked().getEquipment().getChestplate();
-							}
-							if(e.getSlot() == ArmorType.LEGGINGS.getSlot()) {
-								I = e.getWhoClicked().getEquipment().getLeggings();
-							}
-							if(e.getSlot() == ArmorType.BOOTS.getSlot()) {
-								I = e.getWhoClicked().getEquipment().getBoots();
-							}
+							I = new ItemStack(Material.AIR, 1);
 						}
-						if(I == null) {
-							if(e.getInventory().getType().equals(InventoryType.CRAFTING)) {
-								I = new ItemStack(Material.AIR, 0);
-							}
-							if(e.getInventory().getType().equals(InventoryType.PLAYER)) {
-								I = new ItemStack(Material.AIR, 1);
-							}
-						}
-						// I == the old item
-						// It == the new item
-						if(I.isSimilar(It) || (I.getType() == Material.AIR && It.getType() == Material.AIR)) {
-							Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
-							if(armorEquipEvent.isCancelled()) {
-								e.setCancelled(true);
-							}
+					}
+					// I == the old item
+					// It == the new item
+					if(I.isSimilar(It) || (I.getType() == Material.AIR && It.getType() == Material.AIR)) {
+						Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+						if(armorEquipEvent.isCancelled()) {
+							e.setCancelled(true);
 						}
 					}
 				}, 0);
@@ -201,7 +198,6 @@ public class ArmorListener implements Listener {
 							if(armorEquipEvent.isCancelled()) {
 								e.setCancelled(true);
 							}
-							return;
 						}
 					}
 				}else {// 1.10+
@@ -237,7 +233,7 @@ public class ArmorListener implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void playerInteractEvent(PlayerInteractEvent e) {
 		if(e.getAction() == Action.PHYSICAL) return;
@@ -266,7 +262,7 @@ public class ArmorListener implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void dispenserFireEvent(BlockDispenseEvent e) {
 		ArmorType type = ArmorType.matchType(e.getItem());
@@ -294,7 +290,7 @@ public class ArmorListener implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void itemBreakEvent(PlayerItemBreakEvent e) {
 		ArmorType type = ArmorType.matchType(e.getBrokenItem());
@@ -318,7 +314,7 @@ public class ArmorListener implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void playerDeathEvent(PlayerDeathEvent e) {
 		Player p = e.getEntity();
@@ -329,9 +325,9 @@ public class ArmorListener implements Listener {
 			}
 		}
 	}
-
+	
 	private List<String> getBlocks() {
-		List<String> blocks = new ArrayList<String>();
+		List<String> blocks = new ArrayList<>();
 		blocks.add("FURNACE");
 		blocks.add("CHEST");
 		blocks.add("TRAPPED_CHEST");
@@ -382,5 +378,5 @@ public class ArmorListener implements Listener {
 		blocks.add("SHULKER_BOX");
 		return blocks;
 	}
-
+	
 }

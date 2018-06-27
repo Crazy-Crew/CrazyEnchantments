@@ -7,7 +7,7 @@
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.9.3.7</version>
+    <version>1.7.9.3.8</version>
     <modules>
         <module>CrazyEnchantments</module>
         <module>V1_7_R4</module>
@@ -28,10 +28,6 @@
     </build>
 
     <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>

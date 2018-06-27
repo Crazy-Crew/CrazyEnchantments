@@ -3,7 +3,7 @@ package me.badbones69.crazyenchantments.enchantments;
 import me.badbones69.crazyenchantments.Main;
 import me.badbones69.crazyenchantments.ParticleEffect;
 import me.badbones69.crazyenchantments.api.CEnchantments;
-import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.multisupport.armorequip.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;

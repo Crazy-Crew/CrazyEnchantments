@@ -9,6 +9,7 @@ import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.armorequip.ArmorEquipEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -26,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -33,14 +35,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class Armor implements Listener {
-
+	
 	private static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-
-	private ArrayList<Player> fall = new ArrayList<Player>();
-	private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<Player, HashMap<CEnchantments, Calendar>>();
-	private HashMap<Player, Calendar> mobTimer = new HashMap<Player, Calendar>();
-	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<Player, ArrayList<LivingEntity>>();
-
+	
+	private ArrayList<Player> fall = new ArrayList<>();
+	private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
+	private HashMap<Player, Calendar> mobTimer = new HashMap<>();
+	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<>();
+	
 	@EventHandler
 	public void onEquip(ArmorEquipEvent e) {
 		Player player = e.getPlayer();
@@ -85,7 +87,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -107,19 +109,13 @@ public class Armor implements Listener {
 											AACSupport.exemptPlayerTime(player);
 										}
 										if(!event.isCancelled()) {
-											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-												public void run() {
-													Vector v = player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1);
-													player.setVelocity(v);
-												}
+											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+												Vector v = player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1);
+												player.setVelocity(v);
 											}, 1);
 											player.getWorld().playEffect(player.getLocation(), Effect.EXPLOSION_HUGE, 1);
 											fall.add(player);
-											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-												public void run() {
-													fall.remove(player);
-												}
-											}, 8 * 20);
+											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> fall.remove(player), 8 * 20);
 										}
 									}
 								}
@@ -298,7 +294,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onAura(AuraActiveEvent e) {
 		Player player = e.getPlayer();
@@ -309,7 +305,7 @@ public class Armor implements Listener {
 			if(Support.allowsPVP(other.getLocation())) {
 				if(!Support.isFriendly(player, other)) {
 					Calendar cal = Calendar.getInstance();
-					HashMap<CEnchantments, Calendar> eff = new HashMap<CEnchantments, Calendar>();
+					HashMap<CEnchantments, Calendar> eff = new HashMap<>();
 					if(timer.containsKey(other)) {
 						eff = timer.get(other);
 					}
@@ -330,9 +326,8 @@ public class Armor implements Listener {
 									if(Methods.randomPicker(15)) {
 										other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
 										int time = 35 - (power * 5);
-										Calendar c = cal;
-										c.add(Calendar.SECOND, time > 0 ? time : 5);
-										eff.put(enchant, c);
+										cal.add(Calendar.SECOND, time > 0 ? time : 5);
+										eff.put(enchant, cal);
 									}
 								}
 							}
@@ -343,9 +338,8 @@ public class Armor implements Listener {
 									if(Methods.randomPicker(10)) {
 										other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
 										int time = 35 - (power * 5);
-										Calendar c = cal;
-										c.add(Calendar.SECOND, time > 0 ? time : 5);
-										eff.put(enchant, c);
+										cal.add(Calendar.SECOND, time > 0 ? time : 5);
+										eff.put(enchant, cal);
 									}
 								}
 							}
@@ -356,9 +350,8 @@ public class Armor implements Listener {
 									if(Methods.randomPicker(5)) {
 										other.setFireTicks(5 * 20);
 										int time = 20 - (power * 5);
-										Calendar c = cal;
-										c.add(Calendar.SECOND, time > 0 ? time : 0);
-										eff.put(enchant, c);
+										cal.add(Calendar.SECOND, time > 0 ? time : 0);
+										eff.put(enchant, cal);
 									}
 								}
 							}
@@ -371,7 +364,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMovement(PlayerMoveEvent e) {
@@ -493,7 +486,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDeath(PlayerDeathEvent e) {
 		Player player = e.getEntity();
@@ -541,18 +534,18 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerFallDamage(EntityDamageEvent e) {
 		if(e.getEntity() instanceof Player) {
 			if(e.getCause() == DamageCause.FALL) {
-				if(fall.contains((Player) e.getEntity())) {
+				if(fall.contains(e.getEntity())) {
 					e.setCancelled(true);
 				}
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onAllyTarget(EntityTargetEvent e) {
 		if(e.getEntity() instanceof LivingEntity) {
@@ -570,7 +563,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onAllySpawn(EntityDamageByEntityEvent e) {
 		if(!e.isCancelled()) {
@@ -680,7 +673,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onAllyDeath(EntityDeathEvent e) {
 		for(Player player : mobs.keySet()) {
@@ -690,7 +683,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onAllyDespawn(ChunkUnloadEvent e) {
 		if(e.getChunk().getEntities().length > 0) {
@@ -707,7 +700,7 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
@@ -718,7 +711,7 @@ public class Armor implements Listener {
 			mobs.remove(player);
 		}
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	private void spawnAllies(final Player player, LivingEntity enemy, EntityType mob, Integer amount) {
 		Calendar cal = Calendar.getInstance();
@@ -760,7 +753,7 @@ public class Armor implements Listener {
 			en.setCustomName(Methods.color("&6" + player.getName() + "'s " + en.getName()));
 			en.setCustomNameVisible(true);
 			if(!mobs.containsKey(player)) {
-				ArrayList<LivingEntity> E = new ArrayList<LivingEntity>();
+				ArrayList<LivingEntity> E = new ArrayList<>();
 				E.add(en);
 				mobs.put(player, E);
 			}else {
@@ -768,19 +761,16 @@ public class Armor implements Listener {
 			}
 		}
 		attackEnemy(player, enemy);
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			@Override
-			public void run() {
-				if(mobs.containsKey(player)) {
-					for(LivingEntity en : mobs.get(player)) {
-						en.remove();
-					}
-					mobs.remove(player);
+		final BukkitTask bukkitTask = Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			if(mobs.containsKey(player)) {
+				for(LivingEntity en : mobs.get(player)) {
+					en.remove();
 				}
+				mobs.remove(player);
 			}
-		}, 1 * 60 * 20);
+		}, 60 * 20);
 	}
-
+	
 	private void attackEnemy(Player player, LivingEntity enemy) {
 		for(LivingEntity ally : mobs.get(player)) {
 			switch(ally.getType()) {
@@ -809,11 +799,11 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 	public static HashMap<Player, ArrayList<LivingEntity>> getAllies() {
 		return mobs;
 	}
-
+	
 	public static void removeAllies() {
 		for(Player player : mobs.keySet()) {
 			for(LivingEntity ally : mobs.get(player)) {
@@ -821,5 +811,5 @@ public class Armor implements Listener {
 			}
 		}
 	}
-
+	
 }
