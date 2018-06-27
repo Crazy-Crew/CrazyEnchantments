@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.api.events;
+package me.badbones69.crazyenchantments.multisupport.armorequip;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,13 +14,13 @@ import org.bukkit.inventory.ItemStack;
  * @since Jul 30, 2015
  */
 public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
-
+	
 	private static final HandlerList handlers = new HandlerList();
 	private boolean cancel = false;
 	private final EquipMethod equipType;
 	private final ArmorType type;
 	private ItemStack oldArmorPiece, newArmorPiece;
-
+	
 	/**
 	 * Constructor for the ArmorEquipEvent.
 	 *
@@ -36,16 +36,16 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 		this.oldArmorPiece = oldArmorPiece;
 		this.newArmorPiece = newArmorPiece;
 	}
-
+	
 	/**
 	 * Gets a list of handlers handling this event.
 	 *
 	 * @return A list of handlers handling this event.
 	 */
-	public final static HandlerList getHandlerList() {
+	public static HandlerList getHandlerList() {
 		return handlers;
 	}
-
+	
 	/**
 	 * Gets a list of handlers handling this event.
 	 *
@@ -55,7 +55,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 	public final HandlerList getHandlers() {
 		return handlers;
 	}
-
+	
 	/**
 	 * Sets if this event should be cancelled.
 	 *
@@ -64,7 +64,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 	public final void setCancelled(final boolean cancel) {
 		this.cancel = cancel;
 	}
-
+	
 	/**
 	 * Gets if this event is cancelled.
 	 *
@@ -73,40 +73,40 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 	public final boolean isCancelled() {
 		return cancel;
 	}
-
+	
 	public final ArmorType getType() {
 		return type;
 	}
-
+	
 	/**
 	 * Returns the last equipped armor piece, could be a piece of armor, {@link Material#AIR}, or null.
 	 */
 	public final ItemStack getOldArmorPiece() {
 		return oldArmorPiece;
 	}
-
+	
 	public final void setOldArmorPiece(final ItemStack oldArmorPiece) {
 		this.oldArmorPiece = oldArmorPiece;
 	}
-
+	
 	/**
 	 * Returns the newly equipped armor, could be a piece of armor, {@link Material#AIR}, or null.
 	 */
 	public final ItemStack getNewArmorPiece() {
 		return newArmorPiece;
 	}
-
+	
 	public final void setNewArmorPiece(final ItemStack newArmorPiece) {
 		this.newArmorPiece = newArmorPiece;
 	}
-
+	
 	/**
 	 * Gets the method used to either equip or unequip an armor piece.
 	 */
 	public EquipMethod getMethod() {
 		return equipType;
 	}
-
+	
 	public enum EquipMethod {
 		/**
 		 * When you shift click an armor piece to equip or unequip
@@ -137,5 +137,5 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
 		 */
 		DEATH,;
 	}
-
+	
 }

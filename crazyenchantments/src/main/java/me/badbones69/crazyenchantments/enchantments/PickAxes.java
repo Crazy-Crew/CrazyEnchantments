@@ -30,9 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PickAxes implements Listener {
-
-	private HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<Player, HashMap<Block, BlockFace>>();
-
+	
+	private HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockClick(PlayerInteractEvent e) {
 		if(e.isCancelled()) return;
@@ -43,7 +43,7 @@ public class PickAxes implements Listener {
 			if(Main.CE.hasEnchantments(item)) {
 				if(Main.CE.hasEnchantment(item, CEnchantments.BLAST)) {
 					if(CEnchantments.BLAST.isEnabled()) {
-						HashMap<Block, BlockFace> blockFace = new HashMap<Block, BlockFace>();
+						HashMap<Block, BlockFace> blockFace = new HashMap<>();
 						blockFace.put(block, e.getBlockFace());
 						blocks.put(player, blockFace);
 					}
@@ -51,7 +51,7 @@ public class PickAxes implements Listener {
 			}
 		}
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlastBreak(BlockBreakEvent e) {
@@ -64,7 +64,7 @@ public class PickAxes implements Listener {
 					if(blocks.get(player).containsKey(block)) {
 						BlockFace face = blocks.get(player).get(block);
 						blocks.remove(player);
-						HashMap<ItemStack, Integer> drops = new HashMap<ItemStack, Integer>();
+						HashMap<ItemStack, Integer> drops = new HashMap<>();
 						int xp = 0;
 						if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
 							NoCheatPlusSupport.exemptPlayer(player);
@@ -138,14 +138,12 @@ public class PickAxes implements Listener {
 												}
 											}
 										}else {
-											Boolean fortune = false;
 											if(Main.CE.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(b.getType())) {
 												for(ItemStack drop : b.getDrops()) {
 													drop = getOres().get(b.getType());
 													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
 															drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-															fortune = true;
 														}
 													}
 													b.getWorld().dropItem(b.getLocation(), getOres(drop.getAmount()).get(b.getType()));
@@ -158,35 +156,38 @@ public class PickAxes implements Listener {
 														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
 																drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
-																fortune = true;
 															}
 														}
 													}
 													b.getWorld().dropItem(b.getLocation(), drop);
 												}
 											}else {
-												if(!fortune) {
+												Boolean hasSilkTouch = false;
+												if(item.getItemMeta().hasEnchants()) {
+													if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
+														hasSilkTouch = true;
+														ItemStack drop;
+														if(b.getType() == Material.GLOWING_REDSTONE_ORE) {
+															drop = new ItemStack(Material.REDSTONE_ORE, 1, b.getData());
+														}else {
+															drop = new ItemStack(b.getType(), 1, b.getData());
+														}
+														b.getWorld().dropItem(b.getLocation(), drop);
+													}
+												}
+												if(!hasSilkTouch) {
 													for(ItemStack drop : b.getDrops()) {
 														if(getItems().contains(b.getType())) {
 															if(item.getItemMeta().hasEnchants()) {
 																if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 																	if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
 																		drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
-																		toggle = false;
 																	}
 																}
 															}
 														}
-														if(item.getItemMeta().hasEnchants()) {
-															if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-																if(b.getType() == Material.GLOWING_REDSTONE_ORE) {
-																	drop = new ItemStack(Material.REDSTONE_ORE, 1, b.getData());
-																}else {
-																	drop = new ItemStack(b.getType(), 1, b.getData());
-																}
-															}
-														}
-														b.getWorld().dropItem(b.getLocation(), drop);
+														//Puts the item in the middle of the block so it doesn't glitch into the walls.
+														b.getWorld().dropItem(b.getLocation().add(.5, 0, .5), drop);
 														toggle = true;
 														if(drop.getType() == Material.GLOWING_REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
 															break;
@@ -244,7 +245,7 @@ public class PickAxes implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e) {
 		if(e.isCancelled()) return;
@@ -336,16 +337,14 @@ public class PickAxes implements Listener {
 			}
 		}
 	}
-
+	
 	private Boolean hasSilkTouch(ItemStack item) {
 		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-				return true;
-			}
+			return item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
 		}
 		return false;
 	}
-
+	
 	private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
 		Location loc2 = loc.clone();
 		switch(blockFace) {
@@ -376,7 +375,7 @@ public class PickAxes implements Listener {
 			default:
 				break;
 		}
-		List<Block> blocks = new ArrayList<Block>();
+		List<Block> blocks = new ArrayList<>();
 		int topBlockX = (loc.getBlockX() < loc2.getBlockX() ? loc2.getBlockX() : loc.getBlockX());
 		int bottomBlockX = (loc.getBlockX() > loc2.getBlockX() ? loc2.getBlockX() : loc.getBlockX());
 		int topBlockY = (loc.getBlockY() < loc2.getBlockY() ? loc2.getBlockY() : loc.getBlockY());
@@ -393,9 +392,9 @@ public class PickAxes implements Listener {
 		}
 		return blocks;
 	}
-
+	
 	private HashMap<Material, ItemStack> getOres() {
-		HashMap<Material, ItemStack> ores = new HashMap<Material, ItemStack>();
+		HashMap<Material, ItemStack> ores = new HashMap<>();
 		ores.put(Material.COAL_ORE, new ItemStack(Material.COAL));
 		ores.put(Material.QUARTZ_ORE, new ItemStack(Material.QUARTZ));
 		ores.put(Material.IRON_ORE, new ItemStack(Material.IRON_INGOT));
@@ -407,9 +406,9 @@ public class PickAxes implements Listener {
 		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK, 1, (short) 4));
 		return ores;
 	}
-
+	
 	private HashMap<Material, ItemStack> getOres(int amount) {
-		HashMap<Material, ItemStack> ores = new HashMap<Material, ItemStack>();
+		HashMap<Material, ItemStack> ores = new HashMap<>();
 		ores.put(Material.COAL_ORE, new ItemStack(Material.COAL, amount));
 		ores.put(Material.QUARTZ_ORE, new ItemStack(Material.QUARTZ, amount));
 		ores.put(Material.IRON_ORE, new ItemStack(Material.IRON_INGOT, amount));
@@ -421,9 +420,9 @@ public class PickAxes implements Listener {
 		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SACK, amount, (short) 4));
 		return ores;
 	}
-
+	
 	private ArrayList<Material> getItems() {
-		ArrayList<Material> items = new ArrayList<Material>();
+		ArrayList<Material> items = new ArrayList<>();
 		items.add(Material.COAL_ORE);
 		items.add(Material.QUARTZ_ORE);
 		items.add(Material.DIAMOND_ORE);
@@ -438,5 +437,5 @@ public class PickAxes implements Listener {
 		items.add(Material.LEAVES);
 		return items;
 	}
-
+	
 }

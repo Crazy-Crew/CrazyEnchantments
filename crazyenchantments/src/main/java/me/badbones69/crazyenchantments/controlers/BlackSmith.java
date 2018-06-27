@@ -26,9 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BlackSmith implements Listener {
-
+	
 	public static Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-
+	
 	public static void openBlackSmith(Player player) {
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")));
 		List<Integer> other = new ArrayList<>();
@@ -80,7 +80,7 @@ public class BlackSmith implements Listener {
 		}
 		player.openInventory(inv);
 	}
-
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
 		List<Integer> result = new ArrayList<>();
@@ -88,7 +88,6 @@ public class BlackSmith implements Listener {
 		result.add(8);
 		result.add(9);
 		result.add(16);
-		;
 		result.add(18);
 		result.add(25);
 		result.add(26);
@@ -304,40 +303,38 @@ public class BlackSmith implements Listener {
 			}
 		}
 	}
-
+	
 	@EventHandler
 	public void onInvClose(final InventoryCloseEvent e) {
 		final Inventory inv = e.getInventory();
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-			public void run() {
-				if(inv != null) {
-					if(inv.getName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")))) {
-						List<Integer> slots = new ArrayList<>();
-						slots.add(10);
-						slots.add(13);
-						Boolean dead = e.getPlayer().isDead();
-						for(int slot : slots) {
-							if(inv.getItem(slot) != null) {
-								if(inv.getItem(slot).getType() != Material.AIR) {
-									if(dead) {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+			if(inv != null) {
+				if(inv.getName().equals(Methods.color(Main.settings.getConfig().getString("Settings.BlackSmith.GUIName")))) {
+					List<Integer> slots = new ArrayList<>();
+					slots.add(10);
+					slots.add(13);
+					Boolean dead = e.getPlayer().isDead();
+					for(int slot : slots) {
+						if(inv.getItem(slot) != null) {
+							if(inv.getItem(slot).getType() != Material.AIR) {
+								if(dead) {
+									e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
+								}else {
+									if(Methods.isInvFull(((Player) e.getPlayer()))) {
 										e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
 									}else {
-										if(Methods.isInvFull(((Player) e.getPlayer()))) {
-											e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
-										}else {
-											e.getPlayer().getInventory().addItem(inv.getItem(slot));
-										}
+										e.getPlayer().getInventory().addItem(inv.getItem(slot));
 									}
 								}
 							}
 						}
-						inv.clear();
 					}
+					inv.clear();
 				}
 			}
 		}, 0);
 	}
-
+	
 	private ItemStack getUpgradedItem(Player player, ItemStack master, ItemStack sub, boolean glowing) {
 		ItemStack item = master.clone();
 		if(master.getType() == Main.CE.getEnchantmentBookItem().getType() && sub.getType() == Main.CE.getEnchantmentBookItem().getType()) {
@@ -404,7 +401,7 @@ public class BlackSmith implements Listener {
 						if(!Main.CustomE.hasEnchantment(master, enchant)) {
 							newEnchants.put(enchant, Main.CustomE.getPower(sub, enchant));
 						}
-
+						
 					}
 				}
 				for(String enchant : dupEnchants.keySet()) {
@@ -445,7 +442,7 @@ public class BlackSmith implements Listener {
 		}
 		return item;
 	}
-
+	
 	private int getUpgradeCost(Player player, ItemStack master, ItemStack sub) {
 		int total = 0;
 		//Is 2 books
@@ -548,13 +545,12 @@ public class BlackSmith implements Listener {
 		}
 		return total;
 	}
-
+	
 	private boolean inBlackSmith(int slot) {
 		//The last slot in the tinker is 54
-		if(slot < 27) return true;
-		return false;
+		return slot < 27;
 	}
-
+	
 	private void playClick(Player player) {
 		try {
 			if(Version.getCurrentVersion().getVersionInteger() >= 191) {
@@ -565,5 +561,5 @@ public class BlackSmith implements Listener {
 		}catch(Exception ex) {
 		}
 	}
-
+	
 }

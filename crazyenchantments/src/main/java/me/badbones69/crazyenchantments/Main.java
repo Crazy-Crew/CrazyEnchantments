@@ -1,8 +1,9 @@
 package me.badbones69.crazyenchantments;
 
+import com.massivestats.MassiveStats;
 import me.badbones69.crazyenchantments.api.*;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
-import me.badbones69.crazyenchantments.api.events.ArmorListener;
+import me.badbones69.crazyenchantments.multisupport.armorequip.ArmorListener;
 import me.badbones69.crazyenchantments.api.events.AuraListener;
 import me.badbones69.crazyenchantments.controlers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
@@ -25,15 +26,14 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Main extends JavaPlugin implements Listener {
-
+	
 	public static CrazyEnchantments CE = CrazyEnchantments.getInstance();
 	public static SettingsManager settings = SettingsManager.getInstance();
 	public static CustomEnchantments CustomE = CustomEnchantments.getInstance();
-
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
@@ -100,13 +100,13 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		//==========================================================================\\
 		try {
+			MassiveStats massiveStats = new MassiveStats(this);
 			if(settings.getConfig().contains("Settings.Update-Checker")) {
-				new MCUpdate(this, true).checkUpdate(settings.getConfig().getBoolean("Settings.Update-Checker"));
-			}else {
-				new MCUpdate(this, true);
+				massiveStats.setListenerDisabled(!settings.getConfig().getBoolean("Settings.Update-Checker"));
 			}
-		}catch(IOException e) {
+		}catch(Exception e) {
 		}
+		
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -123,7 +123,7 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}.runTaskTimerAsynchronously(this, 5 * 20 * 60, 5 * 20 * 60);
 	}
-
+	
 	@Override
 	public void onDisable() {
 		Armor.removeAllies();
@@ -131,7 +131,7 @@ public class Main extends JavaPlugin implements Listener {
 			CE.unloadCEPlayer(player);
 		}
 	}
-
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
 		FileConfiguration config = settings.getConfig();
 		FileConfiguration msg = settings.getMessages();
@@ -861,7 +861,7 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		return false;
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
@@ -890,10 +890,10 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}.runTaskLaterAsynchronously(this, 20);
 	}
-
+	
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent e) {
 		CE.unloadCEPlayer(e.getPlayer());
 	}
-
+	
 }
