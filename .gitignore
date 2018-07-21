@@ -8,5 +8,5 @@ dependency-reduced-pom.xml
 *.iml
 META-INF/
 
-crazyenchantments/src/main/lib/
+src/main/library/
 \.DS_Store
