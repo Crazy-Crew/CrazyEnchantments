@@ -25,6 +25,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +55,6 @@ public class PickAxes implements Listener {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlastBreak(BlockBreakEvent e) {
 		Player player = e.getPlayer();
@@ -64,173 +64,212 @@ public class PickAxes implements Listener {
 			if(ce.hasEnchantment(item, CEnchantments.BLAST)) {
 				if(CEnchantments.BLAST.isActivated()) {
 					if(blocks.get(player).containsKey(block)) {
-						BlockFace face = blocks.get(player).get(block);
-						blocks.remove(player);
-						HashMap<ItemStack, Integer> drops = new HashMap<>();
-						int xp = 0;
-						if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-							NoCheatPlusSupport.exemptPlayer(player);
-						}
-						if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
-							SpartanSupport.cancelNucker(player);
-							SpartanSupport.cancelNoSwing(player);
-							SpartanSupport.cancelBlockReach(player);
-						}
-						if(SupportedPlugins.AAC.isPluginLoaded()) {
-							AACSupport.exemptPlayer(player);
-						}
-						Boolean damage = true;
-						if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Blast-Full-Durability")) {
-							damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
-						}
-						for(Block b : getBlocks(block.getLocation(), face, (ce.getPower(item, CEnchantments.BLAST) - 1))) {
-							if(ce.getBlockList().contains(b.getType())) {
-								BlockBreakEvent event = new BlockBreakEvent(b, player);
-								Bukkit.getPluginManager().callEvent(event);
-								if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
-									if(player.getGameMode() == GameMode.CREATIVE) {
-										b.setType(Material.AIR);
-									}else {
-										boolean toggle = true; //True means its air and false means it breaks normaly.
-										if(ce.hasEnchantment(item, CEnchantments.TELEPATHY)) {
-											for(ItemStack drop : b.getDrops()) {
-												if(ce.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(b.getType())) {
-													drop = getOres().get(b.getType());
-													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-															drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
-														}
+						e.setCancelled(true);
+						new BukkitRunnable() {// Run async to help offload some lag.
+							@Override public void run() {
+								BlockFace face = blocks.get(player).get(block);
+								blocks.remove(player);
+								HashMap<ItemStack, Integer> drops = new HashMap<>();
+								int xp = 0;
+								if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+									NoCheatPlusSupport.exemptPlayer(player);
+								}
+								if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
+									SpartanSupport.cancelNucker(player);
+									SpartanSupport.cancelNoSwing(player);
+									SpartanSupport.cancelBlockReach(player);
+								}
+								if(SupportedPlugins.AAC.isPluginLoaded()) {
+									AACSupport.exemptPlayer(player);
+								}
+								boolean damage = true;
+								if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Blast-Full-Durability")) {
+									damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
+								}
+								boolean hasTelepathy = ce.hasEnchantment(item, CEnchantments.TELEPATHY);
+								boolean hasFurnace = ce.hasEnchantment(item, CEnchantments.FURNACE);
+								boolean hasLootingBonusBlocks = item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS);
+								boolean hasAutoSmelt = ce.hasEnchantment(item, CEnchantments.AUTOSMELT);
+								boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
+								boolean hasExperience = ce.hasEnchantment(item, CEnchantments.EXPERIENCE);
+								for(Block block : getBlocks(block.getLocation(), face, (ce.getPower(item, CEnchantments.BLAST) - 1))) {
+									if(ce.getBlockList().contains(block.getType())) {
+										BlockBreakEvent event = new BlockBreakEvent(block, player);
+										Bukkit.getPluginManager().callEvent(event);
+										if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
+											if(player.getGameMode() == GameMode.CREATIVE) {
+												new BukkitRunnable() {
+													@Override public void run() {
+														block.setType(Material.AIR);
 													}
-												}else if(ce.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())) {
-													if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-														drop = getOres().get(b.getType());
-														drop.setAmount(1 + ce.getPower(item, CEnchantments.AUTOSMELT));
-														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-																drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
-															}
-														}
-													}
-												}else {
-													if(getItems().contains(b.getType())) {
-														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-																drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
-															}
-														}
-													}
-												}
-												if(item.getItemMeta().hasEnchants()) {
-													if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-														if(b.getType() == Material.REDSTONE_ORE) {
-															drop = new ItemStack(Material.REDSTONE_ORE, 1, b.getData());
-														}else {
-															drop = new ItemStack(b.getType(), 1, b.getData());
-														}
-													}
-												}
-												int amount = drop.getAmount();
-												if(drops.containsKey(drop)) {
-													drops.put(drop, drops.get(drop) + amount);
-												}else {
-													drops.put(drop, amount);
-												}
-												if(drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
-													break;
-												}
-											}
-										}else {
-											Boolean fortune = false;
-											if(ce.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(b.getType())) {
-												for(ItemStack drop : b.getDrops()) {
-													drop = getOres().get(b.getType());
-													if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-														if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-															drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-														}
-													}
-													b.getWorld().dropItem(b.getLocation(), getOres(drop.getAmount()).get(b.getType()));
-												}
-											}else if(ce.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(b.getType())) {
-												for(ItemStack drop : b.getDrops()) {
-													if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-														drop = getOres().get(b.getType());
-														drop.setAmount(ce.getPower(item, CEnchantments.AUTOSMELT));
-														if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-															if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-																drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
-															}
-														}
-													}
-													b.getWorld().dropItem(b.getLocation(), drop);
-												}
+												}.runTask(ce.getPlugin());
 											}else {
-												for(ItemStack drop : b.getDrops()) {
-													if(getItems().contains(b.getType())) {
-														if(item.getItemMeta().hasEnchants()) {
-															if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
+												boolean toggle = true; //True means its air and false means it breaks normaly.
+												if(hasTelepathy) {
+													for(ItemStack drop : block.getDrops()) {
+														if(hasFurnace && getOres().containsKey(block.getType())) {
+															drop = getOres().get(block.getType());
+															if(hasLootingBonusBlocks) {
 																if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-																	drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																	drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																}
+															}
+														}else if(hasAutoSmelt && getOres().containsKey(block.getType())) {
+															if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+																drop = getOres().get(block.getType());
+																drop.setAmount(1 + ce.getPower(item, CEnchantments.AUTOSMELT));
+																if(hasLootingBonusBlocks) {
+																	if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+																		drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																	}
+																}
+															}
+														}else {
+															if(getItems().contains(block.getType())) {
+																if(hasLootingBonusBlocks) {
+																	if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+																		drop.setAmount(Methods.getRandomNumber(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																	}
 																}
 															}
 														}
+														if(item.getItemMeta().hasEnchants()) {
+															if(hasSilkTouch) {
+																if(block.getType() == Material.REDSTONE_ORE) {
+																	drop = new ItemStack(Material.REDSTONE_ORE, 1, block.getData());
+																}else {
+																	drop = new ItemStack(block.getType(), 1, block.getData());
+																}
+															}
+														}
+														int amount = drop.getAmount();
+														if(drops.containsKey(drop)) {
+															drops.put(drop, drops.get(drop) + amount);
+														}else {
+															drops.put(drop, amount);
+														}
+														if(drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
+															break;
+														}
 													}
-													if(item.getItemMeta().hasEnchants()) {
-														if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-															if(b.getType() == Material.REDSTONE_ORE) {
-																drop = new ItemStack(Material.REDSTONE_ORE, 1, b.getData());
-															}else {
-																drop = new ItemStack(b.getType(), 1, b.getData());
+												}else {
+													Boolean fortune = false;
+													if(hasFurnace && getOres().containsKey(block.getType())) {
+														for(ItemStack drop : block.getDrops()) {
+															drop = getOres().get(block.getType());
+															if(hasLootingBonusBlocks) {
+																if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+																	drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+																}
+															}
+															ItemStack finalDrop = drop;
+															new BukkitRunnable() {
+																@Override public void run() {
+																	block.getWorld().dropItem(block.getLocation(), getOres(finalDrop.getAmount()).get(block.getType()));
+																}
+															}.runTask(ce.getPlugin());
+														}
+													}else if(hasAutoSmelt && getOres().containsKey(block.getType())) {
+														for(ItemStack drop : block.getDrops()) {
+															if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+																drop = getOres().get(block.getType());
+																drop.setAmount(ce.getPower(item, CEnchantments.AUTOSMELT));
+																if(hasLootingBonusBlocks) {
+																	if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+																		drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																	}
+																}
+															}
+															ItemStack finalDrop = drop;
+															new BukkitRunnable() {
+																@Override public void run() {
+																	block.getWorld().dropItem(block.getLocation(), finalDrop);
+																}
+															}.runTask(ce.getPlugin());
+														}
+													}else {
+														for(ItemStack drop : block.getDrops()) {
+															if(getItems().contains(block.getType())) {
+																if(hasLootingBonusBlocks) {
+																	if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+																		drop.setAmount(drop.getAmount() + Methods.getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS)));
+																	}
+																}
+															}
+															if(hasSilkTouch) {
+																if(block.getType() == Material.REDSTONE_ORE) {
+																	drop = new ItemStack(Material.REDSTONE_ORE, 1, block.getData());
+																}else {
+																	drop = new ItemStack(block.getType(), 1, block.getData());
+																}
+															}
+															ItemStack finalDrop = drop;
+															new BukkitRunnable() {
+																@Override public void run() {
+																	block.getWorld().dropItem(block.getLocation(), finalDrop);
+																}
+															}.runTask(ce.getPlugin());
+															if(drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
+																break;
 															}
 														}
 													}
-													b.getWorld().dropItem(b.getLocation(), drop);
-													if(drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
-														break;
+												}
+												if(hasExperience) {
+													if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+														int power = ce.getPower(item, CEnchantments.EXPERIENCE);
+														if(getOres().containsKey(block.getType())) {
+															xp += Methods.percentPick(7, 3) * power;
+														}
 													}
 												}
-											}
-										}
-										if(ce.hasEnchantment(item, CEnchantments.EXPERIENCE)) {
-											if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-												int power = ce.getPower(item, CEnchantments.EXPERIENCE);
-												if(getOres().containsKey(b.getType())) {
-													xp += Methods.percentPick(7, 3) * power;
+												new BukkitRunnable() {
+													@Override public void run() {
+														block.setType(Material.AIR);
+													}
+												}.runTask(ce.getPlugin());
+												if(damage) {
+													Methods.removeDurability(item, player);
 												}
 											}
-										}
-										b.setType(Material.AIR);
-										if(damage) {
-											Methods.removeDurability(item, player);
+											if(getOres().containsKey(block.getType())) {
+												xp += Methods.percentPick(7, 3);
+											}
 										}
 									}
 								}
+								if(!damage) {
+									Methods.removeDurability(item, player);
+								}
+								if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+									NoCheatPlusSupport.unexemptPlayer(player);
+								}
+								if(SupportedPlugins.AAC.isPluginLoaded()) {
+									AACSupport.unexemptPlayer(player);
+								}
+								for(ItemStack i : drops.keySet()) {
+									i.setAmount(drops.get(i));
+									if(Methods.isInvFull(player)) {
+										new BukkitRunnable() {
+											@Override public void run() {
+												player.getWorld().dropItem(player.getLocation(), i);
+											}
+										}.runTask(ce.getPlugin());
+									}else {
+										player.getInventory().addItem(i);
+									}
+								}
+								if(xp > 0) {
+									int finalXp = xp;
+									new BukkitRunnable() {
+										@Override public void run() {
+											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+											orb.setExperience(finalXp);
+										}
+									}.runTask(ce.getPlugin());
+								}
 							}
-						}
-						if(!damage) {
-							Methods.removeDurability(item, player);
-						}
-						if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-							NoCheatPlusSupport.unexemptPlayer(player);
-						}
-						if(SupportedPlugins.AAC.isPluginLoaded()) {
-							AACSupport.unexemptPlayer(player);
-						}
-						for(ItemStack i : drops.keySet()) {
-							if(i.getType() == Material.INK_SAC) {
-								i.setType((new ItemStack(Material.INK_SAC, 1, (short) 4)).getType());
-							}
-							i.setAmount(drops.get(i));
-							if(Methods.isInvFull(player)) {
-								player.getWorld().dropItem(player.getLocation(), i);
-							}else {
-								player.getInventory().addItem(i);
-							}
-						}
-						if(xp > 0) {
-							ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-							orb.setExperience(xp);
-						}
+						}.runTaskAsynchronously(ce.getPlugin());
 					}
 				}
 			}
@@ -390,7 +429,7 @@ public class PickAxes implements Listener {
 		ores.put(Material.DIAMOND_ORE, new ItemStack(Material.DIAMOND));
 		ores.put(Material.EMERALD_ORE, new ItemStack(Material.EMERALD));
 		ores.put(Material.REDSTONE_ORE, new ItemStack(Material.REDSTONE));
-		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SAC, 1, (short) 4));
+		ores.put(Material.LAPIS_ORE, new ItemStack(Material.LAPIS_LAZULI));
 		return ores;
 	}
 	
@@ -403,7 +442,7 @@ public class PickAxes implements Listener {
 		ores.put(Material.DIAMOND_ORE, new ItemStack(Material.DIAMOND, amount));
 		ores.put(Material.EMERALD_ORE, new ItemStack(Material.EMERALD, amount));
 		ores.put(Material.REDSTONE_ORE, new ItemStack(Material.REDSTONE, amount));
-		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SAC, amount, (short) 4));
+		ores.put(Material.LAPIS_ORE, new ItemStack(Material.LAPIS_LAZULI));
 		return ores;
 	}
 	

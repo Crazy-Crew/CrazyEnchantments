@@ -6,7 +6,7 @@
 
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments</artifactId>
-    <version>1.8-Dev-Build-v2</version>
+    <version>1.8-Dev-Build-v3</version>
 
     <repositories>
         <repository>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.13-pre7-R0.1-SNAPSHOT</version>
+            <version>1.13-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -48,14 +48,14 @@
             <artifactId>mcMMO</artifactId>
             <version>1.5.09-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>src/main/library/mcMMO.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/mcMMO.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-legacy</artifactId>
             <version>6.2.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>src/main/library/worldguard-6.2.1.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/worldguard-6.2.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
@@ -74,49 +74,49 @@
             <artifactId>PlotSquared</artifactId>
             <version>3.5.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>src/main/library/PlotSquared.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/PlotSquared.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
             <version>10.7.2</version>
             <scope>system</scope>
-            <systemPath>src/main/library/PreciousStones.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/PreciousStones.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.sacredlabyrinth.phaed.simpleclans</groupId>
             <artifactId>SimpleClans</artifactId>
             <version>2.7.11</version>
             <scope>system</scope>
-            <systemPath>src/main/library/SimpleClans.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/SimpleClans.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>MassiveCraft</artifactId>
             <version>2.13.2</version>
             <scope>system</scope>
-            <systemPath>src/main/library/MassiveCore.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/MassiveCore.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
             <version>2.13.2</version>
             <scope>system</scope>
-            <systemPath>src/main/library/Factions.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/Factions.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>de.dustplanet</groupId>
             <artifactId>SilkSpawners</artifactId>
             <version>5.0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>src/main/library/SilkSpawners.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/SilkSpawners.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>us.forseth11.feudal.core</groupId>
             <artifactId>Feudal</artifactId>
             <version>1.10.0</version>
             <scope>system</scope>
-            <systemPath>src/main/library/Feudal.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/Feudal.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.wasteofplastic</groupId>
@@ -133,7 +133,7 @@
             <artifactId>Kingdoms</artifactId>
             <version>13.2.40</version>
             <scope>system</scope>
-            <systemPath>src/main/library/Kingdoms-13.3.40.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/Kingdoms-13.3.40.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.TechFortress</groupId>
@@ -145,42 +145,42 @@
             <artifactId>Spartan</artifactId>
             <version>Build 173</version>
             <scope>system</scope>
-            <systemPath>src/main/library/Spartan.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/Spartan.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>CoreProtect</artifactId>
             <version>2.14.2</version>
             <scope>system</scope>
-            <systemPath>src/main/library/CoreProtect_2.14.2.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/CoreProtect_2.14.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>uk.antiperson.stackmob</groupId>
             <artifactId>StackMob</artifactId>
             <version>2.3.3</version>
             <scope>system</scope>
-            <systemPath>src/main/library/StackMob-2.3.3-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/StackMob-2.3.3-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.massivecraft.factions</groupId>
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.1.17-b</version>
             <scope>system</scope>
-            <systemPath>src/main/library/FactionsUUID-1.6.9.5.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/FactionsUUID-1.6.9.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.NoCheatPlus.NoCheatPlus</groupId>
             <artifactId>ncpbuildbase</artifactId>
             <version>3.16.0-RC-sMD5NET-b1134</version>
             <scope>system</scope>
-            <systemPath>src/main/library/NoCheatPlus.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/NoCheatPlus.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>DAKATA.Main</groupId>
             <artifactId>DakataAntiCheat</artifactId>
             <version>BETA 1.8</version>
             <scope>system</scope>
-            <systemPath>src/main/library/DakataAntiCheat.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/DakataAntiCheat.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>de.janmm14</groupId>
@@ -192,28 +192,28 @@
             <artifactId>GeneralLib</artifactId>
             <version>0.1.4</version>
             <scope>system</scope>
-            <systemPath>src/main/library/GLib.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/GLib.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>Towny</artifactId>
             <version>0.92.0.0</version>
             <scope>system</scope>
-            <systemPath>src/main/library/Towny.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/Towny.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.redstone</groupId>
             <artifactId>LegacyFactions</artifactId>
             <version>1.4.7</version>
             <scope>system</scope>
-            <systemPath>src/main/library/LegacyFactions.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/LegacyFactions.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.songoda.epicspawners</groupId>
             <artifactId>EpicSpawners</artifactId>
             <version>3.1.4 R2</version>
             <scope>system</scope>
-            <systemPath>src/main/library/EpicSpawners.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/EpicSpawners.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -256,8 +256,8 @@
                         </includes>
                     </artifactSet>
                     <!--<finalName>${project.artifactId}[v${project.version}]</finalName>-->
-                    <!--<outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/${project.artifactId}[v${project.version}].jar</outputFile>-->
-                    <outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Enchantments/${project.artifactId}[v${project.version}].jar</outputFile>
+                    <outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/Crazy Enchantmnets[v${project.version}].jar</outputFile>
+                    <!--<outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Enchantments/Crazy Enchantmnets[v${project.version}].jar</outputFile>-->
                 </configuration>
                 <executions>
                     <execution>
