@@ -488,6 +488,7 @@ public class Armor implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDeath(PlayerDeathEvent e) {
 		Player player = e.getEntity();
+		if(!(player.getKiller() instanceof Player)) return;
 		Player killer = player.getKiller();
 		if(!Support.allowsPVP(player.getLocation())) return;
 		for(ItemStack item : player.getEquipment().getArmorContents()) {
