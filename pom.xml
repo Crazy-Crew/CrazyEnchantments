@@ -107,7 +107,7 @@
         <dependency>
             <groupId>de.dustplanet</groupId>
             <artifactId>SilkSpawners</artifactId>
-            <version>5.0.1-SNAPSHOT</version>
+            <version>5.0.2-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/library/SilkSpawners.jar</systemPath>
         </dependency>

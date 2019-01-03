@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Methods {
@@ -361,7 +362,7 @@ public class Methods {
 			HttpURLConnection c = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
 			c.setDoOutput(true);
 			c.setRequestMethod("POST");
-			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes("UTF-8"));
+			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes(StandardCharsets.UTF_8));
 			String oldVersion = ce.getPlugin().getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
@@ -376,7 +377,7 @@ public class Methods {
 			HttpURLConnection c = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
 			c.setDoOutput(true);
 			c.setRequestMethod("POST");
-			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes("UTF-8"));
+			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes(StandardCharsets.UTF_8));
 			String oldVersion = ce.getPlugin().getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
@@ -409,7 +410,7 @@ public class Methods {
 			if(oLine.contains(Argument.toLowerCase())) {
 				String[] b = oLine.split(Argument.toLowerCase());
 				for(String iline : lore) {
-					Boolean toggle = false;// Checks to make sure the lore is the same.
+					boolean toggle = false;// Checks to make sure the lore is the same.
 					if(b.length >= 1) {
 						if(iline.toLowerCase().startsWith(b[0])) {
 							arg = iline.toLowerCase().replace(b[0], "");
@@ -459,7 +460,7 @@ public class Methods {
 	}
 	
 	public static boolean randomPicker(int min, int max) {
-		if(max == min || max <= min || max <= 0) {
+		if(max <= min || max <= 0) {
 			return true;
 		}
 		int chance = 1 + new Random().nextInt(max);

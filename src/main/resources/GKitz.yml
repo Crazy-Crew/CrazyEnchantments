@@ -64,7 +64,7 @@ GKitz: #GKit optons.
   PeaceKeeper:
     Display:
       Slot: 14
-      Item: 'ORANGE_STAINED_GLASS_PANE1'
+      Item: 'BLUE_STAINED_GLASS_PANE'
       Glowing: true
       Name: '&9&lThe Peace Keeper GKit'
       Lore:
@@ -86,7 +86,7 @@ GKitz: #GKit optons.
   Villain:
     Display:
       Slot: 16
-      Item: 'ORANGE_STAINED_GLASS_PANE4'
+      Item: 'RED_STAINED_GLASS_PANE'
       Glowing: true
       Name: '&4&lThe Villain GKit'
       Lore:

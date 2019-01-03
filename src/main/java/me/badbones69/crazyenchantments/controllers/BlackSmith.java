@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,32 +31,8 @@ public class BlackSmith implements Listener {
 	
 	public static void openBlackSmith(Player player) {
 		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.GUIName")));
-		List<Integer> other = new ArrayList<>();
-		List<Integer> result = new ArrayList<>();
-		other.add(1);
-		other.add(2);
-		other.add(3);
-		other.add(4);
-		other.add(5);
-		other.add(6);
-		other.add(10);
-		other.add(12);
-		other.add(13);
-		other.add(15);
-		other.add(19);
-		other.add(20);
-		other.add(21);
-		other.add(22);
-		other.add(23);
-		other.add(24);
-		result.add(7);
-		result.add(8);
-		result.add(9);
-		result.add(16);
-		result.add(18);
-		result.add(25);
-		result.add(26);
-		result.add(27);
+		List<Integer> other = Arrays.asList(1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24);
+		List<Integer> result = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
 		for(int i : other)
 			inv.setItem(i - 1, new ItemBuilder().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build());
 		for(int i : result)
@@ -72,15 +49,7 @@ public class BlackSmith implements Listener {
 	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
-		List<Integer> result = new ArrayList<>();
-		result.add(7);
-		result.add(8);
-		result.add(9);
-		result.add(16);
-		result.add(18);
-		result.add(25);
-		result.add(26);
-		result.add(27);
+		List<Integer> result = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
 		FileConfiguration config = Files.CONFIG.getFile();
@@ -236,7 +205,7 @@ public class BlackSmith implements Listener {
 					List<Integer> slots = new ArrayList<>();
 					slots.add(10);
 					slots.add(13);
-					Boolean dead = e.getPlayer().isDead();
+					boolean dead = e.getPlayer().isDead();
 					for(int slot : slots) {
 						if(inv.getItem(slot) != null) {
 							if(inv.getItem(slot).getType() != Material.AIR) {

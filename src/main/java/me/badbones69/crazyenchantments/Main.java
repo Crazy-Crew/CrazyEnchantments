@@ -1,6 +1,5 @@
 package me.badbones69.crazyenchantments;
 
-import com.massivestats.MassiveStats;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -98,14 +97,6 @@ public class Main extends JavaPlugin implements Listener {
 			pm.registerEvents(new DakataAntiCheatSupport(), this);
 		}
 		//==========================================================================\\
-		try {
-			MassiveStats massiveStats = new MassiveStats(this);
-			massiveStats.start();
-			if(Files.CONFIG.getFile().contains("Settings.Update-Checker")) {
-				massiveStats.setListenerDisabled(Files.CONFIG.getFile().getBoolean("Settings.Update-Checker"));
-			}
-		}catch(Exception ignored) {
-		}
 		new BukkitRunnable() {
 			@Override
 			public void run() {
