@@ -112,6 +112,7 @@ public enum EnchantmentType {
 		ma.add(Material.DIAMOND_CHESTPLATE);
 		ma.add(Material.DIAMOND_LEGGINGS);
 		ma.add(Material.DIAMOND_BOOTS);
+		ma.add(Material.TURTLE_HELMET);
 		return ma;
 	}
 	
@@ -142,6 +143,7 @@ public enum EnchantmentType {
 		ma.add(Material.CHAINMAIL_HELMET);
 		ma.add(Material.GOLDEN_HELMET);
 		ma.add(Material.DIAMOND_HELMET);
+		ma.add(Material.TURTLE_HELMET);
 		return ma;
 	}
 	
@@ -228,6 +230,7 @@ public enum EnchantmentType {
 		ma.add(Material.IRON_HOE);
 		ma.add(Material.GOLDEN_HOE);
 		ma.add(Material.DIAMOND_HOE);
+		ma.add(Material.SHEARS);
 		return ma;
 	}
 	
@@ -237,6 +240,8 @@ public enum EnchantmentType {
 		ma.addAll(isTool());
 		ma.addAll(isBow());
 		ma.addAll(isWeapon());
+		ma.add(Material.FISHING_ROD);
+		ma.add(Material.ELYTRA);
 		return ma;
 	}
 	

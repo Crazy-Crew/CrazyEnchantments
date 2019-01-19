@@ -72,6 +72,7 @@ Messages:
           - '&a- Gold Helmet'
           - '&a- Iron Helmet'
           - '&a- Diamond Helmet'
+          - '&a- Turtle Helmet'
       Boots:
         Item: 317
         Slot: 2
@@ -133,6 +134,7 @@ Messages:
           - '&a- All Axes'
           - '&a- All Shovels'
           - '&a- All Hoes'
+          - '&a- Shears'
       Pickaxe:
         Item: 285
         Slot: 8
