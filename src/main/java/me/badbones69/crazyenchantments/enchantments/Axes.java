@@ -126,22 +126,24 @@ public class Axes implements Listener {
 	@EventHandler
 	public void onPlayerDamage(PlayerDeathEvent e) {
 		if(!Support.allowsPVP(e.getEntity().getLocation())) return;
-		Player damager = e.getEntity().getKiller();
-		Player player = e.getEntity();
-		ItemStack item = damager.getInventory().getItemInMainHand();
-		if(ce.hasEnchantments(item)) {
-			if(ce.hasEnchantment(item, CEnchantments.DECAPITATION)) {
-				if(CEnchantments.DECAPITATION.isActivated()) {
-					int power = ce.getPower(item, CEnchantments.DECAPITATION);
-					if(CEnchantments.DECAPITATION.chanceSuccessful(item)) {
-						EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
-						Bukkit.getPluginManager().callEvent(event);
-						if(!event.isCancelled()) {
-							ItemStack head = new ItemBuilder().setMaterial(Material.PLAYER_HEAD).build();
-							SkullMeta m = (SkullMeta) head.getItemMeta();
-							m.setOwner(player.getName());
-							head.setItemMeta(m);
-							e.getDrops().add(head);
+		if(e.getEntity().getKiller() instanceof Player) {
+			Player damager = e.getEntity().getKiller();
+			Player player = e.getEntity();
+			ItemStack item = damager.getInventory().getItemInMainHand();
+			if(ce.hasEnchantments(item)) {
+				if(ce.hasEnchantment(item, CEnchantments.DECAPITATION)) {
+					if(CEnchantments.DECAPITATION.isActivated()) {
+						int power = ce.getPower(item, CEnchantments.DECAPITATION);
+						if(CEnchantments.DECAPITATION.chanceSuccessful(item)) {
+							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
+							Bukkit.getPluginManager().callEvent(event);
+							if(!event.isCancelled()) {
+								ItemStack head = new ItemBuilder().setMaterial(Material.PLAYER_HEAD).build();
+								SkullMeta m = (SkullMeta) head.getItemMeta();
+								m.setOwner(player.getName());
+								head.setItemMeta(m);
+								e.getDrops().add(head);
+							}
 						}
 					}
 				}

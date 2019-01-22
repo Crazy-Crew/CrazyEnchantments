@@ -27,7 +27,7 @@ public class TownySupport {
 		try {
 			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
 			Resident otherUser = TownyUniverse.getDataSource().getResident(other.getName());
-			if(playerUser.getTown().getName().equalsIgnoreCase(otherUser.getTown().getName())) {
+			if(playerUser.hasTown() && otherUser.hasTown() && playerUser.getTown().getName().equalsIgnoreCase(otherUser.getTown().getName())) {
 				return true;
 			}
 		}catch(NotRegisteredException e) {

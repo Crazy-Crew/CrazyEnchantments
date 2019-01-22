@@ -158,34 +158,34 @@ public class Support {
 	}
 	
 	public static boolean allowsPVP(Location loc) {
-		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuard.allowsPVP(loc);
+		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuardSupport.allowsPVP(loc);
 	}
 	
 	public static boolean allowsBreak(Location loc) {
-		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuard.allowsBreak(loc);
+		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuardSupport.allowsBreak(loc);
 	}
 	
 	public static boolean allowsExplotions(Location loc) {
-		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuard.allowsExplosions(loc);
+		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuardSupport.allowsExplosions(loc);
 	}
 	
 	public static boolean inWingsRegion(Player player) {
 		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
 			if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Regions")) {
 				for(String rg : Files.CONFIG.getFile().getStringList("Settings.EnchantmentOptions.Wings.Regions")) {
-					if(WorldGuard.inRegion(rg, player.getLocation())) {
+					if(WorldGuardSupport.inRegion(rg, player.getLocation())) {
 						return true;
 					}else {
 						if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
 							if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
-								if(WorldGuard.isMember(player)) {
+								if(WorldGuardSupport.isMember(player)) {
 									return true;
 								}
 							}
 						}
 						if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
 							if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
-								if(WorldGuard.isOwner(player)) {
+								if(WorldGuardSupport.isOwner(player)) {
 									return true;
 								}
 							}
