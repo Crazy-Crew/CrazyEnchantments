@@ -6,10 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class NBTFile extends NBTCompound {
-
+	
 	private final File file;
 	private Object nbt;
-
+	
 	public NBTFile(File file) throws IOException {
 		super(null, null);
 		this.file = file;
@@ -21,7 +21,7 @@ public class NBTFile extends NBTCompound {
 			save();
 		}
 	}
-
+	
 	public void save() throws IOException {
 		if(!file.exists()) {
 			file.getParentFile().mkdirs();
@@ -30,17 +30,17 @@ public class NBTFile extends NBTCompound {
 		FileOutputStream outStream = new FileOutputStream(file);
 		NBTReflectionUtil.saveNBTFile(nbt, outStream);
 	}
-
+	
 	public File getFile() {
 		return file;
 	}
-
+	
 	protected Object getCompound() {
 		return nbt;
 	}
-
+	
 	protected void setCompound(Object compound) {
 		nbt = compound;
 	}
-
+	
 }

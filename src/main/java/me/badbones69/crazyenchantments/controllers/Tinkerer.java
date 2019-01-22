@@ -90,7 +90,7 @@ public class Tinkerer implements Listener {
 								if(current.getItemMeta().hasDisplayName()) {
 									if(current.getItemMeta().getDisplayName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
 										int total = 0;
-										Boolean toggle = false;
+										boolean toggle = false;
 										for(int slot : getSlot().keySet()) {
 											if(inv.getItem(getSlot().get(slot)) != null) {
 												if(Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")) == Currency.VAULT) {
@@ -123,7 +123,7 @@ public class Tinkerer implements Listener {
 								if(!current.getType().toString().endsWith("STAINED_GLASS_PANE")) {// Adding/Taking Items
 									if(current.getType() == ce.getEnchantmentBookItem().getType()) {// Adding a book
 										Boolean custom = false;
-										Boolean toggle = false;
+										boolean toggle = false;
 										String enchant = "";
 										for(CEnchantment en : ce.getRegisteredEnchantments()) {
 											if(current.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
