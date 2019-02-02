@@ -195,6 +195,7 @@ public enum EnchantmentType {
 		ma.add(Material.IRON_AXE);
 		ma.add(Material.GOLDEN_AXE);
 		ma.add(Material.DIAMOND_AXE);
+		ma.add(Material.TRIDENT);
 		return ma;
 	}
 	
