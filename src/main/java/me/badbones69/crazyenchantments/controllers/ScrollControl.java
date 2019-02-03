@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.controllers;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
@@ -82,7 +83,7 @@ public class ScrollControl implements Listener {
 					}
 					HashMap<String, Integer> lvl = new HashMap<>();
 					ArrayList<CEnchantment> enchants = new ArrayList<>();
-					Boolean i = false;
+					boolean i = false;
 					if(ce.hasEnchantments(item)) {
 						for(CEnchantment en : ce.getRegisteredEnchantments()) {
 							if(ce.hasEnchantment(item, en)) {
@@ -97,7 +98,7 @@ public class ScrollControl implements Listener {
 						player.setItemOnCursor(Methods.removeItem(scroll));
 						if(Files.CONFIG.getFile().getBoolean("Settings.BlackScroll.Chance-Toggle")) {
 							if(!Methods.randomPicker(Files.CONFIG.getFile().getInt("Settings.BlackScroll.Chance"), 100)) {
-								player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Black-Scroll-Unsuccessful")));
+								player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
 								return;
 							}
 						}
@@ -119,7 +120,7 @@ public class ScrollControl implements Listener {
 		if(item != null) {
 			if(Methods.isSimilar(item, Scrolls.BlACK_SCROLL.getScroll())) {
 				e.setCancelled(true);
-				player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Right-Click-Black-Scroll")));
+				player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
 			}else if(Methods.isSimilar(item, Scrolls.WHITE_SCROLL.getScroll()) || Methods.isSimilar(item, Scrolls.TRANSMOG_SCROLL.getScroll())) {
 				e.setCancelled(true);
 			}
@@ -166,8 +167,9 @@ public class ScrollControl implements Listener {
 		if(m.hasDisplayName()) {
 			name = m.getDisplayName();
 			for(int i = 0; i <= 100; i++) {
-				if(m.getDisplayName().endsWith(Methods.color(enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "")))) {
-					name = m.getDisplayName().substring(0, m.getDisplayName().length() - (enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "")).length());
+				String msg = enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "");
+				if(m.getDisplayName().endsWith(Methods.color(msg))) {
+					name = m.getDisplayName().substring(0, m.getDisplayName().length() - msg.length());
 				}
 			}
 		}

@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.api.objects.Cooldown;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
@@ -19,12 +20,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
-public class GKitzControler implements Listener {
+public class GKitzController implements Listener {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
@@ -136,21 +134,20 @@ public class GKitzControler implements Listener {
 											in.setItem(slots - 1, new ItemBuilder().setMaterial(Material.PRISMARINE_CRYSTALS).setName(msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")).build());
 											player.openInventory(in);
 										}else {
+											HashMap<String, String> placeholders = new HashMap<>();
+											placeholders.put("%kit%", kit.getName());
 											if(p.hasGkitPermission(kit)) {
 												if(p.canUseGKit(kit)) {
 													p.giveGKit(kit);
 													p.addCooldown(kit);
-													player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Received-GKit")
-													.replaceAll("%Kit%", name).replaceAll("%kit%", name)));
+													player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
 													return;
 												}else {
-													player.sendMessage(Methods.getPrefix() + p.getCooldown(kit).getCooldownLeft(msg.getString("Messages.Still-In-Cooldown"))
-													.replaceAll("%Kit%", name).replaceAll("%kit%", name));
+													player.sendMessage(Methods.getPrefix() + p.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
 													return;
 												}
 											}else {
-												player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.No-GKit-Permission")
-												.replaceAll("%Kit%", kit.getName()).replaceAll("%kit%", kit.getName())));
+												player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
 												return;
 											}
 										}

@@ -4,6 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -150,15 +151,18 @@ public class BlackSmith implements Listener {
 											}else {
 												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 												if(currency != null) {
+													HashMap<String, String> placeholders = new HashMap<>();
+													placeholders.put("%money_needed%", needed);
+													placeholders.put("%xp%", needed);
 													switch(currency) {
 														case VAULT:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money").replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+															player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 															break;
 														case XP_LEVEL:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls").replace("%XP%", needed).replace("%xp%", needed)));
+															player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
 															break;
 														case XP_TOTAL:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP").replace("%XP%", needed).replace("%xp%", needed)));
+															player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
 															break;
 													}
 												}

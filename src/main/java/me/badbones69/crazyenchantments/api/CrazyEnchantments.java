@@ -121,8 +121,8 @@ public class CrazyEnchantments {
 	}
 	
 	/**
-	 * Only needs used when the player joines the server.
-	 * This plugin does it automaticly, so there is no need to use it unless you have to.
+	 * Only needs used when the player joins the server.
+	 * This plugin does it automatically, so there is no need to use it unless you have to.
 	 * @param player The player you wish to load.
 	 */
 	public void loadCEPlayer(Player player) {
@@ -149,7 +149,7 @@ public class CrazyEnchantments {
 	
 	/**
 	 * Only needs used when the player leaves the server.
-	 * This plugin removes the player automaticly, so don't use this method unless needed for some reason.
+	 * This plugin removes the player automatically, so don't use this method unless needed for some reason.
 	 * @param player Player you wish to remove.
 	 */
 	public void unloadCEPlayer(Player player) {
@@ -827,7 +827,7 @@ public class CrazyEnchantments {
 	public CEBook convertToCEBook(ItemStack book) {
 		CEBook ceBook = new CEBook(getEnchantmentBookEnchantmnet(book), getBookPower(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
 		ceBook.setSuccessRate(Methods.getPercent("%Success_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
-		ceBook.setDestoryRate(Methods.getPercent("%Destroy_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setDestroyRate(Methods.getPercent("%Destroy_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
 		ceBook.setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing"));
 		return ceBook;
 	}

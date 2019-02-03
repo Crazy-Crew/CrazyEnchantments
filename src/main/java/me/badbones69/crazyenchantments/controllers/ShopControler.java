@@ -5,6 +5,7 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Dust;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ShopControler implements Listener {
@@ -48,11 +50,7 @@ public class ShopControler implements Listener {
 							if(Files.CONFIG.getFile().getBoolean("Categories." + cat + ".InGUI")) {
 								if(name.equals(Methods.color(config.getString("Categories." + cat + ".Name")))) {
 									if(Methods.isInvFull(player)) {
-										if(!Files.MESSAGES.getFile().contains("Messages.Inventory-Full")) {
-											player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-										}else {
-											player.sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
-										}
+										player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 										return;
 									}
 									Currency currency = null;
@@ -66,18 +64,18 @@ public class ShopControler implements Listener {
 											}else {
 												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 												if(currency != null) {
+													HashMap<String, String> placeholders = new HashMap<>();
+													placeholders.put("%money_needed%", needed);
+													placeholders.put("%xp%", needed);
 													switch(currency) {
 														case VAULT:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
-															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+															player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 															break;
 														case XP_LEVEL:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
-															.replace("%XP%", needed).replace("%xp%", needed)));
+															player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
 															break;
 														case XP_TOTAL:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
-															.replace("%XP%", needed).replace("%xp%", needed)));
+															player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
 															break;
 													}
 												}
@@ -97,11 +95,7 @@ public class ShopControler implements Listener {
 							if(Files.CONFIG.getFile().getBoolean("Categories." + cat + ".LostBook.InGUI")) {
 								if(name.equals(Methods.color(config.getString("Categories." + cat + ".LostBook.Name")))) {
 									if(Methods.isInvFull(player)) {
-										if(!Files.MESSAGES.getFile().contains("Messages.Inventory-Full")) {
-											player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-										}else {
-											player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
-										}
+										player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 										return;
 									}
 									if(player.getGameMode() != GameMode.CREATIVE) {
@@ -113,18 +107,18 @@ public class ShopControler implements Listener {
 											}else {
 												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 												if(currency != null) {
+													HashMap<String, String> placeholders = new HashMap<>();
+													placeholders.put("%money_needed%", needed);
+													placeholders.put("%xp%", needed);
 													switch(currency) {
 														case VAULT:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
-															.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+															player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 															break;
 														case XP_LEVEL:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
-															.replace("%XP%", needed).replace("%xp%", needed)));
+															player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
 															break;
 														case XP_TOTAL:
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
-															.replace("%XP%", needed).replace("%xp%", needed)));
+															player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
 															break;
 													}
 												}
@@ -146,7 +140,7 @@ public class ShopControler implements Listener {
 						for(String o : options) {
 							if(name.equalsIgnoreCase(Methods.color(config.getString("Settings." + o + ".GUIName")))) {
 								if(Methods.isInvFull(player)) {
-									player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
+									player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE) {
@@ -158,18 +152,18 @@ public class ShopControler implements Listener {
 										}else {
 											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 											if(currency != null) {
+												HashMap<String, String> placeholders = new HashMap<>();
+												placeholders.put("%money_needed%", needed);
+												placeholders.put("%xp%", needed);
 												switch(currency) {
 													case VAULT:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
-														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+														player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 														break;
 													case XP_LEVEL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
-														.replace("%XP%", needed).replace("%xp%", needed)));
+														player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
 														break;
 													case XP_TOTAL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
-														.replace("%XP%", needed).replace("%xp%", needed)));
+														player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
 														break;
 												}
 											}
@@ -203,11 +197,7 @@ public class ShopControler implements Listener {
 						for(String o : options) {
 							if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Dust." + o + ".GUIName")))) {
 								if(Methods.isInvFull(player)) {
-									if(!Files.MESSAGES.getFile().contains("Messages.Inventory-Full")) {
-										player.sendMessage(Methods.getPrefix() + Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-									}else {
-										player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
-									}
+									player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 									return;
 								}
 								if(player.getGameMode() != GameMode.CREATIVE) {
@@ -219,18 +209,18 @@ public class ShopControler implements Listener {
 										}else {
 											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 											if(currency != null) {
+												HashMap<String, String> placeholders = new HashMap<>();
+												placeholders.put("%money_needed%", needed);
+												placeholders.put("%xp%", needed);
 												switch(currency) {
 													case VAULT:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
-														.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+														player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 														break;
 													case XP_LEVEL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
-														.replace("%XP%", needed).replace("%xp%", needed)));
+														player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
 														break;
 													case XP_TOTAL:
-														player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
-														.replace("%XP%", needed).replace("%xp%", needed)));
+														player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
 														break;
 												}
 											}
@@ -251,7 +241,7 @@ public class ShopControler implements Listener {
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.GKitz.Name")))) {
 							if(!Methods.hasPermission(player, "gkitz", true)) return;
-							GKitzControler.openGUI(player);
+							GKitzController.openGUI(player);
 							return;
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.BlackSmith.Name")))) {
@@ -327,7 +317,7 @@ public class ShopControler implements Listener {
 				String id = config.getString("Categories." + cat + ".Item");
 				String name = config.getString("Categories." + cat + ".Name");
 				List<String> lore = config.getStringList("Categories." + cat + ".Lore");
-				Boolean glowing = false;
+				boolean glowing = false;
 				if(config.contains("Categories." + cat + ".Glowing")) {
 					if(config.getBoolean("Categories." + cat + ".Glowing")) {
 						glowing = true;
@@ -343,7 +333,7 @@ public class ShopControler implements Listener {
 				String id = config.getString("Categories." + cat + ".LostBook.Item");
 				String name = config.getString("Categories." + cat + ".LostBook.Name");
 				List<String> lore = config.getStringList("Categories." + cat + ".LostBook.Lore");
-				Boolean glowing = false;
+				boolean glowing = false;
 				if(config.contains("Categories." + cat + ".LostBook.Glowing")) {
 					if(config.getBoolean("Categories." + cat + ".LostBook.Glowing")) {
 						glowing = true;

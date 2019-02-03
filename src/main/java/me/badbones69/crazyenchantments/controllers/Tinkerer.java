@@ -6,6 +6,7 @@ import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -114,7 +115,7 @@ public class Tinkerer implements Listener {
 											Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give " + player.getName() + " " + total);
 										}
 										if(toggle) {
-											player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Tinker-Sold-Msg")));
+											player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
 										}
 										player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 1, 1);
 										return;
@@ -139,7 +140,7 @@ public class Tinkerer implements Listener {
 												player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
 											}else {// Clicking in their inventory
 												if(player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Tinker-Inventory-Full")));
+													player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
 													return;
 												}
 												e.setCurrentItem(new ItemStack(Material.AIR));
@@ -159,15 +160,11 @@ public class Tinkerer implements Listener {
 											}
 										}else {// Clicking in their inventory
 											if(player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
-												player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Tinker-Inventory-Full")));
+												player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
 												return;
 											}
 											if(current.getAmount() > 1) {
-												if(Files.MESSAGES.getFile().contains("Messages.Need-To-UnStack-Item")) {
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-To-UnStack-Item")));
-												}else {
-													player.sendMessage(Methods.getPrefix() + Methods.color("&cYou need to unstack that item for it to be used."));
-												}
+												player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
 												return;
 											}
 											e.setCurrentItem(new ItemStack(Material.AIR));

@@ -5,11 +5,11 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.events.DisarmerUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.events.RageBreakEvent;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
-import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
@@ -31,6 +31,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Swords implements Listener {
@@ -54,12 +55,8 @@ public class Swords implements Listener {
 								player.setRageMultiplyer(0.0);
 								player.setRageLevel(0);
 								player.setRage(false);
-								if(Files.MESSAGES.getFile().contains("Messages.Rage.Damaged")) {
-									if(Files.MESSAGES.getFile().getString("Messages.Rage.Damaged").length() > 0) {
-										e.getEntity().sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Rage.Damaged")));
-									}
-								}else {
-									e.getEntity().sendMessage(Methods.color("&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"));
+								if(Messages.RAGE_DAMAGED.getMessage().length() > 0) {
+									e.getEntity().sendMessage(Messages.RAGE_DAMAGED.getMessage());
 								}
 							}
 						}
@@ -139,9 +136,10 @@ public class Swords implements Listener {
 												}
 												int rageUp = cePlayer.getRageLevel() + 1;
 												if(cePlayer.getRageMultiplyer().intValue() == rageUp) {
-													if(Files.MESSAGES.getFile().getString("Messages.Rage.Rage-Up").length() > 0) {
-														damager.sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Rage.Rage-Up")
-														.replaceAll("%Level%", rageUp + "").replaceAll("%level%", rageUp + "")));
+													if(Messages.RAGE_RAGE_UP.getMessage().length() > 0) {
+														HashMap<String, String> placeholders = new HashMap<>();
+														placeholders.put("%level%", rageUp + "");
+														damager.sendMessage(Messages.RAGE_RAGE_UP.getMessage(placeholders));
 													}
 													cePlayer.setRageLevel(rageUp);
 												}
@@ -150,8 +148,8 @@ public class Swords implements Listener {
 											if(!cePlayer.hasRage()) {
 												cePlayer.setRageMultiplyer(1.0);
 												cePlayer.setRageLevel(1);
-												if(Files.MESSAGES.getFile().getString("Messages.Rage.Building").length() > 0) {
-													damager.sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Rage.Building")));
+												if(Messages.RAGE_BUILDING.getMessage().length() > 0) {
+													damager.sendMessage(Messages.RAGE_BUILDING.getMessage());
 												}
 											}
 											cePlayer.setRageTask(new BukkitRunnable() {
@@ -160,8 +158,8 @@ public class Swords implements Listener {
 													cePlayer.setRageMultiplyer(0.0);
 													cePlayer.setRage(false);
 													cePlayer.setRageLevel(0);
-													if(Files.MESSAGES.getFile().getString("Messages.Rage.Cooled-Down").length() > 0) {
-														damager.sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Rage.Cooled-Down")));
+													if(Messages.RAGE_COOLED_DOWN.getMessage().length() > 0) {
+														damager.sendMessage(Messages.RAGE_COOLED_DOWN.getMessage());
 													}
 												}
 											}.runTaskLater(ce.getPlugin(), 80));

@@ -2,10 +2,7 @@ package me.badbones69.crazyenchantments;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
-import me.badbones69.crazyenchantments.api.enums.CEnchantments;
-import me.badbones69.crazyenchantments.api.enums.Dust;
-import me.badbones69.crazyenchantments.api.enums.InfoType;
-import me.badbones69.crazyenchantments.api.enums.Scrolls;
+import me.badbones69.crazyenchantments.api.enums.*;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.controllers.*;
@@ -33,6 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Main extends JavaPlugin implements Listener {
@@ -126,11 +124,10 @@ public class Main extends JavaPlugin implements Listener {
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
 		FileConfiguration config = Files.CONFIG.getFile();
-		FileConfiguration msg = Files.MESSAGES.getFile();
 		if(commandLable.equalsIgnoreCase("BlackSmith") || commandLable.equalsIgnoreCase("BSmith")
 		|| commandLable.equalsIgnoreCase("BlackS") || commandLable.equalsIgnoreCase("BS")) {
 			if(!(sender instanceof Player)) {
-				sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+				sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 				return true;
 			}
 			if(!Methods.hasPermission(sender, "blacksmith", true)) return true;
@@ -140,7 +137,7 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		if(commandLable.equalsIgnoreCase("Tinkerer") || commandLable.equalsIgnoreCase("Tinker")) {
 			if(!(sender instanceof Player)) {
-				sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+				sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 				return true;
 			}
 			if(!Methods.hasPermission(sender, "tinker", true)) return true;
@@ -152,7 +149,7 @@ public class Main extends JavaPlugin implements Listener {
 		|| commandLable.equalsIgnoreCase("enchanter")) {
 			if(args.length == 0) {
 				if(!(sender instanceof Player)) {
-					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+					sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 					return true;
 				}
 				Player player = (Player) sender;
@@ -170,7 +167,7 @@ public class Main extends JavaPlugin implements Listener {
 					sender.sendMessage(Methods.color("&b/GKitz Reset <Kit> [Player] - &9Reset a players gkit cooldown."));
 					sender.sendMessage(Methods.color("&b/ce Help - &9Shows all ce Commands."));
 					sender.sendMessage(Methods.color("&b/ce Debug - &9Does a small debug for some errors."));
-					sender.sendMessage(Methods.color("&b/ce Info [Enchantment] - &9Shows info on all Enchantmnets."));
+					sender.sendMessage(Methods.color("&b/ce Info [Enchantment] - &9Shows info on all enchantments."));
 					sender.sendMessage(Methods.color("&b/ce Reload - &9Reloads the Config.yml."));
 					sender.sendMessage(Methods.color("&b/ce Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
 					sender.sendMessage(Methods.color("&b/ce Add <Enchantment> [LvL] - &9Adds an enchantment to the item in your hand."));
@@ -200,7 +197,7 @@ public class Main extends JavaPlugin implements Listener {
 						ce.unloadCEPlayer(player);
 						ce.loadCEPlayer(player);
 					}
-					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Config-Reload")));
+					sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Debug")) {
@@ -227,7 +224,7 @@ public class Main extends JavaPlugin implements Listener {
 					if(!Methods.hasPermission(sender, "info", true)) return true;
 					if(args.length == 1) {
 						if(!(sender instanceof Player)) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+							sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 							return true;
 						}
 						Player player = (Player) sender;
@@ -250,7 +247,7 @@ public class Main extends JavaPlugin implements Listener {
 								return true;
 							}
 						}
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 						return true;
 					}
 				}
@@ -270,7 +267,7 @@ public class Main extends JavaPlugin implements Listener {
 								}
 							}
 							if(category == null) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+								sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 								return true;
 							}
 						}
@@ -319,11 +316,12 @@ public class Main extends JavaPlugin implements Listener {
 							book = LostBook.getLostBook(category, 1);
 						}
 						loc.getWorld().dropItemNaturally(loc, book);
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Spawned-Book")
-						.replaceAll("%World%", loc.getWorld().getName()).replaceAll("%world%", loc.getWorld().getName())
-						.replaceAll("%X%", loc.getBlockX() + "").replaceAll("%x%", loc.getBlockX() + "")
-						.replaceAll("%Y%", loc.getBlockY() + "").replaceAll("%y%", loc.getBlockY() + "")
-						.replaceAll("%Z%", loc.getBlockZ() + "").replaceAll("%z%", loc.getBlockZ() + "")));
+						HashMap<String, String> placeholders = new HashMap<>();
+						placeholders.put("%world%", loc.getWorld().getName());
+						placeholders.put("%x%", loc.getBlockX() + "");
+						placeholders.put("%y%", loc.getBlockY() + "");
+						placeholders.put("%z%", loc.getBlockZ() + "");
+						sender.sendMessage(Messages.SPAWNED_BOOK.getMessage(placeholders));
 						return true;
 					}
 					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/ce Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#]"));
@@ -334,15 +332,15 @@ public class Main extends JavaPlugin implements Listener {
 					if(args.length >= 2) {// /ce LostBook <Category> [Amount] [Player]
 						if(args.length <= 3) {
 							if(!(sender instanceof Player)) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+								sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 								return true;
 							}
 						}
 						int amount = 1;
 						if(args.length >= 3) {
 							if(!Methods.isInt(args[2])) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+								sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
 								return true;
 							}
 							amount = Integer.parseInt(args[2]);
@@ -354,20 +352,21 @@ public class Main extends JavaPlugin implements Listener {
 						}else {
 							player = (Player) sender;
 						}
-						String cat = args[1];
+						String category = args[1];
 						for(String C : config.getConfigurationSection("Categories").getKeys(false)) {
-							if(cat.equalsIgnoreCase(C)) {
-								cat = C;
+							if(category.equalsIgnoreCase(C)) {
+								category = C;
 								if(Methods.isInvFull(player)) {
-									player.getWorld().dropItemNaturally(player.getLocation(), LostBook.getLostBook(cat, amount));
+									player.getWorld().dropItemNaturally(player.getLocation(), LostBook.getLostBook(category, amount));
 								}else {
-									player.getInventory().addItem(LostBook.getLostBook(cat, amount));
+									player.getInventory().addItem(LostBook.getLostBook(category, amount));
 								}
 								return true;
 							}
 						}
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Category")
-						.replaceAll("%Category%", cat).replaceAll("%category%", cat)));
+						HashMap<String, String> placeholders = new HashMap<>();
+						placeholders.put("%category%", category);
+						sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
 						return true;
 					}
 					sender.sendMessage(Methods.getPrefix() + Methods.color("&c/ce LostBook <Category> [Amount] [Player]"));
@@ -378,14 +377,14 @@ public class Main extends JavaPlugin implements Listener {
 					int amount = 1;
 					if(args.length <= 2) {
 						if(!(sender instanceof Player)) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+							sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 							return true;
 						}
 					}
 					if(args.length >= 2) {
 						if(!Methods.isInt(args[1])) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-							.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
+							sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+							.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1]));
 							return true;
 						}
 						amount = Integer.parseInt(args[1]);
@@ -398,15 +397,15 @@ public class Main extends JavaPlugin implements Listener {
 						player = (Player) sender;
 					}
 					if(Methods.isInvFull(player)) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Inventory-Full")));
+						sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
 						return true;
 					}
 					player.getInventory().addItem(Scrambler.getScramblers(amount));
-					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Give-Scrambler-Crystal")
-					.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")
-					.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-					player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Get-Scrambler-Crystal")
-					.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
+					HashMap<String, String> placeholders = new HashMap<>();
+					placeholders.put("%amount%", amount + "");
+					placeholders.put("%player%", player.getName());
+					sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
+					player.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Crystal") || args[0].equalsIgnoreCase("C")) {// /ce Crystal [Amount] [Player]
@@ -414,14 +413,14 @@ public class Main extends JavaPlugin implements Listener {
 					int amount = 1;
 					if(args.length <= 2) {
 						if(!(sender instanceof Player)) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+							sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 							return true;
 						}
 					}
 					if(args.length >= 2) {
 						if(!Methods.isInt(args[1])) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-							.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1])));
+							sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+							.replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1]));
 							return true;
 						}
 						amount = Integer.parseInt(args[1]);
@@ -434,15 +433,15 @@ public class Main extends JavaPlugin implements Listener {
 						player = (Player) sender;
 					}
 					if(Methods.isInvFull(player)) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Inventory-Full")));
+						sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
 						return true;
 					}
 					player.getInventory().addItem(ProtectionCrystal.getCrystals(amount));
-					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Give-Protection-Crystal")
-					.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")
-					.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-					player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Get-Protection-Crystal")
-					.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
+					HashMap<String, String> placeholders = new HashMap<>();
+					placeholders.put("%amount%", amount + "");
+					placeholders.put("%player%", player.getName());
+					sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
+					player.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Dust")) {// /ce Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent]
@@ -453,14 +452,14 @@ public class Main extends JavaPlugin implements Listener {
 						int percent = 0;
 						if(args.length == 2) {
 							if(!(sender instanceof Player)) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+								sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 								return true;
 							}
 						}
 						if(args.length >= 3) {
 							if(!Methods.isInt(args[2])) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+								sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
 								return true;
 							}
 							amount = Integer.parseInt(args[2]);
@@ -470,14 +469,14 @@ public class Main extends JavaPlugin implements Listener {
 							player = Methods.getPlayer(args[3]);
 						}else {
 							if(!(sender instanceof Player)) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+								sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 								return true;
 							}
 						}
 						if(args.length >= 5) {
 							if(!Methods.isInt(args[4])) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-								.replaceAll("%Arg%", args[4]).replaceAll("%arg%", args[4])));
+								sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+								.replaceAll("%Arg%", args[4]).replaceAll("%arg%", args[4]));
 								return true;
 							}
 							percent = Integer.parseInt(args[4]);
@@ -489,11 +488,24 @@ public class Main extends JavaPlugin implements Listener {
 								}else {
 									player.getInventory().addItem(dust.getDust(amount));
 								}
-								player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Get-" + dust.getName() + "")
-								.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Give-" + dust.getName() + "")
-								.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")
-								.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
+								HashMap<String, String> placeholders = new HashMap<>();
+								placeholders.put("%amount%", amount + "");
+								placeholders.put("%player%", player.getName());
+								Messages message;
+								switch(dust) {
+									case SUCCESS_DUST:
+										player.sendMessage(Messages.GET_SUCCESS_DUST.getMessage(placeholders));
+										sender.sendMessage(Messages.GIVE_SUCCESS_DUST.getMessage(placeholders));
+										break;
+									case DESTROY_DUST:
+										player.sendMessage(Messages.GET_DESTROY_DUST.getMessage(placeholders));
+										sender.sendMessage(Messages.GIVE_DESTROY_DUST.getMessage(placeholders));
+										break;
+									case MYSTERY_DUST:
+										player.sendMessage(Messages.GET_MYSTERY_DUST.getMessage(placeholders));
+										sender.sendMessage(Messages.GIVE_MYSTERY_DUST.getMessage(placeholders));
+										break;
+								}
 								return true;
 							}
 						}
@@ -508,8 +520,8 @@ public class Main extends JavaPlugin implements Listener {
 						String name = sender.getName();
 						if(args.length >= 3) {
 							if(!Methods.isInt(args[2])) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+								sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+								.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
 								return true;
 							}
 							i = Integer.parseInt(args[2]);
@@ -519,7 +531,7 @@ public class Main extends JavaPlugin implements Listener {
 							if(!Methods.isOnline(name, sender)) return true;
 						}else {
 							if(!(sender instanceof Player)) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+								sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 								return true;
 							}
 						}
@@ -535,7 +547,7 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				if(args[0].equalsIgnoreCase("Remove")) {
 					if(!(sender instanceof Player)) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+						sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 						return true;
 					}
 					if(args.length != 2) {
@@ -562,11 +574,11 @@ public class Main extends JavaPlugin implements Listener {
 						}
 					}
 					if(!T) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 						return true;
 					}
 					if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Doesnt-Have-Item-In-Hand")));
+						sender.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
 						return true;
 					}
 					ItemStack item = player.getInventory().getItemInMainHand();
@@ -579,19 +591,20 @@ public class Main extends JavaPlugin implements Listener {
 					}else {
 						if(ce.hasEnchantment(item, en)) {
 							Methods.setItemInHand(player, ce.removeEnchantment(item, en));
-							String m = Methods.getPrefix() + Methods.color(msg.getString("Messages.Remove-Enchantment")
-							.replaceAll("%Enchantment%", en.getCustomName()).replaceAll("%enchantment%", en.getCustomName()));
-							player.sendMessage(m);
+							HashMap<String, String> placeholders = new HashMap<>();
+							placeholders.put("%enchantment%", en.getCustomName());
+							player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders));
 							return true;
 						}
 					}
-					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Doesnt-Have-Enchantment")
-					.replaceAll("%Enchantment%", enchantment).replaceAll("%enchantment%", enchantment)));
+					HashMap<String, String> placeholders = new HashMap<>();
+					placeholders.put("%enchantment%", enchantment);
+					sender.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
 					return true;
 				}
 				if(args[0].equalsIgnoreCase("Add")) {
 					if(!(sender instanceof Player)) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+						sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 						return true;
 					}
 					if(args.length <= 1) {
@@ -607,31 +620,31 @@ public class Main extends JavaPlugin implements Listener {
 					String lvl = "1";
 					if(args.length >= 3) {
 						if(!Methods.isInt(args[2])) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-							.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+							sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+							.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
 							return true;
 						}
 						lvl = args[2];
 					}
-					for(Enchantment enc : Enchantment.values()) {
+					for(Enchantment enc : Enchantment.values()) {//Vanilla Enchantments
 						if(args[1].equalsIgnoreCase(enc.getName()) || args[1].equalsIgnoreCase(Methods.getEnchantmentName(enc))) {
 							T = true;
 							isVanilla = true;
 							enchant = enc;
 						}
 					}
-					for(CEnchantment i : ce.getRegisteredEnchantments()) {
+					for(CEnchantment i : ce.getRegisteredEnchantments()) {//Crazy Enchantments
 						if(i.getCustomName().equalsIgnoreCase(args[1])) {
 							T = true;
 							en = i;
 						}
 					}
 					if(!T) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 						return true;
 					}
 					if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Doesnt-Have-Item-In-Hand")));
+						sender.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
 						return false;
 					}
 					if(isVanilla) {
@@ -650,7 +663,7 @@ public class Main extends JavaPlugin implements Listener {
 					}
 					if(args.length <= 2) {
 						if(!(sender instanceof Player)) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+							sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 							return true;
 						}
 					}
@@ -665,15 +678,15 @@ public class Main extends JavaPlugin implements Listener {
 						}else if(args[2].contains("-")) {
 							lvl = Methods.getRandomNumber(args[2]);
 						}else {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-							.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2])));
+							sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+							.replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
 							return true;
 						}
 					}
 					if(args.length >= 4) {
 						if(!Methods.isInt(args[3])) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-Number")
-							.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3])));
+							sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
+							.replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3]));
 							return true;
 						}
 						amount = Integer.parseInt(args[3]);
@@ -683,16 +696,18 @@ public class Main extends JavaPlugin implements Listener {
 						player = Methods.getPlayer(args[4]);
 					}
 					if(ench == null) {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-An-Enchantment")));
+						sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 						return true;
 					}
-					sender.sendMessage(Methods.color(Methods.getPrefix() + msg.getString("Messages.Send-Enchantment-Book").replace("%Player%", player.getName()).replace("%player%", player.getName())));
+					HashMap<String, String> placeholders = new HashMap<>();
+					placeholders.put("%player%", player.getName());
+					sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
 					int Smax = config.getInt("Settings.BlackScroll.SuccessChance.Max");
 					int Smin = config.getInt("Settings.BlackScroll.SuccessChance.Min");
 					int Dmax = config.getInt("Settings.BlackScroll.DestroyChance.Max");
 					int Dmin = config.getInt("Settings.BlackScroll.DestroyChance.Min");
 					CEBook book = new CEBook(ench, lvl, amount);
-					book.setDestoryRate(Methods.percentPick(Dmax, Dmin));
+					book.setDestroyRate(Methods.percentPick(Dmax, Dmin));
 					book.setSuccessRate(Methods.percentPick(Smax, Smin));
 					player.getInventory().addItem(book.buildBook());
 					return true;
@@ -703,107 +718,113 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		if(commandLable.equalsIgnoreCase("gkitz") || commandLable.equalsIgnoreCase("gkits") ||
 		commandLable.equalsIgnoreCase("gkit")) {
-			if(args.length == 0) {
-				if(!(sender instanceof Player)) {
-					sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
+				if(args.length == 0) {
+					if(!(sender instanceof Player)) {
+						sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+						return true;
+					}
+					if(!Methods.hasPermission(sender, "gkitz", true)) return true;
+					GKitzController.openGUI((Player) sender);
 					return true;
-				}
-				if(!Methods.hasPermission(sender, "gkitz", true)) return true;
-				GKitzControler.openGUI((Player) sender);
-				return true;
-			}else {
-				GKitz kit;
+				}else {
+					GKitz kit;
 				Player player;
 				if(args[0].equalsIgnoreCase("reset")) {// /GKitz Reset <Kit> [Player]
 					if(!Methods.hasPermission(sender, "reset", true)) return true;
 					if(args.length >= 2) {
-						if(ce.getGKitFromName(args[1]) != null) {
-							kit = ce.getGKitFromName(args[1]);
-						}else {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-GKit").replaceAll("%Kit%", args[1]).replaceAll("%kit%", args[1])));
-							return true;
-						}
-						if(args.length >= 3) {
+							if(ce.getGKitFromName(args[1]) != null) {
+								kit = ce.getGKitFromName(args[1]);
+							}else {
+								HashMap<String, String> placeholders = new HashMap<>();
+								placeholders.put("%kit%", args[1]);
+								placeholders.put("%gkit%", args[1]);
+								sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
+								return true;
+							}
+							if(args.length >= 3) {
 							if(!Methods.isOnline(args[2], sender)) {
 								return true;
 							}else {
 								player = Methods.getPlayer(args[2]);
-							}
-						}else {
-							if(!(sender instanceof Player)) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
-								return true;
+								}
 							}else {
-								player = (Player) sender;
+								if(!(sender instanceof Player)) {
+									sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+									return true;
+								}else {
+									player = (Player) sender;
+								}
 							}
-						}
-						ce.getCEPlayer(player).removeCooldown(kit);
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Reset-GKit")
-						.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())
-						.replaceAll("%GKit%", kit.getName()).replaceAll("%gkit%", kit.getName())));
-						return true;
-					}else {
-						sender.sendMessage(Methods.getPrefix() + Methods.color("&c/GKitz Reset <Kit> [Player]"));
+							ce.getCEPlayer(player).removeCooldown(kit);
+							HashMap<String, String> placeholders = new HashMap<>();
+							placeholders.put("%player%", player.getName());
+							placeholders.put("%gkit%", kit.getName());
+							placeholders.put("%kit%", kit.getName());
+							sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
+							return true;
+						}else {
+							sender.sendMessage(Methods.getPrefix() + Methods.color("&c/GKitz Reset <Kit> [Player]"));
 						return true;
 					}
 				}else {
 					Boolean adminGive = false;// An admin is giving the kit.
-					if(ce.getGKitFromName(args[0]) != null) {// /GKitz [Kit] [Player]
-						kit = ce.getGKitFromName(args[0]);
-					}else {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Not-A-GKit").replaceAll("%Kit%", args[0]).replaceAll("%kit%", args[0])));
-						return true;
-					}
-					if(args.length >= 2) {
+						if(ce.getGKitFromName(args[0]) != null) {// /GKitz [Kit] [Player]
+							kit = ce.getGKitFromName(args[0]);
+						}else {
+							HashMap<String, String> placeholders = new HashMap<>();
+							placeholders.put("%kit%", args[0]);
+							placeholders.put("%gkit%", args[0]);
+							sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
+							return true;
+						}
+						if(args.length >= 2) {
 						if(!Methods.hasPermission(sender, "gkitz", true)) {
 							return true;
 						}else {
 							if(!Methods.isOnline(args[1], sender)) {
-								return true;
-							}else {
-								if(Methods.hasPermission(sender, "crazyenchantments.gkitz.give", true)) {
-									player = Methods.getPlayer(args[1]);// Targeting a plyer.
-									adminGive = true;
-								}else {
 									return true;
+								}else {
+									if(Methods.hasPermission(sender, "crazyenchantments.gkitz.give", true)) {
+										player = Methods.getPlayer(args[1]);// Targeting a player.
+										adminGive = true;
+									}else {
+										return true;
 								}
 							}
-						}
-					}else {
-						if(!(sender instanceof Player)) {
-							sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Players-Only")));
-							return true;
-						}else {
-							player = (Player) sender;// The player is the sender.
-						}
-					}
-					CEPlayer cePlayer = ce.getCEPlayer(player);
-					String name = kit.getDisplayItem().getItemMeta().getDisplayName();
-					if(cePlayer.hasGkitPermission(kit) || adminGive) {
-						if(cePlayer.canUseGKit(kit) || adminGive) {
-							cePlayer.giveGKit(kit);
-							player.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Received-GKit")
-							.replaceAll("%Kit%", name).replaceAll("%kit%", name)));
-							if(adminGive) {
-								sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.Given-GKit")
-								.replaceAll("%Kit%", name).replaceAll("%kit%", name)
-								.replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName())));
-							}else {
-								cePlayer.addCooldown(kit);
 							}
 						}else {
-							sender.sendMessage(Methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(msg.getString("Messages.Still-In-Cooldown"))
-							.replaceAll("%Kit%", name).replaceAll("%kit%", name));
+							if(!(sender instanceof Player)) {
+								sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+								return true;
+							}else {
+								player = (Player) sender;// The player is the sender.
+							}
+						}
+						CEPlayer cePlayer = ce.getCEPlayer(player);
+						String kitName = kit.getDisplayItem().getItemMeta().getDisplayName();
+						HashMap<String, String> placeholders = new HashMap<>();
+						placeholders.put("%player%", player.getName());
+						placeholders.put("%kit%", kitName);
+						if(cePlayer.hasGkitPermission(kit) || adminGive) {
+							if(cePlayer.canUseGKit(kit) || adminGive) {
+								cePlayer.giveGKit(kit);
+								player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+								if(adminGive) {
+									sender.sendMessage(Messages.GIVEN_GKIT.getMessage(placeholders));
+								}else {
+									cePlayer.addCooldown(kit);
+								}
+							}else {
+								sender.sendMessage(Methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+								return true;
+							}
+						}else {
+							sender.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
 							return true;
 						}
-					}else {
-						sender.sendMessage(Methods.getPrefix() + Methods.color(msg.getString("Messages.No-GKit-Permission")
-						.replaceAll("%Kit%", kit.getName()).replaceAll("%kit%", kit.getName())));
 						return true;
 					}
-					return true;
 				}
-			}
 		}
 		return false;
 	}

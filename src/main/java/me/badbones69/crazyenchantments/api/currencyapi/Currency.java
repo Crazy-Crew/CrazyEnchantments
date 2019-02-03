@@ -21,7 +21,7 @@ public enum Currency {
 	}
 	
 	/**
-	 * Checks if it is a compatable curency.
+	 * Checks if it is a compatible currency.
 	 * @param currency The currency name you are checking.
 	 * @return True if it is supported and false if not.
 	 */
@@ -35,7 +35,7 @@ public enum Currency {
 	}
 	
 	/**
-	 * Get a currceny enum.
+	 * Get a currency enum.
 	 * @param currency The currency you want.
 	 * @return The currency enum.
 	 */

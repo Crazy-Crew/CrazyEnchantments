@@ -14,7 +14,7 @@ public class CEBook {
 	private int amount;
 	private int power;
 	private boolean glowing;
-	private int destory_rate;
+	private int destroy_rate;
 	private int success_rate;
 	
 	/**
@@ -31,7 +31,7 @@ public class CEBook {
 		int Smin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
 		int Dmax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
 		int Dmin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
-		this.destory_rate = percentPick(Dmax, Dmin);
+		this.destroy_rate = percentPick(Dmax, Dmin);
 		this.success_rate = percentPick(Smax, Smin);
 	}
 	
@@ -50,7 +50,7 @@ public class CEBook {
 		int Smin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
 		int Dmax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
 		int Dmin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
-		this.destory_rate = percentPick(Dmax, Dmin);
+		this.destroy_rate = percentPick(Dmax, Dmin);
 		this.success_rate = percentPick(Smax, Smin);
 	}
 	
@@ -120,18 +120,18 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param destory_rate Set the destroy rate on the book.
+	 * @param destroy_rate Set the destroy rate on the book.
 	 */
-	public void setDestoryRate(Integer destory_rate) {
-		this.destory_rate = destory_rate;
+	public void setDestroyRate(Integer destroy_rate) {
+		this.destroy_rate = destroy_rate;
 	}
 	
 	/**
 	 * Get the destroy rate on the book.
 	 * @return Destroy rate of the book.
 	 */
-	public int getDestoryRate() {
-		return this.destory_rate;
+	public int getDestroyRate() {
+		return this.destroy_rate;
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class CEBook {
 				}
 			}else {
 				lore.add(Methods.color(l)
-				.replaceAll("%Destroy_Rate%", destory_rate + "").replaceAll("%destroy_rate%", destory_rate + "")
+				.replaceAll("%Destroy_Rate%", destroy_rate + "").replaceAll("%destroy_rate%", destroy_rate + "")
 				.replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_Rate%", success_rate + ""));
 			}
 		}

@@ -5,6 +5,7 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Dust;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
@@ -50,11 +51,7 @@ public class SignControl implements Listener {
 				Location loc = new Location(world, x, y, z);
 				if(Loc.equals(loc)) {
 					if(Methods.isInvFull(player)) {
-						if(!Files.MESSAGES.getFile().contains("Messages.Inventory-Full")) {
-							player.sendMessage(Methods.color("&cYour inventory is to full. Please open up some space to buy that."));
-						}else {
-							player.sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
-						}
+						player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 						return;
 					}
 					List<String> options = new ArrayList<>();
@@ -76,18 +73,18 @@ public class SignControl implements Listener {
 									}else {
 										String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 										if(currency != null) {
+											HashMap<String, String> placeholders = new HashMap<>();
+											placeholders.put("%money_needed%", needed);
+											placeholders.put("%xp%", needed);
 											switch(currency) {
 												case VAULT:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
-													.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+													player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 													break;
 												case XP_LEVEL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
-													.replace("%XP%", needed).replace("%xp%", needed)));
+													player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
 													break;
 												case XP_TOTAL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
-													.replace("%XP%", needed).replace("%xp%", needed)));
+													player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
 													break;
 											}
 										}
@@ -137,18 +134,18 @@ public class SignControl implements Listener {
 									}else {
 										String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 										if(currency != null) {
+											HashMap<String, String> placeholders = new HashMap<>();
+											placeholders.put("%money_needed%", needed);
+											placeholders.put("%xp%", needed);
 											switch(currency) {
 												case VAULT:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Money")
-													.replace("%Money_Needed%", needed).replace("%money_needed%", needed)));
+													player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
 													break;
 												case XP_LEVEL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-XP-Lvls")
-													.replace("%XP%", needed).replace("%xp%", needed)));
+													player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
 													break;
 												case XP_TOTAL:
-													player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Need-More-Total-XP")
-													.replace("%XP%", needed).replace("%xp%", needed)));
+													player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
 													break;
 											}
 										}
@@ -189,7 +186,7 @@ public class SignControl implements Listener {
 				if(Loc.equals(loc)) {
 					Files.SIGNS.getFile().set("Locations." + l, null);
 					Files.SIGNS.saveFile();
-					player.sendMessage(Methods.color(Methods.getPrefix() + Files.MESSAGES.getFile().getString("Messages.Break-Enchantment-Shop-Sign")));
+					player.sendMessage(Messages.BREAK_ENCHANTMENT_SHOP_SIGN.getMessage());
 					return;
 				}
 			}

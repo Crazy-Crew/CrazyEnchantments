@@ -42,7 +42,7 @@ public class DustControl implements Listener {
 							if(book.getItemMeta().hasLore() && dust.getItemMeta().hasLore()) {
 								if(book.getItemMeta().hasDisplayName() && dust.getItemMeta().hasDisplayName()) {
 									if(book.getType() == ce.getEnchantmentBookItem().getType()) {
-										Boolean toggle = false;
+										boolean toggle = false;
 										String name = book.getItemMeta().getDisplayName();
 										for(CEnchantment en : ce.getRegisteredEnchantments()) {
 											if(name.contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
@@ -164,7 +164,7 @@ public class DustControl implements Listener {
 			}
 		}
 		for(String l : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
-			Boolean line = true;
+			boolean line = true;
 			if(l.contains("%Description%") || l.contains("%description%")) {
 				if(enchantment != null) {
 					for(String L : enchantment.getInfoDescription()) {

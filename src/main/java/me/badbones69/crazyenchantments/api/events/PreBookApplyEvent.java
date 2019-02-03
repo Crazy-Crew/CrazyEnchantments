@@ -11,7 +11,7 @@ public class PreBookApplyEvent extends Event implements Cancellable {
 	
 	private Player player;
 	private Integer level;
-	private Boolean destoryed;
+	private Boolean destroyed;
 	private Boolean cancelled;
 	private Boolean successful;
 	private Integer successChance;
@@ -23,7 +23,7 @@ public class PreBookApplyEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	
 	public PreBookApplyEvent(Player player, CEnchantment enchantment, Integer level, ItemStack enchantedItem, ItemStack enchantmentBook,
-	Boolean creativeSuccess, Boolean successful, Integer successChance, Boolean destoryed, Integer destroyChance) {
+	Boolean creativeSuccess, Boolean successful, Integer successChance, Boolean destroyed, Integer destroyChance) {
 		this.level = level;
 		this.player = player;
 		this.enchantment = enchantment;
@@ -32,7 +32,7 @@ public class PreBookApplyEvent extends Event implements Cancellable {
 		this.creativeSuccess = creativeSuccess;
 		this.successful = successful;
 		this.successChance = successChance;
-		this.destoryed = destoryed;
+		this.destroyed = destroyed;
 		this.destroyChance = destroyChance;
 		this.cancelled = false;
 	}
@@ -57,8 +57,8 @@ public class PreBookApplyEvent extends Event implements Cancellable {
 		return enchantmentBook;
 	}
 	
-	public Boolean getDestoryed() {
-		return destoryed;
+	public Boolean getDestroyed() {
+		return destroyed;
 	}
 	
 	public Boolean getSuccessful() {

@@ -5,6 +5,7 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.ArmorType;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 import me.badbones69.crazyenchantments.api.events.BookDestroyEvent;
@@ -76,7 +77,7 @@ public class EnchantmentControl implements Listener {
 						if(book.getType() != ce.getEnchantmentBookItem().getType()) {
 							return;
 						}
-						Boolean t = false;
+						boolean t = false;
 						for(CEnchantment en : ce.getRegisteredEnchantments()) {
 							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
 								t = true;
@@ -100,8 +101,8 @@ public class EnchantmentControl implements Listener {
 									boolean success = successChance(book);
 									boolean destroy = destroyChance(book);
 									int bookPower = ce.getBookPower(book, enchantment);
-									Boolean toggle = false;
-									Boolean lowerLvl = false;
+									boolean toggle = false;
+									boolean lowerLvl = false;
 									if(ce.hasEnchantment(item, enchantment)) {
 										toggle = true;
 										if(ce.getPower(item, enchantment) < bookPower) {
@@ -122,9 +123,10 @@ public class EnchantmentControl implements Listener {
 														if(!bookApplyEvent.isCancelled()) {
 															e.setCurrentItem(ce.addEnchantment(item, enchantment, bookPower));
 															player.setItemOnCursor(new ItemStack(Material.AIR));
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Success")
-															.replaceAll("%Enchantment%", enchantment.getCustomName()).replaceAll("%enchantment%", enchantment.getCustomName())
-															.replaceAll("%Level%", bookPower + "").replaceAll("%level%", bookPower + "")));
+															HashMap<String, String> placeholders = new HashMap<>();
+															placeholders.put("%enchantment%", enchantment.getCustomName());
+															placeholders.put("%level%", bookPower + "");
+															player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
 															player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 														}
 														return;
@@ -135,7 +137,7 @@ public class EnchantmentControl implements Listener {
 															if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
 																if(Methods.isProtected(item)) {
 																	e.setCurrentItem(Methods.removeProtected(item));
-																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Was-Protected")));
+																	player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
 																}else {
 																	ItemStack newItem = ce.removeEnchantment(item, enchantment);
 																	if(e.getInventory().getType() == InventoryType.CRAFTING) {
@@ -144,12 +146,12 @@ public class EnchantmentControl implements Listener {
 																			Bukkit.getPluginManager().callEvent(event);
 																		}
 																	}
-																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Destroyed")));
+																	player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
 																}
 															}else {
 																if(Methods.isProtected(item)) {
 																	e.setCurrentItem(Methods.removeProtected(item));
-																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Was-Protected")));
+																	player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
 																}else {
 																	ItemStack newItem = new ItemStack(Material.AIR);
 																	e.setCurrentItem(newItem);
@@ -159,7 +161,7 @@ public class EnchantmentControl implements Listener {
 																			Bukkit.getPluginManager().callEvent(event);
 																		}
 																	}
-																	player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Destroyed")));
+																	player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
 																}
 															}
 															player.setItemOnCursor(new ItemStack(Material.AIR));
@@ -171,7 +173,7 @@ public class EnchantmentControl implements Listener {
 														Bukkit.getPluginManager().callEvent(bookFailEvent);
 														if(!bookFailEvent.isCancelled()) {
 															player.setItemOnCursor(new ItemStack(Material.AIR));
-															player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Enchantment-Upgrade.Failed")));
+															player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
 															player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 														}
 														return;
@@ -186,7 +188,7 @@ public class EnchantmentControl implements Listener {
 										int total = Methods.getEnchAmount(item);
 										if(!player.hasPermission("crazyenchantments.bypass.limit")) {
 											if(total >= limit) {
-												player.sendMessage(Methods.color(Files.MESSAGES.getFile().getString("Messages.Hit-Enchantment-Max")));
+												player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
 												return;
 											}
 										}
@@ -205,7 +207,7 @@ public class EnchantmentControl implements Listener {
 											}
 										}
 										player.setItemOnCursor(oldItem);
-										player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Book-Works")));
+										player.sendMessage(Messages.BOOK_WORKS.getMessage());
 										player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 										return;
 									}
@@ -213,7 +215,7 @@ public class EnchantmentControl implements Listener {
 										if(Methods.isProtected(item)) {
 											e.setCurrentItem(Methods.removeProtected(item));
 											player.setItemOnCursor(new ItemStack(Material.AIR));
-											player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Was-Protected")));
+											player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
 											player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 											return;
 										}else {
@@ -227,13 +229,13 @@ public class EnchantmentControl implements Listener {
 												}
 											}
 											e.setCurrentItem(oldItem);
-											player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Item-Destroyed")));
+											player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
 										}
 										player.updateInventory();
 										return;
 									}
 								}
-								player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Book-Failed")));
+								player.sendMessage(Messages.BOOK_FAILED.getMessage());
 								player.setItemOnCursor(new ItemStack(Material.AIR));
 								player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
 								player.updateInventory();

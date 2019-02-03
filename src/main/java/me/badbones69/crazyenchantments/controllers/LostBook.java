@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Color;
@@ -16,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LostBook implements Listener {
@@ -51,15 +53,16 @@ public class LostBook implements Listener {
 						if(toggle) {
 							e.setCancelled(true);
 							if(Methods.isInvFull(player)) {
-								player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Inventory-Full")));
+								player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 								return;
 							}
 							Methods.removeItem(item, player);
 							ItemStack book = EnchantmentControl.pick(category);
 							player.getInventory().addItem(book);
 							player.updateInventory();
-							player.sendMessage(Methods.getPrefix() + Methods.color(Files.MESSAGES.getFile().getString("Messages.Clean-Lost-Book")
-							.replaceAll("%Found%", book.getItemMeta().getDisplayName()).replaceAll("%found%", book.getItemMeta().getDisplayName())));
+							HashMap<String, String> placeholders = new HashMap<>();
+							placeholders.put("%found%", book.getItemMeta().getDisplayName());
+							player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
 							if(Files.CONFIG.getFile().contains("Categories." + category + ".LostBook.FireworkToggle")) {
 								if(Files.CONFIG.getFile().contains("Categories." + category + ".LostBook.FireworkColors")) {
 									if(Files.CONFIG.getFile().getBoolean("Categories." + category + ".LostBook.FireworkToggle")) {

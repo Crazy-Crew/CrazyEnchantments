@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 public class CurrencyAPI {
 	
 	/**
-	 * Get the amount that a player has from a spesific currency.
+	 * Get the amount that a player has from a specific currency.
 	 * @param player The player you wish to get the amount from.
 	 * @param currency The currency you wish to get from.
 	 * @return The amount that the player has of that currency.
@@ -72,9 +72,9 @@ public class CurrencyAPI {
 	}
 	
 	/**
-	 * Checks if the player has enought of a currency.
+	 * Checks if the player has enough of a currency.
 	 * @param player The player you are checking.
-	 * @param currency The currencoy you wish to check.
+	 * @param currency The currency you wish to check.
 	 * @param cost The cost of the item you are checking.
 	 * @return True if they have enough to buy it or false if they don't.
 	 */

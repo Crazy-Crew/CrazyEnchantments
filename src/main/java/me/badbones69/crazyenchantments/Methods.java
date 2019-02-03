@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.controllers.FireworkDamageAPI;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
@@ -68,7 +69,7 @@ public class Methods {
 			return true;
 		}else {
 			if(toggle) {
-				player.sendMessage(getPrefix() + color(Files.MESSAGES.getFile().getString("Messages.No-Perm")));
+				player.sendMessage(Messages.NO_PERMISSION.getMessage());
 			}
 			return false;
 		}
@@ -81,7 +82,7 @@ public class Methods {
 				return true;
 			}else {
 				if(toggle) {
-					player.sendMessage(getPrefix() + color(Files.MESSAGES.getFile().getString("Messages.No-Perm")));
+					player.sendMessage(Messages.NO_PERMISSION.getMessage());
 				}
 				return false;
 			}
@@ -262,6 +263,10 @@ public class Methods {
 		return color(Files.CONFIG.getFile().getString("Settings.Prefix"));
 	}
 	
+	public static String getPrefix(String string) {
+		return color(Files.CONFIG.getFile().getString("Settings.Prefix") + string);
+	}
+	
 	public static boolean isInt(String s) {
 		try {
 			Integer.parseInt(s);
@@ -289,7 +294,7 @@ public class Methods {
 				return true;
 			}
 		}
-		p.sendMessage(getPrefix() + color(Files.MESSAGES.getFile().getString("Messages.Not-Online")));
+		p.sendMessage(Messages.NOT_ONLINE.getMessage());
 		return false;
 	}
 	

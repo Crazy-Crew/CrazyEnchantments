@@ -72,7 +72,7 @@ public class Scrambler implements Listener {
 			Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min"));
 			int S = Methods.percentPick(Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Max"),
 			Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Min"));
-			eBook.setDestoryRate(D);
+			eBook.setDestroyRate(D);
 			eBook.setSuccessRate(S);
 			newBook = eBook.buildBook();
 		}

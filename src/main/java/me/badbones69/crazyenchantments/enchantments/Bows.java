@@ -38,7 +38,7 @@ public class Bows implements Listener {
 		if(e.isCancelled()) return;
 		ItemStack bow = e.getBow();
 		if(ce.hasEnchantments(bow)) {
-			Boolean hasEnchantments = false;
+			boolean hasEnchantments = false;
 			ArrayList<CEnchantments> enchants = new ArrayList<>();
 			for(CEnchantments ench : getEnchantments()) {
 				if(e.getProjectile() instanceof Arrow) {
