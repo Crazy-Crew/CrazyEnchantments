@@ -59,7 +59,9 @@ public class Main extends JavaPlugin implements Listener {
 		pm.registerEvents(this, this);
 		pm.registerEvents(new ShopControler(), this);
 		pm.registerEvents(new InfoGUIControl(), this);
-		pm.registerEvents(new GKitzControler(), this);
+		if(ce.isGkitzEnabled()) {
+			pm.registerEvents(new GKitzController(), this);
+		}
 		pm.registerEvents(new LostBook(), this);
 		pm.registerEvents(new EnchantmentControl(), this);
 		pm.registerEvents(new SignControl(), this);
@@ -718,6 +720,7 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		if(commandLable.equalsIgnoreCase("gkitz") || commandLable.equalsIgnoreCase("gkits") ||
 		commandLable.equalsIgnoreCase("gkit")) {
+			if(ce.isGkitzEnabled()) {
 				if(args.length == 0) {
 					if(!(sender instanceof Player)) {
 						sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
@@ -728,10 +731,10 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}else {
 					GKitz kit;
-				Player player;
-				if(args[0].equalsIgnoreCase("reset")) {// /GKitz Reset <Kit> [Player]
-					if(!Methods.hasPermission(sender, "reset", true)) return true;
-					if(args.length >= 2) {
+					Player player;
+					if(args[0].equalsIgnoreCase("reset")) {// /GKitz Reset <Kit> [Player]
+						if(!Methods.hasPermission(sender, "reset", true)) return true;
+						if(args.length >= 2) {
 							if(ce.getGKitFromName(args[1]) != null) {
 								kit = ce.getGKitFromName(args[1]);
 							}else {
@@ -742,10 +745,10 @@ public class Main extends JavaPlugin implements Listener {
 								return true;
 							}
 							if(args.length >= 3) {
-							if(!Methods.isOnline(args[2], sender)) {
-								return true;
-							}else {
-								player = Methods.getPlayer(args[2]);
+								if(!Methods.isOnline(args[2], sender)) {
+									return true;
+								}else {
+									player = Methods.getPlayer(args[2]);
 								}
 							}else {
 								if(!(sender instanceof Player)) {
@@ -764,10 +767,10 @@ public class Main extends JavaPlugin implements Listener {
 							return true;
 						}else {
 							sender.sendMessage(Methods.getPrefix() + Methods.color("&c/GKitz Reset <Kit> [Player]"));
-						return true;
-					}
-				}else {
-					Boolean adminGive = false;// An admin is giving the kit.
+							return true;
+						}
+					}else {
+						Boolean adminGive = false;// An admin is giving the kit.
 						if(ce.getGKitFromName(args[0]) != null) {// /GKitz [Kit] [Player]
 							kit = ce.getGKitFromName(args[0]);
 						}else {
@@ -778,10 +781,10 @@ public class Main extends JavaPlugin implements Listener {
 							return true;
 						}
 						if(args.length >= 2) {
-						if(!Methods.hasPermission(sender, "gkitz", true)) {
-							return true;
-						}else {
-							if(!Methods.isOnline(args[1], sender)) {
+							if(!Methods.hasPermission(sender, "gkitz", true)) {
+								return true;
+							}else {
+								if(!Methods.isOnline(args[1], sender)) {
 									return true;
 								}else {
 									if(Methods.hasPermission(sender, "crazyenchantments.gkitz.give", true)) {
@@ -789,8 +792,8 @@ public class Main extends JavaPlugin implements Listener {
 										adminGive = true;
 									}else {
 										return true;
+									}
 								}
-							}
 							}
 						}else {
 							if(!(sender instanceof Player)) {
@@ -825,6 +828,7 @@ public class Main extends JavaPlugin implements Listener {
 						return true;
 					}
 				}
+			}
 		}
 		return false;
 	}

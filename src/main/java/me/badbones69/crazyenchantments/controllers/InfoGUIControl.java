@@ -34,17 +34,18 @@ public class InfoGUIControl implements Listener {
 					if(item.hasItemMeta()) {
 						if(item.getItemMeta().hasDisplayName()) {
 							Player player = (Player) e.getWhoClicked();
-							if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info.Back.Right"))) || item.getItemMeta().getDisplayName().equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info.Back.Left")))) {
+							String displayName = item.getItemMeta().getDisplayName();
+							if(displayName.equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info.Back.Right"))) || displayName.equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info.Back.Left")))) {
 								openInfo(player);
 								return;
 							}
 							for(InfoType ty : InfoType.getTypes()) {
 								String type = ty.getName();
-								if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info." + type + ".Name")))) {
+								if(displayName.equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info." + type + ".Name")))) {
 									openInfo(player, ty);
 								}
 							}
-							if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info.Other.Name")))) {
+							if(displayName.equals(Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Categories-Info.Other.Name")))) {
 								Inventory in = Bukkit.createInventory(null, 18, Methods.color(Files.MESSAGES.getFile().getString("Messages.InfoGUI.Inventory.Name")));
 								in.setItem(2, new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.BlackScroll.Item")).setName(Files.CONFIG.getFile().getString("Settings.BlackScroll.Name")).setLore(Files.MESSAGES.getFile().getStringList("Messages.InfoGUI.Black-Scroll")).build());
 								in.setItem(11, new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.WhiteScroll.Item")).setName(Files.CONFIG.getFile().getString("Settings.WhiteScroll.Name")).setLore(Files.MESSAGES.getFile().getStringList("Messages.InfoGUI.White-Scroll")).build());
@@ -62,42 +63,42 @@ public class InfoGUIControl implements Listener {
 								return;
 							}
 							String bar = Methods.color("&a&m------------------------------------------------");
-							if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.Name")))) {
+							if(displayName.equals(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.Name")))) {
 								player.closeInventory();
 								player.sendMessage(bar);
 								player.sendMessage(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.Name")));
 								for(String lore : Files.MESSAGES.getFile().getStringList("Messages.InfoGUI.BlackSmith"))
 									player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
-							}else if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackScroll.Name")))) {
+							}else if(displayName.equals(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackScroll.Name")))) {
 								player.closeInventory();
 								player.sendMessage(bar);
 								player.sendMessage(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackScroll.Name")));
 								for(String lore : Files.MESSAGES.getFile().getStringList("Messages.InfoGUI.Black-Scroll"))
 									player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
-							}else if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.Name")))) {
+							}else if(displayName.equals(Methods.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.Name")))) {
 								player.closeInventory();
 								player.sendMessage(bar);
 								player.sendMessage(Methods.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.Name")));
 								for(String lore : Files.MESSAGES.getFile().getStringList("Messages.InfoGUI.White-Scroll"))
 									player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
-							}else if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Tinker.Name")))) {
+							}else if(displayName.equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Tinker.Name")))) {
 								player.closeInventory();
 								player.sendMessage(bar);
 								player.sendMessage(Methods.color(Files.CONFIG.getFile().getString("Settings.Tinker.Name")));
 								for(String lore : Files.MESSAGES.getFile().getStringList("Messages.InfoGUI.Tinker"))
 									player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
-							}else if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Name")))) {
+							}else if(displayName.equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Name")))) {
 								player.closeInventory();
 								player.sendMessage(bar);
 								player.sendMessage(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Name")));
 								for(String lore : Files.MESSAGES.getFile().getStringList("Messages.InfoGUI.Success-Dust"))
 									player.sendMessage(Methods.color(lore));
 								player.sendMessage(bar);
-							}else if(item.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Name")))) {
+							}else if(displayName.equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Name")))) {
 								player.closeInventory();
 								player.sendMessage(bar);
 								player.sendMessage(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Name")));

@@ -43,6 +43,7 @@ Messages:
   No-GKit-Permission: '&cYou do not have permission to use the %Kit% GKit.'
   Spawned-Book: '&7You have spawned a book at &6%World%, %X%, %Y%, %Z%&7.'
   Reset-GKit: '&7You have reset %Player%''s %GKit% GKit cooldown.'
+  GKitz-Not-Enabled: '&cGKitz is currently not enabled.'
   Enchantment-Upgrade:
     Success: '&7You have upgraded &6%Enchantment%&7 to level &6%Level%&7.'
     Destroyed: '&cYour upgrade failed and the lower level enchantment was lost.'

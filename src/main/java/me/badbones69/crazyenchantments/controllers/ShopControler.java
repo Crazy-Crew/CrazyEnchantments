@@ -343,7 +343,7 @@ public class ShopControler implements Listener {
 			}
 		}
 		ArrayList<String> options = new ArrayList<>();
-		options.add("GKitz");
+		if(ce.isGkitzEnabled()) options.add("GKitz");//Only adds if the gkit option is enabled.
 		options.add("BlackSmith");
 		options.add("Tinker");
 		options.add("Info");

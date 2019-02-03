@@ -25,6 +25,7 @@ public class CrazyEnchantments {
 	
 	private static CrazyEnchantments instance = new CrazyEnchantments();
 	private Integer rageMaxLevel;
+	private Boolean gkitzToggle;
 	private Boolean breakRageOnDamage;
 	private Boolean enchantStackedItems;
 	private ArrayList<GKitz> gkitz = new ArrayList<>();
@@ -59,6 +60,7 @@ public class CrazyEnchantments {
 			}catch(Exception e) {
 			}
 		}
+		gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled");
 		rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
 		breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
 		enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
@@ -102,17 +104,19 @@ public class CrazyEnchantments {
 				en.registerEnchantment();
 			}
 		}
-		for(String kit : gkit.getConfigurationSection("GKitz").getKeys(false)) {
-			int slot = gkit.getInt("GKitz." + kit + ".Display.Slot");
-			String time = gkit.getString("GKitz." + kit + ".Cooldown");
-			Boolean autoEquip = false;
-			if(gkit.contains("GKitz." + kit + ".Auto-Equip")) {
-				autoEquip = gkit.getBoolean("GKitz." + kit + ".Auto-Equip");
+		if(gkitzToggle) {
+			for(String kit : gkit.getConfigurationSection("GKitz").getKeys(false)) {
+				int slot = gkit.getInt("GKitz." + kit + ".Display.Slot");
+				String time = gkit.getString("GKitz." + kit + ".Cooldown");
+				boolean autoEquip = false;
+				if(gkit.contains("GKitz." + kit + ".Auto-Equip")) {
+					autoEquip = gkit.getBoolean("GKitz." + kit + ".Auto-Equip");
+				}
+				ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString("GKitz." + kit + ".Display.Item")).setName(gkit.getString("GKitz." + kit + ".Display.Name")).setLore(gkit.getStringList("GKitz." + kit + ".Display.Lore")).setGlowing(gkit.getBoolean("GKitz." + kit + ".Display.Glowing")).build();
+				ArrayList<String> commands = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Commands");
+				ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
+				gkitz.add(new GKitz(kit, slot, time, displayItem, getInfoGKit(itemStrings), commands, getKitItems(itemStrings), itemStrings, autoEquip));
 			}
-			ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString("GKitz." + kit + ".Display.Item")).setName(gkit.getString("GKitz." + kit + ".Display.Name")).setLore(gkit.getStringList("GKitz." + kit + ".Display.Lore")).setGlowing(gkit.getBoolean("GKitz." + kit + ".Display.Glowing")).build();
-			ArrayList<String> commands = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Commands");
-			ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
-			gkitz.add(new GKitz(kit, slot, time, displayItem, getInfoGKit(itemStrings), commands, getKitItems(itemStrings), itemStrings, autoEquip));
 		}
 		//Loads the scrolls
 		Scrolls.loadScrolls();
@@ -215,6 +219,14 @@ public class CrazyEnchantments {
 	 */
 	public Plugin getPlugin() {
 		return Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+	}
+	
+	/**
+	 * Check if the gkitz option is enabled.
+	 * @return True if it is on and false if it is off.
+	 */
+	public Boolean isGkitzEnabled() {
+		return gkitzToggle;
 	}
 	
 	/**

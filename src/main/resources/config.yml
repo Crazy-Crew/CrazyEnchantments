@@ -53,6 +53,7 @@ Settings:
       - '&eCost: &e&l$800'
   GKitz: #GKitz GUI option.
     InGUI: false #If you can open the GKitz GUI from the main /ce gui.
+    Enabled: true #If the GKitz option is enabled on the server.
     Slot: 1 #The slot it will be in.
     Item: 'DIAMOND_CHESTPLATE' #The item it is.
     Glowing: true #If the item has a glowing effect.
