@@ -34,11 +34,11 @@ Settings:
 # Lore: <Line 1>,<Line 2>,<Line 3>,<Line 4> - The lore that will go under the enchantments. Split lines with a ','
 # <Enchantment>:<Level> - Choose vanilla enchantments here.
 # <Custom Enchantment>:<Level> - Choose a custom enchantments here.
-# To chose a random level for the custom or vinilla enchantments use like this '<Custom/Enchantment>:<Min Level>-<Max Level>'
+# To chose a random level for the custom or vanilla enchantments use like this '<Custom/Enchantment>:<Min Level>-<Max Level>'
 # Example of this is shows here.
 # Overload:1-5, Hulk:1-5 << this will add Hulk and Overload and pick a random level from 1-5 and set it as the power.
 ###################################
-GKitz: #GKit optons.
+GKitz: #GKit options.
   Hero: #Name of the GKit.
     Display: #All the display option in the gui.
       Slot: 12 #Slot the item is located at in the gui.
@@ -59,6 +59,8 @@ GKitz: #GKit optons.
       - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:&6&lHero Chestplate, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&aA special chestplate worn by a great hero.,&aTake special care of this.'
       - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:&6&lHero Leggings, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&aA special leggings worn by a great hero.,&aTake special care of this.'
       - 'Item:DIAMOND_BOOTS, Amount:1, Name:&6&lHero Boots, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:&aA special boots worn by a great hero.,&aTake special care of this.'
+    Fake-Items: #Items the user doesn't accrual get but can be used to show an item you get from a command.
+      - 'Item:BOOK, Amount:1, Name:&b&lOverLoad V, Lore:&7Gives health boost,&7when you put it on.,'
     Commands: #Is used if you wish to use commands to give other things to players.
       - 'ce book overload 5 1 %Player%'
   PeaceKeeper:
@@ -81,6 +83,8 @@ GKitz: #GKit optons.
       - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:&9&lPeace Keeper Chestplate, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&9A special chestplate worn by a peace keeper.,&9Take special care of this.'
       - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:&9&lPeace Keeper Leggings, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&9A special leggings worn by a peace keeper.,&9Take special care of this.'
       - 'Item:DIAMOND_BOOTS, Amount:1, Name:&9&lPeace Keeper Boots, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:&9A special boots worn by a peace keeper.,&9Take special care of this.'
+    Fake-Items:
+      - 'Item:BOOK, Amount:1, Name:&b&lOverLoad V, Lore:&7Gives health boost,&7when you put it on.,'
     Commands:
       - 'ce book overload 5 1 %Player%'
   Villain:
@@ -103,5 +107,7 @@ GKitz: #GKit optons.
       - 'Item:DIAMOND_CHESTPLATE, Amount:1, Name:&4&lVillain Chestplate, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&cA special chestplate worn by a evil villain.,&cTake special care of this.'
       - 'Item:DIAMOND_LEGGINGS, Amount:1, Name:&4&lVillain Leggings, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Lore:&cA special leggings worn by a evil villain.,&cTake special care of this.'
       - 'Item:DIAMOND_BOOTS, Amount:1, Name:&4&lVillain Boots, Protection:4, Thorns:3, Aqua_Affinity:1, Overload:0-5, Hulk:2-5, Gears:0-3, Rocket:1, Anti-Gravity:0-5, Lore:&cA special boots worn by a evil villain.,&cTake special care of this.'
+    Fake-Items:
+      - 'Item:BOOK, Amount:1, Name:&b&lOverLoad V, Lore:&7Gives health boost,&7when you put it on.,'
     Commands:
       - 'ce book overload 5 1 %Player%'

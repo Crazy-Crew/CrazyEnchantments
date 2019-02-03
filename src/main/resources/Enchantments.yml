@@ -76,7 +76,7 @@ Enchantments:
       Base: 5
       Increase: 5
     Info:
-      Name: '&e&lPiercing &7(&bI-&bIII&7)' 
+      Name: '&e&lPiercing &7(&bI-&bIII&7)'
       Description:
         - '&7Has a chance to deal'
         - '&7double damage to your enemy.'

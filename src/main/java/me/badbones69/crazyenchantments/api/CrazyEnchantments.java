@@ -108,14 +108,13 @@ public class CrazyEnchantments {
 			for(String kit : gkit.getConfigurationSection("GKitz").getKeys(false)) {
 				int slot = gkit.getInt("GKitz." + kit + ".Display.Slot");
 				String time = gkit.getString("GKitz." + kit + ".Cooldown");
-				boolean autoEquip = false;
-				if(gkit.contains("GKitz." + kit + ".Auto-Equip")) {
-					autoEquip = gkit.getBoolean("GKitz." + kit + ".Auto-Equip");
-				}
+				boolean autoEquip = gkit.getBoolean("GKitz." + kit + ".Auto-Equip");
 				ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString("GKitz." + kit + ".Display.Item")).setName(gkit.getString("GKitz." + kit + ".Display.Name")).setLore(gkit.getStringList("GKitz." + kit + ".Display.Lore")).setGlowing(gkit.getBoolean("GKitz." + kit + ".Display.Glowing")).build();
 				ArrayList<String> commands = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Commands");
 				ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
-				gkitz.add(new GKitz(kit, slot, time, displayItem, getInfoGKit(itemStrings), commands, getKitItems(itemStrings), itemStrings, autoEquip));
+				ArrayList<ItemStack> previewItems = getInfoGKit(itemStrings);
+				previewItems.addAll(getInfoGKit((ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Fake-Items")));
+				gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, getKitItems(itemStrings), itemStrings, autoEquip));
 			}
 		}
 		//Loads the scrolls
@@ -1129,39 +1128,39 @@ public class CrazyEnchantments {
 	
 	private ArrayList<ItemStack> getInfoGKit(ArrayList<String> itemStrings) {
 		ArrayList<ItemStack> items = new ArrayList<>();
-		for(String i : itemStrings) {
+		for(String item : itemStrings) {
 			String type = "";
 			int amount = 0;
 			String name = "";
 			ArrayList<String> lore = new ArrayList<>();
 			ArrayList<String> customEnchantments = new ArrayList<>();
 			HashMap<Enchantment, Integer> enchantments = new HashMap<>();
-			for(String d : i.split(", ")) {
-				if(d.startsWith("Item:")) {
-					d = d.replace("Item:", "");
-					type = d;
-				}else if(d.startsWith("Amount:")) {
-					d = d.replace("Amount:", "");
-					if(Methods.isInt(d)) {
-						amount = Integer.parseInt(d);
+			for(String sub : item.split(", ")) {
+				if(sub.startsWith("Item:")) {
+					sub = sub.replace("Item:", "");
+					type = sub;
+				}else if(sub.startsWith("Amount:")) {
+					sub = sub.replace("Amount:", "");
+					if(Methods.isInt(sub)) {
+						amount = Integer.parseInt(sub);
 					}
-				}else if(d.startsWith("Name:")) {
-					d = d.replaceAll("Name:", "");
-					name = d;
-				}else if(d.startsWith("Lore:")) {
-					d = d.replace("Lore:", "");
-					if(d.contains(",")) {
-						lore.addAll(Arrays.asList(d.split(",")));
+				}else if(sub.startsWith("Name:")) {
+					sub = sub.replaceAll("Name:", "");
+					name = sub;
+				}else if(sub.startsWith("Lore:")) {
+					sub = sub.replace("Lore:", "");
+					if(sub.contains(",")) {
+						lore.addAll(Arrays.asList(sub.split(",")));
 					}else {
-						lore.add(d);
+						lore.add(sub);
 					}
 				}else {
 					for(Enchantment en : Enchantment.values()) {
-						if(d.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
-						Enchantment.getByName(d.split(":")[0]) != null) {
-							String power = d.split(":")[1];
+						if(sub.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
+						Enchantment.getByName(sub.split(":")[0]) != null) {
+							String power = sub.split(":")[1];
 							if(power.contains("-")) {
-								customEnchantments.add("&7" + d.split(":")[0] + " " + power);
+								customEnchantments.add("&7" + sub.split(":")[0] + " " + power);
 							}else {
 								enchantments.put(en, Integer.parseInt(power));
 							}
@@ -1169,9 +1168,9 @@ public class CrazyEnchantments {
 						}
 					}
 					for(CEnchantment en : getRegisteredEnchantments()) {
-						if(d.split(":")[0].equalsIgnoreCase(en.getName()) ||
-						d.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
-							customEnchantments.add(en.getColor() + en.getCustomName() + " " + d.split(":")[1]);
+						if(sub.split(":")[0].equalsIgnoreCase(en.getName()) ||
+						sub.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
+							customEnchantments.add(en.getColor() + en.getCustomName() + " " + sub.split(":")[1]);
 							break;
 						}
 					}
@@ -1184,8 +1183,7 @@ public class CrazyEnchantments {
 	}
 	
 	private Integer pickLevel(int min, int max) {
-		max++;
-		return min + new Random().nextInt(max - min);
+		return min + new Random().nextInt((max + 1) - min);
 	}
 	
 }
