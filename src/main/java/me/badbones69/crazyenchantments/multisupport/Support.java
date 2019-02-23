@@ -229,6 +229,7 @@ public class Support {
 		ASKYBLOCK("ASkyBlock"),
 		KINGDOMS("Kingdoms"),
 		SILK_SPAWNERS("SilkSpawners"),
+		SILK_SPAWNERS_CANDC("SilkSpawners"),
 		SPARTAN("Spartan"),
 		MOB_STACKER("MobStacker"),
 		MOB_STACKER_2("MobStacker2"),
@@ -250,22 +251,30 @@ public class Support {
 		
 		public Boolean isPluginLoaded() {
 			Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(name);
-			if(this == SupportedPlugins.FACTIONS_MASSIVE_CRAFT) {
-				if(plugin != null) {
+			if(plugin != null) {
+				if(this == SupportedPlugins.SILK_SPAWNERS) {
+					if(plugin.getDescription().getAuthors() != null) {
+						return plugin.getDescription().getAuthors().contains("xGhOsTkiLLeRx");
+					}
+					return false;
+				}else if(this == SupportedPlugins.SILK_SPAWNERS_CANDC) {
+					if(plugin.getDescription().getAuthors() != null) {
+						return plugin.getDescription().getAuthors().contains("CandC_9_12");
+					}
+					return false;
+				}else if(this == SupportedPlugins.FACTIONS_MASSIVE_CRAFT) {
 					if(plugin.getDescription() != null) {
 						if(plugin.getDescription().getWebsite() != null) {
 							return plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions");
 						}
 					}
-				}
-				return false;
-			}else if(this == SupportedPlugins.FACTIONS_UUID) {
-				if(plugin != null) {
+					return false;
+				}else if(this == SupportedPlugins.FACTIONS_UUID) {
 					if(plugin.getDescription().getAuthors() != null) {
 						return plugin.getDescription().getAuthors().contains("drtshock");
 					}
+					return false;
 				}
-				return false;
 			}
 			return plugin != null;
 		}

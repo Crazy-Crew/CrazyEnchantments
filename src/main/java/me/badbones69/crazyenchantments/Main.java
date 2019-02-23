@@ -7,10 +7,7 @@ import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
-import me.badbones69.crazyenchantments.multisupport.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
-import me.badbones69.crazyenchantments.multisupport.SilkSpawners;
-import me.badbones69.crazyenchantments.multisupport.StackMobSupport;
+import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -88,7 +85,10 @@ public class Main extends JavaPlugin implements Listener {
 			pm.registerEvents(new AACSupport(), this);
 		}
 		if(SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) {
-			pm.registerEvents(new SilkSpawners(), this);
+			pm.registerEvents(new SilkSpawnerSupport(), this);
+		}
+		if(SupportedPlugins.SILK_SPAWNERS_CANDC.isPluginLoaded()) {
+			pm.registerEvents(new SilkSpawnersCandcSupport(), this);
 		}
 		if(SupportedPlugins.STACK_MOB.isPluginLoaded()) {
 			pm.registerEvents(new StackMobSupport(), this);

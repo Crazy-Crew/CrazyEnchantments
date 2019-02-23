@@ -6,7 +6,7 @@
 
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments</artifactId>
-    <version>1.8-Dev-Build-v3</version>
+    <version>1.8-Dev-Build-v4</version>
 
     <repositories>
         <repository>
@@ -111,6 +111,13 @@
             <version>5.0.2-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/library/SilkSpawners.jar</systemPath>
+        </dependency>
+        <dependency> <!-- https://www.spigotmc.org/resources/60063 -->
+            <groupId>de.candc</groupId>
+            <artifactId>SilkSpawners</artifactId>
+            <version>1.6</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/library/SilkSpawners candc.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>us.forseth11.feudal.core</groupId>

@@ -16,9 +16,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-public class SilkSpawners implements Listener {
+public class SilkSpawnerSupport implements Listener {
 	
-	private SilkUtil su = SilkUtil.hookIntoSilkSpanwers();
+	private SilkUtil api = SilkUtil.hookIntoSilkSpanwers();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -33,14 +33,14 @@ public class SilkSpawners implements Listener {
 					if(ce.hasEnchantments(item)) {
 						if(ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
 							if(CEnchantments.TELEPATHY.isActivated()) {
-								String mobName = su.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
+								String mobName = api.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
 								if(player.hasPermission("silkspawners.silkdrop." + mobName)) {
-									EnchantmentUseEvent useEnchant = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
-									Bukkit.getPluginManager().callEvent(useEnchant);
-									if(useEnchant.isCancelled()) {
+									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
+									Bukkit.getPluginManager().callEvent(event);
+									if(event.isCancelled()) {
 										return;
 									}
-									ItemStack it = su.newSpawnerItem(e.getEntityID(), su.getCustomSpawnerName(su.getCreatureName(e.getEntityID())), 1, false);
+									ItemStack it = api.newSpawnerItem(e.getEntityID(), api.getCustomSpawnerName(api.getCreatureName(e.getEntityID())), 1, false);
 									if(!Methods.isInvFull(player)) {
 										player.getInventory().addItem(it);
 									}else {
