@@ -615,7 +615,7 @@ public class Main extends JavaPlugin implements Listener {
 					}
 					Player player = (Player) sender;
 					if(!Methods.hasPermission(sender, "add", true)) return true;
-					boolean T = false;
+					boolean foundEnchantment = false;
 					boolean isVanilla = false;
 					Enchantment enchant = Enchantment.LUCK;
 					CEnchantment en = null;
@@ -630,18 +630,18 @@ public class Main extends JavaPlugin implements Listener {
 					}
 					for(Enchantment enc : Enchantment.values()) {//Vanilla Enchantments
 						if(args[1].equalsIgnoreCase(enc.getName()) || args[1].equalsIgnoreCase(Methods.getEnchantmentName(enc))) {
-							T = true;
+							foundEnchantment = true;
 							isVanilla = true;
 							enchant = enc;
 						}
 					}
 					for(CEnchantment i : ce.getRegisteredEnchantments()) {//Crazy Enchantments
 						if(i.getCustomName().equalsIgnoreCase(args[1])) {
-							T = true;
+							foundEnchantment = true;
 							en = i;
 						}
 					}
-					if(!T) {
+					if(!foundEnchantment) {
 						sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 						return true;
 					}
@@ -654,7 +654,7 @@ public class Main extends JavaPlugin implements Listener {
 						it.addUnsafeEnchantment(enchant, Integer.parseInt(lvl));
 						Methods.setItemInHand(player, it);
 					}else {
-						Methods.setItemInHand(player, Methods.addGlow(ce.addEnchantment(player.getInventory().getItemInMainHand(), en, Integer.parseInt(lvl))));
+						Methods.setItemInHand(player, ce.addEnchantment(player.getInventory().getItemInMainHand(), en, Integer.parseInt(lvl)));
 					}
 					return true;
 				}
