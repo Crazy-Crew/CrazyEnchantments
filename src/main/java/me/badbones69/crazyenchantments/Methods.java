@@ -606,7 +606,7 @@ public class Methods {
 			}catch(NoSuchMethodError e) {
 			}
 			try {
-				if(item.getItemMeta().spigot().isUnbreakable()) {
+				if(item.getItemMeta().isUnbreakable()) {
 					return;
 				}
 			}catch(NoSuchMethodError e) {
