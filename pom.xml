@@ -18,10 +18,6 @@
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
-        </repository>
-        <repository>
             <id>bintray-tastybento-maven-repo</id>
             <name>bintray</name>
             <url>http://dl.bintray.com/tastybento/maven-repo</url>
@@ -39,9 +35,9 @@
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <artifactId>spigot-api</artifactId>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <classifier>javadoc</classifier>
         </dependency>
         <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
