@@ -11,6 +11,7 @@ import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -23,6 +24,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -93,6 +95,22 @@ public class Bows implements Listener {
 		if(e.getEntity() instanceof Arrow) {
 			EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
 			if(arrow != null) {
+				if(arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
+					if(CEnchantments.STICKY_SHOT.isActivated()) {
+						//if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
+						Location entityLocation = e.getEntity().getLocation();
+						if(entityLocation.getBlock().getType() == Material.AIR) {
+							entityLocation.getBlock().setType(Material.COBWEB);
+							e.getEntity().remove();
+							new BukkitRunnable() {
+								@Override public void run() {
+									entityLocation.getBlock().setType(Material.AIR);
+								}
+							}.runTaskLater(ce.getPlugin(), 5 * 20);
+						}
+						//}
+					}
+				}
 				if(arrow.getEnchantments().contains(CEnchantments.BOOM)) {
 					if(CEnchantments.BOOM.isActivated()) {
 						if(CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
@@ -134,32 +152,32 @@ public class Bows implements Listener {
 	public void onArrowDamage(EntityDamageByEntityEvent e) {
 		if(e.getDamager() instanceof Arrow) {
 			if(e.getEntity() instanceof LivingEntity) {
-				LivingEntity en = (LivingEntity) e.getEntity();
+				LivingEntity entity = (LivingEntity) e.getEntity();
 				EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
 				if(arrow != null) {
 					ItemStack bow = arrow.getBow();
-					if(Support.isFriendly(arrow.getShooter(), e.getEntity())) {
+					if(Support.isFriendly(arrow.getShooter(), e.getEntity())) {// Damaged player is friendly.
 						if(arrow.hasEnchantment(CEnchantments.DOCTOR)) {
 							if(CEnchantments.DOCTOR.isActivated()) {
 								int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
-								if(en.getHealth() < en.getMaxHealth()) {
-									if(en instanceof Player) {
+								if(entity.getHealth() < entity.getMaxHealth()) {
+									if(entity instanceof Player) {
 										EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()) {
-											if(en.getHealth() + heal < en.getMaxHealth()) {
-												en.setHealth(en.getHealth() + heal);
+											if(entity.getHealth() + heal < entity.getMaxHealth()) {
+												entity.setHealth(entity.getHealth() + heal);
 											}
-											if(en.getHealth() + heal >= en.getMaxHealth()) {
-												en.setHealth(en.getMaxHealth());
+											if(entity.getHealth() + heal >= entity.getMaxHealth()) {
+												entity.setHealth(entity.getMaxHealth());
 											}
 										}
 									}else {
-										if(en.getHealth() + heal < en.getMaxHealth()) {
-											en.setHealth(en.getHealth() + heal);
+										if(entity.getHealth() + heal < entity.getMaxHealth()) {
+											entity.setHealth(entity.getHealth() + heal);
 										}
-										if(en.getHealth() + heal >= en.getMaxHealth()) {
-											en.setHealth(en.getMaxHealth());
+										if(entity.getHealth() + heal >= entity.getMaxHealth()) {
+											entity.setHealth(entity.getMaxHealth());
 										}
 									}
 								}
@@ -167,12 +185,28 @@ public class Bows implements Listener {
 						}
 					}
 					if(!e.isCancelled()) {
-						if(!Support.isFriendly(arrow.getShooter(), e.getEntity())) {
+						if(!Support.isFriendly(arrow.getShooter(), e.getEntity())) {// Damaged player is an enemy.
+							if(arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
+								if(CEnchantments.STICKY_SHOT.isActivated()) {
+									//if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
+									Location entityLocation = entity.getLocation();
+									if(entityLocation.getBlock().getType() == Material.AIR) {
+										entityLocation.getBlock().setType(Material.COBWEB);
+										entity.remove();
+										new BukkitRunnable() {
+											@Override public void run() {
+												entityLocation.getBlock().setType(Material.AIR);
+											}
+										}.runTaskLater(ce.getPlugin(), 5 * 20);
+									}
+									//}
+								}
+							}
 							if(arrow.hasEnchantment(CEnchantments.PULL)) {
 								if(CEnchantments.PULL.isActivated()) {
 									if(CEnchantments.PULL.chanceSuccessful(bow)) {
-										Vector v = arrow.getShooter().getLocation().toVector().subtract(en.getLocation().toVector()).normalize().multiply(3);
-										if(en instanceof Player) {
+										Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
+										if(entity instanceof Player) {
 											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
 											Bukkit.getPluginManager().callEvent(event);
 											Player player = (Player) e.getEntity();
@@ -188,10 +222,10 @@ public class Bows implements Listener {
 												if(SupportedPlugins.AAC.isPluginLoaded()) {
 													AACSupport.exemptPlayerTime(player);
 												}
-												en.setVelocity(v);
+												entity.setVelocity(v);
 											}
 										}else {
-											en.setVelocity(v);
+											entity.setVelocity(v);
 										}
 									}
 								}
@@ -199,14 +233,14 @@ public class Bows implements Listener {
 							if(arrow.hasEnchantment(CEnchantments.ICEFREEZE)) {
 								if(CEnchantments.ICEFREEZE.isActivated()) {
 									if(CEnchantments.ICEFREEZE.chanceSuccessful(bow)) {
-										if(en instanceof Player) {
+										if(entity instanceof Player) {
 											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.ICEFREEZE, bow);
 											Bukkit.getPluginManager().callEvent(event);
 											if(!event.isCancelled()) {
-												en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
+												entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
 											}
 										}else {
-											en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
+											entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
 										}
 									}
 								}
@@ -214,7 +248,7 @@ public class Bows implements Listener {
 							if(arrow.hasEnchantment(CEnchantments.PIERCING)) {
 								if(CEnchantments.PIERCING.isActivated()) {
 									if(CEnchantments.PIERCING.chanceSuccessful(bow)) {
-										if(en instanceof Player) {
+										if(entity instanceof Player) {
 											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PIERCING, bow);
 											Bukkit.getPluginManager().callEvent(event);
 											if(!event.isCancelled()) {
@@ -229,14 +263,14 @@ public class Bows implements Listener {
 							if(arrow.hasEnchantment(CEnchantments.VENOM)) {
 								if(CEnchantments.VENOM.isActivated()) {
 									if(CEnchantments.VENOM.chanceSuccessful(bow)) {
-										if(en instanceof Player) {
+										if(entity instanceof Player) {
 											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.VENOM, bow);
 											Bukkit.getPluginManager().callEvent(event);
 											if(!event.isCancelled()) {
-												en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
+												entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
 											}
 										}else {
-											en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
+											entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
 										}
 									}
 								}
