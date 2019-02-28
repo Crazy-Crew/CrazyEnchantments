@@ -44,8 +44,8 @@ public class Axes implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getPower(item, CEnchantments.BERSERK) + 5) * 20, 1));
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (ce.getPower(item, CEnchantments.BERSERK) + 5) * 20, 0));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
 									}
 								}
 							}
@@ -63,7 +63,7 @@ public class Axes implements Listener {
 						}
 						if(ce.hasEnchantment(item, CEnchantments.FEEDME)) {
 							if(CEnchantments.FEEDME.isActivated()) {
-								int food = 2 * ce.getPower(item, CEnchantments.FEEDME);
+								int food = 2 * ce.getLevel(item, CEnchantments.FEEDME);
 								if(CEnchantments.FEEDME.chanceSuccessful(item)) {
 									if(damager.getFoodLevel() < 20) {
 										EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FEEDME.getEnchantment(), item);
@@ -101,7 +101,7 @@ public class Axes implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getPower(item, CEnchantments.CURSED) + 9) * 20, 1));
+										en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
 									}
 								}
 							}
@@ -112,7 +112,7 @@ public class Axes implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (ce.getPower(item, CEnchantments.DIZZY) + 9) * 20, 0));
+										en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (ce.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
 									}
 								}
 							}
@@ -133,7 +133,7 @@ public class Axes implements Listener {
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.DECAPITATION)) {
 					if(CEnchantments.DECAPITATION.isActivated()) {
-						int power = ce.getPower(item, CEnchantments.DECAPITATION);
+						int power = ce.getLevel(item, CEnchantments.DECAPITATION);
 						if(CEnchantments.DECAPITATION.chanceSuccessful(item)) {
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
 							Bukkit.getPluginManager().callEvent(event);

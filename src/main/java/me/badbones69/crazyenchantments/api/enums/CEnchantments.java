@@ -239,7 +239,7 @@ public enum CEnchantments {
 	 * @param item The item that is being checked.
 	 * @return The level of the enchantment that is on the item.
 	 */
-	public Integer getPower(ItemStack item) {
+	public Integer getLevel(ItemStack item) {
 		return getEnchantment().getPower(item);
 	}
 	
@@ -258,7 +258,7 @@ public enum CEnchantments {
 	 * @return True if the chance was successful and false if not.
 	 */
 	public Boolean chanceSuccessful(ItemStack item) {
-		return ce.getEnchantmentFromName(name).chanceSuccesful(getPower(item));
+		return ce.getEnchantmentFromName(name).chanceSuccesful(getLevel(item));
 	}
 	
 	/**

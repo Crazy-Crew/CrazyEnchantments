@@ -34,7 +34,7 @@ public class Helmets implements Listener {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
-						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, ce.getPower(NewItem, CEnchantments.GLOWING) - 1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, ce.getLevel(NewItem, CEnchantments.GLOWING) - 1));
 					}
 				}
 			}
@@ -43,7 +43,7 @@ public class Helmets implements Listener {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, NewItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
-						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, ce.getPower(NewItem, CEnchantments.MERMAID) - 1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, ce.getLevel(NewItem, CEnchantments.MERMAID) - 1));
 					}
 				}
 			}
@@ -69,7 +69,7 @@ public class Helmets implements Listener {
 			if(ce.hasEnchantments(armor)) {
 				if(ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
 					if(CEnchantments.COMMANDER.isActivated()) {
-						int radius = 4 + ce.getPower(armor, CEnchantments.COMMANDER);
+						int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
 						ArrayList<Player> players = new ArrayList<>();
 						for(Entity en : player.getNearbyEntities(radius, radius, radius)) {
 							if(en instanceof Player) {

@@ -88,7 +88,7 @@ public class ScrollControl implements Listener {
 						for(CEnchantment en : ce.getRegisteredEnchantments()) {
 							if(ce.hasEnchantment(item, en)) {
 								enchants.add(en);
-								lvl.put(en.getName(), ce.getPower(item, en));
+								lvl.put(en.getName(), ce.getLevel(item, en));
 								i = true;
 							}
 						}
@@ -143,7 +143,7 @@ public class ScrollControl implements Listener {
 						top = ce.getCategoryRarity(cat);
 					}
 				}
-				enchants.put(ench, ce.getPower(item, ce.getEnchantmentFromName(ench)));
+				enchants.put(ench, ce.getLevel(item, ce.getEnchantmentFromName(ench)));
 				ce.removeEnchantment(item, ce.getEnchantmentFromName(ench));
 			}
 			categories.put(ench, top);
@@ -155,7 +155,7 @@ public class ScrollControl implements Listener {
 		for(String ench : order) {
 			if(ce.getEnchantmentFromName(ench) != null) {
 				CEnchantment en = ce.getEnchantmentFromName(ench);
-				lore.add(en.getColor() + en.getCustomName() + " " + ce.convertPower(enchants.get(ench)));
+				lore.add(en.getColor() + en.getCustomName() + " " + ce.convertLevelString(enchants.get(ench)));
 			}
 		}
 		if(m.hasLore()) {

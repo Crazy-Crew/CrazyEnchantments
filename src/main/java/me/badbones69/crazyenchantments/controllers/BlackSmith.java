@@ -237,7 +237,7 @@ public class BlackSmith implements Listener {
 			if(Methods.removeColor(mainItem.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(subItem.getItemMeta().getDisplayName()))) {
 				for(CEnchantment en : ce.getRegisteredEnchantments()) {
 					if(mainItem.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
-						int power = ce.getBookPower(mainItem, en);
+						int power = ce.getBookLevel(mainItem, en);
 						int max = Files.ENCHANTMENTS.getFile().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max) {
 							item = new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item")).setName(en.getBookColor() + en.getCustomName() + " " + Methods.getPower(power + 1)).setLore(mainItem.getItemMeta().getLore()).build();
@@ -253,13 +253,13 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
-						if(ce.getPower(mainItem, enchant).equals(ce.getPower(subItem, enchant))) {
+						if(ce.getLevel(mainItem, enchant).equals(ce.getLevel(subItem, enchant))) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
-								dupEnchants.put(enchant.getName(), ce.getPower(mainItem, enchant));
+								dupEnchants.put(enchant.getName(), ce.getLevel(mainItem, enchant));
 							}
 						}else {
-							if(ce.getPower(mainItem, enchant) < ce.getPower(subItem, enchant)) {
-								higherEnchants.put(enchant.getName(), ce.getPower(subItem, enchant));
+							if(ce.getLevel(mainItem, enchant) < ce.getLevel(subItem, enchant)) {
+								higherEnchants.put(enchant.getName(), ce.getLevel(subItem, enchant));
 							}
 						}
 					}
@@ -267,7 +267,7 @@ public class BlackSmith implements Listener {
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(subItem)) {
 					if(!dupEnchants.containsKey(enchant.getName()) && !higherEnchants.containsKey(enchant.getName())) {
 						if(!ce.hasEnchantment(mainItem, enchant)) {
-							newEnchants.put(enchant.getName(), ce.getPower(subItem, enchant));
+							newEnchants.put(enchant.getName(), ce.getLevel(subItem, enchant));
 						}
 					}
 				}
@@ -307,7 +307,7 @@ public class BlackSmith implements Listener {
 			if(Methods.removeColor(mainItem.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(subItem.getItemMeta().getDisplayName()))) {
 				for(CEnchantment en : ce.getRegisteredEnchantments()) {
 					if(ce.getEnchantmentBookEnchantmnet(mainItem) == en) {
-						int power = ce.getBookPower(mainItem, en);
+						int power = ce.getBookLevel(mainItem, en);
 						int max = en.getMaxLevel();
 						if(power + 1 <= max) {
 							total += Files.CONFIG.getFile().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
@@ -325,13 +325,13 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
-						if(ce.getPower(mainItem, enchant).equals(ce.getPower(subItem, enchant))) {
+						if(ce.getLevel(mainItem, enchant).equals(ce.getLevel(subItem, enchant))) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
-								dupEnchants.put(enchant.getName(), ce.getPower(mainItem, enchant));
+								dupEnchants.put(enchant.getName(), ce.getLevel(mainItem, enchant));
 							}
 						}else {
-							if(ce.getPower(mainItem, enchant) < ce.getPower(subItem, enchant)) {
-								higherEnchants.put(enchant.getName(), ce.getPower(subItem, enchant));
+							if(ce.getLevel(mainItem, enchant) < ce.getLevel(subItem, enchant)) {
+								higherEnchants.put(enchant.getName(), ce.getLevel(subItem, enchant));
 							}
 						}
 					}
@@ -339,7 +339,7 @@ public class BlackSmith implements Listener {
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(subItem)) {
 					if(!dupEnchants.containsKey(enchant.getName()) && !higherEnchants.containsKey(enchant.getName())) {
 						if(!ce.hasEnchantment(mainItem, enchant)) {
-							newEnchants.put(enchant.getName(), ce.getPower(subItem, enchant));
+							newEnchants.put(enchant.getName(), ce.getLevel(subItem, enchant));
 						}
 					}
 				}

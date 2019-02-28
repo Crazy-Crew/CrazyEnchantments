@@ -66,7 +66,7 @@ public class Scrambler implements Listener {
 		if(ce.isEnchantmentBook(book)) {
 			CEnchantment en = ce.getEnchantmentBookEnchantmnet(book);
 			String cat = ce.getHighestEnchantmentCategory(en);
-			int lvl = ce.getBookPower(book, en);
+			int lvl = ce.getBookLevel(book, en);
 			CEBook eBook = new CEBook(en, lvl);
 			int D = Methods.percentPick(Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max"),
 			Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min"));

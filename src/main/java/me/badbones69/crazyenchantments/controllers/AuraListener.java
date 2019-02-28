@@ -28,7 +28,7 @@ public class AuraListener implements Listener {
 					if(ce.hasEnchantments(item)) {
 						for(CEnchantments enchant : getAuraEnchantments()) {
 							if(ce.hasEnchantment(item, ce.getEnchantmentFromName(enchant.getName()))) {
-								int power = ce.getPower(item, ce.getEnchantmentFromName(enchant.getName()));
+								int power = ce.getLevel(item, ce.getEnchantmentFromName(enchant.getName()));
 								if(players.size() > 0) {
 									for(Player other : players) {
 										Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, other, enchant, power));
@@ -44,7 +44,7 @@ public class AuraListener implements Listener {
 							for(CEnchantments enchant : getAuraEnchantments()) {
 								if(ce.hasEnchantment(item, ce.getEnchantmentFromName(enchant.getName()))) {
 									Bukkit.getPluginManager().callEvent(new AuraActiveEvent(other, e.getPlayer(), enchant,
-									ce.getPower(item, ce.getEnchantmentFromName(enchant.getName()))));
+									ce.getLevel(item, ce.getEnchantmentFromName(enchant.getName()))));
 								}
 							}
 						}

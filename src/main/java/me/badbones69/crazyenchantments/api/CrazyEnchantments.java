@@ -495,7 +495,7 @@ public class CrazyEnchantments {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(!armor.isSimilar(exclude)) {
 				if(hasEnchantment(armor, enchantment)) {
-					int level = getPower(armor, enchantment);
+					int level = getLevel(armor, enchantment);
 					if(highest < level) {
 						highest = level;
 					}
@@ -503,7 +503,7 @@ public class CrazyEnchantments {
 			}
 		}
 		if(hasEnchantment(include, enchantment)) {
-			int level = getPower(include, enchantment);
+			int level = getLevel(include, enchantment);
 			if(highest < level) {
 				highest = level;
 			}
@@ -523,7 +523,7 @@ public class CrazyEnchantments {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(!armor.isSimilar(item)) {
 				if(hasEnchantment(armor, enchantment)) {
-					int level = getPower(armor, enchantment);
+					int level = getLevel(armor, enchantment);
 					if(highest < level) {
 						highest = level;
 					}
@@ -544,14 +544,14 @@ public class CrazyEnchantments {
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(hasEnchantment(armor, enchantment)) {
-				int level = getPower(armor, enchantment);
+				int level = getLevel(armor, enchantment);
 				if(highest < level) {
 					highest = level;
 				}
 			}
 		}
 		if(hasEnchantment(item, enchantment)) {
-			int level = getPower(item, enchantment);
+			int level = getLevel(item, enchantment);
 			if(highest < level) {
 				highest = level;
 			}
@@ -612,7 +612,7 @@ public class CrazyEnchantments {
 		List<String> lores = new ArrayList<>();
 		HashMap<String, String> enchantments = new HashMap<>();
 		for(CEnchantment en : getEnchantmentsOnItem(item)) {
-			enchantments.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " + convertPower(getPower(item, en))));
+			enchantments.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
 			removeEnchantment(item, en);
 		}
 		ItemMeta meta = item.getItemMeta();
@@ -621,7 +621,7 @@ public class CrazyEnchantments {
 				lores.addAll(item.getItemMeta().getLore());
 			}
 		}
-		enchantments.put(enchant.getName(), Methods.color(enchant.getColor() + enchant.getCustomName() + " " + convertPower(level)));
+		enchantments.put(enchant.getName(), Methods.color(enchant.getColor() + enchant.getCustomName() + " " + convertLevelString(level)));
 		for(String en : enchantments.keySet()) {
 			newLore.add(enchantments.get(en));
 		}
@@ -732,21 +732,21 @@ public class CrazyEnchantments {
 				if(armor != null) {
 					if(!armor.isSimilar(exclude)) {
 						if(hasEnchantment(armor, getEnchantmentFromName(ench.getName()))) {
-							int power = getPower(armor, getEnchantmentFromName(ench.getName()));
+							int level = getLevel(armor, getEnchantmentFromName(ench.getName()));
 							if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
-								if(power > getEnchantmentFromName(ench.getName()).getMaxLevel()) {
-									power = getEnchantmentFromName(ench.getName()).getMaxLevel();
+								if(level > getEnchantmentFromName(ench.getName()).getMaxLevel()) {
+									level = getEnchantmentFromName(ench.getName()).getMaxLevel();
 								}
 							}
 							for(PotionEffectType type : armorEffects.get(enchantment).keySet()) {
 								if(armorEffects.get(ench).containsKey(type)) {
 									if(effects.containsKey(type)) {
 										int updated = effects.get(type);
-										if(updated < (power + armorEffects.get(ench).get(type))) {
-											effects.put(type, power + armorEffects.get(ench).get(type));
+										if(updated < (level + armorEffects.get(ench).get(type))) {
+											effects.put(type, level + armorEffects.get(ench).get(type));
 										}
 									}else {
-										effects.put(type, power + armorEffects.get(ench).get(type));
+										effects.put(type, level + armorEffects.get(ench).get(type));
 									}
 								}
 							}
@@ -836,7 +836,7 @@ public class CrazyEnchantments {
 	 * @return The ItemStack but as a CEBook.
 	 */
 	public CEBook convertToCEBook(ItemStack book) {
-		CEBook ceBook = new CEBook(getEnchantmentBookEnchantmnet(book), getBookPower(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
+		CEBook ceBook = new CEBook(getEnchantmentBookEnchantmnet(book), getBookLevel(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
 		ceBook.setSuccessRate(Methods.getPercent("%Success_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
 		ceBook.setDestroyRate(Methods.getPercent("%Destroy_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
 		ceBook.setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing"));
@@ -895,11 +895,11 @@ public class CrazyEnchantments {
 	
 	/**
 	 *
-	 * @param book The book you are getting the power from.
-	 * @param enchant The enchantment you want the power from.
-	 * @return The power the enchantment has.
+	 * @param book The book you are getting the level from.
+	 * @param enchant The enchantment you want the level from.
+	 * @return The level the enchantment has.
 	 */
-	public Integer getBookPower(ItemStack book, CEnchantment enchant) {
+	public Integer getBookLevel(ItemStack book, CEnchantment enchant) {
 		String line = book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName() + " ", "");
 		if(Methods.isInt(line)) return Integer.parseInt(line);
 		if(line.equalsIgnoreCase("I")) return 1;
@@ -917,12 +917,12 @@ public class CrazyEnchantments {
 	
 	/**
 	 *
-	 * @param item Item you are getting the power from.
-	 * @param enchant The enchantment you want the power from.
-	 * @return The power the enchantment has.
+	 * @param item Item you are getting the level from.
+	 * @param enchant The enchantment you want the level from.
+	 * @return The level the enchantment has.
 	 */
-	public Integer getPower(ItemStack item, CEnchantment enchant) {
-		int power = 0;
+	public Integer getLevel(ItemStack item, CEnchantment enchant) {
+		int level = 0;
 		String line = "";
 		if(item.hasItemMeta()) {
 			if(item.getItemMeta().hasLore()) {
@@ -935,33 +935,33 @@ public class CrazyEnchantments {
 			}
 		}
 		line = line.replace(enchant.getColor() + enchant.getCustomName() + " ", "");
-		if(Methods.isInt(line)) power = Integer.parseInt(line);
-		if(line.equalsIgnoreCase("I")) power = 1;
-		if(line.equalsIgnoreCase("II")) power = 2;
-		if(line.equalsIgnoreCase("III")) power = 3;
-		if(line.equalsIgnoreCase("IV")) power = 4;
-		if(line.equalsIgnoreCase("V")) power = 5;
-		if(line.equalsIgnoreCase("VI")) power = 6;
-		if(line.equalsIgnoreCase("VII")) power = 7;
-		if(line.equalsIgnoreCase("VIII")) power = 8;
-		if(line.equalsIgnoreCase("IX")) power = 9;
-		if(line.equalsIgnoreCase("X")) power = 10;
+		if(Methods.isInt(line)) level = Integer.parseInt(line);
+		if(line.equalsIgnoreCase("I")) level = 1;
+		if(line.equalsIgnoreCase("II")) level = 2;
+		if(line.equalsIgnoreCase("III")) level = 3;
+		if(line.equalsIgnoreCase("IV")) level = 4;
+		if(line.equalsIgnoreCase("V")) level = 5;
+		if(line.equalsIgnoreCase("VI")) level = 6;
+		if(line.equalsIgnoreCase("VII")) level = 7;
+		if(line.equalsIgnoreCase("VIII")) level = 8;
+		if(line.equalsIgnoreCase("IX")) level = 9;
+		if(line.equalsIgnoreCase("X")) level = 10;
 		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
-			if(power > enchant.getMaxLevel()) {
-				power = enchant.getMaxLevel();
+			if(level > enchant.getMaxLevel()) {
+				level = enchant.getMaxLevel();
 			}
 		}
-		return power;
+		return level;
 	}
 	
 	/**
 	 *
-	 * @param item Item you are getting the power from.
-	 * @param enchant The enchantment you want the power from.
-	 * @return The power the enchantment has.
+	 * @param item Item you are getting the level from.
+	 * @param enchant The enchantment you want the level from.
+	 * @return The level the enchantment has.
 	 */
-	public Integer getPower(ItemStack item, CEnchantments enchant) {
-		int power;
+	public Integer getLevel(ItemStack item, CEnchantments enchant) {
+		int level;
 		String line = "";
 		if(item.hasItemMeta()) {
 			if(item.getItemMeta().hasLore()) {
@@ -973,13 +973,13 @@ public class CrazyEnchantments {
 				}
 			}
 		}
-		power = Methods.convertPower(line.replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
+		level = convertLevelInteger(line.replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
 		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
-			if(power > enchant.getEnchantment().getMaxLevel()) {
-				power = enchant.getEnchantment().getMaxLevel();
+			if(level > enchant.getEnchantment().getMaxLevel()) {
+				level = enchant.getEnchantment().getMaxLevel();
 			}
 		}
-		return power;
+		return level;
 	}
 	
 	/**
@@ -1034,19 +1034,70 @@ public class CrazyEnchantments {
 	 * @param i The integer you want to convert.
 	 * @return The integer as a roman numeral if between 1-10 other wise the number as a string.
 	 */
-	public String convertPower(Integer i) {
-		if(i <= 0) return "I";
-		if(i == 1) return "I";
-		if(i == 2) return "II";
-		if(i == 3) return "III";
-		if(i == 4) return "IV";
-		if(i == 5) return "V";
-		if(i == 6) return "VI";
-		if(i == 7) return "VII";
-		if(i == 8) return "VIII";
-		if(i == 9) return "IX";
-		if(i == 10) return "X";
-		return i + "";
+	public String convertLevelString(Integer i) {
+		switch(i) {
+			case 0:
+				return "I";
+			case 1:
+				return "I";
+			case 2:
+				return "II";
+			case 3:
+				return "III";
+			case 4:
+				return "IV";
+			case 5:
+				return "V";
+			case 6:
+				return "VI";
+			case 7:
+				return "VII";
+			case 8:
+				return "VIII";
+			case 9:
+				return "IX";
+			case 10:
+				return "X";
+			default:
+				return i + "";
+			
+		}
+	}
+	
+	/**
+	 * This converts a String into a number if using a roman numeral from I-X.
+	 * @param i The string you want to convert.
+	 * @return The roman numeral as a number.
+	 */
+	public Integer convertLevelInteger(String i) {
+		switch(i) {
+			case "I":
+				return 1;
+			case "II":
+				return 2;
+			case "III":
+				return 3;
+			case "IV":
+				return 4;
+			case "V":
+				return 5;
+			case "VI":
+				return 6;
+			case "VII":
+				return 7;
+			case "VIII":
+				return 8;
+			case "IX":
+				return 9;
+			case "X":
+				return 10;
+			default:
+				if(Methods.isInt(i)) {
+					return Integer.parseInt(i);
+				}else {
+					return 0;
+				}
+		}
 	}
 	
 	private void addCEPlayer(CEPlayer player) {
@@ -1090,12 +1141,12 @@ public class CrazyEnchantments {
 					for(Enchantment en : Enchantment.values()) {
 						if(d.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
 						Enchantment.getByName(d.split(":")[0]) != null) {
-							String power = d.split(":")[1];
-							if(power.contains("-")) {
-								int level = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
+							String level = d.split(":")[1];
+							if(level.contains("-")) {
+								int randomLevel = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
 								Integer.parseInt(d.split(":")[1].split("-")[1]));
-								if(level > 0) {
-									item.addEnchantment(en, level);
+								if(randomLevel > 0) {
+									item.addEnchantment(en, randomLevel);
 								}
 							}else {
 								item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
@@ -1106,12 +1157,12 @@ public class CrazyEnchantments {
 					for(CEnchantment en : getRegisteredEnchantments()) {
 						if(d.split(":")[0].equalsIgnoreCase(en.getName()) ||
 						d.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
-							String power = d.split(":")[1];
-							if(power.contains("-")) {
-								int level = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
+							String level = d.split(":")[1];
+							if(level.contains("-")) {
+								int randomLevel = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
 								Integer.parseInt(d.split(":")[1].split("-")[1]));
-								if(level > 0) {
-									item.addCEEnchantment(en, level);
+								if(randomLevel > 0) {
+									item.addCEEnchantment(en, randomLevel);
 								}
 							}else {
 								item.addCEEnchantment(en, Integer.parseInt(d.split(":")[1]));
@@ -1158,11 +1209,11 @@ public class CrazyEnchantments {
 					for(Enchantment en : Enchantment.values()) {
 						if(sub.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
 						Enchantment.getByName(sub.split(":")[0]) != null) {
-							String power = sub.split(":")[1];
-							if(power.contains("-")) {
-								customEnchantments.add("&7" + sub.split(":")[0] + " " + power);
+							String level = sub.split(":")[1];
+							if(level.contains("-")) {
+								customEnchantments.add("&7" + sub.split(":")[0] + " " + level);
 							}else {
-								enchantments.put(en, Integer.parseInt(power));
+								enchantments.put(en, Integer.parseInt(level));
 							}
 							break;
 						}

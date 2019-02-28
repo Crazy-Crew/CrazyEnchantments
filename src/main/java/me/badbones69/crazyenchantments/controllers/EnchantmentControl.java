@@ -100,12 +100,12 @@ public class EnchantmentControl implements Listener {
 								if(ce.enchantStackedItems() || item.getAmount() == 1) {
 									boolean success = successChance(book);
 									boolean destroy = destroyChance(book);
-									int bookPower = ce.getBookPower(book, enchantment);
+									int bookPower = ce.getBookLevel(book, enchantment);
 									boolean toggle = false;
 									boolean lowerLvl = false;
 									if(ce.hasEnchantment(item, enchantment)) {
 										toggle = true;
-										if(ce.getPower(item, enchantment) < bookPower) {
+										if(ce.getLevel(item, enchantment) < bookPower) {
 											lowerLvl = true;
 										}
 									}

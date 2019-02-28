@@ -125,7 +125,7 @@ public class Armor implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										double heal = ce.getPower(armor, CEnchantments.ENLIGHTENED);
+										double heal = ce.getLevel(armor, CEnchantments.ENLIGHTENED);
 										if(player.getHealth() + heal < player.getMaxHealth()) {
 											player.setHealth(player.getHealth() + heal);
 										}
@@ -142,7 +142,7 @@ public class Armor implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FORTIFY.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5 * 20, ce.getPower(armor, CEnchantments.FORTIFY)));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5 * 20, ce.getLevel(armor, CEnchantments.FORTIFY)));
 									}
 								}
 							}
@@ -153,7 +153,7 @@ public class Armor implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FREEZE.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 1 + ce.getPower(armor, CEnchantments.FREEZE)));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 1 + ce.getLevel(armor, CEnchantments.FREEZE)));
 									}
 								}
 							}
@@ -164,7 +164,7 @@ public class Armor implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MOLTEN.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										damager.setFireTicks((ce.getPower(armor, CEnchantments.MOLTEN) * 2) * 20);
+										damager.setFireTicks((ce.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
 									}
 								}
 							}
@@ -175,7 +175,7 @@ public class Armor implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.PAINGIVER.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 3 * 20, ce.getPower(armor, CEnchantments.PAINGIVER)));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 3 * 20, ce.getLevel(armor, CEnchantments.PAINGIVER)));
 									}
 								}
 							}
@@ -209,7 +209,7 @@ public class Armor implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.VOODOO.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5 * 20, ce.getPower(armor, CEnchantments.VOODOO) - 1));
+										damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5 * 20, ce.getLevel(armor, CEnchantments.VOODOO) - 1));
 									}
 								}
 							}
@@ -231,7 +231,7 @@ public class Armor implements Listener {
 									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.CACTUS.getEnchantment(), armor);
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
-										damager.damage(ce.getPower(armor, CEnchantments.CACTUS));
+										damager.damage(ce.getLevel(armor, CEnchantments.CACTUS));
 									}
 								}
 							}
@@ -265,7 +265,7 @@ public class Armor implements Listener {
 								if(CEnchantments.LEADERSHIP.isActivated()) {
 									if(CEnchantments.LEADERSHIP.chanceSuccessful(armor)) {
 										if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-											int radius = 4 + ce.getPower(armor, CEnchantments.LEADERSHIP);
+											int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
 											int players = 0;
 											for(Entity en : damager.getNearbyEntities(radius, radius, radius)) {
 												if(en instanceof Player) {
@@ -420,7 +420,7 @@ public class Armor implements Listener {
 					if(ce.hasEnchantment(armor, CEnchantments.ANGEL)) {
 						if(CEnchantments.ANGEL.isActivated()) {
 							if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-								int radius = 4 + ce.getPower(armor, CEnchantments.ANGEL);
+								int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
 								for(Entity en : player.getNearbyEntities(radius, radius, radius)) {
 									if(en instanceof Player) {
 										Player o = (Player) en;
@@ -440,7 +440,7 @@ public class Armor implements Listener {
 						if(CEnchantments.HELLFORGED.isActivated()) {
 							if(armor.getDurability() > 0) {
 								if(CEnchantments.HELLFORGED.chanceSuccessful(armor)) {
-									int durribility = armor.getDurability() - ce.getPower(armor, CEnchantments.HELLFORGED);
+									int durribility = armor.getDurability() - ce.getLevel(armor, CEnchantments.HELLFORGED);
 									if(armor.getDurability() > 0) {
 										HellForgedUseEvent event = new HellForgedUseEvent(player, armor);
 										Bukkit.getPluginManager().callEvent(event);
@@ -464,7 +464,7 @@ public class Armor implements Listener {
 						if(CEnchantments.HELLFORGED.isActivated()) {
 							if(item.getDurability() > 0) {
 								if(CEnchantments.HELLFORGED.chanceSuccessful(item)) {
-									int durribility = item.getDurability() - ce.getPower(item, CEnchantments.HELLFORGED);
+									int durribility = item.getDurability() - ce.getLevel(item, CEnchantments.HELLFORGED);
 									if(item.getDurability() > 0) {
 										HellForgedUseEvent event = new HellForgedUseEvent(player, item);
 										Bukkit.getPluginManager().callEvent(event);
@@ -574,7 +574,7 @@ public class Armor implements Listener {
 								if(ce.hasEnchantment(item, CEnchantments.TAMER)) {
 									if(CEnchantments.TAMER.isActivated()) {
 										if(!mobs.containsKey(player)) {
-											int power = ce.getPower(item, CEnchantments.TAMER);
+											int power = ce.getLevel(item, CEnchantments.TAMER);
 											spawnAllies(player, en, EntityType.WOLF, power);
 										}
 									}
@@ -582,7 +582,7 @@ public class Armor implements Listener {
 								if(ce.hasEnchantment(item, CEnchantments.GUARDS)) {
 									if(CEnchantments.GUARDS.isActivated()) {
 										if(!mobs.containsKey(player)) {
-											int power = ce.getPower(item, CEnchantments.GUARDS);
+											int power = ce.getLevel(item, CEnchantments.GUARDS);
 											spawnAllies(player, en, EntityType.IRON_GOLEM, power);
 										}
 									}
@@ -591,7 +591,7 @@ public class Armor implements Listener {
 									if(ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
 										if(CEnchantments.NECROMANCER.isActivated()) {
 											if(!mobs.containsKey(player)) {
-												int power = ce.getPower(item, CEnchantments.NECROMANCER);
+												int power = ce.getLevel(item, CEnchantments.NECROMANCER);
 												spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
 											}
 										}
@@ -599,7 +599,7 @@ public class Armor implements Listener {
 									if(ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
 										if(CEnchantments.INFESTATION.isActivated()) {
 											if(!mobs.containsKey(player)) {
-												int power = ce.getPower(item, CEnchantments.INFESTATION);
+												int power = ce.getLevel(item, CEnchantments.INFESTATION);
 												spawnAllies(player, en, EntityType.ENDERMITE, power * 3);
 												spawnAllies(player, en, EntityType.SILVERFISH, power * 3);
 											}
@@ -629,7 +629,7 @@ public class Armor implements Listener {
 								if(ce.hasEnchantment(item, CEnchantments.TAMER)) {
 									if(CEnchantments.INFESTATION.isActivated()) {
 										if(!mobs.containsKey(player)) {
-											int power = ce.getPower(item, CEnchantments.TAMER);
+											int power = ce.getLevel(item, CEnchantments.TAMER);
 											spawnAllies(player, en, EntityType.WOLF, power);
 										}
 									}
@@ -637,7 +637,7 @@ public class Armor implements Listener {
 								if(ce.hasEnchantment(item, CEnchantments.GUARDS)) {
 									if(CEnchantments.INFESTATION.isActivated()) {
 										if(!mobs.containsKey(player)) {
-											int power = ce.getPower(item, CEnchantments.GUARDS);
+											int power = ce.getLevel(item, CEnchantments.GUARDS);
 											spawnAllies(player, en, EntityType.IRON_GOLEM, power);
 										}
 									}
@@ -646,7 +646,7 @@ public class Armor implements Listener {
 									if(ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
 										if(CEnchantments.INFESTATION.isActivated()) {
 											if(!mobs.containsKey(player)) {
-												int power = ce.getPower(item, CEnchantments.NECROMANCER);
+												int power = ce.getLevel(item, CEnchantments.NECROMANCER);
 												spawnAllies(player, en, EntityType.ZOMBIE, power * 2);
 											}
 										}
@@ -654,7 +654,7 @@ public class Armor implements Listener {
 									if(ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
 										if(CEnchantments.INFESTATION.isActivated()) {
 											if(!mobs.containsKey(player)) {
-												int power = ce.getPower(item, CEnchantments.INFESTATION);
+												int power = ce.getLevel(item, CEnchantments.INFESTATION);
 												spawnAllies(player, en, EntityType.ENDERMITE, power * 3);
 												spawnAllies(player, en, EntityType.SILVERFISH, power * 3);
 											}

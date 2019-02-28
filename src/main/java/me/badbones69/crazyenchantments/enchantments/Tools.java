@@ -77,7 +77,7 @@ public class Tools implements Listener {
 								}else if(ce.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(block.getType())) {
 									if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
 										drop.setType(getOres().get(block.getType()));
-										drop.setAmount(1 + ce.getPower(item, CEnchantments.AUTOSMELT));
+										drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
 										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 											if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
 												drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
@@ -112,7 +112,7 @@ public class Tools implements Listener {
 								}
 								if(ce.hasEnchantment(item, CEnchantments.EXPERIENCE)) {
 									if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-										int power = ce.getPower(item, CEnchantments.EXPERIENCE);
+										int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
 										if(getOres().containsKey(block.getType())) {
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3) * power);
@@ -184,7 +184,7 @@ public class Tools implements Listener {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
-						int power = ce.getPower(item, CEnchantments.HASTE);
+						int power = ce.getLevel(item, CEnchantments.HASTE);
 						player.removePotionEffect(PotionEffectType.FAST_DIGGING);
 						player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power - 1));
 					}

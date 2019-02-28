@@ -58,7 +58,7 @@ public class Bows implements Listener {
 			}
 			if(ce.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
 				if(CEnchantments.MULTIARROW.isActivated()) {
-					int power = ce.getPower(bow, CEnchantments.MULTIARROW);
+							int power = ce.getLevel(bow, CEnchantments.MULTIARROW);
 					if(CEnchantments.MULTIARROW.chanceSuccessful(bow)) {
 						if(e.getEntity() instanceof Player) {
 							EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.MULTIARROW, bow);
@@ -153,7 +153,7 @@ public class Bows implements Listener {
 						if(Support.isFriendly(P.get(e.getDamager()), e.getEntity())) {
 							if(Enchant.get(arrow).contains(CEnchantments.DOCTOR)) {
 								if(CEnchantments.DOCTOR.isActivated()) {
-									int heal = 1 + ce.getPower(Arrow.get(arrow), CEnchantments.DOCTOR);
+								int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
 									if(en.getHealth() < en.getMaxHealth()) {
 										if(en instanceof Player) {
 											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, item);
