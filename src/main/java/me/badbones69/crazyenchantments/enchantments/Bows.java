@@ -130,7 +130,6 @@ public class Bows implements Listener {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onArrowDamage(EntityDamageByEntityEvent e) {
 		if(e.getDamager() instanceof Arrow) {
@@ -139,15 +138,24 @@ public class Bows implements Listener {
 				EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
 				if(arrow != null) {
 					ItemStack bow = arrow.getBow();
-					if(Support.isFriendly(arrow.getShooter(), e.getEntity())) {
-						if(arrow.hasEnchantment(CEnchantments.DOCTOR)) {
-							if(CEnchantments.DOCTOR.isActivated()) {
-								int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
-								if(en.getHealth() < en.getMaxHealth()) {
-									if(en instanceof Player) {
-										EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
-										Bukkit.getPluginManager().callEvent(event);
-										if(!event.isCancelled()) {
+					if(!e.isCancelled()) {
+						if(Support.isFriendly(arrow.getShooter(), e.getEntity())) {
+							if(arrow.hasEnchantment(CEnchantments.DOCTOR)) {
+								if(CEnchantments.DOCTOR.isActivated()) {
+									int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
+									if(en.getHealth() < en.getMaxHealth()) {
+										if(en instanceof Player) {
+											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
+											Bukkit.getPluginManager().callEvent(event);
+											if(!event.isCancelled()) {
+												if(en.getHealth() + heal < en.getMaxHealth()) {
+													en.setHealth(en.getHealth() + heal);
+												}
+												if(en.getHealth() + heal >= en.getMaxHealth()) {
+													en.setHealth(en.getMaxHealth());
+												}
+											}
+										}else {
 											if(en.getHealth() + heal < en.getMaxHealth()) {
 												en.setHealth(en.getHealth() + heal);
 											}
@@ -155,19 +163,10 @@ public class Bows implements Listener {
 												en.setHealth(en.getMaxHealth());
 											}
 										}
-									}else {
-										if(en.getHealth() + heal < en.getMaxHealth()) {
-											en.setHealth(en.getHealth() + heal);
-										}
-										if(en.getHealth() + heal >= en.getMaxHealth()) {
-											en.setHealth(en.getMaxHealth());
-										}
 									}
 								}
 							}
 						}
-					}
-					if(!e.isCancelled()) {
 						if(!Support.isFriendly(arrow.getShooter(), e.getEntity())) {
 							if(arrow.hasEnchantment(CEnchantments.PULL)) {
 								if(CEnchantments.PULL.isActivated()) {
