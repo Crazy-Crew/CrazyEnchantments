@@ -189,7 +189,7 @@ public class CEnchantment {
 				}
 			}
 		}
-		power = Methods.convertLevel(line.replace(color + customName + " ", ""));
+		power = ce.convertLevelInteger(line.replace(color + customName + " ", ""));
 		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
 			if(power > maxLevel) {
 				power = maxLevel;
