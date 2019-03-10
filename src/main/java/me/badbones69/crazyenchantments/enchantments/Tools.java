@@ -223,7 +223,7 @@ public class Tools implements Listener {
 		ores.put(Material.DIAMOND_ORE, Material.DIAMOND);
 		ores.put(Material.EMERALD_ORE, Material.EMERALD);
 		ores.put(Material.REDSTONE_ORE, Material.REDSTONE);
-		ores.put(Material.LAPIS_ORE, new ItemStack(Material.INK_SAC, 1, (short) 4).getType());
+		ores.put(Material.LAPIS_ORE, Material.LAPIS_LAZULI);
 		return ores;
 	}
 	
