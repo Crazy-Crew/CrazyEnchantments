@@ -166,7 +166,7 @@ public class Tools implements Listener {
 									player.getInventory().addItem(i);
 								}
 							}
-							block.setType(Material.AIR);
+							e.setDropItems(false);
 							Methods.removeDurability(item, player);
 						}
 					}

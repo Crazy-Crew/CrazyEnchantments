@@ -325,7 +325,7 @@ public class PickAxes implements Listener {
 											}
 										}
 									}
-									block.setType(Material.AIR);
+									e.setDropItems(false);
 									Methods.removeDurability(item, player);
 								}
 							}
@@ -358,7 +358,7 @@ public class PickAxes implements Listener {
 										}
 									}
 								}
-								block.setType(Material.AIR);
+								e.setDropItems(false);
 								Methods.removeDurability(item, player);
 							}
 						}
