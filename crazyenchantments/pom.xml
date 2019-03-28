@@ -6,7 +6,7 @@
     <parent>
         <artifactId>crazyenchantments-parent</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.7.9.3.8</version>
+        <version>1.7.9.3.9</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>v1_7_R4</artifactId>
-            <version>1.7.9.3.8</version>
+            <version>1.7.9.3.9</version>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
@@ -203,8 +203,8 @@
                         </includes>
                     </artifactSet>
                     <!--<finalName>${project.artifactId}[v${project.version}]</finalName>-->
-                    <outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/Crazy Enchantments[v${project.version}].jar</outputFile>
-                    <!--<outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Enchantments/Crazy Enchantments[v${project.version}].jar</outputFile>-->
+                    <!--                    <outputFile>/Users/badbones/Desktop/Stuff/Server/plugins/Crazy Enchantments[v${project.version}].jar</outputFile>-->
+                    <outputFile>/Users/badbones/Plugins/Public Plugins/Crazy Enchantments/Crazy Enchantments[v${project.version}].jar</outputFile>
                 </configuration>
                 <executions>
                     <execution>

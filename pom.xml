@@ -7,7 +7,7 @@
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.9.3.8</version>
+    <version>1.7.9.3.9</version>
     <modules>
         <module>CrazyEnchantments</module>
         <module>V1_7_R4</module>
