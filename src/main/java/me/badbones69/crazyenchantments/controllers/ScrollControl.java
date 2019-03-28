@@ -35,78 +35,80 @@ public class ScrollControl implements Listener {
 		ItemStack item = e.getCurrentItem();
 		ItemStack scroll = e.getCursor();
 		if(inv != null) {
-			if(item == null) item = new ItemStack(Material.AIR);
-			if(scroll == null) scroll = new ItemStack(Material.AIR);
-			if(item.getType() != Material.AIR && scroll.getType() != Material.AIR) {
-				if(inv.getType() == InventoryType.CRAFTING) {
-					if(e.getRawSlot() < 9) {
-						return;
-					}
-				}
-				if(scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
-					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
-						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
-						return;
-					}
-					if(ce.hasEnchantments(item)) {
-						if(item.isSimilar(orderEnchantments(item.clone()))) {
-							return;
-						}
-						e.setCancelled(true);
-						ItemStack it = orderEnchantments(item);
-						it = Methods.addGlow(it);
-						e.setCurrentItem(it);
-						player.setItemOnCursor(Methods.removeItem(scroll));
-						player.updateInventory();
-						return;
-					}
-				}
-				if(scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) {
-					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
-						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
-						return;
-					}
-					if(!Methods.isProtected(item)) {
-						ArrayList<Material> types = new ArrayList<>(EnchantmentType.ALL.getItems());
-						if(types.contains(item.getType())) {
-							e.setCancelled(true);
-							e.setCurrentItem(Methods.addLore(item, Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-							player.setItemOnCursor(Methods.removeItem(scroll));
+			if(inv.getType() == InventoryType.CRAFTING) {
+				if(item == null) item = new ItemStack(Material.AIR);
+				if(scroll == null) scroll = new ItemStack(Material.AIR);
+				if(item.getType() != Material.AIR && scroll.getType() != Material.AIR) {
+					if(inv.getType() == InventoryType.CRAFTING) {
+						if(e.getRawSlot() < 9) {
 							return;
 						}
 					}
-				}
-				if(scroll.isSimilar(Scrolls.BlACK_SCROLL.getScroll())) {
-					if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
-						player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
-						return;
-					}
-					HashMap<String, Integer> lvl = new HashMap<>();
-					ArrayList<CEnchantment> enchants = new ArrayList<>();
-					boolean i = false;
-					if(ce.hasEnchantments(item)) {
-						for(CEnchantment en : ce.getRegisteredEnchantments()) {
-							if(ce.hasEnchantment(item, en)) {
-								enchants.add(en);
-								lvl.put(en.getName(), ce.getLevel(item, en));
-								i = true;
+					if(scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
+						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
+							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+							return;
+						}
+						if(ce.hasEnchantments(item)) {
+							if(item.isSimilar(orderEnchantments(item.clone()))) {
+								return;
 							}
+							e.setCancelled(true);
+							ItemStack it = orderEnchantments(item);
+							it = Methods.addGlow(it);
+							e.setCurrentItem(it);
+							player.setItemOnCursor(Methods.removeItem(scroll));
+							player.updateInventory();
+							return;
 						}
 					}
-					if(i) {
-						e.setCancelled(true);
-						player.setItemOnCursor(Methods.removeItem(scroll));
-						if(Files.CONFIG.getFile().getBoolean("Settings.BlackScroll.Chance-Toggle")) {
-							if(!Methods.randomPicker(Files.CONFIG.getFile().getInt("Settings.BlackScroll.Chance"), 100)) {
-								player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
+					if(scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) {
+						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
+							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+							return;
+						}
+						if(!Methods.isProtected(item)) {
+							ArrayList<Material> types = new ArrayList<>(EnchantmentType.ALL.getItems());
+							if(types.contains(item.getType())) {
+								e.setCancelled(true);
+								e.setCurrentItem(Methods.addLore(item, Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+								player.setItemOnCursor(Methods.removeItem(scroll));
 								return;
 							}
 						}
-						CEnchantment enchantment = pickEnchant(enchants);
-						e.setCurrentItem(ce.removeEnchantment(item, enchantment));
-						CEBook book = new CEBook(enchantment, lvl.get(enchantment.getName()), 1);
-						player.getInventory().addItem(book.buildBook());
-						player.updateInventory();
+					}
+					if(scroll.isSimilar(Scrolls.BlACK_SCROLL.getScroll())) {
+						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
+							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+							return;
+						}
+						HashMap<String, Integer> lvl = new HashMap<>();
+						ArrayList<CEnchantment> enchants = new ArrayList<>();
+						boolean i = false;
+						if(ce.hasEnchantments(item)) {
+							for(CEnchantment en : ce.getRegisteredEnchantments()) {
+								if(ce.hasEnchantment(item, en)) {
+									enchants.add(en);
+									lvl.put(en.getName(), ce.getLevel(item, en));
+									i = true;
+								}
+							}
+						}
+						if(i) {
+							e.setCancelled(true);
+							player.setItemOnCursor(Methods.removeItem(scroll));
+							if(Files.CONFIG.getFile().getBoolean("Settings.BlackScroll.Chance-Toggle")) {
+								if(!Methods.randomPicker(Files.CONFIG.getFile().getInt("Settings.BlackScroll.Chance"), 100)) {
+									player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
+									return;
+								}
+							}
+							CEnchantment enchantment = pickEnchant(enchants);
+							e.setCurrentItem(ce.removeEnchantment(item, enchantment));
+							CEBook book = new CEBook(enchantment, lvl.get(enchantment.getName()), 1);
+							player.getInventory().addItem(book.buildBook());
+							player.updateInventory();
+						}
 					}
 				}
 			}
