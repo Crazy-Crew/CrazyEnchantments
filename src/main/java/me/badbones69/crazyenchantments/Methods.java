@@ -664,9 +664,9 @@ public class Methods {
 	}
 	
 	public static void explode(Entity player, Entity arrow) {
-		ParticleEffect.FLAME.display(0, 0, 0, 1, 200, arrow.getLocation(), 100);
-		ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, arrow.getLocation(), 100);
-		ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, arrow.getLocation(), 100);
+		arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
+		arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
+		arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
 		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 		for(Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)) {
 			if(Support.allowsPVP(e.getLocation())) {
