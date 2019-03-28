@@ -67,11 +67,11 @@ public class PickAxes implements Listener {
 					if(blocks.get(player).containsKey(block)) {
 						e.setCancelled(true);
 						new BukkitRunnable() { // Run async to help offload some lag.
-							@Override public void run() {
+							@Override
+							public void run() {
 								BlockFace face = blocks.get(player).get(block);
 								blocks.remove(player);
 								HashMap<ItemStack, Integer> drops = new HashMap<>();
-								int xp = 0;
 								if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
 									NoCheatPlusSupport.exemptPlayer(player);
 								}
@@ -83,10 +83,8 @@ public class PickAxes implements Listener {
 								if(SupportedPlugins.AAC.isPluginLoaded()) {
 									AACSupport.exemptPlayer(player);
 								}
-								boolean damage = true;
-								if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Blast-Full-Durability")) {
-									damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
-								}
+								int xp = 0;
+								boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 								boolean hasTelepathy = ce.hasEnchantment(item, CEnchantments.TELEPATHY);
 								boolean hasFurnace = ce.hasEnchantment(item, CEnchantments.FURNACE);
 								boolean hasLootingBonusBlocks = item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS);
@@ -100,11 +98,17 @@ public class PickAxes implements Listener {
 									for(Block block : blockList) {
 										if(ce.getBlockList().contains(block.getType())) {
 											BlockBreakEvent event = new BlockBreakEvent(block, player);
-											Bukkit.getPluginManager().callEvent(event);
+											new BukkitRunnable() {
+												@Override
+												public void run() {
+													Bukkit.getPluginManager().callEvent(event);
+												}
+											}.runTask(ce.getPlugin());
 											if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 												if(player.getGameMode() == GameMode.CREATIVE) { //If the user is in creative mode.
 													new BukkitRunnable() {
-														@Override public void run() {
+														@Override
+														public void run() {
 															block.setType(Material.AIR);
 														}
 													}.runTask(ce.getPlugin());
@@ -169,7 +173,8 @@ public class PickAxes implements Listener {
 																}
 																ItemStack finalDrop = drop;
 																new BukkitRunnable() {
-																	@Override public void run() {
+																	@Override
+																	public void run() {
 																		block.getWorld().dropItem(block.getLocation(), getOres(finalDrop.getAmount()).get(block.getType()));
 																	}
 																}.runTask(ce.getPlugin());
@@ -187,7 +192,8 @@ public class PickAxes implements Listener {
 																}
 																ItemStack finalDrop = drop;
 																new BukkitRunnable() {
-																	@Override public void run() {
+																	@Override
+																	public void run() {
 																		block.getWorld().dropItem(block.getLocation(), finalDrop);
 																	}
 																}.runTask(ce.getPlugin());
@@ -210,7 +216,8 @@ public class PickAxes implements Listener {
 																}
 																ItemStack finalDrop = drop;
 																new BukkitRunnable() {
-																	@Override public void run() {
+																	@Override
+																	public void run() {
 																		block.getWorld().dropItem(block.getLocation(), finalDrop);
 																	}
 																}.runTask(ce.getPlugin());
@@ -229,7 +236,8 @@ public class PickAxes implements Listener {
 														}
 													}
 													new BukkitRunnable() {
-														@Override public void run() {
+														@Override
+														public void run() {
 															block.setType(Material.AIR);
 														}
 													}.runTask(ce.getPlugin());
@@ -257,7 +265,8 @@ public class PickAxes implements Listener {
 									i.setAmount(drops.get(i));
 									if(Methods.isInvFull(player)) {
 										new BukkitRunnable() {
-											@Override public void run() {
+											@Override
+											public void run() {
 												player.getWorld().dropItem(player.getLocation(), i);
 											}
 										}.runTask(ce.getPlugin());
@@ -268,7 +277,8 @@ public class PickAxes implements Listener {
 								if(xp > 0) {
 									int finalXp = xp;
 									new BukkitRunnable() {
-										@Override public void run() {
+										@Override
+										public void run() {
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
 											orb.setExperience(finalXp);
 										}

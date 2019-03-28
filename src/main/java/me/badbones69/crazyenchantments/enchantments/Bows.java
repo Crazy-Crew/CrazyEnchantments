@@ -103,7 +103,8 @@ public class Bows implements Listener {
 							entityLocation.getBlock().setType(Material.COBWEB);
 							e.getEntity().remove();
 							new BukkitRunnable() {
-								@Override public void run() {
+								@Override
+								public void run() {
 									entityLocation.getBlock().setType(Material.AIR);
 								}
 							}.runTaskLater(ce.getPlugin(), 5 * 20);
@@ -194,7 +195,8 @@ public class Bows implements Listener {
 										entityLocation.getBlock().setType(Material.COBWEB);
 										entity.remove();
 										new BukkitRunnable() {
-											@Override public void run() {
+											@Override
+											public void run() {
 												entityLocation.getBlock().setType(Material.AIR);
 											}
 										}.runTaskLater(ce.getPlugin(), 5 * 20);
