@@ -97,6 +97,7 @@ public class Main extends JavaPlugin implements Listener {
 			pm.registerEvents(new DakataAntiCheatSupport(), this);
 		}
 		//==========================================================================\\
+		new Metrics(this);// Stats up the bStats
 		new BukkitRunnable() {
 			@Override
 			public void run() {
