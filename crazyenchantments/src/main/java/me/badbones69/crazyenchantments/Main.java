@@ -1,14 +1,13 @@
 package me.badbones69.crazyenchantments;
 
-import com.massivestats.MassiveStats;
 import me.badbones69.crazyenchantments.api.*;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
-import me.badbones69.crazyenchantments.multisupport.armorequip.ArmorListener;
 import me.badbones69.crazyenchantments.api.events.AuraListener;
 import me.badbones69.crazyenchantments.controlers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
 import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.armorequip.ArmorListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -99,14 +98,7 @@ public class Main extends JavaPlugin implements Listener {
 			pm.registerEvents(new DakataAntiCheatSupport(), this);
 		}
 		//==========================================================================\\
-		try {
-			MassiveStats massiveStats = new MassiveStats(this);
-			if(settings.getConfig().contains("Settings.Update-Checker")) {
-				massiveStats.setListenerDisabled(!settings.getConfig().getBoolean("Settings.Update-Checker"));
-			}
-		}catch(Exception e) {
-		}
-		
+		new Metrics(this);
 		new BukkitRunnable() {
 			@Override
 			public void run() {

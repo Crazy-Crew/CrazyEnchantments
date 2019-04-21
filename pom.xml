@@ -7,7 +7,7 @@
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.7.9.3.9</version>
+    <version>1.7.9.4</version>
     <modules>
         <module>CrazyEnchantments</module>
         <module>V1_7_R4</module>
@@ -31,10 +31,6 @@
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
-        </repository>
-        <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
             <id>bintray-tastybento-maven-repo</id>
