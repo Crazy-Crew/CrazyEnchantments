@@ -80,7 +80,7 @@ public class Tinkerer implements Listener {
 		Inventory inv = e.getInventory();
 		Player player = (Player) e.getWhoClicked();
 		if(inv != null) {
-			if(inv.getName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
+			if(e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
 				e.setCancelled(true);
 				ItemStack current = e.getCurrentItem();
 				if(current != null) {
@@ -188,7 +188,7 @@ public class Tinkerer implements Listener {
 		final Player player = (Player) e.getPlayer();
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("CrazyEnchantments"), () -> {
 			if(inv != null) {
-				if(inv.getName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
+				if(e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
 					for(int slot : getSlot().keySet()) {
 						if(inv.getItem(slot) != null) {
 							if(inv.getItem(slot).getType() != Material.AIR) {
