@@ -96,7 +96,7 @@ public class GKitzController implements Listener {
 			CEPlayer p = ce.getCEPlayer(player);
 			ItemStack item = e.getCurrentItem();
 			for(GKitz kit : ce.getGKitz()) {
-				if(inv.getName().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
+				if(e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
 					e.setCancelled(true);
 					if(e.getRawSlot() < inv.getSize()) {
 						if(item != null) {
@@ -112,7 +112,7 @@ public class GKitzController implements Listener {
 					}
 				}
 			}
-			if(inv.getName().equals(Methods.color(gkitz.getString("Settings.Inventory-Name")))) {
+			if(e.getView().getTitle().equals(Methods.color(gkitz.getString("Settings.Inventory-Name")))) {
 				e.setCancelled(true);
 				if(e.getRawSlot() < inv.getSize()) {
 					if(item != null) {

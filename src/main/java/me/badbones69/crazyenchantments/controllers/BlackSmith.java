@@ -55,7 +55,7 @@ public class BlackSmith implements Listener {
 		Inventory inv = e.getInventory();
 		FileConfiguration config = Files.CONFIG.getFile();
 		if(inv != null) {
-			if(inv.getName().equals(Methods.color(config.getString("Settings.BlackSmith.GUIName")))) {
+			if(e.getView().getTitle().equals(Methods.color(config.getString("Settings.BlackSmith.GUIName")))) {
 				e.setCancelled(true);
 				if(e.getCurrentItem() != null) {
 					ItemStack item = e.getCurrentItem();
@@ -205,7 +205,7 @@ public class BlackSmith implements Listener {
 		final Inventory inv = e.getInventory();
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), () -> {
 			if(inv != null) {
-				if(inv.getName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.GUIName")))) {
+				if(e.getView().getTitle().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.GUIName")))) {
 					List<Integer> slots = new ArrayList<>();
 					slots.add(10);
 					slots.add(13);

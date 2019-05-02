@@ -205,7 +205,7 @@ public class Scrambler implements Listener {
 	public void onInvClick(InventoryClickEvent e) {
 		Inventory inv = e.getInventory();
 		if(inv != null) {
-			if(inv.getName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name")))) {
+			if(e.getView().getTitle().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name")))) {
 				e.setCancelled(true);
 			}
 		}

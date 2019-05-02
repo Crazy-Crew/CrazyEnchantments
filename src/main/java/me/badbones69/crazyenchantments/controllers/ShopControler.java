@@ -39,7 +39,7 @@ public class ShopControler implements Listener {
 		Player player = (Player) e.getWhoClicked();
 		FileConfiguration config = Files.CONFIG.getFile();
 		if(inv != null) {
-			if(inv.getName().equals(Methods.getInvName())) {
+			if(e.getView().getTitle().equals(Methods.getInvName())) {
 				e.setCancelled(true);
 				if(e.getRawSlot() >= inv.getSize()) return;
 				if(item == null) return;
