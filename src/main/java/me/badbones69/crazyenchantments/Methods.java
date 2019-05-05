@@ -489,8 +489,6 @@ public class Methods {
 				return Color.SILVER;
 			case "TEAL":
 				return Color.TEAL;
-			case "WHITE":
-				return Color.WHITE;
 			case "YELLOW":
 				return Color.YELLOW;
 			default:
