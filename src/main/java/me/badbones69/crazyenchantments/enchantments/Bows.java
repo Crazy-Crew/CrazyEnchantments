@@ -98,7 +98,7 @@ public class Bows implements Listener {
 			if(arrow != null) {
 				if(arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
 					if(CEnchantments.STICKY_SHOT.isActivated()) {
-						if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
+						if(CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow())) {
 							if(e.getHitEntity() == null) {//If the arrow hits a block.
 								Location entityLocation = e.getEntity().getLocation();
 								if(entityLocation.getBlock().getType() == Material.AIR) {
