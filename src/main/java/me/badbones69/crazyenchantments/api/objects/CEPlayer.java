@@ -19,7 +19,7 @@ public class CEPlayer {
 	private Player player;
 	private Boolean soulsActive;
 	private ArrayList<Cooldown> cooldowns;
-	private Double rageMultiplyer;
+	private Double rageMultiplier;
 	private Boolean hasRage;
 	private Integer rageLevel;
 	private BukkitTask rageTask;
@@ -38,7 +38,7 @@ public class CEPlayer {
 		this.soulsActive = soulsActive;
 		this.hasRage = false;
 		this.rageLevel = 0;
-		this.rageMultiplyer = 0.0;
+		this.rageMultiplier = 0.0;
 		this.rageTask = null;
 	}
 	
@@ -286,18 +286,18 @@ public class CEPlayer {
 	}
 	
 	/**
-	 * Get the player's rage damage multiplyer.
+	 * Get the player's rage damage multiplier.
 	 */
-	public Double getRageMultiplyer() {
-		return rageMultiplyer;
+	public Double getRageMultiplier() {
+		return rageMultiplier;
 	}
 	
 	/**
-	 * Set the player's rage damage multiplyer.
-	 * @param rageMultiplyer The player's new rage damage multiplyer.
+	 * Set the player's rage damage multiplier.
+	 * @param rageMultiplier The player's new rage damage multiplier.
 	 */
-	public void setRageMultiplyer(Double rageMultiplyer) {
-		this.rageMultiplyer = rageMultiplyer;
+	public void setRageMultiplier(Double rageMultiplier) {
+		this.rageMultiplier = rageMultiplier;
 	}
 	
 	/**

@@ -52,7 +52,7 @@ public class Swords implements Listener {
 							UUID uuid = e.getEntity().getUniqueId();
 							if(player.hasRage()) {
 								player.getRageTask().cancel();
-								player.setRageMultiplyer(0.0);
+								player.setRageMultiplier(0.0);
 								player.setRageLevel(0);
 								player.setRage(false);
 								if(Messages.RAGE_DAMAGED.getMessage().length() > 0) {
@@ -131,11 +131,11 @@ public class Swords implements Listener {
 										if(!event.isCancelled()) {
 											if(cePlayer.hasRage()) {
 												cePlayer.getRageTask().cancel();
-												if(cePlayer.getRageMultiplyer() <= ce.getRageMaxLevel()) {
-													cePlayer.setRageMultiplyer(cePlayer.getRageMultiplyer() + (ce.getLevel(item, CEnchantments.RAGE) * 0.1));
+												if(cePlayer.getRageMultiplier() <= ce.getRageMaxLevel()) {
+													cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (ce.getLevel(item, CEnchantments.RAGE) * 0.1));
 												}
 												int rageUp = cePlayer.getRageLevel() + 1;
-												if(cePlayer.getRageMultiplyer().intValue() == rageUp) {
+												if(cePlayer.getRageMultiplier().intValue() == rageUp) {
 													if(Messages.RAGE_RAGE_UP.getMessage().length() > 0) {
 														HashMap<String, String> placeholders = new HashMap<>();
 														placeholders.put("%level%", rageUp + "");
@@ -143,10 +143,10 @@ public class Swords implements Listener {
 													}
 													cePlayer.setRageLevel(rageUp);
 												}
-												e.setDamage(e.getDamage() * cePlayer.getRageMultiplyer());
+												e.setDamage(e.getDamage() * cePlayer.getRageMultiplier());
 											}
 											if(!cePlayer.hasRage()) {
-												cePlayer.setRageMultiplyer(1.0);
+												cePlayer.setRageMultiplier(1.0);
 												cePlayer.setRage(true);
 												cePlayer.setRageLevel(1);
 												if(Messages.RAGE_BUILDING.getMessage().length() > 0) {
@@ -156,7 +156,7 @@ public class Swords implements Listener {
 											cePlayer.setRageTask(new BukkitRunnable() {
 												@Override
 												public void run() {
-													cePlayer.setRageMultiplyer(0.0);
+													cePlayer.setRageMultiplier(0.0);
 													cePlayer.setRage(false);
 													cePlayer.setRageLevel(0);
 													if(Messages.RAGE_COOLED_DOWN.getMessage().length() > 0) {
