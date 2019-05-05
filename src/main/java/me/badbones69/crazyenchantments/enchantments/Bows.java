@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -97,22 +98,53 @@ public class Bows implements Listener {
 			if(arrow != null) {
 				if(arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
 					if(CEnchantments.STICKY_SHOT.isActivated()) {
-						//if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
-						Location entityLocation = e.getEntity().getLocation();
-						if(entityLocation.getBlock().getType() == Material.AIR) {
-							entityLocation.getBlock().setType(Material.COBWEB);
-							e.getEntity().remove();
-							new BukkitRunnable() {
-								@Override
-								public void run() {
-									entityLocation.getBlock().setType(Material.AIR);
+						if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
+							if(e.getHitEntity() == null) {//If the arrow hits a block.
+								Location entityLocation = e.getEntity().getLocation();
+								if(entityLocation.getBlock().getType() == Material.AIR) {
+									entityLocation.getBlock().setType(Material.COBWEB);
+									e.getEntity().remove();
+									new BukkitRunnable() {
+										@Override
+										public void run() {
+											entityLocation.getBlock().setType(Material.AIR);
+										}
+									}.runTaskLater(ce.getPlugin(), 5 * 20);
 								}
-							}.runTaskLater(ce.getPlugin(), 5 * 20);
+							}else {//If the arrow hits an entity.
+								Entity en = e.getHitEntity();
+								List<Location> locations = new ArrayList<>();
+								Location enLocation = en.getLocation();
+								locations.add(enLocation.clone().add(1, 0, 1));//Top Left
+								locations.add(enLocation.clone().add(1, 0, 0));//Top Middle
+								locations.add(enLocation.clone().add(1, 0, -1));//Top Right
+								locations.add(enLocation.clone().add(0, 0, 1));//Center Left
+								locations.add(enLocation.clone());//Center Middle
+								locations.add(enLocation.clone().add(0, 0, -1));//Center Right
+								locations.add(enLocation.clone().add(-1, 0, 1));//Bottom Left
+								locations.add(enLocation.clone().add(-1, 0, 0));//Bottom Middle
+								locations.add(enLocation.clone().add(-1, 0, -1));//Bottom Right
+								for(Location loc : locations) {
+									if(loc.getBlock().getType() == Material.AIR) {
+										loc.getBlock().setType(Material.COBWEB);
+									}
+								}
+								e.getEntity().remove();
+								new BukkitRunnable() {
+									@Override
+									public void run() {
+										for(Location loc : locations) {
+											if(loc.getBlock().getType() == Material.COBWEB) {
+												loc.getBlock().setType(Material.AIR);
+											}
+										}
+									}
+								}.runTaskLater(ce.getPlugin(), 5 * 20);
+							}
 						}
-						//}
 					}
 				}
-				if(arrow.getEnchantments().contains(CEnchantments.BOOM)) {
+				if(arrow.hasEnchantment(CEnchantments.BOOM)) {
 					if(CEnchantments.BOOM.isActivated()) {
 						if(CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
 							Methods.explode(arrow.getShooter(), arrow.getArrow());
