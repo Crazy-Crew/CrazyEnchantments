@@ -147,6 +147,7 @@ public class Swords implements Listener {
 											}
 											if(!cePlayer.hasRage()) {
 												cePlayer.setRageMultiplyer(1.0);
+												cePlayer.setRage(true);
 												cePlayer.setRageLevel(1);
 												if(Messages.RAGE_BUILDING.getMessage().length() > 0) {
 													damager.sendMessage(Messages.RAGE_BUILDING.getMessage());
