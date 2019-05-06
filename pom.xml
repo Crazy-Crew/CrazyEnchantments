@@ -30,6 +30,22 @@
             <id>janmm14-public</id>
             <url>https://repo.janmm14.de/repository/public/</url>
         </repository>
+        <repository>
+            <id>athion.net</id>
+            <url>http://ci.athion.net/job/PlotSquared-Legacy/ws/mvn/</url>
+        </repository>
+        <repository>
+            <id>factions-repo</id>
+            <url>http://ci.ender.zone/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>md_5-snapshots</id>
+            <url>https://repo.md-5.net/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>md_5-releases</id>
+            <url>https://repo.md-5.net/content/repositories/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -87,11 +103,10 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.intellectualcrafters</groupId>
-            <artifactId>PlotSquared</artifactId>
-            <version>3.5.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/PlotSquared.jar</systemPath>
+            <groupId>com.plotsquared</groupId>
+            <artifactId>plotsquared-api</artifactId>
+            <version>latest</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.sacredlabyrinth.Phaed</groupId>
@@ -114,13 +129,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/library/MassiveCore.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.13.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/Factions.jar</systemPath>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.massivecraft</groupId>-->
+        <!--            <artifactId>Factions</artifactId>-->
+        <!--            <version>2.13.2</version>-->
+        <!--            <scope>system</scope>-->
+        <!--            <systemPath>${project.basedir}/src/main/library/Factions.jar</systemPath>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>de.dustplanet</groupId>
             <artifactId>SilkSpawners</artifactId>
@@ -162,42 +177,34 @@
         <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.11.4</version>
+            <version>16.11.6</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.vagdedes.spartan</groupId>
             <artifactId>Spartan</artifactId>
-            <version>Build 173</version>
+            <version>Build 238</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/library/Spartan.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>net.coreprotect</groupId>
-            <artifactId>CoreProtect</artifactId>
-            <version>2.14.2</version>
+            <groupId>com.github.Nathat23</groupId>
+            <artifactId>StackMob-3</artifactId>
+            <version>3.3.6</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/CoreProtect_2.14.2.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/StackMob-3.3.6.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>uk.antiperson.stackmob</groupId>
-            <artifactId>StackMob</artifactId>
-            <version>2.3.3</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/StackMob-2.3.3-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft.factions</groupId>
+        <dependency><!-- FactionsUUID -->
+            <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
-            <version>1.6.9.5-U0.1.17-b</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/FactionsUUID-1.6.9.5.jar</systemPath>
+            <version>1.6.9.5-U0.3.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.NoCheatPlus.NoCheatPlus</groupId>
-            <artifactId>ncpbuildbase</artifactId>
-            <version>3.16.0-RC-sMD5NET-b1134</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/NoCheatPlus.jar</systemPath>
+            <groupId>fr.neatmonster</groupId>
+            <artifactId>nocheatplus</artifactId>
+            <version>3.16.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>DAKATA.Main</groupId>
@@ -221,7 +228,7 @@
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.92.0.0</version>
+            <version>0.93.0.0</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/library/Towny.jar</systemPath>
         </dependency>
