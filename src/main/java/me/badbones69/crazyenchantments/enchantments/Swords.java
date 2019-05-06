@@ -17,6 +17,7 @@ import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -334,7 +335,8 @@ public class Swords implements Listener {
 											Bukkit.getPluginManager().callEvent(event);
 											if(!event.isCancelled()) {
 												Location loc = en.getLocation();
-												loc.getWorld().strikeLightningEffect(loc);
+												loc.getWorld().spigot().strikeLightningEffect(loc,true);
+												loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT,1,1);
 												for(LivingEntity En : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 													if(Support.allowsPVP(En.getLocation())) {
 														if(!Support.isFriendly(damager, En)) {
