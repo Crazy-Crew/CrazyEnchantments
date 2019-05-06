@@ -19,6 +19,11 @@ public class Support {
 				return true;
 			}
 		}
+		if(SupportedPlugins.FACTIONS3.isPluginLoaded()) {
+			if(Factions3Support.inTerritory(player)) {
+				return true;
+			}
+		}
 		if(SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) {
 			if(FactionsSupport.inTerritory(player)) {
 				return true;
@@ -68,6 +73,11 @@ public class Support {
 			Player other = (Player) o;
 			if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
 				if(FactionsUUID.isFriendly(player, other)) {
+					return true;
+				}
+			}
+			if(SupportedPlugins.FACTIONS3.isPluginLoaded()) {
+				if(Factions3Support.isFriendly(player, other)) {
 					return true;
 				}
 			}
@@ -125,6 +135,11 @@ public class Support {
 		if(player != null) {
 			if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
 				if(!FactionsUUID.canBreakBlock(player, block)) {
+					return false;
+				}
+			}
+			if(SupportedPlugins.FACTIONS3.isPluginLoaded()) {
+				if(!Factions3Support.canBreakBlock(player, block)) {
 					return false;
 				}
 			}
@@ -223,6 +238,7 @@ public class Support {
 		WORLD_EDIT("WorldEdit"),
 		WORLD_GUARD("WorldGuard"),
 		FACTIONS_MASSIVE_CRAFT("Factions"),
+		FACTIONS3("Factions"),
 		FACTIONS_UUID("Factions"),
 		FEUDAL("Feudal"),
 		ACID_ISLAND("AcidIsland"),
@@ -272,6 +288,11 @@ public class Support {
 				}else if(this == SupportedPlugins.FACTIONS_UUID) {
 					if(plugin.getDescription().getAuthors() != null) {
 						return plugin.getDescription().getAuthors().contains("drtshock");
+					}
+					return false;
+				}else if(this == SupportedPlugins.FACTIONS3) {
+					if(plugin.getDescription().getAuthors() != null) {
+						return plugin.getDescription().getAuthors().contains("Madus");
 					}
 					return false;
 				}
