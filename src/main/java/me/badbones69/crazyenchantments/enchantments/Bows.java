@@ -157,8 +157,8 @@ public class Bows implements Listener {
 					if(CEnchantments.LIGHTNING.isActivated()) {
 						Location loc = arrow.getArrow().getLocation();
 						if(CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
-							loc.getWorld().spigot().strikeLightningEffect(loc,true);
-							loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT,1,1);
+							loc.getWorld().spigot().strikeLightningEffect(loc, true);
+							loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
 							for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow.getArrow())) {
 								if(Support.allowsPVP(entity.getLocation())) {
 									if(!Support.isFriendly(arrow.getShooter(), entity)) {

@@ -9,11 +9,7 @@ import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -244,8 +240,8 @@ public class Armor implements Listener {
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
 										Location loc = damager.getLocation();
-										loc.getWorld().spigot().strikeLightningEffect(loc,true);
-										loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT,1,1);
+										loc.getWorld().spigot().strikeLightningEffect(loc, true);
+										loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
 										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 											if(Support.allowsPVP(en.getLocation())) {
 												if(!Support.isFriendly(player, en)) {

@@ -335,8 +335,8 @@ public class Swords implements Listener {
 											Bukkit.getPluginManager().callEvent(event);
 											if(!event.isCancelled()) {
 												Location loc = en.getLocation();
-												loc.getWorld().spigot().strikeLightningEffect(loc,true);
-												loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT,1,1);
+												loc.getWorld().spigot().strikeLightningEffect(loc, true);
+												loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
 												for(LivingEntity En : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 													if(Support.allowsPVP(En.getLocation())) {
 														if(!Support.isFriendly(damager, En)) {
