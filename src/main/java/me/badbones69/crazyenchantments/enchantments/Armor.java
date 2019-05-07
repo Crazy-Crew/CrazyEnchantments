@@ -4,6 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.*;
+import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
@@ -241,7 +242,8 @@ public class Armor implements Listener {
 									if(!event.isCancelled()) {
 										Location loc = damager.getLocation();
 										loc.getWorld().spigot().strikeLightningEffect(loc, true);
-										loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
+										int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160 );
+										loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float)lightningSoundRange / 16f, 1);
 										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 											if(Support.allowsPVP(en.getLocation())) {
 												if(!Support.isFriendly(player, en)) {
