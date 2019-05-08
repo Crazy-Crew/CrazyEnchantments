@@ -66,11 +66,11 @@ public class PickAxes implements Listener {
 				if(CEnchantments.BLAST.isActivated()) {
 					if(blocks.get(player).containsKey(block)) {
 						e.setCancelled(true);
+						BlockFace face = blocks.get(player).get(block);
+						blocks.remove(player);
 						new BukkitRunnable() { // Run async to help offload some lag.
 							@Override
 							public void run() {
-								BlockFace face = blocks.get(player).get(block);
-								blocks.remove(player);
 								HashMap<ItemStack, Integer> drops = new HashMap<>();
 								if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
 									NoCheatPlusSupport.exemptPlayer(player);
