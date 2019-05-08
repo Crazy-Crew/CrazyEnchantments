@@ -274,15 +274,17 @@ public class PickAxes implements Listener {
 										player.getInventory().addItem(i);
 									}
 								}
-								if(xp > 0) {
-									int finalXp = xp;
-									new BukkitRunnable() {
-										@Override
-										public void run() {
-											ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-											orb.setExperience(finalXp);
-										}
-									}.runTask(ce.getPlugin());
+								if(player.getGameMode() != GameMode.CREATIVE) {
+									if(xp > 0) {
+										int finalXp = xp;
+										new BukkitRunnable() {
+											@Override
+											public void run() {
+												ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+												orb.setExperience(finalXp);
+											}
+										}.runTask(ce.getPlugin());
+									}
 								}
 							}
 						}.runTaskAsynchronously(ce.getPlugin());
