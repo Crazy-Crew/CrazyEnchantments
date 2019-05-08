@@ -5,6 +5,7 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.EnchantedArrow;
+import me.badbones69.crazyenchantments.api.objects.FileManager;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
@@ -158,7 +159,8 @@ public class Bows implements Listener {
 						Location loc = arrow.getArrow().getLocation();
 						if(CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
 							loc.getWorld().spigot().strikeLightningEffect(loc, true);
-							loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
+							int lightningSoundRange = FileManager.Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160 );
+							loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float)lightningSoundRange / 16f, 1);
 							for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow.getArrow())) {
 								if(Support.allowsPVP(entity.getLocation())) {
 									if(!Support.isFriendly(arrow.getShooter(), entity)) {

@@ -10,6 +10,7 @@ import me.badbones69.crazyenchantments.api.events.DisarmerUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.events.RageBreakEvent;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
+import me.badbones69.crazyenchantments.api.objects.FileManager;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
@@ -336,7 +337,8 @@ public class Swords implements Listener {
 											if(!event.isCancelled()) {
 												Location loc = en.getLocation();
 												loc.getWorld().spigot().strikeLightningEffect(loc, true);
-												loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1, 1);
+												int lightningSoundRange = FileManager.Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160 );
+												loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float)lightningSoundRange / 16f, 1);
 												for(LivingEntity En : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 													if(Support.allowsPVP(En.getLocation())) {
 														if(!Support.isFriendly(damager, En)) {
