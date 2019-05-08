@@ -98,12 +98,7 @@ public class PickAxes implements Listener {
 									for(Block block : blockList) {
 										if(ce.getBlockList().contains(block.getType())) {
 											BlockBreakEvent event = new BlockBreakEvent(block, player);
-											new BukkitRunnable() {
-												@Override
-												public void run() {
-													Bukkit.getPluginManager().callEvent(event);
-												}
-											}.runTask(ce.getPlugin());
+											Bukkit.getPluginManager().callEvent(event);
 											if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 												if(player.getGameMode() == GameMode.CREATIVE) { //If the user is in creative mode.
 													new BukkitRunnable() {
