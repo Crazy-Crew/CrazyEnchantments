@@ -120,7 +120,7 @@ public class DustControl implements Listener {
 					if(Methods.isSimilar(item, Dust.MYSTERY_DUST.getDust(getPercent(Dust.MYSTERY_DUST, item), 1))) {
 						e.setCancelled(true);
 						Methods.setItemInHand(player, Methods.removeItem(item));
-						player.getInventory().addItem(pickDust().getDust(Methods.percentPick(getPercent(Dust.MYSTERY_DUST, item) + 1, 1)));
+						player.getInventory().addItem(pickDust().getDust(Methods.percentPick(getPercent(Dust.MYSTERY_DUST, item) + 1, 1), 1));
 						player.updateInventory();
 						player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
 						if(config.contains("Settings.Dust.MysteryDust.Firework.Toggle")) {
