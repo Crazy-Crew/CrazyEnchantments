@@ -66,7 +66,7 @@ public enum Dust {
 		return dust.get(this)
 		.addLorePlaceholder("%percent%", percent + "")
 		.addLorePlaceholder("%Percent%", percent + "")
-		.build();
+		.setAmount(amount).build();
 	}
 	
 	public static void loadDust() {
