@@ -152,12 +152,14 @@ public class Axes implements Listener {
 
 	private void removeBadPotions(Player player) {
 		ArrayList<PotionEffectType> bad = new ArrayList<PotionEffectType>();
+		bad.add(PotionEffectType.BAD_OMEN);
 		bad.add(PotionEffectType.BLINDNESS);
 		bad.add(PotionEffectType.CONFUSION);
 		bad.add(PotionEffectType.HUNGER);
 		bad.add(PotionEffectType.POISON);
 		bad.add(PotionEffectType.SLOW);
 		bad.add(PotionEffectType.SLOW_DIGGING);
+		bad.add(PotionEffectType.UNLUCK);
 		bad.add(PotionEffectType.WEAKNESS);
 		bad.add(PotionEffectType.WITHER);
 		for(PotionEffectType p : bad) {
