@@ -1,5 +1,7 @@
 package me.badbones69.crazyenchantments.multisupport;
 
+import org.bukkit.Bukkit;
+
 public enum Version {
 	
 	TOO_OLD(-1),
@@ -9,6 +11,8 @@ public enum Version {
 	v1_10_R1(1101),
 	v1_11_R1(1111),
 	v1_12_R1(1121),
+	v1_13_R2(1132),
+	v1_14_R1(1141),
 	TOO_NEW(-2);
 	
 	private static Version latest;
@@ -19,29 +23,29 @@ public enum Version {
 		this.versionInteger = versionInteger;
 	}
 	
-	//	/**
-	//	 *
-	//	 * @return Get the server's Minecraft version.
-	//	 */
-	//	public static Version getCurrentVersion() {
-	//		if(currentVersion == null) {
-	//			String ver = Bukkit.getServer().getClass().getPackage().getName();
-	//			int v = Integer.parseInt(ver.substring(ver.lastIndexOf('.') + 1).replaceAll("_", "").replaceAll("R", "").replaceAll("v", ""));
-	//			for(Version version : values()) {
-	//				if(version.getVersionInteger() == v) {
-	//					currentVersion = version;
-	//					break;
-	//				}
-	//			}
-	//			if(v > Version.getLatestVersion().getVersionInteger()) {
-	//				currentVersion = Version.getLatestVersion();
-	//			}
-	//			if(currentVersion == null) {
-	//				currentVersion = Version.TOO_NEW;
-	//			}
-	//		}
-	//		return currentVersion;
-	//	}
+	/**
+	 *
+	 * @return Get the server's Minecraft version.
+	 */
+	public static Version getCurrentVersion() {
+		if(currentVersion == null) {
+			String ver = Bukkit.getServer().getClass().getPackage().getName();
+			int v = Integer.parseInt(ver.substring(ver.lastIndexOf('.') + 1).replaceAll("_", "").replaceAll("R", "").replaceAll("v", ""));
+			for(Version version : values()) {
+				if(version.getVersionInteger() == v) {
+					currentVersion = version;
+					break;
+				}
+			}
+			if(v > Version.getLatestVersion().getVersionInteger()) {
+				currentVersion = Version.getLatestVersion();
+			}
+			if(currentVersion == null) {
+				currentVersion = Version.TOO_NEW;
+			}
+		}
+		return currentVersion;
+	}
 	
 	/**
 	 *
