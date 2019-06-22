@@ -23,16 +23,7 @@ public class CEBook {
 	 * @param power Tier of the enchantment.
 	 */
 	public CEBook(CEnchantment enchantment, Integer power) {
-		this.enchantment = enchantment;
-		this.amount = 1;
-		this.power = power;
-		this.glowing = Files.CONFIG.getFile().contains("Settings.Enchantment-Book-Glowing") && Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
-		int Smax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Max");
-		int Smin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
-		int Dmax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
-		int Dmin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
-		this.destroy_rate = percentPick(Dmax, Dmin);
-		this.success_rate = percentPick(Smax, Smin);
+		this(enchantment, power, 1);
 	}
 	
 	/**
