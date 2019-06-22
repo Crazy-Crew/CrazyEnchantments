@@ -6,7 +6,7 @@ version: ${project.version}
 softdepend: [Vault, Factions, WorldEdit, SilkSpawners, Feudal, ASkyBlock, Kingdoms, Spartan, CoreProtect, StackMob]
 website: https://www.spigotmc.org/resources/16470/
 description: >
-             A Plugin full of Crazy Enchantments.
+  A Plugin full of Crazy Enchantments.
 commands:
   crazyenchantments:
     description: Opens the Enchanter GUI.

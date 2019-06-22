@@ -9,6 +9,7 @@ import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -65,6 +66,14 @@ public class Methods {
 		return number;
 	}
 	
+	public static boolean hasPermission(CommandSender sender, String perm, Boolean toggle) {
+		if(sender instanceof Player) {
+			return hasPermission((Player) sender, perm, toggle);
+		}else {
+			return true;
+		}
+	}
+	
 	public static boolean hasPermission(Player player, String perm, Boolean toggle) {
 		if(player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
 			return true;
@@ -76,38 +85,8 @@ public class Methods {
 		}
 	}
 	
-	public static boolean hasPermission(CommandSender sender, String perm, Boolean toggle) {
-		if(sender instanceof Player) {
-			Player player = (Player) sender;
-			if(player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
-				return true;
-			}else {
-				if(toggle) {
-					player.sendMessage(Messages.NO_PERMISSION.getMessage());
-				}
-				return false;
-			}
-		}else {
-			return true;
-		}
-	}
-	
 	public static ItemStack addGlow(ItemStack item) {
-		ItemStack it = item.clone();
-		try {
-			if(item.hasItemMeta()) {
-				if(item.getItemMeta().hasEnchants()) {
-					return item;
-				}
-			}
-			item.addUnsafeEnchantment(Enchantment.LUCK, 1);
-			ItemMeta meta = item.getItemMeta();
-			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-			item.setItemMeta(meta);
-			return item;
-		}catch(NoClassDefFoundError e) {
-			return it;
-		}
+		return addGlow(item, true);
 	}
 	
 	public static ItemStack addGlow(ItemStack item, boolean toggle) {
@@ -132,14 +111,18 @@ public class Methods {
 	
 	public static ItemStack getItemInHand(Player player) {
 		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-			return Methods.getItemInHand(player);
+			return player.getInventory().getItemInMainHand();
 		}else {
 			return player.getItemInHand();
 		}
 	}
 	
 	public static void setItemInHand(Player player, ItemStack item) {
-		player.getInventory().setItemInMainHand(item);
+		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+			player.getInventory().setItemInMainHand(item);
+		}else {
+			player.setItemInHand(item);
+		}
 	}
 	
 	public static ArrayList<String> getPotions() {
@@ -208,7 +191,7 @@ public class Methods {
 	}
 	
 	public static String getPrefix() {
-		return color(Files.CONFIG.getFile().getString("Settings.Prefix"));
+		return getPrefix("");
 	}
 	
 	public static String getPrefix(String string) {
@@ -228,21 +211,21 @@ public class Methods {
 		return Bukkit.getServer().getPlayer(name);
 	}
 	
-	public static Location getLoc(Player player) {
+	public static Location getPlayerLocation(Player player) {
 		return player.getLocation();
 	}
 	
-	public static void runCMD(Player player, String CMD) {
+	public static void runCommand(Player player, String CMD) {
 		player.performCommand(CMD);
 	}
 	
-	public static boolean isOnline(String name, CommandSender p) {
+	public static boolean isPlayerOnline(String playerName, CommandSender sender) {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-			if(player.getName().equalsIgnoreCase(name)) {
+			if(player.getName().equalsIgnoreCase(playerName)) {
 				return true;
 			}
 		}
-		p.sendMessage(Messages.NOT_ONLINE.getMessage());
+		sender.sendMessage(Messages.NOT_ONLINE.getMessage());
 		return false;
 	}
 	
@@ -311,18 +294,7 @@ public class Methods {
 	}
 	
 	public static void hasUpdate() {
-		try {
-			HttpURLConnection c = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-			c.setDoOutput(true);
-			c.setRequestMethod("POST");
-			c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes(StandardCharsets.UTF_8));
-			String oldVersion = ce.getPlugin().getDescription().getVersion();
-			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
-			if(!newVersion.equals(oldVersion)) {
-				Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
-			}
-		}catch(Exception e) {
-		}
+		hasUpdate(null);
 	}
 	
 	public static void hasUpdate(Player player) {
@@ -334,7 +306,11 @@ public class Methods {
 			String oldVersion = ce.getPlugin().getDescription().getVersion();
 			String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
 			if(!newVersion.equals(oldVersion)) {
-				player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
+				if(player != null) {
+					player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
+				}else {
+					Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
+				}
 			}
 		}catch(Exception e) {
 		}
@@ -433,8 +409,8 @@ public class Methods {
 		return player.getInventory().firstEmpty() == -1;
 	}
 	
-	public static List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity ent) {
-		List<Entity> out = ent.getNearbyEntities(radius, radius, radius);
+	public static List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity entity) {
+		List<Entity> out = entity.getNearbyEntities(radius, radius, radius);
 		List<LivingEntity> entities = new ArrayList<>();
 		for(Entity en : out) {
 			if(en instanceof LivingEntity) {
@@ -444,8 +420,8 @@ public class Methods {
 		return entities;
 	}
 	
-	public static List<Entity> getNearbyEntitiess(Location loc, double radius, Entity ent) {
-		return ent.getNearbyEntities(radius, radius, radius);
+	public static List<Entity> getNearbyEntitiess(Location loc, double radius, Entity entity) {
+		return entity.getNearbyEntities(radius, radius, radius);
 	}
 	
 	public static void fireWork(Location loc, ArrayList<Color> colors) {
@@ -459,11 +435,7 @@ public class Methods {
 		fm.setPower(0);
 		fw.setFireworkMeta(fm);
 		FireworkDamageAPI.addFirework(fw);
-		detonate(fw);
-	}
-	
-	private static void detonate(final Firework f) {
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), f::detonate, 2);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), fw::detonate, 2);
 	}
 	
 	public static Color getColor(String color) {

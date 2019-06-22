@@ -35,7 +35,6 @@ public class Main extends JavaPlugin implements Listener {
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private FileManager fileManager = FileManager.getInstance();
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onEnable() {
 		fileManager.logInfo(true).setup(this);
@@ -350,7 +349,7 @@ public class Main extends JavaPlugin implements Listener {
 						}
 						Player player;
 						if(args.length >= 4) {
-							if(!Methods.isOnline(args[3], sender)) return true;
+							if(!Methods.isPlayerOnline(args[3], sender)) return true;
 							player = Methods.getPlayer(args[3]);
 						}else {
 							player = (Player) sender;
@@ -394,7 +393,7 @@ public class Main extends JavaPlugin implements Listener {
 					}
 					Player player;
 					if(args.length >= 3) {
-						if(!Methods.isOnline(args[2], sender)) return true;
+						if(!Methods.isPlayerOnline(args[2], sender)) return true;
 						player = Methods.getPlayer(args[2]);
 					}else {
 						player = (Player) sender;
@@ -430,7 +429,7 @@ public class Main extends JavaPlugin implements Listener {
 					}
 					Player player;
 					if(args.length >= 3) {
-						if(!Methods.isOnline(args[2], sender)) return true;
+						if(!Methods.isPlayerOnline(args[2], sender)) return true;
 						player = Methods.getPlayer(args[2]);
 					}else {
 						player = (Player) sender;
@@ -468,7 +467,7 @@ public class Main extends JavaPlugin implements Listener {
 							amount = Integer.parseInt(args[2]);
 						}
 						if(args.length >= 4) {
-							if(!Methods.isOnline(args[3], sender)) return true;
+							if(!Methods.isPlayerOnline(args[3], sender)) return true;
 							player = Methods.getPlayer(args[3]);
 						}else {
 							if(!(sender instanceof Player)) {
@@ -531,7 +530,7 @@ public class Main extends JavaPlugin implements Listener {
 						}
 						if(args.length >= 4) {
 							name = args[3];
-							if(!Methods.isOnline(name, sender)) return true;
+							if(!Methods.isPlayerOnline(name, sender)) return true;
 						}else {
 							if(!(sender instanceof Player)) {
 								sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
@@ -695,7 +694,7 @@ public class Main extends JavaPlugin implements Listener {
 						amount = Integer.parseInt(args[3]);
 					}
 					if(args.length >= 5) {
-						if(!Methods.isOnline(args[4], sender)) return true;
+						if(!Methods.isPlayerOnline(args[4], sender)) return true;
 						player = Methods.getPlayer(args[4]);
 					}
 					if(ench == null) {
@@ -746,7 +745,7 @@ public class Main extends JavaPlugin implements Listener {
 								return true;
 							}
 							if(args.length >= 3) {
-								if(!Methods.isOnline(args[2], sender)) {
+								if(!Methods.isPlayerOnline(args[2], sender)) {
 									return true;
 								}else {
 									player = Methods.getPlayer(args[2]);
@@ -785,7 +784,7 @@ public class Main extends JavaPlugin implements Listener {
 							if(!Methods.hasPermission(sender, "gkitz", true)) {
 								return true;
 							}else {
-								if(!Methods.isOnline(args[1], sender)) {
+								if(!Methods.isPlayerOnline(args[1], sender)) {
 									return true;
 								}else {
 									if(Methods.hasPermission(sender, "crazyenchantments.gkitz.give", true)) {
