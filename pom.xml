@@ -7,6 +7,7 @@
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments</artifactId>
     <version>1.8-Dev-Build-v4</version>
+    <name>Crazy Enchantments</name>
 
     <repositories>
         <repository>
@@ -52,7 +53,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -256,6 +257,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.name}[v${project.version}]</finalName>
         <defaultGoal>clean install package</defaultGoal>
         <resources>
             <resource>
