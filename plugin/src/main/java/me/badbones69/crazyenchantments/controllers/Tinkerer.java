@@ -13,7 +13,6 @@ import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,7 +35,7 @@ public class Tinkerer implements Listener {
 	
 	public static void openTinker(Player player) {
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
-		inv.setItem(0, new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE).setName(Files.TINKER.getFile().getString("Settings.TradeButton")).build());
+		inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(Files.TINKER.getFile().getString("Settings.TradeButton")).build());
 		ArrayList<Integer> slots = new ArrayList<>();
 		slots.add(4);
 		slots.add(13);
@@ -45,9 +44,9 @@ public class Tinkerer implements Listener {
 		slots.add(40);
 		slots.add(49);
 		for(int i : slots) {
-			inv.setItem(i, new ItemBuilder().setMaterial(Material.WHITE_STAINED_GLASS_PANE).setName(" ").build());
+			inv.setItem(i, new ItemBuilder().setMaterial("WHITE_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:0").setName(" ").build());
 		}
-		inv.setItem(8, new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE).setName(Files.TINKER.getFile().getString("Settings.TradeButton")).build());
+		inv.setItem(8, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(Files.TINKER.getFile().getString("Settings.TradeButton")).build());
 		player.openInventory(inv);
 	}
 	
@@ -55,8 +54,8 @@ public class Tinkerer implements Listener {
 	public void onXPUse(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
 		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if(player.getInventory().getItemInMainHand() != null) {
-				ItemStack item = player.getInventory().getItemInMainHand();
+			if(Methods.getItemInHand(player) != null) {
+				ItemStack item = Methods.getItemInHand(player);
 				if(item.getType() == new ItemBuilder().setMaterial(Files.TINKER.getFile().getString("Settings.BottleOptions.Item")).getMaterial()) {
 					if(item.hasItemMeta()) {
 						if(item.getItemMeta().hasLore() && item.getItemMeta().hasDisplayName()) {
@@ -66,7 +65,7 @@ public class Tinkerer implements Listener {
 								if(Currency.isCurrency(Files.TINKER.getFile().getString("Settings.Currency"))) {
 									CurrencyAPI.giveCurrency(player, Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")), getXP(item));
 								}
-								player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+								player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
 							}
 						}
 					}
@@ -117,7 +116,7 @@ public class Tinkerer implements Listener {
 										if(toggle) {
 											player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
 										}
-										player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 1, 1);
+										player.playSound(player.getLocation(), ce.getSound("ENTITY_VILLAGER_TRADE", "ENTITY_VILLAGER_TRADING"), 1, 1);
 										return;
 									}
 								}
@@ -137,7 +136,7 @@ public class Tinkerer implements Listener {
 												e.setCurrentItem(new ItemStack(Material.AIR));
 												player.getInventory().addItem(current);
 												inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
-												player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+												player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 											}else {// Clicking in their inventory
 												if(player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
 													player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
@@ -146,7 +145,7 @@ public class Tinkerer implements Listener {
 												e.setCurrentItem(new ItemStack(Material.AIR));
 												inv.setItem(getSlot().get(inv.firstEmpty()), Dust.MYSTERY_DUST.getDust(Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchant + ".Book"), 1));
 												inv.setItem(inv.firstEmpty(), current);
-												player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+												player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 											}
 										}
 									}
@@ -156,7 +155,7 @@ public class Tinkerer implements Listener {
 												e.setCurrentItem(new ItemStack(Material.AIR));
 												player.getInventory().addItem(current);
 												inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
-												player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+												player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 											}
 										}else {// Clicking in their inventory
 											if(player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
@@ -170,7 +169,7 @@ public class Tinkerer implements Listener {
 											e.setCurrentItem(new ItemStack(Material.AIR));
 											inv.setItem(getSlot().get(inv.firstEmpty()), getBottle(current));
 											inv.setItem(inv.firstEmpty(), current);
-											player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+											player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 										}
 									}
 								}
@@ -219,7 +218,7 @@ public class Tinkerer implements Listener {
 		}
 		ItemStack it = new ItemBuilder().setMaterial(id).setName(name).setLore(lore).build();
 		if(SupportedPlugins.MEGA_SKILLS.isPluginLoaded()) {
-			it = new ItemBuilder().setMaterial(Material.EXPERIENCE_BOTTLE).setName("&6Enhanced Exp - &a&l" + getTotalXP(item) + " EXP").build();
+			it = new ItemBuilder().setMaterial("EXPERIENCE_BOTTLE", "EXP_BOTTLE").setName("&6Enhanced Exp - &a&l" + getTotalXP(item) + " EXP").build();
 		}
 		return it;
 	}

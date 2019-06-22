@@ -580,14 +580,14 @@ public class Main extends JavaPlugin implements Listener {
 						sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 						return true;
 					}
-					if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+					if(Methods.getItemInHand(player).getType() == Material.AIR) {
 						sender.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
 						return true;
 					}
-					ItemStack item = player.getInventory().getItemInMainHand();
+					ItemStack item = Methods.getItemInHand(player);
 					String enchantment = args[1];
 					if(isVanilla) {
-						ItemStack it = player.getInventory().getItemInMainHand().clone();
+						ItemStack it = Methods.getItemInHand(player).clone();
 						it.removeEnchantment(enchant);
 						Methods.setItemInHand(player, it);
 						return true;
@@ -646,16 +646,16 @@ public class Main extends JavaPlugin implements Listener {
 						sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 						return true;
 					}
-					if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+					if(Methods.getItemInHand(player).getType() == Material.AIR) {
 						sender.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
 						return false;
 					}
 					if(isVanilla) {
-						ItemStack it = player.getInventory().getItemInMainHand().clone();
+						ItemStack it = Methods.getItemInHand(player).clone();
 						it.addUnsafeEnchantment(enchant, Integer.parseInt(lvl));
 						Methods.setItemInHand(player, it);
 					}else {
-						Methods.setItemInHand(player, ce.addEnchantment(player.getInventory().getItemInMainHand(), en, Integer.parseInt(lvl)));
+						Methods.setItemInHand(player, ce.addEnchantment(Methods.getItemInHand(player), en, Integer.parseInt(lvl)));
 					}
 					return true;
 				}

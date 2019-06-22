@@ -13,6 +13,7 @@ import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v6;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;

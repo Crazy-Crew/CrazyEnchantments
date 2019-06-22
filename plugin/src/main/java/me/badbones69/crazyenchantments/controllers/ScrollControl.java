@@ -118,7 +118,7 @@ public class ScrollControl implements Listener {
 	@EventHandler
 	public void onClick(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
-		ItemStack item = player.getInventory().getItemInMainHand();
+		ItemStack item = Methods.getItemInHand(player);
 		if(item != null) {
 			if(Methods.isSimilar(item, Scrolls.BlACK_SCROLL.getScroll())) {
 				e.setCancelled(true);

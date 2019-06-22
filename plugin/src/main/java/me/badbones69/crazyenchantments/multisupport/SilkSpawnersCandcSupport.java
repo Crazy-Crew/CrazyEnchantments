@@ -30,7 +30,7 @@ public class SilkSpawnersCandcSupport implements Listener {
 		if(player != null) {
 			if(block != null) {
 				if(player.getGameMode() != GameMode.CREATIVE) {
-					ItemStack item = player.getInventory().getItemInMainHand();
+					ItemStack item = Methods.getItemInHand(player);
 					if(ce.hasEnchantments(item)) {
 						if(ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
 							if(CEnchantments.TELEPATHY.isActivated()) {

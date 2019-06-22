@@ -8,7 +8,6 @@ import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -109,8 +108,8 @@ public class Scrambler implements Listener {
 	private static void setGlass(Inventory inv) {
 		for(int i = 0; i < 9; i++) {
 			if(i != 4) {
-				inv.setItem(i, new ItemBuilder().setMaterial(Methods.getRandomPaneColor()).setName(" ").build());
-				inv.setItem(i + 18, new ItemBuilder().setMaterial(Methods.getRandomPaneColor()).setName(" ").build());
+				inv.setItem(i, Methods.getRandomPaneColor().setName(" ").build());
+				inv.setItem(i + 18, Methods.getRandomPaneColor().setName(" ").build());
 				
 			}else {
 				FileConfiguration config = Files.CONFIG.getFile();
@@ -141,7 +140,7 @@ public class Scrambler implements Listener {
 				if(full <= 50) {//When Spinning
 					moveItems(inv, player, book);
 					setGlass(inv);
-					player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+					player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 				}
 				open++;
 				if(open >= 5) {
@@ -153,11 +152,11 @@ public class Scrambler implements Listener {
 					if(slowSpin().contains(time)) {//When Slowing Down
 						moveItems(inv, player, book);
 						setGlass(inv);
-						player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+						player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 					}
 					time++;
 					if(time >= 60) {// When done
-						player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+						player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
 						Bukkit.getScheduler().cancelTask(roll.get(player));
 						roll.remove(player);
 						ItemStack item = inv.getItem(13).clone();
@@ -194,7 +193,7 @@ public class Scrambler implements Listener {
 			items.add(inv.getItem(i));
 		}
 		ItemStack newBook = getNewScrambledBook(book);
-		newBook.setType(Methods.getRandomPaneColor());
+		newBook.setType(Methods.getRandomPaneColor().getMaterial());
 		inv.setItem(9, newBook);
 		for(int i = 0; i < 8; i++) {
 			inv.setItem(i + 10, items.get(i));
@@ -213,7 +212,7 @@ public class Scrambler implements Listener {
 	
 	@EventHandler
 	public void onScramblerClick(PlayerInteractEvent e) {
-		ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+		ItemStack item = Methods.getItemInHand(e.getPlayer());
 		if(item != null) {
 			if(Methods.isSimilar(item, getScramblers())) {
 				e.setCancelled(true);

@@ -17,7 +17,6 @@ import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -127,7 +126,7 @@ public class EnchantmentControl implements Listener {
 															placeholders.put("%enchantment%", enchantment.getCustomName());
 															placeholders.put("%level%", bookPower + "");
 															player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
-															player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+															player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
 														}
 														return;
 													}else if(destroy) {
@@ -165,7 +164,7 @@ public class EnchantmentControl implements Listener {
 																}
 															}
 															player.setItemOnCursor(new ItemStack(Material.AIR));
-															player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+															player.playSound(player.getLocation(), ce.getSound("ENTITY_ITEM_BREAK", "ITEM_BREAK"), 1, 1);
 														}
 														return;
 													}else {
@@ -174,7 +173,7 @@ public class EnchantmentControl implements Listener {
 														if(!bookFailEvent.isCancelled()) {
 															player.setItemOnCursor(new ItemStack(Material.AIR));
 															player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
-															player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+															player.playSound(player.getLocation(), ce.getSound("ENTITY_ITEM_BREAK", "ITEM_BREAK"), 1, 1);
 														}
 														return;
 													}
@@ -208,7 +207,7 @@ public class EnchantmentControl implements Listener {
 										}
 										player.setItemOnCursor(oldItem);
 										player.sendMessage(Messages.BOOK_WORKS.getMessage());
-										player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+										player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
 										return;
 									}
 									if(destroy) {
@@ -216,7 +215,7 @@ public class EnchantmentControl implements Listener {
 											e.setCurrentItem(Methods.removeProtected(item));
 											player.setItemOnCursor(new ItemStack(Material.AIR));
 											player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
-											player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+											player.playSound(player.getLocation(), ce.getSound("ENTITY_ITEM_BREAK", "ITEM_BREAK"), 1, 1);
 											return;
 										}else {
 											ItemStack newItem = new ItemStack(Material.AIR);
@@ -237,7 +236,7 @@ public class EnchantmentControl implements Listener {
 								}
 								player.sendMessage(Messages.BOOK_FAILED.getMessage());
 								player.setItemOnCursor(new ItemStack(Material.AIR));
-								player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+								player.playSound(player.getLocation(), ce.getSound("ENTITY_ITEM_BREAK", "ITEM_BREAK"), 1, 1);
 								player.updateInventory();
 							}
 						}
@@ -250,7 +249,7 @@ public class EnchantmentControl implements Listener {
 	@EventHandler
 	public void onDescriptionSend(PlayerInteractEvent e) {
 		if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description") || !Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
-			ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+			ItemStack item = Methods.getItemInHand(e.getPlayer());
 			if(ce.isEnchantmentBook(item)) {
 				e.setCancelled(true);
 				String name = "";

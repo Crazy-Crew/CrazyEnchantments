@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.multisupport;
 
 import DAKATA.CheatType;
 import DAKATA.PlayerCheatEvent;
+import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +16,7 @@ public class DakataAntiCheatSupport implements Listener {
 	@EventHandler
 	public void onCheatDetect(PlayerCheatEvent e) {
 		Player player = e.getPlayer();
-		ItemStack item = player.getInventory().getItemInMainHand();
+		ItemStack item = Methods.getItemInHand(player);
 		CheatType cheatType = e.getCheatType();
 		if(cheatType == CheatType.AUTOCLICKER || cheatType == CheatType.INVALIDBLOCK_BREAK || cheatType == CheatType.NOBREAKDELAY || cheatType == CheatType.REACH_BLOCK) {
 			if(item != null) {

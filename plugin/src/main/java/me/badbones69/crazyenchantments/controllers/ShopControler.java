@@ -12,7 +12,6 @@ import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -419,7 +418,7 @@ public class ShopControler implements Listener {
 		Block block = e.getClickedBlock();
 		if(block != null) {
 			if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-				if(block.getType() == Material.ENCHANTING_TABLE) {
+				if(block.getType() == new ItemBuilder().setMaterial("ENCHANTING_TABLE", "ENCHANTMENT_TABLE").getMaterial()) {
 					if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")) {
 						if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table")) {
 							e.setCancelled(true);

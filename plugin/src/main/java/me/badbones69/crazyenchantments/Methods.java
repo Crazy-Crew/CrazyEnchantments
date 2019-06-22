@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
+import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.controllers.FireworkDamageAPI;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
@@ -711,24 +712,26 @@ public class Methods {
 		}
 	}
 	
-	public static Material getRandomPaneColor() {
-		List<Material> colors = Arrays.asList(
-		Material.BLACK_STAINED_GLASS_PANE,
-		Material.BLUE_STAINED_GLASS_PANE,
-		Material.BROWN_STAINED_GLASS_PANE,
-		Material.CYAN_STAINED_GLASS_PANE,
-		Material.GRAY_STAINED_GLASS_PANE,
-		Material.GREEN_STAINED_GLASS_PANE,
-		Material.LIGHT_BLUE_STAINED_GLASS_PANE,
-		Material.LIME_STAINED_GLASS_PANE,
-		Material.MAGENTA_STAINED_GLASS_PANE,
-		Material.ORANGE_STAINED_GLASS_PANE,
-		Material.PINK_STAINED_GLASS_PANE,
-		Material.PURPLE_STAINED_GLASS_PANE,
-		Material.RED_STAINED_GLASS_PANE,
-		Material.WHITE_STAINED_GLASS_PANE,
-		Material.YELLOW_STAINED_GLASS_PANE);
-		return colors.get(new Random().nextInt(colors.size()));
+	public static ItemBuilder getRandomPaneColor() {
+		Boolean newMaterial = ce.useNewMaterial();
+		List<String> colors = Arrays.asList(
+		newMaterial ? "WHITE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:0",// 0
+		newMaterial ? "ORANGE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:1",// 1
+		newMaterial ? "MAGENTA_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:2",// 2
+		newMaterial ? "LIGHT_BLUE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:3",// 3
+		newMaterial ? "YELLOW_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:4",// 4
+		newMaterial ? "LIME_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:5",// 5
+		newMaterial ? "PINK_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:6",// 6
+		newMaterial ? "GRAY_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:7",// 7
+		//Skipped 8 due to it being basically invisible in a GUI.
+		newMaterial ? "CYAN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:9",// 9
+		newMaterial ? "PURPLE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:10",// 10
+		newMaterial ? "BLUE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:11",// 11
+		newMaterial ? "BROWN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:12",// 12
+		newMaterial ? "GREEN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:13",// 13
+		newMaterial ? "RED_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:14",// 14
+		newMaterial ? "BLACK_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:15");// 15
+		return new ItemBuilder().setMaterial(colors.get(new Random().nextInt(colors.size())));
 	}
 	
 }

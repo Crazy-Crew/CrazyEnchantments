@@ -115,7 +115,7 @@ public class ProtectionCrystal implements Listener {
 	
 	@EventHandler
 	public void onCrystalClick(PlayerInteractEvent e) {
-		ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+		ItemStack item = Methods.getItemInHand(e.getPlayer());
 		if(item != null) {
 			if(Methods.isSimilar(item, getCrystals())) {
 				e.setCancelled(true);
