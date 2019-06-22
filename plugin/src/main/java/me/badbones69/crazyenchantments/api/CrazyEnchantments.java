@@ -7,6 +7,10 @@ import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
+import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
+import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v6;
+import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,6 +32,7 @@ public class CrazyEnchantments {
 	private Boolean gkitzToggle;
 	private Boolean breakRageOnDamage;
 	private Boolean enchantStackedItems;
+	private WorldGuardVersion worldGuardVersion;
 	private ArrayList<GKitz> gkitz = new ArrayList<>();
 	private ArrayList<CEPlayer> players = new ArrayList<>();
 	private ArrayList<String> whitelisted = new ArrayList<>();
@@ -51,6 +56,7 @@ public class CrazyEnchantments {
 		registeredEnchantments.clear();
 		whitelisted.clear();
 		blacklisted.clear();
+		worldGuardVersion = Version.getCurrentVersion().isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration gkit = Files.GKITZ.getFile();
 		FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
@@ -218,6 +224,14 @@ public class CrazyEnchantments {
 	 */
 	public Plugin getPlugin() {
 		return Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+	}
+	
+	/**
+	 * Get the World Guard support class.
+	 * @return World Guard support class.
+	 */
+	public WorldGuardVersion getWorldGuardSupport() {
+		return worldGuardVersion;
 	}
 	
 	/**
@@ -1037,7 +1051,6 @@ public class CrazyEnchantments {
 	public String convertLevelString(Integer i) {
 		switch(i) {
 			case 0:
-				return "I";
 			case 1:
 				return "I";
 			case 2:

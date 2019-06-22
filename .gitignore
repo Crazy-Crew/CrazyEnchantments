@@ -12,3 +12,5 @@ src/main/library/
 \.DS_Store
 
 crazyenchantments/src/main/lib/
+
+plugin/src/main/library/

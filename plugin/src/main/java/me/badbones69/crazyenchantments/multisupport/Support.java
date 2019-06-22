@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.multisupport;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
+import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -11,7 +12,7 @@ import org.bukkit.plugin.Plugin;
 
 public class Support {
 	
-	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private static WorldGuardVersion worldGuardVersion = CrazyEnchantments.getInstance().getWorldGuardSupport();
 	
 	public static boolean inTerritory(Player player) {
 		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
@@ -173,34 +174,34 @@ public class Support {
 	}
 	
 	public static boolean allowsPVP(Location loc) {
-		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuardSupport.allowsPVP(loc);
+		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsPVP(loc);
 	}
 	
 	public static boolean allowsBreak(Location loc) {
-		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuardSupport.allowsBreak(loc);
+		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsBreak(loc);
 	}
 	
 	public static boolean allowsExplotions(Location loc) {
-		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || WorldGuardSupport.allowsExplosions(loc);
+		return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsExplosions(loc);
 	}
 	
 	public static boolean inWingsRegion(Player player) {
 		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
 			if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Regions")) {
 				for(String rg : Files.CONFIG.getFile().getStringList("Settings.EnchantmentOptions.Wings.Regions")) {
-					if(WorldGuardSupport.inRegion(rg, player.getLocation())) {
+					if(worldGuardVersion.inRegion(rg, player.getLocation())) {
 						return true;
 					}else {
 						if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
 							if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
-								if(WorldGuardSupport.isMember(player)) {
+								if(worldGuardVersion.isMember(player)) {
 									return true;
 								}
 							}
 						}
 						if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
 							if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
-								if(WorldGuardSupport.isOwner(player)) {
+								if(worldGuardVersion.isOwner(player)) {
 									return true;
 								}
 							}

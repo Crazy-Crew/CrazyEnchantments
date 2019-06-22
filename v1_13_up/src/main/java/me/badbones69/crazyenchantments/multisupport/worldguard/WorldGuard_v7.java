@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.worldguard;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -10,9 +10,10 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class WorldGuardSupport {
+public class WorldGuard_v7 implements WorldGuardVersion {
 	
-	public static boolean allowsPVP(Location loc) {
+	@Override
+	public boolean allowsPVP(Location loc) {
 		BukkitWorld world = new BukkitWorld(loc.getWorld());
 		BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 		try {
@@ -23,7 +24,8 @@ public class WorldGuardSupport {
 		}
 	}
 	
-	public static boolean allowsBreak(Location loc) {
+	@Override
+	public boolean allowsBreak(Location loc) {
 		BukkitWorld world = new BukkitWorld(loc.getWorld());
 		BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 		try {
@@ -34,7 +36,8 @@ public class WorldGuardSupport {
 		}
 	}
 	
-	public static boolean allowsExplosions(Location loc) {
+	@Override
+	public boolean allowsExplosions(Location loc) {
 		BukkitWorld world = new BukkitWorld(loc.getWorld());
 		BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 		try {
@@ -45,7 +48,8 @@ public class WorldGuardSupport {
 		}
 	}
 	
-	public static boolean inRegion(String regionName, Location loc) {
+	@Override
+	public boolean inRegion(String regionName, Location loc) {
 		BukkitWorld world = new BukkitWorld(loc.getWorld());
 		BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 		try {
@@ -61,7 +65,8 @@ public class WorldGuardSupport {
 		return false;
 	}
 	
-	public static Boolean isMember(Player player) {
+	@Override
+	public boolean isMember(Player player) {
 		BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
 		BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 		try {
@@ -77,7 +82,8 @@ public class WorldGuardSupport {
 		return false;
 	}
 	
-	public static Boolean isOwner(Player player) {
+	@Override
+	public boolean isOwner(Player player) {
 		BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
 		BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 		try {
