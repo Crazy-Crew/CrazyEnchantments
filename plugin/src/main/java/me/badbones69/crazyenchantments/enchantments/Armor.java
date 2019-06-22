@@ -10,6 +10,8 @@ import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -109,7 +111,11 @@ public class Armor implements Listener {
 												Vector v = player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1);
 												player.setVelocity(v);
 											}, 1);
-											player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
+											if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+												player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
+											}else {
+												ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 1, 1, player.getLocation(), 100);
+											}
 											fall.add(player);
 											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> fall.remove(player), 8 * 20);
 										}
@@ -242,8 +248,9 @@ public class Armor implements Listener {
 									if(!event.isCancelled()) {
 										Location loc = damager.getLocation();
 										loc.getWorld().spigot().strikeLightningEffect(loc, true);
-										int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160 );
-										loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float)lightningSoundRange / 16f, 1);
+										int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+										Sound sound = Version.getCurrentVersion().isNewer(Version.v1_8_R3) ? Sound.valueOf("ENTITY_LIGHTNING_BOLT_IMPACT") : Sound.valueOf("ENTITY_LIGHTNING_IMPACT");
+										loc.getWorld().playSound(loc, sound, (float) lightningSoundRange / 16f, 1);
 										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 											if(Support.allowsPVP(en.getLocation())) {
 												if(!Support.isFriendly(player, en)) {
@@ -735,10 +742,6 @@ public class Armor implements Listener {
 					en.setCanPickupItems(false);
 					break;
 				case ENDERMITE:
-					en.setMaxHealth(10);
-					en.setHealth(10);
-					Support.noStack(en);
-					break;
 				case SILVERFISH:
 					en.setMaxHealth(10);
 					en.setHealth(10);

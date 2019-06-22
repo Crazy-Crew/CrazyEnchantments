@@ -7,6 +7,8 @@ import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -182,7 +184,11 @@ public class Boots implements Listener {
 									if(boots != null) {
 										if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
 											if(CEnchantments.WINGS.isActivated()) {
-												player.getWorld().spawnParticle(Particle.CLOUD, l, 100, .25, 0, .25, 0);
+												if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+													player.getWorld().spawnParticle(Particle.CLOUD, l, 100, .25, 0, .25, 0);
+												}else {
+													ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, player.getLocation(), 100);
+												}
 											}
 										}
 									}

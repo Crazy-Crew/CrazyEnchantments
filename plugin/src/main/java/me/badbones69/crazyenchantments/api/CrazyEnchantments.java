@@ -245,6 +245,26 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * Get the correct sound for the version of minecraft.
+	 * @param newSound The sound from 1.9+
+	 * @param oldSound The sound from 1.8.8-
+	 * @return The Sound object of the current minecraft version.
+	 */
+	public Sound getSound(String newSound, String oldSound) {
+		return Sound.valueOf(Version.getCurrentVersion().isNewer(Version.v1_8_R3) ? newSound : oldSound);
+	}
+	
+	/**
+	 * Get the correct material for the version of minecraft.
+	 * @param newMaterial The material from 1.13+
+	 * @param oldMaterial The material from 1.12.2-
+	 * @return The Material object of the current minecraft version.
+	 */
+	public Material getMaterial(String newMaterial, String oldMaterial) {
+		return Material.matchMaterial(useNewMaterial ? newMaterial : oldMaterial);
+	}
+	
+	/**
 	 * Check if the gkitz option is enabled.
 	 * @return True if it is on and false if it is off.
 	 */

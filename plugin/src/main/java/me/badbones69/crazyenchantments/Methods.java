@@ -129,6 +129,14 @@ public class Methods {
 		}
 	}
 	
+	public static ItemStack getItemInHand(Player player) {
+		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+			return Methods.getItemInHand(player);
+		}else {
+			return player.getItemInHand();
+		}
+	}
+	
 	public static void setItemInHand(Player player, ItemStack item) {
 		player.getInventory().setItemInMainHand(item);
 	}
@@ -533,15 +541,8 @@ public class Methods {
 		return enchants.get(en.getName());
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void removeDurability(ItemStack item, Player player) {
 		if(item.hasItemMeta()) {
-			try {
-				if(item.getItemMeta().isUnbreakable()) {
-					return;
-				}
-			}catch(NoSuchMethodError e) {
-			}
 			try {
 				if(item.getItemMeta().isUnbreakable()) {
 					return;
@@ -625,10 +626,16 @@ public class Methods {
 	}
 	
 	public static void explode(Entity player) {
-		ParticleEffect.FLAME.display(0, 0, 0, 1, 200, player.getLocation().add(0, 1, 0), 100);
-		ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, player.getLocation().add(0, 1, 0), 100);
-		ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, player.getLocation().add(0, 1, 0), 100);
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+			player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
+			player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
+			player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
+		}else {
+			ParticleEffect.FLAME.display(0, 0, 0, 1, 200, player.getLocation().add(0, 1, 0), 100);
+			ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, player.getLocation().add(0, 1, 0), 100);
+			ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, player.getLocation().add(0, 1, 0), 100);
+		}
+		player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE", "EXPLODE"), 1, 1);
 		for(Entity e : Methods.getNearbyEntitiess(player.getLocation(), 3D, player)) {
 			if(Support.allowsPVP(e.getLocation())) {
 				if(e.getType() == EntityType.DROPPED_ITEM) {
@@ -662,10 +669,16 @@ public class Methods {
 	}
 	
 	public static void explode(Entity player, Entity arrow) {
-		arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
-		arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
-		arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
-		player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+			arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
+			arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
+			arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
+		}else {
+			ParticleEffect.FLAME.display(0, 0, 0, 1, 200, arrow.getLocation().add(0, 1, 0), 100);
+			ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, arrow.getLocation().add(0, 1, 0), 100);
+			ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, arrow.getLocation().add(0, 1, 0), 100);
+		}
+		player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE", "EXPLODE"), 1, 1);
 		for(Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)) {
 			if(Support.allowsPVP(e.getLocation())) {
 				if(e.getType() == EntityType.DROPPED_ITEM) {

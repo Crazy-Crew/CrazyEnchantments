@@ -125,6 +125,26 @@ public class ItemBuilder {
 	}
 	
 	/**
+	 * Set the type of item and its metadata in the builder.
+	 * @param newMaterial The 1.13+ string must be in this form: %Material% or %Material%:%MetaData%
+	 * @param oldMaterial The 1.12.2- string must be in this form: %Material% or %Material%:%MetaData%
+	 * @return The ItemBuilder with updated info.
+	 */
+	public ItemBuilder setMaterial(String newMaterial, String oldMaterial) {
+		String material = ce.useNewMaterial() ? newMaterial : oldMaterial;
+		if(material.contains(":")) {// Sets the durability.
+			String[] b = material.split(":");
+			material = b[0];
+			this.damage = Integer.parseInt(b[1]);
+		}
+		Material m = Material.matchMaterial(material);
+		if(m != null) {// Sets the material.
+			this.material = m;
+		}
+		return this;
+	}
+	
+	/**
 	 * Get the damage of the item.
 	 * @return The damage of the item as an int.
 	 */

@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.enchantments;
 
+import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
@@ -8,7 +9,6 @@ import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +35,7 @@ public class Axes implements Listener {
 			LivingEntity en = (LivingEntity) e.getEntity();
 			if(e.getDamager() instanceof Player) {
 				Player damager = (Player) e.getDamager();
-				ItemStack item = damager.getInventory().getItemInMainHand();
+				ItemStack item = Methods.getItemInHand(damager);
 				if(!e.getEntity().isDead()) {
 					if(ce.hasEnchantments(item)) {
 						if(ce.hasEnchantment(item, CEnchantments.BERSERK)) {
@@ -129,7 +129,7 @@ public class Axes implements Listener {
 		if(e.getEntity().getKiller() instanceof Player) {
 			Player damager = e.getEntity().getKiller();
 			Player player = e.getEntity();
-			ItemStack item = damager.getInventory().getItemInMainHand();
+			ItemStack item = Methods.getItemInHand(damager);
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.DECAPITATION)) {
 					if(CEnchantments.DECAPITATION.isActivated()) {
@@ -138,7 +138,7 @@ public class Axes implements Listener {
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()) {
-								ItemStack head = new ItemBuilder().setMaterial(Material.PLAYER_HEAD).build();
+								ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD", "SKULL:3").build();
 								SkullMeta m = (SkullMeta) head.getItemMeta();
 								m.setOwner(player.getName());
 								head.setItemMeta(m);

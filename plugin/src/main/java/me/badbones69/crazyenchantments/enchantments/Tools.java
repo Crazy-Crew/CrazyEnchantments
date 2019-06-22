@@ -4,6 +4,8 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -51,13 +53,13 @@ public class Tools implements Listener {
 		}
 		updateEffects(player);
 		if(player.getGameMode() != GameMode.CREATIVE) {
-			ItemStack item = player.getInventory().getItemInMainHand();
+			ItemStack item = Methods.getItemInHand(player);
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.TELEPATHY) && !ce.hasEnchantment(item, CEnchantments.BLAST)) {
 					if(CEnchantments.TELEPATHY.isActivated()) {
 						if(item.getItemMeta().hasEnchants()) {
 							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-								if(block.getType() == Material.SPAWNER) {
+								if(block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER"))) {
 									return;
 								}
 							}
@@ -67,16 +69,16 @@ public class Tools implements Listener {
 						if(!event.isCancelled()) {
 							HashMap<ItemStack, Integer> drops = new HashMap<>();
 							for(ItemStack drop : block.getDrops()) {
-								if(ce.hasEnchantment(item, CEnchantments.FURNACE) && getOres().containsKey(block.getType())) {
-									drop.setType(getOres().get(block.getType()));
+								if(ce.hasEnchantment(item, CEnchantments.FURNACE) && isOre(block.getType())) {
+									drop = getOreDrop(block.getType());
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 										if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
 											drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 										}
 									}
-								}else if(ce.hasEnchantment(item, CEnchantments.AUTOSMELT) && getOres().containsKey(block.getType())) {
+								}else if(ce.hasEnchantment(item, CEnchantments.AUTOSMELT) && isOre(block.getType())) {
 									if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-										drop.setType(getOres().get(block.getType()));
+										drop = getOreDrop(block.getType());
 										drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
 										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 											if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
@@ -113,7 +115,7 @@ public class Tools implements Listener {
 								if(ce.hasEnchantment(item, CEnchantments.EXPERIENCE)) {
 									if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
 										int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-										if(getOres().containsKey(block.getType())) {
+										if(isOre(block.getType())) {
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3) * power);
 										}
@@ -156,8 +158,10 @@ public class Tools implements Listener {
 								}
 							}
 							for(ItemStack i : drops.keySet()) {
-								if(i.getType() == Material.INK_SAC) {
-									i.setType((new ItemStack(Material.INK_SAC, 1, (short) 4)).getType());
+								if(!ce.useNewMaterial()) {
+									if(i.getType() == Material.matchMaterial("INK_SACK")) {//Changes ink sacks to lapis if on 1.12.2-
+										i.setDurability((short) 4);
+									}
 								}
 								i.setAmount(drops.get(i));
 								if(Methods.isInvFull(player)) {
@@ -166,7 +170,11 @@ public class Tools implements Listener {
 									player.getInventory().addItem(i);
 								}
 							}
-							e.setDropItems(false);
+							if(Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
+								e.setDropItems(false);
+							}else {
+								block.setType(Material.AIR);
+							}
 							Methods.removeDurability(item, player);
 						}
 					}
@@ -176,7 +184,7 @@ public class Tools implements Listener {
 	}
 	
 	private void updateEffects(Player player) {
-		ItemStack item = player.getInventory().getItemInMainHand();
+		ItemStack item = Methods.getItemInHand(player);
 		if(ce.hasEnchantments(item)) {
 			int time = 5 * 20;
 			if(ce.hasEnchantment(item, CEnchantments.HASTE)) {
@@ -214,17 +222,57 @@ public class Tools implements Listener {
 		return ores;
 	}
 	
-	private HashMap<Material, Material> getOres() {
-		HashMap<Material, Material> ores = new HashMap<>();
-		ores.put(Material.COAL_ORE, Material.COAL);
-		ores.put(Material.NETHER_QUARTZ_ORE, Material.QUARTZ);
-		ores.put(Material.IRON_ORE, Material.IRON_INGOT);
-		ores.put(Material.GOLD_ORE, Material.GOLD_INGOT);
-		ores.put(Material.DIAMOND_ORE, Material.DIAMOND);
-		ores.put(Material.EMERALD_ORE, Material.EMERALD);
-		ores.put(Material.REDSTONE_ORE, Material.REDSTONE);
-		ores.put(Material.LAPIS_ORE, Material.LAPIS_LAZULI);
-		return ores;
+	private boolean isOre(Material material) {
+		if(material == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+			return true;
+		}
+		switch(material) {
+			case COAL_ORE:
+			case IRON_ORE:
+			case GOLD_ORE:
+			case DIAMOND_ORE:
+			case EMERALD_ORE:
+			case LAPIS_ORE:
+			case REDSTONE_ORE:
+				return true;
+			default:
+				return false;
+		}
+	}
+	
+	private ItemStack getOreDrop(Material material) {
+		ItemBuilder dropItem = new ItemBuilder();
+		if(material == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+			dropItem.setMaterial(Material.QUARTZ);
+		}else {
+			switch(material) {
+				case COAL_ORE:
+					dropItem.setMaterial(Material.COAL);
+					break;
+				case IRON_ORE:
+					dropItem.setMaterial(Material.IRON_INGOT);
+					break;
+				case GOLD_ORE:
+					dropItem.setMaterial(Material.GOLD_INGOT);
+					break;
+				case DIAMOND_ORE:
+					dropItem.setMaterial(Material.DIAMOND);
+					break;
+				case EMERALD_ORE:
+					dropItem.setMaterial(Material.EMERALD);
+					break;
+				case LAPIS_ORE:
+					dropItem.setMaterial("LAPIS_LAZULI", "INK_SACK:4");
+					break;
+				case REDSTONE_ORE:
+					dropItem.setMaterial(Material.REDSTONE);
+					break;
+				default:
+					dropItem.setMaterial(Material.AIR);
+					break;
+			}
+		}
+		return dropItem.build();
 	}
 	
 	private ArrayList<Material> getItems() {
@@ -236,8 +284,8 @@ public class Tools implements Listener {
 		items.add(Material.REDSTONE_ORE);
 		items.add(Material.REDSTONE_ORE);
 		items.add(Material.LAPIS_ORE);
-		items.add(Material.TALL_GRASS);
-		items.add(Material.NETHER_WART);
+		items.add(ce.getMaterial("TALL_GRASS", "LONG_GRASS"));
+		items.add(ce.getMaterial("NETHER_WART", "NETHER_WARTS"));
 		items.add(Material.GLOWSTONE);
 		items.add(Material.GRAVEL);
 		return items;

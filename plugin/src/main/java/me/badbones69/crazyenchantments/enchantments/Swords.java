@@ -15,9 +15,9 @@ import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -48,7 +48,7 @@ public class Swords implements Listener {
 				if(ce.isBreakRageOnDamageOn()) {
 					if(e.getEntity() instanceof Player) {
 						CEPlayer player = ce.getCEPlayer((Player) e.getEntity());
-						RageBreakEvent event = new RageBreakEvent(player.getPlayer(), e.getDamager(), player.getPlayer().getInventory().getItemInMainHand());
+						RageBreakEvent event = new RageBreakEvent(player.getPlayer(), e.getDamager(), Methods.getItemInHand(player.getPlayer()));
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()) {
 							UUID uuid = e.getEntity().getUniqueId();
@@ -69,7 +69,7 @@ public class Swords implements Listener {
 						final Player damager = (Player) e.getDamager();
 						CEPlayer cePlayer = ce.getCEPlayer(damager);
 						LivingEntity en = (LivingEntity) e.getEntity();
-						ItemStack item = damager.getInventory().getItemInMainHand();
+						ItemStack item = Methods.getItemInHand(damager);
 						if(!e.getEntity().isDead()) {
 							if(ce.hasEnchantments(item)) {
 								if(ce.hasEnchantment(item, CEnchantments.DISARMER)) {
@@ -337,8 +337,9 @@ public class Swords implements Listener {
 											if(!event.isCancelled()) {
 												Location loc = en.getLocation();
 												loc.getWorld().spigot().strikeLightningEffect(loc, true);
-												int lightningSoundRange = FileManager.Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160 );
-												loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float)lightningSoundRange / 16f, 1);
+												int lightningSoundRange = FileManager.Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+												Sound sound = Version.getCurrentVersion().isNewer(Version.v1_8_R3) ? Sound.valueOf("ENTITY_LIGHTNING_BOLT_IMPACT") : Sound.valueOf("ENTITY_LIGHTNING_IMPACT");
+												loc.getWorld().playSound(loc, sound, (float) lightningSoundRange / 16f, 1);
 												for(LivingEntity En : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 													if(Support.allowsPVP(En.getLocation())) {
 														if(!Support.isFriendly(damager, En)) {
@@ -423,7 +424,7 @@ public class Swords implements Listener {
 		if(e.getEntity().getKiller() instanceof Player) {
 			Player damager = e.getEntity().getKiller();
 			Player player = e.getEntity();
-			ItemStack item = damager.getInventory().getItemInMainHand();
+			ItemStack item = Methods.getItemInHand(damager);
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.HEADLESS)) {
 					if(CEnchantments.HEADLESS.isActivated()) {
@@ -432,7 +433,7 @@ public class Swords implements Listener {
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.HEADLESS, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()) {
-								ItemStack head = new ItemBuilder().setMaterial(Material.PLAYER_HEAD).build();
+								ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD", "SKULL:3").build();
 								SkullMeta m = (SkullMeta) head.getItemMeta();
 								m.setOwner(player.getName());
 								head.setItemMeta(m);
@@ -450,7 +451,7 @@ public class Swords implements Listener {
 		if(Support.isFriendly(e.getEntity().getKiller(), e.getEntity())) return;
 		if(e.getEntity().getKiller() instanceof Player) {
 			Player damager = e.getEntity().getKiller();
-			ItemStack item = damager.getInventory().getItemInMainHand();
+			ItemStack item = Methods.getItemInHand(damager);
 			if(ce.hasEnchantments(item)) {
 				if(ce.hasEnchantment(item, CEnchantments.INQUISITIVE)) {
 					if(CEnchantments.INQUISITIVE.isActivated()) {
