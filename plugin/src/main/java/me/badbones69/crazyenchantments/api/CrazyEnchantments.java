@@ -30,6 +30,7 @@ public class CrazyEnchantments {
 	private static CrazyEnchantments instance = new CrazyEnchantments();
 	private Integer rageMaxLevel;
 	private Boolean gkitzToggle;
+	private Boolean useNewMaterial;
 	private Boolean breakRageOnDamage;
 	private Boolean enchantStackedItems;
 	private WorldGuardVersion worldGuardVersion;
@@ -56,7 +57,9 @@ public class CrazyEnchantments {
 		registeredEnchantments.clear();
 		whitelisted.clear();
 		blacklisted.clear();
-		worldGuardVersion = Version.getCurrentVersion().isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
+		Version version = Version.getCurrentVersion();
+		useNewMaterial = version.isNewer(Version.v1_12_R1);
+		worldGuardVersion = version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration gkit = Files.GKITZ.getFile();
 		FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
@@ -232,6 +235,13 @@ public class CrazyEnchantments {
 	 */
 	public WorldGuardVersion getWorldGuardSupport() {
 		return worldGuardVersion;
+	}
+	
+	/**
+	 * The material version needed to be used.
+	 */
+	public Boolean useNewMaterial() {
+		return useNewMaterial;
 	}
 	
 	/**

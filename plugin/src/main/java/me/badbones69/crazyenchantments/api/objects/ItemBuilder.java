@@ -1,9 +1,12 @@
 package me.badbones69.crazyenchantments.api.objects;
 
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -14,7 +17,7 @@ import java.util.List;
 /**
  *
  * The ItemBuilder is designed to make creating items easier by creating an easy to use Builder.
- * This will allow you to covert an existing ItemStack into an ItemBuilder to allow you to edit 
+ * This will allow you to covert an existing ItemStack into an ItemBuilder to allow you to edit
  * an existing ItemStack or make a new ItemStack from scratch.
  *
  * @author BadBones69
@@ -23,26 +26,33 @@ import java.util.List;
 public class ItemBuilder {
 	
 	private Material material;
+	private int damage;
 	private String name;
 	private List<String> lore;
 	private Integer amount;
+	private String player;
 	private HashMap<Enchantment, Integer> enchantments;
 	private Boolean unbreakable;
+	private Boolean hideItemFlags;
 	private Boolean glowing;
 	private ItemStack referenceItem;
 	private HashMap<String, String> namePlaceholders;
 	private HashMap<String, String> lorePlaceholders;
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	/**
-	 * The inishal starting point for making an item.
+	 * The initial starting point for making an item.
 	 */
 	public ItemBuilder() {
 		this.material = Material.STONE;
+		this.damage = 0;
 		this.name = "";
 		this.lore = new ArrayList<>();
 		this.amount = 1;
+		this.player = "";
 		this.enchantments = new HashMap<>();
 		this.unbreakable = false;
+		this.hideItemFlags = false;
 		this.glowing = false;
 		this.namePlaceholders = new HashMap<>();
 		this.lorePlaceholders = new HashMap<>();
@@ -60,11 +70,19 @@ public class ItemBuilder {
 		.setMaterial(item.getType())
 		.setEnchantments(new HashMap<>(item.getEnchantments()));
 		if(item.hasItemMeta()) {
-			itemBuilder.setName(item.getItemMeta().getDisplayName())
-			.setLore(item.getItemMeta().getLore());
+			ItemMeta itemMeta = item.getItemMeta();
+			itemBuilder.setName(itemMeta.getDisplayName())
+			.setLore(itemMeta.getLore());
 			NBTItem nbt = new NBTItem(item);
 			if(nbt.hasKey("Unbreakable")) {
 				itemBuilder.setUnbreakable(nbt.getBoolean("Unbreakable"));
+			}
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				if(itemMeta instanceof org.bukkit.inventory.meta.Damageable) {
+					itemBuilder.setDamage(((org.bukkit.inventory.meta.Damageable) itemMeta).getDamage());
+				}
+			}else {
+				itemBuilder.setDamage(item.getDurability());
 			}
 		}
 		return itemBuilder;
@@ -90,14 +108,36 @@ public class ItemBuilder {
 	
 	/**
 	 * Set the type of item and its metadata in the builder.
-	 * @param string The string must be in this form: %Material% or %Material%:%MetaData%
+	 * @param material The string must be in this form: %Material% or %Material%:%MetaData%
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder setMaterial(String string) {
-		Material material = Material.getMaterial(string); //Needs to be changed to getMaterial() for 1.13.
-		if(material != null) {
-			this.material = material;
+	public ItemBuilder setMaterial(String material) {
+		if(material.contains(":")) {// Sets the durability.
+			String[] b = material.split(":");
+			material = b[0];
+			this.damage = Integer.parseInt(b[1]);
 		}
+		Material m = Material.matchMaterial(material);
+		if(m != null) {// Sets the material.
+			this.material = m;
+		}
+		return this;
+	}
+	
+	/**
+	 * Get the damage of the item.
+	 * @return The damage of the item as an int.
+	 */
+	public int getDamage() {
+		return damage;
+	}
+	
+	/**
+	 * Set the items damage value.
+	 * @param damage The damage value of the item.
+	 */
+	public ItemBuilder setDamage(int damage) {
+		this.damage = damage;
 		return this;
 	}
 	
@@ -123,7 +163,7 @@ public class ItemBuilder {
 	
 	/**
 	 * Set the placeholders for the name of the item.
-	 * @param placeholders The palceholders that will be used.
+	 * @param placeholders The placeholders that will be used.
 	 * @return The ItemBuilder with updated info.
 	 */
 	public ItemBuilder setNamePlaceholders(HashMap<String, String> placeholders) {
@@ -212,7 +252,7 @@ public class ItemBuilder {
 	/**
 	 * Add a placeholder to the lore of the item.
 	 * @param placeholder The placeholder you wish to replace.
-	 * @param argument The arument that will replace the placeholder.
+	 * @param argument The argument that will replace the placeholder.
 	 * @return The ItemBuilder with updated info.
 	 */
 	public ItemBuilder addLorePlaceholder(String placeholder, String argument) {
@@ -222,7 +262,7 @@ public class ItemBuilder {
 	
 	/**
 	 * Remove a placeholder from the lore.
-	 * @param placeholder The palceholder you wish to remove.
+	 * @param placeholder The placeholder you wish to remove.
 	 * @return The ItemBuilder with updated info.
 	 */
 	public ItemBuilder removeLorePlaceholder(String placeholder) {
@@ -260,6 +300,24 @@ public class ItemBuilder {
 	 */
 	public ItemBuilder setAmount(Integer amount) {
 		this.amount = amount;
+		return this;
+	}
+	
+	/**
+	 * Get the name of the player being used as a head.
+	 * @return The name of the player being used on the head.
+	 */
+	public String getPlayer() {
+		return player;
+	}
+	
+	/**
+	 * Set the player that will be displayed on the head.
+	 * @param player The player being displayed on the head.
+	 * @return The ItemBuilder with updated info.
+	 */
+	public ItemBuilder setPlayer(String player) {
+		this.player = player;
 		return this;
 	}
 	
@@ -324,6 +382,24 @@ public class ItemBuilder {
 	}
 	
 	/**
+	 * Set if the item should hide item flags or not
+	 * @param hideItemFlags true the item will hide item flags. false will show them.
+	 * @return The ItemBuilder with updated info.
+	 */
+	public ItemBuilder hideItemFlags(Boolean hideItemFlags) {
+		this.hideItemFlags = hideItemFlags;
+		return this;
+	}
+	
+	/**
+	 * Check if the item in the builder has hidden item flags.
+	 * @return The ItemBuilder with updated info.
+	 */
+	public Boolean areItemFlagsHidden() {
+		return hideItemFlags;
+	}
+	
+	/**
 	 * Check if the item in the builder is glowing.
 	 * @return The ItemBuilder with updated info.
 	 */
@@ -347,23 +423,45 @@ public class ItemBuilder {
 	 */
 	public ItemStack build() {
 		ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material, amount);
-		ItemMeta itemMeta = item.getItemMeta();
-		itemMeta.setDisplayName(getUpdatedName());
-		itemMeta.setLore(getUpdatedLore());
-		item.setItemMeta(itemMeta);
-		item.addUnsafeEnchantments(enchantments);
-		addGlow(item, glowing);
-		NBTItem nbt = new NBTItem(item);
-		if(unbreakable) {
-			nbt.setBoolean("Unbreakable", true);
-			nbt.setInteger("HideFlags", 4);
+		if(item.getType() != Material.AIR) {
+			ItemMeta itemMeta = item.getItemMeta();
+			itemMeta.setDisplayName(getUpdatedName());
+			itemMeta.setLore(getUpdatedLore());
+			if(Version.getCurrentVersion().isNewer(Version.v1_10_R1)) {
+				itemMeta.setUnbreakable(unbreakable);
+			}
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				if(itemMeta instanceof org.bukkit.inventory.meta.Damageable) {
+					((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
+				}
+			}else {
+				item.setDurability((short) damage);
+			}
+			item.setItemMeta(itemMeta);
+			hideFlags(item, hideItemFlags);
+			item.addUnsafeEnchantments(enchantments);
+			addGlow(item, glowing);
+			NBTItem nbt = new NBTItem(item);
+			if(material == Material.matchMaterial(ce.useNewMaterial() ? "PLAYER_HEAD" : "SKULL:3")) {
+				if(!player.equals("")) {
+					nbt.setString("SkullOwner", player);
+				}
+			}
+			if(Version.getCurrentVersion().isOlder(Version.v1_11_R1)) {
+				if(unbreakable) {
+					nbt.setBoolean("Unbreakable", true);
+					nbt.setInteger("HideFlags", 4);
+				}
+			}
+			return nbt.getItem();
+		}else {
+			return item;
 		}
-		return nbt.getItem();
 	}
 	
 	/**
 	 * Sets the converted item as a reference to try and save NBT tags and stuff.
-	 * @param referenceItem The item that is being referenced. 
+	 * @param referenceItem The item that is being referenced.
 	 * @return The ItemBuilder with updated info.
 	 */
 	private ItemBuilder setReferenceItem(ItemStack referenceItem) {
@@ -373,6 +471,18 @@ public class ItemBuilder {
 	
 	private String color(String msg) {
 		return ChatColor.translateAlternateColorCodes('&', msg);
+	}
+	
+	private ItemStack hideFlags(ItemStack item, Boolean toggle) {
+		if(toggle) {
+			if(item != null && item.hasItemMeta()) {
+				ItemMeta itemMeta = item.getItemMeta();
+				itemMeta.addItemFlags(ItemFlag.values());
+				item.setItemMeta(itemMeta);
+				return item;
+			}
+		}
+		return item;
 	}
 	
 	private ItemStack addGlow(ItemStack item, boolean toggle) {
