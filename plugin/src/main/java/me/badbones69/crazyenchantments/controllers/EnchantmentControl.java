@@ -12,7 +12,7 @@ import me.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import me.badbones69.crazyenchantments.api.events.BookFailEvent;
 import me.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

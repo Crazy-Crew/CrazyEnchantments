@@ -8,7 +8,7 @@ import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
-import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;

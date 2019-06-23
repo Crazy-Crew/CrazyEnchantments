@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.api.objects;
+package me.badbones69.crazyenchantments.api;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

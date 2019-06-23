@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.multisupport;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.objects.FileManager.Files;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
