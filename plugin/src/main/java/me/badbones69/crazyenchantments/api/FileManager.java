@@ -54,7 +54,7 @@ public class FileManager {
 			if(!newFile.exists()) {
 				try {
 					File serverFile = new File(plugin.getDataFolder(), "/" + file.getFileLocation());
-					InputStream jarFile = getClass().getResourceAsStream("/" + file.getFileLocation());
+					InputStream jarFile = getClass().getResourceAsStream("/" + file.getFileJar());
 					copyFile(jarFile, serverFile);
 				}catch(Exception e) {
 					if(log) System.out.println(prefix + "Failed to load " + file.getFileName());
@@ -244,7 +244,7 @@ public class FileManager {
 		if(file != null) {
 			try {
 				file.file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
-				if(log) System.out.println(prefix + "Successfuly reload the " + file.getFileName() + ".");
+				if(log) System.out.println(prefix + "Successfully reload the " + file.getFileName() + ".");
 			}catch(Exception e) {
 				System.out.println(prefix + "Could not reload the " + file.getFileName() + "!");
 				e.printStackTrace();
@@ -284,36 +284,49 @@ public class FileManager {
 		
 		//ENUM_NAME("fileName.yml", "fileLocation.yml"),
 		//ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
-		CONFIG("config.yml", "config1.13-Up.yml", "config1.12.2-Down.yml"),
-		BLOCKLIST("BlockList.yml", "BlockList1.13-Up.yml", "BlockList1.12.2-Down.yml"),
+		CONFIG("config.yml", "config.yml", "config1.13-Up.yml", "config1.12.2-Down.yml"),
+		BLOCKLIST("BlockList.yml", "BlockList.yml", "BlockList1.13-Up.yml", "BlockList1.12.2-Down.yml"),
 		DATA("Data.yml", "Data.yml"),
 		ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
-		GKITZ("GKitz.yml", "GKitz1.13-Up.yml", "GKitz1.12.2-Down.yml"),
+		GKITZ("GKitz.yml", "GKitz.yml", "GKitz1.13-Up.yml", "GKitz1.12.2-Down.yml"),
 		MESSAGES("Messages.yml", "Messages.yml"),
 		SIGNS("Signs.yml", "Signs.yml"),
-		TINKER("Tinker.yml", "Tinker1.13-Up.yml", "Tinker1.12.2-Down.yml");
+		TINKER("Tinker.yml", "Tinker.yml", "Tinker1.13-Up.yml", "Tinker1.12.2-Down.yml");
 		
 		private String fileName;
+		private String fileJar;
 		private String fileLocation;
 		
 		/**
 		 * The files that the server will try and load.
 		 * @param fileName The file name that will be in the plugin's folder.
-		 * @param fileLocation The location the file is in while in the Jar.
+		 * @param fileLocation The location the file in the plugin's folder.
 		 */
 		private Files(String fileName, String fileLocation) {
-			this.fileName = fileName;
-			this.fileLocation = fileLocation;
+			this(fileName, fileLocation, fileLocation);
 		}
 		
 		/**
 		 * The files that the server will try and load.
 		 * @param fileName The file name that will be in the plugin's folder.
-		 * @param newFileLocation The location of the 1.13+ file version.
-		 * @param oldFileLocation The location of the 1.12.2- file version.
+		 * @param fileLocation The location of the file will be in the plugin's folder.
+		 * @param fileJar The location of the file in the jar.
 		 */
-		private Files(String fileName, String newFileLocation, String oldFileLocation) {
-			this(fileName, Version.getCurrentVersion().isNewer(Version.v1_12_R1) ? newFileLocation : oldFileLocation);
+		private Files(String fileName, String fileLocation, String fileJar) {
+			this.fileName = fileName;
+			this.fileLocation = fileLocation;
+			this.fileJar = fileJar;
+		}
+		
+		/**
+		 * The files that the server will try and load.
+		 * @param fileName The file name that will be in the plugin's folder.
+		 * @param fileLocation The location of the file will be in the plugin's folder.
+		 * @param newFileJar The location of the 1.13+ file version in the jar.
+		 * @param oldFileJar The location of the 1.12.2- file version in the jar.
+		 */
+		private Files(String fileName, String fileLocation, String newFileJar, String oldFileJar) {
+			this(fileName, fileLocation, Version.getCurrentVersion().isNewer(Version.v1_12_R1) ? newFileJar : oldFileJar);
 		}
 		
 		/**
@@ -325,11 +338,19 @@ public class FileManager {
 		}
 		
 		/**
-		 * The location the jar it is at.
-		 * @return The location in the jar the file is in.
+		 * Get the location of the file in the plugin's folder.
+		 * @return The location of the file in the plugin's folder.
 		 */
 		public String getFileLocation() {
 			return fileLocation;
+		}
+		
+		/**
+		 * Get the location of the file in the jar.
+		 * @return The location of the file in the jar.
+		 */
+		public String getFileJar() {
+			return fileJar;
 		}
 		
 		/**
