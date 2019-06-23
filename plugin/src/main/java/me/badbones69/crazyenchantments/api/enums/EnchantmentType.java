@@ -6,38 +6,41 @@ import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public enum EnchantmentType {
 	
-	ARMOR("Armor", getArmor()),
-	HELMET("Helmet", getHelmets()),
-	CHESTPLATE("Chestplate", getChestplates()),
-	LEGGINGS("Leggings", getLeggings()),
-	BOOTS("Boots", getBoots()),
-	BOW("Bow", getBow()),
-	AXE("Axe", getAxes()),
-	SWORD("Sword", getSwords()),
-	WEAPONS("Weapons", getWepons()),
-	PICKAXE("PickAxe", getPickAxes()),
-	SHOVEL("Shovel", getShovels()),
-	TOOL("Tool", getTools()),
-	FISHING_ROD("Fishing-Rod", new ArrayList<>(Collections.singletonList(Material.FISHING_ROD))),
-	ELYTRA("Elytra", getElytra()),
-	ALL("All", getAll());
+	ARMOR("Armor"),
+	HELMET("Helmet"),
+	CHESTPLATE("Chestplate"),
+	LEGGINGS("Leggings"),
+	BOOTS("Boots"),
+	BOW("Bow"),
+	AXE("Axe"),
+	SWORD("Sword"),
+	WEAPONS("Weapons"),
+	PICKAXE("PickAxe"),
+	SHOVEL("Shovel"),
+	HOE("Hoe"),
+	TOOL("Tool"),
+	FISHING_ROD("Fishing-Rod"),
+	ELYTRA("Elytra"),
+	ALL("All");
 	
 	private String name;
-	private ArrayList<Material> items;
-	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private EnchantmentType instance;
+	private static HashMap<EnchantmentType, List<Material>> items;
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	/**
 	 *
 	 * @param name Name of the type.
-	 * @param items Items in the enchantment type.
 	 */
-	private EnchantmentType(String name, ArrayList<Material> items) {
+	private EnchantmentType(String name) {
 		this.name = name;
-		this.items = items;
+		this.instance = this;
 	}
 	
 	/**
@@ -52,8 +55,11 @@ public enum EnchantmentType {
 	 *
 	 * @return List of all items in the Type.
 	 */
-	public ArrayList<Material> getItems() {
-		return items;
+	public List<Material> getItems() {
+		if(items == null) {
+			loadItems();
+		}
+		return items.get(instance);
 	}
 	
 	/**
@@ -92,145 +98,110 @@ public enum EnchantmentType {
 		return null;
 	}
 	
-	private static ArrayList<Material> getArmor() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.addAll(getHelmets());
-		ma.addAll(getChestplates());
-		ma.addAll(getLeggings());
-		ma.addAll(getBoots());
-		return ma;
-	}
-	
-	private static ArrayList<Material> getHelmets() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(Material.LEATHER_HELMET);
-		ma.add(Material.IRON_HELMET);
-		ma.add(Material.CHAINMAIL_HELMET);
-		ma.add(ce.getMaterial("GOLDEN_HELMET", "GOLD_HELMET"));
-		ma.add(Material.DIAMOND_HELMET);
-		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
-			ma.add(Material.matchMaterial("TURTLE_HELMET"));
-		}
-		return ma;
-	}
-	
-	private static ArrayList<Material> getChestplates() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(Material.LEATHER_CHESTPLATE);
-		ma.add(Material.IRON_CHESTPLATE);
-		ma.add(Material.CHAINMAIL_CHESTPLATE);
-		ma.add(ce.getMaterial("GOLDEN_CHESTPLATE", "GOLD_CHESTPLATE"));
-		ma.add(Material.DIAMOND_CHESTPLATE);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getLeggings() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(Material.LEATHER_LEGGINGS);
-		ma.add(Material.IRON_LEGGINGS);
-		ma.add(Material.CHAINMAIL_LEGGINGS);
-		ma.add(ce.getMaterial("GOLDEN_LEGGINGS", "GOLD_LEGGINGS"));
-		ma.add(Material.DIAMOND_LEGGINGS);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getBoots() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(Material.LEATHER_BOOTS);
-		ma.add(Material.IRON_BOOTS);
-		ma.add(Material.CHAINMAIL_BOOTS);
-		ma.add(ce.getMaterial("GOLDEN_BOOTS", "GOLD_BOOTS"));
-		ma.add(Material.DIAMOND_BOOTS);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getAxes() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(ce.getMaterial("WOODEN_AXE", "WOOD_AXE"));
-		ma.add(Material.STONE_AXE);
-		ma.add(Material.IRON_AXE);
-		ma.add(ce.getMaterial("GOLDEN_AXE", "GOLD_AXE"));
-		ma.add(Material.DIAMOND_AXE);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getBow() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(Material.BOW);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getSwords() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(ce.getMaterial("WOODEN_SWORD", "WOOD_SWORD"));
-		ma.add(Material.STONE_SWORD);
-		ma.add(Material.IRON_SWORD);
-		ma.add(ce.getMaterial("GOLDEN_SWORD", "GOLD_SWORD"));
-		ma.add(Material.DIAMOND_SWORD);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getWepons() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.addAll(getSwords());
-		ma.addAll(getAxes());
-		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
-			ma.add(Material.matchMaterial("TRIDENT"));
-		}
-		return ma;
-	}
-	
-	private static ArrayList<Material> getPickAxes() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(ce.getMaterial("WOODEN_PICKAXE", "WOOD_PICKAXE"));
-		ma.add(Material.STONE_PICKAXE);
-		ma.add(Material.IRON_PICKAXE);
-		ma.add(ce.getMaterial("GOLDEN_PICKAXE", "GOLD_PICKAXE"));
-		ma.add(Material.DIAMOND_PICKAXE);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getShovels() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.add(ce.getMaterial("WOODEN_SHOVEL", "WOOD_SPADE"));
-		ma.add(ce.getMaterial("STONE_SHOVEL", "STONE_SPADE"));
-		ma.add(ce.getMaterial("IRON_SHOVEL", "IRON_SPADE"));
-		ma.add(ce.getMaterial("GOLDEN_SHOVEL", "GOLD_SPADE"));
-		ma.add(ce.getMaterial("DIAMOND_SHOVEL", "DIAMOND_SPADE"));
-		return ma;
-	}
-	
-	private static ArrayList<Material> getTools() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.addAll(getPickAxes());
-		ma.addAll(getAxes());
-		ma.addAll(getShovels());
-		ma.add(ce.getMaterial("WOODEN_HOE", "WOOD_HOE"));
-		ma.add(Material.STONE_HOE);
-		ma.add(Material.IRON_HOE);
-		ma.add(ce.getMaterial("GOLDEN_HOE", "GOLD_HOE"));
-		ma.add(Material.DIAMOND_HOE);
-		ma.add(Material.SHEARS);
-		return ma;
-	}
-	
-	private static ArrayList<Material> getElytra() {
-		ArrayList<Material> ma = new ArrayList<>();
+	private void loadItems() {
+		items = new HashMap<>();
+		//Helmets
+		items.put(HELMET, Arrays.asList(
+		Material.LEATHER_HELMET,
+		Material.IRON_HELMET,
+		Material.CHAINMAIL_HELMET,
+		ce.getMaterial("GOLDEN_HELMET", "GOLD_HELMET"),
+		Material.DIAMOND_HELMET));
+		//Chestplates
+		items.put(CHESTPLATE, Arrays.asList(
+		Material.LEATHER_CHESTPLATE,
+		Material.IRON_CHESTPLATE,
+		Material.CHAINMAIL_CHESTPLATE,
+		ce.getMaterial("GOLDEN_CHESTPLATE", "GOLD_CHESTPLATE"),
+		Material.DIAMOND_CHESTPLATE));
+		//Leggings
+		items.put(LEGGINGS, Arrays.asList(
+		Material.LEATHER_LEGGINGS,
+		Material.IRON_LEGGINGS,
+		Material.CHAINMAIL_LEGGINGS,
+		ce.getMaterial("GOLDEN_LEGGINGS", "GOLD_LEGGINGS"),
+		Material.DIAMOND_LEGGINGS));
+		//Boots
+		items.put(BOOTS, Arrays.asList(
+		Material.LEATHER_BOOTS,
+		Material.IRON_BOOTS,
+		Material.CHAINMAIL_BOOTS,
+		ce.getMaterial("GOLDEN_BOOTS", "GOLD_BOOTS"),
+		Material.DIAMOND_BOOTS));
+		//Armor
+		items.put(ARMOR, new ArrayList<>());
+		items.get(ARMOR).addAll(items.get(HELMET));
+		items.get(ARMOR).addAll(items.get(CHESTPLATE));
+		items.get(ARMOR).addAll(items.get(LEGGINGS));
+		items.get(ARMOR).addAll(items.get(BOOTS));
+		//Axes
+		items.put(AXE, Arrays.asList(
+		ce.getMaterial("WOODEN_AXE", "WOOD_AXE"),
+		Material.STONE_AXE,
+		Material.IRON_AXE,
+		ce.getMaterial("GOLDEN_AXE", "GOLD_AXE"),
+		Material.DIAMOND_AXE));
+		//Bow
+		items.put(BOW, Arrays.asList(Material.BOW));
+		//Swords
+		items.put(SWORD, Arrays.asList(
+		ce.getMaterial("WOODEN_SWORD", "WOOD_SWORD"),
+		Material.STONE_SWORD,
+		Material.IRON_SWORD,
+		ce.getMaterial("GOLDEN_SWORD", "GOLD_SWORD"),
+		Material.DIAMOND_SWORD));
+		//Weapons
+		items.put(WEAPONS, new ArrayList<>());
+		items.get(WEAPONS).addAll(items.get(SWORD));
+		items.get(WEAPONS).addAll(items.get(AXE));
+		//Pickaxes
+		items.put(PICKAXE, Arrays.asList(
+		ce.getMaterial("WOODEN_PICKAXE", "WOOD_PICKAXE"),
+		Material.STONE_PICKAXE,
+		Material.IRON_PICKAXE,
+		ce.getMaterial("GOLDEN_PICKAXE", "GOLD_PICKAXE"),
+		Material.DIAMOND_PICKAXE));
+		//Shovels
+		items.put(SHOVEL, Arrays.asList(
+		ce.getMaterial("WOODEN_SHOVEL", "WOOD_SPADE"),
+		ce.getMaterial("STONE_SHOVEL", "STONE_SPADE"),
+		ce.getMaterial("IRON_SHOVEL", "IRON_SPADE"),
+		ce.getMaterial("GOLDEN_SHOVEL", "GOLD_SPADE"),
+		ce.getMaterial("DIAMOND_SHOVEL", "DIAMOND_SPADE")));
+		//Hoes
+		items.put(HOE, Arrays.asList(
+		ce.getMaterial("WOODEN_HOE", "WOOD_HOE"),
+		Material.STONE_HOE,
+		Material.IRON_HOE,
+		ce.getMaterial("GOLDEN_HOE", "GOLD_HOE"),
+		Material.DIAMOND_HOE));
+		//Tools
+		items.put(TOOL, new ArrayList<>());
+		items.get(TOOL).addAll(items.get(PICKAXE));
+		items.get(TOOL).addAll(items.get(AXE));
+		items.get(TOOL).addAll(items.get(SHOVEL));
+		items.get(TOOL).addAll(items.get(HOE));
+		items.get(TOOL).add(Material.SHEARS);
+		//Elytra
+		items.put(ELYTRA, new ArrayList<>());
 		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-			ma.add(Material.matchMaterial("ELYTRA"));
+			items.get(ELYTRA).add(Material.matchMaterial("ELYTRA"));
 		}
-		return ma;
-	}
-	
-	private static ArrayList<Material> getAll() {
-		ArrayList<Material> ma = new ArrayList<>();
-		ma.addAll(getArmor());
-		ma.addAll(getTools());
-		ma.addAll(getBow());
-		ma.addAll(getWepons());
-		ma.addAll(getElytra());
-		ma.add(Material.FISHING_ROD);
-		return ma;
+		//Fishing Pole
+		items.put(FISHING_ROD, Arrays.asList(Material.FISHING_ROD));
+		//1.12+ Items
+		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+			items.get(HELMET).add(Material.matchMaterial("TURTLE_HELMET"));
+			items.get(WEAPONS).add(Material.matchMaterial("TRIDENT"));
+		}
+		//All
+		items.put(ALL, new ArrayList<>());
+		items.get(ALL).addAll(items.get(ARMOR));
+		items.get(ALL).addAll(items.get(TOOL));
+		items.get(ALL).addAll(items.get(BOW));
+		items.get(ALL).addAll(items.get(WEAPONS));
+		items.get(ALL).addAll(items.get(ELYTRA));
+		items.get(ALL).addAll(items.get(FISHING_ROD));
 	}
 	
 }
