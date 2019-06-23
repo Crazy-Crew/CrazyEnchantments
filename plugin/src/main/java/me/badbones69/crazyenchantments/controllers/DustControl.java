@@ -2,9 +2,9 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
@@ -53,8 +53,8 @@ public class DustControl implements Listener {
 									if(dust.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Name")))) {
 										if(dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Item")).getMaterial()) {
 											int per = getPercent(Dust.SUCCESS_DUST, dust);
-											if(Methods.hasArgument("%Success_Rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-												int total = Methods.getPercent("%Success_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
+											if(Methods.hasArgument("%success_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
+												int total = Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
 												if(total >= 100) return;
 												if(player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
 													player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));
@@ -74,8 +74,8 @@ public class DustControl implements Listener {
 									if(dust.getItemMeta().getDisplayName().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Name")))) {
 										if(dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Item")).getMaterial()) {
 											int per = getPercent(Dust.DESTROY_DUST, dust);
-											if(Methods.hasArgument("%Destroy_Rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-												int total = Methods.getPercent("%Destroy_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
+											if(Methods.hasArgument("%destroy_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
+												int total = Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
 												if(total <= 0) return;
 												if(player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
 													player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));
@@ -216,12 +216,8 @@ public class DustControl implements Listener {
 							String lo = lore.get(i);
 							if(l.contains("%Percent%")) {
 								String[] b = l.split("%Percent%");
-								if(b.length >= 1) {
-									arg = lo.replace(b[0], "");
-								}
-								if(b.length >= 2) {
-									arg = arg.replace(b[1], "");
-								}
+								if(b.length >= 1) arg = lo.replace(b[0], "");
+								if(b.length >= 2) arg = arg.replace(b[1], "");
 								break;
 							}
 							if(l.contains("%percent%")) {
@@ -253,12 +249,8 @@ public class DustControl implements Listener {
 							String lo = lore.get(i);
 							if(l.contains("%Percent%")) {
 								String[] b = l.split("%Percent%");
-								if(b.length >= 1) {
-									arg = lo.replace(b[0], "");
-								}
-								if(b.length >= 2) {
-									arg = arg.replace(b[1], "");
-								}
+								if(b.length >= 1) arg = lo.replace(b[0], "");
+								if(b.length >= 2) arg = arg.replace(b[1], "");
 								break;
 							}
 							if(l.contains("%percent%")) {

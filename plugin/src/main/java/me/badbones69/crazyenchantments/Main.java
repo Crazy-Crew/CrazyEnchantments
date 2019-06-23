@@ -2,10 +2,13 @@ package me.badbones69.crazyenchantments;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.*;
-import me.badbones69.crazyenchantments.api.objects.*;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.objects.CEBook;
+import me.badbones69.crazyenchantments.api.objects.CEPlayer;
+import me.badbones69.crazyenchantments.api.objects.CEnchantment;
+import me.badbones69.crazyenchantments.api.objects.GKitz;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
 import me.badbones69.crazyenchantments.multisupport.*;
@@ -97,7 +100,7 @@ public class Main extends JavaPlugin implements Listener {
 			pm.registerEvents(new DakataAntiCheatSupport(), this);
 		}
 		//==========================================================================\\
-		new Metrics(this);// Stats up the bStats
+		new Metrics(this);// Starts up bStats
 		new BukkitRunnable() {
 			@Override
 			public void run() {

@@ -882,8 +882,8 @@ public class CrazyEnchantments {
 	 */
 	public CEBook convertToCEBook(ItemStack book) {
 		CEBook ceBook = new CEBook(getEnchantmentBookEnchantmnet(book), getBookLevel(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
-		ceBook.setSuccessRate(Methods.getPercent("%Success_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
-		ceBook.setDestroyRate(Methods.getPercent("%Destroy_Rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setSuccessRate(Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setDestroyRate(Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
 		ceBook.setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing"));
 		return ceBook;
 	}

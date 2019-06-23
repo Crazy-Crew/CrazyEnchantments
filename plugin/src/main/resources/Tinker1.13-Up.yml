@@ -6,7 +6,7 @@ Settings:
     Item: 'EXPERIENCE_BOTTLE' #Item the XP bottles are
     Name: '&aRecycled XP' #Name of the Bottle
     Lore: #Lore of the Bottle
-      - '&a&lRecycled &6%Total%XP'
+      - '&a&lRecycled &6%total%XP'
       - '&7&l(&6&l!&7&l) &7Throw to get XP.'
 Tinker:
   Vanilla-Enchantments:

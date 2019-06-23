@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.api;
 
+import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -281,15 +282,16 @@ public class FileManager {
 	
 	public enum Files {
 		
-		//ENUM_NAME("FileName.yml", "FilePath.yml"),
-		CONFIG("config.yml", "config.yml"),
-		BLOCKLIST("BlockList.yml", "BlockList.yml"),
+		//ENUM_NAME("fileName.yml", "fileLocation.yml"),
+		//ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
+		CONFIG("config.yml", "config1.13-Up.yml", "config1.12.2-Down.yml"),
+		BLOCKLIST("BlockList.yml", "BlockList1.13-Up.yml", "BlockList1.12.2-Down.yml"),
 		DATA("Data.yml", "Data.yml"),
 		ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
-		GKITZ("GKitz.yml", "GKitz.yml"),
+		GKITZ("GKitz.yml", "GKitz1.13-Up.yml", "GKitz1.12.2-Down.yml"),
 		MESSAGES("Messages.yml", "Messages.yml"),
 		SIGNS("Signs.yml", "Signs.yml"),
-		TINKER("Tinker.yml", "Tinker.yml");
+		TINKER("Tinker.yml", "Tinker1.13-Up.yml", "Tinker1.12.2-Down.yml");
 		
 		private String fileName;
 		private String fileLocation;
@@ -302,6 +304,16 @@ public class FileManager {
 		private Files(String fileName, String fileLocation) {
 			this.fileName = fileName;
 			this.fileLocation = fileLocation;
+		}
+		
+		/**
+		 * The files that the server will try and load.
+		 * @param fileName The file name that will be in the plugin's folder.
+		 * @param newFileLocation The location of the 1.13+ file version.
+		 * @param oldFileLocation The location of the 1.12.2- file version.
+		 */
+		private Files(String fileName, String newFileLocation, String oldFileLocation) {
+			this(fileName, Version.getCurrentVersion().isNewer(Version.v1_12_R1) ? newFileLocation : oldFileLocation);
 		}
 		
 		/**

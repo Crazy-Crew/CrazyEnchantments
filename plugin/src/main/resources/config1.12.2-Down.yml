@@ -11,20 +11,20 @@ Settings:
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'
     - ''
-    - '%Description%'
+    - '%description%'
     - ''
-    - '&4%Destroy_Rate%% Destroy Chance'
-    - '&a%Success_Rate%% Success Chance'
+    - '&4%destroy_rate%% Destroy Chance'
+    - '&a%success_rate%% Success Chance'
   LostBook: #Lost book options.
     Item: 'BOOK' #The item the lost books is.
-    Name: '&8&l&nA Lost %Category%&8&l&n Book' #The name of the lost books.
+    Name: '&8&l&nA Lost %category%&8&l&n Book' #The name of the lost books.
     Lore: #The lore of the lost books.
       - '&7This book has been lost for centuries'
-      - '&7It is said to be an enchantment book from %Category%'
+      - '&7It is said to be an enchantment book from %category%'
       - '&7But you must clean it off to find out what kind it is.'
       - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
   Scrambler:
-    Item: 'SUNFLOWER' #The item it will be.
+    Item: 'DOUBLE_PLANT' #The item it will be.
     Glowing: true #If it has the glowing effect.
     Name: '&e&lThe Grand Scrambler' #The name of the item.
     Lore: #The lore of the item.
@@ -36,7 +36,7 @@ Settings:
       Name: '&8Rolling the &eScrambler' #Name of the GUI.
       Toggle: true #If the GUI will show. Warning>> This may cause lag if a lot of players are using it all the time.
       Pointer: #The pointer in the middle of the GUI.
-        Item: 'REDSTONE_TORCH' #The item the pointer is.
+        Item: 'REDSTONE_TORCH_ON' #The item the pointer is.
         Name: '&c&lPointer' #The name of the pointer.
         Lore: #The lore on the pointer.
           - '&7Whatever percents the item lands on'
@@ -101,7 +101,7 @@ Settings:
         - '&7the same enchantment and level.'
         - '&7Or put in two items to combined'
         - '&7the enchantments on them.'
-      Found: '&c&lCost: &6&l%Cost%XP' #The lore at the bottom of the item
+      Found: '&c&lCost: &6&l%cost%XP' #The lore at the bottom of the item
     Transaction: #Options for the pricing
       Currency: XP_Level
       Costs: #Cost options
@@ -126,10 +126,10 @@ Settings:
       - '&b>>&7&nClick to view&b<<'
   Dust: #Settings for the Magical Dust
     MysteryDust:
-      Item: 'GUNPOWDER' #Item mystery dust is
+      Item: 'SULPHUR' #Item mystery dust is
       Name: '&7Mystery Dust' #Name of the dust
-      Lore: #Use %Percent% to set the percent
-        - '&a1-%Percent%% &7will be on a'
+      Lore: #Use %percent% to set the percent
+        - '&a1-%percent%% &7will be on a'
         - '&aMagical AngelDust &7or &eMagical Fixing &7Dust'
         - '&7&l(&6&l!&7&l) &7Right click'
       Firework:
@@ -153,9 +153,9 @@ Settings:
       Item: 'SUGAR' #Item the dust is
       Name: '&aMagical Angel Dust' #Name of the dust
       Lore: #Lore for the dust
-        - '&a+%Percent%% Success Rate'
+        - '&a+%percent%% Success Rate'
         - '&7Apply to an Enchantment Book to'
-        - '&7Increase the Success Rate by &e%Percent%%'
+        - '&7Increase the Success Rate by &e%percent%%'
       PercentRange: #Range the success rate will be.
         Max: 30 #Max percent
         Min: 2 #Minimum percent
@@ -170,21 +170,21 @@ Settings:
       Item: 'REDSTONE' #Item the dust is
       Name: '&eMagical Fixing Dust' #Name of the dust
       Lore: #Lore for the dust
-        - '&c-%Percent%% Destroy Rate'
+        - '&c-%percent%% Destroy Rate'
         - '&7Apply to an Enchantment Book to'
-        - '&7Decrease the Destroy Rate by &e%Percent%%'
+        - '&7Decrease the Destroy Rate by &e%percent%%'
       PercentRange: #Range the destroy rate will be.
         Max: 10 #Max percent
         Min: 2 #Minimum percent
     FailedDust:
-      Item: 'GUNPOWDER' #Item the dust is
+      Item: 'SULPHUR' #Item the dust is
       Name: '&7Failed Dust' #Name of the dust
       Lore: #Lore for the dust
         - '&7This dust has failed.'
         - '&7It is now useless unless you'
         - '&7needed to make TNT or a throwable potion.'
   BlackScroll: #Settings for the black scrolls
-    Item: 'INK_SAC' #The item the black scroll can be
+    Item: 'INK_SACK' #The item the black scroll can be
     Name: '&8&l&nBlack Scroll' #The name of the black scroll
     Item-Lore: #The lore that will be on the black scroll.
       - '&7Have a custom enchantment you don''t want?'
@@ -239,7 +239,7 @@ Settings:
       - '&7This scroll allows you to organize'
       - '&7your enchantments and tell you how many'
       - '&7enchantments you currently have on the item.'
-    Amount-of-Enchantments: ' &7[&6&n%Amount%&7]' #The suffix that will be added at the end of the item's name.
+    Amount-of-Enchantments: ' &7[&6&n%amount%&7]' #The suffix that will be added at the end of the item's name.
     Amount-Toggle: true #If the amount is added to the suffix of the item's name.
     Count-Vanilla-Enchantments: true #If it counts the vanilla enchantments in the amount.
   EnchantmentOptions: #Options for enchanted books.
@@ -297,9 +297,9 @@ Settings:
     CategoryShopStyle: #What the sign will look like. The price will be determined by the category you pick
       Line1: '&b&lCrazy Enchant' #Line 1 of the sign
       Line2: '&b&lShop:' #Line 2 of the sign
-      Line3: '&2&l%Category%' #Line 3 of the sign
-      Line4: '&c&lCost: &6&l%Cost%XP' #Line 4 of the sign
-      Buy-Message: '&7You have just bought an enchantment book, and it is %BookName%&7 from the %Category%&7 tier.'
+      Line3: '&2&l%category%' #Line 3 of the sign
+      Line4: '&c&lCost: &6&l%cost%XP' #Line 4 of the sign
+      Buy-Message: '&7You have just bought an enchantment book, and it is %bookname%&7 from the %category%&7 tier.'
     ProtectionCrystalStyle:
       Line1: '&b&lCrazy Enchant'
       Line2: '&b&lShop:'
@@ -351,50 +351,50 @@ Settings:
   #Placeholders: %vault% %xp_level% %xp_total%
   #####################
   GUICustomization: #This allows you to customize unclickable items into you GUI.
-    - 'Slot:1, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:2, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:3, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:4, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:5, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:6, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:7, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:8, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:9, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:10, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:18, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:19, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:27, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:28, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:36, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:37, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:45, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:46, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:47, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:48, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:49, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:50, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:51, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:52, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:53, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:54, Item:BLACK_STAINED_GLASS_PANE, Name: '
-    - 'Slot:11, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:12, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:13, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:14, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:15, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:16, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:17, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:20, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:26, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:29, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:35, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:38, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:39, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:40, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:41, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:42, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:43, Item:WHITE_STAINED_GLASS_PANE, Name: '
-    - 'Slot:44, Item:WHITE_STAINED_GLASS_PANE, Name: '
+    - 'Slot:1, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:2, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:3, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:4, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:5, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:6, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:7, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:8, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:9, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:10, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:18, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:19, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:27, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:28, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:36, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:37, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:45, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:46, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:47, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:48, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:49, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:50, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:51, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:52, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:53, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:54, Item:STAINED_GLASS_PANE:15, Name: '
+    - 'Slot:11, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:12, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:13, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:14, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:15, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:16, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:17, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:20, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:26, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:29, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:35, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:38, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:39, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:40, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:41, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:42, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:43, Item:STAINED_GLASS_PANE:0, Name: '
+    - 'Slot:44, Item:STAINED_GLASS_PANE:0, Name: '
 Categories: #You can make as many different categories as you want
   Common: #Name of the category
     Name: '&a&l&nCommon' #Name in the GUI
@@ -402,7 +402,7 @@ Categories: #You can make as many different categories as you want
     InGUI: true #Toggle if it's in the GUI or not.
     Lore: #The lore of the Item
       - '&eCost: &6&l20 &6XP Levels'
-    Item: 'LIME_STAINED_GLASS_PANE' #The id for the item
+    Item: 'STAINED_GLASS_PANE:5' #The id for the item
     Glowing: true #If the item is glowing in the GUI.
     Cost: 20 #How much each book will cost to buy.
     Currency: XP_Level #The currency you wish to use. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
@@ -446,7 +446,7 @@ Categories: #You can make as many different categories as you want
     InGUI: true
     Lore:
       - '&eCost: &6&l40 &6XP Levels'
-    Item: 'BLUE_STAINED_GLASS_PANE'
+    Item: 'STAINED_GLASS_PANE:11'
     Glowing: true
     Cost: 40
     Currency: XP_Level
@@ -487,7 +487,7 @@ Categories: #You can make as many different categories as you want
     InGUI: true
     Lore:
       - '&eCost: &6&l60 &6XP Levels'
-    Item: 'RED_STAINED_GLASS_PANE'
+    Item: 'STAINED_GLASS_PANE:14'
     Glowing: true
     Cost: 60
     Currency: XP_Level

@@ -50,7 +50,7 @@ GKitz: #GKit options.
         - '&7into battle by a great hero.'
         - ''
         - '&7Cooldown: &624 Hours'
-        - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
+        - '&7Available in: &6%day%d, %hour%h, %minute%m, %second%s'
         - '&7&l(&6&l!&7&l) &7Right click to preview'
     Auto-Equip: false #If armor is auto equipped onto the player if the slots are available.
     Cooldown: '24h' #Cooldown for the GKit. Available options d - Day, h - Hour, m - Minute, s - Second
@@ -74,7 +74,7 @@ GKitz: #GKit options.
         - '&7into battle by a peace keeper.'
         - ''
         - '&7Cooldown: &624 Hours'
-        - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
+        - '&7Available in: &6%day%d, %hour%h, %minute%m, %second%s'
         - '&7&l(&9&l!&7&l) &7Right click to preview'
     Auto-Equip: false
     Cooldown: '24h'
@@ -98,7 +98,7 @@ GKitz: #GKit options.
         - '&7into battle by a evil villain.'
         - ''
         - '&7Cooldown: &624 Hours'
-        - '&7Available in: &6%Day%d, %Hour%h, %Minute%m, %Second%s'
+        - '&7Available in: &6%day%d, %hour%h, %minute%m, %second%s'
         - '&7&l(&4&l!&7&l) &7Right click to preview'
     Auto-Equip: false
     Cooldown: '24h'
