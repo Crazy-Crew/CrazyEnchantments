@@ -8,7 +8,7 @@
     <artifactId>crazyenchantments</artifactId>
     <packaging>pom</packaging>
     <version>1.8-Dev-Build-v5</version>
-    <name>Crazy Enchantments</name>
+    <name>CrazyEnchantments</name>
     <modules>
         <module>api</module>
         <module>plugin</module>
