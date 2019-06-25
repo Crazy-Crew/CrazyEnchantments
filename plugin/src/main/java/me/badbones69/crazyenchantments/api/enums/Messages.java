@@ -35,7 +35,7 @@ public enum Messages {
 	GET_MYSTERY_DUST("Get-Mystery-Dust", "&7You have gained &a%amount% &7Mystery Dust."),
 	GIVE_MYSTERY_DUST("Give-Mystery-Dust", "&7You have given &a%amount% &7Mystery Dust to &6%player%&7."),
 	NOT_A_CATEGORY("Not-A-Category", "&6%category% &cis not a category."),
-	CLEAN_LOST_BOOK("Clean-Lost-Book", "&7You have cleaned a lost book and found %Found%&7."),
+	CLEAN_LOST_BOOK("Clean-Lost-Book", "&7You have cleaned a lost book and found %found%&7."),
 	BOOK_WORKS("Book-Works", "&aYour item loved this book and accepted it."),
 	BOOK_FAILED("Book-Failed", "&cYour item must not have liked that enchantment."),
 	ITEM_DESTROYED("Item-Destroyed", "&cOh no the destroy rate was too much for the item."),

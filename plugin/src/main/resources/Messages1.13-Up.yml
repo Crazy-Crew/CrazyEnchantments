@@ -1,0 +1,205 @@
+Messages:
+  Config-Reload: '&7You have reloaded the Config.yml'
+  Need-To-UnStack-Item: '&cYou need to unstack that item for it to be used.'
+  Not-An-Enchantment: '&cThat is not an enchantment'
+  Right-Click-Black-Scroll: '&7Black scrolls will remove a random enchantment from your item.'
+  Black-Scroll-Unsuccessful: '&cThe black scroll was unsuccessful. Please try again with another one.'
+  Need-More-XP-Lvls: '&cYou need &6%xp% &cmore XP Lvls.'
+  Need-More-Total-XP: '&cYou need &6%xp% &cmore Total XP.'
+  Need-More-Money: '&cYou are in need of &a$%money_needed%&c.'
+  Hit-Enchantment-Max: '&cYou have hit the max amount of enchantment an item can have.'
+  Inventory-Full: '&cYour inventory is too full. Please open up some space to buy that.'
+  Tinker-Inventory-Full: '&cThe inventory is full. Sell all or remove items.'
+  Tinker-Sold-Msg: '&7Thank you for trading at &7&lThe &4&lCrazy &c&lTinkerer&7.'
+  Players-Only: '&cOnly players can use this command.'
+  No-Perm: '&cYou do not have permission to use that command!'
+  Not-Online: '&cThat player is not online at this time.'
+  Remove-Enchantment: '&7You have removed the enchantment &a%enchantment% &7from this item.'
+  Doesnt-Have-Enchantment: '&cYour item does not contain the enchantment &6%enchantment%&c.'
+  Doesnt-Have-Item-In-Hand: '&cYou must have an item in your hand.'
+  Not-A-Number: '&c%Arg% is not a number.'
+  Get-Success-Dust: '&7You have gained &a%amount% &7Success Dust.'
+  Give-Success-Dust: '&7You have given &a%amount% &7Success Dust to &6%player%&7.'
+  Get-Destroy-Dust: '&7You have gained &a%amount% &7Destroy Dust.'
+  Give-Destroy-Dust: '&7You have given &a%amount% &7Destroy Dust to &6%player%&7.'
+  Get-Mystery-Dust: '&7You have gained &a%amount% &7Mystery Dust.'
+  Give-Mystery-Dust: '&7You have given &a%amount% &7Mystery Dust to &6%player%&7.'
+  Not-A-Category: '&6%category% &cis not a category.'
+  Clean-Lost-Book: '&7You have cleaned a lost book and found %found%&7.'
+  Book-Works: '&aYour item loved this book and accepted it.'
+  Book-Failed: '&cYour item must not have liked that enchantment.'
+  Item-Destroyed: '&cOh no the destroy rate was too much for the item.'
+  Item-Was-Protected: '&cLuckily your item was blessed with davine Protection and didn''t break.'
+  Give-Protection-Crystal: '&7You have given %player% %amount% Protection Crystals.'
+  Get-Protection-Crystal: '&7You have gained %amount% Protection Crystals.'
+  Give-Scrambler-Crystal: '&7You have given %player% %amount% &e&lGrand Scramblers&7.'
+  Get-Scrambler-Crystal: '&7You have gained %amount% &e&lGrand Scramblers&7.'
+  Break-Enchantment-Shop-Sign: '&cYou have removed a Crazy Enchantment Shop Sign.'
+  Send-Enchantment-Book: '&7You have sent &6%player% &7an Crazy Enchantment Book.'
+  Not-A-GKit: '&c%kit% is not a GKit.'
+  Still-In-Cooldown: '&cYou still have %day%d %hour%h %minute%m %second%s cooldown left on %kit%&c.'
+  Given-GKit: '&7You have given &6%player%&7 a %kit%&7 GKit.'
+  Received-GKit: '&7You have received a %kit%&7 GKit.'
+  No-GKit-Permission: '&cYou do not have permission to use the %kit% GKit.'
+  Spawned-Book: '&7You have spawned a book at &6%world%, %x%, %y%, %z%&7.'
+  Reset-GKit: '&7You have reset %player%''s %gkit% GKit cooldown.'
+  GKitz-Not-Enabled: '&cGKitz is currently not enabled.'
+  Enchantment-Upgrade:
+    Success: '&7You have upgraded &6%enchantment%&7 to level &6%level%&7.'
+    Destroyed: '&cYour upgrade failed and the lower level enchantment was lost.'
+    Failed: '&cThe book failed to upgrade to the item.'
+  Rage:
+    Building: '&7[&c&lRage&7]: &aKeep it up, your rage is building.'
+    Cooled-Down: '&7[&c&lRage&7]: &cYour Rage has cooled down.'
+    Rage-Up: '&7[&c&lRage&7]: &7You are now doing &a%level%x &7Damage.'
+    Damaged: '&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!'
+  InfoGUI:
+    Inventory:
+      Size: 18
+      Name: '&c&lEnchantment Info'
+    Categories-Info:
+      Back:
+        Item: 'NETHER_STAR'
+        Right: '&7&l<<&b&lBack'
+        Left: '&b&lBack&7&l>>'
+      Helmets:
+        Item: 'GOLDEN_HELMET'
+        Slot: 1
+        Name: '&e&lHelmet Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Helmet'
+          - '&a- Chain Helmet'
+          - '&a- Gold Helmet'
+          - '&a- Iron Helmet'
+          - '&a- Diamond Helmet'
+          - '&a- Turtle Helmet'
+      Boots:
+        Item: 'GOLDEN_BOOTS'
+        Slot: 2
+        Name: '&e&lBoot Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Boots'
+          - '&a- Chain Boots'
+          - '&a- Gold Boots'
+          - '&a- Iron Boots'
+          - '&a- Diamond Boots'
+      Armor:
+        Item: 'GOLDEN_CHESTPLATE'
+        Slot: 3
+        Name: '&e&lArmor Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Leather Armor'
+          - '&a- Chain Armor'
+          - '&a- Gold Armor'
+          - '&a- Iron Armor'
+          - '&a- Diamond Armor'
+      Bow:
+        Item: 'BOW'
+        Slot: 4
+        Name: '&e&lBow Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Bow'
+      Sword:
+        Item: 'GOLDEN_SWORD'
+        Slot: 5
+        Name: '&e&lSword Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Wooden Sword'
+          - '&a- Stone Sword'
+          - '&a- Gold Sword'
+          - '&a- Iron Sword'
+          - '&a- Diamond Sword'
+      Axe:
+        Item: 'GOLDEN_AXE'
+        Slot: 6
+        Name: '&e&lAxe Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Wooden Axe'
+          - '&a- Stone Axe'
+          - '&a- Gold Axe'
+          - '&a- Iron Axe'
+          - '&a- Diamond Axe'
+      Tool:
+        Item: 'GOLDEN_HOE'
+        Slot: 7
+        Name: '&e&lTool Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- All Pickaxes'
+          - '&a- All Axes'
+          - '&a- All Shovels'
+          - '&a- All Hoes'
+          - '&a- Shears'
+      Pickaxe:
+        Item: 'GOLDEN_PICKAXE'
+        Slot: 8
+        Name: '&e&lPickaxe Enchantments'
+        Lore:
+          - '&cEnchantable Items:'
+          - '&a- Wooden Pickaxe'
+          - '&a- Stone Pickaxe'
+          - '&a- Gold Pickaxe'
+          - '&a- Iron Pickaxe'
+          - '&a- Diamond Pickaxe'
+      Misc:
+        Item: 'COMPASS'
+        Slot: 9
+        Name: '&e&lMisc Enchantments'
+        Lore:
+          - '&aRead enchantment to'
+          - '&aSee enchantable Items.'
+      Other:
+        Item: 'ENDER_EYE'
+        Slot: 14
+        Name: '&e&lOther Info'
+        Lore:
+          - '&cInfo on these items:'
+          - '&a- The Tinkerer'
+          - '&a- Scrolls'
+          - '&a- Magic Dust'
+          - '&a- Black Smith'
+    BlackSmith:
+      - '&7Do you have an enchantment on your item you want to be leveled up?'
+      - '&7Or level up your book because you have too many low-level ones?'
+      - '&7The Black Smith is for you. It acts just like an Anvil but for'
+      - '&7Custom Enchantments. All you do is throw 2 items or books in and BLAMMO,'
+      - '&7You can easily level up your old low-level enchantments.'
+      - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments. Will not add Vanilla Enchantments to new Item.'
+    Black-Scroll:
+      - '&7Do you have an enchantment on your item you don''t want?'
+      - '&7Well Black Scrolls are here to help you remove that enchantment.'
+      - '&7All you need to do is put the Black Scroll on your cursor and then.'
+      - '&7Drag and drop it on the item and BLAMMO. It takes a random enchantment off,'
+      - '&7And turns it into a normal enchantment book. An easy way to add new better enchantments.'
+      - '&7&l(&6&l!&7&l) &7Only works on Custom Enchantments.'
+    White-Scroll:
+      - '&7Have an item that is precious to you and don''t want it to,'
+      - '&7Break because of Destroy Rate? Well, this scroll allows you to,'
+      - '&7Protect or precious item and not let it break. Well, your in luck,'
+      - '&7White Scrolls add a &b&lPROTECTED &7lore to your item to stop it from,'
+      - '&7Destroying your precious item. If the book tries to break your item it removes,'
+      - '&7The &b&lPROTECTED &7lore from your item and must add a new White Scroll to the item.'
+    Tinker:
+      - '&7Just raided a big base and have a lot of useless enchanted items?'
+      - '&7Want to get rid of them but not throw them in lava or at a cactus?'
+      - '&7Well with &7&lThe &c&lCrazy &4&lTinkerer &7you can recycle those items,'
+      - '&7For XP bottles which you can then use to get new enchantments from the Enchanter'
+      - '&7The tinkerer also takes Enchantment books and will give you Mystery Dust which you'
+      - '&7Right click to receive either Success Dust or Destroy Dust.'
+      - '&7&l(&6&l!&7&l) &7Trading in books only works with Custom Enchanted Books.'
+    Success-Dust:
+      - '&7Do you have an enchantment book with a bad Success Rate?'
+      - '&7Well this dust can really help you bring the success rate up.'
+      - '&7Drag and drop the dust on an enchantment book and BLAMMO.'
+      - '&7It will increase your success rate by the percent the book says.'
+    Destroy-Dust:
+      - '&7Have an enchantment book with a high Destroy Rate?'
+      - '&7Well this dust allows you to bring that destroy rate down.'
+      - '&7Drag and drop the dust on an enchantment book and BLAMMO.'
+      - '&7It will decrease your destroy rate by the percent the book says.'

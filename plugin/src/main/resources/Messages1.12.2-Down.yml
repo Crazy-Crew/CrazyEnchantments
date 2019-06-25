@@ -25,7 +25,7 @@ Messages:
   Get-Mystery-Dust: '&7You have gained &a%amount% &7Mystery Dust.'
   Give-Mystery-Dust: '&7You have given &a%amount% &7Mystery Dust to &6%player%&7.'
   Not-A-Category: '&6%category% &cis not a category.'
-  Clean-Lost-Book: '&7You have cleaned a lost book and found %Found%&7.'
+  Clean-Lost-Book: '&7You have cleaned a lost book and found %found%&7.'
   Book-Works: '&aYour item loved this book and accepted it.'
   Book-Failed: '&cYour item must not have liked that enchantment.'
   Item-Destroyed: '&cOh no the destroy rate was too much for the item.'
@@ -59,11 +59,11 @@ Messages:
       Name: '&c&lEnchantment Info'
     Categories-Info:
       Back:
-        Item: 399
+        Item: 'NETHER_STAR'
         Right: '&7&l<<&b&lBack'
         Left: '&b&lBack&7&l>>'
       Helmets:
-        Item: 314
+        Item: 'GOLD_HELMET'
         Slot: 1
         Name: '&e&lHelmet Enchantments'
         Lore:
@@ -75,7 +75,7 @@ Messages:
           - '&a- Diamond Helmet'
           - '&a- Turtle Helmet'
       Boots:
-        Item: 317
+        Item: 'GOLD_BOOTS'
         Slot: 2
         Name: '&e&lBoot Enchantments'
         Lore:
@@ -86,7 +86,7 @@ Messages:
           - '&a- Iron Boots'
           - '&a- Diamond Boots'
       Armor:
-        Item: 315
+        Item: 'GOLD_CHESTPLATE'
         Slot: 3
         Name: '&e&lArmor Enchantments'
         Lore:
@@ -97,14 +97,14 @@ Messages:
           - '&a- Iron Armor'
           - '&a- Diamond Armor'
       Bow:
-        Item: 261
+        Item: 'BOW'
         Slot: 4
         Name: '&e&lBow Enchantments'
         Lore:
           - '&cEnchantable Items:'
           - '&a- Bow'
       Sword:
-        Item: 283
+        Item: 'GOLD_SWORD'
         Slot: 5
         Name: '&e&lSword Enchantments'
         Lore:
@@ -115,7 +115,7 @@ Messages:
           - '&a- Iron Sword'
           - '&a- Diamond Sword'
       Axe:
-        Item: 286
+        Item: 'GOLD_AXE'
         Slot: 6
         Name: '&e&lAxe Enchantments'
         Lore:
@@ -126,7 +126,7 @@ Messages:
           - '&a- Iron Axe'
           - '&a- Diamond Axe'
       Tool:
-        Item: 294
+        Item: 'GOLD_HOE'
         Slot: 7
         Name: '&e&lTool Enchantments'
         Lore:
@@ -137,7 +137,7 @@ Messages:
           - '&a- All Hoes'
           - '&a- Shears'
       Pickaxe:
-        Item: 285
+        Item: 'GOLD_PICKAXE'
         Slot: 8
         Name: '&e&lPickaxe Enchantments'
         Lore:
@@ -148,14 +148,14 @@ Messages:
           - '&a- Iron Pickaxe'
           - '&a- Diamond Pickaxe'
       Misc:
-        Item: 345
+        Item: 'COMPASS'
         Slot: 9
         Name: '&e&lMisc Enchantments'
         Lore:
           - '&aRead enchantment to'
           - '&aSee enchantable Items.'
       Other:
-        Item: 381
+        Item: 'EYE_OF_ENDER'
         Slot: 14
         Name: '&e&lOther Info'
         Lore:
