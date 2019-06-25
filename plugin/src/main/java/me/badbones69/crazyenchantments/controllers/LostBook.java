@@ -2,8 +2,8 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Color;
 import org.bukkit.Sound;
@@ -61,6 +61,7 @@ public class LostBook implements Listener {
 							player.getInventory().addItem(book);
 							player.updateInventory();
 							HashMap<String, String> placeholders = new HashMap<>();
+							placeholders.put("%Found%", book.getItemMeta().getDisplayName());
 							placeholders.put("%found%", book.getItemMeta().getDisplayName());
 							player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
 							if(Files.CONFIG.getFile().contains("Categories." + category + ".LostBook.FireworkToggle")) {
