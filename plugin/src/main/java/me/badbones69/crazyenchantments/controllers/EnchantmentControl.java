@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.ArmorType;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
@@ -12,18 +13,20 @@ import me.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import me.badbones69.crazyenchantments.api.events.BookFailEvent;
 import me.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -253,23 +256,26 @@ public class EnchantmentControl implements Listener {
 				return;
 			}
 		}
-			ItemStack item = Methods.getItemInHand(e.getPlayer());
-			if(ce.isEnchantmentBook(item)) {
-				e.setCancelled(true);
-				String name = "";
-				Player player = e.getPlayer();
-				List<String> desc = new ArrayList<>();
-				for(CEnchantment en : ce.getRegisteredEnchantments()) {
-					if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
-						name = Files.ENCHANTMENTS.getFile().getString("Enchantments." + en.getName() + ".Info.Name");
-						desc = Files.ENCHANTMENTS.getFile().getStringList("Enchantments." + en.getName() + ".Info.Description");
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
+			if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
+				ItemStack item = Methods.getItemInHand(e.getPlayer());
+				if(ce.isEnchantmentBook(item)) {
+					e.setCancelled(true);
+					String name = "";
+					Player player = e.getPlayer();
+					List<String> desc = new ArrayList<>();
+					for(CEnchantment en : ce.getRegisteredEnchantments()) {
+						if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
+							name = Files.ENCHANTMENTS.getFile().getString("Enchantments." + en.getName() + ".Info.Name");
+							desc = Files.ENCHANTMENTS.getFile().getStringList("Enchantments." + en.getName() + ".Info.Description");
+						}
 					}
-				}
-				if(name.length() > 0) {
-					player.sendMessage(Methods.color(name));
-				}
-				for(String msg : desc) {
-					player.sendMessage(Methods.color(msg));
+					if(name.length() > 0) {
+						player.sendMessage(Methods.color(name));
+					}
+					for(String msg : desc) {
+						player.sendMessage(Methods.color(msg));
+					}
 				}
 			}
 		}
