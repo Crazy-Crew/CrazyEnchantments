@@ -303,7 +303,7 @@ public class EnchantmentControl implements Listener {
 			}else {
 				lore.add(Methods.color(l)
 				.replaceAll("%Destroy_Rate%", Methods.percentPick(Dmax, Dmin) + "").replaceAll("%destroy_rate%", Methods.percentPick(Dmax, Dmin) + "")
-				.replaceAll("%Success_Rate%", Methods.percentPick(Smax, Smin) + "").replaceAll("%success_Rate%", Methods.percentPick(Smax, Smin) + ""));
+				.replaceAll("%Success_Rate%", Methods.percentPick(Smax, Smin) + "").replaceAll("%success_rate%", Methods.percentPick(Smax, Smin) + ""));
 			}
 		}
 		ItemStack item = new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item")).setName(enchants.get(enchant)).setLore(lore).build();

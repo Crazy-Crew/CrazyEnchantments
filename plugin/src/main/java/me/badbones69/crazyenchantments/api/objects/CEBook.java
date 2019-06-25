@@ -36,7 +36,7 @@ public class CEBook {
 		this.enchantment = enchantment;
 		this.amount = amount;
 		this.power = power;
-		this.glowing = Files.CONFIG.getFile().contains("Settings.Enchantment-Book-Glowing") && Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
+		this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
 		int Smax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Max");
 		int Smin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
 		int Dmax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
@@ -157,7 +157,7 @@ public class CEBook {
 			}else {
 				lore.add(Methods.color(l)
 				.replaceAll("%Destroy_Rate%", destroy_rate + "").replaceAll("%destroy_rate%", destroy_rate + "")
-				.replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_Rate%", success_rate + ""));
+				.replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_rate%", success_rate + ""));
 			}
 		}
 		return new ItemBuilder().setMaterial(item).setAmount(amount).setName(name).setLore(lore).setGlowing(glowing).build();
