@@ -234,7 +234,7 @@
                             <include>me.badbones69:*</include>
                         </includes>
                     </artifactSet>
-                    <!--                    <outputFile>/Users/badbones/Desktop/Minecraft/Server/plugins/Crazy Enchantments[v${project.version}].jar</outputFile>-->
+                    <!--                    <outputFile>/Users/badbones/Desktop/Minecraft/Server/plugins/CrazyEnchantments[v${project.version}].jar</outputFile>-->
                 </configuration>
                 <executions>
                     <execution>
