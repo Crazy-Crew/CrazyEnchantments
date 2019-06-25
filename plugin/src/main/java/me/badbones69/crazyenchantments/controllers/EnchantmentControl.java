@@ -248,7 +248,11 @@ public class EnchantmentControl implements Listener {
 	
 	@EventHandler
 	public void onDescriptionSend(PlayerInteractEvent e) {
-		if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description") || !Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
+		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+			if(e.getHand() != EquipmentSlot.HAND) {
+				return;
+			}
+		}
 			ItemStack item = Methods.getItemInHand(e.getPlayer());
 			if(ce.isEnchantmentBook(item)) {
 				e.setCancelled(true);
