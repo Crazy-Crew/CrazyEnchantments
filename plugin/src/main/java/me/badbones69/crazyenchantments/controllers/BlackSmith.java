@@ -2,11 +2,11 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -239,7 +239,7 @@ public class BlackSmith implements Listener {
 						int power = ce.getBookLevel(mainItem, en);
 						int max = Files.ENCHANTMENTS.getFile().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max) {
-							item = new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item")).setName(en.getBookColor() + en.getCustomName() + " " + ce.convertLevelString(power + 1)).setLore(mainItem.getItemMeta().getLore()).build();
+							item = new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item")).setName(en.getBookColor() + en.getCustomName() + " " + ce.convertLevelString(power + 1)).setLore(mainItem.getItemMeta().getLore()).setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing")).build();
 						}
 					}
 				}
