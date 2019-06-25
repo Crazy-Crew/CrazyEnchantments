@@ -6,7 +6,7 @@ Block-List: #All the blocks that can be broken by the Blast Enchantment.
   - 'POLISHED_DIORITE'
   - 'ANDESITE'
   - 'POLISHED_ANDESITE'
-  - 'GRASS'
+  - 'GRASS_BLOCK'
   - 'DIRT'
   - 'COARSE_DIRT'
   - 'PODZOL'
