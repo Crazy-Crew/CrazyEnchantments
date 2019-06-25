@@ -191,14 +191,13 @@ public class Bows implements Listener {
 						}
 					}
 				}
-				//Unsure what this code was needed for.
-				//new BukkitRunnable() {
-				//	@Override
-				//	public void run() {
-				//		arrows.remove(arrow);
-				//	}
-				//}.runTaskLaterAsynchronously(Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments"), 5 * 20);
-				enchantedArrows.remove(arrow);// Removes it from the list.
+				//Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list so it can check.
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						enchantedArrows.remove(arrow);// Removes it from the list.
+					}
+				}.runTaskLaterAsynchronously(ce.getPlugin(), 5);
 			}
 		}
 	}
@@ -333,7 +332,6 @@ public class Bows implements Listener {
 							}
 						}
 					}
-					enchantedArrows.remove(arrow);
 				}
 			}
 		}
