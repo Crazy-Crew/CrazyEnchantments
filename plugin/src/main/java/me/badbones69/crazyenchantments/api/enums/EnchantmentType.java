@@ -5,10 +5,7 @@ import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Material;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public enum EnchantmentType {
 	
@@ -101,33 +98,33 @@ public enum EnchantmentType {
 	private void loadItems() {
 		items = new HashMap<>();
 		//Helmets
-		items.put(HELMET, Arrays.asList(
+		items.put(HELMET, new LinkedList<>(Arrays.asList(
 		Material.LEATHER_HELMET,
 		Material.IRON_HELMET,
 		Material.CHAINMAIL_HELMET,
 		ce.getMaterial("GOLDEN_HELMET", "GOLD_HELMET"),
-		Material.DIAMOND_HELMET));
+		Material.DIAMOND_HELMET)));
 		//Chestplates
-		items.put(CHESTPLATE, Arrays.asList(
+		items.put(CHESTPLATE, new LinkedList<>(Arrays.asList(
 		Material.LEATHER_CHESTPLATE,
 		Material.IRON_CHESTPLATE,
 		Material.CHAINMAIL_CHESTPLATE,
 		ce.getMaterial("GOLDEN_CHESTPLATE", "GOLD_CHESTPLATE"),
-		Material.DIAMOND_CHESTPLATE));
+		Material.DIAMOND_CHESTPLATE)));
 		//Leggings
-		items.put(LEGGINGS, Arrays.asList(
+		items.put(LEGGINGS, new LinkedList<>(Arrays.asList(
 		Material.LEATHER_LEGGINGS,
 		Material.IRON_LEGGINGS,
 		Material.CHAINMAIL_LEGGINGS,
 		ce.getMaterial("GOLDEN_LEGGINGS", "GOLD_LEGGINGS"),
-		Material.DIAMOND_LEGGINGS));
+		Material.DIAMOND_LEGGINGS)));
 		//Boots
-		items.put(BOOTS, Arrays.asList(
+		items.put(BOOTS, new LinkedList<>(Arrays.asList(
 		Material.LEATHER_BOOTS,
 		Material.IRON_BOOTS,
 		Material.CHAINMAIL_BOOTS,
 		ce.getMaterial("GOLDEN_BOOTS", "GOLD_BOOTS"),
-		Material.DIAMOND_BOOTS));
+		Material.DIAMOND_BOOTS)));
 		//Armor
 		items.put(ARMOR, new ArrayList<>());
 		items.get(ARMOR).addAll(items.get(HELMET));
@@ -135,46 +132,46 @@ public enum EnchantmentType {
 		items.get(ARMOR).addAll(items.get(LEGGINGS));
 		items.get(ARMOR).addAll(items.get(BOOTS));
 		//Axes
-		items.put(AXE, Arrays.asList(
+		items.put(AXE, new LinkedList<>(Arrays.asList(
 		ce.getMaterial("WOODEN_AXE", "WOOD_AXE"),
 		Material.STONE_AXE,
 		Material.IRON_AXE,
 		ce.getMaterial("GOLDEN_AXE", "GOLD_AXE"),
-		Material.DIAMOND_AXE));
+		Material.DIAMOND_AXE)));
 		//Bow
-		items.put(BOW, Arrays.asList(Material.BOW));
+		items.put(BOW, new LinkedList<>(Arrays.asList(Material.BOW)));
 		//Swords
-		items.put(SWORD, Arrays.asList(
+		items.put(SWORD, new LinkedList<>(Arrays.asList(
 		ce.getMaterial("WOODEN_SWORD", "WOOD_SWORD"),
 		Material.STONE_SWORD,
 		Material.IRON_SWORD,
 		ce.getMaterial("GOLDEN_SWORD", "GOLD_SWORD"),
-		Material.DIAMOND_SWORD));
+		Material.DIAMOND_SWORD)));
 		//Weapons
 		items.put(WEAPONS, new ArrayList<>());
 		items.get(WEAPONS).addAll(items.get(SWORD));
 		items.get(WEAPONS).addAll(items.get(AXE));
 		//Pickaxes
-		items.put(PICKAXE, Arrays.asList(
+		items.put(PICKAXE, new LinkedList<>(Arrays.asList(
 		ce.getMaterial("WOODEN_PICKAXE", "WOOD_PICKAXE"),
 		Material.STONE_PICKAXE,
 		Material.IRON_PICKAXE,
 		ce.getMaterial("GOLDEN_PICKAXE", "GOLD_PICKAXE"),
-		Material.DIAMOND_PICKAXE));
+		Material.DIAMOND_PICKAXE)));
 		//Shovels
-		items.put(SHOVEL, Arrays.asList(
+		items.put(SHOVEL, new LinkedList<>(Arrays.asList(
 		ce.getMaterial("WOODEN_SHOVEL", "WOOD_SPADE"),
 		ce.getMaterial("STONE_SHOVEL", "STONE_SPADE"),
 		ce.getMaterial("IRON_SHOVEL", "IRON_SPADE"),
 		ce.getMaterial("GOLDEN_SHOVEL", "GOLD_SPADE"),
-		ce.getMaterial("DIAMOND_SHOVEL", "DIAMOND_SPADE")));
+		ce.getMaterial("DIAMOND_SHOVEL", "DIAMOND_SPADE"))));
 		//Hoes
-		items.put(HOE, Arrays.asList(
+		items.put(HOE, new LinkedList<>(Arrays.asList(
 		ce.getMaterial("WOODEN_HOE", "WOOD_HOE"),
 		Material.STONE_HOE,
 		Material.IRON_HOE,
 		ce.getMaterial("GOLDEN_HOE", "GOLD_HOE"),
-		Material.DIAMOND_HOE));
+		Material.DIAMOND_HOE)));
 		//Tools
 		items.put(TOOL, new ArrayList<>());
 		items.get(TOOL).addAll(items.get(PICKAXE));
@@ -188,7 +185,7 @@ public enum EnchantmentType {
 			items.get(ELYTRA).add(Material.matchMaterial("ELYTRA"));
 		}
 		//Fishing Pole
-		items.put(FISHING_ROD, Arrays.asList(Material.FISHING_ROD));
+		items.put(FISHING_ROD, new LinkedList<>(Arrays.asList(Material.FISHING_ROD)));
 		//1.12+ Items
 		if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
 			items.get(HELMET).add(Material.matchMaterial("TURTLE_HELMET"));
