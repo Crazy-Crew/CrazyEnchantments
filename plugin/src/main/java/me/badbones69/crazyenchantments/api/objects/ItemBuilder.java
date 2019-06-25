@@ -462,7 +462,7 @@ public class ItemBuilder {
 			item.addUnsafeEnchantments(enchantments);
 			addGlow(item, glowing);
 			NBTItem nbt = new NBTItem(item);
-			if(material == Material.matchMaterial(ce.useNewMaterial() ? "PLAYER_HEAD" : "SKULL:3")) {
+			if(material == Material.matchMaterial(ce.useNewMaterial() ? "PLAYER_HEAD" : "397")) {
 				if(!player.equals("")) {
 					nbt.setString("SkullOwner", player);
 				}

@@ -17,7 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -138,11 +137,7 @@ public class Axes implements Listener {
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()) {
-								ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD", "SKULL:3").build();
-								SkullMeta m = (SkullMeta) head.getItemMeta();
-								m.setOwner(player.getName());
-								head.setItemMeta(m);
-								e.getDrops().add(head);
+								e.getDrops().add(new ItemBuilder().setMaterial("PLAYER_HEAD", "397:3").setPlayer(player.getName()).build());
 							}
 						}
 					}

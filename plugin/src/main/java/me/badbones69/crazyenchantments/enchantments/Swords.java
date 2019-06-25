@@ -28,7 +28,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -433,10 +432,7 @@ public class Swords implements Listener {
 							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.HEADLESS, item);
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()) {
-								ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD", "SKULL:3").build();
-								SkullMeta m = (SkullMeta) head.getItemMeta();
-								m.setOwner(player.getName());
-								head.setItemMeta(m);
+								ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD", "397:3").setPlayer(player.getName()).build();
 								e.getDrops().add(head);
 							}
 						}
