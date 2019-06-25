@@ -134,7 +134,7 @@ public enum CEnchantments {
 	 * @param name Name of the enchantment.
 	 * @param type Type of items it goes on.
 	 * @param chance The chance the enchantment has to active.
-	 * @param chanceIncrease The amont the chance increases by every level.
+	 * @param chanceIncrease The amount the chance increases by every level.
 	 */
 	private CEnchantments(String name, EnchantmentType type, Integer chance, Integer chanceIncrease) {
 		this.name = name;
