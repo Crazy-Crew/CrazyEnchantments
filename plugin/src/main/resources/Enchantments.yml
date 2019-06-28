@@ -2065,3 +2065,21 @@ Enchantments:
         - '&6Enchantable Items: &aSword'
     Categories:
       - 'Legendary'
+  Charge: #Do not change this line.
+    Enabled: true
+    Name: 'Charge'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Info:
+      Name: '&e&lCharge &7(&bI-V&7)'
+      Description:
+        - '&7When you kill an enemy player'
+        - '&7nearby allies and you gain a speed boost.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &9&l&nRare'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Rare'

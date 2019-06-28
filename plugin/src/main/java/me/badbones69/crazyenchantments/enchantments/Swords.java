@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -140,22 +141,22 @@ public class Swords implements Listener {
 													Player player = (Player) e.getEntity();
 													Inventory inventory = player.getInventory();
 													List<ItemStack> items = new ArrayList<>();
-												List<Integer> slots = new ArrayList<>();
-												for(int i = 0; i < 9; i++) {
-													ItemStack inventoryItem = inventory.getItem(i);
-													if(inventoryItem != null) {
-														items.add(inventoryItem);
-														inventory.setItem(i, new ItemStack(Material.AIR));
+													List<Integer> slots = new ArrayList<>();
+													for(int i = 0; i < 9; i++) {
+														ItemStack inventoryItem = inventory.getItem(i);
+														if(inventoryItem != null) {
+															items.add(inventoryItem);
+															inventory.setItem(i, new ItemStack(Material.AIR));
+														}
+														slots.add(i);
 													}
-													slots.add(i);
+													Collections.shuffle(items);
+													Collections.shuffle(slots);
+													for(int i = 0; i < items.size(); i++) {
+														inventory.setItem(slots.get(i), items.get(i));
+													}
+													damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
 												}
-												Collections.shuffle(items);
-												Collections.shuffle(slots);
-												for(int i = 0; i < items.size(); i++) {
-													inventory.setItem(slots.get(i), items.get(i));
-												}
-												damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
-											}
 											}
 										}
 									}
@@ -491,6 +492,23 @@ public class Swords implements Listener {
 							Bukkit.getPluginManager().callEvent(event);
 							if(!event.isCancelled()) {
 								e.setDroppedExp(e.getDroppedExp() * (ce.getLevel(item, CEnchantments.INQUISITIVE) + 1));
+							}
+						}
+					}
+				}
+				if(e.getEntity() instanceof Player) {//The entity that is killed is a player.
+					if(ce.hasEnchantment(item, CEnchantments.CHARGE)) {
+						if(CEnchantments.CHARGE.isActivated()) {
+							EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CHARGE, item);
+							Bukkit.getPluginManager().callEvent(event);
+							if(!event.isCancelled()) {
+								int radius = 4 + ce.getLevel(item, CEnchantments.CHARGE);
+								damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
+								for(Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
+									if(Support.isFriendly(entity, damager)) {
+										((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
+									}
+								}
 							}
 						}
 					}

@@ -106,7 +106,8 @@ public enum CEnchantments {
 	HELLFORGED("HellForged", EnchantmentType.ALL, 5, 5),
 	//	----------------New Enchantments----------------  \\
 	STICKY_SHOT("Sticky-Shot", EnchantmentType.BOW, 10, 10),
-	DISORDER("Disorder", EnchantmentType.SWORD, 1, 0);
+	DISORDER("Disorder", EnchantmentType.SWORD, 1, 0),
+	CHARGE("Charge", EnchantmentType.SWORD);
 	
 	private String name;
 	private EnchantmentType type;
