@@ -75,13 +75,6 @@
             <systemPath>${project.basedir}/src/main/library/PreciousStones.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>net.sacredlabyrinth.phaed.simpleclans</groupId>
-            <artifactId>SimpleClans</artifactId>
-            <version>2.7.11</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/SimpleClans.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>MassiveCraft</artifactId>
             <version>2.13.2</version>

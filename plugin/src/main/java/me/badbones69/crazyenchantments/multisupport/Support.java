@@ -125,9 +125,6 @@ public class Support {
 			if(SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
 				return GriefPreventionSupport.isFriendly(player, other);
 			}
-			if(SupportedPlugins.SIMPLE_CLANS.isPluginLoaded()) {
-				return SimpleClansSupport.isFriendly(player, other);
-			}
 		}
 		return false;
 	}
@@ -252,7 +249,6 @@ public class Support {
 		MOB_STACKER_2("MobStacker2"),
 		STACK_MOB("StackMob"),
 		MEGA_SKILLS("MegaSkills"),
-		SIMPLE_CLANS("SimpleClansSupport"),
 		PRECIOUS_STONES("PreciousStones"),
 		PLOT_SQUARED("PlotSquared");
 		
