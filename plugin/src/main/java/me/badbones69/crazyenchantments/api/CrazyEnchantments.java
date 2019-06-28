@@ -7,6 +7,7 @@ import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.*;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v6;
@@ -60,7 +61,6 @@ public class CrazyEnchantments {
 		blacklisted.clear();
 		Version version = Version.getCurrentVersion();
 		useNewMaterial = version.isNewer(Version.v1_12_R1);
-		worldGuardVersion = version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration gkit = Files.GKITZ.getFile();
 		FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
@@ -131,6 +131,9 @@ public class CrazyEnchantments {
 		Scrolls.loadScrolls();
 		//Loads the dust
 		Dust.loadDust();
+		if(SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
+			worldGuardVersion = version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
+		}
 	}
 	
 	/**
