@@ -44,6 +44,7 @@ Messages:
   Spawned-Book: '&7You have spawned a book at &6%world%, %x%, %y%, %z%&7.'
   Reset-GKit: '&7You have reset %player%''s %gkit% GKit cooldown.'
   GKitz-Not-Enabled: '&cGKitz is currently not enabled.'
+  Disordered-Enemy-Hot-Bar: '&7Disordered enemies hot bar.'
   Enchantment-Upgrade:
     Success: '&7You have upgraded &6%enchantment%&7 to level &6%level%&7.'
     Destroyed: '&cYour upgrade failed and the lower level enchantment was lost.'

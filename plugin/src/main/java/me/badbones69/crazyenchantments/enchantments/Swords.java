@@ -18,6 +18,7 @@ import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,19 +28,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class Swords implements Listener {
 	
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
-	@SuppressWarnings("deprecation")
+	//	@EventHandler
+	//	public void onClick(InventoryClickEvent e) {
+	//		System.out.println(e.getSlot());
+	//	}
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
 		if(!e.isCancelled()) {
@@ -121,6 +126,32 @@ public class Swords implements Listener {
 														}
 													}
 												}
+											}
+										}
+									}
+								}
+								if(ce.hasEnchantment(item, CEnchantments.DISORDER)) {
+									if(CEnchantments.DISORDER.isActivated()) {
+										if(e.getEntity() instanceof Player) {
+											if(CEnchantments.DISORDER.chanceSuccessful(item)) {
+												Player player = (Player) e.getEntity();
+												Inventory inventory = player.getInventory();
+												List<ItemStack> items = new ArrayList<>();
+												List<Integer> slots = new ArrayList<>();
+												for(int i = 0; i < 9; i++) {
+													ItemStack inventoryItem = inventory.getItem(i);
+													if(inventoryItem != null) {
+														items.add(inventoryItem);
+														inventory.setItem(i, new ItemStack(Material.AIR));
+													}
+													slots.add(i);
+												}
+												Collections.shuffle(items);
+												Collections.shuffle(slots);
+												for(int i = 0; i < items.size(); i++) {
+													inventory.setItem(slots.get(i), items.get(i));
+												}
+												damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
 											}
 										}
 									}
