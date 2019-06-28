@@ -2097,7 +2097,28 @@ Enchantments:
         - '&7you receive speed, regeneration, and haste.'
         - ''
         - '&6Found in:'
-        - '&7 - &4&l&nLegendary'
+        - '&7 - &9&l&nRare'
         - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Rare'
+  BattleCry: #Do not change this line.
+    Enabled: true
+    Name: 'BattleCry'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lBattleCry &7(&bI-V&7)'
+      Description:
+        - '&7During combat it has a 10%(+5% per level)'
+        - '&7chance to send nearby players flying backwards.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxe'
     Categories:
       - 'Legendary'

@@ -9,6 +9,7 @@ import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -112,6 +113,21 @@ public class Axes implements Listener {
 									Bukkit.getPluginManager().callEvent(event);
 									if(!event.isCancelled()) {
 										en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (ce.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
+									}
+								}
+							}
+						}
+						if(ce.hasEnchantment(item, CEnchantments.BATTLECRY)) {
+							if(CEnchantments.BATTLECRY.isActivated()) {
+								if(CEnchantments.BATTLECRY.chanceSuccessful(item)) {
+									EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BATTLECRY.getEnchantment(), item);
+									Bukkit.getPluginManager().callEvent(event);
+									if(!event.isCancelled()) {
+										for(Entity entity : damager.getNearbyEntities(3, 3, 3)) {
+											if(!Support.isFriendly(damager, entity)) {
+												entity.setVelocity(entity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
+											}
+										}
 									}
 								}
 							}

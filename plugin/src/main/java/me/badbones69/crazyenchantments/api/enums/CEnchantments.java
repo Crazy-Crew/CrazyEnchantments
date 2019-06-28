@@ -108,7 +108,8 @@ public enum CEnchantments {
 	STICKY_SHOT("Sticky-Shot", EnchantmentType.BOW, 10, 10),
 	DISORDER("Disorder", EnchantmentType.SWORD, 1, 0),
 	CHARGE("Charge", EnchantmentType.SWORD),
-	REVENGE("Revenge", EnchantmentType.SWORD);
+	REVENGE("Revenge", EnchantmentType.SWORD),
+	BATTLECRY("BattleCry", EnchantmentType.AXE, 10, 5);
 	
 	private String name;
 	private EnchantmentType type;
