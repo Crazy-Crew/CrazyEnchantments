@@ -123,7 +123,7 @@ public class Axes implements Listener {
 	}
 	
 	@EventHandler
-	public void onPlayerDamage(PlayerDeathEvent e) {
+	public void onPlayerDeath(PlayerDeathEvent e) {
 		if(!Support.allowsPVP(e.getEntity().getLocation())) return;
 		if(e.getEntity().getKiller() instanceof Player) {
 			Player damager = e.getEntity().getKiller();
