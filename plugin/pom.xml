@@ -142,9 +142,9 @@
         <dependency>
             <groupId>com.github.Nathat23</groupId>
             <artifactId>StackMob-3</artifactId>
-            <version>3.3.6</version>
+            <version>4.0.2</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/StackMob-3.3.6.jar</systemPath>
+            <systemPath>${project.basedir}/src/main/library/StackMob-4.0.2.jar</systemPath>
         </dependency>
         <dependency><!-- FactionsUUID -->
             <groupId>com.massivecraft</groupId>
