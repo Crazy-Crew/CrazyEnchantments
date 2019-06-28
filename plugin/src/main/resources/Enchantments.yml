@@ -2083,3 +2083,21 @@ Enchantments:
         - '&6Enchantable Items: &aSword'
     Categories:
       - 'Rare'
+  Revenge: #Do not change this line.
+    Enabled: true
+    Name: 'Revenge'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Sword'
+    Info:
+      Name: '&e&lRevenge &7(&bI&7)'
+      Description:
+        - '&7When a nearby ally is killed'
+        - '&7you receive speed, regeneration, and haste.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Legendary'

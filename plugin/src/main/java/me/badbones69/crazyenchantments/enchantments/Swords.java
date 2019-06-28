@@ -473,6 +473,24 @@ public class Swords implements Listener {
 					}
 				}
 			}
+			if(CEnchantments.REVENGE.isActivated()) {
+				for(Entity entity : player.getNearbyEntities(10, 10, 10)) {
+					if(Support.isFriendly(entity, player)) {
+						Player ally = (Player) entity;
+						ItemStack itemStack = Methods.getItemInHand(ally);
+						if(ce.hasEnchantments(itemStack)) {
+							if(ce.hasEnchantment(itemStack, CEnchantments.REVENGE)) {
+								if(CEnchantments.REVENGE.isActivated()) {
+									ally.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 1));
+									ally.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0));
+									ally.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5 * 20, 1));
+									
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	

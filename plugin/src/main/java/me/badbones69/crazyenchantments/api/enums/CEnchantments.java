@@ -107,7 +107,8 @@ public enum CEnchantments {
 	//	----------------New Enchantments----------------  \\
 	STICKY_SHOT("Sticky-Shot", EnchantmentType.BOW, 10, 10),
 	DISORDER("Disorder", EnchantmentType.SWORD, 1, 0),
-	CHARGE("Charge", EnchantmentType.SWORD);
+	CHARGE("Charge", EnchantmentType.SWORD),
+	REVENGE("Revenge", EnchantmentType.SWORD);
 	
 	private String name;
 	private EnchantmentType type;
