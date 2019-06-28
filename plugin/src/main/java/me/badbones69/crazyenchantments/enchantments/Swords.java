@@ -454,8 +454,6 @@ public class Swords implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDeath(PlayerDeathEvent e) {
-		if(Support.isFriendly(e.getEntity().getKiller(), e.getEntity())) return;
-		if(!Support.allowsPVP(e.getEntity().getLocation())) return;
 		if(e.getEntity().getKiller() instanceof Player) {
 			Player damager = e.getEntity().getKiller();
 			Player player = e.getEntity();
@@ -480,7 +478,6 @@ public class Swords implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent e) {
-		if(Support.isFriendly(e.getEntity().getKiller(), e.getEntity())) return;
 		if(e.getEntity().getKiller() instanceof Player) {
 			Player damager = e.getEntity().getKiller();
 			ItemStack item = Methods.getItemInHand(damager);
