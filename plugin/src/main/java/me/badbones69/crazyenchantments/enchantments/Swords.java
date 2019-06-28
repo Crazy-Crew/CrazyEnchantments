@@ -134,9 +134,12 @@ public class Swords implements Listener {
 									if(CEnchantments.DISORDER.isActivated()) {
 										if(e.getEntity() instanceof Player) {
 											if(CEnchantments.DISORDER.chanceSuccessful(item)) {
-												Player player = (Player) e.getEntity();
-												Inventory inventory = player.getInventory();
-												List<ItemStack> items = new ArrayList<>();
+												EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DISORDER, item);
+												Bukkit.getPluginManager().callEvent(event);
+												if(!event.isCancelled()) {
+													Player player = (Player) e.getEntity();
+													Inventory inventory = player.getInventory();
+													List<ItemStack> items = new ArrayList<>();
 												List<Integer> slots = new ArrayList<>();
 												for(int i = 0; i < 9; i++) {
 													ItemStack inventoryItem = inventory.getItem(i);
@@ -152,6 +155,7 @@ public class Swords implements Listener {
 													inventory.setItem(slots.get(i), items.get(i));
 												}
 												damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+											}
 											}
 										}
 									}
