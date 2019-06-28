@@ -444,6 +444,17 @@ public class Swords implements Listener {
 										}
 									}
 								}
+								if(ce.hasEnchantment(item, CEnchantments.FAMISHED)) {
+									if(CEnchantments.FAMISHED.isActivated()) {
+										if(CEnchantments.FAMISHED.chanceSuccessful(item)) {
+											EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FAMISHED, item);
+											Bukkit.getPluginManager().callEvent(event);
+											if(!event.isCancelled()) {
+												en.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 10 * 20, 1));
+											}
+										}
+									}
+								}
 							}
 						}
 					}

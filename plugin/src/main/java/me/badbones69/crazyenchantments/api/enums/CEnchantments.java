@@ -109,7 +109,8 @@ public enum CEnchantments {
 	DISORDER("Disorder", EnchantmentType.SWORD, 1, 0),
 	CHARGE("Charge", EnchantmentType.SWORD),
 	REVENGE("Revenge", EnchantmentType.SWORD),
-	BATTLECRY("BattleCry", EnchantmentType.AXE, 10, 5);
+	BATTLECRY("BattleCry", EnchantmentType.AXE, 10, 5),
+	FAMISHED("Famished", EnchantmentType.SWORD, 10, 5);
 	
 	private String name;
 	private EnchantmentType type;

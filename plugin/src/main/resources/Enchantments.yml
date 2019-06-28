@@ -2122,3 +2122,24 @@ Enchantments:
         - '&6Enchantable Items: &aAxe'
     Categories:
       - 'Legendary'
+  Famished: #Do not change this line.
+    Enabled: true
+    Name: 'Famished'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lFamished &7(&bI-III&7)'
+      Description:
+        - '&7During combat it has a 10%(+5% per level)'
+        - '&7chance to give the enemy hunger.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &9&l&nRare'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Rare'
