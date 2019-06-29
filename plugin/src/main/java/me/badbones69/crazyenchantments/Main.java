@@ -79,6 +79,7 @@ public class Main extends JavaPlugin implements Listener {
 		pm.registerEvents(new Bows(), this);
 		pm.registerEvents(new Axes(), this);
 		pm.registerEvents(new Tools(), this);
+		pm.registerEvents(new Hoes(), this);
 		pm.registerEvents(new Helmets(), this);
 		pm.registerEvents(new PickAxes(), this);
 		pm.registerEvents(new Boots(), this);

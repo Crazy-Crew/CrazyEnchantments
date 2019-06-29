@@ -2143,3 +2143,25 @@ Enchantments:
         - '&6Enchantable Items: &aSword'
     Categories:
       - 'Rare'
+  GreenThumb: #Do not change this line.
+    Enabled: true
+    Name: 'GreenThumb'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Hoe'
+    Chance-System:
+      Base: 10
+      Increase: 10
+    Info:
+      Name: '&e&lGreenThumb &7(&bI-III&7)'
+      Description:
+        - '&7When right clicking a seedling you have a'
+        - '&710%(+10% per level) chance to fully grow the plant'
+        - '&7but at the cost of the hoe''s durability.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &9&l&nRare'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Rare'
