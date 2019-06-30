@@ -2165,3 +2165,22 @@ Enchantments:
         - '&6Enchantable Items: &aHoe'
     Categories:
       - 'Rare'
+  Harvester: #Do not change this line.
+    Enabled: true
+    Name: 'Harvester'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Hoe'
+    Info:
+      Name: '&e&lHarvester &7(&bI&7)'
+      Description:
+        - '&7When breaking fully grown crops'
+        - '&7it will break all fully grown crops'
+        - '&7in a 3x3 area of the broken crop.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Common'

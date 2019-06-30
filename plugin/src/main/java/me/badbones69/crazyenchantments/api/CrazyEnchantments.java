@@ -726,10 +726,10 @@ public class CrazyEnchantments {
 			if(item.hasItemMeta()) {
 				if(item.getItemMeta().hasLore()) {
 					for(String lore : item.getItemMeta().getLore()) {
-						for(CEnchantment en : getRegisteredEnchantments()) {
-							if(lore.startsWith(en.getColor() + en.getCustomName())) {
-								if(!enchantments.contains(en)) {
-									enchantments.add(en);
+						for(CEnchantment enchantment : getRegisteredEnchantments()) {
+							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
+								if(!enchantments.contains(enchantment)) {
+									enchantments.add(enchantment);
 								}
 							}
 						}
