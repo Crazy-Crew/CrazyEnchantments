@@ -6,6 +6,8 @@ public interface NMSSupport {
 	
 	void fullyGrowPlant(Block block);
 	
-	Boolean isFullyGrown(Block block);
+	boolean isFullyGrown(Block block);
+	
+	void hydrateSoil(Block soil);
 	
 }

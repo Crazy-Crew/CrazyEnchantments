@@ -39,7 +39,7 @@ public class NMS_v1_12_2_Down implements NMSSupport {
 	}
 	
 	@Override
-	public Boolean isFullyGrown(Block block) {
+	public boolean isFullyGrown(Block block) {
 		if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
 			if(block.getState().getData() instanceof Crops) {
 				return ((Crops) block.getState().getData()).getState() == CropState.RIPE;
@@ -63,6 +63,13 @@ public class NMS_v1_12_2_Down implements NMSSupport {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public void hydrateSoil(Block soil) {
+		if(soil.getType() == Material.SOIL) {
+			soil.setData((byte) 7);
+		}
 	}
 	
 }

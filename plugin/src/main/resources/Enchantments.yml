@@ -2184,3 +2184,25 @@ Enchantments:
         - '&6Enchantable Items: &aHoe'
     Categories:
       - 'Common'
+  Tiller: #Do not change this line.
+    Enabled: true
+    Name: 'Tiller'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Hoe'
+    Info:
+      Name: '&e&lTiller &7(&bI&7)'
+      Description:
+        - '&7When tilling up soil'
+        - '&7it will automatically till soil'
+        - '&7in a 3x3 area of the tilled soil.'
+        - '&7It will also automatically hydrate'
+        - '&7the soil if it is 3 blocks away from'
+        - '&7a water source block.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Common'

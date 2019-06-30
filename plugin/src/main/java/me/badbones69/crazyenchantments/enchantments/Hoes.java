@@ -38,21 +38,37 @@ public class Hoes implements Listener {
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			ItemStack item = Methods.getItemInHand(player);
 			Block block = e.getClickedBlock();
+			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
 			if(getSeedlings().contains(block.getType())) {
-				if(ce.hasEnchantments(item)) {
-					if(ce.hasEnchantment(item, CEnchantments.GREENTHUMB)) {//Crop is not fully grown
-						if(!ce.getNMSSupport().isFullyGrown(block)) {
-							if(CEnchantments.GREENTHUMB.chanceSuccessful(item) || player.getGameMode() == GameMode.CREATIVE) {
-								ce.getNMSSupport().fullyGrowPlant(block);
-								if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-									block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, block.getLocation().add(.5, .5, .5), 20, .25, .25, .25);
-								}else {
-									ParticleEffect.VILLAGER_HAPPY.display(.25F, .25F, .25F, 0, 20, block.getLocation().add(.5, .5, .5), 20);
-								}
+				if(enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment())) {//Crop is not fully grown
+					if(!ce.getNMSSupport().isFullyGrown(block)) {
+						if(CEnchantments.GREENTHUMB.chanceSuccessful(item) || player.getGameMode() == GameMode.CREATIVE) {
+							ce.getNMSSupport().fullyGrowPlant(block);
+							if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+								block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, block.getLocation().add(.5, .5, .5), 20, .25, .25, .25);
+							}else {
+								ParticleEffect.VILLAGER_HAPPY.display(.25F, .25F, .25F, 0, 20, block.getLocation().add(.5, .5, .5), 20);
 							}
-							if(player.getGameMode() != GameMode.CREATIVE) {//Take durability from players not in Creative
-								Methods.removeDurability(item, player);
+						}
+						if(player.getGameMode() != GameMode.CREATIVE) {//Take durability from players not in Creative
+							Methods.removeDurability(item, player);
+						}
+					}
+				}
+			}
+			if(block.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS")) {
+				if(enchantments.contains(CEnchantments.TILLER.getEnchantment())) {
+					for(Block soil : getSoil(player, block)) {
+						soil.setType(ce.getMaterial("FARMLAND", "SOIL"));
+						for(Block water : getAreaBlocks(soil, 3)) {
+							if(water.getType() == Material.WATER || water.getType() == ce.getMaterial("WATER", "STATIONARY_WATER")) {
+								ce.getNMSSupport().hydrateSoil(soil);
+								break;
 							}
+						}
+						//Take durability from the hoe for each block set to a soil.
+						if(player.getGameMode() != GameMode.CREATIVE) {//Take durability from players not in Creative
+							Methods.removeDurability(item, player);
 						}
 					}
 				}
@@ -84,7 +100,7 @@ public class Hoes implements Listener {
 							BlockFace blockFace = blocks.get(player.getUniqueId()).get(block);
 							blocks.remove(player.getUniqueId());
 							if(ce.getNMSSupport().isFullyGrown(block)) {
-								for(Block crop : getCrops(player, block, blockFace)) {
+								for(Block crop : getAreaCrops(player, block, blockFace)) {
 									crop.breakNaturally();
 								}
 							}
@@ -147,34 +163,87 @@ public class Hoes implements Listener {
 		return crops;
 	}
 	
-	private List<Block> getCrops(Player player, Block block, BlockFace blockFace) {
+	private List<Block> getAreaCrops(Player player, Block block, BlockFace blockFace) {
+		List<Block> blocks = new ArrayList<>();
+		for(Block crop : getAreaBlocks(block, blockFace, 0, 1)) {//Radius of 1 is 3x3
+			if(getCrops().contains(crop.getType())) {
+				if(ce.getNMSSupport().isFullyGrown(crop)) {
+					BlockBreakEvent event = new BlockBreakEvent(crop, player);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
+						blocks.add(crop);
+					}
+				}
+			}
+		}
+		return blocks;
+	}
+	
+	private List<Block> getSoil(Player player, Block block) {
+		Location location = block.getLocation();
+		List<Block> soilBlocks = new ArrayList<>();
+		for(Block soil : getAreaBlocks(block)) {
+			if(soil.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS")) {
+				BlockBreakEvent event = new BlockBreakEvent(soil, player);
+				Bukkit.getPluginManager().callEvent(event);
+				if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
+					soilBlocks.add(soil);
+				}
+			}
+		}
+		return soilBlocks;
+	}
+	
+	//	private List<Block> getAreaBlocks(Block block) {
+	//		Location location = block.getLocation();
+	//		return new ArrayList<>(Arrays.asList(
+	//		location.clone().add(1, 0, 1).getBlock(),//Top Left
+	//		location.clone().add(1, 0, 0).getBlock(),//Top Middle
+	//		location.clone().add(1, 0, -1).getBlock(),//Top Right
+	//		location.clone().add(0, 0, 1).getBlock(),//Center Left
+	//		block,//Center Middle
+	//		location.clone().add(0, 0, -1).getBlock(),//Center Right
+	//		location.clone().add(-1, 0, 1).getBlock(),//Bottom Left
+	//		location.clone().add(-1, 0, 0).getBlock(),//Bottom Middle
+	//		location.clone().add(-1, 0, -1).getBlock()//Bottom Right
+	//		));
+	//	}
+	
+	private List<Block> getAreaBlocks(Block block) {
+		return getAreaBlocks(block, BlockFace.UP, 0, 1);//Radius of 1 is 3x3
+	}
+	
+	private List<Block> getAreaBlocks(Block block, int radius) {
+		return getAreaBlocks(block, BlockFace.UP, 0, radius);
+	}
+	
+	private List<Block> getAreaBlocks(Block block, BlockFace blockFace, int depth, int radius) {
 		Location loc = block.getLocation();
 		Location loc2 = block.getLocation();
-		int depth = 1;
 		switch(blockFace) {
 			case SOUTH:
-				loc.add(-1, 1, -depth);
-				loc2.add(1, -1, 0);
+				loc.add(-radius, radius, -depth);
+				loc2.add(radius, -radius, 0);
 				break;
 			case WEST:
-				loc.add(depth, 1, -1);
-				loc2.add(0, -1, 1);
+				loc.add(depth, radius, -radius);
+				loc2.add(0, -radius, radius);
 				break;
 			case EAST:
-				loc.add(-depth, 1, 1);
-				loc2.add(0, -1, -1);
+				loc.add(-depth, radius, radius);
+				loc2.add(0, -radius, -radius);
 				break;
 			case NORTH:
-				loc.add(1, 1, depth);
-				loc2.add(-1, -1, 0);
+				loc.add(radius, radius, depth);
+				loc2.add(-radius, -radius, 0);
 				break;
 			case UP:
-				loc.add(-1, -depth, -1);
-				loc2.add(1, 0, 1);
+				loc.add(-radius, -depth, -radius);
+				loc2.add(radius, 0, radius);
 				break;
 			case DOWN:
-				loc.add(1, depth, 1);
-				loc2.add(-1, 0, -1);
+				loc.add(radius, depth, radius);
+				loc2.add(-radius, 0, -radius);
 				break;
 			default:
 				break;
@@ -189,16 +258,7 @@ public class Hoes implements Listener {
 		for(int x = bottomBlockX; x <= topBlockX; x++) {
 			for(int z = bottomBlockZ; z <= topBlockZ; z++) {
 				for(int y = bottomBlockY; y <= topBlockY; y++) {
-					Block crop = loc.getWorld().getBlockAt(x, y, z);
-					if(getCrops().contains(crop.getType())) {
-						if(ce.getNMSSupport().isFullyGrown(crop)) {
-							BlockBreakEvent event = new BlockBreakEvent(crop, player);
-							Bukkit.getPluginManager().callEvent(event);
-							if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
-								blocks.add(crop);
-							}
-						}
-					}
+					blocks.add(loc.getWorld().getBlockAt(x, y, z));
 				}
 			}
 		}
