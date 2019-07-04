@@ -1,3 +1,9 @@
+###################################
+## Currency Types: https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
+## Commands and Permissions: https://github.com/badbones69/Crazy-Enchantments/wiki/Commands-and-Permissions
+## 1.8 and lower players use these sounds: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html
+## 1.9 and up players use these sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+###################################################################
 Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the messages
   Update-Checker: true #Toggle on and off if you get a update message when you join if there is a new update.
@@ -14,7 +20,7 @@ Settings:
     - '&4%Destroy_Rate%% Destroy Chance'
     - '&a%Success_Rate%% Success Chance'
   LostBook: #Lost book options.
-    Item: '340' #The item the lost books is.
+    Item: '340' #The item the lost books are.
     Name: '&8&l&nA Lost %Category%&8&l&n Book' #The name of the lost books.
     Lore: #The lore of the lost books.
       - '&7This book has been lost for centuries'
@@ -23,7 +29,7 @@ Settings:
       - '&7&l(&6&l!&7&l) &7Right Click to clean off.'
   Scrambler:
     Item: '175' #The item it will be.
-    Glowing: true #If it has the glowing effect.
+    Glowing: true #If it has a glowing effect.
     Name: '&e&lThe Grand Scrambler' #The name of the item.
     Lore: #The lore of the item.
       - '&7The &e&lThe Grand Scrambler &7will allow'
@@ -58,10 +64,10 @@ Settings:
     Lore: #The lore of the item.
       - '&b>>&7&nClick to open&b<<'
   ProtectionCrystal:
-    InGUI: false #If its in the GUI.
+    InGUI: false #If it's in the GUI.
     Slot: 1 #Slot it is in
     Item: '388' #Item it is
-    Glowing: true #If it is enchanted
+    Glowing: true #If the item has a glowing effect.
     Protected: '&6Ancient Protection' #The lore that goes on the item that is protected.
     Lose-Protection-On-Death: true #If true then when the player dies they get the item but it loses its protection.
     Chance: #The option to allow the protection to fail.
@@ -85,7 +91,7 @@ Settings:
     InGUI: true #In the GUI.
     Slot: 24 #Slot it is in.
     Item: '145' #Item that shows in the GUI
-    Glowing: false #Is it enchanted
+    Glowing: false #If the item has a glowing effect.
     Name: '&7&lThe &b&lBlack &9&lSmith' #Name of the Item in the GUI
     Lore: #Lore on the item.
       - '&b>>&7&nClick to open&b<<'
@@ -109,7 +115,7 @@ Settings:
     InGUI: true #Toggle whether it is in the /CE GUI or not
     Slot: 22 #Slot it is in
     Item: '399' #Item it is
-    Glowing: false #Whether it glows like its enchanted
+    Glowing: false #If the item has a glowing effect.
     Name: '&7&lThe &b&lCrazy &9&lTinkerer' #Name of the Item
     Lore: #Lore of the item
       - '&b>>&7&nClick to open&b<<'
@@ -117,7 +123,7 @@ Settings:
     InGUI: true #Toggle whether it is in the /CE GUI or not
     Slot: 23 #Slot it is in
     Item: '345' #Item it is
-    Glowing: true #Whether it glows like its enchanted
+    Glowing: true #If the item has a glowing effect.
     Name: '&eInfo on the Enchantments' #Name of the Item
     Lore: #Lore of the item
       - '&b>>&7&nClick to view&b<<'
@@ -192,7 +198,7 @@ Settings:
     Chance: 75 #The chance that the black scroll will work.
     InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&7Black Scroll'
-    Glowing: false #If the item is glowing.
+    Glowing: false #If the item has a glowing effect.
     Slot: 21 #Slot you can buy the scroll at
     Lore: #Lore of the item in the GUI
       - '&eCost: &a&l$1000'
@@ -213,7 +219,7 @@ Settings:
       - '&7and it will protect the item from the destroy rate.'
     InGUI: true #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&7White Scroll'
-    Glowing: false #If the item is glowing.
+    Glowing: false #If the item has a glowing effect.
     Slot: 30 #Slot you can buy the scroll at
     Lore: #Lore of the scroll in the GUI
       - '&eCost: &a&l$2000'
@@ -229,7 +235,7 @@ Settings:
       - '&7enchantments you currently have on the item.'
     InGUI: false #Toggle being able to buy in the /CE GUI. Cost is controlled in the SignOptions section
     GUIName: '&dTransmog Scroll'
-    Glowing: false #If the item is glowing.
+    Glowing: false #If the item has a glowing effect.
     Slot: 30 #Slot you can buy the scroll at
     Lore: #Lore of the scroll in the GUI
       - '&eCost: &a&l$200'
@@ -243,7 +249,7 @@ Settings:
     MaxAmountOfEnchantmentsToggle: true #Turn on an off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also?
     MaxRageLevel: 4 #The max amount rage can stack when fighting.
-    Break-Rage-On-Damage: true #If the player is damaged and has a rage building it will be broken if this is enabled.
+    Break-Rage-On-Damage: true #If the player is damaged while building rage, it will be broken if this is enabled.
     Right-Click-Book-Description: true #Toggles whether when you right click the enchantment book if it messages the player the description or not.
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
@@ -254,14 +260,14 @@ Settings:
       Enchantment-Break: true #If the book's destroy rate happens the item doesn't break but instead the current lower version of the enchantment is destroyed. If false then the item will be destroyed instead.
     Wings: #Options for the Wings Enchantment.
       Clouds: true #Toggle if the wings enchantment shows particles under the player's feet. Warning this option has been known to cause lag so toggle it off if you get lag.
-      Enemy-Toggle: true #This toggles on and off the wings enchantment when an enemy is # away from the player.
+      Enemy-Toggle: true #This toggles on and off the wings enchantment when an enemy is close to the player.
       Distance: 25 #How far away the enemy has to be to toggle off the enchantment.
       Members-Can-Fly: true #Toggle if a player is a member of a world guard region if they can fly.
       Owners-Can-Fly: true #Toggle if a player is an owner of a world guard region if they can fly.
       Regions: #All world guard regions the Wings enchantment can work in.
         - 'Free_Fly'
         - 'SafeZone'
-  Costs: #This is where you set the cost of stuff in the shop GUI. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
+  Costs: #This is where you set the cost of stuff in the shop GUI.
     Scrambler: #The item that is being bought.
       Cost: 800 #How much the item will cost.
       Currency: Vault #The currency that will be taken when bought.
@@ -340,7 +346,7 @@ Settings:
   #Placeholders can be used in the name and lore and they must be lowercase. 
   #Placeholders: %vault% %xp_level% %xp_total%
   #####################
-  GUICustomization: #This allows you to customize unclickable items into you GUI.
+  GUICustomization: #This allows you to customize unclickable items into your GUI.
     - 'Slot:1, Item:160:15, Name: '
     - 'Slot:2, Item:160:15, Name: '
     - 'Slot:3, Item:160:15, Name: '
@@ -393,15 +399,15 @@ Categories: #You can make as many different categories as you want
     Lore: #The lore of the Item
       - '&eCost: &6&l20 &6XP Levels'
     Item: '160:5' #The id for the item
-    Glowing: true #If the item is glowing in the GUI.
+    Glowing: true #If the item has a glowing effect.
     Cost: 20 #How much each book will cost to buy.
-    Currency: XP_Level #The currency you wish to use. https://github.com/kicjow/Crazy-Enchantments/wiki/Currency-Types
+    Currency: XP_Level #The currency you wish to use.
     Rarity: 1 #This allows the enchantments to be ordered with the Transmog Scrolls. The higher the number the rarer it is. Try and have each category have different rarities.
     LostBook: #Controls the Lost Book shop for this tier
       InGUI: false #If it shows in the /CE Gui
       Slot: 1 #Slot it will be in
       Item: '340' #The item that is shown in the GUI
-      Glowing: false #Is it enchanted
+      Glowing: false #If the item has a glowing effect.
       Name: '&8&l&nLost&c&l Tier1 &8&l&nBooks' #Name of the item
       Lore: #Lore on the item
         - '&7These are lost books that are'
@@ -414,13 +420,8 @@ Categories: #You can make as many different categories as you want
       Currency: Vault
       FireworkToggle: true #Toggle on and off if when opening a lost book a firework effect happens
       FireworkColors: 'Red, White, Blue' #The colors of the firework
-      Sound-Toggle: false
+      Sound-Toggle: false #Sound Options
       Sound: 'BLOCK_ANVIL_PLACE'
-      ####################
-      ## Sound Options
-      ## 1.8 and lower players use these sounds: http://docs.codelanx.com/Bukkit/1.8/org/bukkit/Sound.html
-      ## 1.9 and up players use these sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
-      ####################
     EnchOptions: #Enchantment Options
       SuccessPercent: #The range for the success rate that the enchantment will have
         Max: 90 #The max success rate
