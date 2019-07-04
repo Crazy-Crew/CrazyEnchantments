@@ -3,7 +3,9 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
-import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
+import me.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
+import me.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -26,8 +28,10 @@ public class CEnchantment {
 	private List<String> infoDescription;
 	private List<String> categories;
 	private EnchantmentType enchantmentType;
+	private CEnchantment instance;
 	
 	public CEnchantment(String name) {
+		this.instance = this;
 		this.name = name;
 		this.customName = name;
 		this.activated = true;
@@ -169,15 +173,17 @@ public class CEnchantment {
 	}
 	
 	public void registerEnchantment() {
-		ce.registerEnchantment(this);
+		RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(instance);
+		Bukkit.getPluginManager().callEvent(event);
 		ce.registerEnchantment(instance);
 		if(enchantmentType != null) {
 			enchantmentType.addEnchantment(instance);
-	}
+		}
 	}
 	
 	public void unregisterEnchantment() {
-		ce.unregisterEnchantment(this);
+		UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(instance);
+		Bukkit.getPluginManager().callEvent(event);
 		ce.unregisterEnchantment(instance);
 		if(enchantmentType != null) {
 			enchantmentType.removeEnchantment(instance);
