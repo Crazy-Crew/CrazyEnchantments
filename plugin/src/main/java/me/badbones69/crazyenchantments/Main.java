@@ -4,11 +4,11 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
-import me.badbones69.crazyenchantments.api.enums.*;
-import me.badbones69.crazyenchantments.api.objects.CEBook;
-import me.badbones69.crazyenchantments.api.objects.CEPlayer;
-import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.objects.GKitz;
+import me.badbones69.crazyenchantments.api.enums.CEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Dust;
+import me.badbones69.crazyenchantments.api.enums.Messages;
+import me.badbones69.crazyenchantments.api.enums.Scrolls;
+import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
 import me.badbones69.crazyenchantments.multisupport.*;
@@ -234,13 +234,12 @@ public class Main extends JavaPlugin implements Listener {
 							sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 							return true;
 						}
-						Player player = (Player) sender;
-						InfoGUIControl.openInfo(player);
+						ce.getInfoMenuManager().openInfoMenu((Player) sender);
 						return true;
 					}else {
-						for(InfoType type : InfoType.getTypes()) {
-							if(args[1].equalsIgnoreCase(type.getName())) {
-								InfoGUIControl.openInfo((Player) sender, type);
+						for(EnchantmentType enchantmentType : ce.getInfoMenuManager().getEnchantmentTypes()) {
+							if(args[1].equalsIgnoreCase(enchantmentType.getName())) {
+								ce.getInfoMenuManager().openInfoMenu((Player) sender, enchantmentType);
 								return true;
 							}
 						}

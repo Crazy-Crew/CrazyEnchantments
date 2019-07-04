@@ -254,7 +254,7 @@ public class ShopControler implements Listener {
 							return;
 						}
 						if(name.equalsIgnoreCase(Methods.color(config.getString("Settings.Info.Name")))) {
-							InfoGUIControl.openInfo(player);
+							ce.getInfoMenuManager().openInfoMenu(player);
 						}
 					}
 				}

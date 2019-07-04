@@ -1,16 +1,12 @@
 # Enchantment Types:
 # - Armor ~ All armor
 # - Helmet
-# - Chestplate
-# - Leggings
 # - Boots
 # - Bow
 # - Axe
 # - Sword
-# - Weapons ~ Swords and Axes
 # - PickAxe
-# - Fishing-Rod
-# - Elytra
+# - Hoe
 # - Tool ~ Pickaxes, Axes, Shovels, Hoes, and Shears
 # - All ~ All items listed here
 ##########
@@ -1617,7 +1613,7 @@ Enchantments:
     Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
-    Enchantment-Type: 'All'
+    Enchantment-Type: 'Damaged-Items'
     Chance-System:
       Base: 5
       Increase: 5
@@ -1631,7 +1627,7 @@ Enchantments:
         - '&7 - &a&l&nCommon'
         - '&7 - &9&l&nRare'
         - '&7 - &4&l&nLegendary'
-        - '&6Enchantable Items: &aArmor, Weapons, and Tools'
+        - '&6Enchantable Items: &aArmor, Weapons, Tools, Fishing Rods, and Shears'
     Categories:
       - 'Common'
       - 'Rare'
@@ -2093,8 +2089,9 @@ Enchantments:
     Info:
       Name: '&e&lRevenge &7(&bI&7)'
       Description:
-        - '&7When a nearby ally is killed'
-        - '&7you receive speed, regeneration, and haste.'
+        - '&7When a nearby ally is'
+        - '&7killed you receive speed,'
+        - '&7regeneration, and haste.'
         - ''
         - '&6Found in:'
         - '&7 - &9&l&nRare'
@@ -2114,8 +2111,9 @@ Enchantments:
     Info:
       Name: '&e&lBattleCry &7(&bI-V&7)'
       Description:
-        - '&7During combat it has a 10%(+5% per level)'
-        - '&7chance to send nearby players flying backwards.'
+        - '&7During combat it has a'
+        - '&610%(+5% per level) &7chance to send'
+        - '&7nearby players flying backwards.'
         - ''
         - '&6Found in:'
         - '&7 - &4&l&nLegendary'
@@ -2135,8 +2133,9 @@ Enchantments:
     Info:
       Name: '&e&lFamished &7(&bI-III&7)'
       Description:
-        - '&7During combat it has a 10%(+5% per level)'
-        - '&7chance to give the enemy hunger.'
+        - '&7During combat it has a'
+        - '&610%(+5% per level) &7chance'
+        - '&7to give the enemy hunger.'
         - ''
         - '&6Found in:'
         - '&7 - &9&l&nRare'
@@ -2156,9 +2155,10 @@ Enchantments:
     Info:
       Name: '&e&lGreenThumb &7(&bI-III&7)'
       Description:
-        - '&7When right clicking a seedling you have a'
-        - '&710%(+10% per level) chance to fully grow the plant'
-        - '&7but at the cost of the hoe''s durability.'
+        - '&7When right clicking a seedling you'
+        - '&7have a &610%(+10% per level)&7 chance'
+        - '&7to fully grow the plant but at the cost'
+        - '&7of the hoe''s durability.'
         - ''
         - '&6Found in:'
         - '&7 - &9&l&nRare'

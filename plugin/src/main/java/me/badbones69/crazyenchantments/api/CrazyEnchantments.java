@@ -4,7 +4,6 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
-import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.multisupport.NMSSupport;
@@ -39,6 +38,7 @@ public class CrazyEnchantments {
 	private Boolean breakRageOnDamage;
 	private Boolean enchantStackedItems;
 	private NMSSupport nmsSupport;
+	private InfoMenuManager infoMenuManager;
 	private WorldGuardVersion worldGuardVersion;
 	private ArrayList<GKitz> gkitz = new ArrayList<>();
 	private ArrayList<CEPlayer> players = new ArrayList<>();
@@ -66,6 +66,8 @@ public class CrazyEnchantments {
 		Version version = Version.getCurrentVersion();
 		useNewMaterial = version.isNewer(Version.v1_12_R1);
 		nmsSupport = version.isNewer(Version.v1_12_R1) ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
+		infoMenuManager = InfoMenuManager.getInstance();
+		infoMenuManager.load();
 		FileConfiguration config = Files.CONFIG.getFile();
 		FileConfiguration gkit = Files.GKITZ.getFile();
 		FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
@@ -252,6 +254,14 @@ public class CrazyEnchantments {
 	 */
 	public NMSSupport getNMSSupport() {
 		return nmsSupport;
+	}
+	
+	/**
+	 * Get the info menu manager.
+	 * @return The instance of the info menu manager.
+	 */
+	public InfoMenuManager getInfoMenuManager() {
+		return infoMenuManager;
 	}
 	
 	/**

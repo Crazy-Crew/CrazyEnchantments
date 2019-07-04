@@ -39,7 +39,7 @@ public class CEnchantment {
 		this.chanceIncrease = 0;
 		this.infoDescription = new ArrayList<>();
 		this.categories = new ArrayList<>();
-		this.enchantmentType = EnchantmentType.ALL;
+		this.enchantmentType = null;
 	}
 	
 	public CEnchantment setName(String name) {
@@ -170,10 +170,18 @@ public class CEnchantment {
 	
 	public void registerEnchantment() {
 		ce.registerEnchantment(this);
+		ce.registerEnchantment(instance);
+		if(enchantmentType != null) {
+			enchantmentType.addEnchantment(instance);
+	}
 	}
 	
 	public void unregisterEnchantment() {
 		ce.unregisterEnchantment(this);
+		ce.unregisterEnchantment(instance);
+		if(enchantmentType != null) {
+			enchantmentType.removeEnchantment(instance);
+		}
 	}
 	
 	public Integer getPower(ItemStack item) {

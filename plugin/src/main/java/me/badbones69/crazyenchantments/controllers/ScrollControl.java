@@ -3,11 +3,11 @@ package me.badbones69.crazyenchantments.controllers;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
-import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
+import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -68,12 +68,13 @@ public class ScrollControl implements Listener {
 							return;
 						}
 						if(!Methods.isProtected(item)) {
-							ArrayList<Material> types = new ArrayList<>(EnchantmentType.ALL.getItems());
-							if(types.contains(item.getType())) {
-								e.setCancelled(true);
-								e.setCurrentItem(Methods.addLore(item, Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-								player.setItemOnCursor(Methods.removeItem(scroll));
-								return;
+							for(EnchantmentType enchantmentType : ce.getInfoMenuManager().getEnchantmentTypes()) {
+								if(enchantmentType.getEnchantableMaterials().contains(item.getType())) {
+									e.setCancelled(true);
+									e.setCurrentItem(Methods.addLore(item, Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+									player.setItemOnCursor(Methods.removeItem(scroll));
+									return;
+								}
 							}
 						}
 					}

@@ -6,7 +6,6 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Dust;
-import me.badbones69.crazyenchantments.api.enums.EnchantmentType;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -258,17 +257,15 @@ public class Tinkerer implements Listener {
 	
 	private int getTotalXP(ItemStack item) {
 		int total = 0;
-		if(EnchantmentType.ALL.getItems().contains(item.getType()) || item.getType() == ce.getEnchantmentBookItem().getType()) {
-			if(ce.hasEnchantments(item)) {
-				for(CEnchantment en : ce.getEnchantmentsOnItem(item)) {
-					total += Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + en.getName() + ".Items");
-				}
+		if(ce.hasEnchantments(item)) {
+			for(CEnchantment enchantment : ce.getEnchantmentsOnItem(item)) {
+				total += Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items");
 			}
-			if(item.hasItemMeta()) {
-				if(item.getItemMeta().hasEnchants()) {
-					for(Enchantment en : item.getEnchantments().keySet()) {
-						total += Files.TINKER.getFile().getInt("Tinker.Vanilla-Enchantments." + en.getName());
-					}
+		}
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasEnchants()) {
+				for(Enchantment enchantment : item.getEnchantments().keySet()) {
+					total += Files.TINKER.getFile().getInt("Tinker.Vanilla-Enchantments." + enchantment.getName());
 				}
 			}
 		}
@@ -276,13 +273,11 @@ public class Tinkerer implements Listener {
 	}
 	
 	private Integer getXP(ItemStack item) {
-		List<String> lore = item.getItemMeta().getLore();
-		List<String> L = Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore");
 		String arg = "";
 		int i = 0;
-		for(String l : L) {
+		for(String l : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
 			l = Methods.color(l);
-			String lo = lore.get(i);
+			String lo = item.getItemMeta().getLore().get(i);
 			if(l.contains("%Total%")) {
 				String[] b = l.split("%Total%");
 				if(b.length >= 1) arg = lo.replace(b[0], "");

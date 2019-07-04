@@ -20,6 +20,14 @@ public class CEBook {
 	/**
 	 *
 	 * @param enchantment Enchantment you want.
+	 */
+	public CEBook(CEnchantment enchantment) {
+		this(enchantment, 1, 1);
+	}
+	
+	/**
+	 *
+	 * @param enchantment Enchantment you want.
 	 * @param power Tier of the enchantment.
 	 */
 	public CEBook(CEnchantment enchantment, Integer power) {
