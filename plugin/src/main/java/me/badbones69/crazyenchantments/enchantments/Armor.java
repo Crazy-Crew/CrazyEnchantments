@@ -23,7 +23,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -39,18 +38,17 @@ public class Armor implements Listener {
 	private HashMap<Player, Calendar> mobTimer = new HashMap<>();
 	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<>();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-	private Plugin plugin = ce.getPlugin();
 	
 	@EventHandler
 	public void onEquip(ArmorEquipEvent e) {
 		Player player = e.getPlayer();
-		ItemStack NewItem = e.getNewArmorPiece();
-		ItemStack OldItem = e.getOldArmorPiece();
-		if(ce.hasEnchantments(OldItem)) {// Removing the potion effects.
+		ItemStack newItem = e.getNewArmorPiece();
+		ItemStack oldItem = e.getOldArmorPiece();
+		if(ce.hasEnchantments(oldItem)) {// Removing the potion effects.
 			for(CEnchantments ench : ce.getEnchantmentPotions().keySet()) {
-				if(ce.hasEnchantment(OldItem, ench.getEnchantment())) {
+				if(ce.hasEnchantment(oldItem, ench.getEnchantment())) {
 					if(ench.isActivated()) {
-						HashMap<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, new ItemStack(Material.AIR), OldItem, ench);
+						HashMap<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, ench);
 						for(PotionEffectType type : effects.keySet()) {
 							if(effects.get(type) < 0) {
 								player.removePotionEffect(type);
@@ -63,14 +61,14 @@ public class Armor implements Listener {
 				}
 			}
 		}
-		if(ce.hasEnchantments(NewItem)) {// Adding the potion effects.
+		if(ce.hasEnchantments(newItem)) {// Adding the potion effects.
 			for(CEnchantments ench : ce.getEnchantmentPotions().keySet()) {
-				if(ce.hasEnchantment(NewItem, ench.getEnchantment())) {
+				if(ce.hasEnchantment(newItem, ench.getEnchantment())) {
 					if(ench.isActivated()) {
-						EnchantmentUseEvent event = new EnchantmentUseEvent(player, ench.getEnchantment(), NewItem);
+						EnchantmentUseEvent event = new EnchantmentUseEvent(player, ench.getEnchantment(), newItem);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()) {
-							HashMap<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, NewItem, OldItem, ench);
+							HashMap<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, newItem, oldItem, ench);
 							for(PotionEffectType type : effects.keySet()) {
 								if(effects.get(type) < 0) {
 									player.removePotionEffect(type);
@@ -107,7 +105,7 @@ public class Armor implements Listener {
 											AACSupport.exemptPlayerTime(player);
 										}
 										if(!event.isCancelled()) {
-											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), () -> {
 												Vector v = player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1);
 												player.setVelocity(v);
 											}, 1);
@@ -117,7 +115,7 @@ public class Armor implements Listener {
 												ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 1, 1, player.getLocation(), 100);
 											}
 											fall.add(player);
-											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> fall.remove(player), 8 * 20);
+											Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), () -> fall.remove(player), 8 * 20);
 										}
 									}
 								}
@@ -761,7 +759,7 @@ public class Armor implements Listener {
 			}
 		}
 		attackEnemy(player, enemy);
-		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+		Bukkit.getScheduler().runTaskLater(ce.getPlugin(), () -> {
 			if(mobs.containsKey(player)) {
 				for(LivingEntity en : mobs.get(player)) {
 					en.remove();

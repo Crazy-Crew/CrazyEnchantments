@@ -4,6 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
@@ -26,6 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Tools implements Listener {
 	
@@ -41,7 +43,6 @@ public class Tools implements Listener {
 		updateEffects(e.getPlayer());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e) {
 		Block block = e.getBlock();
@@ -54,129 +55,128 @@ public class Tools implements Listener {
 		updateEffects(player);
 		if(player.getGameMode() != GameMode.CREATIVE) {
 			ItemStack item = Methods.getItemInHand(player);
-			if(ce.hasEnchantments(item)) {
-				if(ce.hasEnchantment(item, CEnchantments.TELEPATHY) && !ce.hasEnchantment(item, CEnchantments.BLAST)) {
-					if(CEnchantments.TELEPATHY.isActivated()) {
-						if(item.getItemMeta().hasEnchants()) {
-							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-								if(block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER"))) {
-									return;
-								}
+			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+			if(enchantments.contains(CEnchantments.TELEPATHY) && !enchantments.contains(CEnchantments.BLAST)) {
+				if(CEnchantments.TELEPATHY.isActivated()) {
+					if(item.getItemMeta().hasEnchants()) {
+						if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
+							if(block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER"))) {
+								return;
 							}
 						}
-						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-						Bukkit.getPluginManager().callEvent(event);
-						if(!event.isCancelled()) {
-							HashMap<ItemStack, Integer> drops = new HashMap<>();
-							for(ItemStack drop : block.getDrops()) {
-								if(ce.hasEnchantment(item, CEnchantments.FURNACE) && isOre(block.getType())) {
+					}
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()) {
+						HashMap<ItemStack, Integer> drops = new HashMap<>();
+						for(ItemStack drop : block.getDrops()) {
+							if(enchantments.contains(CEnchantments.FURNACE) && isOre(block.getType())) {
+								drop = getOreDrop(block.getType());
+								if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
+									if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+										drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+									}
+								}
+							}else if(enchantments.contains(CEnchantments.AUTOSMELT) && isOre(block.getType())) {
+								if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
 									drop = getOreDrop(block.getType());
+									drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
 									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 										if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-											drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+											drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 										}
 									}
-								}else if(ce.hasEnchantment(item, CEnchantments.AUTOSMELT) && isOre(block.getType())) {
-									if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-										drop = getOreDrop(block.getType());
-										drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
-										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-											if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-												drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-											}
+								}
+							}else {
+								if(getItems().contains(block.getType())) {
+									if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
+										if(Methods.randomPicker(3)) {
+											drop.setAmount(2);
 										}
 									}
-								}else {
-									if(getItems().contains(block.getType())) {
-										if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-											if(Methods.randomPicker(3)) {
-												drop.setAmount(2);
-											}
-										}
-									}
-									if(item.getItemMeta().hasEnchants()) {
-										if(!item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-											if(getXPOres().contains(block.getType())) {
-												if(!ce.hasEnchantment(item, CEnchantments.EXPERIENCE)) {
-													ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-													orb.setExperience(Methods.percentPick(7, 3));
-												}
-											}
-										}
-									}else {
+								}
+								if(item.getItemMeta().hasEnchants()) {
+									if(!item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 										if(getXPOres().contains(block.getType())) {
-											if(!ce.hasEnchantment(item, CEnchantments.EXPERIENCE)) {
+											if(!enchantments.contains(CEnchantments.EXPERIENCE)) {
 												ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 												orb.setExperience(Methods.percentPick(7, 3));
 											}
 										}
 									}
-								}
-								if(ce.hasEnchantment(item, CEnchantments.EXPERIENCE)) {
-									if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-										int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-										if(isOre(block.getType())) {
+								}else {
+									if(getXPOres().contains(block.getType())) {
+										if(!enchantments.contains(CEnchantments.EXPERIENCE)) {
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-											orb.setExperience(Methods.percentPick(7, 3) * power);
+											orb.setExperience(Methods.percentPick(7, 3));
 										}
 									}
 								}
-								if(block.getType() == Material.SUGAR_CANE) {
-									drop.setAmount(0);
-									Location loc = block.getLocation();
-									for(; loc.getBlock().getType() == Material.SUGAR_CANE; loc.add(0, 1, 0)) ;
-									loc.subtract(0, 1, 0);
-									for(; loc.getBlock().getType() == Material.SUGAR_CANE; loc.subtract(0, 1, 0)) {
-										drop.setAmount(drop.getAmount() + 1);
-										loc.getBlock().setType(Material.AIR);
-									}
-									
-								}
-								int amount = drop.getAmount();
-								if(drops.containsKey(drop)) {
-									drops.put(drop, drops.get(drop) + amount);
-								}else {
-									drops.put(drop, amount);
-								}
 							}
-							if(item.getItemMeta().hasEnchants()) {
-								if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-									drops.clear();
-									if(block.getType() == Material.REDSTONE_ORE) {
-										drops.put(new ItemStack(Material.REDSTONE_ORE, 1, block.getData()), 1);
-									}else if(block.getType() == Material.ANVIL) {
-										byte data = block.getData();
-										if(data == 4) {
-											data = 1;
-										}else if(data == 8) {
-											data = 2;
-										}
-										drops.put(new ItemStack(block.getType(), 1, data), 1);
-									}else {
-										drops.put(new ItemStack(block.getType(), 1, block.getData()), 1);
+							if(enchantments.contains(CEnchantments.EXPERIENCE)) {
+								if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+									int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
+									if(isOre(block.getType())) {
+										ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
+										orb.setExperience(Methods.percentPick(7, 3) * power);
 									}
 								}
 							}
-							for(ItemStack i : drops.keySet()) {
-								if(!ce.useNewMaterial()) {
-									if(i.getType() == Material.matchMaterial("INK_SACK")) {//Changes ink sacks to lapis if on 1.12.2-
-										i.setDurability((short) 4);
-									}
+							if(block.getType() == Material.SUGAR_CANE) {
+								drop.setAmount(0);
+								Location loc = block.getLocation();
+								for(; loc.getBlock().getType() == Material.SUGAR_CANE; loc.add(0, 1, 0)) ;
+								loc.subtract(0, 1, 0);
+								for(; loc.getBlock().getType() == Material.SUGAR_CANE; loc.subtract(0, 1, 0)) {
+									drop.setAmount(drop.getAmount() + 1);
+									loc.getBlock().setType(Material.AIR);
 								}
-								i.setAmount(drops.get(i));
-								if(Methods.isInvFull(player)) {
-									player.getWorld().dropItem(player.getLocation(), i);
-								}else {
-									player.getInventory().addItem(i);
-								}
+								
 							}
-							if(Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
-								e.setDropItems(false);
+							int amount = drop.getAmount();
+							if(drops.containsKey(drop)) {
+								drops.put(drop, drops.get(drop) + amount);
 							}else {
-								block.setType(Material.AIR);
+								drops.put(drop, amount);
 							}
-							Methods.removeDurability(item, player);
 						}
+						if(item.getItemMeta().hasEnchants()) {
+							if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
+								drops.clear();
+								if(block.getType() == Material.REDSTONE_ORE) {
+									drops.put(new ItemStack(Material.REDSTONE_ORE, 1, block.getData()), 1);
+								}else if(block.getType() == Material.ANVIL) {
+									byte data = block.getData();
+									if(data == 4) {
+										data = 1;
+									}else if(data == 8) {
+										data = 2;
+									}
+									drops.put(new ItemStack(block.getType(), 1, data), 1);
+								}else {
+									drops.put(new ItemStack(block.getType(), 1, block.getData()), 1);
+								}
+							}
+						}
+						for(ItemStack i : drops.keySet()) {
+							if(!ce.useNewMaterial()) {
+								if(i.getType() == Material.matchMaterial("INK_SACK")) {//Changes ink sacks to lapis if on 1.12.2-
+									i.setDurability((short) 4);
+								}
+							}
+							i.setAmount(drops.get(i));
+							if(Methods.isInvFull(player)) {
+								player.getWorld().dropItem(player.getLocation(), i);
+							}else {
+								player.getInventory().addItem(i);
+							}
+						}
+						if(Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
+							e.setDropItems(false);
+						}else {
+							block.setType(Material.AIR);
+						}
+						Methods.removeDurability(item, player);
 					}
 				}
 			}
@@ -187,7 +187,8 @@ public class Tools implements Listener {
 		ItemStack item = Methods.getItemInHand(player);
 		if(ce.hasEnchantments(item)) {
 			int time = 5 * 20;
-			if(ce.hasEnchantment(item, CEnchantments.HASTE)) {
+			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+			if(enchantments.contains(CEnchantments.HASTE)) {
 				if(CEnchantments.HASTE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
 					Bukkit.getPluginManager().callEvent(event);
@@ -198,7 +199,7 @@ public class Tools implements Listener {
 					}
 				}
 			}
-			if(ce.hasEnchantment(item, CEnchantments.OXYGENATE)) {
+			if(enchantments.contains(CEnchantments.OXYGENATE)) {
 				if(CEnchantments.OXYGENATE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
 					Bukkit.getPluginManager().callEvent(event);

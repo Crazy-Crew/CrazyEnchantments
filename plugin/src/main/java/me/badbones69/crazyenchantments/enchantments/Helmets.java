@@ -25,36 +25,36 @@ public class Helmets implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onEquip(ArmorEquipEvent e) {
 		Player player = e.getPlayer();
-		ItemStack NewItem = e.getNewArmorPiece();
-		ItemStack OldItem = e.getOldArmorPiece();
-		if(ce.hasEnchantments(NewItem)) {
+		ItemStack newItem = e.getNewArmorPiece();
+		ItemStack oldItem = e.getOldArmorPiece();
+		if(ce.hasEnchantments(newItem)) {
 			int time = Integer.MAX_VALUE;
-			if(ce.hasEnchantment(NewItem, CEnchantments.GLOWING)) {
+			if(ce.hasEnchantment(newItem, CEnchantments.GLOWING)) {
 				if(CEnchantments.GLOWING.isActivated()) {
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, NewItem);
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, newItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
-						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, ce.getLevel(NewItem, CEnchantments.GLOWING) - 1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, ce.getLevel(newItem, CEnchantments.GLOWING) - 1));
 					}
 				}
 			}
-			if(ce.hasEnchantment(NewItem, CEnchantments.MERMAID)) {
+			if(ce.hasEnchantment(newItem, CEnchantments.MERMAID)) {
 				if(CEnchantments.MERMAID.isActivated()) {
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, NewItem);
+					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, newItem);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) {
-						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, ce.getLevel(NewItem, CEnchantments.MERMAID) - 1));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, ce.getLevel(newItem, CEnchantments.MERMAID) - 1));
 					}
 				}
 			}
 		}
-		if(ce.hasEnchantments(OldItem)) {
-			if(ce.hasEnchantment(OldItem, CEnchantments.GLOWING)) {
+		if(ce.hasEnchantments(oldItem)) {
+			if(ce.hasEnchantment(oldItem, CEnchantments.GLOWING)) {
 				if(CEnchantments.GLOWING.isActivated()) {
 					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 				}
 			}
-			if(ce.hasEnchantment(OldItem, CEnchantments.MERMAID)) {
+			if(ce.hasEnchantment(oldItem, CEnchantments.MERMAID)) {
 				if(CEnchantments.MERMAID.isActivated()) {
 					player.removePotionEffect(PotionEffectType.WATER_BREATHING);
 				}
@@ -66,26 +66,24 @@ public class Helmets implements Listener {
 	public void onMovment(PlayerMoveEvent e) {
 		Player player = e.getPlayer();
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
-			if(ce.hasEnchantments(armor)) {
-				if(ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
-					if(CEnchantments.COMMANDER.isActivated()) {
-						int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
-						ArrayList<Player> players = new ArrayList<>();
-						for(Entity en : player.getNearbyEntities(radius, radius, radius)) {
-							if(en instanceof Player) {
-								Player o = (Player) en;
-								if(Support.isFriendly(player, o)) {
-									players.add(o);
-								}
+			if(ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
+				if(CEnchantments.COMMANDER.isActivated()) {
+					int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
+					ArrayList<Player> players = new ArrayList<>();
+					for(Entity en : player.getNearbyEntities(radius, radius, radius)) {
+						if(en instanceof Player) {
+							Player o = (Player) en;
+							if(Support.isFriendly(player, o)) {
+								players.add(o);
 							}
 						}
-						if(players.size() > 0) {
-							EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
-							Bukkit.getPluginManager().callEvent(event);
-							if(!event.isCancelled()) {
-								for(Player P : players) {
-									P.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
-								}
+					}
+					if(players.size() > 0) {
+						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
+						Bukkit.getPluginManager().callEvent(event);
+						if(!event.isCancelled()) {
+							for(Player P : players) {
+								P.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
 							}
 						}
 					}

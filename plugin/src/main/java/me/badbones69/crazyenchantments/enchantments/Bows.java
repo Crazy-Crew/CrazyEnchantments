@@ -48,32 +48,15 @@ public class Bows implements Listener {
 		if(ce.hasEnchantments(bow)) {
 			if(e.getProjectile() instanceof Arrow) {
 				Arrow arrow = (Arrow) e.getProjectile();
-				boolean hasEnchantments = ce.hasEnchantments(bow);
-				if(hasEnchantments) {
-					enchantedArrows.add(new EnchantedArrow(arrow, e.getEntity(), bow, ce.getEnchantmentsOnItem(bow)));
-					if(ce.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
-						if(CEnchantments.MULTIARROW.isActivated()) {
-							int power = ce.getLevel(bow, CEnchantments.MULTIARROW);
-							if(CEnchantments.MULTIARROW.chanceSuccessful(bow)) {
-								if(e.getEntity() instanceof Player) {
-									EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.MULTIARROW, bow);
-									Bukkit.getPluginManager().callEvent(event);
-									if(!event.isCancelled()) {
-										for(int i = 1; i <= power; i++) {
-											Arrow spawnedArrow = e.getEntity().getWorld().spawn(e.getProjectile().getLocation(), Arrow.class);
-											spawnedArrow.setShooter(e.getEntity());
-											spawnedArrow.setBounce(false);
-											Vector v = new Vector(randomSpred(), 0, randomSpred());
-											spawnedArrow.setVelocity(e.getProjectile().getVelocity().add(v));
-											if(((Arrow) e.getProjectile()).isCritical()) {
-												spawnedArrow.setCritical(true);
-											}
-											if(e.getProjectile().getFireTicks() > 0) {
-												spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
-											}
-										}
-									}
-								}else {
+				enchantedArrows.add(new EnchantedArrow(arrow, e.getEntity(), bow, ce.getEnchantmentsOnItem(bow)));
+				if(ce.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
+					if(CEnchantments.MULTIARROW.isActivated()) {
+						int power = ce.getLevel(bow, CEnchantments.MULTIARROW);
+						if(CEnchantments.MULTIARROW.chanceSuccessful(bow)) {
+							if(e.getEntity() instanceof Player) {
+								EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.MULTIARROW, bow);
+								Bukkit.getPluginManager().callEvent(event);
+								if(!event.isCancelled()) {
 									for(int i = 1; i <= power; i++) {
 										Arrow spawnedArrow = e.getEntity().getWorld().spawn(e.getProjectile().getLocation(), Arrow.class);
 										spawnedArrow.setShooter(e.getEntity());
@@ -86,6 +69,20 @@ public class Bows implements Listener {
 										if(e.getProjectile().getFireTicks() > 0) {
 											spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
 										}
+									}
+								}
+							}else {
+								for(int i = 1; i <= power; i++) {
+									Arrow spawnedArrow = e.getEntity().getWorld().spawn(e.getProjectile().getLocation(), Arrow.class);
+									spawnedArrow.setShooter(e.getEntity());
+									spawnedArrow.setBounce(false);
+									Vector v = new Vector(randomSpred(), 0, randomSpred());
+									spawnedArrow.setVelocity(e.getProjectile().getVelocity().add(v));
+									if(((Arrow) e.getProjectile()).isCritical()) {
+										spawnedArrow.setCritical(true);
+									}
+									if(e.getProjectile().getFireTicks() > 0) {
+										spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
 									}
 								}
 							}
