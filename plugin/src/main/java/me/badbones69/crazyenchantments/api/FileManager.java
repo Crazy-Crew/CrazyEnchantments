@@ -290,6 +290,7 @@ public class FileManager {
 		ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
 		GKITZ("GKitz.yml", "GKitz.yml", "GKitz1.13-Up.yml", "GKitz1.12.2-Down.yml"),
 		MESSAGES("Messages.yml", "Messages.yml"),
+		ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml", "Enchantment-Types1.13-Up.yml", "Enchantment-Types1.12.2-Down.yml"),
 		SIGNS("Signs.yml", "Signs.yml"),
 		TINKER("Tinker.yml", "Tinker.yml", "Tinker1.13-Up.yml", "Tinker1.12.2-Down.yml");
 		
