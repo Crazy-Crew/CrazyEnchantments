@@ -59,6 +59,7 @@ public class PickAxes implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlastBreak(BlockBreakEvent e) {
+		if(e.isCancelled()) return;
 		Player player = e.getPlayer();
 		Block block = e.getBlock();
 		ItemStack item = Methods.getItemInHand(player);
