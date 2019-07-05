@@ -83,6 +83,9 @@ public class CEnchantment {
 	}
 	
 	public CEnchantment setBookColor(String bookColor) {
+		if(bookColor.startsWith("&f")) {
+			bookColor = bookColor.substring(2);
+		}
 		this.bookColor = Methods.color(bookColor);
 		return this;
 	}
