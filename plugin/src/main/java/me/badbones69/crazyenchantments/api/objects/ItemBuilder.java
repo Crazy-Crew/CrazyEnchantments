@@ -29,7 +29,7 @@ public class ItemBuilder {
 	private int damage;
 	private String name;
 	private List<String> lore;
-	private Integer amount;
+	private int amount;
 	private String player;
 	private HashMap<Enchantment, Integer> enchantments;
 	private Boolean unbreakable;
@@ -309,7 +309,7 @@ public class ItemBuilder {
 	 * The amount of the item stack in the builder.
 	 * @return The amount that is set in the builder.
 	 */
-	public Integer getAmount() {
+	public int getAmount() {
 		return amount;
 	}
 	
@@ -318,7 +318,7 @@ public class ItemBuilder {
 	 * @param amount The amount that is in the item stack.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder setAmount(Integer amount) {
+	public ItemBuilder setAmount(int amount) {
 		this.amount = amount;
 		return this;
 	}
@@ -355,7 +355,7 @@ public class ItemBuilder {
 	 * @param level The level of the enchantment. This can be unsafe levels.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder addEnchantments(Enchantment enchantment, Integer level) {
+	public ItemBuilder addEnchantments(Enchantment enchantment, int level) {
 		this.enchantments.put(enchantment, level);
 		return this;
 	}

@@ -32,7 +32,7 @@ import java.util.*;
 public class CrazyEnchantments {
 	
 	private static CrazyEnchantments instance = new CrazyEnchantments();
-	private Integer rageMaxLevel;
+	private int rageMaxLevel;
 	private Boolean gkitzToggle;
 	private Boolean useNewMaterial;
 	private Boolean breakRageOnDamage;
@@ -40,6 +40,7 @@ public class CrazyEnchantments {
 	private NMSSupport nmsSupport;
 	private InfoMenuManager infoMenuManager;
 	private WorldGuardVersion worldGuardVersion;
+	private ArrayList<Category> categories = new ArrayList<>();
 	private ArrayList<GKitz> gkitz = new ArrayList<>();
 	private ArrayList<CEPlayer> players = new ArrayList<>();
 	private ArrayList<String> whitelisted = new ArrayList<>();
@@ -491,7 +492,7 @@ public class CrazyEnchantments {
 	 * @param category The category you want the rarity from.
 	 * @return The level of the category's rarity.
 	 */
-	public Integer getCategoryRarity(String category) {
+	public int getCategoryRarity(String category) {
 		int rarity = 0;
 		FileConfiguration config = Files.CONFIG.getFile();
 		if(config.contains("Categories." + category)) {
@@ -561,7 +562,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public Integer getHighestEnchantmentLevel(Player player, ItemStack include, ItemStack exclude, CEnchantment enchantment) {
+	public int getHighestEnchantmentLevel(Player player, ItemStack include, ItemStack exclude, CEnchantment enchantment) {
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(!armor.isSimilar(exclude)) {
@@ -589,7 +590,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public Integer getHighestEnchantmentLevelExclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public int getHighestEnchantmentLevelExclude(Player player, ItemStack item, CEnchantment enchantment) {
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(!armor.isSimilar(item)) {
@@ -611,7 +612,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public Integer getHighestEnchantmentLevelInclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public int getHighestEnchantmentLevelInclude(Player player, ItemStack item, CEnchantment enchantment) {
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(hasEnchantment(armor, enchantment)) {
@@ -675,7 +676,7 @@ public class CrazyEnchantments {
 	 * @param level Tier of the enchantment.
 	 * @return The item with the enchantment on it.
 	 */
-	public ItemStack addEnchantment(ItemStack item, CEnchantment enchant, Integer level) {
+	public ItemStack addEnchantment(ItemStack item, CEnchantment enchant, int level) {
 		if(hasEnchantment(item, enchant)) {
 			removeEnchantment(item, enchant);
 		}
@@ -941,7 +942,7 @@ public class CrazyEnchantments {
 	 * @param player The player you are checking.
 	 * @return The max amount of enchantments a player can have on an item.
 	 */
-	public Integer getPlayerMaxEnchantments(Player player) {
+	public int getPlayerMaxEnchantments(Player player) {
 		int limit = 0;
 		for(int i = 1; i < 100; i++) {
 			if(player.hasPermission("crazyenchantments.limit." + i)) {
@@ -1031,7 +1032,7 @@ public class CrazyEnchantments {
 	 * @param enchant The enchantment you want the level from.
 	 * @return The level the enchantment has.
 	 */
-	public Integer getLevel(ItemStack item, CEnchantments enchant) {
+	public int getLevel(ItemStack item, CEnchantments enchant) {
 		int level;
 		String line = "";
 		if(item.hasItemMeta()) {
@@ -1105,7 +1106,7 @@ public class CrazyEnchantments {
 	 * @param i The integer you want to convert.
 	 * @return The integer as a roman numeral if between 1-10 other wise the number as a string.
 	 */
-	public String convertLevelString(Integer i) {
+	public String convertLevelString(int i) {
 		switch(i) {
 			case 0:
 			case 1:
@@ -1139,7 +1140,7 @@ public class CrazyEnchantments {
 	 * @param i The string you want to convert.
 	 * @return The roman numeral as a number.
 	 */
-	public Integer convertLevelInteger(String i) {
+	public int convertLevelInteger(String i) {
 		switch(i) {
 			case "I":
 				return 1;
@@ -1303,7 +1304,7 @@ public class CrazyEnchantments {
 		return items;
 	}
 	
-	private Integer pickLevel(int min, int max) {
+	private int pickLevel(int min, int max) {
 		return min + new Random().nextInt((max + 1) - min);
 	}
 	
