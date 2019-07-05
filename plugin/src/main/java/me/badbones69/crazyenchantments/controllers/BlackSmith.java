@@ -305,7 +305,7 @@ public class BlackSmith implements Listener {
 		if(mainItem.getType() == ce.getEnchantmentBookItem().getType() && subItem.getType() == ce.getEnchantmentBookItem().getType()) {
 			if(Methods.removeColor(mainItem.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(subItem.getItemMeta().getDisplayName()))) {
 				for(CEnchantment en : ce.getRegisteredEnchantments()) {
-					if(ce.getEnchantmentBookEnchantmnet(mainItem) == en) {
+					if(ce.getEnchantmentBookEnchantment(mainItem) == en) {
 						int power = ce.getBookLevel(mainItem, en);
 						int max = en.getMaxLevel();
 						if(power + 1 <= max) {

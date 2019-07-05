@@ -920,7 +920,7 @@ public class CrazyEnchantments {
 	 * @param book The book you want the enchantment from.
 	 * @return The enchantment the book is.
 	 */
-	public CEnchantment getEnchantmentBookEnchantmnet(ItemStack book) {
+	public CEnchantment getEnchantmentBookEnchantment(ItemStack book) {
 		if(book != null) {
 			if(book.hasItemMeta()) {
 				if(book.getItemMeta().hasDisplayName()) {

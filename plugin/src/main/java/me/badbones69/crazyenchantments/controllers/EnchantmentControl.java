@@ -87,7 +87,7 @@ public class EnchantmentControl implements Listener {
 							return;
 						}
 						String name = book.getItemMeta().getDisplayName();
-						CEnchantment enchantment = ce.getEnchantmentBookEnchantmnet(book);
+					CEnchantment enchantment = ce.getEnchantmentBookEnchantment(book);
 						if(enchantment != null) {
 							if(enchantment.getEnchantmentType().getEnchantableMaterials().contains(item.getType())) {
 								if(book.getAmount() == 1) {

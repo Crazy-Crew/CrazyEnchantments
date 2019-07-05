@@ -63,7 +63,7 @@ public class Scrambler implements Listener {
 	public static ItemStack getNewScrambledBook(ItemStack book) {
 		ItemStack newBook = new ItemStack(Material.AIR);
 		if(ce.isEnchantmentBook(book)) {
-			CEnchantment en = ce.getEnchantmentBookEnchantmnet(book);
+			CEnchantment en = ce.getEnchantmentBookEnchantment(book);
 			String cat = ce.getHighestEnchantmentCategory(en);
 			int lvl = ce.getBookLevel(book, en);
 			CEBook eBook = new CEBook(en, lvl);
