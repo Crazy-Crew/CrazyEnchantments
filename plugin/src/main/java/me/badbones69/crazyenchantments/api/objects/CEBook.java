@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +17,7 @@ public class CEBook {
 	private boolean glowing;
 	private int destroy_rate;
 	private int success_rate;
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	/**
 	 *
@@ -51,6 +53,23 @@ public class CEBook {
 		int Dmin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
 		this.destroy_rate = percentPick(Dmax, Dmin);
 		this.success_rate = percentPick(Smax, Smin);
+	}
+	
+	/**
+	 *
+	 * @param enchantment Enchantment you want.
+	 * @param power Tier of the enchantment.
+	 * @param amount Amount of books you want.
+	 * @param destroy_rate The rate of the destroy rate.
+	 * @param success_rate The rate of the success rate.
+	 */
+	public CEBook(CEnchantment enchantment, Integer power, Integer amount, Integer destroy_rate, Integer success_rate) {
+		this.enchantment = enchantment;
+		this.amount = amount;
+		this.power = power;
+		this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
+		this.destroy_rate = destroy_rate;
+		this.success_rate = success_rate;
 	}
 	
 	/**
@@ -155,35 +174,20 @@ public class CEBook {
 	 */
 	public ItemStack buildBook() {
 		String item = Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item");
-		String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + convertPower(power);
+		String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + ce.convertLevelString(power);
 		List<String> lore = new ArrayList<>();
-		for(String l : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
-			if(l.contains("%Description%") || l.contains("%description%")) {
-				for(String m : enchantment.getInfoDescription()) {
-					lore.add(Methods.color(m));
+		for(String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
+			if(bookLine.contains("%Description%") || bookLine.contains("%description%")) {
+				for(String enchantmentLine : enchantment.getInfoDescription()) {
+					lore.add(Methods.color(enchantmentLine));
 				}
 			}else {
-				lore.add(Methods.color(l)
+				lore.add(Methods.color(bookLine)
 				.replaceAll("%Destroy_Rate%", destroy_rate + "").replaceAll("%destroy_rate%", destroy_rate + "")
 				.replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_rate%", success_rate + ""));
 			}
 		}
 		return new ItemBuilder().setMaterial(item).setAmount(amount).setName(name).setLore(lore).setGlowing(glowing).build();
-	}
-	
-	private String convertPower(Integer i) {
-		if(i == 0) return "I";
-		if(i == 1) return "I";
-		if(i == 2) return "II";
-		if(i == 3) return "III";
-		if(i == 4) return "IV";
-		if(i == 5) return "V";
-		if(i == 6) return "VI";
-		if(i == 7) return "VII";
-		if(i == 8) return "VII";
-		if(i == 9) return "IX";
-		if(i == 10) return "X";
-		return i + "";
 	}
 	
 	private Integer percentPick(int max, int min) {
@@ -194,4 +198,5 @@ public class CEBook {
 			return min + i.nextInt(max - min);
 		}
 	}
+	
 }

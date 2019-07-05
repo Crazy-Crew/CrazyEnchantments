@@ -881,6 +881,19 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * This method converts an ItemStack into a CEBook.
+	 * @param book The ItemStack you are converting.
+	 * @return The ItemStack but as a CEBook.
+	 */
+	public CEBook convertToCEBook(ItemStack book) {
+		CEBook ceBook = new CEBook(getEnchantmentBookEnchantment(book), getBookLevel(book, getEnchantmentBookEnchantment(book)), book.getAmount());
+		ceBook.setSuccessRate(Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setDestroyRate(Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
+		ceBook.setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing"));
+		return ceBook;
+	}
+	
+	/**
 	 * Check if an itemstack is an enchantment book.
 	 * @param book The item you are checking.
 	 * @return True if it is and false if not.
@@ -900,19 +913,6 @@ public class CrazyEnchantments {
 			}
 		}
 		return false;
-	}
-	
-	/**
-	 * This method converts an ItemStack into a CEBook.
-	 * @param book The ItemStack you are converting.
-	 * @return The ItemStack but as a CEBook.
-	 */
-	public CEBook convertToCEBook(ItemStack book) {
-		CEBook ceBook = new CEBook(getEnchantmentBookEnchantmnet(book), getBookLevel(book, getEnchantmentBookEnchantmnet(book)), book.getAmount());
-		ceBook.setSuccessRate(Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
-		ceBook.setDestroyRate(Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
-		ceBook.setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing"));
-		return ceBook;
 	}
 	
 	/**
@@ -971,20 +971,8 @@ public class CrazyEnchantments {
 	 * @param enchant The enchantment you want the level from.
 	 * @return The level the enchantment has.
 	 */
-	public Integer getBookLevel(ItemStack book, CEnchantment enchant) {
-		String line = book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName() + " ", "");
-		if(Methods.isInt(line)) return Integer.parseInt(line);
-		if(line.equalsIgnoreCase("I")) return 1;
-		if(line.equalsIgnoreCase("II")) return 2;
-		if(line.equalsIgnoreCase("III")) return 3;
-		if(line.equalsIgnoreCase("IV")) return 4;
-		if(line.equalsIgnoreCase("V")) return 5;
-		if(line.equalsIgnoreCase("VI")) return 6;
-		if(line.equalsIgnoreCase("VII")) return 7;
-		if(line.equalsIgnoreCase("VIII")) return 8;
-		if(line.equalsIgnoreCase("IX")) return 9;
-		if(line.equalsIgnoreCase("X")) return 10;
-		return 1;
+	public int getBookLevel(ItemStack book, CEnchantment enchant) {
+		return convertLevelInteger(book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName() + " ", ""));
 	}
 	
 	/**
@@ -993,8 +981,7 @@ public class CrazyEnchantments {
 	 * @param enchant The enchantment you want the level from.
 	 * @return The level the enchantment has.
 	 */
-	public Integer getLevel(ItemStack item, CEnchantment enchant) {
-		int level = 0;
+	public int getLevel(ItemStack item, CEnchantment enchant) {
 		String line = "";
 		if(item.hasItemMeta()) {
 			if(item.getItemMeta().hasLore()) {
@@ -1006,18 +993,7 @@ public class CrazyEnchantments {
 				}
 			}
 		}
-		line = line.replace(enchant.getColor() + enchant.getCustomName() + " ", "");
-		if(Methods.isInt(line)) level = Integer.parseInt(line);
-		if(line.equalsIgnoreCase("I")) level = 1;
-		if(line.equalsIgnoreCase("II")) level = 2;
-		if(line.equalsIgnoreCase("III")) level = 3;
-		if(line.equalsIgnoreCase("IV")) level = 4;
-		if(line.equalsIgnoreCase("V")) level = 5;
-		if(line.equalsIgnoreCase("VI")) level = 6;
-		if(line.equalsIgnoreCase("VII")) level = 7;
-		if(line.equalsIgnoreCase("VIII")) level = 8;
-		if(line.equalsIgnoreCase("IX")) level = 9;
-		if(line.equalsIgnoreCase("X")) level = 10;
+		int level = convertLevelInteger(line.replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
 		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
 			if(level > enchant.getMaxLevel()) {
 				level = enchant.getMaxLevel();
