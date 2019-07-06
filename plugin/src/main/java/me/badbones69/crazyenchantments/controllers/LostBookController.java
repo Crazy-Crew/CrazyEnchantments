@@ -1,0 +1,59 @@
+package me.badbones69.crazyenchantments.controllers;
+
+import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Messages;
+import me.badbones69.crazyenchantments.api.objects.Category;
+import me.badbones69.crazyenchantments.api.objects.LostBook;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+
+public class LostBookController implements Listener {
+	
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onBookClean(PlayerInteractEvent e) {
+		Player player = e.getPlayer();
+		if(e.getItem() != null) {
+			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				ItemStack item = Methods.getItemInHand(player);
+				if(item.hasItemMeta()) {
+					if(item.getItemMeta().hasDisplayName()) {
+						Category category = ce.getCategoryFromLostBook(item);
+						if(category != null) {
+							e.setCancelled(true);
+							if(Methods.isInvFull(player)) {
+								player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+								return;
+							}
+							LostBook lostBook = category.getLostBook();
+							Methods.removeItem(item, player);
+							ItemStack book = ce.getRandomEnchantmentBook(category).buildBook();
+							player.getInventory().addItem(book);
+							player.updateInventory();
+							HashMap<String, String> placeholders = new HashMap<>();
+							placeholders.put("%Found%", book.getItemMeta().getDisplayName());
+							placeholders.put("%found%", book.getItemMeta().getDisplayName());
+							player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
+							if(lostBook.useFirework()) {
+								Methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
+							}
+							if(lostBook.playSound()) {
+								player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+}

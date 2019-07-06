@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.api;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
@@ -15,6 +16,7 @@ import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v6;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -38,6 +40,7 @@ public class CrazyEnchantments {
 	private Boolean breakRageOnDamage;
 	private Boolean enchantStackedItems;
 	private NMSSupport nmsSupport;
+	private Random random = new Random();
 	private InfoMenuManager infoMenuManager;
 	private WorldGuardVersion worldGuardVersion;
 	private ArrayList<Category> categories = new ArrayList<>();
@@ -87,6 +90,41 @@ public class CrazyEnchantments {
 		}
 		for(String world : config.getStringList("Settings.EnchantmentOptions.Wings.Worlds.Blacklisted")) {
 			blacklisted.add(world.toLowerCase());
+		}
+		for(String category : config.getConfigurationSection("Categories").getKeys(false)) {
+			String path = "Categories." + category;
+			LostBook lostBook = new LostBook(
+			config.getInt(path + ".LostBook.Slot"),
+			config.getBoolean(path + ".LostBook.InGUI"),
+			new ItemBuilder()
+			.setName(config.getString(path + ".LostBook.Name"))
+			.setLore(config.getStringList(path + ".LostBook.Lore"))
+			.setGlowing(config.getBoolean(path + ".LostBook.Glowing")),
+			config.getInt(path + ".LostBook.Cost"),
+			Currency.getCurrency(config.getString(path + ".LostBook.Currency")),
+			config.getBoolean(path + ".LostBook.FireworkToggle"),
+			getColors(config.getString(path + ".LostBook.FireworkColors")),
+			config.getBoolean(path + ".LostBook.Sound-Toggle"),
+			Sound.valueOf(config.getString(path + ".LostBook.Sound")));
+			categories.add(new Category(
+			category,
+			config.getInt(path + ".Slot"),
+			config.getBoolean(path + ".InGUI"),
+			new ItemBuilder()
+			.setName(config.getString(path + ".Name"))
+			.setLore(config.getStringList(path + ".Lore"))
+			.setGlowing(config.getBoolean(path + ".Glowing")),
+			config.getInt(path + ".Cost"),
+			Currency.getCurrency(config.getString(path + ".Currency")),
+			config.getInt(path + ".Rarity"),
+			lostBook,
+			config.getInt(path + ".EnchOptions.SuccessPercent.Max"),
+			config.getInt(path + ".EnchOptions.SuccessPercent.Min"),
+			config.getInt(path + ".EnchOptions.DestroyPercent.Max"),
+			config.getInt(path + ".EnchOptions.DestroyPercent.Min"),
+			config.getBoolean(path + ".MaxLvlToggle"),
+			config.getInt(path + ".LvlRange.Max"),
+			config.getInt(path + ".LvlRange.Min")));
 		}
 		for(CEnchantments enchant : CEnchantments.values()) {
 			String name = enchant.getName();
@@ -467,38 +505,91 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest category based on the rarities.
 	 */
-	public String getHighestEnchantmentCategory(CEnchantment enchantment) {
-		String top = "";
+	public Category getHighestEnchantmentCategory(CEnchantment enchantment) {
+		Category topCategory = null;
 		int rarity = 0;
-		for(String cat : enchantment.getCategories()) {
-			if(getCategoryRarity(cat) >= rarity) {
-				rarity = getCategoryRarity(cat);
-				top = cat;
+		for(Category category : enchantment.getCategories()) {
+			if(category.getRarity() >= rarity) {
+				rarity = category.getRarity();
+				topCategory = category;
 			}
 		}
-		return top;
+		return topCategory;
 	}
 	
 	/**
 	 * Get all the categories that can be used.
 	 * @return List of all the categories.
 	 */
-	public ArrayList<String> getCategories() {
-		return new ArrayList<>(Files.CONFIG.getFile().getConfigurationSection("Categories").getKeys(false));
+	public List<Category> getCategories() {
+		return categories;
 	}
 	
 	/**
 	 *
-	 * @param category The category you want the rarity from.
-	 * @return The level of the category's rarity.
+	 * @param name The name of the category you want.
+	 * @return The category object.
 	 */
-	public int getCategoryRarity(String category) {
-		int rarity = 0;
-		FileConfiguration config = Files.CONFIG.getFile();
-		if(config.contains("Categories." + category)) {
-			rarity = config.getInt("Categories." + category + ".Rarity");
+	public Category getCategory(String name) {
+		for(Category category : categories) {
+			if(category.getName().equalsIgnoreCase(name)) {
+				return category;
+			}
 		}
-		return rarity;
+		return null;
+	}
+	
+	/**
+	 * Get the category of a lostbook from an itemstack.
+	 * @param item The itemstack you are checking.
+	 * @return The category it has or null if not found.
+	 */
+	public Category getCategoryFromLostBook(ItemStack item) {
+		//		List<String> lore = item.getItemMeta().getLore();
+		//		List<String> bookLore = Files.CONFIG.getFile().getStringList("Settings.LostBook.Lore");
+		//		String arg = "";
+		//		int i = 0;
+		//		for(String l : bookLore) {
+		//			l = Methods.color(l);
+		//			String lo = lore.get(i);
+		//			if(l.contains("%Category%")) {
+		//				String[] b = l.split("%Category%");
+		//				if(b.length >= 1) arg = lo.replace(b[0], "");
+		//				if(b.length >= 2) arg = arg.replace(b[1], "");
+		//			}
+		//			if(l.contains("%category%")) {
+		//				String[] b = l.split("%category%");
+		//				if(b.length >= 1) arg = lo.replace(b[0], "");
+		//				if(b.length >= 2) arg = arg.replace(b[1], "");
+		//			}
+		//			i++;
+		//		}
+		//		return getCategory(arg);
+		for(Category category : categories) {
+			if(item.isSimilar(category.getLostBook().getLostBook(category).build())) {
+				return category;
+			}
+		}
+		return null;
+	}
+	
+	public CEBook getRandomEnchantmentBook(Category category) {
+		List<CEnchantment> enchantments = new ArrayList<>();
+		for(CEnchantment enchantment : registeredEnchantments) {
+			if(enchantment.isActivated()) {
+				if(enchantment.getCategories().contains(category)) {
+					enchantments.add(enchantment);
+				}
+			}
+		}
+		try {
+			CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
+			return new CEBook(enchantment, randomLevel(enchantment, category), 1, category);
+		}catch(Exception e) {
+			System.out.println("[Crazy Enchantments]>> The category " + category.getName() + " has no enchantments."
+			+ " &7Please add enchantments to the category in the Enchantments.yml. If you do not wish to have the category feel free to delete it from the Config.yml.");
+			return null;
+		}
 	}
 	
 	/**
@@ -1030,6 +1121,29 @@ public class CrazyEnchantments {
 		return level;
 	}
 	
+	public int randomLevel(CEnchantment enchantment, Category category) {
+		Random r = new Random();
+		int ench = enchantment.getMaxLevel(); //Max set by the enchantment
+		int level = 1 + r.nextInt(ench);
+		if(category.useMaxLevel()) {
+			if(level > category.getMaxLevel()) {
+				for(Boolean l = false; ; ) {
+					level = 1 + r.nextInt(ench);
+					if(level <= category.getMaxLevel()) {
+						break;
+					}
+				}
+			}
+			if(level < category.getMinLevel()) {//If i is smaller then the Min of the Category
+				level = category.getMinLevel();
+			}
+			if(level > ench) {//If i is bigger then the Enchantment Max
+				level = ench;
+			}
+		}
+		return level;
+	}
+	
 	/**
 	 *
 	 * @return The block list for blast.
@@ -1282,6 +1396,24 @@ public class CrazyEnchantments {
 	
 	private int pickLevel(int min, int max) {
 		return min + new Random().nextInt((max + 1) - min);
+	}
+	
+	private List<Color> getColors(String string) {
+		List<Color> colors = new ArrayList<>();
+		if(string.contains(", ")) {
+			for(String name : string.split(", ")) {
+				Color color = Methods.getColor(name);
+				if(color != null) {
+					colors.add(color);
+				}
+			}
+		}else {
+			Color color = Methods.getColor(string);
+			if(color != null) {
+				colors.add(color);
+			}
+		}
+		return colors;
 	}
 	
 }

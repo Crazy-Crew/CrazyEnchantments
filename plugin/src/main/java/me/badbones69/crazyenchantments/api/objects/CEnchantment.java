@@ -26,7 +26,7 @@ public class CEnchantment {
 	private int chance;
 	private int chanceIncrease;
 	private List<String> infoDescription;
-	private List<String> categories;
+	private List<Category> categories;
 	private EnchantmentType enchantmentType;
 	private CEnchantment instance;
 	
@@ -157,12 +157,19 @@ public class CEnchantment {
 		return infoDescription;
 	}
 	
-	public CEnchantment setCategories(List<String> categories) {
-		this.categories = categories;
+	public CEnchantment addCategory(Category category) {
+		this.categories.add(category);
 		return this;
 	}
 	
-	public List<String> getCategories() {
+	public CEnchantment setCategories(List<String> categories) {
+		for(String category : categories) {
+			this.categories.add(ce.getCategory(category));
+		}
+		return this;
+	}
+	
+	public List<Category> getCategories() {
 		return categories;
 	}
 	

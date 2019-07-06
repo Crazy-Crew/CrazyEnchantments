@@ -11,7 +11,6 @@ import me.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import me.badbones69.crazyenchantments.api.events.BookFailEvent;
 import me.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -32,37 +31,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Level;
 
 public class EnchantmentControl implements Listener {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	private static HashMap<String, String> enchants = new HashMap<>();
-	
-	public static String getRandomEnchantment(String cat) {
-		Random number = new Random();
-		List<String> enchantments = new ArrayList<>();
-		for(CEnchantment en : ce.getRegisteredEnchantments()) {
-			for(String C : Files.ENCHANTMENTS.getFile().getStringList("Enchantments." + en.getName() + ".Categories")) {
-				if(cat.equalsIgnoreCase(C)) {
-					if(en.isActivated()) {
-						String power = powerPicker(en, cat);
-						enchants.put(en.getName(), en.getBookColor() + en.getCustomName() + " " + power);
-						enchantments.add(en.getName());
-					}
-				}
-			}
-		}
-		try {
-			return enchantments.get(number.nextInt(enchantments.size()));
-		}catch(Exception e) {
-			Bukkit.getLogger().log(Level.SEVERE, Methods.color("&c[Crazy Enchantments]>> The category " + cat + " has no enchantments."
-			+ " &7Please add enchantments to the category in the Enchantments.yml. If you do not wish to have the category feel free to delete it from the Config.yml."));
-			return enchantments.get(number.nextInt(enchantments.size()));
-		}
-	}
 	
 	@EventHandler
 	public void addEnchantment(InventoryClickEvent e) {
@@ -177,7 +151,7 @@ public class EnchantmentControl implements Listener {
 									e.setCancelled(true);
 									if(success || player.getGameMode() == GameMode.CREATIVE) {
 										name = Methods.removeColor(name);
-										Integer lvl = convertPower(name.split(" ")[1]);
+										int lvl = ce.convertLevelInteger(name.split(" ")[1]);
 										ItemStack newItem = ce.addEnchantment(item, enchantment, lvl);
 										ItemStack oldItem = new ItemStack(Material.AIR);
 										e.setCurrentItem(newItem);
@@ -273,112 +247,6 @@ public class EnchantmentControl implements Listener {
 				}.runTaskLater(ce.getPlugin(), 5);
 			}
 		}
-	}
-	
-	public static ItemStack pick(String cat) {
-		int Smax = Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Max");
-		int Smin = Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Min");
-		int Dmax = Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max");
-		int Dmin = Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min");
-		
-		ArrayList<String> lore = new ArrayList<>();
-		String enchant = getRandomEnchantment(cat);
-		for(String l : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
-			if(l.contains("%Description%") || l.contains("%description%")) {
-				if(ce.getEnchantmentFromName(enchant) != null) {
-					for(String m : ce.getEnchantmentFromName(enchant).getInfoDescription()) {
-						lore.add(Methods.color(m));
-					}
-				}
-			}else {
-				lore.add(Methods.color(l)
-				.replaceAll("%Destroy_Rate%", Methods.percentPick(Dmax, Dmin) + "").replaceAll("%destroy_rate%", Methods.percentPick(Dmax, Dmin) + "")
-				.replaceAll("%Success_Rate%", Methods.percentPick(Smax, Smin) + "").replaceAll("%success_rate%", Methods.percentPick(Smax, Smin) + ""));
-			}
-		}
-		ItemStack item = new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item")).setName(enchants.get(enchant)).setLore(lore).build();
-		if(Files.CONFIG.getFile().contains("Settings.Enchantment-Book-Glowing")) {
-			if(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing")) {
-				item = Methods.addGlow(item);
-			}
-		}
-		return item;
-	}
-	
-	public static String powerPicker(CEnchantment en, String C) {
-		Random r = new Random();
-		int ench = en.getMaxLevel(); //Max set by the enchantment
-		int max = Files.CONFIG.getFile().getInt("Categories." + C + ".EnchOptions.LvlRange.Max"); //Max lvl set by the Category
-		int min = Files.CONFIG.getFile().getInt("Categories." + C + ".EnchOptions.LvlRange.Min"); //Min lvl set by the Category
-		int i = 1 + r.nextInt(ench);
-		if(Files.CONFIG.getFile().contains("Categories." + C + ".EnchOptions.MaxLvlToggle")) {
-			if(Files.CONFIG.getFile().getBoolean("Categories." + C + ".EnchOptions.MaxLvlToggle")) {
-				if(i > max) {
-					for(Boolean l = false; ; ) {
-						i = 1 + r.nextInt(ench);
-						if(i <= max) {
-							break;
-						}
-					}
-				}
-				if(i < min) {//If i is smaller then the Min of the Category
-					i = min;
-				}
-				if(i > ench) {//If i is bigger then the Enchantment Max
-					i = ench;
-				}
-			}
-		}
-		if(i == 0) return "I";
-		if(i == 1) return "I";
-		if(i == 2) return "II";
-		if(i == 3) return "III";
-		if(i == 4) return "IV";
-		if(i == 5) return "V";
-		if(i == 6) return "VI";
-		if(i == 7) return "VII";
-		if(i == 8) return "VII";
-		if(i == 9) return "IX";
-		if(i == 10) return "X";
-		return i + "";
-	}
-	
-	public static String getCategory(ItemStack item) {
-		List<String> lore = item.getItemMeta().getLore();
-		List<String> L = Files.CONFIG.getFile().getStringList("Settings.LostBook.Lore");
-		String arg = "";
-		int i = 0;
-		for(String l : L) {
-			l = Methods.color(l);
-			String lo = lore.get(i);
-			if(l.contains("%Category%")) {
-				String[] b = l.split("%Category%");
-				if(b.length >= 1) arg = lo.replace(b[0], "");
-				if(b.length >= 2) arg = arg.replace(b[1], "");
-			}
-			if(l.contains("%category%")) {
-				String[] b = l.split("%category%");
-				if(b.length >= 1) arg = lo.replace(b[0], "");
-				if(b.length >= 2) arg = arg.replace(b[1], "");
-			}
-			i++;
-		}
-		return arg;
-	}
-	
-	private Integer convertPower(String num) {
-		if(Methods.isInt(num)) return Integer.parseInt(num);
-		if(num.equalsIgnoreCase("I")) return 1;
-		if(num.equalsIgnoreCase("II")) return 2;
-		if(num.equalsIgnoreCase("III")) return 3;
-		if(num.equalsIgnoreCase("IV")) return 4;
-		if(num.equalsIgnoreCase("V")) return 5;
-		if(num.equalsIgnoreCase("VI")) return 6;
-		if(num.equalsIgnoreCase("VII")) return 7;
-		if(num.equalsIgnoreCase("VIII")) return 8;
-		if(num.equalsIgnoreCase("IX")) return 9;
-		if(num.equalsIgnoreCase("X")) return 10;
-		return 1;
 	}
 	
 	private Integer getSuccessChance(ItemStack item) {

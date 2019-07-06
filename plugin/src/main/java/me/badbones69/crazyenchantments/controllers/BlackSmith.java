@@ -252,7 +252,7 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
-						if(ce.getLevel(mainItem, enchant).equals(ce.getLevel(subItem, enchant))) {
+						if(ce.getLevel(mainItem, enchant) == ce.getLevel(subItem, enchant)) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
 								dupEnchants.put(enchant.getName(), ce.getLevel(mainItem, enchant));
 							}
@@ -324,7 +324,7 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
-						if(ce.getLevel(mainItem, enchant).equals(ce.getLevel(subItem, enchant))) {
+						if(ce.getLevel(mainItem, enchant) == ce.getLevel(subItem, enchant)) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
 								dupEnchants.put(enchant.getName(), ce.getLevel(mainItem, enchant));
 							}

@@ -424,6 +424,10 @@ public class Methods {
 		return entity.getNearbyEntities(radius, radius, radius);
 	}
 	
+	public static void fireWork(Location loc, List<Color> colors) {
+		fireWork(loc, new ArrayList<>(colors));
+	}
+	
 	public static void fireWork(Location loc, ArrayList<Color> colors) {
 		Firework fw = loc.getWorld().spawn(loc, Firework.class);
 		FireworkMeta fm = fw.getFireworkMeta();

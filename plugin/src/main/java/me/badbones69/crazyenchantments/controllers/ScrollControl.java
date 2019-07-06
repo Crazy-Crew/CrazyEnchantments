@@ -140,14 +140,11 @@ public class ScrollControl implements Listener {
 		}
 		for(String ench : enchantments) {
 			int top = 0;
-			if(ce.getEnchantmentFromName(ench) != null) {
-				for(String cat : ce.getEnchantmentFromName(ench).getCategories()) {
-					if(top < ce.getCategoryRarity(cat)) {
-						top = ce.getCategoryRarity(cat);
-					}
-				}
-				enchants.put(ench, ce.getLevel(item, ce.getEnchantmentFromName(ench)));
-				ce.removeEnchantment(item, ce.getEnchantmentFromName(ench));
+			CEnchantment cEnchantment = ce.getEnchantmentFromName(ench);
+			if(cEnchantment != null) {
+				top = ce.getHighestEnchantmentCategory(cEnchantment).getRarity();
+				enchants.put(ench, ce.getLevel(item, cEnchantment));
+				ce.removeEnchantment(item, cEnchantment);
 			}
 			categories.put(ench, top);
 			order.add(ench);

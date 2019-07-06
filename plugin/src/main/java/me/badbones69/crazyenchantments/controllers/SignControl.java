@@ -9,6 +9,9 @@ import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
+import me.badbones69.crazyenchantments.api.objects.CEBook;
+import me.badbones69.crazyenchantments.api.objects.Category;
+import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -23,7 +26,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,51 +123,43 @@ public class SignControl implements Listener {
 							return;
 						}
 					}
-					for(String cat : config.getConfigurationSection("Categories").getKeys(false)) {
-						if(type.equalsIgnoreCase(cat)) {
-							Currency currency = null;
-							int cost = 0;
-							if(player.getGameMode() != GameMode.CREATIVE) {
-								if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))) {
-									currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
-									cost = config.getInt("Categories." + cat + ".Cost");
-									if(CurrencyAPI.canBuy(player, currency, cost)) {
-										CurrencyAPI.takeCurrency(player, currency, cost);
-									}else {
-										String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-										if(currency != null) {
-											HashMap<String, String> placeholders = new HashMap<>();
-											placeholders.put("%money_needed%", needed);
-											placeholders.put("%xp%", needed);
-											switch(currency) {
-												case VAULT:
-													player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-													break;
-												case XP_LEVEL:
-													player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-													break;
-												case XP_TOTAL:
-													player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-													break;
-											}
-										}
-										return;
+					Category category = ce.getCategory(type);
+					if(category != null) {
+						if(player.getGameMode() != GameMode.CREATIVE) {
+							if(category.getCurrency() != null) {
+								if(CurrencyAPI.canBuy(player, category)) {
+									CurrencyAPI.takeCurrency(player, category);
+								}else {
+									String needed = (category.getCost() - CurrencyAPI.getCurrency(player, category.getCurrency())) + "";
+									HashMap<String, String> placeholders = new HashMap<>();
+									placeholders.put("%money_needed%", needed);
+									placeholders.put("%xp%", needed);
+									switch(category.getCurrency()) {
+										case VAULT:
+											player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+											break;
+										case XP_LEVEL:
+											player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+											break;
+										case XP_TOTAL:
+											player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
+											break;
 									}
+									return;
 								}
 							}
-							ItemStack book = EnchantmentControl.pick(cat);
-							book = Methods.addGlow(book);
-							String C = config.getString("Categories." + cat + ".Name");
-							if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")) {
-								player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
-								.replaceAll("%BookName%", book.getItemMeta().getDisplayName()).replaceAll("%bookname%", book.getItemMeta().getDisplayName())
-								.replaceAll("%Category%", C).replaceAll("%category%", C)));
-							}
-							BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), currency, cost, ce.convertToCEBook(book));
-							Bukkit.getPluginManager().callEvent(event);
-							player.getInventory().addItem(book);
-							return;
 						}
+						CEBook book = ce.getRandomEnchantmentBook(category);
+						ItemBuilder itemBuilder = book.getItemBuilder();
+						if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")) {
+							player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
+							.replaceAll("%BookName%", itemBuilder.getName()).replaceAll("%bookname%", itemBuilder.getName())
+							.replaceAll("%Category%", category.getName()).replaceAll("%category%", category.getName())));
+						}
+						BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
+						Bukkit.getPluginManager().callEvent(event);
+						player.getInventory().addItem(itemBuilder.build());
+						return;
 					}
 				}
 			}
@@ -177,14 +171,14 @@ public class SignControl implements Listener {
 		if(!e.isCancelled()) {
 			Player player = e.getPlayer();
 			Location Loc = e.getBlock().getLocation();
-			for(String l : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
-				World world = Bukkit.getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
-				int x = Files.SIGNS.getFile().getInt("Locations." + l + ".X");
-				int y = Files.SIGNS.getFile().getInt("Locations." + l + ".Y");
-				int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
-				Location loc = new Location(world, x, y, z);
-				if(Loc.equals(loc)) {
-					Files.SIGNS.getFile().set("Locations." + l, null);
+			for(String locationName : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
+				World world = Bukkit.getWorld(Files.SIGNS.getFile().getString("Locations." + locationName + ".World"));
+				int x = Files.SIGNS.getFile().getInt("Locations." + locationName + ".X");
+				int y = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Y");
+				int z = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Z");
+				Location location = new Location(world, x, y, z);
+				if(Loc.equals(location)) {
+					Files.SIGNS.getFile().set("Locations." + locationName, null);
 					Files.SIGNS.saveFile();
 					player.sendMessage(Messages.BREAK_ENCHANTMENT_SHOP_SIGN.getMessage());
 					return;
@@ -210,13 +204,13 @@ public class SignControl implements Listener {
 		String line2 = e.getLine(1);
 		if(Methods.hasPermission(player, "sign", false)) {
 			if(line1.equalsIgnoreCase("{CrazyEnchant}")) {
-				for(String cat : Files.CONFIG.getFile().getConfigurationSection("Categories").getKeys(false)) {
-					if(line2.equalsIgnoreCase("{" + cat + "}")) {
-						e.setLine(0, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line1"), cat));
-						e.setLine(1, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line2"), cat));
-						e.setLine(2, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line3"), cat));
-						e.setLine(3, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line4"), cat));
-						signs.set("Locations." + id + ".Type", cat);
+				for(Category category : ce.getCategories()) {
+					if(line2.equalsIgnoreCase("{" + category.getName() + "}")) {
+						e.setLine(0, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line1"), category));
+						e.setLine(1, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line2"), category));
+						e.setLine(2, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line3"), category));
+						e.setLine(3, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line4"), category));
+						signs.set("Locations." + id + ".Type", category.getName());
 						signs.set("Locations." + id + ".World", loc.getWorld().getName());
 						signs.set("Locations." + id + ".X", loc.getBlockX());
 						signs.set("Locations." + id + ".Y", loc.getBlockY());
@@ -253,12 +247,11 @@ public class SignControl implements Listener {
 		}
 	}
 	
-	private String placeHolders(String msg, String cat) {
-		msg = Methods.color(msg);
-		msg = msg.replaceAll("%category%", cat).replaceAll("%Category%", cat);
-		msg = msg.replaceAll("%cost%", Files.CONFIG.getFile().getInt("Categories." + cat + ".Cost") + "").replaceAll("%Cost%", Files.CONFIG.getFile().getInt("Categories." + cat + ".Cost") + "");
-		msg = msg.replaceAll("%xp%", Files.CONFIG.getFile().getInt("Categories." + cat + ".Cost") + "").replaceAll("%XP%", Files.CONFIG.getFile().getInt("Categories." + cat + ".Cost") + "");
-		return msg;
+	private String placeHolders(String msg, Category category) {
+		return Methods.color(msg
+		.replaceAll("%category%", category.getName()).replaceAll("%Category%", category.getName())
+		.replaceAll("%cost%", category.getCost() + "").replaceAll("%Cost%", category.getCost() + "")
+		.replaceAll("%xp%", category.getCost() + "").replaceAll("%XP%", category.getCost() + ""));
 	}
 	
 }
