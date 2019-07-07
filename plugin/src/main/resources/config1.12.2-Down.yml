@@ -67,7 +67,7 @@ Settings:
     Lore: #The lore of the item.
       - '&b>>&7&nClick to open&b<<'
   ProtectionCrystal:
-    InGUI: false #If its in the GUI.
+    InGUI: false #If it's in the GUI.
     Slot: 1 #Slot it is in
     Item: 'EMERALD' #Item it is
     Glowing: true #If it is enchanted
