@@ -12,7 +12,7 @@ public class GKitzItem {
 	
 	private String type;
 	private String name;
-	private Integer amount;
+	private int amount;
 	private ArrayList<String> lore;
 	private HashMap<Enchantment, Integer> enchantments;
 	private HashMap<CEnchantment, Integer> ceEnchantments;
@@ -35,7 +35,7 @@ public class GKitzItem {
 	 * @param enchant Crazy Enchantment
 	 * @param level Level of the enchantment
 	 */
-	public void addCEEnchantment(CEnchantment enchant, Integer level) {
+	public void addCEEnchantment(CEnchantment enchant, int level) {
 		ceEnchantments.put(enchant, level);
 	}
 	
@@ -52,7 +52,7 @@ public class GKitzItem {
 	 * @param enchant Vanilla Enchantment
 	 * @param level Level of the enchantment
 	 */
-	public void addEnchantment(Enchantment enchant, Integer level) {
+	public void addEnchantment(Enchantment enchant, int level) {
 		enchantments.put(enchant, level);
 	}
 	
@@ -76,7 +76,7 @@ public class GKitzItem {
 	 *
 	 * @param amount Amount of items
 	 */
-	public void setAmount(Integer amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 	

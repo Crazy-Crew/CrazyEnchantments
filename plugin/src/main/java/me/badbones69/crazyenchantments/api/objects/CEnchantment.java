@@ -18,15 +18,15 @@ public class CEnchantment {
 	
 	private String name;
 	private String customName;
-	private Boolean activated;
+	private boolean activated;
 	private String color;
 	private String bookColor;
-	private Integer maxLevel;
+	private int maxLevel;
 	private String infoName;
-	private Integer chance;
-	private Integer chanceIncrease;
+	private int chance;
+	private int chanceIncrease;
 	private List<String> infoDescription;
-	private List<String> categories;
+	private List<Category> categories;
 	private EnchantmentType enchantmentType;
 	private CEnchantment instance;
 	
@@ -64,12 +64,12 @@ public class CEnchantment {
 		return customName;
 	}
 	
-	public CEnchantment setActivated(Boolean activated) {
+	public CEnchantment setActivated(boolean activated) {
 		this.activated = activated;
 		return this;
 	}
 	
-	public Boolean isActivated() {
+	public boolean isActivated() {
 		return activated;
 	}
 	
@@ -83,6 +83,9 @@ public class CEnchantment {
 	}
 	
 	public CEnchantment setBookColor(String bookColor) {
+		if(bookColor.startsWith("&f")) {
+			bookColor = bookColor.substring(2);
+		}
 		this.bookColor = Methods.color(bookColor);
 		return this;
 	}
@@ -91,12 +94,12 @@ public class CEnchantment {
 		return bookColor;
 	}
 	
-	public CEnchantment setMaxLevel(Integer maxLevel) {
+	public CEnchantment setMaxLevel(int maxLevel) {
 		this.maxLevel = maxLevel;
 		return this;
 	}
 	
-	public Integer getMaxLevel() {
+	public int getMaxLevel() {
 		return maxLevel;
 	}
 	
@@ -109,33 +112,33 @@ public class CEnchantment {
 		return infoName;
 	}
 	
-	public CEnchantment setChance(Integer chance) {
+	public CEnchantment setChance(int chance) {
 		this.chance = chance;
 		return this;
 	}
 	
-	public Integer getChance() {
+	public int getChance() {
 		return chance;
 	}
 	
-	public CEnchantment setChanceIncrease(Integer chanceIncrease) {
+	public CEnchantment setChanceIncrease(int chanceIncrease) {
 		this.chanceIncrease = chanceIncrease;
 		return this;
 	}
 	
-	public Integer getChanceIncrease() {
+	public int getChanceIncrease() {
 		return chanceIncrease;
 	}
 	
-	public Boolean hasChanceSystem() {
+	public boolean hasChanceSystem() {
 		return chance > 0;
 	}
 	
-	public Boolean chanceSuccesful(Integer enchantmentLevel) {
+	public boolean chanceSuccesful(int enchantmentLevel) {
 		int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
 		int pickedChance = new Random().nextInt(100) + 1;
 		//This is to just chance the chance system.
-		//Boolean result = newChance >= 100 || newChance <= 0 || pickedChance <= chance;
+		//boolean result = newChance >= 100 || newChance <= 0 || pickedChance <= chance;
 		//System.out.print("[CrazyEnchantments] " + name + ", " + newChance + "%, " + pickedChance + "/100, " + result);
 		//return result;
 		return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
@@ -154,12 +157,19 @@ public class CEnchantment {
 		return infoDescription;
 	}
 	
-	public CEnchantment setCategories(List<String> categories) {
-		this.categories = categories;
+	public CEnchantment addCategory(Category category) {
+		this.categories.add(category);
 		return this;
 	}
 	
-	public List<String> getCategories() {
+	public CEnchantment setCategories(List<String> categories) {
+		for(String category : categories) {
+			this.categories.add(ce.getCategory(category));
+		}
+		return this;
+	}
+	
+	public List<Category> getCategories() {
 		return categories;
 	}
 	
@@ -190,7 +200,7 @@ public class CEnchantment {
 		}
 	}
 	
-	public Integer getPower(ItemStack item) {
+	public int getPower(ItemStack item) {
 		int power;
 		String line = "";
 		if(item.hasItemMeta()) {

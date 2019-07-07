@@ -5,6 +5,7 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
+import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -63,16 +64,12 @@ public class Scrambler implements Listener {
 	public static ItemStack getNewScrambledBook(ItemStack book) {
 		ItemStack newBook = new ItemStack(Material.AIR);
 		if(ce.isEnchantmentBook(book)) {
-			CEnchantment en = ce.getEnchantmentBookEnchantmnet(book);
-			String cat = ce.getHighestEnchantmentCategory(en);
-			int lvl = ce.getBookLevel(book, en);
-			CEBook eBook = new CEBook(en, lvl);
-			int D = Methods.percentPick(Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Max"),
-			Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.DestroyPercent.Min"));
-			int S = Methods.percentPick(Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Max"),
-			Files.CONFIG.getFile().getInt("Categories." + cat + ".EnchOptions.SuccessPercent.Min"));
-			eBook.setDestroyRate(D);
-			eBook.setSuccessRate(S);
+			CEnchantment enchantment = ce.getEnchantmentBookEnchantment(book);
+			Category category = ce.getHighestEnchantmentCategory(enchantment);
+			int lvl = ce.getBookLevel(book, enchantment);
+			CEBook eBook = new CEBook(enchantment, lvl);
+			eBook.setDestroyRate(Methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate()));
+			eBook.setSuccessRate(Methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate()));
 			newBook = eBook.buildBook();
 		}
 		return newBook;

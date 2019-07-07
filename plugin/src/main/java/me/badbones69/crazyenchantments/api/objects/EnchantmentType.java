@@ -25,7 +25,7 @@ public class EnchantmentType {
 		.setMaterial(file.getString(path + ".Display-Item.Item"))
 		.setName(file.getString(path + ".Display-Item.Name"))
 		.setLore(file.getStringList(path + ".Display-Item.Lore")).build();
-		for(String type : file.getStringList(path + "Enchantable-Items")) {
+		for(String type : file.getStringList(path + ".Enchantable-Items")) {
 			Material material = new ItemBuilder().setMaterial(type).getMaterial();
 			if(material != null) {
 				this.enchantableMaterials.add(material);

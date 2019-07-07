@@ -1,5 +1,7 @@
 package me.badbones69.crazyenchantments.api.currencyapi;
 
+import me.badbones69.crazyenchantments.api.objects.Category;
+import me.badbones69.crazyenchantments.api.objects.LostBook;
 import org.bukkit.entity.Player;
 
 public class CurrencyAPI {
@@ -23,6 +25,24 @@ public class CurrencyAPI {
 		}catch(Exception | NoClassDefFoundError e) {
 		}
 		return 0;
+	}
+	
+	/**
+	 * Take an amount from a player's currency.
+	 * @param player The player you wish to take from.
+	 * @param category The category you wish to use.
+	 */
+	public static void takeCurrency(Player player, Category category) {
+		takeCurrency(player, category.getCurrency(), category.getCost());
+	}
+	
+	/**
+	 * Take an amount from a player's currency.
+	 * @param player The player you wish to take from.
+	 * @param lostBook The category you wish to use.
+	 */
+	public static void takeCurrency(Player player, LostBook lostBook) {
+		takeCurrency(player, lostBook.getCurrency(), lostBook.getCost());
 	}
 	
 	/**
@@ -69,6 +89,26 @@ public class CurrencyAPI {
 			}
 		}catch(Exception | NoClassDefFoundError e) {
 		}
+	}
+	
+	/**
+	 * Checks if the player has enough of a currency.
+	 * @param player The player you are checking.
+	 * @param category The category you wish to check.
+	 * @return True if they have enough to buy it or false if they don't.
+	 */
+	public static Boolean canBuy(Player player, Category category) {
+		return canBuy(player, category.getCurrency(), category.getCost());
+	}
+	
+	/**
+	 * Checks if the player has enough of a currency.
+	 * @param player The player you are checking.
+	 * @param lostBook The lostBook you wish to check.
+	 * @return True if they have enough to buy it or false if they don't.
+	 */
+	public static Boolean canBuy(Player player, LostBook lostBook) {
+		return canBuy(player, lostBook.getCurrency(), lostBook.getCost());
 	}
 	
 	/**

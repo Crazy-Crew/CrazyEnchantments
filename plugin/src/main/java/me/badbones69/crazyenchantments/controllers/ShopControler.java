@@ -9,7 +9,10 @@ import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.events.BuyBookEvent;
+import me.badbones69.crazyenchantments.api.objects.CEBook;
+import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.api.objects.LostBook;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
@@ -45,89 +48,76 @@ public class ShopControler implements Listener {
 				if(item.hasItemMeta()) {
 					if(item.getItemMeta().hasDisplayName()) {
 						String name = item.getItemMeta().getDisplayName();
-						for(String cat : config.getConfigurationSection("Categories").getKeys(false)) {
-							if(Files.CONFIG.getFile().getBoolean("Categories." + cat + ".InGUI")) {
-								if(name.equals(Methods.color(config.getString("Categories." + cat + ".Name")))) {
-									if(Methods.isInvFull(player)) {
-										player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-										return;
-									}
-									Currency currency = null;
-									int cost = 0;
-									if(player.getGameMode() != GameMode.CREATIVE) {
-										if(Currency.isCurrency(config.getString("Categories." + cat + ".Currency"))) {
-											currency = Currency.getCurrency(config.getString("Categories." + cat + ".Currency"));
-											cost = config.getInt("Categories." + cat + ".Cost");
-											if(CurrencyAPI.canBuy(player, currency, cost)) {
-												CurrencyAPI.takeCurrency(player, currency, cost);
-											}else {
-												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-												if(currency != null) {
-													HashMap<String, String> placeholders = new HashMap<>();
-													placeholders.put("%money_needed%", needed);
-													placeholders.put("%xp%", needed);
-													switch(currency) {
-														case VAULT:
-															player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-															break;
-														case XP_LEVEL:
-															player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-															break;
-														case XP_TOTAL:
-															player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-															break;
-													}
-												}
-												return;
-											}
-										}
-									}
-									ItemStack book = EnchantmentControl.pick(cat);
-									BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), currency, cost, ce.convertToCEBook(book));
-									Bukkit.getPluginManager().callEvent(event);
-									player.getInventory().addItem(book);
+						for(Category category : ce.getCategories()) {
+							if(item.isSimilar(category.getDisplayItem().build())) {
+								if(Methods.isInvFull(player)) {
+									player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 									return;
 								}
+								if(player.getGameMode() != GameMode.CREATIVE) {
+									if(category.getCurrency() != null) {
+										if(CurrencyAPI.canBuy(player, category)) {
+											CurrencyAPI.takeCurrency(player, category);
+										}else {
+											String needed = (category.getCost() - CurrencyAPI.getCurrency(player, category.getCurrency())) + "";
+											HashMap<String, String> placeholders = new HashMap<>();
+											placeholders.put("%money_needed%", needed);
+											placeholders.put("%xp%", needed);
+											switch(category.getCurrency()) {
+												case VAULT:
+													player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+													break;
+												case XP_LEVEL:
+													player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+													break;
+												case XP_TOTAL:
+													player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
+													break;
+											}
+											return;
+										}
+									}
+								}
+								CEBook book = ce.getRandomEnchantmentBook(category);
+								BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
+								Bukkit.getPluginManager().callEvent(event);
+								player.getInventory().addItem(book.buildBook());
+								return;
 							}
 						}
-						for(String cat : config.getConfigurationSection("Categories").getKeys(false)) {
-							if(Files.CONFIG.getFile().getBoolean("Categories." + cat + ".LostBook.InGUI")) {
-								if(name.equals(Methods.color(config.getString("Categories." + cat + ".LostBook.Name")))) {
-									if(Methods.isInvFull(player)) {
-										player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-										return;
-									}
-									if(player.getGameMode() != GameMode.CREATIVE) {
-										if(Currency.isCurrency(config.getString("Categories." + cat + ".LostBook.Currency"))) {
-											Currency currency = Currency.getCurrency(config.getString("Categories." + cat + ".LostBook.Currency"));
-											int cost = config.getInt("Categories." + cat + ".LostBook.Cost");
-											if(CurrencyAPI.canBuy(player, currency, cost)) {
-												CurrencyAPI.takeCurrency(player, currency, cost);
-											}else {
-												String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
-												if(currency != null) {
-													HashMap<String, String> placeholders = new HashMap<>();
-													placeholders.put("%money_needed%", needed);
-													placeholders.put("%xp%", needed);
-													switch(currency) {
-														case VAULT:
-															player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-															break;
-														case XP_LEVEL:
-															player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-															break;
-														case XP_TOTAL:
-															player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-															break;
-													}
-												}
-												return;
-											}
-										}
-									}
-									player.getInventory().addItem(LostBook.getLostBook(cat, 1));
+						for(Category category : ce.getCategories()) {
+							LostBook lostBook = category.getLostBook();
+							if(item.isSimilar(lostBook.getDisplayItem().build())) {
+								if(Methods.isInvFull(player)) {
+									player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 									return;
 								}
+								if(player.getGameMode() != GameMode.CREATIVE) {
+									if(lostBook.getCurrency() != null) {
+										if(CurrencyAPI.canBuy(player, lostBook)) {
+											CurrencyAPI.takeCurrency(player, lostBook);
+										}else {
+											String needed = (lostBook.getCost() - CurrencyAPI.getCurrency(player, lostBook.getCurrency())) + "";
+											HashMap<String, String> placeholders = new HashMap<>();
+											placeholders.put("%money_needed%", needed);
+											placeholders.put("%xp%", needed);
+											switch(lostBook.getCurrency()) {
+												case VAULT:
+													player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+													break;
+												case XP_LEVEL:
+													player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+													break;
+												case XP_TOTAL:
+													player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
+													break;
+											}
+											return;
+										}
+									}
+								}
+								player.getInventory().addItem(lostBook.getLostBook(category).build());
+								return;
 							}
 						}
 						List<String> options = new ArrayList<>();
@@ -306,39 +296,20 @@ public class ShopControler implements Listener {
 				inv.setItem(slot, new ItemBuilder().setMaterial(item).setName(name).setLore(lore).build());
 			}
 		}
-		for(String cat : Files.CONFIG.getFile().getConfigurationSection("Categories").getKeys(false)) {
+		for(Category category : ce.getCategories()) {
 			FileConfiguration config = Files.CONFIG.getFile();
-			if(config.getBoolean("Categories." + cat + ".InGUI")) {
-				int slot = config.getInt("Categories." + cat + ".Slot");
-				if(slot > size) {
+			if(category.isInGUI()) {
+				if(category.getSlot() > size) {
 					continue;
 				}
-				String id = config.getString("Categories." + cat + ".Item");
-				String name = config.getString("Categories." + cat + ".Name");
-				List<String> lore = config.getStringList("Categories." + cat + ".Lore");
-				boolean glowing = false;
-				if(config.contains("Categories." + cat + ".Glowing")) {
-					if(config.getBoolean("Categories." + cat + ".Glowing")) {
-						glowing = true;
-					}
-				}
-				inv.setItem(slot - 1, new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setGlowing(glowing).build());
+				inv.setItem(category.getSlot(), category.getDisplayItem().build());
 			}
-			if(config.getBoolean("Categories." + cat + ".LostBook.InGUI")) {
-				int slot = config.getInt("Categories." + cat + ".LostBook.Slot");
-				if(slot > size) {
+			LostBook lostBook = category.getLostBook();
+			if(lostBook.isInGUI()) {
+				if(lostBook.getSlot() > size) {
 					continue;
 				}
-				String id = config.getString("Categories." + cat + ".LostBook.Item");
-				String name = config.getString("Categories." + cat + ".LostBook.Name");
-				List<String> lore = config.getStringList("Categories." + cat + ".LostBook.Lore");
-				boolean glowing = false;
-				if(config.contains("Categories." + cat + ".LostBook.Glowing")) {
-					if(config.getBoolean("Categories." + cat + ".LostBook.Glowing")) {
-						glowing = true;
-					}
-				}
-				inv.setItem(slot - 1, new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setGlowing(glowing).build());
+				inv.setItem(lostBook.getSlot() - 1, lostBook.getLostBook(category).build());
 			}
 		}
 		ArrayList<String> options = new ArrayList<>();

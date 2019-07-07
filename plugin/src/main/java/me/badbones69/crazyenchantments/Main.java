@@ -32,7 +32,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Main extends JavaPlugin implements Listener {
 	
@@ -62,7 +61,7 @@ public class Main extends JavaPlugin implements Listener {
 		if(ce.isGkitzEnabled()) {
 			pm.registerEvents(new GKitzController(), this);
 		}
-		pm.registerEvents(new LostBook(), this);
+		pm.registerEvents(new LostBookController(), this);
 		pm.registerEvents(new EnchantmentControl(), this);
 		pm.registerEvents(new SignControl(), this);
 		pm.registerEvents(new DustControl(), this);
@@ -243,13 +242,10 @@ public class Main extends JavaPlugin implements Listener {
 								return true;
 							}
 						}
-						String ench = args[1];
-						for(CEnchantment en : ce.getRegisteredEnchantments()) {
-							if(en.getName().equalsIgnoreCase(ench) || en.getCustomName().equalsIgnoreCase(ench)) {
-								String name = Files.ENCHANTMENTS.getFile().getString("Enchantments." + en.getName() + ".Info.Name");
-								List<String> desc = Files.ENCHANTMENTS.getFile().getStringList("Enchantments." + en.getName() + ".Info.Description");
-								sender.sendMessage(Methods.color(name));
-								for(String m : desc) sender.sendMessage(Methods.color(m));
+						for(CEnchantment enchantment : ce.getRegisteredEnchantments()) {
+							if(enchantment.getName().equalsIgnoreCase(args[1]) || enchantment.getCustomName().equalsIgnoreCase(args[1])) {
+								sender.sendMessage(enchantment.getInfoName());
+								for(String m : enchantment.getInfoDescription()) sender.sendMessage(Methods.color(m));
 								return true;
 							}
 						}
@@ -261,17 +257,12 @@ public class Main extends JavaPlugin implements Listener {
 					if(!Methods.hasPermission(sender, "spawn", true)) return true;
 					if(args.length >= 2) {
 						CEnchantment enchant = null;
-						String category = null;
+						Category category = ce.getCategory(args[1]);
 						Location loc = new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
 						int level = 1;
 						if(ce.getEnchantmentFromName(args[1]) != null) {
 							enchant = ce.getEnchantmentFromName(args[1]);
 						}else {
-							for(String cat : ce.getCategories()) {
-								if(cat.equalsIgnoreCase(args[1])) {
-									category = cat;
-								}
-							}
 							if(category == null) {
 								sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
 								return true;
@@ -319,7 +310,7 @@ public class Main extends JavaPlugin implements Listener {
 						if(category == null) {
 							book = new CEBook(enchant, level).buildBook();
 						}else {
-							book = LostBook.getLostBook(category, 1);
+							book = category.getLostBook().getLostBook(category).build();
 						}
 						loc.getWorld().dropItemNaturally(loc, book);
 						HashMap<String, String> placeholders = new HashMap<>();
@@ -358,20 +349,17 @@ public class Main extends JavaPlugin implements Listener {
 						}else {
 							player = (Player) sender;
 						}
-						String category = args[1];
-						for(String C : config.getConfigurationSection("Categories").getKeys(false)) {
-							if(category.equalsIgnoreCase(C)) {
-								category = C;
-								if(Methods.isInvFull(player)) {
-									player.getWorld().dropItemNaturally(player.getLocation(), LostBook.getLostBook(category, amount));
-								}else {
-									player.getInventory().addItem(LostBook.getLostBook(category, amount));
-								}
-								return true;
+						Category category = ce.getCategory(args[1]);
+						if(category != null) {
+							if(Methods.isInvFull(player)) {
+								player.getWorld().dropItemNaturally(player.getLocation(), category.getLostBook().getLostBook(category, amount).build());
+							}else {
+								player.getInventory().addItem(category.getLostBook().getLostBook(category, amount).build());
 							}
+							return true;
 						}
 						HashMap<String, String> placeholders = new HashMap<>();
-						placeholders.put("%category%", category);
+						placeholders.put("%category%", category.getName());
 						sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
 						return true;
 					}
@@ -708,14 +696,7 @@ public class Main extends JavaPlugin implements Listener {
 					HashMap<String, String> placeholders = new HashMap<>();
 					placeholders.put("%player%", player.getName());
 					sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
-					int Smax = config.getInt("Settings.BlackScroll.SuccessChance.Max");
-					int Smin = config.getInt("Settings.BlackScroll.SuccessChance.Min");
-					int Dmax = config.getInt("Settings.BlackScroll.DestroyChance.Max");
-					int Dmin = config.getInt("Settings.BlackScroll.DestroyChance.Min");
-					CEBook book = new CEBook(ench, lvl, amount);
-					book.setDestroyRate(Methods.percentPick(Dmax, Dmin));
-					book.setSuccessRate(Methods.percentPick(Smax, Smin));
-					player.getInventory().addItem(book.buildBook());
+					player.getInventory().addItem(new CEBook(ench, lvl, amount).buildBook());
 					return true;
 				}
 			}
@@ -774,7 +755,7 @@ public class Main extends JavaPlugin implements Listener {
 							return true;
 						}
 					}else {
-						Boolean adminGive = false;// An admin is giving the kit.
+						boolean adminGive = false;// An admin is giving the kit.
 						if(ce.getGKitFromName(args[0]) != null) {// /GKitz [Kit] [Player]
 							kit = ce.getGKitFromName(args[0]);
 						}else {
@@ -837,7 +818,6 @@ public class Main extends JavaPlugin implements Listener {
 		return false;
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		final Player player = e.getPlayer();

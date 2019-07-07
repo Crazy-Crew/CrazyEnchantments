@@ -15,13 +15,13 @@ import java.util.Calendar;
 
 public class CEPlayer {
 	
-	private Integer souls;
+	private int souls;
 	private Player player;
-	private Boolean soulsActive;
+	private boolean soulsActive;
 	private ArrayList<Cooldown> cooldowns;
 	private Double rageMultiplier;
-	private Boolean hasRage;
-	private Integer rageLevel;
+	private boolean hasRage;
+	private int rageLevel;
 	private BukkitTask rageTask;
 	
 	/**
@@ -101,9 +101,9 @@ public class CEPlayer {
 	
 	/**
 	 * Find out if the players souls are active.
-	 * @return Ture if active and false if not.
+	 * @return True if active and false if not.
 	 */
-	public Boolean isSoulsActive() {
+	public boolean isSoulsActive() {
 		return soulsActive;
 	}
 	
@@ -111,7 +111,7 @@ public class CEPlayer {
 	 * Set if the players souls are active.
 	 * @param soulsActive True if you want to activate them and false if not.
 	 */
-	public void setSoulsActive(Boolean soulsActive) {
+	public void setSoulsActive(boolean soulsActive) {
 		this.soulsActive = soulsActive;
 	}
 	
@@ -177,7 +177,7 @@ public class CEPlayer {
 	 * @param kit The gkit you are checking.
 	 * @return Ture if they can use it and false if they can't.
 	 */
-	public Boolean hasGkitPermission(GKitz kit) {
+	public boolean hasGkitPermission(GKitz kit) {
 		return player.hasPermission("crazyenchantments.bypass.gkitz") || player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase());
 	}
 	
@@ -186,7 +186,7 @@ public class CEPlayer {
 	 * @param kit The gkit you want to check.
 	 * @return Ture if they dont have a cooldown and they have permission.
 	 */
-	public Boolean canUseGKit(GKitz kit) {
+	public boolean canUseGKit(GKitz kit) {
 		if(player.hasPermission("crazyenchantments.bypass.gkitz")) {
 			return true;
 		}else {
@@ -303,7 +303,7 @@ public class CEPlayer {
 	/**
 	 * Check if the player is in rage.
 	 */
-	public Boolean hasRage() {
+	public boolean hasRage() {
 		return hasRage;
 	}
 	
@@ -311,14 +311,14 @@ public class CEPlayer {
 	 * Toggle on/off the player's rage.
 	 * @param hasRage If the player has rage.
 	 */
-	public void setRage(Boolean hasRage) {
+	public void setRage(boolean hasRage) {
 		this.hasRage = hasRage;
 	}
 	
 	/**
 	 * Get the level of rage the player is in.
 	 */
-	public Integer getRageLevel() {
+	public int getRageLevel() {
 		return rageLevel;
 	}
 	
@@ -326,7 +326,7 @@ public class CEPlayer {
 	 * Set the level of rage the player is in.
 	 * @param rageLevel The player's new rage level.
 	 */
-	public void setRageLevel(Integer rageLevel) {
+	public void setRageLevel(int rageLevel) {
 		this.rageLevel = rageLevel;
 	}
 	

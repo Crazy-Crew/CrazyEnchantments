@@ -252,7 +252,7 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
-						if(ce.getLevel(mainItem, enchant).equals(ce.getLevel(subItem, enchant))) {
+						if(ce.getLevel(mainItem, enchant) == ce.getLevel(subItem, enchant)) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
 								dupEnchants.put(enchant.getName(), ce.getLevel(mainItem, enchant));
 							}
@@ -305,7 +305,7 @@ public class BlackSmith implements Listener {
 		if(mainItem.getType() == ce.getEnchantmentBookItem().getType() && subItem.getType() == ce.getEnchantmentBookItem().getType()) {
 			if(Methods.removeColor(mainItem.getItemMeta().getDisplayName()).equalsIgnoreCase(Methods.removeColor(subItem.getItemMeta().getDisplayName()))) {
 				for(CEnchantment en : ce.getRegisteredEnchantments()) {
-					if(ce.getEnchantmentBookEnchantmnet(mainItem) == en) {
+					if(ce.getEnchantmentBookEnchantment(mainItem) == en) {
 						int power = ce.getBookLevel(mainItem, en);
 						int max = en.getMaxLevel();
 						if(power + 1 <= max) {
@@ -324,7 +324,7 @@ public class BlackSmith implements Listener {
 				HashMap<String, Integer> higherEnchants = new HashMap<>();
 				for(CEnchantment enchant : ce.getEnchantmentsOnItem(mainItem)) {
 					if(ce.hasEnchantment(subItem, enchant)) {
-						if(ce.getLevel(mainItem, enchant).equals(ce.getLevel(subItem, enchant))) {
+						if(ce.getLevel(mainItem, enchant) == ce.getLevel(subItem, enchant)) {
 							if(!dupEnchants.containsKey(enchant.getName())) {
 								dupEnchants.put(enchant.getName(), ce.getLevel(mainItem, enchant));
 							}
