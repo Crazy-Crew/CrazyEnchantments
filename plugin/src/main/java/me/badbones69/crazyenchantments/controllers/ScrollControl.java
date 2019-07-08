@@ -177,7 +177,7 @@ public class ScrollControl implements Listener {
 		if(Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")) {
 			for(Enchantment ench : item.getEnchantments().keySet()) {
 				try {
-					if(Methods.getEnchantments().contains(ench.getName())) {
+					if(Methods.getEnchantments().containsKey(ench.getName())) {
 						amount++;
 					}
 				}catch(Exception e) {

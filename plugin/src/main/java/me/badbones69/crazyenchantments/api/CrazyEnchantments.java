@@ -1299,20 +1299,17 @@ public class CrazyEnchantments {
 					}
 					item.setLore(lore);
 				}else {
-					for(Enchantment en : Enchantment.values()) {
-						if(d.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
-						Enchantment.getByName(d.split(":")[0]) != null) {
-							String level = d.split(":")[1];
-							if(level.contains("-")) {
-								int randomLevel = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
-								Integer.parseInt(d.split(":")[1].split("-")[1]));
-								if(randomLevel > 0) {
-									item.addEnchantment(en, randomLevel);
-								}
-							}else {
-								item.addEnchantment(en, Integer.parseInt(d.split(":")[1]));
+					Enchantment enchantment = Methods.getEnchantment(d.split(":")[0]);
+					if(enchantment != null) {
+						String level = d.split(":")[1];
+						if(level.contains("-")) {
+							int randomLevel = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
+							Integer.parseInt(d.split(":")[1].split("-")[1]));
+							if(randomLevel > 0) {
+								item.addEnchantment(enchantment, randomLevel);
 							}
-							break;
+						}else {
+							item.addEnchantment(enchantment, Integer.parseInt(d.split(":")[1]));
 						}
 					}
 					for(CEnchantment en : getRegisteredEnchantments()) {
@@ -1367,16 +1364,13 @@ public class CrazyEnchantments {
 						lore.add(sub);
 					}
 				}else {
-					for(Enchantment en : Enchantment.values()) {
-						if(sub.split(":")[0].equalsIgnoreCase(Methods.getEnchantmentName(en)) ||
-						Enchantment.getByName(sub.split(":")[0]) != null) {
-							String level = sub.split(":")[1];
-							if(level.contains("-")) {
-								customEnchantments.add("&7" + sub.split(":")[0] + " " + level);
-							}else {
-								enchantments.put(en, Integer.parseInt(level));
-							}
-							break;
+					Enchantment enchantment = Methods.getEnchantment(sub.split(":")[0]);
+					if(enchantment != null) {
+						String level = sub.split(":")[1];
+						if(level.contains("-")) {
+							customEnchantments.add("&7" + sub.split(":")[0] + " " + level);
+						}else {
+							enchantments.put(enchantment, Integer.parseInt(level));
 						}
 					}
 					for(CEnchantment en : getRegisteredEnchantments()) {

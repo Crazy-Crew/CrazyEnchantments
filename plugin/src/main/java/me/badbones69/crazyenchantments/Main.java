@@ -37,6 +37,7 @@ public class Main extends JavaPlugin implements Listener {
 	
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private FileManager fileManager = FileManager.getInstance();
+	private boolean fixHealth;
 	
 	@Override
 	public void onEnable() {
@@ -45,10 +46,10 @@ public class Main extends JavaPlugin implements Listener {
 		Boots.onStart();
 		ce.load();
 		CurrencyAPI.loadCurrency();
+		fixHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
 		for(Player player : Bukkit.getOnlinePlayers()) {
 			ce.loadCEPlayer(player);
-			if(Files.CONFIG.getFile().contains("Settings.Reset-Players-Max-Health")) {
-				if(Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health")) {
+			if(fixHealth) {
 					player.setMaxHealth(20);
 				}
 			}
@@ -823,11 +824,9 @@ public class Main extends JavaPlugin implements Listener {
 		final Player player = e.getPlayer();
 		ce.loadCEPlayer(player);
 		ce.updatePlayerEffects(player);
-		if(Files.CONFIG.getFile().contains("Settings.Reset-Players-Max-Health")) {
-			if(Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health")) {
+		if(fixHealth) {
 				player.setMaxHealth(20);
 			}
-		}
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -836,16 +835,15 @@ public class Main extends JavaPlugin implements Listener {
 					+ "&7It is running version &av" + ce.getPlugin().getDescription().getVersion() + "&7."));
 				}
 				if(player.isOp()) {
-					if(Files.CONFIG.getFile().contains("Settings.Update-Checker")) {
-						if(Files.CONFIG.getFile().getBoolean("Settings.Update-Checker")) {
-							Methods.hasUpdate(player);
-						}
+					if(Files.CONFIG.getFile().getBoolean("Settings.Update-Checker")) {
+						Methods.hasUpdate(player);
 					}else {
 						Methods.hasUpdate(player);
 					}
 				}
 			}
-		}.runTaskLaterAsynchronously(this, 20);
+		}.
+		runTaskLaterAsynchronously(this, 20);
 	}
 	
 	@EventHandler
