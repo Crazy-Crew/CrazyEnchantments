@@ -491,7 +491,8 @@ public class Methods {
 				}
 			}else {
 				if(enchantment.getName().equalsIgnoreCase(enchantmentName) ||
-				enchantments.get(enchantment.getName()).equalsIgnoreCase(enchantmentName)) {
+				(enchantments.get(enchantment.getName()) != null &&
+				enchantments.get(enchantment.getName()).equalsIgnoreCase(enchantmentName))) {
 					return enchantment;
 				}
 			}
