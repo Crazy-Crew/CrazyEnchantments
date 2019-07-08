@@ -1,7 +1,7 @@
 Settings:
   GUI-Size: 27 #Must be a factor of 9.
   Inventory-Name: '&8List of all GKitz'
-  GUI-Customization: #This allows you to customize unclickable items into you GUI.
+  GUI-Customization: #This allows you to customize unclickable items into your GUI.
     - 'Slot:1, Item:STAINED_GLASS_PANE:15, Name: '
     - 'Slot:2, Item:STAINED_GLASS_PANE:15, Name: '
     - 'Slot:3, Item:STAINED_GLASS_PANE:15, Name: '
@@ -43,7 +43,7 @@ GKitz: #GKit options.
     Display: #All the display option in the gui.
       Slot: 12 #Slot the item is located at in the gui.
       Item: 'STAINED_GLASS_PANE:1' #The item that is displayed for the GKit.
-      Glowing: true #Toggle on or off if the item has an enchanted effect.
+      Glowing: true #If it has a glowing effect.
       Name: '&6&lThe Hero GKit' #Display name of the GKit.
       Lore: #The lore that goes on the display item.
         - '&7A kit that used to be worn'
@@ -95,7 +95,7 @@ GKitz: #GKit options.
       Name: '&4&lThe Villain GKit'
       Lore:
         - '&7A kit that used to be worn'
-        - '&7into battle by a evil villain.'
+        - '&7into battle by an evil villain.'
         - ''
         - '&7Cooldown: &624 Hours'
         - '&7Available in: &6%day%d, %hour%h, %minute%m, %second%s'

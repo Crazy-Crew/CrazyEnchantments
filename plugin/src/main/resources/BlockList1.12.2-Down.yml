@@ -1,86 +1,86 @@
 Block-List: #All the blocks that can be broken by the Blast Enchantment.
-  - '1'
-  - '1:1'
-  - '1:2'
-  - '1:3'
-  - '1:4'
-  - '1:5'
-  - '1:6'
-  - '2'
-  - '3'
-  - '3:1'
-  - '3:2'
-  - '4'
-  - '12'
-  - '12:1'
-  - '13'
-  - '14'
-  - '15'
-  - '16'
-  - '21'
-  - '22'
-  - '24'
-  - '24:1'
-  - '24:2'
-  - '42'
-  - '44'
-  - '44:1'
-  - '44:3'
-  - '44:4'
-  - '44:5'
-  - '44:6'
-  - '44:7'
-  - '45'
-  - '48'
-  - '49'
-  - '56'
-  - '57'
-  - '73'
-  - '79'
-  - '80'
-  - '82'
-  - '87'
-  - '88'
-  - '98'
-  - '98:1'
-  - '98:2'
-  - '98:3'
-  - '110'
-  - '112'
-  - '121'
-  - '129'
-  - '133'
-  - '139'
-  - '139:1'
-  - '153'
-  - '155'
-  - '155:1'
-  - '155:2'
-  - '156'
-  - '159'
-  - '159:1'
-  - '159:2'
-  - '159:3'
-  - '159:4'
-  - '159:5'
-  - '159:6'
-  - '159:7'
-  - '159:8'
-  - '159:9'
-  - '159:10'
-  - '159:11'
-  - '159:12'
-  - '159:13'
-  - '159:14'
-  - '159:15'
-  - '168'
-  - '168:1'
-  - '168:2'
-  - '169'
-  - '172'
-  - '173'
-  - '174'
-  - '179'
-  - '179:1'
-  - '179:2'
-  - '152'
+  - '1' #Stone
+  - '1:1' #Granite
+  - '1:2' #Polished Granite
+  - '1:3' #Diorite
+  - '1:4' #Polished Diorite
+  - '1:5' #Andesite
+  - '1:6' #Polished Andesite
+  - '2' #Grass
+  - '3' #Dirt
+  - '3:1' #Coarse Dirt
+  - '3:2' #Podzol
+  - '4' #Cobblestone
+  - '12' #Sand
+  - '12:1' #Red Sand
+  - '13' #Gravel
+  - '14' #Gold Ore
+  - '15' #Iron Ore
+  - '16' #Coal Ore
+  - '21' #Lapis Lazuli Ore
+  - '22' #Lapis Lazuli Block
+  - '24' #Sandstone
+  - '24:1' #Chiseled Sandstone
+  - '24:2' #Smooth Sandstone
+  - '42' #Iron Block
+  - '44' #Stone Slab
+  - '44:1' #Sandstone Slab
+  - '44:3' #Cobblestone Slab
+  - '44:4' #Brick Slab
+  - '44:5' #Stone Brick Slab
+  - '44:6' #Nether Brick Slab
+  - '44:7' #Quartz Slab
+  - '45' #Bricks
+  - '48' #Moss Stone
+  - '49' #Obsidian
+  - '56' #Diamond Ore
+  - '57' #Diamond Block
+  - '73' #Redstone Ore
+  - '79' #Ice
+  - '80' #Snow Block
+  - '82' #Clay
+  - '87' #Netherrack
+  - '88' #Soul Sand
+  - '98' #Stone Bricks
+  - '98:1' #Mossy Stone Bricks
+  - '98:2' #Cracked Stone Bricks
+  - '98:3' #Chiseled Stone Bricks
+  - '110' #Mycelium
+  - '112' #Nether Brick
+  - '121' #End Stone
+  - '129' #Sandstone Stairs
+  - '133' #Emerald Block
+  - '139' #Cobblestone Wall
+  - '139:1' #Mossy Cobblestone Wall
+  - '152' #Redstone Block
+  - '153' #Nether Quartz Ore
+  - '155' #Quartz Block
+  - '155:1' #Chiseled Quartz Block
+  - '155:2' #Pillar Quartz Block
+  - '156' #Quartz Stairs
+  - '159' #White Hardened Clay
+  - '159:1' #Orange Hardened Clay
+  - '159:2' #Magenta Hardened Clay
+  - '159:3' #Light Blue Hardened Clay
+  - '159:4' #Yellow Hardened Clay
+  - '159:5' #Lime Hardened Clay
+  - '159:6' #Pink Hardened Clay
+  - '159:7' #Gray Hardened Clay
+  - '159:8' #Light Gray Hardened Clay
+  - '159:9' #Cyan Hardened Clay
+  - '159:10' #Purple Hardened Clay
+  - '159:11' #Blue Hardened Clay
+  - '159:12' #Brown Hardened Clay
+  - '159:13' #Green Hardened Clay
+  - '159:14' #Red Hardened Clay
+  - '159:15' #Black Hardened Clay
+  - '168' #Prismarine
+  - '168:1' #Prismarine Bricks
+  - '168:2' #Dark Prismarine
+  - '169' #Sea Lantern
+  - '172' #Hardened Clay
+  - '173' #Coal Block
+  - '174' #Packed Ice
+  - '179' #Red Sandstone
+  - '179:1' #Chiseled Red Sandstone
+  - '179:2' #Smooth Red Sandstone
