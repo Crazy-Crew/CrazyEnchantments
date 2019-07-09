@@ -85,6 +85,7 @@ public class PickAxes implements Listener {
 									}
 								}
 							}
+							Location originalBlockLocation = block.getLocation();
 							new BukkitRunnable() { // Run async to help offload some lag.
 								@Override
 								public void run() {
@@ -109,7 +110,7 @@ public class PickAxes implements Listener {
 									boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
 									boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
 									for(Block block : finalBlockList) {
-										if(ce.getBlockList().contains(block.getType())) {
+										if(ce.getBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation)) {
 											if(player.getGameMode() == GameMode.CREATIVE) { //If the user is in creative mode.
 												new BukkitRunnable() {
 													@Override
