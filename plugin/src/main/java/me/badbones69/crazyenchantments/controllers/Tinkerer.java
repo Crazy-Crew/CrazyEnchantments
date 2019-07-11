@@ -115,7 +115,7 @@ public class Tinkerer implements Listener {
 										if(toggle) {
 											player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
 										}
-										player.playSound(player.getLocation(), ce.getSound("ENTITY_VILLAGER_TRADE", "ENTITY_VILLAGER_TRADING"), 1, 1);
+										player.playSound(player.getLocation(), ce.getSound("ENTITY_VILLAGER_TRADE", "VILLAGER_YES"), 1, 1);
 										return;
 									}
 								}
