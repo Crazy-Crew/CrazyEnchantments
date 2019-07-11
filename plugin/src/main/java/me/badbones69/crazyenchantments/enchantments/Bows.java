@@ -253,6 +253,7 @@ public class Bows implements Listener {
 									if(entityLocation.getBlock().getType() == Material.AIR) {
 										entityLocation.getBlock().setType(web);
 										webBlocks.add(entityLocation.getBlock());
+										arrow.getArrow().remove();
 										new BukkitRunnable() {
 											@Override
 											public void run() {
