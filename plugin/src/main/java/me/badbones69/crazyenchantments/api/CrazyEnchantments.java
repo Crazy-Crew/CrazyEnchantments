@@ -738,8 +738,9 @@ public class CrazyEnchantments {
 	 * @return The enchantment as a CEnchantment but if not found will be null.
 	 */
 	public CEnchantment getEnchantmentFromName(String enchantment) {
-		for(CEnchantment enchant : getRegisteredEnchantments()) {
-			if(enchant.getName().equalsIgnoreCase(enchantment)) {
+		for(CEnchantment enchant : registeredEnchantments) {
+			if(enchant.getName().replace("-", "").equalsIgnoreCase(enchantment.replace("-", "")) ||
+			enchant.getCustomName().replace("-", "").equalsIgnoreCase(enchantment.replace("-", ""))) {
 				return enchant;
 			}
 		}
