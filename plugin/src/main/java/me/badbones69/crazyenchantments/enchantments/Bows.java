@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -40,6 +42,7 @@ public class Bows implements Listener {
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private List<EnchantedArrow> enchantedArrows = new ArrayList<>();
 	private Material web = new ItemBuilder().setMaterial("COBWEB", "WEB").getMaterial();
+	private List<Block> webBlocks = new ArrayList<>();
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBowShoot(final EntityShootBowEvent e) {
@@ -106,11 +109,13 @@ public class Bows implements Listener {
 									Location entityLocation = e.getEntity().getLocation();
 									if(entityLocation.getBlock().getType() == Material.AIR) {
 										entityLocation.getBlock().setType(web);
+										webBlocks.add(entityLocation.getBlock());
 										e.getEntity().remove();
 										new BukkitRunnable() {
 											@Override
 											public void run() {
 												entityLocation.getBlock().setType(Material.AIR);
+												webBlocks.remove(entityLocation.getBlock());
 											}
 										}.runTaskLater(ce.getPlugin(), 5 * 20);
 									}
@@ -130,6 +135,7 @@ public class Bows implements Listener {
 									for(Location loc : locations) {
 										if(loc.getBlock().getType() == Material.AIR) {
 											loc.getBlock().setType(web);
+											webBlocks.add(loc.getBlock());
 										}
 									}
 									e.getEntity().remove();
@@ -139,6 +145,7 @@ public class Bows implements Listener {
 											for(Location loc : locations) {
 												if(loc.getBlock().getType() == web) {
 													loc.getBlock().setType(Material.AIR);
+													webBlocks.remove(loc.getBlock());
 												}
 											}
 										}
@@ -148,11 +155,13 @@ public class Bows implements Listener {
 								Location entityLocation = e.getEntity().getLocation();
 								if(entityLocation.getBlock().getType() == Material.AIR) {
 									entityLocation.getBlock().setType(web);
+									webBlocks.add(entityLocation.getBlock());
 									e.getEntity().remove();
 									new BukkitRunnable() {
 										@Override
 										public void run() {
 											entityLocation.getBlock().setType(Material.AIR);
+											webBlocks.remove(entityLocation.getBlock());
 										}
 									}.runTaskLater(ce.getPlugin(), 5 * 20);
 								}
@@ -243,11 +252,12 @@ public class Bows implements Listener {
 									Location entityLocation = entity.getLocation();
 									if(entityLocation.getBlock().getType() == Material.AIR) {
 										entityLocation.getBlock().setType(web);
-										entity.remove();
+										webBlocks.add(entityLocation.getBlock());
 										new BukkitRunnable() {
 											@Override
 											public void run() {
 												entityLocation.getBlock().setType(Material.AIR);
+												webBlocks.remove(entityLocation.getBlock());
 											}
 										}.runTaskLater(ce.getPlugin(), 5 * 20);
 									}
@@ -331,6 +341,13 @@ public class Bows implements Listener {
 					}
 				}
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onWebBreak(BlockBreakEvent e) {
+		if(webBlocks.contains(e.getBlock())) {
+			e.setCancelled(true);
 		}
 	}
 	
