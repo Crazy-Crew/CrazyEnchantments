@@ -105,7 +105,7 @@ public class CrazyEnchantments {
 			config.getBoolean(path + ".LostBook.FireworkToggle"),
 			getColors(config.getString(path + ".LostBook.FireworkColors")),
 			config.getBoolean(path + ".LostBook.Sound-Toggle"),
-			Sound.valueOf(config.getString(path + ".LostBook.Sound")));
+			config.getString(path + ".LostBook.Sound"));
 			categories.add(new Category(
 			category,
 			config.getInt(path + ".Slot"),

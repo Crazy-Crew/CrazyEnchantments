@@ -31,7 +31,11 @@ public class LostBook {
 		this.useFirework = !fireworkColors.isEmpty() && useFirework;
 		this.fireworkColors = fireworkColors;
 		this.useSound = sound != null && useSound;
-		this.sound = sound;
+		try {//If the sound doesn't exist it will not error.
+			this.sound = Sound.valueOf(sound);
+		}catch(IllegalArgumentException e) {
+			System.out.println("[CrazyEnchantments] The sound " + sound + " is not a sound found in this minecraft version.");
+		}
 	}
 	
 	public int getSlot() {
