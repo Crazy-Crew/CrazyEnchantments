@@ -151,19 +151,21 @@ public class Bows implements Listener {
 										}
 									}.runTaskLater(ce.getPlugin(), 5 * 20);
 								}
-							}else {//If the arrow hits an entity.
-								Location entityLocation = e.getEntity().getLocation();
-								if(entityLocation.getBlock().getType() == Material.AIR) {
-									entityLocation.getBlock().setType(web);
-									webBlocks.add(entityLocation.getBlock());
-									e.getEntity().remove();
-									new BukkitRunnable() {
-										@Override
-										public void run() {
-											entityLocation.getBlock().setType(Material.AIR);
-											webBlocks.remove(entityLocation.getBlock());
-										}
-									}.runTaskLater(ce.getPlugin(), 5 * 20);
+							}else {//If the arrow hits something.
+								if(e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty()) {//Checking to make sure it doesn't hit an entity.
+									Location entityLocation = e.getEntity().getLocation();
+									if(entityLocation.getBlock().getType() == Material.AIR) {
+										entityLocation.getBlock().setType(web);
+										webBlocks.add(entityLocation.getBlock());
+										e.getEntity().remove();
+										new BukkitRunnable() {
+											@Override
+											public void run() {
+												entityLocation.getBlock().setType(Material.AIR);
+												webBlocks.remove(entityLocation.getBlock());
+											}
+										}.runTaskLater(ce.getPlugin(), 5 * 20);
+									}
 								}
 							}
 						}
@@ -245,24 +247,40 @@ public class Bows implements Listener {
 						}
 					}
 					if(!e.isCancelled()) {
-						if(!Support.isFriendly(arrow.getShooter(), e.getEntity())) {// Damaged player is an enemy.
+						if(!Support.isFriendly(arrow.getShooter(), entity)) {// Damaged player is an enemy.
 							if(arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
 								if(CEnchantments.STICKY_SHOT.isActivated()) {
-									//if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
-									Location entityLocation = entity.getLocation();
-									if(entityLocation.getBlock().getType() == Material.AIR) {
-										entityLocation.getBlock().setType(web);
-										webBlocks.add(entityLocation.getBlock());
+									if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
+										List<Location> locations = new ArrayList<>();
+										Location enLocation = entity.getLocation();
+										locations.add(enLocation.clone().add(1, 0, 1));//Top Left
+										locations.add(enLocation.clone().add(1, 0, 0));//Top Middle
+										locations.add(enLocation.clone().add(1, 0, -1));//Top Right
+										locations.add(enLocation.clone().add(0, 0, 1));//Center Left
+										locations.add(enLocation.clone());//Center Middle
+										locations.add(enLocation.clone().add(0, 0, -1));//Center Right
+										locations.add(enLocation.clone().add(-1, 0, 1));//Bottom Left
+										locations.add(enLocation.clone().add(-1, 0, 0));//Bottom Middle
+										locations.add(enLocation.clone().add(-1, 0, -1));//Bottom Right
+										for(Location loc : locations) {
+											if(loc.getBlock().getType() == Material.AIR) {
+												loc.getBlock().setType(web);
+												webBlocks.add(loc.getBlock());
+											}
+										}
 										arrow.getArrow().remove();
 										new BukkitRunnable() {
 											@Override
 											public void run() {
-												entityLocation.getBlock().setType(Material.AIR);
-												webBlocks.remove(entityLocation.getBlock());
+												for(Location loc : locations) {
+													if(loc.getBlock().getType() == web) {
+														loc.getBlock().setType(Material.AIR);
+														webBlocks.remove(loc.getBlock());
+													}
+												}
 											}
 										}.runTaskLater(ce.getPlugin(), 5 * 20);
 									}
-									//}
 								}
 							}
 							if(arrow.hasEnchantment(CEnchantments.PULL)) {
