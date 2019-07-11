@@ -97,6 +97,7 @@ public class CrazyEnchantments {
 			config.getInt(path + ".LostBook.Slot"),
 			config.getBoolean(path + ".LostBook.InGUI"),
 			new ItemBuilder()
+			.setMaterial(config.getString(path + ".LostBook.Item"))
 			.setName(config.getString(path + ".LostBook.Name"))
 			.setLore(config.getStringList(path + ".LostBook.Lore"))
 			.setGlowing(config.getBoolean(path + ".LostBook.Glowing")),
@@ -111,6 +112,7 @@ public class CrazyEnchantments {
 			config.getInt(path + ".Slot"),
 			config.getBoolean(path + ".InGUI"),
 			new ItemBuilder()
+			.setMaterial(config.getString(path + ".Item"))
 			.setName(config.getString(path + ".Name"))
 			.setLore(config.getStringList(path + ".Lore"))
 			.setGlowing(config.getBoolean(path + ".Glowing")),
