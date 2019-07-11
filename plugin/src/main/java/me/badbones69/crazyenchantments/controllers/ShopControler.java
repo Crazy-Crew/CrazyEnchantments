@@ -309,7 +309,7 @@ public class ShopControler implements Listener {
 				if(lostBook.getSlot() > size) {
 					continue;
 				}
-				inv.setItem(lostBook.getSlot() - 1, lostBook.getLostBook(category).build());
+				inv.setItem(lostBook.getSlot(), lostBook.getLostBook(category).build());
 			}
 		}
 		ArrayList<String> options = new ArrayList<>();
