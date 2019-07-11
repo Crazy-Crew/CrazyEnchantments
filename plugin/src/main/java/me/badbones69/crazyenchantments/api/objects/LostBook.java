@@ -22,8 +22,8 @@ public class LostBook {
 	private Sound sound;
 	
 	public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency,
-	boolean useFirework, List<Color> fireworkColors, boolean useSound, Sound sound) {
-		this.slot = slot;
+	boolean useFirework, List<Color> fireworkColors, boolean useSound, String sound) {
+		this.slot = slot - 1;
 		this.inGUI = inGUI;
 		this.displayItem = displayItem;
 		this.cost = cost;
