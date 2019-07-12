@@ -60,7 +60,7 @@ public class Hoes implements Listener {
 				if(enchantments.contains(CEnchantments.TILLER.getEnchantment())) {
 					for(Block soil : getSoil(player, block)) {
 						soil.setType(ce.getMaterial("FARMLAND", "SOIL"));
-						for(Block water : getAreaBlocks(soil, 3)) {
+						for(Block water : getAreaBlocks(soil, 4)) {
 							if(water.getType() == Material.WATER || water.getType() == ce.getMaterial("WATER", "STATIONARY_WATER")) {
 								ce.getNMSSupport().hydrateSoil(soil);
 								break;
