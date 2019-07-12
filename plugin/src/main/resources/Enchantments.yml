@@ -2049,7 +2049,7 @@ Enchantments:
     Enchantment-Type: 'Sword'
     Chance-System:
       Base: 1
-      Increase: 0
+      Increase: 1
     Info:
       Name: '&e&lDisorder &7(&bI&7)'
       Description:

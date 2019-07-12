@@ -156,7 +156,9 @@ public class Swords implements Listener {
 												for(int i = 0; i < items.size(); i++) {
 													inventory.setItem(slots.get(i), items.get(i));
 												}
-												damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+												if(!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) {
+													damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+												}
 											}
 										}
 									}
