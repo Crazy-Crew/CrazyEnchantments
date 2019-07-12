@@ -56,7 +56,7 @@ public class Hoes implements Listener {
 					}
 				}
 			}
-			if(block.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS")) {
+			if(block.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS") || block.getType() == Material.DIRT) {
 				if(enchantments.contains(CEnchantments.TILLER.getEnchantment())) {
 					for(Block soil : getSoil(player, block)) {
 						soil.setType(ce.getMaterial("FARMLAND", "SOIL"));
@@ -183,7 +183,7 @@ public class Hoes implements Listener {
 		Location location = block.getLocation();
 		List<Block> soilBlocks = new ArrayList<>();
 		for(Block soil : getAreaBlocks(block)) {
-			if(soil.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS")) {
+			if(soil.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS") || soil.getType() == Material.DIRT) {
 				BlockBreakEvent event = new BlockBreakEvent(soil, player);
 				Bukkit.getPluginManager().callEvent(event);
 				if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
