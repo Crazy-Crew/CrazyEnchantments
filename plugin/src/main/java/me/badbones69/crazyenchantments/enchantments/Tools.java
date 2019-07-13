@@ -28,9 +28,11 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class Tools implements Listener {
 	
+	private Random random = new Random();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	@EventHandler
@@ -48,6 +50,7 @@ public class Tools implements Listener {
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
 		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e)
+		|| block.getType() == Material.AIR
 		|| block.getType().toString().toLowerCase().contains("shulker_box")
 		|| block.getType().toString().toLowerCase().contains("chest")) {
 			return;
@@ -58,6 +61,11 @@ public class Tools implements Listener {
 			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
 			if(enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
 				if(CEnchantments.TELEPATHY.isActivated()) {
+					if(enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) {
+						if(Hoes.getHarvesterCrops().contains(block.getType())) {
+							return;//This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
+						}
+					}
 					if(item.getItemMeta().hasEnchants()) {
 						if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 							if(block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER"))) {
@@ -131,7 +139,6 @@ public class Tools implements Listener {
 									drop.setAmount(drop.getAmount() + 1);
 									loc.getBlock().setType(Material.AIR);
 								}
-								
 							}
 							int amount = drop.getAmount();
 							if(drops.containsKey(drop)) {
@@ -158,17 +165,24 @@ public class Tools implements Listener {
 								}
 							}
 						}
-						for(ItemStack i : drops.keySet()) {
+						for(ItemStack droppedItem : drops.keySet()) {
 							if(!ce.useNewMaterial()) {
-								if(i.getType() == Material.matchMaterial("INK_SACK")) {//Changes ink sacks to lapis if on 1.12.2-
-									i.setDurability((short) 4);
+								if(droppedItem.getType() == Material.matchMaterial("INK_SACK")) {//Changes ink sacks to lapis if on 1.12.2-
+									droppedItem.setDurability((short) 4);
 								}
 							}
-							i.setAmount(drops.get(i));
-							if(Methods.isInvFull(player)) {
-								player.getWorld().dropItem(player.getLocation(), i);
+							if(droppedItem.getType() == Material.WHEAT || droppedItem.getType() == Material.matchMaterial("BEETROOT_SEEDS")) {
+								droppedItem.setAmount(random.nextInt(3));//Wheat and BeetRoots drops 0-3 seeds.
+							}else if(droppedItem.getType() == ce.getMaterial("POTATO", "POTATO_ITEM") ||
+							droppedItem.getType() == ce.getMaterial("CARROT", "CARROT_ITEM")) {
+								droppedItem.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
 							}else {
-								player.getInventory().addItem(i);
+								droppedItem.setAmount(drops.get(droppedItem));
+							}
+							if(Methods.isInvFull(player)) {
+								player.getWorld().dropItem(player.getLocation(), droppedItem);
+							}else {
+								player.getInventory().addItem(droppedItem);
 							}
 						}
 						if(Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
