@@ -10,6 +10,7 @@ import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 import me.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import me.badbones69.crazyenchantments.api.events.BookFailEvent;
 import me.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
+import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
@@ -24,13 +25,10 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class EnchantmentControl implements Listener {
 	
@@ -40,53 +38,50 @@ public class EnchantmentControl implements Listener {
 	
 	@EventHandler
 	public void addEnchantment(InventoryClickEvent e) {
-		Inventory inv = e.getInventory();
-		Player player = (Player) e.getWhoClicked();
-		if(inv != null) {
+		if(e.getInventory() != null) {
 			if(e.getCursor() != null && e.getCurrentItem() != null) {
-				ItemStack book = e.getCursor();
 				ItemStack item = e.getCurrentItem();
-				if(ce.isEnchantmentBook(book)) {
-					String name = book.getItemMeta().getDisplayName();
-					CEnchantment enchantment = ce.getEnchantmentBookEnchantment(book);
+				if(ce.isEnchantmentBook(e.getCursor())) {
+					CEBook ceBook = ce.convertToCEBook(e.getCursor());
+					CEnchantment enchantment = ceBook.getEnchantment();
 					if(enchantment != null) {
 						if(enchantment.getEnchantmentType().getEnchantableMaterials().contains(item.getType())) {
-							if(book.getAmount() == 1) {
+							if(ceBook.getAmount() == 1) {
+								Player player = (Player) e.getWhoClicked();
 								if(ce.enchantStackedItems() || item.getAmount() == 1) {
-									boolean success = successChance(book);
-									boolean destroy = destroyChance(book);
-									int bookPower = ce.getBookLevel(book, enchantment);
-									boolean toggle = false;
-									boolean lowerLvl = false;
+									boolean success = Methods.randomPicker(ceBook.getSuccessRate(), 100);
+									boolean destroy = Methods.randomPicker(ceBook.getDestroyRate(), 100);
+									int bookLevel = ceBook.getLevel();
+									boolean hasEnchantment = false;
+									boolean isLowerLevel = false;
 									if(ce.hasEnchantment(item, enchantment)) {
-										toggle = true;
-										if(ce.getLevel(item, enchantment) < bookPower) {
-											lowerLvl = true;
+										hasEnchantment = true;
+										if(ce.getLevel(item, enchantment) < bookLevel) {
+											isLowerLevel = true;
 										}
 									}
-									if(toggle) {
+									if(hasEnchantment) {
 										if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle")) {
-											if(lowerLvl) {
+											if(isLowerLevel) {
 												e.setCancelled(true);
-												PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, enchantment, bookPower, item, book, (player.getGameMode() == GameMode.CREATIVE),
-												success, getSuccessChance(book), destroy, getDestroyChance(book));
+												PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, item, ceBook, player.getGameMode() == GameMode.CREATIVE, success, destroy);
 												Bukkit.getPluginManager().callEvent(preBookApplyEvent);
 												if(!preBookApplyEvent.isCancelled()) {
 													if(success || player.getGameMode() == GameMode.CREATIVE) {
-														BookFailEvent bookApplyEvent = new BookFailEvent(player, enchantment, bookPower, item, book);
+														BookFailEvent bookApplyEvent = new BookFailEvent(player, item, ceBook);
 														Bukkit.getPluginManager().callEvent(bookApplyEvent);
 														if(!bookApplyEvent.isCancelled()) {
-															e.setCurrentItem(ce.addEnchantment(item, enchantment, bookPower));
+															e.setCurrentItem(ce.addEnchantment(item, enchantment, bookLevel));
 															player.setItemOnCursor(new ItemStack(Material.AIR));
 															HashMap<String, String> placeholders = new HashMap<>();
 															placeholders.put("%enchantment%", enchantment.getCustomName());
-															placeholders.put("%level%", bookPower + "");
+															placeholders.put("%level%", bookLevel + "");
 															player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
 															player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
 														}
 														return;
 													}else if(destroy) {
-														BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, enchantment, bookPower, item, book);
+														BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, item, ceBook);
 														Bukkit.getPluginManager().callEvent(bookDestroyEvent);
 														if(!bookDestroyEvent.isCancelled()) {
 															if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
@@ -124,7 +119,7 @@ public class EnchantmentControl implements Listener {
 														}
 														return;
 													}else {
-														BookFailEvent bookFailEvent = new BookFailEvent(player, enchantment, bookPower, item, book);
+														BookFailEvent bookFailEvent = new BookFailEvent(player, item, ceBook);
 														Bukkit.getPluginManager().callEvent(bookFailEvent);
 														if(!bookFailEvent.isCancelled()) {
 															player.setItemOnCursor(new ItemStack(Material.AIR));
@@ -140,7 +135,7 @@ public class EnchantmentControl implements Listener {
 									}
 									if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")) {
 										int limit = ce.getPlayerMaxEnchantments(player);
-										int total = Methods.getEnchAmount(item);
+										int total = Methods.getEnchantmentAmount(item);
 										if(!player.hasPermission("crazyenchantments.bypass.limit")) {
 											if(total >= limit) {
 												player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
@@ -150,9 +145,7 @@ public class EnchantmentControl implements Listener {
 									}
 									e.setCancelled(true);
 									if(success || player.getGameMode() == GameMode.CREATIVE) {
-										name = Methods.removeColor(name);
-										int lvl = ce.convertLevelInteger(name.split(" ")[name.split(" ").length - 1]);
-										ItemStack newItem = ce.addEnchantment(item, enchantment, lvl);
+										ItemStack newItem = ce.addEnchantment(item, enchantment, ceBook.getLevel());
 										ItemStack oldItem = new ItemStack(Material.AIR);
 										e.setCurrentItem(newItem);
 										if(e.getInventory().getType() == InventoryType.CRAFTING) {
@@ -214,20 +207,13 @@ public class EnchantmentControl implements Listener {
 				ItemStack item = Methods.getItemInHand(e.getPlayer());
 				if(ce.isEnchantmentBook(item)) {
 					e.setCancelled(true);
-					String name = "";
+					CEnchantment enchantment = ce.convertToCEBook(item).getEnchantment();
 					Player player = e.getPlayer();
-					List<String> desc = new ArrayList<>();
-					for(CEnchantment en : ce.getRegisteredEnchantments()) {
-						if(item.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
-							name = Files.ENCHANTMENTS.getFile().getString("Enchantments." + en.getName() + ".Info.Name");
-							desc = Files.ENCHANTMENTS.getFile().getStringList("Enchantments." + en.getName() + ".Info.Description");
-						}
+					if(enchantment.getInfoName().length() > 0) {
+						player.sendMessage(enchantment.getInfoName());
 					}
-					if(name.length() > 0) {
-						player.sendMessage(Methods.color(name));
-					}
-					for(String msg : desc) {
-						player.sendMessage(Methods.color(msg));
+					for(String descriptionLine : enchantment.getInfoDescription()) {
+						player.sendMessage(descriptionLine);
 					}
 				}
 			}
@@ -247,44 +233,6 @@ public class EnchantmentControl implements Listener {
 				}.runTaskLater(ce.getPlugin(), 5);
 			}
 		}
-	}
-	
-	private Integer getSuccessChance(ItemStack item) {
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasLore()) {
-				return Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
-			}
-		}
-		return 0;
-	}
-	
-	private boolean successChance(ItemStack item) {
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasLore()) {
-				int percent = Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
-				return Methods.randomPicker(percent, 100);
-			}
-		}
-		return true;
-	}
-	
-	private Integer getDestroyChance(ItemStack item) {
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasLore()) {
-				return Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
-			}
-		}
-		return 0;
-	}
-	
-	private boolean destroyChance(ItemStack item) {
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasLore()) {
-				int percent = Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
-				return Methods.randomPicker(percent, 100);
-			}
-		}
-		return false;
 	}
 	
 }
