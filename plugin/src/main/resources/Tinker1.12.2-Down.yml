@@ -295,3 +295,33 @@ Tinker:
     Necromancer:
       Items: 20
       Book: 5
+    Sticky-Shot:
+      Items: 20
+      Book: 5
+    Disorder:
+      Items: 20
+      Book: 5
+    Charge:
+      Items: 20
+      Book: 5
+    Revenge:
+      Items: 20
+      Book: 5
+    BattleCry:
+      Items: 20
+      Book: 5
+    Famished:
+      Items: 20
+      Book: 5
+    GreenThumb:
+      Items: 20
+      Book: 5
+    Harvester:
+      Items: 20
+      Book: 5
+    Tiller:
+      Items: 20
+      Book: 5
+    Planter:
+      Items: 20
+      Book: 5
