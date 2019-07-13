@@ -151,7 +151,7 @@ public class EnchantmentControl implements Listener {
 									e.setCancelled(true);
 									if(success || player.getGameMode() == GameMode.CREATIVE) {
 										name = Methods.removeColor(name);
-										int lvl = ce.convertLevelInteger(name.split(" ")[1]);
+										int lvl = ce.convertLevelInteger(name.split(" ")[name.split(" ").length - 1]);
 										ItemStack newItem = ce.addEnchantment(item, enchantment, lvl);
 										ItemStack oldItem = new ItemStack(Material.AIR);
 										e.setCurrentItem(newItem);
