@@ -54,9 +54,7 @@ public class ScrollControl implements Listener {
 								return;
 							}
 							e.setCancelled(true);
-							ItemStack it = orderEnchantments(item);
-							it = Methods.addGlow(it);
-							e.setCurrentItem(it);
+							e.setCurrentItem(orderEnchantments(item));
 							player.setItemOnCursor(Methods.removeItem(scroll));
 							player.updateInventory();
 							return;
