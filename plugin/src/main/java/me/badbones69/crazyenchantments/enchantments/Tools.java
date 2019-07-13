@@ -167,7 +167,7 @@ public class Tools implements Listener {
 						}
 						if(block.getType() == Material.COCOA) {
 							drops.put(new ItemBuilder().setMaterial("COCOA_BEANS", "INK_SACK:3").build(),
-							ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
+							ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);//Coco drops 2-3 beans.
 						}
 						for(ItemStack droppedItem : drops.keySet()) {
 							if(!ce.useNewMaterial()) {
