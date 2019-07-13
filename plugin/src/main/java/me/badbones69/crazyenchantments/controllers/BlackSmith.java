@@ -122,7 +122,7 @@ public class BlackSmith implements Listener {
 					}else {// Click In the Black Smith
 						if(e.getRawSlot() == 10 || e.getRawSlot() == 13) {
 							e.setCurrentItem(new ItemStack(Material.AIR));
-							if(Methods.isInvFull(player)) {
+							if(Methods.isInventoryFull(player)) {
 								player.getWorld().dropItem(player.getLocation(), item);
 							}else {
 								player.getInventory().addItem(item);
@@ -169,7 +169,7 @@ public class BlackSmith implements Listener {
 											}
 										}
 									}
-									if(Methods.isInvFull(player)) {
+									if(Methods.isInventoryFull(player)) {
 										player.getWorld().dropItem(player.getLocation(), getUpgradedItem(player, inv.getItem(10), inv.getItem(13)));
 									}else {
 										player.getInventory().addItem(getUpgradedItem(player, inv.getItem(10), inv.getItem(13)));
@@ -215,7 +215,7 @@ public class BlackSmith implements Listener {
 								if(dead) {
 									e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
 								}else {
-									if(Methods.isInvFull(((Player) e.getPlayer()))) {
+									if(Methods.isInventoryFull(((Player) e.getPlayer()))) {
 										e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), inv.getItem(slot));
 									}else {
 										e.getPlayer().getInventory().addItem(inv.getItem(slot));
@@ -282,7 +282,7 @@ public class BlackSmith implements Listener {
 				int maxEnchants = ce.getPlayerMaxEnchantments(player);
 				for(String enchant : newEnchants.keySet()) {
 					if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")) {
-						if((Methods.getEnchAmount(item) + 1) <= maxEnchants) {
+						if((Methods.getEnchantmentAmount(item) + 1) <= maxEnchants) {
 							if(ce.getEnchantmentFromName(enchant) != null) {
 								item = ce.addEnchantment(item, ce.getEnchantmentFromName(enchant), newEnchants.get(enchant));
 							}
@@ -354,7 +354,7 @@ public class BlackSmith implements Listener {
 				int maxEnchants = ce.getPlayerMaxEnchantments(player);
 				for(int i = 0; i < newEnchants.size(); i++) {
 					if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")) {
-						if((Methods.getEnchAmount(item) + i + 1) <= maxEnchants) {
+						if((Methods.getEnchantmentAmount(item) + i + 1) <= maxEnchants) {
 							total += Files.CONFIG.getFile().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
 						}
 					}

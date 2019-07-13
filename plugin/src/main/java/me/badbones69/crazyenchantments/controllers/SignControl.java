@@ -52,7 +52,7 @@ public class SignControl implements Listener {
 				int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
 				Location loc = new Location(world, x, y, z);
 				if(Loc.equals(loc)) {
-					if(Methods.isInvFull(player)) {
+					if(Methods.isInventoryFull(player)) {
 						player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 						return;
 					}

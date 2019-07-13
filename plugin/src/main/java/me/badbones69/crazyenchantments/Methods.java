@@ -413,7 +413,7 @@ public class Methods {
 		}
 	}
 	
-	public static boolean isInvFull(Player player) {
+	public static boolean isInventoryFull(Player player) {
 		return player.getInventory().firstEmpty() == -1;
 	}
 	

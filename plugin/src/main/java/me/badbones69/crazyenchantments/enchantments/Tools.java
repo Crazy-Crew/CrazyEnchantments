@@ -183,7 +183,7 @@ public class Tools implements Listener {
 							}else {
 								droppedItem.setAmount(drops.get(droppedItem));
 							}
-							if(Methods.isInvFull(player)) {
+							if(Methods.isInventoryFull(player)) {
 								player.getWorld().dropItem(player.getLocation(), droppedItem);
 							}else {
 								player.getInventory().addItem(droppedItem);

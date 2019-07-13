@@ -159,7 +159,7 @@ public class Scrambler implements Listener {
 						ItemStack item = inv.getItem(13).clone();
 						item.setType(ce.getEnchantmentBookItem().getType());
 						item.setDurability(ce.getEnchantmentBookItem().getDurability());
-						if(Methods.isInvFull(player)) {
+						if(Methods.isInventoryFull(player)) {
 							player.getWorld().dropItem(player.getLocation(), item);
 						}else {
 							player.getInventory().addItem(item);

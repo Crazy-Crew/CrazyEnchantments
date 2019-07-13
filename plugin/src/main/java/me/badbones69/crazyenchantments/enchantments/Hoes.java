@@ -136,7 +136,7 @@ public class Hoes implements Listener {
 										if(!droppedItems.isEmpty()) {
 											for(ItemStack droppedItem : droppedItems) {
 												if(droppedItem.getAmount() > 0) {
-													if(Methods.isInvFull(player)) {
+													if(Methods.isInventoryFull(player)) {
 														player.getWorld().dropItem(player.getLocation(), droppedItem);
 													}else {
 														player.getInventory().addItem(droppedItem);

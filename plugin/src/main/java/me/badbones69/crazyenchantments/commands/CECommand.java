@@ -241,7 +241,7 @@ public class CECommand implements CommandExecutor {
 					}
 					Category category = ce.getCategory(args[1]);
 					if(category != null) {
-						if(Methods.isInvFull(player)) {
+						if(Methods.isInventoryFull(player)) {
 							player.getWorld().dropItemNaturally(player.getLocation(), category.getLostBook().getLostBook(category, amount).build());
 						}else {
 							player.getInventory().addItem(category.getLostBook().getLostBook(category, amount).build());
@@ -284,7 +284,7 @@ public class CECommand implements CommandExecutor {
 				}else {
 					player = (Player) sender;
 				}
-				if(Methods.isInvFull(player)) {
+				if(Methods.isInventoryFull(player)) {
 					sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
 					return true;
 				}
@@ -324,7 +324,7 @@ public class CECommand implements CommandExecutor {
 				}else {
 					player = (Player) sender;
 				}
-				if(Methods.isInvFull(player)) {
+				if(Methods.isInventoryFull(player)) {
 					sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
 					return true;
 				}

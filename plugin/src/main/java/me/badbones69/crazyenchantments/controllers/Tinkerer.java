@@ -97,7 +97,7 @@ public class Tinkerer implements Listener {
 													total = total + getTotalXP(item);
 													toggle = true;
 												}else {
-													if(Methods.isInvFull(player)) {
+													if(Methods.isInventoryFull(player)) {
 														player.getWorld().dropItem(player.getLocation(), inv.getItem(getSlot().get(slot)));
 													}else {
 														player.getInventory().addItem(inv.getItem(getSlot().get(slot)));
@@ -193,7 +193,7 @@ public class Tinkerer implements Listener {
 								if(player.isDead()) {
 									player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
 								}else {
-									if(Methods.isInvFull(player)) {
+									if(Methods.isInventoryFull(player)) {
 										player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
 									}else {
 										player.getInventory().addItem(inv.getItem(slot));

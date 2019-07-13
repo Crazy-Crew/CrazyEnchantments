@@ -269,7 +269,7 @@ public class PickAxes implements Listener {
 									}
 									for(ItemStack i : drops.keySet()) {
 										i.setAmount(drops.get(i));
-										if(Methods.isInvFull(player)) {
+										if(Methods.isInventoryFull(player)) {
 											new BukkitRunnable() {
 												@Override
 												public void run() {
