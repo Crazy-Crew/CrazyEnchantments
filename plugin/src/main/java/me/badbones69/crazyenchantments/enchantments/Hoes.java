@@ -88,7 +88,7 @@ public class Hoes implements Listener {
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
-		if(!e.isCancelled()) {
+		if(!e.isCancelled() && !ce.getSkippedBreakEvents().contains(e)) {
 			Player player = e.getPlayer();
 			Block block = e.getBlock();
 			if(getCrops().contains(block.getType())) {
@@ -169,9 +169,11 @@ public class Hoes implements Listener {
 			if(getCrops().contains(crop.getType())) {
 				if(ce.getNMSSupport().isFullyGrown(crop)) {
 					BlockBreakEvent event = new BlockBreakEvent(crop, player);
+					ce.addBreakEvent(event);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 						blocks.add(crop);
+						ce.removeBreakEvent(event);
 					}
 				}
 			}
@@ -185,9 +187,11 @@ public class Hoes implements Listener {
 		for(Block soil : getAreaBlocks(block)) {
 			if(soil.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS") || soil.getType() == Material.DIRT) {
 				BlockBreakEvent event = new BlockBreakEvent(soil, player);
+				ce.addBreakEvent(event);
 				Bukkit.getPluginManager().callEvent(event);
 				if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 					soilBlocks.add(soil);
+					ce.removeBreakEvent(event);
 				}
 			}
 		}

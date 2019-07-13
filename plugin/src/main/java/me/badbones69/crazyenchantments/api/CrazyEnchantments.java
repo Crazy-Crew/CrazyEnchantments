@@ -22,6 +22,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -49,6 +50,7 @@ public class CrazyEnchantments {
 	private ArrayList<String> whitelisted = new ArrayList<>();
 	private ArrayList<String> blacklisted = new ArrayList<>();
 	private ArrayList<Material> blockList = new ArrayList<>();
+	private ArrayList<BlockBreakEvent> skipBreakEvents = new ArrayList<>();
 	private ArrayList<CEnchantment> registeredEnchantments = new ArrayList<>();
 	private FileManager fileManager = FileManager.getInstance();
 	
@@ -1192,6 +1194,18 @@ public class CrazyEnchantments {
 	 */
 	public Boolean enchantStackedItems() {
 		return enchantStackedItems;
+	}
+	
+	public List<BlockBreakEvent> getSkippedBreakEvents() {
+		return skipBreakEvents;
+	}
+	
+	public void addBreakEvent(BlockBreakEvent event) {
+		skipBreakEvents.add(event);
+	}
+	
+	public void removeBreakEvent(BlockBreakEvent event) {
+		skipBreakEvents.remove(event);
 	}
 	
 	/**

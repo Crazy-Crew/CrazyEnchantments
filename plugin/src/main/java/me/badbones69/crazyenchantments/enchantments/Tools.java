@@ -47,7 +47,7 @@ public class Tools implements Listener {
 	public void onBlockBreak(BlockBreakEvent e) {
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(e.isCancelled() || block.getType() == Material.AIR
+		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e)
 		|| block.getType().toString().toLowerCase().contains("shulker_box")
 		|| block.getType().toString().toLowerCase().contains("chest")) {
 			return;
