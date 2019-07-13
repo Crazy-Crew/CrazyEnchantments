@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -40,14 +39,6 @@ public class Methods {
 	
 	public static String removeColor(String msg) {
 		return ChatColor.stripColor(msg);
-	}
-	
-	public static Plugin getPlugin() {
-		return Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
-	}
-	
-	public static void sendMultiMessage(Player player, List<String> messages) {
-		messages.forEach(message -> player.sendMessage(color(message)));
 	}
 	
 	public static Integer getRandomNumber(int range) {
@@ -124,38 +115,6 @@ public class Methods {
 		}
 	}
 	
-	public static ArrayList<String> getPotions() {
-		ArrayList<String> list = new ArrayList<>();
-		list.add("ABSORPTION");
-		list.add("BLINDNESS");
-		list.add("CONFUSION");
-		list.add("DAMAGE_RESISTANCE");
-		list.add("FAST_DIGGING");
-		list.add("FIRE_RESISTANCE");
-		list.add("GLOWING");
-		list.add("HARM");
-		list.add("HEAL");
-		list.add("HEALTH_BOOST");
-		list.add("HUNGER");
-		list.add("INCREASE_DAMAGE");
-		list.add("INVISIBILITY");
-		list.add("JUMP");
-		list.add("LEVITATION");
-		list.add("LUCK");
-		list.add("NIGHT_VISION");
-		list.add("POISON");
-		list.add("REGENERATION");
-		list.add("SATURATION");
-		list.add("SLOW");
-		list.add("SLOW_DIGGING");
-		list.add("SPEED");
-		list.add("UNLUCK");
-		list.add("WATER_BREATHING");
-		list.add("WEAKNESS");
-		list.add("WITHER");
-		return list;
-	}
-	
 	public static ItemStack removeLore(ItemStack item, String i) {
 		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();
@@ -167,26 +126,6 @@ public class Methods {
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
-	}
-	
-	public static ItemStack replaceLore(ItemStack item, String oldlore, String newlore) {
-		ArrayList<String> lore = new ArrayList<>();
-		ItemMeta m = item.getItemMeta();
-		for(String l : item.getItemMeta().getLore()) {
-			if(l.equals(oldlore)) {
-				lore.add(color(newlore));
-			}else {
-				lore.add(l);
-			}
-		}
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
-	}
-	
-	public static String percentPicker() {
-		Random i = random;
-		return Integer.toString(i.nextInt(100));
 	}
 	
 	public static String getPrefix() {
@@ -208,14 +147,6 @@ public class Methods {
 	
 	public static Player getPlayer(String name) {
 		return Bukkit.getServer().getPlayer(name);
-	}
-	
-	public static Location getPlayerLocation(Player player) {
-		return player.getLocation();
-	}
-	
-	public static void runCommand(Player player, String CMD) {
-		player.performCommand(CMD);
 	}
 	
 	public static boolean isPlayerOnline(String playerName, CommandSender sender) {
@@ -256,10 +187,6 @@ public class Methods {
 		return itemStack;
 	}
 	
-	public static String getInvName() {
-		return color(Files.CONFIG.getFile().getString("Settings.InvName"));
-	}
-	
 	public static boolean isProtected(ItemStack i) {
 		if(i.hasItemMeta()) {
 			if(i.getItemMeta().hasLore()) {
@@ -270,6 +197,15 @@ public class Methods {
 			}
 		}
 		return false;
+	}
+	
+	public static ItemStack removeProtected(ItemStack item) {
+		ItemMeta m = item.getItemMeta();
+		ArrayList<String> lore = new ArrayList<>(m.getLore());
+		lore.remove(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+		m.setLore(lore);
+		item.setItemMeta(m);
+		return item;
 	}
 	
 	public static ItemStack addLore(ItemStack item, String i) {
@@ -287,15 +223,6 @@ public class Methods {
 			lore.remove(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
 			lore.add(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
 		}
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
-	}
-	
-	public static ItemStack removeProtected(ItemStack item) {
-		ItemMeta m = item.getItemMeta();
-		ArrayList<String> lore = new ArrayList<>(m.getLore());
-		lore.remove(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
@@ -324,7 +251,7 @@ public class Methods {
 		}
 	}
 	
-	public static int getEnchAmount(ItemStack item) {
+	public static int getEnchantmentAmount(ItemStack item) {
 		int amount = 0;
 		amount += ce.getEnchantmentsOnItem(item).size();
 		if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
@@ -447,7 +374,7 @@ public class Methods {
 		fm.setPower(0);
 		fw.setFireworkMeta(fm);
 		FireworkDamageAPI.addFirework(fw);
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), fw::detonate, 2);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), fw::detonate, 2);
 	}
 	
 	public static Color getColor(String color) {
