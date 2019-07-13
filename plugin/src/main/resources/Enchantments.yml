@@ -17,16 +17,26 @@
 #   Increase: # The amount it goes up each level.
 ##########
 Enchantments:
+  #Do not change this line.
   Glowing: #Do not change these lines. If so you will get errors in console.
-    Enabled: true #Wether or not an enchantment is active
-    Name: 'Glowing' #The in-game name of the enchantment
-    Color: '&7' #The color of the enchantment on the item
-    BookColor: '&b&l' #The color of the enchantment on the book
-    MaxPower: 1 #Max lvl the enchantment goes up to
-    Enchantment-Type: 'Helmet' #The type of items that can be enchanted with the enchantment.
-    Info: #Info for the enchantment
-      Name: '&e&lGlowing &7(&bI&7)' #Name for the GUI
-      Description: #The description of what it does
+    #Wether or not an enchantment is active
+    Enabled: true
+    #The in-game name of the enchantment.
+    Name: 'Glowing'
+    #The color of the enchantment on the item.
+    Color: '&7'
+    #The color of the enchantment on the book.
+    BookColor: '&b&l'
+    #Max lvl the enchantment goes up to.
+    MaxPower: 1
+    #The type of items that can be enchanted with the enchantment.
+    Enchantment-Type: 'Helmet'
+    #Info for the enchantment
+    Info:
+      #Name if the item in the info GUI.
+      Name: '&e&lGlowing &7(&bI&7)'
+      #The description of what it does.
+      Description:
         - '&7Give you night vision'
         - '&7when you put it on you.'
         - ''
@@ -35,11 +45,13 @@ Enchantments:
         - '&7 - &9&l&nRare'
         - '&7 - &4&l&nLegendary'
         - '&6Enchantable Items: &aHelmets'
-    Categories: #All the categories the Enchantment can be found in
+    #All the categories the Enchantment can be found in
+    Categories:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  BurnShield: #Do not change this line.
+  #Do not change this line.
+  BurnShield:
     Enabled: true
     Name: 'BurnShield'
     Color: '&7'
@@ -61,7 +73,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Piercing: #Do not change this line.
+  #Do not change this line.
+  Piercing:
     Enabled: true
     Name: 'Piercing'
     Color: '&7'
@@ -86,7 +99,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  OverLoad: #Do not change this line.
+  #Do not change this line.
+  OverLoad:
     Enabled: true
     Name: 'OverLoad'
     Color: '&7'
@@ -108,7 +122,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SelfDestruct: #Do not change this line.
+  #Do not change this line.
+  SelfDestruct:
     Enabled: true
     Name: 'SelfDestruct'
     Color: '&7'
@@ -130,7 +145,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Springs: #Do not change this line.
+  #Do not change this line.
+  Springs:
     Enabled: true
     Name: 'Springs'
     Color: '&7'
@@ -152,7 +168,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Gears: #Do not change this line.
+  #Do not change this line.
+  Gears:
     Enabled: true
     Name: 'Gears'
     Color: '&7'
@@ -174,7 +191,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Hulk: #Do not change this line.
+  #Do not change this line.
+  Hulk:
     Enabled: true
     Name: 'Hulk'
     Color: '&7'
@@ -196,7 +214,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Mermaid: #Do not change this line.
+  #Do not change this line.
+  Mermaid:
     Enabled: true
     Name: 'Mermaid'
     Color: '&7'
@@ -218,7 +237,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Ninja: #Do not change this line.
+  #Do not change this line.
+  Ninja:
     Enabled: true
     Name: 'Ninja'
     Color: '&7'
@@ -240,7 +260,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Vampire: #Do not change this line.
+  #Do not change this line.
+  Vampire:
     Enabled: true
     Name: 'Vampire'
     Color: '&7'
@@ -265,7 +286,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  LifeSteal: #Do not change this line.
+  #Do not change this line.
+  LifeSteal:
     Enabled: true
     Name: 'LifeSteal'
     Color: '&7'
@@ -290,7 +312,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Doctor: #Do not change this line.
+  #Do not change this line.
+  Doctor:
     Enabled: true
     Name: 'Doctor'
     Color: '&7'
@@ -312,7 +335,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Boom: #Do not change this line.
+  #Do not change this line.
+  Boom:
     Enabled: true
     Name: 'Boom'
     Color: '&7'
@@ -337,7 +361,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Venom: #Do not change this line.
+  #Do not change this line.
+  Venom:
     Enabled: true
     Name: 'Venom'
     Color: '&7'
@@ -362,7 +387,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  DoubleDamage: #Do not change this line.
+  #Do not change this line.
+  DoubleDamage:
     Enabled: true
     Name: 'DoubleDamage'
     Color: '&7'
@@ -387,7 +413,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SlowMo: #Do not change this line.
+  #Do not change this line.
+  SlowMo:
     Enabled: true
     Name: 'SlowMo'
     Color: '&7'
@@ -412,7 +439,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blindness: #Do not change this line.
+  #Do not change this line.
+  Blindness:
     Enabled: true
     Name: 'Blindness'
     Color: '&7'
@@ -437,7 +465,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Viper: #Do not change this line.
+  #Do not change this line.
+  Viper:
     Enabled: true
     Name: 'Viper'
     Color: '&7'
@@ -462,7 +491,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  AntiGravity: #Do not change this line.
+  #Do not change this line.
+  AntiGravity:
     Enabled: true
     Name: 'AntiGravity'
     Color: '&7'
@@ -484,7 +514,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  FastTurn: #Do not change this line.
+  #Do not change this line.
+  FastTurn:
     Enabled: true
     Name: 'FastTurn'
     Color: '&7'
@@ -509,7 +540,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  LightWeight: #Do not change this line.
+  #Do not change this line.
+  LightWeight:
     Enabled: true
     Name: 'LightWeight'
     Color: '&7'
@@ -534,7 +566,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blessed: #Do not change this line.
+  #Do not change this line.
+  Blessed:
     Enabled: true
     Name: 'Blessed'
     Color: '&7'
@@ -559,7 +592,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  FeedMe: #Do not change this line.
+  #Do not change this line.
+  FeedMe:
     Enabled: true
     Name: 'FeedMe'
     Color: '&7'
@@ -584,7 +618,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Dizzy: #Do not change this line.
+  #Do not change this line.
+  Dizzy:
     Enabled: true
     Name: 'Dizzy'
     Color: '&7'
@@ -609,7 +644,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Berserk: #Do not change this line.
+  #Do not change this line.
+  Berserk:
     Enabled: true
     Name: 'Berserk'
     Color: '&7'
@@ -634,7 +670,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Cursed: #Do not change this line.
+  #Do not change this line.
+  Cursed:
     Enabled: true
     Name: 'Cursed'
     Color: '&7'
@@ -659,7 +696,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Rekt: #Do not change this line.
+  #Do not change this line.
+  Rekt:
     Enabled: true
     Name: 'Rekt'
     Color: '&7'
@@ -684,7 +722,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Enlightened: #Do not change this line.
+  #Do not change this line.
+  Enlightened:
     Enabled: true
     Name: 'Enlightened'
     Color: '&7'
@@ -709,7 +748,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Freeze: #Do not change this line.
+  #Do not change this line.
+  Freeze:
     Enabled: true
     Name: 'Freeze'
     Color: '&7'
@@ -734,7 +774,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Fortify: #Do not change this line.
+  #Do not change this line.
+  Fortify:
     Enabled: true
     Name: 'Fortify'
     Color: '&7'
@@ -759,7 +800,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Molten: #Do not change this line.
+  #Do not change this line.
+  Molten:
     Enabled: true
     Name: 'Molten'
     Color: '&7'
@@ -784,7 +826,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  PainGiver: #Do not change this line.
+  #Do not change this line.
+  PainGiver:
     Enabled: true
     Name: 'PainGiver'
     Color: '&7'
@@ -809,7 +852,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Savior: #Do not change this line.
+  #Do not change this line.
+  Savior:
     Enabled: true
     Name: 'Savior'
     Color: '&7'
@@ -834,7 +878,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Nursery: #Do not change this line.
+  #Do not change this line.
+  Nursery:
     Enabled: true
     Name: 'Nursery'
     Color: '&7'
@@ -859,7 +904,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  AutoSmelt: #Do not change this line.
+  #Do not change this line.
+  AutoSmelt:
     Enabled: true
     Name: 'AutoSmelt'
     Color: '&7'
@@ -884,7 +930,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Experience: #Do not change this line.
+  #Do not change this line.
+  Experience:
     Enabled: true
     Name: 'Experience'
     Color: '&7'
@@ -909,7 +956,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Telepathy: #Do not change this line.
+  #Do not change this line.
+  Telepathy:
     Enabled: true
     Name: 'Telepathy'
     Color: '&7'
@@ -931,7 +979,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Haste: #Do not change this line.
+  #Do not change this line.
+  Haste:
     Enabled: true
     Name: 'Haste'
     Color: '&7'
@@ -953,7 +1002,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Oxygenate: #Do not change this line.
+  #Do not change this line.
+  Oxygenate:
     Enabled: true
     Name: 'Oxygenate'
     Color: '&7'
@@ -975,7 +1025,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  IceFreeze: #Do not change this line.
+  #Do not change this line.
+  IceFreeze:
     Enabled: true
     Name: 'IceFreeze'
     Color: '&7'
@@ -1000,7 +1051,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Lightning: #Do not change this line.
+  #Do not change this line.
+  Lightning:
     Enabled: true
     Name: 'Lightning'
     Color: '&7'
@@ -1025,7 +1077,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Decapitation: #Do not change this line.
+  #Do not change this line.
+  Decapitation:
     Enabled: true
     Name: 'Decapitation'
     Color: '&7'
@@ -1050,7 +1103,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Confusion: #Do not change this line.
+  #Do not change this line.
+  Confusion:
     Enabled: true
     Name: 'Confusion'
     Color: '&7'
@@ -1075,7 +1129,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Disarmer: #Do not change this line.
+  #Do not change this line.
+  Disarmer:
     Enabled: true
     Name: 'Disarmer'
     Color: '&7'
@@ -1100,7 +1155,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Execute: #Do not change this line.
+  #Do not change this line.
+  Execute:
     Enabled: true
     Name: 'Execute'
     Color: '&7'
@@ -1122,7 +1178,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Headless: #Do not change this line.
+  #Do not change this line.
+  Headless:
     Enabled: true
     Name: 'Headless'
     Color: '&7'
@@ -1147,7 +1204,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Inquisitive: #Do not change this line.
+  #Do not change this line.
+  Inquisitive:
     Enabled: true
     Name: 'Inquisitive'
     Color: '&7'
@@ -1172,7 +1230,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Insomnia: #Do not change this line.
+  #Do not change this line.
+  Insomnia:
     Enabled: true
     Name: 'Insomnia'
     Color: '&7'
@@ -1197,7 +1256,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Nutrition: #Do not change this line.
+  #Do not change this line.
+  Nutrition:
     Enabled: true
     Name: 'Nutrition'
     Color: '&7'
@@ -1222,7 +1282,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Obliterate: #Do not change this line.
+  #Do not change this line.
+  Obliterate:
     Enabled: true
     Name: 'Obliterate'
     Color: '&7'
@@ -1247,7 +1308,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Paralyze: #Do not change this line.
+  #Do not change this line.
+  Paralyze:
     Enabled: true
     Name: 'Paralyze'
     Color: '&7'
@@ -1272,7 +1334,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SkillSwipe: #Do not change this line.
+  #Do not change this line.
+  SkillSwipe:
     Enabled: true
     Name: 'SkillSwipe'
     Color: '&7'
@@ -1297,7 +1360,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Snare: #Do not change this line.
+  #Do not change this line.
+  Snare:
     Enabled: true
     Name: 'Snare'
     Color: '&7'
@@ -1322,7 +1386,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Trap: #Do not change this line.
+  #Do not change this line.
+  Trap:
     Enabled: true
     Name: 'Trap'
     Color: '&7'
@@ -1347,7 +1412,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Wither: #Do not change this line.
+  #Do not change this line.
+  Wither:
     Enabled: true
     Name: 'Wither'
     Color: '&7'
@@ -1372,7 +1438,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Rage: #Do not change this line.
+  #Do not change this line.
+  Rage:
     Enabled: true
     Name: 'Rage'
     Color: '&7'
@@ -1394,7 +1461,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Valor: #Do not change this line.
+  #Do not change this line.
+  Valor:
     Enabled: true
     Name: 'Valor'
     Color: '&7'
@@ -1416,7 +1484,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SmokeBomb: #Do not change this line.
+  #Do not change this line.
+  SmokeBomb:
     Enabled: true
     Name: 'SmokeBomb'
     Color: '&7'
@@ -1441,7 +1510,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Drunk: #Do not change this line.
+  #Do not change this line.
+  Drunk:
     Enabled: true
     Name: 'Drunk'
     Color: '&7'
@@ -1463,7 +1533,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Voodoo: #Do not change this line.
+  #Do not change this line.
+  Voodoo:
     Enabled: true
     Name: 'Voodoo'
     Color: '&7'
@@ -1488,7 +1559,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  MultiArrow: #Do not change this line.
+  #Do not change this line.
+  MultiArrow:
     Enabled: true
     Name: 'MultiArrow'
     Color: '&7'
@@ -1513,7 +1585,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Recover: #Do not change this line.
+  #Do not change this line.
+  Recover:
     Enabled: true
     Name: 'Recover'
     Color: '&7'
@@ -1535,7 +1608,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Cactus: #Do not change this line.
+  #Do not change this line.
+  Cactus:
     Enabled: true
     Name: 'Cactus'
     Color: '&7'
@@ -1560,7 +1634,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Rocket: #Do not change this line.
+  #Do not change this line.
+  Rocket:
     Enabled: true
     Name: 'Rocket'
     Color: '&7'
@@ -1585,7 +1660,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Angel: #Do not change this line.
+  #Do not change this line.
+  Angel:
     Enabled: true
     Name: 'Angel'
     Color: '&7'
@@ -1607,7 +1683,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  HellForged: #Do not change this line.
+  #Do not change this line.
+  HellForged:
     Enabled: true
     Name: 'HellForged'
     Color: '&7'
@@ -1632,7 +1709,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Commander: #Do not change this line.
+  #Do not change this line.
+  Commander:
     Enabled: true
     Name: 'Commander'
     Color: '&7'
@@ -1654,7 +1732,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  StormCaller: #Do not change this line.
+  #Do not change this line.
+  StormCaller:
     Enabled: true
     Name: 'StormCaller'
     Color: '&7'
@@ -1679,7 +1758,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Leadership: #Do not change this line.
+  #Do not change this line.
+  Leadership:
     Enabled: true
     Name: 'Leadership'
     Color: '&7'
@@ -1701,7 +1781,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Implants: #Do not change this line.
+  #Do not change this line.
+  Implants:
     Enabled: true
     Name: 'Implants'
     Color: '&7'
@@ -1726,7 +1807,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Wings: #Do not change this line.
+  #Do not change this line.
+  Wings:
     Enabled: true
     Name: 'Wings'
     Color: '&7'
@@ -1748,7 +1830,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blast: #Do not change this line.
+  #Do not change this line.
+  Blast:
     Enabled: true
     Name: 'Blast'
     Color: '&7'
@@ -1770,7 +1853,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Furnace: #Do not change this line.
+  #Do not change this line.
+  Furnace:
     Enabled: true
     Name: 'Furnace'
     Color: '&7'
@@ -1792,7 +1876,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Blizzard: #Do not change this line.
+  #Do not change this line.
+  Blizzard:
     Enabled: true
     Name: 'Blizzard'
     Color: '&7'
@@ -1814,7 +1899,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  AcidRain: #Do not change this line.
+  #Do not change this line.
+  AcidRain:
     Enabled: true
     Name: 'AcidRain'
     Color: '&7'
@@ -1836,7 +1922,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  SandStorm: #Do not change this line.
+  #Do not change this line.
+  SandStorm:
     Enabled: true
     Name: 'SandStorm'
     Color: '&7'
@@ -1858,7 +1945,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Radiant: #Do not change this line.
+  #Do not change this line.
+  Radiant:
     Enabled: true
     Name: 'Radiant'
     Color: '&7'
@@ -1880,7 +1968,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Intimidate: #Do not change this line.
+  #Do not change this line.
+  Intimidate:
     Enabled: true
     Name: 'Intimidate'
     Color: '&7'
@@ -1902,7 +1991,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Pull: #Do not change this line.
+  #Do not change this line.
+  Pull:
     Enabled: true
     Name: 'Pull'
     Color: '&7'
@@ -1927,7 +2017,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Tamer: #Do not change this line.
+  #Do not change this line.
+  Tamer:
     Enabled: true
     Name: 'Tamer'
     Color: '&7'
@@ -1949,7 +2040,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Guards: #Do not change this line.
+  #Do not change this line.
+  Guards:
     Enabled: true
     Name: 'Guards'
     Color: '&7'
@@ -1971,7 +2063,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Infestation: #Do not change this line.
+  #Do not change this line.
+  Infestation:
     Enabled: true
     Name: 'Infestation'
     Color: '&7'
@@ -1993,7 +2086,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Necromancer: #Do not change this line.
+  #Do not change this line.
+  Necromancer:
     Enabled: true
     Name: 'Necromancer'
     Color: '&7'
@@ -2015,7 +2109,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Sticky-Shot: #Do not change this line.
+  #Do not change this line.
+  Sticky-Shot:
     Enabled: true
     Name: 'StickyShot'
     Color: '&7'
@@ -2040,7 +2135,8 @@ Enchantments:
       - 'Common'
       - 'Rare'
       - 'Legendary'
-  Disorder: #Do not change this line.
+  #Do not change this line.
+  Disorder:
     Enabled: true
     Name: 'Disorder'
     Color: '&7'
@@ -2061,7 +2157,8 @@ Enchantments:
         - '&6Enchantable Items: &aSword'
     Categories:
       - 'Legendary'
-  Charge: #Do not change this line.
+  #Do not change this line.
+  Charge:
     Enabled: true
     Name: 'Charge'
     Color: '&7'
@@ -2079,7 +2176,8 @@ Enchantments:
         - '&6Enchantable Items: &aSword'
     Categories:
       - 'Rare'
-  Revenge: #Do not change this line.
+  #Do not change this line.
+  Revenge:
     Enabled: true
     Name: 'Revenge'
     Color: '&7'
@@ -2098,7 +2196,8 @@ Enchantments:
         - '&6Enchantable Items: &aSword'
     Categories:
       - 'Rare'
-  BattleCry: #Do not change this line.
+  #Do not change this line.
+  BattleCry:
     Enabled: true
     Name: 'BattleCry'
     Color: '&7'
@@ -2120,7 +2219,8 @@ Enchantments:
         - '&6Enchantable Items: &aAxe'
     Categories:
       - 'Legendary'
-  Famished: #Do not change this line.
+  #Do not change this line.
+  Famished:
     Enabled: true
     Name: 'Famished'
     Color: '&7'
@@ -2142,7 +2242,8 @@ Enchantments:
         - '&6Enchantable Items: &aSword'
     Categories:
       - 'Rare'
-  GreenThumb: #Do not change this line.
+  #Do not change this line.
+  GreenThumb:
     Enabled: true
     Name: 'GreenThumb'
     Color: '&7'
@@ -2165,7 +2266,8 @@ Enchantments:
         - '&6Enchantable Items: &aHoe'
     Categories:
       - 'Rare'
-  Harvester: #Do not change this line.
+  #Do not change this line.
+  Harvester:
     Enabled: true
     Name: 'Harvester'
     Color: '&7'
@@ -2184,7 +2286,8 @@ Enchantments:
         - '&6Enchantable Items: &aHoe'
     Categories:
       - 'Common'
-  Tiller: #Do not change this line.
+  #Do not change this line.
+  Tiller:
     Enabled: true
     Name: 'Tiller'
     Color: '&7'
@@ -2206,7 +2309,8 @@ Enchantments:
         - '&6Enchantable Items: &aHoe'
     Categories:
       - 'Common'
-  Planter: #Do not change this line.
+  #Do not change this line.
+  Planter:
     Enabled: true
     Name: 'Planter'
     Color: '&7'
