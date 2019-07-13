@@ -165,9 +165,13 @@ public class Tools implements Listener {
 								}
 							}
 						}
+						if(block.getType() == Material.COCOA) {
+							drops.put(new ItemBuilder().setMaterial("COCOA_BEANS", "INK_SACK:3").build(),
+							ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
+						}
 						for(ItemStack droppedItem : drops.keySet()) {
 							if(!ce.useNewMaterial()) {
-								if(droppedItem.getType() == Material.matchMaterial("INK_SACK")) {//Changes ink sacks to lapis if on 1.12.2-
+								if(droppedItem.getType() == Material.matchMaterial("INK_SACK") && droppedItem.getDurability() != 3) {//Changes ink sacks to lapis if on 1.12.2-
 									droppedItem.setDurability((short) 4);
 								}
 							}
