@@ -56,7 +56,7 @@ public class Tools implements Listener {
 		if(player.getGameMode() != GameMode.CREATIVE) {
 			ItemStack item = Methods.getItemInHand(player);
 			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-			if(enchantments.contains(CEnchantments.TELEPATHY) && !enchantments.contains(CEnchantments.BLAST)) {
+			if(enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
 				if(CEnchantments.TELEPATHY.isActivated()) {
 					if(item.getItemMeta().hasEnchants()) {
 						if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
@@ -70,14 +70,14 @@ public class Tools implements Listener {
 					if(!event.isCancelled()) {
 						HashMap<ItemStack, Integer> drops = new HashMap<>();
 						for(ItemStack drop : block.getDrops()) {
-							if(enchantments.contains(CEnchantments.FURNACE) && isOre(block.getType())) {
+							if(enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && isOre(block.getType())) {
 								drop = getOreDrop(block.getType());
 								if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 									if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
 										drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 									}
 								}
-							}else if(enchantments.contains(CEnchantments.AUTOSMELT) && isOre(block.getType())) {
+							}else if(enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && isOre(block.getType())) {
 								if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
 									drop = getOreDrop(block.getType());
 									drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
@@ -98,7 +98,7 @@ public class Tools implements Listener {
 								if(item.getItemMeta().hasEnchants()) {
 									if(!item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 										if(getXPOres().contains(block.getType())) {
-											if(!enchantments.contains(CEnchantments.EXPERIENCE)) {
+											if(!enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 												ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 												orb.setExperience(Methods.percentPick(7, 3));
 											}
@@ -106,14 +106,14 @@ public class Tools implements Listener {
 									}
 								}else {
 									if(getXPOres().contains(block.getType())) {
-										if(!enchantments.contains(CEnchantments.EXPERIENCE)) {
+										if(!enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3));
 										}
 									}
 								}
 							}
-							if(enchantments.contains(CEnchantments.EXPERIENCE)) {
+							if(enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 								if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
 									int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
 									if(isOre(block.getType())) {
