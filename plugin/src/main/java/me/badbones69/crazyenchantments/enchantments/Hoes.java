@@ -124,7 +124,7 @@ public class Hoes implements Listener {
 											droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT).build());
 											droppedItems.add(new ItemBuilder().setMaterial("WHEAT_SEEDS", "SEEDS").setAmount(random.nextInt(3)).build());//Wheat drops 0-3 seeds.
 										}else if(crop.getType() == ce.getMaterial("BEETROOTS", "BEETROOT_BLOCK")) {
-											droppedItems.add(new ItemBuilder().setMaterial("BEETROOTS", "BEETROOT").build());
+											droppedItems.add(new ItemBuilder().setMaterial("BEETROOT").build());
 											droppedItems.add(new ItemBuilder().setMaterial("BEETROOT_SEEDS").setAmount(random.nextInt(3)).build());//BeetRoots drops 0-3 seeds.
 										}else if(crop.getType() == ce.getMaterial("POTATOES", "POTATO")) {
 											droppedItems.add(new ItemBuilder().setMaterial("POTATO", "POTATO_ITEM").setAmount(random.nextInt(4) + 1).build());//Potatoes drop 1-4 of them self's.
