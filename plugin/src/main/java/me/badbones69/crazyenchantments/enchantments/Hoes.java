@@ -25,6 +25,9 @@ public class Hoes implements Listener {
 	private List<Material> seedlings;
 	private List<Material> crops;
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private Material soilBlock = ce.getMaterial("FARMLAND", "SOIL");
+	private Material grassBlock = ce.getMaterial("GRASS_BLOCK", "GRASS");
+	private HashMap<Material, Material> planterSeeds;
 	private HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 	
 	@EventHandler
@@ -111,6 +114,69 @@ public class Hoes implements Listener {
 		}
 	}
 	
+	
+	private boolean plantSeedSuccess(ItemStack hoe, Block soil, Player player, boolean hasGreenThumb) {
+		boolean isSoulSand = soil.getType() == Material.SOUL_SAND;
+		Material seedType = null;
+		ItemStack playerSeedItem = null;
+		Block plant = soil.getLocation().add(0, 1, 0).getBlock();
+		if(plant.getType() == Material.AIR) {
+			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+				if(isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
+					seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
+					playerSeedItem = player.getEquipment().getItemInOffHand();
+					if(playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+						seedType = null;
+					}
+				}else {
+					seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
+					playerSeedItem = player.getEquipment().getItemInOffHand();
+					if(playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+						seedType = null;//Makes sure nether warts are not put on soil.
+					}
+				}
+			}
+			if(seedType == null) {
+				for(int slot = 0; slot < 9; slot++) {
+					if(isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
+						seedType = getPlanterSeed(player.getInventory().getItem(slot));
+						playerSeedItem = player.getInventory().getItem(slot);
+						if(playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+							seedType = null;
+						}else {
+							if(seedType != null) {
+								break;
+							}
+						}
+					}else {
+						seedType = getPlanterSeed(player.getInventory().getItem(slot));
+						playerSeedItem = player.getInventory().getItem(slot);
+						if(playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+							seedType = null;//Makes sure nether warts are not put on soil.
+						}else {
+							if(seedType != null) {
+								break;
+							}
+						}
+					}
+				}
+			}
+			if(seedType != null) {
+				if(soil.getType() != soilBlock && !isSoulSand) {
+					soil.setType(soilBlock);
+				}
+				if(player.getGameMode() != GameMode.CREATIVE) {
+					Methods.removeItem(playerSeedItem, player);//Take seed from player
+				}
+				plant.setType(seedType);
+				if(hasGreenThumb) {
+					fullyGrowPlant(hoe, plant, player);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 	private List<Material> getSeedlings() {
 		if(seedlings == null) {
 			seedlings = new ArrayList<>();
@@ -159,8 +225,36 @@ public class Hoes implements Listener {
 				Material.matchMaterial("POTATO"),
 				Material.matchMaterial("NETHER_WARTS")));
 			}
+	private Material getPlanterSeed(ItemStack item) {
+		return item != null ? getPlanterSeed(item.getType()) : null;
+	}
+	
+	private Material getPlanterSeed(Block block) {
+		return getPlanterSeed(block.getType());
+	}
+	
+	private Material getPlanterSeed(Material material) {
+		if(planterSeeds == null) {
+			planterSeeds = new HashMap<>();//Key == Item : Value == BlockType
+			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
+				planterSeeds.put(Material.matchMaterial("BEETROOT_SEEDS"), Material.matchMaterial("BEETROOT_BLOCK"));
+			}
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				planterSeeds.put(Material.matchMaterial("WHEAT_SEEDS"), Material.matchMaterial("WHEAT"));
+				planterSeeds.put(Material.matchMaterial("BEETROOT_SEEDS"), Material.matchMaterial("BEETROOTS"));
+				planterSeeds.put(Material.matchMaterial("POTATO"), Material.matchMaterial("POTATOES"));
+				planterSeeds.put(Material.matchMaterial("CARROT"), Material.matchMaterial("CARROTS"));
+				planterSeeds.put(Material.matchMaterial("NETHER_WART"), Material.matchMaterial("NETHER_WART"));
+			}else {
+				planterSeeds.put(Material.matchMaterial("SEEDS"), Material.matchMaterial("CROPS"));
+				planterSeeds.put(Material.matchMaterial("POTATO_ITEM"), Material.matchMaterial("POTATO"));
+				planterSeeds.put(Material.matchMaterial("CARROT_ITEM"), Material.matchMaterial("CARROT"));
+				planterSeeds.put(Material.matchMaterial("NETHER_STALK"), Material.matchMaterial("NETHER_WARTS"));
+			}
+			planterSeeds.put(Material.MELON_SEEDS, Material.MELON_STEM);
+			planterSeeds.put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
 		}
-		return crops;
+		return material != null ? planterSeeds.get(material) : null;
 	}
 	
 	private List<Block> getAreaCrops(Player player, Block block, BlockFace blockFace) {

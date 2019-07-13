@@ -114,7 +114,8 @@ public enum CEnchantments {
 	FAMISHED("Famished", EnchantmentType.getFromName("Sword"), 10, 5),
 	GREENTHUMB("GreenThumb", EnchantmentType.getFromName("Hoe"), 10, 10),
 	HARVESTER("Harvester", EnchantmentType.getFromName("Hoe")),
-	TILLER("Tiller", EnchantmentType.getFromName("Hoe"));
+	TILLER("Tiller", EnchantmentType.getFromName("Hoe")),
+	PLANTER("Planter", EnchantmentType.getFromName("Hoe"));
 	
 	private String name;
 	private EnchantmentType type;

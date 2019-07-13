@@ -2206,3 +2206,24 @@ Enchantments:
         - '&6Enchantable Items: &aHoe'
     Categories:
       - 'Common'
+  Planter: #Do not change this line.
+    Enabled: true
+    Name: 'Planter'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Hoe'
+    Info:
+      Name: '&e&lPlanter &7(&bI&7)'
+      Description:
+        - '&7When tilling up soil'
+        - '&7it will automatically plant'
+        - '&7a seed in your off-hand or'
+        - '&7in your hot-bar going from the'
+        - '&7right side to the left side.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Common'
