@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.api.events;
 
+import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -10,19 +11,19 @@ import org.bukkit.inventory.ItemStack;
 public class BookFailEvent extends Event implements Cancellable {
 	
 	private Player player;
-	private Integer level;
-	private Boolean cancelled;
+	private int level;
+	private boolean cancelled;
 	private ItemStack enchantedItem;
 	private CEnchantment enchantment;
-	private ItemStack enchantmentBook;
+	private CEBook ceBook;
 	private static final HandlerList handlers = new HandlerList();
 	
-	public BookFailEvent(Player player, CEnchantment enchantment, Integer level, ItemStack enchantedItem, ItemStack enchantmentBook) {
-		this.level = level;
+	public BookFailEvent(Player player, ItemStack enchantedItem, CEBook ceBook) {
+		this.level = ceBook.getLevel();
 		this.player = player;
-		this.enchantment = enchantment;
+		this.enchantment = ceBook.getEnchantment();
 		this.enchantedItem = enchantedItem;
-		this.enchantmentBook = enchantmentBook;
+		this.ceBook = ceBook;
 		this.cancelled = false;
 	}
 	
@@ -30,7 +31,7 @@ public class BookFailEvent extends Event implements Cancellable {
 		return player;
 	}
 	
-	public Integer getLevel() {
+	public int getLevel() {
 		return level;
 	}
 	
@@ -42,8 +43,8 @@ public class BookFailEvent extends Event implements Cancellable {
 		return enchantment;
 	}
 	
-	public ItemStack getEnchantmentBook() {
-		return enchantmentBook;
+	public CEBook getCEBook() {
+		return ceBook;
 	}
 	
 	@Override
