@@ -179,7 +179,6 @@ public enum Messages {
 		boolean saveFile = false;
 		for(Messages message : values()) {
 			if(!messages.contains("Messages." + message.getPath())) {
-				System.out.println(message.getPath());
 				saveFile = true;
 				if(message.getDefaultMessage() != null) {
 					messages.set("Messages." + message.getPath(), message.getDefaultMessage());
