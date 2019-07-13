@@ -30,6 +30,7 @@ import java.util.*;
 
 public class Methods {
 	
+	private static Random random = new Random();
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private static boolean isV1_13_Up = Version.getCurrentVersion().isNewer(Version.v1_12_R1);
 	
@@ -38,8 +39,7 @@ public class Methods {
 	}
 	
 	public static String removeColor(String msg) {
-		msg = ChatColor.stripColor(msg);
-		return msg;
+		return ChatColor.stripColor(msg);
 	}
 	
 	public static Plugin getPlugin() {
@@ -47,13 +47,11 @@ public class Methods {
 	}
 	
 	public static void sendMultiMessage(Player player, List<String> messages) {
-		for(String msg : messages) {
-			player.sendMessage(color(msg));
-		}
+		messages.forEach(message -> player.sendMessage(color(message)));
 	}
 	
 	public static Integer getRandomNumber(int range) {
-		return ((new Random().nextInt(range - 1)) + 1);
+		return random.nextInt(range - 1) + 1;
 	}
 	
 	public static Integer getRandomNumber(String range) {
@@ -62,7 +60,7 @@ public class Methods {
 		if(isInt(split[0]) && isInt(split[1])) {
 			int max = Integer.parseInt(split[1]) + 1;
 			int min = Integer.parseInt(split[0]);
-			number = min + new Random().nextInt(max - min);
+			number = min + random.nextInt(max - min);
 		}
 		return number;
 	}
@@ -187,7 +185,7 @@ public class Methods {
 	}
 	
 	public static String percentPicker() {
-		Random i = new Random();
+		Random i = random;
 		return Integer.toString(i.nextInt(100));
 	}
 	
@@ -231,22 +229,31 @@ public class Methods {
 	}
 	
 	public static void removeItem(ItemStack item, Player player) {
-		if(item.getAmount() <= 1) {
+		removeItem(item, player, 1);
+	}
+	
+	public static void removeItem(ItemStack item, Player player, int amount) {
+		if(item.getAmount() <= amount) {
 			player.getInventory().removeItem(item);
 		}
-		if(item.getAmount() > 1) {
-			item.setAmount(item.getAmount() - 1);
+		if(item.getAmount() > amount) {
+			item.setAmount(item.getAmount() - amount);
 		}
+		player.updateInventory();
 	}
 	
 	public static ItemStack removeItem(ItemStack item) {
-		ItemStack i = item.clone();
-		if(item.getAmount() <= 1) {
-			i = new ItemStack(Material.AIR);
+		return removeItem(item, 1);
+	}
+	
+	public static ItemStack removeItem(ItemStack item, int amount) {
+		ItemStack itemStack = item.clone();
+		if(item.getAmount() <= amount) {
+			itemStack = new ItemStack(Material.AIR);
 		}else {
-			i.setAmount(item.getAmount() - 1);
+			itemStack.setAmount(item.getAmount() - amount);
 		}
-		return i;
+		return itemStack;
 	}
 	
 	public static String getInvName() {
@@ -381,7 +388,7 @@ public class Methods {
 	}
 	
 	public static boolean randomPicker(int max) {
-		Random number = new Random();
+		Random number = random;
 		if(max <= 0) {
 			return true;
 		}
@@ -393,12 +400,12 @@ public class Methods {
 		if(max <= min || max <= 0) {
 			return true;
 		}
-		int chance = 1 + new Random().nextInt(max);
+		int chance = 1 + random.nextInt(max);
 		return chance >= 1 && chance <= min;
 	}
 	
 	public static Integer percentPick(int max, int min) {
-		Random i = new Random();
+		Random i = random;
 		if(max == min) {
 			return max;
 		}else {
@@ -689,7 +696,7 @@ public class Methods {
 		newMaterial ? "GREEN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:13",// 13
 		newMaterial ? "RED_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:14",// 14
 		newMaterial ? "BLACK_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:15");// 15
-		return new ItemBuilder().setMaterial(colors.get(new Random().nextInt(colors.size())));
+		return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
 	}
 	
 }
