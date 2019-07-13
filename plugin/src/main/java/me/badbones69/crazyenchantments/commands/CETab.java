@@ -41,10 +41,10 @@ public class CETab implements TabCompleter {
 				case "remove":
 				case "add":
 				case "book":
-					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getName()));
+					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getCustomName().replace(" ", "_")));
 					break;
 				case "spawn":
-					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getName()));
+					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getCustomName().replace(" ", "_")));
 					ce.getCategories().forEach(category -> completions.add(category.getName()));
 					break;
 				case "scroll":
