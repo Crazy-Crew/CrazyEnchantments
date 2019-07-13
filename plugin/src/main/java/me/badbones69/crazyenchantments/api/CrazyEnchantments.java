@@ -741,8 +741,9 @@ public class CrazyEnchantments {
 	 */
 	public CEnchantment getEnchantmentFromName(String enchantment) {
 		for(CEnchantment enchant : registeredEnchantments) {
-			if(enchant.getName().replace("-", "").equalsIgnoreCase(enchantment.replace("-", "")) ||
-			enchant.getCustomName().replace("-", "").equalsIgnoreCase(enchantment.replace("-", ""))) {
+			enchantment = enchantment.replace("-", "").replace("_", "").replace("", "");
+			if(enchant.getName().replace("-", "").replace("_", "").replace("", "").equalsIgnoreCase(enchantment) ||
+			enchant.getCustomName().replace("-", "").replace("_", "").replace("", "").equalsIgnoreCase(enchantment)) {
 				return enchant;
 			}
 		}
