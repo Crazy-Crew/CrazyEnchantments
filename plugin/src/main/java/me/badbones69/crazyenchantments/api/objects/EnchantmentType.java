@@ -2,8 +2,8 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;

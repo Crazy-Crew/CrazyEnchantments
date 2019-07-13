@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.api.enums;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.List;

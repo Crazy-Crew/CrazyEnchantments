@@ -3,10 +3,10 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;

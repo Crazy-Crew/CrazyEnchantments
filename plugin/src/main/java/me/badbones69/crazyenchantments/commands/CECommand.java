@@ -25,9 +25,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.simpleyaml.configuration.file.YamlFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class CECommand implements CommandExecutor {
 	
@@ -105,14 +108,47 @@ public class CECommand implements CommandExecutor {
 					}
 				}
 				if(brokenEnchantments.isEmpty()) {
-					sender.sendMessage(Methods.getPrefix() + Methods.color("&aAll enchantments loaded."));
+					sender.sendMessage(Methods.getPrefix("&aAll enchantments are loaded."));
 				}else {
 					int i = 1;
-					sender.sendMessage(Methods.getPrefix() + Methods.color("&cBroken Enchantments:"));
+					sender.sendMessage(Methods.getPrefix("&cBroken Enchantments:"));
 					for(String broke : brokenEnchantments) {
 						sender.sendMessage(Methods.color("&c#" + i + ": &6" + broke));
 						i++;
 					}
+					sender.sendMessage(Methods.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
+					sender.sendMessage(Methods.color("&7- &cMissing from the Enchantments.yml"));
+					sender.sendMessage(Methods.color("&7- &c<Enchantment Name>: option was changed"));
+					sender.sendMessage(Methods.color("&7- &cYaml format has been broken."));
+				}
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("fix")) {
+				if(!Methods.hasPermission(sender, "fix", true)) {
+					return true;
+				}
+				ArrayList<CEnchantments> brokenEnchantments = new ArrayList<>();
+				YamlFile file = Files.ENCHANTMENTS.getFile();
+				for(CEnchantments enchantment : CEnchantments.values()) {
+					if(!file.contains("Enchantments." + enchantment.getName())) {
+						brokenEnchantments.add(enchantment);
+					}
+				}
+				sender.sendMessage(Methods.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
+				for(CEnchantments enchantment : brokenEnchantments) {
+					String path = "Enchantments." + enchantment.getName();
+					file.set(path + ".Enabled", true);
+					file.set(path + ".Name", enchantment.getName());
+					file.set(path + ".Color", "&7");
+					file.set(path + ".BookColor", "&b&l");
+					file.set(path + ".MaxPower", 1);
+					file.set(path + ".Enchantment-Type", enchantment.getType().getName());
+					file.set(path + ".Info.Name", "&e&l" + enchantment.getName() + " &7(&bI&7)");
+					file.set(path + ".Info.Description", Arrays.asList("Line 1", "Line 2"));
+					List<String> categories = new ArrayList<>();
+					ce.getCategories().forEach(category -> categories.add(category.getName()));
+					file.set(path + ".Categories", categories);
+					Files.ENCHANTMENTS.saveFile();
 				}
 				return true;
 			}

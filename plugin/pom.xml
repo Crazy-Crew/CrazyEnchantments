@@ -43,6 +43,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.github.Carleslc</groupId>
+            <artifactId>Simple-YAML</artifactId>
+            <version>1.4.1</version>
+            <scope>compile</scope>
+            <optional>false</optional>
+        </dependency>
+        <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>1.5.09-SNAPSHOT</version>
@@ -225,6 +232,7 @@
                     <artifactSet>
                         <includes>
                             <include>me.badbones69:*</include>
+                            <include>com.github.Carleslc:*</include>
                         </includes>
                     </artifactSet>
                     <!--                    <outputFile>/Users/badbones/Desktop/Minecraft/Server/plugins/CrazyEnchantments[v${project.version}].jar</outputFile>-->
