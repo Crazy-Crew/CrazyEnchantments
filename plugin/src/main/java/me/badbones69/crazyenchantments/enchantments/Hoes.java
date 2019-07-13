@@ -119,7 +119,7 @@ public class Hoes implements Listener {
 									if(hasTelepathy) {
 										List<ItemStack> droppedItems = new ArrayList<>();
 										if(crop.getType() == Material.COCOA) {
-											droppedItems.add(new ItemBuilder().setMaterial("INK_SACK:3", "COCOA_BEANS").setAmount(random.nextInt(2) + 2).build());//Coco drops 2-3 beans.
+											droppedItems.add(new ItemBuilder().setMaterial("COCOA_BEANS", "INK_SACK:3").setAmount(random.nextInt(2) + 2).build());//Coco drops 2-3 beans.
 										}else if(crop.getType() == ce.getMaterial("WHEAT", "CROPS")) {
 											droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT).build());
 											droppedItems.add(new ItemBuilder().setMaterial("WHEAT_SEEDS", "SEEDS").setAmount(random.nextInt(3)).build());//Wheat drops 0-3 seeds.
