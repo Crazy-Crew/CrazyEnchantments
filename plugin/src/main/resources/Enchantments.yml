@@ -2301,7 +2301,7 @@ Enchantments:
         - '&7it will automatically till soil'
         - '&7in a 3x3 area of the tilled soil.'
         - '&7It will also automatically hydrate'
-        - '&7the soil if it is 3 blocks away from'
+        - '&7the soil if it is 4 blocks away from'
         - '&7a water source block.'
         - ''
         - '&6Found in:'
