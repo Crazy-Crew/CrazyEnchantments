@@ -120,8 +120,8 @@ public enum CEnchantments {
 	private String name;
 	private EnchantmentType type;
 	private Boolean hasChanceSystem;
-	private Integer chance;
-	private Integer chanceIncrease;
+	private int chance;
+	private int chanceIncrease;
 	
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
@@ -145,7 +145,7 @@ public enum CEnchantments {
 	 * @param chance The chance the enchantment has to active.
 	 * @param chanceIncrease The amount the chance increases by every level.
 	 */
-	private CEnchantments(String name, EnchantmentType type, Integer chance, Integer chanceIncrease) {
+	private CEnchantments(String name, EnchantmentType type, int chance, int chanceIncrease) {
 		this.name = name;
 		this.type = type;
 		this.chance = chance;
@@ -201,7 +201,7 @@ public enum CEnchantments {
 	 *
 	 * @return The chance of the enchantment activating.
 	 */
-	public Integer getChance() {
+	public int getChance() {
 		return chance;
 	}
 	
@@ -212,7 +212,7 @@ public enum CEnchantments {
 	 *
 	 * @return The amount the chance increases by every level.
 	 */
-	public Integer getChanceIncrease() {
+	public int getChanceIncrease() {
 		return chanceIncrease;
 	}
 	
@@ -273,7 +273,7 @@ public enum CEnchantments {
 	 * @param item The item that is being checked.
 	 * @return The level of the enchantment that is on the item.
 	 */
-	public Integer getLevel(ItemStack item) {
+	public int getLevel(ItemStack item) {
 		return getEnchantment().getPower(item);
 	}
 	

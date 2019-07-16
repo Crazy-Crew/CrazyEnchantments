@@ -21,8 +21,8 @@ public enum Dust {
 	private String name;
 	private String configName;
 	private List<String> knownNames;
-	private Integer max;
-	private Integer min;
+	private int max;
+	private int min;
 	
 	private Dust(String name, String configName, List<String> knowNames) {
 		this.name = name;

@@ -41,11 +41,11 @@ public class Methods {
 		return ChatColor.stripColor(msg);
 	}
 	
-	public static Integer getRandomNumber(int range) {
+	public static int getRandomNumber(int range) {
 		return random.nextInt(range - 1) + 1;
 	}
 	
-	public static Integer getRandomNumber(String range) {
+	public static int getRandomNumber(String range) {
 		int number = 1;
 		String[] split = range.split("-");
 		if(isInt(split[0]) && isInt(split[1])) {
@@ -266,7 +266,7 @@ public class Methods {
 		return amount;
 	}
 	
-	public static Integer getPercent(String Argument, ItemStack item, List<String> Msg) {
+	public static int getPercent(String Argument, ItemStack item, List<String> Msg) {
 		List<String> lore = item.getItemMeta().getLore();
 		String arg = "100";
 		for(String oLine : Msg) {
