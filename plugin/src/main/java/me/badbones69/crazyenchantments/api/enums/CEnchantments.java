@@ -154,6 +154,31 @@ public enum CEnchantments {
 	}
 	
 	/**
+	 * Get a CEnchantments from the enchantment name.
+	 * @param enchant The name of the enchantment.
+	 * @return Returns the CEnchantments but if not found it will be null.
+	 */
+	public static CEnchantments getFromName(String enchant) {
+		for(CEnchantments ench : values()) {
+			if(ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) {
+				return ench;
+			}
+		}
+		return null;
+	}
+	
+	public static List<CEnchantments> getFromeNames(List<CEnchantment> enchantments) {
+		List<CEnchantments> cEnchantments = new ArrayList<>();
+		for(CEnchantment cEnchantment : enchantments) {
+			CEnchantments enchantment = getFromName(cEnchantment.getName());
+			if(enchantment != null) {
+				cEnchantments.add(enchantment);
+			}
+		}
+		return cEnchantments;
+	}
+	
+	/**
 	 *
 	 * @return The name of the enchantment.
 	 */
@@ -275,31 +300,6 @@ public enum CEnchantments {
 	 */
 	public Boolean hasChanceSystem() {
 		return hasChanceSystem;
-	}
-	
-	/**
-	 * Get a CEnchantments from the enchantment name.
-	 * @param enchant The name of the enchantment.
-	 * @return Returns the CEnchantments but if not found it will be null.
-	 */
-	public static CEnchantments getFromName(String enchant) {
-		for(CEnchantments ench : values()) {
-			if(ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) {
-				return ench;
-			}
-		}
-		return null;
-	}
-	
-	public static List<CEnchantments> getFromeNames(List<CEnchantment> enchantments) {
-		List<CEnchantments> cEnchantments = new ArrayList<>();
-		for(CEnchantment cEnchantment : enchantments) {
-			CEnchantments enchantment = getFromName(cEnchantment.getName());
-			if(enchantment != null) {
-				cEnchantments.add(enchantment);
-			}
-		}
-		return cEnchantments;
 	}
 	
 }

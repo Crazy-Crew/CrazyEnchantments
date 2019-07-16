@@ -87,14 +87,6 @@ public class CEBook {
 	}
 	
 	/**
-	 *
-	 * @param enchantment Set the enchantment.
-	 */
-	public void setEnchantment(CEnchantment enchantment) {
-		this.enchantment = enchantment;
-	}
-	
-	/**
 	 * Get the CEEnchantment.
 	 * @return The CEEnchantment.
 	 */
@@ -104,10 +96,10 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param toggle Toggle on or off the glowing effect.
+	 * @param enchantment Set the enchantment.
 	 */
-	public void setGlowing(Boolean toggle) {
-		this.glowing = toggle;
+	public void setEnchantment(CEnchantment enchantment) {
+		this.enchantment = enchantment;
 	}
 	
 	/**
@@ -120,10 +112,10 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param amount Set the amount of books.
+	 * @param toggle Toggle on or off the glowing effect.
 	 */
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public void setGlowing(Boolean toggle) {
+		this.glowing = toggle;
 	}
 	
 	/**
@@ -136,10 +128,10 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param level Set the tier of the enchantment.
+	 * @param amount Set the amount of books.
 	 */
-	public void setLevel(int level) {
-		this.level = level;
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 	
 	/**
@@ -152,10 +144,10 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param destroy_rate Set the destroy rate on the book.
+	 * @param level Set the tier of the enchantment.
 	 */
-	public void setDestroyRate(int destroy_rate) {
-		this.destroy_rate = destroy_rate;
+	public void setLevel(int level) {
+		this.level = level;
 	}
 	
 	/**
@@ -168,10 +160,10 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param success_rate Set the success rate on the book.
+	 * @param destroy_rate Set the destroy rate on the book.
 	 */
-	public void setSuccessRate(int success_rate) {
-		this.success_rate = success_rate;
+	public void setDestroyRate(int destroy_rate) {
+		this.destroy_rate = destroy_rate;
 	}
 	
 	/**
@@ -180,6 +172,14 @@ public class CEBook {
 	 */
 	public int getSuccessRate() {
 		return this.success_rate;
+	}
+	
+	/**
+	 *
+	 * @param success_rate Set the success rate on the book.
+	 */
+	public void setSuccessRate(int success_rate) {
+		this.success_rate = success_rate;
 	}
 	
 	/**

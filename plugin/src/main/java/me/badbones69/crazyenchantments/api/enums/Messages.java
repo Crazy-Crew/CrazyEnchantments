@@ -77,6 +77,43 @@ public enum Messages {
 		this.defaultListMessage = defaultListMessage;
 	}
 	
+	public static String convertList(List<String> list) {
+		String message = "";
+		for(String m : list) {
+			message += Methods.color(m) + "\n";
+		}
+		return message;
+	}
+	
+	public static String convertList(List<String> list, HashMap<String, String> placeholders) {
+		String message = "";
+		for(String m : list) {
+			message += Methods.color(m) + "\n";
+		}
+		for(String ph : placeholders.keySet()) {
+			message = Methods.color(message.replaceAll(ph, placeholders.get(ph)));
+		}
+		return message;
+	}
+	
+	public static void addMissingMessages() {
+		FileConfiguration messages = Files.MESSAGES.getFile();
+		boolean saveFile = false;
+		for(Messages message : values()) {
+			if(!messages.contains("Messages." + message.getPath())) {
+				saveFile = true;
+				if(message.getDefaultMessage() != null) {
+					messages.set("Messages." + message.getPath(), message.getDefaultMessage());
+				}else {
+					messages.set("Messages." + message.getPath(), message.getDefaultListMessage());
+				}
+			}
+		}
+		if(saveFile) {
+			Files.MESSAGES.saveFile();
+		}
+	}
+	
 	public String getMessage() {
 		if(isList()) {
 			if(exists()) {
@@ -153,43 +190,6 @@ public enum Messages {
 			}
 		}
 		return message;
-	}
-	
-	public static String convertList(List<String> list) {
-		String message = "";
-		for(String m : list) {
-			message += Methods.color(m) + "\n";
-		}
-		return message;
-	}
-	
-	public static String convertList(List<String> list, HashMap<String, String> placeholders) {
-		String message = "";
-		for(String m : list) {
-			message += Methods.color(m) + "\n";
-		}
-		for(String ph : placeholders.keySet()) {
-			message = Methods.color(message.replaceAll(ph, placeholders.get(ph)));
-		}
-		return message;
-	}
-	
-	public static void addMissingMessages() {
-		FileConfiguration messages = Files.MESSAGES.getFile();
-		boolean saveFile = false;
-		for(Messages message : values()) {
-			if(!messages.contains("Messages." + message.getPath())) {
-				saveFile = true;
-				if(message.getDefaultMessage() != null) {
-					messages.set("Messages." + message.getPath(), message.getDefaultMessage());
-				}else {
-					messages.set("Messages." + message.getPath(), message.getDefaultListMessage());
-				}
-			}
-		}
-		if(saveFile) {
-			Files.MESSAGES.saveFile();
-		}
 	}
 	
 	private Boolean exists() {

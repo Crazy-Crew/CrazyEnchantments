@@ -28,34 +28,6 @@ public class Scrambler implements Listener {
 	public static HashMap<Player, Integer> roll = new HashMap<>();
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
-	@EventHandler
-	public void onReRoll(InventoryClickEvent e) {
-		Player player = (Player) e.getWhoClicked();
-		Inventory inv = e.getInventory();
-		if(inv != null) {
-			ItemStack book = e.getCurrentItem();
-			ItemStack sc = e.getCursor();
-			if(book != null && sc != null) {
-				if(book.getType() != Material.AIR && sc.getType() != Material.AIR) {
-					if(book.getAmount() == 1 && sc.getAmount() == 1) {
-						if(getScramblers().isSimilar(sc)) {
-							if(ce.isEnchantmentBook(book)) {
-								e.setCancelled(true);
-								player.setItemOnCursor(new ItemStack(Material.AIR));
-								if(Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle")) {
-									e.setCurrentItem(new ItemStack(Material.AIR));
-									openScrambler(player, book);
-								}else {
-									e.setCurrentItem(getNewScrambledBook(book));
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
 	/**
 	 * Get a new book that has been scrambled.
 	 * @param book The old book.
@@ -132,6 +104,7 @@ public class Scrambler implements Listener {
 			int time = 1;
 			int full = 0;
 			int open = 0;
+			
 			@Override
 			public void run() {
 				if(full <= 50) {//When Spinning
@@ -194,6 +167,34 @@ public class Scrambler implements Listener {
 		inv.setItem(9, newBook);
 		for(int i = 0; i < 8; i++) {
 			inv.setItem(i + 10, items.get(i));
+		}
+	}
+	
+	@EventHandler
+	public void onReRoll(InventoryClickEvent e) {
+		Player player = (Player) e.getWhoClicked();
+		Inventory inv = e.getInventory();
+		if(inv != null) {
+			ItemStack book = e.getCurrentItem();
+			ItemStack sc = e.getCursor();
+			if(book != null && sc != null) {
+				if(book.getType() != Material.AIR && sc.getType() != Material.AIR) {
+					if(book.getAmount() == 1 && sc.getAmount() == 1) {
+						if(getScramblers().isSimilar(sc)) {
+							if(ce.isEnchantmentBook(book)) {
+								e.setCancelled(true);
+								player.setItemOnCursor(new ItemStack(Material.AIR));
+								if(Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle")) {
+									e.setCurrentItem(new ItemStack(Material.AIR));
+									openScrambler(player, book);
+								}else {
+									e.setCurrentItem(getNewScrambledBook(book));
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	

@@ -6,10 +6,15 @@ import org.bukkit.event.HandlerList;
 
 public class UnregisterCEnchantmentEvent extends Event {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private CEnchantment enchantment;
 	
 	public UnregisterCEnchantmentEvent(CEnchantment enchantment) {
 		this.enchantment = enchantment;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	/**
@@ -19,13 +24,7 @@ public class UnregisterCEnchantmentEvent extends Event {
 		return enchantment;
 	}
 	
-	private static final HandlerList handlers = new HandlerList();
-	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

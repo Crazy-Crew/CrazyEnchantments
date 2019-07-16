@@ -7,11 +7,11 @@ import org.bukkit.event.HandlerList;
 
 public class AuraActiveEvent extends Event {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private Player other;
 	private Player player;
 	private Integer power;
 	private CEnchantments enchantment;
-	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 * This event fires when a player walks near another player with an aura enchantment on.
@@ -25,6 +25,10 @@ public class AuraActiveEvent extends Event {
 		this.other = other;
 		this.enchantment = enchantment;
 		this.power = power;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	/**
@@ -60,10 +64,6 @@ public class AuraActiveEvent extends Event {
 	}
 	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

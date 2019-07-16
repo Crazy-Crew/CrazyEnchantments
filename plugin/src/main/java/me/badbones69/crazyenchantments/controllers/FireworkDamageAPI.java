@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class FireworkDamageAPI implements Listener {
 	
-	private Plugin plugin;
 	private static ArrayList<Entity> fireworks = new ArrayList<>();
+	private Plugin plugin;
 	
 	public FireworkDamageAPI(Plugin plugin) {
 		this.plugin = plugin;

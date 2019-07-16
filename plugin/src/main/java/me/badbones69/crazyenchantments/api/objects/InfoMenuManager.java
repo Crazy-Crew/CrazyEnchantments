@@ -13,13 +13,13 @@ import java.util.List;
 
 public class InfoMenuManager {
 	
+	public static InfoMenuManager instance = new InfoMenuManager();
 	private Inventory inventoryMenu;
 	private String inventoryName;
 	private int inventorySize;
 	private ItemStack backRight;
 	private ItemStack backLeft;
 	private List<EnchantmentType> enchantmentTypes = new ArrayList<>();
-	public static InfoMenuManager instance = new InfoMenuManager();
 	
 	public static InfoMenuManager getInstance() {
 		return instance;

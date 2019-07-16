@@ -374,7 +374,7 @@ public class Methods {
 		fm.setPower(0);
 		fw.setFireworkMeta(fm);
 		FireworkDamageAPI.addFirework(fw);
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), fw::detonate, 2);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), fw :: detonate, 2);
 	}
 	
 	public static Color getColor(String color) {

@@ -15,9 +15,9 @@ public enum Version {
 	v1_14_R1(1141),
 	TOO_NEW(-2);
 	
+	public static Version currentVersion;
 	private static Version latest;
 	private Integer versionInteger;
-	public static Version currentVersion;
 	
 	private Version(int versionInteger) {
 		this.versionInteger = versionInteger;
@@ -48,14 +48,6 @@ public enum Version {
 	}
 	
 	/**
-	 *
-	 * @return The server's minecraft version as an integer.
-	 */
-	public Integer getVersionInteger() {
-		return this.versionInteger;
-	}
-	
-	/**
 	 * Get the latest version allowed by the Version class.
 	 * @return The latest version.
 	 */
@@ -70,7 +62,16 @@ public enum Version {
 			return v;
 		}else {
 			return latest;
+			
 		}
+	}
+	
+	/**
+	 *
+	 * @return The server's minecraft version as an integer.
+	 */
+	public Integer getVersionInteger() {
+		return this.versionInteger;
 	}
 	
 	/**

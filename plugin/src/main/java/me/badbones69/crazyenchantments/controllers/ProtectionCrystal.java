@@ -29,6 +29,63 @@ public class ProtectionCrystal implements Listener {
 	private HashMap<UUID, ArrayList<ItemStack>> playersItems = new HashMap<>();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
+	public static Boolean isProtected(ItemStack item) {
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				for(String lore : item.getItemMeta().getLore()) {
+					if(lore.contains(Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static Boolean isSuccessfull(Player player) {
+		if(player.hasPermission("crazyenchantments.bypass.protectioncrystal")) {
+			return true;
+		}
+		FileConfiguration config = Files.CONFIG.getFile();
+		if(config.contains("Settings.ProtectionCrystal.Chance")) {
+			if(config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")) {
+				return Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance"), 100);
+			}
+		}
+		return true;
+	}
+	
+	public static ItemStack getCrystals() {
+		FileConfiguration config = Files.CONFIG.getFile();
+		String id = config.getString("Settings.ProtectionCrystal.Item");
+		String name = config.getString("Settings.ProtectionCrystal.Name");
+		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
+		boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
+		ItemStack item = new ItemBuilder().setMaterial(id).setName(name).setLore(lore).build();
+		item = Methods.addGlow(item, toggle);
+		return item;
+	}
+	
+	public static ItemStack getCrystals(int amount) {
+		FileConfiguration config = Files.CONFIG.getFile();
+		String id = config.getString("Settings.ProtectionCrystal.Item");
+		String name = config.getString("Settings.ProtectionCrystal.Name");
+		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
+		boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
+		ItemStack item = new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(lore).build();
+		item = Methods.addGlow(item, toggle);
+		return item;
+	}
+	
+	public static ItemStack removeProtection(ItemStack item) {
+		ItemMeta m = item.getItemMeta();
+		ArrayList<String> lore = new ArrayList<>(m.getLore());
+		lore.remove(Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+		m.setLore(lore);
+		item.setItemMeta(m);
+		return item;
+	}
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
 		FileConfiguration config = Files.CONFIG.getFile();
@@ -121,63 +178,6 @@ public class ProtectionCrystal implements Listener {
 				e.setCancelled(true);
 			}
 		}
-	}
-	
-	public static Boolean isProtected(ItemStack item) {
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasLore()) {
-				for(String lore : item.getItemMeta().getLore()) {
-					if(lore.contains(Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static Boolean isSuccessfull(Player player) {
-		if(player.hasPermission("crazyenchantments.bypass.protectioncrystal")) {
-			return true;
-		}
-		FileConfiguration config = Files.CONFIG.getFile();
-		if(config.contains("Settings.ProtectionCrystal.Chance")) {
-			if(config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")) {
-				return Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance"), 100);
-			}
-		}
-		return true;
-	}
-	
-	public static ItemStack getCrystals() {
-		FileConfiguration config = Files.CONFIG.getFile();
-		String id = config.getString("Settings.ProtectionCrystal.Item");
-		String name = config.getString("Settings.ProtectionCrystal.Name");
-		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
-		boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
-		ItemStack item = new ItemBuilder().setMaterial(id).setName(name).setLore(lore).build();
-		item = Methods.addGlow(item, toggle);
-		return item;
-	}
-	
-	public static ItemStack getCrystals(int amount) {
-		FileConfiguration config = Files.CONFIG.getFile();
-		String id = config.getString("Settings.ProtectionCrystal.Item");
-		String name = config.getString("Settings.ProtectionCrystal.Name");
-		List<String> lore = config.getStringList("Settings.ProtectionCrystal.Lore");
-		boolean toggle = config.getBoolean("Settings.ProtectionCrystal.Glowing");
-		ItemStack item = new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(lore).build();
-		item = Methods.addGlow(item, toggle);
-		return item;
-	}
-	
-	public static ItemStack removeProtection(ItemStack item) {
-		ItemMeta m = item.getItemMeta();
-		ArrayList<String> lore = new ArrayList<>(m.getLore());
-		lore.remove(Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
 	}
 	
 }

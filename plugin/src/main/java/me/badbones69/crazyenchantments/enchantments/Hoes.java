@@ -23,14 +23,40 @@ import java.util.*;
 
 public class Hoes implements Listener {
 	
+	private static List<Material> harvesterCrops;
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private List<Material> seedlings;
 	private Random random = new Random();
-	private static List<Material> harvesterCrops;
 	private Material soilBlock = ce.getMaterial("FARMLAND", "SOIL");
 	private Material grassBlock = ce.getMaterial("GRASS_BLOCK", "GRASS");
 	private HashMap<Material, Material> planterSeeds;
 	private HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+	
+	/**
+	 * Only has crop blocks
+	 */
+	public static List<Material> getHarvesterCrops() {
+		if(harvesterCrops == null) {
+			harvesterCrops = new ArrayList<>();
+			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
+				harvesterCrops.add(Material.matchMaterial("BEETROOT_BLOCK"));
+			}
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				harvesterCrops.addAll(Arrays.asList(Material.WHEAT,
+				Material.matchMaterial("CARROTS"),
+				Material.matchMaterial("BEETROOTS"),
+				Material.matchMaterial("POTATOES"),
+				Material.matchMaterial("NETHER_WART")));
+			}else {
+				harvesterCrops.addAll(Arrays.asList(Material.matchMaterial("CROPS"),
+				Material.matchMaterial("CARROT"),
+				Material.matchMaterial("POTATO"),
+				Material.matchMaterial("NETHER_WARTS")));
+			}
+			harvesterCrops.add(Material.COCOA);
+		}
+		return harvesterCrops;
+	}
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
@@ -263,32 +289,6 @@ public class Hoes implements Listener {
 			}
 		}
 		return seedlings;
-	}
-	
-	/**
-	 * Only has crop blocks
-	 */
-	public static List<Material> getHarvesterCrops() {
-		if(harvesterCrops == null) {
-			harvesterCrops = new ArrayList<>();
-			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
-				harvesterCrops.add(Material.matchMaterial("BEETROOT_BLOCK"));
-			}
-			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
-				harvesterCrops.addAll(Arrays.asList(Material.WHEAT,
-				Material.matchMaterial("CARROTS"),
-				Material.matchMaterial("BEETROOTS"),
-				Material.matchMaterial("POTATOES"),
-				Material.matchMaterial("NETHER_WART")));
-			}else {
-				harvesterCrops.addAll(Arrays.asList(Material.matchMaterial("CROPS"),
-				Material.matchMaterial("CARROT"),
-				Material.matchMaterial("POTATO"),
-				Material.matchMaterial("NETHER_WARTS")));
-			}
-			harvesterCrops.add(Material.COCOA);
-		}
-		return harvesterCrops;
 	}
 	
 	private Material getPlanterSeed(ItemStack item) {

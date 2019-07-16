@@ -27,6 +27,113 @@ public class DustControl implements Listener {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
+	private static void setLore(ItemStack item, int percent, String rate) {
+		ItemMeta m = item.getItemMeta();
+		ArrayList<String> lore = new ArrayList<>();
+		CEnchantment enchantment = null;
+		for(CEnchantment en : ce.getRegisteredEnchantments()) {
+			String ench = en.getCustomName();
+			if(item.getItemMeta().getDisplayName().contains(ench)) {
+				enchantment = en;
+			}
+		}
+		for(String l : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
+			boolean line = true;
+			if(l.contains("%Description%") || l.contains("%description%")) {
+				if(enchantment != null) {
+					for(String L : enchantment.getInfoDescription()) {
+						lore.add(Methods.color(L));
+					}
+				}
+				line = false;
+			}
+			if(rate.equalsIgnoreCase("Success")) {
+				l = l.replaceAll("%Success_Rate%", percent + "").replaceAll("%success_rate%", percent + "")
+				.replaceAll("%Destroy_Rate%", Methods.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "")
+				.replaceAll("%destroy_rate%", Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "");
+			}else {
+				l = l.replaceAll("%Destroy_Rate%", percent + "").replaceAll("%destroy_rate%", percent + "")
+				.replaceAll("%Success_Rate%", Methods.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "")
+				.replaceAll("%success_rate%", Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "");
+			}
+			if(line) {
+				lore.add(Methods.color(l));
+			}
+		}
+		m.setLore(lore);
+		item.setItemMeta(m);
+	}
+	
+	public static Boolean hasPercent(Dust dust, ItemStack item) {
+		String arg = "";
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				List<String> lore = item.getItemMeta().getLore();
+				List<String> L = Files.CONFIG.getFile().getStringList("Settings.Dust." + dust.getConfigName() + ".Lore");
+				int i = 0;
+				if(lore != null && L != null) {
+					if(lore.size() == L.size()) {
+						for(String l : L) {
+							l = Methods.color(l);
+							String lo = lore.get(i);
+							if(l.contains("%Percent%")) {
+								String[] b = l.split("%Percent%");
+								if(b.length >= 1) arg = lo.replace(b[0], "");
+								if(b.length >= 2) arg = arg.replace(b[1], "");
+								break;
+							}
+							if(l.contains("%percent%")) {
+								String[] b = l.split("%percent%");
+								if(b.length >= 1) arg = lo.replace(b[0], "");
+								if(b.length >= 2) arg = arg.replace(b[1], "");
+								break;
+							}
+							i++;
+						}
+					}
+				}
+			}
+		}
+		return Methods.isInt(arg);
+	}
+	
+	public static Integer getPercent(Dust dust, ItemStack item) {
+		String arg = "";
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				List<String> lore = item.getItemMeta().getLore();
+				List<String> L = Files.CONFIG.getFile().getStringList("Settings.Dust." + dust.getConfigName() + ".Lore");
+				int i = 0;
+				if(lore != null && L != null) {
+					if(lore.size() == L.size()) {
+						for(String l : L) {
+							l = Methods.color(l);
+							String lo = lore.get(i);
+							if(l.contains("%Percent%")) {
+								String[] b = l.split("%Percent%");
+								if(b.length >= 1) arg = lo.replace(b[0], "");
+								if(b.length >= 2) arg = arg.replace(b[1], "");
+								break;
+							}
+							if(l.contains("%percent%")) {
+								String[] b = l.split("%percent%");
+								if(b.length >= 1) arg = lo.replace(b[0], "");
+								if(b.length >= 2) arg = arg.replace(b[1], "");
+								break;
+							}
+							i++;
+						}
+					}
+				}
+			}
+		}
+		if(Methods.isInt(arg)) {
+			return Integer.parseInt(arg);
+		}else {
+			return 0;
+		}
+	}
+	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
 		Inventory inv = e.getInventory();
@@ -150,43 +257,6 @@ public class DustControl implements Listener {
 		}
 	}
 	
-	private static void setLore(ItemStack item, int percent, String rate) {
-		ItemMeta m = item.getItemMeta();
-		ArrayList<String> lore = new ArrayList<>();
-		CEnchantment enchantment = null;
-		for(CEnchantment en : ce.getRegisteredEnchantments()) {
-			String ench = en.getCustomName();
-			if(item.getItemMeta().getDisplayName().contains(ench)) {
-				enchantment = en;
-			}
-		}
-		for(String l : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
-			boolean line = true;
-			if(l.contains("%Description%") || l.contains("%description%")) {
-				if(enchantment != null) {
-					for(String L : enchantment.getInfoDescription()) {
-						lore.add(Methods.color(L));
-					}
-				}
-				line = false;
-			}
-			if(rate.equalsIgnoreCase("Success")) {
-				l = l.replaceAll("%Success_Rate%", percent + "").replaceAll("%success_rate%", percent + "")
-				.replaceAll("%Destroy_Rate%", Methods.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "")
-				.replaceAll("%destroy_rate%", Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "");
-			}else {
-				l = l.replaceAll("%Destroy_Rate%", percent + "").replaceAll("%destroy_rate%", percent + "")
-				.replaceAll("%Success_Rate%", Methods.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "")
-				.replaceAll("%success_rate%", Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "");
-			}
-			if(line) {
-				lore.add(Methods.color(l));
-			}
-		}
-		m.setLore(lore);
-		item.setItemMeta(m);
-	}
-	
 	private Dust pickDust() {
 		Random r = new Random();
 		List<Dust> dusts = new ArrayList<>();
@@ -200,76 +270,6 @@ public class DustControl implements Listener {
 			dusts.add(Dust.FAILED_DUST);
 		}
 		return dusts.get(r.nextInt(dusts.size()));
-	}
-	
-	public static Boolean hasPercent(Dust dust, ItemStack item) {
-		String arg = "";
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasLore()) {
-				List<String> lore = item.getItemMeta().getLore();
-				List<String> L = Files.CONFIG.getFile().getStringList("Settings.Dust." + dust.getConfigName() + ".Lore");
-				int i = 0;
-				if(lore != null && L != null) {
-					if(lore.size() == L.size()) {
-						for(String l : L) {
-							l = Methods.color(l);
-							String lo = lore.get(i);
-							if(l.contains("%Percent%")) {
-								String[] b = l.split("%Percent%");
-								if(b.length >= 1) arg = lo.replace(b[0], "");
-								if(b.length >= 2) arg = arg.replace(b[1], "");
-								break;
-							}
-							if(l.contains("%percent%")) {
-								String[] b = l.split("%percent%");
-								if(b.length >= 1) arg = lo.replace(b[0], "");
-								if(b.length >= 2) arg = arg.replace(b[1], "");
-								break;
-							}
-							i++;
-						}
-					}
-				}
-			}
-		}
-		return Methods.isInt(arg);
-	}
-	
-	public static Integer getPercent(Dust dust, ItemStack item) {
-		String arg = "";
-		if(item.hasItemMeta()) {
-			if(item.getItemMeta().hasLore()) {
-				List<String> lore = item.getItemMeta().getLore();
-				List<String> L = Files.CONFIG.getFile().getStringList("Settings.Dust." + dust.getConfigName() + ".Lore");
-				int i = 0;
-				if(lore != null && L != null) {
-					if(lore.size() == L.size()) {
-						for(String l : L) {
-							l = Methods.color(l);
-							String lo = lore.get(i);
-							if(l.contains("%Percent%")) {
-								String[] b = l.split("%Percent%");
-								if(b.length >= 1) arg = lo.replace(b[0], "");
-								if(b.length >= 2) arg = arg.replace(b[1], "");
-								break;
-							}
-							if(l.contains("%percent%")) {
-								String[] b = l.split("%percent%");
-								if(b.length >= 1) arg = lo.replace(b[0], "");
-								if(b.length >= 2) arg = arg.replace(b[1], "");
-								break;
-							}
-							i++;
-						}
-					}
-				}
-			}
-		}
-		if(Methods.isInt(arg)) {
-			return Integer.parseInt(arg);
-		}else {
-			return 0;
-		}
 	}
 	
 }

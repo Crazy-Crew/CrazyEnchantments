@@ -10,13 +10,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class BookFailEvent extends Event implements Cancellable {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private int level;
 	private boolean cancelled;
 	private ItemStack enchantedItem;
 	private CEnchantment enchantment;
 	private CEBook ceBook;
-	private static final HandlerList handlers = new HandlerList();
 	
 	public BookFailEvent(Player player, ItemStack enchantedItem, CEBook ceBook) {
 		this.level = ceBook.getLevel();
@@ -25,6 +25,10 @@ public class BookFailEvent extends Event implements Cancellable {
 		this.enchantedItem = enchantedItem;
 		this.ceBook = ceBook;
 		this.cancelled = false;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	public Player getPlayer() {
@@ -58,10 +62,6 @@ public class BookFailEvent extends Event implements Cancellable {
 	}
 	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

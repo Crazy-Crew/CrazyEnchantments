@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class RageBreakEvent extends Event implements Cancellable {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private Entity damager;
 	private ItemStack weapon;
@@ -19,6 +20,10 @@ public class RageBreakEvent extends Event implements Cancellable {
 		this.damager = damager;
 		this.weapon = weapon;
 		this.cancel = false;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	/**
@@ -45,13 +50,7 @@ public class RageBreakEvent extends Event implements Cancellable {
 		return weapon;
 	}
 	
-	private static final HandlerList handlers = new HandlerList();
-	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

@@ -33,6 +33,10 @@ public class EnchantmentType {
 		}
 	}
 	
+	public static EnchantmentType getFromName(String name) {
+		return InfoMenuManager.getInstance().getFromName(name);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -47,10 +51,6 @@ public class EnchantmentType {
 	
 	public List<Material> getEnchantableMaterials() {
 		return enchantableMaterials;
-	}
-	
-	public static EnchantmentType getFromName(String name) {
-		return InfoMenuManager.getInstance().getFromName(name);
 	}
 	
 	public List<CEnchantment> getEnchantments() {
