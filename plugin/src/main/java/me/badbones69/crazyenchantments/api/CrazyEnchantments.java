@@ -549,26 +549,6 @@ public class CrazyEnchantments {
 	 * @return The category it has or null if not found.
 	 */
 	public Category getCategoryFromLostBook(ItemStack item) {
-		//		List<String> lore = item.getItemMeta().getLore();
-		//		List<String> bookLore = Files.CONFIG.getFile().getStringList("Settings.LostBook.Lore");
-		//		String arg = "";
-		//		int i = 0;
-		//		for(String l : bookLore) {
-		//			l = Methods.color(l);
-		//			String lo = lore.get(i);
-		//			if(l.contains("%Category%")) {
-		//				String[] b = l.split("%Category%");
-		//				if(b.length >= 1) arg = lo.replace(b[0], "");
-		//				if(b.length >= 2) arg = arg.replace(b[1], "");
-		//			}
-		//			if(l.contains("%category%")) {
-		//				String[] b = l.split("%category%");
-		//				if(b.length >= 1) arg = lo.replace(b[0], "");
-		//				if(b.length >= 2) arg = arg.replace(b[1], "");
-		//			}
-		//			i++;
-		//		}
-		//		return getCategory(arg);
 		for(Category category : categories) {
 			if(item.isSimilar(category.getLostBook().getLostBook(category).build())) {
 				return category;
