@@ -12,7 +12,7 @@ public class DisarmerUseEvent extends Event implements Cancellable {
 	private Player player;
 	private Player damager;
 	private ItemStack item;
-	private Boolean cancel;
+	private boolean cancel;
 	
 	public DisarmerUseEvent(Player player, Player damager, ItemStack item) {
 		this.player = player;

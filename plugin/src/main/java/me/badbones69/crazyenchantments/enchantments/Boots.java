@@ -201,7 +201,7 @@ public class Boots implements Listener {
 		}
 	}
 	
-	private Boolean areEnemiesNearBy(Player player) {
+	private boolean areEnemiesNearBy(Player player) {
 		if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Enemy-Toggle")) {
 			for(Player otherPlayer : getNearByPlayers(player, Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Wings.Distance"))) {
 				if(!Support.isFriendly(player, otherPlayer)) {

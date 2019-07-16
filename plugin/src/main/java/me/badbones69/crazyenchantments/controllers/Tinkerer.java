@@ -121,7 +121,7 @@ public class Tinkerer implements Listener {
 								}
 								if(!current.getType().toString().endsWith("STAINED_GLASS_PANE")) {// Adding/Taking Items
 									if(current.getType() == ce.getEnchantmentBookItem().getType()) {// Adding a book
-										Boolean custom = false;
+										boolean custom = false;
 										boolean toggle = false;
 										String enchant = "";
 										for(CEnchantment en : ce.getRegisteredEnchantments()) {

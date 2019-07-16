@@ -170,7 +170,7 @@ public class PickAxes implements Listener {
 														}
 													}
 												}else {
-													Boolean fortune = false;
+													boolean fortune = false;
 													if(hasFurnace && isOre(block.getType())) {
 														for(ItemStack drop : block.getDrops()) {
 															drop = getOreDrop(block.getType());
@@ -398,7 +398,7 @@ public class PickAxes implements Listener {
 		}
 	}
 	
-	private Boolean hasSilkTouch(ItemStack item) {
+	private boolean hasSilkTouch(ItemStack item) {
 		return item.hasItemMeta() && item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
 	}
 	

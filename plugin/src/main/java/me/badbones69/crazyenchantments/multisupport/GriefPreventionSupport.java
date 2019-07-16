@@ -9,7 +9,7 @@ public class GriefPreventionSupport {
 	
 	private static GriefPrevention gp = GriefPrevention.instance;
 	
-	public static Boolean inTerritory(Player player) {
+	public static boolean inTerritory(Player player) {
 		Claim claim = gp.dataStore.getClaimAt(player.getLocation(), true, null);
 		return claim != null && (claim.getOwnerName().equalsIgnoreCase(player.getName()) || claim.allowAccess(player) == null);
 	}

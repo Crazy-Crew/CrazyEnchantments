@@ -17,7 +17,7 @@ public enum Currency {
 	 * @param currency The currency name you are checking.
 	 * @return True if it is supported and false if not.
 	 */
-	public static Boolean isCurrency(String currency) {
+	public static boolean isCurrency(String currency) {
 		for(Currency c : Currency.values()) {
 			if(currency.equalsIgnoreCase(c.getName())) {
 				return true;

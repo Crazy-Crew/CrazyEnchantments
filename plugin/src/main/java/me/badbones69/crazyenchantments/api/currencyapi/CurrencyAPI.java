@@ -97,7 +97,7 @@ public class CurrencyAPI {
 	 * @param category The category you wish to check.
 	 * @return True if they have enough to buy it or false if they don't.
 	 */
-	public static Boolean canBuy(Player player, Category category) {
+	public static boolean canBuy(Player player, Category category) {
 		return canBuy(player, category.getCurrency(), category.getCost());
 	}
 	
@@ -107,7 +107,7 @@ public class CurrencyAPI {
 	 * @param lostBook The lostBook you wish to check.
 	 * @return True if they have enough to buy it or false if they don't.
 	 */
-	public static Boolean canBuy(Player player, LostBook lostBook) {
+	public static boolean canBuy(Player player, LostBook lostBook) {
 		return canBuy(player, lostBook.getCurrency(), lostBook.getCost());
 	}
 	
@@ -118,7 +118,7 @@ public class CurrencyAPI {
 	 * @param cost The cost of the item you are checking.
 	 * @return True if they have enough to buy it or false if they don't.
 	 */
-	public static Boolean canBuy(Player player, Currency currency, int cost) {
+	public static boolean canBuy(Player player, Currency currency, int cost) {
 		return getCurrency(player, currency) >= cost;
 	}
 	

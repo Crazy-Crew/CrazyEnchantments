@@ -56,7 +56,7 @@ public class Scrambler implements Listener {
 		String id = config.getString("Settings.Scrambler.Item");
 		String name = config.getString("Settings.Scrambler.Name");
 		List<String> lore = config.getStringList("Settings.Scrambler.Lore");
-		Boolean toggle = config.getBoolean("Settings.Scrambler.Glowing");
+		boolean toggle = config.getBoolean("Settings.Scrambler.Glowing");
 		return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setGlowing(toggle).build();
 	}
 	
@@ -70,7 +70,7 @@ public class Scrambler implements Listener {
 		String id = config.getString("Settings.Scrambler.Item");
 		String name = config.getString("Settings.Scrambler.Name");
 		List<String> lore = config.getStringList("Settings.Scrambler.Lore");
-		Boolean toggle = config.getBoolean("Settings.Scrambler.Glowing");
+		boolean toggle = config.getBoolean("Settings.Scrambler.Glowing");
 		return new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(lore).setGlowing(toggle).build();
 	}
 	

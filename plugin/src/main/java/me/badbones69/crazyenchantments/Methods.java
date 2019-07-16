@@ -56,7 +56,7 @@ public class Methods {
 		return number;
 	}
 	
-	public static boolean hasPermission(CommandSender sender, String perm, Boolean toggle) {
+	public static boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
 		if(sender instanceof Player) {
 			return hasPermission((Player) sender, perm, toggle);
 		}else {
@@ -64,7 +64,7 @@ public class Methods {
 		}
 	}
 	
-	public static boolean hasPermission(Player player, String perm, Boolean toggle) {
+	public static boolean hasPermission(Player player, String perm, boolean toggle) {
 		if(player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
 			return true;
 		}else {
@@ -304,7 +304,7 @@ public class Methods {
 		return percent;
 	}
 	
-	public static Boolean hasArgument(String Argument, List<String> Msg) {
+	public static boolean hasArgument(String Argument, List<String> Msg) {
 		for(String l : Msg) {
 			l = Methods.color(l).toLowerCase();
 			if(l.contains(Argument.toLowerCase())) {
@@ -605,7 +605,7 @@ public class Methods {
 	}
 	
 	public static ItemBuilder getRandomPaneColor() {
-		Boolean newMaterial = ce.useNewMaterial();
+		boolean newMaterial = ce.useNewMaterial();
 		List<String> colors = Arrays.asList(
 		newMaterial ? "WHITE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:0",// 0
 		newMaterial ? "ORANGE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:1",// 1

@@ -119,7 +119,7 @@ public enum CEnchantments {
 	
 	private String name;
 	private EnchantmentType type;
-	private Boolean hasChanceSystem;
+	private boolean hasChanceSystem;
 	private int chance;
 	private int chanceIncrease;
 	
@@ -256,7 +256,7 @@ public enum CEnchantments {
 	 *
 	 * @return True if the enchantment is enabled and false if not.
 	 */
-	public Boolean isActivated() {
+	public boolean isActivated() {
 		return getEnchantment().isActivated();
 	}
 	
@@ -281,7 +281,7 @@ public enum CEnchantments {
 	 * Check to see if the enchantment's chance is successful.
 	 * @return True if the chance was successful and false if not.
 	 */
-	public Boolean chanceSuccessful() {
+	public boolean chanceSuccessful() {
 		int chance = getEnchantment().getChance();
 		return chance >= 100 || chance <= 0 || (new Random().nextInt(100) + 1) <= chance;
 	}
@@ -291,14 +291,14 @@ public enum CEnchantments {
 	 * @param item The item being checked.
 	 * @return True if the chance was successful and false if not.
 	 */
-	public Boolean chanceSuccessful(ItemStack item) {
+	public boolean chanceSuccessful(ItemStack item) {
 		return ce.getEnchantmentFromName(name).chanceSuccesful(getLevel(item));
 	}
 	
 	/**
 	 * Check if the CEnchantments uses a chance system.
 	 */
-	public Boolean hasChanceSystem() {
+	public boolean hasChanceSystem() {
 		return hasChanceSystem;
 	}
 	

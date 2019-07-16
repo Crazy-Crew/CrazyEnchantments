@@ -32,9 +32,9 @@ public class ItemBuilder {
 	private int amount;
 	private String player;
 	private HashMap<Enchantment, Integer> enchantments;
-	private Boolean unbreakable;
-	private Boolean hideItemFlags;
-	private Boolean glowing;
+	private boolean unbreakable;
+	private boolean hideItemFlags;
+	private boolean glowing;
 	private ItemStack referenceItem;
 	private HashMap<String, String> namePlaceholders;
 	private HashMap<String, String> lorePlaceholders;
@@ -387,7 +387,7 @@ public class ItemBuilder {
 	 * Check if the item in the builder is unbreakable.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public Boolean isUnbreakable() {
+	public boolean isUnbreakable() {
 		return unbreakable;
 	}
 	
@@ -396,7 +396,7 @@ public class ItemBuilder {
 	 * @param unbreakable True will set it to be unbreakable and false will make it able to take damage.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder setUnbreakable(Boolean unbreakable) {
+	public ItemBuilder setUnbreakable(boolean unbreakable) {
 		this.unbreakable = unbreakable;
 		return this;
 	}
@@ -406,7 +406,7 @@ public class ItemBuilder {
 	 * @param hideItemFlags true the item will hide item flags. false will show them.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder hideItemFlags(Boolean hideItemFlags) {
+	public ItemBuilder hideItemFlags(boolean hideItemFlags) {
 		this.hideItemFlags = hideItemFlags;
 		return this;
 	}
@@ -415,7 +415,7 @@ public class ItemBuilder {
 	 * Check if the item in the builder has hidden item flags.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public Boolean areItemFlagsHidden() {
+	public boolean areItemFlagsHidden() {
 		return hideItemFlags;
 	}
 	
@@ -423,7 +423,7 @@ public class ItemBuilder {
 	 * Check if the item in the builder is glowing.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public Boolean isGlowing() {
+	public boolean isGlowing() {
 		return glowing;
 	}
 	
@@ -432,7 +432,7 @@ public class ItemBuilder {
 	 * @param glowing True will set the item to have a glowing effect.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder setGlowing(Boolean glowing) {
+	public ItemBuilder setGlowing(boolean glowing) {
 		this.glowing = glowing;
 		return this;
 	}
@@ -493,7 +493,7 @@ public class ItemBuilder {
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
 	
-	private ItemStack hideFlags(ItemStack item, Boolean toggle) {
+	private ItemStack hideFlags(ItemStack item, boolean toggle) {
 		if(toggle) {
 			if(item != null && item.hasItemMeta()) {
 				ItemMeta itemMeta = item.getItemMeta();

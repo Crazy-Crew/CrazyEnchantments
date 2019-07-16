@@ -64,7 +64,7 @@ public class DustControl implements Listener {
 		item.setItemMeta(m);
 	}
 	
-	public static Boolean hasPercent(Dust dust, ItemStack item) {
+	public static boolean hasPercent(Dust dust, ItemStack item) {
 		String arg = "";
 		if(item.hasItemMeta()) {
 			if(item.getItemMeta().hasLore()) {

@@ -29,7 +29,7 @@ public class ProtectionCrystal implements Listener {
 	private HashMap<UUID, ArrayList<ItemStack>> playersItems = new HashMap<>();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
-	public static Boolean isProtected(ItemStack item) {
+	public static boolean isProtected(ItemStack item) {
 		if(item.hasItemMeta()) {
 			if(item.getItemMeta().hasLore()) {
 				for(String lore : item.getItemMeta().getLore()) {
@@ -42,7 +42,7 @@ public class ProtectionCrystal implements Listener {
 		return false;
 	}
 	
-	public static Boolean isSuccessfull(Player player) {
+	public static boolean isSuccessfull(Player player) {
 		if(player.hasPermission("crazyenchantments.bypass.protectioncrystal")) {
 			return true;
 		}

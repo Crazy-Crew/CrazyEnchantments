@@ -11,7 +11,7 @@ public class AngelUseEvent extends Event implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private ItemStack item;
-	private Boolean cancel;
+	private boolean cancel;
 	
 	public AngelUseEvent(Player player, ItemStack item) {
 		this.player = player;

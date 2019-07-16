@@ -49,11 +49,11 @@ public class EnchantedArrow {
 		return enchantments;
 	}
 	
-	public Boolean hasEnchantment(CEnchantment enchantment) {
+	public boolean hasEnchantment(CEnchantment enchantment) {
 		return enchantments.contains(enchantment);
 	}
 	
-	public Boolean hasEnchantment(CEnchantments enchantment) {
+	public boolean hasEnchantment(CEnchantments enchantment) {
 		return enchantments.contains(enchantment.getEnchantment());
 	}
 	

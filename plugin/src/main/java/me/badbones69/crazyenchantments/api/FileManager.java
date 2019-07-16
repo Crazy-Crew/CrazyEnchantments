@@ -23,7 +23,7 @@ public class FileManager {
 	private static FileManager instance = new FileManager();
 	private Plugin plugin;
 	private String prefix = "";
-	private Boolean log = false;
+	private boolean log = false;
 	private HashMap<Files, File> files = new HashMap<>();
 	private ArrayList<String> homeFolders = new ArrayList<>();
 	private ArrayList<CustomFile> customFiles = new ArrayList<>();
@@ -121,7 +121,7 @@ public class FileManager {
 	 * Turn on the logger system for the FileManager.
 	 * @param log True to turn it on and false for it to be off.
 	 */
-	public FileManager logInfo(Boolean log) {
+	public FileManager logInfo(boolean log) {
 		this.log = log;
 		return this;
 	}
@@ -130,7 +130,7 @@ public class FileManager {
 	 * Check if the logger is logging in console.
 	 * @return True if it is and false if it isn't.
 	 */
-	public Boolean isLogging() {
+	public boolean isLogging() {
 		return log;
 	}
 	
@@ -230,7 +230,7 @@ public class FileManager {
 	 * @param file The custom file you are saving.
 	 * @return True if the file saved correct and false if there was an error.
 	 */
-	public Boolean saveFile(CustomFile file) {
+	public boolean saveFile(CustomFile file) {
 		return file.saveFile();
 	}
 	
@@ -274,7 +274,7 @@ public class FileManager {
 	 * Overrides the loaded state file and loads the filesystems file.
 	 * @return True if it reloaded correct and false if the file wasn't found.
 	 */
-	public Boolean reloadFile(CustomFile file) {
+	public boolean reloadFile(CustomFile file) {
 		return file.reloadFile();
 	}
 	
@@ -483,7 +483,7 @@ public class FileManager {
 		 * Check if the file actually exists in the file system.
 		 * @return True if it does and false if it doesn't.
 		 */
-		public Boolean exists() {
+		public boolean exists() {
 			return file != null;
 		}
 		
@@ -491,7 +491,7 @@ public class FileManager {
 		 * Save the custom file.
 		 * @return True if it saved correct and false if something went wrong.
 		 */
-		public Boolean saveFile() {
+		public boolean saveFile() {
 			if(file != null) {
 				try {
 					file.saveWithComments();
@@ -512,7 +512,7 @@ public class FileManager {
 		 * Overrides the loaded state file and loads the filesystems file.
 		 * @return True if it reloaded correct and false if the file wasn't found or an error happened.
 		 */
-		public Boolean reloadFile() {
+		public boolean reloadFile() {
 			if(file != null) {
 				try {
 					file = new YamlFile(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));

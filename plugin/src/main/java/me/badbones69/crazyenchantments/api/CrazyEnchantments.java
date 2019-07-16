@@ -36,10 +36,10 @@ public class CrazyEnchantments {
 	
 	private static CrazyEnchantments instance = new CrazyEnchantments();
 	private int rageMaxLevel;
-	private Boolean gkitzToggle;
-	private Boolean useNewMaterial;
-	private Boolean breakRageOnDamage;
-	private Boolean enchantStackedItems;
+	private boolean gkitzToggle;
+	private boolean useNewMaterial;
+	private boolean breakRageOnDamage;
+	private boolean enchantStackedItems;
 	private NMSSupport nmsSupport;
 	private Random random = new Random();
 	private InfoMenuManager infoMenuManager;
@@ -310,7 +310,7 @@ public class CrazyEnchantments {
 	/**
 	 * The material version needed to be used.
 	 */
-	public Boolean useNewMaterial() {
+	public boolean useNewMaterial() {
 		return useNewMaterial;
 	}
 	
@@ -338,7 +338,7 @@ public class CrazyEnchantments {
 	 * Check if the gkitz option is enabled.
 	 * @return True if it is on and false if it is off.
 	 */
-	public Boolean isGkitzEnabled() {
+	public boolean isGkitzEnabled() {
 		return gkitzToggle;
 	}
 	
@@ -413,7 +413,7 @@ public class CrazyEnchantments {
 	 * Check to see if a player is in a whitelisted world for the wings enchantment.
 	 * @param player The player you wish to check.
 	 */
-	public Boolean inWhitelistedWorld(Player player) {
+	public boolean inWhitelistedWorld(Player player) {
 		return player != null && whitelisted.contains(player.getWorld().getName().toLowerCase());
 	}
 	
@@ -428,7 +428,7 @@ public class CrazyEnchantments {
 	 * Check to see if a player is in a blacklisted world for the wings enchantment.
 	 * @param player The player you wish to check.
 	 */
-	public Boolean inBlacklistedWorld(Player player) {
+	public boolean inBlacklistedWorld(Player player) {
 		return player != null && blacklisted.contains(player.getWorld().getName().toLowerCase());
 	}
 	
@@ -445,7 +445,7 @@ public class CrazyEnchantments {
 	 * @param item Item you want to check to see if it has enchantments.
 	 * @return True if it has enchantments / False if it doesn't have enchantments.
 	 */
-	public Boolean hasEnchantments(ItemStack item) {
+	public boolean hasEnchantments(ItemStack item) {
 		if(item != null) {
 			if(item.hasItemMeta()) {
 				if(item.getItemMeta().hasLore()) {
@@ -468,7 +468,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you want to check if the item has.
 	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
 	 */
-	public Boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
+	public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
 		if(item != null) {
 			if(item.hasItemMeta()) {
 				if(item.getItemMeta().hasLore()) {
@@ -489,7 +489,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you want to check if the item has.
 	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
 	 */
-	public Boolean hasEnchantment(ItemStack item, CEnchantments enchantment) {
+	public boolean hasEnchantment(ItemStack item, CEnchantments enchantment) {
 		if(item != null) {
 			if(item.hasItemMeta()) {
 				if(item.getItemMeta().hasLore()) {
@@ -584,7 +584,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public Boolean playerHasEnchantmentOn(Player player, ItemStack include, ItemStack exclude, CEnchantment enchantment) {
+	public boolean playerHasEnchantmentOn(Player player, ItemStack include, ItemStack exclude, CEnchantment enchantment) {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(!armor.isSimilar(exclude)) {
 				if(hasEnchantment(armor, enchantment)) {
@@ -602,7 +602,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public Boolean playerHasEnchantmentOnExclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public boolean playerHasEnchantmentOnExclude(Player player, ItemStack item, CEnchantment enchantment) {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(!armor.isSimilar(item)) {
 				if(hasEnchantment(armor, enchantment)) {
@@ -620,7 +620,7 @@ public class CrazyEnchantments {
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public Boolean playerHasEnchantmentOnInclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public boolean playerHasEnchantmentOnInclude(Player player, ItemStack item, CEnchantment enchantment) {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(hasEnchantment(armor, enchantment)) {
 				return true;
@@ -975,7 +975,7 @@ public class CrazyEnchantments {
 	 * @param book The item you are checking.
 	 * @return True if it is and false if not.
 	 */
-	public Boolean isEnchantmentBook(ItemStack book) {
+	public boolean isEnchantmentBook(ItemStack book) {
 		if(book != null) {
 			if(book.hasItemMeta()) {
 				if(book.getItemMeta().hasDisplayName()) {
@@ -1113,7 +1113,7 @@ public class CrazyEnchantments {
 		int level = 1 + r.nextInt(ench);
 		if(category.useMaxLevel()) {
 			if(level > category.getMaxLevel()) {
-				for(Boolean l = false; ; ) {
+				for(boolean l = false; ; ) {
 					level = 1 + r.nextInt(ench);
 					if(level <= category.getMaxLevel()) {
 						break;
@@ -1158,7 +1158,7 @@ public class CrazyEnchantments {
 	 * Set if a player takes damage the current rage stack on the player will be lost.
 	 * @param toggle True if they lose the rage stack on damage and false if not.
 	 */
-	public void setBreakRageOnDamage(Boolean toggle) {
+	public void setBreakRageOnDamage(boolean toggle) {
 		breakRageOnDamage = toggle;
 	}
 	
@@ -1166,14 +1166,14 @@ public class CrazyEnchantments {
 	 * Check if players lose their current rage stack on damage.
 	 * @return True if they do and false if not.
 	 */
-	public Boolean isBreakRageOnDamageOn() {
+	public boolean isBreakRageOnDamageOn() {
 		return breakRageOnDamage;
 	}
 	
 	/**
 	 * Check if players can enchant a stack of items with an enchantment book.
 	 */
-	public Boolean enchantStackedItems() {
+	public boolean enchantStackedItems() {
 		return enchantStackedItems;
 	}
 	

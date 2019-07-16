@@ -106,7 +106,7 @@ public class CEBook {
 	 * If the item will be glowing or not.
 	 * @return Ture if glowing and false if not.
 	 */
-	public Boolean getGlowing() {
+	public boolean getGlowing() {
 		return this.glowing;
 	}
 	
@@ -114,7 +114,7 @@ public class CEBook {
 	 *
 	 * @param toggle Toggle on or off the glowing effect.
 	 */
-	public void setGlowing(Boolean toggle) {
+	public void setGlowing(boolean toggle) {
 		this.glowing = toggle;
 	}
 	

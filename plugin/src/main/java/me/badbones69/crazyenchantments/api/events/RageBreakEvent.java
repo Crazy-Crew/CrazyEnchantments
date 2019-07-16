@@ -13,7 +13,7 @@ public class RageBreakEvent extends Event implements Cancellable {
 	private Player player;
 	private Entity damager;
 	private ItemStack weapon;
-	private Boolean cancel;
+	private boolean cancel;
 	
 	public RageBreakEvent(Player player, Entity damager, ItemStack weapon) {
 		this.player = player;

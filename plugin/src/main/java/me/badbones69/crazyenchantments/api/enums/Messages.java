@@ -192,11 +192,11 @@ public enum Messages {
 		return message;
 	}
 	
-	private Boolean exists() {
+	private boolean exists() {
 		return Files.MESSAGES.getFile().contains("Messages." + path);
 	}
 	
-	private Boolean isList() {
+	private boolean isList() {
 		if(Files.MESSAGES.getFile().contains("Messages." + path)) {
 			return !Files.MESSAGES.getFile().getStringList("Messages." + path).isEmpty();
 		}else {

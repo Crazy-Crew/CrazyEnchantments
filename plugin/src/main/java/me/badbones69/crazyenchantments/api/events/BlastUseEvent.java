@@ -12,7 +12,7 @@ public class BlastUseEvent extends Event implements Cancellable {
 	
 	private static final HandlerList handlers = new HandlerList();
 	private Player player;
-	private Boolean cancelled;
+	private boolean cancelled;
 	private List<Block> blockList;
 	
 	public BlastUseEvent(Player player, List<Block> blockList) {
