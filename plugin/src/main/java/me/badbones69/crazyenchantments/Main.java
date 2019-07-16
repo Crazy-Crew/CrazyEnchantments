@@ -30,7 +30,7 @@ public class Main extends JavaPlugin implements Listener {
 	public void onEnable() {
 		fileManager.logInfo(true).setup(this);
 		Methods.hasUpdate();
-		Boots.onStart();
+		Boots.startWings();
 		ce.load();
 		CurrencyAPI.loadCurrency();
 		fixHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");

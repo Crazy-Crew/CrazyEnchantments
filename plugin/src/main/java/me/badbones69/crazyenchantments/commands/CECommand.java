@@ -89,7 +89,7 @@ public class CECommand implements CommandExecutor {
 				Files.DATA.relaodFile();
 				fileManager.setup(ce.getPlugin());
 				ce.load();
-				Boots.onStart();
+				Boots.startWings();
 				for(Player player : Bukkit.getOnlinePlayers()) {
 					ce.unloadCEPlayer(player);
 					ce.loadCEPlayer(player);

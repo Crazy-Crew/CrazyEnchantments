@@ -31,7 +31,7 @@ public class Boots implements Listener {
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private static ArrayList<Player> flying = new ArrayList<>();
 	
-	public static void onStart() {
+	public static void startWings() {
 		if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Clouds")) {
 			if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")) {
 				new BukkitRunnable() {
