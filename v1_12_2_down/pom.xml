@@ -5,7 +5,7 @@
     <parent>
         <artifactId>crazyenchantments</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.8-Dev-Build-v56</version>
+        <version>1.8-Dev-Build-v6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-api</artifactId>
-            <version>1.8-Dev-Build-v56</version>
+            <version>1.8-Dev-Build-v6</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
