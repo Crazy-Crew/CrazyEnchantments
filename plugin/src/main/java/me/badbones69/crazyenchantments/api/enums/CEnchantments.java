@@ -27,6 +27,7 @@ public enum CEnchantments {
 	ICEFREEZE("IceFreeze", EnchantmentType.getFromName("Bow"), 25, 10),
 	LIGHTNING("Lightning", EnchantmentType.getFromName("Bow"), 25, 10),
 	MULTIARROW("MultiArrow", EnchantmentType.getFromName("Bow"), 25, 10),
+	STICKY_SHOT("Sticky-Shot", EnchantmentType.getFromName("Bow"), 10, 10),
 	//	----------------Helmets----------------  \\
 	GLOWING("Glowing", EnchantmentType.getFromName("Helmet")),
 	MERMAID("Mermaid", EnchantmentType.getFromName("Helmet")),
@@ -54,6 +55,10 @@ public enum CEnchantments {
 	INQUISITIVE("Inquisitive", EnchantmentType.getFromName("Sword"), 50, 25),
 	LIGHTWEIGHT("LightWeight", EnchantmentType.getFromName("Sword"), 15, 5),
 	DOUBLEDAMAGE("DoubleDamage", EnchantmentType.getFromName("Sword"), 5, 1),
+	DISORDER("Disorder", EnchantmentType.getFromName("Sword"), 1, 0),
+	CHARGE("Charge", EnchantmentType.getFromName("Sword")),
+	REVENGE("Revenge", EnchantmentType.getFromName("Sword")),
+	FAMISHED("Famished", EnchantmentType.getFromName("Sword"), 10, 5),
 	//	----------------Armor----------------  \\
 	HULK("Hulk", EnchantmentType.getFromName("Armor")),
 	VALOR("Valor", EnchantmentType.getFromName("Armor")),
@@ -94,6 +99,7 @@ public enum CEnchantments {
 	BERSERK("Berserk", EnchantmentType.getFromName("Axe"), 10, 1),
 	BLESSED("Blessed", EnchantmentType.getFromName("Axe"), 10, 5),
 	DECAPITATION("Decapitation", EnchantmentType.getFromName("Axe"), 10, 10),
+	BATTLECRY("BattleCry", EnchantmentType.getFromName("Axe"), 10, 5),
 	//	----------------PickAxes----------------  \\
 	BLAST("Blast", EnchantmentType.getFromName("Pickaxe")),
 	AUTOSMELT("AutoSmelt", EnchantmentType.getFromName("Pickaxe"), 25, 25),
@@ -103,19 +109,13 @@ public enum CEnchantments {
 	HASTE("Haste", EnchantmentType.getFromName("Tool")),
 	TELEPATHY("Telepathy", EnchantmentType.getFromName("Tool")),
 	OXYGENATE("Oxygenate", EnchantmentType.getFromName("Tool")),
-	//	----------------All----------------  \\
-	HELLFORGED("HellForged", EnchantmentType.getFromName("Damaged-Items"), 5, 5),
-	//	----------------New Enchantments----------------  \\
-	STICKY_SHOT("Sticky-Shot", EnchantmentType.getFromName("Bow"), 10, 10),
-	DISORDER("Disorder", EnchantmentType.getFromName("Sword"), 1, 0),
-	CHARGE("Charge", EnchantmentType.getFromName("Sword")),
-	REVENGE("Revenge", EnchantmentType.getFromName("Sword")),
-	BATTLECRY("BattleCry", EnchantmentType.getFromName("Axe"), 10, 5),
-	FAMISHED("Famished", EnchantmentType.getFromName("Sword"), 10, 5),
+	//	----------------Hoes----------------  \\
 	GREENTHUMB("GreenThumb", EnchantmentType.getFromName("Hoe"), 10, 10),
 	HARVESTER("Harvester", EnchantmentType.getFromName("Hoe")),
 	TILLER("Tiller", EnchantmentType.getFromName("Hoe")),
-	PLANTER("Planter", EnchantmentType.getFromName("Hoe"));
+	PLANTER("Planter", EnchantmentType.getFromName("Hoe")),
+	//	----------------All----------------  \\
+	HELLFORGED("HellForged", EnchantmentType.getFromName("Damaged-Items"), 5, 5);
 	
 	private String name;
 	private EnchantmentType type;
