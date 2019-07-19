@@ -92,12 +92,14 @@ public class InfoMenuManager {
 		for(int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
 		Inventory inventory = Bukkit.createInventory(null, slots, inventoryName);
 		for(CEnchantment enchantment : enchantments) {
-			inventory.addItem(new ItemBuilder()
-			.setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item"))
-			.setName(enchantment.getInfoName())
-			.setLore(enchantment.getInfoDescription())
-			.setGlowing(true)
-			.build());
+			if(enchantment.isActivated()) {
+				inventory.addItem(new ItemBuilder()
+				.setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item"))
+				.setName(enchantment.getInfoName())
+				.setLore(enchantment.getInfoDescription())
+				.setGlowing(true)
+				.build());
+			}
 		}
 		inventory.setItem(slots - 1, backRight);
 		player.openInventory(inventory);
