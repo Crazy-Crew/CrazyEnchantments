@@ -206,7 +206,7 @@ public class Tools implements Listener {
 		if(ce.hasEnchantments(item)) {
 			int time = 5 * 20;
 			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-			if(enchantments.contains(CEnchantments.HASTE)) {
+			if(enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
 				if(CEnchantments.HASTE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
 					Bukkit.getPluginManager().callEvent(event);
@@ -217,7 +217,7 @@ public class Tools implements Listener {
 					}
 				}
 			}
-			if(enchantments.contains(CEnchantments.OXYGENATE)) {
+			if(enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
 				if(CEnchantments.OXYGENATE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
 					Bukkit.getPluginManager().callEvent(event);
