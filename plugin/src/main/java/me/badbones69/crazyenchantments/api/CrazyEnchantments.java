@@ -461,7 +461,7 @@ public class CrazyEnchantments {
 			if(item.hasItemMeta()) {
 				if(item.getItemMeta().hasLore()) {
 					for(String lore : item.getItemMeta().getLore()) {
-						for(CEnchantment enchantment : getRegisteredEnchantments()) {
+						for(CEnchantment enchantment : registeredEnchantments) {
 							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
 								return true;
 							}
@@ -814,7 +814,7 @@ public class CrazyEnchantments {
 			if(item.hasItemMeta()) {
 				if(item.getItemMeta().hasLore()) {
 					for(String lore : item.getItemMeta().getLore()) {
-						for(CEnchantment enchantment : getRegisteredEnchantments()) {
+						for(CEnchantment enchantment : registeredEnchantments) {
 							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
 								if(!enchantments.contains(enchantment)) {
 									enchantments.add(enchantment);
@@ -976,10 +976,10 @@ public class CrazyEnchantments {
 	 */
 	public boolean isEnchantmentBook(ItemStack book) {
 		if(book != null) {
-			if(book.hasItemMeta()) {
-				if(book.getItemMeta().hasDisplayName()) {
-					if(book.getType() == getEnchantmentBookItem().getType()) {
-						for(CEnchantment en : getRegisteredEnchantments()) {
+			if(book.getType() == enchantmentBook.getMaterial()) {
+				if(book.hasItemMeta()) {
+					if(book.getItemMeta().hasDisplayName()) {
+						for(CEnchantment en : registeredEnchantments) {
 							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
 								return true;
 							}
@@ -998,10 +998,10 @@ public class CrazyEnchantments {
 	 */
 	public CEnchantment getEnchantmentBookEnchantment(ItemStack book) {
 		if(book != null) {
-			if(book.hasItemMeta()) {
-				if(book.getItemMeta().hasDisplayName()) {
-					if(book.getType() == getEnchantmentBookItem().getType()) {
-						for(CEnchantment en : getRegisteredEnchantments()) {
+			if(book.getType() == enchantmentBook.getMaterial()) {
+				if(book.hasItemMeta()) {
+					if(book.getItemMeta().hasDisplayName()) {
+						for(CEnchantment en : registeredEnchantments) {
 							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
 								return en;
 							}
@@ -1309,7 +1309,7 @@ public class CrazyEnchantments {
 							item.addEnchantment(enchantment, Integer.parseInt(d.split(":")[1]));
 						}
 					}
-					for(CEnchantment en : getRegisteredEnchantments()) {
+					for(CEnchantment en : registeredEnchantments) {
 						if(d.split(":")[0].equalsIgnoreCase(en.getName()) ||
 						d.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
 							String level = d.split(":")[1];
@@ -1370,7 +1370,7 @@ public class CrazyEnchantments {
 							enchantments.put(enchantment, Integer.parseInt(level));
 						}
 					}
-					for(CEnchantment en : getRegisteredEnchantments()) {
+					for(CEnchantment en : registeredEnchantments) {
 						if(sub.split(":")[0].equalsIgnoreCase(en.getName()) ||
 						sub.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
 							customEnchantments.add(en.getColor() + en.getCustomName() + " " + sub.split(":")[1]);
