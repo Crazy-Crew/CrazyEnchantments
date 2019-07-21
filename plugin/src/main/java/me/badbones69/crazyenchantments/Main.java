@@ -29,9 +29,9 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		fileManager.logInfo(true).setup(this);
+		ce.load();
 		Methods.hasUpdate();
 		Boots.startWings();
-		ce.load();
 		CurrencyAPI.loadCurrency();
 		fixHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
 		for(Player player : Bukkit.getOnlinePlayers()) {

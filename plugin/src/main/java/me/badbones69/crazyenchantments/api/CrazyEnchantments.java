@@ -35,7 +35,7 @@ import java.util.*;
 public class CrazyEnchantments {
 	
 	private static CrazyEnchantments instance = new CrazyEnchantments();
-	private Plugin plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+	private Plugin plugin;
 	private int rageMaxLevel;
 	private boolean gkitzToggle;
 	private boolean useUnsafeEnchantments;
@@ -73,6 +73,7 @@ public class CrazyEnchantments {
 		registeredEnchantments.clear();
 		whitelisted.clear();
 		blacklisted.clear();
+		plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 		Version version = Version.getCurrentVersion();
 		useNewSounds = version.isNewer(Version.v1_8_R3);
 		useNewMaterial = version.isNewer(Version.v1_12_R1);
