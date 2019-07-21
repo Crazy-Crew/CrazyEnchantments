@@ -99,8 +99,9 @@ public class CEBook {
 	 *
 	 * @param enchantment Set the enchantment.
 	 */
-	public void setEnchantment(CEnchantment enchantment) {
+	public CEBook setEnchantment(CEnchantment enchantment) {
 		this.enchantment = enchantment;
+		return this;
 	}
 	
 	/**
@@ -115,8 +116,9 @@ public class CEBook {
 	 *
 	 * @param toggle Toggle on or off the glowing effect.
 	 */
-	public void setGlowing(boolean toggle) {
+	public CEBook setGlowing(boolean toggle) {
 		this.glowing = toggle;
+		return this;
 	}
 	
 	/**
@@ -131,8 +133,9 @@ public class CEBook {
 	 *
 	 * @param amount Set the amount of books.
 	 */
-	public void setAmount(int amount) {
+	public CEBook setAmount(int amount) {
 		this.amount = amount;
+		return this;
 	}
 	
 	/**
@@ -147,8 +150,9 @@ public class CEBook {
 	 *
 	 * @param level Set the tier of the enchantment.
 	 */
-	public void setLevel(int level) {
+	public CEBook setLevel(int level) {
 		this.level = level;
+		return this;
 	}
 	
 	/**
@@ -163,8 +167,9 @@ public class CEBook {
 	 *
 	 * @param destroy_rate Set the destroy rate on the book.
 	 */
-	public void setDestroyRate(int destroy_rate) {
+	public CEBook setDestroyRate(int destroy_rate) {
 		this.destroy_rate = destroy_rate;
+		return this;
 	}
 	
 	/**
@@ -179,8 +184,9 @@ public class CEBook {
 	 *
 	 * @param success_rate Set the success rate on the book.
 	 */
-	public void setSuccessRate(int success_rate) {
+	public CEBook setSuccessRate(int success_rate) {
 		this.success_rate = success_rate;
+		return this;
 	}
 	
 	/**
@@ -213,12 +219,7 @@ public class CEBook {
 	}
 	
 	private int percentPick(int max, int min) {
-		Random i = new Random();
-		if(max == min) {
-			return max;
-		}else {
-			return min + i.nextInt(max - min);
-		}
+		return max == min ? max : min + new Random().nextInt(max - min);
 	}
 	
 }

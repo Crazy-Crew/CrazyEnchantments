@@ -962,11 +962,10 @@ public class CrazyEnchantments {
 	 * @param book The ItemStack you are converting.
 	 * @return The ItemStack but as a CEBook.
 	 */
-	public CEBook convertToCEBook(ItemStack book) {
-		CEBook ceBook = new CEBook(getEnchantmentBookEnchantment(book), getBookLevel(book, getEnchantmentBookEnchantment(book)), book.getAmount());
-		ceBook.setSuccessRate(Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
-		ceBook.setDestroyRate(Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
-		return ceBook;
+	public CEBook getCEBook(ItemStack book) {
+		return new CEBook(getEnchantmentBookEnchantment(book), getBookLevel(book, getEnchantmentBookEnchantment(book)), book.getAmount())
+		.setSuccessRate(Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")))
+		.setDestroyRate(Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")));
 	}
 	
 	/**

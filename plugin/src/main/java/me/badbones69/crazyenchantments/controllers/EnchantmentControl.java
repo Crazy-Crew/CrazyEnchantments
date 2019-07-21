@@ -42,7 +42,7 @@ public class EnchantmentControl implements Listener {
 			if(e.getCursor() != null && e.getCurrentItem() != null) {
 				ItemStack item = e.getCurrentItem();
 				if(ce.isEnchantmentBook(e.getCursor())) {
-					CEBook ceBook = ce.convertToCEBook(e.getCursor());
+					CEBook ceBook = ce.getCEBook(e.getCursor());
 					CEnchantment enchantment = ceBook.getEnchantment();
 					if(enchantment != null) {
 						if(enchantment.getEnchantmentType().getEnchantableMaterials().contains(item.getType())) {
@@ -207,7 +207,7 @@ public class EnchantmentControl implements Listener {
 				ItemStack item = Methods.getItemInHand(e.getPlayer());
 				if(ce.isEnchantmentBook(item)) {
 					e.setCancelled(true);
-					CEnchantment enchantment = ce.convertToCEBook(item).getEnchantment();
+					CEnchantment enchantment = ce.getCEBook(item).getEnchantment();
 					Player player = e.getPlayer();
 					if(enchantment.getInfoName().length() > 0) {
 						player.sendMessage(enchantment.getInfoName());
