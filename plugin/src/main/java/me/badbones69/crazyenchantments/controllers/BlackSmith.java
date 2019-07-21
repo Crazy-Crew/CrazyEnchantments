@@ -66,17 +66,9 @@ public class BlackSmith implements Listener {
 					int resaultSlot = 16;
 					if(!inBlackSmith(e.getRawSlot())) {// Click In Players Inventory
 						if(item.getAmount() != 1) return;
-						if(ce.hasEnchantments(item) || item.getType() == ce.getEnchantmentBookItem().getType()) {
-							if(item.getType() == ce.getEnchantmentBookItem().getType()) {//Is a custom enchantment book.
-								if(!item.hasItemMeta()) return;
-								if(!item.getItemMeta().hasDisplayName()) return;
-								boolean T = false;
-								for(CEnchantment en : ce.getRegisteredEnchantments()) {
-									if(item.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
-										T = true;
-									}
-								}
-								if(!T) {
+						if(ce.hasEnchantments(item) || item.getType() == ce.getEnchantmentBook().getMaterial()) {
+							if(item.getType() == ce.getEnchantmentBook().getMaterial()) {//Is a custom enchantment book.
+								if(!ce.isEnchantmentBook(item)) {
 									return;
 								}
 							}
@@ -86,14 +78,14 @@ public class BlackSmith implements Listener {
 								playClick(player);
 								if(inv.getItem(subSlot) != null) {//Sub item slot is not empty
 									if(getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot)) > 0) {//Items are upgradable
-										inv.setItem(resaultSlot, Methods.addLore(getUpgradedItem(player, inv.getItem(mainSlot), inv.getItem(subSlot)),
+										inv.setItem(resultSlot, Methods.addLore(getUpgradedItem(player, inv.getItem(mainSlot), inv.getItem(subSlot)),
 										config.getString("Settings.BlackSmith.Results.Found")
 										.replaceAll("%Cost%", getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot)) + "")
 										.replaceAll("%cost%", getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot)) + "")));
 										for(int i : result)
 											inv.setItem(i - 1, blueGlass);
 									}else {//Items are not upgradable
-										inv.setItem(resaultSlot, denyBarrier);
+										inv.setItem(resultSlot, denyBarrier);
 										for(int i : result)
 											inv.setItem(i - 1, redGlass);
 									}
@@ -106,14 +98,14 @@ public class BlackSmith implements Listener {
 								inv.setItem(subSlot, item);//Moves clicked item to sub slot
 								playClick(player);
 								if(getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot)) > 0) {//Items are upgradable
-									inv.setItem(resaultSlot, Methods.addLore(getUpgradedItem(player, inv.getItem(mainSlot), inv.getItem(subSlot)),
+									inv.setItem(resultSlot, Methods.addLore(getUpgradedItem(player, inv.getItem(mainSlot), inv.getItem(subSlot)),
 									config.getString("Settings.BlackSmith.Results.Found")
 									.replaceAll("%Cost%", getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot)) + "")
 									.replaceAll("%cost%", getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot)) + "")));
 									for(int i : result)
 										inv.setItem(i - 1, blueGlass);
 								}else {//Items are not upgradable
-									inv.setItem(resaultSlot, denyBarrier);
+									inv.setItem(resultSlot, denyBarrier);
 									for(int i : result)
 										inv.setItem(i - 1, redGlass);
 								}
@@ -127,12 +119,12 @@ public class BlackSmith implements Listener {
 							}else {
 								player.getInventory().addItem(item);
 							}
-							inv.setItem(resaultSlot, denyBarrier);
+							inv.setItem(resultSlot, denyBarrier);
 							for(int i : result)
 								inv.setItem(i - 1, redGlass);
 							playClick(player);
 						}
-						if(e.getRawSlot() == resaultSlot) {//Clicks the result item slot
+						if(e.getRawSlot() == resultSlot) {//Clicks the result item slot
 							if(inv.getItem(mainSlot) != null && inv.getItem(subSlot) != null) {//Main and Sub items are not empty
 								if(getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot)) > 0) {//Items are upgradeable
 									int cost = getUpgradeCost(player, inv.getItem(mainSlot), inv.getItem(subSlot));
@@ -171,7 +163,7 @@ public class BlackSmith implements Listener {
 									inv.setItem(mainSlot, new ItemStack(Material.AIR));
 									inv.setItem(subSlot, new ItemStack(Material.AIR));
 									player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
-									inv.setItem(resaultSlot, denyBarrier);
+									inv.setItem(resultSlot, denyBarrier);
 									for(int i : result)
 										inv.setItem(i - 1, redGlass);
 								}else {
