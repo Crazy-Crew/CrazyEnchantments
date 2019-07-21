@@ -2,10 +2,10 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Messages;
+import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import me.badbones69.crazyenchantments.api.objects.BlackSmithResult;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
@@ -19,7 +19,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,28 +27,20 @@ import java.util.List;
 
 public class BlackSmith implements Listener {
 	
+	private static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private int mainSlot = 10;
 	private int subSlot = 13;
-	private ItemStack denyBarrier = new ItemBuilder().setMaterial(Material.BARRIER).setName(Files.CONFIG.getFile().getString("Settings.BlackSmith.Results.None")).setLore(Files.CONFIG.getFile().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")).build();
-	private ItemStack redGlass = new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(" ").build();
-	private ItemStack blueGlass = new ItemBuilder().setMaterial("LIGHT_BLUE_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:3").build();
 	
 	public static void openBlackSmith(Player player) {
-		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.GUIName")));
+		Inventory inv = Bukkit.createInventory(null, 27, blackSmithManager.getMenuName());
 		List<Integer> other = Arrays.asList(1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24);
 		List<Integer> result = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
 		for(int i : other)
 			inv.setItem(i - 1, new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:7").setName(" ").build());
 		for(int i : result)
 			inv.setItem(i - 1, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(" ").build());
-		ItemStack item = new ItemBuilder().setMaterial(Material.BARRIER).setName(Files.CONFIG.getFile().getString("Settings.BlackSmith.Results.None")).build();
-		if(Files.CONFIG.getFile().contains("Settings.BlackSmith.Results.Not-Found-Lore")) {
-			for(String line : Files.CONFIG.getFile().getStringList("Settings.BlackSmith.Results.Not-Found-Lore")) {
-				item = Methods.addLore(item, line);
-			}
-		}
-		inv.setItem(16, item);
+		inv.setItem(16, blackSmithManager.getDenyBarrier());
 		player.openInventory(inv);
 	}
 	
@@ -58,9 +49,8 @@ public class BlackSmith implements Listener {
 		List<Integer> result = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
 		Player player = (Player) e.getWhoClicked();
 		Inventory inv = e.getInventory();
-		FileConfiguration config = Files.CONFIG.getFile();
 		if(inv != null) {
-			if(e.getView().getTitle().equals(Methods.color(config.getString("Settings.BlackSmith.GUIName")))) {
+			if(e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
 				e.setCancelled(true);
 				if(e.getCurrentItem() != null) {
 					ItemStack item = e.getCurrentItem();
@@ -81,15 +71,15 @@ public class BlackSmith implements Listener {
 									BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(subSlot), inv.getItem(subSlot));
 									if(resultItem.getCost() > 0) {//Items are upgradable
 										inv.setItem(resultSlot, Methods.addLore(resultItem.getResultItem(),
-										config.getString("Settings.BlackSmith.Results.Found")
+										blackSmithManager.getFoundString()
 										.replaceAll("%Cost%", resultItem.getCost() + "")
 										.replaceAll("%cost%", resultItem.getCost() + "")));
 										for(int i : result)
-											inv.setItem(i - 1, blueGlass);
+											inv.setItem(i - 1, blackSmithManager.getBlueGlass());
 									}else {//Items are not upgradable
-										inv.setItem(resultSlot, denyBarrier);
+										inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
 										for(int i : result)
-											inv.setItem(i - 1, redGlass);
+											inv.setItem(i - 1, blackSmithManager.getRedGlass());
 									}
 								}
 							}else {//Main item slot is not empty
@@ -102,15 +92,15 @@ public class BlackSmith implements Listener {
 								BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(subSlot), inv.getItem(subSlot));
 								if(resultItem.getCost() > 0) {//Items are upgradable
 									inv.setItem(resultSlot, Methods.addLore(resultItem.getResultItem(),
-									config.getString("Settings.BlackSmith.Results.Found")
+									blackSmithManager.getFoundString()
 									.replaceAll("%Cost%", resultItem.getCost() + "")
 									.replaceAll("%cost%", resultItem.getCost() + "")));
 									for(int i : result)
-										inv.setItem(i - 1, blueGlass);
+										inv.setItem(i - 1, blackSmithManager.getBlueGlass());
 								}else {//Items are not upgradable
-									inv.setItem(resultSlot, denyBarrier);
+									inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
 									for(int i : result)
-										inv.setItem(i - 1, redGlass);
+										inv.setItem(i - 1, blackSmithManager.getRedGlass());
 								}
 							}
 						}
@@ -122,9 +112,9 @@ public class BlackSmith implements Listener {
 							}else {
 								player.getInventory().addItem(item);
 							}
-							inv.setItem(resultSlot, denyBarrier);
+							inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
 							for(int i : result)
-								inv.setItem(i - 1, redGlass);
+								inv.setItem(i - 1, blackSmithManager.getRedGlass());
 							playClick(player);
 						}
 						if(e.getRawSlot() == resultSlot) {//Clicks the result item slot
@@ -132,8 +122,8 @@ public class BlackSmith implements Listener {
 								BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(subSlot), inv.getItem(subSlot));
 								if(resultItem.getCost() > 0) {//Items are upgradeable
 									if(player.getGameMode() != GameMode.CREATIVE) {
-										if(Currency.isCurrency(config.getString("Settings.BlackSmith.Transaction.Currency"))) {
-											Currency currency = Currency.getCurrency(config.getString("Settings.BlackSmith.Transaction.Currency"));
+										if(blackSmithManager.getCurrency() != null) {
+											Currency currency = blackSmithManager.getCurrency();
 											if(CurrencyAPI.canBuy(player, currency, resultItem.getCost())) {
 												CurrencyAPI.takeCurrency(player, currency, resultItem.getCost());
 											}else {
@@ -166,9 +156,9 @@ public class BlackSmith implements Listener {
 									inv.setItem(mainSlot, new ItemStack(Material.AIR));
 									inv.setItem(subSlot, new ItemStack(Material.AIR));
 									player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
-									inv.setItem(resultSlot, denyBarrier);
+									inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
 									for(int i : result)
-										inv.setItem(i - 1, redGlass);
+										inv.setItem(i - 1, blackSmithManager.getRedGlass());
 								}else {
 									player.playSound(player.getLocation(), ce.getSound("ENTITY_VILLAGER_NO", "VILLAGER_NO"), 1, 1);
 								}
@@ -189,7 +179,7 @@ public class BlackSmith implements Listener {
 			@Override
 			public void run() {
 				if(inv != null) {
-					if(e.getView().getTitle().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.BlackSmith.GUIName")))) {
+					if(e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
 						List<Integer> slots = new ArrayList<>();
 						slots.add(mainSlot);
 						slots.add(subSlot);

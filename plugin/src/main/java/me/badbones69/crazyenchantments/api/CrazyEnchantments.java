@@ -6,6 +6,7 @@ import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
+import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.multisupport.NMSSupport;
@@ -47,6 +48,7 @@ public class CrazyEnchantments {
 	private ItemBuilder enchantmentBook;
 	private NMSSupport nmsSupport;
 	private Random random = new Random();
+	private BlackSmithManager blackSmithManager;
 	private InfoMenuManager infoMenuManager;
 	private WorldGuardVersion worldGuardVersion;
 	private ArrayList<Category> categories = new ArrayList<>();
@@ -79,6 +81,8 @@ public class CrazyEnchantments {
 		useNewSounds = version.isNewer(Version.v1_8_R3);
 		useNewMaterial = version.isNewer(Version.v1_12_R1);
 		nmsSupport = version.isNewer(Version.v1_12_R1) ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
+		blackSmithManager = BlackSmithManager.getInstance();
+		blackSmithManager.load();
 		infoMenuManager = InfoMenuManager.getInstance();
 		infoMenuManager.load();
 		FileConfiguration config = Files.CONFIG.getFile();
@@ -293,6 +297,14 @@ public class CrazyEnchantments {
 	 */
 	public NMSSupport getNMSSupport() {
 		return nmsSupport;
+	}
+	
+	/**
+	 * Get the blacksmith manager.
+	 * @return The instance of the blacksmith manager.
+	 */
+	public BlackSmithManager getBlackSmithManager() {
+		return blackSmithManager;
 	}
 	
 	/**

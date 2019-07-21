@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,9 +10,10 @@ import java.util.HashMap;
 
 public class BlackSmithResult {
 	
+	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
 	private int cost;
 	private ItemStack resultItem;
-	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
 		ItemStack resultItem = mainItem.clone();
@@ -22,7 +23,7 @@ public class BlackSmithResult {
 			CEBook subBook = ce.getCEBook(subItem);
 			if(mainBook.getEnchantment() == subBook.getEnchantment()) {
 				resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
-				cost += Files.CONFIG.getFile().getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade");
+				cost += blackSmithManager.getBookUpgrade();
 			}
 		}else {
 			if(mainItem.getType() == subItem.getType()) {
@@ -54,22 +55,22 @@ public class BlackSmithResult {
 					int level = duplicateEnchantments.get(enchantment);
 					if(level + 1 <= enchantment.getMaxLevel()) {
 						resultItem = ce.addEnchantment(resultItem, enchantment, level + 1);
-						cost += Files.CONFIG.getFile().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+						cost += blackSmithManager.getLevelUp();
 					}
 				}
 				for(CEnchantment enchantment : newEnchantments.keySet()) {
-					if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")) {
+					if(blackSmithManager.useMaxEnchantments()) {
 						if((Methods.getEnchantmentAmount(resultItem) + 1) <= maxEnchants) {
 							if(enchantment != null) {
 								resultItem = ce.addEnchantment(resultItem, enchantment, newEnchantments.get(enchantment));
-								cost += Files.CONFIG.getFile().getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment");
+								cost += blackSmithManager.getAddEnchantment();
 							}
 						}
 					}
 				}
 				for(CEnchantment enchantment : higherLevelEnchantments.keySet()) {
 					resultItem = ce.addEnchantment(resultItem, enchantment, higherLevelEnchantments.get(enchantment));
-					cost += Files.CONFIG.getFile().getInt("Settings.BlackSmith.Transaction.Costs.Power-Up");
+					cost += blackSmithManager.getLevelUp();
 				}
 			}
 		}
