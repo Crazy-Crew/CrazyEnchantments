@@ -55,7 +55,7 @@ public class BlackSmith implements Listener {
 				if(e.getCurrentItem() != null) {
 					ItemStack item = e.getCurrentItem();
 					int resultSlot = 16;
-					if(e.getRawSlot() > 27) {// Click In Players Inventory
+					if(e.getRawSlot() > 26) {// Click In Players Inventory
 						if(item.getAmount() != 1) return;
 						if(ce.hasEnchantments(item) || item.getType() == ce.getEnchantmentBook().getMaterial()) {
 							if(item.getType() == ce.getEnchantmentBook().getMaterial()) {//Is a custom enchantment book.
@@ -68,7 +68,7 @@ public class BlackSmith implements Listener {
 								inv.setItem(mainSlot, item);//Moves clicked item to main slot
 								playClick(player);
 								if(inv.getItem(subSlot) != null) {//Sub item slot is not empty
-									BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(subSlot), inv.getItem(subSlot));
+									BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(mainSlot), inv.getItem(subSlot));
 									if(resultItem.getCost() > 0) {//Items are upgradable
 										inv.setItem(resultSlot, Methods.addLore(resultItem.getResultItem(),
 										blackSmithManager.getFoundString()
@@ -89,7 +89,7 @@ public class BlackSmith implements Listener {
 								}
 								inv.setItem(subSlot, item);//Moves clicked item to sub slot
 								playClick(player);
-								BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(subSlot), inv.getItem(subSlot));
+								BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(mainSlot), inv.getItem(subSlot));
 								if(resultItem.getCost() > 0) {//Items are upgradable
 									inv.setItem(resultSlot, Methods.addLore(resultItem.getResultItem(),
 									blackSmithManager.getFoundString()
@@ -119,7 +119,7 @@ public class BlackSmith implements Listener {
 						}
 						if(e.getRawSlot() == resultSlot) {//Clicks the result item slot
 							if(inv.getItem(mainSlot) != null && inv.getItem(subSlot) != null) {//Main and Sub items are not empty
-								BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(subSlot), inv.getItem(subSlot));
+								BlackSmithResult resultItem = new BlackSmithResult(player, inv.getItem(mainSlot), inv.getItem(subSlot));
 								if(resultItem.getCost() > 0) {//Items are upgradeable
 									if(player.getGameMode() != GameMode.CREATIVE) {
 										if(blackSmithManager.getCurrency() != null) {
