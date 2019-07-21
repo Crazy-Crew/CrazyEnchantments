@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.simpleyaml.configuration.file.FileConfiguration;

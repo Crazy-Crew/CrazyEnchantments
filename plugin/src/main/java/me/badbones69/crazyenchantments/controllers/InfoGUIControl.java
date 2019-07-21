@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
-import me.badbones69.crazyenchantments.api.objects.InfoMenuManager;
+import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -6,6 +6,7 @@ import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
+import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.multisupport.NMSSupport;
 import me.badbones69.crazyenchantments.multisupport.NMS_v1_12_2_Down;
