@@ -35,11 +35,15 @@ import java.util.*;
 public class CrazyEnchantments {
 	
 	private static CrazyEnchantments instance = new CrazyEnchantments();
+	private Plugin plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 	private int rageMaxLevel;
 	private boolean gkitzToggle;
+	private boolean useUnsafeEnchantments;
+	private boolean useNewSounds;
 	private boolean useNewMaterial;
 	private boolean breakRageOnDamage;
 	private boolean enchantStackedItems;
+	private ItemBuilder enchantmentBook;
 	private NMSSupport nmsSupport;
 	private Random random = new Random();
 	private InfoMenuManager infoMenuManager;
@@ -70,6 +74,7 @@ public class CrazyEnchantments {
 		whitelisted.clear();
 		blacklisted.clear();
 		Version version = Version.getCurrentVersion();
+		useNewSounds = version.isNewer(Version.v1_8_R3);
 		useNewMaterial = version.isNewer(Version.v1_12_R1);
 		nmsSupport = version.isNewer(Version.v1_12_R1) ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
 		infoMenuManager = InfoMenuManager.getInstance();
@@ -83,6 +88,8 @@ public class CrazyEnchantments {
 			}catch(Exception e) {
 			}
 		}
+		enchantmentBook = new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item"));
+		useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
 		gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled");
 		rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
 		breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
@@ -241,20 +248,7 @@ public class CrazyEnchantments {
 	 * @param player The player you wish to backup.
 	 */
 	public void backupCEPlayer(Player player) {
-		FileConfiguration data = Files.DATA.getFile();
-		String uuid = player.getUniqueId().toString();
-		CEPlayer p = getCEPlayer(player);
-		if(p != null) {
-			if(p.getSouls() > 0) {
-				data.set("Players." + uuid + ".Name", player.getName());
-				data.set("Players." + uuid + ".Souls-Information.Souls", p.getSouls());
-				data.set("Players." + uuid + ".Souls-Information.Is-Active", p.isSoulsActive());
-			}
-			for(Cooldown cooldown : p.getCooldowns()) {
-				data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
-			}
-			Files.DATA.saveFile();
-		}
+		backupCEPlayer(getCEPlayer(player));
 	}
 	
 	/**
@@ -280,7 +274,7 @@ public class CrazyEnchantments {
 	 * @return The plugin as a Plugin object.
 	 */
 	public Plugin getPlugin() {
-		return Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+		return plugin;
 	}
 	
 	/**
@@ -308,6 +302,14 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * Check if the config has unsafe enchantments enabled.
+	 * @return True if enabled and false if not.
+	 */
+	public boolean useUnsafeEnchantments() {
+		return useUnsafeEnchantments;
+	}
+	
+	/**
 	 * The material version needed to be used.
 	 */
 	public boolean useNewMaterial() {
@@ -321,7 +323,7 @@ public class CrazyEnchantments {
 	 * @return The Sound object of the current minecraft version.
 	 */
 	public Sound getSound(String newSound, String oldSound) {
-		return Sound.valueOf(Version.getCurrentVersion().isNewer(Version.v1_8_R3) ? newSound : oldSound);
+		return Sound.valueOf(useNewSounds ? newSound : oldSound);
 	}
 	
 	/**
@@ -434,10 +436,18 @@ public class CrazyEnchantments {
 	
 	/**
 	 *
-	 * @return Returns the item the enchantment book will be.
+	 * @return a clone of the ItemBuilder of the enchantment book.
+	 */
+	public ItemBuilder getEnchantmentBook() {
+		return enchantmentBook.clone();
+	}
+	
+	/**
+	 *
+	 * @return the itemstack of the enchantment book.
 	 */
 	public ItemStack getEnchantmentBookItem() {
-		return new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item")).build();
+		return enchantmentBook.build();
 	}
 	
 	/**
@@ -490,18 +500,7 @@ public class CrazyEnchantments {
 	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
 	 */
 	public boolean hasEnchantment(ItemStack item, CEnchantments enchantment) {
-		if(item != null) {
-			if(item.hasItemMeta()) {
-				if(item.getItemMeta().hasLore()) {
-					for(String lore : item.getItemMeta().getLore()) {
-						if(lore.startsWith(enchantment.getEnchantment().getColor() + enchantment.getEnchantment().getCustomName())) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
+		return hasEnchantment(item, enchantment.getEnchantment());
 	}
 	
 	/**
@@ -598,13 +597,13 @@ public class CrazyEnchantments {
 	/**
 	 *
 	 * @param player The player you want to check if they have the enchantment on their armor.
-	 * @param item The item you want to exclude.
+	 * @param excludedItem The item you want to exclude.
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public boolean playerHasEnchantmentOnExclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public boolean playerHasEnchantmentOnExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
-			if(!armor.isSimilar(item)) {
+			if(!armor.isSimilar(excludedItem)) {
 				if(hasEnchantment(armor, enchantment)) {
 					return true;
 				}
@@ -616,31 +615,31 @@ public class CrazyEnchantments {
 	/**
 	 *
 	 * @param player The player you want to check if they have the enchantment on their armor.
-	 * @param item The item you want to include.
+	 * @param includedItem The item you want to include.
 	 * @param enchantment The enchantment you are checking.
 	 * @return True if a piece of armor has the enchantment and false if not.
 	 */
-	public boolean playerHasEnchantmentOnInclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public boolean playerHasEnchantmentOnInclude(Player player, ItemStack includedItem, CEnchantment enchantment) {
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(hasEnchantment(armor, enchantment)) {
 				return true;
 			}
 		}
-		return hasEnchantment(item, enchantment);
+		return hasEnchantment(includedItem, enchantment);
 	}
 	
 	/**
 	 *
 	 * @param player The player you want to get the highest level of an enchantment from.
-	 * @param include The item you want to include.
-	 * @param exclude The item you want to exclude.
+	 * @param includedItem The item you want to include.
+	 * @param excludedItem The item you want to exclude.
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public int getHighestEnchantmentLevel(Player player, ItemStack include, ItemStack exclude, CEnchantment enchantment) {
+	public int getHighestEnchantmentLevel(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantment enchantment) {
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
-			if(!armor.isSimilar(exclude)) {
+			if(!armor.isSimilar(excludedItem)) {
 				if(hasEnchantment(armor, enchantment)) {
 					int level = getLevel(armor, enchantment);
 					if(highest < level) {
@@ -649,8 +648,8 @@ public class CrazyEnchantments {
 				}
 			}
 		}
-		if(hasEnchantment(include, enchantment)) {
-			int level = getLevel(include, enchantment);
+		if(hasEnchantment(includedItem, enchantment)) {
+			int level = getLevel(includedItem, enchantment);
 			if(highest < level) {
 				highest = level;
 			}
@@ -661,14 +660,14 @@ public class CrazyEnchantments {
 	/**
 	 *
 	 * @param player The player you want to get the highest level of an enchantment from.
-	 * @param item The item you want to exclude.
+	 * @param excludedItem The item you want to exclude.
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public int getHighestEnchantmentLevelExclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public int getHighestEnchantmentLevelExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
-			if(!armor.isSimilar(item)) {
+			if(!armor.isSimilar(excludedItem)) {
 				if(hasEnchantment(armor, enchantment)) {
 					int level = getLevel(armor, enchantment);
 					if(highest < level) {
@@ -683,11 +682,11 @@ public class CrazyEnchantments {
 	/**
 	 *
 	 * @param player The player you want to get the highest level of an enchantment from.
-	 * @param item The item you want to include.
+	 * @param includedItem The item you want to include.
 	 * @param enchantment The enchantment you are checking.
 	 * @return The highest level of the enchantment that the player currently has.
 	 */
-	public int getHighestEnchantmentLevelInclude(Player player, ItemStack item, CEnchantment enchantment) {
+	public int getHighestEnchantmentLevelInclude(Player player, ItemStack includedItem, CEnchantment enchantment) {
 		int highest = 0;
 		for(ItemStack armor : player.getEquipment().getArmorContents()) {
 			if(hasEnchantment(armor, enchantment)) {
@@ -697,8 +696,8 @@ public class CrazyEnchantments {
 				}
 			}
 		}
-		if(hasEnchantment(item, enchantment)) {
-			int level = getLevel(item, enchantment);
+		if(hasEnchantment(includedItem, enchantment)) {
+			int level = getLevel(includedItem, enchantment);
 			if(highest < level) {
 				highest = level;
 			}
@@ -857,32 +856,32 @@ public class CrazyEnchantments {
 	/**
 	 *
 	 * @param player The player you are adding it to.
-	 * @param include Include an item.
-	 * @param exclude Exclude an item.
+	 * @param includedItem Include an item.
+	 * @param excludedItem Exclude an item.
 	 * @param enchantment The enchantment you want the max level effects from.
 	 * @return The list of all the max potion effects based on all the armor on the player.
 	 */
-	public HashMap<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack include, ItemStack exclude, CEnchantments enchantment) {
+	public HashMap<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) {
 		HashMap<PotionEffectType, Integer> effects = new HashMap<>();
 		ArrayList<ItemStack> items = new ArrayList<>(Arrays.asList(player.getEquipment().getArmorContents()));
-		if(include == null) {
-			include = new ItemStack(Material.AIR);
+		if(includedItem == null) {
+			includedItem = new ItemStack(Material.AIR);
 		}
-		if(exclude == null) {
-			exclude = new ItemStack(Material.AIR);
+		if(excludedItem == null) {
+			excludedItem = new ItemStack(Material.AIR);
 		}
-		if(exclude.isSimilar(include)) {
-			exclude = new ItemStack(Material.AIR);
+		if(excludedItem.isSimilar(includedItem)) {
+			excludedItem = new ItemStack(Material.AIR);
 		}
-		items.add(include);
+		items.add(includedItem);
 		HashMap<CEnchantments, HashMap<PotionEffectType, Integer>> armorEffects = getEnchantmentPotions();
 		for(CEnchantments ench : armorEffects.keySet()) {
 			for(ItemStack armor : items) {
 				if(armor != null) {
-					if(!armor.isSimilar(exclude)) {
+					if(!armor.isSimilar(excludedItem)) {
 						if(hasEnchantment(armor, getEnchantmentFromName(ench.getName()))) {
 							int level = getLevel(armor, getEnchantmentFromName(ench.getName()));
-							if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
+							if(!useUnsafeEnchantments) {
 								if(level > getEnchantmentFromName(ench.getName()).getMaxLevel()) {
 									level = getEnchantmentFromName(ench.getName()).getMaxLevel();
 								}
@@ -1071,7 +1070,7 @@ public class CrazyEnchantments {
 			}
 		}
 		int level = convertLevelInteger(line.replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
-		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
+		if(!useUnsafeEnchantments) {
 			if(level > enchant.getMaxLevel()) {
 				level = enchant.getMaxLevel();
 			}
@@ -1099,7 +1098,7 @@ public class CrazyEnchantments {
 			}
 		}
 		level = convertLevelInteger(line.replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
-		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
+		if(!useUnsafeEnchantments) {
 			if(level > enchant.getEnchantment().getMaxLevel()) {
 				level = enchant.getEnchantment().getMaxLevel();
 			}

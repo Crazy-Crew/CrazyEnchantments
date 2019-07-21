@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ public class InfoMenuManager {
 	private ItemStack backRight;
 	private ItemStack backLeft;
 	private List<EnchantmentType> enchantmentTypes = new ArrayList<>();
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	public static InfoMenuManager getInstance() {
 		return instance;
@@ -93,8 +95,8 @@ public class InfoMenuManager {
 		Inventory inventory = Bukkit.createInventory(null, slots, inventoryName);
 		for(CEnchantment enchantment : enchantments) {
 			if(enchantment.isActivated()) {
-				inventory.addItem(new ItemBuilder()
-				.setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item"))
+				inventory.addItem(
+				ce.getEnchantmentBook()
 				.setName(enchantment.getInfoName())
 				.setLore(enchantment.getInfoDescription())
 				.setGlowing(true)

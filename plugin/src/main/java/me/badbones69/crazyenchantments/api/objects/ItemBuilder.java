@@ -23,7 +23,7 @@ import java.util.List;
  * @author BadBones69
  *
  */
-public class ItemBuilder {
+public class ItemBuilder implements Cloneable {
 	
 	private Material material;
 	private int damage;
@@ -477,6 +477,19 @@ public class ItemBuilder {
 		}else {
 			return item;
 		}
+	}
+	
+	/**
+	 * Get a clone of the object.
+	 * @return a new cloned object.
+	 */
+	public ItemBuilder clone() {
+		try {
+			return (ItemBuilder) super.clone();
+		}catch(CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return new ItemBuilder();
 	}
 	
 	/**

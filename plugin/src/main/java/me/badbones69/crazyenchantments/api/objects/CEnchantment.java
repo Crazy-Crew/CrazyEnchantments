@@ -2,7 +2,6 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import me.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import org.bukkit.Bukkit;
@@ -218,7 +217,7 @@ public class CEnchantment {
 			}
 		}
 		power = ce.convertLevelInteger(line.replace(color + customName + " ", ""));
-		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
+		if(!ce.useUnsafeEnchantments()) {
 			if(power > maxLevel) {
 				power = maxLevel;
 			}

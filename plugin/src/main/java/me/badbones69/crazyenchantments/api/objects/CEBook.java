@@ -187,7 +187,6 @@ public class CEBook {
 	 * @return Return the book as an ItemBuilder.
 	 */
 	public ItemBuilder getItemBuilder() {
-		String item = Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item");
 		String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + ce.convertLevelString(level);
 		List<String> lore = new ArrayList<>();
 		for(String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
@@ -201,7 +200,7 @@ public class CEBook {
 				.replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_rate%", success_rate + ""));
 			}
 		}
-		return new ItemBuilder().setMaterial(item).setAmount(amount).setName(name).setLore(lore).setGlowing(glowing);
+		return ce.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlowing(glowing);
 	}
 	
 	/**

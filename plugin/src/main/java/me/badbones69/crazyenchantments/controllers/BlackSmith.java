@@ -239,7 +239,7 @@ public class BlackSmith implements Listener {
 						int power = ce.getBookLevel(mainItem, en);
 						int max = Files.ENCHANTMENTS.getFile().getInt("Enchantments." + en.getName() + ".MaxPower");
 						if(power + 1 <= max) {
-							item = new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item")).setName(en.getBookColor() + en.getCustomName() + " " + ce.convertLevelString(power + 1)).setLore(mainItem.getItemMeta().getLore()).setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing")).build();
+							item = ce.getEnchantmentBook().setName(en.getBookColor() + en.getCustomName() + " " + ce.convertLevelString(power + 1)).setLore(mainItem.getItemMeta().getLore()).setGlowing(Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing")).build();
 						}
 					}
 				}
