@@ -21,9 +21,13 @@ public class BlackSmithResult {
 		if(mainItem.getType() == ce.getEnchantmentBook().getMaterial() && subItem.getType() == ce.getEnchantmentBook().getMaterial()) {
 			CEBook mainBook = ce.getCEBook(mainItem);
 			CEBook subBook = ce.getCEBook(subItem);
-			if(mainBook.getEnchantment() == subBook.getEnchantment()) {
-				resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
-				cost += blackSmithManager.getBookUpgrade();
+			if(mainBook.getEnchantment() == subBook.getEnchantment()) {//Books are the same enchantment.
+				if(mainBook.getLevel() == subBook.getLevel()) {//Books have to be the same level.
+					if(mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {//Makes sure level doesn't go passed max.
+						resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
+						cost += blackSmithManager.getBookUpgrade();
+					}
+				}
 			}
 		}else {
 			if(mainItem.getType() == subItem.getType()) {
