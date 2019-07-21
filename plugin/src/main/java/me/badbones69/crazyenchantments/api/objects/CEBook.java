@@ -65,6 +65,7 @@ public class CEBook {
 		this.enchantment = enchantment;
 		this.amount = amount;
 		this.level = level;
+		this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
 		this.destroy_rate = percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
 		this.success_rate = percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
 	}
