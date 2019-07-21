@@ -104,7 +104,7 @@ public class CEBook {
 	
 	/**
 	 * If the item will be glowing or not.
-	 * @return Ture if glowing and false if not.
+	 * @return True if glowing and false if not.
 	 */
 	public boolean getGlowing() {
 		return this.glowing;
