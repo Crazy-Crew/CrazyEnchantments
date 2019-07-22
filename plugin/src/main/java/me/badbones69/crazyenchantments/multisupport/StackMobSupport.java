@@ -2,11 +2,10 @@ package me.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.Listener;
 import uk.antiperson.stackmob.StackMob;
 import uk.antiperson.stackmob.api.EntityManager;
 
-public class StackMobSupport implements Listener {
+public class StackMobSupport {
 	
 	private static EntityManager entityManager = new EntityManager((StackMob) Bukkit.getPluginManager().getPlugin("StackMob"));
 	
