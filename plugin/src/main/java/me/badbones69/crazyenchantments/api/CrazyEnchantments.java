@@ -493,12 +493,14 @@ public class CrazyEnchantments {
 	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
 	 */
 	public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-		if(item != null) {
-			if(item.hasItemMeta()) {
-				if(item.getItemMeta().hasLore()) {
-					for(String lore : item.getItemMeta().getLore()) {
-						if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
-							return true;
+		if(enchantment.isActivated()) {
+			if(item != null) {
+				if(item.hasItemMeta()) {
+					if(item.getItemMeta().hasLore()) {
+						for(String lore : item.getItemMeta().getLore()) {
+							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
+								return true;
+							}
 						}
 					}
 				}
