@@ -97,7 +97,7 @@ public class Tinkerer implements Listener {
 													total = total + getTotalXP(item);
 													toggle = true;
 												}else {
-													if(Methods.isInvFull(player)) {
+													if(Methods.isInventoryFull(player)) {
 														player.getWorld().dropItem(player.getLocation(), inv.getItem(getSlot().get(slot)));
 													}else {
 														player.getInventory().addItem(inv.getItem(getSlot().get(slot)));
@@ -115,13 +115,13 @@ public class Tinkerer implements Listener {
 										if(toggle) {
 											player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
 										}
-										player.playSound(player.getLocation(), ce.getSound("ENTITY_VILLAGER_TRADE", "ENTITY_VILLAGER_TRADING"), 1, 1);
+										player.playSound(player.getLocation(), ce.getSound("ENTITY_VILLAGER_TRADE", "VILLAGER_YES"), 1, 1);
 										return;
 									}
 								}
 								if(!current.getType().toString().endsWith("STAINED_GLASS_PANE")) {// Adding/Taking Items
 									if(current.getType() == ce.getEnchantmentBookItem().getType()) {// Adding a book
-										Boolean custom = false;
+										boolean custom = false;
 										boolean toggle = false;
 										String enchant = "";
 										for(CEnchantment en : ce.getRegisteredEnchantments()) {
@@ -193,7 +193,7 @@ public class Tinkerer implements Listener {
 								if(player.isDead()) {
 									player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
 								}else {
-									if(Methods.isInvFull(player)) {
+									if(Methods.isInventoryFull(player)) {
 										player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
 									}else {
 										player.getInventory().addItem(inv.getItem(slot));

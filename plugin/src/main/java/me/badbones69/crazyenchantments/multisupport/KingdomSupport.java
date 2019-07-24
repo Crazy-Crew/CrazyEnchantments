@@ -32,4 +32,5 @@ public class KingdomSupport {
 		return land.getOwner() == null || kp.isAdminMode() || kingdomland.equals(kp.getKingdom());
 		
 	}
+	
 }

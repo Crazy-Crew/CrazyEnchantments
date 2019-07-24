@@ -28,6 +28,76 @@ public class ScrollControl implements Listener {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
+	public static ItemStack orderEnchantments(ItemStack item) {
+		HashMap<String, Integer> enchants = new HashMap<>();
+		HashMap<String, Integer> categories = new HashMap<>();
+		List<String> order = new ArrayList<>();
+		ArrayList<String> enchantments = new ArrayList<>();
+		for(CEnchantment en : ce.getEnchantmentsOnItem(item)) {
+			enchantments.add(en.getName());
+		}
+		for(String ench : enchantments) {
+			int top = 0;
+			CEnchantment cEnchantment = ce.getEnchantmentFromName(ench);
+			if(cEnchantment != null) {
+				top = ce.getHighestEnchantmentCategory(cEnchantment).getRarity();
+				enchants.put(ench, ce.getLevel(item, cEnchantment));
+				ce.removeEnchantment(item, cEnchantment);
+			}
+			categories.put(ench, top);
+			order.add(ench);
+		}
+		order = orderInts(order, categories);
+		ItemMeta m = item.getItemMeta();
+		ArrayList<String> lore = new ArrayList<>();
+		for(String ench : order) {
+			if(ce.getEnchantmentFromName(ench) != null) {
+				CEnchantment en = ce.getEnchantmentFromName(ench);
+				lore.add(en.getColor() + en.getCustomName() + " " + ce.convertLevelString(enchants.get(ench)));
+			}
+		}
+		if(m.hasLore()) {
+			lore.addAll(m.getLore());
+		}
+		m.setLore(lore);
+		String name = Methods.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replaceAll("_", " ").toLowerCase()));
+		String enchs = Files.CONFIG.getFile().getString("Settings.TransmogScroll.Amount-of-Enchantments");
+		if(m.hasDisplayName()) {
+			name = m.getDisplayName();
+			for(int i = 0; i <= 100; i++) {
+				String msg = enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "");
+				if(m.getDisplayName().endsWith(Methods.color(msg))) {
+					name = m.getDisplayName().substring(0, m.getDisplayName().length() - msg.length());
+				}
+			}
+		}
+		int amount = order.size();
+		if(Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")) {
+			for(Enchantment ench : item.getEnchantments().keySet()) {
+				try {
+					if(Methods.getEnchantments().containsKey(ench.getName())) {
+						amount++;
+					}
+				}catch(Exception e) {
+				}
+			}
+		}
+		if(Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Amount-Toggle")) {
+			m.setDisplayName(name + Methods.color(enchs.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
+		}
+		item.setItemMeta(m);
+		return item;
+	}
+	
+	public static List<String> orderInts(List<String> list, final Map<String, Integer> map) {
+		list.sort((a1, a2) -> {
+			Integer string1 = map.get(a1);
+			Integer string2 = map.get(a2);
+			return string2.compareTo(string1);
+		});
+		return list;
+	}
+	
 	@EventHandler
 	public void onScrollUse(InventoryClickEvent e) {
 		Player player = (Player) e.getWhoClicked();
@@ -54,9 +124,7 @@ public class ScrollControl implements Listener {
 								return;
 							}
 							e.setCancelled(true);
-							ItemStack it = orderEnchantments(item);
-							it = Methods.addGlow(it);
-							e.setCurrentItem(it);
+							e.setCurrentItem(orderEnchantments(item));
 							player.setItemOnCursor(Methods.removeItem(scroll));
 							player.updateInventory();
 							return;
@@ -130,78 +198,9 @@ public class ScrollControl implements Listener {
 		}
 	}
 	
-	public static ItemStack orderEnchantments(ItemStack item) {
-		HashMap<String, Integer> enchants = new HashMap<>();
-		HashMap<String, Integer> categories = new HashMap<>();
-		List<String> order = new ArrayList<>();
-		ArrayList<String> enchantments = new ArrayList<>();
-		for(CEnchantment en : ce.getEnchantmentsOnItem(item)) {
-			enchantments.add(en.getName());
-		}
-		for(String ench : enchantments) {
-			int top = 0;
-			CEnchantment cEnchantment = ce.getEnchantmentFromName(ench);
-			if(cEnchantment != null) {
-				top = ce.getHighestEnchantmentCategory(cEnchantment).getRarity();
-				enchants.put(ench, ce.getLevel(item, cEnchantment));
-				ce.removeEnchantment(item, cEnchantment);
-			}
-			categories.put(ench, top);
-			order.add(ench);
-		}
-		order = orderInts(order, categories);
-		ItemMeta m = item.getItemMeta();
-		ArrayList<String> lore = new ArrayList<>();
-		for(String ench : order) {
-			if(ce.getEnchantmentFromName(ench) != null) {
-				CEnchantment en = ce.getEnchantmentFromName(ench);
-				lore.add(en.getColor() + en.getCustomName() + " " + ce.convertLevelString(enchants.get(ench)));
-			}
-		}
-		if(m.hasLore()) {
-			lore.addAll(m.getLore());
-		}
-		m.setLore(lore);
-		String name = Methods.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replaceAll("_", " ").toLowerCase()));
-		String enchs = Files.CONFIG.getFile().getString("Settings.TransmogScroll.Amount-of-Enchantments");
-		if(m.hasDisplayName()) {
-			name = m.getDisplayName();
-			for(int i = 0; i <= 100; i++) {
-				String msg = enchs.replaceAll("%Amount%", i + "").replaceAll("%amount%", i + "");
-				if(m.getDisplayName().endsWith(Methods.color(msg))) {
-					name = m.getDisplayName().substring(0, m.getDisplayName().length() - msg.length());
-				}
-			}
-		}
-		int amount = order.size();
-		if(Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments")) {
-			for(Enchantment ench : item.getEnchantments().keySet()) {
-				try {
-					if(Methods.getEnchantments().contains(ench.getName())) {
-						amount++;
-					}
-				}catch(Exception e) {
-				}
-			}
-		}
-		if(Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Amount-Toggle")) {
-			m.setDisplayName(name + Methods.color(enchs.replaceAll("%Amount%", amount + "").replaceAll("%amount%", amount + "")));
-		}
-		item.setItemMeta(m);
-		return item;
-	}
-	
-	public static List<String> orderInts(List<String> list, final Map<String, Integer> map) {
-		list.sort((a1, a2) -> {
-			Integer string1 = map.get(a1);
-			Integer string2 = map.get(a2);
-			return string2.compareTo(string1);
-		});
-		return list;
-	}
-	
 	private CEnchantment pickEnchant(List<CEnchantment> enchants) {
 		Random i = new Random();
 		return enchants.get(i.nextInt(enchants.size()));
 	}
+	
 }

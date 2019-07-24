@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.api.events;
 
+import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -9,39 +10,42 @@ import org.bukkit.inventory.ItemStack;
 
 public class PreBookApplyEvent extends Event implements Cancellable {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private Player player;
-	private Integer level;
-	private Boolean destroyed;
-	private Boolean cancelled;
-	private Boolean successful;
-	private Integer successChance;
-	private Integer destroyChance;
-	private Boolean creativeSuccess;
+	private int level;
+	private boolean destroyed;
+	private boolean cancelled;
+	private boolean successful;
+	private int successChance;
+	private int destroyChance;
+	private boolean creativeSuccess;
 	private ItemStack enchantedItem;
 	private CEnchantment enchantment;
-	private ItemStack enchantmentBook;
-	private static final HandlerList handlers = new HandlerList();
+	private CEBook ceBook;
 	
-	public PreBookApplyEvent(Player player, CEnchantment enchantment, Integer level, ItemStack enchantedItem, ItemStack enchantmentBook,
-	Boolean creativeSuccess, Boolean successful, Integer successChance, Boolean destroyed, Integer destroyChance) {
-		this.level = level;
+	public PreBookApplyEvent(Player player, ItemStack enchantedItem, CEBook ceBook, boolean creativeSuccess, boolean successful, boolean destroyed) {
+		this.level = ceBook.getLevel();
 		this.player = player;
-		this.enchantment = enchantment;
+		this.enchantment = ceBook.getEnchantment();
 		this.enchantedItem = enchantedItem;
-		this.enchantmentBook = enchantmentBook;
+		this.ceBook = ceBook;
 		this.creativeSuccess = creativeSuccess;
 		this.successful = successful;
-		this.successChance = successChance;
+		this.successChance = ceBook.getSuccessRate();
 		this.destroyed = destroyed;
-		this.destroyChance = destroyChance;
+		this.destroyChance = ceBook.getDestroyRate();
 		this.cancelled = false;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	public Player getPlayer() {
 		return player;
 	}
 	
-	public Integer getLevel() {
+	public int getLevel() {
 		return level;
 	}
 	
@@ -53,27 +57,27 @@ public class PreBookApplyEvent extends Event implements Cancellable {
 		return enchantment;
 	}
 	
-	public ItemStack getEnchantmentBook() {
-		return enchantmentBook;
+	public CEBook getCEBook() {
+		return ceBook;
 	}
 	
-	public Boolean getDestroyed() {
+	public boolean getDestroyed() {
 		return destroyed;
 	}
 	
-	public Boolean getSuccessful() {
+	public boolean getSuccessful() {
 		return successful;
 	}
 	
-	public Integer getSuccessChance() {
+	public int getSuccessChance() {
 		return successChance;
 	}
 	
-	public Integer getDestroyChance() {
+	public int getDestroyChance() {
 		return destroyChance;
 	}
 	
-	public Boolean getCreativeSuccess() {
+	public boolean getCreativeSuccess() {
 		return creativeSuccess;
 	}
 	
@@ -88,10 +92,6 @@ public class PreBookApplyEvent extends Event implements Cancellable {
 	}
 	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

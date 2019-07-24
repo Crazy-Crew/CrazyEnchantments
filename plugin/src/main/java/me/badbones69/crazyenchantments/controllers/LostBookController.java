@@ -30,7 +30,7 @@ public class LostBookController implements Listener {
 						Category category = ce.getCategoryFromLostBook(item);
 						if(category != null) {
 							e.setCancelled(true);
-							if(Methods.isInvFull(player)) {
+							if(Methods.isInventoryFull(player)) {
 								player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 								return;
 							}

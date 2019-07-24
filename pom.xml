@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments</artifactId>
     <packaging>pom</packaging>
-    <version>1.8-Dev-Build-v5</version>
+    <version>1.8-Dev-Build-v6</version>
     <name>CrazyEnchantments</name>
     <modules>
         <module>api</module>

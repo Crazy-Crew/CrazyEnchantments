@@ -30,7 +30,7 @@ public class AACSupport implements Listener {
 		}
 	}
 	
-	public static Boolean isExempted(Player player) {
+	public static boolean isExempted(Player player) {
 		return player != null && exempted.contains(player.getUniqueId());
 	}
 	

@@ -4,7 +4,7 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import me.badbones69.crazyenchantments.controllers.FireworkDamageAPI;
+import me.badbones69.crazyenchantments.controllers.FireworkDamage;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -30,43 +29,34 @@ import java.util.*;
 
 public class Methods {
 	
+	private static Random random = new Random();
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private static boolean isV1_13_Up = Version.getCurrentVersion().isNewer(Version.v1_12_R1);
 	
 	public static String color(String msg) {
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
 	
 	public static String removeColor(String msg) {
-		msg = ChatColor.stripColor(msg);
-		return msg;
+		return ChatColor.stripColor(msg);
 	}
 	
-	public static Plugin getPlugin() {
-		return Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
+	public static int getRandomNumber(int range) {
+		return random.nextInt(range - 1) + 1;
 	}
 	
-	public static void sendMultiMessage(Player player, List<String> messages) {
-		for(String msg : messages) {
-			player.sendMessage(color(msg));
-		}
-	}
-	
-	public static Integer getRandomNumber(int range) {
-		return ((new Random().nextInt(range - 1)) + 1);
-	}
-	
-	public static Integer getRandomNumber(String range) {
+	public static int getRandomNumber(String range) {
 		int number = 1;
 		String[] split = range.split("-");
 		if(isInt(split[0]) && isInt(split[1])) {
 			int max = Integer.parseInt(split[1]) + 1;
 			int min = Integer.parseInt(split[0]);
-			number = min + new Random().nextInt(max - min);
+			number = min + random.nextInt(max - min);
 		}
 		return number;
 	}
 	
-	public static boolean hasPermission(CommandSender sender, String perm, Boolean toggle) {
+	public static boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
 		if(sender instanceof Player) {
 			return hasPermission((Player) sender, perm, toggle);
 		}else {
@@ -74,7 +64,7 @@ public class Methods {
 		}
 	}
 	
-	public static boolean hasPermission(Player player, String perm, Boolean toggle) {
+	public static boolean hasPermission(Player player, String perm, boolean toggle) {
 		if(player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
 			return true;
 		}else {
@@ -125,38 +115,6 @@ public class Methods {
 		}
 	}
 	
-	public static ArrayList<String> getPotions() {
-		ArrayList<String> list = new ArrayList<>();
-		list.add("ABSORPTION");
-		list.add("BLINDNESS");
-		list.add("CONFUSION");
-		list.add("DAMAGE_RESISTANCE");
-		list.add("FAST_DIGGING");
-		list.add("FIRE_RESISTANCE");
-		list.add("GLOWING");
-		list.add("HARM");
-		list.add("HEAL");
-		list.add("HEALTH_BOOST");
-		list.add("HUNGER");
-		list.add("INCREASE_DAMAGE");
-		list.add("INVISIBILITY");
-		list.add("JUMP");
-		list.add("LEVITATION");
-		list.add("LUCK");
-		list.add("NIGHT_VISION");
-		list.add("POISON");
-		list.add("REGENERATION");
-		list.add("SATURATION");
-		list.add("SLOW");
-		list.add("SLOW_DIGGING");
-		list.add("SPEED");
-		list.add("UNLUCK");
-		list.add("WATER_BREATHING");
-		list.add("WEAKNESS");
-		list.add("WITHER");
-		return list;
-	}
-	
 	public static ItemStack removeLore(ItemStack item, String i) {
 		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();
@@ -168,26 +126,6 @@ public class Methods {
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
-	}
-	
-	public static ItemStack replaceLore(ItemStack item, String oldlore, String newlore) {
-		ArrayList<String> lore = new ArrayList<>();
-		ItemMeta m = item.getItemMeta();
-		for(String l : item.getItemMeta().getLore()) {
-			if(l.equals(oldlore)) {
-				lore.add(color(newlore));
-			}else {
-				lore.add(l);
-			}
-		}
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
-	}
-	
-	public static String percentPicker() {
-		Random i = new Random();
-		return Integer.toString(i.nextInt(100));
 	}
 	
 	public static String getPrefix() {
@@ -211,14 +149,6 @@ public class Methods {
 		return Bukkit.getServer().getPlayer(name);
 	}
 	
-	public static Location getPlayerLocation(Player player) {
-		return player.getLocation();
-	}
-	
-	public static void runCommand(Player player, String CMD) {
-		player.performCommand(CMD);
-	}
-	
 	public static boolean isPlayerOnline(String playerName, CommandSender sender) {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			if(player.getName().equalsIgnoreCase(playerName)) {
@@ -230,26 +160,31 @@ public class Methods {
 	}
 	
 	public static void removeItem(ItemStack item, Player player) {
-		if(item.getAmount() <= 1) {
+		removeItem(item, player, 1);
+	}
+	
+	public static void removeItem(ItemStack item, Player player, int amount) {
+		if(item.getAmount() <= amount) {
 			player.getInventory().removeItem(item);
 		}
-		if(item.getAmount() > 1) {
-			item.setAmount(item.getAmount() - 1);
+		if(item.getAmount() > amount) {
+			item.setAmount(item.getAmount() - amount);
 		}
+		player.updateInventory();
 	}
 	
 	public static ItemStack removeItem(ItemStack item) {
-		ItemStack i = item.clone();
-		if(item.getAmount() <= 1) {
-			i = new ItemStack(Material.AIR);
-		}else {
-			i.setAmount(item.getAmount() - 1);
-		}
-		return i;
+		return removeItem(item, 1);
 	}
 	
-	public static String getInvName() {
-		return color(Files.CONFIG.getFile().getString("Settings.InvName"));
+	public static ItemStack removeItem(ItemStack item, int amount) {
+		ItemStack itemStack = item.clone();
+		if(item.getAmount() <= amount) {
+			itemStack = new ItemStack(Material.AIR);
+		}else {
+			itemStack.setAmount(item.getAmount() - amount);
+		}
+		return itemStack;
 	}
 	
 	public static boolean isProtected(ItemStack i) {
@@ -262,6 +197,15 @@ public class Methods {
 			}
 		}
 		return false;
+	}
+	
+	public static ItemStack removeProtected(ItemStack item) {
+		ItemMeta m = item.getItemMeta();
+		ArrayList<String> lore = new ArrayList<>(m.getLore());
+		lore.remove(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+		m.setLore(lore);
+		item.setItemMeta(m);
+		return item;
 	}
 	
 	public static ItemStack addLore(ItemStack item, String i) {
@@ -279,15 +223,6 @@ public class Methods {
 			lore.remove(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
 			lore.add(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
 		}
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
-	}
-	
-	public static ItemStack removeProtected(ItemStack item) {
-		ItemMeta m = item.getItemMeta();
-		ArrayList<String> lore = new ArrayList<>(m.getLore());
-		lore.remove(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
 		m.setLore(lore);
 		item.setItemMeta(m);
 		return item;
@@ -316,7 +251,7 @@ public class Methods {
 		}
 	}
 	
-	public static int getEnchAmount(ItemStack item) {
+	public static int getEnchantmentAmount(ItemStack item) {
 		int amount = 0;
 		amount += ce.getEnchantmentsOnItem(item).size();
 		if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
@@ -331,7 +266,7 @@ public class Methods {
 		return amount;
 	}
 	
-	public static Integer getPercent(String Argument, ItemStack item, List<String> Msg) {
+	public static int getPercent(String Argument, ItemStack item, List<String> Msg) {
 		List<String> lore = item.getItemMeta().getLore();
 		String arg = "100";
 		for(String oLine : Msg) {
@@ -369,7 +304,7 @@ public class Methods {
 		return percent;
 	}
 	
-	public static Boolean hasArgument(String Argument, List<String> Msg) {
+	public static boolean hasArgument(String Argument, List<String> Msg) {
 		for(String l : Msg) {
 			l = Methods.color(l).toLowerCase();
 			if(l.contains(Argument.toLowerCase())) {
@@ -380,7 +315,7 @@ public class Methods {
 	}
 	
 	public static boolean randomPicker(int max) {
-		Random number = new Random();
+		Random number = random;
 		if(max <= 0) {
 			return true;
 		}
@@ -392,12 +327,12 @@ public class Methods {
 		if(max <= min || max <= 0) {
 			return true;
 		}
-		int chance = 1 + new Random().nextInt(max);
+		int chance = 1 + random.nextInt(max);
 		return chance >= 1 && chance <= min;
 	}
 	
 	public static Integer percentPick(int max, int min) {
-		Random i = new Random();
+		Random i = random;
 		if(max == min) {
 			return max;
 		}else {
@@ -405,7 +340,7 @@ public class Methods {
 		}
 	}
 	
-	public static boolean isInvFull(Player player) {
+	public static boolean isInventoryFull(Player player) {
 		return player.getInventory().firstEmpty() == -1;
 	}
 	
@@ -438,8 +373,8 @@ public class Methods {
 		.build());
 		fm.setPower(0);
 		fw.setFireworkMeta(fm);
-		FireworkDamageAPI.addFirework(fw);
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getPlugin(), fw::detonate, 2);
+		FireworkDamage.addFirework(fw);
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), fw :: detonate, 2);
 	}
 	
 	public static Color getColor(String color) {
@@ -481,41 +416,56 @@ public class Methods {
 		}
 	}
 	
-	public static String getEnchantmentName(Enchantment en) {
-		HashMap<String, String> enchants = new HashMap<>();
-		enchants.put("ARROW_DAMAGE", "Power");
-		enchants.put("ARROW_FIRE", "Flame");
-		enchants.put("ARROW_INFINITE", "Infinity");
-		enchants.put("ARROW_KNOCKBACK", "Punch");
-		enchants.put("DAMAGE_ALL", "Sharpness");
-		enchants.put("DAMAGE_ARTHROPODS", "Bane_Of_Arthropods");
-		enchants.put("DAMAGE_UNDEAD", "Smite");
-		enchants.put("DEPTH_STRIDER", "Depth_Strider");
-		enchants.put("DIG_SPEED", "Efficiency");
-		enchants.put("DURABILITY", "Unbreaking");
-		enchants.put("FIRE_ASPECT", "Fire_Aspect");
-		enchants.put("KNOCKBACK", "KnockBack");
-		enchants.put("LOOT_BONUS_BLOCKS", "Fortune");
-		enchants.put("LOOT_BONUS_MOBS", "Looting");
-		enchants.put("LUCK", "Luck_Of_The_Sea");
-		enchants.put("LURE", "Lure");
-		enchants.put("OXYGEN", "Respiration");
-		enchants.put("PROTECTION_ENVIRONMENTAL", "Protection");
-		enchants.put("PROTECTION_EXPLOSIONS", "Blast_Protection");
-		enchants.put("PROTECTION_FALL", "Feather_Falling");
-		enchants.put("PROTECTION_FIRE", "Fire_Protection");
-		enchants.put("PROTECTION_PROJECTILE", "Projectile_Protection");
-		enchants.put("SILK_TOUCH", "Silk_Touch");
-		enchants.put("THORNS", "Thorns");
-		enchants.put("WATER_WORKER", "Aqua_Affinity");
-		enchants.put("BINDING_CURSE", "Curse_Of_Binding");
-		enchants.put("MENDING", "Mending");
-		enchants.put("FROST_WALKER", "Frost_Walker");
-		enchants.put("VANISHING_CURSE", "Curse_Of_Vanishing");
-		if(enchants.get(en.getName()) == null) {
-			return "None Found";
+	public static Enchantment getEnchantment(String enchantmentName) {
+		HashMap<String, String> enchantments = getEnchantments();
+		for(Enchantment enchantment : Enchantment.values()) {
+			if(isV1_13_Up) {
+				if(enchantment.getKey().getKey().equalsIgnoreCase(enchantmentName)) {//MC 1.13+ has the correct names.
+					return enchantment;
+				}
+			}else {
+				if(enchantment.getName().equalsIgnoreCase(enchantmentName) ||
+				(enchantments.get(enchantment.getName()) != null &&
+				enchantments.get(enchantment.getName()).equalsIgnoreCase(enchantmentName))) {
+					return enchantment;
+				}
+			}
 		}
-		return enchants.get(en.getName());
+		return null;
+	}
+	
+	public static HashMap<String, String> getEnchantments() {
+		HashMap<String, String> enchantments = new HashMap<>();
+		enchantments.put("ARROW_DAMAGE", "Power");
+		enchantments.put("ARROW_FIRE", "Flame");
+		enchantments.put("ARROW_INFINITE", "Infinity");
+		enchantments.put("ARROW_KNOCKBACK", "Punch");
+		enchantments.put("DAMAGE_ALL", "Sharpness");
+		enchantments.put("DAMAGE_ARTHROPODS", "Bane_Of_Arthropods");
+		enchantments.put("DAMAGE_UNDEAD", "Smite");
+		enchantments.put("DEPTH_STRIDER", "Depth_Strider");
+		enchantments.put("DIG_SPEED", "Efficiency");
+		enchantments.put("DURABILITY", "Unbreaking");
+		enchantments.put("FIRE_ASPECT", "Fire_Aspect");
+		enchantments.put("KNOCKBACK", "KnockBack");
+		enchantments.put("LOOT_BONUS_BLOCKS", "Fortune");
+		enchantments.put("LOOT_BONUS_MOBS", "Looting");
+		enchantments.put("LUCK", "Luck_Of_The_Sea");
+		enchantments.put("LURE", "Lure");
+		enchantments.put("OXYGEN", "Respiration");
+		enchantments.put("PROTECTION_ENVIRONMENTAL", "Protection");
+		enchantments.put("PROTECTION_EXPLOSIONS", "Blast_Protection");
+		enchantments.put("PROTECTION_FALL", "Feather_Falling");
+		enchantments.put("PROTECTION_FIRE", "Fire_Protection");
+		enchantments.put("PROTECTION_PROJECTILE", "Projectile_Protection");
+		enchantments.put("SILK_TOUCH", "Silk_Touch");
+		enchantments.put("THORNS", "Thorns");
+		enchantments.put("WATER_WORKER", "Aqua_Affinity");
+		enchantments.put("BINDING_CURSE", "Curse_Of_Binding");
+		enchantments.put("MENDING", "Mending");
+		enchantments.put("FROST_WALKER", "Frost_Walker");
+		enchantments.put("VANISHING_CURSE", "Curse_Of_Vanishing");
+		return enchantments;
 	}
 	
 	public static void removeDurability(ItemStack item, Player player) {
@@ -566,40 +516,6 @@ public class Methods {
 			}
 		}
 		return false;
-	}
-	
-	public static Set<String> getEnchantments() {
-		HashMap<String, String> enchants = new HashMap<>();
-		enchants.put("ARROW_DAMAGE", "Power");
-		enchants.put("ARROW_FIRE", "Flame");
-		enchants.put("ARROW_INFINITE", "Infinity");
-		enchants.put("ARROW_KNOCKBACK", "Punch");
-		enchants.put("DAMAGE_ALL", "Sharpness");
-		enchants.put("DAMAGE_ARTHROPODS", "Bane_Of_Arthropods");
-		enchants.put("DAMAGE_UNDEAD", "Smite");
-		enchants.put("DEPTH_STRIDER", "Depth_Strider");
-		enchants.put("DIG_SPEED", "Efficiency");
-		enchants.put("DURABILITY", "Unbreaking");
-		enchants.put("FIRE_ASPECT", "Fire_Aspect");
-		enchants.put("KNOCKBACK", "KnockBack");
-		enchants.put("LOOT_BONUS_BLOCKS", "Fortune");
-		enchants.put("LOOT_BONUS_MOBS", "Looting");
-		enchants.put("LUCK", "Luck_Of_The_Sea");
-		enchants.put("LURE", "Lure");
-		enchants.put("OXYGEN", "Respiration");
-		enchants.put("PROTECTION_ENVIRONMENTAL", "Protection");
-		enchants.put("PROTECTION_EXPLOSIONS", "Blast_Protection");
-		enchants.put("PROTECTION_FALL", "Feather_Falling");
-		enchants.put("PROTECTION_FIRE", "Fire_Protection");
-		enchants.put("PROTECTION_PROJECTILE", "Projectile_Protection");
-		enchants.put("SILK_TOUCH", "Silk_Touch");
-		enchants.put("THORNS", "Thorns");
-		enchants.put("WATER_WORKER", "Aqua_Affinity");
-		enchants.put("BINDING_CURSE", "Curse_Of_Binding");
-		enchants.put("MENDING", "Mending");
-		enchants.put("FROST_WALKER", "Frost_Walker");
-		enchants.put("VANISHING_CURSE", "Curse_Of_Vanishing");
-		return enchants.keySet();
 	}
 	
 	public static void explode(Entity player) {
@@ -689,7 +605,7 @@ public class Methods {
 	}
 	
 	public static ItemBuilder getRandomPaneColor() {
-		Boolean newMaterial = ce.useNewMaterial();
+		boolean newMaterial = ce.useNewMaterial();
 		List<String> colors = Arrays.asList(
 		newMaterial ? "WHITE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:0",// 0
 		newMaterial ? "ORANGE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:1",// 1
@@ -707,7 +623,7 @@ public class Methods {
 		newMaterial ? "GREEN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:13",// 13
 		newMaterial ? "RED_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:14",// 14
 		newMaterial ? "BLACK_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:15");// 15
-		return new ItemBuilder().setMaterial(colors.get(new Random().nextInt(colors.size())));
+		return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
 	}
 	
 }

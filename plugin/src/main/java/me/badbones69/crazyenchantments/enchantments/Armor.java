@@ -33,11 +33,23 @@ import java.util.HashMap;
 
 public class Armor implements Listener {
 	
+	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<>();
 	private ArrayList<Player> fall = new ArrayList<>();
 	private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
 	private HashMap<Player, Calendar> mobTimer = new HashMap<>();
-	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<>();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	
+	public static HashMap<Player, ArrayList<LivingEntity>> getAllies() {
+		return mobs;
+	}
+	
+	public static void removeAllies() {
+		for(Player player : mobs.keySet()) {
+			for(LivingEntity ally : mobs.get(player)) {
+				ally.remove();
+			}
+		}
+	}
 	
 	@EventHandler
 	public void onEquip(ArmorEquipEvent e) {
@@ -794,18 +806,6 @@ public class Armor implements Listener {
 					break;
 				default:
 					break;
-			}
-		}
-	}
-	
-	public static HashMap<Player, ArrayList<LivingEntity>> getAllies() {
-		return mobs;
-	}
-	
-	public static void removeAllies() {
-		for(Player player : mobs.keySet()) {
-			for(LivingEntity ally : mobs.get(player)) {
-				ally.remove();
 			}
 		}
 	}

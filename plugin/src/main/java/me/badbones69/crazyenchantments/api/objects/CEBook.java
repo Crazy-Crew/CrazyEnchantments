@@ -65,6 +65,7 @@ public class CEBook {
 		this.enchantment = enchantment;
 		this.amount = amount;
 		this.level = level;
+		this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
 		this.destroy_rate = percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
 		this.success_rate = percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
 	}
@@ -87,14 +88,6 @@ public class CEBook {
 	}
 	
 	/**
-	 *
-	 * @param enchantment Set the enchantment.
-	 */
-	public void setEnchantment(CEnchantment enchantment) {
-		this.enchantment = enchantment;
-	}
-	
-	/**
 	 * Get the CEEnchantment.
 	 * @return The CEEnchantment.
 	 */
@@ -104,26 +97,28 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param toggle Toggle on or off the glowing effect.
+	 * @param enchantment Set the enchantment.
 	 */
-	public void setGlowing(Boolean toggle) {
-		this.glowing = toggle;
+	public CEBook setEnchantment(CEnchantment enchantment) {
+		this.enchantment = enchantment;
+		return this;
 	}
 	
 	/**
 	 * If the item will be glowing or not.
-	 * @return Ture if glowing and false if not.
+	 * @return True if glowing and false if not.
 	 */
-	public Boolean getGlowing() {
+	public boolean getGlowing() {
 		return this.glowing;
 	}
 	
 	/**
 	 *
-	 * @param amount Set the amount of books.
+	 * @param toggle Toggle on or off the glowing effect.
 	 */
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public CEBook setGlowing(boolean toggle) {
+		this.glowing = toggle;
+		return this;
 	}
 	
 	/**
@@ -136,10 +131,11 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param level Set the tier of the enchantment.
+	 * @param amount Set the amount of books.
 	 */
-	public void setLevel(int level) {
-		this.level = level;
+	public CEBook setAmount(int amount) {
+		this.amount = amount;
+		return this;
 	}
 	
 	/**
@@ -152,10 +148,11 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param destroy_rate Set the destroy rate on the book.
+	 * @param level Set the tier of the enchantment.
 	 */
-	public void setDestroyRate(int destroy_rate) {
-		this.destroy_rate = destroy_rate;
+	public CEBook setLevel(int level) {
+		this.level = level;
+		return this;
 	}
 	
 	/**
@@ -168,10 +165,11 @@ public class CEBook {
 	
 	/**
 	 *
-	 * @param success_rate Set the success rate on the book.
+	 * @param destroy_rate Set the destroy rate on the book.
 	 */
-	public void setSuccessRate(int success_rate) {
-		this.success_rate = success_rate;
+	public CEBook setDestroyRate(int destroy_rate) {
+		this.destroy_rate = destroy_rate;
+		return this;
 	}
 	
 	/**
@@ -184,10 +182,18 @@ public class CEBook {
 	
 	/**
 	 *
+	 * @param success_rate Set the success rate on the book.
+	 */
+	public CEBook setSuccessRate(int success_rate) {
+		this.success_rate = success_rate;
+		return this;
+	}
+	
+	/**
+	 *
 	 * @return Return the book as an ItemBuilder.
 	 */
 	public ItemBuilder getItemBuilder() {
-		String item = Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item");
 		String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + ce.convertLevelString(level);
 		List<String> lore = new ArrayList<>();
 		for(String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
@@ -201,7 +207,7 @@ public class CEBook {
 				.replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_rate%", success_rate + ""));
 			}
 		}
-		return new ItemBuilder().setMaterial(item).setAmount(amount).setName(name).setLore(lore).setGlowing(glowing);
+		return ce.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlowing(glowing);
 	}
 	
 	/**
@@ -213,12 +219,7 @@ public class CEBook {
 	}
 	
 	private int percentPick(int max, int min) {
-		Random i = new Random();
-		if(max == min) {
-			return max;
-		}else {
-			return min + i.nextInt(max - min);
-		}
+		return max == min ? max : min + new Random().nextInt(max - min);
 	}
 	
 }

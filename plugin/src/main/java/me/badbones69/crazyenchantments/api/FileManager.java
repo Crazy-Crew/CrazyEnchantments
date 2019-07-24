@@ -1,9 +1,9 @@
 package me.badbones69.crazyenchantments.api;
 
 import me.badbones69.crazyenchantments.multisupport.Version;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.simpleyaml.configuration.file.YamlFile;
+import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,16 +20,15 @@ import java.util.HashMap;
  */
 public class FileManager {
 	
+	private static FileManager instance = new FileManager();
 	private Plugin plugin;
 	private String prefix = "";
-	private Boolean log = false;
+	private boolean log = false;
 	private HashMap<Files, File> files = new HashMap<>();
 	private ArrayList<String> homeFolders = new ArrayList<>();
 	private ArrayList<CustomFile> customFiles = new ArrayList<>();
 	private HashMap<String, String> autoGenerateFiles = new HashMap<>();
-	private HashMap<Files, FileConfiguration> configurations = new HashMap<>();
-	
-	private static FileManager instance = new FileManager();
+	private HashMap<Files, YamlFile> configurations = new HashMap<>();
 	
 	public static FileManager getInstance() {
 		return instance;
@@ -63,7 +62,13 @@ public class FileManager {
 				}
 			}
 			files.put(file, newFile);
-			configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
+			YamlFile yamlFile = new YamlFile(newFile);
+			try {
+				yamlFile.load();
+			}catch(InvalidConfigurationException | IOException e) {
+				e.printStackTrace();
+			}
+			configurations.put(file, yamlFile);
 			if(log) System.out.println(prefix + "Successfully loaded " + file.getFileName());
 		}
 		//Starts to load all the custom files.
@@ -116,7 +121,7 @@ public class FileManager {
 	 * Turn on the logger system for the FileManager.
 	 * @param log True to turn it on and false for it to be off.
 	 */
-	public FileManager logInfo(Boolean log) {
+	public FileManager logInfo(boolean log) {
 		this.log = log;
 		return this;
 	}
@@ -125,7 +130,7 @@ public class FileManager {
 	 * Check if the logger is logging in console.
 	 * @return True if it is and false if it isn't.
 	 */
-	public Boolean isLogging() {
+	public boolean isLogging() {
 		return log;
 	}
 	
@@ -170,7 +175,7 @@ public class FileManager {
 	 * Gets the file from the system.
 	 * @return The file from the system.
 	 */
-	public FileConfiguration getFile(Files file) {
+	public YamlFile getFile(Files file) {
 		return configurations.get(file);
 	}
 	
@@ -194,7 +199,7 @@ public class FileManager {
 	 */
 	public void saveFile(Files file) {
 		try {
-			configurations.get(file).save(files.get(file));
+			configurations.get(file).saveWithComments();
 		}catch(IOException e) {
 			System.out.println(prefix + "Could not save " + file.getFileName() + "!");
 			e.printStackTrace();
@@ -209,8 +214,8 @@ public class FileManager {
 		CustomFile file = getFile(name);
 		if(file != null) {
 			try {
-				file.getFile().save(new File(plugin.getDataFolder(), file.getHomeFolder() + "/" + file.getFileName()));
-				if(log) System.out.println(prefix + "Successfuly saved the " + file.getFileName() + ".");
+				file.getYamlFile().saveWithComments();
+				if(log) System.out.println(prefix + "Successfully saved the " + file.getFileName() + ".");
 			}catch(Exception e) {
 				System.out.println(prefix + "Could not save " + file.getFileName() + "!");
 				e.printStackTrace();
@@ -225,7 +230,7 @@ public class FileManager {
 	 * @param file The custom file you are saving.
 	 * @return True if the file saved correct and false if there was an error.
 	 */
-	public Boolean saveFile(CustomFile file) {
+	public boolean saveFile(CustomFile file) {
 		return file.saveFile();
 	}
 	
@@ -233,7 +238,13 @@ public class FileManager {
 	 * Overrides the loaded state file and loads the file systems file.
 	 */
 	public void reloadFile(Files file) {
-		configurations.put(file, YamlConfiguration.loadConfiguration(files.get(file)));
+		YamlFile yamlFile = new YamlFile(files.get(file));
+		try {
+			yamlFile.load();
+		}catch(InvalidConfigurationException | IOException e) {
+			e.printStackTrace();
+		}
+		configurations.put(file, yamlFile);
 	}
 	
 	/**
@@ -243,7 +254,12 @@ public class FileManager {
 		CustomFile file = getFile(name);
 		if(file != null) {
 			try {
-				file.file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
+				file.file = new YamlFile(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
+				try {
+					file.file.load();
+				}catch(InvalidConfigurationException | IOException e) {
+					e.printStackTrace();
+				}
 				if(log) System.out.println(prefix + "Successfully reload the " + file.getFileName() + ".");
 			}catch(Exception e) {
 				System.out.println(prefix + "Could not reload the " + file.getFileName() + "!");
@@ -258,7 +274,7 @@ public class FileManager {
 	 * Overrides the loaded state file and loads the filesystems file.
 	 * @return True if it reloaded correct and false if the file wasn't found.
 	 */
-	public Boolean reloadFile(CustomFile file) {
+	public boolean reloadFile(CustomFile file) {
 		return file.reloadFile();
 	}
 	
@@ -358,7 +374,7 @@ public class FileManager {
 		 * Gets the file from the system.
 		 * @return The file from the system.
 		 */
-		public FileConfiguration getFile() {
+		public YamlFile getFile() {
 			return getInstance().getFile(this);
 		}
 		
@@ -384,7 +400,7 @@ public class FileManager {
 		private Plugin plugin;
 		private String fileName;
 		private String homeFolder;
-		private FileConfiguration file;
+		private YamlFile file;
 		
 		/**
 		 * A custom file that is being made.
@@ -399,7 +415,12 @@ public class FileManager {
 			this.homeFolder = homeFolder;
 			if(new File(plugin.getDataFolder(), "/" + homeFolder).exists()) {
 				if(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + name).exists()) {
-					file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + name));
+					file = new YamlFile(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + name));
+					try {
+						file.load();
+					}catch(InvalidConfigurationException | IOException e) {
+						e.printStackTrace();
+					}
 				}else {
 					file = null;
 				}
@@ -446,7 +467,15 @@ public class FileManager {
 		 * Get the ConfigurationFile.
 		 * @return The ConfigurationFile of this file.
 		 */
-		public FileConfiguration getFile() {
+		public YamlFile getFile() {
+			return file;
+		}
+		
+		/**
+		 * Get the YamlFile.
+		 * @return The YamlFile of this file.
+		 */
+		public YamlFile getYamlFile() {
 			return file;
 		}
 		
@@ -454,7 +483,7 @@ public class FileManager {
 		 * Check if the file actually exists in the file system.
 		 * @return True if it does and false if it doesn't.
 		 */
-		public Boolean exists() {
+		public boolean exists() {
 			return file != null;
 		}
 		
@@ -462,11 +491,11 @@ public class FileManager {
 		 * Save the custom file.
 		 * @return True if it saved correct and false if something went wrong.
 		 */
-		public Boolean saveFile() {
+		public boolean saveFile() {
 			if(file != null) {
 				try {
-					file.save(new File(plugin.getDataFolder(), homeFolder + "/" + fileName));
-					if(log) System.out.println(prefix + "Successfuly saved the " + fileName + ".");
+					file.saveWithComments();
+					if(log) System.out.println(prefix + "Successfully saved the " + fileName + ".");
 					return true;
 				}catch(Exception e) {
 					System.out.println(prefix + "Could not save " + fileName + "!");
@@ -481,13 +510,14 @@ public class FileManager {
 		
 		/**
 		 * Overrides the loaded state file and loads the filesystems file.
-		 * @return True if it reloaded correct and false if the file wasn't found or errored.
+		 * @return True if it reloaded correct and false if the file wasn't found or an error happened.
 		 */
-		public Boolean reloadFile() {
+		public boolean reloadFile() {
 			if(file != null) {
 				try {
-					file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));
-					if(log) System.out.println(prefix + "Successfuly reload the " + fileName + ".");
+					file = new YamlFile(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));
+					file.load();
+					if(log) System.out.println(prefix + "Successfully reload the " + fileName + ".");
 					return true;
 				}catch(Exception e) {
 					System.out.println(prefix + "Could not reload the " + fileName + "!");

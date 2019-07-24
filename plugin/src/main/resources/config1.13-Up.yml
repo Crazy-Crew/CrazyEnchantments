@@ -414,7 +414,7 @@ Categories: #You can make as many different categories as you want
     Rarity: 1 #This allows the enchantments to be ordered with the Transmog Scrolls. The higher the number the rarer it is. Try and have each category have different rarities.
     LostBook: #Controls the Lost Book shop for this tier
       InGUI: false #If it shows in the /CE Gui
-      Slot: 1 #Slot it will be in
+      Slot: 31 #Slot it will be in
       Item: 'BOOK' #The item that is shown in the GUI
       Glowing: false #Is it enchanted
       Name: '&8&l&nLost&c&l Tier1 &8&l&nBooks' #Name of the item
@@ -455,7 +455,7 @@ Categories: #You can make as many different categories as you want
     Rarity: 2
     LostBook:
       InGUI: false
-      Slot: 2
+      Slot: 32
       Item: 'BOOK'
       Glowing: false
       Name: '&8&l&nLost&c&l Tier2 &8&l&nBooks'
@@ -496,7 +496,7 @@ Categories: #You can make as many different categories as you want
     Rarity: 3
     LostBook:
       InGUI: false
-      Slot: 3
+      Slot: 33
       Item: 'BOOK'
       Glowing: false
       Name: '&8&l&nLost&c&l Tier3 &8&l&nBooks'

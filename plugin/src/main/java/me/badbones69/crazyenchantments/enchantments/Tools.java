@@ -28,9 +28,11 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class Tools implements Listener {
 	
+	private Random random = new Random();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	@EventHandler
@@ -47,7 +49,8 @@ public class Tools implements Listener {
 	public void onBlockBreak(BlockBreakEvent e) {
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(e.isCancelled() || block.getType() == Material.AIR
+		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e)
+		|| block.getType() == Material.AIR
 		|| block.getType().toString().toLowerCase().contains("shulker_box")
 		|| block.getType().toString().toLowerCase().contains("chest")) {
 			return;
@@ -56,8 +59,13 @@ public class Tools implements Listener {
 		if(player.getGameMode() != GameMode.CREATIVE) {
 			ItemStack item = Methods.getItemInHand(player);
 			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-			if(enchantments.contains(CEnchantments.TELEPATHY) && !enchantments.contains(CEnchantments.BLAST)) {
+			if(enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
 				if(CEnchantments.TELEPATHY.isActivated()) {
+					if(enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) {
+						if(Hoes.getHarvesterCrops().contains(block.getType())) {
+							return;//This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
+						}
+					}
 					if(item.getItemMeta().hasEnchants()) {
 						if(item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 							if(block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER"))) {
@@ -70,14 +78,14 @@ public class Tools implements Listener {
 					if(!event.isCancelled()) {
 						HashMap<ItemStack, Integer> drops = new HashMap<>();
 						for(ItemStack drop : block.getDrops()) {
-							if(enchantments.contains(CEnchantments.FURNACE) && isOre(block.getType())) {
+							if(enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && isOre(block.getType())) {
 								drop = getOreDrop(block.getType());
 								if(item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
 									if(Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
 										drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 									}
 								}
-							}else if(enchantments.contains(CEnchantments.AUTOSMELT) && isOre(block.getType())) {
+							}else if(enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && isOre(block.getType())) {
 								if(CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
 									drop = getOreDrop(block.getType());
 									drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
@@ -98,7 +106,7 @@ public class Tools implements Listener {
 								if(item.getItemMeta().hasEnchants()) {
 									if(!item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
 										if(getXPOres().contains(block.getType())) {
-											if(!enchantments.contains(CEnchantments.EXPERIENCE)) {
+											if(!enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 												ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 												orb.setExperience(Methods.percentPick(7, 3));
 											}
@@ -106,14 +114,14 @@ public class Tools implements Listener {
 									}
 								}else {
 									if(getXPOres().contains(block.getType())) {
-										if(!enchantments.contains(CEnchantments.EXPERIENCE)) {
+										if(!enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 											ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
 											orb.setExperience(Methods.percentPick(7, 3));
 										}
 									}
 								}
 							}
-							if(enchantments.contains(CEnchantments.EXPERIENCE)) {
+							if(enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 								if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
 									int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
 									if(isOre(block.getType())) {
@@ -131,7 +139,6 @@ public class Tools implements Listener {
 									drop.setAmount(drop.getAmount() + 1);
 									loc.getBlock().setType(Material.AIR);
 								}
-								
 							}
 							int amount = drop.getAmount();
 							if(drops.containsKey(drop)) {
@@ -158,17 +165,28 @@ public class Tools implements Listener {
 								}
 							}
 						}
-						for(ItemStack i : drops.keySet()) {
+						if(block.getType() == Material.COCOA) {
+							drops.put(new ItemBuilder().setMaterial("COCOA_BEANS", "INK_SACK:3").build(),
+							ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);//Coco drops 2-3 beans.
+						}
+						for(ItemStack droppedItem : drops.keySet()) {
 							if(!ce.useNewMaterial()) {
-								if(i.getType() == Material.matchMaterial("INK_SACK")) {//Changes ink sacks to lapis if on 1.12.2-
-									i.setDurability((short) 4);
+								if(droppedItem.getType() == Material.matchMaterial("INK_SACK") && droppedItem.getDurability() != 3) {//Changes ink sacks to lapis if on 1.12.2-
+									droppedItem.setDurability((short) 4);
 								}
 							}
-							i.setAmount(drops.get(i));
-							if(Methods.isInvFull(player)) {
-								player.getWorld().dropItem(player.getLocation(), i);
+							if(droppedItem.getType() == Material.WHEAT || droppedItem.getType() == Material.matchMaterial("BEETROOT_SEEDS")) {
+								droppedItem.setAmount(random.nextInt(3));//Wheat and BeetRoots drops 0-3 seeds.
+							}else if(droppedItem.getType() == ce.getMaterial("POTATO", "POTATO_ITEM") ||
+							droppedItem.getType() == ce.getMaterial("CARROT", "CARROT_ITEM")) {
+								droppedItem.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
 							}else {
-								player.getInventory().addItem(i);
+								droppedItem.setAmount(drops.get(droppedItem));
+							}
+							if(Methods.isInventoryFull(player)) {
+								player.getWorld().dropItem(player.getLocation(), droppedItem);
+							}else {
+								player.getInventory().addItem(droppedItem);
 							}
 						}
 						if(Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
@@ -188,7 +206,7 @@ public class Tools implements Listener {
 		if(ce.hasEnchantments(item)) {
 			int time = 5 * 20;
 			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-			if(enchantments.contains(CEnchantments.HASTE)) {
+			if(enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
 				if(CEnchantments.HASTE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
 					Bukkit.getPluginManager().callEvent(event);
@@ -199,7 +217,7 @@ public class Tools implements Listener {
 					}
 				}
 			}
-			if(enchantments.contains(CEnchantments.OXYGENATE)) {
+			if(enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
 				if(CEnchantments.OXYGENATE.isActivated()) {
 					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
 					Bukkit.getPluginManager().callEvent(event);

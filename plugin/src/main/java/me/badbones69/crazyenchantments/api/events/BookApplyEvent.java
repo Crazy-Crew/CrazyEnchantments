@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.api.events;
 
+import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -9,28 +10,32 @@ import org.bukkit.inventory.ItemStack;
 
 public class BookApplyEvent extends Event implements Cancellable {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private Player player;
-	private Integer level;
-	private Boolean cancelled;
+	private int level;
+	private boolean cancelled;
 	private ItemStack enchantedItem;
 	private CEnchantment enchantment;
-	private ItemStack enchantmentBook;
-	private static final HandlerList handlers = new HandlerList();
+	private CEBook ceBook;
 	
-	public BookApplyEvent(Player player, CEnchantment enchantment, Integer level, ItemStack enchantedItem, ItemStack enchantmentBook) {
-		this.level = level;
+	public BookApplyEvent(Player player, ItemStack enchantedItem, CEBook ceBook) {
+		this.level = ceBook.getLevel();
 		this.player = player;
-		this.enchantment = enchantment;
+		this.enchantment = ceBook.getEnchantment();
 		this.enchantedItem = enchantedItem;
-		this.enchantmentBook = enchantmentBook;
+		this.ceBook = ceBook;
 		this.cancelled = false;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	public Player getPlayer() {
 		return player;
 	}
 	
-	public Integer getLevel() {
+	public int getLevel() {
 		return level;
 	}
 	
@@ -42,8 +47,8 @@ public class BookApplyEvent extends Event implements Cancellable {
 		return enchantment;
 	}
 	
-	public ItemStack getEnchantmentBook() {
-		return enchantmentBook;
+	public CEBook getCEBook() {
+		return ceBook;
 	}
 	
 	@Override
@@ -57,10 +62,6 @@ public class BookApplyEvent extends Event implements Cancellable {
 	}
 	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

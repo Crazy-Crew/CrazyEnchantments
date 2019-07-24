@@ -37,11 +37,11 @@ public class EnchantedArrow {
 		return shooter;
 	}
 	
-	public Integer getLevel(CEnchantments enchantment) {
+	public int getLevel(CEnchantments enchantment) {
 		return ce.getLevel(bow, enchantment);
 	}
 	
-	public Integer getLevel(CEnchantment enchantment) {
+	public int getLevel(CEnchantment enchantment) {
 		return ce.getLevel(bow, enchantment);
 	}
 	
@@ -49,11 +49,11 @@ public class EnchantedArrow {
 		return enchantments;
 	}
 	
-	public Boolean hasEnchantment(CEnchantment enchantment) {
+	public boolean hasEnchantment(CEnchantment enchantment) {
 		return enchantments.contains(enchantment);
 	}
 	
-	public Boolean hasEnchantment(CEnchantments enchantment) {
+	public boolean hasEnchantment(CEnchantments enchantment) {
 		return enchantments.contains(enchantment.getEnchantment());
 	}
 	

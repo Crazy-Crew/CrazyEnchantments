@@ -1,25 +1,30 @@
-package me.badbones69.crazyenchantments.api.objects;
+package me.badbones69.crazyenchantments.api.managers;
 
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.objects.CEnchantment;
+import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
+import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InfoMenuManager {
 	
+	public static InfoMenuManager instance = new InfoMenuManager();
 	private Inventory inventoryMenu;
 	private String inventoryName;
 	private int inventorySize;
 	private ItemStack backRight;
 	private ItemStack backLeft;
 	private List<EnchantmentType> enchantmentTypes = new ArrayList<>();
-	public static InfoMenuManager instance = new InfoMenuManager();
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	public static InfoMenuManager getInstance() {
 		return instance;
@@ -92,12 +97,14 @@ public class InfoMenuManager {
 		for(int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
 		Inventory inventory = Bukkit.createInventory(null, slots, inventoryName);
 		for(CEnchantment enchantment : enchantments) {
-			inventory.addItem(new ItemBuilder()
-			.setMaterial(Files.CONFIG.getFile().getString("Settings.Enchantment-Book-Item"))
-			.setName(enchantment.getInfoName())
-			.setLore(enchantment.getInfoDescription())
-			.setGlowing(true)
-			.build());
+			if(enchantment.isActivated()) {
+				inventory.addItem(
+				ce.getEnchantmentBook()
+				.setName(enchantment.getInfoName())
+				.setLore(enchantment.getInfoDescription())
+				.setGlowing(true)
+				.build());
+			}
 		}
 		inventory.setItem(slots - 1, backRight);
 		player.openInventory(inventory);

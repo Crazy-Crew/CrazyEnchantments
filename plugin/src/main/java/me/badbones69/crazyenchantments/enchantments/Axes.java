@@ -40,7 +40,6 @@ public class Axes implements Listener {
 				ItemStack item = Methods.getItemInHand(damager);
 				if(!e.getEntity().isDead()) {
 					List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-					//if(enchantments.contains(CEnchantments.BERSERK.getEnchantment())) {
 					if(enchantments.contains(CEnchantments.BERSERK.getEnchantment())) {
 						if(CEnchantments.BERSERK.isActivated()) {
 							if(CEnchantments.BERSERK.chanceSuccessful(item)) {

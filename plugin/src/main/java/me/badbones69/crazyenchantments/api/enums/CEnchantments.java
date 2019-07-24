@@ -27,6 +27,7 @@ public enum CEnchantments {
 	ICEFREEZE("IceFreeze", EnchantmentType.getFromName("Bow"), 25, 10),
 	LIGHTNING("Lightning", EnchantmentType.getFromName("Bow"), 25, 10),
 	MULTIARROW("MultiArrow", EnchantmentType.getFromName("Bow"), 25, 10),
+	STICKY_SHOT("Sticky-Shot", EnchantmentType.getFromName("Bow"), 10, 10),
 	//	----------------Helmets----------------  \\
 	GLOWING("Glowing", EnchantmentType.getFromName("Helmet")),
 	MERMAID("Mermaid", EnchantmentType.getFromName("Helmet")),
@@ -54,6 +55,10 @@ public enum CEnchantments {
 	INQUISITIVE("Inquisitive", EnchantmentType.getFromName("Sword"), 50, 25),
 	LIGHTWEIGHT("LightWeight", EnchantmentType.getFromName("Sword"), 15, 5),
 	DOUBLEDAMAGE("DoubleDamage", EnchantmentType.getFromName("Sword"), 5, 1),
+	DISORDER("Disorder", EnchantmentType.getFromName("Sword"), 1, 0),
+	CHARGE("Charge", EnchantmentType.getFromName("Sword")),
+	REVENGE("Revenge", EnchantmentType.getFromName("Sword")),
+	FAMISHED("Famished", EnchantmentType.getFromName("Sword"), 10, 5),
 	//	----------------Armor----------------  \\
 	HULK("Hulk", EnchantmentType.getFromName("Armor")),
 	VALOR("Valor", EnchantmentType.getFromName("Armor")),
@@ -94,6 +99,7 @@ public enum CEnchantments {
 	BERSERK("Berserk", EnchantmentType.getFromName("Axe"), 10, 1),
 	BLESSED("Blessed", EnchantmentType.getFromName("Axe"), 10, 5),
 	DECAPITATION("Decapitation", EnchantmentType.getFromName("Axe"), 10, 10),
+	BATTLECRY("BattleCry", EnchantmentType.getFromName("Axe"), 10, 5),
 	//	----------------PickAxes----------------  \\
 	BLAST("Blast", EnchantmentType.getFromName("Pickaxe")),
 	AUTOSMELT("AutoSmelt", EnchantmentType.getFromName("Pickaxe"), 25, 25),
@@ -103,24 +109,19 @@ public enum CEnchantments {
 	HASTE("Haste", EnchantmentType.getFromName("Tool")),
 	TELEPATHY("Telepathy", EnchantmentType.getFromName("Tool")),
 	OXYGENATE("Oxygenate", EnchantmentType.getFromName("Tool")),
-	//	----------------All----------------  \\
-	HELLFORGED("HellForged", EnchantmentType.getFromName("Damaged-Items"), 5, 5),
-	//	----------------New Enchantments----------------  \\
-	STICKY_SHOT("Sticky-Shot", EnchantmentType.getFromName("Bow"), 10, 10),
-	DISORDER("Disorder", EnchantmentType.getFromName("Sword"), 1, 0),
-	CHARGE("Charge", EnchantmentType.getFromName("Sword")),
-	REVENGE("Revenge", EnchantmentType.getFromName("Sword")),
-	BATTLECRY("BattleCry", EnchantmentType.getFromName("Axe"), 10, 5),
-	FAMISHED("Famished", EnchantmentType.getFromName("Sword"), 10, 5),
+	//	----------------Hoes----------------  \\
 	GREENTHUMB("GreenThumb", EnchantmentType.getFromName("Hoe"), 10, 10),
 	HARVESTER("Harvester", EnchantmentType.getFromName("Hoe")),
-	TILLER("Tiller", EnchantmentType.getFromName("Hoe"));
+	TILLER("Tiller", EnchantmentType.getFromName("Hoe")),
+	PLANTER("Planter", EnchantmentType.getFromName("Hoe")),
+	//	----------------All----------------  \\
+	HELLFORGED("HellForged", EnchantmentType.getFromName("Damaged-Items"), 5, 5);
 	
 	private String name;
 	private EnchantmentType type;
-	private Boolean hasChanceSystem;
-	private Integer chance;
-	private Integer chanceIncrease;
+	private boolean hasChanceSystem;
+	private int chance;
+	private int chanceIncrease;
 	
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
@@ -144,12 +145,37 @@ public enum CEnchantments {
 	 * @param chance The chance the enchantment has to active.
 	 * @param chanceIncrease The amount the chance increases by every level.
 	 */
-	private CEnchantments(String name, EnchantmentType type, Integer chance, Integer chanceIncrease) {
+	private CEnchantments(String name, EnchantmentType type, int chance, int chanceIncrease) {
 		this.name = name;
 		this.type = type;
 		this.chance = chance;
 		this.chanceIncrease = chanceIncrease;
 		this.hasChanceSystem = true;
+	}
+	
+	/**
+	 * Get a CEnchantments from the enchantment name.
+	 * @param enchant The name of the enchantment.
+	 * @return Returns the CEnchantments but if not found it will be null.
+	 */
+	public static CEnchantments getFromName(String enchant) {
+		for(CEnchantments ench : values()) {
+			if(ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) {
+				return ench;
+			}
+		}
+		return null;
+	}
+	
+	public static List<CEnchantments> getFromeNames(List<CEnchantment> enchantments) {
+		List<CEnchantments> cEnchantments = new ArrayList<>();
+		for(CEnchantment cEnchantment : enchantments) {
+			CEnchantments enchantment = getFromName(cEnchantment.getName());
+			if(enchantment != null) {
+				cEnchantments.add(enchantment);
+			}
+		}
+		return cEnchantments;
 	}
 	
 	/**
@@ -175,7 +201,7 @@ public enum CEnchantments {
 	 *
 	 * @return The chance of the enchantment activating.
 	 */
-	public Integer getChance() {
+	public int getChance() {
 		return chance;
 	}
 	
@@ -186,7 +212,7 @@ public enum CEnchantments {
 	 *
 	 * @return The amount the chance increases by every level.
 	 */
-	public Integer getChanceIncrease() {
+	public int getChanceIncrease() {
 		return chanceIncrease;
 	}
 	
@@ -230,7 +256,7 @@ public enum CEnchantments {
 	 *
 	 * @return True if the enchantment is enabled and false if not.
 	 */
-	public Boolean isActivated() {
+	public boolean isActivated() {
 		return getEnchantment().isActivated();
 	}
 	
@@ -247,7 +273,7 @@ public enum CEnchantments {
 	 * @param item The item that is being checked.
 	 * @return The level of the enchantment that is on the item.
 	 */
-	public Integer getLevel(ItemStack item) {
+	public int getLevel(ItemStack item) {
 		return getEnchantment().getPower(item);
 	}
 	
@@ -255,7 +281,7 @@ public enum CEnchantments {
 	 * Check to see if the enchantment's chance is successful.
 	 * @return True if the chance was successful and false if not.
 	 */
-	public Boolean chanceSuccessful() {
+	public boolean chanceSuccessful() {
 		int chance = getEnchantment().getChance();
 		return chance >= 100 || chance <= 0 || (new Random().nextInt(100) + 1) <= chance;
 	}
@@ -265,40 +291,15 @@ public enum CEnchantments {
 	 * @param item The item being checked.
 	 * @return True if the chance was successful and false if not.
 	 */
-	public Boolean chanceSuccessful(ItemStack item) {
+	public boolean chanceSuccessful(ItemStack item) {
 		return ce.getEnchantmentFromName(name).chanceSuccesful(getLevel(item));
 	}
 	
 	/**
 	 * Check if the CEnchantments uses a chance system.
 	 */
-	public Boolean hasChanceSystem() {
+	public boolean hasChanceSystem() {
 		return hasChanceSystem;
-	}
-	
-	/**
-	 * Get a CEnchantments from the enchantment name.
-	 * @param enchant The name of the enchantment.
-	 * @return Returns the CEnchantments but if not found it will be null.
-	 */
-	public static CEnchantments getFromName(String enchant) {
-		for(CEnchantments ench : values()) {
-			if(ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) {
-				return ench;
-			}
-		}
-		return null;
-	}
-	
-	public static List<CEnchantments> getFromeNames(List<CEnchantment> enchantments) {
-		List<CEnchantments> cEnchantments = new ArrayList<>();
-		for(CEnchantment cEnchantment : enchantments) {
-			CEnchantments enchantment = getFromName(cEnchantment.getName());
-			if(enchantment != null) {
-				cEnchantments.add(enchantment);
-			}
-		}
-		return cEnchantments;
 	}
 	
 }

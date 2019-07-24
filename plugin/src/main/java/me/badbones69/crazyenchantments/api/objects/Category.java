@@ -23,7 +23,7 @@ public class Category {
 	public Category(String name, int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency, int rarity, LostBook lostBook,
 	int maxSuccessRate, int minSuccessRate, int maxDestroyRate, int minDestroyRate, boolean useMaxLevel, int maxLevel, int minLevel) {
 		this.name = name;
-		this.slot = slot;
+		this.slot = slot - 1;
 		this.inGUI = inGUI;
 		this.displayItem = displayItem;
 		this.cost = cost;

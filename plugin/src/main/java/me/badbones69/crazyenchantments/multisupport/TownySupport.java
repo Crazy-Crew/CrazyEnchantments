@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 public class TownySupport {
 	
-	public static Boolean inTerritory(Player player) {
+	public static boolean inTerritory(Player player) {
 		try {
 			TownBlock block = WorldCoord.parseWorldCoord(player).getTownBlock();
 			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
@@ -23,7 +23,7 @@ public class TownySupport {
 		return false;
 	}
 	
-	public static Boolean isFriendly(Player player, Player other) {
+	public static boolean isFriendly(Player player, Player other) {
 		try {
 			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
 			Resident otherUser = TownyUniverse.getDataSource().getResident(other.getName());

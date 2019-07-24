@@ -14,7 +14,7 @@ Info-GUI-Settings:
 Types:
   Helmet:
     Display-Item:
-      Item: 'GOLDEN_HELMET'
+      Item: 'GOLD_HELMET'
       Slot: 1
       Name: '&e&lHelmet Enchantments'
       Lore:
@@ -28,12 +28,12 @@ Types:
     Enchantable-Items:
       - 'LEATHER_HELMET'
       - 'CHAINMAIL_HELMET'
-      - 'GOLDEN_HELMET'
+      - 'GOLD_HELMET'
       - 'IRON_HELMET'
       - 'DIAMOND_HELMET'
   Boots:
     Display-Item:
-      Item: 'GOLDEN_BOOTS'
+      Item: 'GOLD_BOOTS'
       Slot: 2
       Name: '&e&lBoot Enchantments'
       Lore:
@@ -46,12 +46,12 @@ Types:
     Enchantable-Items:
       - 'LEATHER_BOOTS'
       - 'CHAINMAIL_BOOTS'
-      - 'GOLDEN_BOOTS'
+      - 'GOLD_BOOTS'
       - 'IRON_BOOTS'
       - 'DIAMOND_BOOTS'
   Armor:
     Display-Item:
-      Item: 'GOLDEN_CHESTPLATE'
+      Item: 'GOLD_CHESTPLATE'
       Slot: 3
       Name: '&e&lArmor Enchantments'
       Lore:
@@ -64,22 +64,22 @@ Types:
     Enchantable-Items:
       - 'LEATHER_HELMET'
       - 'CHAINMAIL_HELMET'
-      - 'GOLDEN_HELMET'
+      - 'GOLD_HELMET'
       - 'IRON_HELMET'
       - 'DIAMOND_HELMET'
       - 'LEATHER_CHESTPLATE'
       - 'CHAINMAIL_CHESTPLATE'
-      - 'GOLDEN_CHESTPLATE'
+      - 'GOLD_CHESTPLATE'
       - 'IRON_CHESTPLATE'
       - 'DIAMOND_CHESTPLATE'
       - 'LEATHER_LEGGINGS'
       - 'CHAINMAIL_LEGGINGS'
-      - 'GOLDEN_LEGGINGS'
+      - 'GOLD_LEGGINGS'
       - 'IRON_LEGGINGS'
       - 'DIAMOND_LEGGINGS'
       - 'LEATHER_BOOTS'
       - 'CHAINMAIL_BOOTS'
-      - 'GOLDEN_BOOTS'
+      - 'GOLD_BOOTS'
       - 'IRON_BOOTS'
       - 'DIAMOND_BOOTS'
   Bow:
@@ -94,7 +94,7 @@ Types:
       - 'BOW'
   Sword:
     Display-Item:
-      Item: 'GOLDEN_SWORD'
+      Item: 'GOLD_SWORD'
       Slot: 5
       Name: '&e&lSword Enchantments'
       Lore:
@@ -105,15 +105,15 @@ Types:
         - '&a- Iron Sword'
         - '&a- Diamond Sword'
     Enchantable-Items:
-      - 'WOODEN_SWORD'
+      - 'WOOD_SWORD'
       - 'STONE_SWORD'
       - 'IRON_SWORD'
-      - 'GOLDEN_SWORD'
+      - 'GOLD_SWORD'
       - 'DIAMOND_SWORD'
   Axe:
     Display-Item:
       Slot: 6
-      Item: 'GOLDEN_AXE'
+      Item: 'GOLD_AXE'
       Name: '&e&lAxe Enchantments'
       Lore:
         - '&7Enchantable Items:'
@@ -123,14 +123,14 @@ Types:
         - '&a- Golden Axe'
         - '&a- Diamond Axe'
     Enchantable-Items:
-      - 'WOODEN_AXE'
+      - 'WOOD_AXE'
       - 'STONE_AXE'
       - 'IRON_AXE'
-      - 'GOLDEN_AXE'
+      - 'GOLD_AXE'
       - 'DIAMOND_AXE'
   Hoe:
     Display-Item:
-      Item: 'GOLDEN_HOE'
+      Item: 'GOLD_HOE'
       Slot: 7
       Name: '&e&lHoe Enchantments'
       Lore:
@@ -141,14 +141,14 @@ Types:
         - '&a- Iron Hoe'
         - '&a- Diamond Hoe'
     Enchantable-Items:
-      - 'WOODEN_HOE'
+      - 'WOOD_HOE'
       - 'STONE_HOE'
       - 'IRON_HOE'
-      - 'GOLDEN_HOE'
+      - 'GOLD_HOE'
       - 'DIAMOND_HOE'
   Pickaxe:
     Display-Item:
-      Item: 'GOLDEN_PICKAXE'
+      Item: 'GOLD_PICKAXE'
       Slot: 8
       Name: '&e&lPickaxe Enchantments'
       Lore:
@@ -159,14 +159,14 @@ Types:
         - '&a- Iron Pickaxe'
         - '&a- Diamond Pickaxe'
     Enchantable-Items:
-      - 'WOODEN_PICKAXE'
+      - 'WOOD_PICKAXE'
       - 'STONE_PICKAXE'
       - 'IRON_PICKAXE'
-      - 'GOLDEN_PICKAXE'
+      - 'GOLD_PICKAXE'
       - 'DIAMOND_PICKAXE'
   Tool:
     Display-Item:
-      Item: 'GOLDEN_SHOVEL'
+      Item: 'GOLD_SPADE'
       Slot: 9
       Name: '&e&lTool Enchantments'
       Lore:
@@ -177,30 +177,30 @@ Types:
         - '&a- All Hoes'
         - '&a- Shears'
     Enchantable-Items:
-      - 'WOODEN_PICKAXE'
+      - 'WOOD_PICKAXE'
       - 'STONE_PICKAXE'
       - 'IRON_PICKAXE'
-      - 'GOLDEN_PICKAXE'
+      - 'GOLD_PICKAXE'
       - 'DIAMOND_PICKAXE'
-      - 'WOODEN_AXE'
+      - 'WOOD_AXE'
       - 'STONE_AXE'
       - 'IRON_AXE'
-      - 'GOLDEN_AXE'
+      - 'GOLD_AXE'
       - 'DIAMOND_AXE'
-      - 'WOODEN_SHOVEL'
-      - 'STONE_SHOVEL'
-      - 'IRON_SHOVEL'
-      - 'GOLDEN_SHOVEL'
-      - 'DIAMOND_SHOVEL'
-      - 'WOODEN_HOE'
+      - 'WOOD_SPADE'
+      - 'STONE_SPADE'
+      - 'IRON_SPADE'
+      - 'GOLD_SPADE'
+      - 'DIAMOND_SPADE'
+      - 'WOOD_HOE'
       - 'STONE_HOE'
       - 'IRON_HOE'
-      - 'GOLDEN_HOE'
+      - 'GOLD_HOE'
       - 'DIAMOND_HOE'
       - 'SHEARS'
   Damaged-Items:
     Display-Item:
-      Item: 'DAMAGED_ANVIL'
+      Item: 'ANVIL:2'
       Slot: 14
       Name: '&e&lDamaged Item Enchantments'
       Lore:
@@ -211,51 +211,51 @@ Types:
         - '&a- All Armor'
         - '&a- All Weapons'
     Enchantable-Items:
-      - 'WOODEN_PICKAXE'
+      - 'WOOD_PICKAXE'
       - 'STONE_PICKAXE'
       - 'IRON_PICKAXE'
-      - 'GOLDEN_PICKAXE'
+      - 'GOLD_PICKAXE'
       - 'DIAMOND_PICKAXE'
-      - 'WOODEN_AXE'
+      - 'WOOD_AXE'
       - 'STONE_AXE'
       - 'IRON_AXE'
-      - 'GOLDEN_AXE'
+      - 'GOLD_AXE'
       - 'DIAMOND_AXE'
-      - 'WOODEN_SHOVEL'
-      - 'STONE_SHOVEL'
-      - 'IRON_SHOVEL'
-      - 'GOLDEN_SHOVEL'
-      - 'DIAMOND_SHOVEL'
-      - 'WOODEN_HOE'
+      - 'WOOD_SPADE'
+      - 'STONE_SPADE'
+      - 'IRON_SPADE'
+      - 'GOLD_SPADE'
+      - 'DIAMOND_SPADE'
+      - 'WOOD_HOE'
       - 'STONE_HOE'
       - 'IRON_HOE'
-      - 'GOLDEN_HOE'
+      - 'GOLD_HOE'
       - 'DIAMOND_HOE'
       - 'SHEARS'
       - 'LEATHER_HELMET'
       - 'CHAINMAIL_HELMET'
-      - 'GOLDEN_HELMET'
+      - 'GOLD_HELMET'
       - 'IRON_HELMET'
       - 'DIAMOND_HELMET'
       - 'LEATHER_CHESTPLATE'
       - 'CHAINMAIL_CHESTPLATE'
-      - 'GOLDEN_CHESTPLATE'
+      - 'GOLD_CHESTPLATE'
       - 'IRON_CHESTPLATE'
       - 'DIAMOND_CHESTPLATE'
       - 'LEATHER_LEGGINGS'
       - 'CHAINMAIL_LEGGINGS'
-      - 'GOLDEN_LEGGINGS'
+      - 'GOLD_LEGGINGS'
       - 'IRON_LEGGINGS'
       - 'DIAMOND_LEGGINGS'
       - 'LEATHER_BOOTS'
       - 'CHAINMAIL_BOOTS'
-      - 'GOLDEN_BOOTS'
+      - 'GOLD_BOOTS'
       - 'IRON_BOOTS'
       - 'DIAMOND_BOOTS'
-      - 'WOODEN_SWORD'
+      - 'WOOD_SWORD'
       - 'STONE_SWORD'
       - 'IRON_SWORD'
-      - 'GOLDEN_SWORD'
+      - 'GOLD_SWORD'
       - 'DIAMOND_SWORD'
       - 'BOW'
       - 'FISHING_ROD'

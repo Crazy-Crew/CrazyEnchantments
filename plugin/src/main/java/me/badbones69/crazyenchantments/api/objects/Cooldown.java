@@ -27,7 +27,7 @@ public class Cooldown {
 		return this.cooldown;
 	}
 	
-	public Boolean isCooldownOver() {
+	public boolean isCooldownOver() {
 		return Calendar.getInstance().after(this.cooldown);
 	}
 	

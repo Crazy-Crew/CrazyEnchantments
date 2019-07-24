@@ -3,8 +3,8 @@ package me.badbones69.crazyenchantments.api.enums;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,12 +17,12 @@ public enum Dust {
 	MYSTERY_DUST("Mystery-Dust", "MysteryDust", Arrays.asList("m", "mystery")),
 	FAILED_DUST("Failed-Dust", "FailedDust", Arrays.asList("f, failed"));
 	
+	private static HashMap<Dust, ItemBuilder> dust = new HashMap<>();
 	private String name;
 	private String configName;
 	private List<String> knownNames;
-	private Integer max;
-	private Integer min;
-	private static HashMap<Dust, ItemBuilder> dust = new HashMap<>();
+	private int max;
+	private int min;
 	
 	private Dust(String name, String configName, List<String> knowNames) {
 		this.name = name;
@@ -33,6 +33,18 @@ public enum Dust {
 			this.min = max;
 		}else {
 			this.min = Files.CONFIG.getFile().getInt("Settings.Dust." + configName + ".PercentRange.Min");
+		}
+	}
+	
+	public static void loadDust() {
+		FileConfiguration config = Files.CONFIG.getFile();
+		dust.clear();
+		for(Dust dust : values()) {
+			String path = "Settings.Dust." + dust.getConfigName() + ".";
+			Dust.dust.put(dust, new ItemBuilder()
+			.setName(config.getString(path + "Name"))
+			.setLore(config.getStringList(path + "Lore"))
+			.setMaterial(config.getString(path + "Item")));
 		}
 	}
 	
@@ -67,18 +79,6 @@ public enum Dust {
 		.addLorePlaceholder("%percent%", percent + "")
 		.addLorePlaceholder("%Percent%", percent + "")
 		.setAmount(amount).build();
-	}
-	
-	public static void loadDust() {
-		FileConfiguration config = Files.CONFIG.getFile();
-		dust.clear();
-		for(Dust dust : values()) {
-			String path = "Settings.Dust." + dust.getConfigName() + ".";
-			Dust.dust.put(dust, new ItemBuilder()
-			.setName(config.getString(path + "Name"))
-			.setLore(config.getStringList(path + "Lore"))
-			.setMaterial(config.getString(path + "Item")));
-		}
 	}
 	
 }

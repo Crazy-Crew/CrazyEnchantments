@@ -8,14 +8,19 @@ import org.bukkit.inventory.ItemStack;
 
 public class AngelUseEvent extends Event implements Cancellable {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private Player player;
 	private ItemStack item;
-	private Boolean cancel;
+	private boolean cancel;
 	
 	public AngelUseEvent(Player player, ItemStack item) {
 		this.player = player;
 		this.item = item;
 		this.cancel = false;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	/**
@@ -34,13 +39,7 @@ public class AngelUseEvent extends Event implements Cancellable {
 		return item;
 	}
 	
-	private static final HandlerList handlers = new HandlerList();
-	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

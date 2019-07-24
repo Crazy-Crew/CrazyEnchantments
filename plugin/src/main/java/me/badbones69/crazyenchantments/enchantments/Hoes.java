@@ -4,6 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
+import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.*;
@@ -22,10 +23,40 @@ import java.util.*;
 
 public class Hoes implements Listener {
 	
-	private List<Material> seedlings;
-	private List<Material> crops;
+	private static List<Material> harvesterCrops;
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private List<Material> seedlings;
+	private Random random = new Random();
+	private Material soilBlock = ce.getMaterial("FARMLAND", "SOIL");
+	private Material grassBlock = ce.getMaterial("GRASS_BLOCK", "GRASS");
+	private HashMap<Material, Material> planterSeeds;
 	private HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+	
+	/**
+	 * Only has crop blocks
+	 */
+	public static List<Material> getHarvesterCrops() {
+		if(harvesterCrops == null) {
+			harvesterCrops = new ArrayList<>();
+			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
+				harvesterCrops.add(Material.matchMaterial("BEETROOT_BLOCK"));
+			}
+			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+				harvesterCrops.addAll(Arrays.asList(Material.WHEAT,
+				Material.matchMaterial("CARROTS"),
+				Material.matchMaterial("BEETROOTS"),
+				Material.matchMaterial("POTATOES"),
+				Material.matchMaterial("NETHER_WART")));
+			}else {
+				harvesterCrops.addAll(Arrays.asList(Material.matchMaterial("CROPS"),
+				Material.matchMaterial("CARROT"),
+				Material.matchMaterial("POTATO"),
+				Material.matchMaterial("NETHER_WARTS")));
+			}
+			harvesterCrops.add(Material.COCOA);
+		}
+		return harvesterCrops;
+	}
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
@@ -36,39 +67,47 @@ public class Hoes implements Listener {
 			}
 		}
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			ItemStack item = Methods.getItemInHand(player);
+			ItemStack hoe = Methods.getItemInHand(player);
 			Block block = e.getClickedBlock();
-			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+			List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(hoe);
 			if(getSeedlings().contains(block.getType())) {
-				if(enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment())) {//Crop is not fully grown
-					if(!ce.getNMSSupport().isFullyGrown(block)) {
-						if(CEnchantments.GREENTHUMB.chanceSuccessful(item) || player.getGameMode() == GameMode.CREATIVE) {
-							ce.getNMSSupport().fullyGrowPlant(block);
-							if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-								block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, block.getLocation().add(.5, .5, .5), 20, .25, .25, .25);
-							}else {
-								ParticleEffect.VILLAGER_HAPPY.display(.25F, .25F, .25F, 0, 20, block.getLocation().add(.5, .5, .5), 20);
-							}
-						}
+				if(enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment())) {
+					if(!ce.getNMSSupport().isFullyGrown(block)) {//Crop is not fully grown
+						fullyGrowPlant(hoe, block, player);
 						if(player.getGameMode() != GameMode.CREATIVE) {//Take durability from players not in Creative
-							Methods.removeDurability(item, player);
+							Methods.removeDurability(hoe, player);
 						}
 					}
 				}
 			}
-			if(block.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS")) {
+			if(block.getType() == grassBlock || block.getType() == Material.DIRT || block.getType() == Material.SOUL_SAND || block.getType() == soilBlock) {
 				if(enchantments.contains(CEnchantments.TILLER.getEnchantment())) {
+					boolean hasGreenThumb = enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment());
 					for(Block soil : getSoil(player, block)) {
-						soil.setType(ce.getMaterial("FARMLAND", "SOIL"));
-						for(Block water : getAreaBlocks(soil, 3)) {
-							if(water.getType() == Material.WATER || water.getType() == ce.getMaterial("WATER", "STATIONARY_WATER")) {
-								ce.getNMSSupport().hydrateSoil(soil);
-								break;
+						if(soil.getType() != soilBlock && soil.getType() != Material.SOUL_SAND) {
+							soil.setType(soilBlock);
+						}
+						if(soil.getType() != Material.SOUL_SAND) {
+							for(Block water : getAreaBlocks(soil, 4)) {
+								if(water.getType() == Material.WATER || water.getType() == ce.getMaterial("WATER", "STATIONARY_WATER")) {
+									ce.getNMSSupport().hydrateSoil(soil);
+									break;
+								}
 							}
+						}
+						if(enchantments.contains(CEnchantments.PLANTER.getEnchantment())) {
+							plantSeedSuccess(hoe, soil, player, hasGreenThumb);
 						}
 						//Take durability from the hoe for each block set to a soil.
 						if(player.getGameMode() != GameMode.CREATIVE) {//Take durability from players not in Creative
-							Methods.removeDurability(item, player);
+							Methods.removeDurability(hoe, player);
+						}
+					}
+				}
+				if(enchantments.contains(CEnchantments.PLANTER.getEnchantment()) && !enchantments.contains(CEnchantments.TILLER.getEnchantment())) {//Checking else to make sure the item does have Tiller.
+					if(plantSeedSuccess(hoe, block, player, enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment()))) {
+						if(player.getGameMode() != GameMode.CREATIVE) {//Take durability from players not in Creative
+							Methods.removeDurability(hoe, player);
 						}
 					}
 				}
@@ -84,23 +123,59 @@ public class Hoes implements Listener {
 				}
 			}
 		}
+		
 	}
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
-		if(!e.isCancelled()) {
+		if(!e.isCancelled() && !ce.getSkippedBreakEvents().contains(e)) {
 			Player player = e.getPlayer();
-			Block block = e.getBlock();
-			if(getCrops().contains(block.getType())) {
-				ItemStack item = Methods.getItemInHand(player);
-				List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+			Block plant = e.getBlock();
+			if(getHarvesterCrops().contains(plant.getType())) {
+				ItemStack hoe = Methods.getItemInHand(player);
+				List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(hoe);
 				if(!enchantments.isEmpty()) {
 					if(enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) {
 						if(blocks.containsKey(player.getUniqueId())) {
-							BlockFace blockFace = blocks.get(player.getUniqueId()).get(block);
+							BlockFace blockFace = blocks.get(player.getUniqueId()).get(plant);
 							blocks.remove(player.getUniqueId());
-							if(ce.getNMSSupport().isFullyGrown(block)) {
-								for(Block crop : getAreaCrops(player, block, blockFace)) {
+							if(ce.getNMSSupport().isFullyGrown(plant)) {
+								boolean hasTelepathy = enchantments.contains(CEnchantments.TELEPATHY.getEnchantment());
+								for(Block crop : getAreaCrops(player, plant, blockFace)) {
+									if(hasTelepathy) {
+										List<ItemStack> droppedItems = new ArrayList<>();
+										if(crop.getType() == Material.COCOA) {
+											droppedItems.add(new ItemBuilder().setMaterial("COCOA_BEANS", "INK_SACK:3").setAmount(random.nextInt(2) + 2).build());//Coco drops 2-3 beans.
+										}else if(crop.getType() == ce.getMaterial("WHEAT", "CROPS")) {
+											droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT).build());
+											droppedItems.add(new ItemBuilder().setMaterial("WHEAT_SEEDS", "SEEDS").setAmount(random.nextInt(3)).build());//Wheat drops 0-3 seeds.
+										}else if(crop.getType() == ce.getMaterial("BEETROOTS", "BEETROOT_BLOCK")) {
+											droppedItems.add(new ItemBuilder().setMaterial("BEETROOT").build());
+											droppedItems.add(new ItemBuilder().setMaterial("BEETROOT_SEEDS").setAmount(random.nextInt(3)).build());//BeetRoots drops 0-3 seeds.
+										}else if(crop.getType() == ce.getMaterial("POTATOES", "POTATO")) {
+											droppedItems.add(new ItemBuilder().setMaterial("POTATO", "POTATO_ITEM").setAmount(random.nextInt(4) + 1).build());//Potatoes drop 1-4 of them self's.
+										}else if(crop.getType() == ce.getMaterial("CARROTS", "CARROT")) {
+											droppedItems.add(new ItemBuilder().setMaterial("CARROT", "CARROT_ITEM").setAmount(random.nextInt(4) + 1).build());//Carrots drop 1-4 of them self's.
+										}else if(crop.getType() == ce.getMaterial("NETHER_WART", "NETHER_WARTS")) {
+											droppedItems.add(new ItemBuilder().setMaterial("NETHER_WART", "NETHER_STALK").setAmount(random.nextInt(3) + 2).build());//Nether Warts drop 2-4 of them self's.
+										}
+										if(!droppedItems.isEmpty()) {
+											for(ItemStack droppedItem : droppedItems) {
+												if(droppedItem.getAmount() > 0) {
+													if(Methods.isInventoryFull(player)) {
+														player.getWorld().dropItem(player.getLocation(), droppedItem);
+													}else {
+														player.getInventory().addItem(droppedItem);
+													}
+												}
+											}
+											if(Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
+												e.setDropItems(false);
+											}
+											crop.setType(Material.AIR);
+											continue;
+										}
+									}
 									crop.breakNaturally();
 								}
 							}
@@ -111,6 +186,83 @@ public class Hoes implements Listener {
 		}
 	}
 	
+	private void fullyGrowPlant(ItemStack hoe, Block block, Player player) {
+		if(CEnchantments.GREENTHUMB.chanceSuccessful(hoe) || player.getGameMode() == GameMode.CREATIVE) {
+			ce.getNMSSupport().fullyGrowPlant(block);
+			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+				block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, block.getLocation().add(.5, .5, .5), 20, .25, .25, .25);
+			}else {
+				ParticleEffect.VILLAGER_HAPPY.display(.25F, .25F, .25F, 0, 20, block.getLocation().add(.5, .5, .5), 20);
+			}
+		}
+	}
+	
+	private boolean plantSeedSuccess(ItemStack hoe, Block soil, Player player, boolean hasGreenThumb) {
+		boolean isSoulSand = soil.getType() == Material.SOUL_SAND;
+		Material seedType = null;
+		ItemStack playerSeedItem = null;
+		Block plant = soil.getLocation().add(0, 1, 0).getBlock();
+		if(plant.getType() == Material.AIR) {
+			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+				if(isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
+					seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
+					playerSeedItem = player.getEquipment().getItemInOffHand();
+					if(playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+						seedType = null;
+					}
+				}else {
+					seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
+					playerSeedItem = player.getEquipment().getItemInOffHand();
+					if(playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+						seedType = null;//Makes sure nether warts are not put on soil.
+					}
+				}
+			}
+			if(seedType == null) {
+				for(int slot = 0; slot < 9; slot++) {
+					if(isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
+						seedType = getPlanterSeed(player.getInventory().getItem(slot));
+						playerSeedItem = player.getInventory().getItem(slot);
+						if(playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+							seedType = null;
+						}else {
+							if(seedType != null) {
+								break;
+							}
+						}
+					}else {
+						seedType = getPlanterSeed(player.getInventory().getItem(slot));
+						playerSeedItem = player.getInventory().getItem(slot);
+						if(playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
+							seedType = null;//Makes sure nether warts are not put on soil.
+						}else {
+							if(seedType != null) {
+								break;
+							}
+						}
+					}
+				}
+			}
+			if(seedType != null) {
+				if(soil.getType() != soilBlock && !isSoulSand) {
+					soil.setType(soilBlock);
+				}
+				if(player.getGameMode() != GameMode.CREATIVE) {
+					Methods.removeItem(playerSeedItem, player);//Take seed from player
+				}
+				plant.setType(seedType);
+				if(hasGreenThumb) {
+					fullyGrowPlant(hoe, plant, player);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Includes crop blocks and stems
+	 */
 	private List<Material> getSeedlings() {
 		if(seedlings == null) {
 			seedlings = new ArrayList<>();
@@ -139,39 +291,49 @@ public class Hoes implements Listener {
 		return seedlings;
 	}
 	
-	private List<Material> getCrops() {
-		if(crops == null) {
-			crops = new ArrayList<>();
+	private Material getPlanterSeed(ItemStack item) {
+		return item != null ? getPlanterSeed(item.getType()) : null;
+	}
+	
+	private Material getPlanterSeed(Block block) {
+		return getPlanterSeed(block.getType());
+	}
+	
+	private Material getPlanterSeed(Material material) {
+		if(planterSeeds == null) {
+			planterSeeds = new HashMap<>();//Key == Item : Value == BlockType
 			if(Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
-				crops.add(Material.matchMaterial("BEETROOT_BLOCK"));
+				planterSeeds.put(Material.matchMaterial("BEETROOT_SEEDS"), Material.matchMaterial("BEETROOT_BLOCK"));
 			}
 			if(Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
-				crops.addAll(Arrays.asList(Material.WHEAT,
-				Material.matchMaterial("CARROTS"),
-				Material.COCOA,
-				Material.matchMaterial("BEETROOTS"),
-				Material.matchMaterial("POTATOES"),
-				Material.matchMaterial("NETHER_WART")));
+				planterSeeds.put(Material.matchMaterial("WHEAT_SEEDS"), Material.matchMaterial("WHEAT"));
+				planterSeeds.put(Material.matchMaterial("BEETROOT_SEEDS"), Material.matchMaterial("BEETROOTS"));
+				planterSeeds.put(Material.matchMaterial("POTATO"), Material.matchMaterial("POTATOES"));
+				planterSeeds.put(Material.matchMaterial("CARROT"), Material.matchMaterial("CARROTS"));
+				planterSeeds.put(Material.matchMaterial("NETHER_WART"), Material.matchMaterial("NETHER_WART"));
 			}else {
-				crops.addAll(Arrays.asList(Material.matchMaterial("CROPS"),
-				Material.matchMaterial("CARROT"),
-				Material.COCOA,
-				Material.matchMaterial("POTATO"),
-				Material.matchMaterial("NETHER_WARTS")));
+				planterSeeds.put(Material.matchMaterial("SEEDS"), Material.matchMaterial("CROPS"));
+				planterSeeds.put(Material.matchMaterial("POTATO_ITEM"), Material.matchMaterial("POTATO"));
+				planterSeeds.put(Material.matchMaterial("CARROT_ITEM"), Material.matchMaterial("CARROT"));
+				planterSeeds.put(Material.matchMaterial("NETHER_STALK"), Material.matchMaterial("NETHER_WARTS"));
 			}
+			planterSeeds.put(Material.MELON_SEEDS, Material.MELON_STEM);
+			planterSeeds.put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
 		}
-		return crops;
+		return material != null ? planterSeeds.get(material) : null;
 	}
 	
 	private List<Block> getAreaCrops(Player player, Block block, BlockFace blockFace) {
 		List<Block> blocks = new ArrayList<>();
 		for(Block crop : getAreaBlocks(block, blockFace, 0, 1)) {//Radius of 1 is 3x3
-			if(getCrops().contains(crop.getType())) {
+			if(getHarvesterCrops().contains(crop.getType())) {
 				if(ce.getNMSSupport().isFullyGrown(crop)) {
 					BlockBreakEvent event = new BlockBreakEvent(crop, player);
+					ce.addBreakEvent(event);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 						blocks.add(crop);
+						ce.removeBreakEvent(event);
 					}
 				}
 			}
@@ -183,11 +345,13 @@ public class Hoes implements Listener {
 		Location location = block.getLocation();
 		List<Block> soilBlocks = new ArrayList<>();
 		for(Block soil : getAreaBlocks(block)) {
-			if(soil.getType() == ce.getMaterial("GRASS_BLOCK", "GRASS")) {
+			if(soil.getType() == grassBlock || soil.getType() == Material.DIRT || soil.getType() == Material.SOUL_SAND || soil.getType() == soilBlock) {
 				BlockBreakEvent event = new BlockBreakEvent(soil, player);
+				ce.addBreakEvent(event);
 				Bukkit.getPluginManager().callEvent(event);
 				if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 					soilBlocks.add(soil);
+					ce.removeBreakEvent(event);
 				}
 			}
 		}

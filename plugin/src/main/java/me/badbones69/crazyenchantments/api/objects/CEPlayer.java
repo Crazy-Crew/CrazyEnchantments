@@ -160,7 +160,7 @@ public class CEPlayer {
 					}
 				}
 			}
-			if(Methods.isInvFull(player)) {
+			if(Methods.isInventoryFull(player)) {
 				player.getWorld().dropItemNaturally(player.getLocation(), item);
 			}else {
 				player.getInventory().addItem(item);

@@ -2,7 +2,6 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import me.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import org.bukkit.Bukkit;
@@ -46,17 +45,16 @@ public class CEnchantment {
 		this.enchantmentType = null;
 	}
 	
-	public CEnchantment setName(String name) {
-		this.name = name;
-		return this;
+	public static CEnchantment getCEnchantmentFromName(String enchantment) {
+		return ce.getEnchantmentFromName(enchantment);
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public CEnchantment setCustomName(String customName) {
-		this.customName = customName;
+	public CEnchantment setName(String name) {
+		this.name = name;
 		return this;
 	}
 	
@@ -64,8 +62,8 @@ public class CEnchantment {
 		return customName;
 	}
 	
-	public CEnchantment setActivated(boolean activated) {
-		this.activated = activated;
+	public CEnchantment setCustomName(String customName) {
+		this.customName = customName;
 		return this;
 	}
 	
@@ -73,13 +71,22 @@ public class CEnchantment {
 		return activated;
 	}
 	
-	public CEnchantment setColor(String color) {
-		this.color = Methods.color(color);
+	public CEnchantment setActivated(boolean activated) {
+		this.activated = activated;
 		return this;
 	}
 	
 	public String getColor() {
 		return color;
+	}
+	
+	public CEnchantment setColor(String color) {
+		this.color = Methods.color(color);
+		return this;
+	}
+	
+	public String getBookColor() {
+		return bookColor;
 	}
 	
 	public CEnchantment setBookColor(String bookColor) {
@@ -90,8 +97,8 @@ public class CEnchantment {
 		return this;
 	}
 	
-	public String getBookColor() {
-		return bookColor;
+	public int getMaxLevel() {
+		return maxLevel;
 	}
 	
 	public CEnchantment setMaxLevel(int maxLevel) {
@@ -99,8 +106,8 @@ public class CEnchantment {
 		return this;
 	}
 	
-	public int getMaxLevel() {
-		return maxLevel;
+	public String getInfoName() {
+		return infoName;
 	}
 	
 	public CEnchantment setInfoName(String infoName) {
@@ -108,8 +115,8 @@ public class CEnchantment {
 		return this;
 	}
 	
-	public String getInfoName() {
-		return infoName;
+	public int getChance() {
+		return chance;
 	}
 	
 	public CEnchantment setChance(int chance) {
@@ -117,17 +124,13 @@ public class CEnchantment {
 		return this;
 	}
 	
-	public int getChance() {
-		return chance;
+	public int getChanceIncrease() {
+		return chanceIncrease;
 	}
 	
 	public CEnchantment setChanceIncrease(int chanceIncrease) {
 		this.chanceIncrease = chanceIncrease;
 		return this;
-	}
-	
-	public int getChanceIncrease() {
-		return chanceIncrease;
 	}
 	
 	public boolean hasChanceSystem() {
@@ -144,6 +147,10 @@ public class CEnchantment {
 		return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
 	}
 	
+	public List<String> getInfoDescription() {
+		return infoDescription;
+	}
+	
 	public CEnchantment setInfoDescription(List<String> infoDescription) {
 		ArrayList<String> info = new ArrayList<>();
 		for(String i : infoDescription) {
@@ -153,13 +160,13 @@ public class CEnchantment {
 		return this;
 	}
 	
-	public List<String> getInfoDescription() {
-		return infoDescription;
-	}
-	
 	public CEnchantment addCategory(Category category) {
 		this.categories.add(category);
 		return this;
+	}
+	
+	public List<Category> getCategories() {
+		return categories;
 	}
 	
 	public CEnchantment setCategories(List<String> categories) {
@@ -169,17 +176,13 @@ public class CEnchantment {
 		return this;
 	}
 	
-	public List<Category> getCategories() {
-		return categories;
+	public EnchantmentType getEnchantmentType() {
+		return enchantmentType;
 	}
 	
 	public CEnchantment setEnchantmentType(EnchantmentType enchantmentType) {
 		this.enchantmentType = enchantmentType;
 		return this;
-	}
-	
-	public EnchantmentType getEnchantmentType() {
-		return enchantmentType;
 	}
 	
 	public void registerEnchantment() {
@@ -214,16 +217,12 @@ public class CEnchantment {
 			}
 		}
 		power = ce.convertLevelInteger(line.replace(color + customName + " ", ""));
-		if(!Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments")) {
+		if(!ce.useUnsafeEnchantments()) {
 			if(power > maxLevel) {
 				power = maxLevel;
 			}
 		}
 		return power;
-	}
-	
-	public static CEnchantment getCEnchantmentFromName(String enchantment) {
-		return ce.getEnchantmentFromName(enchantment);
 	}
 	
 }

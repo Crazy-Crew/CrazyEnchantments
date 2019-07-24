@@ -35,8 +35,8 @@ import java.util.List;
  */
 public class ArmorListener implements Listener {
 	
-	private Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	private final List<String> blockedMaterials;
+	private Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
 	
 	public ArmorListener() {
 		this.blockedMaterials = getBlocks();

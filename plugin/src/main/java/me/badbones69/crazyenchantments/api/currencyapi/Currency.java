@@ -13,19 +13,11 @@ public enum Currency {
 	}
 	
 	/**
-	 * Get the name of the currency.
-	 * @return The name of the currency.
-	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
 	 * Checks if it is a compatible currency.
 	 * @param currency The currency name you are checking.
 	 * @return True if it is supported and false if not.
 	 */
-	public static Boolean isCurrency(String currency) {
+	public static boolean isCurrency(String currency) {
 		for(Currency c : Currency.values()) {
 			if(currency.equalsIgnoreCase(c.getName())) {
 				return true;
@@ -46,6 +38,14 @@ public enum Currency {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Get the name of the currency.
+	 * @return The name of the currency.
+	 */
+	public String getName() {
+		return name;
 	}
 	
 }

@@ -17,7 +17,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +25,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class SignControl implements Listener {
 				int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
 				Location loc = new Location(world, x, y, z);
 				if(Loc.equals(loc)) {
-					if(Methods.isInvFull(player)) {
+					if(Methods.isInventoryFull(player)) {
 						player.sendMessage(Messages.INVENTORY_FULL.getMessage());
 						return;
 					}
@@ -168,7 +168,7 @@ public class SignControl implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBreak(BlockBreakEvent e) {
-		if(!e.isCancelled()) {
+		if(!e.isCancelled() && !ce.getSkippedBreakEvents().contains(e)) {
 			Player player = e.getPlayer();
 			Location Loc = e.getBlock().getLocation();
 			for(String locationName : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {

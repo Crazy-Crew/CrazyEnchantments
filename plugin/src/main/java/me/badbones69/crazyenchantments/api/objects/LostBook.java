@@ -4,7 +4,7 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +22,8 @@ public class LostBook {
 	private Sound sound;
 	
 	public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency,
-	boolean useFirework, List<Color> fireworkColors, boolean useSound, Sound sound) {
-		this.slot = slot;
+	boolean useFirework, List<Color> fireworkColors, boolean useSound, String sound) {
+		this.slot = slot - 1;
 		this.inGUI = inGUI;
 		this.displayItem = displayItem;
 		this.cost = cost;
@@ -31,7 +31,11 @@ public class LostBook {
 		this.useFirework = !fireworkColors.isEmpty() && useFirework;
 		this.fireworkColors = fireworkColors;
 		this.useSound = sound != null && useSound;
-		this.sound = sound;
+		try {//If the sound doesn't exist it will not error.
+			this.sound = Sound.valueOf(sound);
+		}catch(IllegalArgumentException e) {
+			System.out.println("[CrazyEnchantments] The sound " + sound + " is not a sound found in this minecraft version.");
+		}
 	}
 	
 	public int getSlot() {

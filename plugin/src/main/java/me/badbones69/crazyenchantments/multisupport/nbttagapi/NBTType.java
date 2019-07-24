@@ -14,14 +14,10 @@ public enum NBTType {
 	NBTTagList(9),
 	NBTTagCompound(10);
 	
-	NBTType(int i) {
-		id = i;
-	}
-	
 	private final int id;
 	
-	public int getId() {
-		return id;
+	NBTType(int i) {
+		id = i;
 	}
 	
 	public static NBTType valueOf(int id) {
@@ -29,6 +25,10 @@ public enum NBTType {
 			if(t.getId() == id)
 				return t;
 		return NBTType.NBTTagEnd;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 }

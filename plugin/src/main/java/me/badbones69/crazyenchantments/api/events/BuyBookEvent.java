@@ -8,11 +8,11 @@ import org.bukkit.event.HandlerList;
 
 public class BuyBookEvent extends Event {
 	
+	private static final HandlerList handlers = new HandlerList();
 	private int price;
 	private CEBook book;
 	private CEPlayer player;
 	private Currency currency;
-	private static final HandlerList handlers = new HandlerList();
 	
 	/**
 	 * Called when a book is being bought with the signs and gui.
@@ -26,6 +26,10 @@ public class BuyBookEvent extends Event {
 		this.price = price;
 		this.player = player;
 		this.currency = currency;
+	}
+	
+	public static HandlerList getHandlerList() {
+		return handlers;
 	}
 	
 	/**
@@ -61,10 +65,6 @@ public class BuyBookEvent extends Event {
 	}
 	
 	public HandlerList getHandlers() {
-		return handlers;
-	}
-	
-	public static HandlerList getHandlerList() {
 		return handlers;
 	}
 	

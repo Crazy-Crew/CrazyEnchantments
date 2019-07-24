@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.api.enums;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
@@ -75,6 +75,43 @@ public enum Messages {
 	private Messages(String path, List<String> defaultListMessage) {
 		this.path = path;
 		this.defaultListMessage = defaultListMessage;
+	}
+	
+	public static String convertList(List<String> list) {
+		String message = "";
+		for(String m : list) {
+			message += Methods.color(m) + "\n";
+		}
+		return message;
+	}
+	
+	public static String convertList(List<String> list, HashMap<String, String> placeholders) {
+		String message = "";
+		for(String m : list) {
+			message += Methods.color(m) + "\n";
+		}
+		for(String ph : placeholders.keySet()) {
+			message = Methods.color(message.replaceAll(ph, placeholders.get(ph)));
+		}
+		return message;
+	}
+	
+	public static void addMissingMessages() {
+		FileConfiguration messages = Files.MESSAGES.getFile();
+		boolean saveFile = false;
+		for(Messages message : values()) {
+			if(!messages.contains("Messages." + message.getPath())) {
+				saveFile = true;
+				if(message.getDefaultMessage() != null) {
+					messages.set("Messages." + message.getPath(), message.getDefaultMessage());
+				}else {
+					messages.set("Messages." + message.getPath(), message.getDefaultListMessage());
+				}
+			}
+		}
+		if(saveFile) {
+			Files.MESSAGES.saveFile();
+		}
 	}
 	
 	public String getMessage() {
@@ -155,49 +192,11 @@ public enum Messages {
 		return message;
 	}
 	
-	public static String convertList(List<String> list) {
-		String message = "";
-		for(String m : list) {
-			message += Methods.color(m) + "\n";
-		}
-		return message;
-	}
-	
-	public static String convertList(List<String> list, HashMap<String, String> placeholders) {
-		String message = "";
-		for(String m : list) {
-			message += Methods.color(m) + "\n";
-		}
-		for(String ph : placeholders.keySet()) {
-			message = Methods.color(message.replaceAll(ph, placeholders.get(ph)));
-		}
-		return message;
-	}
-	
-	public static void addMissingMessages() {
-		FileConfiguration messages = Files.MESSAGES.getFile();
-		boolean saveFile = false;
-		for(Messages message : values()) {
-			if(!messages.contains("Messages." + message.getPath())) {
-				System.out.println(message.getPath());
-				saveFile = true;
-				if(message.getDefaultMessage() != null) {
-					messages.set("Messages." + message.getPath(), message.getDefaultMessage());
-				}else {
-					messages.set("Messages." + message.getPath(), message.getDefaultListMessage());
-				}
-			}
-		}
-		if(saveFile) {
-			Files.MESSAGES.saveFile();
-		}
-	}
-	
-	private Boolean exists() {
+	private boolean exists() {
 		return Files.MESSAGES.getFile().contains("Messages." + path);
 	}
 	
-	private Boolean isList() {
+	private boolean isList() {
 		if(Files.MESSAGES.getFile().contains("Messages." + path)) {
 			return !Files.MESSAGES.getFile().getStringList("Messages." + path).isEmpty();
 		}else {

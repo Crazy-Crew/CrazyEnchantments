@@ -23,7 +23,7 @@ import java.util.List;
  * @author BadBones69
  *
  */
-public class ItemBuilder {
+public class ItemBuilder implements Cloneable {
 	
 	private Material material;
 	private int damage;
@@ -32,9 +32,9 @@ public class ItemBuilder {
 	private int amount;
 	private String player;
 	private HashMap<Enchantment, Integer> enchantments;
-	private Boolean unbreakable;
-	private Boolean hideItemFlags;
-	private Boolean glowing;
+	private boolean unbreakable;
+	private boolean hideItemFlags;
+	private boolean glowing;
 	private ItemStack referenceItem;
 	private HashMap<String, String> namePlaceholders;
 	private HashMap<String, String> lorePlaceholders;
@@ -350,6 +350,19 @@ public class ItemBuilder {
 	}
 	
 	/**
+	 * Set a list of enchantments that will go onto the item in the builder. These can have unsafe levels.
+	 * It will also override any enchantments used in the "ItemBuilder#addEnchantment()" method.
+	 * @param enchantments A list of enchantments that will go onto the item in the builder.
+	 * @return The ItemBuilder with updated info.
+	 */
+	public ItemBuilder setEnchantments(HashMap<Enchantment, Integer> enchantments) {
+		if(enchantments != null) {
+			this.enchantments = enchantments;
+		}
+		return this;
+	}
+	
+	/**
 	 * Add an enchantment to the item in the builder.
 	 * @param enchantment The enchantment you wish to add.
 	 * @param level The level of the enchantment. This can be unsafe levels.
@@ -371,23 +384,10 @@ public class ItemBuilder {
 	}
 	
 	/**
-	 * Set a list of enchantments that will go onto the item in the builder. These can have unsafe levels.
-	 * It will also override any enchantments used in the "ItemBuilder#addEnchantment()" method.
-	 * @param enchantments A list of enchantments that will go onto the item in the builder.
-	 * @return The ItemBuilder with updated info.
-	 */
-	public ItemBuilder setEnchantments(HashMap<Enchantment, Integer> enchantments) {
-		if(enchantments != null) {
-			this.enchantments = enchantments;
-		}
-		return this;
-	}
-	
-	/**
 	 * Check if the item in the builder is unbreakable.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public Boolean isUnbreakable() {
+	public boolean isUnbreakable() {
 		return unbreakable;
 	}
 	
@@ -396,7 +396,7 @@ public class ItemBuilder {
 	 * @param unbreakable True will set it to be unbreakable and false will make it able to take damage.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder setUnbreakable(Boolean unbreakable) {
+	public ItemBuilder setUnbreakable(boolean unbreakable) {
 		this.unbreakable = unbreakable;
 		return this;
 	}
@@ -406,7 +406,7 @@ public class ItemBuilder {
 	 * @param hideItemFlags true the item will hide item flags. false will show them.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder hideItemFlags(Boolean hideItemFlags) {
+	public ItemBuilder hideItemFlags(boolean hideItemFlags) {
 		this.hideItemFlags = hideItemFlags;
 		return this;
 	}
@@ -415,7 +415,7 @@ public class ItemBuilder {
 	 * Check if the item in the builder has hidden item flags.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public Boolean areItemFlagsHidden() {
+	public boolean areItemFlagsHidden() {
 		return hideItemFlags;
 	}
 	
@@ -423,7 +423,7 @@ public class ItemBuilder {
 	 * Check if the item in the builder is glowing.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public Boolean isGlowing() {
+	public boolean isGlowing() {
 		return glowing;
 	}
 	
@@ -432,7 +432,7 @@ public class ItemBuilder {
 	 * @param glowing True will set the item to have a glowing effect.
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder setGlowing(Boolean glowing) {
+	public ItemBuilder setGlowing(boolean glowing) {
 		this.glowing = glowing;
 		return this;
 	}
@@ -480,6 +480,19 @@ public class ItemBuilder {
 	}
 	
 	/**
+	 * Get a clone of the object.
+	 * @return a new cloned object.
+	 */
+	public ItemBuilder clone() {
+		try {
+			return (ItemBuilder) super.clone();
+		}catch(CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return new ItemBuilder();
+	}
+	
+	/**
 	 * Sets the converted item as a reference to try and save NBT tags and stuff.
 	 * @param referenceItem The item that is being referenced.
 	 * @return The ItemBuilder with updated info.
@@ -493,7 +506,7 @@ public class ItemBuilder {
 		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
 	
-	private ItemStack hideFlags(ItemStack item, Boolean toggle) {
+	private ItemStack hideFlags(ItemStack item, boolean toggle) {
 		if(toggle) {
 			if(item != null && item.hasItemMeta()) {
 				ItemMeta itemMeta = item.getItemMeta();

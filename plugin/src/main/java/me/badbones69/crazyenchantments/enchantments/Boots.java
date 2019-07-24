@@ -31,6 +31,37 @@ public class Boots implements Listener {
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private static ArrayList<Player> flying = new ArrayList<>();
 	
+	public static void startWings() {
+		if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Clouds")) {
+			if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")) {
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+							if(flying.contains(player)) {
+								Location l = player.getLocation().subtract(0, .25, 0);
+								if(player.isFlying()) {
+									ItemStack boots = player.getEquipment().getBoots();
+									if(boots != null) {
+										if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
+											if(CEnchantments.WINGS.isActivated()) {
+												if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+													player.getWorld().spawnParticle(Particle.CLOUD, l, 100, .25, 0, .25, 0);
+												}else {
+													ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, player.getLocation(), 100);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}.runTaskTimerAsynchronously(ce.getPlugin(), 1, 1);
+			}
+		}
+	}
+	
 	@EventHandler
 	public void onEquip(ArmorEquipEvent e) {
 		Player player = e.getPlayer();
@@ -170,38 +201,7 @@ public class Boots implements Listener {
 		}
 	}
 	
-	public static void onStart() {
-		if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Clouds")) {
-			if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")) {
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-							if(flying.contains(player)) {
-								Location l = player.getLocation().subtract(0, .25, 0);
-								if(player.isFlying()) {
-									ItemStack boots = player.getEquipment().getBoots();
-									if(boots != null) {
-										if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-											if(CEnchantments.WINGS.isActivated()) {
-												if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-													player.getWorld().spawnParticle(Particle.CLOUD, l, 100, .25, 0, .25, 0);
-												}else {
-													ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, player.getLocation(), 100);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}.runTaskTimerAsynchronously(ce.getPlugin(), 1, 1);
-			}
-		}
-	}
-	
-	private Boolean areEnemiesNearBy(Player player) {
+	private boolean areEnemiesNearBy(Player player) {
 		if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Enemy-Toggle")) {
 			for(Player otherPlayer : getNearByPlayers(player, Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Wings.Distance"))) {
 				if(!Support.isFriendly(player, otherPlayer)) {

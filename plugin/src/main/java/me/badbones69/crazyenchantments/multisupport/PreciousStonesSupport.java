@@ -11,7 +11,7 @@ public class PreciousStonesSupport {
 	
 	//No api to check if the player is in their land.
 	
-	public static Boolean canBreakBlock(Player player, Block block) {
+	public static boolean canBreakBlock(Player player, Block block) {
 		return preciousStones.canBreak(player, block.getLocation());
 	}
 	

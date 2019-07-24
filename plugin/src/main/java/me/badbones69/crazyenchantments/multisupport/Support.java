@@ -262,7 +262,7 @@ public class Support {
 			return name;
 		}
 		
-		public Boolean isPluginLoaded() {
+		public boolean isPluginLoaded() {
 			Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(name);
 			if(plugin != null) {
 				if(this == SupportedPlugins.SILK_SPAWNERS) {

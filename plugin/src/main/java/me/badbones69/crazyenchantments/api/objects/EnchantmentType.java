@@ -1,9 +1,10 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,10 @@ public class EnchantmentType {
 		}
 	}
 	
+	public static EnchantmentType getFromName(String name) {
+		return InfoMenuManager.getInstance().getFromName(name);
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -47,10 +52,6 @@ public class EnchantmentType {
 	
 	public List<Material> getEnchantableMaterials() {
 		return enchantableMaterials;
-	}
-	
-	public static EnchantmentType getFromName(String name) {
-		return InfoMenuManager.getInstance().getFromName(name);
 	}
 	
 	public List<CEnchantment> getEnchantments() {
