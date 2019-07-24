@@ -258,7 +258,7 @@ Settings:
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
     Right-Click-Enchantment-Table: false #When set to true if a player right clicks an enchantment table it will open the /CE gui.
-    EXP-Bug: false #Only needs to be true if player's XP sometimes glitches to 1Bill after buying an item will all their XP.
+    EXP-Bug: false #Only needs to be true if player's XP sometimes glitches to 1Bill after buying an item with all their XP.
     Lightning-Sound-Range: 160 #Range in blocks where lightning sound should become inaudible.
     Armor-Upgrade: #Having this enabled will allow players to try and add a higher level of an enchantment onto an item with a lower level of the enchantment.
       Toggle: true #Toggle on or off the ability to upgrade the enchantments.
