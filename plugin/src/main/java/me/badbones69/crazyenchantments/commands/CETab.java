@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.commands;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,11 +12,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CETab implements TabCompleter {
 	
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private boolean isV1_13_Up = Version.getCurrentVersion().isNewer(Version.v1_12_R1);
 	
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String commandLable, String[] args) {
@@ -42,6 +45,11 @@ public class CETab implements TabCompleter {
 				case "add":
 				case "book":
 					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getCustomName().replace(" ", "_")));
+					if(isV1_13_Up) {
+						Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
+					}else {
+						Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getName().replace(" ", "_")));
+					}
 					break;
 				case "spawn":
 					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getCustomName().replace(" ", "_")));
