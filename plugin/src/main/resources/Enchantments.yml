@@ -18,8 +18,8 @@
 ##########
 Enchantments:
   #Do not change this line.
-  Glowing: #Do not change these lines. If so you will get errors in console.
-    #Wether or not an enchantment is active
+  Glowing: #Do not change these lines. If so you will get errors in the console.
+    #Whether or not an enchantment is active
     Enabled: true
     #The in-game name of the enchantment.
     Name: 'Glowing'
@@ -33,7 +33,7 @@ Enchantments:
     Enchantment-Type: 'Helmet'
     #Info for the enchantment
     Info:
-      #Name if the item in the info GUI.
+      #Name of the item in the info GUI.
       Name: '&e&lGlowing &7(&bI&7)'
       #The description of what it does.
       Description:
@@ -110,7 +110,7 @@ Enchantments:
     Info:
       Name: '&e&lOverload &7(&bI-&bV&7)'
       Description:
-        - '&7Gives health boost'
+        - '&7Gives a health boost'
         - '&7when you put it on.'
         - ''
         - '&6Found in:'
@@ -157,7 +157,7 @@ Enchantments:
       Name: '&e&lSprings &7(&bI-&bV&7)'
       Description:
         - '&7Gives you a small'
-        - '&7jump boost when wearing it.'
+        - '&7jump boost while wearing it.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -203,7 +203,7 @@ Enchantments:
       Name: '&e&lHulk &7(&bI-&bII&7)'
       Description:
         - '&7Gives strength, damage resistance,'
-        - '&7and slowness when wearing it.'
+        - '&7and slowness while wearing it.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -867,7 +867,7 @@ Enchantments:
       Name: '&e&lSavior &7(&bI-&bV&7)'
       Description:
         - '&7Has a chance to cut'
-        - '&7your in-coming damage by half.'
+        - '&7your incoming damage by half.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -968,7 +968,7 @@ Enchantments:
       Name: '&e&lTelepathy &7(&bI&7)'
       Description:
         - '&7Will automatically send'
-        - '&7mined block to your inventory.'
+        - '&7mined blocks to your inventory.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -1218,7 +1218,7 @@ Enchantments:
     Info:
       Name: '&e&lInquisitive &7(&bI-&bV&7)'
       Description:
-        - '&7Will double or more XP'
+        - '&7Has a chance to double or more XP' #CHECK IF LINE IS TOO LONG PLEASE. ORIG: Will double or more XP
         - '&7based on the enchantment level.'
         - ''
         - '&6Found in:'
@@ -1450,7 +1450,7 @@ Enchantments:
       Name: '&e&lRage &7(&bI-&bIII&7)'
       Description:
         - '&7Attacks will get stronger'
-        - '&7as long as you keep fightning.'
+        - '&7as long as you keep fighting.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
@@ -1671,7 +1671,7 @@ Enchantments:
     Info:
       Name: '&e&lAngel &7(&bI-&bV&7)'
       Description:
-        - '&7Heals near by faction members'
+        - '&7Heals nearby faction members'
         - '&7when you are wearing item.'
         - ''
         - '&6Found in:'
@@ -1841,7 +1841,7 @@ Enchantments:
     Info:
       Name: '&e&lBlast &7(&bI-&bIII&7)'
       Description:
-        - '&7Breaks blocks in a 3 x level x 3 radius'
+        - '&7Breaks blocks in a 3 x level x 3 radius' #Level increases depth not size. Size remains 3x3 (9 blocks)
         - '&7depending on the power of the enchantment.'
         - ''
         - '&6Found in:'
@@ -2028,7 +2028,7 @@ Enchantments:
     Info:
       Name: '&e&lTamer &7(&bI-&bV&7)'
       Description:
-        - '&7Spawns wolfs to help'
+        - '&7Spawns wolves to help'
         - '&7when you are in trouble.'
         - ''
         - '&6Found in:'

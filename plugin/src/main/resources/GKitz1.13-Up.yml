@@ -40,8 +40,8 @@ Settings:
 ###################################
 GKitz: #GKit options.
   Hero: #Name of the GKit.
-    Display: #All the display option in the gui.
-      Slot: 12 #Slot the item is located at in the gui.
+    Display: #All the display option in the GUI.
+      Slot: 12 #Slot the item is located at in the GUI.
       Item: 'ORANGE_STAINED_GLASS_PANE' #The item that is displayed for the GKit.
       Glowing: true #If it has a glowing effect.
       Name: '&6&lThe Hero GKit' #Display name of the GKit.
