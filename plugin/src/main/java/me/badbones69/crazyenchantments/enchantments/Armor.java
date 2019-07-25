@@ -12,7 +12,10 @@ import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -259,8 +262,10 @@ public class Armor implements Listener {
 										Location loc = damager.getLocation();
 										loc.getWorld().spigot().strikeLightningEffect(loc, true);
 										int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
-										Sound sound = Version.getCurrentVersion().isNewer(Version.v1_8_R3) ? Sound.valueOf("ENTITY_LIGHTNING_BOLT_IMPACT") : Sound.valueOf("ENTITY_LIGHTNING_IMPACT");
-										loc.getWorld().playSound(loc, sound, (float) lightningSoundRange / 16f, 1);
+										try {
+											loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
+										}catch(Exception ignore) {
+										}
 										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 											if(Support.allowsPVP(en.getLocation())) {
 												if(!Support.isFriendly(player, en)) {

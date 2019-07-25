@@ -15,7 +15,6 @@ import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -185,8 +184,10 @@ public class Bows implements Listener {
 						if(CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
 							loc.getWorld().spigot().strikeLightningEffect(loc, true);
 							int lightningSoundRange = FileManager.Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
-							Sound sound = Version.getCurrentVersion().isNewer(Version.v1_8_R3) ? Sound.valueOf("ENTITY_LIGHTNING_BOLT_IMPACT") : Sound.valueOf("ENTITY_LIGHTNING_IMPACT");
-							loc.getWorld().playSound(loc, sound, (float) lightningSoundRange / 16f, 1);
+							try {
+								loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
+							}catch(Exception ignore) {
+							}
 							for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow.getArrow())) {
 								if(Support.allowsPVP(entity.getLocation())) {
 									if(!Support.isFriendly(arrow.getShooter(), entity)) {
