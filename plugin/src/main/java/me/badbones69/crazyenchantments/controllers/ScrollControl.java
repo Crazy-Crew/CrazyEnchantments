@@ -27,6 +27,7 @@ import java.util.*;
 public class ScrollControl implements Listener {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private Random random = new Random();
 	
 	public static ItemStack orderEnchantments(ItemStack item) {
 		HashMap<String, Integer> enchants = new HashMap<>();
@@ -127,10 +128,8 @@ public class ScrollControl implements Listener {
 							e.setCurrentItem(orderEnchantments(item));
 							player.setItemOnCursor(Methods.removeItem(scroll));
 							player.updateInventory();
-							return;
 						}
-					}
-					if(scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) {
+					}else if(scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) {
 						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 							player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
 							return;
@@ -145,25 +144,17 @@ public class ScrollControl implements Listener {
 								}
 							}
 						}
-					}
-					if(scroll.isSimilar(Scrolls.BlACK_SCROLL.getScroll())) {
+					}else if(scroll.isSimilar(Scrolls.BlACK_SCROLL.getScroll())) {
 						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
 							player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
 							return;
 						}
-						HashMap<String, Integer> lvl = new HashMap<>();
-						ArrayList<CEnchantment> enchants = new ArrayList<>();
-						boolean i = false;
-						if(ce.hasEnchantments(item)) {
-							for(CEnchantment en : ce.getRegisteredEnchantments()) {
-								if(ce.hasEnchantment(item, en)) {
-									enchants.add(en);
-									lvl.put(en.getName(), ce.getLevel(item, en));
-									i = true;
-								}
-							}
+						if(Methods.isInventoryFull(player)) {
+							player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+							return;
 						}
-						if(i) {
+						List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+						if(!enchantments.isEmpty()) {//Item has enchantments
 							e.setCancelled(true);
 							player.setItemOnCursor(Methods.removeItem(scroll));
 							if(Files.CONFIG.getFile().getBoolean("Settings.BlackScroll.Chance-Toggle")) {
@@ -172,9 +163,10 @@ public class ScrollControl implements Listener {
 									return;
 								}
 							}
-							CEnchantment enchantment = pickEnchant(enchants);
+							CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
+							int level = ce.getLevel(item, enchantment);
 							e.setCurrentItem(ce.removeEnchantment(item, enchantment));
-							CEBook book = new CEBook(enchantment, lvl.get(enchantment.getName()), 1);
+							CEBook book = new CEBook(enchantment, level, 1);
 							player.getInventory().addItem(book.buildBook());
 							player.updateInventory();
 						}
@@ -196,11 +188,6 @@ public class ScrollControl implements Listener {
 				e.setCancelled(true);
 			}
 		}
-	}
-	
-	private CEnchantment pickEnchant(List<CEnchantment> enchants) {
-		Random i = new Random();
-		return enchants.get(i.nextInt(enchants.size()));
 	}
 	
 }
