@@ -175,7 +175,7 @@ public class CEPlayer {
 	/**
 	 * If the player has permission to use the gkit.
 	 * @param kit The gkit you are checking.
-	 * @return Ture if they can use it and false if they can't.
+	 * @return True if they can use it and false if they can't.
 	 */
 	public boolean hasGkitPermission(GKitz kit) {
 		return player.hasPermission("crazyenchantments.bypass.gkitz") || player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase());
@@ -184,7 +184,7 @@ public class CEPlayer {
 	/**
 	 * If the player can use the gkit. Checks their cooldowns and permissions.
 	 * @param kit The gkit you want to check.
-	 * @return Ture if they dont have a cooldown and they have permission.
+	 * @return True if they don't have a cooldown and they have permission.
 	 */
 	public boolean canUseGKit(GKitz kit) {
 		if(player.hasPermission("crazyenchantments.bypass.gkitz")) {

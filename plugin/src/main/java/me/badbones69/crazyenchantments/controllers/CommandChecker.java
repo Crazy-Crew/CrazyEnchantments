@@ -18,7 +18,7 @@ public class CommandChecker implements Listener {
 	@EventHandler
 	public void onInventoryClear(PlayerCommandPreprocessEvent e) {
 		Player player = e.getPlayer();
-		if(e.getMessage().toLowerCase().equalsIgnoreCase("/ci") || e.getMessage().toLowerCase().equalsIgnoreCase("/clear") || e.getMessage().toLowerCase().equalsIgnoreCase("/cearinventory")) {
+		if(e.getMessage().toLowerCase().equalsIgnoreCase("/ci") || e.getMessage().toLowerCase().equalsIgnoreCase("/clear") || e.getMessage().toLowerCase().equalsIgnoreCase("/clearinventory")) {
 			for(CEnchantments ench : ce.getEnchantmentPotions().keySet()) {
 				if(ench.isActivated()) {
 					for(ItemStack armor : player.getEquipment().getArmorContents()) {

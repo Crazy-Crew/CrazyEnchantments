@@ -28,7 +28,7 @@ public class GKitz {
 	 * @param commands The commands that will be run.
 	 * @param items The items that will be given.
 	 * @param itemStrings The items as a string.
-	 * @param autoEquip This is if the armor equipts when given.
+	 * @param autoEquip This is if the armor equips when given.
 	 */
 	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview,
 	ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings, boolean autoEquip) {
