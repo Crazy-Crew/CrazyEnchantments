@@ -18,8 +18,8 @@
 ##########
 Enchantments:
   #Do not change this line.
-  Glowing: #Do not change these lines. If so you will get errors in console.
-    #Wether or not an enchantment is active
+  Glowing: #Do not change these lines. If so you will get errors in the console.
+    #Whether or not an enchantment is active
     Enabled: true
     #The in-game name of the enchantment.
     Name: 'Glowing'
@@ -33,7 +33,7 @@ Enchantments:
     Enchantment-Type: 'Helmet'
     #Info for the enchantment
     Info:
-      #Name if the item in the info GUI.
+      #Name of the item in the info GUI.
       Name: '&e&lGlowing &7(&bI&7)'
       #The description of what it does.
       Description:

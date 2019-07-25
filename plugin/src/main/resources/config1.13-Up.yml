@@ -72,7 +72,7 @@ Settings:
     Glowing: true #If it has a glowing effect.
     Protected: '&6Ancient Protection' #The lore that goes on the item that is protected.
     Lose-Protection-On-Death: true #If true then when the player dies they get the item but it loses its protection.
-    Chance: #The option to allow the protection to fail.
+    Chance: #The option to allow protection to fail.
       Toggle: false #Toggle if the protection has a chance of failing.
       Success-Chance: 75 #The chance that the protection will work.
     Name: '&5&lProtection &b&lCrystal' #Name of the item
@@ -251,14 +251,14 @@ Settings:
     MaxAmountOfEnchantmentsToggle: true #Turn on and off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also.
     Enchant-Stacked-Items: false #Turn on if you wish for enchantment books to enchant stacked items.
-    MaxRageLevel: 4 #The max amount rage can stack when fighting.
+    MaxRageLevel: 4 #The max amount of rage that scan stack when fighting.
     Break-Rage-On-Damage: true #If the player is damaged while building rage, it will be broken if this is enabled.
     Right-Click-Book-Description: true #Toggles whether when you right-click the enchantment book if it messages the player the description or not.
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
-    Right-Click-Enchantment-Table: false #When set to true if a player right clicks an enchantment table it will open the /CE gui.
-    EXP-Bug: false #Only needs to be true if player's XP sometimes glitches to 1Bill after buying an item with all their XP.
-    Lightning-Sound-Range: 160 #Range in blocks where lightning sound should become inaudible.
+    Right-Click-Enchantment-Table: false #When set to true if a player right-clicks an enchantment table it will open the /ce GUI.
+    EXP-Bug: false #Only needs to be true if the player's XP sometimes glitches to 1Bill after buying an item with all their XP.
+    Lightning-Sound-Range: 160 #Range in blocks where the lightning sound should become inaudible.
     Armor-Upgrade: #Having this enabled will allow players to try and add a higher level of an enchantment onto an item with a lower level of the enchantment.
       Toggle: true #Toggle on or off the ability to upgrade the enchantments.
       Enchantment-Break: true #If the book's destroy rate happens the item doesn't break but instead the current lower version of the enchantment is destroyed. If false then the item will be destroyed instead.
