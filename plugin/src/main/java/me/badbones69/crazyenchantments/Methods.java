@@ -187,27 +187,6 @@ public class Methods {
 		return itemStack;
 	}
 	
-	public static boolean isProtected(ItemStack i) {
-		if(i.hasItemMeta()) {
-			if(i.getItemMeta().hasLore()) {
-				for(String lore : i.getItemMeta().getLore())
-					if(lore.equals(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")))) {
-						return true;
-					}
-			}
-		}
-		return false;
-	}
-	
-	public static ItemStack removeProtected(ItemStack item) {
-		ItemMeta m = item.getItemMeta();
-		ArrayList<String> lore = new ArrayList<>(m.getLore());
-		lore.remove(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
-	}
-	
 	public static ItemStack addLore(ItemStack item, String i) {
 		ArrayList<String> lore = new ArrayList<>();
 		ItemMeta m = item.getItemMeta();

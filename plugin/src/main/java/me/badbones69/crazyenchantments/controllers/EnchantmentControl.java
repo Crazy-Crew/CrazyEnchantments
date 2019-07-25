@@ -85,8 +85,8 @@ public class EnchantmentControl implements Listener {
 														Bukkit.getPluginManager().callEvent(bookDestroyEvent);
 														if(!bookDestroyEvent.isCancelled()) {
 															if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
-																if(Methods.isProtected(item)) {
-																	e.setCurrentItem(Methods.removeProtected(item));
+																if(ce.hasWhiteScrollProtection(item)) {
+																	e.setCurrentItem(ce.removeWhiteScrollProtection(item));
 																	player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
 																}else {
 																	ItemStack newItem = ce.removeEnchantment(item, enchantment);
@@ -99,8 +99,8 @@ public class EnchantmentControl implements Listener {
 																	player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
 																}
 															}else {
-																if(Methods.isProtected(item)) {
-																	e.setCurrentItem(Methods.removeProtected(item));
+																if(ce.hasWhiteScrollProtection(item)) {
+																	e.setCurrentItem(ce.removeWhiteScrollProtection(item));
 																	player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
 																}else {
 																	ItemStack newItem = new ItemStack(Material.AIR);
@@ -160,8 +160,8 @@ public class EnchantmentControl implements Listener {
 										return;
 									}
 									if(destroy) {
-										if(Methods.isProtected(item)) {
-											e.setCurrentItem(Methods.removeProtected(item));
+										if(ce.hasWhiteScrollProtection(item)) {
+											e.setCurrentItem(ce.removeWhiteScrollProtection(item));
 											player.setItemOnCursor(new ItemStack(Material.AIR));
 											player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
 											player.playSound(player.getLocation(), ce.getSound("ENTITY_ITEM_BREAK", "ITEM_BREAK"), 1, 1);

@@ -48,6 +48,7 @@ public class CrazyEnchantments {
 	private ItemBuilder enchantmentBook;
 	private NMSSupport nmsSupport;
 	private Random random = new Random();
+	private String whiteScrollProtectionName;
 	private BlackSmithManager blackSmithManager;
 	private InfoMenuManager infoMenuManager;
 	private WorldGuardVersion worldGuardVersion;
@@ -94,6 +95,7 @@ public class CrazyEnchantments {
 			}catch(Exception e) {
 			}
 		}
+		whiteScrollProtectionName = Methods.color(config.getString("Settings.WhiteScroll.ProtectedName"));
 		enchantmentBook = new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item"));
 		useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
 		gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled");
@@ -843,6 +845,32 @@ public class CrazyEnchantments {
 		return enchantments;
 	}
 	
+	public boolean hasWhiteScrollProtection(ItemStack item) {
+		if(item.hasItemMeta()) {
+			if(item.getItemMeta().hasLore()) {
+				for(String lore : item.getItemMeta().getLore()) {
+					if(lore.equals(whiteScrollProtectionName)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public ItemStack addWhiteScrollProtection(ItemStack item) {
+		return ItemBuilder.convertItemStack(item).addLore(whiteScrollProtectionName).build();
+	}
+	
+	public ItemStack removeWhiteScrollProtection(ItemStack item) {
+		ItemMeta itemMeta = item.getItemMeta();
+		List<String> newLore = new ArrayList<>(itemMeta.getLore());
+		newLore.remove(whiteScrollProtectionName);
+		itemMeta.setLore(newLore);
+		item.setItemMeta(itemMeta);
+		return item;
+	}
+	
 	/**
 	 * Force an update of a players armor potion effects.
 	 * @param player The player you are updating the effects of.
@@ -1121,13 +1149,12 @@ public class CrazyEnchantments {
 	}
 	
 	public int randomLevel(CEnchantment enchantment, Category category) {
-		Random r = new Random();
 		int ench = enchantment.getMaxLevel(); //Max set by the enchantment
-		int level = 1 + r.nextInt(ench);
+		int level = 1 + random.nextInt(ench);
 		if(category.useMaxLevel()) {
 			if(level > category.getMaxLevel()) {
 				for(boolean l = false; ; ) {
-					level = 1 + r.nextInt(ench);
+					level = 1 + random.nextInt(ench);
 					if(level <= category.getMaxLevel()) {
 						break;
 					}
@@ -1400,7 +1427,7 @@ public class CrazyEnchantments {
 	}
 	
 	private int pickLevel(int min, int max) {
-		return min + new Random().nextInt((max + 1) - min);
+		return min + random.nextInt((max + 1) - min);
 	}
 	
 	private List<Color> getColors(String string) {

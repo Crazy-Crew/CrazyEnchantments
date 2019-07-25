@@ -135,11 +135,11 @@ public class ScrollControl implements Listener {
 							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
 							return;
 						}
-						if(!Methods.isProtected(item)) {
+						if(!ce.hasWhiteScrollProtection(item)) {
 							for(EnchantmentType enchantmentType : ce.getInfoMenuManager().getEnchantmentTypes()) {
 								if(enchantmentType.getEnchantableMaterials().contains(item.getType())) {
 									e.setCancelled(true);
-									e.setCurrentItem(Methods.addLore(item, Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+									e.setCurrentItem(ce.addWhiteScrollProtection(item));
 									player.setItemOnCursor(Methods.removeItem(scroll));
 									return;
 								}
