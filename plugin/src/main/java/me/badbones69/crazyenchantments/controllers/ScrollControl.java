@@ -116,7 +116,7 @@ public class ScrollControl implements Listener {
 					}
 					if(scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
 						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
-							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+							player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
 							return;
 						}
 						if(ce.hasEnchantments(item)) {
@@ -132,7 +132,7 @@ public class ScrollControl implements Listener {
 					}
 					if(scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) {
 						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
-							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+							player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
 							return;
 						}
 						if(!ce.hasWhiteScrollProtection(item)) {
@@ -148,7 +148,7 @@ public class ScrollControl implements Listener {
 					}
 					if(scroll.isSimilar(Scrolls.BlACK_SCROLL.getScroll())) {
 						if(player.getGameMode() == GameMode.CREATIVE && scroll.getAmount() > 1) {
-							player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the scrolls for them to work."));
+							player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
 							return;
 						}
 						HashMap<String, Integer> lvl = new HashMap<>();
