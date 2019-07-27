@@ -212,6 +212,11 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/library/Factions.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.github.intellectualsites.plotsquared</groupId>
+            <artifactId>PlotSquared-API</artifactId>
+            <version>latest</version>
+        </dependency>
     </dependencies>
 
     <build>
