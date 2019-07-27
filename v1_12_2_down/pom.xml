@@ -53,6 +53,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+           <groupId>com.github.intellectualsites.plotsquared</groupId>
+           <artifactId>PlotSquared-API</artifactId>
+           <version>latest</version>
+        </dependency>      
     </dependencies>
 
 </project>
