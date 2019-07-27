@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.multisupport;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,7 +13,9 @@ import org.bukkit.plugin.Plugin;
 
 public class Support {
 	
-	private static WorldGuardVersion worldGuardVersion = CrazyEnchantments.getInstance().getWorldGuardSupport();
+	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private static WorldGuardVersion worldGuardVersion = ce.getWorldGuardSupport();
+	private static PlotSquaredVersion plotSquaredVersion = ce.getPlotSquaredSupport();
 	
 	public static boolean inTerritory(Player player) {
 		if(SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
@@ -61,7 +64,7 @@ public class Support {
 			}
 		}
 		if(SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
-			if(PlotSquaredSupport.inTerritory(player)) {
+			if(plotSquaredVersion.inTerritory(player)) {
 				return true;
 			}
 		}
