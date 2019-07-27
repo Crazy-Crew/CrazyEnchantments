@@ -14,6 +14,9 @@ import me.badbones69.crazyenchantments.multisupport.NMS_v1_12_2_Down;
 import me.badbones69.crazyenchantments.multisupport.NMS_v1_13_Up;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquared;
+import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredLegacy;
+import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v6;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
@@ -52,6 +55,7 @@ public class CrazyEnchantments {
 	private BlackSmithManager blackSmithManager;
 	private InfoMenuManager infoMenuManager;
 	private WorldGuardVersion worldGuardVersion;
+	private PlotSquaredVersion plotSquaredVersion;
 	private ArrayList<Category> categories = new ArrayList<>();
 	private ArrayList<GKitz> gkitz = new ArrayList<>();
 	private ArrayList<CEPlayer> players = new ArrayList<>();
@@ -199,6 +203,9 @@ public class CrazyEnchantments {
 		if(SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
 			worldGuardVersion = version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
 		}
+		if(SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
+			plotSquaredVersion = version.isNewer(Version.v1_12_R1) ? new PlotSquared() : new PlotSquaredLegacy();
+		}
 	}
 	
 	/**
@@ -291,6 +298,14 @@ public class CrazyEnchantments {
 	 */
 	public WorldGuardVersion getWorldGuardSupport() {
 		return worldGuardVersion;
+	}
+	
+	/**
+	 * Get the PlotSquared support class.
+	 * @return PlotSquared support class.
+	 */
+	public PlotSquaredVersion getPlotSquaredSupport() {
+		return plotSquaredVersion;
 	}
 	
 	/**

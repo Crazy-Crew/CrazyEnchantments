@@ -54,6 +54,10 @@
             <id>md_5-releases</id>
             <url>https://repo.md-5.net/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>p2-repo</id>
+            <url>http://ci.athion.net/job/PlotSquared-Breaking/ws/mvn/</url>
+        </repository>
     </repositories>
 
     <build>
