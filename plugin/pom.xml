@@ -69,12 +69,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.plotsquared</groupId>
-            <artifactId>plotsquared-api</artifactId>
-            <version>latest</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
             <version>10.7.2</version>
@@ -136,7 +130,7 @@
         <dependency>
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.11.6</version>
+            <version>16.12.alpha</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -156,7 +150,7 @@
         <dependency><!-- FactionsUUID -->
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
-            <version>1.6.9.5-U0.3.0</version>
+            <version>1.6.9.5-U0.4.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
