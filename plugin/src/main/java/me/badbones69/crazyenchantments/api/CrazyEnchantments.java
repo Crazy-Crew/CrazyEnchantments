@@ -510,8 +510,8 @@ public class CrazyEnchantments {
 	 * @return True if the item has the enchantment / False if it doesn't have the enchantment.
 	 */
 	public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-		if(enchantment.isActivated()) {
-			if(item != null) {
+		try {
+			if(enchantment.isActivated()) {
 				if(item.hasItemMeta()) {
 					if(item.getItemMeta().hasLore()) {
 						for(String lore : item.getItemMeta().getLore()) {
@@ -522,6 +522,7 @@ public class CrazyEnchantments {
 					}
 				}
 			}
+		}catch(Exception ignore) {
 		}
 		return false;
 	}
