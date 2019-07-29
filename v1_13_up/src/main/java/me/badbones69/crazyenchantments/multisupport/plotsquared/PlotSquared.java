@@ -8,7 +8,11 @@ public class PlotSquared implements PlotSquaredVersion {
 	
 	public boolean inTerritory(Player player) {
 		Plot plot = PlotPlayer.get(player.getName()).getCurrentPlot();
-		return plot.getOwners().contains(player.getUniqueId()) || plot.getMembers().contains(player.getUniqueId());
+		try {
+			return plot.getOwners().contains(player.getUniqueId()) || plot.getMembers().contains(player.getUniqueId());
+		}catch(Exception e) {
+			return false;
+		}
 	}
 	
 }
