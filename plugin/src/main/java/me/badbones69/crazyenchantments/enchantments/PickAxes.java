@@ -224,12 +224,14 @@ public class PickAxes implements Listener {
 															}
 														}
 														ItemStack finalDrop = drop;
-														new BukkitRunnable() {
-															@Override
-															public void run() {
-																block.getWorld().dropItem(block.getLocation(), finalDrop);
-															}
-														}.runTask(ce.getPlugin());
+														if(finalDrop.getType() != Material.AIR) {
+															new BukkitRunnable() {
+																@Override
+																public void run() {
+																	block.getWorld().dropItem(block.getLocation(), finalDrop);
+																}
+															}.runTask(ce.getPlugin());
+														}
 														if(drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
 															break;
 														}
