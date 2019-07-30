@@ -150,15 +150,19 @@ public class SignControl implements Listener {
 							}
 						}
 						CEBook book = ce.getRandomEnchantmentBook(category);
-						ItemBuilder itemBuilder = book.getItemBuilder();
-						if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")) {
-							player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
-							.replaceAll("%BookName%", itemBuilder.getName()).replaceAll("%bookname%", itemBuilder.getName())
-							.replaceAll("%Category%", category.getName()).replaceAll("%category%", category.getName())));
+						if(book != null) {
+							ItemBuilder itemBuilder = book.getItemBuilder();
+							if(config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")) {
+								player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
+								.replaceAll("%BookName%", itemBuilder.getName()).replaceAll("%bookname%", itemBuilder.getName())
+								.replaceAll("%Category%", category.getName()).replaceAll("%category%", category.getName())));
+							}
+							BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
+							Bukkit.getPluginManager().callEvent(event);
+							player.getInventory().addItem(itemBuilder.build());
+						}else {
+							player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
 						}
-						BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-						Bukkit.getPluginManager().callEvent(event);
-						player.getInventory().addItem(itemBuilder.build());
 						return;
 					}
 				}

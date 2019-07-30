@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.controllers;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Messages;
+import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.LostBook;
 import org.bukkit.entity.Player;
@@ -36,18 +37,22 @@ public class LostBookController implements Listener {
 							}
 							LostBook lostBook = category.getLostBook();
 							Methods.removeItem(item, player);
-							ItemStack book = ce.getRandomEnchantmentBook(category).buildBook();
-							player.getInventory().addItem(book);
-							player.updateInventory();
-							HashMap<String, String> placeholders = new HashMap<>();
-							placeholders.put("%Found%", book.getItemMeta().getDisplayName());
-							placeholders.put("%found%", book.getItemMeta().getDisplayName());
-							player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
-							if(lostBook.useFirework()) {
-								Methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
-							}
-							if(lostBook.playSound()) {
-								player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
+							CEBook book = ce.getRandomEnchantmentBook(category);
+							if(book != null) {
+								player.getInventory().addItem(book.buildBook());
+								player.updateInventory();
+								HashMap<String, String> placeholders = new HashMap<>();
+								placeholders.put("%Found%", book.getItemBuilder().getName());
+								placeholders.put("%found%", book.getItemBuilder().getName());
+								player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
+								if(lostBook.useFirework()) {
+									Methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
+								}
+								if(lostBook.playSound()) {
+									player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
+								}
+							}else {
+								player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
 							}
 						}
 					}
