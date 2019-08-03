@@ -12,20 +12,21 @@ import org.bukkit.entity.Player;
 public class FactionsUUID {
 	
 	public static boolean isFriendly(Player player, Player other) {
-		Faction p = FPlayers.getInstance().getByPlayer(player).getFaction();
-		Faction o = FPlayers.getInstance().getByPlayer(other).getFaction();
-		if(o.isPeaceful()) {
+		Faction fPlayer = FPlayers.getInstance().getByPlayer(player).getFaction();
+		Faction fOther = FPlayers.getInstance().getByPlayer(other).getFaction();
+		if(fOther.isPeaceful()) {
 			return true;
 		}
 		if(FPlayers.getInstance().getByPlayer(other) == null || FPlayers.getInstance().getByPlayer(other).getFaction() == null) {
 			return false;
 		}
-		Relation r = FPlayers.getInstance().getByPlayer(player).getRelationTo(FPlayers.getInstance().getByPlayer(other));
-		return !Methods.removeColor(o.getTag()).equalsIgnoreCase("Wilderness") && (p == o || r.isAlly());
+		Relation relation = FPlayers.getInstance().getByPlayer(player).getRelationTo(FPlayers.getInstance().getByPlayer(other));
+		return !Methods.removeColor(fOther.getTag()).equalsIgnoreCase("Wilderness") && (fPlayer == fOther || relation.isAlly() || relation.isTruce());
 	}
 	
-	public static boolean inTerritory(Player P) {
-		return !Methods.removeColor(FPlayers.getInstance().getByPlayer(P).getFaction().getTag()).equalsIgnoreCase("Wilderness") && (FPlayers.getInstance().getByPlayer(P).isInOwnTerritory() || FPlayers.getInstance().getByPlayer(P).isInAllyTerritory());
+	public static boolean inTerritory(Player player) {
+		return !Methods.removeColor(FPlayers.getInstance().getByPlayer(player).getFaction().getTag()).equalsIgnoreCase("Wilderness") &&
+		(FPlayers.getInstance().getByPlayer(player).isInOwnTerritory() || FPlayers.getInstance().getByPlayer(player).isInAllyTerritory());
 	}
 	
 	public static boolean canBreakBlock(Player player, Block block) {

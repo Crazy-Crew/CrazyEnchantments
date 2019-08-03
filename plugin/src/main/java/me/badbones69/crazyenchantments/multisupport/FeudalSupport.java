@@ -14,11 +14,11 @@ public class FeudalSupport {
 			return false;
 		}
 		Kingdom o = Feudal.getPlayerKingdom(other.getUniqueId().toString());
-		return p != null && o != null && isFrendly(p, o);
+		return o != null && isFrendly(p, o);
 	}
 	
-	public static boolean isFrendly(Kingdom p, Kingdom o) {
-		return p != null && o != null && !p.isEnemied(o) && (p.isAllied(o) || p == o);
+	public static boolean isFrendly(Kingdom player, Kingdom other) {
+		return player != null && other != null && !player.isEnemied(other) && (player.isAllied(other) || player == other);
 	}
 	
 	public static boolean inTerritory(Player player) {

@@ -12,16 +12,16 @@ import org.bukkit.entity.Player;
 public class LegacyFactionsSupport {
 	
 	public static boolean isFriendly(Player player, Player other) {
-		Faction p = FPlayerColl.get(player).getFaction();
-		Faction o = FPlayerColl.get(other).getFaction();
-		if(o.isPeaceful()) {
+		Faction fPlayer = FPlayerColl.get(player).getFaction();
+		Faction fOther = FPlayerColl.get(other).getFaction();
+		if(fOther.isPeaceful()) {
 			return true;
 		}
 		if(FPlayerColl.get(other) == null) {
 			return false;
 		}
-		Relation r = FPlayerColl.get(player).getRelationTo(FPlayerColl.get(other));
-		return !Methods.removeColor(o.getTag()).equalsIgnoreCase("Wilderness") && (p == o || r.isAlly());
+		Relation relation = FPlayerColl.get(player).getRelationTo(FPlayerColl.get(other));
+		return !Methods.removeColor(fOther.getTag()).equalsIgnoreCase("Wilderness") && (fPlayer == fOther || relation.isAlly() || relation.isTruce());
 	}
 	
 	public static boolean inTerritory(Player player) {

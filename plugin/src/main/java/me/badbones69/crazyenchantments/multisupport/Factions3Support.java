@@ -15,18 +15,18 @@ public class Factions3Support {
 		if(MPlayer.get(player) == null || MPlayer.get(player).getFaction() == null) {
 			return false;
 		}
-		Faction p = MPlayer.get(player).getFaction();
+		Faction fPlayer = MPlayer.get(player).getFaction();
 		if(MPlayer.get(other) == null || MPlayer.get(other).getFaction() == null) {
 			return false;
 		}
-		Faction o = MPlayer.get(other).getFaction();
-		Rel r = MPlayer.get(player).getRelationTo(MPlayer.get(other));
-		return !Methods.removeColor(o.getName()).equalsIgnoreCase("Wilderness") && (r.isFriend() || p == o);
+		Faction fOther = MPlayer.get(other).getFaction();
+		Rel relation = MPlayer.get(player).getRelationTo(MPlayer.get(other));
+		return !Methods.removeColor(fOther.getName()).equalsIgnoreCase("Wilderness") && (fPlayer == fOther || relation.isFriend() || relation.isAtLeast(Rel.NEUTRAL));
 	}
 	
 	public static boolean isFriendly(Faction player, Faction other) {
-		Rel r = player.getRelationTo(other);
-		return !Methods.removeColor(other.getName()).equalsIgnoreCase("Wilderness") && (r.isFriend() || player == other);
+		Rel relation = player.getRelationTo(other);
+		return !Methods.removeColor(other.getName()).equalsIgnoreCase("Wilderness") && (relation.isFriend() || player == other);
 	}
 	
 	public static boolean inTerritory(Player P) {

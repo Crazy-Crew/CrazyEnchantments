@@ -13,7 +13,8 @@ public class KingdomSupport {
 	public static boolean isFriendly(Player player, Player other) {
 		KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
 		KingdomPlayer ko = GameManagement.getPlayerManager().getSession(other);
-		return kp != null && ko != null && kp.getKingdom() != null && ko.getKingdom() != null && (kp.getKingdom() == ko.getKingdom() || kp.getKingdom() != null && kp.getKingdom().isAllianceWith(ko.getKingdom()));
+		return kp != null && ko != null && kp.getKingdom() != null && ko.getKingdom() != null &&
+		(kp.getKingdom() == ko.getKingdom() || kp.getKingdom() != null && kp.getKingdom().isAllianceWith(ko.getKingdom()));
 	}
 	
 	public static boolean inTerritory(Player P) {
