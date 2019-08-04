@@ -319,6 +319,8 @@ public class Armor implements Listener {
 	public void onAura(AuraActiveEvent e) {
 		Player player = e.getPlayer();
 		Player other = e.getOther();
+		if(!player.canSee(other) || !other.canSee(player)) return;
+		if(Support.isVanished(player) || Support.isVanished(other)) return;
 		CEnchantments enchant = e.getEnchantment();
 		int power = e.getPower();
 		if(!Methods.hasPermission(other, "bypass.aura", false)) {
