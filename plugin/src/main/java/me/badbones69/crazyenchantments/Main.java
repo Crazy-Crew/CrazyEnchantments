@@ -52,7 +52,7 @@ public class Main extends JavaPlugin implements Listener {
 		PluginManager pm = Bukkit.getServer().getPluginManager();
 		//==========================================================================\\
 		pm.registerEvents(this, this);
-		pm.registerEvents(new ShopControler(), this);
+		pm.registerEvents(new ShopControl(), this);
 		pm.registerEvents(new InfoGUIControl(), this);
 		if(ce.isGkitzEnabled()) {
 			pm.registerEvents(new GKitzController(), this);

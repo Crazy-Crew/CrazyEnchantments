@@ -14,7 +14,7 @@ import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
-import me.badbones69.crazyenchantments.controllers.ShopControler;
+import me.badbones69.crazyenchantments.controllers.ShopControl;
 import me.badbones69.crazyenchantments.enchantments.Boots;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -47,7 +47,7 @@ public class CECommand implements CommandExecutor {
 			if(!Methods.hasPermission(sender, "gui", true)) {
 				return true;
 			}
-			ShopControler.openGUI((Player) sender);
+			ShopControl.openGUI((Player) sender);
 			return true;
 		}else {
 			if(args[0].equalsIgnoreCase("help")) {
