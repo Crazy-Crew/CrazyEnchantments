@@ -49,12 +49,12 @@ public class DustControl implements Listener {
 			}
 			if(rate.equalsIgnoreCase("Success")) {
 				l = l.replaceAll("%Success_Rate%", percent + "").replaceAll("%success_rate%", percent + "")
-				.replaceAll("%Destroy_Rate%", Methods.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "")
-				.replaceAll("%destroy_rate%", Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "");
+				.replaceAll("%Destroy_Rate%", Methods.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "")
+				.replaceAll("%destroy_rate%", Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "");
 			}else {
 				l = l.replaceAll("%Destroy_Rate%", percent + "").replaceAll("%destroy_rate%", percent + "")
-				.replaceAll("%Success_Rate%", Methods.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "")
-				.replaceAll("%success_rate%", Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) + "");
+				.replaceAll("%Success_Rate%", Methods.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "")
+				.replaceAll("%success_rate%", Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "");
 			}
 			if(line) {
 				lore.add(Methods.color(l));
@@ -161,7 +161,7 @@ public class DustControl implements Listener {
 										if(dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Item")).getMaterial()) {
 											int per = getPercent(Dust.SUCCESS_DUST, dust);
 											if(Methods.hasArgument("%success_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-												int total = Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
+												int total = Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100);
 												if(total >= 100) return;
 												if(player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
 													player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));
@@ -182,7 +182,7 @@ public class DustControl implements Listener {
 										if(dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Item")).getMaterial()) {
 											int per = getPercent(Dust.DESTROY_DUST, dust);
 											if(Methods.hasArgument("%destroy_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-												int total = Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"));
+												int total = Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0);
 												if(total <= 0) return;
 												if(player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
 													player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));

@@ -245,23 +245,22 @@ public class Methods {
 		return amount;
 	}
 	
-	public static int getPercent(String Argument, ItemStack item, List<String> Msg) {
-		List<String> lore = item.getItemMeta().getLore();
-		String arg = "100";
-		for(String oLine : Msg) {
-			oLine = Methods.color(oLine).toLowerCase();
-			if(oLine.contains(Argument.toLowerCase())) {
-				String[] b = oLine.split(Argument.toLowerCase());
-				for(String iline : lore) {
+	public static int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
+		String arg = defaultValue + "";
+		for(String originalLine : originalLore) {
+			originalLine = Methods.color(originalLine).toLowerCase();
+			if(originalLine.contains(argument.toLowerCase())) {
+				String[] b = originalLine.split(argument.toLowerCase());
+				for(String itemLine : item.getItemMeta().getLore()) {
 					boolean toggle = false;// Checks to make sure the lore is the same.
 					if(b.length >= 1) {
-						if(iline.toLowerCase().startsWith(b[0])) {
-							arg = iline.toLowerCase().replace(b[0], "");
+						if(itemLine.toLowerCase().startsWith(b[0])) {
+							arg = itemLine.toLowerCase().replace(b[0], "");
 							toggle = true;
 						}
 					}
 					if(b.length >= 2) {
-						if(iline.toLowerCase().endsWith(b[1])) {
+						if(itemLine.toLowerCase().endsWith(b[1])) {
 							arg = arg.toLowerCase().replace(b[1], "");
 						}else {
 							toggle = false;
@@ -276,7 +275,7 @@ public class Methods {
 				}
 			}
 		}
-		int percent = 100;
+		int percent = defaultValue;
 		if(isInt(arg)) {
 			percent = Integer.parseInt(arg);
 		}
