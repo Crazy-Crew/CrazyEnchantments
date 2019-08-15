@@ -492,7 +492,8 @@ public class CrazyEnchantments {
 				if(item.getItemMeta().hasLore()) {
 					for(String lore : item.getItemMeta().getLore()) {
 						for(CEnchantment enchantment : registeredEnchantments) {
-							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
+							String[] split = lore.split(" ");
+							if(lore.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) {
 								return true;
 							}
 						}
@@ -848,6 +849,7 @@ public class CrazyEnchantments {
 				if(item.getItemMeta().hasLore()) {
 					for(String lore : item.getItemMeta().getLore()) {
 						for(CEnchantment enchantment : registeredEnchantments) {
+							//To-Do
 							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
 								if(!enchantments.contains(enchantment)) {
 									enchantments.add(enchantment);
@@ -1037,8 +1039,10 @@ public class CrazyEnchantments {
 			if(book.getType() == enchantmentBook.getMaterial()) {
 				if(book.hasItemMeta()) {
 					if(book.getItemMeta().hasDisplayName()) {
-						for(CEnchantment en : registeredEnchantments) {
-							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
+						for(CEnchantment enchantment : registeredEnchantments) {
+							String bookNameCheck = book.getItemMeta().getDisplayName();
+							String[] split = bookNameCheck.split(" ");
+							if(bookNameCheck.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) {
 								return true;
 							}
 						}
@@ -1059,9 +1063,11 @@ public class CrazyEnchantments {
 			if(book.getType() == enchantmentBook.getMaterial()) {
 				if(book.hasItemMeta()) {
 					if(book.getItemMeta().hasDisplayName()) {
-						for(CEnchantment en : registeredEnchantments) {
-							if(book.getItemMeta().getDisplayName().startsWith(en.getBookColor() + en.getCustomName())) {
-								return en;
+						for(CEnchantment enchantment : registeredEnchantments) {
+							String bookNameCheck = book.getItemMeta().getDisplayName();
+							String[] split = bookNameCheck.split(" ");
+							if(bookNameCheck.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) {
+								return enchantment;
 							}
 						}
 					}
