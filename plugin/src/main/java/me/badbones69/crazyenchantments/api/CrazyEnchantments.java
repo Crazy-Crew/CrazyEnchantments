@@ -493,7 +493,7 @@ public class CrazyEnchantments {
 					for(String lore : item.getItemMeta().getLore()) {
 						for(CEnchantment enchantment : registeredEnchantments) {
 							String[] split = lore.split(" ");
-							if(lore.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) {
+							if(lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
 								return true;
 							}
 						}
@@ -516,7 +516,8 @@ public class CrazyEnchantments {
 				if(item.hasItemMeta()) {
 					if(item.getItemMeta().hasLore()) {
 						for(String lore : item.getItemMeta().getLore()) {
-							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
+							String[] split = lore.split(" ");
+							if(lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
 								return true;
 							}
 						}
@@ -849,8 +850,8 @@ public class CrazyEnchantments {
 				if(item.getItemMeta().hasLore()) {
 					for(String lore : item.getItemMeta().getLore()) {
 						for(CEnchantment enchantment : registeredEnchantments) {
-							//To-Do
-							if(lore.startsWith(enchantment.getColor() + enchantment.getCustomName())) {
+							String[] split = lore.split(" ");
+							if(lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
 								if(!enchantments.contains(enchantment)) {
 									enchantments.add(enchantment);
 								}
