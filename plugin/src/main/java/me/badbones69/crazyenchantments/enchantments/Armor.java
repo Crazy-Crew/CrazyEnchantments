@@ -370,7 +370,7 @@ public class Armor implements Listener {
 									if(CEnchantments.RADIANT.chanceSuccessful()) {
 										other.setFireTicks(5 * 20);
 										int time = 20 - (power * 5);
-										cal.add(Calendar.SECOND, time > 0 ? time : 0);
+										cal.add(Calendar.SECOND, Math.max(time, 0));
 										eff.put(enchant, cal);
 									}
 								}

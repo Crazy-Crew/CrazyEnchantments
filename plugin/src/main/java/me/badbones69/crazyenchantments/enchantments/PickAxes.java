@@ -435,17 +435,16 @@ public class PickAxes implements Listener {
 				break;
 		}
 		List<Block> blocks = new ArrayList<>();
-		int topBlockX = (loc.getBlockX() < loc2.getBlockX() ? loc2.getBlockX() : loc.getBlockX());
-		int bottomBlockX = (loc.getBlockX() > loc2.getBlockX() ? loc2.getBlockX() : loc.getBlockX());
-		int topBlockY = (loc.getBlockY() < loc2.getBlockY() ? loc2.getBlockY() : loc.getBlockY());
-		int bottomBlockY = (loc.getBlockY() > loc2.getBlockY() ? loc2.getBlockY() : loc.getBlockY());
-		int topBlockZ = (loc.getBlockZ() < loc2.getBlockZ() ? loc2.getBlockZ() : loc.getBlockZ());
-		int bottomBlockZ = (loc.getBlockZ() > loc2.getBlockZ() ? loc2.getBlockZ() : loc.getBlockZ());
+		int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
+		int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
+		int topBlockY = (Math.max(loc.getBlockY(), loc2.getBlockY()));
+		int bottomBlockY = (Math.min(loc.getBlockY(), loc2.getBlockY()));
+		int topBlockZ = (Math.max(loc.getBlockZ(), loc2.getBlockZ()));
+		int bottomBlockZ = (Math.min(loc.getBlockZ(), loc2.getBlockZ()));
 		for(int x = bottomBlockX; x <= topBlockX; x++) {
 			for(int z = bottomBlockZ; z <= topBlockZ; z++) {
 				for(int y = bottomBlockY; y <= topBlockY; y++) {
-					Block block = loc.getWorld().getBlockAt(x, y, z);
-					blocks.add(block);
+					blocks.add(loc.getWorld().getBlockAt(x, y, z));
 				}
 			}
 		}
