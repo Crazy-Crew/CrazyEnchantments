@@ -145,9 +145,9 @@ public class CrazyEnchantments {
 			config.getInt(path + ".EnchOptions.SuccessPercent.Min"),
 			config.getInt(path + ".EnchOptions.DestroyPercent.Max"),
 			config.getInt(path + ".EnchOptions.DestroyPercent.Min"),
-			config.getBoolean(path + ".MaxLvlToggle"),
-			config.getInt(path + ".LvlRange.Max"),
-			config.getInt(path + ".LvlRange.Min")));
+			config.getBoolean(path + ".EnchOptions.MaxLvlToggle"),
+			config.getInt(path + ".EnchOptions.LvlRange.Max"),
+			config.getInt(path + ".EnchOptions.LvlRange.Min")));
 		}
 		for(CEnchantments enchant : CEnchantments.values()) {
 			String name = enchant.getName();
@@ -1171,25 +1171,25 @@ public class CrazyEnchantments {
 	}
 	
 	public int randomLevel(CEnchantment enchantment, Category category) {
-		int ench = enchantment.getMaxLevel(); //Max set by the enchantment
-		int level = 1 + random.nextInt(ench);
+		int enchantmentMax = enchantment.getMaxLevel(); //Max set by the enchantment
+		int randomLevel = 1 + random.nextInt(enchantmentMax);
 		if(category.useMaxLevel()) {
-			if(level > category.getMaxLevel()) {
+			if(randomLevel > category.getMaxLevel()) {
 				for(boolean l = false; ; ) {
-					level = 1 + random.nextInt(ench);
-					if(level <= category.getMaxLevel()) {
+					randomLevel = 1 + random.nextInt(enchantmentMax);
+					if(randomLevel <= category.getMaxLevel()) {
 						break;
 					}
 				}
 			}
-			if(level < category.getMinLevel()) {//If i is smaller then the Min of the Category
-				level = category.getMinLevel();
+			if(randomLevel < category.getMinLevel()) {//If i is smaller then the Min of the Category
+				randomLevel = category.getMinLevel();
 			}
-			if(level > ench) {//If i is bigger then the Enchantment Max
-				level = ench;
+			if(randomLevel > enchantmentMax) {//If i is bigger then the Enchantment Max
+				randomLevel = enchantmentMax;
 			}
 		}
-		return level;
+		return randomLevel;
 	}
 	
 	/**
