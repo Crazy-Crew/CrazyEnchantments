@@ -180,6 +180,10 @@ public class CEnchantment {
 		return enchantmentType;
 	}
 	
+	public boolean canEnchantItem(ItemStack item) {
+		return enchantmentType.canEnchantItem(item);
+	}
+	
 	public CEnchantment setEnchantmentType(EnchantmentType enchantmentType) {
 		this.enchantmentType = enchantmentType;
 		return this;

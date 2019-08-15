@@ -54,6 +54,10 @@ public class EnchantmentType {
 		return enchantableMaterials;
 	}
 	
+	public boolean canEnchantItem(ItemStack item) {
+		return enchantableMaterials.contains(item.getType());
+	}
+	
 	public List<CEnchantment> getEnchantments() {
 		return enchantments;
 	}

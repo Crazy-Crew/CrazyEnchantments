@@ -45,7 +45,7 @@ public class EnchantmentControl implements Listener {
 					CEBook ceBook = ce.getCEBook(e.getCursor());
 					CEnchantment enchantment = ceBook.getEnchantment();
 					if(enchantment != null) {
-						if(enchantment.getEnchantmentType().getEnchantableMaterials().contains(item.getType())) {
+						if(enchantment.canEnchantItem(item)) {
 							if(ceBook.getAmount() == 1) {
 								Player player = (Player) e.getWhoClicked();
 								if(ce.enchantStackedItems() || item.getAmount() == 1) {
