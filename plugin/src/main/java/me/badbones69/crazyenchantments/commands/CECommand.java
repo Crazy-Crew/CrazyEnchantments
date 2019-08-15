@@ -8,6 +8,7 @@ import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
+import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.Category;
@@ -120,6 +121,10 @@ public class CECommand implements CommandExecutor {
 					sender.sendMessage(Methods.color("&7- &cMissing from the Enchantments.yml"));
 					sender.sendMessage(Methods.color("&7- &c<Enchantment Name>: option was changed"));
 					sender.sendMessage(Methods.color("&7- &cYaml format has been broken."));
+				}
+				sender.sendMessage(Methods.getPrefix("&cEnchantment Types and amount of items in each:"));
+				for(EnchantmentType enchantmentType : InfoMenuManager.getInstance().getEnchantmentTypes()) {
+					sender.sendMessage(Methods.color("&c" + enchantmentType.getName() + ": &6" + enchantmentType.getEnchantableMaterials().size()));
 				}
 				return true;
 			}
