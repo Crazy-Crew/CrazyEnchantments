@@ -1218,7 +1218,7 @@ Enchantments:
     Info:
       Name: '&e&lInquisitive &7(&bI-&bV&7)'
       Description:
-        - '&7Has a chance to double or more XP' #CHECK IF LINE IS TOO LONG PLEASE. ORIG: Will double or more XP
+        - '&7Has a chance to double or more XP'
         - '&7based on the enchantment level.'
         - ''
         - '&6Found in:'
