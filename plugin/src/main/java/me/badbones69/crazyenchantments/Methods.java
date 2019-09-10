@@ -395,21 +395,24 @@ public class Methods {
 	}
 	
 	public static Enchantment getEnchantment(String enchantmentName) {
-		HashMap<String, String> enchantments = getEnchantments();
-		enchantmentName = enchantmentName.replace("-", "").replace("_", "").replace(" ", "");
-		for(Enchantment enchantment : Enchantment.values()) {
-			if(isV1_13_Up) {
-				//MC 1.13+ has the correct names.
-				if(enchantment.getKey().getKey().replace("-", "").replace("_", "").replace(" ", "").equalsIgnoreCase(enchantmentName)) {
-					return enchantment;
-				}
-			}else {
-				if(enchantment.getName().replace("-", "").replace("_", "").replace(" ", "").equalsIgnoreCase(enchantmentName) ||
-				(enchantments.get(enchantment.getName()) != null &&
-				enchantments.get(enchantment.getName()).replace("-", "").replace("_", "").replace(" ", "").equalsIgnoreCase(enchantmentName))) {
-					return enchantment;
+		try {
+			HashMap<String, String> enchantments = getEnchantments();
+			enchantmentName = enchantmentName.replace("-", "").replace("_", "").replace(" ", "");
+			for(Enchantment enchantment : Enchantment.values()) {
+				if(isV1_13_Up) {
+					//MC 1.13+ has the correct names.
+					if(enchantment.getKey().getKey().replace("-", "").replace("_", "").replace(" ", "").equalsIgnoreCase(enchantmentName)) {
+						return enchantment;
+					}
+				}else {
+					if(enchantment.getName().replace("-", "").replace("_", "").replace(" ", "").equalsIgnoreCase(enchantmentName) ||
+					(enchantments.get(enchantment.getName()) != null &&
+					enchantments.get(enchantment.getName()).replace("-", "").replace("_", "").replace(" ", "").equalsIgnoreCase(enchantmentName))) {
+						return enchantment;
+					}
 				}
 			}
+		}catch(Exception ignore) {
 		}
 		return null;
 	}
