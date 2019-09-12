@@ -35,6 +35,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class CrazyEnchantments {
@@ -1022,12 +1023,17 @@ public class CrazyEnchantments {
 	/**
 	 * This method converts an ItemStack into a CEBook.
 	 * @param book The ItemStack you are converting.
-	 * @return The ItemStack but as a CEBook.
+	 * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
 	 */
+	@Nullable
 	public CEBook getCEBook(ItemStack book) {
-		return new CEBook(getEnchantmentBookEnchantment(book), getBookLevel(book, getEnchantmentBookEnchantment(book)), book.getAmount())
-		.setSuccessRate(Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100))
-		.setDestroyRate(Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0));
+		try {
+			return new CEBook(getEnchantmentBookEnchantment(book), getBookLevel(book, getEnchantmentBookEnchantment(book)), book.getAmount())
+			.setSuccessRate(Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100))
+			.setDestroyRate(Methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0));
+		}catch(Exception e) {
+			return null;
+		}
 	}
 	
 	/**
