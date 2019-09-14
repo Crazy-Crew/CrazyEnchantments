@@ -493,9 +493,12 @@ public class CrazyEnchantments {
 				if(item.getItemMeta().hasLore()) {
 					for(String lore : item.getItemMeta().getLore()) {
 						for(CEnchantment enchantment : registeredEnchantments) {
-							String[] split = lore.split(" ");
-							if(lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
-								return true;
+							try {
+								String[] split = lore.split(" ");
+								if(lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
+									return true;
+								}
+							}catch(Exception ignore) {
 							}
 						}
 					}
