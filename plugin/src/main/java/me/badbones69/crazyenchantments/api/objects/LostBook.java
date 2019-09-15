@@ -33,7 +33,7 @@ public class LostBook {
 		this.useSound = sound != null && useSound;
 		try {//If the sound doesn't exist it will not error.
 			this.sound = Sound.valueOf(sound);
-		}catch(IllegalArgumentException e) {
+		}catch(Exception e) {
 			System.out.println("[CrazyEnchantments] The sound " + sound + " is not a sound found in this minecraft version.");
 		}
 	}
