@@ -58,6 +58,10 @@
             <id>p2-repo</id>
             <url>http://ci.athion.net/job/PlotSquared-Breaking/ws/mvn/</url>
         </repository>
+        <repository>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
+        </repository>
     </repositories>
 
     <properties>

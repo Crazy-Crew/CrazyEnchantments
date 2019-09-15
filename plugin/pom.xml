@@ -52,9 +52,8 @@
         <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
-            <version>1.5.09-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/mcMMO.jar</systemPath>
+            <version>2.1.107</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -72,15 +71,13 @@
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
             <version>10.7.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/PreciousStones.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>MassiveCraft</artifactId>
             <version>2.13.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/MassiveCore.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <!--        <dependency>-->
         <!--            <groupId>com.massivecraft</groupId>-->
@@ -92,23 +89,20 @@
         <dependency>
             <groupId>de.dustplanet</groupId>
             <artifactId>SilkSpawners</artifactId>
-            <version>5.0.2-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/SilkSpawners.jar</systemPath>
+            <version>5.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency> <!-- https://www.spigotmc.org/resources/60063 -->
             <groupId>de.candc</groupId>
             <artifactId>SilkSpawners</artifactId>
             <version>1.6</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/SilkSpawners candc.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>us.forseth11.feudal.core</groupId>
             <artifactId>Feudal</artifactId>
-            <version>1.10.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/Feudal.jar</systemPath>
+            <version>1.14.1</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.wasteofplastic</groupId>
@@ -124,8 +118,7 @@
             <groupId>org.kingdoms.main</groupId>
             <artifactId>Kingdoms</artifactId>
             <version>13.2.40</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/Kingdoms-13.3.40.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.TechFortress</groupId>
@@ -136,16 +129,14 @@
         <dependency>
             <groupId>me.vagdedes.spartan</groupId>
             <artifactId>Spartan</artifactId>
-            <version>Build 238</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/Spartan.jar</systemPath>
+            <version>Build-269</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.Nathat23</groupId>
             <artifactId>StackMob-3</artifactId>
             <version>4.0.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/StackMob-4.0.2.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency><!-- FactionsUUID -->
             <groupId>com.massivecraft</groupId>
@@ -162,9 +153,8 @@
         <dependency>
             <groupId>DAKATA.Main</groupId>
             <artifactId>DakataAntiCheat</artifactId>
-            <version>BETA 1.8</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/DakataAntiCheat.jar</systemPath>
+            <version>BETA-1.8</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.janmm14</groupId>
@@ -175,36 +165,31 @@
             <groupId>org.generallib.main</groupId>
             <artifactId>GeneralLib</artifactId>
             <version>0.1.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/GLib.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>Towny</artifactId>
             <version>0.93.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/Towny.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.redstone</groupId>
             <artifactId>LegacyFactions</artifactId>
             <version>1.4.7</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/LegacyFactions.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.songoda.epicspawners</groupId>
             <artifactId>EpicSpawners</artifactId>
-            <version>3.1.4 R2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/EpicSpawners.jar</systemPath>
+            <version>3.1.4-R2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency><!-- Factions3 -->
             <groupId>com.massivecraft.factions</groupId>
             <artifactId>Factions</artifactId>
             <version>3.2.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/library/Factions.jar</systemPath>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
