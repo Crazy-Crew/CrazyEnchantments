@@ -1,16 +1,20 @@
 
-#Maven
-target
-dependency-reduced-pom.xml
+.DS_Store
 
-#IntelliJ
-.idea
+.idea/
+
 *.iml
-META-INF/
 
-src/main/library/
-\.DS_Store
+*.class
 
-crazyenchantments/src/main/lib/
+*.jar
 
-plugin/src/main/library/
+plugin/target
+
+api/target
+
+*.lst
+
+*.properties
+
+plugin/dependency-reduced-pom.xml
