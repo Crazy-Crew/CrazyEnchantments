@@ -218,8 +218,8 @@ public class ItemBuilder implements Cloneable {
 	 */
 	public String getUpdatedName() {
 		String newName = name;
-		for(String placeholder : lorePlaceholders.keySet()) {
-			newName = newName.replace(placeholder, lorePlaceholders.get(placeholder));
+		for(String placeholder : namePlaceholders.keySet()) {
+			newName = newName.replace(placeholder, namePlaceholders.get(placeholder));
 		}
 		return newName;
 	}
