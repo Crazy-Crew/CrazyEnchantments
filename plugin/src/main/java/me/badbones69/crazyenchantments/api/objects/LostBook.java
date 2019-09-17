@@ -88,6 +88,7 @@ public class LostBook {
 		.setMaterial(file.getString("Settings.LostBook.Item"))
 		.setAmount(amount)
 		.setName(file.getString("Settings.LostBook.Name"))
+		.setNamePlaceholders(placeholders)
 		.setLore(file.getStringList("Settings.LostBook.Lore"))
 		.setLorePlaceholders(placeholders);
 	}
