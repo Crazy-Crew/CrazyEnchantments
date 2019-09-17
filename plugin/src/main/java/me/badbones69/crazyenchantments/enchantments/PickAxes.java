@@ -184,7 +184,10 @@ public class PickAxes implements Listener {
 														new BukkitRunnable() {
 															@Override
 															public void run() {
-																block.getWorld().dropItem(block.getLocation(), getOreDrop(block.getType(), finalDrop.getAmount()));
+																try {
+																	block.getWorld().dropItem(block.getLocation(), getOreDrop(block.getType(), finalDrop.getAmount()));
+																}catch(IllegalArgumentException ignore) {
+																}
 															}
 														}.runTask(ce.getPlugin());
 													}
@@ -203,7 +206,10 @@ public class PickAxes implements Listener {
 														new BukkitRunnable() {
 															@Override
 															public void run() {
-																block.getWorld().dropItem(block.getLocation(), finalDrop);
+																try {
+																	block.getWorld().dropItem(block.getLocation(), finalDrop);
+																}catch(IllegalArgumentException ignore) {
+																}
 															}
 														}.runTask(ce.getPlugin());
 													}
@@ -228,7 +234,10 @@ public class PickAxes implements Listener {
 															new BukkitRunnable() {
 																@Override
 																public void run() {
-																	block.getWorld().dropItem(block.getLocation(), finalDrop);
+																	try {
+																		block.getWorld().dropItem(block.getLocation(), finalDrop);
+																	}catch(IllegalArgumentException ignore) {
+																	}
 																}
 															}.runTask(ce.getPlugin());
 														}
@@ -275,7 +284,10 @@ public class PickAxes implements Listener {
 											new BukkitRunnable() {
 												@Override
 												public void run() {
-													player.getWorld().dropItem(player.getLocation(), i);
+													try {
+														player.getWorld().dropItem(player.getLocation(), i);
+													}catch(IllegalArgumentException ignore) {
+													}
 												}
 											}.runTask(ce.getPlugin());
 										}else {
@@ -325,7 +337,10 @@ public class PickAxes implements Listener {
 										dropAmount += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
 									}
 								}
-								block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
+								try {
+									block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
+								}catch(IllegalArgumentException ignore) {
+								}
 								if(enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 									if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
 										int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
@@ -361,7 +376,10 @@ public class PickAxes implements Listener {
 							if(block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) {
 								dropAmount += Methods.percentPick(4, 1);
 							}
-							block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
+							try {
+								block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
+							}catch(IllegalArgumentException ignore) {
+							}
 							if(enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
 								if(CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
 									int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
