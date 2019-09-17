@@ -135,7 +135,7 @@ public class GKitzController implements Listener {
 											player.openInventory(in);
 										}else {
 											HashMap<String, String> placeholders = new HashMap<>();
-											placeholders.put("%kit%", kit.getName());
+											placeholders.put("%Kit%", kit.getName());
 											if(p.hasGkitPermission(kit)) {
 												if(p.canUseGKit(kit)) {
 													p.giveGKit(kit);

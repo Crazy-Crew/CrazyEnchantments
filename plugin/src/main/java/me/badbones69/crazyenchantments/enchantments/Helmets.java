@@ -70,11 +70,11 @@ public class Helmets implements Listener {
 				if(CEnchantments.COMMANDER.isActivated()) {
 					int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
 					ArrayList<Player> players = new ArrayList<>();
-					for(Entity en : player.getNearbyEntities(radius, radius, radius)) {
-						if(en instanceof Player) {
-							Player o = (Player) en;
-							if(Support.isFriendly(player, o)) {
-								players.add(o);
+					for(Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+						if(entity instanceof Player) {
+							Player other = (Player) entity;
+							if(Support.isFriendly(player, other)) {
+								players.add(other);
 							}
 						}
 					}
@@ -82,8 +82,8 @@ public class Helmets implements Listener {
 						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()) {
-							for(Player P : players) {
-								P.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
+							for(Player other : players) {
+								other.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
 							}
 						}
 					}

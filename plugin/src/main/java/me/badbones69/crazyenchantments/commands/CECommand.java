@@ -241,10 +241,10 @@ public class CECommand implements CommandExecutor {
 					}
 					loc.getWorld().dropItemNaturally(loc, category == null ? new CEBook(enchantment, level).buildBook() : category.getLostBook().getLostBook(category).build());
 					HashMap<String, String> placeholders = new HashMap<>();
-					placeholders.put("%world%", loc.getWorld().getName());
-					placeholders.put("%x%", loc.getBlockX() + "");
-					placeholders.put("%y%", loc.getBlockY() + "");
-					placeholders.put("%z%", loc.getBlockZ() + "");
+					placeholders.put("%World%", loc.getWorld().getName());
+					placeholders.put("%X%", loc.getBlockX() + "");
+					placeholders.put("%Y%", loc.getBlockY() + "");
+					placeholders.put("%Z%", loc.getBlockZ() + "");
 					sender.sendMessage(Messages.SPAWNED_BOOK.getMessage(placeholders));
 					return true;
 				}
@@ -290,7 +290,7 @@ public class CECommand implements CommandExecutor {
 						return true;
 					}
 					HashMap<String, String> placeholders = new HashMap<>();
-					placeholders.put("%category%", category.getName());
+					placeholders.put("%Category%", category.getName());
 					sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
 					return true;
 				}
@@ -331,8 +331,8 @@ public class CECommand implements CommandExecutor {
 				}
 				player.getInventory().addItem(Scrambler.getScramblers(amount));
 				HashMap<String, String> placeholders = new HashMap<>();
-				placeholders.put("%amount%", amount + "");
-				placeholders.put("%player%", player.getName());
+				placeholders.put("%Amount%", amount + "");
+				placeholders.put("%Player%", player.getName());
 				sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
 				player.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
 				return true;
@@ -371,8 +371,8 @@ public class CECommand implements CommandExecutor {
 				}
 				player.getInventory().addItem(ProtectionCrystal.getCrystals(amount));
 				HashMap<String, String> placeholders = new HashMap<>();
-				placeholders.put("%amount%", amount + "");
-				placeholders.put("%player%", player.getName());
+				placeholders.put("%Amount%", amount + "");
+				placeholders.put("%Player%", player.getName());
 				sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
 				player.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
 				return true;
@@ -426,8 +426,8 @@ public class CECommand implements CommandExecutor {
 								player.getInventory().addItem(dust.getDust(amount));
 							}
 							HashMap<String, String> placeholders = new HashMap<>();
-							placeholders.put("%amount%", amount + "");
-							placeholders.put("%player%", player.getName());
+							placeholders.put("%Amount%", amount + "");
+							placeholders.put("%Player%", player.getName());
 							Messages message;
 							switch(dust) {
 								case SUCCESS_DUST:
@@ -520,13 +520,13 @@ public class CECommand implements CommandExecutor {
 					if(ce.hasEnchantment(item, ceEnchantment)) {
 						Methods.setItemInHand(player, ce.removeEnchantment(item, ceEnchantment));
 						HashMap<String, String> placeholders = new HashMap<>();
-						placeholders.put("%enchantment%", ceEnchantment.getCustomName());
+						placeholders.put("%Enchantment%", ceEnchantment.getCustomName());
 						player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders));
 						return true;
 					}
 				}
 				HashMap<String, String> placeholders = new HashMap<>();
-				placeholders.put("%enchantment%", args[1]);
+				placeholders.put("%Enchantment%", args[1]);
 				sender.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
 				return true;
 			}
@@ -620,7 +620,7 @@ public class CECommand implements CommandExecutor {
 					return true;
 				}
 				HashMap<String, String> placeholders = new HashMap<>();
-				placeholders.put("%player%", player.getName());
+				placeholders.put("%Player%", player.getName());
 				sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
 				player.getInventory().addItem(new CEBook(enchantment, lvl, amount).buildBook());
 				return true;

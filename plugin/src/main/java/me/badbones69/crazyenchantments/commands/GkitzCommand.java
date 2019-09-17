@@ -40,8 +40,8 @@ public class GkitzCommand implements CommandExecutor {
 					if(args.length >= 2) {
 						if(kit == null) {
 							HashMap<String, String> placeholders = new HashMap<>();
-							placeholders.put("%kit%", args[1]);
-							placeholders.put("%gkit%", args[1]);
+							placeholders.put("%Kit%", args[1]);
+							placeholders.put("%Gkit%", args[1]);
 							sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
 							return true;
 						}
@@ -61,9 +61,9 @@ public class GkitzCommand implements CommandExecutor {
 						}
 						ce.getCEPlayer(player).removeCooldown(kit);
 						HashMap<String, String> placeholders = new HashMap<>();
-						placeholders.put("%player%", player.getName());
-						placeholders.put("%gkit%", kit.getName());
-						placeholders.put("%kit%", kit.getName());
+						placeholders.put("%Player%", player.getName());
+						placeholders.put("%Gkit%", kit.getName());
+						placeholders.put("%Kit%", kit.getName());
 						sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
 						return true;
 					}else {
@@ -76,8 +76,8 @@ public class GkitzCommand implements CommandExecutor {
 					Player player;
 					if(kit == null) {
 						HashMap<String, String> placeholders = new HashMap<>();
-						placeholders.put("%kit%", args[0]);
-						placeholders.put("%gkit%", args[0]);
+						placeholders.put("%Kit%", args[0]);
+						placeholders.put("%Gkit%", args[0]);
 						sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
 						return true;
 					}
@@ -106,8 +106,8 @@ public class GkitzCommand implements CommandExecutor {
 					}
 					CEPlayer cePlayer = ce.getCEPlayer(player);
 					HashMap<String, String> placeholders = new HashMap<>();
-					placeholders.put("%player%", player.getName());
-					placeholders.put("%kit%", kit.getDisplayItem().getItemMeta().getDisplayName());
+					placeholders.put("%Player%", player.getName());
+					placeholders.put("%Kit%", kit.getDisplayItem().getItemMeta().getDisplayName());
 					if(cePlayer.hasGkitPermission(kit) || adminGive) {
 						if(cePlayer.canUseGKit(kit) || adminGive) {
 							cePlayer.giveGKit(kit);

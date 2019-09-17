@@ -83,7 +83,6 @@ public class LostBook {
 		FileConfiguration file = Files.CONFIG.getFile();
 		HashMap<String, String> placeholders = new HashMap<>();
 		placeholders.put("%Category%", category.getDisplayItem().getName());
-		placeholders.put("%category%", category.getDisplayItem().getName());
 		return new ItemBuilder()
 		.setMaterial(file.getString("Settings.LostBook.Item"))
 		.setAmount(amount)

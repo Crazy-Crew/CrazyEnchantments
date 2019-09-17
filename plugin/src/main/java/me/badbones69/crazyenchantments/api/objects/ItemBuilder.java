@@ -219,7 +219,8 @@ public class ItemBuilder implements Cloneable {
 	public String getUpdatedName() {
 		String newName = name;
 		for(String placeholder : namePlaceholders.keySet()) {
-			newName = newName.replace(placeholder, namePlaceholders.get(placeholder));
+			newName = newName.replaceAll(placeholder, namePlaceholders.get(placeholder))
+			.replaceAll(placeholder.toLowerCase(), namePlaceholders.get(placeholder));
 		}
 		return newName;
 	}
@@ -281,6 +282,17 @@ public class ItemBuilder implements Cloneable {
 	}
 	
 	/**
+	 * Add a placeholder to the lore of the item.
+	 * @param placeholder The placeholder you wish to replace.
+	 * @param argument The argument that will replace the placeholder.
+	 * @return The ItemBuilder with updated info.
+	 */
+	public ItemBuilder addLorePlaceholder(String placeholder, int argument) {
+		this.lorePlaceholders.put(placeholder, argument + "");
+		return this;
+	}
+	
+	/**
 	 * Remove a placeholder from the lore.
 	 * @param placeholder The placeholder you wish to remove.
 	 * @return The ItemBuilder with updated info.
@@ -298,7 +310,8 @@ public class ItemBuilder implements Cloneable {
 		List<String> newLore = new ArrayList<>();
 		for(String i : lore) {
 			for(String placeholder : lorePlaceholders.keySet()) {
-				i = i.replace(placeholder, lorePlaceholders.get(placeholder));
+				i = i.replaceAll(placeholder, lorePlaceholders.get(placeholder))
+				.replaceAll(placeholder.toLowerCase(), lorePlaceholders.get(placeholder));
 			}
 			newLore.add(i);
 		}

@@ -176,7 +176,7 @@ public class Swords implements Listener {
 											if(cePlayer.getRageMultiplier().intValue() == rageUp) {
 												if(Messages.RAGE_RAGE_UP.getMessage().length() > 0) {
 													HashMap<String, String> placeholders = new HashMap<>();
-													placeholders.put("%level%", rageUp + "");
+													placeholders.put("%Level%", rageUp + "");
 													damager.sendMessage(Messages.RAGE_RAGE_UP.getMessage(placeholders));
 												}
 												cePlayer.setRageLevel(rageUp);

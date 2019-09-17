@@ -193,8 +193,8 @@ public class ShopControl implements Listener {
 											}else {
 												String needed = (category.getCost() - CurrencyAPI.getCurrency(player, category.getCurrency())) + "";
 												HashMap<String, String> placeholders = new HashMap<>();
-												placeholders.put("%money_needed%", needed);
-												placeholders.put("%xp%", needed);
+												placeholders.put("%Money_Needed%", needed);
+												placeholders.put("%XP%", needed);
 												switch(category.getCurrency()) {
 													case VAULT:
 														player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
@@ -235,8 +235,8 @@ public class ShopControl implements Listener {
 											}else {
 												String needed = (lostBook.getCost() - CurrencyAPI.getCurrency(player, lostBook.getCurrency())) + "";
 												HashMap<String, String> placeholders = new HashMap<>();
-												placeholders.put("%money_needed%", needed);
-												placeholders.put("%xp%", needed);
+												placeholders.put("%Money_Needed%", needed);
+												placeholders.put("%XP%", needed);
 												switch(lostBook.getCurrency()) {
 													case VAULT:
 														player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
@@ -279,8 +279,8 @@ public class ShopControl implements Listener {
 											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 											if(currency != null) {
 												HashMap<String, String> placeholders = new HashMap<>();
-												placeholders.put("%money_needed%", needed);
-												placeholders.put("%xp%", needed);
+												placeholders.put("%Money_Needed%", needed);
+												placeholders.put("%XP%", needed);
 												switch(currency) {
 													case VAULT:
 														player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
@@ -336,8 +336,8 @@ public class ShopControl implements Listener {
 											String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
 											if(currency != null) {
 												HashMap<String, String> placeholders = new HashMap<>();
-												placeholders.put("%money_needed%", needed);
-												placeholders.put("%xp%", needed);
+												placeholders.put("%Money_Needed%", needed);
+												placeholders.put("%XP%", needed);
 												switch(currency) {
 													case VAULT:
 														player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));

@@ -130,8 +130,8 @@ public class BlackSmith implements Listener {
 												String needed = (resultItem.getCost() - CurrencyAPI.getCurrency(player, currency)) + "";
 												if(currency != null) {
 													HashMap<String, String> placeholders = new HashMap<>();
-													placeholders.put("%money_needed%", needed);
-													placeholders.put("%xp%", needed);
+													placeholders.put("%Money_Needed%", needed);
+													placeholders.put("%XP%", needed);
 													switch(currency) {
 														case VAULT:
 															player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));

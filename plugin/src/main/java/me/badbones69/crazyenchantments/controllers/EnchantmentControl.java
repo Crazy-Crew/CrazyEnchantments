@@ -74,8 +74,8 @@ public class EnchantmentControl implements Listener {
 															e.setCurrentItem(ce.addEnchantment(item, enchantment, bookLevel));
 															player.setItemOnCursor(new ItemStack(Material.AIR));
 															HashMap<String, String> placeholders = new HashMap<>();
-															placeholders.put("%enchantment%", enchantment.getCustomName());
-															placeholders.put("%level%", bookLevel + "");
+															placeholders.put("%Enchantment%", enchantment.getCustomName());
+															placeholders.put("%Level%", bookLevel + "");
 															player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
 															player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
 														}

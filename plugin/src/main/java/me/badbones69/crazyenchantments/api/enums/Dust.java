@@ -62,22 +62,19 @@ public enum Dust {
 	
 	public ItemStack getDust() {
 		return dust.get(this)
-		.addLorePlaceholder("%percent%", Methods.percentPick(max, min) + "")
-		.addLorePlaceholder("%Percent%", Methods.percentPick(max, min) + "")
+		.addLorePlaceholder("%Percent%", Methods.percentPick(max, min))
 		.build();
 	}
 	
 	public ItemStack getDust(int amount) {
 		return dust.get(this)
-		.addLorePlaceholder("%percent%", Methods.percentPick(max, min) + "")
-		.addLorePlaceholder("%Percent%", Methods.percentPick(max, min) + "")
+		.addLorePlaceholder("%Percent%", Methods.percentPick(max, min))
 		.setAmount(amount).build();
 	}
 	
 	public ItemStack getDust(int percent, int amount) {
 		return dust.get(this)
-		.addLorePlaceholder("%percent%", percent + "")
-		.addLorePlaceholder("%Percent%", percent + "")
+		.addLorePlaceholder("%Percent%", percent)
 		.setAmount(amount).build();
 	}
 	
