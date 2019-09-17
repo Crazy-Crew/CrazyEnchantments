@@ -1370,6 +1370,10 @@ public class CrazyEnchantments {
 					item.setLore(lore);
 				}else if(option.startsWith("Player:")) {
 					item.setPlayer(option.replace("Player:", ""));
+				}else if(option.startsWith("Unbreakable-Item:")) {
+					if(option.replaceAll("Unbreakable-Item:", "").equalsIgnoreCase("true")) {
+						item.setUnbreakable(true);
+					}
 				}else {
 					Enchantment enchantment = Methods.getEnchantment(option.split(":")[0]);
 					if(enchantment != null) {

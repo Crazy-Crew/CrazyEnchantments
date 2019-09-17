@@ -14,6 +14,7 @@ public class GKitzItem {
 	private String name;
 	private int amount;
 	private String player;
+	private boolean unbreakable;
 	private ArrayList<String> lore;
 	private HashMap<Enchantment, Integer> enchantments;
 	private HashMap<CEnchantment, Integer> ceEnchantments;
@@ -27,6 +28,7 @@ public class GKitzItem {
 		this.amount = 1;
 		this.type = "299";
 		this.player = "";
+		this.unbreakable = false;
 		this.lore = new ArrayList<>();
 		this.enchantments = new HashMap<>();
 		this.ceEnchantments = new HashMap<>();
@@ -108,10 +110,18 @@ public class GKitzItem {
 	
 	/**
 	 *
+	 * @param unbreakable True for the item to be unbreakable and false if it can take damage.
+	 */
+	public void setUnbreakable(boolean unbreakable) {
+		this.unbreakable = unbreakable;
+	}
+	
+	/**
+	 *
 	 * @return Returns a fully finished item.
 	 */
 	public ItemStack build() {
-		ItemStack item = new ItemBuilder().setMaterial(type).setAmount(amount).setName(name).setPlayer(player).build();
+		ItemStack item = new ItemBuilder().setMaterial(type).setAmount(amount).setName(name).setPlayer(player).setUnbreakable(unbreakable).build();
 		for(CEnchantment en : ceEnchantments.keySet()) {
 			ce.addEnchantment(item, en, ceEnchantments.get(en));
 		}
