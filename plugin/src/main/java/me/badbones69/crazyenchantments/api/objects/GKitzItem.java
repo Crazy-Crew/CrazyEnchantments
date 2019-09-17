@@ -13,6 +13,7 @@ public class GKitzItem {
 	private String type;
 	private String name;
 	private int amount;
+	private String player;
 	private ArrayList<String> lore;
 	private HashMap<Enchantment, Integer> enchantments;
 	private HashMap<CEnchantment, Integer> ceEnchantments;
@@ -25,6 +26,7 @@ public class GKitzItem {
 		this.name = "";
 		this.amount = 1;
 		this.type = "299";
+		this.player = "";
 		this.lore = new ArrayList<>();
 		this.enchantments = new HashMap<>();
 		this.ceEnchantments = new HashMap<>();
@@ -98,10 +100,18 @@ public class GKitzItem {
 	
 	/**
 	 *
+	 * @param player The player the head will be set to.
+	 */
+	public void setPlayer(String player) {
+		this.player = player;
+	}
+	
+	/**
+	 *
 	 * @return Returns a fully finished item.
 	 */
 	public ItemStack build() {
-		ItemStack item = new ItemBuilder().setMaterial(type).setAmount(amount).setName(name).build();
+		ItemStack item = new ItemBuilder().setMaterial(type).setAmount(amount).setName(name).setPlayer(player).build();
 		for(CEnchantment en : ceEnchantments.keySet()) {
 			ce.addEnchantment(item, en, ceEnchantments.get(en));
 		}

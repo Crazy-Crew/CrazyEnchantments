@@ -1346,54 +1346,56 @@ public class CrazyEnchantments {
 	 */
 	private ArrayList<ItemStack> getKitItems(ArrayList<String> itemStrings) {
 		ArrayList<ItemStack> items = new ArrayList<>();
-		for(String i : itemStrings) {
+		for(String itemString : itemStrings) {
 			GKitzItem item = new GKitzItem();
-			for(String d : i.split(", ")) {
-				if(d.startsWith("Item:")) {
-					item.setItem(d.replace("Item:", ""));
-				}else if(d.startsWith("Amount:")) {
-					if(Methods.isInt(d.replace("Amount:", ""))) {
-						item.setAmount(Integer.parseInt(d.replace("Amount:", "")));
+			for(String option : itemString.split(", ")) {
+				if(option.startsWith("Item:")) {
+					item.setItem(option.replace("Item:", ""));
+				}else if(option.startsWith("Amount:")) {
+					if(Methods.isInt(option.replace("Amount:", ""))) {
+						item.setAmount(Integer.parseInt(option.replace("Amount:", "")));
 					}
-				}else if(d.startsWith("Name:")) {
-					item.setName(d.replace("Name:", ""));
-				}else if(d.startsWith("Lore:")) {
-					d = d.replace("Lore:", "");
+				}else if(option.startsWith("Name:")) {
+					item.setName(option.replace("Name:", ""));
+				}else if(option.startsWith("Lore:")) {
+					option = option.replace("Lore:", "");
 					ArrayList<String> lore = new ArrayList<>();
-					if(d.contains(",")) {
-						for(String line : d.split(",")) {
+					if(option.contains(",")) {
+						for(String line : option.split(",")) {
 							lore.add(line.replaceAll("%comma%", ","));
 						}
 					}else {
-						lore.add(d);
+						lore.add(option);
 					}
 					item.setLore(lore);
+				}else if(option.startsWith("Player:")) {
+					item.setPlayer(option.replace("Player:", ""));
 				}else {
-					Enchantment enchantment = Methods.getEnchantment(d.split(":")[0]);
+					Enchantment enchantment = Methods.getEnchantment(option.split(":")[0]);
 					if(enchantment != null) {
-						String level = d.split(":")[1];
+						String level = option.split(":")[1];
 						if(level.contains("-")) {
-							int randomLevel = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
-							Integer.parseInt(d.split(":")[1].split("-")[1]));
+							int randomLevel = pickLevel(Integer.parseInt(option.split(":")[1].split("-")[0]),
+							Integer.parseInt(option.split(":")[1].split("-")[1]));
 							if(randomLevel > 0) {
 								item.addEnchantment(enchantment, randomLevel);
 							}
 						}else {
-							item.addEnchantment(enchantment, Integer.parseInt(d.split(":")[1]));
+							item.addEnchantment(enchantment, Integer.parseInt(option.split(":")[1]));
 						}
 					}
 					for(CEnchantment en : registeredEnchantments) {
-						if(d.split(":")[0].equalsIgnoreCase(en.getName()) ||
-						d.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
-							String level = d.split(":")[1];
+						if(option.split(":")[0].equalsIgnoreCase(en.getName()) ||
+						option.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
+							String level = option.split(":")[1];
 							if(level.contains("-")) {
-								int randomLevel = pickLevel(Integer.parseInt(d.split(":")[1].split("-")[0]),
-								Integer.parseInt(d.split(":")[1].split("-")[1]));
+								int randomLevel = pickLevel(Integer.parseInt(option.split(":")[1].split("-")[0]),
+								Integer.parseInt(option.split(":")[1].split("-")[1]));
 								if(randomLevel > 0) {
 									item.addCEEnchantment(en, randomLevel);
 								}
 							}else {
-								item.addCEEnchantment(en, Integer.parseInt(d.split(":")[1]));
+								item.addCEEnchantment(en, Integer.parseInt(option.split(":")[1]));
 							}
 							break;
 						}
