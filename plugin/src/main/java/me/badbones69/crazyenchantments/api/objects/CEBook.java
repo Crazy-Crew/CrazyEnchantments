@@ -59,7 +59,18 @@ public class CEBook {
 	 *
 	 * @param enchantment Enchantment you want.
 	 * @param level Tier of the enchantment.
+	 * @param category The category for the rates.
+	 */
+	public CEBook(CEnchantment enchantment, int level, Category category) {
+		this(enchantment, level, 1, category);
+	}
+	
+	/**
+	 *
+	 * @param enchantment Enchantment you want.
+	 * @param level Tier of the enchantment.
 	 * @param amount Amount of books you want.
+	 * @param category The category for the rates.
 	 */
 	public CEBook(CEnchantment enchantment, int level, int amount, Category category) {
 		this.enchantment = enchantment;

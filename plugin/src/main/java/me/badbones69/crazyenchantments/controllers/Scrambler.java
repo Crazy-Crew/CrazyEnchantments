@@ -5,7 +5,6 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,16 +16,36 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Scrambler implements Listener {
 	
-	public static HashMap<Player, Integer> roll = new HashMap<>();
+	public static HashMap<Player, BukkitTask> roll = new HashMap<>();
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private static ItemBuilder scramblerItem;
+	private static ItemBuilder pointer;
+	private static boolean animationToggle;
+	private static String guiName;
+	
+	public static void loadScrambler() {
+		FileConfiguration config = Files.CONFIG.getFile();
+		scramblerItem = new ItemBuilder()
+		.setMaterial(config.getString("Settings.Scrambler.Item"))
+		.setName(config.getString("Settings.Scrambler.Name"))
+		.setLore(config.getStringList("Settings.Scrambler.Lore"))
+		.setGlowing(config.getBoolean("Settings.Scrambler.Glowing"));
+		pointer = new ItemBuilder()
+		.setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item"))
+		.setName(config.getString("Settings.Scrambler.GUI.Pointer.Name"))
+		.setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
+		animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle");
+		guiName = Methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
+	}
 	
 	/**
 	 * Get a new book that has been scrambled.
@@ -34,17 +53,11 @@ public class Scrambler implements Listener {
 	 * @return A new scrambled book.
 	 */
 	public static ItemStack getNewScrambledBook(ItemStack book) {
-		ItemStack newBook = new ItemStack(Material.AIR);
 		if(ce.isEnchantmentBook(book)) {
 			CEnchantment enchantment = ce.getEnchantmentBookEnchantment(book);
-			Category category = ce.getHighestEnchantmentCategory(enchantment);
-			int lvl = ce.getBookLevel(book, enchantment);
-			CEBook eBook = new CEBook(enchantment, lvl);
-			eBook.setDestroyRate(Methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate()));
-			eBook.setSuccessRate(Methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate()));
-			newBook = eBook.buildBook();
+			return new CEBook(enchantment, ce.getBookLevel(book, enchantment), ce.getHighestEnchantmentCategory(enchantment)).buildBook();
 		}
-		return newBook;
+		return new ItemStack(Material.AIR);
 	}
 	
 	/**
@@ -52,12 +65,7 @@ public class Scrambler implements Listener {
 	 * @return The scramblers.
 	 */
 	public static ItemStack getScramblers() {
-		FileConfiguration config = Files.CONFIG.getFile();
-		String id = config.getString("Settings.Scrambler.Item");
-		String name = config.getString("Settings.Scrambler.Name");
-		List<String> lore = config.getStringList("Settings.Scrambler.Lore");
-		boolean toggle = config.getBoolean("Settings.Scrambler.Glowing");
-		return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setGlowing(toggle).build();
+		return getScramblers(1);
 	}
 	
 	/**
@@ -66,41 +74,34 @@ public class Scrambler implements Listener {
 	 * @return The scramblers.
 	 */
 	public static ItemStack getScramblers(int amount) {
-		FileConfiguration config = Files.CONFIG.getFile();
-		String id = config.getString("Settings.Scrambler.Item");
-		String name = config.getString("Settings.Scrambler.Name");
-		List<String> lore = config.getStringList("Settings.Scrambler.Lore");
-		boolean toggle = config.getBoolean("Settings.Scrambler.Glowing");
-		return new ItemBuilder().setMaterial(id).setAmount(amount).setName(name).setLore(lore).setGlowing(toggle).build();
+		return scramblerItem.clone().setAmount(amount).build();
 	}
 	
 	private static void setGlass(Inventory inv) {
-		for(int i = 0; i < 9; i++) {
-			if(i != 4) {
-				inv.setItem(i, Methods.getRandomPaneColor().setName(" ").build());
-				inv.setItem(i + 18, Methods.getRandomPaneColor().setName(" ").build());
+		for(int slot = 0; slot < 9; slot++) {
+			if(slot != 4) {
+				inv.setItem(slot, Methods.getRandomPaneColor().setName(" ").build());
+				inv.setItem(slot + 18, Methods.getRandomPaneColor().setName(" ").build());
 				
 			}else {
-				FileConfiguration config = Files.CONFIG.getFile();
-				ItemStack pointer = new ItemBuilder().setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item")).setName(config.getString("Settings.Scrambler.GUI.Pointer.Name")).setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore")).build();
-				inv.setItem(i, pointer);
-				inv.setItem(i + 18, pointer);
+				inv.setItem(slot, pointer.build());
+				inv.setItem(slot + 18, pointer.build());
 			}
 		}
 	}
 	
 	public static void openScrambler(Player player, ItemStack book) {
-		Inventory inv = Bukkit.createInventory(null, 27, Methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name")));
-		setGlass(inv);
-		for(int i = 9; i > 8 && i < 18; i++) {
-			inv.setItem(i, getNewScrambledBook(book));
+		Inventory inventory = Bukkit.createInventory(null, 27, guiName);
+		setGlass(inventory);
+		for(int slot = 9; slot > 8 && slot < 18; slot++) {
+			inventory.setItem(slot, getNewScrambledBook(book));
 		}
-		player.openInventory(inv);
-		startScrambler(player, inv, book);
+		player.openInventory(inventory);
+		startScrambler(player, inventory, book);
 	}
 	
-	private static void startScrambler(final Player player, final Inventory inv, final ItemStack book) {
-		roll.put(player, Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("CrazyEnchantments"), new Runnable() {
+	private static void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
+		roll.put(player, new BukkitRunnable() {
 			int time = 1;
 			int full = 0;
 			int open = 0;
@@ -108,28 +109,28 @@ public class Scrambler implements Listener {
 			@Override
 			public void run() {
 				if(full <= 50) {//When Spinning
-					moveItems(inv, player, book);
-					setGlass(inv);
+					moveItems(inventory, player, book);
+					setGlass(inventory);
 					player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 				}
 				open++;
 				if(open >= 5) {
-					player.openInventory(inv);
+					player.openInventory(inventory);
 					open = 0;
 				}
 				full++;
 				if(full > 51) {
 					if(slowSpin().contains(time)) {//When Slowing Down
-						moveItems(inv, player, book);
-						setGlass(inv);
+						moveItems(inventory, player, book);
+						setGlass(inventory);
 						player.playSound(player.getLocation(), ce.getSound("UI_BUTTON_CLICK", "CLICK"), 1, 1);
 					}
 					time++;
-					if(time >= 60) {// When done
+					if(time == 60) {// When done
 						player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
-						Bukkit.getScheduler().cancelTask(roll.get(player));
+						cancel();
 						roll.remove(player);
-						ItemStack item = inv.getItem(13).clone();
+						ItemStack item = inventory.getItem(13).clone();
 						item.setType(ce.getEnchantmentBookItem().getType());
 						item.setDurability(ce.getEnchantmentBookItem().getDurability());
 						if(Methods.isInventoryFull(player)) {
@@ -137,10 +138,12 @@ public class Scrambler implements Listener {
 						}else {
 							player.getInventory().addItem(item);
 						}
+					}else if(time > 60) {//Just in case the cancel fails.
+						cancel();
 					}
 				}
 			}
-		}, 1, 1));
+		}.runTaskTimer(ce.getPlugin(), 1, 1));
 	}
 	
 	private static ArrayList<Integer> slowSpin() {
@@ -159,8 +162,8 @@ public class Scrambler implements Listener {
 	
 	private static void moveItems(Inventory inv, Player player, ItemStack book) {
 		ArrayList<ItemStack> items = new ArrayList<>();
-		for(int i = 9; i > 8 && i < 17; i++) {
-			items.add(inv.getItem(i));
+		for(int slot = 9; slot > 8 && slot < 17; slot++) {
+			items.add(inv.getItem(slot));
 		}
 		ItemStack newBook = getNewScrambledBook(book);
 		newBook.setType(Methods.getRandomPaneColor().getMaterial());
@@ -173,23 +176,20 @@ public class Scrambler implements Listener {
 	@EventHandler
 	public void onReRoll(InventoryClickEvent e) {
 		Player player = (Player) e.getWhoClicked();
-		Inventory inv = e.getInventory();
-		if(inv != null) {
-			ItemStack book = e.getCurrentItem();
-			ItemStack sc = e.getCursor();
-			if(book != null && sc != null) {
-				if(book.getType() != Material.AIR && sc.getType() != Material.AIR) {
-					if(book.getAmount() == 1 && sc.getAmount() == 1) {
-						if(getScramblers().isSimilar(sc)) {
-							if(ce.isEnchantmentBook(book)) {
-								e.setCancelled(true);
-								player.setItemOnCursor(new ItemStack(Material.AIR));
-								if(Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle")) {
-									e.setCurrentItem(new ItemStack(Material.AIR));
-									openScrambler(player, book);
-								}else {
-									e.setCurrentItem(getNewScrambledBook(book));
-								}
+		if(e.getInventory() != null) {
+			ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
+			ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
+			if(book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
+				if(book.getAmount() == 1 && scrambler.getAmount() == 1) {
+					if(getScramblers().isSimilar(scrambler)) {
+						if(ce.isEnchantmentBook(book)) {
+							e.setCancelled(true);
+							player.setItemOnCursor(new ItemStack(Material.AIR));
+							if(animationToggle) {
+								e.setCurrentItem(new ItemStack(Material.AIR));
+								openScrambler(player, book);
+							}else {
+								e.setCurrentItem(getNewScrambledBook(book));
 							}
 						}
 					}
@@ -200,9 +200,8 @@ public class Scrambler implements Listener {
 	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
-		Inventory inv = e.getInventory();
-		if(inv != null) {
-			if(e.getView().getTitle().equals(Methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name")))) {
+		if(e.getInventory() != null) {
+			if(e.getView().getTitle().equals(guiName)) {
 				e.setCancelled(true);
 			}
 		}
@@ -212,7 +211,7 @@ public class Scrambler implements Listener {
 	public void onScramblerClick(PlayerInteractEvent e) {
 		ItemStack item = Methods.getItemInHand(e.getPlayer());
 		if(item != null) {
-			if(Methods.isSimilar(item, getScramblers())) {
+			if(getScramblers().isSimilar(item)) {
 				e.setCancelled(true);
 			}
 		}
@@ -221,9 +220,10 @@ public class Scrambler implements Listener {
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
-		if(roll.containsKey(player)) {
-			Bukkit.getScheduler().cancelTask(roll.get(player));
+		try {
+			roll.get(player).cancel();
 			roll.remove(player);
+		}catch(Exception ignore) {
 		}
 	}
 	
