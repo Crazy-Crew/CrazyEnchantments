@@ -115,19 +115,6 @@ public class Methods {
 		}
 	}
 	
-	public static ItemStack removeLore(ItemStack item, String i) {
-		ArrayList<String> lore = new ArrayList<>();
-		ItemMeta m = item.getItemMeta();
-		for(String l : item.getItemMeta().getLore()) {
-			if(!l.equals(i)) {
-				lore.add(l);
-			}
-		}
-		m.setLore(lore);
-		item.setItemMeta(m);
-		return item;
-	}
-	
 	public static String getPrefix() {
 		return getPrefix("");
 	}
