@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
 public class Support {
@@ -128,6 +129,13 @@ public class Support {
 			if(SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
 				return GriefPreventionSupport.isFriendly(player, other);
 			}
+		}
+		return false;
+	}
+	
+	public static boolean isVanished(Entity p) {
+		for(MetadataValue meta : p.getMetadata("vanished")) {
+			if(meta.asBoolean()) return true;
 		}
 		return false;
 	}
