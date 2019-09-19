@@ -218,8 +218,7 @@ public class Methods {
 	}
 	
 	public static int getEnchantmentAmount(ItemStack item) {
-		int amount = 0;
-		amount += ce.getEnchantmentsOnItem(item).size();
+		int amount = ce.getEnchantmentsOnItem(item).size();
 		if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
 			if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
 				if(item.hasItemMeta()) {
@@ -269,10 +268,10 @@ public class Methods {
 		return percent;
 	}
 	
-	public static boolean hasArgument(String Argument, List<String> Msg) {
-		for(String l : Msg) {
-			l = Methods.color(l).toLowerCase();
-			if(l.contains(Argument.toLowerCase())) {
+	public static boolean hasArgument(String arg, List<String> message) {
+		for(String line : message) {
+			line = Methods.color(line).toLowerCase();
+			if(line.contains(arg.toLowerCase())) {
 				return true;
 			}
 		}
