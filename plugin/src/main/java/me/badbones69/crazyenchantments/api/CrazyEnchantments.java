@@ -6,8 +6,10 @@ import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
+import me.badbones69.crazyenchantments.api.enums.ShopOption;
 import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
+import me.badbones69.crazyenchantments.api.managers.ShopManager;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
@@ -58,6 +60,7 @@ public class CrazyEnchantments {
 	private String whiteScrollProtectionName;
 	private BlackSmithManager blackSmithManager;
 	private InfoMenuManager infoMenuManager;
+	private ShopManager shopManager;
 	private WorldGuardVersion worldGuardVersion;
 	private PlotSquaredVersion plotSquaredVersion;
 	private ArrayList<Category> categories = new ArrayList<>();
@@ -90,8 +93,10 @@ public class CrazyEnchantments {
 		useNewSounds = version.isNewer(Version.v1_8_R3);
 		useNewMaterial = version.isNewer(Version.v1_12_R1);
 		nmsSupport = version.isNewer(Version.v1_12_R1) ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
+		//Loads the blacksmith manager
 		blackSmithManager = BlackSmithManager.getInstance();
 		blackSmithManager.load();
+		//Loads the info menu manager
 		infoMenuManager = InfoMenuManager.getInstance();
 		infoMenuManager.load();
 		FileConfiguration config = Files.CONFIG.getFile();
@@ -210,6 +215,11 @@ public class CrazyEnchantments {
 		Scrambler.loadScrambler();
 		//Loads the Scroll Control settings
 		ScrollControl.loadScrollControl();
+		//Loads the ShopOptions
+		ShopOption.loadShopOptions();
+		//Loads the shop manager
+		shopManager = ShopManager.getInstance();
+		shopManager.load();
 		if(SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
 			worldGuardVersion = version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
 		}
@@ -340,6 +350,14 @@ public class CrazyEnchantments {
 	 */
 	public InfoMenuManager getInfoMenuManager() {
 		return infoMenuManager;
+	}
+	
+	/**
+	 * Get the shop manager.
+	 * @return The instance of the shop manager.
+	 */
+	public ShopManager getShopManager() {
+		return shopManager;
 	}
 	
 	/**

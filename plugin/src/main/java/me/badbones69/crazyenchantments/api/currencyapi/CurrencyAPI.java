@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.api.currencyapi;
 
+import me.badbones69.crazyenchantments.api.enums.ShopOption;
 import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.LostBook;
 import org.bukkit.entity.Player;
@@ -39,10 +40,19 @@ public class CurrencyAPI {
 	/**
 	 * Take an amount from a player's currency.
 	 * @param player The player you wish to take from.
-	 * @param lostBook The category you wish to use.
+	 * @param lostBook The lostbook you wish to use.
 	 */
 	public static void takeCurrency(Player player, LostBook lostBook) {
 		takeCurrency(player, lostBook.getCurrency(), lostBook.getCost());
+	}
+	
+	/**
+	 * Take an amount from a player's currency.
+	 * @param player The player you wish to take from.
+	 * @param option The ShopOption you wish to use.
+	 */
+	public static void takeCurrency(Player player, ShopOption option) {
+		takeCurrency(player, option.getCurrency(), option.getCost());
 	}
 	
 	/**
@@ -109,6 +119,16 @@ public class CurrencyAPI {
 	 */
 	public static boolean canBuy(Player player, LostBook lostBook) {
 		return canBuy(player, lostBook.getCurrency(), lostBook.getCost());
+	}
+	
+	/**
+	 * Checks if the player has enough of a currency.
+	 * @param player The player you are checking.
+	 * @param option The ShopOption you wish to check.
+	 * @return True if they have enough to buy it or false if they don't.
+	 */
+	public static boolean canBuy(Player player, ShopOption option) {
+		return canBuy(player, option.getCurrency(), option.getCost());
 	}
 	
 	/**
