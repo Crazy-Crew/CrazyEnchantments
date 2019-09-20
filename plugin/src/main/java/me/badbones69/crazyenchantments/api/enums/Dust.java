@@ -28,12 +28,8 @@ public enum Dust {
 		this.name = name;
 		this.knownNames = knowNames;
 		this.configName = configName;
-		this.max = Files.CONFIG.getFile().getInt("Settings.Dust." + configName + ".PercentRange.Max");
-		if(!Files.CONFIG.getFile().contains("Settings.Dust." + configName + ".PercentRange.Min")) {
-			this.min = max;
-		}else {
-			this.min = Files.CONFIG.getFile().getInt("Settings.Dust." + configName + ".PercentRange.Min");
-		}
+		this.max = Files.CONFIG.getFile().getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
+		this.min = Files.CONFIG.getFile().getInt("Settings.Dust." + configName + ".PercentRange.Min", max);
 	}
 	
 	public static void loadDust() {
@@ -61,15 +57,11 @@ public enum Dust {
 	}
 	
 	public ItemStack getDust() {
-		return dust.get(this)
-		.addLorePlaceholder("%Percent%", Methods.percentPick(max, min))
-		.build();
+		return getDust(1);
 	}
 	
 	public ItemStack getDust(int amount) {
-		return dust.get(this)
-		.addLorePlaceholder("%Percent%", Methods.percentPick(max, min))
-		.setAmount(amount).build();
+		return getDust(Methods.percentPick(max, min), amount);
 	}
 	
 	public ItemStack getDust(int percent, int amount) {
