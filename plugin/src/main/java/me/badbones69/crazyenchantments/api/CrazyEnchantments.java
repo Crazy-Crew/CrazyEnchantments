@@ -11,6 +11,7 @@ import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
+import me.badbones69.crazyenchantments.controllers.ScrollControl;
 import me.badbones69.crazyenchantments.multisupport.NMSSupport;
 import me.badbones69.crazyenchantments.multisupport.NMS_v1_12_2_Down;
 import me.badbones69.crazyenchantments.multisupport.NMS_v1_13_Up;
@@ -207,6 +208,8 @@ public class CrazyEnchantments {
 		ProtectionCrystal.loadProtectionCrystal();
 		//Loads the scrambler
 		Scrambler.loadScrambler();
+		//Loads the Scroll Control settings
+		ScrollControl.loadScrollControl();
 		if(SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
 			worldGuardVersion = version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
 		}
