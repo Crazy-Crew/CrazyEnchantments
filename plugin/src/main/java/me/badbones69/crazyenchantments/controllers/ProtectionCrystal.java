@@ -99,7 +99,7 @@ public class ProtectionCrystal implements Listener {
 				//The item getting protected is not stacked.
 				if(item.getAmount() == 1) {
 					//Making sure they are not dropping crystals on top of other crystals.
-					if(!getCrystals().isSimilar(item)) {
+					if(!getCrystals().isSimilar(item) && crystal.isSimilar(getCrystals())) {
 						//The item does not have protection on it.
 						if(!isProtected(item)) {
 							//The crystal is not stacked.
