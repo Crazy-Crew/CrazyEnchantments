@@ -104,8 +104,8 @@ public class ScrollControl implements Listener {
 								}
 							}
 							CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
-							e.setCurrentItem(ce.removeEnchantment(item, enchantment));
 							player.getInventory().addItem(new CEBook(enchantment, ce.getLevel(item, enchantment), 1).buildBook());
+							e.setCurrentItem(ce.removeEnchantment(item, enchantment));
 							player.updateInventory();
 						}
 					}
