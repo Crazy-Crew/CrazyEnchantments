@@ -2,6 +2,9 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Category {
 	
 	private String name;
@@ -19,6 +22,7 @@ public class Category {
 	private boolean useMaxLevel;
 	private int maxLevel;
 	private int minLevel;
+	private List<CEnchantment> enchantmentList;
 	
 	public Category(String name, int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency, int rarity, LostBook lostBook,
 	int maxSuccessRate, int minSuccessRate, int maxDestroyRate, int minDestroyRate, boolean useMaxLevel, int maxLevel, int minLevel) {
@@ -37,6 +41,7 @@ public class Category {
 		this.useMaxLevel = useMaxLevel;
 		this.maxLevel = maxLevel;
 		this.minLevel = minLevel;
+		this.enchantmentList = new ArrayList<>();
 	}
 	
 	public String getName() {
@@ -97,6 +102,18 @@ public class Category {
 	
 	public int getMinLevel() {
 		return minLevel;
+	}
+	
+	public List<CEnchantment> getEnchantmentList() {
+		return enchantmentList;
+	}
+	
+	public void addEnchantment(CEnchantment enchantment) {
+		enchantmentList.add(enchantment);
+	}
+	
+	public void removeEnchantment(CEnchantment enchantment) {
+		enchantmentList.remove(enchantment);
 	}
 	
 }

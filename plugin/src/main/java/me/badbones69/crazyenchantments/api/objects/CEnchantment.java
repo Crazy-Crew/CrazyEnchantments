@@ -196,6 +196,9 @@ public class CEnchantment {
 		if(enchantmentType != null) {
 			enchantmentType.addEnchantment(instance);
 		}
+		for(Category category : categories) {
+			category.addEnchantment(instance);
+		}
 	}
 	
 	public void unregisterEnchantment() {
@@ -204,6 +207,9 @@ public class CEnchantment {
 		ce.unregisterEnchantment(instance);
 		if(enchantmentType != null) {
 			enchantmentType.removeEnchantment(instance);
+		}
+		for(Category category : categories) {
+			category.removeEnchantment(instance);
 		}
 	}
 	
