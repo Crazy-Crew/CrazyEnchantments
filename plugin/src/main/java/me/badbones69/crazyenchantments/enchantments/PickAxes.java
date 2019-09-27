@@ -122,6 +122,19 @@ public class PickAxes implements Listener {
 												}
 											}.runTask(ce.getPlugin());
 										}else { //If the user is in survival mode.
+											if(block.getLocation().equals(originalBlockLocation)) {
+												//This is to check if the original block the player broke was in the block list.
+												//If it is not then it should be broken and dropped on the ground.
+												if(!ce.getBlockList().contains(block.getType())) {
+													new BukkitRunnable() {
+														@Override
+														public void run() {
+															block.breakNaturally();
+														}
+													}.runTask(ce.getPlugin());
+													continue;
+												}
+											}
 											boolean toggle = true; //True means its air and false means it breaks normally.
 											if(hasTelepathy) {
 												for(ItemStack drop : block.getDrops()) {
