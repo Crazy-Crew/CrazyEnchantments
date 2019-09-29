@@ -17,10 +17,12 @@
     </modules>
 
     <repositories>
+        <!--Spigot-->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <!--World Edit/Guard-->
         <repository>
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
@@ -54,6 +56,7 @@
             <id>md_5-releases</id>
             <url>https://repo.md-5.net/content/repositories/releases/</url>
         </repository>
+        <!--PlotSquared-->
         <repository>
             <id>p2-repo</id>
             <url>http://ci.athion.net/job/PlotSquared-Breaking/ws/mvn/</url>

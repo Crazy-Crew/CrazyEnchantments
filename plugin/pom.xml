@@ -108,11 +108,13 @@
             <groupId>com.wasteofplastic</groupId>
             <artifactId>askyblock</artifactId>
             <version>3.0.8.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.wasteofplastic</groupId>
             <artifactId>acidisland</artifactId>
             <version>3.0.8.2</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.kingdoms.main</groupId>
@@ -160,6 +162,7 @@
             <groupId>de.janmm14</groupId>
             <artifactId>aac-api</artifactId>
             <version>3.3.12</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.generallib.main</groupId>

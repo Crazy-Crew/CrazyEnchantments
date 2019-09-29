@@ -30,6 +30,7 @@
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-legacy</artifactId>
             <version>6.2</version>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>com.sk89q</groupId>
@@ -57,6 +58,7 @@
             <groupId>com.plotsquared</groupId>
             <artifactId>plotsquared-api</artifactId>
             <version>latest</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
