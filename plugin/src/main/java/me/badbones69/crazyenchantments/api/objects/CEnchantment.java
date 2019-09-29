@@ -161,7 +161,9 @@ public class CEnchantment {
 	}
 	
 	public CEnchantment addCategory(Category category) {
-		this.categories.add(category);
+		if(category != null) {
+			this.categories.add(category);
+		}
 		return this;
 	}
 	
@@ -170,8 +172,11 @@ public class CEnchantment {
 	}
 	
 	public CEnchantment setCategories(List<String> categories) {
-		for(String category : categories) {
-			this.categories.add(ce.getCategory(category));
+		for(String categoryString : categories) {
+			Category category = ce.getCategory(categoryString);
+			if(category != null) {
+				this.categories.add(category);
+			}
 		}
 		return this;
 	}
