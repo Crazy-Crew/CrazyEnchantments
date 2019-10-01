@@ -290,7 +290,7 @@ public class CECommand implements CommandExecutor {
 						return true;
 					}
 					HashMap<String, String> placeholders = new HashMap<>();
-					placeholders.put("%Category%", category.getName());
+					placeholders.put("%Category%", args[1]);
 					sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
 					return true;
 				}
