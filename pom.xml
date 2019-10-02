@@ -16,6 +16,12 @@
         <module>v1_13_up</module>
     </modules>
 
+    <properties>
+        <!--This is used to show the build number for jenkins.-->
+        <build.number/>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <repositories>
         <!--Spigot-->
         <repository>
@@ -66,10 +72,6 @@
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
     </repositories>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <build>
         <defaultGoal>clean package install</defaultGoal>
