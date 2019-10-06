@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -71,6 +72,7 @@ public class Bows implements Listener {
 										if(e.getProjectile().getFireTicks() > 0) {
 											spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
 										}
+										spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
 									}
 								}
 							}else {
@@ -86,6 +88,7 @@ public class Bows implements Listener {
 									if(e.getProjectile().getFireTicks() > 0) {
 										spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
 									}
+									spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
 								}
 							}
 						}
