@@ -164,6 +164,7 @@ public class ShopControl implements Listener {
 									case GKITZ:
 										if(!Methods.hasPermission(player, "gkitz", true)) return;
 										GKitzController.openGUI(player);
+										break;
 									case BLACKSMITH:
 										if(!Methods.hasPermission(player, "blacksmith", true)) return;
 										BlackSmith.openBlackSmith(player);
