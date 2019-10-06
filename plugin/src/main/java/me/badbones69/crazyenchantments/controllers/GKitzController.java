@@ -99,15 +99,8 @@ public class GKitzController implements Listener {
 				if(e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
 					e.setCancelled(true);
 					if(e.getRawSlot() < inv.getSize()) {
-						if(item != null) {
-							if(item.hasItemMeta()) {
-								if(item.getItemMeta().hasDisplayName()) {
-									String name = item.getItemMeta().getDisplayName();
-									if(name.equals(Methods.color(msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")))) {
-										openGUI(player);
-									}
-								}
-							}
+						if(item != null && item.isSimilar(infoManager.getBackRightButton())) {
+							openGUI(player);
 						}
 					}
 				}
@@ -127,12 +120,12 @@ public class GKitzController implements Listener {
 											for(int size = items.size(); size >= 9; size -= 9) {
 												slots += 9;
 											}
-											Inventory in = Bukkit.createInventory(null, slots, name);
-											for(ItemStack it : items) {
-												in.addItem(it);
+											Inventory inventory = Bukkit.createInventory(null, slots, name);
+											for(ItemStack itemStack : items) {
+												inventory.addItem(itemStack);
 											}
-											in.setItem(slots - 1, new ItemBuilder().setMaterial(Material.PRISMARINE_CRYSTALS).setName(msg.getString("Messages.InfoGUI.Categories-Info.Back.Right")).build());
-											player.openInventory(in);
+											inventory.setItem(slots - 1, infoManager.getBackRightButton());
+											player.openInventory(inventory);
 										}else {
 											HashMap<String, String> placeholders = new HashMap<>();
 											placeholders.put("%Kit%", kit.getName());
