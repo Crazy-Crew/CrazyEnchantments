@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.Methods;
+import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.ArmorType;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
@@ -24,6 +25,7 @@ public class CEPlayer {
 	private boolean hasRage;
 	private int rageLevel;
 	private BukkitTask rageTask;
+	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	/**
 	 * Used to make a new CEPlayer.
@@ -121,7 +123,7 @@ public class CEPlayer {
 	 * @param kit The gkit you wish to give them.
 	 */
 	public void giveGKit(GKitz kit) {
-		for(ItemStack item : kit.getItems()) {
+		for(ItemStack item : kit.getKitItems()) {
 			if(kit.canAutoEquipt()) {
 				if(item.getType().toString().toLowerCase().contains("helmet")) {
 					if(player.getEquipment().getHelmet() == null || player.getEquipment().getHelmet().getType() == Material.AIR) {

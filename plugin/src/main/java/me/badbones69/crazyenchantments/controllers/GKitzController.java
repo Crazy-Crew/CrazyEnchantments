@@ -33,35 +33,17 @@ public class GKitzController implements Listener {
 	public static void openGUI(Player player) {
 		FileConfiguration gkitz = Files.GKITZ.getFile();
 		Inventory inventory = Bukkit.createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
-		if(gkitz.contains("Settings.GUI-Customization")) {
-			for(String custom : gkitz.getStringList("Settings.GUI-Customization")) {
-				String name = "";
-				String item = "1";
-				int slot = 0;
-				ArrayList<String> lore = new ArrayList<>();
-				String[] b = custom.split(", ");
-				for(String i : b) {
-					if(i.contains("Item:")) {
-						i = i.replace("Item:", "");
-						item = i;
-					}
-					if(i.contains("Name:")) {
-						i = i.replace("Name:", "");
-						name = i;
-					}
-					if(i.contains("Slot:")) {
-						i = i.replace("Slot:", "");
-						slot = Integer.parseInt(i);
-					}
-					if(i.contains("Lore:")) {
-						i = i.replace("Lore:", "");
-						String[] d = i.split(",");
-						lore.addAll(Arrays.asList(d));
-					}
+		for(String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
+			int slot = 0;
+			for(String option : customItemString.split(", ")) {
+				if(option.contains("Slot:")) {
+					option = option.replace("Slot:", "");
+					slot = Integer.parseInt(option);
+					break;
 				}
-				slot--;
-				inventory.setItem(slot, new ItemBuilder().setMaterial(item).setName(name).setLore(lore).build());
 			}
+			slot--;
+			inventory.setItem(slot, ItemBuilder.convertString(customItemString).build());
 		}
 		CEPlayer cePlayer = ce.getCEPlayer(player);
 		for(GKitz kit : ce.getGKitz()) {

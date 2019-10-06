@@ -208,7 +208,7 @@ public class CrazyEnchantments {
 				List<String> itemStrings = gkit.getStringList("GKitz." + kit + ".Items");
 				List<ItemStack> previewItems = getInfoGKit(itemStrings);
 				previewItems.addAll(getInfoGKit(gkit.getStringList("GKitz." + kit + ".Fake-Items")));
-				gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, getKitItems(itemStrings), itemStrings, autoEquip));
+				gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, itemStrings, autoEquip));
 			}
 		}
 		//Loads the scrolls
@@ -1365,132 +1365,37 @@ public class CrazyEnchantments {
 		players.remove(player);
 	}
 	
-	/**
-	 * Reloads the gkit items.
-	 * @param itemStrings The items as a string.
-	 * @return A list of all the ItemStacks.
-	 */
-	private List<ItemStack> getKitItems(List<String> itemStrings) {
-		List<ItemStack> items = new ArrayList<>();
-		for(String itemString : itemStrings) {
-			GKitzItem item = new GKitzItem();
-			for(String option : itemString.split(", ")) {
-				if(option.startsWith("Item:")) {
-					item.setItem(option.replace("Item:", ""));
-				}else if(option.startsWith("Amount:")) {
-					if(Methods.isInt(option.replace("Amount:", ""))) {
-						item.setAmount(Integer.parseInt(option.replace("Amount:", "")));
-					}
-				}else if(option.startsWith("Name:")) {
-					item.setName(option.replace("Name:", ""));
-				}else if(option.startsWith("Lore:")) {
-					option = option.replace("Lore:", "");
-					ArrayList<String> lore = new ArrayList<>();
-					if(option.contains(",")) {
-						for(String line : option.split(",")) {
-							lore.add(line.replaceAll("%comma%", ","));
-						}
-					}else {
-						lore.add(option);
-					}
-					item.setLore(lore);
-				}else if(option.startsWith("Player:")) {
-					item.setPlayer(option.replace("Player:", ""));
-				}else if(option.startsWith("Unbreakable-Item:")) {
-					if(option.replaceAll("Unbreakable-Item:", "").equalsIgnoreCase("true")) {
-						item.setUnbreakable(true);
-					}
-				}else {
-					Enchantment enchantment = Methods.getEnchantment(option.split(":")[0]);
-					if(enchantment != null) {
-						String level = option.split(":")[1];
-						if(level.contains("-")) {
-							int randomLevel = pickLevel(Integer.parseInt(option.split(":")[1].split("-")[0]),
-							Integer.parseInt(option.split(":")[1].split("-")[1]));
-							if(randomLevel > 0) {
-								item.addEnchantment(enchantment, randomLevel);
-							}
-						}else {
-							item.addEnchantment(enchantment, Integer.parseInt(option.split(":")[1]));
-						}
-					}
-					for(CEnchantment en : registeredEnchantments) {
-						if(option.split(":")[0].equalsIgnoreCase(en.getName()) ||
-						option.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
-							String level = option.split(":")[1];
-							if(level.contains("-")) {
-								int randomLevel = pickLevel(Integer.parseInt(option.split(":")[1].split("-")[0]),
-								Integer.parseInt(option.split(":")[1].split("-")[1]));
-								if(randomLevel > 0) {
-									item.addCEEnchantment(en, randomLevel);
-								}
-							}else {
-								item.addCEEnchantment(en, Integer.parseInt(option.split(":")[1]));
-							}
-							break;
-						}
-					}
-				}
-			}
-			items.add(item.build());
-		}
-		return items;
-	}
-	
 	private List<ItemStack> getInfoGKit(List<String> itemStrings) {
 		List<ItemStack> items = new ArrayList<>();
-		for(String item : itemStrings) {
-			String type = "";
-			int amount = 0;
-			String name = "";
+		for(String itemString : itemStrings) {
+			ItemBuilder itemBuilder = ItemBuilder.convertString(itemString);
 			List<String> lore = new ArrayList<>();
 			List<String> customEnchantments = new ArrayList<>();
 			HashMap<Enchantment, Integer> enchantments = new HashMap<>();
-			for(String sub : item.split(", ")) {
-				if(sub.startsWith("Item:")) {
-					sub = sub.replace("Item:", "");
-					type = sub;
-				}else if(sub.startsWith("Amount:")) {
-					sub = sub.replace("Amount:", "");
-					if(Methods.isInt(sub)) {
-						amount = Integer.parseInt(sub);
-					}
-				}else if(sub.startsWith("Name:")) {
-					sub = sub.replaceAll("Name:", "");
-					name = sub;
-				}else if(sub.startsWith("Lore:")) {
-					sub = sub.replace("Lore:", "");
-					if(sub.contains(",")) {
-						lore.addAll(Arrays.asList(sub.split(",")));
-					}else {
-						lore.add(sub);
-					}
-				}else {
-					Enchantment enchantment = Methods.getEnchantment(sub.split(":")[0]);
+			for(String option : itemString.split(", ")) {
+				try {
+					Enchantment enchantment = Methods.getEnchantment(option.split(":")[0]);
+					CEnchantment cEnchantment = getEnchantmentFromName(option.split(":")[0]);
+					String level = option.split(":")[1];
 					if(enchantment != null) {
-						String level = sub.split(":")[1];
 						if(level.contains("-")) {
-							customEnchantments.add("&7" + sub.split(":")[0] + " " + level);
+							customEnchantments.add("&7" + option.split(":")[0] + " " + level);
 						}else {
 							enchantments.put(enchantment, Integer.parseInt(level));
 						}
+					}else if(cEnchantment != null) {
+						customEnchantments.add(cEnchantment.getColor() + cEnchantment.getCustomName() + " " + level);
 					}
-					for(CEnchantment en : registeredEnchantments) {
-						if(sub.split(":")[0].equalsIgnoreCase(en.getName()) ||
-						sub.split(":")[0].equalsIgnoreCase(en.getCustomName())) {
-							customEnchantments.add(en.getColor() + en.getCustomName() + " " + sub.split(":")[1]);
-							break;
-						}
-					}
+				}catch(Exception ignore) {
 				}
 			}
 			lore.addAll(0, customEnchantments);
-			items.add(new ItemBuilder().setMaterial(type).setAmount(amount).setName(name).setLore(lore).setEnchantments(enchantments).build());
+			items.add(itemBuilder.setLore(lore).setEnchantments(enchantments).build());
 		}
 		return items;
 	}
 	
-	private int pickLevel(int min, int max) {
+	public int pickLevel(int min, int max) {
 		return min + random.nextInt((max + 1) - min);
 	}
 	

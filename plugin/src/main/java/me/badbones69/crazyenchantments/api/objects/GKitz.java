@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GKitz {
@@ -13,7 +14,6 @@ public class GKitz {
 	private boolean autoEquip;
 	private ItemStack displayItem;
 	private List<String> commands;
-	private List<ItemStack> items;
 	private List<ItemStack> preview;
 	private List<String> itemStrings;
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
@@ -26,15 +26,13 @@ public class GKitz {
 	 * @param displayItem The display item that will be in the GUI.
 	 * @param preview The preview items.
 	 * @param commands The commands that will be run.
-	 * @param items The items that will be given.
 	 * @param itemStrings The items as a string.
 	 * @param autoEquip This is if the armor equips when given.
 	 */
 	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, List<ItemStack> preview,
-	List<String> commands, List<ItemStack> items, List<String> itemStrings, boolean autoEquip) {
+	List<String> commands, List<String> itemStrings, boolean autoEquip) {
 		this.name = name;
 		this.slot = slot;
-		this.items = items;
 		this.preview = preview;
 		this.cooldown = cooldown;
 		this.commands = commands;
@@ -67,16 +65,42 @@ public class GKitz {
 		return this.commands;
 	}
 	
-	public List<ItemStack> getItems() {
-		return this.items;
-	}
-	
 	public List<String> getItemStrings() {
 		return this.itemStrings;
 	}
 	
 	public boolean canAutoEquipt() {
 		return this.autoEquip;
+	}
+	
+	/**
+	 * Get the items for the GKit. Needs to be done as it has to get random levels each time.
+	 * @return A list of all the ItemStacks.
+	 */
+	public List<ItemStack> getKitItems() {
+		List<ItemStack> items = new ArrayList<>();
+		for(String itemString : itemStrings) {
+			GKitzItem item = new GKitzItem(ItemBuilder.convertString(itemString));
+			for(String option : itemString.split(", ")) {
+				try {
+					CEnchantment enchantment = ce.getEnchantmentFromName(option.split(":")[0]);
+					String level = option.split(":")[1];
+					if(enchantment != null) {
+						if(level.contains("-")) {
+							int randomLevel = ce.pickLevel(Integer.parseInt(level.split("-")[0]), Integer.parseInt(level.split("-")[1]));
+							if(randomLevel > 0) {
+								item.addCEEnchantment(enchantment, randomLevel);
+							}
+						}else {
+							item.addCEEnchantment(enchantment, Integer.parseInt(level));
+						}
+					}
+				}catch(Exception ignore) {
+				}
+			}
+			items.add(item.build());
+		}
+		return items;
 	}
 	
 }

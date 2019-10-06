@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ShopManager {
@@ -38,30 +37,17 @@ public class ShopManager {
 		inventoryName = Methods.color(config.getString("Settings.InvName"));
 		inventorySize = config.getInt("Settings.GUISize");
 		enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
-		for(String custom : config.getStringList("Settings.GUICustomization")) {
-			ItemBuilder itemBuilder = new ItemBuilder();
+		for(String customItemString : config.getStringList("Settings.GUICustomization")) {
 			int slot = 0;
-			String[] b = custom.split(", ");
-			for(String i : b) {
-				if(i.contains("Item:")) {
-					itemBuilder.setMaterial(i.replace("Item:", ""));
+			for(String option : customItemString.split(", ")) {
+				if(option.contains("Slot:")) {
+					option = option.replace("Slot:", "");
+					slot = Integer.parseInt(option);
+					break;
 				}
-				if(i.contains("Name:")) {
-					i = i.replace("Name:", "");
-					itemBuilder.setName(i);
-				}
-				if(i.contains("Slot:")) {
-					slot = Integer.parseInt(i.replace("Slot:", ""));
-				}
-				if(i.contains("Lore:")) {
-					itemBuilder.setLore(Arrays.asList(i.replace("Lore:", "").split(",")));
-				}
-			}
-			if(slot > inventorySize || slot <= 0) {
-				continue;
 			}
 			slot--;
-			customizerItems.put(itemBuilder, slot);
+			customizerItems.put(ItemBuilder.convertString(customItemString), slot);
 		}
 		for(Category category : ce.getCategories()) {
 			if(category.isInGUI()) {
