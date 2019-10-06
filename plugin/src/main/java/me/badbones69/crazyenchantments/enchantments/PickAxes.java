@@ -539,8 +539,8 @@ public class PickAxes implements Listener {
 		return dropItem.build();
 	}
 	
-	private ArrayList<Material> getItems() {
-		ArrayList<Material> items = new ArrayList<>();
+	private List<Material> getItems() {
+		List<Material> items = new ArrayList<>();
 		items.add(Material.COAL_ORE);
 		items.add(Material.QUARTZ);
 		items.add(Material.DIAMOND_ORE);

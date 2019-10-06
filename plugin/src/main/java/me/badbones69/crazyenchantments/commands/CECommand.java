@@ -102,7 +102,7 @@ public class CECommand implements CommandExecutor {
 				if(!Methods.hasPermission(sender, "debug", true)) {
 					return true;
 				}
-				ArrayList<String> brokenEnchantments = new ArrayList<>();
+				List<String> brokenEnchantments = new ArrayList<>();
 				for(CEnchantments enchantment : CEnchantments.values()) {
 					if(!Files.ENCHANTMENTS.getFile().contains("Enchantments." + enchantment.getName())) {
 						brokenEnchantments.add(enchantment.getName());
@@ -132,7 +132,7 @@ public class CECommand implements CommandExecutor {
 				if(!Methods.hasPermission(sender, "fix", true)) {
 					return true;
 				}
-				ArrayList<CEnchantments> brokenEnchantments = new ArrayList<>();
+				List<CEnchantments> brokenEnchantments = new ArrayList<>();
 				YamlFile file = Files.ENCHANTMENTS.getFile();
 				for(CEnchantments enchantment : CEnchantments.values()) {
 					if(!file.contains("Enchantments." + enchantment.getName())) {

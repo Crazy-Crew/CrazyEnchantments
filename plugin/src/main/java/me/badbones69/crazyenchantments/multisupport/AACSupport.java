@@ -9,11 +9,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class AACSupport implements Listener {
 	
-	private static ArrayList<UUID> exempted = new ArrayList<>();
+	private static List<UUID> exempted = new ArrayList<>();
 	private static Plugin plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 	
 	public static void exemptPlayer(Player player) {

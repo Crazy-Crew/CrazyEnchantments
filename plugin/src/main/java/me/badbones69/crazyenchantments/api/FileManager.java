@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -25,8 +26,8 @@ public class FileManager {
 	private String prefix = "";
 	private boolean log = false;
 	private HashMap<Files, File> files = new HashMap<>();
-	private ArrayList<String> homeFolders = new ArrayList<>();
-	private ArrayList<CustomFile> customFiles = new ArrayList<>();
+	private List<String> homeFolders = new ArrayList<>();
+	private List<CustomFile> customFiles = new ArrayList<>();
 	private HashMap<String, String> autoGenerateFiles = new HashMap<>();
 	private HashMap<Files, YamlFile> configurations = new HashMap<>();
 	

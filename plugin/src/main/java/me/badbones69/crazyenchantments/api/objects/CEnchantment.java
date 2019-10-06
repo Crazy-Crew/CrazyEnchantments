@@ -152,7 +152,7 @@ public class CEnchantment {
 	}
 	
 	public CEnchantment setInfoDescription(List<String> infoDescription) {
-		ArrayList<String> info = new ArrayList<>();
+		List<String> info = new ArrayList<>();
 		for(String i : infoDescription) {
 			info.add(Methods.color(i));
 		}

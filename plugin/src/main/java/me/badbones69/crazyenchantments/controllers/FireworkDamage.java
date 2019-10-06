@@ -9,17 +9,18 @@ import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FireworkDamage implements Listener {
 	
-	private static ArrayList<Entity> fireworks = new ArrayList<>();
+	private static List<Entity> fireworks = new ArrayList<>();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	/**
 	 *
 	 * @return All the active fireworks.
 	 */
-	public static ArrayList<Entity> getFireworks() {
+	public static List<Entity> getFireworks() {
 		return fireworks;
 	}
 	

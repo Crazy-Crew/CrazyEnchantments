@@ -20,11 +20,12 @@ import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class ProtectionCrystal implements Listener {
 	
-	private HashMap<UUID, ArrayList<ItemStack>> playersItems = new HashMap<>();
+	private HashMap<UUID, List<ItemStack>> playersItems = new HashMap<>();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private static ItemBuilder crystal;
 	private static String protectionString;
@@ -121,8 +122,8 @@ public class ProtectionCrystal implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		Player player = e.getEntity();
-		ArrayList<ItemStack> savedItems = new ArrayList<>();
-		ArrayList<ItemStack> droppedItems = new ArrayList<>();
+		List<ItemStack> savedItems = new ArrayList<>();
+		List<ItemStack> droppedItems = new ArrayList<>();
 		for(ItemStack item : e.getDrops()) {
 			if(item != null) {
 				if(isProtected(item)) {

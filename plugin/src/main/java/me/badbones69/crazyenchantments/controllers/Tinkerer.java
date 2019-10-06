@@ -35,7 +35,7 @@ public class Tinkerer implements Listener {
 	public static void openTinker(Player player) {
 		Inventory inv = Bukkit.createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
 		inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(Files.TINKER.getFile().getString("Settings.TradeButton")).build());
-		ArrayList<Integer> slots = new ArrayList<>();
+		List<Integer> slots = new ArrayList<>();
 		slots.add(4);
 		slots.add(13);
 		slots.add(22);

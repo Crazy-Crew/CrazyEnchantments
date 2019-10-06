@@ -232,7 +232,7 @@ public class DustControl implements Listener {
 						if(config.contains("Settings.Dust.MysteryDust.Firework.Toggle")) {
 							if(config.contains("Settings.Dust.MysteryDust.Firework.Colors")) {
 								if(config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")) {
-									ArrayList<Color> colors = new ArrayList<>();
+									List<Color> colors = new ArrayList<>();
 									String Cs = config.getString("Settings.Dust.MysteryDust.Firework.Colors");
 									if(Cs.contains(", ")) {
 										for(String color : Cs.split(", ")) {

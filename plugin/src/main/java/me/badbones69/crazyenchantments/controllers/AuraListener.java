@@ -32,7 +32,7 @@ public class AuraListener implements Listener {
 		if(!e.isCancelled()) {
 			if((e.getFrom().getBlockX() != e.getTo().getBlockX()) || (e.getFrom().getBlockY() != e.getTo().getBlockY()) || (e.getFrom().getBlockZ() != e.getTo().getBlockZ())) {
 				Player player = e.getPlayer();
-				ArrayList<Player> players = getNearByPlayers(player, 3);
+				List<Player> players = getNearByPlayers(player, 3);
 				for(ItemStack item : player.getEquipment().getArmorContents()) {//The player that moves.
 					List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
 					if(!enchantments.isEmpty()) {
@@ -61,8 +61,8 @@ public class AuraListener implements Listener {
 		}
 	}
 	
-	private ArrayList<Player> getNearByPlayers(Player player, int radius) {
-		ArrayList<Player> players = new ArrayList<>();
+	private List<Player> getNearByPlayers(Player player, int radius) {
+		List<Player> players = new ArrayList<>();
 		for(Entity entity : player.getNearbyEntities(radius, radius, radius)) {
 			if(entity instanceof Player) {
 				if(entity != player) {

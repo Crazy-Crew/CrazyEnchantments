@@ -12,13 +12,14 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class CEPlayer {
 	
 	private int souls;
 	private Player player;
 	private boolean soulsActive;
-	private ArrayList<Cooldown> cooldowns;
+	private List<Cooldown> cooldowns;
 	private Double rageMultiplier;
 	private boolean hasRage;
 	private int rageLevel;
@@ -31,7 +32,7 @@ public class CEPlayer {
 	 * @param soulsActive If the soul uses is active.
 	 * @param cooldowns The cooldowns the player has.
 	 */
-	public CEPlayer(Player player, int souls, boolean soulsActive, ArrayList<Cooldown> cooldowns) {
+	public CEPlayer(Player player, int souls, boolean soulsActive, List<Cooldown> cooldowns) {
 		this.souls = souls;
 		this.player = player;
 		this.cooldowns = cooldowns;
@@ -207,7 +208,7 @@ public class CEPlayer {
 	 * Get all the cooldowns the player has.
 	 * @return The cooldowns the player has.
 	 */
-	public ArrayList<Cooldown> getCooldowns() {
+	public List<Cooldown> getCooldowns() {
 		return this.cooldowns;
 	}
 	
@@ -230,7 +231,7 @@ public class CEPlayer {
 	 * @param cooldown The cooldown you are adding.
 	 */
 	public void addCooldown(Cooldown cooldown) {
-		ArrayList<Cooldown> cooldowns = new ArrayList<>();
+		List<Cooldown> cooldowns = new ArrayList<>();
 		for(Cooldown c : getCooldowns()) {
 			if(c.getGKitz().getName().equalsIgnoreCase(cooldown.getGKitz().getName())) {
 				cooldowns.add(c);
@@ -276,7 +277,7 @@ public class CEPlayer {
 	 * @param kit The gkit cooldown you want to remove.
 	 */
 	public void removeCooldown(GKitz kit) {
-		ArrayList<Cooldown> cooldowns = new ArrayList<>();
+		List<Cooldown> cooldowns = new ArrayList<>();
 		for(Cooldown c : getCooldowns()) {
 			if(c.getGKitz().getName().equalsIgnoreCase(kit.getName())) {
 				cooldowns.add(c);

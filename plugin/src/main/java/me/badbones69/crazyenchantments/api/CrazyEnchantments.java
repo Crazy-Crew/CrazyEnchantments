@@ -64,14 +64,14 @@ public class CrazyEnchantments {
 	private ShopManager shopManager;
 	private WorldGuardVersion worldGuardVersion;
 	private PlotSquaredVersion plotSquaredVersion;
-	private ArrayList<Category> categories = new ArrayList<>();
-	private ArrayList<GKitz> gkitz = new ArrayList<>();
-	private ArrayList<CEPlayer> players = new ArrayList<>();
-	private ArrayList<String> whitelisted = new ArrayList<>();
-	private ArrayList<String> blacklisted = new ArrayList<>();
-	private ArrayList<Material> blockList = new ArrayList<>();
-	private ArrayList<BlockBreakEvent> skipBreakEvents = new ArrayList<>();
-	private ArrayList<CEnchantment> registeredEnchantments = new ArrayList<>();
+	private List<Category> categories = new ArrayList<>();
+	private List<GKitz> gkitz = new ArrayList<>();
+	private List<CEPlayer> players = new ArrayList<>();
+	private List<String> whitelisted = new ArrayList<>();
+	private List<String> blacklisted = new ArrayList<>();
+	private List<Material> blockList = new ArrayList<>();
+	private List<BlockBreakEvent> skipBreakEvents = new ArrayList<>();
+	private List<CEnchantment> registeredEnchantments = new ArrayList<>();
 	private FileManager fileManager = FileManager.getInstance();
 	
 	public static CrazyEnchantments getInstance() {
@@ -204,10 +204,10 @@ public class CrazyEnchantments {
 				.setLore(gkit.getStringList("GKitz." + kit + ".Display.Lore"))
 				.setGlowing(gkit.getBoolean("GKitz." + kit + ".Display.Glowing")).build());
 				displayItem.setString("gkit", kit);
-				ArrayList<String> commands = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Commands");
-				ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
-				ArrayList<ItemStack> previewItems = getInfoGKit(itemStrings);
-				previewItems.addAll(getInfoGKit((ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Fake-Items")));
+				List<String> commands = gkit.getStringList("GKitz." + kit + ".Commands");
+				List<String> itemStrings = gkit.getStringList("GKitz." + kit + ".Items");
+				List<ItemStack> previewItems = getInfoGKit(itemStrings);
+				previewItems.addAll(getInfoGKit(gkit.getStringList("GKitz." + kit + ".Fake-Items")));
 				gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, getKitItems(itemStrings), itemStrings, autoEquip));
 			}
 		}
@@ -250,7 +250,7 @@ public class CrazyEnchantments {
 				isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
 			}
 		}
-		ArrayList<Cooldown> cooldowns = new ArrayList<>();
+		List<Cooldown> cooldowns = new ArrayList<>();
 		for(GKitz kit : getGKitz()) {
 			if(data.contains("Players." + uuid + ".GKitz." + kit.getName())) {
 				Calendar cooldown = Calendar.getInstance();
@@ -427,7 +427,7 @@ public class CrazyEnchantments {
 	 * Get all loaded gkitz.
 	 * @return All of the loaded gkitz.
 	 */
-	public ArrayList<GKitz> getGKitz() {
+	public List<GKitz> getGKitz() {
 		return gkitz;
 	}
 	
@@ -465,14 +465,14 @@ public class CrazyEnchantments {
 	 * This gets all the CEPlayer's that are loaded.
 	 * @return All CEPlayer's that are loading and in a list.
 	 */
-	public ArrayList<CEPlayer> getCEPlayers() {
+	public List<CEPlayer> getCEPlayers() {
 		return players;
 	}
 	
 	/**
 	 * Get the list of all the whitelisted worlds for the Wings enchantment.
 	 */
-	public ArrayList<String> getWhitelistedWorlds() {
+	public List<String> getWhitelistedWorlds() {
 		return whitelisted;
 	}
 	
@@ -487,7 +487,7 @@ public class CrazyEnchantments {
 	/**
 	 * Get the list of all the blacklisted worlds for the Wings enchantment.
 	 */
-	public ArrayList<String> getBlacklistedWorlds() {
+	public List<String> getBlacklistedWorlds() {
 		return blacklisted;
 	}
 	
@@ -775,7 +775,7 @@ public class CrazyEnchantments {
 	 * Get all the current registered enchantments.
 	 * @return A list of all the registered enchantments in the plugin.
 	 */
-	public ArrayList<CEnchantment> getRegisteredEnchantments() {
+	public List<CEnchantment> getRegisteredEnchantments() {
 		return new ArrayList<>(registeredEnchantments);
 	}
 	
@@ -873,8 +873,8 @@ public class CrazyEnchantments {
 	 * @param item Item you want to get the enchantments from.
 	 * @return A list of enchantments the item has.
 	 */
-	public ArrayList<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
-		ArrayList<CEnchantment> enchantments = new ArrayList<>();
+	public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
+		List<CEnchantment> enchantments = new ArrayList<>();
 		if(item != null) {
 			if(item.hasItemMeta()) {
 				if(item.getItemMeta().hasLore()) {
@@ -956,7 +956,7 @@ public class CrazyEnchantments {
 	 */
 	public HashMap<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) {
 		HashMap<PotionEffectType, Integer> effects = new HashMap<>();
-		ArrayList<ItemStack> items = new ArrayList<>(Arrays.asList(player.getEquipment().getArmorContents()));
+		List<ItemStack> items = new ArrayList<>(Arrays.asList(player.getEquipment().getArmorContents()));
 		if(includedItem == null) {
 			includedItem = new ItemStack(Material.AIR);
 		}
@@ -1232,7 +1232,7 @@ public class CrazyEnchantments {
 	 *
 	 * @return The block list for blast.
 	 */
-	public ArrayList<Material> getBlockList() {
+	public List<Material> getBlockList() {
 		return blockList;
 	}
 	
@@ -1370,8 +1370,8 @@ public class CrazyEnchantments {
 	 * @param itemStrings The items as a string.
 	 * @return A list of all the ItemStacks.
 	 */
-	private ArrayList<ItemStack> getKitItems(ArrayList<String> itemStrings) {
-		ArrayList<ItemStack> items = new ArrayList<>();
+	private List<ItemStack> getKitItems(List<String> itemStrings) {
+		List<ItemStack> items = new ArrayList<>();
 		for(String itemString : itemStrings) {
 			GKitzItem item = new GKitzItem();
 			for(String option : itemString.split(", ")) {
@@ -1437,14 +1437,14 @@ public class CrazyEnchantments {
 		return items;
 	}
 	
-	private ArrayList<ItemStack> getInfoGKit(ArrayList<String> itemStrings) {
-		ArrayList<ItemStack> items = new ArrayList<>();
+	private List<ItemStack> getInfoGKit(List<String> itemStrings) {
+		List<ItemStack> items = new ArrayList<>();
 		for(String item : itemStrings) {
 			String type = "";
 			int amount = 0;
 			String name = "";
-			ArrayList<String> lore = new ArrayList<>();
-			ArrayList<String> customEnchantments = new ArrayList<>();
+			List<String> lore = new ArrayList<>();
+			List<String> customEnchantments = new ArrayList<>();
 			HashMap<Enchantment, Integer> enchantments = new HashMap<>();
 			for(String sub : item.split(", ")) {
 				if(sub.startsWith("Item:")) {

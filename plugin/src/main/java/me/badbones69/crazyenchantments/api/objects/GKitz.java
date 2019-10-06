@@ -3,7 +3,7 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class GKitz {
 	
@@ -12,10 +12,10 @@ public class GKitz {
 	private String cooldown;
 	private boolean autoEquip;
 	private ItemStack displayItem;
-	private ArrayList<String> commands;
-	private ArrayList<ItemStack> items;
-	private ArrayList<ItemStack> preview;
-	private ArrayList<String> itemStrings;
+	private List<String> commands;
+	private List<ItemStack> items;
+	private List<ItemStack> preview;
+	private List<String> itemStrings;
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
 	/**
@@ -30,8 +30,8 @@ public class GKitz {
 	 * @param itemStrings The items as a string.
 	 * @param autoEquip This is if the armor equips when given.
 	 */
-	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, ArrayList<ItemStack> preview,
-	ArrayList<String> commands, ArrayList<ItemStack> items, ArrayList<String> itemStrings, boolean autoEquip) {
+	public GKitz(String name, int slot, String cooldown, ItemStack displayItem, List<ItemStack> preview,
+	List<String> commands, List<ItemStack> items, List<String> itemStrings, boolean autoEquip) {
 		this.name = name;
 		this.slot = slot;
 		this.items = items;
@@ -59,19 +59,19 @@ public class GKitz {
 		return this.displayItem;
 	}
 	
-	public ArrayList<ItemStack> getPreviewItems() {
+	public List<ItemStack> getPreviewItems() {
 		return this.preview;
 	}
 	
-	public ArrayList<String> getCommands() {
+	public List<String> getCommands() {
 		return this.commands;
 	}
 	
-	public ArrayList<ItemStack> getItems() {
+	public List<ItemStack> getItems() {
 		return this.items;
 	}
 	
-	public ArrayList<String> getItemStrings() {
+	public List<String> getItemStrings() {
 		return this.itemStrings;
 	}
 	

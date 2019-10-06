@@ -33,16 +33,17 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class Armor implements Listener {
 	
-	private static HashMap<Player, ArrayList<LivingEntity>> mobs = new HashMap<>();
-	private ArrayList<Player> fall = new ArrayList<>();
+	private static HashMap<Player, List<LivingEntity>> mobs = new HashMap<>();
+	private List<Player> fall = new ArrayList<>();
 	private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
 	private HashMap<Player, Calendar> mobTimer = new HashMap<>();
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	
-	public static HashMap<Player, ArrayList<LivingEntity>> getAllies() {
+	public static HashMap<Player, List<LivingEntity>> getAllies() {
 		return mobs;
 	}
 	
@@ -523,7 +524,7 @@ public class Armor implements Listener {
 						Bukkit.getPluginManager().callEvent(event);
 						if(!event.isCancelled()) {
 							Methods.explode(player);
-							ArrayList<ItemStack> items = new ArrayList<>();
+							List<ItemStack> items = new ArrayList<>();
 							for(ItemStack drop : e.getDrops()) {
 								if(drop != null) {
 									if(ProtectionCrystal.isProtected(drop)) {
@@ -770,7 +771,7 @@ public class Armor implements Listener {
 			en.setCustomName(Methods.color("&6" + player.getName() + "'s " + en.getName()));
 			en.setCustomNameVisible(true);
 			if(!mobs.containsKey(player)) {
-				ArrayList<LivingEntity> E = new ArrayList<>();
+				List<LivingEntity> E = new ArrayList<>();
 				E.add(en);
 				mobs.put(player, E);
 			}else {

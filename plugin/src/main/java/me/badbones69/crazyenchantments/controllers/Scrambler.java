@@ -22,6 +22,7 @@ import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Scrambler implements Listener {
 	
@@ -146,8 +147,8 @@ public class Scrambler implements Listener {
 		}.runTaskTimer(ce.getPlugin(), 1, 1));
 	}
 	
-	private static ArrayList<Integer> slowSpin() {
-		ArrayList<Integer> slow = new ArrayList<>();
+	private static List<Integer> slowSpin() {
+		List<Integer> slow = new ArrayList<>();
 		int full = 120;
 		int cut = 15;
 		for(int i = 120; cut > 0; full--) {
@@ -161,7 +162,7 @@ public class Scrambler implements Listener {
 	}
 	
 	private static void moveItems(Inventory inv, Player player, ItemStack book) {
-		ArrayList<ItemStack> items = new ArrayList<>();
+		List<ItemStack> items = new ArrayList<>();
 		for(int slot = 9; slot > 8 && slot < 17; slot++) {
 			items.add(inv.getItem(slot));
 		}

@@ -6,7 +6,6 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EnchantedArrow {
@@ -18,7 +17,7 @@ public class EnchantedArrow {
 	private Entity shooter;
 	private List<CEnchantment> enchantments;
 	
-	public EnchantedArrow(Arrow arrow, Entity shooter, ItemStack bow, ArrayList<CEnchantment> enchantments) {
+	public EnchantedArrow(Arrow arrow, Entity shooter, ItemStack bow, List<CEnchantment> enchantments) {
 		this.bow = bow;
 		this.arrow = arrow;
 		this.shooter = shooter;

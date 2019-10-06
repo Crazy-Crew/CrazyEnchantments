@@ -22,7 +22,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -107,7 +106,7 @@ public class GKitzController implements Listener {
 					if(nbtItem.hasKey("gkit")) {
 						GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
 						if(e.getAction() == InventoryAction.PICKUP_HALF) {
-							ArrayList<ItemStack> items = kit.getPreviewItems();
+							List<ItemStack> items = kit.getPreviewItems();
 							int slots = 9;
 							for(int size = items.size(); size >= 9; size -= 9, e.getCurrentItem()) ;
 							Inventory inventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
