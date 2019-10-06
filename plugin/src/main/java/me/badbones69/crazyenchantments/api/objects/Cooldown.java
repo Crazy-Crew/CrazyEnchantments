@@ -11,6 +11,14 @@ public class Cooldown {
 	
 	/**
 	 *
+	 */
+	public Cooldown() {
+		this.gkit = null;
+		this.cooldown = null;
+	}
+	
+	/**
+	 *
 	 * @param gkit The gkit this is tied to.
 	 * @param cooldown When the cooldown ends.
 	 */
@@ -31,21 +39,23 @@ public class Cooldown {
 		return Calendar.getInstance().after(this.cooldown);
 	}
 	
-	public String getCooldownLeft(String msg) {
-		Calendar C = Calendar.getInstance();
-		int total = ((int) (cooldown.getTimeInMillis() / 1000) - (int) (C.getTimeInMillis() / 1000));
-		int D = 0;
-		int H = 0;
-		int M = 0;
-		int S = 0;
-		for(; total > 86400; total -= 86400, D++) ;
-		for(; total > 3600; total -= 3600, H++) ;
-		for(; total > 60; total -= 60, M++) ;
-		S += total;
-		return Methods.color(msg.replaceAll("%Day%", D + "").replaceAll("%day%", D + "")
-		.replaceAll("%Hour%", H + "").replaceAll("%hour%", H + "")
-		.replaceAll("%Minute%", M + "").replaceAll("%minute%", M + "")
-		.replaceAll("%Second%", S + "").replaceAll("%second%", S + ""));
+	public String getCooldownLeft(String message) {
+		int day = 0;
+		int hour = 0;
+		int minute = 0;
+		int second = 0;
+		if(cooldown != null) {
+			Calendar C = Calendar.getInstance();
+			int total = ((int) (cooldown.getTimeInMillis() / 1000) - (int) (C.getTimeInMillis() / 1000));
+			for(; total > 86400; total -= 86400, day++) ;
+			for(; total > 3600; total -= 3600, hour++) ;
+			for(; total > 60; total -= 60, minute++) ;
+			second += total;
+		}
+		return Methods.color(message.replaceAll("%Day%", day + "").replaceAll("%day%", day + "")
+		.replaceAll("%Hour%", hour + "").replaceAll("%hour%", hour + "")
+		.replaceAll("%Minute%", minute + "").replaceAll("%minute%", minute + "")
+		.replaceAll("%Second%", second + "").replaceAll("%second%", second + ""));
 	}
 	
 }

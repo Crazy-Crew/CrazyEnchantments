@@ -4,12 +4,13 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.Messages;
+import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.api.objects.Cooldown;
 import me.badbones69.crazyenchantments.api.objects.GKitz;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,15 +21,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class GKitzController implements Listener {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private InfoMenuManager infoManager = ce.getInfoMenuManager();
 	
 	public static void openGUI(Player player) {
 		FileConfiguration gkitz = Files.GKITZ.getFile();
-		Inventory inv = Bukkit.createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
+		Inventory inventory = Bukkit.createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
 		if(gkitz.contains("Settings.GUI-Customization")) {
 			for(String custom : gkitz.getStringList("Settings.GUI-Customization")) {
 				String name = "";
@@ -56,96 +61,74 @@ public class GKitzController implements Listener {
 					}
 				}
 				slot--;
-				inv.setItem(slot, new ItemBuilder().setMaterial(item).setName(name).setLore(lore).build());
+				inventory.setItem(slot, new ItemBuilder().setMaterial(item).setName(name).setLore(lore).build());
 			}
 		}
-		CEPlayer p = ce.getCEPlayer(player);
+		CEPlayer cePlayer = ce.getCEPlayer(player);
 		for(GKitz kit : ce.getGKitz()) {
 			ItemStack displayItem = kit.getDisplayItem().clone();
-			ItemMeta m = displayItem.getItemMeta();
+			ItemMeta itemMeta = displayItem.getItemMeta();
 			List<String> lore = new ArrayList<>();
-			if(displayItem.hasItemMeta()) {
-				if(displayItem.getItemMeta().hasLore()) {
-					for(String l : displayItem.getItemMeta().getLore()) {
-						if(p.canUseGKit(kit)) {
-							lore.add(new Cooldown(kit, Calendar.getInstance()).getCooldownLeft(l));
-						}else {
-							if(p.hasGkitPermission(kit)) {
-								lore.add(p.getCooldown(kit).getCooldownLeft(l));
-							}else {
-								lore.add(new Cooldown(kit, Calendar.getInstance()).getCooldownLeft(l));
-							}
-						}
-					}
+			Cooldown cooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCooldown(kit) : new Cooldown();
+			if(displayItem.hasItemMeta() && displayItem.getItemMeta().hasLore()) {
+				for(String line : displayItem.getItemMeta().getLore()) {
+					lore.add(cooldown.getCooldownLeft(line));
 				}
 			}
-			m.setLore(lore);
-			displayItem.setItemMeta(m);
-			inv.setItem(kit.getSlot() - 1, displayItem);
+			itemMeta.setLore(lore);
+			displayItem.setItemMeta(itemMeta);
+			inventory.setItem(kit.getSlot() - 1, displayItem);
 		}
-		player.openInventory(inv);
+		player.openInventory(inventory);
 	}
 	
 	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
 		Inventory inv = e.getInventory();
-		if(inv != null) {
-			FileConfiguration gkitz = Files.GKITZ.getFile();
-			FileConfiguration msg = Files.MESSAGES.getFile();
+		if(inv != null && e.getCurrentItem() != null) {
 			Player player = (Player) e.getWhoClicked();
-			CEPlayer p = ce.getCEPlayer(player);
+			CEPlayer cePlayer = ce.getCEPlayer(player);
 			ItemStack item = e.getCurrentItem();
 			for(GKitz kit : ce.getGKitz()) {
 				if(e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
 					e.setCancelled(true);
 					if(e.getRawSlot() < inv.getSize()) {
-						if(item != null && item.isSimilar(infoManager.getBackRightButton())) {
+						if(item.isSimilar(infoManager.getBackRightButton())) {
 							openGUI(player);
+							return;
 						}
 					}
 				}
 			}
-			if(e.getView().getTitle().equals(Methods.color(gkitz.getString("Settings.Inventory-Name")))) {
+			if(e.getView().getTitle().equals(Methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
 				e.setCancelled(true);
 				if(e.getRawSlot() < inv.getSize()) {
-					if(item != null) {
-						if(item.hasItemMeta()) {
-							if(item.getItemMeta().hasDisplayName()) {
-								for(GKitz kit : ce.getGKitz()) {
-									String name = kit.getDisplayItem().getItemMeta().getDisplayName();
-									if(item.getItemMeta().getDisplayName().equalsIgnoreCase(name)) {
-										if(e.getAction() == InventoryAction.PICKUP_HALF) {
-											ArrayList<ItemStack> items = kit.getPreviewItems();
-											int slots = 9;
-											for(int size = items.size(); size >= 9; size -= 9) {
-												slots += 9;
-											}
-											Inventory inventory = Bukkit.createInventory(null, slots, name);
-											for(ItemStack itemStack : items) {
-												inventory.addItem(itemStack);
-											}
-											inventory.setItem(slots - 1, infoManager.getBackRightButton());
-											player.openInventory(inventory);
-										}else {
-											HashMap<String, String> placeholders = new HashMap<>();
-											placeholders.put("%Kit%", kit.getName());
-											if(p.hasGkitPermission(kit)) {
-												if(p.canUseGKit(kit)) {
-													p.giveGKit(kit);
-													p.addCooldown(kit);
-													player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
-													return;
-												}else {
-													player.sendMessage(Methods.getPrefix() + p.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
-													return;
-												}
-											}else {
-												player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
-												return;
-											}
-										}
-									}
+					NBTItem nbtItem = new NBTItem(item);
+					if(nbtItem.hasKey("gkit")) {
+						GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
+						if(e.getAction() == InventoryAction.PICKUP_HALF) {
+							ArrayList<ItemStack> items = kit.getPreviewItems();
+							int slots = 9;
+							for(int size = items.size(); size >= 9; size -= 9, e.getCurrentItem()) ;
+							Inventory inventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
+							for(ItemStack itemStack : items) {
+								inventory.addItem(itemStack);
+							}
+							inventory.setItem(slots - 1, infoManager.getBackRightButton());
+							player.openInventory(inventory);
+						}else {
+							HashMap<String, String> placeholders = new HashMap<>();
+							placeholders.put("%Kit%", kit.getName());
+							if(cePlayer.hasGkitPermission(kit)) {
+								if(cePlayer.canUseGKit(kit)) {
+									cePlayer.giveGKit(kit);
+									cePlayer.addCooldown(kit);
+									player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+								}else {
+									player.sendMessage(Methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
 								}
+							}else {
+								player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
 							}
 						}
 					}

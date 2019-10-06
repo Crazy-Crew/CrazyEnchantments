@@ -19,6 +19,7 @@ import me.badbones69.crazyenchantments.multisupport.NMS_v1_12_2_Down;
 import me.badbones69.crazyenchantments.multisupport.NMS_v1_13_Up;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquared;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredLegacy;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
@@ -197,12 +198,17 @@ public class CrazyEnchantments {
 				int slot = gkit.getInt("GKitz." + kit + ".Display.Slot");
 				String time = gkit.getString("GKitz." + kit + ".Cooldown");
 				boolean autoEquip = gkit.getBoolean("GKitz." + kit + ".Auto-Equip");
-				ItemStack displayItem = new ItemBuilder().setMaterial(gkit.getString("GKitz." + kit + ".Display.Item")).setName(gkit.getString("GKitz." + kit + ".Display.Name")).setLore(gkit.getStringList("GKitz." + kit + ".Display.Lore")).setGlowing(gkit.getBoolean("GKitz." + kit + ".Display.Glowing")).build();
+				NBTItem displayItem = new NBTItem(new ItemBuilder()
+				.setMaterial(gkit.getString("GKitz." + kit + ".Display.Item"))
+				.setName(gkit.getString("GKitz." + kit + ".Display.Name"))
+				.setLore(gkit.getStringList("GKitz." + kit + ".Display.Lore"))
+				.setGlowing(gkit.getBoolean("GKitz." + kit + ".Display.Glowing")).build());
+				displayItem.setString("gkit", kit);
 				ArrayList<String> commands = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Commands");
 				ArrayList<String> itemStrings = (ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Items");
 				ArrayList<ItemStack> previewItems = getInfoGKit(itemStrings);
 				previewItems.addAll(getInfoGKit((ArrayList<String>) gkit.getStringList("GKitz." + kit + ".Fake-Items")));
-				gkitz.add(new GKitz(kit, slot, time, displayItem, previewItems, commands, getKitItems(itemStrings), itemStrings, autoEquip));
+				gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, getKitItems(itemStrings), itemStrings, autoEquip));
 			}
 		}
 		//Loads the scrolls
@@ -405,13 +411,13 @@ public class CrazyEnchantments {
 	
 	/**
 	 * Get a GKit from its name.
-	 * @param kit The kit you wish to get.
+	 * @param kitName The kit you wish to get.
 	 * @return The kit as a GKitz object.
 	 */
-	public GKitz getGKitFromName(String kit) {
-		for(GKitz k : getGKitz()) {
-			if(k.getName().equalsIgnoreCase(kit)) {
-				return k;
+	public GKitz getGKitFromName(String kitName) {
+		for(GKitz kit : getGKitz()) {
+			if(kit.getName().equalsIgnoreCase(kitName)) {
+				return kit;
 			}
 		}
 		return null;
