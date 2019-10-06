@@ -7,7 +7,7 @@
     <groupId>me.badbones69</groupId>
     <artifactId>crazyenchantments</artifactId>
     <packaging>pom</packaging>
-    <version>1.8-Dev-Build-v6.2</version>
+    <version>1.8-Dev-Build-v7</version>
     <name>CrazyEnchantments</name>
     <modules>
         <module>api</module>
