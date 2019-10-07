@@ -257,7 +257,7 @@ public enum CEnchantments {
 	 * @return True if the enchantment is enabled and false if not.
 	 */
 	public boolean isActivated() {
-		return getEnchantment().isActivated();
+		return getEnchantment() != null && getEnchantment().isActivated();
 	}
 	
 	/**
