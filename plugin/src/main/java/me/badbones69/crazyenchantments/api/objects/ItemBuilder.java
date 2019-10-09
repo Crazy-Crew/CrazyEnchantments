@@ -390,7 +390,7 @@ public class ItemBuilder implements Cloneable {
 	public String getUpdatedName() {
 		String newName = name;
 		for(String placeholder : namePlaceholders.keySet()) {
-			newName = newName.replace(placeholder, namePlaceholders.get(placeholder));
+			newName = newName.replace(placeholder, namePlaceholders.get(placeholder)).replace(placeholder.toLowerCase(), namePlaceholders.get(placeholder));
 		}
 		return newName;
 	}
