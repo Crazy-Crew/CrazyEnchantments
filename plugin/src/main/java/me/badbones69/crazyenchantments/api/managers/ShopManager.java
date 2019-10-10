@@ -46,6 +46,9 @@ public class ShopManager {
 					break;
 				}
 			}
+			if(slot > inventorySize || slot <= 0) {
+				continue;
+			}
 			slot--;
 			customizerItems.put(ItemBuilder.convertString(customItemString), slot);
 		}
