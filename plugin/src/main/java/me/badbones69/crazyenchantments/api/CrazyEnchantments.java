@@ -631,7 +631,7 @@ public class CrazyEnchantments {
 	
 	public CEBook getRandomEnchantmentBook(Category category) {
 		try {
-			List<CEnchantment> enchantments = category.getEnchantmentList();
+			List<CEnchantment> enchantments = category.getEnabledEnchantments();
 			CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
 			return new CEBook(enchantment, randomLevel(enchantment, category), 1, category);
 		}catch(Exception e) {

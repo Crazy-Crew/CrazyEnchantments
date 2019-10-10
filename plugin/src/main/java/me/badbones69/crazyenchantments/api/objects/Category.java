@@ -23,6 +23,7 @@ public class Category {
 	private int maxLevel;
 	private int minLevel;
 	private List<CEnchantment> enchantmentList;
+	private List<CEnchantment> enabledEnchantments;
 	
 	public Category(String name, int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency, int rarity, LostBook lostBook,
 	int maxSuccessRate, int minSuccessRate, int maxDestroyRate, int minDestroyRate, boolean useMaxLevel, int maxLevel, int minLevel) {
@@ -42,6 +43,7 @@ public class Category {
 		this.maxLevel = maxLevel;
 		this.minLevel = minLevel;
 		this.enchantmentList = new ArrayList<>();
+		this.enabledEnchantments = new ArrayList<>();
 	}
 	
 	public String getName() {
@@ -104,16 +106,24 @@ public class Category {
 		return minLevel;
 	}
 	
+	public List<CEnchantment> getEnabledEnchantments() {
+		return enabledEnchantments;
+	}
+	
 	public List<CEnchantment> getEnchantmentList() {
 		return enchantmentList;
 	}
 	
 	public void addEnchantment(CEnchantment enchantment) {
 		enchantmentList.add(enchantment);
+		if(enchantment.isActivated()) {
+			enabledEnchantments.add(enchantment);
+		}
 	}
 	
 	public void removeEnchantment(CEnchantment enchantment) {
 		enchantmentList.remove(enchantment);
+		enabledEnchantments.remove(enchantment);
 	}
 	
 }
