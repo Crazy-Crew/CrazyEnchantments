@@ -20,6 +20,7 @@ public class WingsManager {
 	private List<String> whitelistWorlds = new ArrayList<>();
 	private List<String> blacklistWorlds = new ArrayList<>();
 	private List<String> regions;
+	private List<String> limitlessFlightWorlds = new ArrayList<>();
 	private boolean ownersCanFly;
 	private boolean membersCanFly;
 	private BukkitTask wingsTask;
@@ -39,6 +40,8 @@ public class WingsManager {
 		config.getStringList(path + "Worlds.Whitelisted").forEach(world -> whitelistWorlds.add(world.toLowerCase()));
 		blacklistWorlds.clear();
 		config.getStringList(path + "Worlds.Blacklisted").forEach(world -> blacklistWorlds.add(world.toLowerCase()));
+		limitlessFlightWorlds.clear();
+		config.getStringList(path + "Worlds.Limitless-Flight-Worlds").forEach(world -> limitlessFlightWorlds.add(world.toLowerCase()));
 		regions = config.getStringList(path + "Regions");
 		ownersCanFly = config.getBoolean(path + "Owners-Can-Fly", true);
 		membersCanFly = config.getBoolean(path + "Members-Can-Fly", true);
@@ -80,6 +83,21 @@ public class WingsManager {
 	
 	public void removeFlyingPlayer(Player player) {
 		flyingPlayers.remove(player);
+	}
+	
+	/**
+	 * Get the list of all worlds players with wings can fly limitless in.
+	 */
+	public List<String> getLimitlessFlightWorlds() {
+		return limitlessFlightWorlds;
+	}
+	
+	/**
+	 * Check to see if a player is in a world with limitless flight.
+	 * @param player The player you wish to check.
+	 */
+	public boolean inLimitlessFlightWorld(Player player) {
+		return player != null && limitlessFlightWorlds.contains(player.getWorld().getName().toLowerCase());
 	}
 	
 	/**

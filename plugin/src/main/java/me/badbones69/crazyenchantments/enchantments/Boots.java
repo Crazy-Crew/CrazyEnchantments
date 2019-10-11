@@ -37,13 +37,11 @@ public class Boots implements Listener {
 				public void run() {
 					for(Player player : manager.getFlyingPlayers()) {
 						if(player.isFlying()) {
-							if(ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
-								Location location = player.getLocation().subtract(0, .25, 0);
-								if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-									player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
-								}else {
-									ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, location, 100);
-								}
+							Location location = player.getLocation().subtract(0, .25, 0);
+							if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+								player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
+							}else {
+								ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, location, 100);
 							}
 						}
 					}
@@ -157,11 +155,11 @@ public class Boots implements Listener {
 	}
 	
 	private boolean regionCheck(Player player) {
-		return !manager.inBlacklistedWorld(player) && (Support.inTerritory(player) || Support.inWingsRegion(player) || manager.inWhitelistedWorld(player));
+		return manager.inLimitlessFlightWorld(player) || (!manager.inBlacklistedWorld(player) && (Support.inTerritory(player) || Support.inWingsRegion(player) || manager.inWhitelistedWorld(player)));
 	}
 	
 	private boolean areEnemiesNearby(Player player) {
-		if(manager.isEnemeyCheckEnabled()) {
+		if(manager.isEnemeyCheckEnabled() && !manager.inLimitlessFlightWorld(player)) {
 			for(Player otherPlayer : getNearByPlayers(player, manager.getEnemyRadius())) {
 				if(!Support.isFriendly(player, otherPlayer) && !player.hasPermission("crazyenchantments.bypass.wings")) {
 					return true;

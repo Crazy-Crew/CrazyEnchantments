@@ -273,6 +273,8 @@ Settings:
         - 'Free_Fly'
         - 'SafeZone'
       Worlds: #The option to disable/enable wings in worlds.
+        Limitless-Flight-Worlds: #Worlds that players are allowed to fly for a limitless amount of time. This bypasses enemy checks as well.
+          - 'Hub_Example'
         Whitelisted: #If the player has wings enchantment in these worlds they will be able to fly anywhere regardless of regions/enemies.
           - 'Hub_Example'
         Blacklisted: #Wings will not work at all in these worlds regardless of regions.
