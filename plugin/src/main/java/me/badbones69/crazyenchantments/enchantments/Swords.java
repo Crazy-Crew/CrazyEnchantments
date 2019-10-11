@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.enchantments;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -13,6 +13,8 @@ import me.badbones69.crazyenchantments.api.events.RageBreakEvent;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.multisupport.AACSupport;
+import me.badbones69.crazyenchantments.multisupport.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
@@ -26,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.Inventory;
@@ -373,20 +376,39 @@ public class Swords implements Listener {
 										if(!event.isCancelled()) {
 											Location loc = en.getLocation();
 											loc.getWorld().spigot().strikeLightningEffect(loc, true);
-											int lightningSoundRange = FileManager.Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+											int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 											try {
 												loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
 											}catch(Exception ignore) {
 											}
-											for(LivingEntity En : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
-												if(Support.allowsPVP(En.getLocation())) {
-													if(!Support.isFriendly(damager, En)) {
-														En.damage(5D);
+											if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+												NoCheatPlusSupport.exemptPlayer(damager);
+											}
+											if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
+												SpartanSupport.cancelNoSwing(damager);
+											}
+											if(SupportedPlugins.AAC.isPluginLoaded()) {
+												AACSupport.exemptPlayer(damager);
+											}
+											for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
+												EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, DamageCause.LIGHTNING, 5D);
+												Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+												if(!damageByEntityEvent.isCancelled()) {
+													if(Support.allowsPVP(entity.getLocation())) {
+														if(!Support.isFriendly(damager, entity)) {
+															entity.damage(5D);
+														}
 													}
 												}
 											}
 											en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
 											en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));
+											if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+												NoCheatPlusSupport.unexemptPlayer(damager);
+											}
+											if(SupportedPlugins.AAC.isPluginLoaded()) {
+												AACSupport.unexemptPlayer(damager);
+											}
 										}
 									}
 								}

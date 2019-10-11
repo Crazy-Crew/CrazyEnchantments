@@ -2,16 +2,13 @@ package me.badbones69.crazyenchantments.enchantments;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager;
+import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.EnchantedArrow;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import me.badbones69.crazyenchantments.multisupport.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
-import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -181,20 +179,40 @@ public class Bows implements Listener {
 					if(CEnchantments.LIGHTNING.isActivated()) {
 						Location loc = arrow.getArrow().getLocation();
 						if(CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
+							Player shooter = (Player) arrow.getShooter();
 							loc.getWorld().spigot().strikeLightningEffect(loc, true);
-							int lightningSoundRange = FileManager.Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+							int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 							try {
 								loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
 							}catch(Exception ignore) {
 							}
+							if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+								NoCheatPlusSupport.exemptPlayer(shooter);
+							}
+							if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
+								SpartanSupport.cancelNoSwing(shooter);
+							}
+							if(SupportedPlugins.AAC.isPluginLoaded()) {
+								AACSupport.exemptPlayer(shooter);
+							}
 							for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow.getArrow())) {
-								if(Support.allowsPVP(entity.getLocation())) {
-									if(!Support.isFriendly(arrow.getShooter(), entity)) {
-										if(!arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
-											entity.damage(5D);
+								EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.LIGHTNING, 5D);
+								Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+								if(!damageByEntityEvent.isCancelled()) {
+									if(Support.allowsPVP(entity.getLocation())) {
+										if(!Support.isFriendly(arrow.getShooter(), entity)) {
+											if(!arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
+												entity.damage(5D);
+											}
 										}
 									}
 								}
+							}
+							if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+								NoCheatPlusSupport.unexemptPlayer(shooter);
+							}
+							if(SupportedPlugins.AAC.isPluginLoaded()) {
+								AACSupport.unexemptPlayer(shooter);
 							}
 						}
 					}

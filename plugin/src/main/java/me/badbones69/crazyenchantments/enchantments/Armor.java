@@ -6,11 +6,8 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.*;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
-import me.badbones69.crazyenchantments.multisupport.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
-import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -267,14 +264,33 @@ public class Armor implements Listener {
 											loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
 										}catch(Exception ignore) {
 										}
-										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
-											if(Support.allowsPVP(en.getLocation())) {
-												if(!Support.isFriendly(player, en)) {
-													en.damage(5D);
+										if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+											NoCheatPlusSupport.exemptPlayer(player);
+										}
+										if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
+											SpartanSupport.cancelNoSwing(player);
+										}
+										if(SupportedPlugins.AAC.isPluginLoaded()) {
+											AACSupport.exemptPlayer(player);
+										}
+										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
+											EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.LIGHTNING, 5D);
+											Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+											if(!damageByEntityEvent.isCancelled()) {
+												if(Support.allowsPVP(en.getLocation())) {
+													if(!Support.isFriendly(player, en)) {
+														en.damage(5D);
+													}
 												}
 											}
 										}
 										damager.damage(5D);
+										if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+											NoCheatPlusSupport.unexemptPlayer(player);
+										}
+										if(SupportedPlugins.AAC.isPluginLoaded()) {
+											AACSupport.unexemptPlayer(player);
+										}
 									}
 								}
 							}
