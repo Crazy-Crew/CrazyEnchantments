@@ -143,55 +143,63 @@ public class ItemBuilder implements Cloneable {
 		ItemBuilder itemBuilder = new ItemBuilder();
 		try {
 			options:
-			for(String option : itemString.split(", ")) {
-				if(option.startsWith("Item:")) {
-					itemBuilder.setMaterial(option.replaceAll("Item:", ""));
-				}else if(option.startsWith("Name:")) {
-					itemBuilder.setName(option.replaceAll("Name:", ""));
-				}else if(option.startsWith("Amount:")) {
-					try {
-						itemBuilder.setAmount(Integer.parseInt(option.replaceAll("Amount:", "")));
-					}catch(NumberFormatException e) {
-						itemBuilder.setAmount(1);
-					}
-				}else if(option.startsWith("Lore:")) {
-					itemBuilder.setLore(Arrays.asList(option.replaceAll("Lore:", "").split(",")));
-				}else if(option.startsWith("Player:")) {
-					itemBuilder.setPlayer(option.replaceAll("Player:", ""));
-				}else if(option.startsWith("Unbreakable-Item:")) {
-					if(option.replaceAll("Unbreakable-Item:", "").equalsIgnoreCase("true")) {
-						itemBuilder.setUnbreakable(true);
-					}
-				}else {
-					String[] split = option.split(":");
-					String argument1 = split[0];
-					Enchantment enchantment = getEnchantment(argument1);
-					if(enchantment != null && enchantment.getName() != null) {
+			for(String optionString : itemString.split(", ")) {
+				String option = optionString.split(":")[0];
+				String value = optionString.replace(option + ":", "").replace(option, "");
+				switch(option.toLowerCase()) {
+					case "item":
+						itemBuilder.setMaterial(value);
+						break;
+					case "name":
+						itemBuilder.setName(value);
+						break;
+					case "amount":
 						try {
-							itemBuilder.addEnchantments(enchantment, Integer.parseInt(split[1]));
-						}catch(Exception e) {
-							itemBuilder.addEnchantments(enchantment, 1);
+							itemBuilder.setAmount(Integer.parseInt(value));
+						}catch(NumberFormatException e) {
+							itemBuilder.setAmount(1);
 						}
-						continue;
-					}
-					for(ItemFlag itemFlag : ItemFlag.values()) {
-						if(itemFlag.name().equalsIgnoreCase(option)) {
-							itemBuilder.addItemFlag(itemFlag);
-							continue options;
+						break;
+					case "lore":
+						itemBuilder.setLore(Arrays.asList(value.split(",")));
+						break;
+					case "player":
+						itemBuilder.setPlayer(value);
+						break;
+					case "unbreakable-item":
+						if(value.isEmpty() || value.equalsIgnoreCase("true")) {
+							itemBuilder.setUnbreakable(true);
 						}
-					}
-					try {
-						for(PatternType pattern : PatternType.values()) {
-							if(argument1.equalsIgnoreCase(pattern.name()) || argument1.equalsIgnoreCase(pattern.getIdentifier())) {
-								DyeColor color = getDyeColor(split[1]);
-								if(color != null) {
-									itemBuilder.addPattern(new Pattern(color, pattern));
-								}
+						break;
+					default:
+						Enchantment enchantment = getEnchantment(option);
+						if(enchantment != null && enchantment.getName() != null) {
+							try {
+								itemBuilder.addEnchantments(enchantment, Integer.parseInt(value));
+							}catch(NumberFormatException e) {
+								itemBuilder.addEnchantments(enchantment, 1);
+							}
+							break;
+						}
+						for(ItemFlag itemFlag : ItemFlag.values()) {
+							if(itemFlag.name().equalsIgnoreCase(option)) {
+								itemBuilder.addItemFlag(itemFlag);
 								break;
 							}
 						}
-					}catch(Exception e) {
-					}
+						try {
+							for(PatternType pattern : PatternType.values()) {
+								if(option.equalsIgnoreCase(pattern.name()) || value.equalsIgnoreCase(pattern.getIdentifier())) {
+									DyeColor color = getDyeColor(value);
+									if(color != null) {
+										itemBuilder.addPattern(new Pattern(color, pattern));
+									}
+								break;
+							}
+							}
+						}catch(Exception e) {
+						}
+						break;
 				}
 			}
 		}catch(Exception e) {
