@@ -16,11 +16,14 @@ public class TinkerCommand implements CommandExecutor {
 			sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
 			return true;
 		}
-		if(!Methods.hasPermission(sender, "tinker", true)) {
-			return true;
+		if(hasPermission(sender, "tinker")) {
+			Tinkerer.openTinker((Player) sender);
 		}
-		Tinkerer.openTinker((Player) sender);
 		return true;
+	}
+	
+	private boolean hasPermission(CommandSender sender, String permission) {
+		return Methods.hasPermission(sender, permission, true);
 	}
 	
 }
