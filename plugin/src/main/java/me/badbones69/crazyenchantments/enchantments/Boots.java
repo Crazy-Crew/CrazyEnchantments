@@ -32,24 +32,22 @@ public class Boots implements Listener {
 	private static ArrayList<Player> flying = new ArrayList<>();
 	
 	public static void startWings() {
-		if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Clouds")) {
-			if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")) {
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-							if(flying.contains(player)) {
-								Location l = player.getLocation().subtract(0, .25, 0);
-								if(player.isFlying()) {
-									ItemStack boots = player.getEquipment().getBoots();
-									if(boots != null) {
-										if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-											if(CEnchantments.WINGS.isActivated()) {
-												if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-													player.getWorld().spawnParticle(Particle.CLOUD, l, 100, .25, 0, .25, 0);
-												}else {
-													ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, player.getLocation(), 100);
-												}
+		if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+						if(flying.contains(player)) {
+							Location l = player.getLocation().subtract(0, .25, 0);
+							if(player.isFlying()) {
+								ItemStack boots = player.getEquipment().getBoots();
+								if(boots != null) {
+									if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
+										if(CEnchantments.WINGS.isActivated()) {
+											if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+												player.getWorld().spawnParticle(Particle.CLOUD, l, 100, .25, 0, .25, 0);
+											}else {
+												ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, player.getLocation(), 100);
 											}
 										}
 									}
@@ -57,8 +55,8 @@ public class Boots implements Listener {
 							}
 						}
 					}
-				}.runTaskTimerAsynchronously(ce.getPlugin(), 1, 1);
-			}
+				}
+			}.runTaskTimerAsynchronously(ce.getPlugin(), 1, 1);
 		}
 	}
 	
