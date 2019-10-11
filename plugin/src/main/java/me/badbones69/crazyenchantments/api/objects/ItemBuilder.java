@@ -57,6 +57,7 @@ public class ItemBuilder implements Cloneable {
 	private ItemStack referenceItem;
 	private boolean isMobEgg;
 	private EntityType entityType;
+	private boolean isTippedArrow;
 	private PotionType potionType;
 	private Color potionColor;
 	private boolean isPotion;
@@ -89,6 +90,7 @@ public class ItemBuilder implements Cloneable {
 		this.hideItemFlags = false;
 		this.glowing = false;
 		this.entityType = EntityType.BAT;
+		this.isTippedArrow = false;
 		this.potionType = null;
 		this.potionColor = null;
 		this.isPotion = false;
@@ -297,6 +299,9 @@ public class ItemBuilder implements Cloneable {
 			case "PLAYER_HEAD":
 			case "SKULL_ITEM":
 				this.isHead = true;
+				break;
+			case "TIPPED_ARROW":
+				this.isTippedArrow = true;
 				break;
 			case "POTION":
 				this.isPotion = true;
@@ -519,6 +524,10 @@ public class ItemBuilder implements Cloneable {
 	public ItemBuilder setEntityType(EntityType entityType) {
 		this.entityType = entityType;
 		return this;
+	}
+	
+	public boolean isTippedArrow() {
+		return isTippedArrow;
 	}
 	
 	/**
@@ -853,7 +862,7 @@ public class ItemBuilder implements Cloneable {
 			}else {
 				item.setDurability((short) damage);
 			}
-			if(isPotion && (potionType != null || potionColor != null)) {
+			if((isTippedArrow || isPotion) && (potionType != null || potionColor != null)) {
 				PotionMeta potionMeta = (PotionMeta) itemMeta;
 				if(potionType != null) {
 					potionMeta.setBasePotionData(new PotionData(potionType));
