@@ -49,10 +49,7 @@ public class Tools implements Listener {
 	public void onBlockBreak(BlockBreakEvent e) {
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e)
-		|| block.getType() == Material.AIR
-		|| block.getType().toString().toLowerCase().contains("shulker_box")
-		|| block.getType().toString().toLowerCase().contains("chest")) {
+		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e) || ignoreBlock(block)) {
 			return;
 		}
 		updateEffects(player);
@@ -227,6 +224,19 @@ public class Tools implements Listener {
 					}
 				}
 			}
+		}
+	}
+	
+	private boolean ignoreBlock(Block block) {
+		switch(block.getType().name().toLowerCase()) {
+			case "air":
+			case "shulker_box":
+			case "chest":
+			case "head":
+			case "skull":
+				return true;
+			default:
+				return false;
 		}
 	}
 	
