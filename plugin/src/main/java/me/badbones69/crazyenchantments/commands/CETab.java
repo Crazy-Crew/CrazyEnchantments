@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.commands;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
+import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -44,7 +45,12 @@ public class CETab implements TabCompleter {
 				case "remove":
 				case "add":
 				case "book":
-					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getCustomName().replace(" ", "_")));
+					for(CEnchantment enchantment : ce.getRegisteredEnchantments()) {
+						try {
+							completions.add(enchantment.getCustomName().replace(" ", "_"));
+						}catch(NullPointerException ignore) {
+						}
+					}
 					if(isV1_13_Up) {
 						Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
 					}else {
@@ -52,8 +58,18 @@ public class CETab implements TabCompleter {
 					}
 					break;
 				case "spawn":
-					ce.getRegisteredEnchantments().forEach(enchantment -> completions.add(enchantment.getCustomName().replace(" ", "_")));
-					ce.getCategories().forEach(category -> completions.add(category.getName()));
+					for(CEnchantment enchantment : ce.getRegisteredEnchantments()) {
+						try {
+							completions.add(enchantment.getCustomName().replace(" ", "_"));
+						}catch(NullPointerException ignore) {
+						}
+					}
+					for(Category category : ce.getCategories()) {
+						try {
+							completions.add(category.getName());
+						}catch(NullPointerException ignore) {
+						}
+					}
 					break;
 				case "scroll":
 					completions.add("black");
@@ -72,7 +88,12 @@ public class CETab implements TabCompleter {
 					completions.add("mystery");
 					break;
 				case "lostbook":
-					ce.getCategories().forEach(category -> completions.add(category.getName()));
+					for(Category category : ce.getCategories()) {
+						try {
+							completions.add(category.getName());
+						}catch(NullPointerException ignore) {
+						}
+					}
 					break;
 			}
 			return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
