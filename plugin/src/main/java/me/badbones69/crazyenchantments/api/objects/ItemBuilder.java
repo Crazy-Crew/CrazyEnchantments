@@ -194,8 +194,8 @@ public class ItemBuilder implements Cloneable {
 									if(color != null) {
 										itemBuilder.addPattern(new Pattern(color, pattern));
 									}
-								break;
-							}
+									break;
+								}
 							}
 						}catch(Exception e) {
 						}
@@ -238,46 +238,54 @@ public class ItemBuilder implements Cloneable {
 	
 	/**
 	 * Set the type of item and its metadata in the builder.
-	 * @param material The string must be in this form: %Material% or %Material%:%MetaData%
+	 * @param materialString The string must be in this form: %Material% or %Material%:%MetaData%
 	 * @return The ItemBuilder with updated info.
 	 */
-	public ItemBuilder setMaterial(String material) {
-		String metaData = "";
-		if(material.contains(":")) {// Sets the durability or another value option.
-			String[] b = material.split(":");
-			material = b[0];
-			metaData = b[1];
-			if(metaData.contains("#")) {// <ID>:<Durability>#<CustomModelData>
-				String modelData = metaData.split("#")[1];
+	public ItemBuilder setMaterial(String materialString) {
+		String metaDataString = "";
+		if(materialString.contains(":")) {// Sets the durability or another value option.
+			String[] split = materialString.split(":");
+			materialString = split[0];
+			metaDataString = split[1];
+			if(metaDataString.contains("#")) {// <ID>:<Durability>#<CustomModelData>
+				String modelData = metaDataString.split("#")[1];
 				if(Methods.isInt(modelData)) {//Value is a number.
 					this.useCustomModelData = true;
 					this.customModelData = Integer.parseInt(modelData);
 				}
 			}
-			metaData = metaData.replace("#" + customModelData, "");
-			if(Methods.isInt(metaData)) {//Value is durability.
-				this.damage = Integer.parseInt(metaData);
+			metaDataString = metaDataString.replace("#" + customModelData, "");
+			if(Methods.isInt(metaDataString)) {//Value is durability.
+				this.damage = Integer.parseInt(metaDataString);
 			}else {//Value is something else.
-				this.potionType = getPotionType(PotionEffectType.getByName(metaData));
-				this.potionColor = getColor(metaData);
-				this.armorColor = getColor(metaData);
+				for(String option : split) {
+					if(potionType == null) {
+						this.potionType = getPotionType(PotionEffectType.getByName(option));
+					}
+					if(potionColor == null) {
+						this.potionColor = getColor(option);
+					}
+					if(armorColor == null) {
+						this.armorColor = getColor(option);
+					}
+				}
 			}
-		}else if(material.contains("#")) {
-			String[] b = material.split("#");
-			material = b[0];
+		}else if(materialString.contains("#")) {
+			String[] b = materialString.split("#");
+			materialString = b[0];
 			if(Methods.isInt(b[1])) {//Value is a number.
 				this.useCustomModelData = true;
 				this.customModelData = Integer.parseInt(b[1]);
 			}
 		}
-		Material m = Material.matchMaterial(material);
-		if(m != null) {// Sets the material.
-			this.material = m;
+		Material material = Material.matchMaterial(materialString);
+		if(material != null) {// Sets the material.
+			this.material = material;
 			//1.9-1.12.2
 			if(version.isNewer(Version.v1_8_R3) && version.isOlder(Version.v1_13_R2)) {
-				if(m == Material.matchMaterial("MONSTER_EGG")) {
+				if(material == Material.matchMaterial("MONSTER_EGG")) {
 					try {
-						this.entityType = EntityType.fromId(damage) != null ? EntityType.fromId(damage) : EntityType.valueOf(metaData);
+						this.entityType = EntityType.fromId(damage) != null ? EntityType.fromId(damage) : EntityType.valueOf(metaDataString);
 					}catch(Exception ignore) {
 					}
 					this.damage = 0;
