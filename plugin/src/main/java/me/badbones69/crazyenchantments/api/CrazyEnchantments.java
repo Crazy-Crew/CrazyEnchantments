@@ -781,15 +781,15 @@ public class CrazyEnchantments {
 	
 	/**
 	 * Get a CEnchantment enchantment from the name.
-	 * @param enchantment The name of the enchantment.
+	 * @param enchantmentString The name of the enchantment.
 	 * @return The enchantment as a CEnchantment but if not found will be null.
 	 */
-	public CEnchantment getEnchantmentFromName(String enchantment) {
-		for(CEnchantment enchant : registeredEnchantments) {
-			enchantment = Methods.stripString(enchantment);
-			if(Methods.stripString(enchant.getName()).equalsIgnoreCase(enchantment) ||
-			Methods.stripString(enchant.getCustomName()).equalsIgnoreCase(enchantment)) {
-				return enchant;
+	public CEnchantment getEnchantmentFromName(String enchantmentString) {
+		enchantmentString = Methods.stripString(enchantmentString);
+		for(CEnchantment enchantment : registeredEnchantments) {
+			if(Methods.stripString(enchantment.getName()).equalsIgnoreCase(enchantmentString) ||
+			Methods.stripString(enchantment.getCustomName()).equalsIgnoreCase(enchantmentString)) {
+				return enchantment;
 			}
 		}
 		return null;
