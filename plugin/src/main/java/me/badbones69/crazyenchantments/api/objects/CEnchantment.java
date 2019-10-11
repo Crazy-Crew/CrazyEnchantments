@@ -186,7 +186,7 @@ public class CEnchantment {
 	}
 	
 	public boolean canEnchantItem(ItemStack item) {
-		return enchantmentType.canEnchantItem(item);
+		return enchantmentType != null && enchantmentType.canEnchantItem(item);
 	}
 	
 	public CEnchantment setEnchantmentType(EnchantmentType enchantmentType) {
