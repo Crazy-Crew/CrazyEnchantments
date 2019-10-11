@@ -44,6 +44,15 @@ public enum Dust {
 		}
 	}
 	
+	public static Dust getFromName(String nameString) {
+		for(Dust dust : Dust.values()) {
+			if(dust.getKnownNames().contains(nameString.toLowerCase())) {
+				return dust;
+			}
+		}
+		return null;
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -39,6 +39,15 @@ public enum Scrolls {
 		}
 	}
 	
+	public static Scrolls getFromName(String nameString) {
+		for(Scrolls scroll : Scrolls.values()) {
+			if(scroll.getKnownNames().contains(nameString.toLowerCase())) {
+				return scroll;
+			}
+		}
+		return null;
+	}
+	
 	public String getName() {
 		return name;
 	}
