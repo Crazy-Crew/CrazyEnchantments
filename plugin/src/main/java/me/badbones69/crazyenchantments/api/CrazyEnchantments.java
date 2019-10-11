@@ -10,10 +10,12 @@ import me.badbones69.crazyenchantments.api.enums.ShopOption;
 import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import me.badbones69.crazyenchantments.api.managers.ShopManager;
+import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
 import me.badbones69.crazyenchantments.controllers.ScrollControl;
+import me.badbones69.crazyenchantments.enchantments.Boots;
 import me.badbones69.crazyenchantments.multisupport.NMSSupport;
 import me.badbones69.crazyenchantments.multisupport.NMS_v1_12_2_Down;
 import me.badbones69.crazyenchantments.multisupport.NMS_v1_13_Up;
@@ -62,13 +64,12 @@ public class CrazyEnchantments {
 	private BlackSmithManager blackSmithManager;
 	private InfoMenuManager infoMenuManager;
 	private ShopManager shopManager;
+	private WingsManager wingsManager;
 	private WorldGuardVersion worldGuardVersion;
 	private PlotSquaredVersion plotSquaredVersion;
 	private List<Category> categories = new ArrayList<>();
 	private List<GKitz> gkitz = new ArrayList<>();
 	private List<CEPlayer> players = new ArrayList<>();
-	private List<String> whitelisted = new ArrayList<>();
-	private List<String> blacklisted = new ArrayList<>();
 	private List<Material> blockList = new ArrayList<>();
 	private List<BlockBreakEvent> skipBreakEvents = new ArrayList<>();
 	private List<CEnchantment> registeredEnchantments = new ArrayList<>();
@@ -87,8 +88,6 @@ public class CrazyEnchantments {
 		blockList.clear();
 		gkitz.clear();
 		registeredEnchantments.clear();
-		whitelisted.clear();
-		blacklisted.clear();
 		plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
 		Version version = Version.getCurrentVersion();
 		useNewSounds = version.isNewer(Version.v1_8_R3);
@@ -116,12 +115,6 @@ public class CrazyEnchantments {
 		rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
 		breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
 		enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
-		for(String world : config.getStringList("Settings.EnchantmentOptions.Wings.Worlds.Whitelisted")) {
-			whitelisted.add(world.toLowerCase());
-		}
-		for(String world : config.getStringList("Settings.EnchantmentOptions.Wings.Worlds.Blacklisted")) {
-			blacklisted.add(world.toLowerCase());
-		}
 		for(String category : config.getConfigurationSection("Categories").getKeys(false)) {
 			String path = "Categories." + category;
 			LostBook lostBook = new LostBook(
@@ -226,6 +219,11 @@ public class CrazyEnchantments {
 		//Loads the shop manager
 		shopManager = ShopManager.getInstance();
 		shopManager.load();
+		//Loads the settings for wings enchantment.
+		wingsManager = WingsManager.getInstance();
+		wingsManager.load();
+		//Starts the wings task
+		Boots.startWings();
 		if(SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
 			worldGuardVersion = version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
 		}
@@ -359,6 +357,14 @@ public class CrazyEnchantments {
 	}
 	
 	/**
+	 * Get the wings enchantment manager.
+	 * @return The instance of the wings manager.
+	 */
+	public WingsManager getWingsManager() {
+		return wingsManager;
+	}
+	
+	/**
 	 * Get the shop manager.
 	 * @return The instance of the shop manager.
 	 */
@@ -467,36 +473,6 @@ public class CrazyEnchantments {
 	 */
 	public List<CEPlayer> getCEPlayers() {
 		return players;
-	}
-	
-	/**
-	 * Get the list of all the whitelisted worlds for the Wings enchantment.
-	 */
-	public List<String> getWhitelistedWorlds() {
-		return whitelisted;
-	}
-	
-	/**
-	 * Check to see if a player is in a whitelisted world for the wings enchantment.
-	 * @param player The player you wish to check.
-	 */
-	public boolean inWhitelistedWorld(Player player) {
-		return player != null && whitelisted.contains(player.getWorld().getName().toLowerCase());
-	}
-	
-	/**
-	 * Get the list of all the blacklisted worlds for the Wings enchantment.
-	 */
-	public List<String> getBlacklistedWorlds() {
-		return blacklisted;
-	}
-	
-	/**
-	 * Check to see if a player is in a blacklisted world for the wings enchantment.
-	 * @param player The player you wish to check.
-	 */
-	public boolean inBlacklistedWorld(Player player) {
-		return player != null && blacklisted.contains(player.getWorld().getName().toLowerCase());
 	}
 	
 	/**

@@ -16,7 +16,6 @@ import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
 import me.badbones69.crazyenchantments.controllers.ShopControl;
-import me.badbones69.crazyenchantments.enchantments.Boots;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -80,7 +79,6 @@ public class CECommand implements CommandExecutor {
 						ce.getCEPlayers().forEach(cePlayer -> ce.backupCEPlayer(cePlayer));
 						fileManager.setup(ce.getPlugin());
 						ce.load();
-						Boots.startWings();
 						sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
 					}
 					return true;
@@ -487,6 +485,7 @@ public class CECommand implements CommandExecutor {
 							}else {
 								Methods.setItemInHand(player, ce.addEnchantment(Methods.getItemInHand(player), ceEnchantment, Integer.parseInt(level)));
 							}
+							return true;
 						}
 						sender.sendMessage(Methods.getPrefix("&c/ce Add <Enchantment> [LvL]"));
 					}

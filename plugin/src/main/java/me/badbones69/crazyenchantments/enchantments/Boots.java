@@ -1,15 +1,14 @@
 package me.badbones69.crazyenchantments.enchantments;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -21,71 +20,52 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Boots implements Listener {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
-	private static ArrayList<Player> flying = new ArrayList<>();
+	private static WingsManager manager = ce.getWingsManager();
 	
 	public static void startWings() {
-		if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Clouds")) {
-			new BukkitRunnable() {
+		if(manager.isCloudsEnabled() && manager.isWingsEnabled()) {
+			manager.setWingsTask(new BukkitRunnable() {
 				@Override
 				public void run() {
-					for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-						if(flying.contains(player)) {
-							Location l = player.getLocation().subtract(0, .25, 0);
-							if(player.isFlying()) {
-								ItemStack boots = player.getEquipment().getBoots();
-								if(boots != null) {
-									if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-										if(CEnchantments.WINGS.isActivated()) {
-											if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
-												player.getWorld().spawnParticle(Particle.CLOUD, l, 100, .25, 0, .25, 0);
-											}else {
-												ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, player.getLocation(), 100);
-											}
-										}
-									}
+					for(Player player : manager.getFlyingPlayers()) {
+						if(player.isFlying()) {
+							if(ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
+								Location location = player.getLocation().subtract(0, .25, 0);
+								if(Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+									player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
+								}else {
+									ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, location, 100);
 								}
 							}
 						}
 					}
 				}
-			}.runTaskTimerAsynchronously(ce.getPlugin(), 1, 1);
+			}.runTaskTimerAsynchronously(ce.getPlugin(), 1, 1));
+		}else {
+			manager.endWingsTask();
 		}
 	}
 	
 	@EventHandler
 	public void onEquip(ArmorEquipEvent e) {
 		Player player = e.getPlayer();
-		ItemStack NewItem = e.getNewArmorPiece();
-		ItemStack OldItem = e.getOldArmorPiece();
-		if(ce.hasEnchantments(NewItem)) {
-			if(ce.hasEnchantment(NewItem, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isActivated()) {
-					if((Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) && !ce.inBlacklistedWorld(player)) {
-						if(player.getGameMode() != GameMode.CREATIVE) {
-							if(player.getGameMode() != GameMode.ADVENTURE) {
-								player.setAllowFlight(true);
-							}
-						}
-					}
+		if(manager.isWingsEnabled()) {
+			if(ce.hasEnchantment(e.getNewArmorPiece(), CEnchantments.WINGS)) {
+				if(regionCheck(player) && gamemodeCheck(player)) {
+					player.setAllowFlight(true);
 				}
 			}
-		}
-		if(ce.hasEnchantments(OldItem)) {
-			if(ce.hasEnchantment(OldItem, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isActivated()) {
-					if(player.getGameMode() != GameMode.CREATIVE) {
-						if(player.getGameMode() != GameMode.ADVENTURE) {
-							player.setAllowFlight(false);
-						}
-					}
+			if(ce.hasEnchantment(e.getOldArmorPiece(), CEnchantments.WINGS)) {
+				if(gamemodeCheck(player)) {
+					player.setAllowFlight(false);
 				}
 			}
 		}
@@ -94,25 +74,20 @@ public class Boots implements Listener {
 	@EventHandler
 	public void onFly(PlayerToggleFlightEvent e) {
 		Player player = e.getPlayer();
-		ItemStack boots = player.getEquipment().getBoots();
-		if(ce.hasEnchantments(boots)) {
-			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isActivated()) {
-					if((Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) && !ce.inBlacklistedWorld(player)) {
-						if(!areEnemiesNearBy(player)) {
-							if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
-								SpartanSupport.cancelFly(player);
-							}
-							if(e.isFlying()) {
-								if(player.getAllowFlight()) {
-									e.setCancelled(true);
-									player.setFlying(true);
-									flying.add(player);
-								}
-							}else {
-								flying.remove(player);
-							}
+		if(manager.isWingsEnabled()) {
+			if(ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
+				if(regionCheck(player) && !areEnemiesNearby(player)) {
+					if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
+						SpartanSupport.cancelFly(player);
+					}
+					if(e.isFlying()) {
+						if(player.getAllowFlight()) {
+							e.setCancelled(true);
+							player.setFlying(true);
+							manager.addFlyingPlayer(player);
 						}
+					}else {
+						manager.removeFlyingPlayer(player);
 					}
 				}
 			}
@@ -122,40 +97,28 @@ public class Boots implements Listener {
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
 		Player player = e.getPlayer();
-		ItemStack boots = player.getEquipment().getBoots();
-		if(ce.hasEnchantments(boots)) {
-			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isActivated()) {
-					if((Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) && !ce.inBlacklistedWorld(player)) {
-						if(!areEnemiesNearBy(player)) {
-							if(!player.getAllowFlight()) {
-								player.setAllowFlight(true);
-							}
-						}else {
-							if(player.isFlying()) {
-								if(player.getGameMode() != GameMode.CREATIVE) {
-									if(player.getGameMode() != GameMode.ADVENTURE) {
-										player.setFlying(false);
-										player.setAllowFlight(false);
-										flying.remove(player);
-									}
-								}
-							}
-						}
+		boolean isFlying = player.isFlying();
+		if(manager.isWingsEnabled()) {
+			if(ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
+				if(regionCheck(player)) {
+					if(!areEnemiesNearby(player)) {
+						player.setAllowFlight(true);
 					}else {
-						if(player.isFlying()) {
-							if(player.getGameMode() != GameMode.CREATIVE) {
-								if(player.getGameMode() != GameMode.ADVENTURE) {
-									player.setFlying(false);
-									player.setAllowFlight(false);
-									flying.remove(player);
-								}
-							}
+						if(isFlying && gamemodeCheck(player)) {
+							player.setFlying(false);
+							player.setAllowFlight(false);
+							manager.removeFlyingPlayer(player);
 						}
 					}
-					if(player.isFlying()) {
-						flying.add(player);
+				}else {
+					if(isFlying && gamemodeCheck(player)) {
+						player.setFlying(false);
+						player.setAllowFlight(false);
+						manager.removeFlyingPlayer(player);
 					}
+				}
+				if(isFlying) {
+					manager.addFlyingPlayer(player);
 				}
 			}
 		}
@@ -164,21 +127,14 @@ public class Boots implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player player = e.getPlayer();
-		ItemStack boots = player.getEquipment().getBoots();
-		if(ce.hasEnchantments(boots)) {
-			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isActivated()) {
-					if(Support.inTerritory(player) || Support.inWingsRegion(player) || ce.inWhitelistedWorld(player)) {
-						if(!areEnemiesNearBy(player)) {
-							if(!ce.inBlacklistedWorld(player)) {
-								if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
-									SpartanSupport.cancelFly(player);
-								}
-								player.setAllowFlight(true);
-								flying.add(player);
-							}
-						}
+		if(manager.isWingsEnabled()) {
+			if(ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
+				if(regionCheck(player) && !areEnemiesNearby(player)) {
+					if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
+						SpartanSupport.cancelFly(player);
 					}
+					player.setAllowFlight(true);
+					manager.addFlyingPlayer(player);
 				}
 			}
 		}
@@ -187,38 +143,39 @@ public class Boots implements Listener {
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
-		ItemStack boots = player.getEquipment().getBoots();
-		if(ce.hasEnchantments(boots)) {
-			if(ce.hasEnchantment(boots, CEnchantments.WINGS)) {
-				if(CEnchantments.WINGS.isActivated()) {
-					player.setFlying(false);
-					player.setAllowFlight(false);
-					flying.remove(player);
-				}
+		if(manager.isWingsEnabled()) {
+			if(manager.isFlyingPlayer(player)) {
+				player.setFlying(false);
+				player.setAllowFlight(false);
+				manager.removeFlyingPlayer(player);
 			}
 		}
 	}
 	
-	private boolean areEnemiesNearBy(Player player) {
-		if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Enemy-Toggle")) {
-			for(Player otherPlayer : getNearByPlayers(player, Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Wings.Distance"))) {
-				if(!Support.isFriendly(player, otherPlayer)) {
-					if(!player.hasPermission("crazyenchantments.bypass.wings")) {
-						return true;
-					}
+	private boolean gamemodeCheck(Player player) {
+		return player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.ADVENTURE;
+	}
+	
+	private boolean regionCheck(Player player) {
+		return !manager.inBlacklistedWorld(player) && (Support.inTerritory(player) || Support.inWingsRegion(player) || manager.inWhitelistedWorld(player));
+	}
+	
+	private boolean areEnemiesNearby(Player player) {
+		if(manager.isEnemeyCheckEnabled()) {
+			for(Player otherPlayer : getNearByPlayers(player, manager.getEnemyRadius())) {
+				if(!Support.isFriendly(player, otherPlayer) && !player.hasPermission("crazyenchantments.bypass.wings")) {
+					return true;
 				}
 			}
 		}
 		return false;
 	}
 	
-	private ArrayList<Player> getNearByPlayers(Player player, int radius) {
-		ArrayList<Player> players = new ArrayList<>();
+	private List<Player> getNearByPlayers(Player player, int radius) {
+		List<Player> players = new ArrayList<>();
 		for(Entity entity : player.getNearbyEntities(radius, radius, radius)) {
 			if(entity instanceof Player) {
-				if(entity != player) {
-					players.add((Player) entity);
-				}
+				players.add((Player) entity);
 			}
 		}
 		return players;

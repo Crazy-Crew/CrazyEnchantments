@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.multisupport;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
-import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import org.bukkit.Bukkit;
@@ -15,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 public class Support {
 	
 	private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+	private static WingsManager manager = ce.getWingsManager();
 	private static WorldGuardVersion worldGuardVersion = ce.getWorldGuardSupport();
 	private static PlotSquaredVersion plotSquaredVersion = ce.getPlotSquaredSupport();
 	
@@ -195,25 +196,15 @@ public class Support {
 	
 	public static boolean inWingsRegion(Player player) {
 		if(SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
-			if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Regions")) {
-				for(String rg : Files.CONFIG.getFile().getStringList("Settings.EnchantmentOptions.Wings.Regions")) {
-					if(worldGuardVersion.inRegion(rg, player.getLocation())) {
+			for(String region : manager.getRegions()) {
+				if(worldGuardVersion.inRegion(region, player.getLocation())) {
+					return true;
+				}else {
+					if(manager.canOwnersFly() && worldGuardVersion.isOwner(player)) {
 						return true;
-					}else {
-						if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
-							if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Members-Can-Fly")) {
-								if(worldGuardVersion.isMember(player)) {
-									return true;
-								}
-							}
-						}
-						if(Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
-							if(Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Wings.Owners-Can-Fly")) {
-								if(worldGuardVersion.isOwner(player)) {
-									return true;
-								}
-							}
-						}
+					}
+					if(manager.canMembersFly() && worldGuardVersion.isMember(player)) {
+						return true;
 					}
 				}
 			}
