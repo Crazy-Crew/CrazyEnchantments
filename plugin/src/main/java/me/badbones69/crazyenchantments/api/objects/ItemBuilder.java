@@ -199,7 +199,7 @@ public class ItemBuilder implements Cloneable {
 									break;
 								}
 							}
-						}catch(Exception e) {
+						}catch(Exception ignored) {
 						}
 						break;
 				}
@@ -594,7 +594,7 @@ public class ItemBuilder implements Cloneable {
 					break;
 				}
 			}
-		}catch(Exception e) {
+		}catch(Exception ignored) {
 		}
 		return this;
 	}
@@ -797,7 +797,7 @@ public class ItemBuilder implements Cloneable {
 	public ItemBuilder addItemFlag(String flagString) {
 		try {
 			addItemFlag(ItemFlag.valueOf(flagString.toUpperCase()));
-		}catch(Exception e) {
+		}catch(Exception ignored) {
 		}
 		return this;
 	}
@@ -809,7 +809,7 @@ public class ItemBuilder implements Cloneable {
 				if(itemFlag != null) {
 					addItemFlag(itemFlag);
 				}
-			}catch(Exception e) {
+			}catch(Exception ignored) {
 			}
 		}
 		return this;

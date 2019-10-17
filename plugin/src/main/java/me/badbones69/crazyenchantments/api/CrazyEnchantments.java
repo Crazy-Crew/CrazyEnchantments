@@ -105,7 +105,7 @@ public class CrazyEnchantments {
 		for(String id : Files.BLOCKLIST.getFile().getStringList("Block-List")) {
 			try {
 				blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
-			}catch(Exception e) {
+			}catch(Exception ignored) {
 			}
 		}
 		whiteScrollProtectionName = Methods.color(config.getString("Settings.WhiteScroll.ProtectedName"));

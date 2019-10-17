@@ -213,7 +213,7 @@ public class Methods {
 					Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
 				}
 			}
-		}catch(Exception e) {
+		}catch(Exception ignored) {
 		}
 	}
 	
@@ -447,7 +447,7 @@ public class Methods {
 				if(item.getItemMeta().isUnbreakable()) {
 					return;
 				}
-			}catch(NoSuchMethodError e) {
+			}catch(NoSuchMethodError ignored) {
 			}
 			if(item.getItemMeta().hasEnchants()) {
 				if(item.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {

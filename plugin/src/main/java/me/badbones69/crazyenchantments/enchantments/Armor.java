@@ -544,7 +544,7 @@ public class Armor implements Listener {
 							for(ItemStack drop : e.getDrops()) {
 								if(drop != null) {
 									if(ProtectionCrystal.isProtected(drop)) {
-										if(ProtectionCrystal.isSuccessfull(player)) {
+										if(ProtectionCrystal.isProtectionSuccessful(player)) {
 											items.add(drop);
 										}
 									}

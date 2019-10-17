@@ -23,7 +23,7 @@ public class CurrencyAPI {
 				case XP_TOTAL:
 					return getTotalExperience(player);
 			}
-		}catch(Exception | NoClassDefFoundError e) {
+		}catch(Exception | NoClassDefFoundError ignored) {
 		}
 		return 0;
 	}
@@ -74,7 +74,7 @@ public class CurrencyAPI {
 					takeTotalExperience(player, amount);
 					break;
 			}
-		}catch(Exception | NoClassDefFoundError e) {
+		}catch(Exception | NoClassDefFoundError ignored) {
 		}
 	}
 	
@@ -97,7 +97,7 @@ public class CurrencyAPI {
 					takeTotalExperience(player, -amount);
 					break;
 			}
-		}catch(Exception | NoClassDefFoundError e) {
+		}catch(Exception | NoClassDefFoundError ignored) {
 		}
 	}
 	

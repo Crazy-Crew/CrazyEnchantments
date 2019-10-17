@@ -18,7 +18,7 @@ public class TownySupport {
 					return true;
 				}
 			}
-		}catch(NotRegisteredException e) {
+		}catch(NotRegisteredException ignored) {
 		}
 		return false;
 	}
@@ -30,7 +30,7 @@ public class TownySupport {
 			if(playerUser.hasTown() && otherUser.hasTown() && playerUser.getTown().getName().equalsIgnoreCase(otherUser.getTown().getName())) {
 				return true;
 			}
-		}catch(NotRegisteredException e) {
+		}catch(NotRegisteredException ignored) {
 		}
 		return false;
 	}
