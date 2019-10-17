@@ -85,6 +85,9 @@ public class ShopManager {
 		Inventory inventory = Bukkit.createInventory(null, inventorySize, inventoryName);
 		for(ItemBuilder itemBuilder : customizerItems.keySet()) {
 			int slot = customizerItems.get(itemBuilder);
+			if(slot > inventorySize || slot <= 0) {
+				continue;
+			}
 			itemBuilder.setNamePlaceholders(placeholders)
 			.setLorePlaceholders(placeholders);
 			inventory.setItem(slot, itemBuilder.build());
