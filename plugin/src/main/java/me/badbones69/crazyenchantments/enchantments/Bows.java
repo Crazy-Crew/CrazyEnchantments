@@ -37,6 +37,7 @@ public class Bows implements Listener {
 	private List<EnchantedArrow> enchantedArrows = new ArrayList<>();
 	private Material web = new ItemBuilder().setMaterial("COBWEB", "WEB").getMaterial();
 	private List<Block> webBlocks = new ArrayList<>();
+	private boolean isv1_13_Up = Version.getCurrentVersion().isNewer(Version.v1_12_R1);
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBowShoot(final EntityShootBowEvent e) {
@@ -66,7 +67,9 @@ public class Bows implements Listener {
 										if(e.getProjectile().getFireTicks() > 0) {
 											spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
 										}
-										spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+										if(isv1_13_Up) {
+											spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+										}
 									}
 								}
 							}else {
@@ -82,7 +85,9 @@ public class Bows implements Listener {
 									if(e.getProjectile().getFireTicks() > 0) {
 										spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
 									}
-									spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+									if(isv1_13_Up) {
+										spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+									}
 								}
 							}
 						}
