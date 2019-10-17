@@ -1347,7 +1347,6 @@ public class CrazyEnchantments {
 		List<ItemStack> items = new ArrayList<>();
 		for(String itemString : itemStrings) {
 			ItemBuilder itemBuilder = ItemBuilder.convertString(itemString);
-			List<String> lore = new ArrayList<>();
 			List<String> customEnchantments = new ArrayList<>();
 			HashMap<Enchantment, Integer> enchantments = new HashMap<>();
 			for(String option : itemString.split(", ")) {
@@ -1367,8 +1366,8 @@ public class CrazyEnchantments {
 				}catch(Exception ignore) {
 				}
 			}
-			lore.addAll(0, customEnchantments);
-			items.add(itemBuilder.setLore(lore).setEnchantments(enchantments).build());
+			itemBuilder.getLore().addAll(0, customEnchantments);
+			items.add(itemBuilder.setEnchantments(enchantments).build());
 		}
 		return items;
 	}
