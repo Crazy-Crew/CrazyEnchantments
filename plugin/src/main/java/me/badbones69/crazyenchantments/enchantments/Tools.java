@@ -49,7 +49,7 @@ public class Tools implements Listener {
 	public void onBlockBreak(BlockBreakEvent e) {
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
-		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e) || ignoreBlock(block)) {
+		if(e.isCancelled() || ce.isIgnoredEvent(e) || ignoreBlock(block)) {
 			return;
 		}
 		updateEffects(player);

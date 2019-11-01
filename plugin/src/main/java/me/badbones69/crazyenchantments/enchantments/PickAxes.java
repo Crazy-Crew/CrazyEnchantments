@@ -59,7 +59,7 @@ public class PickAxes implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlastBreak(BlockBreakEvent e) {
-		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e)) return;
+		if(e.isCancelled() || ce.isIgnoredEvent(e)) return;
 		Player player = e.getPlayer();
 		Block block = e.getBlock();
 		ItemStack item = Methods.getItemInHand(player);
@@ -81,12 +81,12 @@ public class PickAxes implements Listener {
 								if(b.getType() != Material.AIR) {
 									if(ce.getBlockList().contains(b.getType()) || b.getLocation().equals(originalBlockLocation)) {
 										BlockBreakEvent event = new BlockBreakEvent(b, player);
-										ce.addBreakEvent(event);
+										ce.addIgnoredEvent(event);
 										Bukkit.getPluginManager().callEvent(event);
 										if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 											finalBlockList.add(b);
-											ce.removeBreakEvent(event);
 										}
+										ce.removeIgnoredEvent(event);
 									}
 								}
 							}
@@ -330,7 +330,7 @@ public class PickAxes implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBlockBreak(BlockBreakEvent e) {
-		if(e.isCancelled() || ce.getSkippedBreakEvents().contains(e)) return;
+		if(e.isCancelled() || ce.isIgnoredEvent(e)) return;
 		Block block = e.getBlock();
 		Player player = e.getPlayer();
 		ItemStack item = Methods.getItemInHand(player);

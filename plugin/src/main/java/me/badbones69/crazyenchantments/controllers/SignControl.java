@@ -172,7 +172,7 @@ public class SignControl implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBreak(BlockBreakEvent e) {
-		if(!e.isCancelled() && !ce.getSkippedBreakEvents().contains(e)) {
+		if(!e.isCancelled() && !ce.isIgnoredEvent(e)) {
 			Player player = e.getPlayer();
 			Location Loc = e.getBlock().getLocation();
 			for(String locationName : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {

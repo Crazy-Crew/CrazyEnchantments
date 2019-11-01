@@ -41,7 +41,7 @@ public class Bows implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBowShoot(final EntityShootBowEvent e) {
-		if(e.isCancelled()) return;
+		if(e.isCancelled() || ce.isIgnoredEvent(e)) return;
 		ItemStack bow = e.getBow();
 		if(ce.hasEnchantments(bow)) {
 			if(e.getProjectile() instanceof Arrow) {
@@ -202,6 +202,7 @@ public class Bows implements Listener {
 							}
 							for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow.getArrow())) {
 								EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.LIGHTNING, 5D);
+								ce.addIgnoredEvent(damageByEntityEvent);
 								Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 								if(!damageByEntityEvent.isCancelled()) {
 									if(Support.allowsPVP(entity.getLocation())) {
@@ -212,6 +213,7 @@ public class Bows implements Listener {
 										}
 									}
 								}
+								ce.removeIgnoredEvent(damageByEntityEvent);
 							}
 							if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
 								NoCheatPlusSupport.unexemptPlayer(shooter);
@@ -235,21 +237,30 @@ public class Bows implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onArrowDamage(EntityDamageByEntityEvent e) {
-		if(e.getDamager() instanceof Arrow) {
-			if(e.getEntity() instanceof LivingEntity) {
-				LivingEntity entity = (LivingEntity) e.getEntity();
-				EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
-				if(arrow != null) {
-					ItemStack bow = arrow.getBow();
-					if(Support.isFriendly(arrow.getShooter(), e.getEntity())) {// Damaged player is friendly.
-						if(arrow.hasEnchantment(CEnchantments.DOCTOR)) {
-							if(CEnchantments.DOCTOR.isActivated()) {
-								int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
-								if(entity.getHealth() < entity.getMaxHealth()) {
-									if(entity instanceof Player) {
-										EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
-										Bukkit.getPluginManager().callEvent(event);
-										if(!event.isCancelled()) {
+		if(!ce.isIgnoredEvent(e)) {
+			if(e.getDamager() instanceof Arrow) {
+				if(e.getEntity() instanceof LivingEntity) {
+					LivingEntity entity = (LivingEntity) e.getEntity();
+					EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
+					if(arrow != null) {
+						ItemStack bow = arrow.getBow();
+						if(Support.isFriendly(arrow.getShooter(), e.getEntity())) {// Damaged player is friendly.
+							if(arrow.hasEnchantment(CEnchantments.DOCTOR)) {
+								if(CEnchantments.DOCTOR.isActivated()) {
+									int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
+									if(entity.getHealth() < entity.getMaxHealth()) {
+										if(entity instanceof Player) {
+											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
+											Bukkit.getPluginManager().callEvent(event);
+											if(!event.isCancelled()) {
+												if(entity.getHealth() + heal < entity.getMaxHealth()) {
+													entity.setHealth(entity.getHealth() + heal);
+												}
+												if(entity.getHealth() + heal >= entity.getMaxHealth()) {
+													entity.setHealth(entity.getMaxHealth());
+												}
+											}
+										}else {
 											if(entity.getHealth() + heal < entity.getMaxHealth()) {
 												entity.setHealth(entity.getHealth() + heal);
 											}
@@ -257,124 +268,117 @@ public class Bows implements Listener {
 												entity.setHealth(entity.getMaxHealth());
 											}
 										}
-									}else {
-										if(entity.getHealth() + heal < entity.getMaxHealth()) {
-											entity.setHealth(entity.getHealth() + heal);
-										}
-										if(entity.getHealth() + heal >= entity.getMaxHealth()) {
-											entity.setHealth(entity.getMaxHealth());
-										}
 									}
 								}
 							}
 						}
-					}
-					if(!e.isCancelled()) {
-						if(!Support.isFriendly(arrow.getShooter(), entity)) {// Damaged player is an enemy.
-							if(arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
-								if(CEnchantments.STICKY_SHOT.isActivated()) {
-									if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
-										List<Location> locations = new ArrayList<>();
-										Location enLocation = entity.getLocation();
-										locations.add(enLocation.clone().add(1, 0, 1));//Top Left
-										locations.add(enLocation.clone().add(1, 0, 0));//Top Middle
-										locations.add(enLocation.clone().add(1, 0, -1));//Top Right
-										locations.add(enLocation.clone().add(0, 0, 1));//Center Left
-										locations.add(enLocation.clone());//Center Middle
-										locations.add(enLocation.clone().add(0, 0, -1));//Center Right
-										locations.add(enLocation.clone().add(-1, 0, 1));//Bottom Left
-										locations.add(enLocation.clone().add(-1, 0, 0));//Bottom Middle
-										locations.add(enLocation.clone().add(-1, 0, -1));//Bottom Right
-										for(Location loc : locations) {
-											if(loc.getBlock().getType() == Material.AIR) {
-												loc.getBlock().setType(web);
-												webBlocks.add(loc.getBlock());
+						if(!e.isCancelled()) {
+							if(!Support.isFriendly(arrow.getShooter(), entity)) {// Damaged player is an enemy.
+								if(arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
+									if(CEnchantments.STICKY_SHOT.isActivated()) {
+										if(CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
+											List<Location> locations = new ArrayList<>();
+											Location enLocation = entity.getLocation();
+											locations.add(enLocation.clone().add(1, 0, 1));//Top Left
+											locations.add(enLocation.clone().add(1, 0, 0));//Top Middle
+											locations.add(enLocation.clone().add(1, 0, -1));//Top Right
+											locations.add(enLocation.clone().add(0, 0, 1));//Center Left
+											locations.add(enLocation.clone());//Center Middle
+											locations.add(enLocation.clone().add(0, 0, -1));//Center Right
+											locations.add(enLocation.clone().add(-1, 0, 1));//Bottom Left
+											locations.add(enLocation.clone().add(-1, 0, 0));//Bottom Middle
+											locations.add(enLocation.clone().add(-1, 0, -1));//Bottom Right
+											for(Location loc : locations) {
+												if(loc.getBlock().getType() == Material.AIR) {
+													loc.getBlock().setType(web);
+													webBlocks.add(loc.getBlock());
+												}
 											}
-										}
-										arrow.getArrow().remove();
-										new BukkitRunnable() {
-											@Override
-											public void run() {
-												for(Location loc : locations) {
-													if(loc.getBlock().getType() == web) {
-														loc.getBlock().setType(Material.AIR);
-														webBlocks.remove(loc.getBlock());
+											arrow.getArrow().remove();
+											new BukkitRunnable() {
+												@Override
+												public void run() {
+													for(Location loc : locations) {
+														if(loc.getBlock().getType() == web) {
+															loc.getBlock().setType(Material.AIR);
+															webBlocks.remove(loc.getBlock());
+														}
 													}
 												}
-											}
-										}.runTaskLater(ce.getPlugin(), 5 * 20);
+											}.runTaskLater(ce.getPlugin(), 5 * 20);
+										}
 									}
 								}
-							}
-							if(arrow.hasEnchantment(CEnchantments.PULL)) {
-								if(CEnchantments.PULL.isActivated()) {
-									if(CEnchantments.PULL.chanceSuccessful(bow)) {
-										Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
-										if(entity instanceof Player) {
-											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
-											Bukkit.getPluginManager().callEvent(event);
-											Player player = (Player) e.getEntity();
-											if(!event.isCancelled()) {
-												if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
-													SpartanSupport.cancelSpeed(player);
-													SpartanSupport.cancelFly(player);
-													SpartanSupport.cancelClip(player);
-													SpartanSupport.cancelNormalMovements(player);
-													SpartanSupport.cancelNoFall(player);
-													SpartanSupport.cancelJesus(player);
+								if(arrow.hasEnchantment(CEnchantments.PULL)) {
+									if(CEnchantments.PULL.isActivated()) {
+										if(CEnchantments.PULL.chanceSuccessful(bow)) {
+											Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
+											if(entity instanceof Player) {
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
+												Bukkit.getPluginManager().callEvent(event);
+												Player player = (Player) e.getEntity();
+												if(!event.isCancelled()) {
+													if(SupportedPlugins.SPARTAN.isPluginLoaded()) {
+														SpartanSupport.cancelSpeed(player);
+														SpartanSupport.cancelFly(player);
+														SpartanSupport.cancelClip(player);
+														SpartanSupport.cancelNormalMovements(player);
+														SpartanSupport.cancelNoFall(player);
+														SpartanSupport.cancelJesus(player);
+													}
+													if(SupportedPlugins.AAC.isPluginLoaded()) {
+														AACSupport.exemptPlayerTime(player);
+													}
+													entity.setVelocity(v);
 												}
-												if(SupportedPlugins.AAC.isPluginLoaded()) {
-													AACSupport.exemptPlayerTime(player);
-												}
+											}else {
 												entity.setVelocity(v);
 											}
-										}else {
-											entity.setVelocity(v);
 										}
 									}
 								}
-							}
-							if(arrow.hasEnchantment(CEnchantments.ICEFREEZE)) {
-								if(CEnchantments.ICEFREEZE.isActivated()) {
-									if(CEnchantments.ICEFREEZE.chanceSuccessful(bow)) {
-										if(entity instanceof Player) {
-											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.ICEFREEZE, bow);
-											Bukkit.getPluginManager().callEvent(event);
-											if(!event.isCancelled()) {
+								if(arrow.hasEnchantment(CEnchantments.ICEFREEZE)) {
+									if(CEnchantments.ICEFREEZE.isActivated()) {
+										if(CEnchantments.ICEFREEZE.chanceSuccessful(bow)) {
+											if(entity instanceof Player) {
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.ICEFREEZE, bow);
+												Bukkit.getPluginManager().callEvent(event);
+												if(!event.isCancelled()) {
+													entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
+												}
+											}else {
 												entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
 											}
-										}else {
-											entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
 										}
 									}
 								}
-							}
-							if(arrow.hasEnchantment(CEnchantments.PIERCING)) {
-								if(CEnchantments.PIERCING.isActivated()) {
-									if(CEnchantments.PIERCING.chanceSuccessful(bow)) {
-										if(entity instanceof Player) {
-											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PIERCING, bow);
-											Bukkit.getPluginManager().callEvent(event);
-											if(!event.isCancelled()) {
+								if(arrow.hasEnchantment(CEnchantments.PIERCING)) {
+									if(CEnchantments.PIERCING.isActivated()) {
+										if(CEnchantments.PIERCING.chanceSuccessful(bow)) {
+											if(entity instanceof Player) {
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PIERCING, bow);
+												Bukkit.getPluginManager().callEvent(event);
+												if(!event.isCancelled()) {
+													e.setDamage(e.getDamage() * 2);
+												}
+											}else {
 												e.setDamage(e.getDamage() * 2);
 											}
-										}else {
-											e.setDamage(e.getDamage() * 2);
 										}
 									}
 								}
-							}
-							if(arrow.hasEnchantment(CEnchantments.VENOM)) {
-								if(CEnchantments.VENOM.isActivated()) {
-									if(CEnchantments.VENOM.chanceSuccessful(bow)) {
-										if(entity instanceof Player) {
-											EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.VENOM, bow);
-											Bukkit.getPluginManager().callEvent(event);
-											if(!event.isCancelled()) {
+								if(arrow.hasEnchantment(CEnchantments.VENOM)) {
+									if(CEnchantments.VENOM.isActivated()) {
+										if(CEnchantments.VENOM.chanceSuccessful(bow)) {
+											if(entity instanceof Player) {
+												EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.VENOM, bow);
+												Bukkit.getPluginManager().callEvent(event);
+												if(!event.isCancelled()) {
+													entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
+												}
+											}else {
 												entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
 											}
-										}else {
-											entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
 										}
 									}
 								}
@@ -388,7 +392,7 @@ public class Bows implements Listener {
 	
 	@EventHandler
 	public void onWebBreak(BlockBreakEvent e) {
-		if(webBlocks.contains(e.getBlock())) {
+		if(!ce.isIgnoredEvent(e) && webBlocks.contains(e.getBlock())) {
 			e.setCancelled(true);
 		}
 	}

@@ -31,7 +31,7 @@ public class Axes implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
-		if(e.isCancelled()) return;
+		if(e.isCancelled() || ce.isIgnoredEvent(e)) return;
 		if(Support.isFriendly(e.getDamager(), e.getEntity())) return;
 		if(e.getEntity() instanceof LivingEntity) {
 			LivingEntity en = (LivingEntity) e.getEntity();

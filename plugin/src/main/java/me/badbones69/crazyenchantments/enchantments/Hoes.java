@@ -128,7 +128,7 @@ public class Hoes implements Listener {
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
-		if(!e.isCancelled() && !ce.getSkippedBreakEvents().contains(e)) {
+		if(!e.isCancelled() && !ce.isIgnoredEvent(e)) {
 			Player player = e.getPlayer();
 			Block plant = e.getBlock();
 			if(getHarvesterCrops().contains(plant.getType())) {
@@ -329,11 +329,11 @@ public class Hoes implements Listener {
 			if(getHarvesterCrops().contains(crop.getType())) {
 				if(ce.getNMSSupport().isFullyGrown(crop)) {
 					BlockBreakEvent event = new BlockBreakEvent(crop, player);
-					ce.addBreakEvent(event);
+					ce.addIgnoredEvent(event);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 						blocks.add(crop);
-						ce.removeBreakEvent(event);
+						ce.removeIgnoredEvent(event);
 					}
 				}
 			}
@@ -347,11 +347,11 @@ public class Hoes implements Listener {
 		for(Block soil : getAreaBlocks(block)) {
 			if(soil.getType() == grassBlock || soil.getType() == Material.DIRT || soil.getType() == Material.SOUL_SAND || soil.getType() == soilBlock) {
 				BlockBreakEvent event = new BlockBreakEvent(soil, player);
-				ce.addBreakEvent(event);
+				ce.addIgnoredEvent(event);
 				Bukkit.getPluginManager().callEvent(event);
 				if(!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
 					soilBlocks.add(soil);
-					ce.removeBreakEvent(event);
+					ce.removeIgnoredEvent(event);
 				}
 			}
 		}

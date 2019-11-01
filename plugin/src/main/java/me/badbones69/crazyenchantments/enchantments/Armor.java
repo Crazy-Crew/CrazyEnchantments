@@ -100,7 +100,7 @@ public class Armor implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
-		if(e.isCancelled()) return;
+		if(e.isCancelled() || ce.isIgnoredEvent(e)) return;
 		if(Support.isFriendly(e.getDamager(), e.getEntity())) return;
 		if(e.getDamager() instanceof LivingEntity) {
 			if(e.getEntity() instanceof Player) {
@@ -275,6 +275,7 @@ public class Armor implements Listener {
 										}
 										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
 											EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.LIGHTNING, 5D);
+											ce.addIgnoredEvent(damageByEntityEvent);
 											Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 											if(!damageByEntityEvent.isCancelled()) {
 												if(Support.allowsPVP(en.getLocation())) {
@@ -283,6 +284,7 @@ public class Armor implements Listener {
 													}
 												}
 											}
+											ce.removeIgnoredEvent(damageByEntityEvent);
 										}
 										damager.damage(5D);
 										if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
@@ -604,7 +606,7 @@ public class Armor implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onAllySpawn(EntityDamageByEntityEvent e) {
-		if(!e.isCancelled()) {
+		if(!e.isCancelled() && !ce.isIgnoredEvent(e)) {
 			if(e.getEntity() instanceof Player && e.getDamager() instanceof LivingEntity) {// Player gets attacked
 				Player player = (Player) e.getEntity();
 				LivingEntity en = (LivingEntity) e.getDamager();

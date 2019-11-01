@@ -34,7 +34,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -71,8 +71,8 @@ public class CrazyEnchantments {
 	private List<GKitz> gkitz = new ArrayList<>();
 	private List<CEPlayer> players = new ArrayList<>();
 	private List<Material> blockList = new ArrayList<>();
-	private List<BlockBreakEvent> skipBreakEvents = new ArrayList<>();
 	private List<CEnchantment> registeredEnchantments = new ArrayList<>();
+	private List<Event> ignoredEvents = new ArrayList<>();
 	private FileManager fileManager = FileManager.getInstance();
 	
 	public static CrazyEnchantments getInstance() {
@@ -1214,6 +1214,24 @@ public class CrazyEnchantments {
 		return blockList;
 	}
 	
+	public List<Event> getIgnoredEvents() {
+		return ignoredEvents;
+	}
+	
+	public boolean isIgnoredEvent(Event event) {
+		return ignoredEvents.contains(event);
+	}
+	
+	public void addIgnoredEvent(Event event) {
+		if(!ignoredEvents.contains(event)) {
+			ignoredEvents.add(event);
+		}
+	}
+	
+	public void removeIgnoredEvent(Event event) {
+		ignoredEvents.remove(event);
+	}
+	
 	/**
 	 *
 	 * @return The max rage stack level.
@@ -1251,18 +1269,6 @@ public class CrazyEnchantments {
 	 */
 	public boolean enchantStackedItems() {
 		return enchantStackedItems;
-	}
-	
-	public List<BlockBreakEvent> getSkippedBreakEvents() {
-		return skipBreakEvents;
-	}
-	
-	public void addBreakEvent(BlockBreakEvent event) {
-		skipBreakEvents.add(event);
-	}
-	
-	public void removeBreakEvent(BlockBreakEvent event) {
-		skipBreakEvents.remove(event);
 	}
 	
 	/**
