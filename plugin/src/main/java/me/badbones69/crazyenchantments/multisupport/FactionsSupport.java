@@ -21,12 +21,12 @@ public class FactionsSupport {
 		}
 		Faction fOther = MPlayer.get(other).getFaction();
 		Rel relation = MPlayer.get(player).getRelationTo(MPlayer.get(other));
-		return !Methods.removeColor(fOther.getName()).equalsIgnoreCase("Wilderness") && (fPlayer == fOther || relation.isFriend() || relation.isAtLeast(Rel.TRUCE));
+		return !Methods.removeColor(fOther.getName()).equalsIgnoreCase("Wilderness") && !relation.isAtMost(Rel.NEUTRAL) && (fPlayer == fOther || relation.isFriend() || relation.isAtLeast(Rel.TRUCE));
 	}
 	
 	public static boolean isFriendly(Faction player, Faction other) {
 		Rel r = player.getRelationTo(other);
-		return !Methods.removeColor(other.getName()).equalsIgnoreCase("Wilderness") && (r.isFriend() || player == other);
+		return !Methods.removeColor(other.getName()).equalsIgnoreCase("Wilderness") && !r.isAtMost(Rel.NEUTRAL) && (r.isFriend() || player == other);
 	}
 	
 	public static boolean inTerritory(Player P) {
