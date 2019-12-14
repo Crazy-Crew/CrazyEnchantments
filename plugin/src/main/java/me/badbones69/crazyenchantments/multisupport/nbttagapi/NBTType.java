@@ -1,5 +1,12 @@
 package me.badbones69.crazyenchantments.multisupport.nbttagapi;
 
+/**
+ * Enum of all NBT Types Minecraft contains
+ *
+ * @author tr7zw
+ *
+ */
+@SuppressWarnings("javadoc")
 public enum NBTType {
 	NBTTagEnd(0),
 	NBTTagByte(1),
@@ -14,21 +21,28 @@ public enum NBTType {
 	NBTTagList(9),
 	NBTTagCompound(10);
 	
-	private final int id;
-	
 	NBTType(int i) {
 		id = i;
 	}
 	
+	private final int id;
+	
+	/**
+	 * @return Id used by Minecraft internally
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	/**
+	 * @param id Internal Minecraft id
+	 * @return Enum representing the id, NBTTagEnd for invalide ids
+	 */
 	public static NBTType valueOf(int id) {
 		for(NBTType t : values())
 			if(t.getId() == id)
 				return t;
 		return NBTType.NBTTagEnd;
-	}
-	
-	public int getId() {
-		return id;
 	}
 	
 }

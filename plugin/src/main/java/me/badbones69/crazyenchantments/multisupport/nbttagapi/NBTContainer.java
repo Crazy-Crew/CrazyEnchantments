@@ -1,34 +1,59 @@
 package me.badbones69.crazyenchantments.multisupport.nbttagapi;
 
+import me.badbones69.crazyenchantments.multisupport.nbttagapi.utils.nmsmappings.ObjectCreator;
+import me.badbones69.crazyenchantments.multisupport.nbttagapi.utils.nmsmappings.ReflectionMethod;
+
+/**
+ * A Standalone {@link NBTCompound} implementation. All data is just kept inside
+ * this Object.
+ *
+ * @author tr7zw
+ *
+ */
 public class NBTContainer extends NBTCompound {
 	
 	private Object nbt;
 	
+	/**
+	 * Creates an empty, standalone NBTCompound
+	 */
 	public NBTContainer() {
 		super(null, null);
-		nbt = NBTReflectionUtil.getNewNBTTag();
+		nbt = ObjectCreator.NMS_NBTTAGCOMPOUND.getInstance();
 	}
 	
-	protected NBTContainer(Object nbt) {
+	/**
+	 * Takes in any NMS Compound to wrap it
+	 *
+	 * @param nbt
+	 */
+	public NBTContainer(Object nbt) {
 		super(null, null);
 		this.nbt = nbt;
 	}
 	
-	public NBTContainer(String nbtString) throws IllegalArgumentException {
+	/**
+	 * Parses in a NBT String to a standalone {@link NBTCompound}. Can throw a
+	 * {@link NbtApiException} in case something goes wrong.
+	 *
+	 * @param nbtString
+	 */
+	public NBTContainer(String nbtString) {
 		super(null, null);
 		try {
-			nbt = NBTReflectionUtil.parseNBT(nbtString);
+			nbt = ReflectionMethod.PARSE_NBT.run(null, nbtString);
 		}catch(Exception ex) {
-			ex.printStackTrace();
-			throw new IllegalArgumentException("Malformed Json: " + ex.getMessage());
+			throw new NbtApiException("Unable to parse Malformed Json!", ex);
 		}
 	}
 	
-	protected Object getCompound() {
+	@Override
+	public Object getCompound() {
 		return nbt;
 	}
 	
-	protected void setCompound(Object tag) {
+	@Override
+	public void setCompound(Object tag) {
 		nbt = tag;
 	}
 	
