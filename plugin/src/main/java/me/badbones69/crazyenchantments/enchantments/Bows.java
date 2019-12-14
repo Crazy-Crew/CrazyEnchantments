@@ -201,7 +201,7 @@ public class Bows implements Listener {
 								AACSupport.exemptPlayer(shooter);
 							}
 							for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow.getArrow())) {
-								EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.LIGHTNING, 5D);
+								EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
 								ce.addIgnoredEvent(damageByEntityEvent);
 								Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 								if(!damageByEntityEvent.isCancelled()) {

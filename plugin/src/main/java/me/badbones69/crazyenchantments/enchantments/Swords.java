@@ -219,11 +219,10 @@ public class Swords implements Listener {
 											if(!event.isCancelled()) {
 												if(CurrencyAPI.getCurrency(player, Currency.XP_TOTAL) >= amount) {
 													CurrencyAPI.takeCurrency(player, Currency.XP_TOTAL, amount);
-													CurrencyAPI.giveCurrency(damager, Currency.XP_TOTAL, amount);
 												}else {
 													player.setTotalExperience(0);
-													CurrencyAPI.giveCurrency(damager, Currency.XP_TOTAL, amount);
 												}
+												CurrencyAPI.giveCurrency(damager, Currency.XP_TOTAL, amount);
 											}
 										}
 									}
@@ -391,7 +390,7 @@ public class Swords implements Listener {
 												AACSupport.exemptPlayer(damager);
 											}
 											for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
-												EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, DamageCause.LIGHTNING, 5D);
+												EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, DamageCause.CUSTOM, 5D);
 												ce.addIgnoredEvent(damageByEntityEvent);
 												Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 												if(!damageByEntityEvent.isCancelled()) {

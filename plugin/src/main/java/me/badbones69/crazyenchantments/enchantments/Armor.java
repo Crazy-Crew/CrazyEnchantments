@@ -274,7 +274,7 @@ public class Armor implements Listener {
 											AACSupport.exemptPlayer(player);
 										}
 										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
-											EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.LIGHTNING, 5D);
+											EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
 											ce.addIgnoredEvent(damageByEntityEvent);
 											Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 											if(!damageByEntityEvent.isCancelled()) {
