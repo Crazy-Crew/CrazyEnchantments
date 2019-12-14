@@ -50,7 +50,7 @@ public class Swords implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
-		if(!e.isCancelled() && !ce.isIgnoredEvent(e)) {
+		if(!e.isCancelled() && !ce.isIgnoredEvent(e) && !ce.isIgnoredUUID(e.getDamager().getUniqueId())) {
 			if(!Support.isFriendly(e.getDamager(), e.getEntity())) {
 				if(ce.isBreakRageOnDamageOn()) {
 					if(e.getEntity() instanceof Player) {
@@ -392,6 +392,7 @@ public class Swords implements Listener {
 											for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
 												EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, DamageCause.CUSTOM, 5D);
 												ce.addIgnoredEvent(damageByEntityEvent);
+												ce.addIgnoredUUID(damager.getUniqueId());
 												Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 												if(!damageByEntityEvent.isCancelled()) {
 													if(Support.allowsPVP(entity.getLocation())) {
@@ -401,6 +402,7 @@ public class Swords implements Listener {
 													}
 												}
 												ce.removeIgnoredEvent(damageByEntityEvent);
+												ce.removeIgnoredUUID(damager.getUniqueId());
 											}
 											en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
 											en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));

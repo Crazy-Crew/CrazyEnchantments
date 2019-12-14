@@ -73,6 +73,7 @@ public class CrazyEnchantments {
 	private List<Material> blockList = new ArrayList<>();
 	private List<CEnchantment> registeredEnchantments = new ArrayList<>();
 	private List<Event> ignoredEvents = new ArrayList<>();
+	private List<UUID> ignoredUUIDs = new ArrayList<>();
 	private FileManager fileManager = FileManager.getInstance();
 	
 	public static CrazyEnchantments getInstance() {
@@ -1225,6 +1226,24 @@ public class CrazyEnchantments {
 	public void addIgnoredEvent(Event event) {
 		if(!ignoredEvents.contains(event)) {
 			ignoredEvents.add(event);
+		}
+	}
+	
+	public void removeIgnoredUUID(UUID uuid) {
+		ignoredUUIDs.remove(uuid);
+	}
+	
+	public List<UUID> getIgnoredUUIDs() {
+		return ignoredUUIDs;
+	}
+	
+	public boolean isIgnoredUUID(UUID uuid) {
+		return ignoredUUIDs.contains(uuid);
+	}
+	
+	public void addIgnoredUUID(UUID uuid) {
+		if(!ignoredUUIDs.contains(uuid)) {
+			ignoredUUIDs.add(uuid);
 		}
 	}
 	

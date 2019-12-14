@@ -100,7 +100,7 @@ public class Armor implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerDamage(EntityDamageByEntityEvent e) {
-		if(e.isCancelled() || ce.isIgnoredEvent(e)) return;
+		if(e.isCancelled() || ce.isIgnoredEvent(e) || ce.isIgnoredUUID(e.getDamager().getUniqueId())) return;
 		if(Support.isFriendly(e.getDamager(), e.getEntity())) return;
 		if(e.getDamager() instanceof LivingEntity) {
 			if(e.getEntity() instanceof Player) {
@@ -276,6 +276,7 @@ public class Armor implements Listener {
 										for(LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
 											EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
 											ce.addIgnoredEvent(damageByEntityEvent);
+											ce.addIgnoredUUID(player.getUniqueId());
 											Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 											if(!damageByEntityEvent.isCancelled()) {
 												if(Support.allowsPVP(en.getLocation())) {
@@ -285,6 +286,7 @@ public class Armor implements Listener {
 												}
 											}
 											ce.removeIgnoredEvent(damageByEntityEvent);
+											ce.removeIgnoredUUID(player.getUniqueId());
 										}
 										damager.damage(5D);
 										if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {

@@ -41,7 +41,7 @@ public class Bows implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onBowShoot(final EntityShootBowEvent e) {
-		if(e.isCancelled() || ce.isIgnoredEvent(e)) return;
+		if(e.isCancelled() || ce.isIgnoredEvent(e) || ce.isIgnoredUUID(e.getEntity().getUniqueId())) return;
 		ItemStack bow = e.getBow();
 		if(ce.hasEnchantments(bow)) {
 			if(e.getProjectile() instanceof Arrow) {
@@ -203,6 +203,7 @@ public class Bows implements Listener {
 							for(LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, arrow.getArrow())) {
 								EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
 								ce.addIgnoredEvent(damageByEntityEvent);
+								ce.addIgnoredUUID(shooter.getUniqueId());
 								Bukkit.getPluginManager().callEvent(damageByEntityEvent);
 								if(!damageByEntityEvent.isCancelled()) {
 									if(Support.allowsPVP(entity.getLocation())) {
@@ -214,6 +215,7 @@ public class Bows implements Listener {
 									}
 								}
 								ce.removeIgnoredEvent(damageByEntityEvent);
+								ce.removeIgnoredUUID(shooter.getUniqueId());
 							}
 							if(SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
 								NoCheatPlusSupport.unexemptPlayer(shooter);
