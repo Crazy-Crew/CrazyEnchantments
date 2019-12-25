@@ -33,10 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CECommand implements CommandExecutor {
-	
+
 	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
 	private FileManager fileManager = FileManager.getInstance();
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {
 		boolean isPlayer = sender instanceof Player;
@@ -206,7 +206,7 @@ public class CECommand implements CommandExecutor {
 												location.setZ(Integer.parseInt(value));
 											}
 											break;
-										
+
 									}
 								}catch(Exception ignore) {
 								}
@@ -577,6 +577,7 @@ public class CECommand implements CommandExecutor {
 							placeholders.put("%Player%", player.getName());
 							sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
 							player.getInventory().addItem(new CEBook(enchantment, level, amount).buildBook());
+							return true;
 						}
 						sender.sendMessage(Methods.getPrefix() + Methods.color("&c/ce Book <Enchantment> [Lvl] [Amount] [Player]"));
 					}
@@ -587,9 +588,9 @@ public class CECommand implements CommandExecutor {
 			}
 		}
 	}
-	
+
 	private boolean hasPermission(CommandSender sender, String permission) {
 		return Methods.hasPermission(sender, permission, true);
 	}
-	
+
 }
