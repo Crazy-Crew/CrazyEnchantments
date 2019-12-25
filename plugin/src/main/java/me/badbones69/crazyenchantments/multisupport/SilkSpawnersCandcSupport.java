@@ -18,43 +18,43 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 public class SilkSpawnersCandcSupport implements Listener {
-	
-	private SilkSpawnersAPI api = SilkSpawners.getApi();
-	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onBreak(SpawnerBreakEvent e) {
-		if(e.isCancelled()) return;
-		Player player = e.getPlayer();
-		Block block = e.getSpawner();
-		if(player != null) {
-			if(block != null) {
-				if(player.getGameMode() != GameMode.CREATIVE) {
-					ItemStack item = Methods.getItemInHand(player);
-					if(ce.hasEnchantments(item)) {
-						if(ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
-							if(CEnchantments.TELEPATHY.isActivated()) {
-								if(player.hasPermission("silkspawners.break")) {
-									EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
-									Bukkit.getPluginManager().callEvent(event);
-									if(event.isCancelled()) {
-										return;
-									}
-									ItemStack it = api.getSpawner(e.getSpawnedEntity());
-									if(!Methods.isInventoryFull(player)) {
-										player.getInventory().addItem(it);
-									}else {
-										block.getWorld().dropItemNaturally(block.getLocation(), it);
-									}
-									block.setType(Material.AIR);
-									e.setCancelled(true);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
+    
+    private SilkSpawnersAPI api = SilkSpawners.getApi();
+    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBreak(SpawnerBreakEvent e) {
+        if (e.isCancelled()) return;
+        Player player = e.getPlayer();
+        Block block = e.getSpawner();
+        if (player != null) {
+            if (block != null) {
+                if (player.getGameMode() != GameMode.CREATIVE) {
+                    ItemStack item = Methods.getItemInHand(player);
+                    if (ce.hasEnchantments(item)) {
+                        if (ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
+                            if (CEnchantments.TELEPATHY.isActivated()) {
+                                if (player.hasPermission("silkspawners.break")) {
+                                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
+                                    Bukkit.getPluginManager().callEvent(event);
+                                    if (event.isCancelled()) {
+                                        return;
+                                    }
+                                    ItemStack it = api.getSpawner(e.getSpawnedEntity());
+                                    if (!Methods.isInventoryFull(player)) {
+                                        player.getInventory().addItem(it);
+                                    } else {
+                                        block.getWorld().dropItemNaturally(block.getLocation(), it);
+                                    }
+                                    block.setType(Material.AIR);
+                                    e.setCancelled(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 }

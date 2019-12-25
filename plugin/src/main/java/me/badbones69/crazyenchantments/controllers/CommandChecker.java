@@ -15,40 +15,40 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandChecker implements Listener {
-	
-	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-	private List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
-	private ItemStack air = new ItemStack(Material.AIR);
-	
-	@EventHandler
-	public void onInventoryClear(PlayerCommandPreprocessEvent e) {
-		Player player = e.getPlayer();
-		if(clearInventoryCommands.contains(e.getMessage().toLowerCase())) {
-			for(CEnchantments enchantment : ce.getEnchantmentPotions().keySet()) {
-				if(enchantment.isActivated()) {
-					for(ItemStack armor : player.getEquipment().getArmorContents()) {
-						if(armor != null) {
-							for(PotionEffectType type : ce.getUpdatedEffects(player, air, air, enchantment).keySet()) {
-								player.removePotionEffect(type);
-							}
-						}
-					}
-				}
-			}
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					ce.updatePlayerEffects(player);
-				}
-			}.runTaskLater(ce.getPlugin(), 5);
-		}else if(e.getMessage().equalsIgnoreCase("/heal")) {
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					ce.updatePlayerEffects(player);
-				}
-			}.runTaskLater(ce.getPlugin(), 5);
-		}
-	}
-	
+    
+    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
+    private ItemStack air = new ItemStack(Material.AIR);
+    
+    @EventHandler
+    public void onInventoryClear(PlayerCommandPreprocessEvent e) {
+        Player player = e.getPlayer();
+        if (clearInventoryCommands.contains(e.getMessage().toLowerCase())) {
+            for (CEnchantments enchantment : ce.getEnchantmentPotions().keySet()) {
+                if (enchantment.isActivated()) {
+                    for (ItemStack armor : player.getEquipment().getArmorContents()) {
+                        if (armor != null) {
+                            for (PotionEffectType type : ce.getUpdatedEffects(player, air, air, enchantment).keySet()) {
+                                player.removePotionEffect(type);
+                            }
+                        }
+                    }
+                }
+            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ce.updatePlayerEffects(player);
+                }
+            }.runTaskLater(ce.getPlugin(), 5);
+        } else if (e.getMessage().equalsIgnoreCase("/heal")) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ce.updatePlayerEffects(player);
+                }
+            }.runTaskLater(ce.getPlugin(), 5);
+        }
+    }
+    
 }

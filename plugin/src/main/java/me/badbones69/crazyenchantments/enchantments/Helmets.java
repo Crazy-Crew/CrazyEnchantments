@@ -19,77 +19,77 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 
 public class Helmets implements Listener {
-	
-	private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onEquip(ArmorEquipEvent e) {
-		Player player = e.getPlayer();
-		ItemStack newItem = e.getNewArmorPiece();
-		ItemStack oldItem = e.getOldArmorPiece();
-		if(ce.hasEnchantments(newItem)) {
-			int time = Integer.MAX_VALUE;
-			if(ce.hasEnchantment(newItem, CEnchantments.GLOWING)) {
-				if(CEnchantments.GLOWING.isActivated()) {
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, newItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()) {
-						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, ce.getLevel(newItem, CEnchantments.GLOWING) - 1));
-					}
-				}
-			}
-			if(ce.hasEnchantment(newItem, CEnchantments.MERMAID)) {
-				if(CEnchantments.MERMAID.isActivated()) {
-					EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, newItem);
-					Bukkit.getPluginManager().callEvent(event);
-					if(!event.isCancelled()) {
-						player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, ce.getLevel(newItem, CEnchantments.MERMAID) - 1));
-					}
-				}
-			}
-		}
-		if(ce.hasEnchantments(oldItem)) {
-			if(ce.hasEnchantment(oldItem, CEnchantments.GLOWING)) {
-				if(CEnchantments.GLOWING.isActivated()) {
-					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-				}
-			}
-			if(ce.hasEnchantment(oldItem, CEnchantments.MERMAID)) {
-				if(CEnchantments.MERMAID.isActivated()) {
-					player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-				}
-			}
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onMovment(PlayerMoveEvent e) {
-		Player player = e.getPlayer();
-		for(ItemStack armor : player.getEquipment().getArmorContents()) {
-			if(ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
-				if(CEnchantments.COMMANDER.isActivated()) {
-					int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
-					ArrayList<Player> players = new ArrayList<>();
-					for(Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-						if(entity instanceof Player) {
-							Player other = (Player) entity;
-							if(Support.isFriendly(player, other)) {
-								players.add(other);
-							}
-						}
-					}
-					if(players.size() > 0) {
-						EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
-						Bukkit.getPluginManager().callEvent(event);
-						if(!event.isCancelled()) {
-							for(Player other : players) {
-								other.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	
+    
+    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEquip(ArmorEquipEvent e) {
+        Player player = e.getPlayer();
+        ItemStack newItem = e.getNewArmorPiece();
+        ItemStack oldItem = e.getOldArmorPiece();
+        if (ce.hasEnchantments(newItem)) {
+            int time = Integer.MAX_VALUE;
+            if (ce.hasEnchantment(newItem, CEnchantments.GLOWING)) {
+                if (CEnchantments.GLOWING.isActivated()) {
+                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, newItem);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, ce.getLevel(newItem, CEnchantments.GLOWING) - 1));
+                    }
+                }
+            }
+            if (ce.hasEnchantment(newItem, CEnchantments.MERMAID)) {
+                if (CEnchantments.MERMAID.isActivated()) {
+                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, newItem);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, ce.getLevel(newItem, CEnchantments.MERMAID) - 1));
+                    }
+                }
+            }
+        }
+        if (ce.hasEnchantments(oldItem)) {
+            if (ce.hasEnchantment(oldItem, CEnchantments.GLOWING)) {
+                if (CEnchantments.GLOWING.isActivated()) {
+                    player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                }
+            }
+            if (ce.hasEnchantment(oldItem, CEnchantments.MERMAID)) {
+                if (CEnchantments.MERMAID.isActivated()) {
+                    player.removePotionEffect(PotionEffectType.WATER_BREATHING);
+                }
+            }
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onMovment(PlayerMoveEvent e) {
+        Player player = e.getPlayer();
+        for (ItemStack armor : player.getEquipment().getArmorContents()) {
+            if (ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
+                if (CEnchantments.COMMANDER.isActivated()) {
+                    int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
+                    ArrayList<Player> players = new ArrayList<>();
+                    for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+                        if (entity instanceof Player) {
+                            Player other = (Player) entity;
+                            if (Support.isFriendly(player, other)) {
+                                players.add(other);
+                            }
+                        }
+                    }
+                    if (players.size() > 0) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            for (Player other : players) {
+                                other.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
 }

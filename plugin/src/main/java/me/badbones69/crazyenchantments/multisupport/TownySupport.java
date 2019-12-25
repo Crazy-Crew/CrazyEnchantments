@@ -8,31 +8,31 @@ import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.entity.Player;
 
 public class TownySupport {
-	
-	public static boolean inTerritory(Player player) {
-		try {
-			TownBlock block = WorldCoord.parseWorldCoord(player).getTownBlock();
-			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
-			if(playerUser.hasTown()) {
-				if(playerUser.getTown().hasTownBlock(block)) {
-					return true;
-				}
-			}
-		}catch(NotRegisteredException ignored) {
-		}
-		return false;
-	}
-	
-	public static boolean isFriendly(Player player, Player other) {
-		try {
-			Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
-			Resident otherUser = TownyUniverse.getDataSource().getResident(other.getName());
-			if(playerUser.hasTown() && otherUser.hasTown() && playerUser.getTown().getName().equalsIgnoreCase(otherUser.getTown().getName())) {
-				return true;
-			}
-		}catch(NotRegisteredException ignored) {
-		}
-		return false;
-	}
-	
+    
+    public static boolean inTerritory(Player player) {
+        try {
+            TownBlock block = WorldCoord.parseWorldCoord(player).getTownBlock();
+            Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
+            if (playerUser.hasTown()) {
+                if (playerUser.getTown().hasTownBlock(block)) {
+                    return true;
+                }
+            }
+        } catch (NotRegisteredException ignored) {
+        }
+        return false;
+    }
+    
+    public static boolean isFriendly(Player player, Player other) {
+        try {
+            Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
+            Resident otherUser = TownyUniverse.getDataSource().getResident(other.getName());
+            if (playerUser.hasTown() && otherUser.hasTown() && playerUser.getTown().getName().equalsIgnoreCase(otherUser.getTown().getName())) {
+                return true;
+            }
+        } catch (NotRegisteredException ignored) {
+        }
+        return false;
+    }
+    
 }
