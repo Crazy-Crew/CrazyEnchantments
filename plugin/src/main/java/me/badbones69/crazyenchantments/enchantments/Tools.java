@@ -74,32 +74,15 @@ public class Tools implements Listener {
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         HashMap<ItemStack, Integer> drops = new HashMap<>();
-                        for (ItemStack drop : block.getDrops()) {
+                        for (ItemStack drop : block.getDrops(item)) {
                             if (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && isOre(block.getType())) {
                                 drop = getOreDrop(block.getType());
-                                if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-                                    if (Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                                        drop.setAmount(1 + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-                                    }
-                                }
                             } else if (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && isOre(block.getType())) {
                                 if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
                                     drop = getOreDrop(block.getType());
                                     drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
-                                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-                                        if (Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                                            drop.setAmount(drop.getAmount() + item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-                                        }
-                                    }
                                 }
                             } else {
-                                if (getItems().contains(block.getType())) {
-                                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-                                        if (Methods.randomPicker(3)) {
-                                            drop.setAmount(2);
-                                        }
-                                    }
-                                }
                                 if (item.getItemMeta().hasEnchants()) {
                                     if (!item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
                                         if (getXPOres().contains(block.getType())) {
