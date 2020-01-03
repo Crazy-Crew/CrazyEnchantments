@@ -54,3 +54,9 @@ Messages:
     Cooled-Down: '&7[&c&lRage&7]: &cYour Rage has cooled down.'
     Rage-Up: '&7[&c&lRage&7]: &7You are now doing &a%level%x &7Damage.'
     Damaged: '&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!'
+  Limit-Command:
+    - '&8[&aCrazyEnchants&8]: &bPersonal Enchantment Limit:'
+    - '&7Bypass Limit: &6%bypass%'
+    - '&7Vanilla Enchantment Check: &6%vanilla%'
+    - '&7Max Enchantment Limit: &6%limit%'
+    - '&7Current Enchantment amount on item: &6%item%'

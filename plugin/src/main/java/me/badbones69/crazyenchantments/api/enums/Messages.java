@@ -4,6 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,7 +62,13 @@ public enum Messages {
     RAGE_BUILDING("Rage.Building", "&7[&c&lRage&7]: &aKeep it up, your rage is building."),
     RAGE_COOLED_DOWN("Rage.Cooled-Down", "&7[&c&lRage&7]: &cYour Rage has just cooled down."),
     RAGE_RAGE_UP("Rage.Rage-Up", "&7[&c&lRage&7]: &7You are now doing &a%Level%x &7Damage."),
-    RAGE_DAMAGED("Rage.Damaged", "&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!");
+    RAGE_DAMAGED("Rage.Damaged", "&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"),
+    LIMIT_COMMAND("Limit-Command", Arrays.asList(
+    "&8[&aCrazyEnchants&8]: &bPersonal Enchantment Limit:",
+    "&7Bypass Limit: &6%bypass%",
+    "&7Vanilla Enchantment Check: &6%vanilla%",
+    "&7Max Enchantment Limit: &6%limit%",
+    "&7Current Enchantment amount on item: &6%item%"));
     
     private String path;
     private String defaultMessage;
