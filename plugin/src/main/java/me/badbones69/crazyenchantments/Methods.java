@@ -219,12 +219,10 @@ public class Methods {
     
     public static int getEnchantmentAmount(ItemStack item) {
         int amount = ce.getEnchantmentsOnItem(item).size();
-        if (Files.CONFIG.getFile().contains("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
-            if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
-                if (item.hasItemMeta()) {
-                    if (item.getItemMeta().hasEnchants()) {
-                        amount = +item.getItemMeta().getEnchants().size();
-                    }
+        if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
+            if (item.hasItemMeta()) {
+                if (item.getItemMeta().hasEnchants()) {
+                    amount += +item.getItemMeta().getEnchants().size();
                 }
             }
         }
