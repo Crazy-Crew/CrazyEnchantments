@@ -304,6 +304,7 @@ public class ItemBuilder implements Cloneable {
                 this.isTippedArrow = true;
                 break;
             case "POTION":
+            case "SPLASH_POTION":
                 this.isPotion = true;
                 break;
             case "LEATHER_HELMET":
