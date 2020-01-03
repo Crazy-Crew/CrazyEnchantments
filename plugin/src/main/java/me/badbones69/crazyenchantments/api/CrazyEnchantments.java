@@ -1099,13 +1099,6 @@ public class CrazyEnchantments {
      */
     public int getPlayerMaxEnchantments(Player player) {
         int limit = 0;
-        for (int i = 1; i < 100; i++) {
-            if (player.hasPermission("crazyenchantments.limit." + i)) {
-                if (limit < i) {
-                    limit = i;
-                }
-            }
-        }
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
             if (perm.startsWith("crazyenchantments.limit.")) {
