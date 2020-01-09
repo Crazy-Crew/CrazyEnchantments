@@ -136,11 +136,7 @@ public class Main extends JavaPlugin implements Listener {
                     + "&7It is running version &av" + ce.getPlugin().getDescription().getVersion() + "&7."));
                 }
                 if (player.isOp()) {
-                    if (Files.CONFIG.getFile().getBoolean("Settings.Update-Checker")) {
-                        Methods.hasUpdate(player);
-                    } else {
-                        Methods.hasUpdate(player);
-                    }
+                    Methods.hasUpdate(player);
                 }
             }
         }.
