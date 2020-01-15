@@ -401,7 +401,7 @@ public class Bows implements Listener {
     
     private EnchantedArrow getEnchantedArrow(Arrow arrow) {
         for (EnchantedArrow enchantedArrow : enchantedArrows) {
-            if (enchantedArrow.getArrow() != null && enchantedArrow.getArrow().equals(arrow)) {
+            if (enchantedArrow != null && enchantedArrow.getArrow() != null && enchantedArrow.getArrow().equals(arrow)) {
                 return enchantedArrow;
             }
         }
