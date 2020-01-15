@@ -27,6 +27,7 @@ public class CETab implements TabCompleter {
         if (args.length == 1) {// /ce
             if (hasPermission(sender, "access")) completions.add("help");
             if (hasPermission(sender, "debug")) completions.add("debug");
+            if (hasPermission(sender, "limit")) completions.add("limit");
             if (hasPermission(sender, "info")) completions.add("info");
             if (hasPermission(sender, "reload")) completions.add("reload");
             if (hasPermission(sender, "remove")) completions.add("remove");
