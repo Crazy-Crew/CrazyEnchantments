@@ -127,24 +127,6 @@ public class Tools implements Listener {
                                 drops.put(drop, amount);
                             }
                         }
-                        if (item.getItemMeta().hasEnchants()) {
-                            if (item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-                                drops.clear();
-                                if (block.getType() == Material.REDSTONE_ORE) {
-                                    drops.put(new ItemStack(Material.REDSTONE_ORE, 1, block.getData()), 1);
-                                } else if (block.getType() == Material.ANVIL) {
-                                    byte data = block.getData();
-                                    if (data == 4) {
-                                        data = 1;
-                                    } else if (data == 8) {
-                                        data = 2;
-                                    }
-                                    drops.put(new ItemStack(block.getType(), 1, data), 1);
-                                } else {
-                                    drops.put(new ItemStack(block.getType(), 1, block.getData()), 1);
-                                }
-                            }
-                        }
                         if (block.getType() == Material.COCOA) {
                             drops.put(new ItemBuilder().setMaterial("COCOA_BEANS", "INK_SACK:3").build(),
                             ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);//Coco drops 2-3 beans.
