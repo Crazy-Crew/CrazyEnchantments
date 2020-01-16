@@ -10,6 +10,7 @@ import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -463,6 +464,10 @@ public class Methods {
                     return;
                 }
             } catch (NoSuchMethodError ignored) {
+            }
+            NBTItem nbtItem = new NBTItem(item);
+            if (nbtItem.hasNBTData() && nbtItem.hasKey("Unbreakable") && nbtItem.getBoolean("Unbreakable")) {
+                return;
             }
             if (item.getItemMeta().hasEnchants()) {
                 if (item.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
