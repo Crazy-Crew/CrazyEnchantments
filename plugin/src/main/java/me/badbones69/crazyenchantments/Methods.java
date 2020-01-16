@@ -151,11 +151,28 @@ public class Methods {
     }
     
     public static void removeItem(ItemStack item, Player player, int amount) {
-        if (item.getAmount() <= amount) {
-            player.getInventory().removeItem(item);
-        }
-        if (item.getAmount() > amount) {
-            item.setAmount(item.getAmount() - amount);
+        try {
+            boolean found = false;
+            if (player.getInventory().contains(item)) {
+                if (item.getAmount() <= amount) {
+                    player.getInventory().removeItem(item);
+                    found = true;
+                } else {
+                    found = true;
+                    item.setAmount(item.getAmount() - amount);
+                }
+            }
+            if (!found) {
+                ItemStack offHand = player.getEquipment().getItemInOffHand();
+                if (offHand.isSimilar(item)) {
+                    if ((amount - offHand.getAmount()) >= 0) {
+                        player.getEquipment().setItemInOffHand(new ItemStack(Material.AIR, 1));
+                    } else {
+                        item.setAmount(offHand.getAmount() - amount);
+                    }
+                }
+            }
+        } catch (Exception e) {
         }
         player.updateInventory();
     }

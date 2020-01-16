@@ -204,15 +204,13 @@ public class Hoes implements Listener {
         Block plant = soil.getLocation().add(0, 1, 0).getBlock();
         if (plant.getType() == Material.AIR) {
             if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+                seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
+                playerSeedItem = player.getEquipment().getItemInOffHand();
                 if (isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
-                    seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
-                    playerSeedItem = player.getEquipment().getItemInOffHand();
                     if (playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
                         seedType = null;
                     }
                 } else {
-                    seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
-                    playerSeedItem = player.getEquipment().getItemInOffHand();
                     if (playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
                         seedType = null;//Makes sure nether warts are not put on soil.
                     }
@@ -220,9 +218,9 @@ public class Hoes implements Listener {
             }
             if (seedType == null) {
                 for (int slot = 0; slot < 9; slot++) {
+                    seedType = getPlanterSeed(player.getInventory().getItem(slot));
+                    playerSeedItem = player.getInventory().getItem(slot);
                     if (isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
-                        seedType = getPlanterSeed(player.getInventory().getItem(slot));
-                        playerSeedItem = player.getInventory().getItem(slot);
                         if (playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
                             seedType = null;
                         } else {
@@ -231,8 +229,6 @@ public class Hoes implements Listener {
                             }
                         }
                     } else {
-                        seedType = getPlanterSeed(player.getInventory().getItem(slot));
-                        playerSeedItem = player.getInventory().getItem(slot);
                         if (playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART", "NETHER_STALK")) {
                             seedType = null;//Makes sure nether warts are not put on soil.
                         } else {
