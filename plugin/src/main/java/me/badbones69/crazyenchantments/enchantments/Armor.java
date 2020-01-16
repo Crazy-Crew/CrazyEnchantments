@@ -810,30 +810,32 @@ public class Armor implements Listener {
     }
     
     private void attackEnemy(Player player, LivingEntity enemy) {
-        for (LivingEntity ally : mobs.get(player)) {
-            switch (ally.getType()) {
-                case IRON_GOLEM:
-                    IronGolem iron = (IronGolem) ally;
-                    iron.setTarget(enemy);
-                    break;
-                case WOLF:
-                    Wolf wolf = (Wolf) ally;
-                    wolf.setTarget(enemy);
-                    break;
-                case ZOMBIE:
-                    Zombie zom = (Zombie) ally;
-                    zom.setTarget(enemy);
-                    break;
-                case ENDERMITE:
-                    Endermite mite = (Endermite) ally;
-                    mite.setTarget(enemy);
-                    break;
-                case SILVERFISH:
-                    Silverfish sfish = (Silverfish) ally;
-                    sfish.setTarget(enemy);
-                    break;
-                default:
-                    break;
+        if (mobs.containsKey(player)) {
+            for (LivingEntity ally : mobs.get(player)) {
+                switch (ally.getType()) {
+                    case IRON_GOLEM:
+                        IronGolem iron = (IronGolem) ally;
+                        iron.setTarget(enemy);
+                        break;
+                    case WOLF:
+                        Wolf wolf = (Wolf) ally;
+                        wolf.setTarget(enemy);
+                        break;
+                    case ZOMBIE:
+                        Zombie zom = (Zombie) ally;
+                        zom.setTarget(enemy);
+                        break;
+                    case ENDERMITE:
+                        Endermite mite = (Endermite) ally;
+                        mite.setTarget(enemy);
+                        break;
+                    case SILVERFISH:
+                        Silverfish sfish = (Silverfish) ally;
+                        sfish.setTarget(enemy);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
