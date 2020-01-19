@@ -89,6 +89,7 @@ public class CrazyEnchantments {
         gkitz.clear();
         registeredEnchantments.clear();
         plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+        CEnchantments.invalidateCachedEnchants();
         Version version = Version.getCurrentVersion();
         useNewSounds = version.isNewer(Version.v1_8_R3);
         useNewMaterial = version.isNewer(Version.v1_12_R1);
