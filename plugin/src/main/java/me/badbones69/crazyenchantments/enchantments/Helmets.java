@@ -65,9 +65,9 @@ public class Helmets implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onMovment(PlayerMoveEvent e) {
         Player player = e.getPlayer();
-        for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
-                if (CEnchantments.COMMANDER.isActivated()) {
+        if (CEnchantments.COMMANDER.isActivated()) {
+            for (ItemStack armor : player.getEquipment().getArmorContents()) {
+                if (ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
                     int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
                     ArrayList<Player> players = new ArrayList<>();
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
