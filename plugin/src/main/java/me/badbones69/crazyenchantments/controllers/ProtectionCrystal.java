@@ -121,6 +121,9 @@ public class ProtectionCrystal implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(PlayerDeathEvent e) {
+        if(e.getKeepInventory()) {
+            return;
+        }
         Player player = e.getEntity();
         List<ItemStack> savedItems = new ArrayList<>();
         List<ItemStack> droppedItems = new ArrayList<>();
