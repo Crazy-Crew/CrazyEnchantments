@@ -11,6 +11,14 @@
 
     <artifactId>crazyenchantments-v1_12_2_down</artifactId>
 
+    <repositories>
+        <!-- PlotSquared repo -->
+        <repository>
+            <id>plotsquared-legacy-repo</id>
+            <url>http://ci.athion.net/job/PlotSquared-Legacy/ws/mvn/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>me.badbones69</groupId>
@@ -33,12 +41,20 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>com.sk89q</groupId>
-                    <artifactId>commandbook</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-core</artifactId>
+            <version>6.1.4-SNAPSHOT</version>
+            <scope>provided</scope>
+            <exclusions>
                 <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -49,8 +65,8 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -59,6 +75,12 @@
             <artifactId>plotsquared-api</artifactId>
             <version>latest</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

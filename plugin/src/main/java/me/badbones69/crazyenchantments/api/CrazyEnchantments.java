@@ -43,7 +43,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.simpleyaml.configuration.file.FileConfiguration;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class CrazyEnchantments {
@@ -1033,7 +1032,6 @@ public class CrazyEnchantments {
      * @param book The ItemStack you are converting.
      * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
      */
-    @Nullable
     public CEBook getCEBook(ItemStack book) {
         try {
             return new CEBook(getEnchantmentBookEnchantment(book), getBookLevel(book, getEnchantmentBookEnchantment(book)), book.getAmount())

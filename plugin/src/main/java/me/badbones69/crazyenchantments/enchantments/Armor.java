@@ -307,7 +307,7 @@ public class Armor implements Listener {
                             if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP)) {
                                 if (CEnchantments.LEADERSHIP.isActivated()) {
                                     if (CEnchantments.LEADERSHIP.chanceSuccessful(armor)) {
-                                        if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+                                        if (/*SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() ||*/ SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                                             int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
                                             int players = 0;
                                             for (Entity en : damager.getNearbyEntities(radius, radius, radius)) {
@@ -464,7 +464,7 @@ public class Armor implements Listener {
                     }
                     if (ce.hasEnchantment(armor, CEnchantments.ANGEL)) {
                         if (CEnchantments.ANGEL.isActivated()) {
-                            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+                            if (/*SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() ||*/ SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                                 int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
                                 for (Entity en : player.getNearbyEntities(radius, radius, radius)) {
                                     if (en instanceof Player) {
