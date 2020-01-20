@@ -25,7 +25,6 @@ public class Support {
                 return true;
             }
         }
-        /*
         if (SupportedPlugins.FACTIONS3.isPluginLoaded()) {
             if (Factions3Support.inTerritory(player)) {
                 return true;
@@ -41,7 +40,6 @@ public class Support {
                 return true;
             }
         }
-        */
         if (SupportedPlugins.ASKYBLOCK.isPluginLoaded()) {
             if (ASkyBlockSupport.inTerritory(player)) {
                 return true;
@@ -52,7 +50,6 @@ public class Support {
                 return true;
             }
         }
-        /*
         if (SupportedPlugins.KINGDOMS.isPluginLoaded()) {
             if (KingdomSupport.inTerritory(player)) {
                 return true;
@@ -63,7 +60,6 @@ public class Support {
                 return true;
             }
         }
-        */
         if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
             if (GriefPreventionSupport.inTerritory(player)) {
                 return true;
@@ -74,7 +70,7 @@ public class Support {
                 return true;
             }
         }
-        return false; //SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() && LegacyFactionsSupport.inTerritory(player);
+        return SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() && LegacyFactionsSupport.inTerritory(player);
     }
     
     public static boolean isFriendly(Entity p, Entity o) {
@@ -86,7 +82,6 @@ public class Support {
                     return true;
                 }
             }
-            /*
             if (SupportedPlugins.FACTIONS3.isPluginLoaded()) {
                 if (Factions3Support.isFriendly(player, other)) {
                     return true;
@@ -102,7 +97,6 @@ public class Support {
                     return true;
                 }
             }
-            */
             if (SupportedPlugins.ASKYBLOCK.isPluginLoaded()) {
                 if (ASkyBlockSupport.isFriendly(player, other)) {
                     return true;
@@ -113,7 +107,6 @@ public class Support {
                     return true;
                 }
             }
-            /*
             if (SupportedPlugins.KINGDOMS.isPluginLoaded()) {
                 if (KingdomSupport.isFriendly(player, other)) {
                     return true;
@@ -129,7 +122,6 @@ public class Support {
                     return true;
                 }
             }
-            */
             if (SupportedPlugins.MCMMO.isPluginLoaded()) {
                 if (MCMMOParty.isFriendly(player, other)) {
                     return true;
@@ -156,7 +148,6 @@ public class Support {
                     return false;
                 }
             }
-            /*
             if (SupportedPlugins.FACTIONS3.isPluginLoaded()) {
                 if (!Factions3Support.canBreakBlock(player, block)) {
                     return false;
@@ -177,21 +168,18 @@ public class Support {
                     return false;
                 }
             }
-            */
             if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
                 if (!GriefPreventionSupport.canBreakBlock(player, block)) {
                     return false;
                 }
             }
-            /*
             if (SupportedPlugins.PRECIOUS_STONES.isPluginLoaded()) {
                 if (!PreciousStonesSupport.canBreakBlock(player, block)) {
                     return false;
                 }
             }
-            */
         }
-        return true; //!SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() || LegacyFactionsSupport.canBreakBlock(player, block);
+        return !SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() || LegacyFactionsSupport.canBreakBlock(player, block);
     }
     
     public static boolean allowsPVP(Location loc) {
@@ -240,30 +228,30 @@ public class Support {
         
         MCMMO("mcMMO"),
         GRIEF_PREVENTION("GriefPrevention"),
-        //LEGACY_FACTIONS("LegacyFactions"),
-        //TOWNY("Towny"),
-        //EPIC_SPAWNERS("EpicSpawners"),
+        LEGACY_FACTIONS("LegacyFactions"),
+        TOWNY("Towny"),
+        EPIC_SPAWNERS("EpicSpawners"),
         AAC("AAC"),
-        //DAKATA("DakataAntiCheat"),
+        DAKATA("DakataAntiCheat"),
         NO_CHEAT_PLUS("NoCheatPlus"),
         VAULT("Vault"),
         WORLD_EDIT("WorldEdit"),
         WORLD_GUARD("WorldGuard"),
-        //FACTIONS_MASSIVE_CRAFT("Factions"),
-        //FACTIONS3("Factions"),
+        FACTIONS_MASSIVE_CRAFT("Factions"),
+        FACTIONS3("Factions"),
         FACTIONS_UUID("Factions"),
-        //FEUDAL("Feudal"),
+        FEUDAL("Feudal"),
         ACID_ISLAND("AcidIsland"),
         ASKYBLOCK("ASkyBlock"),
-        //KINGDOMS("Kingdoms"),
+        KINGDOMS("Kingdoms"),
         SILK_SPAWNERS("SilkSpawners"),
-        //SILK_SPAWNERS_CANDC("SilkSpawners"),
+        SILK_SPAWNERS_CANDC("SilkSpawners"),
         SPARTAN("Spartan"),
         MOB_STACKER("MobStacker"),
         MOB_STACKER_2("MobStacker2"),
         STACK_MOB("StackMob"),
         MEGA_SKILLS("MegaSkills"),
-        //PRECIOUS_STONES("PreciousStones"),
+        PRECIOUS_STONES("PreciousStones"),
         PLOT_SQUARED("PlotSquared");
         
         private String name;
@@ -284,8 +272,7 @@ public class Support {
                         return plugin.getDescription().getAuthors().contains("xGhOsTkiLLeRx");
                     }
                     return false;
-                }
-                /*else if (this == SupportedPlugins.SILK_SPAWNERS_CANDC) {
+                } else if (this == SupportedPlugins.SILK_SPAWNERS_CANDC) {
                     if (plugin.getDescription().getAuthors() != null) {
                         return plugin.getDescription().getAuthors().contains("CandC_9_12");
                     }
@@ -297,21 +284,17 @@ public class Support {
                         }
                     }
                     return false;
-                }
-                */
-                else if (this == SupportedPlugins.FACTIONS_UUID) {
+                } else if (this == SupportedPlugins.FACTIONS_UUID) {
                     if (plugin.getDescription().getAuthors() != null) {
                         return plugin.getDescription().getAuthors().contains("drtshock");
                     }
                     return false;
-                }
-                /*else if (this == SupportedPlugins.FACTIONS3) {
+                } else if (this == SupportedPlugins.FACTIONS3) {
                     if (plugin.getDescription().getAuthors() != null) {
                         return plugin.getDescription().getAuthors().contains("Madus");
                     }
                     return false;
                 }
-                */
             }
             return plugin != null;
         }

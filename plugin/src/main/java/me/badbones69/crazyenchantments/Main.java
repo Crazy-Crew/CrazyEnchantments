@@ -9,7 +9,9 @@ import me.badbones69.crazyenchantments.commands.*;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
+import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawnerSupport;
+import me.badbones69.crazyenchantments.multisupport.SilkSpawnersCandcSupport;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -83,14 +85,12 @@ public class Main extends JavaPlugin implements Listener {
         if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) {
             pm.registerEvents(new SilkSpawnerSupport(), this);
         }
-        /*
         if (SupportedPlugins.SILK_SPAWNERS_CANDC.isPluginLoaded()) {
             pm.registerEvents(new SilkSpawnersCandcSupport(), this);
         }
         if (SupportedPlugins.DAKATA.isPluginLoaded()) {
             pm.registerEvents(new DakataAntiCheatSupport(), this);
         }
-        */
         //==========================================================================\\
         new Metrics(this);// Starts up bStats
         new BukkitRunnable() {

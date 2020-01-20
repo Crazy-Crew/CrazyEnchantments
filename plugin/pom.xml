@@ -43,31 +43,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.carleslc</groupId>
+            <groupId>com.github.Carleslc</groupId>
             <artifactId>Simple-YAML</artifactId>
             <version>1.4.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>compile</scope>
+            <optional>false</optional>
         </dependency>
         <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>2.1.107</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -76,211 +62,143 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--
         <dependency>
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
             <version>10.7.2</version>
             <scope>provided</scope>
         </dependency>
-        -->
-        <!--
         <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>MassiveCraft</artifactId>
             <version>2.13.2</version>
             <scope>provided</scope>
         </dependency>
-        -->
+        <!--        <dependency>-->
+        <!--            <groupId>com.massivecraft</groupId>-->
+        <!--            <artifactId>Factions</artifactId>-->
+        <!--            <version>2.13.2</version>-->
+        <!--            <scope>system</scope>-->
+        <!--            <systemPath>${project.basedir}/src/main/library/Factions.jar</systemPath>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>de.dustplanet</groupId>
             <artifactId>SilkSpawners</artifactId>
             <version>5.1.0</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!-- https://www.spigotmc.org/resources/60063
-        <dependency>
+        <dependency> <!-- https://www.spigotmc.org/resources/60063 -->
             <groupId>de.candc</groupId>
             <artifactId>SilkSpawners</artifactId>
             <version>1.6</version>
             <scope>provided</scope>
         </dependency>
-        -->
-        <!--
         <dependency>
             <groupId>us.forseth11.feudal.core</groupId>
             <artifactId>Feudal</artifactId>
             <version>1.14.1</version>
             <scope>provided</scope>
         </dependency>
-        -->
         <dependency>
             <groupId>com.wasteofplastic</groupId>
             <artifactId>askyblock</artifactId>
             <version>3.0.8.2</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.wasteofplastic</groupId>
             <artifactId>acidisland</artifactId>
             <version>3.0.8.2</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!--
         <dependency>
             <groupId>org.kingdoms.main</groupId>
             <artifactId>Kingdoms</artifactId>
             <version>13.2.40</version>
             <scope>provided</scope>
         </dependency>
-        -->
         <dependency>
-            <groupId>me.ryanhamshire</groupId>
+            <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
-            <version>16.12.0</version>
+            <version>16.12.alpha</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <groupId>me.vagdedes</groupId>
-            <artifactId>spartan</artifactId>
-            <version>Universal</version>
+            <groupId>me.vagdedes.spartan</groupId>
+            <artifactId>Spartan</artifactId>
+            <version>Build-269</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
-            <groupId>uk.antiperson.stackmob</groupId>
-            <artifactId>Plugin</artifactId>
+            <groupId>com.github.Nathat23</groupId>
+            <artifactId>StackMob-3</artifactId>
             <version>4.0.2</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency><!-- FactionsUUID -->
             <groupId>com.massivecraft</groupId>
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.5.0</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>fr.neatmonster</groupId>
             <artifactId>nocheatplus</artifactId>
             <version>3.16.1-SNAPSHOT</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!--
         <dependency>
             <groupId>DAKATA.Main</groupId>
             <artifactId>DakataAntiCheat</artifactId>
             <version>BETA-1.8</version>
             <scope>provided</scope>
         </dependency>
-        -->
         <dependency>
             <groupId>de.janmm14</groupId>
             <artifactId>aac-api</artifactId>
             <version>3.3.12</version>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
-        <!-- Unused?
         <dependency>
             <groupId>org.generallib.main</groupId>
             <artifactId>GeneralLib</artifactId>
             <version>0.1.4</version>
             <scope>provided</scope>
         </dependency>
-        -->
-        <!--
         <dependency>
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>Towny</artifactId>
             <version>0.93.0.0</version>
             <scope>provided</scope>
         </dependency>
-        -->
-        <!--
         <dependency>
             <groupId>com.github.redstone</groupId>
             <artifactId>LegacyFactions</artifactId>
             <version>1.4.7</version>
             <scope>provided</scope>
         </dependency>
-        -->
-        <!--
         <dependency>
             <groupId>com.songoda.epicspawners</groupId>
             <artifactId>EpicSpawners</artifactId>
             <version>3.1.4-R2</version>
             <scope>provided</scope>
         </dependency>
-        -->
-        <!-- Factions3, discontinued
-        <dependency>
+        <dependency><!-- Factions3 -->
             <groupId>com.massivecraft.factions</groupId>
             <artifactId>Factions</artifactId>
             <version>3.2.0</version>
             <scope>provided</scope>
         </dependency>
-         -->
     </dependencies>
 
     <build>
         <finalName>${project.parent.name}[v${project.version}]</finalName>
+        <defaultGoal>clean install package</defaultGoal>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -292,6 +210,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
+                <configuration>
+                    <artifactSet>
+                        <includes>
+                            <include>me.badbones69:*</include>
+                            <include>com.github.Carleslc:*</include>
+                        </includes>
+                    </artifactSet>
+                    <!--                    <outputFile>/Users/badbones/Desktop/Minecraft/Server/plugins/CrazyEnchantments[v${project.version}].jar</outputFile>-->
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
