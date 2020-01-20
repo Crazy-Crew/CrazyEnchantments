@@ -70,7 +70,9 @@ public class GKitzController implements Listener {
             Player player = (Player) e.getWhoClicked();
             CEPlayer cePlayer = ce.getCEPlayer(player);
             ItemStack item = e.getCurrentItem();
-            for (GKitz kit : ce.getGKitz()) {
+            NBTItem nbtItem = new NBTItem(item);
+            if (nbtItem.hasKey("gkit")) {
+                GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
                 if (e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     e.setCancelled(true);
                     if (e.getRawSlot() < inv.getSize()) {
@@ -84,7 +86,6 @@ public class GKitzController implements Listener {
             if (e.getView().getTitle().equals(Methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 e.setCancelled(true);
                 if (e.getRawSlot() < inv.getSize()) {
-                    NBTItem nbtItem = new NBTItem(item);
                     if (nbtItem.hasKey("gkit")) {
                         GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
                         if (e.getAction() == InventoryAction.PICKUP_HALF) {
