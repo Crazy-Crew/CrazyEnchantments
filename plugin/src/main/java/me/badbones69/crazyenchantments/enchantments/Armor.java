@@ -307,7 +307,7 @@ public class Armor implements Listener {
                             if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP)) {
                                 if (CEnchantments.LEADERSHIP.isActivated()) {
                                     if (CEnchantments.LEADERSHIP.chanceSuccessful(armor)) {
-                                        if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+                                        if (/*SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() ||*/ SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                                             int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
                                             int players = 0;
                                             for (Entity en : damager.getNearbyEntities(radius, radius, radius)) {
@@ -421,8 +421,8 @@ public class Armor implements Listener {
         if (x != X || y != Y | z != Z) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
                 if (ce.hasEnchantments(armor)) {
-                    if (ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
-                        if (CEnchantments.NURSERY.isActivated()) {
+                    if (CEnchantments.NURSERY.isActivated()) {
+                        if (ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
                             int heal = 1;
                             if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
                                 if (player.getMaxHealth() > player.getHealth()) {
@@ -440,8 +440,8 @@ public class Armor implements Listener {
                             }
                         }
                     }
-                    if (ce.hasEnchantment(armor, CEnchantments.IMPLANTS)) {
-                        if (CEnchantments.IMPLANTS.isActivated()) {
+                    if (CEnchantments.IMPLANTS.isActivated()) {
+                        if (ce.hasEnchantment(armor, CEnchantments.IMPLANTS)) {
                             int food = 1;
                             if (CEnchantments.IMPLANTS.chanceSuccessful(armor)) {
                                 if (player.getFoodLevel() < 20) {
@@ -462,9 +462,9 @@ public class Armor implements Listener {
                             }
                         }
                     }
-                    if (ce.hasEnchantment(armor, CEnchantments.ANGEL)) {
-                        if (CEnchantments.ANGEL.isActivated()) {
-                            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+                    if (CEnchantments.ANGEL.isActivated()) {
+                        if (ce.hasEnchantment(armor, CEnchantments.ANGEL)) {
+                            if (/*SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() ||*/ SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                                 int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
                                 for (Entity en : player.getNearbyEntities(radius, radius, radius)) {
                                     if (en instanceof Player) {
@@ -481,8 +481,8 @@ public class Armor implements Listener {
                             }
                         }
                     }
-                    if (ce.hasEnchantment(armor, CEnchantments.HELLFORGED)) {
-                        if (CEnchantments.HELLFORGED.isActivated()) {
+                    if (CEnchantments.HELLFORGED.isActivated()) {
+                        if (ce.hasEnchantment(armor, CEnchantments.HELLFORGED)) {
                             if (armor.getDurability() > 0) {
                                 if (CEnchantments.HELLFORGED.chanceSuccessful(armor)) {
                                     int durribility = armor.getDurability() - ce.getLevel(armor, CEnchantments.HELLFORGED);
@@ -503,10 +503,10 @@ public class Armor implements Listener {
                     }
                 }
             }
-            for (ItemStack item : player.getInventory().getContents()) {
-                if (ce.hasEnchantments(item)) {
-                    if (ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
-                        if (CEnchantments.HELLFORGED.isActivated()) {
+            if (CEnchantments.HELLFORGED.isActivated()) {
+                for (ItemStack item : player.getInventory().getContents()) {
+                    if (ce.hasEnchantments(item)) {
+                        if (ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
                             if (item.getDurability() > 0) {
                                 if (CEnchantments.HELLFORGED.chanceSuccessful(item)) {
                                     int durribility = item.getDurability() - ce.getLevel(item, CEnchantments.HELLFORGED);

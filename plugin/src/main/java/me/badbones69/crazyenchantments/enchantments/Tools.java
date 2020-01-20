@@ -37,7 +37,7 @@ public class Tools implements Listener {
     
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
-        updateEffects(e.getPlayer());
+        //updateEffects(e.getPlayer()); FIXME: is this required?
     }
     
     @EventHandler

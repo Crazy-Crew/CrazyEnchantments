@@ -124,7 +124,15 @@ public enum CEnchantments {
     private int chanceIncrease;
     
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    
+
+    private CEnchantment cachedEnchantment = null;
+
+    public static void invalidateCachedEnchants() {
+        for (CEnchantments value : values()) {
+            value.cachedEnchantment = null;
+        }
+    }
+
     /**
      *
      * @param name Name of the enchantment.
@@ -265,7 +273,10 @@ public enum CEnchantments {
      * @return The enchantment this is tied to.
      */
     public CEnchantment getEnchantment() {
-        return ce.getEnchantmentFromName(name);
+        if(cachedEnchantment == null) {
+            cachedEnchantment = ce.getEnchantmentFromName(name);
+        }
+        return cachedEnchantment;
     }
     
     /**
