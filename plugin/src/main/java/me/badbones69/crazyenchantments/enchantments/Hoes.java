@@ -113,17 +113,14 @@ public class Hoes implements Listener {
                 }
             }
         } else if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
-            ItemStack item = Methods.getItemInHand(player);
-            Block block = e.getClickedBlock();
-            if (ce.hasEnchantment(item, CEnchantments.HARVESTER)) {
-                if (CEnchantments.HARVESTER.isActivated()) {
+            if (CEnchantments.HARVESTER.isActivated()) {
+                if (ce.hasEnchantment(Methods.getItemInHand(player), CEnchantments.HARVESTER)) {
                     HashMap<Block, BlockFace> blockFace = new HashMap<>();
-                    blockFace.put(block, e.getBlockFace());
+                    blockFace.put(e.getClickedBlock(), e.getBlockFace());
                     blocks.put(player.getUniqueId(), blockFace);
                 }
             }
         }
-        
     }
     
     @EventHandler
