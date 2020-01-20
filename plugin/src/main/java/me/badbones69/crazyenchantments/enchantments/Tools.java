@@ -20,7 +20,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -34,11 +33,6 @@ public class Tools implements Listener {
     
     private Random random = new Random();
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    
-    @EventHandler
-    public void onMove(PlayerMoveEvent e) {
-        //updateEffects(e.getPlayer()); FIXME: is this required?
-    }
     
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
