@@ -130,7 +130,6 @@ public class PickAxes implements Listener {
                                                 continue;
                                             }
                                         }
-                                        boolean toggle = true; //True means its air and false means it breaks normally.
                                         if (hasTelepathy) {
                                             for (ItemStack drop : block.getDrops(item)) {
                                                 if (hasFurnace && isOre(block.getType())) {
@@ -153,7 +152,7 @@ public class PickAxes implements Listener {
                                             }
                                         } else {
                                             if (hasFurnace && isOre(block.getType())) {
-                                                for (ItemStack drop : block.getDrops()) {
+                                                for (ItemStack drop : block.getDrops(item)) {
                                                     drop = getOreDrop(block.getType());
                                                     ItemStack finalDrop = drop;
                                                     new BukkitRunnable() {
@@ -167,7 +166,7 @@ public class PickAxes implements Listener {
                                                     }.runTask(ce.getPlugin());
                                                 }
                                             } else if (hasAutoSmelt && isOre(block.getType())) {
-                                                for (ItemStack drop : block.getDrops()) {
+                                                for (ItemStack drop : block.getDrops(item)) {
                                                     if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
                                                         drop = getOreDrop(block.getType());
                                                         drop.setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
@@ -269,7 +268,7 @@ public class PickAxes implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.isCancelled() || ce.isIgnoredEvent(e)) return;
         Block block = e.getBlock();
