@@ -54,18 +54,21 @@ public class Swords implements Listener {
             if (!Support.isFriendly(e.getDamager(), e.getEntity())) {
                 if (ce.isBreakRageOnDamageOn()) {
                     if (e.getEntity() instanceof Player) {
-                        CEPlayer player = ce.getCEPlayer((Player) e.getEntity());
-                        RageBreakEvent event = new RageBreakEvent(player.getPlayer(), e.getDamager(), Methods.getItemInHand(player.getPlayer()));
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            UUID uuid = e.getEntity().getUniqueId();
-                            if (player.hasRage()) {
-                                player.getRageTask().cancel();
-                                player.setRageMultiplier(0.0);
-                                player.setRageLevel(0);
-                                player.setRage(false);
-                                if (Messages.RAGE_DAMAGED.getMessage().length() > 0) {
-                                    e.getEntity().sendMessage(Messages.RAGE_DAMAGED.getMessage());
+                        Player player = (Player) e.getEntity();
+                        CEPlayer cePlayer = ce.getCEPlayer(player);
+                        if (cePlayer != null) {
+                            RageBreakEvent event = new RageBreakEvent(player, e.getDamager(), Methods.getItemInHand(player));
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                UUID uuid = e.getEntity().getUniqueId();
+                                if (cePlayer.hasRage()) {
+                                    cePlayer.getRageTask().cancel();
+                                    cePlayer.setRageMultiplier(0.0);
+                                    cePlayer.setRageLevel(0);
+                                    cePlayer.setRage(false);
+                                    if (Messages.RAGE_DAMAGED.getMessage().length() > 0) {
+                                        e.getEntity().sendMessage(Messages.RAGE_DAMAGED.getMessage());
+                                    }
                                 }
                             }
                         }
