@@ -11,10 +11,15 @@ import org.simpleyaml.configuration.file.FileConfiguration;
 public class BlackSmithManager {
     
     private static BlackSmithManager instance = new BlackSmithManager();
-    private ItemStack denyBarrier, redGlass, blueGlass;
-    private String menuName, foundString;
+    private ItemStack denyBarrier;
+    private ItemStack redGlass;
+    private ItemStack blueGlass;
+    private String menuName;
+    private String foundString;
     private Currency currency;
-    private int bookUpgrade, levelUp, addEnchantment;
+    private int bookUpgrade;
+    private int levelUp;
+    private int addEnchantment;
     private boolean maxEnchantments;
     
     public static BlackSmithManager getInstance() {

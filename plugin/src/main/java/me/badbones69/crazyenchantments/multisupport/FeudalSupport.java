@@ -27,10 +27,10 @@ public class FeudalSupport {
     }
     
     public static boolean canBreakBlock(Player player, Block block) {
-        Kingdom p = Main.getPlayerKingdom(player.getUniqueId().toString());
+        Kingdom kPlayer = Main.getPlayerKingdom(player.getUniqueId().toString());
         Land land = new Land(block.getLocation());
-        Kingdom b = Main.getLandKingdom(land);
-        return p == b || b == null;
+        Kingdom kBlock = Main.getLandKingdom(land);
+        return kPlayer == kBlock || kBlock == null;
     }
     
 }

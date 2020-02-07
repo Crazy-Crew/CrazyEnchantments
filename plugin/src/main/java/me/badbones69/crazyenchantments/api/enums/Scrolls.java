@@ -11,11 +11,11 @@ import java.util.List;
 
 public enum Scrolls {
     
-    BlACK_SCROLL("Black-Scroll", "BlackScroll", Arrays.asList("b", "black", "blackscroll")),
+    BLACK_SCROLL("Black-Scroll", "BlackScroll", Arrays.asList("b", "black", "blackscroll")),
     WHITE_SCROLL("White-Scroll", "WhiteScroll", Arrays.asList("w", "white", "whitescroll")),
     TRANSMOG_SCROLL("Transmog-Scroll", "TransmogScroll", Arrays.asList("t", "transmog", "transmogscroll"));
     
-    private static HashMap<Scrolls, ItemBuilder> scrolls = new HashMap<>();
+    private static HashMap<Scrolls, ItemBuilder> itemBuilderScrolls = new HashMap<>();
     private String name;
     private String configName;
     private List<String> knownNames;
@@ -28,10 +28,10 @@ public enum Scrolls {
     
     public static void loadScrolls() {
         FileConfiguration config = Files.CONFIG.getFile();
-        scrolls.clear();
+        itemBuilderScrolls.clear();
         for (Scrolls scroll : values()) {
             String path = "Settings." + scroll.getConfigName() + ".";
-            scrolls.put(scroll, new ItemBuilder()
+            itemBuilderScrolls.put(scroll, new ItemBuilder()
             .setName(config.getString(path + "Name"))
             .setLore(config.getStringList(path + "Item-Lore"))
             .setMaterial(config.getString(path + "Item"))
@@ -61,11 +61,11 @@ public enum Scrolls {
     }
     
     public ItemStack getScroll() {
-        return scrolls.get(this).build();
+        return itemBuilderScrolls.get(this).build();
     }
     
     public ItemStack getScroll(int amount) {
-        return scrolls.get(this).setAmount(amount).build();
+        return itemBuilderScrolls.get(this).setAmount(amount).build();
     }
     
 }

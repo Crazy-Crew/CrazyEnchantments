@@ -27,32 +27,22 @@ public class SilkSpawnersCandcSupport implements Listener {
         if (e.isCancelled()) return;
         Player player = e.getPlayer();
         Block block = e.getSpawner();
-        if (player != null) {
-            if (block != null) {
-                if (player.getGameMode() != GameMode.CREATIVE) {
-                    ItemStack item = Methods.getItemInHand(player);
-                    if (ce.hasEnchantments(item)) {
-                        if (ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
-                            if (CEnchantments.TELEPATHY.isActivated()) {
-                                if (player.hasPermission("silkspawners.break")) {
-                                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (event.isCancelled()) {
-                                        return;
-                                    }
-                                    ItemStack it = api.getSpawner(e.getSpawnedEntity());
-                                    if (!Methods.isInventoryFull(player)) {
-                                        player.getInventory().addItem(it);
-                                    } else {
-                                        block.getWorld().dropItemNaturally(block.getLocation(), it);
-                                    }
-                                    block.setType(Material.AIR);
-                                    e.setCancelled(true);
-                                }
-                            }
-                        }
-                    }
+        if (player != null && block != null && player.getGameMode() != GameMode.CREATIVE) {
+            ItemStack item = Methods.getItemInHand(player);
+            if (player.hasPermission("silkspawners.break") && CEnchantments.TELEPATHY.isActivated() && ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) {
+                    return;
                 }
+                ItemStack it = api.getSpawner(e.getSpawnedEntity());
+                if (!Methods.isInventoryFull(player)) {
+                    player.getInventory().addItem(it);
+                } else {
+                    block.getWorld().dropItemNaturally(block.getLocation(), it);
+                }
+                block.setType(Material.AIR);
+                e.setCancelled(true);
             }
         }
     }

@@ -15,8 +15,8 @@ public class CEBook {
     private int amount;
     private int level;
     private boolean glowing;
-    private int destroy_rate;
-    private int success_rate;
+    private int destroyRate;
+    private int successRate;
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
     
     /**
@@ -47,12 +47,12 @@ public class CEBook {
         this.amount = amount;
         this.level = level;
         this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
-        int Smax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Max");
-        int Smin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
-        int Dmax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
-        int Dmin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
-        this.destroy_rate = percentPick(Dmax, Dmin);
-        this.success_rate = percentPick(Smax, Smin);
+        int successMax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Max");
+        int successMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
+        int destroyMax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
+        int destoryMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
+        this.destroyRate = percentPick(destroyMax, destoryMin);
+        this.successRate = percentPick(successMax, successMin);
     }
     
     /**
@@ -77,8 +77,8 @@ public class CEBook {
         this.amount = amount;
         this.level = level;
         this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
-        this.destroy_rate = percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
-        this.success_rate = percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
+        this.destroyRate = percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
+        this.successRate = percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
     
     /**
@@ -86,16 +86,16 @@ public class CEBook {
      * @param enchantment Enchantment you want.
      * @param level Tier of the enchantment.
      * @param amount Amount of books you want.
-     * @param destroy_rate The rate of the destroy rate.
-     * @param success_rate The rate of the success rate.
+     * @param destroyRate The rate of the destroy rate.
+     * @param successRate The rate of the success rate.
      */
-    public CEBook(CEnchantment enchantment, int level, int amount, int destroy_rate, int success_rate) {
+    public CEBook(CEnchantment enchantment, int level, int amount, int destroyRate, int successRate) {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
         this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
-        this.destroy_rate = destroy_rate;
-        this.success_rate = success_rate;
+        this.destroyRate = destroyRate;
+        this.successRate = successRate;
     }
     
     /**
@@ -171,15 +171,15 @@ public class CEBook {
      * @return Destroy rate of the book.
      */
     public int getDestroyRate() {
-        return this.destroy_rate;
+        return this.destroyRate;
     }
     
     /**
      *
-     * @param destroy_rate Set the destroy rate on the book.
+     * @param destroyRate Set the destroy rate on the book.
      */
-    public CEBook setDestroyRate(int destroy_rate) {
-        this.destroy_rate = destroy_rate;
+    public CEBook setDestroyRate(int destroyRate) {
+        this.destroyRate = destroyRate;
         return this;
     }
     
@@ -188,15 +188,15 @@ public class CEBook {
      * @return The success rate of the book.
      */
     public int getSuccessRate() {
-        return this.success_rate;
+        return this.successRate;
     }
     
     /**
      *
-     * @param success_rate Set the success rate on the book.
+     * @param successRate Set the success rate on the book.
      */
-    public CEBook setSuccessRate(int success_rate) {
-        this.success_rate = success_rate;
+    public CEBook setSuccessRate(int successRate) {
+        this.successRate = successRate;
         return this;
     }
     
@@ -214,8 +214,8 @@ public class CEBook {
                 }
             } else {
                 lore.add(Methods.color(bookLine)
-                .replaceAll("%Destroy_Rate%", destroy_rate + "").replaceAll("%destroy_rate%", destroy_rate + "")
-                .replaceAll("%Success_Rate%", success_rate + "").replaceAll("%success_rate%", success_rate + ""));
+                .replace("%Destroy_Rate%", destroyRate + "").replace("%destroy_rate%", destroyRate + "")
+                .replace("%Success_Rate%", successRate + "").replace("%success_rate%", successRate + ""));
             }
         }
         return ce.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlowing(glowing);

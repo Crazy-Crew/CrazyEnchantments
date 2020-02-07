@@ -148,7 +148,7 @@ public class CurrencyAPI {
         player.setTotalExperience(total);
         player.setLevel(0);
         player.setExp(0);
-        for (; total > player.getExpToLevel(); ) {
+        while (total > player.getExpToLevel()) {
             total -= player.getExpToLevel();
             player.setLevel(player.getLevel() + 1);
         }
@@ -172,7 +172,7 @@ public class CurrencyAPI {
             experience += Math.ceil(currentExp * requiredExperience);
             return experience;
         } else {
-            experience = (int) Math.ceil(((4.5 * Math.pow(level, 2) - (162.5 * level) + 2220)));
+            experience = (int) Math.ceil((4.5 * Math.pow(level, 2) - (162.5 * level) + 2220));
             int requiredExperience = 9 * level - 158;
             double currentExp = Double.parseDouble(Float.toString(player.getExp()));
             experience += Math.ceil(currentExp * requiredExperience);

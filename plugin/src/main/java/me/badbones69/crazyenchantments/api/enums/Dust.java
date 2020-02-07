@@ -17,7 +17,7 @@ public enum Dust {
     MYSTERY_DUST("Mystery-Dust", "MysteryDust", Arrays.asList("m", "mystery")),
     FAILED_DUST("Failed-Dust", "FailedDust", Arrays.asList("f, failed"));
     
-    private static HashMap<Dust, ItemBuilder> dust = new HashMap<>();
+    private static HashMap<Dust, ItemBuilder> itemBuilderDust = new HashMap<>();
     private String name;
     private String configName;
     private List<String> knownNames;
@@ -34,10 +34,10 @@ public enum Dust {
     
     public static void loadDust() {
         FileConfiguration config = Files.CONFIG.getFile();
-        dust.clear();
+        itemBuilderDust.clear();
         for (Dust dust : values()) {
             String path = "Settings.Dust." + dust.getConfigName() + ".";
-            Dust.dust.put(dust, new ItemBuilder()
+            Dust.itemBuilderDust.put(dust, new ItemBuilder()
             .setName(config.getString(path + "Name"))
             .setLore(config.getStringList(path + "Lore"))
             .setMaterial(config.getString(path + "Item")));
@@ -74,7 +74,7 @@ public enum Dust {
     }
     
     public ItemStack getDust(int percent, int amount) {
-        return dust.get(this)
+        return itemBuilderDust.get(this)
         .addLorePlaceholder("%Percent%", percent)
         .setAmount(amount).build();
     }

@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  *
@@ -73,7 +74,7 @@ public class FileManager {
             if (log) System.out.println(prefix + "Successfully loaded " + file.getFileName());
         }
         //Starts to load all the custom files.
-        if (homeFolders.size() > 0) {
+        if (homeFolders.isEmpty()) {
             if (log) System.out.println(prefix + "Loading custom files.");
             for (String homeFolder : homeFolders) {
                 File homeFile = new File(plugin.getDataFolder(), "/" + homeFolder);
@@ -94,19 +95,19 @@ public class FileManager {
                 } else {
                     homeFile.mkdir();
                     if (log) System.out.println(prefix + "The folder " + homeFolder + "/ was not found so it was created.");
-                    for (String fileName : autoGenerateFiles.keySet()) {
-                        if (autoGenerateFiles.get(fileName).equalsIgnoreCase(homeFolder)) {
-                            homeFolder = autoGenerateFiles.get(fileName);
+                    for (Entry<String, String> fileName : autoGenerateFiles.entrySet()) {
+                        if (fileName.getValue().equalsIgnoreCase(homeFolder)) {
+                            homeFolder = fileName.getValue();
                             try {
-                                File serverFile = new File(plugin.getDataFolder(), homeFolder + "/" + fileName);
-                                InputStream jarFile = getClass().getResourceAsStream(homeFolder + "/" + fileName);
+                                File serverFile = new File(plugin.getDataFolder(), homeFolder + "/" + fileName.getKey());
+                                InputStream jarFile = getClass().getResourceAsStream(homeFolder + "/" + fileName.getKey());
                                 copyFile(jarFile, serverFile);
-                                if (fileName.toLowerCase().endsWith(".yml")) {
-                                    customFiles.add(new CustomFile(fileName, homeFolder, plugin));
+                                if (fileName.getKey().toLowerCase().endsWith(".yml")) {
+                                    customFiles.add(new CustomFile(fileName.getKey(), homeFolder, plugin));
                                 }
-                                if (log) System.out.println(prefix + "Created new default file: " + homeFolder + "/" + fileName + ".");
+                                if (log) System.out.println(prefix + "Created new default file: " + homeFolder + "/" + fileName.getKey() + ".");
                             } catch (Exception e) {
-                                if (log) System.out.println(prefix + "Failed to create new default file: " + homeFolder + "/" + fileName + "!");
+                                if (log) System.out.println(prefix + "Failed to create new default file: " + homeFolder + "/" + fileName.getKey() + "!");
                                 e.printStackTrace();
                             }
                         }
@@ -215,7 +216,7 @@ public class FileManager {
         CustomFile file = getFile(name);
         if (file != null) {
             try {
-                file.getYamlFile().saveWithComments();
+                file.getFile().saveWithComments();
                 if (log) System.out.println(prefix + "Successfully saved the " + file.getFileName() + ".");
             } catch (Exception e) {
                 System.out.println(prefix + "Could not save " + file.getFileName() + "!");
@@ -469,14 +470,6 @@ public class FileManager {
          * @return The ConfigurationFile of this file.
          */
         public YamlFile getFile() {
-            return file;
-        }
-        
-        /**
-         * Get the YamlFile.
-         * @return The YamlFile of this file.
-         */
-        public YamlFile getYamlFile() {
             return file;
         }
         

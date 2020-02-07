@@ -140,10 +140,6 @@ public class CEnchantment {
     public boolean chanceSuccesful(int enchantmentLevel) {
         int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
         int pickedChance = new Random().nextInt(100) + 1;
-        //This is to just chance the chance system.
-        //boolean result = newChance >= 100 || newChance <= 0 || pickedChance <= chance;
-        //System.out.print("[CrazyEnchantments] " + name + ", " + newChance + "%, " + pickedChance + "/100, " + result);
-        //return result;
         return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
     }
     
@@ -221,21 +217,17 @@ public class CEnchantment {
     public int getPower(ItemStack item) {
         int power;
         String line = "";
-        if (item.hasItemMeta()) {
-            if (item.getItemMeta().hasLore()) {
-                for (String lore : item.getItemMeta().getLore()) {
-                    if (lore.contains(customName)) {
-                        line = lore;
-                        break;
-                    }
+        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+            for (String lore : item.getItemMeta().getLore()) {
+                if (lore.contains(customName)) {
+                    line = lore;
+                    break;
                 }
             }
         }
         power = ce.convertLevelInteger(line.replace(color + customName + " ", ""));
-        if (!ce.useUnsafeEnchantments()) {
-            if (power > maxLevel) {
-                power = maxLevel;
-            }
+        if (!ce.useUnsafeEnchantments() && power > maxLevel) {
+            power = maxLevel;
         }
         return power;
     }

@@ -29,7 +29,6 @@ public class GkitzCommand implements CommandExecutor {
                 if (hasPermission(sender, "gkitz")) {
                     GKitzController.openGUI((Player) sender);
                 }
-                return true;
             } else {
                 if (args[0].equalsIgnoreCase("reset")) {// /GKitz reset <kit> [player]
                     if (hasPermission(sender, "reset")) {
@@ -67,7 +66,6 @@ public class GkitzCommand implements CommandExecutor {
                             sender.sendMessage(Methods.getPrefix() + Methods.color("&c/GKitz Reset <Kit> [Player]"));
                         }
                     }
-                    return true;
                 } else {
                     if (hasPermission(sender, "gkitz")) {
                         boolean adminGive = false;// An admin is giving the kit.
@@ -121,9 +119,9 @@ public class GkitzCommand implements CommandExecutor {
                             return true;
                         }
                     }
-                    return true;
                 }
             }
+            return true;
         }
         return false;
     }

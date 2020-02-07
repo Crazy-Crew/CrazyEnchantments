@@ -29,15 +29,15 @@ public class Factions3Support {
         return !Methods.removeColor(other.getName()).equalsIgnoreCase("Wilderness") && (relation.isFriend() || player == other);
     }
     
-    public static boolean inTerritory(Player P) {
-        MPlayer player = MPlayer.get(P);
-        return !Methods.removeColor(player.getFaction().getName()).equalsIgnoreCase("Wilderness") && player.isInOwnTerritory();
+    public static boolean inTerritory(Player player) {
+        MPlayer fPlayer = MPlayer.get(player);
+        return !Methods.removeColor(fPlayer.getFaction().getName()).equalsIgnoreCase("Wilderness") && fPlayer.isInOwnTerritory();
     }
     
     public static boolean canBreakBlock(Player player, Block block) {
-        Faction P = MPlayer.get(player).getFaction();
-        Faction B = BoardColl.get().getFactionAt(PS.valueOf(block.getLocation()));
-        return Methods.removeColor(B.getName()).equalsIgnoreCase("Wilderness") || P == B;
+        Faction fPlayer = MPlayer.get(player).getFaction();
+        Faction fBlock = BoardColl.get().getFactionAt(PS.valueOf(block.getLocation()));
+        return Methods.removeColor(fBlock.getName()).equalsIgnoreCase("Wilderness") || fPlayer == fBlock;
     }
     
 }

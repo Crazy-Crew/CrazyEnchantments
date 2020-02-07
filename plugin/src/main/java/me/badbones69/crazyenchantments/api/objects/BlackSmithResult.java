@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class BlackSmithResult {
     
@@ -16,18 +17,19 @@ public class BlackSmithResult {
     private ItemStack resultItem;
     
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
-        ItemStack resultItem = mainItem.clone();
-        int cost = 0;
+        resultItem = mainItem.clone();
+        cost = 0;
         if (mainItem.getType() == ce.getEnchantmentBook().getMaterial() && subItem.getType() == ce.getEnchantmentBook().getMaterial()) {
             CEBook mainBook = ce.getCEBook(mainItem);
             CEBook subBook = ce.getCEBook(subItem);
-            if (mainBook.getEnchantment() == subBook.getEnchantment()) {//Books are the same enchantment.
-                if (mainBook.getLevel() == subBook.getLevel()) {//Books have to be the same level.
-                    if (mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {//Makes sure level doesn't go passed max.
-                        resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
-                        cost += blackSmithManager.getBookUpgrade();
-                    }
-                }
+            //Books are the same enchantment.
+            if (mainBook.getEnchantment() == subBook.getEnchantment() &&
+            //Books have to be the same level.
+            mainBook.getLevel() == subBook.getLevel() &&
+            //Makes sure level doesn't go passed max.
+            mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
+                resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
+                cost += blackSmithManager.getBookUpgrade();
             }
         } else {
             if (mainItem.getType() == subItem.getType()) {
@@ -49,37 +51,29 @@ public class BlackSmithResult {
                     }
                 }
                 for (CEnchantment enchantment : ce.getEnchantmentsOnItem(subItem)) {
-                    if (!duplicateEnchantments.containsKey(enchantment) && !higherLevelEnchantments.containsKey(enchantment)) {
-                        if (!ce.hasEnchantment(mainItem, enchantment)) {
-                            newEnchantments.put(enchantment, ce.getLevel(subItem, enchantment));
-                        }
+                    if (!duplicateEnchantments.containsKey(enchantment) && !higherLevelEnchantments.containsKey(enchantment) && !ce.hasEnchantment(mainItem, enchantment)) {
+                        newEnchantments.put(enchantment, ce.getLevel(subItem, enchantment));
                     }
                 }
-                for (CEnchantment enchantment : duplicateEnchantments.keySet()) {
-                    int level = duplicateEnchantments.get(enchantment);
-                    if (level + 1 <= enchantment.getMaxLevel()) {
-                        resultItem = ce.addEnchantment(resultItem, enchantment, level + 1);
+                for (Entry<CEnchantment, Integer> enchantment : duplicateEnchantments.entrySet()) {
+                    int level = enchantment.getValue();
+                    if (level + 1 <= enchantment.getKey().getMaxLevel()) {
+                        resultItem = ce.addEnchantment(resultItem, enchantment.getKey(), level + 1);
                         cost += blackSmithManager.getLevelUp();
                     }
                 }
-                for (CEnchantment enchantment : newEnchantments.keySet()) {
-                    if (blackSmithManager.useMaxEnchantments()) {
-                        if ((Methods.getEnchantmentAmount(resultItem) + 1) <= maxEnchants) {
-                            if (enchantment != null) {
-                                resultItem = ce.addEnchantment(resultItem, enchantment, newEnchantments.get(enchantment));
-                                cost += blackSmithManager.getAddEnchantment();
-                            }
-                        }
+                for (Entry<CEnchantment, Integer> enchantment : newEnchantments.entrySet()) {
+                    if (blackSmithManager.useMaxEnchantments() && (Methods.getEnchantmentAmount(resultItem) + 1) <= maxEnchants) {
+                        resultItem = ce.addEnchantment(resultItem, enchantment.getKey(), enchantment.getValue());
+                        cost += blackSmithManager.getAddEnchantment();
                     }
                 }
-                for (CEnchantment enchantment : higherLevelEnchantments.keySet()) {
-                    resultItem = ce.addEnchantment(resultItem, enchantment, higherLevelEnchantments.get(enchantment));
+                for (Entry<CEnchantment, Integer> enchantment : higherLevelEnchantments.entrySet()) {
+                    resultItem = ce.addEnchantment(resultItem, enchantment.getKey(), enchantment.getValue());
                     cost += blackSmithManager.getLevelUp();
                 }
             }
         }
-        this.resultItem = resultItem;
-        this.cost = cost;
     }
     
     public int getCost() {

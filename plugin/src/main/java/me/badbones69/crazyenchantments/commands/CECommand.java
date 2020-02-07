@@ -250,11 +250,9 @@ public class CECommand implements CommandExecutor {
                 case "lb":
                     if (hasPermission(sender, "lostbook")) {
                         if (args.length >= 2) {
-                            if (args.length <= 3) {
-                                if (!isPlayer) {
-                                    sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-                                    return true;
-                                }
+                            if (args.length <= 3 && !isPlayer) {
+                                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                                return true;
                             }
                             int amount = 1;
                             Player player;
@@ -262,7 +260,7 @@ public class CECommand implements CommandExecutor {
                             if (args.length >= 3) {
                                 if (!Methods.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                    .replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
+                                    .replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
                                 amount = Integer.parseInt(args[2]);
@@ -296,16 +294,14 @@ public class CECommand implements CommandExecutor {
                     if (hasPermission(sender, "scrambler")) {
                         int amount = 1;
                         Player player;
-                        if (args.length <= 2) {
-                            if (!isPlayer) {
-                                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-                                return true;
-                            }
+                        if (args.length <= 2 && !isPlayer) {
+                            sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                            return true;
                         }
                         if (args.length >= 2) {
                             if (!Methods.isInt(args[1])) {
                                 sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                .replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1]));
+                                .replace("%Arg%", args[1]).replace("%arg%", args[1]));
                                 return true;
                             }
                             amount = Integer.parseInt(args[1]);
@@ -335,16 +331,14 @@ public class CECommand implements CommandExecutor {
                     if (hasPermission(sender, "crystal")) {
                         int amount = 1;
                         Player player;
-                        if (args.length <= 2) {
-                            if (!isPlayer) {
-                                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-                                return true;
-                            }
+                        if (args.length <= 2 && !isPlayer) {
+                            sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                            return true;
                         }
                         if (args.length >= 2) {
                             if (!Methods.isInt(args[1])) {
                                 sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                .replaceAll("%Arg%", args[1]).replaceAll("%arg%", args[1]));
+                                .replace("%Arg%", args[1]).replace("%arg%", args[1]));
                                 return true;
                             }
                             amount = Integer.parseInt(args[1]);
@@ -375,16 +369,14 @@ public class CECommand implements CommandExecutor {
                             Player player;
                             int amount = 1;
                             int percent = 0;
-                            if (args.length == 2) {
-                                if (!isPlayer) {
-                                    sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-                                    return true;
-                                }
+                            if (args.length == 2 && !isPlayer) {
+                                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                                return true;
                             }
                             if (args.length >= 3) {
                                 if (!Methods.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                    .replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
+                                    .replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
                                 amount = Integer.parseInt(args[2]);
@@ -405,7 +397,7 @@ public class CECommand implements CommandExecutor {
                             if (args.length >= 5) {
                                 if (!Methods.isInt(args[4])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                    .replaceAll("%Arg%", args[4]).replaceAll("%arg%", args[4]));
+                                    .replace("%Arg%", args[4]).replace("%arg%", args[4]));
                                     return true;
                                 }
                                 percent = Integer.parseInt(args[4]);
@@ -420,7 +412,6 @@ public class CECommand implements CommandExecutor {
                                 HashMap<String, String> placeholders = new HashMap<>();
                                 placeholders.put("%Amount%", amount + "");
                                 placeholders.put("%Player%", player.getName());
-                                Messages message;
                                 switch (dust) {
                                     case SUCCESS_DUST:
                                         player.sendMessage(Messages.GET_SUCCESS_DUST.getMessage(placeholders));
@@ -449,7 +440,7 @@ public class CECommand implements CommandExecutor {
                             if (args.length >= 3) {
                                 if (!Methods.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                    .replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
+                                    .replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
                                 i = Integer.parseInt(args[2]);
@@ -485,7 +476,7 @@ public class CECommand implements CommandExecutor {
                             String level = "1";
                             if (args.length >= 3) {
                                 if (!Methods.isInt(args[2])) {
-                                    sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
+                                    sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
                                 level = args[2];
@@ -572,14 +563,14 @@ public class CECommand implements CommandExecutor {
                                     level = Methods.getRandomNumber(args[2]);
                                 } else {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                    .replaceAll("%Arg%", args[2]).replaceAll("%arg%", args[2]));
+                                    .replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
                             }
                             if (args.length >= 4) {
                                 if (!Methods.isInt(args[3])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                    .replaceAll("%Arg%", args[3]).replaceAll("%arg%", args[3]));
+                                    .replace("%Arg%", args[3]).replace("%arg%", args[3]));
                                     return true;
                                 }
                                 amount = Integer.parseInt(args[3]);
