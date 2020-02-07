@@ -89,17 +89,17 @@ public class CrazyEnchantments {
         gkitz.clear();
         registeredEnchantments.clear();
         plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+        //Loads the blacksmith manager
+        blackSmithManager = BlackSmithManager.getInstance();
+        blackSmithManager.load();
+        //Loads the info menu manager and the enchantment types.
+        infoMenuManager = InfoMenuManager.getInstance();
+        infoMenuManager.load();
         CEnchantments.invalidateCachedEnchants();
         Version version = Version.getCurrentVersion();
         useNewSounds = version.isNewer(Version.v1_8_R3);
         useNewMaterial = version.isNewer(Version.v1_12_R1);
         nmsSupport = version.isNewer(Version.v1_12_R1) ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
-        //Loads the blacksmith manager
-        blackSmithManager = BlackSmithManager.getInstance();
-        blackSmithManager.load();
-        //Loads the info menu manager
-        infoMenuManager = InfoMenuManager.getInstance();
-        infoMenuManager.load();
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration gkit = Files.GKITZ.getFile();
         FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
