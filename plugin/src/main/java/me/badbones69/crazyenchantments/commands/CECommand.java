@@ -95,24 +95,37 @@ public class CECommand implements CommandExecutor {
                 case "debug":// /ce debug
                     if (hasPermission(sender, "debug")) {
                         List<String> brokenEnchantments = new ArrayList<>();
+                        List<String> brokenEnchantmentTypes = new ArrayList<>();
                         for (CEnchantments enchantment : CEnchantments.values()) {
                             if (!Files.ENCHANTMENTS.getFile().contains("Enchantments." + enchantment.getName())) {
                                 brokenEnchantments.add(enchantment.getName());
                             }
+                            if (enchantment.getType() == null) brokenEnchantmentTypes.add(enchantment.getName());
                         }
-                        if (brokenEnchantments.isEmpty()) {
+                        if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
                             sender.sendMessage(Methods.getPrefix("&aAll enchantments are loaded."));
                         } else {
-                            int i = 1;
-                            sender.sendMessage(Methods.getPrefix("&cBroken Enchantments:"));
-                            for (String broke : brokenEnchantments) {
-                                sender.sendMessage(Methods.color("&c#" + i + ": &6" + broke));
-                                i++;
+                            if (!brokenEnchantments.isEmpty()) {
+                                int i = 1;
+                                sender.sendMessage(Methods.getPrefix("&cMissing Enchantments:"));
+                                sender.sendMessage(Methods.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
+                                for (String broke : brokenEnchantments) {
+                                    sender.sendMessage(Methods.color("&c#" + i + ": &6" + broke));
+                                    i++;
+                                }
+                                sender.sendMessage(Methods.color("&7- &cMissing from the Enchantments.yml"));
+                                sender.sendMessage(Methods.color("&7- &c<Enchantment Name>: option was changed"));
+                                sender.sendMessage(Methods.color("&7- &cYaml format has been broken."));
                             }
-                            sender.sendMessage(Methods.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
-                            sender.sendMessage(Methods.color("&7- &cMissing from the Enchantments.yml"));
-                            sender.sendMessage(Methods.color("&7- &c<Enchantment Name>: option was changed"));
-                            sender.sendMessage(Methods.color("&7- &cYaml format has been broken."));
+                            if (!brokenEnchantmentTypes.isEmpty()) {
+                                int i = 1;
+                                sender.sendMessage(Methods.getPrefix("&cEnchantments with null types:"));
+                                sender.sendMessage(Methods.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
+                                for (String broke : brokenEnchantmentTypes) {
+                                    sender.sendMessage(Methods.color("&c#" + i + ": &6" + broke));
+                                    i++;
+                                }
+                            }
                         }
                         sender.sendMessage(Methods.getPrefix("&cEnchantment Types and amount of items in each:"));
                         for (EnchantmentType enchantmentType : InfoMenuManager.getInstance().getEnchantmentTypes()) {
