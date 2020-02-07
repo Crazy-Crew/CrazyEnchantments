@@ -81,18 +81,18 @@ public class GKitz {
         List<ItemStack> items = new ArrayList<>();
         for (String itemString : itemStrings) {
             //This is used to convert old v1.7- gkit files to use newer way.
-            String newItemString = "";
+            StringBuilder newItemString = new StringBuilder();
             for (String option : itemString.split(", ")) {
                 if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
-                    String newOption = "";
+                    StringBuilder newOption = new StringBuilder();
                     for (String enchantment : option.toLowerCase().replace("enchantments:", "").replace("customenchantments:", "").split(",")) {
-                        newOption += enchantment + ", ";
+                        newOption.append(enchantment).append(", ");
                     }
                     option = newOption.substring(0, newOption.length() - 2);
                 }
-                newItemString += option + ", ";
+                newItemString.append(option).append(", ");
             }
-            if (!newItemString.isEmpty()) {
+            if (newItemString.length() > 0) {
                 itemString = newItemString.substring(0, newItemString.length() - 2);
             }
             GKitzItem item = new GKitzItem(ItemBuilder.convertString(itemString));

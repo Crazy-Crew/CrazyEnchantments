@@ -71,47 +71,41 @@ public class GKitzController implements Listener {
             CEPlayer cePlayer = ce.getCEPlayer(player);
             ItemStack item = e.getCurrentItem();
             NBTItem nbtItem = new NBTItem(item);
-            if (nbtItem.hasKey("gkit")) {
-                GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
+            for (GKitz kit : ce.getGKitz())
                 if (e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     e.setCancelled(true);
-                    if (e.getRawSlot() < inv.getSize()) {
-                        if (item.isSimilar(infoManager.getBackRightButton())) {
-                            openGUI(player);
-                            return;
-                        }
+                    if (e.getRawSlot() < inv.getSize() && item.isSimilar(infoManager.getBackRightButton())) {
+                        openGUI(player);
                     }
+                    return;
                 }
-            }
             if (e.getView().getTitle().equals(Methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 e.setCancelled(true);
-                if (e.getRawSlot() < inv.getSize()) {
-                    if (nbtItem.hasKey("gkit")) {
-                        GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
-                        if (e.getAction() == InventoryAction.PICKUP_HALF) {
-                            List<ItemStack> items = kit.getPreviewItems();
-                            int slots = 9;
-                            for (int size = items.size(); size >= 9; size -= 9, e.getCurrentItem()) ;
-                            Inventory inventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
-                            for (ItemStack itemStack : items) {
-                                inventory.addItem(itemStack);
-                            }
-                            inventory.setItem(slots - 1, infoManager.getBackRightButton());
-                            player.openInventory(inventory);
-                        } else {
-                            HashMap<String, String> placeholders = new HashMap<>();
-                            placeholders.put("%Kit%", kit.getName());
-                            if (cePlayer.hasGkitPermission(kit)) {
-                                if (cePlayer.canUseGKit(kit)) {
-                                    cePlayer.giveGKit(kit);
-                                    cePlayer.addCooldown(kit);
-                                    player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
-                                } else {
-                                    player.sendMessage(Methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
-                                }
+                if (e.getRawSlot() < inv.getSize() && nbtItem.hasKey("gkit")) {
+                    GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
+                    if (e.getAction() == InventoryAction.PICKUP_HALF) {
+                        List<ItemStack> items = kit.getPreviewItems();
+                        int slots = 9;
+                        for (int size = items.size(); size >= 9; size -= 9, e.getCurrentItem()) ;
+                        Inventory inventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
+                        for (ItemStack itemStack : items) {
+                            inventory.addItem(itemStack);
+                        }
+                        inventory.setItem(slots - 1, infoManager.getBackRightButton());
+                        player.openInventory(inventory);
+                    } else {
+                        HashMap<String, String> placeholders = new HashMap<>();
+                        placeholders.put("%Kit%", kit.getName());
+                        if (cePlayer.hasGkitPermission(kit)) {
+                            if (cePlayer.canUseGKit(kit)) {
+                                cePlayer.giveGKit(kit);
+                                cePlayer.addCooldown(kit);
+                                player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
                             } else {
-                                player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                                player.sendMessage(Methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
                             }
+                        } else {
+                            player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
                         }
                     }
                 }

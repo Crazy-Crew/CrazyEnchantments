@@ -1363,6 +1363,21 @@ public class CrazyEnchantments {
     private List<ItemStack> getInfoGKit(List<String> itemStrings) {
         List<ItemStack> items = new ArrayList<>();
         for (String itemString : itemStrings) {
+            //This is used to convert old v1.7- gkit files to use newer way.
+            StringBuilder newItemString = new StringBuilder();
+            for (String option : itemString.split(", ")) {
+                if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
+                    StringBuilder newOption = new StringBuilder();
+                    for (String enchantment : option.toLowerCase().replace("enchantments:", "").replace("customenchantments:", "").split(",")) {
+                        newOption.append(enchantment).append(", ");
+                    }
+                    option = newOption.substring(0, newOption.length() - 2);
+                }
+                newItemString.append(option).append(", ");
+            }
+            if (newItemString.length() > 0) {
+                itemString = newItemString.substring(0, newItemString.length() - 2);
+            }
             ItemBuilder itemBuilder = ItemBuilder.convertString(itemString);
             List<String> customEnchantments = new ArrayList<>();
             HashMap<Enchantment, Integer> enchantments = new HashMap<>();
