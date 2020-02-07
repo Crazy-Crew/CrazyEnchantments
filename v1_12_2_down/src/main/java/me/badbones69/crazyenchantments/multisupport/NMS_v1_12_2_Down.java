@@ -9,7 +9,7 @@ public class NMS_v1_12_2_Down implements NMSSupport {
     
     @Override
     public void fullyGrowPlant(Block block) {
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             if (block.getState().getData() instanceof Crops) {
                 Crops crop = (Crops) block.getState().getData();
                 CropState state = crop.getState();
@@ -40,7 +40,7 @@ public class NMS_v1_12_2_Down implements NMSSupport {
     
     @Override
     public boolean isFullyGrown(Block block) {
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             if (block.getState().getData() instanceof Crops) {
                 return ((Crops) block.getState().getData()).getState() == CropState.RIPE;
             } else if (block.getType() == Material.MELON_STEM || block.getType() == Material.PUMPKIN_STEM ||

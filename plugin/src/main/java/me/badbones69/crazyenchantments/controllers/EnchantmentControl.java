@@ -197,7 +197,7 @@ public class EnchantmentControl implements Listener {
     
     @EventHandler
     public void onDescriptionSend(PlayerInteractEvent e) {
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             if (e.getHand() != EquipmentSlot.HAND) {
                 return;
             }

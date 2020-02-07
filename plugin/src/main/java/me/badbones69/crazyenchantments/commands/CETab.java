@@ -19,7 +19,7 @@ import java.util.List;
 public class CETab implements TabCompleter {
     
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private boolean isV1_13_Up = Version.getCurrentVersion().isNewer(Version.v1_12_R1);
+    private boolean isV1_13_Up = Version.isNewer(Version.v1_12_R1);
     
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLable, String[] args) {

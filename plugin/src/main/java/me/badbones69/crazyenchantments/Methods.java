@@ -32,7 +32,7 @@ public class Methods {
     
     private static Random random = new Random();
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private static boolean isV1_13_Up = Version.getCurrentVersion().isNewer(Version.v1_12_R1);
+    private static boolean isV1_13_Up = Version.isNewer(Version.v1_12_R1);
     
     public static String color(String msg) {
         return ChatColor.translateAlternateColorCodes('&', msg);
@@ -101,7 +101,7 @@ public class Methods {
     }
     
     public static ItemStack getItemInHand(Player player) {
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             return player.getInventory().getItemInMainHand();
         } else {
             return player.getItemInHand();
@@ -109,7 +109,7 @@ public class Methods {
     }
     
     public static void setItemInHand(Player player, ItemStack item) {
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             player.getInventory().setItemInMainHand(item);
         } else {
             player.setItemInHand(item);
@@ -512,7 +512,7 @@ public class Methods {
     }
     
     public static void explode(Entity player) {
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
             player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
             player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
@@ -555,7 +555,7 @@ public class Methods {
     }
     
     public static void explode(Entity player, Entity arrow) {
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
             arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
             arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);

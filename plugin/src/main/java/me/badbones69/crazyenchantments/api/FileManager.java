@@ -344,7 +344,7 @@ public class FileManager {
          * @param oldFileJar The location of the 1.12.2- file version in the jar.
          */
         private Files(String fileName, String fileLocation, String newFileJar, String oldFileJar) {
-            this(fileName, fileLocation, Version.getCurrentVersion().isNewer(Version.v1_12_R1) ? newFileJar : oldFileJar);
+            this(fileName, fileLocation, Version.isNewer(Version.v1_12_R1) ? newFileJar : oldFileJar);
         }
         
         /**

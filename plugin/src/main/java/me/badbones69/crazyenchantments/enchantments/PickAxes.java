@@ -303,7 +303,7 @@ public class PickAxes implements Listener {
                                         }
                                     }
                                 }
-                                if (Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
+                                if (Version.isNewer(Version.v1_11_R1)) {
                                     e.setDropItems(false);
                                 } else {
                                     block.setType(Material.AIR);
@@ -342,7 +342,7 @@ public class PickAxes implements Listener {
                                     }
                                 }
                             }
-                            if (Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
+                            if (Version.isNewer(Version.v1_11_R1)) {
                                 e.setDropItems(false);
                             } else {
                                 block.setType(Material.AIR);

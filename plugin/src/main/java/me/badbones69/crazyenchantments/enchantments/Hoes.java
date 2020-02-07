@@ -38,10 +38,10 @@ public class Hoes implements Listener {
     public static List<Material> getHarvesterCrops() {
         if (harvesterCrops == null) {
             harvesterCrops = new ArrayList<>();
-            if (Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
+            if (Version.isNewer(Version.v1_8_R3) && Version.isOlder(Version.v1_13_R2)) {
                 harvesterCrops.add(Material.matchMaterial("BEETROOT_BLOCK"));
             }
-            if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+            if (Version.isNewer(Version.v1_12_R1)) {
                 harvesterCrops.addAll(Arrays.asList(Material.WHEAT,
                 Material.matchMaterial("CARROTS"),
                 Material.matchMaterial("BEETROOTS"),
@@ -61,7 +61,7 @@ public class Hoes implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+        if (Version.isNewer(Version.v1_8_R3)) {
             if (e.getHand() != EquipmentSlot.HAND) {
                 return;
             }
@@ -166,7 +166,7 @@ public class Hoes implements Listener {
                                                     }
                                                 }
                                             }
-                                            if (Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
+                                            if (Version.isNewer(Version.v1_11_R1)) {
                                                 e.setDropItems(false);
                                             }
                                             crop.setType(Material.AIR);
@@ -186,7 +186,7 @@ public class Hoes implements Listener {
     private void fullyGrowPlant(ItemStack hoe, Block block, Player player) {
         if (CEnchantments.GREENTHUMB.chanceSuccessful(hoe) || player.getGameMode() == GameMode.CREATIVE) {
             ce.getNMSSupport().fullyGrowPlant(block);
-            if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+            if (Version.isNewer(Version.v1_8_R3)) {
                 block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, block.getLocation().add(.5, .5, .5), 20, .25, .25, .25);
             } else {
                 ParticleEffect.VILLAGER_HAPPY.display(.25F, .25F, .25F, 0, 20, block.getLocation().add(.5, .5, .5), 20);
@@ -200,7 +200,7 @@ public class Hoes implements Listener {
         ItemStack playerSeedItem = null;
         Block plant = soil.getLocation().add(0, 1, 0).getBlock();
         if (plant.getType() == Material.AIR) {
-            if (Version.getCurrentVersion().isNewer(Version.v1_8_R3)) {
+            if (Version.isNewer(Version.v1_8_R3)) {
                 seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
                 playerSeedItem = player.getEquipment().getItemInOffHand();
                 if (isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
@@ -259,10 +259,10 @@ public class Hoes implements Listener {
     private List<Material> getSeedlings() {
         if (seedlings == null) {
             seedlings = new ArrayList<>();
-            if (Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
+            if (Version.isNewer(Version.v1_8_R3) && Version.isOlder(Version.v1_13_R2)) {
                 seedlings.add(Material.matchMaterial("BEETROOT_BLOCK"));
             }
-            if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+            if (Version.isNewer(Version.v1_12_R1)) {
                 seedlings.addAll(Arrays.asList(Material.WHEAT,
                 Material.matchMaterial("CARROTS"),
                 Material.MELON_STEM,
@@ -295,10 +295,10 @@ public class Hoes implements Listener {
     private Material getPlanterSeed(Material material) {
         if (planterSeeds == null) {
             planterSeeds = new HashMap<>();//Key == Item : Value == BlockType
-            if (Version.getCurrentVersion().isNewer(Version.v1_8_R3) && Version.getCurrentVersion().isOlder(Version.v1_13_R2)) {
+            if (Version.isNewer(Version.v1_8_R3) && Version.isOlder(Version.v1_13_R2)) {
                 planterSeeds.put(Material.matchMaterial("BEETROOT_SEEDS"), Material.matchMaterial("BEETROOT_BLOCK"));
             }
-            if (Version.getCurrentVersion().isNewer(Version.v1_12_R1)) {
+            if (Version.isNewer(Version.v1_12_R1)) {
                 planterSeeds.put(Material.matchMaterial("WHEAT_SEEDS"), Material.matchMaterial("WHEAT"));
                 planterSeeds.put(Material.matchMaterial("BEETROOT_SEEDS"), Material.matchMaterial("BEETROOTS"));
                 planterSeeds.put(Material.matchMaterial("POTATO"), Material.matchMaterial("POTATOES"));

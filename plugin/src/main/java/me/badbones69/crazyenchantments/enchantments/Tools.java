@@ -145,7 +145,7 @@ public class Tools implements Listener {
                                 player.getInventory().addItem(droppedItem);
                             }
                         }
-                        if (Version.getCurrentVersion().isNewer(Version.v1_11_R1)) {
+                        if (Version.isNewer(Version.v1_11_R1)) {
                             e.setDropItems(false);
                         } else {
                             block.setType(Material.AIR);

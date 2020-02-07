@@ -15,7 +15,7 @@ public enum Version {
     v1_14_R1(1141),
     TOO_NEW(-2);
     
-    public static Version currentVersion;
+    private static Version currentVersion;
     private static Version latest;
     private Integer versionInteger;
     
@@ -30,7 +30,7 @@ public enum Version {
     public static Version getCurrentVersion() {
         if (currentVersion == null) {
             String ver = Bukkit.getServer().getClass().getPackage().getName();
-            int v = Integer.parseInt(ver.substring(ver.lastIndexOf('.') + 1).replaceAll("_", "").replaceAll("R", "").replaceAll("v", ""));
+            int v = Integer.parseInt(ver.substring(ver.lastIndexOf('.') + 1).replace("_", "").replace("R", "").replace("v", ""));
             for (Version version : values()) {
                 if (version.getVersionInteger() == v) {
                     currentVersion = version;
@@ -52,6 +52,7 @@ public enum Version {
      * @return The latest version.
      */
     public static Version getLatestVersion() {
+        if (currentVersion == null) getCurrentVersion();
         if (latest == null) {
             Version v = Version.TOO_OLD;
             for (Version version : values()) {
@@ -80,17 +81,17 @@ public enum Version {
      * @return -1 if older, 0 if the same, and 1 if newer.
      */
     public Integer comparedTo(Version version) {
-        int resault = -1;
+        int result = -1;
         int current = this.getVersionInteger();
         int check = version.getVersionInteger();
         if (current > check || check == -2) {// check is newer then current
-            resault = 1;
+            result = 1;
         } else if (current == check) {// check is the same as current
-            resault = 0;
-        } else if (current < check || check == -1) {// check is older then current
-            resault = -1;
+            result = 0;
+        } else if (check == -1) {// check is older then current
+            result = -1;
         }
-        return resault;
+        return result;
     }
     
     /**
@@ -98,8 +99,9 @@ public enum Version {
      * @param version The version you are checking.
      * @return True if newer then the checked version and false if the same or older.
      */
-    public Boolean isNewer(Version version) {
-        return this.versionInteger > version.versionInteger || this.versionInteger == -2;
+    public static Boolean isNewer(Version version) {
+        if (currentVersion == null) getCurrentVersion();
+        return currentVersion.versionInteger > version.versionInteger || currentVersion.versionInteger == -2;
     }
     
     /**
@@ -107,8 +109,9 @@ public enum Version {
      * @param version The version you are checking.
      * @return True if both the current and checked version is the same and false if otherwise.
      */
-    public Boolean isSame(Version version) {
-        return this.versionInteger.equals(version.versionInteger);
+    public static Boolean isSame(Version version) {
+        if (currentVersion == null) getCurrentVersion();
+        return currentVersion.versionInteger.equals(version.versionInteger);
     }
     
     /**
@@ -116,8 +119,9 @@ public enum Version {
      * @param version The version you are checking.
      * @return True if older then the checked version and false if the same or newer.
      */
-    public Boolean isOlder(Version version) {
-        return this.versionInteger < version.versionInteger || this.versionInteger == -1;
+    public static Boolean isOlder(Version version) {
+        if (currentVersion == null) getCurrentVersion();
+        return currentVersion.versionInteger < version.versionInteger || currentVersion.versionInteger == -1;
     }
     
 }

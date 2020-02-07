@@ -37,7 +37,7 @@ public class Bows implements Listener {
     private List<EnchantedArrow> enchantedArrows = new ArrayList<>();
     private Material web = new ItemBuilder().setMaterial("COBWEB", "WEB").getMaterial();
     private List<Block> webBlocks = new ArrayList<>();
-    private boolean isv1_14_Up = Version.getCurrentVersion().isNewer(Version.v1_13_R2);
+    private boolean isv1_14_Up = Version.isNewer(Version.v1_13_R2);
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBowShoot(final EntityShootBowEvent e) {
@@ -105,7 +105,7 @@ public class Bows implements Listener {
                 if (arrow.hasEnchantment(CEnchantments.STICKY_SHOT)) {
                     if (CEnchantments.STICKY_SHOT.isActivated()) {
                         if (CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow())) {
-                            if (Version.getCurrentVersion().isNewer(Version.v1_10_R1)) {
+                            if (Version.isNewer(Version.v1_10_R1)) {
                                 if (e.getHitEntity() == null) {//If the arrow hits a block.
                                     Location entityLocation = e.getEntity().getLocation();
                                     if (entityLocation.getBlock().getType() == Material.AIR) {
