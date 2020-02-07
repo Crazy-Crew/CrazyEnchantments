@@ -13,109 +13,109 @@ import java.util.Random;
 public enum CEnchantments {
     
     //	----------------Boots----------------  \\
-    GEARS("Gears", EnchantmentType.getFromName("Boots")),
-    WINGS("Wings", EnchantmentType.getFromName("Boots")),
-    ROCKET("Rocket", EnchantmentType.getFromName("Boots"), 15, 5),
-    SPRINGS("Springs", EnchantmentType.getFromName("Boots")),
-    ANTIGRAVITY("AntiGravity", EnchantmentType.getFromName("Boots")),
+    GEARS("Gears", "Boots"),
+    WINGS("Wings", "Boots"),
+    ROCKET("Rocket", "Boots", 15, 5),
+    SPRINGS("Springs", "Boots"),
+    ANTIGRAVITY("AntiGravity", "Boots"),
     //	----------------Bows----------------  \\
-    BOOM("Boom", EnchantmentType.getFromName("Bow"), 20, 10),
-    PULL("Pull", EnchantmentType.getFromName("Bow"), 25, 10),
-    VENOM("Venom", EnchantmentType.getFromName("Bow"), 10, 5),
-    DOCTOR("Doctor", EnchantmentType.getFromName("Bow")),
-    PIERCING("Piercing", EnchantmentType.getFromName("Bow"), 5, 5),
-    ICEFREEZE("IceFreeze", EnchantmentType.getFromName("Bow"), 25, 10),
-    LIGHTNING("Lightning", EnchantmentType.getFromName("Bow"), 25, 10),
-    MULTIARROW("MultiArrow", EnchantmentType.getFromName("Bow"), 25, 10),
-    STICKY_SHOT("Sticky-Shot", EnchantmentType.getFromName("Bow"), 10, 10),
+    BOOM("Boom", "Bow", 20, 10),
+    PULL("Pull", "Bow", 25, 10),
+    VENOM("Venom", "Bow", 10, 5),
+    DOCTOR("Doctor", "Bow"),
+    PIERCING("Piercing", "Bow", 5, 5),
+    ICEFREEZE("IceFreeze", "Bow", 25, 10),
+    LIGHTNING("Lightning", "Bow", 25, 10),
+    MULTIARROW("MultiArrow", "Bow", 25, 10),
+    STICKY_SHOT("Sticky-Shot", "Bow", 10, 10),
     //	----------------Helmets----------------  \\
-    GLOWING("Glowing", EnchantmentType.getFromName("Helmet")),
-    MERMAID("Mermaid", EnchantmentType.getFromName("Helmet")),
-    IMPLANTS("Implants", EnchantmentType.getFromName("Helmet"), 5, 5),
-    COMMANDER("Commander", EnchantmentType.getFromName("Helmet")),
+    GLOWING("Glowing", "Helmet"),
+    MERMAID("Mermaid", "Helmet"),
+    IMPLANTS("Implants", "Helmet", 5, 5),
+    COMMANDER("Commander", "Helmet"),
     //	----------------Swords----------------  \\
-    TRAP("Trap", EnchantmentType.getFromName("Sword"), 10, 5),
-    RAGE("Rage", EnchantmentType.getFromName("Sword")),
-    VIPER("Viper", EnchantmentType.getFromName("Sword"), 10, 5),
-    SNARE("Snare", EnchantmentType.getFromName("Sword"), 10, 3),
-    SLOWMO("SlowMo", EnchantmentType.getFromName("Sword"), 5, 5),
-    WITHER("Wither", EnchantmentType.getFromName("Sword"), 10, 3),
-    VAMPIRE("Vampire", EnchantmentType.getFromName("Sword"), 5, 5),
-    EXECUTE("Execute", EnchantmentType.getFromName("Sword")),
-    FASTTURN("FastTurn", EnchantmentType.getFromName("Sword"), 5, 5),
-    DISARMER("Disarmer", EnchantmentType.getFromName("Sword"), 5, 1),
-    HEADLESS("Headless", EnchantmentType.getFromName("Sword"), 10, 10),
-    PARALYZE("Paralyze", EnchantmentType.getFromName("Sword"), 15, 5),
-    BLINDNESS("Blindness", EnchantmentType.getFromName("Sword"), 5, 1),
-    LIFESTEAL("LifeSteal", EnchantmentType.getFromName("Sword"), 15, 5),
-    CONFUSION("Confusion", EnchantmentType.getFromName("Sword"), 15, 5),
-    NUTRITION("Nutrition", EnchantmentType.getFromName("Sword"), 15, 5),
-    SKILLSWIPE("SkillSwipe", EnchantmentType.getFromName("Sword"), 5, 5),
-    OBLITERATE("Obliterate", EnchantmentType.getFromName("Sword"), 10, 5),
-    INQUISITIVE("Inquisitive", EnchantmentType.getFromName("Sword"), 50, 25),
-    LIGHTWEIGHT("LightWeight", EnchantmentType.getFromName("Sword"), 15, 5),
-    DOUBLEDAMAGE("DoubleDamage", EnchantmentType.getFromName("Sword"), 5, 1),
-    DISORDER("Disorder", EnchantmentType.getFromName("Sword"), 1, 0),
-    CHARGE("Charge", EnchantmentType.getFromName("Sword")),
-    REVENGE("Revenge", EnchantmentType.getFromName("Sword")),
-    FAMISHED("Famished", EnchantmentType.getFromName("Sword"), 10, 5),
+    TRAP("Trap", "Sword", 10, 5),
+    RAGE("Rage", "Sword"),
+    VIPER("Viper", "Sword", 10, 5),
+    SNARE("Snare", "Sword", 10, 3),
+    SLOWMO("SlowMo", "Sword", 5, 5),
+    WITHER("Wither", "Sword", 10, 3),
+    VAMPIRE("Vampire", "Sword", 5, 5),
+    EXECUTE("Execute", "Sword"),
+    FASTTURN("FastTurn", "Sword", 5, 5),
+    DISARMER("Disarmer", "Sword", 5, 1),
+    HEADLESS("Headless", "Sword", 10, 10),
+    PARALYZE("Paralyze", "Sword", 15, 5),
+    BLINDNESS("Blindness", "Sword", 5, 1),
+    LIFESTEAL("LifeSteal", "Sword", 15, 5),
+    CONFUSION("Confusion", "Sword", 15, 5),
+    NUTRITION("Nutrition", "Sword", 15, 5),
+    SKILLSWIPE("SkillSwipe", "Sword", 5, 5),
+    OBLITERATE("Obliterate", "Sword", 10, 5),
+    INQUISITIVE("Inquisitive", "Sword", 50, 25),
+    LIGHTWEIGHT("LightWeight", "Sword", 15, 5),
+    DOUBLEDAMAGE("DoubleDamage", "Sword", 5, 1),
+    DISORDER("Disorder", "Sword", 1, 0),
+    CHARGE("Charge", "Sword"),
+    REVENGE("Revenge", "Sword"),
+    FAMISHED("Famished", "Sword", 10, 5),
     //	----------------Armor----------------  \\
-    HULK("Hulk", EnchantmentType.getFromName("Armor")),
-    VALOR("Valor", EnchantmentType.getFromName("Armor")),
-    DRUNK("Drunk", EnchantmentType.getFromName("Armor")),
-    NINJA("Ninja", EnchantmentType.getFromName("Armor")),
-    ANGEL("Angel", EnchantmentType.getFromName("Armor")),
-    TAMER("Tamer", EnchantmentType.getFromName("Armor")),
-    GUARDS("Guards", EnchantmentType.getFromName("Armor")),
-    VOODOO("Voodoo", EnchantmentType.getFromName("Armor"), 15, 5),
-    MOLTEN("Molten", EnchantmentType.getFromName("Armor"), 10, 1),
-    SAVIOR("Savior", EnchantmentType.getFromName("Armor"), 15, 5),
-    CACTUS("Cactus", EnchantmentType.getFromName("Armor"), 25, 25),
-    FREEZE("Freeze", EnchantmentType.getFromName("Armor"), 10, 5),
-    RECOVER("Recover", EnchantmentType.getFromName("Armor")),
-    NURSERY("Nursery", EnchantmentType.getFromName("Armor"), 5, 5),
-    RADIANT("Radiant", EnchantmentType.getFromName("Armor")),
-    FORTIFY("Fortify", EnchantmentType.getFromName("Armor"), 10, 5),
-    OVERLOAD("OverLoad", EnchantmentType.getFromName("Armor")),
-    BLIZZARD("Blizzard", EnchantmentType.getFromName("Armor")),
-    INSOMNIA("Insomnia", EnchantmentType.getFromName("Armor"), 10, 5),
-    ACIDRAIN("AcidRain", EnchantmentType.getFromName("Armor"), 5, 5),
-    SANDSTORM("SandStorm", EnchantmentType.getFromName("Armor"), 5, 5),
-    SMOKEBOMB("SmokeBomb", EnchantmentType.getFromName("Armor"), 5, 5),
-    PAINGIVER("PainGiver", EnchantmentType.getFromName("Armor"), 10, 5),
-    INTIMIDATE("Intimidate", EnchantmentType.getFromName("Armor")),
-    BURNSHIELD("BurnShield", EnchantmentType.getFromName("Armor")),
-    LEADERSHIP("Leadership", EnchantmentType.getFromName("Armor"), 10, 5),
-    INFESTATION("Infestation", EnchantmentType.getFromName("Armor")),
-    NECROMANCER("Necromancer", EnchantmentType.getFromName("Armor")),
-    STORMCALLER("StormCaller", EnchantmentType.getFromName("Armor"), 10, 5),
-    ENLIGHTENED("Enlightened", EnchantmentType.getFromName("Armor"), 10, 5),
-    SELFDESTRUCT("SelfDestruct", EnchantmentType.getFromName("Armor")),
+    HULK("Hulk", "Armor"),
+    VALOR("Valor", "Armor"),
+    DRUNK("Drunk", "Armor"),
+    NINJA("Ninja", "Armor"),
+    ANGEL("Angel", "Armor"),
+    TAMER("Tamer", "Armor"),
+    GUARDS("Guards", "Armor"),
+    VOODOO("Voodoo", "Armor", 15, 5),
+    MOLTEN("Molten", "Armor", 10, 1),
+    SAVIOR("Savior", "Armor", 15, 5),
+    CACTUS("Cactus", "Armor", 25, 25),
+    FREEZE("Freeze", "Armor", 10, 5),
+    RECOVER("Recover", "Armor"),
+    NURSERY("Nursery", "Armor", 5, 5),
+    RADIANT("Radiant", "Armor"),
+    FORTIFY("Fortify", "Armor", 10, 5),
+    OVERLOAD("OverLoad", "Armor"),
+    BLIZZARD("Blizzard", "Armor"),
+    INSOMNIA("Insomnia", "Armor", 10, 5),
+    ACIDRAIN("AcidRain", "Armor", 5, 5),
+    SANDSTORM("SandStorm", "Armor", 5, 5),
+    SMOKEBOMB("SmokeBomb", "Armor", 5, 5),
+    PAINGIVER("PainGiver", "Armor", 10, 5),
+    INTIMIDATE("Intimidate", "Armor"),
+    BURNSHIELD("BurnShield", "Armor"),
+    LEADERSHIP("Leadership", "Armor", 10, 5),
+    INFESTATION("Infestation", "Armor"),
+    NECROMANCER("Necromancer", "Armor"),
+    STORMCALLER("StormCaller", "Armor", 10, 5),
+    ENLIGHTENED("Enlightened", "Armor", 10, 5),
+    SELFDESTRUCT("SelfDestruct", "Armor"),
     //	----------------Axes----------------  \\
-    REKT("Rekt", EnchantmentType.getFromName("Axe"), 5, 1),
-    DIZZY("Dizzy", EnchantmentType.getFromName("Axe"), 10, 5),
-    CURSED("Cursed", EnchantmentType.getFromName("Axe"), 10, 5),
-    FEEDME("FeedMe", EnchantmentType.getFromName("Axe"), 10, 5),
-    BERSERK("Berserk", EnchantmentType.getFromName("Axe"), 10, 1),
-    BLESSED("Blessed", EnchantmentType.getFromName("Axe"), 10, 5),
-    DECAPITATION("Decapitation", EnchantmentType.getFromName("Axe"), 10, 10),
-    BATTLECRY("BattleCry", EnchantmentType.getFromName("Axe"), 10, 5),
+    REKT("Rekt", "Axe", 5, 1),
+    DIZZY("Dizzy", "Axe", 10, 5),
+    CURSED("Cursed", "Axe", 10, 5),
+    FEEDME("FeedMe", "Axe", 10, 5),
+    BERSERK("Berserk", "Axe", 10, 1),
+    BLESSED("Blessed", "Axe", 10, 5),
+    DECAPITATION("Decapitation", "Axe", 10, 10),
+    BATTLECRY("BattleCry", "Axe", 10, 5),
     //	----------------PickAxes----------------  \\
-    BLAST("Blast", EnchantmentType.getFromName("Pickaxe")),
-    AUTOSMELT("AutoSmelt", EnchantmentType.getFromName("Pickaxe"), 25, 25),
-    EXPERIENCE("Experience", EnchantmentType.getFromName("Pickaxe"), 25, 25),
-    FURNACE("Furnace", EnchantmentType.getFromName("Pickaxe")),
+    BLAST("Blast", "Pickaxe"),
+    AUTOSMELT("AutoSmelt", "Pickaxe", 25, 25),
+    EXPERIENCE("Experience", "Pickaxe", 25, 25),
+    FURNACE("Furnace", "Pickaxe"),
     //	----------------Tools----------------  \\
-    HASTE("Haste", EnchantmentType.getFromName("Tool")),
-    TELEPATHY("Telepathy", EnchantmentType.getFromName("Tool")),
-    OXYGENATE("Oxygenate", EnchantmentType.getFromName("Tool")),
+    HASTE("Haste", "Tool"),
+    TELEPATHY("Telepathy", "Tool"),
+    OXYGENATE("Oxygenate", "Tool"),
     //	----------------Hoes----------------  \\
-    GREENTHUMB("GreenThumb", EnchantmentType.getFromName("Hoe"), 10, 10),
-    HARVESTER("Harvester", EnchantmentType.getFromName("Hoe")),
-    TILLER("Tiller", EnchantmentType.getFromName("Hoe")),
-    PLANTER("Planter", EnchantmentType.getFromName("Hoe")),
+    GREENTHUMB("GreenThumb", "Hoe", 10, 10),
+    HARVESTER("Harvester", "Hoe"),
+    TILLER("Tiller", "Hoe"),
+    PLANTER("Planter", "Hoe"),
     //	----------------All----------------  \\
-    HELLFORGED("HellForged", EnchantmentType.getFromName("Damaged-Items"), 5, 5);
+    HELLFORGED("HellForged", "Damaged-Items", 5, 5);
     
     private String name;
     private EnchantmentType type;
@@ -124,23 +124,23 @@ public enum CEnchantments {
     private int chanceIncrease;
     
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-
+    
     private CEnchantment cachedEnchantment = null;
-
+    
     public static void invalidateCachedEnchants() {
         for (CEnchantments value : values()) {
             value.cachedEnchantment = null;
         }
     }
-
+    
     /**
      *
      * @param name Name of the enchantment.
      * @param type Type of items it goes on.
      */
-    private CEnchantments(String name, EnchantmentType type) {
+    private CEnchantments(String name, String type) {
         this.name = name;
-        this.type = type;
+        this.type = EnchantmentType.getFromName(type);
         this.chance = 0;
         this.chanceIncrease = 0;
         this.hasChanceSystem = false;
@@ -153,9 +153,9 @@ public enum CEnchantments {
      * @param chance The chance the enchantment has to active.
      * @param chanceIncrease The amount the chance increases by every level.
      */
-    private CEnchantments(String name, EnchantmentType type, int chance, int chanceIncrease) {
+    private CEnchantments(String name, String type, int chance, int chanceIncrease) {
         this.name = name;
-        this.type = type;
+        this.type = EnchantmentType.getFromName(type);
         this.chance = chance;
         this.chanceIncrease = chanceIncrease;
         this.hasChanceSystem = true;
@@ -273,7 +273,7 @@ public enum CEnchantments {
      * @return The enchantment this is tied to.
      */
     public CEnchantment getEnchantment() {
-        if(cachedEnchantment == null) {
+        if (cachedEnchantment == null) {
             cachedEnchantment = ce.getEnchantmentFromName(name);
         }
         return cachedEnchantment;
