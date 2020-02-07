@@ -28,36 +28,27 @@ public class Helmets implements Listener {
         ItemStack newItem = e.getNewArmorPiece();
         ItemStack oldItem = e.getOldArmorPiece();
         if (ce.hasEnchantments(newItem)) {
-            int time = Integer.MAX_VALUE;
-            if (ce.hasEnchantment(newItem, CEnchantments.GLOWING)) {
-                if (CEnchantments.GLOWING.isActivated()) {
-                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, newItem);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (!event.isCancelled()) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, time, ce.getLevel(newItem, CEnchantments.GLOWING) - 1));
-                    }
+            if (CEnchantments.GLOWING.isActivated() && ce.hasEnchantment(newItem, CEnchantments.GLOWING)) {
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, newItem);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, ce.getLevel(newItem, CEnchantments.GLOWING) - 1));
                 }
             }
-            if (ce.hasEnchantment(newItem, CEnchantments.MERMAID)) {
-                if (CEnchantments.MERMAID.isActivated()) {
-                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, newItem);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (!event.isCancelled()) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, ce.getLevel(newItem, CEnchantments.MERMAID) - 1));
-                    }
+            if (CEnchantments.MERMAID.isActivated() && ce.hasEnchantment(newItem, CEnchantments.MERMAID)) {
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, newItem);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, ce.getLevel(newItem, CEnchantments.MERMAID) - 1));
                 }
             }
         }
         if (ce.hasEnchantments(oldItem)) {
-            if (ce.hasEnchantment(oldItem, CEnchantments.GLOWING)) {
-                if (CEnchantments.GLOWING.isActivated()) {
-                    player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-                }
+            if (CEnchantments.GLOWING.isActivated() && ce.hasEnchantment(oldItem, CEnchantments.GLOWING)) {
+                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
             }
-            if (ce.hasEnchantment(oldItem, CEnchantments.MERMAID)) {
-                if (CEnchantments.MERMAID.isActivated()) {
-                    player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-                }
+            if (CEnchantments.MERMAID.isActivated() && ce.hasEnchantment(oldItem, CEnchantments.MERMAID)) {
+                player.removePotionEffect(PotionEffectType.WATER_BREATHING);
             }
         }
     }
@@ -78,7 +69,7 @@ public class Helmets implements Listener {
                             }
                         }
                     }
-                    if (players.size() > 0) {
+                    if (!players.isEmpty()) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {

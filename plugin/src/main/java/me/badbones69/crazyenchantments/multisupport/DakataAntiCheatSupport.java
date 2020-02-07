@@ -18,12 +18,8 @@ public class DakataAntiCheatSupport implements Listener {
         Player player = e.getPlayer();
         ItemStack item = Methods.getItemInHand(player);
         CheatType cheatType = e.getCheatType();
-        if (cheatType == CheatType.AUTOCLICKER || cheatType == CheatType.INVALIDBLOCK_BREAK || cheatType == CheatType.NOBREAKDELAY || cheatType == CheatType.REACH_BLOCK) {
-            if (item != null) {
-                if (ce.hasEnchantments(item)) {
-                    e.setCancelled(true);
-                }
-            }
+        if (item != null && (cheatType == CheatType.AUTOCLICKER || cheatType == CheatType.INVALIDBLOCK_BREAK || cheatType == CheatType.NOBREAKDELAY || cheatType == CheatType.REACH_BLOCK) && ce.hasEnchantments(item)) {
+            e.setCancelled(true);
         }
     }
     

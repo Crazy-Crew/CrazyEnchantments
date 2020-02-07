@@ -13,10 +13,8 @@ public class TownySupport {
         try {
             TownBlock block = WorldCoord.parseWorldCoord(player).getTownBlock();
             Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
-            if (playerUser.hasTown()) {
-                if (playerUser.getTown().hasTownBlock(block)) {
-                    return true;
-                }
+            if (playerUser.hasTown() && playerUser.getTown().hasTownBlock(block)) {
+                return true;
             }
         } catch (NotRegisteredException ignored) {
         }

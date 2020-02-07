@@ -11,7 +11,7 @@ import java.util.List;
 
 public class WingsManager {
     
-    public static WingsManager instance = new WingsManager();
+    public static final WingsManager instance = new WingsManager();
     private boolean isWingsEnabled;
     private boolean isCloudsEnabled;
     private boolean isEnemeyCheckEnabled;

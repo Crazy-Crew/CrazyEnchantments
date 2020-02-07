@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class ShopManager {
     
@@ -83,10 +84,10 @@ public class ShopManager {
             placeholders.put("%" + currency.getName() + "%", CurrencyAPI.getCurrency(player, currency) + "");
         }
         Inventory inventory = Bukkit.createInventory(null, inventorySize, inventoryName);
-        for (ItemBuilder itemBuilder : customizerItems.keySet()) {
-            itemBuilder.setNamePlaceholders(placeholders)
+        for (Entry<ItemBuilder, Integer> itemBuilders : customizerItems.entrySet()) {
+            itemBuilders.getKey().setNamePlaceholders(placeholders)
             .setLorePlaceholders(placeholders);
-            inventory.setItem(customizerItems.get(itemBuilder), itemBuilder.build());
+            inventory.setItem(itemBuilders.getValue(), itemBuilders.getKey().build());
         }
         shopItems.keySet().forEach(itemBuilder -> inventory.setItem(shopItems.get(itemBuilder), itemBuilder.build()));
         return inventory;

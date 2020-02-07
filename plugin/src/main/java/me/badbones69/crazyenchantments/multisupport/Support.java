@@ -20,55 +20,35 @@ public class Support {
     private static PlotSquaredVersion plotSquaredVersion = ce.getPlotSquaredSupport();
     
     public static boolean inTerritory(Player player) {
-        if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-            if (FactionsUUID.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && FactionsUUID.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.FACTIONS3.isPluginLoaded()) {
-            if (Factions3Support.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.FACTIONS3.isPluginLoaded() && Factions3Support.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) {
-            if (FactionsSupport.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() && FactionsSupport.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.FEUDAL.isPluginLoaded()) {
-            if (FeudalSupport.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.FEUDAL.isPluginLoaded() && FeudalSupport.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.ASKYBLOCK.isPluginLoaded()) {
-            if (ASkyBlockSupport.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.ASKYBLOCK.isPluginLoaded() && ASkyBlockSupport.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.ACID_ISLAND.isPluginLoaded()) {
-            if (AcidIslandSupport.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.KINGDOMS.isPluginLoaded()) {
-            if (KingdomSupport.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.KINGDOMS.isPluginLoaded() && KingdomSupport.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.TOWNY.isPluginLoaded()) {
-            if (TownySupport.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.TOWNY.isPluginLoaded() && TownySupport.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
-            if (GriefPreventionSupport.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded() && GriefPreventionSupport.inTerritory(player)) {
+            return true;
         }
-        if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
-            if (plotSquaredVersion.inTerritory(player)) {
-                return true;
-            }
+        if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded() && plotSquaredVersion.inTerritory(player)) {
+            return true;
         }
         return SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() && LegacyFactionsSupport.inTerritory(player);
     }
@@ -77,55 +57,35 @@ public class Support {
         if (p instanceof Player && o instanceof Player) {
             Player player = (Player) p;
             Player other = (Player) o;
-            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-                if (FactionsUUID.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && FactionsUUID.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.FACTIONS3.isPluginLoaded()) {
-                if (Factions3Support.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.FACTIONS3.isPluginLoaded() && Factions3Support.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) {
-                if (FactionsSupport.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() && FactionsSupport.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.FEUDAL.isPluginLoaded()) {
-                if (FeudalSupport.isFrendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.FEUDAL.isPluginLoaded() && FeudalSupport.isFrendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.ASKYBLOCK.isPluginLoaded()) {
-                if (ASkyBlockSupport.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.ASKYBLOCK.isPluginLoaded() && ASkyBlockSupport.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.ACID_ISLAND.isPluginLoaded()) {
-                if (AcidIslandSupport.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.KINGDOMS.isPluginLoaded()) {
-                if (KingdomSupport.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.KINGDOMS.isPluginLoaded() && KingdomSupport.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.TOWNY.isPluginLoaded()) {
-                if (TownySupport.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.TOWNY.isPluginLoaded() && TownySupport.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded()) {
-                if (LegacyFactionsSupport.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() && LegacyFactionsSupport.isFriendly(player, other)) {
+                return true;
             }
-            if (SupportedPlugins.MCMMO.isPluginLoaded()) {
-                if (MCMMOParty.isFriendly(player, other)) {
-                    return true;
-                }
+            if (SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other)) {
+                return true;
             }
             if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
                 return GriefPreventionSupport.isFriendly(player, other);
@@ -143,40 +103,26 @@ public class Support {
     
     public static boolean canBreakBlock(Player player, Block block) {
         if (player != null) {
-            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-                if (!FactionsUUID.canBreakBlock(player, block)) {
-                    return false;
-                }
+            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && !FactionsUUID.canBreakBlock(player, block)) {
+                return false;
             }
-            if (SupportedPlugins.FACTIONS3.isPluginLoaded()) {
-                if (!Factions3Support.canBreakBlock(player, block)) {
-                    return false;
-                }
+            if (SupportedPlugins.FACTIONS3.isPluginLoaded() && !Factions3Support.canBreakBlock(player, block)) {
+                return false;
             }
-            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) {
-                if (!FactionsSupport.canBreakBlock(player, block)) {
-                    return false;
-                }
+            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() && !FactionsSupport.canBreakBlock(player, block)) {
+                return false;
             }
-            if (SupportedPlugins.FEUDAL.isPluginLoaded()) {
-                if (!FeudalSupport.canBreakBlock(player, block)) {
-                    return false;
-                }
+            if (SupportedPlugins.FEUDAL.isPluginLoaded() && !FeudalSupport.canBreakBlock(player, block)) {
+                return false;
             }
-            if (SupportedPlugins.KINGDOMS.isPluginLoaded()) {
-                if (!KingdomSupport.canBreakBlock(player, block)) {
-                    return false;
-                }
+            if (SupportedPlugins.KINGDOMS.isPluginLoaded() && !KingdomSupport.canBreakBlock(player, block)) {
+                return false;
             }
-            if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
-                if (!GriefPreventionSupport.canBreakBlock(player, block)) {
-                    return false;
-                }
+            if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded() && !GriefPreventionSupport.canBreakBlock(player, block)) {
+                return false;
             }
-            if (SupportedPlugins.PRECIOUS_STONES.isPluginLoaded()) {
-                if (!PreciousStonesSupport.canBreakBlock(player, block)) {
-                    return false;
-                }
+            if (SupportedPlugins.PRECIOUS_STONES.isPluginLoaded() && !PreciousStonesSupport.canBreakBlock(player, block)) {
+                return false;
             }
         }
         return !SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() || LegacyFactionsSupport.canBreakBlock(player, block);

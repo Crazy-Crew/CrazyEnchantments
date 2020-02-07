@@ -29,10 +29,10 @@ public class LegacyFactionsSupport {
     }
     
     public static boolean canBreakBlock(Player player, Block block) {
-        Faction P = FPlayerColl.get(player).getFaction();
+        Faction fPlayer = FPlayerColl.get(player).getFaction();
         FLocation loc = new FLocation(block.getLocation());
-        Faction B = Board.get().getFactionAt(loc);
-        return Methods.removeColor(B.getTag()).equalsIgnoreCase("Wilderness") || P == B;
+        Faction fBlock = Board.get().getFactionAt(loc);
+        return Methods.removeColor(fBlock.getTag()).equalsIgnoreCase("Wilderness") || fPlayer == fBlock;
     }
     
 }

@@ -30,10 +30,10 @@ public class FactionsUUID {
     }
     
     public static boolean canBreakBlock(Player player, Block block) {
-        Faction P = FPlayers.getInstance().getByPlayer(player).getFaction();
+        Faction fPlayer = FPlayers.getInstance().getByPlayer(player).getFaction();
         FLocation loc = new FLocation(block.getLocation());
-        Faction B = Board.getInstance().getFactionAt(loc);
-        return Methods.removeColor(B.getTag()).equalsIgnoreCase("Wilderness") || P == B;
+        Faction fBlock = Board.getInstance().getFactionAt(loc);
+        return Methods.removeColor(fBlock.getTag()).equalsIgnoreCase("Wilderness") || fPlayer == fBlock;
     }
     
 }

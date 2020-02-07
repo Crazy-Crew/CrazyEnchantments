@@ -21,10 +21,8 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +37,6 @@ import java.util.stream.Collectors;
 public class ItemBuilder implements Cloneable {
     
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private static Version version = Version.getCurrentVersion();
     private static boolean useNewMaterial = ce.useNewMaterial();
     private Material material;
     private int damage;
@@ -50,7 +47,7 @@ public class ItemBuilder implements Cloneable {
     private boolean isHash;
     private boolean isURL;
     private boolean isHead;
-    private HashMap<Enchantment, Integer> enchantments;
+    private Map<Enchantment, Integer> enchantments;
     private boolean unbreakable;
     private boolean hideItemFlags;
     private boolean glowing;
@@ -68,8 +65,8 @@ public class ItemBuilder implements Cloneable {
     private boolean isShield;
     private int customModelData;
     private boolean useCustomModelData;
-    private HashMap<String, String> namePlaceholders;
-    private HashMap<String, String> lorePlaceholders;
+    private Map<String, String> namePlaceholders;
+    private Map<String, String> lorePlaceholders;
     private List<ItemFlag> itemFlags;
     
     /**
@@ -144,7 +141,6 @@ public class ItemBuilder implements Cloneable {
     public static ItemBuilder convertString(String itemString, String placeHolder) {
         ItemBuilder itemBuilder = new ItemBuilder();
         try {
-            options:
             for (String optionString : itemString.split(", ")) {
                 String option = optionString.split(":")[0];
                 String value = optionString.replace(option + ":", "").replace(option, "");
@@ -284,7 +280,7 @@ public class ItemBuilder implements Cloneable {
         if (material != null) {// Sets the material.
             this.material = material;
             //1.9-1.12.2
-            if (version.isNewer(Version.v1_8_R3) && version.isOlder(Version.v1_13_R2)) {
+            if (Version.isNewer(Version.v1_8_R3) && Version.isOlder(Version.v1_13_R2)) {
                 if (material == Material.matchMaterial("MONSTER_EGG")) {
                     try {
                         this.entityType = EntityType.fromId(damage) != null ? EntityType.fromId(damage) : EntityType.valueOf(metaDataString);
@@ -379,7 +375,7 @@ public class ItemBuilder implements Cloneable {
      * @param placeholders The placeholders that will be used.
      * @return The ItemBuilder with updated info.
      */
-    public ItemBuilder setNamePlaceholders(HashMap<String, String> placeholders) {
+    public ItemBuilder setNamePlaceholders(Map<String, String> placeholders) {
         this.namePlaceholders = placeholders;
         return this;
     }
@@ -411,8 +407,8 @@ public class ItemBuilder implements Cloneable {
      */
     public String getUpdatedName() {
         String newName = name;
-        for (String placeholder : namePlaceholders.keySet()) {
-            newName = newName.replace(placeholder, namePlaceholders.get(placeholder)).replace(placeholder.toLowerCase(), namePlaceholders.get(placeholder));
+        for (Entry<String, String> placeholder : namePlaceholders.entrySet()) {
+            newName = newName.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
         }
         return newName;
     }
@@ -457,7 +453,7 @@ public class ItemBuilder implements Cloneable {
      * @param placeholders The placeholders that you wish to use.
      * @return The ItemBuilder with updated info.
      */
-    public ItemBuilder setLorePlaceholders(HashMap<String, String> placeholders) {
+    public ItemBuilder setLorePlaceholders(Map<String, String> placeholders) {
         this.lorePlaceholders = placeholders;
         return this;
     }
@@ -501,8 +497,8 @@ public class ItemBuilder implements Cloneable {
     public List<String> getUpdatedLore() {
         List<String> newLore = new ArrayList<>();
         for (String i : lore) {
-            for (String placeholder : lorePlaceholders.keySet()) {
-                i = i.replace(placeholder, lorePlaceholders.get(placeholder)).replace(placeholder.toLowerCase(), lorePlaceholders.get(placeholder));
+            for (Entry<String, String> placeholder : lorePlaceholders.entrySet()) {
+                i = i.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
             }
             newLore.add(i);
         }
@@ -699,7 +695,7 @@ public class ItemBuilder implements Cloneable {
      * Get the enchantments that are on the item in the builder.
      * @return The enchantments that are on the item in the builder.
      */
-    public HashMap<Enchantment, Integer> getEnchantments() {
+    public Map<Enchantment, Integer> getEnchantments() {
         return enchantments;
     }
     
@@ -709,7 +705,7 @@ public class ItemBuilder implements Cloneable {
      * @param enchantments A list of enchantments that will go onto the item in the builder.
      * @return The ItemBuilder with updated info.
      */
-    public ItemBuilder setEnchantments(HashMap<Enchantment, Integer> enchantments) {
+    public ItemBuilder setEnchantments(Map<Enchantment, Integer> enchantments) {
         if (enchantments != null) {
             this.enchantments = enchantments;
         }
@@ -835,28 +831,28 @@ public class ItemBuilder implements Cloneable {
     public ItemStack build() {
         ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material, amount);
         if (item.getType() != Material.AIR) {
-            if (isHead) {//Has to go 1st due to it removing all data when finished.
-                if (isHash) {//Sauce: https://github.com/deanveloper/SkullCreator
-                    if (isURL) {
-                        SkullCreator.itemWithUrl(item, player);
-                    } else {
-                        SkullCreator.itemWithBase64(item, player);
-                    }
+            //Has to go 1st due to it removing all data when finished.
+            //Sauce: https://github.com/deanveloper/SkullCreator
+            if (isHead && isHash) {
+                if (isURL) {
+                    SkullCreator.itemWithUrl(item, player);
+                } else {
+                    SkullCreator.itemWithBase64(item, player);
                 }
             }
             ItemMeta itemMeta = item.getItemMeta();
             itemMeta.setDisplayName(getUpdatedName());
             itemMeta.setLore(getUpdatedLore());
-            if (version.isSame(Version.v1_8_R3)) {
+            if (Version.isSame(Version.v1_8_R3)) {
                 if (isHead && !isHash && player != null && !player.equals("")) {
                     SkullMeta skullMeta = (SkullMeta) itemMeta;
                     skullMeta.setOwner(player);
                 }
             }
-            if (version.isNewer(Version.v1_10_R1)) {
+            if (Version.isNewer(Version.v1_10_R1)) {
                 itemMeta.setUnbreakable(unbreakable);
             }
-            if (version.isNewer(Version.v1_12_R1)) {
+            if (Version.isNewer(Version.v1_12_R1)) {
                 if (itemMeta instanceof Damageable) {
                     ((Damageable) itemMeta).setDamage(damage);
                 }
@@ -896,21 +892,15 @@ public class ItemBuilder implements Cloneable {
             item.addUnsafeEnchantments(enchantments);
             addGlow(item);
             NBTItem nbt = new NBTItem(item);
-            if (isHead) {
-                if (!isHash && player != null && !player.equals("") && version.isNewer(Version.v1_8_R3)) {
-                    nbt.setString("SkullOwner", player);
-                }
+            if (isHead && !isHash && player != null && !player.equals("") && Version.isNewer(Version.v1_8_R3)) {
+                nbt.setString("SkullOwner", player);
             }
-            if (isMobEgg) {
-                if (entityType != null) {
-                    nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
-                }
+            if (isMobEgg && entityType != null) {
+                nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
             }
-            if (version.isOlder(Version.v1_11_R1)) {
-                if (unbreakable) {
-                    nbt.setBoolean("Unbreakable", true);
-                    nbt.setInteger("HideFlags", 4);
-                }
+            if (unbreakable && Version.isOlder(Version.v1_11_R1)) {
+                nbt.setBoolean("Unbreakable", true);
+                nbt.setInteger("HideFlags", 4);
             }
             return nbt.getItem();
         } else {
@@ -946,13 +936,11 @@ public class ItemBuilder implements Cloneable {
     }
     
     private ItemStack hideFlags(ItemStack item) {
-        if (hideItemFlags) {
-            if (item != null && item.hasItemMeta()) {
-                ItemMeta itemMeta = item.getItemMeta();
-                itemMeta.addItemFlags(ItemFlag.values());
-                item.setItemMeta(itemMeta);
-                return item;
-            }
+        if (hideItemFlags && item != null && item.hasItemMeta()) {
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.addItemFlags(ItemFlag.values());
+            item.setItemMeta(itemMeta);
+            return item;
         }
         return item;
     }
@@ -961,10 +949,8 @@ public class ItemBuilder implements Cloneable {
         if (glowing) {
             try {
                 if (item != null) {
-                    if (item.hasItemMeta()) {
-                        if (item.getItemMeta().hasEnchants()) {
-                            return item;
-                        }
+                    if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
+                        return item;
                     }
                     item.addUnsafeEnchantment(Enchantment.LUCK, 1);
                     ItemMeta meta = item.getItemMeta();
@@ -1081,7 +1067,7 @@ public class ItemBuilder implements Cloneable {
         for (Enchantment enchantment : Enchantment.values()) {
             try {
                 //MC 1.13+ has the correct names.
-                if (version.isNewer(Version.v1_12_R1)) {
+                if (Version.isNewer(Version.v1_12_R1)) {
                     if (stripEnchantmentName(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
                         return enchantment;
                     }

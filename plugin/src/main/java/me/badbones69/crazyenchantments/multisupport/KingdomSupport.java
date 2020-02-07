@@ -17,9 +17,9 @@ public class KingdomSupport {
         (kp.getKingdom() == ko.getKingdom() || kp.getKingdom() != null && kp.getKingdom().isAllianceWith(ko.getKingdom()));
     }
     
-    public static boolean inTerritory(Player P) {
-        KingdomPlayer kp = GameManagement.getPlayerManager().getSession(P);
-        SimpleLocation loc = new SimpleLocation(P.getLocation());
+    public static boolean inTerritory(Player player) {
+        KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
+        SimpleLocation loc = new SimpleLocation(player.getLocation());
         Land land = GameManagement.getLandManager().getOrLoadLand(loc.toSimpleChunk());
         Kingdom kingdom = GameManagement.getKingdomManager().getOrLoadKingdom(land.getOwner());
         return kp.getKingdom() != null && kingdom != null && kingdom.equals(kp.getKingdom());

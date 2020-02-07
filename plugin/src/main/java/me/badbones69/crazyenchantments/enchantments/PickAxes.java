@@ -34,6 +34,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class PickAxes implements Listener {
     
@@ -42,7 +43,6 @@ public class PickAxes implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockClick(PlayerInteractEvent e) {
-        if (e.isCancelled()) return;
         Player player = e.getPlayer();
         if (e.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.BLAST.isActivated()) {
             ItemStack item = Methods.getItemInHand(player);
@@ -63,206 +63,191 @@ public class PickAxes implements Listener {
         ItemStack item = Methods.getItemInHand(player);
         if (blocks.containsKey(player)) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-            if (enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
-                if (blocks.get(player).containsKey(block)) {
-                    e.setCancelled(true);
-                    BlockFace face = blocks.get(player).get(block);
-                    blocks.remove(player);
-                    List<Block> blockList = getBlocks(block.getLocation(), face, (ce.getLevel(item, CEnchantments.BLAST) - 1));
-                    BlastUseEvent blastUseEvent = new BlastUseEvent(player, blockList);
-                    Bukkit.getPluginManager().callEvent(blastUseEvent);
-                    if (!blastUseEvent.isCancelled()) {
-                        Location originalBlockLocation = block.getLocation();
-                        List<Block> finalBlockList = new ArrayList<>();
-                        for (Block b : blockList) {
-                            if (b.getType() != Material.AIR) {
-                                if (ce.getBlockList().contains(b.getType()) || b.getLocation().equals(originalBlockLocation)) {
-                                    BlockBreakEvent event = new BlockBreakEvent(b, player);
-                                    ce.addIgnoredEvent(event);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
-                                        finalBlockList.add(b);
-                                    }
-                                    ce.removeIgnoredEvent(event);
-                                }
+            if (blocks.get(player).containsKey(block) && enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
+                e.setCancelled(true);
+                BlockFace face = blocks.get(player).get(block);
+                blocks.remove(player);
+                List<Block> blockList = getBlocks(block.getLocation(), face, (ce.getLevel(item, CEnchantments.BLAST) - 1));
+                BlastUseEvent blastUseEvent = new BlastUseEvent(player, blockList);
+                Bukkit.getPluginManager().callEvent(blastUseEvent);
+                if (!blastUseEvent.isCancelled()) {
+                    Location originalBlockLocation = block.getLocation();
+                    List<Block> finalBlockList = new ArrayList<>();
+                    for (Block b : blockList) {
+                        if (b.getType() != Material.AIR && (ce.getBlockList().contains(b.getType()) || b.getLocation().equals(originalBlockLocation))) {
+                            BlockBreakEvent event = new BlockBreakEvent(b, player);
+                            ce.addIgnoredEvent(event);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
+                                finalBlockList.add(b);
                             }
+                            ce.removeIgnoredEvent(event);
                         }
-                        new BukkitRunnable() { // Run async to help offload some lag.
-                            @Override
-                            public void run() {
-                                HashMap<ItemStack, Integer> drops = new HashMap<>();
-                                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                    NoCheatPlusSupport.exemptPlayer(player);
-                                }
-                                if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                                    SpartanSupport.cancelNucker(player);
-                                    SpartanSupport.cancelNoSwing(player);
-                                    SpartanSupport.cancelBlockReach(player);
-                                }
-                                if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                    AACSupport.exemptPlayer(player);
-                                }
-                                int xp = 0;
-                                boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
-                                boolean hasTelepathy = enchantments.contains(CEnchantments.TELEPATHY.getEnchantment());
-                                boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
-                                boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
-                                boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
-                                for (Block block : finalBlockList) {
-                                    if (player.getGameMode() == GameMode.CREATIVE) { //If the user is in creative mode.
+                    }
+                    new BukkitRunnable() { // Run async to help offload some lag.
+                        @Override
+                        public void run() {
+                            HashMap<ItemStack, Integer> drops = new HashMap<>();
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                                NoCheatPlusSupport.exemptPlayer(player);
+                            }
+                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                                SpartanSupport.cancelNucker(player);
+                                SpartanSupport.cancelNoSwing(player);
+                                SpartanSupport.cancelBlockReach(player);
+                            }
+                            if (SupportedPlugins.AAC.isPluginLoaded()) {
+                                AACSupport.exemptPlayer(player);
+                            }
+                            int xp = 0;
+                            boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
+                            boolean hasTelepathy = enchantments.contains(CEnchantments.TELEPATHY.getEnchantment());
+                            boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
+                            boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
+                            boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
+                            for (Block block : finalBlockList) {
+                                if (player.getGameMode() == GameMode.CREATIVE) { //If the user is in creative mode.
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            block.setType(Material.AIR);
+                                        }
+                                    }.runTask(ce.getPlugin());
+                                } else { //If the user is in survival mode.
+                                    //This is to check if the original block the player broke was in the block list.
+                                    //If it is not then it should be broken and dropped on the ground.
+                                    if (block.getLocation().equals(originalBlockLocation) && !ce.getBlockList().contains(block.getType())) {
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
-                                                block.setType(Material.AIR);
+                                                block.breakNaturally();
                                             }
                                         }.runTask(ce.getPlugin());
-                                    } else { //If the user is in survival mode.
-                                        if (block.getLocation().equals(originalBlockLocation)) {
-                                            //This is to check if the original block the player broke was in the block list.
-                                            //If it is not then it should be broken and dropped on the ground.
-                                            if (!ce.getBlockList().contains(block.getType())) {
+                                        continue;
+                                    }
+                                    if (hasTelepathy) {
+                                        for (ItemStack drop : block.getDrops(item)) {
+                                            if (hasFurnace && isOre(block.getType())) {
+                                                drop = getOreDrop(block.getType());
+                                            } else if (hasAutoSmelt && isOre(block.getType()) && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+                                                drop = getOreDrop(block.getType());
+                                                drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
+                                            }
+                                            int amount = drop.getAmount();
+                                            if (drops.containsKey(drop)) {
+                                                drops.put(drop, drops.get(drop) + amount);
+                                            } else {
+                                                drops.put(drop, amount);
+                                            }
+                                            if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        if (hasFurnace && isOre(block.getType())) {
+                                            ItemStack finalDrop = getOreDrop(block.getType());
+                                            new BukkitRunnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        block.getWorld().dropItem(block.getLocation(), getOreDrop(block.getType(), finalDrop.getAmount()));
+                                                    } catch (IllegalArgumentException ignore) {
+                                                    }
+                                                }
+                                            }.runTask(ce.getPlugin());
+                                        } else if (hasAutoSmelt && isOre(block.getType())) {
+                                            for (ItemStack drop : block.getDrops(item)) {
+                                                if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+                                                    drop = getOreDrop(block.getType());
+                                                    drop.setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
+                                                }
+                                                ItemStack finalDrop = drop;
                                                 new BukkitRunnable() {
                                                     @Override
                                                     public void run() {
-                                                        block.breakNaturally();
+                                                        try {
+                                                            block.getWorld().dropItem(block.getLocation(), finalDrop);
+                                                        } catch (IllegalArgumentException ignore) {
+                                                        }
                                                     }
                                                 }.runTask(ce.getPlugin());
-                                                continue;
                                             }
-                                        }
-                                        if (hasTelepathy) {
+                                        } else {
                                             for (ItemStack drop : block.getDrops(item)) {
-                                                if (hasFurnace && isOre(block.getType())) {
-                                                    drop = getOreDrop(block.getType());
-                                                } else if (hasAutoSmelt && isOre(block.getType())) {
-                                                    if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                                                        drop = getOreDrop(block.getType());
-                                                        drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
-                                                    }
+                                                if (drop.getType() != Material.AIR) {
+                                                    new BukkitRunnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            try {
+                                                                block.getWorld().dropItem(block.getLocation(), drop);
+                                                            } catch (IllegalArgumentException ignore) {
+                                                            }
+                                                        }
+                                                    }.runTask(ce.getPlugin());
                                                 }
-                                                int amount = drop.getAmount();
-                                                if (drops.containsKey(drop)) {
-                                                    drops.put(drop, drops.get(drop) + amount);
-                                                } else {
-                                                    drops.put(drop, amount);
-                                                }
-                                                if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
+                                                if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
                                                     break;
                                                 }
                                             }
-                                        } else {
-                                            if (hasFurnace && isOre(block.getType())) {
-                                                for (ItemStack drop : block.getDrops(item)) {
-                                                    drop = getOreDrop(block.getType());
-                                                    ItemStack finalDrop = drop;
-                                                    new BukkitRunnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            try {
-                                                                block.getWorld().dropItem(block.getLocation(), getOreDrop(block.getType(), finalDrop.getAmount()));
-                                                            } catch (IllegalArgumentException ignore) {
-                                                            }
-                                                        }
-                                                    }.runTask(ce.getPlugin());
-                                                }
-                                            } else if (hasAutoSmelt && isOre(block.getType())) {
-                                                for (ItemStack drop : block.getDrops(item)) {
-                                                    if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                                                        drop = getOreDrop(block.getType());
-                                                        drop.setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
-                                                    }
-                                                    ItemStack finalDrop = drop;
-                                                    new BukkitRunnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            try {
-                                                                block.getWorld().dropItem(block.getLocation(), finalDrop);
-                                                            } catch (IllegalArgumentException ignore) {
-                                                            }
-                                                        }
-                                                    }.runTask(ce.getPlugin());
-                                                }
-                                            } else {
-                                                for (ItemStack drop : block.getDrops(item)) {
-                                                    if (drop.getType() != Material.AIR) {
-                                                        new BukkitRunnable() {
-                                                            @Override
-                                                            public void run() {
-                                                                try {
-                                                                    block.getWorld().dropItem(block.getLocation(), drop);
-                                                                } catch (IllegalArgumentException ignore) {
-                                                                }
-                                                            }
-                                                        }.runTask(ce.getPlugin());
-                                                    }
-                                                    if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (hasExperience) {
-                                            if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                                                int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-                                                if (isOre(block.getType())) {
-                                                    xp += Methods.percentPick(7, 3) * power;
-                                                }
-                                            }
-                                        }
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                block.setType(Material.AIR);
-                                            }
-                                        }.runTask(ce.getPlugin());
-                                        if (damage) {
-                                            Methods.removeDurability(item, player);
                                         }
                                     }
-                                    if (isOre(block.getType())) {
-                                        xp += Methods.percentPick(7, 3);
+                                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                                        int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
+                                        if (isOre(block.getType())) {
+                                            xp += Methods.percentPick(7, 3) * power;
+                                        }
+                                    }
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            block.setType(Material.AIR);
+                                        }
+                                    }.runTask(ce.getPlugin());
+                                    if (damage) {
+                                        Methods.removeDurability(item, player);
                                     }
                                 }
-                                if (!damage) {
-                                    Methods.removeDurability(item, player);
-                                }
-                                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                    NoCheatPlusSupport.unexemptPlayer(player);
-                                }
-                                if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                    AACSupport.unexemptPlayer(player);
-                                }
-                                for (ItemStack i : drops.keySet()) {
-                                    i.setAmount(drops.get(i));
-                                    if (Methods.isInventoryFull(player)) {
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    player.getWorld().dropItem(player.getLocation(), i);
-                                                } catch (IllegalArgumentException ignore) {
-                                                }
-                                            }
-                                        }.runTask(ce.getPlugin());
-                                    } else {
-                                        player.getInventory().addItem(i);
-                                    }
-                                }
-                                if (player.getGameMode() != GameMode.CREATIVE) {
-                                    if (xp > 0) {
-                                        int finalXp = xp;
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                                                orb.setExperience(finalXp);
-                                            }
-                                        }.runTask(ce.getPlugin());
-                                    }
+                                if (isOre(block.getType())) {
+                                    xp += Methods.percentPick(7, 3);
                                 }
                             }
-                        }.runTaskAsynchronously(ce.getPlugin());
-                    }
+                            if (!damage) {
+                                Methods.removeDurability(item, player);
+                            }
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                                NoCheatPlusSupport.unexemptPlayer(player);
+                            }
+                            if (SupportedPlugins.AAC.isPluginLoaded()) {
+                                AACSupport.unexemptPlayer(player);
+                            }
+                            for (Entry<ItemStack, Integer> item : drops.entrySet()) {
+                                item.getKey().setAmount(item.getValue());
+                                if (Methods.isInventoryFull(player)) {
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                player.getWorld().dropItem(player.getLocation(), item.getKey());
+                                            } catch (IllegalArgumentException ignore) {
+                                            }
+                                        }
+                                    }.runTask(ce.getPlugin());
+                                } else {
+                                    player.getInventory().addItem(item.getKey());
+                                }
+                            }
+                            if (player.getGameMode() != GameMode.CREATIVE && xp > 0) {
+                                int finalXp = xp;
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                                        orb.setExperience(finalXp);
+                                    }
+                                }.runTask(ce.getPlugin());
+                            }
+                        }
+                    }.runTaskAsynchronously(ce.getPlugin());
                 }
             }
         }
@@ -276,96 +261,74 @@ public class PickAxes implements Listener {
         ItemStack item = Methods.getItemInHand(player);
         List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
         if (player.getGameMode() != GameMode.CREATIVE) {
-            if (CEnchantments.AUTOSMELT.isActivated()) {
-                if (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.FURNACE.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) {
-                    if (isOre(block.getType())) {
-                        if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                int dropAmount = 0;
-                                dropAmount += ce.getLevel(item, CEnchantments.AUTOSMELT);
-                                if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-                                    if (Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                                        dropAmount += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
-                                    }
-                                }
-                                try {
-                                    block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
-                                } catch (IllegalArgumentException ignore) {
-                                }
-                                if (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
-                                    if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                                        int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-                                        if (isOre(block.getType())) {
-                                            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                                            orb.setExperience(Methods.percentPick(7, 3) * power);
-                                        }
-                                    }
-                                }
-                                if (Version.isNewer(Version.v1_11_R1)) {
-                                    e.setDropItems(false);
-                                } else {
-                                    block.setType(Material.AIR);
-                                }
-                                Methods.removeDurability(item, player);
-                            }
-                        }
+            if (CEnchantments.AUTOSMELT.isActivated() && isOre(block.getType()) &&
+            (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.FURNACE.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
+            CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    int dropAmount = 0;
+                    dropAmount += ce.getLevel(item, CEnchantments.AUTOSMELT);
+                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+                        dropAmount += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
                     }
-                }
-            }
-            if (CEnchantments.FURNACE.isActivated()) {
-                if (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) {
-                    if (isOre(block.getType())) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            int dropAmount = 1;
-                            if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
-                                if (Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                                    dropAmount += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
-                                }
-                            }
-                            if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) {
-                                dropAmount += Methods.percentPick(4, 1);
-                            }
-                            try {
-                                block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
-                            } catch (IllegalArgumentException ignore) {
-                            }
-                            if (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
-                                if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                                    int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-                                    if (isOre(block.getType())) {
-                                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                                        orb.setExperience(Methods.percentPick(7, 3) * power);
-                                    }
-                                }
-                            }
-                            if (Version.isNewer(Version.v1_11_R1)) {
-                                e.setDropItems(false);
-                            } else {
-                                block.setType(Material.AIR);
-                            }
-                            Methods.removeDurability(item, player);
-                        }
+                    try {
+                        block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
+                    } catch (IllegalArgumentException ignore) {
                     }
-                }
-            }
-            if (CEnchantments.EXPERIENCE.isActivated()) {
-                if (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) {
-                    if (!hasSilkTouch(item)) {
+                    if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                        int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
                         if (isOre(block.getType())) {
-                            int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-                            if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    e.setExpToDrop(e.getExpToDrop() + (power + 2));
-                                }
-                            }
+                            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                            orb.setExperience(Methods.percentPick(7, 3) * power);
                         }
                     }
+                    if (Version.isNewer(Version.v1_11_R1)) {
+                        e.setDropItems(false);
+                    } else {
+                        block.setType(Material.AIR);
+                    }
+                    Methods.removeDurability(item, player);
+                }
+            }
+            if (CEnchantments.FURNACE.isActivated() && isOre(block.getType()) && (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    int dropAmount = 1;
+                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
+                        dropAmount += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                    }
+                    if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) {
+                        dropAmount += Methods.percentPick(4, 1);
+                    }
+                    try {
+                        block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
+                    } catch (IllegalArgumentException ignore) {
+                    }
+                    if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                        int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
+                        if (isOre(block.getType())) {
+                            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                            orb.setExperience(Methods.percentPick(7, 3) * power);
+                        }
+                    }
+                }
+                if (Version.isNewer(Version.v1_11_R1)) {
+                    e.setDropItems(false);
+                } else {
+                    block.setType(Material.AIR);
+                }
+                Methods.removeDurability(item, player);
+            }
+        }
+        if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) && isOre(block.getType()) && (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+            int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
+            if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    e.setExpToDrop(e.getExpToDrop() + (power + 2));
                 }
             }
         }
@@ -405,7 +368,7 @@ public class PickAxes implements Listener {
             default:
                 break;
         }
-        List<Block> blocks = new ArrayList<>();
+        List<Block> blockList = new ArrayList<>();
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
         int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
         int topBlockY = (Math.max(loc.getBlockY(), loc2.getBlockY()));
@@ -415,11 +378,11 @@ public class PickAxes implements Listener {
         for (int x = bottomBlockX; x <= topBlockX; x++) {
             for (int z = bottomBlockZ; z <= topBlockZ; z++) {
                 for (int y = bottomBlockY; y <= topBlockY; y++) {
-                    blocks.add(loc.getWorld().getBlockAt(x, y, z));
+                    blockList.add(loc.getWorld().getBlockAt(x, y, z));
                 }
             }
         }
-        return blocks;
+        return blockList;
     }
     
     private boolean isOre(Material material) {
@@ -477,22 +440,6 @@ public class PickAxes implements Listener {
             }
         }
         return dropItem.build();
-    }
-    
-    private List<Material> getItems() {
-        List<Material> items = new ArrayList<>();
-        items.add(Material.COAL_ORE);
-        items.add(Material.QUARTZ);
-        items.add(Material.DIAMOND_ORE);
-        items.add(Material.EMERALD_ORE);
-        items.add(Material.REDSTONE_ORE);
-        items.add(Material.REDSTONE_ORE);
-        items.add(Material.LAPIS_ORE);
-        items.add(ce.getMaterial("TALL_GRASS", "LONG_GRASS"));
-        items.add(ce.getMaterial("NETHER_WART", "NETHER_WARTS"));
-        items.add(Material.GLOWSTONE);
-        items.add(Material.GRAVEL);
-        return items;
     }
     
 }

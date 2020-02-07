@@ -44,7 +44,8 @@ public class ArmorListener implements Listener {
     
     @EventHandler
     public final void onInventoryClick(final InventoryClickEvent e) {
-        boolean shift = false, numberkey = false;
+        boolean shift = false;
+        boolean numberkey = false;
         Player player = (Player) e.getWhoClicked();
         if (e.isCancelled()) return;
         if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT)) {

@@ -56,15 +56,11 @@ public class Boots implements Listener {
     public void onEquip(ArmorEquipEvent e) {
         Player player = e.getPlayer();
         if (manager.isWingsEnabled()) {
-            if (ce.hasEnchantment(e.getNewArmorPiece(), CEnchantments.WINGS)) {
-                if (regionCheck(player) && gamemodeCheck(player)) {
-                    player.setAllowFlight(true);
-                }
+            if (ce.hasEnchantment(e.getNewArmorPiece(), CEnchantments.WINGS) && regionCheck(player) && gamemodeCheck(player)) {
+                player.setAllowFlight(true);
             }
-            if (ce.hasEnchantment(e.getOldArmorPiece(), CEnchantments.WINGS)) {
-                if (gamemodeCheck(player)) {
-                    player.setAllowFlight(false);
-                }
+            if (ce.hasEnchantment(e.getOldArmorPiece(), CEnchantments.WINGS) && gamemodeCheck(player)) {
+                player.setAllowFlight(false);
             }
         }
     }
@@ -72,22 +68,18 @@ public class Boots implements Listener {
     @EventHandler
     public void onFly(PlayerToggleFlightEvent e) {
         Player player = e.getPlayer();
-        if (manager.isWingsEnabled()) {
-            if (ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
-                if (regionCheck(player) && !areEnemiesNearby(player)) {
-                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        SpartanSupport.cancelFly(player);
-                    }
-                    if (e.isFlying()) {
-                        if (player.getAllowFlight()) {
-                            e.setCancelled(true);
-                            player.setFlying(true);
-                            manager.addFlyingPlayer(player);
-                        }
-                    } else {
-                        manager.removeFlyingPlayer(player);
-                    }
+        if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
+            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                SpartanSupport.cancelFly(player);
+            }
+            if (e.isFlying()) {
+                if (player.getAllowFlight()) {
+                    e.setCancelled(true);
+                    player.setFlying(true);
+                    manager.addFlyingPlayer(player);
                 }
+            } else {
+                manager.removeFlyingPlayer(player);
             }
         }
     }
@@ -96,18 +88,10 @@ public class Boots implements Listener {
     public void onMove(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         boolean isFlying = player.isFlying();
-        if (manager.isWingsEnabled()) {
-            if (ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
-                if (regionCheck(player)) {
-                    if (!areEnemiesNearby(player)) {
-                        player.setAllowFlight(true);
-                    } else {
-                        if (isFlying && gamemodeCheck(player)) {
-                            player.setFlying(false);
-                            player.setAllowFlight(false);
-                            manager.removeFlyingPlayer(player);
-                        }
-                    }
+        if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
+            if (regionCheck(player)) {
+                if (!areEnemiesNearby(player)) {
+                    player.setAllowFlight(true);
                 } else {
                     if (isFlying && gamemodeCheck(player)) {
                         player.setFlying(false);
@@ -115,9 +99,15 @@ public class Boots implements Listener {
                         manager.removeFlyingPlayer(player);
                     }
                 }
-                if (isFlying) {
-                    manager.addFlyingPlayer(player);
+            } else {
+                if (isFlying && gamemodeCheck(player)) {
+                    player.setFlying(false);
+                    player.setAllowFlight(false);
+                    manager.removeFlyingPlayer(player);
                 }
+            }
+            if (isFlying) {
+                manager.addFlyingPlayer(player);
             }
         }
     }
@@ -125,28 +115,22 @@ public class Boots implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        if (manager.isWingsEnabled()) {
-            if (ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
-                if (regionCheck(player) && !areEnemiesNearby(player)) {
-                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        SpartanSupport.cancelFly(player);
-                    }
-                    player.setAllowFlight(true);
-                    manager.addFlyingPlayer(player);
-                }
+        if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
+            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                SpartanSupport.cancelFly(player);
             }
+            player.setAllowFlight(true);
+            manager.addFlyingPlayer(player);
         }
     }
     
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        if (manager.isWingsEnabled()) {
-            if (manager.isFlyingPlayer(player)) {
-                player.setFlying(false);
-                player.setAllowFlight(false);
-                manager.removeFlyingPlayer(player);
-            }
+        if (manager.isWingsEnabled() && manager.isFlyingPlayer(player)) {
+            player.setFlying(false);
+            player.setAllowFlight(false);
+            manager.removeFlyingPlayer(player);
         }
     }
     

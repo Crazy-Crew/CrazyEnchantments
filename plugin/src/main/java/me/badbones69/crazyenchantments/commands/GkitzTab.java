@@ -17,30 +17,27 @@ public class GkitzTab implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLable, String[] args) {
         List<String> completions = new ArrayList<>();
-        if (args.length == 1) {// /gkit
-            if (sender.hasPermission("crazyenchantments.reset")) {
+        if (sender.hasPermission("crazyenchantments.reset")) {
+            if (args.length == 1) {// /gkit
                 completions.add("reset");
-            }
-            ce.getGKitz().forEach(kit -> completions.add(kit.getName()));
-            return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
-        } else if (args.length == 2) {// /gkit reset
-            if (args[0].equalsIgnoreCase("reset")) {
-                if (sender.hasPermission("crazyenchantments.reset")) {
+                ce.getGKitz().forEach(kit -> completions.add(kit.getName()));
+                return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
+            } else if (args.length == 2) {// /gkit reset
+                if (args[0].equalsIgnoreCase("reset")) {
                     ce.getGKitz().forEach(kit -> completions.add(kit.getName()));
                 }
-            }
-            if (ce.getGKitFromName(args[0]) != null) {
-                Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
-            }
-            return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
-        } else {// /gkit reset <kit>
-            if (args[0].equalsIgnoreCase("reset")) {
-                if (sender.hasPermission("crazyenchantments.reset")) {
+                if (ce.getGKitFromName(args[0]) != null) {
                     Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 }
+                return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
+            } else {// /gkit reset <kit>
+                if (args[0].equalsIgnoreCase("reset")) {
+                    Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                }
+                return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
             }
-            return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
         }
+        return completions;
     }
     
 }

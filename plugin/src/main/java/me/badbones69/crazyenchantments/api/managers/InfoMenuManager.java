@@ -17,7 +17,7 @@ import java.util.List;
 
 public class InfoMenuManager {
     
-    public static InfoMenuManager instance = new InfoMenuManager();
+    public static final InfoMenuManager instance = new InfoMenuManager();
     private Inventory inventoryMenu;
     private String inventoryName;
     private int inventorySize;

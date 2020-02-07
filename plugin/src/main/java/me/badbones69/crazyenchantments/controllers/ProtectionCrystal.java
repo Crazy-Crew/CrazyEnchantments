@@ -49,12 +49,10 @@ public class ProtectionCrystal implements Listener {
     }
     
     public static boolean isProtected(ItemStack item) {
-        if (item.hasItemMeta()) {
-            if (item.getItemMeta().hasLore()) {
-                for (String lore : item.getItemMeta().getLore()) {
-                    if (lore.contains(protectionString)) {
-                        return true;
-                    }
+        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+            for (String lore : item.getItemMeta().getLore()) {
+                if (lore.contains(protectionString)) {
+                    return true;
                 }
             }
         }
@@ -62,7 +60,7 @@ public class ProtectionCrystal implements Listener {
     }
     
     /**
-     * Use the ProtectionCrystal.isProtectionSuccessful(Player) method instead.
+     * @deprecated use {@link ProtectionCrystal#isProtectionSuccessful}.
      */
     @Deprecated
     public static boolean isSuccessfull(Player player) {
@@ -91,37 +89,34 @@ public class ProtectionCrystal implements Listener {
     
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
-        FileConfiguration config = Files.CONFIG.getFile();
         Player player = (Player) e.getWhoClicked();
         if (e.getInventory() != null) {
-            ItemStack crystal = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);// The Crystal.
+            ItemStack crystalItem = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);// The Crystal.
             ItemStack item = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);// The item your adding the protection to.
-            if (item.getType() != Material.AIR && crystal.getType() != Material.AIR) {
-                //The item getting protected is not stacked.
-                if (item.getAmount() == 1) {
-                    //Making sure they are not dropping crystals on top of other crystals.
-                    if (!getCrystals().isSimilar(item) && crystal.isSimilar(getCrystals())) {
-                        //The item does not have protection on it.
-                        if (!isProtected(item)) {
-                            //The crystal is not stacked.
-                            if (crystal.getAmount() > 1) {
-                                player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
-                                return;
-                            }
-                            e.setCancelled(true);
-                            player.setItemOnCursor(Methods.removeItem(crystal));
-                            e.setCurrentItem(Methods.addLore(item, protectionString));
-                            player.updateInventory();
-                        }
-                    }
+            if (item.getType() != Material.AIR && crystalItem.getType() != Material.AIR &&
+            //The item getting protected is not stacked.
+            item.getAmount() == 1 &&
+            //Making sure they are not dropping crystals on top of other crystals.
+            !getCrystals().isSimilar(item) && crystalItem.isSimilar(getCrystals()) &&
+            //The item does not have protection on it.
+            !isProtected(item)) {
+                //The crystal is not stacked.
+                if (crystalItem.getAmount() > 1) {
+                    player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+                    return;
                 }
+                e.setCancelled(true);
+                player.setItemOnCursor(Methods.removeItem(crystalItem));
+                e.setCurrentItem(Methods.addLore(item, protectionString));
+                player.updateInventory();
             }
         }
+        
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(PlayerDeathEvent e) {
-        if(e.getKeepInventory()) {
+        if (e.getKeepInventory()) {
             return;
         }
         Player player = e.getEntity();
@@ -129,11 +124,9 @@ public class ProtectionCrystal implements Listener {
         List<ItemStack> droppedItems = new ArrayList<>();
         for (ItemStack item : e.getDrops()) {
             if (item != null) {
-                if (isProtected(item)) {
-                    if (isProtectionSuccessful(player)) {
-                        savedItems.add(item);
-                        continue;
-                    }
+                if (isProtected(item) && isProtectionSuccessful(player)) {
+                    savedItems.add(item);
+                    continue;
                 }
                 droppedItems.add(item);
             }
@@ -164,10 +157,8 @@ public class ProtectionCrystal implements Listener {
     @EventHandler
     public void onCrystalClick(PlayerInteractEvent e) {
         ItemStack item = Methods.getItemInHand(e.getPlayer());
-        if (item != null) {
-            if (item.isSimilar(getCrystals())) {
-                e.setCancelled(true);
-            }
+        if (item != null && item.isSimilar(getCrystals())) {
+            e.setCancelled(true);
         }
     }
     

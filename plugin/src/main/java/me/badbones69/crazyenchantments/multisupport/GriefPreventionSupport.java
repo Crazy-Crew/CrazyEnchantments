@@ -20,7 +20,7 @@ public class GriefPreventionSupport {
     }
     
     public static boolean canBreakBlock(Player player, Block block) {
-        Claim claim = gp.dataStore.getClaimAt(player.getLocation(), true, null);
+        Claim claim = gp.dataStore.getClaimAt(block.getLocation(), true, null);
         return claim == null || claim.allowEdit(player) == null;
     }
     

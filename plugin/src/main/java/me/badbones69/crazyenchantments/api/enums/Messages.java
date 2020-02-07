@@ -7,6 +7,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public enum Messages {
     
@@ -120,7 +122,7 @@ public enum Messages {
         return getMessage(placeholders, true);
     }
     
-    public String getMessage(HashMap<String, String> placeholders) {
+    public String getMessage(Map<String, String> placeholders) {
         return getMessage(placeholders, true);
     }
     
@@ -134,7 +136,7 @@ public enum Messages {
         return getMessage(placeholders, false);
     }
     
-    public String getMessageNoPrefix(HashMap<String, String> placeholders) {
+    public String getMessageNoPrefix(Map<String, String> placeholders) {
         return getMessage(placeholders, false);
     }
     
@@ -142,7 +144,7 @@ public enum Messages {
         return getMessage(new HashMap<>(), prefix);
     }
     
-    private String getMessage(HashMap<String, String> placeholders, boolean prefix) {
+    private String getMessage(Map<String, String> placeholders, boolean prefix) {
         String message;
         boolean isList = isList();
         boolean exists = exists();
@@ -159,9 +161,9 @@ public enum Messages {
                 message = Methods.color(getDefaultMessage());
             }
         }
-        for (String placeholder : placeholders.keySet()) {
-            message = message.replaceAll(placeholder, placeholders.get(placeholder))
-            .replaceAll(placeholder.toLowerCase(), placeholders.get(placeholder));
+        for (Entry<String, String> placeholder : placeholders.entrySet()) {
+            message = message.replaceAll(placeholder.getKey(), placeholder.getValue())
+            .replaceAll(placeholder.getKey().toLowerCase(), placeholder.getValue());
         }
         if (isList) {//Don't want to add a prefix to a list of messages.
             return Methods.color(message);

@@ -463,14 +463,6 @@ public class FileManager {
         }
         
         /**
-         * Get the YamlFile.
-         * @return The YamlFile of this file.
-         */
-        public YamlFile getYamlFile() {
-            return file;
-        }
-        
-        /**
          * Check if the file actually exists in the file system.
          * @return True if it does and false if it doesn't.
          */

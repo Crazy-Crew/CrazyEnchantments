@@ -152,15 +152,13 @@ public class CEPlayer {
                         }
                         continue;
                     }
-                } else if (item.getType().toString().toLowerCase().contains("boots")) {
-                    if (player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR) {
-                        ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            player.getEquipment().setBoots(item);
-                        }
-                        continue;
+                } else if (item.getType().toString().toLowerCase().contains("boots") && (player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR)) {
+                    ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        player.getEquipment().setBoots(item);
                     }
+                    continue;
                 }
             }
             if (Methods.isInventoryFull(player)) {
@@ -169,10 +167,12 @@ public class CEPlayer {
                 player.getInventory().addItem(item);
             }
         }
-        for (String cmd : kit.getCommands()) {
+        for (
+        String cmd : kit.getCommands()) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
-            .replaceAll("%Player%", player.getName()).replaceAll("%player%", player.getName()));
+            .replace("%Player%", player.getName()).replace("%player%", player.getName()));
         }
+        
     }
     
     /**
@@ -233,13 +233,13 @@ public class CEPlayer {
      * @param cooldown The cooldown you are adding.
      */
     public void addCooldown(Cooldown cooldown) {
-        List<Cooldown> cooldowns = new ArrayList<>();
+        List<Cooldown> playerCooldowns = new ArrayList<>();
         for (Cooldown c : getCooldowns()) {
             if (c.getGKitz().getName().equalsIgnoreCase(cooldown.getGKitz().getName())) {
-                cooldowns.add(c);
+                playerCooldowns.add(c);
             }
         }
-        this.cooldowns.removeAll(cooldowns);
+        this.cooldowns.removeAll(playerCooldowns);
         this.cooldowns.add(cooldown);
     }
     
@@ -251,16 +251,16 @@ public class CEPlayer {
         Calendar cooldown = Calendar.getInstance();
         for (String i : kit.getCooldown().split(" ")) {
             if (i.contains("D") || i.contains("d")) {
-                cooldown.add(Calendar.DATE, Integer.parseInt(i.replaceAll("D", "").replaceAll("d", "")));
+                cooldown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
             }
             if (i.contains("H") || i.contains("h")) {
-                cooldown.add(Calendar.HOUR, Integer.parseInt(i.replaceAll("H", "").replaceAll("h", "")));
+                cooldown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
             }
             if (i.contains("M") || i.contains("m")) {
-                cooldown.add(Calendar.MINUTE, Integer.parseInt(i.replaceAll("M", "").replaceAll("m", "")));
+                cooldown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
             }
             if (i.contains("S") || i.contains("s")) {
-                cooldown.add(Calendar.SECOND, Integer.parseInt(i.replaceAll("S", "").replaceAll("s", "")));
+                cooldown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
             }
         }
         addCooldown(new Cooldown(kit, cooldown));
@@ -279,13 +279,13 @@ public class CEPlayer {
      * @param kit The gkit cooldown you want to remove.
      */
     public void removeCooldown(GKitz kit) {
-        List<Cooldown> cooldowns = new ArrayList<>();
-        for (Cooldown c : getCooldowns()) {
-            if (c.getGKitz().getName().equalsIgnoreCase(kit.getName())) {
-                cooldowns.add(c);
+        List<Cooldown> playerCooldowns = new ArrayList<>();
+        for (Cooldown cooldown : getCooldowns()) {
+            if (cooldown.getGKitz().getName().equalsIgnoreCase(kit.getName())) {
+                playerCooldowns.add(cooldown);
             }
         }
-        this.cooldowns.removeAll(cooldowns);
+        this.cooldowns.removeAll(playerCooldowns);
     }
     
     /**

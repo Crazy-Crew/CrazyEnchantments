@@ -26,32 +26,24 @@ public class SilkSpawnerSupport implements Listener {
         if (e.isCancelled()) return;
         Player player = e.getPlayer();
         Block block = e.getBlock();
-        if (player != null) {
-            if (block != null) {
-                if (player.getGameMode() != GameMode.CREATIVE) {
-                    ItemStack item = Methods.getItemInHand(player);
-                    if (ce.hasEnchantments(item)) {
-                        if (ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
-                            if (CEnchantments.TELEPATHY.isActivated()) {
-                                String mobName = api.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
-                                if (player.hasPermission("silkspawners.silkdrop." + mobName)) {
-                                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (event.isCancelled()) {
-                                        return;
-                                    }
-                                    ItemStack it = api.newSpawnerItem(e.getEntityID(), api.getCustomSpawnerName(api.getCreatureName(e.getEntityID())), 1, false);
-                                    if (!Methods.isInventoryFull(player)) {
-                                        player.getInventory().addItem(it);
-                                    } else {
-                                        block.getWorld().dropItemNaturally(block.getLocation(), it);
-                                    }
-                                    block.setType(Material.AIR);
-                                    e.setCancelled(true);
-                                }
-                            }
-                        }
+        if (player != null && block != null && player.getGameMode() != GameMode.CREATIVE) {
+            ItemStack item = Methods.getItemInHand(player);
+            if (CEnchantments.TELEPATHY.isActivated() && ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
+                String mobName = api.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
+                if (player.hasPermission("silkspawners.silkdrop." + mobName)) {
+                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) {
+                        return;
                     }
+                    ItemStack it = api.newSpawnerItem(e.getEntityID(), api.getCustomSpawnerName(api.getCreatureName(e.getEntityID())), 1, false);
+                    if (!Methods.isInventoryFull(player)) {
+                        player.getInventory().addItem(it);
+                    } else {
+                        block.getWorld().dropItemNaturally(block.getLocation(), it);
+                    }
+                    block.setType(Material.AIR);
+                    e.setCancelled(true);
                 }
             }
         }

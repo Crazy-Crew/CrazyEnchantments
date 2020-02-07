@@ -40,96 +40,68 @@ public class Axes implements Listener {
                 ItemStack item = Methods.getItemInHand(damager);
                 if (!e.getEntity().isDead()) {
                     List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-                    if (CEnchantments.BERSERK.isActivated()) {
-                        if (enchantments.contains(CEnchantments.BERSERK.getEnchantment())) {
-                            if (CEnchantments.BERSERK.chanceSuccessful(item)) {
-                                EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
-                                    damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
-                                }
-                            }
+                    if (CEnchantments.BERSERK.isActivated() && enchantments.contains(CEnchantments.BERSERK.getEnchantment()) && CEnchantments.BERSERK.chanceSuccessful(item)) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
+                            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
                         }
                     }
-                    if (CEnchantments.BLESSED.isActivated()) {
-                        if (enchantments.contains(CEnchantments.BLESSED.getEnchantment())) {
-                            if (CEnchantments.BLESSED.chanceSuccessful(item)) {
-                                EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    removeBadPotions(damager);
-                                }
-                            }
+                    if (CEnchantments.BLESSED.isActivated() && enchantments.contains(CEnchantments.BLESSED.getEnchantment()) && CEnchantments.BLESSED.chanceSuccessful(item)) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            removeBadPotions(damager);
                         }
                     }
-                    if (CEnchantments.FEEDME.isActivated()) {
-                        if (enchantments.contains(CEnchantments.FEEDME.getEnchantment())) {
+                    if (CEnchantments.FEEDME.isActivated() && enchantments.contains(CEnchantments.FEEDME.getEnchantment()) && CEnchantments.FEEDME.chanceSuccessful(item) && damager.getFoodLevel() < 20) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FEEDME.getEnchantment(), item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
                             int food = 2 * ce.getLevel(item, CEnchantments.FEEDME);
-                            if (CEnchantments.FEEDME.chanceSuccessful(item)) {
-                                if (damager.getFoodLevel() < 20) {
-                                    EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FEEDME.getEnchantment(), item);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled()) {
-                                        if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                                            SpartanSupport.cancelFastEat(damager);
-                                        }
-                                        if (damager.getFoodLevel() + food < 20) {
-                                            damager.setFoodLevel((int) (damager.getSaturation() + food));
-                                        }
-                                        if (damager.getFoodLevel() + food > 20) {
-                                            damager.setFoodLevel(20);
-                                        }
-                                    }
-                                }
+                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                                SpartanSupport.cancelFastEat(damager);
+                            }
+                            if (damager.getFoodLevel() + food < 20) {
+                                damager.setFoodLevel((int) (damager.getSaturation() + food));
+                            }
+                            if (damager.getFoodLevel() + food > 20) {
+                                damager.setFoodLevel(20);
                             }
                         }
                     }
-                    if (CEnchantments.REKT.isActivated()) {
-                        if (enchantments.contains(CEnchantments.REKT.getEnchantment())) {
-                            double damage = e.getDamage() * 2;
-                            if (CEnchantments.REKT.chanceSuccessful(item)) {
-                                EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    e.setDamage(damage);
-                                }
+                    if (CEnchantments.REKT.isActivated() && enchantments.contains(CEnchantments.REKT.getEnchantment())) {
+                        double damage = e.getDamage() * 2;
+                        if (CEnchantments.REKT.chanceSuccessful(item)) {
+                            EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                e.setDamage(damage);
                             }
                         }
                     }
-                    if (CEnchantments.CURSED.isActivated()) {
-                        if (enchantments.contains(CEnchantments.CURSED.getEnchantment())) {
-                            if (CEnchantments.CURSED.chanceSuccessful(item)) {
-                                EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
-                                }
-                            }
+                    if (CEnchantments.CURSED.isActivated() && enchantments.contains(CEnchantments.CURSED.getEnchantment()) && CEnchantments.CURSED.chanceSuccessful(item)) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
                         }
                     }
-                    if (CEnchantments.DIZZY.isActivated()) {
-                        if (enchantments.contains(CEnchantments.DIZZY.getEnchantment())) {
-                            if (CEnchantments.DIZZY.chanceSuccessful(item)) {
-                                EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (ce.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
-                                }
-                            }
+                    if (CEnchantments.DIZZY.isActivated() && enchantments.contains(CEnchantments.DIZZY.getEnchantment()) && CEnchantments.DIZZY.chanceSuccessful(item)) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (ce.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
                         }
                     }
-                    if (CEnchantments.BATTLECRY.isActivated()) {
-                        if (enchantments.contains(CEnchantments.BATTLECRY.getEnchantment())) {
-                            if (CEnchantments.BATTLECRY.chanceSuccessful(item)) {
-                                EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BATTLECRY.getEnchantment(), item);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    for (Entity entity : damager.getNearbyEntities(3, 3, 3)) {
-                                        if (!Support.isFriendly(damager, entity)) {
-                                            entity.setVelocity(entity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
-                                        }
-                                    }
+                    if (CEnchantments.BATTLECRY.isActivated() && enchantments.contains(CEnchantments.BATTLECRY.getEnchantment()) && CEnchantments.BATTLECRY.chanceSuccessful(item)) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BATTLECRY.getEnchantment(), item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            for (Entity entity : damager.getNearbyEntities(3, 3, 3)) {
+                                if (!Support.isFriendly(damager, entity)) {
+                                    entity.setVelocity(entity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
                                 }
                             }
                         }
@@ -137,6 +109,7 @@ public class Axes implements Listener {
                 }
             }
         }
+        
     }
     
     @EventHandler
@@ -146,16 +119,11 @@ public class Axes implements Listener {
             Player damager = e.getEntity().getKiller();
             Player player = e.getEntity();
             ItemStack item = Methods.getItemInHand(damager);
-            if (CEnchantments.DECAPITATION.isActivated()) {
-                if (ce.hasEnchantment(item, CEnchantments.DECAPITATION)) {
-                    int power = ce.getLevel(item, CEnchantments.DECAPITATION);
-                    if (CEnchantments.DECAPITATION.chanceSuccessful(item)) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            e.getDrops().add(new ItemBuilder().setMaterial("PLAYER_HEAD", "397:3").setPlayer(player.getName()).build());
-                        }
-                    }
+            if (CEnchantments.DECAPITATION.isActivated() && ce.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
+                EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    e.getDrops().add(new ItemBuilder().setMaterial("PLAYER_HEAD", "397:3").setPlayer(player.getName()).build());
                 }
             }
         }

@@ -14,6 +14,7 @@ import me.badbones69.crazyenchantments.multisupport.SilkSpawnerSupport;
 import me.badbones69.crazyenchantments.multisupport.SilkSpawnersCandcSupport;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,7 +40,7 @@ public class Main extends JavaPlugin implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             ce.loadCEPlayer(player);
             if (fixHealth) {
-                player.setMaxHealth(20);
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
             }
         }
         getCommand("crazyenchantments").setExecutor(new CECommand());
@@ -99,15 +100,6 @@ public class Main extends JavaPlugin implements Listener {
                 for (CEPlayer player : ce.getCEPlayers()) {
                     ce.backupCEPlayer(player);
                 }
-                //                              Removed due to spam.
-                //
-                // if(Files.CONFIG.getFile().contains("Settings.Player-Info-Backup-Message")) {
-                //     if(Files.CONFIG.getFile().getBoolean("Settings.Player-Info-Backup-Message")) {
-                //	       Bukkit.getLogger().log(Level.INFO, "[Crazy Enchantments]>> All player data has been backed up. Next back up is in 5 minutes.");
-                //     }
-                // }else {
-                //	   Bukkit.getLogger().log(Level.INFO, "[Crazy Enchantments]>> All player data has been backed up. Next back up is in 5 minutes.");
-                // }
             }
         }.runTaskTimerAsynchronously(this, 5 * 20 * 60, 5 * 20 * 60);
     }
@@ -126,7 +118,7 @@ public class Main extends JavaPlugin implements Listener {
         ce.loadCEPlayer(player);
         ce.updatePlayerEffects(player);
         if (fixHealth) {
-            player.setMaxHealth(20);
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         }
         new BukkitRunnable() {
             @Override
