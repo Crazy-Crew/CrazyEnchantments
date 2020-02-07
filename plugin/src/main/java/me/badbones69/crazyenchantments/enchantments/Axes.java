@@ -40,8 +40,8 @@ public class Axes implements Listener {
                 ItemStack item = Methods.getItemInHand(damager);
                 if (!e.getEntity().isDead()) {
                     List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-                    if (enchantments.contains(CEnchantments.BERSERK.getEnchantment())) {
-                        if (CEnchantments.BERSERK.isActivated()) {
+                    if (CEnchantments.BERSERK.isActivated()) {
+                        if (enchantments.contains(CEnchantments.BERSERK.getEnchantment())) {
                             if (CEnchantments.BERSERK.chanceSuccessful(item)) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
                                 Bukkit.getPluginManager().callEvent(event);
@@ -52,8 +52,8 @@ public class Axes implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.BLESSED.getEnchantment())) {
-                        if (CEnchantments.BLESSED.isActivated()) {
+                    if (CEnchantments.BLESSED.isActivated()) {
+                        if (enchantments.contains(CEnchantments.BLESSED.getEnchantment())) {
                             if (CEnchantments.BLESSED.chanceSuccessful(item)) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
                                 Bukkit.getPluginManager().callEvent(event);
@@ -63,8 +63,8 @@ public class Axes implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.FEEDME.getEnchantment())) {
-                        if (CEnchantments.FEEDME.isActivated()) {
+                    if (CEnchantments.FEEDME.isActivated()) {
+                        if (enchantments.contains(CEnchantments.FEEDME.getEnchantment())) {
                             int food = 2 * ce.getLevel(item, CEnchantments.FEEDME);
                             if (CEnchantments.FEEDME.chanceSuccessful(item)) {
                                 if (damager.getFoodLevel() < 20) {
@@ -85,8 +85,8 @@ public class Axes implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.REKT.getEnchantment())) {
-                        if (CEnchantments.REKT.isActivated()) {
+                    if (CEnchantments.REKT.isActivated()) {
+                        if (enchantments.contains(CEnchantments.REKT.getEnchantment())) {
                             double damage = e.getDamage() * 2;
                             if (CEnchantments.REKT.chanceSuccessful(item)) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
@@ -97,8 +97,8 @@ public class Axes implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.CURSED.getEnchantment())) {
-                        if (CEnchantments.CURSED.isActivated()) {
+                    if (CEnchantments.CURSED.isActivated()) {
+                        if (enchantments.contains(CEnchantments.CURSED.getEnchantment())) {
                             if (CEnchantments.CURSED.chanceSuccessful(item)) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
                                 Bukkit.getPluginManager().callEvent(event);
@@ -108,8 +108,8 @@ public class Axes implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.DIZZY.getEnchantment())) {
-                        if (CEnchantments.DIZZY.isActivated()) {
+                    if (CEnchantments.DIZZY.isActivated()) {
+                        if (enchantments.contains(CEnchantments.DIZZY.getEnchantment())) {
                             if (CEnchantments.DIZZY.chanceSuccessful(item)) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
                                 Bukkit.getPluginManager().callEvent(event);
@@ -119,8 +119,8 @@ public class Axes implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.BATTLECRY.getEnchantment())) {
-                        if (CEnchantments.BATTLECRY.isActivated()) {
+                    if (CEnchantments.BATTLECRY.isActivated()) {
+                        if (enchantments.contains(CEnchantments.BATTLECRY.getEnchantment())) {
                             if (CEnchantments.BATTLECRY.chanceSuccessful(item)) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BATTLECRY.getEnchantment(), item);
                                 Bukkit.getPluginManager().callEvent(event);
@@ -146,8 +146,8 @@ public class Axes implements Listener {
             Player damager = e.getEntity().getKiller();
             Player player = e.getEntity();
             ItemStack item = Methods.getItemInHand(damager);
-            if (ce.hasEnchantment(item, CEnchantments.DECAPITATION)) {
-                if (CEnchantments.DECAPITATION.isActivated()) {
+            if (CEnchantments.DECAPITATION.isActivated()) {
+                if (ce.hasEnchantment(item, CEnchantments.DECAPITATION)) {
                     int power = ce.getLevel(item, CEnchantments.DECAPITATION);
                     if (CEnchantments.DECAPITATION.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
