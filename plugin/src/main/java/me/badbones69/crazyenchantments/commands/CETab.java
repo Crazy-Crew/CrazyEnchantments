@@ -97,9 +97,8 @@ public class CETab implements TabCompleter {
                         }
                     }
                     break;
-                default:
-                    return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
             }
+            return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
         } else if (args.length == 3) {// /ce arg0 arg1
             switch (args[0].toLowerCase()) {
                 case "book":
@@ -134,9 +133,8 @@ public class CETab implements TabCompleter {
                 case "scrambler":
                     Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                     break;
-                default:
-                    return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
             }
+            return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
         } else if (args.length == 4) {// /ce arg0 arg1 arg2
             switch (args[0].toLowerCase()) {
                 case "spawn":
@@ -170,9 +168,8 @@ public class CETab implements TabCompleter {
                     completions.add("75");
                     completions.add("100");
                     break;
-                default:
-                    return StringUtil.copyPartialMatches(args[4], completions, new ArrayList<>());
             }
+            return StringUtil.copyPartialMatches(args[4], completions, new ArrayList<>());
         } else {// /ce arg0 arg1 arg2 args3
             if (args[0].equalsIgnoreCase("spawn")) {
                 completions.add("Level:");
