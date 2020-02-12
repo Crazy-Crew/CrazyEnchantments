@@ -1,9 +1,9 @@
 package me.badbones69.crazyenchantments.api;
 
 import me.badbones69.crazyenchantments.multisupport.Version;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.simpleyaml.configuration.file.YamlFile;
-import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -25,11 +27,12 @@ public class FileManager {
     private Plugin plugin;
     private String prefix = "";
     private boolean log = false;
-    private HashMap<Files, File> files = new HashMap<>();
+    private Map<Files, File> files = new HashMap<>();
     private List<String> homeFolders = new ArrayList<>();
     private List<CustomFile> customFiles = new ArrayList<>();
-    private HashMap<String, String> autoGenerateFiles = new HashMap<>();
-    private HashMap<Files, YamlFile> configurations = new HashMap<>();
+    private Map<String, String> jarHomeFolders = new HashMap<>();
+    private Map<String, String> autoGenerateFiles = new HashMap<>();
+    private Map<Files, FileConfiguration> configurations = new HashMap<>();
     
     public static FileManager getInstance() {
         return instance;
@@ -47,6 +50,7 @@ public class FileManager {
         }
         files.clear();
         customFiles.clear();
+        configurations.clear();
         //Loads all the normal static files.
         for (Files file : Files.values()) {
             File newFile = new File(plugin.getDataFolder(), file.getFileLocation());
@@ -57,23 +61,17 @@ public class FileManager {
                     InputStream jarFile = getClass().getResourceAsStream("/" + file.getFileJar());
                     copyFile(jarFile, serverFile);
                 } catch (Exception e) {
-                    if (log) System.out.println(prefix + "Failed to load " + file.getFileName());
+                    if (log) System.out.println(prefix + "Failed to load file: " + file.getFileName());
                     e.printStackTrace();
                     continue;
                 }
             }
             files.put(file, newFile);
-            YamlFile yamlFile = new YamlFile(newFile);
-            try {
-                yamlFile.load();
-            } catch (InvalidConfigurationException | IOException e) {
-                e.printStackTrace();
-            }
-            configurations.put(file, yamlFile);
+            configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
             if (log) System.out.println(prefix + "Successfully loaded " + file.getFileName());
         }
         //Starts to load all the custom files.
-        if (homeFolders.size() > 0) {
+        if (!homeFolders.isEmpty()) {
             if (log) System.out.println(prefix + "Loading custom files.");
             for (String homeFolder : homeFolders) {
                 File homeFile = new File(plugin.getDataFolder(), "/" + homeFolder);
@@ -94,19 +92,19 @@ public class FileManager {
                 } else {
                     homeFile.mkdir();
                     if (log) System.out.println(prefix + "The folder " + homeFolder + "/ was not found so it was created.");
-                    for (String fileName : autoGenerateFiles.keySet()) {
-                        if (autoGenerateFiles.get(fileName).equalsIgnoreCase(homeFolder)) {
-                            homeFolder = autoGenerateFiles.get(fileName);
+                    for (Entry<String, String> file : autoGenerateFiles.entrySet()) {
+                        if (file.getValue().equalsIgnoreCase(homeFolder)) {
+                            homeFolder = file.getValue();
                             try {
-                                File serverFile = new File(plugin.getDataFolder(), homeFolder + "/" + fileName);
-                                InputStream jarFile = getClass().getResourceAsStream(homeFolder + "/" + fileName);
+                                File serverFile = new File(plugin.getDataFolder(), homeFolder + "/" + file.getKey());
+                                InputStream jarFile = getClass().getResourceAsStream((jarHomeFolders.getOrDefault(file.getKey(), homeFolder)) + "/" + file.getKey());
                                 copyFile(jarFile, serverFile);
-                                if (fileName.toLowerCase().endsWith(".yml")) {
-                                    customFiles.add(new CustomFile(fileName, homeFolder, plugin));
+                                if (file.getKey().toLowerCase().endsWith(".yml")) {
+                                    customFiles.add(new CustomFile(file.getKey(), homeFolder, plugin));
                                 }
-                                if (log) System.out.println(prefix + "Created new default file: " + homeFolder + "/" + fileName + ".");
+                                if (log) System.out.println(prefix + "Created new default file: " + homeFolder + "/" + file.getKey() + ".");
                             } catch (Exception e) {
-                                if (log) System.out.println(prefix + "Failed to create new default file: " + homeFolder + "/" + fileName + "!");
+                                if (log) System.out.println(prefix + "Failed to create new default file: " + homeFolder + "/" + file.getKey() + "!");
                                 e.printStackTrace();
                             }
                         }
@@ -164,11 +162,24 @@ public class FileManager {
     }
     
     /**
+     * Register a file that needs to be generated when it's home folder doesn't exist. Make sure to have a "/" in front of the home folder's name.
+     * @param fileName The name of the file you want to auto-generate when the folder doesn't exist.
+     * @param homeFolder The folder that has custom files in it.
+     * @param jarHomeFolder The folder that the file is found in the jar.
+     */
+    public FileManager registerDefaultGenerateFiles(String fileName, String homeFolder, String jarHomeFolder) {
+        autoGenerateFiles.put(fileName, homeFolder);
+        jarHomeFolders.put(fileName, jarHomeFolder);
+        return this;
+    }
+    
+    /**
      * Unregister a file that doesn't need to be generated when it's home folder doesn't exist. Make sure to have a "/" in front of the home folder's name.
      * @param fileName The file that you want to remove from auto-generating.
      */
     public FileManager unregisterDefaultGenerateFiles(String fileName) {
         autoGenerateFiles.remove(fileName);
+        jarHomeFolders.remove(fileName);
         return this;
     }
     
@@ -176,7 +187,7 @@ public class FileManager {
      * Gets the file from the system.
      * @return The file from the system.
      */
-    public YamlFile getFile(Files file) {
+    public FileConfiguration getFile(Files file) {
         return configurations.get(file);
     }
     
@@ -200,7 +211,7 @@ public class FileManager {
      */
     public void saveFile(Files file) {
         try {
-            configurations.get(file).saveWithComments();
+            configurations.get(file).save(files.get(file));
         } catch (IOException e) {
             System.out.println(prefix + "Could not save " + file.getFileName() + "!");
             e.printStackTrace();
@@ -215,7 +226,7 @@ public class FileManager {
         CustomFile file = getFile(name);
         if (file != null) {
             try {
-                file.getYamlFile().saveWithComments();
+                file.getFile().save(new File(plugin.getDataFolder(), file.getHomeFolder() + "/" + file.getFileName()));
                 if (log) System.out.println(prefix + "Successfully saved the " + file.getFileName() + ".");
             } catch (Exception e) {
                 System.out.println(prefix + "Could not save " + file.getFileName() + "!");
@@ -239,13 +250,7 @@ public class FileManager {
      * Overrides the loaded state file and loads the file systems file.
      */
     public void reloadFile(Files file) {
-        YamlFile yamlFile = new YamlFile(files.get(file));
-        try {
-            yamlFile.load();
-        } catch (InvalidConfigurationException | IOException e) {
-            e.printStackTrace();
-        }
-        configurations.put(file, yamlFile);
+        configurations.put(file, YamlConfiguration.loadConfiguration(files.get(file)));
     }
     
     /**
@@ -255,12 +260,7 @@ public class FileManager {
         CustomFile file = getFile(name);
         if (file != null) {
             try {
-                file.file = new YamlFile(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
-                try {
-                    file.file.load();
-                } catch (InvalidConfigurationException | IOException e) {
-                    e.printStackTrace();
-                }
+                file.file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
                 if (log) System.out.println(prefix + "Successfully reload the " + file.getFileName() + ".");
             } catch (Exception e) {
                 System.out.println(prefix + "Could not reload the " + file.getFileName() + "!");
@@ -283,17 +283,12 @@ public class FileManager {
      * Was found here: https://bukkit.org/threads/extracting-file-from-jar.16962
      */
     private void copyFile(InputStream in, File out) throws Exception {
-        try (FileOutputStream fos = new FileOutputStream(out)) {
+        try (InputStream fis = in; FileOutputStream fos = new FileOutputStream(out)) {
             byte[] buf = new byte[1024];
             int i;
-            while ((i = in.read(buf)) != -1) {
+            while ((i = fis.read(buf)) != -1) {
                 fos.write(buf, 0, i);
             }
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-            
         }
     }
     
@@ -356,8 +351,8 @@ public class FileManager {
         }
         
         /**
-         * Get the location of the file in the plugin's folder.
-         * @return The location of the file in the plugin's folder.
+         * The location the jar it is at.
+         * @return The location in the jar the file is in.
          */
         public String getFileLocation() {
             return fileLocation;
@@ -375,7 +370,7 @@ public class FileManager {
          * Gets the file from the system.
          * @return The file from the system.
          */
-        public YamlFile getFile() {
+        public FileConfiguration getFile() {
             return getInstance().getFile(this);
         }
         
@@ -401,7 +396,7 @@ public class FileManager {
         private Plugin plugin;
         private String fileName;
         private String homeFolder;
-        private YamlFile file;
+        private FileConfiguration file;
         
         /**
          * A custom file that is being made.
@@ -416,12 +411,7 @@ public class FileManager {
             this.homeFolder = homeFolder;
             if (new File(plugin.getDataFolder(), "/" + homeFolder).exists()) {
                 if (new File(plugin.getDataFolder(), "/" + homeFolder + "/" + name).exists()) {
-                    file = new YamlFile(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + name));
-                    try {
-                        file.load();
-                    } catch (InvalidConfigurationException | IOException e) {
-                        e.printStackTrace();
-                    }
+                    file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + name));
                 } else {
                     file = null;
                 }
@@ -468,7 +458,7 @@ public class FileManager {
          * Get the ConfigurationFile.
          * @return The ConfigurationFile of this file.
          */
-        public YamlFile getFile() {
+        public FileConfiguration getFile() {
             return file;
         }
         
@@ -495,8 +485,8 @@ public class FileManager {
         public boolean saveFile() {
             if (file != null) {
                 try {
-                    file.saveWithComments();
-                    if (log) System.out.println(prefix + "Successfully saved the " + fileName + ".");
+                    file.save(new File(plugin.getDataFolder(), homeFolder + "/" + fileName));
+                    if (log) System.out.println(prefix + "Successfuly saved the " + fileName + ".");
                     return true;
                 } catch (Exception e) {
                     System.out.println(prefix + "Could not save " + fileName + "!");
@@ -511,14 +501,13 @@ public class FileManager {
         
         /**
          * Overrides the loaded state file and loads the filesystems file.
-         * @return True if it reloaded correct and false if the file wasn't found or an error happened.
+         * @return True if it reloaded correct and false if the file wasn't found or errored.
          */
         public boolean reloadFile() {
             if (file != null) {
                 try {
-                    file = new YamlFile(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));
-                    file.load();
-                    if (log) System.out.println(prefix + "Successfully reload the " + fileName + ".");
+                    file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));
+                    if (log) System.out.println(prefix + "Successfuly reload the " + fileName + ".");
                     return true;
                 } catch (Exception e) {
                     System.out.println(prefix + "Could not reload the " + fileName + "!");

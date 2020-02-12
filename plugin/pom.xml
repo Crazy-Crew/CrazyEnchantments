@@ -43,17 +43,28 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.Carleslc</groupId>
-            <artifactId>Simple-YAML</artifactId>
-            <version>1.4.1</version>
-            <scope>compile</scope>
-            <optional>false</optional>
-        </dependency>
-        <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>2.1.107</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>snakeyaml</artifactId>
+                    <groupId>org.yaml</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>worldedit-core</artifactId>
+                    <groupId>com.sk89q.worldedit</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>worldguard-core</artifactId>
+                    <groupId>com.sk89q.worldguard</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -145,6 +156,12 @@
             <artifactId>Factions</artifactId>
             <version>1.6.9.5-U0.5.0</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>gson</artifactId>
+                    <groupId>com.google.code.gson</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>fr.neatmonster</groupId>
@@ -193,6 +210,12 @@
             <artifactId>Factions</artifactId>
             <version>3.2.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.intellectualsites.plotsquared</groupId>
+            <artifactId>PlotSquared-API</artifactId>
+            <version>latest</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

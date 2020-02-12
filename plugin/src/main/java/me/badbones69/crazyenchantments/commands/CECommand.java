@@ -23,10 +23,10 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.simpleyaml.configuration.file.YamlFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,7 +136,7 @@ public class CECommand implements CommandExecutor {
                 case "fix":// /ce fix
                     if (hasPermission(sender, "fix")) {
                         List<CEnchantments> brokenEnchantments = new ArrayList<>();
-                        YamlFile file = Files.ENCHANTMENTS.getFile();
+                        FileConfiguration file = Files.ENCHANTMENTS.getFile();
                         for (CEnchantments enchantment : CEnchantments.values()) {
                             if (!file.contains("Enchantments." + enchantment.getName())) {
                                 brokenEnchantments.add(enchantment);

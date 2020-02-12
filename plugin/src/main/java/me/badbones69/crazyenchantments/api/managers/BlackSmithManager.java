@@ -5,8 +5,8 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 public class BlackSmithManager {
     
