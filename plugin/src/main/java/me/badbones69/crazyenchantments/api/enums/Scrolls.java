@@ -2,8 +2,8 @@ package me.badbones69.crazyenchantments.api.enums;
 
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -2,9 +2,9 @@ package me.badbones69.crazyenchantments.api.managers;
 
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;

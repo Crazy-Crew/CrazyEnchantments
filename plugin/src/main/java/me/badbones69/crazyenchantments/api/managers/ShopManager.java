@@ -10,9 +10,9 @@ import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.LostBook;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.simpleyaml.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.Map.Entry;

@@ -4,7 +4,7 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.simpleyaml.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
