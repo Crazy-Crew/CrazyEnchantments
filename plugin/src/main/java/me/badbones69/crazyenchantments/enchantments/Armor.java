@@ -60,7 +60,7 @@ public class Armor implements Listener {
                 if (enchantment.isActivated() && ce.hasEnchantment(oldItem, enchantment.getEnchantment())) {
                     Map<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment);
                     for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-                        if (effects.get(type) < 0) {
+                        if (type.getValue() < 0) {
                             player.removePotionEffect(type.getKey());
                         } else {
                             player.removePotionEffect(type.getKey());
@@ -78,7 +78,7 @@ public class Armor implements Listener {
                     if (!event.isCancelled()) {
                         Map<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, newItem, oldItem, enchantment);
                         for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-                            if (effects.get(type) < 0) {
+                            if (type.getValue() < 0) {
                                 player.removePotionEffect(type.getKey());
                             } else {
                                 player.removePotionEffect(type.getKey());
