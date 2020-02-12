@@ -52,7 +52,6 @@ public enum Version {
      * @return The latest version.
      */
     public static Version getLatestVersion() {
-        if (currentVersion == null) getCurrentVersion();
         if (latest == null) {
             Version v = Version.TOO_OLD;
             for (Version version : values()) {
