@@ -13,114 +13,114 @@ import java.util.Random;
 public enum CEnchantments {
     
     //	----------------Boots----------------  \\
-    GEARS("Gears", Constants.BOOTS),
-    WINGS("Wings", Constants.BOOTS),
-    ROCKET("Rocket", Constants.BOOTS, 15, 5),
-    SPRINGS("Springs", Constants.BOOTS),
-    ANTIGRAVITY("AntiGravity", Constants.BOOTS),
+    GEARS("Gears", "Boots"),
+    WINGS("Wings", "Boots"),
+    ROCKET("Rocket", "Boots", 15, 5),
+    SPRINGS("Springs", "Boots"),
+    ANTIGRAVITY("AntiGravity", "Boots"),
     //	----------------Bows----------------  \\
-    BOOM("Boom", Constants.BOW, 20, 10),
-    PULL("Pull", Constants.BOW, 25, 10),
-    VENOM("Venom", Constants.BOW, 10, 5),
-    DOCTOR("Doctor", Constants.BOW),
-    PIERCING("Piercing", Constants.BOW, 5, 5),
-    ICEFREEZE("IceFreeze", Constants.BOW, 25, 10),
-    LIGHTNING("Lightning", Constants.BOW, 25, 10),
-    MULTIARROW("MultiArrow", Constants.BOW, 25, 10),
-    STICKY_SHOT("Sticky-Shot", Constants.BOW, 10, 10),
-    SNIPER("Sniper", Constants.BOW, 25, 5),
+    BOOM("Boom", "Bow", 20, 10),
+    PULL("Pull", "Bow", 25, 10),
+    VENOM("Venom", "Bow", 10, 5),
+    DOCTOR("Doctor", "Bow"),
+    PIERCING("Piercing", "Bow", 5, 5),
+    ICEFREEZE("IceFreeze", "Bow", 25, 10),
+    LIGHTNING("Lightning", "Bow", 25, 10),
+    MULTIARROW("MultiArrow", "Bow", 25, 10),
+    STICKY_SHOT("Sticky-Shot", "Bow", 10, 10),
+    SNIPER("Sniper", "Bow", 25, 5),
     //	----------------Helmets----------------  \\
-    GLOWING("Glowing", Constants.HELMET),
-    MERMAID("Mermaid", Constants.HELMET),
-    IMPLANTS("Implants", Constants.HELMET, 5, 5),
-    COMMANDER("Commander", Constants.HELMET),
+    GLOWING("Glowing", "Helmet"),
+    MERMAID("Mermaid", "Helmet"),
+    IMPLANTS("Implants", "Helmet", 5, 5),
+    COMMANDER("Commander", "Helmet"),
     //	----------------Swords----------------  \\
-    TRAP("Trap", Constants.SWORD, 10, 5),
-    RAGE("Rage", Constants.SWORD),
-    VIPER("Viper", Constants.SWORD, 10, 5),
-    SNARE("Snare", Constants.SWORD, 10, 3),
-    SLOWMO("SlowMo", Constants.SWORD, 5, 5),
-    WITHER("Wither", Constants.SWORD, 10, 3),
-    VAMPIRE("Vampire", Constants.SWORD, 5, 5),
-    EXECUTE("Execute", Constants.SWORD),
-    FASTTURN("FastTurn", Constants.SWORD, 5, 5),
-    DISARMER("Disarmer", Constants.SWORD, 5, 1),
-    HEADLESS("Headless", Constants.SWORD, 10, 10),
-    PARALYZE("Paralyze", Constants.SWORD, 15, 5),
-    BLINDNESS("Blindness", Constants.SWORD, 5, 1),
-    LIFESTEAL("LifeSteal", Constants.SWORD, 15, 5),
-    CONFUSION("Confusion", Constants.SWORD, 15, 5),
-    NUTRITION("Nutrition", Constants.SWORD, 15, 5),
-    SKILLSWIPE("SkillSwipe", Constants.SWORD, 5, 5),
-    OBLITERATE("Obliterate", Constants.SWORD, 10, 5),
-    INQUISITIVE("Inquisitive", Constants.SWORD, 50, 25),
-    LIGHTWEIGHT("LightWeight", Constants.SWORD, 15, 5),
-    DOUBLEDAMAGE("DoubleDamage", Constants.SWORD, 5, 1),
-    DISORDER("Disorder", Constants.SWORD, 1, 0),
-    CHARGE("Charge", Constants.SWORD),
-    REVENGE("Revenge", Constants.SWORD),
-    FAMISHED("Famished", Constants.SWORD, 10, 5),
+    TRAP("Trap", "Sword", 10, 5),
+    RAGE("Rage", "Sword"),
+    VIPER("Viper", "Sword", 10, 5),
+    SNARE("Snare", "Sword", 10, 3),
+    SLOWMO("SlowMo", "Sword", 5, 5),
+    WITHER("Wither", "Sword", 10, 3),
+    VAMPIRE("Vampire", "Sword", 5, 5),
+    EXECUTE("Execute", "Sword"),
+    FASTTURN("FastTurn", "Sword", 5, 5),
+    DISARMER("Disarmer", "Sword", 5, 1),
+    HEADLESS("Headless", "Sword", 10, 10),
+    PARALYZE("Paralyze", "Sword", 15, 5),
+    BLINDNESS("Blindness", "Sword", 5, 1),
+    LIFESTEAL("LifeSteal", "Sword", 15, 5),
+    CONFUSION("Confusion", "Sword", 15, 5),
+    NUTRITION("Nutrition", "Sword", 15, 5),
+    SKILLSWIPE("SkillSwipe", "Sword", 5, 5),
+    OBLITERATE("Obliterate", "Sword", 10, 5),
+    INQUISITIVE("Inquisitive", "Sword", 50, 25),
+    LIGHTWEIGHT("LightWeight", "Sword", 15, 5),
+    DOUBLEDAMAGE("DoubleDamage", "Sword", 5, 1),
+    DISORDER("Disorder", "Sword", 1, 0),
+    CHARGE("Charge", "Sword"),
+    REVENGE("Revenge", "Sword"),
+    FAMISHED("Famished", "Sword", 10, 5),
     //	----------------Armor----------------  \\
-    HULK("Hulk", Constants.ARMOR),
-    VALOR("Valor", Constants.ARMOR),
-    DRUNK("Drunk", Constants.ARMOR),
-    NINJA("Ninja", Constants.ARMOR),
-    ANGEL("Angel", Constants.ARMOR),
-    TAMER("Tamer", Constants.ARMOR),
-    GUARDS("Guards", Constants.ARMOR),
-    VOODOO("Voodoo", Constants.ARMOR, 15, 5),
-    MOLTEN("Molten", Constants.ARMOR, 10, 1),
-    SAVIOR("Savior", Constants.ARMOR, 15, 5),
-    CACTUS("Cactus", Constants.ARMOR, 25, 25),
-    FREEZE("Freeze", Constants.ARMOR, 10, 5),
-    RECOVER("Recover", Constants.ARMOR),
-    NURSERY("Nursery", Constants.ARMOR, 5, 5),
-    RADIANT("Radiant", Constants.ARMOR),
-    FORTIFY("Fortify", Constants.ARMOR, 10, 5),
-    OVERLOAD("OverLoad", Constants.ARMOR),
-    BLIZZARD("Blizzard", Constants.ARMOR),
-    INSOMNIA("Insomnia", Constants.ARMOR, 10, 5),
-    ACIDRAIN("AcidRain", Constants.ARMOR, 5, 5),
-    SANDSTORM("SandStorm", Constants.ARMOR, 5, 5),
-    SMOKEBOMB("SmokeBomb", Constants.ARMOR, 5, 5),
-    PAINGIVER("PainGiver", Constants.ARMOR, 10, 5),
-    INTIMIDATE("Intimidate", Constants.ARMOR),
-    BURNSHIELD("BurnShield", Constants.ARMOR),
-    LEADERSHIP("Leadership", Constants.ARMOR, 10, 5),
-    INFESTATION("Infestation", Constants.ARMOR),
-    NECROMANCER("Necromancer", Constants.ARMOR),
-    STORMCALLER("StormCaller", Constants.ARMOR, 10, 5),
-    ENLIGHTENED("Enlightened", Constants.ARMOR, 10, 5),
-    SELFDESTRUCT("SelfDestruct", Constants.ARMOR),
-    CYBORG("Cyborg", Constants.ARMOR),
+    HULK("Hulk", "Armor"),
+    VALOR("Valor", "Armor"),
+    DRUNK("Drunk", "Armor"),
+    NINJA("Ninja", "Armor"),
+    ANGEL("Angel", "Armor"),
+    TAMER("Tamer", "Armor"),
+    GUARDS("Guards", "Armor"),
+    VOODOO("Voodoo", "Armor", 15, 5),
+    MOLTEN("Molten", "Armor", 10, 1),
+    SAVIOR("Savior", "Armor", 15, 5),
+    CACTUS("Cactus", "Armor", 25, 25),
+    FREEZE("Freeze", "Armor", 10, 5),
+    RECOVER("Recover", "Armor"),
+    NURSERY("Nursery", "Armor", 5, 5),
+    RADIANT("Radiant", "Armor"),
+    FORTIFY("Fortify", "Armor", 10, 5),
+    OVERLOAD("OverLoad", "Armor"),
+    BLIZZARD("Blizzard", "Armor"),
+    INSOMNIA("Insomnia", "Armor", 10, 5),
+    ACIDRAIN("AcidRain", "Armor", 5, 5),
+    SANDSTORM("SandStorm", "Armor", 5, 5),
+    SMOKEBOMB("SmokeBomb", "Armor", 5, 5),
+    PAINGIVER("PainGiver", "Armor", 10, 5),
+    INTIMIDATE("Intimidate", "Armor"),
+    BURNSHIELD("BurnShield", "Armor"),
+    LEADERSHIP("Leadership", "Armor", 10, 5),
+    INFESTATION("Infestation", "Armor"),
+    NECROMANCER("Necromancer", "Armor"),
+    STORMCALLER("StormCaller", "Armor", 10, 5),
+    ENLIGHTENED("Enlightened", "Armor", 10, 5),
+    SELFDESTRUCT("SelfDestruct", "Armor"),
+    CYBORG("Cyborg", "Armor"),
     //	----------------Axes----------------  \\
-    REKT("Rekt", Constants.AXE, 5, 1),
-    DIZZY("Dizzy", Constants.AXE, 10, 5),
-    CURSED("Cursed", Constants.AXE, 10, 5),
-    FEEDME("FeedMe", Constants.AXE, 10, 5),
-    BERSERK("Berserk", Constants.AXE, 10, 1),
-    BLESSED("Blessed", Constants.AXE, 10, 5),
-    DECAPITATION("Decapitation", Constants.AXE, 10, 10),
-    BATTLECRY("BattleCry", Constants.AXE, 10, 5),
+    REKT("Rekt", "Axe", 5, 1),
+    DIZZY("Dizzy", "Axe", 10, 5),
+    CURSED("Cursed", "Axe", 10, 5),
+    FEEDME("FeedMe", "Axe", 10, 5),
+    BERSERK("Berserk", "Axe", 10, 1),
+    BLESSED("Blessed", "Axe", 10, 5),
+    DECAPITATION("Decapitation", "Axe", 10, 10),
+    BATTLECRY("BattleCry", "Axe", 10, 5),
     //	----------------PickAxes----------------  \\
-    BLAST("Blast", Constants.PICKAXE),
-    AUTOSMELT("AutoSmelt", Constants.PICKAXE, 25, 25),
-    EXPERIENCE("Experience", Constants.PICKAXE, 25, 25),
-    FURNACE("Furnace", Constants.PICKAXE),
+    BLAST("Blast", "Pickaxe"),
+    AUTOSMELT("AutoSmelt", "Pickaxe", 25, 25),
+    EXPERIENCE("Experience", "Pickaxe", 25, 25),
+    FURNACE("Furnace", "Pickaxe"),
     //	----------------Tools----------------  \\
-    HASTE("Haste", Constants.TOOL),
-    TELEPATHY("Telepathy", Constants.TOOL),
-    OXYGENATE("Oxygenate", Constants.TOOL),
+    HASTE("Haste", "Tool"),
+    TELEPATHY("Telepathy", "Tool"),
+    OXYGENATE("Oxygenate", "Tool"),
     //	----------------Hoes----------------  \\
-    GREENTHUMB("GreenThumb", Constants.HOE, 10, 10),
-    HARVESTER("Harvester", Constants.HOE),
-    TILLER("Tiller", Constants.HOE),
-    PLANTER("Planter", Constants.HOE),
+    GREENTHUMB("GreenThumb", "Hoe", 10, 10),
+    HARVESTER("Harvester", "Hoe"),
+    TILLER("Tiller", "Hoe"),
+    PLANTER("Planter", "Hoe"),
     //	----------------All----------------  \\
-    HELLFORGED("HellForged", Constants.DAMAGEABLE, 5, 5);
+    HELLFORGED("HellForged", "Damaged-Items", 5, 5);
     
     private String name;
-    private EnchantmentType type;
+    private String typeName;
     private boolean hasChanceSystem;
     private int chance;
     private int chanceIncrease;
@@ -138,11 +138,11 @@ public enum CEnchantments {
     /**
      *
      * @param name Name of the enchantment.
-     * @param type Type of items it goes on.
+     * @param typeName Type of items it goes on.
      */
-    private CEnchantments(String name, EnchantmentType type) {
+    private CEnchantments(String name, String typeName) {
         this.name = name;
-        this.type = type;
+        this.typeName = typeName;
         this.chance = 0;
         this.chanceIncrease = 0;
         this.hasChanceSystem = false;
@@ -151,13 +151,13 @@ public enum CEnchantments {
     /**
      *
      * @param name Name of the enchantment.
-     * @param type Type of items it goes on.
+     * @param typeName Type of items it goes on.
      * @param chance The chance the enchantment has to active.
      * @param chanceIncrease The amount the chance increases by every level.
      */
-    private CEnchantments(String name, EnchantmentType type, int chance, int chanceIncrease) {
+    private CEnchantments(String name, String typeName, int chance, int chanceIncrease) {
         this.name = name;
-        this.type = type;
+        this.typeName = typeName;
         this.chance = chance;
         this.chanceIncrease = chanceIncrease;
         this.hasChanceSystem = true;
@@ -256,7 +256,7 @@ public enum CEnchantments {
      */
     public EnchantmentType getType() {
         if (getEnchantment() == null || getEnchantment().getEnchantmentType() == null) {
-            return type;
+            return EnchantmentType.getFromName(typeName);
         } else {
             return getEnchantment().getEnchantmentType();
         }
@@ -312,21 +312,6 @@ public enum CEnchantments {
      */
     public boolean hasChanceSystem() {
         return hasChanceSystem;
-    }
-    
-    private static class Constants {
-        
-        public static final EnchantmentType BOOTS = EnchantmentType.getFromName("boots");
-        public static final EnchantmentType BOW = EnchantmentType.getFromName("bow");
-        public static final EnchantmentType HELMET = EnchantmentType.getFromName("helmet");
-        public static final EnchantmentType ARMOR = EnchantmentType.getFromName("armor");
-        public static final EnchantmentType SWORD = EnchantmentType.getFromName("sword");
-        public static final EnchantmentType AXE = EnchantmentType.getFromName("axe");
-        public static final EnchantmentType PICKAXE = EnchantmentType.getFromName("pickaxe");
-        public static final EnchantmentType TOOL = EnchantmentType.getFromName("tool");
-        public static final EnchantmentType HOE = EnchantmentType.getFromName("hoe");
-        public static final EnchantmentType DAMAGEABLE = EnchantmentType.getFromName("damaged-items");
-        
     }
     
 }
