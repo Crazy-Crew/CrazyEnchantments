@@ -5,8 +5,11 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
+import me.badbones69.crazyenchantments.api.objects.BowEnchantment;
 import me.badbones69.crazyenchantments.api.objects.EnchantedArrow;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.api.objects.PotionEffects;
 import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
@@ -28,7 +31,6 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -42,6 +44,7 @@ public class Bows implements Listener {
     private Material web = new ItemBuilder().setMaterial("COBWEB", "WEB").getMaterial();
     private List<Block> webBlocks = new ArrayList<>();
     private boolean isv1_14_Up = Version.isNewer(Version.v1_13_R2);
+    private BowEnchantmentManager manager = ce.getBowManager();
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBowShoot(final EntityShootBowEvent e) {
@@ -286,48 +289,28 @@ public class Bows implements Listener {
                             entity.setVelocity(v);
                         }
                     }
-                    if (CEnchantments.ICEFREEZE.isActivated() && arrow.hasEnchantment(CEnchantments.ICEFREEZE) && CEnchantments.ICEFREEZE.chanceSuccessful(bow)) {
-                        if (entity instanceof Player) {
-                            EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.ICEFREEZE, bow);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
+                    for (BowEnchantment bowEnchantment : manager.getBowEnchantments()) {
+                        CEnchantments enchantment = bowEnchantment.getEnchantment();
+                        //No need to check if its active as if it is not then Bow Manager doesn't add it to the list of enchantments.
+                        if (arrow.hasEnchantment(enchantment) && enchantment.chanceSuccessful(bow)) {
+                            if (entity instanceof Player) {
+                                EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), enchantment, bow);
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (event.isCancelled()) {
+                                    //If the EnchantmentUseEvent is cancelled then no need to keep going with this enchantment.
+                                    continue;
+                                }
                             }
-                        } else {
-                            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, 1));
-                        }
-                    }
-                    if (CEnchantments.PIERCING.isActivated() && arrow.hasEnchantment(CEnchantments.PIERCING) && CEnchantments.PIERCING.chanceSuccessful(bow)) {
-                        if (entity instanceof Player) {
-                            EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PIERCING, bow);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                e.setDamage(e.getDamage() * 2);
+                            //Code is ran if entity is not a player or if the entity is a player and the EnchantmentUseEvent is not cancelled.
+                            //Checks if the enchantment is for potion effects or for damage amplifying.
+                            if (bowEnchantment.isPotionEnchantment()) {
+                                for (PotionEffects effect : bowEnchantment.getPotionEffects()) {
+                                    entity.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + effect.getAmplifire()));
+                                }
+                            } else {
+                                //Sets the new damage amplifier. If isLevelAddedToAmplifier() is true it adds the level to the damage amplifier.
+                                e.setDamage(e.getDamage() * ((bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + bowEnchantment.getDamageAmplifier()));
                             }
-                        } else {
-                            e.setDamage(e.getDamage() * 2);
-                        }
-                    }
-                    if (CEnchantments.VENOM.isActivated() && arrow.hasEnchantment(CEnchantments.VENOM) && CEnchantments.VENOM.chanceSuccessful(bow)) {
-                        if (entity instanceof Player) {
-                            EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.VENOM, bow);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
-                            }
-                        } else {
-                            entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
-                        }
-                    }
-                    if (CEnchantments.SNIPER.isActivated() && arrow.hasEnchantment(CEnchantments.SNIPER) && CEnchantments.SNIPER.chanceSuccessful(bow)) {
-                        if (entity instanceof Player) {
-                            EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.SNIPER, bow);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5 * 20, 1));
-                            }
-                        } else {
-                            entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5 * 20, 1));
                         }
                     }
                 }

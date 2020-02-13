@@ -7,10 +7,7 @@ import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.enums.ShopOption;
-import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
-import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
-import me.badbones69.crazyenchantments.api.managers.ShopManager;
-import me.badbones69.crazyenchantments.api.managers.WingsManager;
+import me.badbones69.crazyenchantments.api.managers.*;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
@@ -65,6 +62,7 @@ public class CrazyEnchantments {
     private InfoMenuManager infoMenuManager;
     private ShopManager shopManager;
     private WingsManager wingsManager;
+    private BowEnchantmentManager bowManager;
     private WorldGuardVersion worldGuardVersion;
     private PlotSquaredVersion plotSquaredVersion;
     private List<Category> categories = new ArrayList<>();
@@ -88,6 +86,7 @@ public class CrazyEnchantments {
         blockList.clear();
         gkitz.clear();
         registeredEnchantments.clear();
+        categories.clear();
         plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
         //Loads the blacksmith manager
         blackSmithManager = BlackSmithManager.getInstance();
@@ -152,38 +151,38 @@ public class CrazyEnchantments {
             config.getInt(path + ".EnchOptions.LvlRange.Max"),
             config.getInt(path + ".EnchOptions.LvlRange.Min")));
         }
-        for (CEnchantments enchant : CEnchantments.values()) {
-            String name = enchant.getName();
+        for (CEnchantments cEnchantment : CEnchantments.values()) {
+            String name = cEnchantment.getName();
             String path = "Enchantments." + name;
             if (enchants.contains(path)) {// To make sure the enchantment isn't broken.
-                CEnchantment en = new CEnchantment(name)
+                CEnchantment enchantment = new CEnchantment(name)
                 .setCustomName(enchants.getString(path + ".Name"))
                 .setActivated(enchants.getBoolean(path + ".Enabled"))
                 .setColor(enchants.getString(path + ".Color"))
                 .setBookColor(enchants.getString(path + ".BookColor"))
                 .setMaxLevel(enchants.getInt(path + ".MaxPower"))
-                .setEnchantmentType(enchant.getType())
+                .setEnchantmentType(cEnchantment.getType())
                 .setInfoName(enchants.getString(path + ".Info.Name"))
                 .setInfoDescription(enchants.getStringList(path + ".Info.Description"))
                 .setCategories(enchants.getStringList(path + ".Categories"))
-                .setChance(enchant.getChance())
-                .setChanceIncrease(enchant.getChanceIncrease());
+                .setChance(cEnchantment.getChance())
+                .setChanceIncrease(cEnchantment.getChanceIncrease());
                 if (enchants.contains(path + ".Enchantment-Type")) {// Sets the custom type set in the enchantments.yml.
-                    en.setEnchantmentType(EnchantmentType.getFromName(enchants.getString(path + ".Enchantment-Type")));
+                    enchantment.setEnchantmentType(EnchantmentType.getFromName(enchants.getString(path + ".Enchantment-Type")));
                 }
-                if (enchant.hasChanceSystem()) {
+                if (cEnchantment.hasChanceSystem()) {
                     if (enchants.contains(path + ".Chance-System.Base")) {
-                        en.setChance(enchants.getInt(path + ".Chance-System.Base"));
+                        enchantment.setChance(enchants.getInt(path + ".Chance-System.Base"));
                     } else {
-                        en.setChance(enchant.getChance());
+                        enchantment.setChance(cEnchantment.getChance());
                     }
                     if (enchants.contains(path + ".Chance-System.Increase")) {
-                        en.setChanceIncrease(enchants.getInt(path + ".Chance-System.Increase"));
+                        enchantment.setChanceIncrease(enchants.getInt(path + ".Chance-System.Increase"));
                     } else {
-                        en.setChanceIncrease(enchant.getChanceIncrease());
+                        enchantment.setChanceIncrease(cEnchantment.getChanceIncrease());
                     }
                 }
-                en.registerEnchantment();
+                enchantment.registerEnchantment();
             }
         }
         if (gkitzToggle) {
@@ -223,6 +222,9 @@ public class CrazyEnchantments {
         //Loads the settings for wings enchantment.
         wingsManager = WingsManager.getInstance();
         wingsManager.load();
+        //Loads the settings for the bow enchantments.
+        bowManager = BowEnchantmentManager.getInstance();
+        bowManager.load();
         //Starts the wings task
         Boots.startWings();
         if (SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
@@ -243,11 +245,9 @@ public class CrazyEnchantments {
         String uuid = player.getUniqueId().toString();
         int souls = 0;
         boolean isActive = false;
-        if (data.contains("Players." + uuid)) {
-            if (data.contains("Players." + uuid + ".Souls-Information")) {
-                souls = data.getInt("Players." + uuid + ".Souls-Information.Souls");
-                isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
-            }
+        if (data.contains("Players." + uuid + ".Souls-Information")) {
+            souls = data.getInt("Players." + uuid + ".Souls-Information.Souls");
+            isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
         }
         List<Cooldown> cooldowns = new ArrayList<>();
         for (GKitz kit : getGKitz()) {
@@ -363,6 +363,14 @@ public class CrazyEnchantments {
      */
     public WingsManager getWingsManager() {
         return wingsManager;
+    }
+    
+    /**
+     * Get the bow enchantments manager.
+     * @return The instance of the bow manager.
+     */
+    public BowEnchantmentManager getBowManager() {
+        return bowManager;
     }
     
     /**
