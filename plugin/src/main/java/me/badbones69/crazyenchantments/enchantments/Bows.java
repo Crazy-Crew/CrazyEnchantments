@@ -95,7 +95,6 @@ public class Bows implements Listener {
                 }
             }
         }
-        
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
@@ -207,7 +206,7 @@ public class Bows implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onArrowDamage(EntityDamageByEntityEvent e) {
         if (!ce.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity) {
             LivingEntity entity = (LivingEntity) e.getEntity();
@@ -318,6 +317,17 @@ public class Bows implements Listener {
                             }
                         } else {
                             entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 2 * 20, arrow.getLevel(CEnchantments.VENOM) - 1));
+                        }
+                    }
+                    if (CEnchantments.SNIPER.isActivated() && arrow.hasEnchantment(CEnchantments.SNIPER) && CEnchantments.SNIPER.chanceSuccessful(bow)) {
+                        if (entity instanceof Player) {
+                            EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.SNIPER, bow);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5 * 20, 1));
+                            }
+                        } else {
+                            entity.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5 * 20, 1));
                         }
                     }
                 }

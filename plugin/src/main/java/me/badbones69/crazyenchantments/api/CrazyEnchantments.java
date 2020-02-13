@@ -991,6 +991,11 @@ public class CrazyEnchantments {
         
         enchants.put(CEnchantments.SPRINGS, new HashMap<>());
         enchants.get(CEnchantments.SPRINGS).put(PotionEffectType.JUMP, -1);
+        
+        enchants.put(CEnchantments.CYBORG, new HashMap<>());
+        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.SPEED, -1);
+        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.INCREASE_DAMAGE, 0);
+        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP, 0);
         return enchants;
     }
     

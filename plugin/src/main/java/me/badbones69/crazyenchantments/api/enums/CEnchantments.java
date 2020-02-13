@@ -28,6 +28,7 @@ public enum CEnchantments {
     LIGHTNING("Lightning", Constants.BOW, 25, 10),
     MULTIARROW("MultiArrow", Constants.BOW, 25, 10),
     STICKY_SHOT("Sticky-Shot", Constants.BOW, 10, 10),
+    SNIPER("Sniper", Constants.BOW, 25, 5),
     //	----------------Helmets----------------  \\
     GLOWING("Glowing", Constants.HELMET),
     MERMAID("Mermaid", Constants.HELMET),
@@ -91,6 +92,7 @@ public enum CEnchantments {
     STORMCALLER("StormCaller", Constants.ARMOR, 10, 5),
     ENLIGHTENED("Enlightened", Constants.ARMOR, 10, 5),
     SELFDESTRUCT("SelfDestruct", Constants.ARMOR),
+    CYBORG("Cyborg", Constants.ARMOR),
     //	----------------Axes----------------  \\
     REKT("Rekt", Constants.AXE, 5, 1),
     DIZZY("Dizzy", Constants.AXE, 10, 5),

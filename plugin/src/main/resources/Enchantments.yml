@@ -2331,3 +2331,45 @@ Enchantments:
         - '&6Enchantable Items: &aHoe'
     Categories:
       - 'Common'
+  #Do not change this line.
+  Cyborg:
+    Enabled: true
+    Name: 'Cyborg'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lCyborg &7(&bI&7)'
+      Description:
+        - '&7Gives you speed, strength and'
+        - '&7jump boost to take down your enemies.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Legendary'
+  #Do not change this line.
+  Sniper:
+    Enabled: true
+    Name: 'Sniper'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 5
+    Info:
+      Name: '&e&lSniper &7(&bI-&bII&7)'
+      Description:
+        - '&7Shoot an enemy with this and'
+        - '&7it will have a high chance of'
+        - '&7doing high poison damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBow'
+    Categories:
+      - 'Legendary'
