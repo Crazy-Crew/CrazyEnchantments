@@ -84,7 +84,7 @@ public class Tools implements Listener {
                                 }
                             }
                         }
-                        if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                        if (hasExperience && !hasSilkTouch && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                             int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
                             if (isOre(block.getType())) {
                                 ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
