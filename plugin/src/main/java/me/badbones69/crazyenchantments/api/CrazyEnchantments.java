@@ -836,7 +836,7 @@ public class CrazyEnchantments {
     }
     
     /**
-     *
+     * Note: If the enchantment is not active it will not be added to the list.
      * @param item Item you want to get the enchantments from.
      * @return A list of enchantments the item has.
      */
@@ -847,7 +847,7 @@ public class CrazyEnchantments {
                 String[] split = lore.split(" ");
                 if (split.length > 0) {
                     for (CEnchantment enchantment : registeredEnchantments) {
-                        if (!enchantments.contains(enchantment) && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
+                        if (enchantment.isActivated() && !enchantments.contains(enchantment) && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
                             enchantments.add(enchantment);
                         }
                     }

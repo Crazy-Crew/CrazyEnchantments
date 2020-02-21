@@ -52,11 +52,13 @@ public class Tools implements Listener {
         if (player.getGameMode() != GameMode.CREATIVE) {
             ItemStack item = Methods.getItemInHand(player);
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-            if (CEnchantments.TELEPATHY.isActivated() && enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
+            if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
+                boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
+                boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
                 //This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
                 if ((Hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
                 //This checks if the block is a spawner and if so the spawner classes will take care of this.
-                (block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER")) && item.getItemMeta().hasEnchants() && item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH))) {
+                (block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER")) && item.getItemMeta().hasEnchants() && !hasSilkTouch)) {
                     return;
                 }
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
@@ -73,12 +75,12 @@ public class Tools implements Listener {
                             }
                         } else {
                             if (item.getItemMeta().hasEnchants()) {
-                                if (!item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH) && getXPOres().contains(block.getType()) && !enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
+                                if (!hasSilkTouch && getXPOres().contains(block.getType()) && !hasExperience) {
                                     ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
                                     orb.setExperience(Methods.percentPick(7, 3));
                                 }
                             } else {
-                                if (getXPOres().contains(block.getType()) && !enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment())) {
+                                if (getXPOres().contains(block.getType()) && !hasExperience) {
                                     ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
                                     orb.setExperience(Methods.percentPick(7, 3));
                                 }
@@ -147,7 +149,7 @@ public class Tools implements Listener {
         if (ce.hasEnchantments(item)) {
             int time = 5 * 20;
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-            if (CEnchantments.HASTE.isActivated() && enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
+            if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
@@ -156,7 +158,7 @@ public class Tools implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power - 1));
                 }
             }
-            if (CEnchantments.OXYGENATE.isActivated() && enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
+            if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
