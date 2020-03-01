@@ -210,7 +210,7 @@ public class PickAxes implements Listener {
                                             }
                                         }
                                     }
-                                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                                    if (!hasSilkTouch && hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                                         int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
                                         if (isOre(block.getType())) {
                                             xp += Methods.percentPick(7, 3) * power;
@@ -226,7 +226,7 @@ public class PickAxes implements Listener {
                                         Methods.removeDurability(item, player);
                                     }
                                 }
-                                if (isOre(block.getType())) {
+                                if (!hasSilkTouch && isOre(block.getType())) {
                                     xp += Methods.percentPick(7, 3);
                                 }
                             }
