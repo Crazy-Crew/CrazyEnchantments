@@ -101,6 +101,7 @@ public class PickAxes implements Listener {
                             }
                             int xp = 0;
                             boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
+                            boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
                             boolean hasTelepathy = enchantments.contains(CEnchantments.TELEPATHY.getEnchantment());
                             boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
                             boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
@@ -127,7 +128,25 @@ public class PickAxes implements Listener {
                                     }
                                     if (hasTelepathy) {
                                         for (ItemStack drop : block.getDrops(item)) {
-                                            if (hasFurnace && isOre(block.getType())) {
+                                            if (hasSilkTouch && Version.isOlder(Version.v1_14_R1)) {
+                                                switch (block.getType()) {
+                                                    case REDSTONE_ORE:
+                                                        drops.put(new ItemStack(Material.REDSTONE_ORE, 1, block.getData()), 1);
+                                                        break;
+                                                    case ANVIL:
+                                                        byte data = block.getData();
+                                                        if (data == 4) {
+                                                            data = 1;
+                                                        } else if (data == 8) {
+                                                            data = 2;
+                                                        }
+                                                        drop = new ItemStack(block.getType(), 1, data);
+                                                        break;
+                                                    default:
+                                                        drop = new ItemStack(block.getType(), 1, block.getData());
+                                                        break;
+                                                }
+                                            } else if (hasFurnace && isOre(block.getType())) {
                                                 drop = getOreDrop(block.getType());
                                             } else if (hasAutoSmelt && isOre(block.getType()) && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
                                                 drop = getOreDrop(block.getType());
