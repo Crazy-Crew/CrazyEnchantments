@@ -17,7 +17,7 @@ public enum Version {
     
     private static Version currentVersion;
     private static Version latest;
-    private Integer versionInteger;
+    private int versionInteger;
     
     private Version(int versionInteger) {
         this.versionInteger = versionInteger;
@@ -70,7 +70,7 @@ public enum Version {
      *
      * @return The server's minecraft version as an integer.
      */
-    public Integer getVersionInteger() {
+    public int getVersionInteger() {
         return this.versionInteger;
     }
     
@@ -79,7 +79,7 @@ public enum Version {
      * @param version The version you are checking.
      * @return -1 if older, 0 if the same, and 1 if newer.
      */
-    public Integer comparedTo(Version version) {
+    public int comparedTo(Version version) {
         int result = -1;
         int current = this.getVersionInteger();
         int check = version.getVersionInteger();
@@ -98,7 +98,7 @@ public enum Version {
      * @param version The version you are checking.
      * @return True if newer then the checked version and false if the same or older.
      */
-    public static Boolean isNewer(Version version) {
+    public static boolean isNewer(Version version) {
         if (currentVersion == null) getCurrentVersion();
         return currentVersion.versionInteger > version.versionInteger || currentVersion.versionInteger == -2;
     }
@@ -108,9 +108,9 @@ public enum Version {
      * @param version The version you are checking.
      * @return True if both the current and checked version is the same and false if otherwise.
      */
-    public static Boolean isSame(Version version) {
+    public static boolean isSame(Version version) {
         if (currentVersion == null) getCurrentVersion();
-        return currentVersion.versionInteger.equals(version.versionInteger);
+        return currentVersion.versionInteger == version.versionInteger;
     }
     
     /**
@@ -118,7 +118,7 @@ public enum Version {
      * @param version The version you are checking.
      * @return True if older then the checked version and false if the same or newer.
      */
-    public static Boolean isOlder(Version version) {
+    public static boolean isOlder(Version version) {
         if (currentVersion == null) getCurrentVersion();
         return currentVersion.versionInteger < version.versionInteger || currentVersion.versionInteger == -1;
     }
