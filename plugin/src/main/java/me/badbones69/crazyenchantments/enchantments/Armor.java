@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -396,26 +397,13 @@ public class Armor implements Listener {
                             }
                         }
                     }
+                    //This is ran to check the player's armor slots.
+                    useHellForge(player, armor);
                 }
             }
-            if (CEnchantments.HELLFORGED.isActivated()) {
-                for (ItemStack armor : player.getInventory().getContents()) {
-                    if (armor != null && armor.hasItemMeta()) {
-                        int armorDurability = Version.isNewer(Version.v1_12_R1) ? ((Damageable) armor.getItemMeta()).getDamage() : armor.getDurability();
-                        if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(armor)) {
-                            HellForgedUseEvent event = new HellForgedUseEvent(player, armor);
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                armorDurability -= ce.getLevel(armor, CEnchantments.HELLFORGED);
-                                if (Version.isNewer(Version.v1_12_R1)) {
-                                    ((Damageable) armor.getItemMeta()).setDamage(Math.max(armorDurability, 0));
-                                } else {
-                                    armor.setDurability((short) Math.max(armorDurability, 0));
-                                }
-                            }
-                        }
-                    }
-                }
+            //This is ran to check the player's inventory items.
+            for (ItemStack item : player.getInventory().getContents()) {
+                useHellForge(player, item);
             }
         }
     }
@@ -589,6 +577,26 @@ public class Armor implements Listener {
                 en.remove();
             }
             mobs.remove(player);
+        }
+    }
+    
+    private void useHellForge(Player player, ItemStack item) {
+        if (ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
+            int armorDurability = Version.isNewer(Version.v1_12_R1) ? ((Damageable) item.getItemMeta()).getDamage() : item.getDurability();
+            if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
+                HellForgedUseEvent event = new HellForgedUseEvent(player, item);
+                Bukkit.getPluginManager().callEvent(event);
+                if (!event.isCancelled()) {
+                    armorDurability -= ce.getLevel(item, CEnchantments.HELLFORGED);
+                    if (Version.isNewer(Version.v1_12_R1)) {
+                        Damageable damageable = (Damageable) item.getItemMeta();
+                        damageable.setDamage(Math.max(armorDurability, 0));
+                        item.setItemMeta((ItemMeta) damageable);
+                    } else {
+                        item.setDurability((short) Math.max(armorDurability, 0));
+                    }
+                }
+            }
         }
     }
     
