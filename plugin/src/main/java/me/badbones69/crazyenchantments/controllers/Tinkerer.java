@@ -74,7 +74,7 @@ public class Tinkerer implements Listener {
         if (inv != null && e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
             e.setCancelled(true);
             ItemStack current = e.getCurrentItem();
-            if (current != null && current.getType() != Material.AIR && current.hasItemMeta() && current.getItemMeta().hasLore() || current.getItemMeta().hasDisplayName() || current.getItemMeta().hasEnchants()) {
+            if (current != null && current.getType() != Material.AIR && current.hasItemMeta() && (current.getItemMeta().hasLore() || current.getItemMeta().hasDisplayName() || current.getItemMeta().hasEnchants())) {
                 // Recycling things
                 if (current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
                     int total = 0;
