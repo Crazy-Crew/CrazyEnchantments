@@ -36,10 +36,8 @@ public class BlackSmith implements Listener {
         Inventory inv = Bukkit.createInventory(null, 27, blackSmithManager.getMenuName());
         List<Integer> other = Arrays.asList(1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24);
         List<Integer> result = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
-        for (int i : other)
-            inv.setItem(i - 1, new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:7").setName(" ").build());
-        for (int i : result)
-            inv.setItem(i - 1, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(" ").build());
+        other.forEach(i -> inv.setItem(i - 1, new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:7").setName(" ").build()));
+        result.forEach(i -> inv.setItem(i - 1, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(" ").build()));
         inv.setItem(16, blackSmithManager.getDenyBarrier());
         player.openInventory(inv);
     }
@@ -56,10 +54,7 @@ public class BlackSmith implements Listener {
                 int resultSlot = 16;
                 if (e.getRawSlot() > 26) {// Click In Players Inventory
                     if (item.getAmount() != 1) return;
-                    if (ce.hasEnchantments(item) || item.getType() == ce.getEnchantmentBook().getMaterial()) {
-                        if (!ce.isEnchantmentBook(item)) {
-                            return;
-                        }
+                    if (ce.hasEnchantments(item) || ce.isEnchantmentBook(item)) {
                         if (inv.getItem(mainSlot) == null) {//Main item slot is empty
                             e.setCurrentItem(new ItemStack(Material.AIR));
                             inv.setItem(mainSlot, item);//Moves clicked item to main slot
