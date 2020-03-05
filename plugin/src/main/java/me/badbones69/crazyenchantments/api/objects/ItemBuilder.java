@@ -646,6 +646,16 @@ public class ItemBuilder implements Cloneable {
     }
     
     /**
+     * Get the amount of the item stack in the builder.
+     * @param amount The amount that is in the item stack.
+     * @return The ItemBuilder with updated info.
+     */
+    public ItemBuilder addAmount(int amount) {
+        this.amount += amount;
+        return this;
+    }
+    
+    /**
      * Get the name of the player being used as a head.
      * @return The name of the player being used on the head.
      */

@@ -24,23 +24,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 
 public class Tools implements Listener {
     
-    private Random random = new Random();
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static Random random = new Random();
+    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
     
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
         updateEffects(e.getPlayer());
     }
     
-    @SuppressWarnings("squid:CallToDeprecatedMethod")
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent e) {
         Block block = e.getBlock();
@@ -53,105 +49,20 @@ public class Tools implements Listener {
             ItemStack item = Methods.getItemInHand(player);
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
-                boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
-                boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
                 //This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
                 if ((Hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
                 //This checks if the block is a spawner and if so the spawner classes will take care of this.
-                (block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER")) && item.getItemMeta().hasEnchants() && !hasSilkTouch)) {
+                (block.getType() == (ce.useNewMaterial() ? Material.matchMaterial("SPAWNER") : Material.matchMaterial("MOB_SPAWNER")) && item.getItemMeta().hasEnchants() && !item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH))) {
                     return;
                 }
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    HashMap<ItemStack, Integer> drops = new HashMap<>();
-                    for (ItemStack drop : block.getDrops(item)) {
-                        if (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && isOre(block.getType())) {
-                            drop = getOreDrop(block.getType());
-                        } else if (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && isOre(block.getType())) {
-                            if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                                drop = getOreDrop(block.getType());
-                                drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
-                            }
-                        } else {
-                            if (item.getItemMeta().hasEnchants()) {
-                                if (!hasSilkTouch && getXPOres().contains(block.getType()) && !hasExperience) {
-                                    ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                                    orb.setExperience(Methods.percentPick(7, 3));
-                                }
-                            } else {
-                                if (getXPOres().contains(block.getType()) && !hasExperience) {
-                                    ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                                    orb.setExperience(Methods.percentPick(7, 3));
-                                }
-                            }
-                        }
-                        if (hasExperience && !hasSilkTouch && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                            int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-                            if (isOre(block.getType())) {
-                                ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                                orb.setExperience(Methods.percentPick(7, 3) * power);
-                            }
-                        }
-                        if (block.getType() == Material.SUGAR_CANE) {
-                            drop.setAmount(0);
-                            Location loc = block.getLocation();
-                            for (; loc.getBlock().getType() == Material.SUGAR_CANE; loc.add(0, 1, 0)) ;
-                            loc.subtract(0, 1, 0);
-                            for (; loc.getBlock().getType() == Material.SUGAR_CANE; loc.subtract(0, 1, 0)) {
-                                drop.setAmount(drop.getAmount() + 1);
-                                loc.getBlock().setType(Material.AIR);
-                            }
-                        }
-                        int amount = drop.getAmount();
-                        if (drops.containsKey(drop)) {
-                            drops.put(drop, drops.get(drop) + amount);
-                        } else {
-                            drops.put(drop, amount);
-                        }
-                    }
-                    if (Version.isOlder(Version.v1_14_R1) && item.getItemMeta().hasEnchants() && item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH)) {
-                        drops.clear();
-                        switch (block.getType()) {
-                            case REDSTONE_ORE:
-                                drops.put(new ItemStack(Material.REDSTONE_ORE, 1, block.getData()), 1);
-                                break;
-                            case ANVIL:
-                                byte data = block.getData();
-                                if (data == 4) {
-                                    data = 1;
-                                } else if (data == 8) {
-                                    data = 2;
-                                }
-                                drops.put(new ItemStack(block.getType(), 1, data), 1);
-                                break;
-                            default:
-                                drops.put(new ItemStack(block.getType(), 1, block.getData()), 1);
-                                break;
-                        }
-                    }
-                    if (block.getType() == Material.COCOA) {
-                        drops.put(new ItemBuilder().setMaterial("COCOA_BEANS", "INK_SACK:3").build(),
-                        ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);//Coco drops 2-3 beans.
-                    }
-                    for (Entry<ItemStack, Integer> dropList : drops.entrySet()) {
-                        ItemStack droppedItem = dropList.getKey();
-                        if (!ce.useNewMaterial() && droppedItem.getType() == Material.matchMaterial("INK_SACK") && droppedItem.getDurability() != 3) {//Changes ink sacks to lapis if on 1.12.2-
-                            droppedItem.setDurability((short) 4);
-                        }
-                        if (droppedItem.getType() == Material.WHEAT || droppedItem.getType() == Material.matchMaterial("BEETROOT_SEEDS")) {
-                            droppedItem.setAmount(random.nextInt(3));//Wheat and BeetRoots drops 0-3 seeds.
-                        } else if (droppedItem.getType() == ce.getMaterial("POTATO", "POTATO_ITEM") ||
-                        droppedItem.getType() == ce.getMaterial("CARROT", "CARROT_ITEM")) {
-                            droppedItem.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
-                        } else {
-                            droppedItem.setAmount(drops.get(droppedItem));
-                        }
-                        if (Methods.isInventoryFull(player)) {
-                            player.getWorld().dropItem(player.getLocation(), droppedItem);
-                        } else {
-                            player.getInventory().addItem(droppedItem);
-                        }
+                    ItemStack drop = getTelepathyDrops(item, block);
+                    if (Methods.isInventoryFull(player)) {
+                        player.getWorld().dropItem(player.getLocation(), drop);
+                    } else {
+                        player.getInventory().addItem(drop);
                     }
                     if (Version.isNewer(Version.v1_11_R1)) {
                         e.setDropItems(false);
@@ -162,6 +73,80 @@ public class Tools implements Listener {
                 }
             }
         }
+    }
+    
+    @SuppressWarnings("squid:CallToDeprecatedMethod")
+    public static ItemStack getTelepathyDrops(ItemStack item, Block block) {
+        List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+        boolean isOre = isOre(block);
+        boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
+        boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
+        boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
+        boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
+        ItemBuilder itemDrop = null;
+        int xp = 0;
+        for (ItemStack drop : block.getDrops(item)) {
+            if (itemDrop == null) {
+                itemDrop = new ItemBuilder().setMaterial(drop.getType());
+            }
+            if (!hasSilkTouch) {
+                if (hasFurnace && isOre) {
+                    drop = getOreDrop(block);
+                } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+                    drop = getOreDrop(block);
+                    drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
+                }
+                if (hasOreXP(block)) {
+                    xp = Methods.percentPick(7, 3);
+                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                        xp += Methods.percentPick(7, 3) * ce.getLevel(item, CEnchantments.EXPERIENCE);
+                    }
+                }
+            }
+            if (block.getType() == Material.SUGAR_CANE) {
+                drop.setAmount(0);
+                Location loc = block.getLocation();
+                for (; loc.getBlock().getType() == Material.SUGAR_CANE; loc.add(0, 1, 0)) ;
+                loc.subtract(0, 1, 0);
+                for (; loc.getBlock().getType() == Material.SUGAR_CANE; loc.subtract(0, 1, 0)) {
+                    drop.setAmount(drop.getAmount() + 1);
+                    loc.getBlock().setType(Material.AIR);
+                }
+            }
+            itemDrop.addAmount(drop.getAmount());
+        }
+        if (hasSilkTouch && Version.isOlder(Version.v1_14_R1)) {
+            if (block.getType() == Material.ANVIL) {
+                byte data = block.getData();
+                if (data == 4) {
+                    data = 1;
+                } else if (data == 8) {
+                    data = 2;
+                }
+                itemDrop.setMaterial(block.getType()).setDamage(data);
+            } else {
+                itemDrop.setMaterial(block.getType()).setDamage(block.getData());
+            }
+        }
+        if (block.getType() == Material.COCOA) {
+            //Coco drops 2-3 beans.
+            itemDrop.setMaterial("COCOA_BEANS", "INK_SACK:3")
+            .setAmount(ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
+        }
+        //Changes ink sacks to lapis if on 1.12.2-
+        if (Version.isOlder(Version.v1_13_R2) && itemDrop.getMaterial() == Material.matchMaterial("INK_SACK") && itemDrop.getDamage() != 3) {
+            itemDrop.setDamage(4);
+        }
+        if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.matchMaterial("BEETROOT_SEEDS")) {
+            itemDrop.setAmount(random.nextInt(3));//Wheat and BeetRoots drops 0-3 seeds.
+        } else if (itemDrop.getMaterial() == ce.getMaterial("POTATO", "POTATO_ITEM") || itemDrop.getMaterial() == ce.getMaterial("CARROT", "CARROT_ITEM")) {
+            itemDrop.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
+        }
+        if (xp > 0) {
+            ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
+            orb.setExperience(xp);
+        }
+        return itemDrop.build();
     }
     
     private void updateEffects(Player player) {
@@ -189,7 +174,7 @@ public class Tools implements Listener {
         }
     }
     
-    private boolean ignoreBlock(Block block) {
+    private static boolean ignoreBlock(Block block) {
         switch (block.getType().name().toLowerCase()) {
             case "air":
             case "shulker_box":
@@ -202,22 +187,24 @@ public class Tools implements Listener {
         }
     }
     
-    private ArrayList<Material> getXPOres() {
-        ArrayList<Material> ores = new ArrayList<>();
-        ores.add(Material.COAL_ORE);
-        ores.add(Material.QUARTZ);
-        ores.add(Material.DIAMOND_ORE);
-        ores.add(Material.EMERALD_ORE);
-        ores.add(Material.REDSTONE_ORE);
-        ores.add(Material.LAPIS_ORE);
-        return ores;
+    private static boolean hasOreXP(Block block) {
+        switch (block.getType()) {
+            case COAL_ORE:
+            case DIAMOND_ORE:
+            case EMERALD_ORE:
+            case LAPIS_ORE:
+            case REDSTONE_ORE:
+                return true;
+            default:
+                return false;
+        }
     }
     
-    private boolean isOre(Material material) {
-        if (material == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+    private static boolean isOre(Block block) {
+        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
             return true;
         }
-        switch (material) {
+        switch (block.getType()) {
             case COAL_ORE:
             case IRON_ORE:
             case GOLD_ORE:
@@ -231,12 +218,12 @@ public class Tools implements Listener {
         }
     }
     
-    private ItemStack getOreDrop(Material material) {
+    private static ItemStack getOreDrop(Block block) {
         ItemBuilder dropItem = new ItemBuilder();
-        if (material == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
-            switch (material) {
+            switch (block.getType()) {
                 case COAL_ORE:
                     dropItem.setMaterial(Material.COAL);
                     break;
