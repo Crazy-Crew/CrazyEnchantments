@@ -85,8 +85,9 @@ public class GKitzController implements Listener {
                     GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
                     if (e.getAction() == InventoryAction.PICKUP_HALF) {
                         List<ItemStack> items = kit.getPreviewItems();
-                        int slots = 9;
-                        for (int size = items.size(); size >= 9; size -= 9, e.getCurrentItem()) ;
+                        int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
+                        //Some debug code for when checking the math for slots.
+                        //System.out.println((items.size() / 9) + " : " + ((items.size() / 9) * 9) + " : " + items.size() % 9 + " : " + slots);
                         Inventory inventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
                         for (ItemStack itemStack : items) {
                             inventory.addItem(itemStack);

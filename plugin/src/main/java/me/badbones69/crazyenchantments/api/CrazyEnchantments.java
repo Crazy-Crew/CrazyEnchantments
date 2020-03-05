@@ -1351,7 +1351,11 @@ public class CrazyEnchantments {
                 }
             }
             itemBuilder.getLore().addAll(0, customEnchantments);
-            items.add(itemBuilder.setEnchantments(enchantments).build());
+            itemBuilder.setEnchantments(enchantments);
+            NBTItem nbtItem = new NBTItem(itemBuilder.build());
+            //This is done so items do not stack if there are multiple of the same.
+            nbtItem.setInteger("random-number", random.nextInt(Integer.MAX_VALUE));
+            items.add(nbtItem.getItem());
         }
         return items;
     }
