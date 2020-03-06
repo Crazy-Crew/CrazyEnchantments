@@ -91,7 +91,8 @@ public class Tools implements Listener {
         int xp = 0;
         for (ItemStack drop : block.getDrops(item)) {
             if (itemDrop == null) {
-                itemDrop = new ItemBuilder().setMaterial(drop.getType());
+                //Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
+                itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
             }
             if (!hasSilkTouch) {
                 if (hasFurnace && isOre) {
