@@ -67,11 +67,8 @@ public class Tools implements Listener {
                     } else {
                         player.getInventory().addItem(drop.getItem());
                     }
-                    if (Version.isNewer(Version.v1_11_R1)) {
-                        e.setDropItems(false);
-                    } else {
-                        block.setType(Material.AIR);
-                    }
+                    block.setType(Material.AIR);
+                    e.setExpToDrop(0);
                     if (drop.hasXp()) {
                         ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
                         orb.setExperience(drop.getXp());
