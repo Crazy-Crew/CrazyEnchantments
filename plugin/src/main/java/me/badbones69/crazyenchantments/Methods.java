@@ -295,11 +295,10 @@ public class Methods {
     }
     
     public static boolean randomPicker(int max) {
-        Random number = random;
         if (max <= 0) {
             return true;
         }
-        int chance = 1 + number.nextInt(max);
+        int chance = 1 + random.nextInt(max);
         return chance == 1;
     }
     
@@ -312,11 +311,10 @@ public class Methods {
     }
     
     public static Integer percentPick(int max, int min) {
-        Random i = random;
         if (max == min) {
             return max;
         } else {
-            return min + i.nextInt(max - min);
+            return min + random.nextInt(max - min);
         }
     }
     
