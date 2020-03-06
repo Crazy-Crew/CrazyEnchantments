@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -31,6 +32,7 @@ public class Tools implements Listener {
     
     private static Random random = new Random();
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static List<String> ignoreBlocks = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
     
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
@@ -175,16 +177,12 @@ public class Tools implements Listener {
     }
     
     private static boolean ignoreBlock(Block block) {
-        switch (block.getType().name().toLowerCase()) {
-            case "air":
-            case "shulker_box":
-            case "chest":
-            case "head":
-            case "skull":
+        for (String name : ignoreBlocks) {
+            if (block.getType().name().toLowerCase().contains(name)) {
                 return true;
-            default:
-                return false;
+            }
         }
+        return false;
     }
     
     private static boolean hasOreXP(Block block) {
