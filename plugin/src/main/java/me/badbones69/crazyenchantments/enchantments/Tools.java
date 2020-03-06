@@ -6,6 +6,7 @@ import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -60,16 +61,20 @@ public class Tools implements Listener {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    ItemStack drop = getTelepathyDrops(item, block);
+                    TelepathyDrop drop = getTelepathyDrops(item, block);
                     if (Methods.isInventoryFull(player)) {
-                        player.getWorld().dropItem(player.getLocation(), drop);
+                        player.getWorld().dropItem(player.getLocation(), drop.getItem());
                     } else {
-                        player.getInventory().addItem(drop);
+                        player.getInventory().addItem(drop.getItem());
                     }
                     if (Version.isNewer(Version.v1_11_R1)) {
                         e.setDropItems(false);
                     } else {
                         block.setType(Material.AIR);
+                    }
+                    if (drop.hasXp()) {
+                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
+                        orb.setExperience(drop.getXp());
                     }
                     Methods.removeDurability(item, player);
                 }
@@ -78,7 +83,7 @@ public class Tools implements Listener {
     }
     
     @SuppressWarnings("squid:CallToDeprecatedMethod")
-    public static ItemStack getTelepathyDrops(ItemStack item, Block block) {
+    public static TelepathyDrop getTelepathyDrops(ItemStack item, Block block) {
         List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
         boolean isOre = isOre(block);
         boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
@@ -144,11 +149,7 @@ public class Tools implements Listener {
         } else if (itemDrop.getMaterial() == ce.getMaterial("POTATO", "POTATO_ITEM") || itemDrop.getMaterial() == ce.getMaterial("CARROT", "CARROT_ITEM")) {
             itemDrop.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
         }
-        if (xp > 0) {
-            ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-            orb.setExperience(xp);
-        }
-        return itemDrop.build();
+        return new TelepathyDrop(itemDrop.build(), xp);
     }
     
     private void updateEffects(Player player) {

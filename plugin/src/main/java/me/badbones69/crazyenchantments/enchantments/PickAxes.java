@@ -8,6 +8,7 @@ import me.badbones69.crazyenchantments.api.events.BlastUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import me.badbones69.crazyenchantments.multisupport.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.SpartanSupport;
@@ -128,12 +129,9 @@ public class PickAxes implements Listener {
                                         continue;
                                     }
                                     if (hasTelepathy) {
-                                        ItemStack drop = Tools.getTelepathyDrops(item, block);
-                                        if (drops.containsKey(drop)) {
-                                            drops.put(drop, drops.get(drop) + drop.getAmount());
-                                        } else {
-                                            drops.put(drop, drop.getAmount());
-                                        }
+                                        TelepathyDrop drop = Tools.getTelepathyDrops(item, block);
+                                        drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + 1);
+                                        xp += drop.getXp();
                                     } else {
                                         if (hasFurnace && isOre) {
                                             ItemStack finalDrop = getOreDrop(block.getType());
