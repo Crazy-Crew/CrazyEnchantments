@@ -86,12 +86,20 @@ public class Boots implements Listener {
     
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
-        Player player = e.getPlayer();
-        boolean isFlying = player.isFlying();
-        if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
-            if (regionCheck(player)) {
-                if (!areEnemiesNearby(player)) {
-                    player.setAllowFlight(true);
+        if ((e.getFrom().getBlockX() != e.getTo().getBlockX()) || (e.getFrom().getBlockY() != e.getTo().getBlockY()) || (e.getFrom().getBlockZ() != e.getTo().getBlockZ())) {
+            Player player = e.getPlayer();
+            boolean isFlying = player.isFlying();
+            if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
+                if (regionCheck(player)) {
+                    if (!areEnemiesNearby(player)) {
+                        player.setAllowFlight(true);
+                    } else {
+                        if (isFlying && gamemodeCheck(player)) {
+                            player.setFlying(false);
+                            player.setAllowFlight(false);
+                            manager.removeFlyingPlayer(player);
+                        }
+                    }
                 } else {
                     if (isFlying && gamemodeCheck(player)) {
                         player.setFlying(false);
@@ -99,15 +107,9 @@ public class Boots implements Listener {
                         manager.removeFlyingPlayer(player);
                     }
                 }
-            } else {
-                if (isFlying && gamemodeCheck(player)) {
-                    player.setFlying(false);
-                    player.setAllowFlight(false);
-                    manager.removeFlyingPlayer(player);
+                if (isFlying) {
+                    manager.addFlyingPlayer(player);
                 }
-            }
-            if (isFlying) {
-                manager.addFlyingPlayer(player);
             }
         }
     }
@@ -145,7 +147,7 @@ public class Boots implements Listener {
     private boolean areEnemiesNearby(Player player) {
         if (manager.isEnemeyCheckEnabled() && !manager.inLimitlessFlightWorld(player)) {
             for (Player otherPlayer : getNearByPlayers(player, manager.getEnemyRadius())) {
-                if (!Support.isFriendly(player, otherPlayer) && !player.hasPermission("crazyenchantments.bypass.wings")) {
+                if (!(player.hasPermission("crazyenchantments.bypass.wings") && Support.isFriendly(player, otherPlayer))) {
                     return true;
                 }
             }
