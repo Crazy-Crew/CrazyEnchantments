@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.commands;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.multisupport.Version;
@@ -85,9 +86,9 @@ public class CETab implements TabCompleter {
                     completions.add("64");
                     break;
                 case "dust":
-                    completions.add("success");
-                    completions.add("destroy");
-                    completions.add("mystery");
+                    for (Dust dust : Dust.values()) {
+                        completions.addAll(dust.getKnownNames());
+                    }
                     break;
                 case "lostbook":
                     for (Category category : ce.getCategories()) {

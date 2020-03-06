@@ -15,7 +15,7 @@ public enum Dust {
     SUCCESS_DUST("Success-Dust", "SuccessDust", Arrays.asList("s", "success")),
     DESTROY_DUST("Destroy-Dust", "DestroyDust", Arrays.asList("d", "destroy")),
     MYSTERY_DUST("Mystery-Dust", "MysteryDust", Arrays.asList("m", "mystery")),
-    FAILED_DUST("Failed-Dust", "FailedDust", Arrays.asList("f, failed"));
+    FAILED_DUST("Failed-Dust", "FailedDust", Arrays.asList("f", "failed"));
     
     private static HashMap<Dust, ItemBuilder> itemBuilderDust = new HashMap<>();
     private String name;
