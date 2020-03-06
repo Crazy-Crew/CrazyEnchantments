@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,19 +38,29 @@ public class Tools implements Listener {
     
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
-        updateEffects(e.getPlayer());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                updateEffects(e.getPlayer());
+            }
+        }.runTaskAsynchronously(ce.getPlugin());
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent e) {
         Block block = e.getBlock();
         Player player = e.getPlayer();
         if (e.isCancelled() || ce.isIgnoredEvent(e) || ignoreBlock(block)) {
             return;
         }
-        updateEffects(player);
+        ItemStack item = Methods.getItemInHand(player);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                updateEffects(player);
+            }
+        }.runTaskAsynchronously(ce.getPlugin());
         if (player.getGameMode() != GameMode.CREATIVE) {
-            ItemStack item = Methods.getItemInHand(player);
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
                 //This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
@@ -61,19 +72,30 @@ public class Tools implements Listener {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    TelepathyDrop drop = getTelepathyDrops(item, block);
-                    if (Methods.isInventoryFull(player)) {
-                        player.getWorld().dropItem(player.getLocation(), drop.getItem());
-                    } else {
-                        player.getInventory().addItem(drop.getItem());
-                    }
-                    block.setType(Material.AIR);
-                    e.setExpToDrop(0);
-                    if (drop.hasXp()) {
-                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                        orb.setExperience(drop.getXp());
-                    }
-                    Methods.removeDurability(item, player);
+                    e.setCancelled(true);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            TelepathyDrop drop = getTelepathyDrops(item, block);
+                            if (Methods.isInventoryFull(player)) {
+                                player.getWorld().dropItem(player.getLocation(), drop.getItem());
+                            } else {
+                                player.getInventory().addItem(drop.getItem());
+                            }
+                            e.setExpToDrop(0);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    block.setType(Material.AIR);
+                                    if (drop.hasXp()) {
+                                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
+                                        orb.setExperience(drop.getXp());
+                                    }
+                                    Methods.removeDurability(item, player);
+                                }
+                            }.runTask(ce.getPlugin());
+                        }
+                    }.runTaskAsynchronously(ce.getPlugin());
                 }
             }
         }
@@ -156,21 +178,31 @@ public class Tools implements Listener {
             int time = 5 * 20;
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    int power = ce.getLevel(item, CEnchantments.HASTE);
-                    player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power - 1));
-                }
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            int power = ce.getLevel(item, CEnchantments.HASTE);
+                            player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power - 1));
+                        }
+                    }
+                }.runTask(ce.getPlugin());
             }
             if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
-                }
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            player.removePotionEffect(PotionEffectType.WATER_BREATHING);
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
+                        }
+                    }
+                }.runTask(ce.getPlugin());
             }
         }
     }
