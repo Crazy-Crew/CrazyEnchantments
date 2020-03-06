@@ -32,6 +32,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -77,42 +78,46 @@ public class Swords implements Listener {
                     boolean isEntityPlayer = e.getEntity() instanceof Player;
                     if (isEntityPlayer && enchantments.contains(CEnchantments.DISARMER.getEnchantment())) {
                         Player player = (Player) e.getEntity();
-                        int slot = Methods.percentPick(4, 1);
                         if (CEnchantments.DISARMER.chanceSuccessful(item)) {
-                            if (slot == 1 && player.getEquipment().getHelmet() != null) {
-                                ItemStack armor = player.getEquipment().getHelmet();
-                                DisarmerUseEvent event = new DisarmerUseEvent(player, damager, armor);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    player.getEquipment().setHelmet(null);
-                                    player.getInventory().addItem(armor);
-                                }
+                            EquipmentSlot equipmentSlot = getSlot(Methods.percentPick(4, 0));
+                            ItemStack armor = null;
+                            switch (equipmentSlot) {
+                                case HEAD:
+                                    armor = player.getEquipment().getHelmet();
+                                    break;
+                                case CHEST:
+                                    armor = player.getEquipment().getChestplate();
+                                    break;
+                                case LEGS:
+                                    armor = player.getEquipment().getLeggings();
+                                    break;
+                                case FEET:
+                                    armor = player.getEquipment().getBoots();
+                                    break;
                             }
-                            if (slot == 2 && player.getEquipment().getChestplate() != null) {
-                                ItemStack armor = player.getEquipment().getChestplate();
+                            if (armor != null) {
                                 DisarmerUseEvent event = new DisarmerUseEvent(player, damager, armor);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (!event.isCancelled()) {
-                                    player.getEquipment().setChestplate(null);
-                                    player.getInventory().addItem(armor);
-                                }
-                            }
-                            if (slot == 3 && player.getEquipment().getLeggings() != null) {
-                                ItemStack armor = player.getEquipment().getLeggings();
-                                DisarmerUseEvent event = new DisarmerUseEvent(player, damager, armor);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    player.getEquipment().setLeggings(null);
-                                    player.getInventory().addItem(armor);
-                                }
-                            }
-                            if (slot == 4 && player.getEquipment().getBoots() != null) {
-                                ItemStack armor = player.getEquipment().getBoots();
-                                DisarmerUseEvent event = new DisarmerUseEvent(player, damager, armor);
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
-                                    player.getEquipment().setBoots(null);
-                                    player.getInventory().addItem(armor);
+                                    switch (equipmentSlot) {
+                                        case HEAD:
+                                            player.getEquipment().setHelmet(null);
+                                            break;
+                                        case CHEST:
+                                            player.getEquipment().setChestplate(null);
+                                            break;
+                                        case LEGS:
+                                            player.getEquipment().setLeggings(null);
+                                            break;
+                                        case FEET:
+                                            player.getEquipment().setBoots(null);
+                                            break;
+                                    }
+                                    if (Methods.isInventoryFull(player)) {
+                                        player.getWorld().dropItemNaturally(player.getLocation(), armor);
+                                    } else {
+                                        player.getInventory().addItem(armor);
+                                    }
                                 }
                             }
                         }
@@ -447,6 +452,19 @@ public class Swords implements Listener {
                     }
                 }
             }
+        }
+    }
+    
+    private EquipmentSlot getSlot(int slot) {
+        switch (slot) {
+            case 1:
+                return EquipmentSlot.CHEST;
+            case 2:
+                return EquipmentSlot.LEGS;
+            case 3:
+                return EquipmentSlot.FEET;
+            default:
+                return EquipmentSlot.HEAD;
         }
     }
     
