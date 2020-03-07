@@ -5,6 +5,8 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.*;
+import me.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
+import me.badbones69.crazyenchantments.api.objects.PotionEffects;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
@@ -135,18 +137,16 @@ public class Armor implements Listener {
                             }
                         }
                     }
-                    if (CEnchantments.FORTIFY.isActivated() && ce.hasEnchantment(armor, CEnchantments.FORTIFY) && CEnchantments.FORTIFY.chanceSuccessful(armor)) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FORTIFY.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5 * 20, ce.getLevel(armor, CEnchantments.FORTIFY)));
-                        }
-                    }
-                    if (CEnchantments.FREEZE.isActivated() && ce.hasEnchantment(armor, CEnchantments.FREEZE) && CEnchantments.FREEZE.chanceSuccessful(armor)) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FREEZE.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 1 + ce.getLevel(armor, CEnchantments.FREEZE)));
+                    for (ArmorEnchantment armorEnchantment : ce.getArmorManager().getArmorEnchantments()) {
+                        CEnchantments enchantment = armorEnchantment.getEnchantment();
+                        if (ce.hasEnchantment(armor, enchantment) && enchantment.chanceSuccessful(armor)) {
+                            EnchantmentUseEvent event = new EnchantmentUseEvent(player, enchantment, armor);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
+                                    damager.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + effect.getAmplifire()));
+                                }
+                            }
                         }
                     }
                     if (CEnchantments.MOLTEN.isActivated() && ce.hasEnchantment(armor, CEnchantments.MOLTEN) && CEnchantments.MOLTEN.chanceSuccessful(armor)) {
@@ -156,33 +156,11 @@ public class Armor implements Listener {
                             damager.setFireTicks((ce.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
                         }
                     }
-                    if (CEnchantments.PAINGIVER.isActivated() && ce.hasEnchantment(armor, CEnchantments.PAINGIVER) && CEnchantments.PAINGIVER.chanceSuccessful(armor)) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.PAINGIVER.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            damager.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 3 * 20, ce.getLevel(armor, CEnchantments.PAINGIVER)));
-                        }
-                    }
                     if (CEnchantments.SAVIOR.isActivated() && ce.hasEnchantment(armor, CEnchantments.SAVIOR) && CEnchantments.SAVIOR.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SAVIOR.getEnchantment(), armor);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             e.setDamage(e.getDamage() / 2);
-                        }
-                    }
-                    if (CEnchantments.SMOKEBOMB.isActivated() && ce.hasEnchantment(armor, CEnchantments.SMOKEBOMB) && CEnchantments.SMOKEBOMB.chanceSuccessful(armor)) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SMOKEBOMB.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 1));
-                            damager.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3 * 20, 0));
-                        }
-                    }
-                    if (CEnchantments.VOODOO.isActivated() && ce.hasEnchantment(armor, CEnchantments.VOODOO) && CEnchantments.VOODOO.chanceSuccessful(armor)) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.VOODOO.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            damager.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5 * 20, ce.getLevel(armor, CEnchantments.VOODOO) - 1));
                         }
                     }
                     if (CEnchantments.INSOMNIA.isActivated() && ce.hasEnchantment(armor, CEnchantments.INSOMNIA) && CEnchantments.INSOMNIA.chanceSuccessful(armor)) {
