@@ -5,13 +5,13 @@ import org.bukkit.potion.PotionEffectType;
 public class PotionEffects {
     
     private PotionEffectType potionEffect;
-    private int amplifire;
+    private int amplifier;
     private int duration;
     
-    public PotionEffects(PotionEffectType potionEffect, int duration, int amplifire) {
+    public PotionEffects(PotionEffectType potionEffect, int duration, int amplifier) {
         this.potionEffect = potionEffect;
         this.duration = duration;
-        this.amplifire = amplifire;
+        this.amplifier = amplifier;
     }
     
     public PotionEffectType getPotionEffect() {
@@ -22,8 +22,8 @@ public class PotionEffects {
         return duration;
     }
     
-    public int getAmplifire() {
-        return amplifire;
+    public int getAmplifier() {
+        return amplifier;
     }
     
 }

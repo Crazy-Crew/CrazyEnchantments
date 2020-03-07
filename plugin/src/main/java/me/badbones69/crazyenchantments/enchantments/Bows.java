@@ -305,7 +305,7 @@ public class Bows implements Listener {
                             //Checks if the enchantment is for potion effects or for damage amplifying.
                             if (bowEnchantment.isPotionEnchantment()) {
                                 for (PotionEffects effect : bowEnchantment.getPotionEffects()) {
-                                    entity.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + effect.getAmplifire()));
+                                    entity.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + effect.getAmplifier()));
                                 }
                             } else {
                                 //Sets the new damage amplifier. If isLevelAddedToAmplifier() is true it adds the level to the damage amplifier.

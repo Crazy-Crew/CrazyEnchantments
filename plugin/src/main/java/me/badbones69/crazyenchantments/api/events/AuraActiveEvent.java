@@ -10,7 +10,7 @@ public class AuraActiveEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private Player other;
     private Player player;
-    private int power;
+    private int level;
     private CEnchantments enchantment;
     
     /**
@@ -18,13 +18,13 @@ public class AuraActiveEvent extends Event {
      * @param player player that has the aura enchantment on.
      * @param other The player that will be effected by it.
      * @param enchantment The aura enchantment that is activated.
-     * @param power The power of the aura enchantment.
+     * @param level The power of the aura enchantment.
      */
-    public AuraActiveEvent(Player player, Player other, CEnchantments enchantment, int power) {
+    public AuraActiveEvent(Player player, Player other, CEnchantments enchantment, int level) {
         this.player = player;
         this.other = other;
         this.enchantment = enchantment;
-        this.power = power;
+        this.level = level;
     }
     
     public static HandlerList getHandlerList() {
@@ -59,8 +59,8 @@ public class AuraActiveEvent extends Event {
      * The power of the aura enchantment.
      * @return The power of the aura enchantment that is being used.
      */
-    public int getPower() {
-        return power;
+    public int getLevel() {
+        return level;
     }
     
     public HandlerList getHandlers() {
