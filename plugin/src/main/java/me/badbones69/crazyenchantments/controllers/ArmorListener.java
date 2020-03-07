@@ -28,10 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Author Borlea
- * @Github https://github.com/borlea/
- * @Website http://codingforcookies.com/
- * @since Jul 30, 2015 6:43:34 PM
+ * @author Arnah
+ * @since Jul 30, 2015
  */
 public class ArmorListener implements Listener {
     
@@ -286,6 +284,13 @@ public class ArmorListener implements Listener {
                 // No way to cancel a death event.
             }
         }
+    }
+    
+    /**
+     * A utility method to support versions that use null or air ItemStacks.
+     */
+    public static boolean isAirOrNull(ItemStack item) {
+        return item == null || item.getType().equals(Material.AIR);
     }
     
     private List<String> getBlocks() {
