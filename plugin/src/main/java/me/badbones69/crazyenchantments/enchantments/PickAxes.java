@@ -6,6 +6,7 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.BlastUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
@@ -73,14 +74,14 @@ public class PickAxes implements Listener {
                 Bukkit.getPluginManager().callEvent(blastUseEvent);
                 if (!blastUseEvent.isCancelled()) {
                     Location originalBlockLocation = block.getLocation();
-                    List<Block> finalBlockList = new ArrayList<>();
+                    List<BlockProcessInfo> finalBlockList = new ArrayList<>();
                     for (Block b : blockList) {
                         if (b.getType() != Material.AIR && (ce.getBlockList().contains(b.getType()) || b.getLocation().equals(originalBlockLocation))) {
                             BlockBreakEvent event = new BlockBreakEvent(b, player);
                             ce.addIgnoredEvent(event);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
-                                finalBlockList.add(b);
+                                finalBlockList.add(new BlockProcessInfo(item, b));
                             }
                             ce.removeIgnoredEvent(event);
                         }
@@ -108,7 +109,8 @@ public class PickAxes implements Listener {
                             boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
                             boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
                             boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
-                            for (Block block : finalBlockList) {
+                            for (BlockProcessInfo processInfo : finalBlockList) {
+                                Block block = processInfo.getBlock();
                                 if (player.getGameMode() == GameMode.CREATIVE) { //If the user is in creative mode.
                                     new BukkitRunnable() {
                                         @Override
@@ -129,7 +131,7 @@ public class PickAxes implements Listener {
                                         continue;
                                     }
                                     if (hasTelepathy) {
-                                        TelepathyDrop drop = Tools.getTelepathyDrops(item, block);
+                                        TelepathyDrop drop = Tools.getTelepathyDrops(processInfo);
                                         drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + 1);
                                         xp += drop.getXp();
                                     } else {

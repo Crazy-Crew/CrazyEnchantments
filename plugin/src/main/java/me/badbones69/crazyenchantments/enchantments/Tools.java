@@ -4,6 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import me.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
@@ -76,7 +77,7 @@ public class Tools implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            TelepathyDrop drop = getTelepathyDrops(item, block);
+                            TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
                             if (Methods.isInventoryFull(player)) {
                                 player.getWorld().dropItem(player.getLocation(), drop.getItem());
                             } else {
@@ -102,7 +103,9 @@ public class Tools implements Listener {
     }
     
     @SuppressWarnings("squid:CallToDeprecatedMethod")
-    public static TelepathyDrop getTelepathyDrops(ItemStack item, Block block) {
+    public static TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
+        ItemStack item = processInfo.getItem();
+        Block block = processInfo.getBlock();
         List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
         boolean isOre = isOre(block);
         boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
@@ -111,7 +114,7 @@ public class Tools implements Listener {
         boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
         ItemBuilder itemDrop = null;
         int xp = 0;
-        for (ItemStack drop : block.getDrops(item)) {
+        for (ItemStack drop : processInfo.getDrops()) {
             if (itemDrop == null) {
                 //Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
                 itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
