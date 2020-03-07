@@ -963,6 +963,13 @@ public class CrazyEnchantments {
      */
     public Map<CEnchantments, HashMap<PotionEffectType, Integer>> getEnchantmentPotions() {
         HashMap<CEnchantments, HashMap<PotionEffectType, Integer>> enchants = new HashMap<>();
+        
+        enchants.put(CEnchantments.GLOWING, new HashMap<>());
+        enchants.get(CEnchantments.GLOWING).put(PotionEffectType.NIGHT_VISION, -1);
+        
+        enchants.put(CEnchantments.MERMAID, new HashMap<>());
+        enchants.get(CEnchantments.MERMAID).put(PotionEffectType.WATER_BREATHING, -1);
+        
         enchants.put(CEnchantments.BURNSHIELD, new HashMap<>());
         enchants.get(CEnchantments.BURNSHIELD).put(PotionEffectType.FIRE_RESISTANCE, -1);
         

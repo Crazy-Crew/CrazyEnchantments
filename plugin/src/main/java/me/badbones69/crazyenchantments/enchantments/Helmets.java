@@ -2,7 +2,6 @@ package me.badbones69.crazyenchantments.enchantments;
 
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
-import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import org.bukkit.Bukkit;
@@ -22,38 +21,7 @@ public class Helmets implements Listener {
     
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
     
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onEquip(ArmorEquipEvent e) {
-        Player player = e.getPlayer();
-        ItemStack newItem = e.getNewArmorPiece();
-        ItemStack oldItem = e.getOldArmorPiece();
-        if (ce.hasEnchantments(newItem)) {
-            if (CEnchantments.GLOWING.isActivated() && ce.hasEnchantment(newItem, CEnchantments.GLOWING)) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.GLOWING, newItem);
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, ce.getLevel(newItem, CEnchantments.GLOWING) - 1));
-                }
-            }
-            if (CEnchantments.MERMAID.isActivated() && ce.hasEnchantment(newItem, CEnchantments.MERMAID)) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MERMAID, newItem);
-                Bukkit.getPluginManager().callEvent(event);
-                if (!event.isCancelled()) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, Integer.MAX_VALUE, ce.getLevel(newItem, CEnchantments.MERMAID) - 1));
-                }
-            }
-        }
-        if (ce.hasEnchantments(oldItem)) {
-            if (CEnchantments.GLOWING.isActivated() && ce.hasEnchantment(oldItem, CEnchantments.GLOWING)) {
-                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-            }
-            if (CEnchantments.MERMAID.isActivated() && ce.hasEnchantment(oldItem, CEnchantments.MERMAID)) {
-                player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-            }
-        }
-    }
-    
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onMovment(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (CEnchantments.COMMANDER.isActivated()) {
