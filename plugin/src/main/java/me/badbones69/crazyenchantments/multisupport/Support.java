@@ -12,10 +12,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Support {
     
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private static WingsManager manager = ce.getWingsManager();
+    private static WingsManager wingsManager = ce.getWingsManager();
     private static WorldGuardVersion worldGuardVersion = ce.getWorldGuardSupport();
     private static PlotSquaredVersion plotSquaredVersion = ce.getPlotSquaredSupport();
     
@@ -142,14 +146,14 @@ public class Support {
     
     public static boolean inWingsRegion(Player player) {
         if (SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
-            for (String region : manager.getRegions()) {
+            for (String region : wingsManager.getRegions()) {
                 if (worldGuardVersion.inRegion(region, player.getLocation())) {
                     return true;
                 } else {
-                    if (manager.canOwnersFly() && worldGuardVersion.isOwner(player)) {
+                    if (wingsManager.canOwnersFly() && worldGuardVersion.isOwner(player)) {
                         return true;
                     }
-                    if (manager.canMembersFly() && worldGuardVersion.isMember(player)) {
+                    if (wingsManager.canMembersFly() && worldGuardVersion.isMember(player)) {
                         return true;
                     }
                 }
