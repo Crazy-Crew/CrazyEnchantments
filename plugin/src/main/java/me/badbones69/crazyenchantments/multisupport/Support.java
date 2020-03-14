@@ -212,37 +212,37 @@ public class Support {
         
         public boolean isPluginLoaded() {
             Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(name);
-            if (plugin != null) {
-                if (this == SupportedPlugins.SILK_SPAWNERS) {
+            switch (this) {
+                case SILK_SPAWNERS:
                     if (plugin.getDescription().getAuthors() != null) {
                         return plugin.getDescription().getAuthors().contains("xGhOsTkiLLeRx");
                     }
                     return false;
-                } else if (this == SupportedPlugins.SILK_SPAWNERS_CANDC) {
+                case SILK_SPAWNERS_CANDC:
                     if (plugin.getDescription().getAuthors() != null) {
                         return plugin.getDescription().getAuthors().contains("CandC_9_12");
                     }
                     return false;
-                } else if (this == SupportedPlugins.FACTIONS_MASSIVE_CRAFT) {
+                case FACTIONS_MASSIVE_CRAFT:
                     if (plugin.getDescription() != null) {
                         if (plugin.getDescription().getWebsite() != null) {
                             return plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions");
                         }
                     }
                     return false;
-                } else if (this == SupportedPlugins.FACTIONS_UUID) {
+                case FACTIONS_UUID:
                     if (plugin.getDescription().getAuthors() != null) {
-                        return plugin.getDescription().getAuthors().contains("drtshock");
+                        return plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.spigotmc.org/resources/factionsuuid.1035/");
                     }
                     return false;
-                } else if (this == SupportedPlugins.FACTIONS3) {
+                case FACTIONS3:
                     if (plugin.getDescription().getAuthors() != null) {
                         return plugin.getDescription().getAuthors().contains("Madus");
                     }
                     return false;
-                }
+                default:
+                    return plugin != null;
             }
-            return plugin != null;
         }
         
         public Plugin getPlugin() {
