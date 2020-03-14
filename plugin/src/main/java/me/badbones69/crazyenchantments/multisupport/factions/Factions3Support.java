@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.factions;
 
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColl;

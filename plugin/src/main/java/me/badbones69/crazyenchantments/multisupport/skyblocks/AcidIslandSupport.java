@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.skyblocks;
 
 import com.wasteofplastic.acidisland.ASkyBlockAPI;
 import org.bukkit.entity.Player;

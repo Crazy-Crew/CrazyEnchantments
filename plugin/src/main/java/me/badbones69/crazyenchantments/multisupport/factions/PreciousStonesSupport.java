@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.factions;
 
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import net.sacredlabyrinth.Phaed.PreciousStones.api.IApi;

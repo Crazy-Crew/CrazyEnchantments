@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.mobstackers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;

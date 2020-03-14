@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.spawners;
 
 import com.songoda.epicspawners.EpicSpawners;
 import org.bukkit.block.Block;

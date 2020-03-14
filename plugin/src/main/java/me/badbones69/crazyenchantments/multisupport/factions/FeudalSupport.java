@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.factions;
 
 import de.browniecodez.feudal.main.Main;
 import org.bukkit.block.Block;

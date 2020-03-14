@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.anticheats;
 
 import DAKATA.CheatType;
 import DAKATA.PlayerCheatEvent;

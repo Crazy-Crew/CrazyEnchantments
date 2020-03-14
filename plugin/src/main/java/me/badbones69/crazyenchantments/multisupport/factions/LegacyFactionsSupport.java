@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.factions;
 
 import me.badbones69.crazyenchantments.Methods;
 import net.redstoneore.legacyfactions.FLocation;

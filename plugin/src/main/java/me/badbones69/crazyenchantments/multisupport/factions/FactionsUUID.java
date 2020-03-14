@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.factions;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;

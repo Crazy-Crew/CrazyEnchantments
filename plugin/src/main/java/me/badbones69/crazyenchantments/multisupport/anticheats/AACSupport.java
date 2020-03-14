@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.multisupport.anticheats;
 
 import me.konsolas.aac.api.PlayerViolationEvent;
 import org.bukkit.Bukkit;
