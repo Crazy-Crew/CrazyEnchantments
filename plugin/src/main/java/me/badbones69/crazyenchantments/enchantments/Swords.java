@@ -210,7 +210,8 @@ public class Swords implements Listener {
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             int steal = ce.getLevel(item, CEnchantments.LIFESTEAL);
-                            double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+                            //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                            double maxHealth = ce.useHealthAttributes() ? damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : damager.getMaxHealth();
                             if (damager.getHealth() + steal < maxHealth) {
                                 damager.setHealth(damager.getHealth() + steal);
                             }
@@ -238,7 +239,8 @@ public class Swords implements Listener {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.VAMPIRE, item);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
-                            double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+                            //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                            double maxHealth = ce.useHealthAttributes() ? damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : damager.getMaxHealth();
                             if (damager.getHealth() + e.getDamage() / 2 < maxHealth) {
                                 damager.setHealth(damager.getHealth() + e.getDamage() / 2);
                             }

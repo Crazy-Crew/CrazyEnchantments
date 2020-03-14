@@ -219,7 +219,8 @@ public class Bows implements Listener {
                 // Damaged player is friendly.
                 if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && Support.isFriendly(arrow.getShooter(), e.getEntity())) {
                     int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
-                    double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+                    //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                    double maxHealth = ce.useHealthAttributes() ? entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : entity.getMaxHealth();
                     if (entity.getHealth() < maxHealth) {
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);

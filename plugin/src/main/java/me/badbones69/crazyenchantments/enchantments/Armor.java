@@ -193,7 +193,8 @@ public class Armor implements Listener {
                                         Bukkit.getPluginManager().callEvent(event);
                                         if (!event.isCancelled()) {
                                             double heal = ce.getLevel(armor, CEnchantments.ENLIGHTENED);
-                                            double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+                                            //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                                            double maxHealth = ce.useHealthAttributes() ? player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : player.getMaxHealth();
                                             if (player.getHealth() + heal < maxHealth) {
                                                 player.setHealth(player.getHealth() + heal);
                                             }
@@ -414,7 +415,8 @@ public class Armor implements Listener {
                             if (CEnchantments.NURSERY.isActivated() && ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
                                 int heal = 1;
                                 if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
-                                    double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+                                    //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                                    double maxHealth = ce.useHealthAttributes() ? player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : player.getMaxHealth();
                                     if (maxHealth > player.getHealth()) {
                                         new BukkitRunnable() {
                                             @Override
@@ -713,33 +715,33 @@ public class Armor implements Listener {
         mobTimer.put(player, cal);
         for (int i = 0; i < amount; i++) {
             LivingEntity entity = (LivingEntity) player.getWorld().spawnEntity(player.getLocation(), mob);
+            double maxHealth = 0;
             switch (mob) {
                 case WOLF:
-                    entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(16);
-                    entity.setHealth(16);
-                    Support.noStack(entity);
+                    maxHealth = 16;
                     break;
                 case IRON_GOLEM:
-                    entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(200);
-                    entity.setHealth(200);
-                    Support.noStack(entity);
+                    maxHealth = 200;
                     entity.setCanPickupItems(false);
                     break;
                 case ZOMBIE:
-                    entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(45);
-                    entity.setHealth(45);
-                    Support.noStack(entity);
+                    maxHealth = 45;
                     entity.setCanPickupItems(false);
                     break;
                 case ENDERMITE:
                 case SILVERFISH:
-                    entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(10);
-                    entity.setHealth(10);
-                    Support.noStack(entity);
+                    maxHealth = 10;
                     break;
                 default:
                     break;
             }
+            Support.noStack(entity);
+            if (ce.useHealthAttributes()) {
+                entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
+            } else {
+                entity.setMaxHealth(maxHealth);
+            }
+            entity.setHealth(maxHealth);
             entity.setCustomName(Methods.color("&6" + player.getName() + "'s " + entity.getName()));
             entity.setCustomNameVisible(true);
             if (!mobs.containsKey(player)) {
@@ -749,14 +751,17 @@ public class Armor implements Listener {
             }
         }
         attackEnemy(player, enemy);
-        Bukkit.getScheduler().runTaskLater(ce.getPlugin(), () -> {
-            if (mobs.containsKey(player)) {
-                for (LivingEntity entity : mobs.get(player)) {
-                    entity.remove();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (mobs.containsKey(player)) {
+                    for (LivingEntity entity : mobs.get(player)) {
+                        entity.remove();
+                    }
+                    mobs.remove(player);
                 }
-                mobs.remove(player);
             }
-        }, 60 * 20);
+        }.runTaskLater(ce.getPlugin(), 60 * 20);
     }
     
     private void attackEnemy(Player player, LivingEntity enemy) {

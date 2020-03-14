@@ -8,7 +8,10 @@ import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.commands.*;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
-import me.badbones69.crazyenchantments.multisupport.*;
+import me.badbones69.crazyenchantments.multisupport.AACSupport;
+import me.badbones69.crazyenchantments.multisupport.DakataAntiCheatSupport;
+import me.badbones69.crazyenchantments.multisupport.SilkSpawnerSupport;
+import me.badbones69.crazyenchantments.multisupport.SilkSpawnersCandcSupport;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -37,7 +40,7 @@ public class Main extends JavaPlugin implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             ce.loadCEPlayer(player);
             if (fixHealth) {
-                if (Version.isNewer(Version.v1_8_R3)) {
+                if (ce.useHealthAttributes()) {
                     player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
                 } else {
                     player.setMaxHealth(20);
@@ -119,7 +122,7 @@ public class Main extends JavaPlugin implements Listener {
         ce.loadCEPlayer(player);
         ce.updatePlayerEffects(player);
         if (fixHealth) {
-            if (Version.isNewer(Version.v1_8_R3)) {
+            if (ce.useHealthAttributes()) {
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
             } else {
                 player.setMaxHealth(20);

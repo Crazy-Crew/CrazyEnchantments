@@ -50,8 +50,9 @@ public class CrazyEnchantments {
     private int rageMaxLevel;
     private boolean gkitzToggle;
     private boolean useUnsafeEnchantments;
-    private boolean useNewSounds;
-    private boolean useNewMaterial;
+    private boolean useNewSounds = Version.isNewer(Version.v1_8_R3);
+    private boolean useHealthAttributes = Version.isNewer(Version.v1_8_R3);
+    private boolean useNewMaterial = Version.isNewer(Version.v1_12_R1);
     private boolean breakRageOnDamage;
     private boolean enchantStackedItems;
     private ItemBuilder enchantmentBook;
@@ -96,9 +97,7 @@ public class CrazyEnchantments {
         infoMenuManager = InfoMenuManager.getInstance();
         infoMenuManager.load();
         CEnchantments.invalidateCachedEnchants();
-        useNewSounds = Version.isNewer(Version.v1_8_R3);
-        useNewMaterial = Version.isNewer(Version.v1_12_R1);
-        nmsSupport = Version.isNewer(Version.v1_12_R1) ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
+        nmsSupport = useNewMaterial ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration gkit = Files.GKITZ.getFile();
         FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
@@ -232,10 +231,10 @@ public class CrazyEnchantments {
         //Starts the wings task
         Boots.startWings();
         if (SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
-            worldGuardVersion = Version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
+            worldGuardVersion = useNewMaterial ? new WorldGuard_v7() : new WorldGuard_v6();
         }
         if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
-            plotSquaredVersion = Version.isNewer(Version.v1_12_R1) ? new PlotSquared() : new PlotSquaredLegacy();
+            plotSquaredVersion = useNewMaterial ? new PlotSquared() : new PlotSquaredLegacy();
         }
     }
     
@@ -406,6 +405,14 @@ public class CrazyEnchantments {
      */
     public boolean useNewMaterial() {
         return useNewMaterial;
+    }
+    
+    /**
+     *
+     * @return true if needs to use health attributes and false if otherwise.
+     */
+    public boolean useHealthAttributes() {
+        return useHealthAttributes;
     }
     
     /**
