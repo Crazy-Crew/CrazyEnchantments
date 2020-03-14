@@ -13,11 +13,11 @@ import me.badbones69.crazyenchantments.api.events.RageBreakEvent;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
-import me.badbones69.crazyenchantments.multisupport.Support;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -47,10 +47,11 @@ import java.util.List;
 public class Swords implements Listener {
     
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private Support support = Support.getInstance();
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
-        if (!e.isCancelled() && !ce.isIgnoredEvent(e) && !ce.isIgnoredUUID(e.getDamager().getUniqueId()) && !Support.isFriendly(e.getDamager(), e.getEntity())) {
+        if (!e.isCancelled() && !ce.isIgnoredEvent(e) && !ce.isIgnoredUUID(e.getDamager().getUniqueId()) && !support.isFriendly(e.getDamager(), e.getEntity())) {
             if (ce.isBreakRageOnDamageOn() && e.getEntity() instanceof Player) {
                 Player player = (Player) e.getEntity();
                 CEPlayer cePlayer = ce.getCEPlayer(player);
@@ -331,7 +332,7 @@ public class Swords implements Listener {
                                 ce.addIgnoredEvent(damageByEntityEvent);
                                 ce.addIgnoredUUID(damager.getUniqueId());
                                 Bukkit.getPluginManager().callEvent(damageByEntityEvent);
-                                if (!damageByEntityEvent.isCancelled() && Support.allowsPVP(entity.getLocation()) && !Support.isFriendly(damager, entity)) {
+                                if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(damager, entity)) {
                                     entity.damage(5D);
                                 }
                                 ce.removeIgnoredEvent(damageByEntityEvent);
@@ -411,7 +412,7 @@ public class Swords implements Listener {
             }
             if (CEnchantments.REVENGE.isActivated()) {
                 for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                    if (Support.isFriendly(entity, player)) {
+                    if (support.isFriendly(entity, player)) {
                         Player ally = (Player) entity;
                         ItemStack itemStack = Methods.getItemInHand(ally);
                         if (ce.hasEnchantment(itemStack, CEnchantments.REVENGE)) {
@@ -447,7 +448,7 @@ public class Swords implements Listener {
                         int radius = 4 + ce.getLevel(item, CEnchantments.CHARGE);
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
                         for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
-                            if (Support.isFriendly(entity, damager)) {
+                            if (support.isFriendly(entity, damager)) {
                                 ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
                             }
                         }

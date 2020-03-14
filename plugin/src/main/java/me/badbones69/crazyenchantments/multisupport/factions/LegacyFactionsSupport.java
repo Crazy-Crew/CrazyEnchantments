@@ -2,37 +2,34 @@ package me.badbones69.crazyenchantments.multisupport.factions;
 
 import me.badbones69.crazyenchantments.Methods;
 import net.redstoneore.legacyfactions.FLocation;
-import net.redstoneore.legacyfactions.Relation;
 import net.redstoneore.legacyfactions.entity.Board;
+import net.redstoneore.legacyfactions.entity.FPlayer;
 import net.redstoneore.legacyfactions.entity.FPlayerColl;
 import net.redstoneore.legacyfactions.entity.Faction;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class LegacyFactionsSupport {
+public class LegacyFactionsSupport implements FactionPlugin {
     
-    public static boolean isFriendly(Player player, Player other) {
-        Faction fPlayer = FPlayerColl.get(player).getFaction();
-        Faction fOther = FPlayerColl.get(other).getFaction();
-        if (fOther.isPeaceful()) {
-            return true;
-        }
-        if (FPlayerColl.get(other) == null) {
+    public boolean isFriendly(Player player, Player other) {
+        FPlayer fPlayer = FPlayerColl.get(player);
+        FPlayer fOther = FPlayerColl.get(other);
+        if (fPlayer == null || fOther == null) {
             return false;
         }
-        Relation relation = FPlayerColl.get(player).getRelationTo(FPlayerColl.get(other));
-        return !Methods.removeColor(fOther.getTag()).equalsIgnoreCase("Wilderness") && (fPlayer == fOther || relation.isAlly() || relation.isTruce());
+        if (fOther.getFaction().isPeaceful()) {
+            return true;
+        }
+        return !Methods.removeColor(fOther.getTag()).equalsIgnoreCase(wilderness) && (fPlayer.getFaction() == fOther.getFaction() || fPlayer.getRelationTo(fOther).isAlly() || fPlayer.getRelationTo(fOther).isTruce());
     }
     
-    public static boolean inTerritory(Player player) {
-        return !Methods.removeColor(FPlayerColl.get(player).getFaction().getTag()).equalsIgnoreCase("Wilderness") && (FPlayerColl.get(player).isInOwnTerritory() || FPlayerColl.get(player).isInAllyTerritory());
+    public boolean inTerritory(Player player) {
+        return !Methods.removeColor(FPlayerColl.get(player).getFaction().getTag()).equalsIgnoreCase(wilderness) && (FPlayerColl.get(player).isInOwnTerritory() || FPlayerColl.get(player).isInAllyTerritory());
     }
     
-    public static boolean canBreakBlock(Player player, Block block) {
-        Faction fPlayer = FPlayerColl.get(player).getFaction();
-        FLocation loc = new FLocation(block.getLocation());
-        Faction fBlock = Board.get().getFactionAt(loc);
-        return Methods.removeColor(fBlock.getTag()).equalsIgnoreCase("Wilderness") || fPlayer == fBlock;
+    public boolean canBreakBlock(Player player, Block block) {
+        Faction fBlock = Board.get().getFactionAt(new FLocation(block.getLocation()));
+        return Methods.removeColor(fBlock.getTag()).equalsIgnoreCase(wilderness) || FPlayerColl.get(player).getFaction() == fBlock;
     }
     
 }

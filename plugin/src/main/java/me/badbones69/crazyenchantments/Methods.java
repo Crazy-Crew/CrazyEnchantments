@@ -32,6 +32,7 @@ public class Methods {
     
     private static Random random = new Random();
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static Support support = Support.getInstance();
     private static boolean isV1_13_Up = Version.isNewer(Version.v1_12_R1);
     
     public static String color(String msg) {
@@ -521,13 +522,13 @@ public class Methods {
         }
         player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE", "EXPLODE"), 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(player.getLocation(), 3D, player)) {
-            if (Support.allowsPVP(e.getLocation())) {
+            if (support.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
                     e.remove();
                 } else {
                     if (e instanceof LivingEntity) {
                         LivingEntity en = (LivingEntity) e;
-                        if (!Support.isFriendly(player, en)) {
+                        if (!support.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {
@@ -564,13 +565,13 @@ public class Methods {
         }
         player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE", "EXPLODE"), 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)) {
-            if (Support.allowsPVP(e.getLocation())) {
+            if (support.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
                     e.remove();
                 } else {
                     if (e instanceof LivingEntity) {
                         LivingEntity en = (LivingEntity) e;
-                        if (!Support.isFriendly(player, en)) {
+                        if (!support.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {

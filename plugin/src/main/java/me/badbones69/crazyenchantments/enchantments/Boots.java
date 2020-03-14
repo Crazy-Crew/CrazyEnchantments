@@ -4,10 +4,10 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.managers.WingsManager;
-import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
+import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -28,6 +28,7 @@ import java.util.List;
 public class Boots implements Listener {
     
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private Support support = Support.getInstance();
     private static WingsManager manager = ce.getWingsManager();
     
     public static void startWings() {
@@ -141,13 +142,13 @@ public class Boots implements Listener {
     }
     
     private boolean regionCheck(Player player) {
-        return manager.inLimitlessFlightWorld(player) || (!manager.inBlacklistedWorld(player) && (Support.inTerritory(player) || Support.inWingsRegion(player) || manager.inWhitelistedWorld(player)));
+        return manager.inLimitlessFlightWorld(player) || (!manager.inBlacklistedWorld(player) && (support.inTerritory(player) || support.inWingsRegion(player) || manager.inWhitelistedWorld(player)));
     }
     
     private boolean areEnemiesNearby(Player player) {
         if (manager.isEnemeyCheckEnabled() && !manager.inLimitlessFlightWorld(player)) {
             for (Player otherPlayer : getNearByPlayers(player, manager.getEnemyRadius())) {
-                if (!(player.hasPermission("crazyenchantments.bypass.wings") && Support.isFriendly(player, otherPlayer))) {
+                if (!(player.hasPermission("crazyenchantments.bypass.wings") && support.isFriendly(player, otherPlayer))) {
                     return true;
                 }
             }

@@ -13,11 +13,8 @@ import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
 import me.badbones69.crazyenchantments.controllers.ScrollControl;
 import me.badbones69.crazyenchantments.enchantments.Boots;
-import me.badbones69.crazyenchantments.multisupport.NMSSupport;
-import me.badbones69.crazyenchantments.multisupport.NMS_v1_12_2_Down;
-import me.badbones69.crazyenchantments.multisupport.NMS_v1_13_Up;
+import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquared;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredLegacy;
@@ -237,6 +234,7 @@ public class CrazyEnchantments {
         if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
             plotSquaredVersion = useNewMaterial ? new PlotSquared() : new PlotSquaredLegacy();
         }
+        Support.getInstance().load();
     }
     
     /**

@@ -30,6 +30,22 @@
         </dependency>
         <dependency>
             <groupId>me.badbones69</groupId>
+            <artifactId>crazyenchantments-factions</artifactId>
+            <version>1.8-Dev-Build-v8.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>me.badbones69</groupId>
+            <artifactId>crazyenchantments-saber-factions</artifactId>
+            <version>1.8-Dev-Build-v8.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-api</artifactId>
             <version>1.8-Dev-Build-v8.1</version>
             <type>jar</type>
@@ -90,13 +106,6 @@
             <version>2.13.2</version>
             <scope>provided</scope>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.massivecraft</groupId>-->
-        <!--            <artifactId>Factions</artifactId>-->
-        <!--            <version>2.13.2</version>-->
-        <!--            <scope>system</scope>-->
-        <!--            <systemPath>${project.basedir}/src/main/library/Factions.jar</systemPath>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>de.dustplanet</groupId>
             <artifactId>SilkSpawners</artifactId>
@@ -151,18 +160,6 @@
             <version>4.0.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency><!-- FactionsUUID -->
-            <groupId>com.massivecraft</groupId>
-            <artifactId>Factions</artifactId>
-            <version>1.6.9.5-U0.5.0</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>gson</artifactId>
-                    <groupId>com.google.code.gson</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <dependency>
             <groupId>fr.neatmonster</groupId>
             <artifactId>nocheatplus</artifactId>
@@ -203,12 +200,6 @@
             <groupId>com.songoda.epicspawners</groupId>
             <artifactId>EpicSpawners</artifactId>
             <version>3.1.4-R2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency><!-- Factions3 -->
-            <groupId>com.massivecraft.factions</groupId>
-            <artifactId>Factions</artifactId>
-            <version>3.2.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

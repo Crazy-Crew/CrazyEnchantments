@@ -8,29 +8,27 @@ import org.kingdoms.constants.land.SimpleLocation;
 import org.kingdoms.constants.player.KingdomPlayer;
 import org.kingdoms.manager.game.GameManagement;
 
-public class KingdomSupport {
+public class KingdomSupport implements FactionPlugin {
     
-    public static boolean isFriendly(Player player, Player other) {
-        KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
-        KingdomPlayer ko = GameManagement.getPlayerManager().getSession(other);
-        return kp != null && ko != null && kp.getKingdom() != null && ko.getKingdom() != null &&
-        (kp.getKingdom() == ko.getKingdom() || kp.getKingdom() != null && kp.getKingdom().isAllianceWith(ko.getKingdom()));
+    public boolean isFriendly(Player player, Player other) {
+        KingdomPlayer kPlayer = GameManagement.getPlayerManager().getSession(player);
+        KingdomPlayer kOther = GameManagement.getPlayerManager().getSession(other);
+        return kPlayer != null && kOther != null && kPlayer.getKingdom() != null && kOther.getKingdom() != null &&
+        (kPlayer.getKingdom() == kOther.getKingdom() || kPlayer.getKingdom() != null && kPlayer.getKingdom().isAllianceWith(kOther.getKingdom()));
     }
     
-    public static boolean inTerritory(Player player) {
-        KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
-        SimpleLocation loc = new SimpleLocation(player.getLocation());
-        Land land = GameManagement.getLandManager().getOrLoadLand(loc.toSimpleChunk());
+    public boolean inTerritory(Player player) {
+        KingdomPlayer kPlayer = GameManagement.getPlayerManager().getSession(player);
+        Land land = GameManagement.getLandManager().getOrLoadLand(new SimpleLocation(player.getLocation()).toSimpleChunk());
         Kingdom kingdom = GameManagement.getKingdomManager().getOrLoadKingdom(land.getOwner());
-        return kp.getKingdom() != null && kingdom != null && kingdom.equals(kp.getKingdom());
+        return kPlayer.getKingdom() != null && kingdom != null && kingdom.equals(kPlayer.getKingdom());
     }
     
-    public static boolean canBreakBlock(Player player, Block block) {
-        KingdomPlayer kp = GameManagement.getPlayerManager().getSession(player);
-        SimpleLocation loc = new SimpleLocation(block.getLocation());
-        Land land = GameManagement.getLandManager().getOrLoadLand(loc.toSimpleChunk());
-        Kingdom kingdomland = GameManagement.getKingdomManager().getOrLoadKingdom(land.getOwner());
-        return land.getOwner() == null || kp.isAdminMode() || kingdomland.equals(kp.getKingdom());
+    public boolean canBreakBlock(Player player, Block block) {
+        KingdomPlayer kPlayer = GameManagement.getPlayerManager().getSession(player);
+        Land land = GameManagement.getLandManager().getOrLoadLand(new SimpleLocation(block.getLocation()).toSimpleChunk());
+        Kingdom kingdom = GameManagement.getKingdomManager().getOrLoadKingdom(land.getOwner());
+        return land.getOwner() == null || kPlayer.isAdminMode() || kingdom.equals(kPlayer.getKingdom());
         
     }
     

@@ -10,8 +10,9 @@ import me.badbones69.crazyenchantments.api.objects.BowEnchantment;
 import me.badbones69.crazyenchantments.api.objects.EnchantedArrow;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.PotionEffects;
-import me.badbones69.crazyenchantments.multisupport.*;
+import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
@@ -43,6 +44,7 @@ import java.util.List;
 public class Bows implements Listener {
     
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private Support support = Support.getInstance();
     private List<EnchantedArrow> enchantedArrows = new ArrayList<>();
     private Material web = new ItemBuilder().setMaterial("COBWEB", "WEB").getMaterial();
     private List<Block> webBlocks = new ArrayList<>();
@@ -188,7 +190,7 @@ public class Bows implements Listener {
                         ce.addIgnoredEvent(damageByEntityEvent);
                         ce.addIgnoredUUID(shooter.getUniqueId());
                         Bukkit.getPluginManager().callEvent(damageByEntityEvent);
-                        if (!damageByEntityEvent.isCancelled() && Support.allowsPVP(entity.getLocation()) && !Support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
+                        if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
                             entity.damage(5D);
                         }
                         ce.removeIgnoredEvent(damageByEntityEvent);
@@ -220,7 +222,7 @@ public class Bows implements Listener {
             if (arrow != null) {
                 ItemStack bow = arrow.getBow();
                 // Damaged player is friendly.
-                if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && Support.isFriendly(arrow.getShooter(), e.getEntity())) {
+                if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && support.isFriendly(arrow.getShooter(), e.getEntity())) {
                     int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
                     //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                     double maxHealth = ce.useHealthAttributes() ? entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : entity.getMaxHealth();
@@ -247,7 +249,7 @@ public class Bows implements Listener {
                     }
                 }
                 // Damaged player is an enemy.
-                if (!e.isCancelled() && !Support.isFriendly(arrow.getShooter(), entity)) {
+                if (!e.isCancelled() && !support.isFriendly(arrow.getShooter(), entity)) {
                     if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
                         List<Location> locations = getSquareArea(entity.getLocation());
                         for (Location location : locations) {

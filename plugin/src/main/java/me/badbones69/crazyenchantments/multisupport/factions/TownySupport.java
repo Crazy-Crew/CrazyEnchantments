@@ -5,11 +5,12 @@ import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import com.palmergames.bukkit.towny.object.WorldCoord;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class TownySupport {
+public class TownySupport implements FactionPlugin {
     
-    public static boolean inTerritory(Player player) {
+    public boolean inTerritory(Player player) {
         try {
             TownBlock block = WorldCoord.parseWorldCoord(player).getTownBlock();
             Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
@@ -21,7 +22,7 @@ public class TownySupport {
         return false;
     }
     
-    public static boolean isFriendly(Player player, Player other) {
+    public boolean isFriendly(Player player, Player other) {
         try {
             Resident playerUser = TownyUniverse.getDataSource().getResident(player.getName());
             Resident otherUser = TownyUniverse.getDataSource().getResident(other.getName());
@@ -31,6 +32,10 @@ public class TownySupport {
         } catch (NotRegisteredException ignored) {
         }
         return false;
+    }
+    
+    public boolean canBreakBlock(Player player, Block block) {
+        return true;
     }
     
 }

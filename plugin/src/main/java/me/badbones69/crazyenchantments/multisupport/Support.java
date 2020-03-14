@@ -24,22 +24,25 @@ import java.util.Map;
 
 public class Support {
     
-    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private static WingsManager wingsManager = ce.getWingsManager();
-    private static WorldGuardVersion worldGuardVersion = ce.getWorldGuardSupport();
-    private static PlotSquaredVersion plotSquaredVersion = ce.getPlotSquaredSupport();
+    private static Support instance = new Support();
+    private static FactionPlugin factionPlugin = null;
+    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private WingsManager wingsManager;
+    private WorldGuardVersion worldGuardVersion;
+    private PlotSquaredVersion plotSquaredVersion;
     
-    public static boolean inTerritory(Player player) {
-        if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && FactionsUUID.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.FACTIONS3.isPluginLoaded() && Factions3Support.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() && FactionsSupport.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.FEUDAL.isPluginLoaded() && FeudalSupport.inTerritory(player)) {
+    public static Support getInstance() {
+        return instance;
+    }
+    
+    public void load() {
+        wingsManager = ce.getWingsManager();
+        worldGuardVersion = ce.getWorldGuardSupport();
+        plotSquaredVersion = ce.getPlotSquaredSupport();
+    }
+    
+    public boolean inTerritory(Player player) {
+        if (factionPlugin != null && factionPlugin.inTerritory(player)) {
             return true;
         }
         if (SupportedPlugins.ASKYBLOCK.isPluginLoaded() && ASkyBlockSupport.inTerritory(player)) {
@@ -48,35 +51,14 @@ public class Support {
         if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.inTerritory(player)) {
             return true;
         }
-        if (SupportedPlugins.KINGDOMS.isPluginLoaded() && KingdomSupport.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.TOWNY.isPluginLoaded() && TownySupport.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded() && GriefPreventionSupport.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded() && plotSquaredVersion.inTerritory(player)) {
-            return true;
-        }
-        return SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() && LegacyFactionsSupport.inTerritory(player);
+        return SupportedPlugins.PLOT_SQUARED.isPluginLoaded() && plotSquaredVersion.inTerritory(player);
     }
     
-    public static boolean isFriendly(Entity p, Entity o) {
-        if (p instanceof Player && o instanceof Player) {
-            Player player = (Player) p;
-            Player other = (Player) o;
-            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && FactionsUUID.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.FACTIONS3.isPluginLoaded() && Factions3Support.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() && FactionsSupport.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.FEUDAL.isPluginLoaded() && FeudalSupport.isFrendly(player, other)) {
+    public boolean isFriendly(Entity pEntity, Entity oEntity) {
+        if (pEntity instanceof Player && oEntity instanceof Player) {
+            Player player = (Player) pEntity;
+            Player other = (Player) oEntity;
+            if (factionPlugin != null && factionPlugin.isFriendly(player, other)) {
                 return true;
             }
             if (SupportedPlugins.ASKYBLOCK.isPluginLoaded() && ASkyBlockSupport.isFriendly(player, other)) {
@@ -85,72 +67,41 @@ public class Support {
             if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.isFriendly(player, other)) {
                 return true;
             }
-            if (SupportedPlugins.KINGDOMS.isPluginLoaded() && KingdomSupport.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.TOWNY.isPluginLoaded() && TownySupport.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() && LegacyFactionsSupport.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded()) {
-                return GriefPreventionSupport.isFriendly(player, other);
-            }
+            return SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other);
         }
         return false;
     }
     
-    public static boolean isVanished(Entity p) {
+    public boolean isVanished(Entity p) {
         for (MetadataValue meta : p.getMetadata("vanished")) {
             if (meta.asBoolean()) return true;
         }
         return false;
     }
     
-    public static boolean canBreakBlock(Player player, Block block) {
+    public boolean canBreakBlock(Player player, Block block) {
         if (player != null) {
-            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && !FactionsUUID.canBreakBlock(player, block)) {
+            if (factionPlugin != null && factionPlugin.inTerritory(player)) {
                 return false;
             }
-            if (SupportedPlugins.FACTIONS3.isPluginLoaded() && !Factions3Support.canBreakBlock(player, block)) {
-                return false;
-            }
-            if (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() && !FactionsSupport.canBreakBlock(player, block)) {
-                return false;
-            }
-            if (SupportedPlugins.FEUDAL.isPluginLoaded() && !FeudalSupport.canBreakBlock(player, block)) {
-                return false;
-            }
-            if (SupportedPlugins.KINGDOMS.isPluginLoaded() && !KingdomSupport.canBreakBlock(player, block)) {
-                return false;
-            }
-            if (SupportedPlugins.GRIEF_PREVENTION.isPluginLoaded() && !GriefPreventionSupport.canBreakBlock(player, block)) {
-                return false;
-            }
-            if (SupportedPlugins.PRECIOUS_STONES.isPluginLoaded() && !PreciousStonesSupport.canBreakBlock(player, block)) {
-                return false;
-            }
+            return !SupportedPlugins.PRECIOUS_STONES.isPluginLoaded() || PreciousStonesSupport.canBreakBlock(player, block);
         }
-        return !SupportedPlugins.LEGACY_FACTIONS.isPluginLoaded() || LegacyFactionsSupport.canBreakBlock(player, block);
+        return true;
     }
     
-    public static boolean allowsPVP(Location loc) {
-        return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsPVP(loc);
+    public boolean allowsPVP(Location location) {
+        return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsPVP(location);
     }
     
-    public static boolean allowsBreak(Location loc) {
-        return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsBreak(loc);
+    public boolean allowsBreak(Location location) {
+        return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsBreak(location);
     }
     
-    public static boolean allowsExplotions(Location loc) {
-        return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsExplosions(loc);
+    public boolean allowsExplotions(Location location) {
+        return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsExplosions(location);
     }
     
-    public static boolean inWingsRegion(Player player) {
+    public boolean inWingsRegion(Player player) {
         if (SupportedPlugins.WORLD_EDIT.isPluginLoaded() && SupportedPlugins.WORLD_GUARD.isPluginLoaded()) {
             for (String region : wingsManager.getRegions()) {
                 if (worldGuardVersion.inRegion(region, player.getLocation())) {
@@ -168,15 +119,15 @@ public class Support {
         return false;
     }
     
-    public static void noStack(Entity en) {
+    public void noStack(Entity entity) {
         if (SupportedPlugins.MOB_STACKER.isPluginLoaded()) {
-            MobStacker.noStack(en);
+            MobStacker.noStack(entity);
         }
         if (SupportedPlugins.MOB_STACKER_2.isPluginLoaded()) {
-            MobStacker2.noStack(en);
+            MobStacker2.noStack(entity);
         }
         if (SupportedPlugins.STACK_MOB.isPluginLoaded()) {
-            StackMobSupport.preventStacking(en);
+            StackMobSupport.preventStacking(entity);
         }
     }
     
@@ -196,6 +147,7 @@ public class Support {
         FACTIONS_MASSIVE_CRAFT("Factions"),
         FACTIONS3("Factions"),
         FACTIONS_UUID("Factions"),
+        SABER_FACTIONS("Factions"),
         FEUDAL("Feudal"),
         ACID_ISLAND("AcidIsland"),
         ASKYBLOCK("ASkyBlock"),
@@ -236,27 +188,71 @@ public class Support {
             cachedPluginState.clear();
             for (SupportedPlugins supportedPlugin : values()) {
                 Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(supportedPlugin.name);
-                List<String> authors = plugin.getDescription().getAuthors();
-                String website = plugin.getDescription().getWebsite() != null ? plugin.getDescription().getWebsite() : "";
-                switch (supportedPlugin) {
-                    case SILK_SPAWNERS:
-                        cachedPluginState.put(supportedPlugin, authors.contains("xGhOsTkiLLeRx"));
-                        break;
-                    case SILK_SPAWNERS_CANDC:
-                        cachedPluginState.put(supportedPlugin, authors.contains("CandC_9_12"));
-                        break;
-                    case FACTIONS_MASSIVE_CRAFT:
-                        cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.massivecraft.com/factions"));
-                        break;
-                    case FACTIONS_UUID:
-                        cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.spigotmc.org/resources/factionsuuid.1035/"));
-                        break;
-                    case FACTIONS3:
-                        cachedPluginState.put(supportedPlugin, authors.contains("Madus"));
-                        break;
-                    default:
-                        cachedPluginState.put(supportedPlugin, plugin != null);
-                        break;
+                if (plugin != null) {
+                    List<String> authors = plugin.getDescription().getAuthors();
+                    String website = plugin.getDescription().getWebsite() != null ? plugin.getDescription().getWebsite() : "";
+                    switch (supportedPlugin) {
+                        case SILK_SPAWNERS:
+                            cachedPluginState.put(supportedPlugin, authors.contains("xGhOsTkiLLeRx"));
+                            break;
+                        case SILK_SPAWNERS_CANDC:
+                            cachedPluginState.put(supportedPlugin, authors.contains("CandC_9_12"));
+                            break;
+                        case FACTIONS_MASSIVE_CRAFT:
+                            cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.massivecraft.com/factions"));
+                            break;
+                        case FACTIONS_UUID:
+                            cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.spigotmc.org/resources/factionsuuid.1035/"));
+                            break;
+                        case FACTIONS3:
+                            cachedPluginState.put(supportedPlugin, authors.contains("Madus"));
+                            break;
+                        case SABER_FACTIONS:
+                            cachedPluginState.put(supportedPlugin, authors.contains("Driftay"));
+                            break;
+                        default:
+                            cachedPluginState.put(supportedPlugin, true);
+                            break;
+                    }
+                } else {
+                    cachedPluginState.put(supportedPlugin, false);
+                }
+            }
+            updateFactionPlugin();
+        }
+        
+        private static void updateFactionPlugin() {
+            for (SupportedPlugins supportedPlugin : values()) {
+                if (supportedPlugin.isPluginLoaded()) {
+                    switch (supportedPlugin) {
+                        case LEGACY_FACTIONS:
+                            factionPlugin = new LegacyFactionsSupport();
+                            return;
+                        case KINGDOMS:
+                            factionPlugin = new KingdomSupport();
+                            return;
+                        case GRIEF_PREVENTION:
+                            factionPlugin = new GriefPreventionSupport();
+                            return;
+                        case FEUDAL:
+                            factionPlugin = new FeudalSupport();
+                            return;
+                        case TOWNY:
+                            factionPlugin = new TownySupport();
+                            return;
+                        case FACTIONS3:
+                            factionPlugin = new Factions3Support();
+                            return;
+                        case FACTIONS_MASSIVE_CRAFT:
+                            factionPlugin = new FactionsSupport();
+                            return;
+                        case FACTIONS_UUID:
+                            factionPlugin = new FactionsUUID();
+                            return;
+                        case SABER_FACTIONS:
+                            factionPlugin = new SaberFactionsSupport();
+                            return;
+                    }
                 }
             }
         }
