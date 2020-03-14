@@ -89,6 +89,7 @@ public class CrazyEnchantments {
         gkitz.clear();
         registeredEnchantments.clear();
         categories.clear();
+        SupportedPlugins.updatePluginStates();
         plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
         //Loads the blacksmith manager
         blackSmithManager = BlackSmithManager.getInstance();

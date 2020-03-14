@@ -205,6 +205,7 @@ public class Support {
         PLOT_SQUARED("PlotSquared");
         
         private String name;
+        private static Map<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
         
         private SupportedPlugins(String name) {
             this.name = name;
@@ -215,44 +216,44 @@ public class Support {
         }
         
         public boolean isPluginLoaded() {
-            Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(name);
-            switch (this) {
-                case SILK_SPAWNERS:
-                    if (plugin.getDescription().getAuthors() != null) {
-                        return plugin.getDescription().getAuthors().contains("xGhOsTkiLLeRx");
-                    }
-                    return false;
-                case SILK_SPAWNERS_CANDC:
-                    if (plugin.getDescription().getAuthors() != null) {
-                        return plugin.getDescription().getAuthors().contains("CandC_9_12");
-                    }
-                    return false;
-                case FACTIONS_MASSIVE_CRAFT:
-                    if (plugin.getDescription() != null) {
-                        if (plugin.getDescription().getWebsite() != null) {
-                            return plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.massivecraft.com/factions");
-                        }
-                    }
-                    return false;
-                case FACTIONS_UUID:
-                    if (plugin.getDescription().getAuthors() != null) {
-                        return plugin.getDescription().getWebsite().equalsIgnoreCase("https://www.spigotmc.org/resources/factionsuuid.1035/");
-                    }
-                    return false;
-                case FACTIONS3:
-                    if (plugin.getDescription().getAuthors() != null) {
-                        return plugin.getDescription().getAuthors().contains("Madus");
-                    }
-                    return false;
-                default:
-                    return plugin != null;
-            }
+            return cachedPluginState.get(this);
         }
         
         public Plugin getPlugin() {
             return Bukkit.getServer().getPluginManager().getPlugin(name);
         }
         
+        /**
+         * Used to update the states of plugins CE hooks into.
+         */
+        public static void updatePluginStates() {
+            cachedPluginState.clear();
+            for (SupportedPlugins supportedPlugin : values()) {
+                Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(supportedPlugin.name);
+                List<String> authors = plugin.getDescription().getAuthors();
+                String website = plugin.getDescription().getWebsite() != null ? plugin.getDescription().getWebsite() : "";
+                switch (supportedPlugin) {
+                    case SILK_SPAWNERS:
+                        cachedPluginState.put(supportedPlugin, authors.contains("xGhOsTkiLLeRx"));
+                        break;
+                    case SILK_SPAWNERS_CANDC:
+                        cachedPluginState.put(supportedPlugin, authors.contains("CandC_9_12"));
+                        break;
+                    case FACTIONS_MASSIVE_CRAFT:
+                        cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.massivecraft.com/factions"));
+                        break;
+                    case FACTIONS_UUID:
+                        cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.spigotmc.org/resources/factionsuuid.1035/"));
+                        break;
+                    case FACTIONS3:
+                        cachedPluginState.put(supportedPlugin, authors.contains("Madus"));
+                        break;
+                    default:
+                        cachedPluginState.put(supportedPlugin, plugin != null);
+                        break;
+                }
+            }
+        }
     }
     
 }
