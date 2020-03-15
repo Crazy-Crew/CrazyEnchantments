@@ -62,6 +62,7 @@ public class CrazyEnchantments {
     private WingsManager wingsManager;
     private BowEnchantmentManager bowManager;
     private ArmorEnchantmentManager armorManager;
+    private AllyManager allyManager;
     private WorldGuardVersion worldGuardVersion;
     private PlotSquaredVersion plotSquaredVersion;
     private List<Category> categories = new ArrayList<>();
@@ -226,6 +227,9 @@ public class CrazyEnchantments {
         //Loads the settings for the armor enchantments.
         armorManager = ArmorEnchantmentManager.getInstance();
         armorManager.load();
+        //Loads the settings for the ally enchantments.
+        allyManager = AllyManager.getInstance();
+        allyManager.load();
         //Starts the wings task
         Boots.startWings();
         if (SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
@@ -377,10 +381,18 @@ public class CrazyEnchantments {
     
     /**
      * Get the armor enchantments manager.
-     * @return The instance of the bow manager.
+     * @return The instance of the armor manager.
      */
     public ArmorEnchantmentManager getArmorManager() {
         return armorManager;
+    }
+    
+    /**
+     * Get the ally enchantments manager.
+     * @return The instance of the ally manager.
+     */
+    public AllyManager getAllyManager() {
+        return allyManager;
     }
     
     /**

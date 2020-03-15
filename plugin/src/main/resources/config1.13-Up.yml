@@ -259,6 +259,12 @@ Settings:
     Right-Click-Enchantment-Table: false #When set to true if a player right-clicks an enchantment table it will open the /ce GUI.
     EXP-Bug: false #Only needs to be true if the player's XP sometimes glitches to 1Bill after buying an item with all their XP.
     Lightning-Sound-Range: 160 #Range in blocks where the lightning sound should become inaudible.
+    Ally-Mobs: #The name of ally mobs that show above their heads.
+      Wolf: '&b%player%''s Saberwolf'
+      Iron-Golem: '&6%player%''s Golem'
+      Zombie: '&2%player%''s Undead'
+      Endermite: '&5%player%''s Endermite'
+      Silverfish: '&7%player%''s Silverfish'
     Armor-Upgrade: #Having this enabled will allow players to try and add a higher level of an enchantment onto an item with a lower level of the enchantment.
       Toggle: true #Toggle on or off the ability to upgrade the enchantments.
       Enchantment-Break: true #If the book's destroy rate happens the item doesn't break but instead the current lower version of the enchantment is destroyed. If false then the item will be destroyed instead.

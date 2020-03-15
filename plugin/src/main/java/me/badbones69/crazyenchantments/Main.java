@@ -8,11 +8,11 @@ import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.commands.*;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
+import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.DakataAntiCheatSupport;
 import me.badbones69.crazyenchantments.multisupport.spawners.SilkSpawnerSupport;
 import me.badbones69.crazyenchantments.multisupport.spawners.SilkSpawnersCandcSupport;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -84,6 +84,7 @@ public class Main extends JavaPlugin implements Listener {
         pm.registerEvents(new Boots(), this);
         pm.registerEvents(new Armor(), this);
         pm.registerEvents(new Swords(), this);
+        pm.registerEvents(new AllyEnchantments(), this);
         if (SupportedPlugins.AAC.isPluginLoaded()) {
             pm.registerEvents(new AACSupport(), this);
         }
@@ -110,7 +111,7 @@ public class Main extends JavaPlugin implements Listener {
     
     @Override
     public void onDisable() {
-        Armor.removeAllies();
+        ce.getAllyManager().forceRemoveAllies();
         for (Player player : Bukkit.getOnlinePlayers()) {
             ce.unloadCEPlayer(player);
         }

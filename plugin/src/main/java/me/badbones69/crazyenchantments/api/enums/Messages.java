@@ -4,10 +4,7 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public enum Messages {
@@ -110,6 +107,37 @@ public enum Messages {
         if (saveFile) {
             Files.MESSAGES.saveFile();
         }
+    }
+    
+    public static String replacePlaceholders(String placeholder, String replacement, String message) {
+        HashMap<String, String> placeholders = new HashMap<>();
+        placeholders.put(placeholder, replacement);
+        return replacePlaceholders(placeholders, message);
+    }
+    
+    public static String replacePlaceholders(HashMap<String, String> placeholders, String message) {
+        for (String placeholder : placeholders.keySet()) {
+            message = message.replaceAll(placeholder, placeholders.get(placeholder))
+            .replaceAll(placeholder.toLowerCase(), placeholders.get(placeholder));
+        }
+        return message;
+    }
+    
+    public static List<String> replacePlaceholders(String placeholder, String replacement, List<String> messageList) {
+        HashMap<String, String> placeholders = new HashMap<>();
+        placeholders.put(placeholder, replacement);
+        return replacePlaceholders(placeholders, messageList);
+    }
+    
+    public static List<String> replacePlaceholders(HashMap<String, String> placeholders, List<String> messageList) {
+        List<String> newMessageList = new ArrayList<>();
+        for (String message : messageList) {
+            for (String placeholder : placeholders.keySet()) {
+                newMessageList.add(message.replaceAll(placeholder, placeholders.get(placeholder))
+                .replaceAll(placeholder.toLowerCase(), placeholders.get(placeholder)));
+            }
+        }
+        return newMessageList;
     }
     
     public String getMessage() {
