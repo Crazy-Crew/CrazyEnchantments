@@ -1357,7 +1357,7 @@ public class CrazyEnchantments {
             for (String option : itemString.split(", ")) {
                 if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
                     StringBuilder newOption = new StringBuilder();
-                    for (String enchantment : option.toLowerCase().replace("enchantments:", "").replace("customenchantments:", "").split(",")) {
+                    for (String enchantment : option.toLowerCase().replace("customenchantments:", "").replace("enchantments:", "").split(",")) {
                         newOption.append(enchantment).append(", ");
                     }
                     option = newOption.substring(0, newOption.length() - 2);
