@@ -11,7 +11,6 @@ import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -27,15 +26,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Tools implements Listener {
     
     private static Random random = new Random();
+    private int potionTime = 5 * 20;
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private static List<String> ignoreBlocks = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
+    private static List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
     
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
@@ -51,7 +49,7 @@ public class Tools implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         Block block = e.getBlock();
         Player player = e.getPlayer();
-        if (e.isCancelled() || ce.isIgnoredEvent(e) || ignoreBlock(block)) {
+        if (e.isCancelled() || ce.isIgnoredEvent(e) || ignoreBlockTypes(block)) {
             return;
         }
         ItemStack item = Methods.getItemInHand(player);
@@ -74,29 +72,23 @@ public class Tools implements Listener {
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
                     e.setCancelled(true);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
-                            if (Methods.isInventoryFull(player)) {
-                                player.getWorld().dropItem(player.getLocation(), drop.getItem());
-                            } else {
-                                player.getInventory().addItem(drop.getItem());
-                            }
-                            e.setExpToDrop(0);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    block.setType(Material.AIR);
-                                    if (drop.hasXp()) {
-                                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                                        orb.setExperience(drop.getXp());
-                                    }
-                                    Methods.removeDurability(item, player);
-                                }
-                            }.runTask(ce.getPlugin());
-                        }
-                    }.runTaskAsynchronously(ce.getPlugin());
+                    TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
+                    if (Methods.isInventoryFull(player)) {
+                        player.getWorld().dropItem(player.getLocation(), drop.getItem());
+                    } else {
+                        player.getInventory().addItem(drop.getItem());
+                    }
+                    e.setExpToDrop(0);
+                    if (drop.getSugarCaneBlocks().isEmpty()) {
+                        block.setType(Material.AIR);
+                    } else {
+                        drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
+                    }
+                    if (drop.hasXp()) {
+                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
+                        orb.setExperience(drop.getXp());
+                    }
+                    Methods.removeDurability(item, player);
                 }
             }
         }
@@ -107,6 +99,7 @@ public class Tools implements Listener {
         ItemStack item = processInfo.getItem();
         Block block = processInfo.getBlock();
         List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+        List<Block> sugarCaneBlocks = new ArrayList<>();
         boolean isOre = isOre(block);
         boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
         boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
@@ -133,17 +126,15 @@ public class Tools implements Listener {
                     }
                 }
             }
-            if (block.getType() == Material.SUGAR_CANE) {
-                drop.setAmount(0);
-                Location loc = block.getLocation();
-                for (; loc.getBlock().getType() == Material.SUGAR_CANE; loc.add(0, 1, 0)) ;
-                loc.subtract(0, 1, 0);
-                for (; loc.getBlock().getType() == Material.SUGAR_CANE; loc.subtract(0, 1, 0)) {
-                    drop.setAmount(drop.getAmount() + 1);
-                    loc.getBlock().setType(Material.AIR);
-                }
+            if (block.getType() == ce.getMaterial("SUGAR_CANE", "SUGAR_CANE_BLOCK")) {
+                sugarCaneBlocks = getSugarCaneBlocks(block);
+                drop.setAmount(sugarCaneBlocks.size());
             }
             itemDrop.addAmount(drop.getAmount());
+        }
+        if (itemDrop == null) {
+            //In case the drop is still null as no drops were found.
+            itemDrop = new ItemBuilder().setMaterial(block.getType());
         }
         if (hasSilkTouch && Version.isOlder(Version.v1_14_R1)) {
             if (block.getType() == Material.ANVIL) {
@@ -172,13 +163,24 @@ public class Tools implements Listener {
         } else if (itemDrop.getMaterial() == ce.getMaterial("POTATO", "POTATO_ITEM") || itemDrop.getMaterial() == ce.getMaterial("CARROT", "CARROT_ITEM")) {
             itemDrop.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
         }
-        return new TelepathyDrop(itemDrop.build(), xp);
+        return new TelepathyDrop(itemDrop.build(), xp, sugarCaneBlocks);
+    }
+    
+    private static List<Block> getSugarCaneBlocks(Block block) {
+        List<Block> sugarCaneBlocks = new ArrayList<>();
+        Block cane = block;
+        while (cane.getType() == ce.getMaterial("SUGAR_CANE", "SUGAR_CANE_BLOCK")) {
+            sugarCaneBlocks.add(cane);
+            cane = cane.getLocation().add(0, 1, 0).getBlock();
+        }
+        
+        Collections.reverse(sugarCaneBlocks);
+        return sugarCaneBlocks;
     }
     
     private void updateEffects(Player player) {
         ItemStack item = Methods.getItemInHand(player);
         if (ce.hasEnchantments(item)) {
-            int time = 5 * 20;
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
                 new BukkitRunnable() {
@@ -189,7 +191,7 @@ public class Tools implements Listener {
                         if (!event.isCancelled()) {
                             int power = ce.getLevel(item, CEnchantments.HASTE);
                             player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, time, power - 1));
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
                         }
                     }
                 }.runTask(ce.getPlugin());
@@ -202,7 +204,7 @@ public class Tools implements Listener {
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, time, 5));
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
                         }
                     }
                 }.runTask(ce.getPlugin());
@@ -210,8 +212,8 @@ public class Tools implements Listener {
         }
     }
     
-    private static boolean ignoreBlock(Block block) {
-        for (String name : ignoreBlocks) {
+    private static boolean ignoreBlockTypes(Block block) {
+        for (String name : ignoreBlockTypes) {
             if (block.getType().name().toLowerCase().contains(name)) {
                 return true;
             }
