@@ -76,10 +76,10 @@
             <id>md_5-snapshots</id>
             <url>https://repo.md-5.net/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>md_5-releases</id>
-            <url>https://repo.md-5.net/content/repositories/releases/</url>
-        </repository>
+        <!--        <repository>-->
+        <!--            <id>md_5-releases</id>-->
+        <!--            <url>https://repo.md-5.net/content/repositories/releases/</url>-->
+        <!--        </repository>-->
         <!-- PlotSquared -->
         <repository>
             <id>p2-repo</id>
