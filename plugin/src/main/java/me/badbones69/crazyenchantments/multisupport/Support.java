@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.multisupport;
 
+import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.multisupport.factions.*;
@@ -190,6 +191,7 @@ public class Support {
                 Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(supportedPlugin.name);
                 if (plugin != null) {
                     List<String> authors = plugin.getDescription().getAuthors();
+                    String version = plugin.getDescription().getVersion();
                     String website = plugin.getDescription().getWebsite() != null ? plugin.getDescription().getWebsite() : "";
                     switch (supportedPlugin) {
                         case SILK_SPAWNERS:
@@ -210,6 +212,10 @@ public class Support {
                         case SABER_FACTIONS:
                             cachedPluginState.put(supportedPlugin, authors.contains("Driftay"));
                             break;
+                        case STACK_MOB:
+                            //CE does not support StackMob Legacy due to issues with package naming.
+                            int v = Methods.isInt(version.replace(".", "")) ? Integer.parseInt(version.replace(".", "")) : 2;
+                            cachedPluginState.put(supportedPlugin, v >= 3);
                         default:
                             cachedPluginState.put(supportedPlugin, true);
                             break;
