@@ -146,7 +146,8 @@ public class Tools implements Listener {
                 }
                 itemDrop.setMaterial(block.getType()).setDamage(data);
             } else {
-                itemDrop.setMaterial(block.getType()).setDamage(block.getData());
+                //Set the amount to 1 as some blocks like GlowStone try to give multiple blocks.
+                itemDrop.setMaterial(block.getType()).setDamage(block.getData()).setAmount(1);
             }
         }
         if (block.getType() == Material.COCOA) {
