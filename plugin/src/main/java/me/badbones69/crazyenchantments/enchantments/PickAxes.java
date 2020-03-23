@@ -132,7 +132,7 @@ public class PickAxes implements Listener {
                                     }
                                     if (hasTelepathy) {
                                         TelepathyDrop drop = Tools.getTelepathyDrops(processInfo);
-                                        drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + 1);
+                                        drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
                                         xp += drop.getXp();
                                     } else {
                                         if (hasFurnace && isOre) {
