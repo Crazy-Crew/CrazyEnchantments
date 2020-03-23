@@ -141,7 +141,7 @@ public class PickAxes implements Listener {
                                                 @Override
                                                 public void run() {
                                                     try {
-                                                        block.getWorld().dropItem(block.getLocation(), getOreDrop(block.getType(), finalDrop.getAmount()));
+                                                        block.getWorld().dropItem(block.getLocation(), finalDrop);
                                                     } catch (IllegalArgumentException ignore) {
                                                     }
                                                 }
