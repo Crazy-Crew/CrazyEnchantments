@@ -216,6 +216,11 @@ public class Support {
                             //CE does not support StackMob Legacy due to issues with package naming.
                             int v = Methods.isInt(version.replace(".", "")) ? Integer.parseInt(version.replace(".", "")) : 2;
                             cachedPluginState.put(supportedPlugin, v >= 3);
+                            break;
+                        case MCMMO:
+                            //CE does not support MCMMO classic. They use different website links in the plugin.yml.
+                            cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.mcmmo.org"));
+                            break;
                         default:
                             cachedPluginState.put(supportedPlugin, true);
                             break;
