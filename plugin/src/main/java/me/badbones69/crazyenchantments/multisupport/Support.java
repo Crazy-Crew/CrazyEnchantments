@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import java.me.badbones69.crazyenchantments.multisupport.skyblocks.SuperiorSkyblockSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,9 @@ public class Support {
                 return true;
             }
             if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.isFriendly(player, other)) {
+                return true;
+            }
+            if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.isFriendly(player, other)) {
                 return true;
             }
             return SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other);
@@ -152,6 +156,7 @@ public class Support {
         FEUDAL("Feudal"),
         ACID_ISLAND("AcidIsland"),
         ASKYBLOCK("ASkyBlock"),
+        SUPERIOR_SKYBLOCK("SuperiorSkyblock2"),
         KINGDOMS("Kingdoms"),
         SILK_SPAWNERS("SilkSpawners"),
         SILK_SPAWNERS_CANDC("SilkSpawners"),
