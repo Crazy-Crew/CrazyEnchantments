@@ -214,7 +214,7 @@ public class Support {
                             break;
                         case STACK_MOB:
                             //CE does not support StackMob Legacy due to issues with package naming.
-                            int v = Methods.isInt(version.replace(".", "")) ? Integer.parseInt(version.replace(".", "")) : 2;
+                            int v = Methods.isInt(version.split(".")[0]) ? Integer.parseInt(version.split(".")[0]) : 2;
                             cachedPluginState.put(supportedPlugin, v >= 3);
                             break;
                         case MCMMO:
