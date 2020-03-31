@@ -1,4 +1,4 @@
-package java.me.badbones69.crazyenchantments.multisupport.skyblocks;
+package me.badbones69.crazyenchantments.multisupport.skyblocks;
 
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
