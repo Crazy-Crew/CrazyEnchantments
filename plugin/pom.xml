@@ -208,6 +208,11 @@
             <version>latest</version>
             <scope>compile</scope>
         </dependency>
+        <dependency> <!-- SuperiorSkyblockAPI -->
+            <groupId>com.github.OmerBenGera</groupId>
+            <artifactId>SuperiorSkyblockAPI</artifactId>
+            <version>b11</version>
+        </dependency>
     </dependencies>
 
     <build>

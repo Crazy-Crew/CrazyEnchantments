@@ -10,6 +10,7 @@ import me.badbones69.crazyenchantments.multisupport.mobstackers.StackMobSupport;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.skyblocks.ASkyBlockSupport;
 import me.badbones69.crazyenchantments.multisupport.skyblocks.AcidIslandSupport;
+import me.badbones69.crazyenchantments.multisupport.skyblocks.SuperiorSkyblockSupport;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
-import java.me.badbones69.crazyenchantments.multisupport.skyblocks.SuperiorSkyblockSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +51,9 @@ public class Support {
             return true;
         }
         if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.inTerritory(player)) {
+            return true;
+        }
+        if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.inTerritory(player)) {
             return true;
         }
         return SupportedPlugins.PLOT_SQUARED.isPluginLoaded() && plotSquaredVersion.inTerritory(player);
