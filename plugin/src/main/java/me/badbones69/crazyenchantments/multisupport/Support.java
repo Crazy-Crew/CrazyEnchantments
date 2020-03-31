@@ -222,7 +222,7 @@ public class Support {
                             cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.mcmmo.org"));
                             break;
                         default:
-                            cachedPluginState.put(supportedPlugin, true);
+                            cachedPluginState.put(supportedPlugin, plugin.isEnabled());
                             break;
                     }
                 } else {
