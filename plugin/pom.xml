@@ -52,13 +52,13 @@
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
+        <dependency> <!-- Spigot-Api -->
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- MCMMO -->
             <groupId>com.gmail.nossr50.mcMMO</groupId>
             <artifactId>mcMMO</artifactId>
             <version>2.1.107</version>
@@ -82,7 +82,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
+        <dependency> <!-- Vault -->
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.6</version>
@@ -94,37 +94,37 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
+        <dependency> <!-- PreciousStones -->
             <groupId>net.sacredlabyrinth.Phaed</groupId>
             <artifactId>PreciousStones</artifactId>
             <version>10.7.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- MassiveCraft -->
             <groupId>com.massivecraft</groupId>
             <artifactId>MassiveCraft</artifactId>
             <version>2.13.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- OG SilkSpawners -->
             <groupId>de.dustplanet</groupId>
             <artifactId>SilkSpawners</artifactId>
             <version>5.1.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency> <!-- https://www.spigotmc.org/resources/60063 -->
+        <dependency> <!-- Fork SilkSpawners https://www.spigotmc.org/resources/60063 -->
             <groupId>de.candc</groupId>
             <artifactId>SilkSpawners</artifactId>
             <version>1.6</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Feudal -->
             <groupId>us.forseth11.feudal.core</groupId>
             <artifactId>Feudal</artifactId>
             <version>1.14.1</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- ASkyBlock -->
             <groupId>com.wasteofplastic</groupId>
             <artifactId>askyblock</artifactId>
             <version>3.0.8.2</version>
@@ -136,73 +136,73 @@
             <version>3.0.8.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Kingdoms -->
             <groupId>org.kingdoms.main</groupId>
             <artifactId>Kingdoms</artifactId>
             <version>13.2.40</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Grief Prevention -->
             <groupId>com.github.TechFortress</groupId>
             <artifactId>GriefPrevention</artifactId>
             <version>16.13.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Spartan -->
             <groupId>me.vagdedes.spartan</groupId>
             <artifactId>Spartan</artifactId>
             <version>Build-269</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- StackMob 3 -->
             <groupId>com.github.Nathat23</groupId>
             <artifactId>StackMob-3</artifactId>
             <version>4.0.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- No Cheat Plus -->
             <groupId>fr.neatmonster</groupId>
             <artifactId>nocheatplus</artifactId>
             <version>3.16.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Dakata Anti Cheat -->
             <groupId>DAKATA.Main</groupId>
             <artifactId>DakataAntiCheat</artifactId>
             <version>BETA-1.8</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- AAC -->
             <groupId>de.janmm14</groupId>
             <artifactId>aac-api</artifactId>
             <version>3.3.12</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- General Lib -->
             <groupId>org.generallib.main</groupId>
             <artifactId>GeneralLib</artifactId>
             <version>0.1.4</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Towny -->
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>Towny</artifactId>
             <version>0.93.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Legacy Factions -->
             <groupId>com.github.redstone</groupId>
             <artifactId>LegacyFactions</artifactId>
             <version>1.4.7</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- Epic Spawners -->
             <groupId>com.songoda.epicspawners</groupId>
             <artifactId>EpicSpawners</artifactId>
             <version>3.1.4-R2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <dependency> <!-- PlotSquared -->
             <groupId>com.github.intellectualsites.plotsquared</groupId>
             <artifactId>PlotSquared-API</artifactId>
             <version>latest</version>
