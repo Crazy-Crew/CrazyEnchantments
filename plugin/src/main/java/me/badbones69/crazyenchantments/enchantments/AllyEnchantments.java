@@ -20,12 +20,13 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class AllyEnchantments implements Listener {
     
     private static AllyManager allyManager = AllyManager.getInstance();
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private HashMap<Player, Calendar> allyCooldown = new HashMap<>();
+    private HashMap<UUID, Calendar> allyCooldown = new HashMap<>();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAllySpawn(EntityDamageByEntityEvent e) {
@@ -34,10 +35,10 @@ public class AllyEnchantments implements Listener {
             if (e.getEntity() instanceof Player && e.getDamager() instanceof LivingEntity) {// Player gets attacked
                 Player player = (Player) e.getEntity();
                 LivingEntity enemy = (LivingEntity) e.getDamager();
-                if (!allyCooldown.containsKey(player)) {
+                if (!inCooldown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when getting attacked
-                        if (ce.hasEnchantments(item) && (!allyCooldown.containsKey(player) || (allyCooldown.containsKey(player) && rightNow.after(allyCooldown.get(player))))) {
+                        if (ce.hasEnchantments(item)) {
                             if (ce.hasEnchantment(item, CEnchantments.TAMER)) {
                                 int power = ce.getLevel(item, CEnchantments.TAMER);
                                 spawnAllies(player, enemy, AllyType.WOLF, power);
@@ -71,10 +72,10 @@ public class AllyEnchantments implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (!allyCooldown.containsKey(player)) {
+                if (!inCooldown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when attacking
-                        if (ce.hasEnchantments(item) && (!allyCooldown.containsKey(player) || (allyCooldown.containsKey(player) && rightNow.after(allyCooldown.get(player))))) {
+                        if (ce.hasEnchantments(item)) {
                             if (ce.hasEnchantment(item, CEnchantments.TAMER)) {
                                 int power = ce.getLevel(item, CEnchantments.TAMER);
                                 spawnAllies(player, enemy, AllyType.WOLF, power);
@@ -142,12 +143,24 @@ public class AllyEnchantments implements Listener {
     private void spawnAllies(Player player, LivingEntity enemy, AllyType allyType, int amount) {
         Calendar cooldown = Calendar.getInstance();
         cooldown.add(Calendar.MINUTE, 2);
-        allyCooldown.put(player, cooldown);
+        allyCooldown.put(player.getUniqueId(), cooldown);
         for (int i = 0; i < amount; i++) {
             AllyMob ally = new AllyMob(player, allyType);
             ally.spawnAlly(60);
             ally.attackEnemy(enemy);
         }
+    }
+    
+    private boolean inCooldown(Player player) {
+        if (allyCooldown.containsKey(player.getUniqueId())) {
+            //Right now is before the player's cooldown ends.
+            if (Calendar.getInstance().before(allyCooldown.get(player.getUniqueId()))) {
+                return true;
+            }
+            //Remove the player because their cooldown is over.
+            allyCooldown.remove(player.getUniqueId());
+        }
+        return false;
     }
     
 }
