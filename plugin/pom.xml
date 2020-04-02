@@ -187,7 +187,7 @@
         <dependency> <!-- Towny -->
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.93.0.0</version>
+            <version>0.95.2.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency> <!-- Legacy Factions -->
