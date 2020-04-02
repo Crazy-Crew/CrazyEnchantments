@@ -98,6 +98,9 @@ public class Support {
     }
     
     public boolean allowsPVP(Location location) {
+        if (SupportedPlugins.TOWNY.isPluginLoaded() && !TownySupport.allowsPvP(location)) {
+            return false;
+        }
         return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsPVP(location);
     }
     
@@ -197,7 +200,7 @@ public class Support {
             cachedPluginState.clear();
             for (SupportedPlugins supportedPlugin : values()) {
                 Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin(supportedPlugin.name);
-                if (plugin != null) {
+                if (plugin != null && plugin.isEnabled()) {
                     List<String> authors = plugin.getDescription().getAuthors();
                     String version = plugin.getDescription().getVersion();
                     String website = plugin.getDescription().getWebsite() != null ? plugin.getDescription().getWebsite() : "";
@@ -230,7 +233,7 @@ public class Support {
                             cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.mcmmo.org"));
                             break;
                         default:
-                            cachedPluginState.put(supportedPlugin, plugin.isEnabled());
+                            cachedPluginState.put(supportedPlugin, true);
                             break;
                     }
                 } else {
