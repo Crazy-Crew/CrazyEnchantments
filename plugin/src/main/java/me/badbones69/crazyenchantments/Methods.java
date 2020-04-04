@@ -43,10 +43,6 @@ public class Methods {
         return ChatColor.stripColor(msg);
     }
     
-    public static int getRandomNumber(int range) {
-        return random.nextInt(range - 1) + 1;
-    }
-    
     public static int getRandomNumber(String range) {
         int number = 1;
         String[] split = range.split("-");

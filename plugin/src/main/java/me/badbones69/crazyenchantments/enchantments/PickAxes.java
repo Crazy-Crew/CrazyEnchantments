@@ -37,9 +37,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 public class PickAxes implements Listener {
     
+    private Random random = new Random();
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
     
@@ -260,7 +262,7 @@ public class PickAxes implements Listener {
                     int dropAmount = 0;
                     dropAmount += ce.getLevel(item, CEnchantments.AUTOSMELT);
                     if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                        dropAmount += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                        dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
                     }
                     try {
                         block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
@@ -287,7 +289,7 @@ public class PickAxes implements Listener {
                 if (!event.isCancelled()) {
                     int dropAmount = 1;
                     if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                        dropAmount += Methods.getRandomNumber(item.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                        dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
                     }
                     if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) {
                         dropAmount += Methods.percentPick(4, 1);
@@ -430,6 +432,10 @@ public class PickAxes implements Listener {
             }
         }
         return dropItem.build();
+    }
+    
+    private int getRandomNumber(int range) {
+        return range > 1 ? random.nextInt(range > 0 ? (range) : 1) : 1;
     }
     
 }
