@@ -53,25 +53,7 @@ public class CECommand implements CommandExecutor {
             switch (args[0].toLowerCase()) {
                 case "help":// /ce help
                     if (hasPermission(sender, "access")) {
-                        sender.sendMessage(Methods.color("&2&l&nCrazy Enchantments"));
-                        sender.sendMessage(Methods.color("&b/ce - &9Opens the GUI."));
-                        sender.sendMessage(Methods.color("&b/Tinker - &9Opens up the Tinkerer."));
-                        sender.sendMessage(Methods.color("&b/BlackSmith - &9Opens up the Black Smith."));
-                        sender.sendMessage(Methods.color("&b/GKitz [Kit] [Player] - &9Open the GKitz GUI or get a GKit."));
-                        sender.sendMessage(Methods.color("&b/GKitz Reset <Kit> [Player] - &9Reset a players gkit cooldown."));
-                        sender.sendMessage(Methods.color("&b/ce Help - &9Shows all ce Commands."));
-                        sender.sendMessage(Methods.color("&b/ce Debug - &9Does a small debug for some errors."));
-                        sender.sendMessage(Methods.color("&b/ce Info [Enchantment] - &9Shows info on all enchantments."));
-                        sender.sendMessage(Methods.color("&b/ce Reload - &9Reloads the Config.yml."));
-                        sender.sendMessage(Methods.color("&b/ce Remove <Enchantment> - &9Removes an enchantment from the item in your hand."));
-                        sender.sendMessage(Methods.color("&b/ce Add <Enchantment> [LvL] - &9Adds an enchantment to the item in your hand."));
-                        sender.sendMessage(Methods.color("&b/ce Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#] - &9Drops an enchantment book where you tell it to."));
-                        sender.sendMessage(Methods.color("&b/ce Scroll <Black/White/Transmog> [Amount] [Player] - &9Gives a player scrolls."));
-                        sender.sendMessage(Methods.color("&b/ce Crystal [Amount] [Player] - &9Gives a player Protection Crystal."));
-                        sender.sendMessage(Methods.color("&b/ce Scrambler [Amount] [Player] - &9Gives a player Scramblers."));
-                        sender.sendMessage(Methods.color("&b/ce Dust <Success/Destroy/Mystery> [Amount] [Player] [Percent] - &9Give a player a some Magical Dust."));
-                        sender.sendMessage(Methods.color("&b/ce Book <Enchantment> [Lvl/Min-Max] [Amount] [Player] - &9Gives a player a Enchantment Book."));
-                        sender.sendMessage(Methods.color("&b/ce LostBook <Category> [Amount] [Player] - &9Gives a player a Lost Book."));
+                        sender.sendMessage(Messages.HELP.getMessage());
                     }
                     return true;
                 case "reload":// /ce reload

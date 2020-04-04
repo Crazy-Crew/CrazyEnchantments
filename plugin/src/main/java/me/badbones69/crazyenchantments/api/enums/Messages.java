@@ -14,8 +14,8 @@ public enum Messages {
     NOT_AN_ENCHANTMENT("Not-An-Enchantment", "&cThat is not an enchantment."),
     RIGHT_CLICK_BLACK_SCROLL("Right-Click-Black-Scroll", "&7Black scrolls will remove a random enchantment from your item."),
     BLACK_SCROLL_UNSUCCESSFUL("Black-Scroll-Unsuccessful", "&cThe black scroll was unsuccessful. Please try again with another one."),
-    NEED_MORE_XP_LEVELS("Need-More-XP-Lvls", "&cYou need &6%XP% &cmore XP Lvls."),
-    NEED_MORE_TOTAL_XP("Need-More-Total-XP", "&cYou need &6%XP% &cmore Total XP."),
+    NEED_MORE_XP_LEVELS("Need-More-XP-Lvls", "&cYou need &6%XP% &cmore xp level."),
+    NEED_MORE_TOTAL_XP("Need-More-Total-XP", "&cYou need &6%XP% &cmore total xp."),
     NEED_MORE_MONEY("Need-More-Money", "&cYou are in need of &a$%Money_Needed%&c."),
     HIT_ENCHANTMENT_MAX("Hit-Enchantment-Max", "&cYou have hit the max amount of enchantments an item can have."),
     INVENTORY_FULL("Inventory-Full", "&cYour inventory is too full. Please open up some space to buy that."),
@@ -67,7 +67,27 @@ public enum Messages {
     "&7Bypass Limit: &6%bypass%",
     "&7Vanilla Enchantment Check: &6%vanilla%",
     "&7Max Enchantment Limit: &6%limit%",
-    "&7Current Enchantment amount on item: &6%item%"));
+    "&7Current Enchantment amount on item: &6%item%")),
+    HELP("Help", Arrays.asList(
+    "&2&l&nCrazy Enchantments",
+    "&b/ce - &9Opens up the menu.",
+    "&b/tinker - &9Opens up the Tinkerer menu.",
+    "&b/blacksmith - &9Opens up the BlackSmith menu.",
+    "&b/gkitz [kit] [player] - &9Open the gkit menu or get a gkit.",
+    "&b/gkitz reset <kit> [player] - &9Reset a players gkit cooldown.",
+    "&b/ce help - &9Shows all crazy enchantment commands.",
+    "&b/ce debug - &9Does a small debug for some errors.",
+    "&b/ce info [enchantment] - &9Shows info on all enchantments.",
+    "&b/ce reload - &9Reloads all of the configuration files.",
+    "&b/ce remove <enchantment> - &9Removes an enchantment from the item in your hand.",
+    "&b/ce add <enchantment> [level] - &9Adds an enchantment to the item in your hand.",
+    "&b/ce scroll <black/white/transmog> [amount] [player] - &9Gives a player a scroll item.",
+    "&b/ce crystal [amount] [player] - &9Gives a player a Protection Crystal item.",
+    "&b/ce scrambler [amount] [player] - &9Gives a player a Scrambler item.",
+    "&b/ce dust <success/destroy/mystery> [amount] [player] [percent] - &9Give a player a dust item.",
+    "&b/ce book <enchantment> [level/min-max] [amount] [player] - &9Gives a player an enchantment Book.",
+    "&b/ce lostbook <category> [amount] [player] - &9Gives a player a lost book item.",
+    "&b/ce spawn <enchantment/category> [(level:#/min-max)/world:<world>/x:#/y:#/z:#] - &9Drops an enchantment book at the specific coordinates."));
     
     private String path;
     private String defaultMessage;
