@@ -6,10 +6,7 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
-import me.badbones69.crazyenchantments.api.objects.BowEnchantment;
-import me.badbones69.crazyenchantments.api.objects.EnchantedArrow;
-import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import me.badbones69.crazyenchantments.api.objects.PotionEffects;
+import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
@@ -57,7 +54,8 @@ public class Bows implements Listener {
         ItemStack bow = e.getBow();
         if (e.getProjectile() instanceof Arrow && ce.hasEnchantments(bow)) {
             Arrow arrow = (Arrow) e.getProjectile();
-            enchantedArrows.add(new EnchantedArrow(arrow, e.getEntity(), bow, ce.getEnchantmentsOnItem(bow)));
+            List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(bow);
+            enchantedArrows.add(new EnchantedArrow(arrow, e.getEntity(), bow, enchantments));
             if (CEnchantments.MULTIARROW.isActivated() && ce.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
                 int power = ce.getLevel(bow, CEnchantments.MULTIARROW);
                 if (CEnchantments.MULTIARROW.chanceSuccessful(bow)) {
@@ -67,6 +65,7 @@ public class Bows implements Listener {
                         if (!event.isCancelled()) {
                             for (int i = 1; i <= power; i++) {
                                 Arrow spawnedArrow = e.getEntity().getWorld().spawn(e.getProjectile().getLocation(), Arrow.class);
+                                enchantedArrows.add(new EnchantedArrow(spawnedArrow, e.getEntity(), bow, enchantments));
                                 spawnedArrow.setShooter(e.getEntity());
                                 spawnedArrow.setBounce(false);
                                 Vector v = new Vector(randomSpred(), 0, randomSpred());
