@@ -243,6 +243,16 @@ public class Support {
             updateFactionPlugin();
         }
         
+        public static void printHooks() {
+            if (cachedPluginState.isEmpty()) updatePluginStates();
+            System.out.println(Methods.color("&4&lCrazy Enchantment Hooks"));
+            for (SupportedPlugins plugin : cachedPluginState.keySet()) {
+                if (plugin.isPluginLoaded()) {
+                    System.out.println(Methods.color("&6&l" + plugin.name() + ": &a&lEnabled"));
+                }
+            }
+        }
+        
         private static void updateFactionPlugin() {
             for (SupportedPlugins supportedPlugin : values()) {
                 if (supportedPlugin.isPluginLoaded()) {

@@ -34,6 +34,7 @@ public class Main extends JavaPlugin implements Listener {
     public void onEnable() {
         fileManager.logInfo(true).setup(this);
         ce.load();
+        SupportedPlugins.printHooks();
         Methods.hasUpdate();
         CurrencyAPI.loadCurrency();
         fixHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
