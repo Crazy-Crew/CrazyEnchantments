@@ -327,6 +327,10 @@ public class Armor implements Listener {
                 if (support.isVanished(player) || support.isVanished(other)) return;
                 CEnchantments enchant = e.getEnchantment();
                 int level = e.getLevel();
+                //Debug code for checking.
+//                System.out.println("PvP: " + support.allowsPVP(other.getLocation()));
+//                System.out.println("Enemy: " + !support.isFriendly(player, other));
+//                System.out.println("NoBypass: " + !Methods.hasPermission(other, "bypass.aura", false));
                 if (support.allowsPVP(other.getLocation()) && !support.isFriendly(player, other) && !Methods.hasPermission(other, "bypass.aura", false)) {
                     Calendar cal = Calendar.getInstance();
                     HashMap<CEnchantments, Calendar> effect = new HashMap<>();
