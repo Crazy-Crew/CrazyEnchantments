@@ -71,14 +71,14 @@ public class Tools implements Listener {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    e.setCancelled(true);
+                    e.setExpToDrop(0);
+                    e.setDropItems(false);
                     TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
                     if (Methods.isInventoryFull(player)) {
                         player.getWorld().dropItem(player.getLocation(), drop.getItem());
                     } else {
                         player.getInventory().addItem(drop.getItem());
                     }
-                    e.setExpToDrop(0);
                     if (drop.getSugarCaneBlocks().isEmpty()) {
                         block.setType(Material.AIR);
                     } else {
