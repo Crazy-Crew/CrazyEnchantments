@@ -48,7 +48,7 @@ public class Bows implements Listener {
     private boolean isv1_14_Up = Version.isNewer(Version.v1_13_R2);
     private BowEnchantmentManager manager = ce.getBowManager();
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBowShoot(final EntityShootBowEvent e) {
         if (e.isCancelled() || ce.isIgnoredEvent(e) || ce.isIgnoredUUID(e.getEntity().getUniqueId())) return;
         ItemStack bow = e.getBow();
@@ -104,7 +104,7 @@ public class Bows implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onland(ProjectileHitEvent e) {
         if (e.getEntity() instanceof Arrow) {
             EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
@@ -162,54 +162,54 @@ public class Bows implements Listener {
                         }
                     }
                 }
-                if (CEnchantments.BOOM.isActivated() && arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
-                    Methods.explode(arrow.getShooter(), arrow.getArrow());
-                    arrow.getArrow().remove();
-                }
-                if (CEnchantments.LIGHTNING.isActivated() && arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
-                    Location location = arrow.getArrow().getLocation();
-                    Player shooter = (Player) arrow.getShooter();
-                    location.getWorld().spigot().strikeLightningEffect(location, true);
-                    int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
-                    try {
-                        location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
-                    } catch (Exception ignore) {
-                    }
-                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                        NoCheatPlusSupport.exemptPlayer(shooter);
-                    }
-                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        SpartanSupport.cancelNoSwing(shooter);
-                    }
-                    if (SupportedPlugins.AAC.isPluginLoaded()) {
-                        AACSupport.exemptPlayer(shooter);
-                    }
-                    for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
-                        EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
-                        ce.addIgnoredEvent(damageByEntityEvent);
-                        ce.addIgnoredUUID(shooter.getUniqueId());
-                        Bukkit.getPluginManager().callEvent(damageByEntityEvent);
-                        if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
-                            entity.damage(5D);
-                        }
-                        ce.removeIgnoredEvent(damageByEntityEvent);
-                        ce.removeIgnoredUUID(shooter.getUniqueId());
-                    }
-                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                        NoCheatPlusSupport.unexemptPlayer(shooter);
-                    }
-                    if (SupportedPlugins.AAC.isPluginLoaded()) {
-                        AACSupport.unexemptPlayer(shooter);
-                    }
-                }
-                //Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list so it can check.
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        enchantedArrows.remove(arrow);// Removes it from the list.
-                    }
-                }.runTaskLaterAsynchronously(ce.getPlugin(), 5);
             }
+            if (CEnchantments.BOOM.isActivated() && arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
+                Methods.explode(arrow.getShooter(), arrow.getArrow());
+                arrow.getArrow().remove();
+            }
+            if (CEnchantments.LIGHTNING.isActivated() && arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
+                Location location = arrow.getArrow().getLocation();
+                Player shooter = (Player) arrow.getShooter();
+                location.getWorld().spigot().strikeLightningEffect(location, true);
+                int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+                try {
+                    location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                } catch (Exception ignore) {
+                }
+                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                    NoCheatPlusSupport.exemptPlayer(shooter);
+                }
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    SpartanSupport.cancelNoSwing(shooter);
+                }
+                if (SupportedPlugins.AAC.isPluginLoaded()) {
+                    AACSupport.exemptPlayer(shooter);
+                }
+                for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
+                    EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
+                    ce.addIgnoredEvent(damageByEntityEvent);
+                    ce.addIgnoredUUID(shooter.getUniqueId());
+                    Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+                    if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
+                        entity.damage(5D);
+                    }
+                    ce.removeIgnoredEvent(damageByEntityEvent);
+                    ce.removeIgnoredUUID(shooter.getUniqueId());
+                }
+                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                    NoCheatPlusSupport.unexemptPlayer(shooter);
+                }
+                if (SupportedPlugins.AAC.isPluginLoaded()) {
+                    AACSupport.unexemptPlayer(shooter);
+                }
+            }
+            //Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list so it can check.
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    enchantedArrows.remove(arrow);// Removes it from the list.
+                }
+            }.runTaskLaterAsynchronously(ce.getPlugin(), 5);
         }
     }
     
