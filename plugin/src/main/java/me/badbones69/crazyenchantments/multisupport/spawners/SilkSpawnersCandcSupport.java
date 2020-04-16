@@ -29,7 +29,7 @@ public class SilkSpawnersCandcSupport implements Listener {
         Block block = e.getSpawner();
         if (player != null && block != null && player.getGameMode() != GameMode.CREATIVE) {
             ItemStack item = Methods.getItemInHand(player);
-            if (player.hasPermission("silkspawners.break") && CEnchantments.TELEPATHY.isActivated() && ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
+            if (player.hasPermission("silkspawners.break") && ce.hasEnchantment(item, CEnchantments.TELEPATHY.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
