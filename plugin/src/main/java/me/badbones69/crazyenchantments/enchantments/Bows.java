@@ -108,10 +108,11 @@ public class Bows implements Listener {
     public void onland(ProjectileHitEvent e) {
         if (e.getEntity() instanceof Arrow) {
             EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
-            if (arrow != null && CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow())) {
-                if (Version.isNewer(Version.v1_10_R1)) {
-                    if (e.getHitEntity() == null) {//If the arrow hits a block.
-                        Location entityLocation = e.getEntity().getLocation();
+            if (arrow != null) {
+                if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow())) {
+                    if (Version.isNewer(Version.v1_10_R1)) {
+                        if (e.getHitEntity() == null) {//If the arrow hits a block.
+                            Location entityLocation = e.getEntity().getLocation();
                         if (entityLocation.getBlock().getType() == Material.AIR) {
                             entityLocation.getBlock().setType(web);
                             webBlocks.add(entityLocation.getBlock());
@@ -209,7 +210,8 @@ public class Bows implements Listener {
                 public void run() {
                     enchantedArrows.remove(arrow);// Removes it from the list.
                 }
-            }.runTaskLaterAsynchronously(ce.getPlugin(), 5);
+                }.runTaskLaterAsynchronously(ce.getPlugin(), 5);
+            }
         }
     }
     
