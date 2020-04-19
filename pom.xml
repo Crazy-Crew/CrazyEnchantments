@@ -93,6 +93,11 @@
             <id>github-towny</id>
             <url>https://maven.pkg.github.com/TownyAdvanced/Towny</url>
         </repository>
+        <!-- FactionsX -->
+        <repository>
+            <id>savagelabs</id>
+            <url>https://nexus.savagelabs.net/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <build>

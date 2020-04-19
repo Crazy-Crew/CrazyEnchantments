@@ -112,7 +112,9 @@ public class Main extends JavaPlugin implements Listener {
     
     @Override
     public void onDisable() {
-        ce.getAllyManager().forceRemoveAllies();
+        if (ce.getAllyManager() != null) {
+            ce.getAllyManager().forceRemoveAllies();
+        }
         for (Player player : Bukkit.getOnlinePlayers()) {
             ce.unloadCEPlayer(player);
         }

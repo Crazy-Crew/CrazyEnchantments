@@ -50,6 +50,11 @@
             <version>3.2.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency><!-- FactionsX -->
+            <groupId>net.prosavage.factionsx</groupId>
+            <artifactId>FactionsX</artifactId>
+            <version>0.2-PATREON</version>
+        </dependency>
     </dependencies>
 
 </project>

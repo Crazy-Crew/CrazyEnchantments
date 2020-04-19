@@ -89,7 +89,7 @@ public class Support {
     
     public boolean canBreakBlock(Player player, Block block) {
         if (player != null) {
-            if (factionPlugin != null && factionPlugin.inTerritory(player)) {
+            if (factionPlugin != null && !factionPlugin.canBreakBlock(player, block)) {
                 return false;
             }
             return !SupportedPlugins.PRECIOUS_STONES.isPluginLoaded() || PreciousStonesSupport.canBreakBlock(player, block);
@@ -172,7 +172,8 @@ public class Support {
         STACK_MOB("StackMob"),
         MEGA_SKILLS("MegaSkills"),
         PRECIOUS_STONES("PreciousStones"),
-        PLOT_SQUARED("PlotSquared");
+        PLOT_SQUARED("PlotSquared"),
+        FACTIONSX("FactionsX");
         
         private String name;
         private static Map<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
@@ -283,6 +284,9 @@ public class Support {
                             return;
                         case SABER_FACTIONS:
                             factionPlugin = new SaberFactionsSupport();
+                            return;
+                        case FACTIONSX:
+                            factionPlugin = new FactionsX();
                             return;
                     }
                 }
