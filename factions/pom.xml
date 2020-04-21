@@ -5,7 +5,7 @@
     <parent>
         <artifactId>crazyenchantments</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.8-Dev-Build-v8.1</version>
+        <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-api</artifactId>
-            <version>1.8-Dev-Build-v8.1</version>
+            <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
@@ -53,7 +53,7 @@
         <dependency><!-- FactionsX -->
             <groupId>net.prosavage.factionsx</groupId>
             <artifactId>FactionsX</artifactId>
-            <version>0.2-PATREON</version>
+            <version>0.2.1-PATREON</version>
         </dependency>
     </dependencies>
 

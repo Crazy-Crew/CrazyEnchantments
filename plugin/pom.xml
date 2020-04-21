@@ -5,17 +5,30 @@
     <parent>
         <artifactId>crazyenchantments</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.8-Dev-Build-v8.1</version>
+        <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>crazyenchantments-plugin</artifactId>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>nexus releases</name>
+            <url>https://nexus.badbones69.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>nexus snapshots</name>
+            <url>https://nexus.badbones69.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-v1_13_up</artifactId>
-            <version>1.8-Dev-Build-v8.1</version>
+            <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
@@ -23,7 +36,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-v1_12_2_down</artifactId>
-            <version>1.8-Dev-Build-v8.1</version>
+            <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
@@ -31,7 +44,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-factions</artifactId>
-            <version>1.8-Dev-Build-v8.1</version>
+            <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
@@ -39,7 +52,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-saber-factions</artifactId>
-            <version>1.8-Dev-Build-v8.1</version>
+            <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
@@ -47,7 +60,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>crazyenchantments-api</artifactId>
-            <version>1.8-Dev-Build-v8.1</version>
+            <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
             <optional>true</optional>
@@ -206,12 +219,13 @@
             <groupId>com.github.intellectualsites.plotsquared</groupId>
             <artifactId>PlotSquared-API</artifactId>
             <version>latest</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency> <!-- SuperiorSkyblockAPI -->
             <groupId>com.github.OmerBenGera</groupId>
             <artifactId>SuperiorSkyblockAPI</artifactId>
             <version>b11</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
