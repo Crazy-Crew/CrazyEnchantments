@@ -10,7 +10,7 @@ import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.spawners.EpicSpawnersSupport;
+import me.badbones69.premiumhooks.spawners.EpicSpawnersSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

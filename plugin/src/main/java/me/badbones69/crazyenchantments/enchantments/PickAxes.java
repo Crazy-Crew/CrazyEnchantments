@@ -14,7 +14,7 @@ import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
-import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
+import me.badbones69.premiumhooks.anticheat.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;

@@ -8,7 +8,7 @@ import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
+import me.badbones69.premiumhooks.anticheat.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;

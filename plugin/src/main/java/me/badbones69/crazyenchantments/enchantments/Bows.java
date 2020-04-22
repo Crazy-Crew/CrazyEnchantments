@@ -12,7 +12,7 @@ import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
-import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
+import me.badbones69.premiumhooks.anticheat.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -113,103 +113,103 @@ public class Bows implements Listener {
                     if (Version.isNewer(Version.v1_10_R1)) {
                         if (e.getHitEntity() == null) {//If the arrow hits a block.
                             Location entityLocation = e.getEntity().getLocation();
-                        if (entityLocation.getBlock().getType() == Material.AIR) {
-                            entityLocation.getBlock().setType(web);
-                            webBlocks.add(entityLocation.getBlock());
+                            if (entityLocation.getBlock().getType() == Material.AIR) {
+                                entityLocation.getBlock().setType(web);
+                                webBlocks.add(entityLocation.getBlock());
+                                e.getEntity().remove();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        entityLocation.getBlock().setType(Material.AIR);
+                                        webBlocks.remove(entityLocation.getBlock());
+                                    }
+                                }.runTaskLater(ce.getPlugin(), 5 * 20);
+                            }
+                        } else {//If the arrow hits an entity.
+                            List<Location> locations = getSquareArea(e.getHitEntity().getLocation());
+                            for (Location location : locations) {
+                                if (location.getBlock().getType() == Material.AIR) {
+                                    location.getBlock().setType(web);
+                                    webBlocks.add(location.getBlock());
+                                }
+                            }
                             e.getEntity().remove();
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    entityLocation.getBlock().setType(Material.AIR);
-                                    webBlocks.remove(entityLocation.getBlock());
-                                }
-                            }.runTaskLater(ce.getPlugin(), 5 * 20);
-                        }
-                    } else {//If the arrow hits an entity.
-                        List<Location> locations = getSquareArea(e.getHitEntity().getLocation());
-                        for (Location location : locations) {
-                            if (location.getBlock().getType() == Material.AIR) {
-                                location.getBlock().setType(web);
-                                webBlocks.add(location.getBlock());
-                            }
-                        }
-                        e.getEntity().remove();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                for (Location location : locations) {
-                                    if (location.getBlock().getType() == web) {
-                                        location.getBlock().setType(Material.AIR);
-                                        webBlocks.remove(location.getBlock());
+                                    for (Location location : locations) {
+                                        if (location.getBlock().getType() == web) {
+                                            location.getBlock().setType(Material.AIR);
+                                            webBlocks.remove(location.getBlock());
+                                        }
                                     }
                                 }
-                            }
-                        }.runTaskLater(ce.getPlugin(), 5 * 20);
-                    }
-                } else {//If the arrow hits something.
-                    if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty()) {//Checking to make sure it doesn't hit an entity.
-                        Location entityLocation = e.getEntity().getLocation();
-                        if (entityLocation.getBlock().getType() == Material.AIR) {
-                            entityLocation.getBlock().setType(web);
-                            webBlocks.add(entityLocation.getBlock());
-                            e.getEntity().remove();
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    entityLocation.getBlock().setType(Material.AIR);
-                                    webBlocks.remove(entityLocation.getBlock());
-                                }
                             }.runTaskLater(ce.getPlugin(), 5 * 20);
+                        }
+                    } else {//If the arrow hits something.
+                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty()) {//Checking to make sure it doesn't hit an entity.
+                            Location entityLocation = e.getEntity().getLocation();
+                            if (entityLocation.getBlock().getType() == Material.AIR) {
+                                entityLocation.getBlock().setType(web);
+                                webBlocks.add(entityLocation.getBlock());
+                                e.getEntity().remove();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        entityLocation.getBlock().setType(Material.AIR);
+                                        webBlocks.remove(entityLocation.getBlock());
+                                    }
+                                }.runTaskLater(ce.getPlugin(), 5 * 20);
+                            }
                         }
                     }
                 }
-            }
-            if (CEnchantments.BOOM.isActivated() && arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
-                Methods.explode(arrow.getShooter(), arrow.getArrow());
-                arrow.getArrow().remove();
-            }
-            if (CEnchantments.LIGHTNING.isActivated() && arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
-                Location location = arrow.getArrow().getLocation();
-                Player shooter = (Player) arrow.getShooter();
-                location.getWorld().spigot().strikeLightningEffect(location, true);
-                int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
-                try {
-                    location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
-                } catch (Exception ignore) {
+                if (CEnchantments.BOOM.isActivated() && arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
+                    Methods.explode(arrow.getShooter(), arrow.getArrow());
+                    arrow.getArrow().remove();
                 }
-                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                    NoCheatPlusSupport.exemptPlayer(shooter);
-                }
-                if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    SpartanSupport.cancelNoSwing(shooter);
-                }
-                if (SupportedPlugins.AAC.isPluginLoaded()) {
-                    AACSupport.exemptPlayer(shooter);
-                }
-                for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
-                    EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
-                    ce.addIgnoredEvent(damageByEntityEvent);
-                    ce.addIgnoredUUID(shooter.getUniqueId());
-                    Bukkit.getPluginManager().callEvent(damageByEntityEvent);
-                    if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
-                        entity.damage(5D);
+                if (CEnchantments.LIGHTNING.isActivated() && arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
+                    Location location = arrow.getArrow().getLocation();
+                    Player shooter = (Player) arrow.getShooter();
+                    location.getWorld().spigot().strikeLightningEffect(location, true);
+                    int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+                    try {
+                        location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                    } catch (Exception ignore) {
                     }
-                    ce.removeIgnoredEvent(damageByEntityEvent);
-                    ce.removeIgnoredUUID(shooter.getUniqueId());
+                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                        NoCheatPlusSupport.exemptPlayer(shooter);
+                    }
+                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                        SpartanSupport.cancelNoSwing(shooter);
+                    }
+                    if (SupportedPlugins.AAC.isPluginLoaded()) {
+                        AACSupport.exemptPlayer(shooter);
+                    }
+                    for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
+                        EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
+                        ce.addIgnoredEvent(damageByEntityEvent);
+                        ce.addIgnoredUUID(shooter.getUniqueId());
+                        Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+                        if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
+                            entity.damage(5D);
+                        }
+                        ce.removeIgnoredEvent(damageByEntityEvent);
+                        ce.removeIgnoredUUID(shooter.getUniqueId());
+                    }
+                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                        NoCheatPlusSupport.unexemptPlayer(shooter);
+                    }
+                    if (SupportedPlugins.AAC.isPluginLoaded()) {
+                        AACSupport.unexemptPlayer(shooter);
+                    }
                 }
-                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                    NoCheatPlusSupport.unexemptPlayer(shooter);
-                }
-                if (SupportedPlugins.AAC.isPluginLoaded()) {
-                    AACSupport.unexemptPlayer(shooter);
-                }
-            }
-            //Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list so it can check.
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    enchantedArrows.remove(arrow);// Removes it from the list.
-                }
+                //Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list so it can check.
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        enchantedArrows.remove(arrow);// Removes it from the list.
+                    }
                 }.runTaskLaterAsynchronously(ce.getPlugin(), 5);
             }
         }
@@ -290,6 +290,8 @@ public class Bows implements Listener {
                                 if (SupportedPlugins.AAC.isPluginLoaded()) {
                                     AACSupport.exemptPlayerTime(player);
                                 }
+                                //Posable fix
+                                //https://github.com/SirBlobman/CombatLogX/commit/16377215a2a474fb94aa0f5ed8d1f681d9dfbb02#diff-b859c5538c8ab4c9a26fa9f968d5fea1
                                 entity.setVelocity(v);
                             }
                         } else {
