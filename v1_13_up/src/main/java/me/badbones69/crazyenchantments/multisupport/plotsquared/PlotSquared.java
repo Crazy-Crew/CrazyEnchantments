@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.multisupport.plotsquared;
 
-import com.github.intellectualsites.plotsquared.plot.object.Plot;
-import com.github.intellectualsites.plotsquared.plot.object.PlotPlayer;
+import com.plotsquared.core.player.PlotPlayer;
+import com.plotsquared.core.plot.Plot;
 import org.bukkit.entity.Player;
 
 public class PlotSquared implements PlotSquaredVersion {
