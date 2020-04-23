@@ -66,12 +66,10 @@ public class BlackSmith implements Listener {
                                     blackSmithManager.getFoundString()
                                     .replace("%Cost%", resultItem.getCost() + "")
                                     .replace("%cost%", resultItem.getCost() + "")));
-                                    for (int i : result)
-                                        inv.setItem(i - 1, blackSmithManager.getBlueGlass());
+                                    result.forEach(i -> inv.setItem(i - 1, blackSmithManager.getBlueGlass()));
                                 } else {//Items are not upgradable
                                     inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
-                                    for (int i : result)
-                                        inv.setItem(i - 1, blackSmithManager.getRedGlass());
+                                    result.forEach(i -> inv.setItem(i - 1, blackSmithManager.getRedGlass()));
                                 }
                             }
                         } else {//Main item slot is not empty
@@ -87,12 +85,10 @@ public class BlackSmith implements Listener {
                                 blackSmithManager.getFoundString()
                                 .replace("%Cost%", resultItem.getCost() + "")
                                 .replace("%cost%", resultItem.getCost() + "")));
-                                for (int i : result)
-                                    inv.setItem(i - 1, blackSmithManager.getBlueGlass());
+                                result.forEach(i -> inv.setItem(i - 1, blackSmithManager.getBlueGlass()));
                             } else {//Items are not upgradable
                                 inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
-                                for (int i : result)
-                                    inv.setItem(i - 1, blackSmithManager.getRedGlass());
+                                result.forEach(i -> inv.setItem(i - 1, blackSmithManager.getRedGlass()));
                             }
                         }
                     }
@@ -105,8 +101,7 @@ public class BlackSmith implements Listener {
                             player.getInventory().addItem(item);
                         }
                         inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
-                        for (int i : result)
-                            inv.setItem(i - 1, blackSmithManager.getRedGlass());
+                        result.forEach(i -> inv.setItem(i - 1, blackSmithManager.getRedGlass()));
                         playClick(player);
                     }
                     if (e.getRawSlot() == resultSlot) {//Clicks the result item slot
@@ -147,8 +142,7 @@ public class BlackSmith implements Listener {
                                 inv.setItem(subSlot, new ItemStack(Material.AIR));
                                 player.playSound(player.getLocation(), ce.getSound("ENTITY_PLAYER_LEVELUP", "LEVEL_UP"), 1, 1);
                                 inv.setItem(resultSlot, blackSmithManager.getDenyBarrier());
-                                for (int i : result)
-                                    inv.setItem(i - 1, blackSmithManager.getRedGlass());
+                                result.forEach(i -> inv.setItem(i - 1, blackSmithManager.getRedGlass()));
                             } else {
                                 player.playSound(player.getLocation(), ce.getSound("ENTITY_VILLAGER_NO", "VILLAGER_NO"), 1, 1);
                             }
