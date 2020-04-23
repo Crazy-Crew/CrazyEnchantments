@@ -214,22 +214,28 @@ public class CEnchantment {
         }
     }
     
+    /**
+     * @deprecated use {@link CEnchantment#getLevel(ItemStack)}.
+     */
+    @Deprecated
     public int getPower(ItemStack item) {
-        int power;
-        String line = "";
+        return getLevel(item);
+    }
+    
+    public int getLevel(ItemStack item) {
+        int level = 0;
         if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.contains(customName)) {
-                    line = lore;
+                    level = ce.convertLevelInteger(lore.replace(color + customName + " ", ""));
                     break;
                 }
             }
         }
-        power = ce.convertLevelInteger(line.replace(color + customName + " ", ""));
-        if (!ce.useUnsafeEnchantments() && power > maxLevel) {
-            power = maxLevel;
+        if (!ce.useUnsafeEnchantments() && level > maxLevel) {
+            level = maxLevel;
         }
-        return power;
+        return level;
     }
     
 }

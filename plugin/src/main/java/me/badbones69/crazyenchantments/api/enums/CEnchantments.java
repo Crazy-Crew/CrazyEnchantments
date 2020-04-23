@@ -287,7 +287,7 @@ public enum CEnchantments {
      * @return The level of the enchantment that is on the item.
      */
     public int getLevel(ItemStack item) {
-        return getEnchantment().getPower(item);
+        return getEnchantment().getLevel(item);
     }
     
     /**
