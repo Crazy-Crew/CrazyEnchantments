@@ -3,7 +3,7 @@ author: BadBones69
 api-version: 1.13
 main: me.badbones69.crazyenchantments.Main
 version: ${project.version}${build.number}
-softdepend: [Vault, Factions, Towny, WorldGuard, WorldEdit, SilkSpawners, Feudal, ASkyBlock, Kingdoms, GriefPrevention, Spartan, CoreProtect, StackMob, FactionX]
+softdepend: [Vault, Factions, Towny, WorldGuard, WorldEdit, SilkSpawners, Feudal, ASkyBlock, Kingdoms, GriefPrevention, Spartan, CoreProtect, StackMob, FactionsX]
 website: https://www.spigotmc.org/resources/16470/
 description: A plugin full of Crazy Enchantments.
 commands:
