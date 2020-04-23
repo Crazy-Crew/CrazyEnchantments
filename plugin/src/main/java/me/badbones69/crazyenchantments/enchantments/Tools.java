@@ -121,10 +121,9 @@ public class Tools implements Listener {
                 }
                 if (!hasSilkTouch) {
                     if (hasFurnace && isOre) {
-                        drop = getOreDrop(block);
+                        itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(0);
                     } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                        drop = getOreDrop(block);
-                        drop.setAmount(1 + ce.getLevel(item, CEnchantments.AUTOSMELT));
+                        itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
                     }
                     if (hasOreXP(block)) {
                         xp = Methods.percentPick(7, 3);

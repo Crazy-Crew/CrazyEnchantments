@@ -839,7 +839,8 @@ public class ItemBuilder implements Cloneable {
      * @return The result of all the info that was given to the builder as an ItemStack.
      */
     public ItemStack build() {
-        ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material, amount);
+        ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material);
+        item.setAmount(amount);
         if (item.getType() != Material.AIR) {
             //Has to go 1st due to it removing all data when finished.
             //Sauce: https://github.com/deanveloper/SkullCreator
