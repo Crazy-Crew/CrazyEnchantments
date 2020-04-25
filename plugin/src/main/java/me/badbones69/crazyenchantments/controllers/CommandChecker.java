@@ -8,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -28,27 +27,24 @@ public class CommandChecker implements Listener {
                 if (enchantment.isActivated()) {
                     for (ItemStack armor : player.getEquipment().getArmorContents()) {
                         if (armor != null) {
-                            for (PotionEffectType type : ce.getUpdatedEffects(player, air, air, enchantment).keySet()) {
-                                player.removePotionEffect(type);
-                            }
+                            ce.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player :: removePotionEffect);
                         }
                     }
                 }
             }
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ce.updatePlayerEffects(player);
-                }
-            }.runTaskLater(ce.getPlugin(), 5);
+            updateEffects(player);
         } else if (e.getMessage().equalsIgnoreCase("/heal")) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ce.updatePlayerEffects(player);
-                }
-            }.runTaskLater(ce.getPlugin(), 5);
+            updateEffects(player);
         }
+    }
+    
+    private void updateEffects(Player player) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ce.updatePlayerEffects(player);
+            }
+        }.runTaskLater(ce.getPlugin(), 5);
     }
     
 }
