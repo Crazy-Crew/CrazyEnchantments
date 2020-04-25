@@ -881,20 +881,7 @@ public class CrazyEnchantments {
      * @return A list of enchantments the item has.
      */
     public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
-        List<CEnchantment> enchantments = new ArrayList<>();
-        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
-            for (String lore : item.getItemMeta().getLore()) {
-                String[] split = lore.split(" ");
-                if (split.length > 0) {
-                    for (CEnchantment enchantment : registeredEnchantments) {
-                        if (enchantment.isActivated() && !enchantments.contains(enchantment) && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
-                            enchantments.add(enchantment);
-                        }
-                    }
-                }
-            }
-        }
-        return enchantments;
+        return new ArrayList<>(getEnchantments(item).keySet());
     }
     
     /**
@@ -904,7 +891,7 @@ public class CrazyEnchantments {
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
-        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore() != null) {
             for (String lore : item.getItemMeta().getLore()) {
                 String[] split = lore.split(" ");
                 if (split.length > 0) {
