@@ -149,7 +149,8 @@ public class Swords implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.RAGE.getEnchantment())) {
+                    //Check if CEPlayer is null as plugins like citizen use Player objects.
+                    if (enchantments.contains(CEnchantments.RAGE.getEnchantment()) && cePlayer != null) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.RAGE, item);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
