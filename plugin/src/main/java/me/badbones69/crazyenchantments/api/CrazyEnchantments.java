@@ -813,34 +813,44 @@ public class CrazyEnchantments {
     /**
      *
      * @param item Item you want to add the enchantment to.
-     * @param enchant Enchantment you want added.
+     * @param enchantment Enchantment you want added.
      * @param level Tier of the enchantment.
      * @return The item with the enchantment on it.
      */
-    public ItemStack addEnchantment(ItemStack item, CEnchantment enchant, int level) {
-        if (hasEnchantment(item, enchant)) {
-            removeEnchantment(item, enchant);
+    public ItemStack addEnchantment(ItemStack item, CEnchantment enchantment, int level) {
+        Map<CEnchantment, Integer> enchantments = new HashMap<>();
+        enchantments.put(enchantment, level);
+        return addEnchantments(item, enchantments);
+    }
+    
+    public ItemStack addEnchantments(ItemStack item, Map<CEnchantment, Integer> enchantments) {
+        for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
+            CEnchantment enchantment = entry.getKey();
+            int level = entry.getValue();
+            if (hasEnchantment(item, enchantment)) {
+                removeEnchantment(item, enchantment);
+            }
+            List<String> newLore = new ArrayList<>();
+            List<String> lores = new ArrayList<>();
+            HashMap<String, String> enchantmentStrings = new HashMap<>();
+            for (CEnchantment en : getEnchantmentsOnItem(item)) {
+                enchantmentStrings.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
+                removeEnchantment(item, en);
+            }
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null && meta.hasLore()) {
+                lores.addAll(item.getItemMeta().getLore());
+            }
+            enchantmentStrings.put(enchantment.getName(), Methods.color(enchantment.getColor() + enchantment.getCustomName() + " " + convertLevelString(level)));
+            for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
+                newLore.add(stringEntry.getValue());
+            }
+            newLore.addAll(lores);
+            if (meta != null) {
+                meta.setLore(newLore);
+            }
+            item.setItemMeta(meta);
         }
-        List<String> newLore = new ArrayList<>();
-        List<String> lores = new ArrayList<>();
-        HashMap<String, String> enchantments = new HashMap<>();
-        for (CEnchantment en : getEnchantmentsOnItem(item)) {
-            enchantments.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
-            removeEnchantment(item, en);
-        }
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null && meta.hasLore()) {
-            lores.addAll(item.getItemMeta().getLore());
-        }
-        enchantments.put(enchant.getName(), Methods.color(enchant.getColor() + enchant.getCustomName() + " " + convertLevelString(level)));
-        for (Entry<String, String> stringEntry : enchantments.entrySet()) {
-            newLore.add(stringEntry.getValue());
-        }
-        newLore.addAll(lores);
-        if (meta != null) {
-            meta.setLore(newLore);
-        }
-        item.setItemMeta(meta);
         return item;
     }
     
@@ -879,6 +889,28 @@ public class CrazyEnchantments {
                     for (CEnchantment enchantment : registeredEnchantments) {
                         if (enchantment.isActivated() && !enchantments.contains(enchantment) && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
                             enchantments.add(enchantment);
+                        }
+                    }
+                }
+            }
+        }
+        return enchantments;
+    }
+    
+    /**
+     * Note: If the enchantment is not active it will not be added to the Map.
+     * @param item Item you want to get the enchantments from.
+     * @return A Map of all enchantments and their levels on the item.
+     */
+    public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
+        Map<CEnchantment, Integer> enchantments = new HashMap<>();
+        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+            for (String lore : item.getItemMeta().getLore()) {
+                String[] split = lore.split(" ");
+                if (split.length > 0) {
+                    for (CEnchantment enchantment : registeredEnchantments) {
+                        if (enchantment.isActivated() && !enchantments.containsKey(enchantment) && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
+                            enchantments.put(enchantment, convertLevelInteger(lore.replace(enchantment.getColor() + enchantment.getCustomName() + " ", "")));
                         }
                     }
                 }
