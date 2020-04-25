@@ -14,6 +14,7 @@ public class BlackSmithManager {
     private ItemStack denyBarrier;
     private ItemStack redGlass;
     private ItemStack blueGlass;
+    private ItemStack grayGlass;
     private String menuName;
     private String foundString;
     private Currency currency;
@@ -33,13 +34,9 @@ public class BlackSmithManager {
         .setName(config.getString("Settings.BlackSmith.Results.None"))
         .setLore(config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore"))
         .build();
-        redGlass = new ItemBuilder()
-        .setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14")
-        .setName(" ")
-        .build();
-        blueGlass = new ItemBuilder()
-        .setMaterial("LIGHT_BLUE_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:3")
-        .build();
+        redGlass = new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(" ").build();
+        grayGlass = new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:7").setName(" ").build();
+        blueGlass = new ItemBuilder().setMaterial("LIGHT_BLUE_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:3").build();
         menuName = Methods.color(config.getString("Settings.BlackSmith.GUIName"));
         foundString = config.getString("Settings.BlackSmith.Results.Found");
         currency = Currency.getCurrency(config.getString("Settings.BlackSmith.Transaction.Currency"));
@@ -55,6 +52,10 @@ public class BlackSmithManager {
     
     public ItemStack getRedGlass() {
         return redGlass;
+    }
+    
+    public ItemStack getGrayGlass() {
+        return grayGlass;
     }
     
     public ItemStack getBlueGlass() {
