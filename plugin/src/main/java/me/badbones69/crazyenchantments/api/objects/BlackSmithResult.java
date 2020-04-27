@@ -40,7 +40,7 @@ public class BlackSmithResult {
                     int subLevel = subCE.getVanillaEnchantmentLevel(enchantment);
                     //Duplicate Enchantments
                     if (subCE.hasVanillaEnchantment(enchantment)) {
-                        if (level == subLevel) {
+                        if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setVanillaEnchantment(enchantment, level + 1);
                             cost += blackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
@@ -55,7 +55,7 @@ public class BlackSmithResult {
                     int subLevel = subCE.getCEnchantmentLevel(enchantment);
                     //Duplicate Enchantments
                     if (subCE.hasCEnchantment(enchantment)) {
-                        if (level == subLevel) {
+                        if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setCEnchantment(enchantment, level + 1);
                             cost += blackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
