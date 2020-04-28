@@ -76,7 +76,8 @@ public class Tools implements Listener {
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
                     e.setExpToDrop(0);
-                    e.setDropItems(false);
+                    //setDropItems was added in 1.12+
+                    if (Version.isNewer(Version.v1_11_R1)) e.setDropItems(false);
                     TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
                     if (Methods.isInventoryFull(player)) {
                         player.getWorld().dropItem(player.getLocation(), drop.getItem());
