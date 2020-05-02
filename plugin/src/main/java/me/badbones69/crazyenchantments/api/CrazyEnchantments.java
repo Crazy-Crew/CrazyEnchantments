@@ -906,6 +906,18 @@ public class CrazyEnchantments {
         return enchantments;
     }
     
+    public int getEnchantmentAmount(ItemStack item) {
+        int amount = getEnchantmentsOnItem(item).size();
+        if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
+            if (item.hasItemMeta()) {
+                if (item.getItemMeta().hasEnchants()) {
+                    amount += item.getItemMeta().getEnchants().size();
+                }
+            }
+        }
+        return amount;
+    }
+    
     public boolean hasWhiteScrollProtection(ItemStack item) {
         if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
             for (String lore : item.getItemMeta().getLore()) {
@@ -1131,6 +1143,13 @@ public class CrazyEnchantments {
             }
         }
         return limit;
+    }
+    
+    public boolean canAddEnchantment(Player player, ItemStack item) {
+        if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle") && !player.hasPermission("crazyenchantments.bypass.limit")) {
+            return getEnchantmentAmount(item) < getPlayerMaxEnchantments(player);
+        }
+        return true;
     }
     
     /**

@@ -232,18 +232,6 @@ public class Methods {
         }
     }
     
-    public static int getEnchantmentAmount(ItemStack item) {
-        int amount = ce.getEnchantmentsOnItem(item).size();
-        if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
-            if (item.hasItemMeta()) {
-                if (item.getItemMeta().hasEnchants()) {
-                    amount += +item.getItemMeta().getEnchants().size();
-                }
-            }
-        }
-        return amount;
-    }
-    
     public static int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
         String arg = defaultValue + "";
         for (String originalLine : originalLore) {

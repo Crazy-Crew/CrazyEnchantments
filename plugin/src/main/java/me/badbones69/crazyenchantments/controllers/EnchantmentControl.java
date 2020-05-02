@@ -124,15 +124,9 @@ public class EnchantmentControl implements Listener {
                             }
                             return;
                         }
-                        if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle")) {
-                            int limit = ce.getPlayerMaxEnchantments(player);
-                            int total = Methods.getEnchantmentAmount(item);
-                            if (!player.hasPermission("crazyenchantments.bypass.limit")) {
-                                if (total >= limit) {
-                                    player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
-                                    return;
-                                }
-                            }
+                        if (!ce.canAddEnchantment(player, item)) {
+                            player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
+                            return;
                         }
                         e.setCancelled(true);
                         if (success || player.getGameMode() == GameMode.CREATIVE) {
