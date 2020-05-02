@@ -34,12 +34,12 @@ public class BlackSmithResult {
                 CEItem mainCE = new CEItem(resultItem);
                 CEItem subCE = new CEItem(subItem);
                 BlackSmithCompare compare = new BlackSmithCompare(mainCE, subCE);
+                //Checking for duplicate enchantments.
                 for (Entry<Enchantment, Integer> entry : mainCE.getVanillaEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
                     int level = entry.getValue();
                     int subLevel = subCE.getVanillaEnchantmentLevel(enchantment);
-                    //Duplicate Enchantments
-                    if (subCE.hasVanillaEnchantment(enchantment)) {
+                    if (enchantment.canEnchantItem(subItem) && subCE.hasVanillaEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setVanillaEnchantment(enchantment, level + 1);
                             cost += blackSmithManager.getLevelUp();
@@ -53,8 +53,7 @@ public class BlackSmithResult {
                     CEnchantment enchantment = entry.getKey();
                     int level = entry.getValue();
                     int subLevel = subCE.getCEnchantmentLevel(enchantment);
-                    //Duplicate Enchantments
-                    if (subCE.hasCEnchantment(enchantment)) {
+                    if (enchantment.canEnchantItem(subItem) && subCE.hasCEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setCEnchantment(enchantment, level + 1);
                             cost += blackSmithManager.getLevelUp();
@@ -64,13 +63,20 @@ public class BlackSmithResult {
                         }
                     }
                 }
+                //Checking for new enchantments.
                 for (Entry<Enchantment, Integer> entry : compare.getNewVanillaEnchantments().entrySet()) {
-                    mainCE.setVanillaEnchantment(entry.getKey(), entry.getValue());
-                    cost += blackSmithManager.getAddEnchantment();
+                    Enchantment enchantment = entry.getKey();
+                    if (enchantment.canEnchantItem(subItem) && ce.canAddEnchantment(player, mainItem)) {
+                        mainCE.setVanillaEnchantment(enchantment, entry.getValue());
+                        cost += blackSmithManager.getAddEnchantment();
+                    }
                 }
                 for (Entry<CEnchantment, Integer> entry : compare.getNewCEnchantments().entrySet()) {
-                    mainCE.setCEnchantment(entry.getKey(), entry.getValue());
-                    cost += blackSmithManager.getAddEnchantment();
+                    CEnchantment enchantment = entry.getKey();
+                    if (enchantment.canEnchantItem(subItem) && ce.canAddEnchantment(player, mainItem)) {
+                        mainCE.setCEnchantment(enchantment, entry.getValue());
+                        cost += blackSmithManager.getAddEnchantment();
+                    }
                 }
                 mainCE.build();
             }
