@@ -2,6 +2,8 @@ Settings:
   GUIName: '&7&lThe &4&lCrazy &c&lTinkerer' #Name of the Tinker GUI
   Currency: XP_Total #The currency you wish to use.
   TradeButton: '&eClick to accept the trade' #The Red Buttons in the Tinkerer
+  TradeButton-Lore: #Lore on the trade buttons.
+    - ''
   BottleOptions:
     Item: 'EXP_BOTTLE' #Item the XP bottles are
     Name: '&aRecycled XP' #Name of the Bottle
