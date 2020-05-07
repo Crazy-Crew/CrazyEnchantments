@@ -52,6 +52,8 @@ public class CrazyEnchantments {
     private boolean useNewMaterial = Version.isNewer(Version.v1_12_R1);
     private boolean breakRageOnDamage;
     private boolean enchantStackedItems;
+    private boolean maxEnchantmentCheck;
+    private boolean checkVanillaLimit;
     private ItemBuilder enchantmentBook;
     private NMSSupport nmsSupport;
     private Random random = new Random();
@@ -109,6 +111,8 @@ public class CrazyEnchantments {
         whiteScrollProtectionName = Methods.color(config.getString("Settings.WhiteScroll.ProtectedName"));
         enchantmentBook = new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item"));
         useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
+        maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle");
+        checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments");
         gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled");
         rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
         breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
@@ -409,6 +413,14 @@ public class CrazyEnchantments {
      */
     public boolean useUnsafeEnchantments() {
         return useUnsafeEnchantments;
+    }
+    
+    public boolean useMaxEnchantmentLimit() {
+        return maxEnchantmentCheck;
+    }
+    
+    public boolean checkVanillaLimit() {
+        return checkVanillaLimit;
     }
     
     /**
@@ -908,7 +920,7 @@ public class CrazyEnchantments {
     
     public int getEnchantmentAmount(ItemStack item) {
         int amount = getEnchantmentsOnItem(item).size();
-        if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments")) {
+        if (checkVanillaLimit) {
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().hasEnchants()) {
                     amount += item.getItemMeta().getEnchants().size();
@@ -1146,7 +1158,7 @@ public class CrazyEnchantments {
     }
     
     public boolean canAddEnchantment(Player player, ItemStack item) {
-        if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle") && !player.hasPermission("crazyenchantments.bypass.limit")) {
+        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) {
             return getEnchantmentAmount(item) < getPlayerMaxEnchantments(player);
         }
         return true;

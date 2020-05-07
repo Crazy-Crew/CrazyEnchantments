@@ -69,7 +69,7 @@ public class CECommand implements CommandExecutor {
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%bypass%", sender.hasPermission("crazyenchantments.bypass.limit") + "");
                         placeholders.put("%limit%", ce.getPlayerMaxEnchantments((Player) sender) + "");
-                        placeholders.put("%vanilla%", Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments") + "");
+                        placeholders.put("%vanilla%", ce.checkVanillaLimit() + "");
                         placeholders.put("%item%", ce.getEnchantmentAmount(Methods.getItemInHand((Player) sender)) + "");
                         sender.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
                     }
