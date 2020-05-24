@@ -47,7 +47,7 @@ public class Tools implements Listener {
         }.runTaskAsynchronously(ce.getPlugin());
     }
     
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent e) {
         Block block = e.getBlock();
         Player player = e.getPlayer();
