@@ -453,7 +453,7 @@ public class CECommand implements CommandExecutor {
                             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
                             return true;
                         }
-                        if (args.length >= 1) {
+                        if (args.length >= 2) {
                             Player player = (Player) sender;
                             String level = "1";
                             if (args.length >= 3) {
