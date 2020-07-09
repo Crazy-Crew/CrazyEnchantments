@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments;
 
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.Messages;
@@ -9,7 +10,6 @@ import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import me.badbones69.premiumhooks.anticheat.SpartanSupport;
 import org.bukkit.*;

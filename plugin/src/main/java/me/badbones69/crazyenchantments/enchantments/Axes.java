@@ -115,12 +115,11 @@ public class Axes implements Listener {
     
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
-        if (!support.allowsPVP(e.getEntity().getLocation())) return;
-        if (e.getEntity().getKiller() instanceof Player) {
+        Player player = e.getEntity();
+        if (support.allowsPVP(player.getLocation()) && e.getEntity().getKiller() instanceof Player) {
             Player damager = e.getEntity().getKiller();
-            Player player = e.getEntity();
             ItemStack item = Methods.getItemInHand(damager);
-            if (CEnchantments.DECAPITATION.isActivated() && ce.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
+            if (ce.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {

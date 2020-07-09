@@ -1,10 +1,10 @@
 package me.badbones69.crazyenchantments.api.objects;
 
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.multisupport.SkullCreator;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;

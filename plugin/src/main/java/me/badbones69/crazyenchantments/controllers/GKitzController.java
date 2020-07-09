@@ -1,5 +1,6 @@
 package me.badbones69.crazyenchantments.controllers;
 
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
@@ -9,7 +10,6 @@ import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.api.objects.Cooldown;
 import me.badbones69.crazyenchantments.api.objects.GKitz;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import me.badbones69.crazyenchantments.multisupport.nbttagapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;

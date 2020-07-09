@@ -93,8 +93,19 @@
         <dependency> <!-- Spigot-Api -->
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>bungeecord-chat</artifactId>
+                    <groupId>net.md-5</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency> <!-- NBT-API -->
+            <groupId>de.tr7zw</groupId>
+            <artifactId>item-nbt-api</artifactId>
+            <version>2.4.1</version>
         </dependency>
         <dependency> <!-- MCMMO -->
             <groupId>com.gmail.nossr50.mcMMO</groupId>
@@ -116,6 +127,14 @@
                 </exclusion>
                 <exclusion>
                     <artifactId>worldguard-core</artifactId>
+                    <groupId>com.sk89q.worldguard</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>maven-scm-provider-gitexe</artifactId>
+                    <groupId>org.apache.maven.scm</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>worldguard-legacy</artifactId>
                     <groupId>com.sk89q.worldguard</groupId>
                 </exclusion>
             </exclusions>
@@ -179,6 +198,12 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>de.tr7zw.changeme.nbtapi</pattern>
+                            <shadedPattern>me.badbones69.crazyenchantments.nbtapi</shadedPattern>
+                        </relocation>
+                    </relocations>
                     <artifactSet>
                         <includes>
                             <include>me.badbones69:*</include>
