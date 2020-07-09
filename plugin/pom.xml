@@ -204,7 +204,6 @@
                             <shadedPattern>me.badbones69.crazyenchantments.nbtapi</shadedPattern>
                         </relocation>
                     </relocations>
-                    <artifactSet>
                 </configuration>
                 <executions>
                     <execution>
