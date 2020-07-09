@@ -205,10 +205,6 @@
                         </relocation>
                     </relocations>
                     <artifactSet>
-                        <includes>
-                            <include>me.badbones69:*</include>
-                        </includes>
-                    </artifactSet>
                 </configuration>
                 <executions>
                     <execution>
