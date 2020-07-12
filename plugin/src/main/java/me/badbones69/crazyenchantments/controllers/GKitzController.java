@@ -11,6 +11,7 @@ import me.badbones69.crazyenchantments.api.objects.Cooldown;
 import me.badbones69.crazyenchantments.api.objects.GKitz;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -65,35 +66,35 @@ public class GKitzController implements Listener {
     
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
-        Inventory inv = e.getInventory();
-        if (inv != null && e.getCurrentItem() != null) {
+        Inventory inventory = e.getInventory();
+        ItemStack item = e.getCurrentItem();
+        if (inventory != null && item != null && item.getType() != Material.AIR) {
             Player player = (Player) e.getWhoClicked();
             CEPlayer cePlayer = ce.getCEPlayer(player);
-            ItemStack item = e.getCurrentItem();
             NBTItem nbtItem = new NBTItem(item);
             for (GKitz kit : ce.getGKitz())
                 if (e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     e.setCancelled(true);
-                    if (e.getRawSlot() < inv.getSize() && item.isSimilar(infoManager.getBackRightButton())) {
+                    if (e.getRawSlot() < inventory.getSize() && item.isSimilar(infoManager.getBackRightButton())) {
                         openGUI(player);
                     }
                     return;
                 }
             if (e.getView().getTitle().equals(Methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 e.setCancelled(true);
-                if (e.getRawSlot() < inv.getSize() && nbtItem.hasKey("gkit")) {
+                if (e.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {
                     GKitz kit = ce.getGKitFromName(nbtItem.getString("gkit"));
                     if (e.getAction() == InventoryAction.PICKUP_HALF) {
                         List<ItemStack> items = kit.getPreviewItems();
                         int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
                         //Some debug code for when checking the math for slots.
                         //System.out.println((items.size() / 9) + " : " + ((items.size() / 9) * 9) + " : " + items.size() % 9 + " : " + slots);
-                        Inventory inventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
+                        Inventory previewInventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
                         for (ItemStack itemStack : items) {
-                            inventory.addItem(itemStack);
+                            previewInventory.addItem(itemStack);
                         }
-                        inventory.setItem(slots - 1, infoManager.getBackRightButton());
-                        player.openInventory(inventory);
+                        previewInventory.setItem(slots - 1, infoManager.getBackRightButton());
+                        player.openInventory(previewInventory);
                     } else {
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Kit%", kit.getName());
