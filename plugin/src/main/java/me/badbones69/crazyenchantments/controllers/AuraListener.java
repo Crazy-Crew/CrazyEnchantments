@@ -5,70 +5,116 @@ import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class AuraListener implements Listener {
-    
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private static List<CEnchantments> auraEnchantments = Arrays.asList(
-    CEnchantments.BLIZZARD,
-    CEnchantments.ACIDRAIN,
-    CEnchantments.SANDSTORM,
-    CEnchantments.RADIANT,
-    CEnchantments.INTIMIDATE);
-    
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerMoveEvent(PlayerMoveEvent e) {
-        if (!e.isCancelled()) {
-            if ((e.getFrom().getBlockX() != e.getTo().getBlockX()) || (e.getFrom().getBlockY() != e.getTo().getBlockY()) || (e.getFrom().getBlockZ() != e.getTo().getBlockZ())) {
-                Player player = e.getPlayer();
-                List<Player> players = getNearByPlayers(player, 3);
-                for (ItemStack item : player.getEquipment().getArmorContents()) {//The player that moves.
-                    List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-                    if (!enchantments.isEmpty()) {
-                        for (CEnchantments enchantment : auraEnchantments) {
-                            if (enchantments.contains(enchantment.getEnchantment())) {
-                                for (Player other : players) {
-                                    Bukkit.getPluginManager().callEvent(new AuraActiveEvent(player, other, enchantment, ce.getLevel(item, enchantment.getEnchantment())));
-                                }
-                            }
-                        }
-                    }
+
+    private final static CEnchantments[] AURA_ENCHANTMENTS = {
+            CEnchantments.BLIZZARD,
+            CEnchantments.ACIDRAIN,
+            CEnchantments.SANDSTORM,
+            CEnchantments.RADIANT,
+            CEnchantments.INTIMIDATE
+    };
+
+    private final CrazyEnchantments ce = CrazyEnchantments.getInstance();
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerMoveEvent(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (to == null) {
+            return;
+        }
+
+        if (from.getBlockX() == to.getBlockX()
+                && from.getBlockY() == to.getBlockY()
+                && from.getBlockZ() == to.getBlockZ()) {
+            return;
+        }
+
+        List<Player> players = getNearbyPlayers(player, 3);
+        if (player.isEmpty()) {
+            return;
+        }
+
+        EntityEquipment playerEquipment = player.getEquipment();
+        if (playerEquipment == null) {
+            return; // Should never happen
+        }
+
+        for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
+            Map<CEnchantment, Integer> itemEnchantments = ce.getEnchantments(item);
+            itemEnchantments.forEach((enchantment, level) -> {
+                CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
+                if (enchantmentEnum == null) {
+                    return; // Not an aura enchantment
                 }
                 for (Player other : players) {
-                    for (ItemStack item : other.getEquipment().getArmorContents()) {// The other players moving.
-                        List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-                        if (!enchantments.isEmpty()) {
-                            for (CEnchantments enchantment : auraEnchantments) {
-                                if (enchantments.contains(enchantment.getEnchantment())) {
-                                    Bukkit.getPluginManager().callEvent(new AuraActiveEvent(other, player, enchantment, ce.getLevel(item, enchantment.getEnchantment())));
-                                }
-                            }
-                        }
-                    }
+                    AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
+                    Bukkit.getPluginManager().callEvent(auraEvent);
                 }
+            });
+        }
+
+        for (Player other : players) {
+            EntityEquipment otherEquipment = player.getEquipment();
+            if (otherEquipment == null) {
+                continue; // Should never happen
+            }
+
+            for (ItemStack item : otherEquipment.getArmorContents()) {// The other players moving.
+                Map<CEnchantment, Integer> itemEnchantments = ce.getEnchantments(item);
+                itemEnchantments.forEach((enchantment, level) -> {
+                    CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
+                    if (enchantmentEnum == null) {
+                        return; // Not an aura enchantment
+                    }
+                    AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
+                    Bukkit.getPluginManager().callEvent(auraEvent);
+                });
             }
         }
     }
-    
-    private List<Player> getNearByPlayers(Player player, int radius) {
-        List<Player> players = new ArrayList<>();
-        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-            if (entity instanceof Player) {
-                if (entity != player) {
-                    players.add((Player) entity);
-                }
+
+    private static CEnchantments getAuraEnchantmentEnum(CEnchantment enchantment) {
+        for (CEnchantments enchantmentEnum : AURA_ENCHANTMENTS) {
+            if (enchantmentEnum.getName().equals(enchantment.getName())) {
+                return enchantmentEnum;
             }
+        }
+        return null;
+    }
+
+    // TODO: move into utils?
+    private static List<Player> getNearbyPlayers(Player player, int radius) {
+        List<Player> players = null;
+        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+            if (!(entity instanceof Player)) {
+                continue;
+            }
+            if (entity == player) {
+                continue;
+            }
+
+            if (players == null) {
+                players = new ArrayList<>();
+            }
+            players.add((Player) entity);
         }
         return players;
     }

@@ -902,18 +902,49 @@ public class CrazyEnchantments {
      * @return A Map of all enchantments and their levels on the item.
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
-        Map<CEnchantment, Integer> enchantments = new HashMap<>();
-        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore() != null) {
-            for (String lore : item.getItemMeta().getLore()) {
-                String[] split = lore.split(" ");
-                if (split.length > 0) {
-                    for (CEnchantment enchantment : registeredEnchantments) {
-                        if (enchantment.isActivated() && !enchantments.containsKey(enchantment) && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
-                            enchantments.put(enchantment, convertLevelInteger(lore.replace(enchantment.getColor() + enchantment.getCustomName() + " ", "")));
-                        }
-                    }
-                }
+        if (item == null) {
+            return Collections.emptyMap();
+        }
+        ItemMeta itemMeta = item.getItemMeta();
+        if (itemMeta == null) {
+            return Collections.emptyMap();
+        }
+        List<String> lore = itemMeta.getLore();
+        if (lore == null) {
+            return Collections.emptyMap();
+        }
+        Map<CEnchantment, Integer> enchantments = null;
+        for (String line : lore) {
+            int lastSpaceIndex = line.lastIndexOf(' ');
+            if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) {
+                continue; // Invalid line
             }
+
+            String enchantmentName = line.substring(0, lastSpaceIndex - 1);
+            for (CEnchantment enchantment : registeredEnchantments) {
+                if (!enchantment.isActivated()) {
+                    continue;
+                }
+                if (!enchantmentName.equals(enchantment.getColor() + enchantment.getCustomName())) {
+                    continue;
+                }
+
+                String levelString = line.substring(lastSpaceIndex + 1);
+                int level = convertLevelInteger(levelString);
+                if (level < 1) {
+                    break; // Invalid level
+                }
+
+                if (enchantments == null) {
+                    enchantments = new HashMap<>();
+                }
+                enchantments.put(enchantment, level);
+
+                break; // Next line
+            }
+        }
+        if (enchantments == null) {
+            enchantments = Collections.emptyMap();
         }
         return enchantments;
     }
