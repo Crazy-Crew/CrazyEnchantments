@@ -920,7 +920,7 @@ public class CrazyEnchantments {
                 continue; // Invalid line
             }
 
-            String enchantmentName = line.substring(0, lastSpaceIndex - 1);
+            String enchantmentName = line.substring(0, lastSpaceIndex);
             for (CEnchantment enchantment : registeredEnchantments) {
                 if (!enchantment.isActivated()) {
                     continue;
