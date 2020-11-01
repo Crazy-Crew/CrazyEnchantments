@@ -224,7 +224,7 @@ public class CEnchantment {
     
     public int getLevel(ItemStack item) {
         int level = 0;
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+        if (Methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.contains(customName)) {
                     level = ce.convertLevelInteger(lore.replace(color + customName + " ", ""));
