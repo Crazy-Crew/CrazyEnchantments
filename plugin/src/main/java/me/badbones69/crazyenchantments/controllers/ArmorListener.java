@@ -67,7 +67,6 @@ public class ArmorListener implements Listener {
             // Used for drag and drop checking to make sure you aren't trying to place a helmet in the boots place.
             return;
         }
-        
         if (e.getInventory().getType() == InventoryType.CRAFTING) {
             // Stops the activation when a player shift clicks from their small crafting option.
             if (e.getRawSlot() >= 0 && e.getRawSlot() <= 4) {
