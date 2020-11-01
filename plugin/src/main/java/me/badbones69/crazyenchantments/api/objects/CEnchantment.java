@@ -6,7 +6,6 @@ import me.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import me.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,17 +224,11 @@ public class CEnchantment {
     
     public int getLevel(ItemStack item) {
         int level = 0;
-        if (item.hasItemMeta()) {
-            ItemMeta itemMeta = item.getItemMeta();
-            if (itemMeta != null && itemMeta.hasLore()) {
-                List<String> loreLines = itemMeta.getLore();
-                if (loreLines != null) {
-                    for (String lore : loreLines) {
-                        if (lore.contains(customName)) {
-                            level = ce.convertLevelInteger(lore.replace(color + customName + " ", ""));
-                            break;
-                        }
-                    }
+        if (Methods.verifyItemLore(item)) {
+            for (String lore : item.getItemMeta().getLore()) {
+                if (lore.contains(customName)) {
+                    level = ce.convertLevelInteger(lore.replace(color + customName + " ", ""));
+                    break;
                 }
             }
         }

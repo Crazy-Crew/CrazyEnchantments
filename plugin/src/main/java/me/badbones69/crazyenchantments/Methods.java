@@ -406,6 +406,15 @@ public class Methods {
         return null;
     }
     
+    /**
+     * Verify the ItemStack has a lore. This checks to make sure everything isn't null because recent minecraft updates cause NPEs.
+     * @param item Itemstack you are checking.
+     * @return True if the item has a lore and no null issues.
+     */
+    public static boolean verifyItemLore(ItemStack item) {
+        return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().getLore() != null && item.getItemMeta().hasLore();
+    }
+    
     public static HashMap<String, String> getEnchantments() {
         HashMap<String, String> enchantments = new HashMap<>();
         enchantments.put("ARROW_DAMAGE", "Power");

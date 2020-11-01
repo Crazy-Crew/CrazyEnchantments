@@ -548,7 +548,7 @@ public class CrazyEnchantments {
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
     public boolean hasEnchantments(ItemStack item) {
-        if (item != null && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+        if (Methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 for (CEnchantment enchantment : registeredEnchantments) {
                     try {
@@ -572,7 +572,7 @@ public class CrazyEnchantments {
      */
     public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
         try {
-            if (enchantment.isActivated() && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+            if (enchantment.isActivated() && Methods.verifyItemLore(item)) {
                 for (String lore : item.getItemMeta().getLore()) {
                     String[] split = lore.split(" ");
                     if (lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
@@ -902,24 +902,16 @@ public class CrazyEnchantments {
      * @return A Map of all enchantments and their levels on the item.
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
-        if (item == null) {
+        if (!Methods.verifyItemLore(item)) {
             return Collections.emptyMap();
         }
-        ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) {
-            return Collections.emptyMap();
-        }
-        List<String> lore = itemMeta.getLore();
-        if (lore == null) {
-            return Collections.emptyMap();
-        }
+        List<String> lore = item.getItemMeta().getLore();
         Map<CEnchantment, Integer> enchantments = null;
         for (String line : lore) {
             int lastSpaceIndex = line.lastIndexOf(' ');
             if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) {
                 continue; // Invalid line
             }
-
             String enchantmentName = line.substring(0, lastSpaceIndex);
             for (CEnchantment enchantment : registeredEnchantments) {
                 if (!enchantment.isActivated()) {
@@ -928,18 +920,15 @@ public class CrazyEnchantments {
                 if (!enchantmentName.equals(enchantment.getColor() + enchantment.getCustomName())) {
                     continue;
                 }
-
                 String levelString = line.substring(lastSpaceIndex + 1);
                 int level = convertLevelInteger(levelString);
                 if (level < 1) {
                     break; // Invalid level
                 }
-
                 if (enchantments == null) {
                     enchantments = new HashMap<>();
                 }
                 enchantments.put(enchantment, level);
-
                 break; // Next line
             }
         }
@@ -962,7 +951,7 @@ public class CrazyEnchantments {
     }
     
     public boolean hasWhiteScrollProtection(ItemStack item) {
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+        if (Methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.equals(whiteScrollProtectionName)) {
                     return true;
@@ -1213,7 +1202,7 @@ public class CrazyEnchantments {
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
         String line = "";
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+        if (Methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.contains(enchant.getCustomName())) {
                     line = lore;
@@ -1237,7 +1226,7 @@ public class CrazyEnchantments {
     public int getLevel(ItemStack item, CEnchantments enchant) {
         int level;
         String line = "";
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
+        if (Methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.contains(enchant.getCustomName())) {
                     line = lore;
