@@ -90,6 +90,12 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.kingdoms</groupId>
+            <artifactId>kingdoms</artifactId>
+            <version>1.9.3</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency> <!-- Spigot-Api -->
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>

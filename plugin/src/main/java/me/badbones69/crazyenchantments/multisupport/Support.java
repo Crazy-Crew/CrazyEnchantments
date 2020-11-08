@@ -263,7 +263,7 @@ public class Support {
                             factionPlugin = new LegacyFactionsSupport();
                             return;
                         case KINGDOMS:
-                            factionPlugin = new KingdomSupport();
+                            factionPlugin = new MyKingdomSupport();
                             return;
                         case GRIEF_PREVENTION:
                             factionPlugin = new GriefPreventionSupport();
