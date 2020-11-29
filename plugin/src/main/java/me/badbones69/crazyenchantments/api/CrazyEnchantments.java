@@ -549,16 +549,21 @@ public class CrazyEnchantments {
      */
     public boolean hasEnchantments(ItemStack item) {
         if (Methods.verifyItemLore(item)) {
-            for (String lore : item.getItemMeta().getLore()) {
-                for (CEnchantment enchantment : registeredEnchantments) {
-                    try {
-                        String[] split = lore.split(" ");
-                        if (lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
-                            return true;
+            try {
+                for (String lore : item.getItemMeta().getLore()) {
+                    for (CEnchantment enchantment : registeredEnchantments) {
+                        try {
+                            String[] split = lore.split(" ");
+                            if (lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
+                                return true;
+                            }
+                        } catch (Exception ignore) {
                         }
-                    } catch (Exception ignore) {
                     }
                 }
+            } catch (NullPointerException npe) {//This is a random error from 1.16+ it seems but unsure why.
+                System.out.println("[CrazyEnchantments] Item:" + (item != null) + "Meta:" + (item.getItemMeta() != null) + "Lore" + (item.getItemMeta().getLore() != null));
+                npe.printStackTrace();
             }
         }
         return false;
