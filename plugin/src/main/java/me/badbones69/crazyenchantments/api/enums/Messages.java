@@ -20,6 +20,7 @@ public enum Messages {
     HIT_ENCHANTMENT_MAX("Hit-Enchantment-Max", "&cYou have hit the max amount of enchantments an item can have."),
     INVENTORY_FULL("Inventory-Full", "&cYour inventory is too full. Please open up some space to buy that."),
     TINKER_INVENTORY_FULL("Tinker-Inventory-Full", "&cThe inventory is full. Sell all or remove items."),
+    NEED_TO_USE_PLAYER_INVENTORY("Need-To-Use-Player-Inventory", "&cYou can only use that in your player inventory."),
     TINKER_SOLD_MESSAGE("Tinker-Sold-Msg", "&7Thank you for trading at &7&lThe &4&lCrazy &c&lTinkerer&7."),
     PLAYERS_ONLY("Players-Only", "&cOnly players can use this command."),
     NO_PERMISSION("No-Perm", "&cYou do not have permission to use that command!"),
