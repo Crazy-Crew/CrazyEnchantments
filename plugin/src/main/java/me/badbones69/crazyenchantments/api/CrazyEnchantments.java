@@ -81,7 +81,6 @@ public class CrazyEnchantments {
 
     /**
      * Loads all the data for Crazy Enchantments plugin.
-     * <p>
      * Do not use unless needed.
      */
     public void load() {
@@ -562,7 +561,7 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param item        Item that you want to check if it has an enchantment.
+     * @param item Item that you want to check if it has an enchantment.
      * @param enchantment The enchantment you want to check if the item has.
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
@@ -583,7 +582,7 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param item        Item that you want to check if it has an enchantment.
+     * @param item Item that you want to check if it has an enchantment.
      * @param enchantment The enchantment you want to check if the item has.
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
@@ -656,7 +655,7 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param player      The player you want to check if they have the enchantment on their armor.
+     * @param player The player you want to check if they have the enchantment on their armor.
      * @param includeItem The item you want to include.
      * @param excludeItem The item you want to exclude.
      * @param enchantment The enchantment you are checking.
@@ -672,9 +671,9 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param player       The player you want to check if they have the enchantment on their armor.
+     * @param player The player you want to check if they have the enchantment on their armor.
      * @param excludedItem The item you want to exclude.
-     * @param enchantment  The enchantment you are checking.
+     * @param enchantment The enchantment you are checking.
      * @return True if a piece of armor has the enchantment and false if not.
      */
     public boolean playerHasEnchantmentOnExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
@@ -687,9 +686,9 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param player       The player you want to check if they have the enchantment on their armor.
+     * @param player The player you want to check if they have the enchantment on their armor.
      * @param includedItem The item you want to include.
-     * @param enchantment  The enchantment you are checking.
+     * @param enchantment The enchantment you are checking.
      * @return True if a piece of armor has the enchantment and false if not.
      */
     public boolean playerHasEnchantmentOnInclude(Player player, ItemStack includedItem, CEnchantment enchantment) {
@@ -702,10 +701,10 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param player       The player you want to get the highest level of an enchantment from.
+     * @param player The player you want to get the highest level of an enchantment from.
      * @param includedItem The item you want to include.
      * @param excludedItem The item you want to exclude.
-     * @param enchantment  The enchantment you are checking.
+     * @param enchantment The enchantment you are checking.
      * @return The highest level of the enchantment that the player currently has.
      */
     public int getHighestEnchantmentLevel(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantment enchantment) {
@@ -728,9 +727,9 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param player       The player you want to get the highest level of an enchantment from.
+     * @param player The player you want to get the highest level of an enchantment from.
      * @param excludedItem The item you want to exclude.
-     * @param enchantment  The enchantment you are checking.
+     * @param enchantment The enchantment you are checking.
      * @return The highest level of the enchantment that the player currently has.
      */
     public int getHighestEnchantmentLevelExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
@@ -747,9 +746,9 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param player       The player you want to get the highest level of an enchantment from.
+     * @param player The player you want to get the highest level of an enchantment from.
      * @param includedItem The item you want to include.
-     * @param enchantment  The enchantment you are checking.
+     * @param enchantment The enchantment you are checking.
      * @return The highest level of the enchantment that the player currently has.
      */
     public int getHighestEnchantmentLevelInclude(Player player, ItemStack includedItem, CEnchantment enchantment) {
@@ -812,9 +811,9 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param item        Item you want to add the enchantment to.
+     * @param item Item you want to add the enchantment to.
      * @param enchantment Enchantment you want added.
-     * @param level       Tier of the enchantment.
+     * @param level Tier of the enchantment.
      * @return The item with the enchantment on it.
      */
     public ItemStack addEnchantment(ItemStack item, CEnchantment enchantment, int level) {
@@ -858,7 +857,7 @@ public class CrazyEnchantments {
     }
 
     /**
-     * @param item    Item you want to remove the enchantment from.
+     * @param item Item you want to remove the enchantment from.
      * @param enchant Enchantment you want removed.
      * @return Item with out the enchantment.
      */
