@@ -93,6 +93,10 @@ public class AllyMob {
                 Silverfish sfish = (Silverfish) ally;
                 sfish.setTarget(enemy);
                 break;
+            case BEE:
+                Bee bee = (Bee) ally;
+                bee.setTarget(enemy);
+                break;
         }
     }
     
@@ -112,7 +116,8 @@ public class AllyMob {
         IRON_GOLEM("Iron-Golem", "&6%player%'s Golem", EntityType.IRON_GOLEM, 200),
         ZOMBIE("Zombie", "&2%player%'s Undead", EntityType.ZOMBIE, 45),
         ENDERMITE("Endermite", "&5%player%'s Endermite", EntityType.ENDERMITE, 10),
-        SILVERFISH("Silverfish", "&7%player%'s Silverfish", EntityType.SILVERFISH, 10);
+        SILVERFISH("Silverfish", "&7%player%'s Silverfish", EntityType.SILVERFISH, 10),
+        BEE("Bee", "&e%player%'s Bee", EntityType.BEE, 10);
         
         private String configName;
         private String defaultName;
