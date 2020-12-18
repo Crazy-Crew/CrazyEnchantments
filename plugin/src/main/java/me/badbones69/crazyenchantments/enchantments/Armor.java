@@ -284,7 +284,7 @@ public class Armor implements Listener {
                         }
                     }
                     if (damager instanceof Player) {
-                        for (ItemStack armor : damager.getEquipment().getArmorContents()) {
+                        for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
                             if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
                                 int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
                                 new BukkitRunnable() {
@@ -408,14 +408,14 @@ public class Armor implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (to.getBlockX() != from.getBlockX() || to.getBlockY() != from.getBlockY() || to.getBlockZ() != from.getBlockZ()) {
-                    for (ItemStack armor : player.getEquipment().getArmorContents()) {
+                if (Objects.requireNonNull(to).getBlockX() != from.getBlockX() || to.getBlockY() != from.getBlockY() || to.getBlockZ() != from.getBlockZ()) {
+                    for (ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
                         if (ce.hasEnchantments(armor)) {
                             if (CEnchantments.NURSERY.isActivated() && ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
                                 int heal = 1;
                                 if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
                                     //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                                    double maxHealth = ce.useHealthAttributes() ? player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : player.getMaxHealth();
+                                    double maxHealth = ce.useHealthAttributes() ? Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() : player.getMaxHealth();
                                     if (maxHealth > player.getHealth()) {
                                         new BukkitRunnable() {
                                             @Override
@@ -501,7 +501,7 @@ public class Armor implements Listener {
                 Player killer = player.getKiller();
                 if (!support.allowsPVP(player.getLocation())) return;
                 if (CEnchantments.SELFDESTRUCT.isActivated()) {
-                    for (ItemStack item : player.getEquipment().getArmorContents()) {
+                    for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
                         if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
                             new BukkitRunnable() {
                                 @Override
@@ -525,7 +525,7 @@ public class Armor implements Listener {
                     }
                 }
                 if (CEnchantments.RECOVER.isActivated()) {
-                    for (ItemStack item : killer.getEquipment().getArmorContents()) {
+                    for (ItemStack item : Objects.requireNonNull(killer.getEquipment()).getArmorContents()) {
                         if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.RECOVER)) {
                             new BukkitRunnable() {
                                 @Override
