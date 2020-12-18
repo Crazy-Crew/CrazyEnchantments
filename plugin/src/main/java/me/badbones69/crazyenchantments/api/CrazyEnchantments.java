@@ -966,7 +966,7 @@ public class CrazyEnchantments {
     public ItemStack removeWhiteScrollProtection(ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
         if (itemMeta != null && itemMeta.hasLore()) {
-            List<String> newLore = new ArrayList<>(Objects.requireNonNull(itemMeta.getLore()));
+            List<String> newLore = new ArrayList<>(itemMeta.getLore());
             newLore.remove(whiteScrollProtectionName);
             itemMeta.setLore(newLore);
             item.setItemMeta(itemMeta);
