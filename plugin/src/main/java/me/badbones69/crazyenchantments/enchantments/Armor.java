@@ -566,8 +566,10 @@ public class Armor implements Listener {
                             finalArmorDirability -= ce.getLevel(item, CEnchantments.HELLFORGED);
                             if (Version.isNewer(Version.v1_12_R1)) {
                                 Damageable damageable = (Damageable) item.getItemMeta();
-                                damageable.setDamage(Math.max(finalArmorDirability, 0));
-                                item.setItemMeta((ItemMeta) damageable);
+                                if (damageable != null) {
+                                    damageable.setDamage(Math.max(finalArmorDirability, 0));
+                                    item.setItemMeta((ItemMeta) damageable);
+                                }
                             } else {
                                 item.setDurability((short) Math.max(finalArmorDirability, 0));
                             }
