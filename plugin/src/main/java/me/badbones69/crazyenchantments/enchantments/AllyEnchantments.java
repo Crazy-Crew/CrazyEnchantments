@@ -103,12 +103,20 @@ public class AllyEnchantments implements Listener {
             }
         }
     }
-    
+   
     @EventHandler
     public void onAllyTarget(EntityTargetEvent e) {
-        if (e.getTarget() instanceof Player && e.getEntity() instanceof LivingEntity) {
-            if (allyManager.isAlly((Player) e.getTarget(), (LivingEntity) e.getEntity())) {
-                e.setCancelled(true);
+        if (e.getEntity() instanceof LivingEntity) {
+            if(e.getTarget() instanceof Player) {
+                if (allyManager.isAlly((Player) e.getTarget(), (LivingEntity) e.getEntity())) {
+                    e.setCancelled(true);
+                }
+            } else if (e.getTarget() instanceof LivingEntity) {
+                if (allyManager.isAllyMob(e.getTarget()) && allyManager.isAllyMob(e.getEntity())) {
+                    if(allyManager.getAllyMob(e.getTarget()).getOwner().getUniqueId() == allyManager.getAllyMob(e.getEntity()).getOwner().getUniqueId()) {
+                        e.setCancelled(true);
+                    }
+                }
             }
         }
     }
