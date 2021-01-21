@@ -24,7 +24,6 @@ Types:
         - '&a- Gold Helmet'
         - '&a- Iron Helmet'
         - '&a- Diamond Helmet'
-        - '&a- Turtle Helmet'
     Enchantable-Items:
       - 'LEATHER_HELMET'
       - 'CHAINMAIL_HELMET'
