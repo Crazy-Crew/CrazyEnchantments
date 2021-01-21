@@ -96,6 +96,7 @@ public class PickAxes implements Listener {
                                 NoCheatPlusSupport.exemptPlayer(player);
                             }
                             if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                                SpartanSupport.cancelFastBreak(player);
                                 SpartanSupport.cancelNoSwing(player);
                                 SpartanSupport.cancelBlockReach(player);
                             }
