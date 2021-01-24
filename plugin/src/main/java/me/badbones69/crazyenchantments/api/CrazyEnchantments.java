@@ -537,25 +537,15 @@ public class CrazyEnchantments {
     public ItemStack getEnchantmentBookItem() {
         return enchantmentBook.build();
     }
-
-    private boolean hasLore(ItemStack item) {
-        if (item != null) {
-            ItemMeta meta = item.getItemMeta();
-            return meta != null && meta.hasLore();
-        }
-        return false;
-    }
-
+    
     /**
      * @param item Item you want to check to see if it has enchantments.
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
     public boolean hasEnchantments(ItemStack item) {
-        if (hasLore(item)) {
-            for (CEnchantment enchantment : registeredEnchantments) {
-                if (hasEnchantment(item, enchantment))
-                    return true;
-            }
+        for (CEnchantment enchantment : registeredEnchantments) {
+            if (hasEnchantment(item, enchantment))
+                return true;
         }
         return false;
     }
@@ -566,7 +556,7 @@ public class CrazyEnchantments {
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
     public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-        if (hasLore(item)) {
+        if (Methods.verifyItemLore(item)) {
             ItemMeta meta = item.getItemMeta();
             List<String> itemLore = meta.getLore();
             if (enchantment.isActivated() && itemLore != null) {
