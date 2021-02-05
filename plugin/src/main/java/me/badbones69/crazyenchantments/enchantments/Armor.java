@@ -405,10 +405,11 @@ public class Armor implements Listener {
         Player player = e.getPlayer();
         Location from = e.getFrom();
         Location to = e.getTo();
+        if (Objects.requireNonNull(to).getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()) return;
+
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (Objects.requireNonNull(to).getBlockX() != from.getBlockX() || to.getBlockY() != from.getBlockY() || to.getBlockZ() != from.getBlockZ()) {
                     for (ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
                         if (ce.hasEnchantments(armor)) {
                             if (CEnchantments.NURSERY.isActivated() && ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
@@ -486,7 +487,6 @@ public class Armor implements Listener {
                     for (ItemStack item : player.getInventory().getContents()) {
                         useHellForge(player, item);
                     }
-                }
             }
         }.runTaskAsynchronously(ce.getPlugin());
     }
