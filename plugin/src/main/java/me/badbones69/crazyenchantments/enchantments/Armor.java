@@ -14,6 +14,8 @@ import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
 import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
+import me.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
+import me.badbones69.crazyenchantments.processors.Processor;
 import me.badbones69.premiumhooks.anticheat.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -47,7 +49,16 @@ public class Armor implements Listener {
     private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private Support support = Support.getInstance();
-    
+    private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
+
+    public Armor() {
+        armorMoveProcessor.start();
+    }
+
+    public void stop() {
+        armorMoveProcessor.stop();
+    }
+
     @EventHandler
     public void onEquip(ArmorEquipEvent e) {
         Player player = e.getPlayer();
@@ -402,93 +413,11 @@ public class Armor implements Listener {
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
     @EventHandler
     public void onMovement(PlayerMoveEvent e) {
-        Player player = e.getPlayer();
         Location from = e.getFrom();
         Location to = e.getTo();
         if (Objects.requireNonNull(to).getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()) return;
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                    for (ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-                        if (ce.hasEnchantments(armor)) {
-                            if (CEnchantments.NURSERY.isActivated() && ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
-                                int heal = 1;
-                                if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
-                                    //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                                    double maxHealth = ce.useHealthAttributes() ? Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() : player.getMaxHealth();
-                                    if (maxHealth > player.getHealth()) {
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
-                                                Bukkit.getPluginManager().callEvent(event);
-                                                if (!event.isCancelled()) {
-                                                    if (player.getHealth() + heal <= maxHealth) {
-                                                        player.setHealth(player.getHealth() + heal);
-                                                    }
-                                                    if (player.getHealth() + heal >= maxHealth) {
-                                                        player.setHealth(maxHealth);
-                                                    }
-                                                }
-                                            }
-                                        }.runTask(ce.getPlugin());
-                                    }
-                                }
-                            }
-                            if (CEnchantments.IMPLANTS.isActivated() && ce.hasEnchantment(armor, CEnchantments.IMPLANTS) &&
-                            CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS.getEnchantment(), armor);
-                                        Bukkit.getPluginManager().callEvent(event);
-                                        if (!event.isCancelled()) {
-                                            int foodIncress = 1;
-                                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                                                SpartanSupport.cancelFastEat(player);
-                                            }
-                                            if (player.getFoodLevel() + foodIncress <= 20) {
-                                                player.setFoodLevel(player.getFoodLevel() + foodIncress);
-                                            }
-                                            if (player.getFoodLevel() + foodIncress >= 20) {
-                                                player.setFoodLevel(20);
-                                            }
-                                        }
-                                    }
-                                }.runTask(ce.getPlugin());
-                            }
-                            if (CEnchantments.ANGEL.isActivated() && ce.hasEnchantment(armor, CEnchantments.ANGEL)
-                            && SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-                                int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-                                            if (entity instanceof Player) {
-                                                Player other = (Player) entity;
-                                                if (support.isFriendly(player, other)) {
-                                                    AngelUseEvent event = new AngelUseEvent(player, armor);
-                                                    Bukkit.getPluginManager().callEvent(event);
-                                                    if (!event.isCancelled()) {
-                                                        other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }.runTask(ce.getPlugin());
-                            }
-                            //This is ran to check the player's armor slots.
-                            useHellForge(player, armor);
-                        }
-                    }
-                    //This is ran to check the player's inventory items.
-                    for (ItemStack item : player.getInventory().getContents()) {
-                        useHellForge(player, item);
-                    }
-            }
-        }.runTaskAsynchronously(ce.getPlugin());
+        armorMoveProcessor.add(e);
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -552,32 +481,6 @@ public class Armor implements Listener {
         }
     }
     
-    private void useHellForge(Player player, ItemStack item) {
-        if (ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
-            int armorDurability = Version.isNewer(Version.v1_12_R1) ? ((Damageable) item.getItemMeta()).getDamage() : item.getDurability();
-            if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        int finalArmorDirability = armorDurability;
-                        HellForgedUseEvent event = new HellForgedUseEvent(player, item);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            finalArmorDirability -= ce.getLevel(item, CEnchantments.HELLFORGED);
-                            if (Version.isNewer(Version.v1_12_R1)) {
-                                Damageable damageable = (Damageable) item.getItemMeta();
-                                if (damageable != null) {
-                                    damageable.setDamage(Math.max(finalArmorDirability, 0));
-                                    item.setItemMeta((ItemMeta) damageable);
-                                }
-                            } else {
-                                item.setDurability((short) Math.max(finalArmorDirability, 0));
-                            }
-                        }
-                    }
-                }.runTask(ce.getPlugin());
-            }
-        }
-    }
+
     
 }
