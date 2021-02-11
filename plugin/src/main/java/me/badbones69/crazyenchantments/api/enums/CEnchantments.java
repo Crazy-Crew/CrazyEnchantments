@@ -93,7 +93,6 @@ public enum CEnchantments {
     ENLIGHTENED("Enlightened", "Armor", 10, 5),
     SELFDESTRUCT("SelfDestruct", "Armor"),
     CYBORG("Cyborg", "Armor"),
-    BEEKEEPER("BeeKeeper", "Armor"),
     //	----------------Axes----------------  \\
     REKT("Rekt", "Axe", 5, 1),
     DIZZY("Dizzy", "Axe", 10, 5),

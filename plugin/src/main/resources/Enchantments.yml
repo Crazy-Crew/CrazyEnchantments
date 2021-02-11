@@ -2110,29 +2110,6 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
   #Do not change this line.
-  BeeKeeper:
-    Enabled: true
-    Name: 'BeeKeeper'
-    Color: '&7'
-    BookColor: '&b&l'
-    MaxPower: 2
-    Enchantment-Type: 'Armor'
-    Info:
-      Name: '&e&lBeeKeeper &7(&bI-&bII&7)'
-      Description:
-        - '&7Spawns in bees'
-        - '&7when you are in trouble.'
-        - ''
-        - '&6Found in:'
-        - '&7 - &a&l&nCommon'
-        - '&7 - &9&l&nRare'
-        - '&7 - &4&l&nLegendary'
-        - '&6Enchantable Items: &aArmor'
-    Categories:
-      - 'Common'
-      - 'Rare'
-      - 'Legendary'
-  #Do not change this line.
   Sticky-Shot:
     Enabled: true
     Name: 'StickyShot'

@@ -10,7 +10,6 @@ Messages:
   Hit-Enchantment-Max: '&cYou have hit the max amount of enchantments an item can have.'
   Inventory-Full: '&cYour inventory is too full. Please open up some space to buy that.'
   Tinker-Inventory-Full: '&cThe inventory is full. Sell all or remove items.'
-  Need-To-Use-Player-Inventory: '&cYou can only use that in your player inventory.'
   Tinker-Sold-Msg: '&7Thank you for trading at &7&lThe &4&lCrazy &c&lTinkerer&7.'
   Players-Only: '&cOnly players can use this command.'
   No-Perm: '&cYou do not have permission to use that command!'

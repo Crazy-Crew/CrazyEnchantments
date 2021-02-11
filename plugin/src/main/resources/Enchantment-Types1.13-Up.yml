@@ -33,7 +33,6 @@ Types:
       - 'IRON_HELMET'
       - 'DIAMOND_HELMET'
       - 'NETHERITE_HELMET'
-      - 'TURTLE_HELMET'
   Boots:
     Display-Item:
       Item: 'GOLDEN_BOOTS'
@@ -74,7 +73,6 @@ Types:
       - 'IRON_HELMET'
       - 'DIAMOND_HELMET'
       - 'NETHERITE_HELMET'
-      - 'TURTLE_HELMET'
       - 'LEATHER_CHESTPLATE'
       - 'CHAINMAIL_CHESTPLATE'
       - 'GOLDEN_CHESTPLATE'
@@ -291,4 +289,3 @@ Types:
       - 'NETHERITE_SWORD'
       - 'BOW'
       - 'FISHING_ROD'
-      - 'TURTLE_HELMET'

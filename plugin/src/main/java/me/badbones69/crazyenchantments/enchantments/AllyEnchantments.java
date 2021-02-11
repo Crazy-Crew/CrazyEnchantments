@@ -47,10 +47,6 @@ public class AllyEnchantments implements Listener {
                                 int power = ce.getLevel(item, CEnchantments.GUARDS);
                                 spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
                             }
-                            if (ce.hasEnchantment(item, CEnchantments.BEEKEEPER)) {
-                                int power = ce.getLevel(item, CEnchantments.BEEKEEPER);
-                                spawnAllies(player, enemy, AllyType.BEE, power);
-                            }
                             if (enemy instanceof Player) {
                                 if (ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
                                     int power = ce.getLevel(item, CEnchantments.NECROMANCER);

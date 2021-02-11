@@ -3,7 +3,6 @@ package me.badbones69.crazyenchantments.controllers;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
-import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
@@ -180,27 +178,23 @@ public class Scrambler implements Listener {
     public void onReRoll(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         if (e.getInventory() != null) {
-            if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
-                ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
-                ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
-                if (book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
-                    if (book.getAmount() == 1 && scrambler.getAmount() == 1) {
-                        if (getScramblers().isSimilar(scrambler)) {
-                            if (ce.isEnchantmentBook(book)) {
-                                e.setCancelled(true);
-                                player.setItemOnCursor(new ItemStack(Material.AIR));
-                                if (animationToggle) {
-                                    e.setCurrentItem(new ItemStack(Material.AIR));
-                                    openScrambler(player, book);
-                                } else {
-                                    e.setCurrentItem(getNewScrambledBook(book));
-                                }
+            ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
+            ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
+            if (book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
+                if (book.getAmount() == 1 && scrambler.getAmount() == 1) {
+                    if (getScramblers().isSimilar(scrambler)) {
+                        if (ce.isEnchantmentBook(book)) {
+                            e.setCancelled(true);
+                            player.setItemOnCursor(new ItemStack(Material.AIR));
+                            if (animationToggle) {
+                                e.setCurrentItem(new ItemStack(Material.AIR));
+                                openScrambler(player, book);
+                            } else {
+                                e.setCurrentItem(getNewScrambledBook(book));
                             }
                         }
                     }
                 }
-            } else {
-                player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
             }
         }
     }

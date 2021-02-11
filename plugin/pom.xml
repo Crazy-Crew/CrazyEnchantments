@@ -87,13 +87,13 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>premiumhooks</artifactId>
-            <version>1.2</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency> <!-- Spigot-Api -->
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <version>1.16.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -105,7 +105,7 @@
         <dependency> <!-- NBT-API -->
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
-            <version>2.7.1</version>
+            <version>2.6.0</version>
         </dependency>
         <dependency> <!-- MCMMO -->
             <groupId>com.gmail.nossr50.mcMMO</groupId>
