@@ -543,6 +543,7 @@ public class CrazyEnchantments {
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
     public boolean hasEnchantments(ItemStack item) {
+<<<<<<< HEAD
         ItemMeta meta = item.getItemMeta();
         if (meta != null && meta.hasLore()) {
             List<String> itemLore = meta.getLore();
@@ -555,6 +556,12 @@ public class CrazyEnchantments {
                         }
                     }
                 }
+=======
+        if (item != null) {
+            for (CEnchantment enchantment : registeredEnchantments) {
+                if (hasEnchantment(item, enchantment))
+                    return true;
+>>>>>>> parent of c7f8661 (Added utility method to reduce checks)
             }
         }
         return false;
