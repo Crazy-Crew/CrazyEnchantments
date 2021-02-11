@@ -546,6 +546,9 @@ public class CrazyEnchantments {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of fa4aa6f (Fixed NPE and removed duplicated code)
         ItemMeta meta = item.getItemMeta();
         if (meta != null && meta.hasLore()) {
             List<String> itemLore = meta.getLore();
@@ -558,6 +561,7 @@ public class CrazyEnchantments {
                         }
                     }
                 }
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> parent of c7f8661 (Added utility method to reduce checks)
@@ -568,6 +572,8 @@ public class CrazyEnchantments {
                 if (hasEnchantment(item, enchantment))
                     return true;
 >>>>>>> parent of c7f8661 (Added utility method to reduce checks)
+=======
+>>>>>>> parent of fa4aa6f (Fixed NPE and removed duplicated code)
             }
         }
         return false;
