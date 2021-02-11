@@ -543,9 +543,19 @@ public class CrazyEnchantments {
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
     public boolean hasEnchantments(ItemStack item) {
-        for (CEnchantment enchantment : registeredEnchantments) {
-            if (hasEnchantment(item, enchantment))
-                return true;
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null && meta.hasLore()) {
+            List<String> itemLore = meta.getLore();
+            if (itemLore != null) {
+                for (String lore : itemLore) {
+                    for (CEnchantment enchantment : registeredEnchantments) {
+                        String[] split = lore.split(" ");
+                        if (lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
+                            return true;
+                        }
+                    }
+                }
+            }
         }
         return false;
     }
@@ -556,14 +566,16 @@ public class CrazyEnchantments {
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
     public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-        if (Methods.verifyItemLore(item)) {
+        if (item != null) {
             ItemMeta meta = item.getItemMeta();
-            List<String> itemLore = meta.getLore();
-            if (enchantment.isActivated() && itemLore != null) {
-                for (String lore : itemLore) {
-                    String[] split = lore.split(" ");
-                    if (lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
-                        return true;
+            if (meta != null && meta.hasLore()) {
+                List<String> itemLore = meta.getLore();
+                if (enchantment.isActivated() && itemLore != null) {
+                    for (String lore : itemLore) {
+                        String[] split = lore.split(" ");
+                        if (lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
+                            return true;
+                        }
                     }
                 }
             }

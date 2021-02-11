@@ -179,26 +179,28 @@ public class Scrambler implements Listener {
     @EventHandler
     public void onReRoll(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (e.getClickedInventory() != null) {
-            ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
-            ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
-            if (book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
-                if (book.getAmount() == 1 && scrambler.getAmount() == 1) {
-                    if (getScramblers().isSimilar(scrambler) && ce.isEnchantmentBook(book)) {
-                        if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
-                            e.setCancelled(true);
-                            player.setItemOnCursor(new ItemStack(Material.AIR));
-                            if (animationToggle) {
-                                e.setCurrentItem(new ItemStack(Material.AIR));
-                                openScrambler(player, book);
-                            } else {
-                                e.setCurrentItem(getNewScrambledBook(book));
+        if (e.getInventory() != null) {
+            if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
+                ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
+                ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
+                if (book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
+                    if (book.getAmount() == 1 && scrambler.getAmount() == 1) {
+                        if (getScramblers().isSimilar(scrambler)) {
+                            if (ce.isEnchantmentBook(book)) {
+                                e.setCancelled(true);
+                                player.setItemOnCursor(new ItemStack(Material.AIR));
+                                if (animationToggle) {
+                                    e.setCurrentItem(new ItemStack(Material.AIR));
+                                    openScrambler(player, book);
+                                } else {
+                                    e.setCurrentItem(getNewScrambledBook(book));
+                                }
                             }
-                        } else {
-                            player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
                         }
                     }
                 }
+            } else {
+                player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
             }
         }
     }
