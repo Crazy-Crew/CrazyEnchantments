@@ -180,7 +180,7 @@ public class Armor implements Listener {
                                     }
                                 }.runTask(ce.getPlugin());
                             }
-                            if (ce.hasEnchantment(armor, CEnchantments.ENLIGHTENED) && CEnchantments.ENLIGHTENED.chanceSuccessful(armor)) {
+                            if (ce.hasEnchantment(armor, CEnchantments.ENLIGHTENED) && CEnchantments.ENLIGHTENED.chanceSuccessful(armor) && player.getHealth() > 0) {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
@@ -416,13 +416,13 @@ public class Armor implements Listener {
                                 if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
                                     //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                                     double maxHealth = ce.useHealthAttributes() ? Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() : player.getMaxHealth();
-                                    if (maxHealth > player.getHealth()) {
+                                    if (maxHealth > player.getHealth() && player.getHealth() > 0) {
                                         new BukkitRunnable() {
                                             @Override
                                             public void run() {
                                                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
                                                 Bukkit.getPluginManager().callEvent(event);
-                                                if (!event.isCancelled()) {
+                                                if (!event.isCancelled() && player.getHealth() > 0) {
                                                     if (player.getHealth() + heal <= maxHealth) {
                                                         player.setHealth(player.getHealth() + heal);
                                                     }

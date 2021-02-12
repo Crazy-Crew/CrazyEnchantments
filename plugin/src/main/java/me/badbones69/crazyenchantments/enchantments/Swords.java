@@ -207,7 +207,7 @@ public class Swords implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.LIFESTEAL.getEnchantment()) && CEnchantments.LIFESTEAL.chanceSuccessful(item)) {
+                    if (enchantments.contains(CEnchantments.LIFESTEAL.getEnchantment()) && CEnchantments.LIFESTEAL.chanceSuccessful(item) && damager.getHealth() > 0) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.LIFESTEAL, item);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
@@ -237,7 +237,7 @@ public class Swords implements Listener {
                             }
                         }
                     }
-                    if (enchantments.contains(CEnchantments.VAMPIRE.getEnchantment()) && CEnchantments.VAMPIRE.chanceSuccessful(item)) {
+                    if (enchantments.contains(CEnchantments.VAMPIRE.getEnchantment()) && CEnchantments.VAMPIRE.chanceSuccessful(item) && damager.getHealth() > 0) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.VAMPIRE, item);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
