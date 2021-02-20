@@ -52,11 +52,11 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
                     //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                     double maxHealth = ce.useHealthAttributes() ? Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue() : player.getMaxHealth();
-                    if (maxHealth > player.getHealth()) {
+                    if (maxHealth > player.getHealth() && player.getHealth() > 0) {
                         syncProcessor.add(() -> {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
                             Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
+                            if (!event.isCancelled() && player.getHealth() > 0) {
                                 if (player.getHealth() + heal <= maxHealth) {
                                     player.setHealth(player.getHealth() + heal);
                                 }
