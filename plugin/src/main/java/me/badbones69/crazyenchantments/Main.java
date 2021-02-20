@@ -29,7 +29,8 @@ public class Main extends JavaPlugin implements Listener {
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private FileManager fileManager = FileManager.getInstance();
     private boolean fixHealth;
-    
+    private Armor armor;
+
     @Override
     public void onEnable() {
         fileManager.logInfo(true).setup(this);
@@ -83,7 +84,7 @@ public class Main extends JavaPlugin implements Listener {
         pm.registerEvents(new Helmets(), this);
         pm.registerEvents(new PickAxes(), this);
         pm.registerEvents(new Boots(), this);
-        pm.registerEvents(new Armor(), this);
+        pm.registerEvents(armor = new Armor(), this);
         pm.registerEvents(new Swords(), this);
         pm.registerEvents(new AllyEnchantments(), this);
         if (SupportedPlugins.AAC.isPluginLoaded()) {
@@ -112,6 +113,8 @@ public class Main extends JavaPlugin implements Listener {
     
     @Override
     public void onDisable() {
+        armor.stop();
+
         if (ce.getAllyManager() != null) {
             ce.getAllyManager().forceRemoveAllies();
         }
