@@ -4,9 +4,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class Processor<T> {
+    
     private final BlockingQueue<T> queue = new LinkedBlockingQueue<>();
     private final Thread thread;
-
+    
     public Processor() {
         thread = new Thread(() -> {
             while (!Thread.interrupted()) {
@@ -20,7 +21,7 @@ public abstract class Processor<T> {
             }
         });
     }
-
+    
     public void add(final T process) {
         try {
             queue.put(process);
@@ -29,15 +30,15 @@ public abstract class Processor<T> {
             Thread.currentThread().interrupt();
         }
     }
-
+    
     abstract void process(final T process);
-
+    
     public void start() {
         thread.start();
     }
-
+    
     public void stop() {
         thread.interrupt();
     }
-
+    
 }

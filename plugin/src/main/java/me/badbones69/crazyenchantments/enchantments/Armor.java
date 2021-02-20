@@ -4,7 +4,9 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
-import me.badbones69.crazyenchantments.api.events.*;
+import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
+import me.badbones69.crazyenchantments.api.events.AuraActiveEvent;
+import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import me.badbones69.crazyenchantments.api.objects.PotionEffects;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
@@ -34,8 +36,6 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -50,15 +50,15 @@ public class Armor implements Listener {
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private Support support = Support.getInstance();
     private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
-
+    
     public Armor() {
         armorMoveProcessor.start();
     }
-
+    
     public void stop() {
         armorMoveProcessor.stop();
     }
-
+    
     @EventHandler
     public void onEquip(ArmorEquipEvent e) {
         Player player = e.getPlayer();
@@ -416,7 +416,7 @@ public class Armor implements Listener {
         Location from = e.getFrom();
         Location to = e.getTo();
         if (Objects.requireNonNull(to).getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()) return;
-
+        
         armorMoveProcessor.add(e);
     }
     
@@ -480,7 +480,5 @@ public class Armor implements Listener {
             e.setCancelled(true);
         }
     }
-    
-
     
 }

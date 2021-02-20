@@ -3,19 +3,19 @@ author: BadBones69
 api-version: 1.13
 main: me.badbones69.crazyenchantments.Main
 version: ${project.version}${build.number}
-softdepend: [Vault, Factions, Towny, WorldGuard, WorldEdit, SilkSpawners, Feudal, ASkyBlock, Kingdoms, GriefPrevention, Spartan, CoreProtect, StackMob, FactionsX]
+softdepend: [ Vault, Factions, Towny, WorldGuard, WorldEdit, SilkSpawners, Feudal, ASkyBlock, Kingdoms, GriefPrevention, Spartan, CoreProtect, StackMob, FactionsX ]
 website: https://www.spigotmc.org/resources/16470/
 description: A plugin full of Crazy Enchantments.
 commands:
   crazyenchantments:
     description: Opens the Enchanter GUI.
-    aliases: [ce, enchanter]
+    aliases: [ ce, enchanter ]
   tinkerer:
     description: Opens the Tinker GUI.
     aliases: tinker
   blacksmith:
     description: Opens the Black Smith GUI.
-    aliases: [bsmith, blacks, bs]
+    aliases: [ bsmith, blacks, bs ]
   gkit:
     description: Opens the GKitz GUI.
-    aliases: [gkitz, gkits]
+    aliases: [ gkitz, gkits ]

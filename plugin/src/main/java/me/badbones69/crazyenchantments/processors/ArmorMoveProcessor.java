@@ -23,28 +23,28 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Objects;
 
 public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
-
+    
     private final Processor<Runnable> syncProcessor;
     private final CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private final Support support = Support.getInstance();
-
+    
     public ArmorMoveProcessor() {
         this.syncProcessor = new RunnableSyncProcessor(ce.getPlugin());
     }
-
+    
     public void stop() {
         syncProcessor.stop();
         super.stop();
     }
-
+    
     public void start() {
         syncProcessor.start();
         super.start();
     }
-
+    
     public void process(PlayerMoveEvent process) {
         Player player = process.getPlayer();
-
+        
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
             if (!ce.hasEnchantments(armor)) continue;
             if (CEnchantments.NURSERY.isActivated() && ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
@@ -68,7 +68,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     }
                 }
             }
-
+            
             if (CEnchantments.IMPLANTS.isActivated() && ce.hasEnchantment(armor, CEnchantments.IMPLANTS) && CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
                 syncProcessor.add(() -> {
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS.getEnchantment(), armor);
@@ -87,7 +87,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     }
                 });
             }
-
+            
             if ((CEnchantments.ANGEL.isActivated() && ce.hasEnchantment(armor, CEnchantments.ANGEL) && Support.SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded()) || Support.SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                 final int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
                 syncProcessor.add(() -> {
@@ -111,7 +111,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             useHellForge(player, item);
         }
     }
-
+    
     private void useHellForge(Player player, ItemStack item) {
         if (ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
             int armorDurability = Version.isNewer(Version.v1_12_R1) ? ((Damageable) item.getItemMeta()).getDamage() : item.getDurability();
@@ -139,4 +139,5 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             }
         }
     }
+    
 }

@@ -30,7 +30,7 @@ public class Main extends JavaPlugin implements Listener {
     private FileManager fileManager = FileManager.getInstance();
     private boolean fixHealth;
     private Armor armor;
-
+    
     @Override
     public void onEnable() {
         fileManager.logInfo(true).setup(this);
@@ -114,7 +114,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         armor.stop();
-
+        
         if (ce.getAllyManager() != null) {
             ce.getAllyManager().forceRemoveAllies();
         }

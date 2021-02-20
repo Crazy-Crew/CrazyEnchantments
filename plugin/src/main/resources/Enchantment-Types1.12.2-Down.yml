@@ -6,11 +6,11 @@ Info-GUI-Settings:
     Right:
       Item: 'NETHER_STAR'
       Name: '&7&l<<&b&lBack'
-      Lore: []
+      Lore: [ ]
     Left:
       Item: 'NETHER_STAR'
       Name: '&b&lBack&7&l>>'
-      Lore: []
+      Lore: [ ]
 Types:
   Helmet:
     Display-Item:
