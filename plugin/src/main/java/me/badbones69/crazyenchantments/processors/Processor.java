@@ -15,7 +15,6 @@ public abstract class Processor<T> {
                     T process = this.queue.take();
                     process(process);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
                     Thread.currentThread().interrupt();
                 }
             }
@@ -26,7 +25,6 @@ public abstract class Processor<T> {
         try {
             queue.put(process);
         } catch (InterruptedException e) {
-            e.printStackTrace();
             Thread.currentThread().interrupt();
         }
     }
