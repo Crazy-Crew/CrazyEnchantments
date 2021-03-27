@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 /**
@@ -942,8 +943,18 @@ public class ItemBuilder implements Cloneable {
         return this;
     }
     
-    private String color(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
+    private final java.util.regex.Pattern HEX_PATTERN = java.util.regex.Pattern.compile("#[a-fA-F0-9]{6}");
+    
+    public String color(String message) {
+        if (Version.isNewer(Version.v1_15_R1)) {
+            Matcher matcher = HEX_PATTERN.matcher(message);
+            StringBuffer buffer = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
+            }
+            return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+        }
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
     
     private ItemStack hideFlags(ItemStack item) {

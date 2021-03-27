@@ -27,6 +27,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Methods {
     
@@ -34,9 +36,18 @@ public class Methods {
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private static Support support = Support.getInstance();
     private static boolean isV1_13_Up = Version.isNewer(Version.v1_12_R1);
+    public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
-    public static String color(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
+    public static String color(String message) {
+        if (Version.isNewer(Version.v1_15_R1)) {
+            Matcher matcher = HEX_PATTERN.matcher(message);
+            StringBuffer buffer = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
+            }
+            return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+        }
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
     
     public static String removeColor(String msg) {
