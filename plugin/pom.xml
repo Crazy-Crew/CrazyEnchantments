@@ -6,7 +6,7 @@
     <parent>
         <artifactId>crazyenchantments</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.8-Dev-Build-v8.1-SNAPSHOT</version>
+        <version>1.8-Dev-Build-v9</version>
     </parent>
 
     <artifactId>crazyenchantments-plugin</artifactId>
