@@ -1011,21 +1011,23 @@ public class CrazyEnchantments {
         items.add(includedItem);
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> armorEffects = getEnchantmentPotions();
         for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
-            for (ItemStack armor : items) {
-                if (armor != null && !armor.isSimilar(excludedItem) && hasEnchantment(armor, enchantments.getKey().getEnchantment())) {
-                    int level = getLevel(armor, enchantments.getKey().getEnchantment());
-                    if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) {
-                        level = enchantments.getKey().getEnchantment().getMaxLevel();
-                    }
-                    for (PotionEffectType type : enchantments.getValue().keySet()) {
-                        if (enchantments.getValue().containsKey(type)) {
-                            if (effects.containsKey(type)) {
-                                int updated = effects.get(type);
-                                if (updated < (level + enchantments.getValue().get(type))) {
+            if (enchantments.getKey().isActivated()) {
+                for (ItemStack armor : items) {
+                    if (armor != null && !armor.isSimilar(excludedItem) && hasEnchantment(armor, enchantments.getKey().getEnchantment())) {
+                        int level = getLevel(armor, enchantments.getKey().getEnchantment());
+                        if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) {
+                            level = enchantments.getKey().getEnchantment().getMaxLevel();
+                        }
+                        for (PotionEffectType type : enchantments.getValue().keySet()) {
+                            if (enchantments.getValue().containsKey(type)) {
+                                if (effects.containsKey(type)) {
+                                    int updated = effects.get(type);
+                                    if (updated < (level + enchantments.getValue().get(type))) {
+                                        effects.put(type, level + enchantments.getValue().get(type));
+                                    }
+                                } else {
                                     effects.put(type, level + enchantments.getValue().get(type));
                                 }
-                            } else {
-                                effects.put(type, level + enchantments.getValue().get(type));
                             }
                         }
                     }
