@@ -1,10 +1,11 @@
 package me.badbones69.crazyenchantments.multisupport;
 
 import me.badbones69.premiumhooks.factions.FactionPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.kingdoms.constants.kingdom.Kingdom;
-import org.kingdoms.constants.kingdom.KingdomRelation;
+import org.kingdoms.constants.kingdom.model.KingdomRelation;
 import org.kingdoms.constants.land.Land;
 import org.kingdoms.constants.player.KingdomPlayer;
 
@@ -17,7 +18,7 @@ public class MyKingdomSupport implements FactionPlugin {
         Kingdom playerKingdom = kPlayer.getKingdom();
         Kingdom otherKingdom = kOther.getKingdom();
 
-        if (kPlayer.isAdmin()) //If the player is an admin he can attack anyone
+        if (kPlayer.isAdmin() || kOther.isAdmin()) //If the player is an admin he can attack anyone
             return true;
 
         if (playerKingdom == null && otherKingdom == null)
@@ -30,14 +31,13 @@ public class MyKingdomSupport implements FactionPlugin {
             return playerKingdom.getAttributes().get(KingdomRelation.NEUTRAL).contains(KingdomRelation.Attribute.CEASEFIRE);
 
         return playerKingdom.hasAttribute(otherKingdom, KingdomRelation.Attribute.CEASEFIRE);
-
     }
 
     @Override
     public boolean inTerritory(Player player) {
         KingdomPlayer kPlayer = KingdomPlayer.getKingdomPlayer(player);
         Land land = Land.getLand(player.getLocation());
-        return land.getKingdom() != null && kPlayer.getKingdom() != null && land.getKingdom() == kPlayer.getKingdom();
+        return land != null && land.getKingdom() != null && kPlayer.getKingdom() != null && land.getKingdom() == kPlayer.getKingdom();
     }
 
     @Override

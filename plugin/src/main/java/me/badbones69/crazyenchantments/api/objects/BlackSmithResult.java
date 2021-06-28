@@ -5,6 +5,8 @@ import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map.Entry;
 
@@ -17,6 +19,7 @@ public class BlackSmithResult {
     
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
         resultItem = mainItem.clone();
+        //fusion book
         if (mainItem.getType() == ce.getEnchantmentBook().getMaterial() && subItem.getType() == ce.getEnchantmentBook().getMaterial()) {
             CEBook mainBook = ce.getCEBook(mainItem);
             CEBook subBook = ce.getCEBook(subItem);
@@ -29,7 +32,9 @@ public class BlackSmithResult {
                 resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
                 cost += blackSmithManager.getBookUpgrade();
             }
-        } else {
+        }
+        else {
+            //same type
             if (mainItem.getType() == subItem.getType()) {
                 CEItem mainCE = new CEItem(resultItem);
                 CEItem subCE = new CEItem(subItem);
@@ -78,7 +83,21 @@ public class BlackSmithResult {
                         cost += blackSmithManager.getAddEnchantment();
                     }
                 }
-                mainCE.build();
+                resultItem = mainCE.build();
+                if (mainItem.getItemMeta() instanceof Damageable && subItem.getItemMeta() instanceof Damageable) {
+                    short maxDurability = mainCE.getItem().getType().getMaxDurability();
+                    int mainDamage = maxDurability - ((Damageable) mainItem.getItemMeta()).getDamage();
+                    int subDamage = maxDurability - ((Damageable) subItem.getItemMeta()).getDamage();
+                    double newDurability = Math.min(mainDamage + subDamage + Math.floor(maxDurability / 20.0), maxDurability);
+                    ItemMeta damageable = resultItem.getItemMeta();
+                    ((Damageable) damageable).setDamage((int) Math.abs(newDurability - maxDurability));
+                    resultItem.setItemMeta(damageable);
+                }
+            }
+            else if (ce.isEnchantmentBook(subItem)){
+                CEItem mainCE = new CEItem(resultItem);
+                CEBook subBook = ce.getCEBook(subItem);
+
             }
         }
     }

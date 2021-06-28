@@ -44,7 +44,7 @@ public class AuraListener implements Listener {
             return;
         }
         List<Player> players = getNearbyPlayers(player, 3);
-        if (player.isEmpty()) {
+        if (players == null || players.isEmpty()) {
             return;
         }
         EntityEquipment playerEquipment = player.getEquipment();
@@ -65,7 +65,7 @@ public class AuraListener implements Listener {
             });
         }
         for (Player other : players) {
-            EntityEquipment otherEquipment = player.getEquipment();
+            EntityEquipment otherEquipment = other.getEquipment();
             if (otherEquipment == null) {
                 continue; // Should never happen
             }

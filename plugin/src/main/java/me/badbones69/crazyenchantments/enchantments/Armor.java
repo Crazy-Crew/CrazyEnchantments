@@ -494,6 +494,7 @@ public class Armor implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
+        final ItemStack[] armorContents = player.getEquipment().getArmorContents();
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -501,7 +502,7 @@ public class Armor implements Listener {
                 Player killer = player.getKiller();
                 if (!support.allowsPVP(player.getLocation())) return;
                 if (CEnchantments.SELFDESTRUCT.isActivated()) {
-                    for (ItemStack item : player.getEquipment().getArmorContents()) {
+                    for (ItemStack item : armorContents) {
                         if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
                             new BukkitRunnable() {
                                 @Override

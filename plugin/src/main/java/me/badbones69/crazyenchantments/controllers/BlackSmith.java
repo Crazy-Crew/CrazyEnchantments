@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -75,7 +76,18 @@ public class BlackSmith implements Listener {
                             setResultBoarder(resultItem, inventory);
                         }
                     }
-                } else {// Click In the Black Smith
+                    else if (inventory.getItem(mainSlot) != null && inventory.getItem(mainSlot).getItemMeta() instanceof Damageable && item.getType().equals(inventory.getItem(mainSlot).getType())){
+                        e.setCurrentItem(new ItemStack(Material.AIR));
+                        if (inventory.getItem(subSlot) != null) {//Sub item slot is not empty
+                            e.setCurrentItem(inventory.getItem(subSlot));//Moves sub slot item to clicked items slot
+                        }
+                        inventory.setItem(subSlot, item);//Moves clicked item to sub slot
+                        playSound(player, click);
+                        BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
+                        setResultBoarder(resultItem, inventory);
+                    }
+                }
+                else {// Click In the Black Smith
                     if (e.getRawSlot() == mainSlot || e.getRawSlot() == subSlot) {//Clicked either the Main slot or Sub slot
                         e.setCurrentItem(new ItemStack(Material.AIR));//Sets the clicked slot to air
                         givePlayerItem(player, item);

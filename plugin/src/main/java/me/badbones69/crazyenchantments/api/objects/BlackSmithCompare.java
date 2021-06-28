@@ -10,7 +10,7 @@ public class BlackSmithCompare {
     
     private Map<Enchantment, Integer> newVanillaEnchantments = new HashMap<>();
     private Map<CEnchantment, Integer> newCEnchantments = new HashMap<>();
-    
+
     public BlackSmithCompare(CEItem mainCE, CEItem subCE) {
         for (Entry<Enchantment, Integer> entry : subCE.getVanillaEnchantments().entrySet()) {
             Enchantment enchantment = entry.getKey();
@@ -23,6 +23,12 @@ public class BlackSmithCompare {
             if (!mainCE.hasCEnchantment(enchantment)) {
                 newCEnchantments.put(enchantment, entry.getValue());
             }
+        }
+    }
+
+    public BlackSmithCompare(CEItem mainCE, CEBook subCE) {
+        if (!mainCE.hasCEnchantment(subCE.getEnchantment())) {
+            newCEnchantments.put(subCE.getEnchantment(), subCE.getLevel());
         }
     }
     

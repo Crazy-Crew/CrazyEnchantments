@@ -91,10 +91,16 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.kingdoms</groupId>
+            <groupId>com.github.cryptomorin</groupId>
             <artifactId>kingdoms</artifactId>
-            <version>1.9.3</version>
+            <version>1.10.13.3</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.cryptomorin</groupId>
+                    <artifactId>XSeries</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency> <!-- Spigot-Api -->
             <groupId>org.spigotmc</groupId>
