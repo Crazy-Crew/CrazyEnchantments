@@ -7,8 +7,6 @@ import me.badbones69.crazyenchantments.multisupport.factions.MCMMOParty;
 import me.badbones69.crazyenchantments.multisupport.mobstackers.MobStacker;
 import me.badbones69.crazyenchantments.multisupport.mobstackers.MobStacker2;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
-import me.badbones69.crazyenchantments.multisupport.skyblocks.ASkyBlockSupport;
-import me.badbones69.crazyenchantments.multisupport.skyblocks.AcidIslandSupport;
 import me.badbones69.crazyenchantments.multisupport.skyblocks.SuperiorSkyblockSupport;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import me.badbones69.premiumhooks.factions.*;
@@ -48,12 +46,6 @@ public class Support {
         if (factionPlugin != null && factionPlugin.inTerritory(player)) {
             return true;
         }
-        if (SupportedPlugins.ASKYBLOCK.isPluginLoaded() && ASkyBlockSupport.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.inTerritory(player)) {
-            return true;
-        }
         if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.inTerritory(player)) {
             return true;
         }
@@ -65,12 +57,6 @@ public class Support {
             Player player = (Player) pEntity;
             Player other = (Player) oEntity;
             if (factionPlugin != null && factionPlugin.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.ASKYBLOCK.isPluginLoaded() && ASkyBlockSupport.isFriendly(player, other)) {
-                return true;
-            }
-            if (SupportedPlugins.ACID_ISLAND.isPluginLoaded() && AcidIslandSupport.isFriendly(player, other)) {
                 return true;
             }
             if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.isFriendly(player, other)) {
