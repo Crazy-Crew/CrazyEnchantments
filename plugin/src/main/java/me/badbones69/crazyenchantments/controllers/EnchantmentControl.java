@@ -38,7 +38,7 @@ public class EnchantmentControl implements Listener {
     
     @EventHandler
     public void addEnchantment(InventoryClickEvent e) {
-        if (e.getInventory() != null && e.getCursor() != null && e.getCurrentItem() != null) {
+        if (e.getCursor() != null && e.getCurrentItem() != null) {
             ItemStack item = e.getCurrentItem();
             if (ce.isEnchantmentBook(e.getCursor())) {
                 CEBook ceBook = ce.getCEBook(e.getCursor());
