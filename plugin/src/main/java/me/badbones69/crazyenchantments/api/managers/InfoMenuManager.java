@@ -39,11 +39,13 @@ public class InfoMenuManager {
         inventoryMenu = Bukkit.createInventory(null, inventorySize, inventoryName);
         backRight = new ItemBuilder()
         .setMaterial(file.getString(path + ".Back-Item.Right.Item", "NETHER_STAR"))
+        .setPlayer(file.getString(path + ".Back-Item.Right.Player"))
         .setName(file.getString(path + ".Back-Item.Right.Name", "&7&l<<&b&lBack"))
         .setLore(file.getStringList(path + ".Back-Item.Right.Lore"))
         .build();
         backLeft = new ItemBuilder()
         .setMaterial(file.getString(path + ".Back-Item.Left.Item", "NETHER_STAR"))
+        .setPlayer(file.getString(path + ".Back-Item.Left.Player"))
         .setName(file.getString(path + ".Back-Item.Left.Name", "&b&lBack&7&l>>"))
         .setLore(file.getStringList(path + ".Back-Item.Left.Lore"))
         .build();

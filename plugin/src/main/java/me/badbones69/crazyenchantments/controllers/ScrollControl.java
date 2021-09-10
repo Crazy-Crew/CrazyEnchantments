@@ -45,11 +45,11 @@ public class ScrollControl implements Listener {
     @EventHandler
     public void onScrollUse(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        Inventory inventory = e.getInventory();
-        ItemStack item = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
-        ItemStack scroll = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
-        if (inventory != null && inventory.getType() == InventoryType.CRAFTING && item.getType() != Material.AIR && scroll.getType() != Material.AIR) {
-            if (e.getRawSlot() < 9) {
+        ItemStack item = e.getCurrentItem();
+        ItemStack scroll = e.getCursor();
+        if (item != null && scroll != null) {
+            InventoryType.SlotType slotType = e.getSlotType();
+            if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) {
                 return;
             }
             if (scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {//The scroll is a Transmog Scroll.

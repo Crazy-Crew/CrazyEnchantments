@@ -51,6 +51,7 @@ public enum ShopOption {
                 .setName(config.getString(itemPath + shopOption.getNamePath()))
                 .setLore(config.getStringList(itemPath + shopOption.getLorePath()))
                 .setMaterial(config.getString(itemPath + "Item"))
+                .setPlayer(config.getString(itemPath + "Player"))
                 .setGlowing(config.getBoolean(itemPath + "Glowing")),
                 config.getInt(itemPath + "Slot", 1) - 1,
                 config.getBoolean(itemPath + "InGUI"),
