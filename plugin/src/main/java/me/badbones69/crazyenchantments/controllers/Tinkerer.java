@@ -183,8 +183,8 @@ public class Tinkerer implements Listener {
                             }
                         }
                     }
-                    inv.clear();
                 }
+                inv.clear();
             }
         }, 0);
     }
