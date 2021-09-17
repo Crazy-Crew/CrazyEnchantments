@@ -564,7 +564,8 @@ public class CrazyEnchantments {
             if (enchantment.isActivated() && itemLore != null) {
                 for (String lore : itemLore) {
                     String[] split = lore.split(" ");
-                    if (lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
+                    // split can generate a empty array in rare case
+                    if (split.length > 0 && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
                         return true;
                     }
                 }
