@@ -15,12 +15,12 @@ import me.badbones69.premiumhooks.spawners.SilkSpawnerSupport;
 import me.badbones69.premiumhooks.spawners.SilkSpawnersCandcSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -49,56 +49,9 @@ public class Main extends JavaPlugin implements Listener {
                 }
             }
         }
-        getCommand("crazyenchantments").setExecutor(new CECommand());
-        getCommand("crazyenchantments").setTabCompleter(new CETab());
-        getCommand("tinkerer").setExecutor(new TinkerCommand());
-        getCommand("blacksmith").setExecutor(new BlackSmithCommand());
-        getCommand("gkit").setExecutor(new GkitzCommand());
-        getCommand("gkit").setTabCompleter(new GkitzTab());
-        PluginManager pm = Bukkit.getServer().getPluginManager();
+        registerCommand(); //Register Commands
         //==========================================================================\\
-        pm.registerEvents(this, this);
-        pm.registerEvents(new ShopControl(), this);
-        pm.registerEvents(new InfoGUIControl(), this);
-        if (ce.isGkitzEnabled()) {
-            pm.registerEvents(new GKitzController(), this);
-        }
-        pm.registerEvents(new LostBookController(), this);
-        pm.registerEvents(new EnchantmentControl(), this);
-        pm.registerEvents(new SignControl(), this);
-        pm.registerEvents(new DustControl(), this);
-        pm.registerEvents(new Tinkerer(), this);
-        pm.registerEvents(new AuraListener(), this);
-        pm.registerEvents(new ScrollControl(), this);
-        pm.registerEvents(new BlackSmith(), this);
-        pm.registerEvents(new ArmorListener(), this);
-        pm.registerEvents(new ProtectionCrystal(), this);
-        pm.registerEvents(new Scrambler(), this);
-        pm.registerEvents(new CommandChecker(), this);
-        pm.registerEvents(new FireworkDamage(), this);
-        //==========================================================================\\
-        pm.registerEvents(new Bows(), this);
-        pm.registerEvents(new Axes(), this);
-        pm.registerEvents(new Tools(), this);
-        pm.registerEvents(new Hoes(), this);
-        pm.registerEvents(new Helmets(), this);
-        pm.registerEvents(new PickAxes(), this);
-        pm.registerEvents(new Boots(), this);
-        pm.registerEvents(armor = new Armor(), this);
-        pm.registerEvents(new Swords(), this);
-        pm.registerEvents(new AllyEnchantments(), this);
-        if (SupportedPlugins.AAC.isPluginLoaded()) {
-            pm.registerEvents(new AACSupport(), this);
-        }
-        if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) {
-            pm.registerEvents(new SilkSpawnerSupport(), this);
-        }
-        if (SupportedPlugins.SILK_SPAWNERS_CANDC.isPluginLoaded()) {
-            pm.registerEvents(new SilkSpawnersCandcSupport(), this);
-        }
-        if (SupportedPlugins.DAKATA.isPluginLoaded()) {
-            pm.registerEvents(new DakataAntiCheatSupport(), this);
-        }
+        registerListener(); // Register Events
         //==========================================================================\\
         new Metrics(this);// Starts up bStats
         new BukkitRunnable() {
@@ -154,5 +107,69 @@ public class Main extends JavaPlugin implements Listener {
     public void onPlayerLeave(PlayerQuitEvent e) {
         ce.unloadCEPlayer(e.getPlayer());
     }
+
+    public void registerCommand() {
+        setCommand("crazyenchantments", new CECommand());
+        getCommand("crazyenchantments").setTabCompleter(new CETab());
+        setCommand("tinkerer", new TinkerCommand());
+        setCommand("blacksmith", new BlackSmithCommand());
+        setCommand("gkit", new GkitzCommand());
+        getCommand("gkit").setTabCompleter(new GkitzTab());
+    }
+
+    public void registerListener() {
+        setEvents(this);
+        setEvents(new ShopControl());
+        setEvents(new InfoGUIControl());
+        if (ce.isGkitzEnabled()) {
+            setEvents(new GKitzController());
+        }
+        setEvents(new LostBookController());
+        setEvents(new EnchantmentControl());
+        setEvents(new SignControl());
+        setEvents(new DustControl());
+        setEvents(new Tinkerer());
+        setEvents(new AuraListener());
+        setEvents(new ScrollControl());
+        setEvents(new BlackSmith());
+        setEvents(new ArmorListener());
+        setEvents(new ProtectionCrystal());
+        setEvents(new Scrambler());
+        setEvents(new CommandChecker());
+        setEvents(new FireworkDamage());
+        //==========================================================================\\
+        setEvents(new Bows());
+        setEvents(new Axes());
+        setEvents(new Tools());
+        setEvents(new Hoes());
+        setEvents(new Helmets());
+        setEvents(new PickAxes());
+        setEvents(new Boots());
+        setEvents(armor = new Armor());
+        setEvents(new Swords());
+        setEvents(new AllyEnchantments());
+        if (SupportedPlugins.AAC.isPluginLoaded()) {
+            setEvents(new AACSupport());
+        }
+        if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) {
+            setEvents(new SilkSpawnerSupport());
+        }
+        if (SupportedPlugins.SILK_SPAWNERS_CANDC.isPluginLoaded()) {
+            setEvents(new SilkSpawnersCandcSupport());
+        }
+        if (SupportedPlugins.DAKATA.isPluginLoaded()) {
+            setEvents(new DakataAntiCheatSupport());
+        }
+    }
+
+    public void setCommand(String cmd, CommandExecutor e) {
+        getCommand(cmd).setExecutor(e);
+    }
+
+    public void setEvents(Listener l) {
+        Bukkit.getServer().getPluginManager().registerEvents(l, this);
+    }
+
+
     
 }
