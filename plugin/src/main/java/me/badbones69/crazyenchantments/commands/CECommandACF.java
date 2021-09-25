@@ -11,10 +11,7 @@ import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.enums.Scrolls;
 import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
-import me.badbones69.crazyenchantments.api.objects.CEBook;
-import me.badbones69.crazyenchantments.api.objects.CEnchantment;
-import me.badbones69.crazyenchantments.api.objects.Category;
-import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
+import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.controllers.Scrambler;
 import me.badbones69.crazyenchantments.controllers.ShopControl;
@@ -24,7 +21,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,10 +28,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@CommandAlias("ace|acrazyenchantments|aenchanter")
+import static me.badbones69.crazyenchantments.commands.CETabACF.*;
+
+@CommandAlias("ce|crazyenchantments|enchanter")
 public class CECommandACF extends BaseCommand {
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private FileManager fileManager = FileManager.getInstance();
+    private final CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private final FileManager fileManager = FileManager.getInstance();
+
+    public CECommandACF() {
+        new CETabACF(); // make the tab completion first
+    }
 
     /**
      * the default implementation of /ce with no arguments
@@ -44,23 +46,30 @@ public class CECommandACF extends BaseCommand {
      */
     @Default
     @CommandPermission("gui")
-    @Description("&9Opens up the menu")
-    public void onCommand(Player player) {
+    @Description("Opens up the menu")
+    public void onGui(Player player) {
         ShopControl.openGUI(player);
+    }
+
+    @Subcommand("gui")
+    @CommandPermission("gui")
+    @Description("Opens up the menu")
+    public void gui(@Syntax("") Player player) {
+        onGui(player);
     }
 
     @Subcommand("help")
     @CommandPermission("access")
-    @Description("&9Shows all crazy enchantment commands.")
+    @Description("Shows all crazy enchantment commands.")
     public void help(CommandSender sender) {
         sender.sendMessage(Messages.HELP.getMessage());
     }
 
     @Subcommand("reload")
     @CommandPermission("reload")
-    @Description("&9Reloads all of the configuration files.")
+    @Description("Reloads all of the configuration files.")
     public void reload(CommandSender sender) {
-        ce.getCEPlayers().forEach(cePlayer -> ce.backupCEPlayer(cePlayer));
+        ce.getCEPlayers().forEach(ce::backupCEPlayer);
         fileManager.setup(ce.getPlugin());
         ce.load();
         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
@@ -68,7 +77,8 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("limit")
     @CommandPermission("limit")
-    public void limit(Player sender) {
+    @Description("Gives information on the players current enchantment limit.")
+    public void limit(@Syntax("") Player sender) {
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("%bypass%", sender.hasPermission("crazyenchantments.bypass.limit") + "");
         placeholders.put("%limit%", ce.getPlayerMaxEnchantments(sender) + "");
@@ -79,7 +89,7 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("debug")
     @CommandPermission("debug")
-    @Description("&9Does a small debug for some errors.")
+    @Description("Does a small debug for some errors.")
     public void debug(CommandSender sender) {
         List<String> brokenEnchantments = new ArrayList<>();
         List<String> brokenEnchantmentTypes = new ArrayList<>();
@@ -124,6 +134,7 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("fix")
     @CommandPermission("fix")
+    @Description("Fix broken enchantment config files.")
     public void fix(CommandSender sender) {
         List<CEnchantments> brokenEnchantments = new ArrayList<>();
         FileConfiguration file = FileManager.Files.ENCHANTMENTS.getFile();
@@ -152,8 +163,8 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("info")
     @CommandPermission("info")
-    @Description("&9Shows info on all enchantments.")
-    public boolean info(Player player, @Optional String enchantmentTypeString) {
+    @Description("Shows info on all enchantments.")
+    public boolean info(@Syntax("") Player player, @Optional String enchantmentTypeString) {
         if (enchantmentTypeString == null) {
             // the argument doesn't exist
             ce.getInfoMenuManager().openInfoMenu(player);
@@ -181,12 +192,19 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("spawn")
     @CommandPermission("spawn")
-    @Description("&9Drops an enchantment book at the specific coordinates.")
-    public boolean spawn(CommandSender sender, @Optional Player player, @Optional @Single @Name("enchantment") String enchantmentArg, @Optional @Split @Name("[(level:#/min-max)/world:<world>/x:#/y:#/z:#]") String[] args) {
+    @Description("Drops an enchantment book at the specific coordinates.")
+    @CommandCompletion(ENCHANTMENTS_COMPLETION + "|" + ENCHANTMENTS_CATEGORY_COMPLETION + " " + GENERIC_VARIABLE_COMPLETION + ":Level=number,World=world,X=number,Y=number,Z=number")
+    public boolean spawn(CommandSender sender, @Syntax("") @Optional Player player, @Optional @Single @Name("enchantment") String enchantmentArg, @Optional @Split("[\\s,]") @Name("[(level:#/min-max)/world:<world>/x:#/y:#/z:#]") String[] args) {
         CEnchantment enchantment = ce.getEnchantmentFromName(enchantmentArg);
         Category category = ce.getCategory(enchantmentArg);
-        World world = Bukkit.getWorlds().get(0);
-        Location location = player == null ? new Location(world, 0, 0, 0) : player.getLocation();
+        World world;
+        Location location;
+        if (player == null) {
+            location = new Location(world = Bukkit.getWorlds().get(0), 0, 0, 0);
+        } else {
+            location = player.getLocation();
+            world = player.getWorld();
+        }
         int level = 1;
         if (enchantment == null && category == null) {
             sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
@@ -207,7 +225,7 @@ public class CECommandACF extends BaseCommand {
                             level = Methods.getRandomNumber(value);
                         }
                         break;
-                    case "worldProvided":
+                    case "world":
                         World worldProvided = Bukkit.getWorld(value);
                         if (worldProvided != null) {
                             location.setWorld(worldProvided);
@@ -246,54 +264,41 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("lostbook|lb")
     @CommandPermission("lostbook")
-    @Description("&9Gives a player a lost book item.")
-    public boolean lostbook(CommandSender sender, @Optional @Split @Name("enchantment") String[] args) {
-        if (args != null && args.length != 0) {
-            if (args.length <= 2 && !(sender instanceof Player)) {
-                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-                return false;
-            }
-            int amount = 1;
-            Player player;
-            Category category = ce.getCategory(args[0]);
-            if (args.length >= 2) {
-                if (!Methods.isInt(args[1])) {
-                    sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                            .replace("%Arg%", args[1]).replace("%arg%", args[2]));
-                    return true;
-                }
-                amount = Integer.parseInt(args[1]);
-            }
-            if (args.length >= 3) {
-                if (!Methods.isPlayerOnline(args[2], sender)) {
-                    return true;
-                }
-                player = Methods.getPlayer(args[2]);
+    @Description("Gives a player a lost book item.")
+    @CommandCompletion(ENCHANTMENTS_CATEGORY_COMPLETION + " amount|@range:1-64 @players")
+    public boolean lostbook(CommandSender sender,
+                            @Syntax("") @Optional Player player,
+                            @Name("category") @Optional @Single String categoryArg,
+                            @Name("amount") @Default("1") int amount,
+                            @Name("player") @Optional OnlinePlayer playerProvided) {
+        if (playerProvided != null) player = playerProvided.getPlayer();
+        if (player == null) {
+            sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+            return false;
+        }
+        Category category = ce.getCategory(categoryArg);
+
+        if (category != null) {
+            ItemStack lostBook = category.getLostBook().getLostBook(category, amount).build();
+            if (Methods.isInventoryFull(player)) {
+                player.getWorld().dropItemNaturally(player.getLocation(), lostBook);
             } else {
-                player = (Player) sender;
+                player.getInventory().addItem(lostBook);
             }
-            if (category != null) {
-                if (Methods.isInventoryFull(player)) {
-                    player.getWorld().dropItemNaturally(player.getLocation(), category.getLostBook().getLostBook(category, amount).build());
-                } else {
-                    player.getInventory().addItem(category.getLostBook().getLostBook(category, amount).build());
-                }
-                return true;
-            }
-            HashMap<String, String> placeholders = new HashMap<>();
-            placeholders.put("%Category%", args[0]);
-            sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
             return true;
         }
-        sender.sendMessage(Methods.getPrefix() + Methods.color("&c/ce LostBook <Category> [Amount] [Player]"));
+        HashMap<String, String> placeholders = new HashMap<>();
+        placeholders.put("%Category%", categoryArg);
+        sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
         return false;
     }
 
     @Subcommand("scrambler|s")
     @CommandPermission("scrambler")
-    @Description("&9Gives a player a Scrambler item.")
+    @Description("Gives a player a Scrambler item.")
+    @CommandCompletion("amount|@range:1-64 @players")
     public boolean scrambler(CommandSender sender,
-                             @Optional Player player,
+                             @Syntax("") @Optional Player player,
                              @Name("amount") @Optional Integer amount,
                              @Name("player") @Optional OnlinePlayer playerProvided) {
         if (playerProvided != null) player = playerProvided.getPlayer();
@@ -316,9 +321,10 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("crystal|c")
     @CommandPermission("crystal")
-    @Description("&9Gives a player a Protection Crystal item.")
+    @Description("Gives a player a Protection Crystal item.")
+    @CommandCompletion("amount|@range:1-64 @players")
     public boolean crystal(CommandSender sender,
-                           @Optional Player player,
+                           @Syntax("") @Optional Player player,
                            @Name("amount") @Optional Integer amount,
                            @Name("player") @Optional OnlinePlayer playerProvided) {
         if (playerProvided != null) player = playerProvided.getPlayer();
@@ -341,9 +347,10 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("dust")
     @CommandPermission("dust")
-    @Description("&9Give a player a dust item.")
+    @Description("Give a player a dust item.")
+    @CommandCompletion("Success|Destroy|Mystery amount|@range:1-64 @players percent|@range:1-100")
     public boolean dust(CommandSender sender,
-                        @Optional Player player,
+                        @Syntax("") @Optional Player player,
                         @Values("Success|Destroy|Mystery") String dustType,
                         @Default(value = "1") int amount,
                         @Optional OnlinePlayer playerProvided,
@@ -383,13 +390,13 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("scroll")
     @CommandPermission("scroll")
-    @Description("&9Gives a player a scroll item.")
+    @Description("Gives a player a scroll item.")
+    @CommandCompletion("White|Black|Transmog amount|@range:1-64 @players")
     public boolean scroll(CommandSender sender,
-                          @Optional Player player,
-                          @Values("White|Black|Transmog") String dustType,
-                          @Default(value = "1") int amount,
-                          @Optional OnlinePlayer playerProvided,
-                          @Optional Integer percent) {
+                          @Syntax("") @Optional Player player,
+                          @Name("dust") @Values("White|Black|Transmog") String dustType,
+                          @Name("amount") @Default(value = "1") int amount,
+                          @Name("player") @Optional OnlinePlayer playerProvided) {
         if (playerProvided != null) player = playerProvided.getPlayer();
         if (player == null) {
             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
@@ -406,11 +413,11 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("add")
     @CommandPermission("add")
-    @CommandCompletion("@enchantments level player")
-    @Description("&9Adds an enchantment to the item in your hand.")
+    @Description("Adds an enchantment to the item in your hand.")
+    @CommandCompletion(ENCHANTMENTS_ALL_COMPLETION + " level|" + ENCHANTMENT_LEVEL_COMPLETION + " @players")
     public boolean add(CommandSender sender,
-                       @Optional Player player,
-                       @Name("enchantment") @Single String enchantment,
+                       @Syntax("") @Optional Player player,
+                       @Name("enchantment") EnchantmentVanillaOrCE enchantment,
                        @Name("level") @Default(value = "1") int level,
                        @Name("player") @Optional OnlinePlayer playerProvided) {
         if (playerProvided != null) player = playerProvided.getPlayer();
@@ -418,22 +425,23 @@ public class CECommandACF extends BaseCommand {
             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
             return false;
         }
-        Enchantment vanillaEnchantment = Methods.getEnchantment(enchantment);
-        CEnchantment ceEnchantment = ce.getEnchantmentFromName(enchantment);
-        if (vanillaEnchantment == null && ceEnchantment == null) {
+        if (enchantment == null) {
             sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
             return true;
         }
-        if (Methods.getItemInHand(player).getType() == Material.AIR) {
+        ItemStack itemInHand = Methods.getItemInHand(player);
+        if (itemInHand.getType() == Material.AIR) {
             sender.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
             return true;
         }
-        if (vanillaEnchantment == null) {
-            Methods.setItemInHand(player, ce.addEnchantment(Methods.getItemInHand(player), ceEnchantment, level));
-        } else {
-            ItemStack item = Methods.getItemInHand(player).clone();
-            item.addUnsafeEnchantment(vanillaEnchantment, level);
+        if (enchantment.isCEnchantment()) {
+            Methods.setItemInHand(player, ce.addEnchantment(itemInHand, enchantment.getCEnchantment(), level));
+            return true;
+        } else if (enchantment.isVanilla()) {
+            ItemStack item = itemInHand.clone();
+            item.addUnsafeEnchantment(enchantment.getVanilla(), level);
             Methods.setItemInHand(player, item);
+            return true;
         }
         sender.sendMessage(Methods.getPrefix("&c/ce Add <Enchantment> [LvL]"));
         return false;
@@ -441,20 +449,18 @@ public class CECommandACF extends BaseCommand {
 
     @Subcommand("remove")
     @CommandPermission("remove")
-    @Description("&9Removes an enchantment from the item in your hand.")
+    @Description("Removes an enchantment from the item in your hand.")
+    @CommandCompletion(ENCHANTMENTS_ALL_COMPLETION + " @players")
     public boolean remove(CommandSender sender,
-                          @Optional Player player,
-                          @Name("enchantment") @Single String enchantment,
-                          @Name("level") @Default(value = "1") int level,
+                          @Syntax("") @Optional Player player,
+                          @Name("enchantment") EnchantmentVanillaOrCE enchantment,
                           @Name("player") @Optional OnlinePlayer playerProvided) {
         if (playerProvided != null) player = playerProvided.getPlayer();
         if (player == null) {
             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
             return false;
         }
-        Enchantment vanillaEnchantment = Methods.getEnchantment(enchantment);
-        CEnchantment ceEnchantment = ce.getEnchantmentFromName(enchantment);
-        if (vanillaEnchantment == null && ceEnchantment == null) {
+        if (enchantment == null) {
             sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
             return false;
         }
@@ -463,30 +469,35 @@ public class CECommandACF extends BaseCommand {
             return false;
         }
         ItemStack item = Methods.getItemInHand(player);
-        if (vanillaEnchantment != null) {
+        if (enchantment.isVanilla()) {
             ItemStack clone = Methods.getItemInHand(player).clone();
-            clone.removeEnchantment(vanillaEnchantment);
+            clone.removeEnchantment(enchantment.getVanilla());
             Methods.setItemInHand(player, clone);
             return true;
-        } else if (ce.hasEnchantment(item, ceEnchantment)) {
-            Methods.setItemInHand(player, ce.removeEnchantment(item, ceEnchantment));
-            HashMap<String, String> placeholders = new HashMap<>();
-            placeholders.put("%Enchantment%", ceEnchantment.getCustomName());
-            player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders));
-            return true;
+        } else { // should always evaluate to true in runtime
+            CEnchantment cEnchantment = enchantment.getCEnchantment();
+            if (ce.hasEnchantment(item, cEnchantment)) {
+                Methods.setItemInHand(player, ce.removeEnchantment(item, cEnchantment));
+                HashMap<String, String> placeholders = new HashMap<>();
+                placeholders.put("%Enchantment%", cEnchantment.getCustomName());
+                player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders));
+                return true;
+            } else {
+                HashMap<String, String> placeholders = new HashMap<>();
+                placeholders.put("%Enchantment%", cEnchantment.getName());
+                sender.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
+                return false;
+            }
         }
-        HashMap<String, String> placeholders = new HashMap<>();
-        placeholders.put("%Enchantment%", enchantment);
-        sender.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
-        return false;
     }
 
     @Subcommand("book")
     @CommandPermission("book")
-    @Description("&9Gives a player an enchantment Book.")
+    @Description("Gives a player an enchantment Book.")
+    @CommandCompletion(ENCHANTMENTS_COMPLETION + " level|" + ENCHANTMENT_LEVEL_COMPLETION + " amount|@range:1-64 @players")
     public boolean book(CommandSender sender,
-                        @Optional Player player,
-                        @Name("enchantment") @Single String enchantmentArg,
+                        @Syntax("") @Optional Player player,
+                        @Name("enchantment") EnchantmentVanillaOrCE enchantment,
                         @Name("level") @Default(value = "1") int level,
                         @Name("amount") @Default(value = "1") int amount,
                         @Name("player") @Optional OnlinePlayer playerProvided) {
@@ -495,15 +506,14 @@ public class CECommandACF extends BaseCommand {
             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
             return false;
         }
-        CEnchantment enchantment = ce.getEnchantmentFromName(enchantmentArg);
-        if (enchantment == null) {
+        if (enchantment == null || !enchantment.isCEnchantment()) {
             sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
             return false;
         }
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("%Player%", player.getName());
         sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
-        player.getInventory().addItem(new CEBook(enchantment, level, amount).buildBook());
+        player.getInventory().addItem(new CEBook(enchantment.getCEnchantment(), level, amount).buildBook());
         return true;
     }
 }

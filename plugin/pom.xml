@@ -200,7 +200,7 @@
                             <shadedPattern>me.badbones69.crazyenchantments.nbtapi</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>co.aikar</pattern>
+                            <pattern>co.aikar.commands</pattern>
                             <shadedPattern>me.badbones69.crazyenchantments.acf</shadedPattern>
                         </relocation>
                         <relocation>
