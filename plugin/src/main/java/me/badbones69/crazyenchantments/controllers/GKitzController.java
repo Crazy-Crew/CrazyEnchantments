@@ -68,7 +68,7 @@ public class GKitzController implements Listener {
     public void onInvClick(InventoryClickEvent e) {
         Inventory inventory = e.getInventory();
         ItemStack item = e.getCurrentItem();
-        if (inventory != null && item != null && item.getType() != Material.AIR) {
+        if (item != null && item.getType() != Material.AIR) {
             Player player = (Player) e.getWhoClicked();
             CEPlayer cePlayer = ce.getCEPlayer(player);
             NBTItem nbtItem = new NBTItem(item);
