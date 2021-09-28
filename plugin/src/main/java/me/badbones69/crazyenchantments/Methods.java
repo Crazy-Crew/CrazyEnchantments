@@ -425,6 +425,15 @@ public class Methods {
     public static boolean verifyItemLore(ItemStack item) {
         return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().getLore() != null && item.getItemMeta().hasLore();
     }
+
+    /**
+     * Verify the ItemStack has a display name. This checks to make sure everything isn't null because recent minecraft updates cause NPEs.
+     * @param item Itemstack you are checking.
+     * @return True if the item has a display name and no null issues.
+     */
+    public static boolean verifyItemDisplayName(ItemStack item) {
+        return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().hasDisplayName();
+    }
     
     public static HashMap<String, String> getEnchantments() {
         HashMap<String, String> enchantments = new HashMap<>();

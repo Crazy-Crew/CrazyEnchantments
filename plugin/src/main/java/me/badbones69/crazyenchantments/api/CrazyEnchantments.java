@@ -54,6 +54,7 @@ public class CrazyEnchantments {
     private boolean enchantStackedItems;
     private boolean maxEnchantmentCheck;
     private boolean checkVanillaLimit;
+    private boolean filterIsWhitelist;
     private ItemBuilder enchantmentBook;
     private NMSSupport nmsSupport;
     private Random random = new Random();
@@ -74,6 +75,8 @@ public class CrazyEnchantments {
     private List<CEnchantment> registeredEnchantments = new ArrayList<>();
     private List<Event> ignoredEvents = new ArrayList<>();
     private List<UUID> ignoredUUIDs = new ArrayList<>();
+    private List<String> filterNames = new ArrayList<>();
+    private List<String> filterLore = new ArrayList<>();
     
     public static CrazyEnchantments getInstance() {
         return instance;
@@ -116,6 +119,9 @@ public class CrazyEnchantments {
         rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
         breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
         enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
+        filterIsWhitelist = config.getBoolean("Settings.EnchantmentOptions.Filter.Is-Whitelist");
+        filterNames = config.getStringList("Settings.EnchantmentOptions.Filter.Names");
+        filterLore = config.getStringList("Settings.EnchantmentOptions.Filter.Lore");
         for (String category : config.getConfigurationSection("Categories").getKeys(false)) {
             String path = "Categories." + category;
             LostBook lostBook = new LostBook(
@@ -1494,6 +1500,30 @@ public class CrazyEnchantments {
             }
         }
         return colors;
+    }
+
+    /**
+     * Get if the item filter mode is whitelist or blacklist
+     * @return True if filter mode is whitelist, False if filter mode is blacklist
+     */
+    public boolean isFilterWhitelist() {
+        return filterIsWhitelist;
+    }
+
+    /**
+     * Get the list of names to be filtered when applying enchantments
+     * @return String List of names to be filtered
+     */
+    public List<String> getFilterNames() {
+        return filterNames;
+    }
+
+    /**
+     * Get the list of lore to be filtered when applying enchantments
+     * @return String List of lore to be filtered
+     */
+    public List<String> getFilterLore() {
+        return filterLore;
     }
     
 }
