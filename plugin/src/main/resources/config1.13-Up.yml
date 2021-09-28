@@ -285,6 +285,14 @@ Settings:
           - 'Hub_Example'
         Blacklisted: #Wings will not work at all in these worlds regardless of regions.
           - 'SkyBlock_Example'
+    Filter: #Filter which items can or can't receive enchantments based on name or lore
+      Names: #Matches if the item name is in this list
+        - '&aSome Custom Item Name'
+        - '&e&lAnother &bCustom Item'
+      Lore: #Matches if a single line of item lore is in this list
+        - '&fExample Item Lore'
+        - '&eMore Example Lore'
+      Is-Whitelist: false #If true, enchantments will only be applied to items matching name or lore. If false, enchantments won't be applied to items matching name or lore.
   Costs: #This is where you set the cost of stuff in the shop GUI.
     Scrambler: #The item that is being bought.
       Cost: 800 #How much the item will cost.
