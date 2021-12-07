@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 public class PlotSquared implements PlotSquaredVersion {
     
     public boolean inTerritory(Player player) {
-        PlotPlayer<Player> plotPlayer = BukkitUtil.getPlayer(player);
+        PlotPlayer<Player> plotPlayer = BukkitUtil.adapt(player);
         Plot plot = plotPlayer.getCurrentPlot();
         if (plot == null) {
             return false;
