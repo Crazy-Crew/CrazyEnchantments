@@ -2,10 +2,10 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class LostBook {
         try {//If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
         } catch (Exception e) {
-            System.out.println("[CrazyEnchantments] The sound " + sound + " is not a sound found in this minecraft version.");
+            Bukkit.getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
             this.sound = null;
         }
         this.useSound = sound != null && useSound;

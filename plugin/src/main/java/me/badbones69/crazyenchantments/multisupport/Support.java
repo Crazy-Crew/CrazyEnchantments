@@ -233,10 +233,10 @@ public class Support {
         
         public static void printHooks() {
             if (cachedPluginState.isEmpty()) updatePluginStates();
-            System.out.println(Methods.color("&4&lCrazy Enchantment Hooks"));
+            Bukkit.getLogger().info(Methods.color("&4&lCrazy Enchantment Hooks"));
             for (SupportedPlugins plugin : cachedPluginState.keySet()) {
                 if (plugin.isPluginLoaded()) {
-                    System.out.println(Methods.color("&6&l" + plugin.name() + ": &a&lEnabled"));
+                    Bukkit.getLogger().info(Methods.color("&6&l" + plugin.name() + ": &a&lEnabled"));
                 }
             }
         }

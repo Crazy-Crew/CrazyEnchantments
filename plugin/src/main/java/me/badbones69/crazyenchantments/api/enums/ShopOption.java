@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.api.enums;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,7 +59,7 @@ public enum ShopOption {
                 config.getInt(costPath + "Cost", 100),
                 Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
             } catch (Exception e) {
-                System.out.println("The option " + shopOption.getOptionPath() + " has failed to load.");
+                Bukkit.getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
                 e.printStackTrace();
             }
         }

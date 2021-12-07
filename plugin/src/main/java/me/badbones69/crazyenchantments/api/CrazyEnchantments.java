@@ -641,7 +641,7 @@ public class CrazyEnchantments {
             CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
             return new CEBook(enchantment, randomLevel(enchantment, category), 1, category);
         } catch (Exception e) {
-            System.out.println("[Crazy Enchantments]>> The category " + category.getName() + " has no enchantments."
+            plugin.getLogger().info("The category " + category.getName() + " has no enchantments."
             + " Please add enchantments to the category in the Enchantments.yml. If you do not wish to have the category feel free to delete it from the Config.yml.");
             return null;
         }
