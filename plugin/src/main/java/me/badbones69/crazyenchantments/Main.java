@@ -60,9 +60,8 @@ public class Main extends JavaPlugin implements Listener {
         pm.registerEvents(this, this);
         pm.registerEvents(new ShopControl(), this);
         pm.registerEvents(new InfoGUIControl(), this);
-        if (ce.isGkitzEnabled()) {
-            pm.registerEvents(new GKitzController(), this);
-        }
+        if (ce.isGkitzEnabled()) pm.registerEvents(new GKitzController(), this);
+
         pm.registerEvents(new LostBookController(), this);
         pm.registerEvents(new EnchantmentControl(), this);
         pm.registerEvents(new SignControl(), this);
@@ -87,18 +86,10 @@ public class Main extends JavaPlugin implements Listener {
         pm.registerEvents(armor = new Armor(), this);
         pm.registerEvents(new Swords(), this);
         pm.registerEvents(new AllyEnchantments(), this);
-        if (SupportedPlugins.AAC.isPluginLoaded()) {
-            pm.registerEvents(new AACSupport(), this);
-        }
-        if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) {
-            pm.registerEvents(new SilkSpawnerSupport(), this);
-        }
-        if (SupportedPlugins.SILK_SPAWNERS_CANDC.isPluginLoaded()) {
-            pm.registerEvents(new SilkSpawnersCandcSupport(), this);
-        }
-        if (SupportedPlugins.DAKATA.isPluginLoaded()) {
-            pm.registerEvents(new DakataAntiCheatSupport(), this);
-        }
+        if (SupportedPlugins.AAC.isPluginLoaded()) pm.registerEvents(new AACSupport(), this);
+        if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) pm.registerEvents(new SilkSpawnerSupport(), this);
+        if (SupportedPlugins.SILK_SPAWNERS_CANDC.isPluginLoaded()) pm.registerEvents(new SilkSpawnersCandcSupport(), this);
+        if (SupportedPlugins.DAKATA.isPluginLoaded()) pm.registerEvents(new DakataAntiCheatSupport(), this);
         //==========================================================================\\
         new Metrics(this);// Starts up bStats
         new BukkitRunnable() {
@@ -115,9 +106,7 @@ public class Main extends JavaPlugin implements Listener {
     public void onDisable() {
         armor.stop();
         
-        if (ce.getAllyManager() != null) {
-            ce.getAllyManager().forceRemoveAllies();
-        }
+        if (ce.getAllyManager() != null) ce.getAllyManager().forceRemoveAllies();
         for (Player player : Bukkit.getOnlinePlayers()) {
             ce.unloadCEPlayer(player);
         }
@@ -138,21 +127,15 @@ public class Main extends JavaPlugin implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (player.getName().equals("BadBones69")) {
-                    player.sendMessage(Methods.getPrefix() + Methods.color("&7This server is running your Crazy Enchantments Plugin. "
-                    + "&7It is running version &av" + ce.getPlugin().getDescription().getVersion() + "&7."));
-                }
                 if (player.isOp()) {
                     Methods.hasUpdate(player);
                 }
             }
-        }.
-        runTaskLaterAsynchronously(this, 20);
+        }.runTaskLaterAsynchronously(this, 20);
     }
     
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e) {
         ce.unloadCEPlayer(e.getPlayer());
     }
-    
 }
