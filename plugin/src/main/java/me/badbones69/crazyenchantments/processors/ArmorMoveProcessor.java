@@ -120,11 +120,11 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        int finalArmorDirability = armorDurability;
+                        int finalArmorDurability = armorDurability;
                         HellForgedUseEvent event = new HellForgedUseEvent(player, item);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
-                            finalArmorDirability -= ce.getLevel(item, CEnchantments.HELLFORGED);
+                            finalArmorDurability -= ce.getLevel(item, CEnchantments.HELLFORGED);
                             support.setDamage(item, finalArmorDurability);
                         }
                     }

@@ -164,7 +164,7 @@
             <scope>provided</scope>
         </dependency>
 		<dependency>
-            <groupId>com.github.Th0rgal</groupId>
+            <groupId>com.github.Mowstyl</groupId>
             <artifactId>Oraxen</artifactId>
             <version>master-SNAPSHOT</version>
         </dependency>
