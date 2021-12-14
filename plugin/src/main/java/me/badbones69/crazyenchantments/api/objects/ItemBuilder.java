@@ -4,6 +4,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.multisupport.SkullCreator;
+import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -116,6 +117,7 @@ public class ItemBuilder implements Cloneable {
         .setAmount(item.getAmount())
         .setMaterial(item.getType())
         .setEnchantments(new HashMap<>(item.getEnchantments()));
+		Support support = Support.getInstance();
         if (item.hasItemMeta()) {
             ItemMeta itemMeta = item.getItemMeta();
             itemBuilder.setName(itemMeta.getDisplayName())
@@ -124,12 +126,8 @@ public class ItemBuilder implements Cloneable {
             if (nbt.hasKey("Unbreakable")) {
                 itemBuilder.setUnbreakable(nbt.getBoolean("Unbreakable"));
             }
-            if (useNewMaterial) {
-                if (itemMeta instanceof Damageable) {
-                    itemBuilder.setDamage(((Damageable) itemMeta).getDamage());
-                }
-            } else {
-                itemBuilder.setDamage(item.getDurability());
+            if (!useNewMaterial || itemMeta instanceof Damageable) {
+                itemBuilder.setDamage(support.getDamage(item));
             }
         }
         return itemBuilder;
@@ -864,13 +862,8 @@ public class ItemBuilder implements Cloneable {
             if (Version.isNewer(Version.v1_10_R1)) {
                 itemMeta.setUnbreakable(unbreakable);
             }
-            if (Version.isNewer(Version.v1_12_R1)) {
-                if (itemMeta instanceof Damageable) {
-                    ((Damageable) itemMeta).setDamage(damage);
-                }
-            } else {
-                item.setDurability((short) damage);
-            }
+            Support support = Support.getInstance();
+            support.setDamage(item, damage);
             if ((isTippedArrow || isPotion) && (potionType != null || potionColor != null)) {
                 PotionMeta potionMeta = (PotionMeta) itemMeta;
                 if (potionType != null) {

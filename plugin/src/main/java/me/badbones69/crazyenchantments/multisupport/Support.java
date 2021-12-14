@@ -16,6 +16,9 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
@@ -50,6 +53,36 @@ public class Support {
             return true;
         }
         return SupportedPlugins.PLOT_SQUARED.isPluginLoaded() && plotSquaredVersion.inTerritory(player);
+    }
+	
+	public int getMaxDurability(ItemStack item) {
+        if (!SupportedPlugins.ORAXEN.isPluginLoaded()) {
+            return item.getType().getMaxDurability();
+        }
+        return OraxenSupport.getMaxDurability(item);
+    }
+
+    public int getDamage(ItemStack item) {
+        if (!SupportedPlugins.ORAXEN.isPluginLoaded()) {
+            return Version.isNewer(Version.v1_12_R1) ? ((Damageable) item.getItemMeta()).getDamage() : item.getDurability();
+        }
+        return OraxenSupport.getDamage(item);
+    }
+
+    public void setDamage(ItemStack item, int newDamage) {
+        newDamage = Math.max(newDamage, 0);
+        if (!SupportedPlugins.ORAXEN.isPluginLoaded()) {
+            if (Version.isNewer(Version.v1_12_R1)) {
+                Damageable damageable = (Damageable) item.getItemMeta();
+                if (damageable != null) {
+                    damageable.setDamage(newDamage);
+                    item.setItemMeta((ItemMeta) damageable);
+                }
+            } else {
+                item.setDurability((short) newDamage);
+            }
+        }
+        OraxenSupport.setDamage(item, newDamage);
     }
     
     public boolean isFriendly(Entity pEntity, Entity oEntity) {
@@ -160,7 +193,8 @@ public class Support {
         MEGA_SKILLS("MegaSkills"),
         PRECIOUS_STONES("PreciousStones"),
         PLOT_SQUARED("PlotSquared"),
-        FACTIONSX("FactionsX");
+        FACTIONSX("FactionsX"),
+        ORAXEN("Oraxen");
         
         private String name;
         private static Map<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();

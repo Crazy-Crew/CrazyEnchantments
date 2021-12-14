@@ -7,6 +7,7 @@ import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import me.badbones69.crazyenchantments.multisupport.Support;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -135,7 +136,8 @@ public class Scrambler implements Listener {
                         roll.remove(player);
                         ItemStack item = inventory.getItem(13).clone();
                         item.setType(ce.getEnchantmentBookItem().getType());
-                        item.setDurability(ce.getEnchantmentBookItem().getDurability());
+						Support support = Support.getInstance();
+						support.setDamage(item, support.getDamage(ce.getEnchantmentBookItem()));
                         if (Methods.isInventoryFull(player)) {
                             player.getWorld().dropItem(player.getLocation(), item);
                         } else {

@@ -163,6 +163,11 @@
             <version>b11</version>
             <scope>provided</scope>
         </dependency>
+		<dependency>
+            <groupId>com.github.Th0rgal</groupId>
+            <artifactId>Oraxen</artifactId>
+            <version>master-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -180,6 +185,11 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
+					<artifactSet>
+                        <excludes>
+                            <exclude>*:Oraxen</exclude>
+                        </excludes>
+                    </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>

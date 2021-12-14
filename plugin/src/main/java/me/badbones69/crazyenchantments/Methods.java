@@ -460,9 +460,12 @@ public class Methods {
     }
     
     public static void removeDurability(ItemStack item, Player player) {
-        if (item.getType().getMaxDurability() == 0) {
+        Support support = Support.getInstance();
+        int maxDurability = support.getMaxDurability(item);
+        if (maxDurability == 0) {
             return;
         }
+		int damage = support.getDamage(item);
         if (item.hasItemMeta()) {
             try {
                 if (item.getItemMeta().isUnbreakable()) {
@@ -477,20 +480,20 @@ public class Methods {
             if (item.getItemMeta().hasEnchants()) {
                 if (item.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
                     if (Methods.randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.DURABILITY))) {
-                        if (item.getDurability() > item.getType().getMaxDurability()) {
+                        if (damage > maxDurability) {
                             player.getInventory().remove(item);
                         } else {
-                            item.setDurability((short) (item.getDurability() + 1));
+                            support.setDamage(item, damage + 1);
                         }
                     }
                     return;
                 }
             }
         }
-        if (item.getDurability() > item.getType().getMaxDurability()) {
+        if (damage > maxDurability) {
             player.getInventory().remove(item);
         } else {
-            item.setDurability((short) (item.getDurability() + 1));
+			support.setDamage(item, damage + 1);
         }
     }
     

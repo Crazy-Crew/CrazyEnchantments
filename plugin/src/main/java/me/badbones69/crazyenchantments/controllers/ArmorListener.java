@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.controllers;
 import me.badbones69.crazyenchantments.api.enums.ArmorType;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
+import me.badbones69.crazyenchantments.multisupport.Support;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -260,7 +261,8 @@ public class ArmorListener implements Listener {
             if (armorEquipEvent.isCancelled()) {
                 ItemStack i = e.getBrokenItem().clone();
                 i.setAmount(1);
-                i.setDurability((short) (i.getDurability() - 1));
+				Support support = Support.getInstance();
+                support.setDamage(i, support.getDamage(i) - 1);
                 if (type.equals(ArmorType.HELMET)) {
                     p.getInventory().setHelmet(i);
                 } else if (type.equals(ArmorType.CHESTPLATE)) {
