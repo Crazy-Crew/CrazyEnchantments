@@ -382,6 +382,15 @@ public class PickAxes implements Listener {
             return true;
         }
         switch (material) {
+            case DEEPSLATE_COAL_ORE:
+            case DEEPSLATE_COPPER_ORE:
+            case DEEPSLATE_DIAMOND_ORE:
+            case DEEPSLATE_EMERALD_ORE:
+            case DEEPSLATE_GOLD_ORE:
+            case DEEPSLATE_IRON_ORE:
+            case DEEPSLATE_LAPIS_ORE:
+            case DEEPSLATE_REDSTONE_ORE:
+            case COPPER_ORE:
             case COAL_ORE:
             case IRON_ORE:
             case GOLD_ORE:
@@ -405,6 +414,33 @@ public class PickAxes implements Listener {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
             switch (material) {
+                case DEEPSLATE_COAL_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_COAL_ORE);
+                    break;
+                case DEEPSLATE_COPPER_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_COPPER_ORE);
+                    break;
+                case DEEPSLATE_DIAMOND_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_DIAMOND_ORE);
+                    break;
+                case DEEPSLATE_EMERALD_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_EMERALD_ORE);
+                    break;
+                case DEEPSLATE_GOLD_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_GOLD_ORE);
+                    break;
+                case DEEPSLATE_IRON_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_IRON_ORE);
+                    break;
+                case DEEPSLATE_LAPIS_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_LAPIS_ORE);
+                    break;
+                case DEEPSLATE_REDSTONE_ORE:
+                    dropItem.setMaterial(Material.DEEPSLATE_REDSTONE_ORE);
+                    break;
+                case COPPER_ORE:
+                    dropItem.setMaterial(Material.COPPER_ORE);
+                    break;
                 case COAL_ORE:
                     dropItem.setMaterial(Material.COAL);
                     break;
