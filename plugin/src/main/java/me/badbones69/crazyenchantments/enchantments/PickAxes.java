@@ -390,6 +390,7 @@ public class PickAxes implements Listener {
             case DEEPSLATE_IRON_ORE:
             case DEEPSLATE_LAPIS_ORE:
             case DEEPSLATE_REDSTONE_ORE:
+            case COPPER_ORE:
             case COAL_ORE:
             case IRON_ORE:
             case GOLD_ORE:
@@ -436,6 +437,9 @@ public class PickAxes implements Listener {
                     break;
                 case DEEPSLATE_REDSTONE_ORE:
                     dropItem.setMaterial(Material.DEEPSLATE_REDSTONE_ORE);
+                    break;
+                case COPPER_ORE:
+                    dropItem.setMaterial(Material.COPPER_ORE);
                     break;
                 case COAL_ORE:
                     dropItem.setMaterial(Material.COAL);
