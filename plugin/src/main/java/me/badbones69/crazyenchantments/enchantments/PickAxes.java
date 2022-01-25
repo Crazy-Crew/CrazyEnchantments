@@ -415,28 +415,28 @@ public class PickAxes implements Listener {
         } else {
             switch (material) {
                 case DEEPSLATE_COAL_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_COAL_ORE);
+                    dropItem.setMaterial(Material.COAL);
                     break;
                 case DEEPSLATE_COPPER_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_COPPER_ORE);
+                    dropItem.setMaterial(Material.COPPER_ORE);
                     break;
                 case DEEPSLATE_DIAMOND_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_DIAMOND_ORE);
+                    dropItem.setMaterial(Material.DIAMOND);
                     break;
                 case DEEPSLATE_EMERALD_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_EMERALD_ORE);
+                    dropItem.setMaterial(Material.EMERALD);
                     break;
                 case DEEPSLATE_GOLD_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_GOLD_ORE);
+                    dropItem.setMaterial(Material.GOLD_INGOT);
                     break;
                 case DEEPSLATE_IRON_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_IRON_ORE);
+                    dropItem.setMaterial(Material.IRON_INGOT);
                     break;
                 case DEEPSLATE_LAPIS_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_LAPIS_ORE);
+                    dropItem.setMaterial("LAPIS_LAZULI", "INK_SACK:4");
                     break;
                 case DEEPSLATE_REDSTONE_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_REDSTONE_ORE);
+                    dropItem.setMaterial(Material.REDSTONE);
                     break;
                 case COPPER_ORE:
                     dropItem.setMaterial(Material.COPPER_ORE);
