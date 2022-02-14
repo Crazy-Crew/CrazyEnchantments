@@ -55,7 +55,7 @@
         <!-- Premium Hooks -->
         <repository>
             <id>nexus</id>
-            <url>https://nexus.badbones69.com/repository/maven-releases/</url>
+            <url>https://nexus.badbones69.com/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>me.badbones69</groupId>
             <artifactId>premiumhooks</artifactId>
-            <version>1.3</version>
+            <version>1.3-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency> <!-- Spigot-Api -->
