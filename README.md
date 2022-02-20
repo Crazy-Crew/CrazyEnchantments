@@ -7,6 +7,11 @@ Source Code for Crazy Enchantments
 ## Latest Version:
 [![Latest Version](https://img.shields.io/badge/Latest%20Version-1.8--Dev--Build--v8-blue)](https://github.com/badbones69/Crazy-Enchantments/releases/latest)
 
+## Support:
+https://guilded.gg/badbones
+
+https://discord.com/invite/MCuz8JG/
+
 ## Jenkins: 
  https://jenkins.badbones69.com/job/Crazy-Enchantments/
 
