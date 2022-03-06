@@ -12,7 +12,7 @@
     <artifactId>crazyenchantments-plugin</artifactId>
 
     <repositories>
-        <!--Spigot-->
+        <!-- Spigot -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
