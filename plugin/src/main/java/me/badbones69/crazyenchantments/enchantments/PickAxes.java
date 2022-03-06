@@ -367,13 +367,20 @@ public class PickAxes implements Listener {
         int bottomBlockY = (Math.min(loc.getBlockY(), loc2.getBlockY()));
         int topBlockZ = (Math.max(loc.getBlockZ(), loc2.getBlockZ()));
         int bottomBlockZ = (Math.min(loc.getBlockZ(), loc2.getBlockZ()));
-        for (int x = bottomBlockX; x <= topBlockX; x++) {
-            for (int z = bottomBlockZ; z <= topBlockZ; z++) {
-                for (int y = bottomBlockY; y <= topBlockY; y++) {
-                    blockList.add(loc.getWorld().getBlockAt(x, y, z));
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (int x = bottomBlockX; x <= topBlockX; x++) {
+                    for (int z = bottomBlockZ; z <= topBlockZ; z++) {
+                        for (int y = bottomBlockY; y <= topBlockY; y++) {
+                            blockList.add(loc.getWorld().getBlockAt(x, y, z));
+                        }
+                    }
                 }
             }
-        }
+        }.runTask(ce.getPlugin());
+
         return blockList;
     }
     
