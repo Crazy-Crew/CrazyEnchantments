@@ -55,7 +55,7 @@
         <!-- Premium Hooks -->
         <repository>
             <id>nexus</id>
-            <url>https://nexus.badbones69.com/repository/maven-public/</url>
+            <url>https://nexus.badbones69.com/repository/</url>
         </repository>
     </repositories>
 
