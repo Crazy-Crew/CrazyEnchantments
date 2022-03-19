@@ -65,7 +65,7 @@ public class AuraListener implements Listener {
             });
         }
         for (Player other : players) {
-            EntityEquipment otherEquipment = player.getEquipment();
+            EntityEquipment otherEquipment = other.getEquipment();
             if (otherEquipment == null) {
                 continue; // Should never happen
             }
@@ -90,8 +90,10 @@ public class AuraListener implements Listener {
     // TODO: move into utils?
     private static List<Player> getNearbyPlayers(Player player, int radius) {
         List<Player> players = new ArrayList<>();
+        int i = 1;
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-            if (!(entity instanceof Player) || entity == player) {
+            i++;
+            if (!(entity instanceof Player) || entity.getUniqueId().toString().equals(player.getUniqueId().toString())) {
                 continue;
             }
             players.add((Player) entity);
