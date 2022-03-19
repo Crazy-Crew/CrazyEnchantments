@@ -89,13 +89,10 @@ public class AuraListener implements Listener {
     
     // TODO: move into utils?
     private static List<Player> getNearbyPlayers(Player player, int radius) {
-        List<Player> players = null;
+        List<Player> players = new ArrayList<>();
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (!(entity instanceof Player) || entity == player) {
                 continue;
-            }
-            if (players == null) {
-                players = new ArrayList<>();
             }
             players.add((Player) entity);
         }
