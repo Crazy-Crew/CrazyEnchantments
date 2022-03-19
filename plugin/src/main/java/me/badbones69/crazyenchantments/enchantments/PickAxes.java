@@ -397,6 +397,8 @@ public class PickAxes implements Listener {
             case EMERALD_ORE:
             case LAPIS_ORE:
             case REDSTONE_ORE:
+            case COPPER_ORE:
+            case NETHER_GOLD_ORE:
                 return true;
             default:
                 return false;
@@ -417,7 +419,8 @@ public class PickAxes implements Listener {
                     dropItem.setMaterial(Material.DEEPSLATE_COAL_ORE);
                     break;
                 case DEEPSLATE_COPPER_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_COPPER_ORE);
+                case COPPER_ORE:
+                    dropItem.setMaterial(Material.COPPER_INGOT);
                     break;
                 case DEEPSLATE_DIAMOND_ORE:
                     dropItem.setMaterial(Material.DEEPSLATE_DIAMOND_ORE);
@@ -426,10 +429,13 @@ public class PickAxes implements Listener {
                     dropItem.setMaterial(Material.DEEPSLATE_EMERALD_ORE);
                     break;
                 case DEEPSLATE_GOLD_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_GOLD_ORE);
+                case GOLD_ORE:
+                case NETHER_GOLD_ORE:
+                    dropItem.setMaterial(Material.GOLD_INGOT);
                     break;
                 case DEEPSLATE_IRON_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_IRON_ORE);
+                case IRON_ORE:
+                    dropItem.setMaterial(Material.IRON_INGOT);
                     break;
                 case DEEPSLATE_LAPIS_ORE:
                     dropItem.setMaterial(Material.DEEPSLATE_LAPIS_ORE);
@@ -439,12 +445,6 @@ public class PickAxes implements Listener {
                     break;
                 case COAL_ORE:
                     dropItem.setMaterial(Material.COAL);
-                    break;
-                case IRON_ORE:
-                    dropItem.setMaterial(Material.IRON_INGOT);
-                    break;
-                case GOLD_ORE:
-                    dropItem.setMaterial(Material.GOLD_INGOT);
                     break;
                 case DIAMOND_ORE:
                     dropItem.setMaterial(Material.DIAMOND);
