@@ -416,17 +416,20 @@ public class PickAxes implements Listener {
         } else {
             switch (material) {
                 case DEEPSLATE_COAL_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_COAL_ORE);
+                case COAL_ORE:
+                    dropItem.setMaterial(Material.COAL);
                     break;
                 case DEEPSLATE_COPPER_ORE:
                 case COPPER_ORE:
                     dropItem.setMaterial(Material.COPPER_INGOT);
                     break;
                 case DEEPSLATE_DIAMOND_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_DIAMOND_ORE);
+                case DIAMOND_ORE:
+                    dropItem.setMaterial(Material.DIAMOND);
                     break;
                 case DEEPSLATE_EMERALD_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_EMERALD_ORE);
+                case EMERALD_ORE:
+                    dropItem.setMaterial(Material.EMERALD);
                     break;
                 case DEEPSLATE_GOLD_ORE:
                 case GOLD_ORE:
@@ -438,23 +441,10 @@ public class PickAxes implements Listener {
                     dropItem.setMaterial(Material.IRON_INGOT);
                     break;
                 case DEEPSLATE_LAPIS_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_LAPIS_ORE);
-                    break;
-                case DEEPSLATE_REDSTONE_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_REDSTONE_ORE);
-                    break;
-                case COAL_ORE:
-                    dropItem.setMaterial(Material.COAL);
-                    break;
-                case DIAMOND_ORE:
-                    dropItem.setMaterial(Material.DIAMOND);
-                    break;
-                case EMERALD_ORE:
-                    dropItem.setMaterial(Material.EMERALD);
-                    break;
                 case LAPIS_ORE:
                     dropItem.setMaterial("LAPIS_LAZULI", "INK_SACK:4");
                     break;
+                case DEEPSLATE_REDSTONE_ORE:
                 case REDSTONE_ORE:
                     dropItem.setMaterial(Material.REDSTONE);
                     break;
