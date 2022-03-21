@@ -6,7 +6,7 @@
     <parent>
         <artifactId>crazyenchantments</artifactId>
         <groupId>me.badbones69</groupId>
-        <version>1.8-Dev-Build-v11</version>
+        <version>1.8-Dev-Build-v12</version>
     </parent>
 
     <artifactId>crazyenchantments-v1_13_up</artifactId>
@@ -45,7 +45,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18-R0.1-SNAPSHOT</version>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -62,6 +62,10 @@
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>bstats-bukkit</artifactId>
+                    <groupId>org.bstats</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -74,13 +78,17 @@
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>bstats-bukkit</artifactId>
+                    <groupId>org.bstats</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- PlotSquared Core API -->
         <dependency>
             <groupId>com.plotsquared</groupId>
             <artifactId>PlotSquared-Core</artifactId>
-            <version>6.2.2</version>
+            <version>6.6.1</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>

@@ -9,10 +9,7 @@ public class PlotSquared implements PlotSquaredVersion {
     public boolean inTerritory(Player player) {
         PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
         Plot plot = plotPlayer.getCurrentPlot();
-        if (plot == null) {
-            return false;
-        }
-        return plot.isAdded(plotPlayer.getUUID());
+        return plot != null && plot.isAdded(plotPlayer.getUUID());
     }
     
 }
