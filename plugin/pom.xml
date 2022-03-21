@@ -163,7 +163,7 @@
             <version>b11</version>
             <scope>provided</scope>
         </dependency>
-		<dependency>
+        <dependency>
             <groupId>com.github.oraxen</groupId>
             <artifactId>Oraxen</artifactId>
             <version>master-SNAPSHOT</version>
@@ -185,7 +185,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
-					<artifactSet>
+                    <artifactSet>
                         <excludes>
                             <exclude>*:Oraxen</exclude>
                         </excludes>
