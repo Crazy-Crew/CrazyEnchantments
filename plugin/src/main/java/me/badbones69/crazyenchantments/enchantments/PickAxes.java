@@ -397,6 +397,8 @@ public class PickAxes implements Listener {
             case EMERALD_ORE:
             case LAPIS_ORE:
             case REDSTONE_ORE:
+            case COPPER_ORE:
+            case NETHER_GOLD_ORE:
                 return true;
             default:
                 return false;
@@ -414,47 +416,35 @@ public class PickAxes implements Listener {
         } else {
             switch (material) {
                 case DEEPSLATE_COAL_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_COAL_ORE);
-                    break;
-                case DEEPSLATE_COPPER_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_COPPER_ORE);
-                    break;
-                case DEEPSLATE_DIAMOND_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_DIAMOND_ORE);
-                    break;
-                case DEEPSLATE_EMERALD_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_EMERALD_ORE);
-                    break;
-                case DEEPSLATE_GOLD_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_GOLD_ORE);
-                    break;
-                case DEEPSLATE_IRON_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_IRON_ORE);
-                    break;
-                case DEEPSLATE_LAPIS_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_LAPIS_ORE);
-                    break;
-                case DEEPSLATE_REDSTONE_ORE:
-                    dropItem.setMaterial(Material.DEEPSLATE_REDSTONE_ORE);
-                    break;
                 case COAL_ORE:
                     dropItem.setMaterial(Material.COAL);
                     break;
-                case IRON_ORE:
-                    dropItem.setMaterial(Material.IRON_INGOT);
+                case DEEPSLATE_COPPER_ORE:
+                case COPPER_ORE:
+                    dropItem.setMaterial(Material.COPPER_INGOT);
                     break;
-                case GOLD_ORE:
-                    dropItem.setMaterial(Material.GOLD_INGOT);
-                    break;
+                case DEEPSLATE_DIAMOND_ORE:
                 case DIAMOND_ORE:
                     dropItem.setMaterial(Material.DIAMOND);
                     break;
+                case DEEPSLATE_EMERALD_ORE:
                 case EMERALD_ORE:
                     dropItem.setMaterial(Material.EMERALD);
                     break;
+                case DEEPSLATE_GOLD_ORE:
+                case GOLD_ORE:
+                case NETHER_GOLD_ORE:
+                    dropItem.setMaterial(Material.GOLD_INGOT);
+                    break;
+                case DEEPSLATE_IRON_ORE:
+                case IRON_ORE:
+                    dropItem.setMaterial(Material.IRON_INGOT);
+                    break;
+                case DEEPSLATE_LAPIS_ORE:
                 case LAPIS_ORE:
                     dropItem.setMaterial("LAPIS_LAZULI", "INK_SACK:4");
                     break;
+                case DEEPSLATE_REDSTONE_ORE:
                 case REDSTONE_ORE:
                     dropItem.setMaterial(Material.REDSTONE);
                     break;
