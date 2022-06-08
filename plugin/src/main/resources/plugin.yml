@@ -19,3 +19,5 @@ commands:
   gkit:
     description: Opens the GKitz GUI.
     aliases: [ gkitz, gkits ]
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.6.21
