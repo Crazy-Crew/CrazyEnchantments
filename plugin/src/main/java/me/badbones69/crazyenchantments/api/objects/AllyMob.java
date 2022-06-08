@@ -71,30 +71,30 @@ public class AllyMob {
     
     public void attackEnemy(LivingEntity enemy) {
         switch (ally.getType()) {
-            case WOLF:
+            case WOLF -> {
                 Wolf wolf = (Wolf) ally;
                 wolf.setTarget(enemy);
-                break;
-            case IRON_GOLEM:
+            }
+            case IRON_GOLEM -> {
                 IronGolem iron = (IronGolem) ally;
                 iron.setTarget(enemy);
-                break;
-            case ZOMBIE:
+            }
+            case ZOMBIE -> {
                 Zombie zom = (Zombie) ally;
                 zom.setTarget(enemy);
-                break;
-            case ENDERMITE:
+            }
+            case ENDERMITE -> {
                 Endermite mite = (Endermite) ally;
                 mite.setTarget(enemy);
-                break;
-            case SILVERFISH:
+            }
+            case SILVERFISH -> {
                 Silverfish sfish = (Silverfish) ally;
                 sfish.setTarget(enemy);
-                break;
-            case BEE:
+            }
+            case BEE -> {
                 Bee bee = (Bee) ally;
                 bee.setTarget(enemy);
-                break;
+            }
         }
     }
     

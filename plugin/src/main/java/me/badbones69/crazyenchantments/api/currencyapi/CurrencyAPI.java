@@ -15,16 +15,12 @@ public class CurrencyAPI {
      */
     public static int getCurrency(Player player, Currency currency) {
         try {
-            switch (currency) {
-                case VAULT:
-                    return (int) VaultSupport.getVault().getBalance(player);
-                case XP_LEVEL:
-                    return player.getLevel();
-                case XP_TOTAL:
-                    return getTotalExperience(player);
-            }
-        } catch (Exception | NoClassDefFoundError ignored) {
-        }
+            return switch (currency) {
+                case VAULT -> (int) VaultSupport.getVault().getBalance(player);
+                case XP_LEVEL -> player.getLevel();
+                case XP_TOTAL -> getTotalExperience(player);
+            };
+        } catch (Exception | NoClassDefFoundError ignored) {}
         return 0;
     }
     
@@ -64,15 +60,9 @@ public class CurrencyAPI {
     public static void takeCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT:
-                    VaultSupport.getVault().withdrawPlayer(player, amount);
-                    break;
-                case XP_LEVEL:
-                    player.setLevel(player.getLevel() - amount);
-                    break;
-                case XP_TOTAL:
-                    takeTotalExperience(player, amount);
-                    break;
+                case VAULT -> VaultSupport.getVault().withdrawPlayer(player, amount);
+                case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
+                case XP_TOTAL -> takeTotalExperience(player, amount);
             }
         } catch (Exception | NoClassDefFoundError ignored) {
         }
@@ -87,15 +77,9 @@ public class CurrencyAPI {
     public static void giveCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT:
-                    VaultSupport.getVault().depositPlayer(player, amount);
-                    break;
-                case XP_LEVEL:
-                    player.setLevel(player.getLevel() + amount);
-                    break;
-                case XP_TOTAL:
-                    takeTotalExperience(player, -amount);
-                    break;
+                case VAULT -> VaultSupport.getVault().depositPlayer(player, amount);
+                case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
+                case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
         } catch (Exception | NoClassDefFoundError ignored) {
         }
