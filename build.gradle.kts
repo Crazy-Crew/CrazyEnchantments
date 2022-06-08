@@ -11,8 +11,7 @@ subprojects {
     apply(plugin = "java")
 
     repositories {
-        // Plot Squared
-        maven("https://mvn.intellectualsites.com/content/repositories/snapshots/")
+        mavenCentral()
 
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 

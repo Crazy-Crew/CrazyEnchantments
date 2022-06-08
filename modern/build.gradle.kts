@@ -10,7 +10,7 @@ dependencies {
         exclude("org.bstats", "bstats-bukkit")
     }
 
-    compileOnly("com.plotsquared:PlotSquared-Core:6.7.0") {
+    compileOnly("com.plotsquared:PlotSquared-Core:6.8.1") {
         exclude("com.destroystokyo.paper", "paper-api")
     }
 

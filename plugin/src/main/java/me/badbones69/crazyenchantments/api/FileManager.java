@@ -293,15 +293,15 @@ public class FileManager {
         
         //ENUM_NAME("fileName.yml", "fileLocation.yml"),
         //ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
-        CONFIG("config.yml", "config.yml", "config1.13-Up.yml", "config1.12.2-Down.yml"),
-        BLOCKLIST("BlockList.yml", "BlockList.yml", "BlockList1.13-Up.yml", "BlockList1.12.2-Down.yml"),
+        CONFIG("config.yml", "config.yml"),
+        BLOCKLIST("BlockList.yml", "BlockList.yml"),
         DATA("Data.yml", "Data.yml"),
         ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
-        GKITZ("GKitz.yml", "GKitz.yml", "GKitz1.13-Up.yml", "GKitz1.12.2-Down.yml"),
+        GKITZ("GKitz.yml", "GKitz.yml"),
         MESSAGES("Messages.yml", "Messages.yml"),
-        ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml", "Enchantment-Types1.13-Up.yml", "Enchantment-Types1.12.2-Down.yml"),
+        ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml"),
         SIGNS("Signs.yml", "Signs.yml"),
-        TINKER("Tinker.yml", "Tinker.yml", "Tinker1.13-Up.yml", "Tinker1.12.2-Down.yml");
+        TINKER("Tinker.yml", "Tinker.yml");
         
         private String fileName;
         private String fileJar;
@@ -312,7 +312,7 @@ public class FileManager {
          * @param fileName The file name that will be in the plugin's folder.
          * @param fileLocation The location the file in the plugin's folder.
          */
-        private Files(String fileName, String fileLocation) {
+        Files(String fileName, String fileLocation) {
             this(fileName, fileLocation, fileLocation);
         }
         
@@ -326,17 +326,6 @@ public class FileManager {
             this.fileName = fileName;
             this.fileLocation = fileLocation;
             this.fileJar = fileJar;
-        }
-        
-        /**
-         * The files that the server will try and load.
-         * @param fileName The file name that will be in the plugin's folder.
-         * @param fileLocation The location of the file will be in the plugin's folder.
-         * @param newFileJar The location of the 1.13+ file version in the jar.
-         * @param oldFileJar The location of the 1.12.2- file version in the jar.
-         */
-        private Files(String fileName, String fileLocation, String newFileJar, String oldFileJar) {
-            this(fileName, fileLocation, Version.isNewer(Version.v1_12_R1) ? newFileJar : oldFileJar);
         }
         
         /**

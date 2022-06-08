@@ -16,10 +16,12 @@ dependencies {
 
     implementation("de.tr7zw:nbt-data-api:2.10.0-SNAPSHOT")
 
+    compileOnly("org.apache.commons:commons-text:1.9")
+
     // implementation("org.bstats:bstats-bukkit:3.0.0")
 
     // Latest Silk Spawners
-    compileOnly("de.dustplanet:silkspawners-parent:7.2.1-SNAPSHOT") {
+    compileOnly("de.dustplanet:silkspawners:7.3.0") {
         exclude("*", "*")
     }
 
@@ -34,6 +36,7 @@ tasks {
         val path = "me.badbones69.crazyenchantments.libs"
 
         relocate("de.tr7zw", path)
+        relocate("org.apache.commons", path)
         // relocate("org.bstats", path)
     }
 }
