@@ -211,7 +211,7 @@ public class Swords implements Listener {
                         if (!event.isCancelled()) {
                             int steal = ce.getLevel(item, CEnchantments.LIFESTEAL);
                             //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                            double maxHealth = ce.useHealthAttributes() ? damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : damager.getMaxHealth();
+                            double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                             if (damager.getHealth() + steal < maxHealth) {
                                 damager.setHealth(damager.getHealth() + steal);
                             }
@@ -240,7 +240,8 @@ public class Swords implements Listener {
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                            double maxHealth = ce.useHealthAttributes() ? damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : damager.getMaxHealth();
+                            double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
                             if (damager.getHealth() + e.getDamage() / 2 < maxHealth) {
                                 damager.setHealth(damager.getHealth() + e.getDamage() / 2);
                             }
@@ -311,7 +312,7 @@ public class Swords implements Listener {
                             loc.getWorld().spigot().strikeLightningEffect(loc, true);
                             int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
                             try {
-                                loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                                loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT"), (float) lightningSoundRange / 16f, 1);
                             } catch (Exception ignore) {}
 
                             if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
@@ -391,7 +392,7 @@ public class Swords implements Listener {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.HEADLESS, item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD", "397:3").setPlayer(player.getName()).build();
+                    ItemStack head = new ItemBuilder().setMaterial("PLAYER_HEAD").setPlayerName(player.getName()).build();
                     e.getDrops().add(head);
                 }
             }
@@ -455,5 +456,4 @@ public class Swords implements Listener {
                 return EquipmentSlot.HEAD;
         }
     }
-    
 }

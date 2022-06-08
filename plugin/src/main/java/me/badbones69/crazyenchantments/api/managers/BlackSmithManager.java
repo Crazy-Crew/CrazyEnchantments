@@ -34,9 +34,9 @@ public class BlackSmithManager {
         .setName(config.getString("Settings.BlackSmith.Results.None", "&c&lNo Results"))
         .setLore(config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore"))
         .build();
-        redGlass = new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:14").setName(" ").build();
-        grayGlass = new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:7").setName(" ").build();
-        blueGlass = new ItemBuilder().setMaterial("LIGHT_BLUE_STAINED_GLASS_PANE", "STAINED_GLASS_PANE:3").build();
+        redGlass = new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE").setName(" ").build();
+        grayGlass = new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE").setName(" ").build();
+        blueGlass = new ItemBuilder().setMaterial("LIGHT_BLUE_STAINED_GLASS_PANE").build();
         menuName = Methods.color(config.getString("Settings.BlackSmith.GUIName", "&7&lThe &b&lBlack &9&lSmith"));
         foundString = config.getString("Settings.BlackSmith.Results.Found", "&c&lCost: &6&l%cost%XP");
         currency = Currency.getCurrency(config.getString("Settings.BlackSmith.Transaction.Currency", "XP_Level"));

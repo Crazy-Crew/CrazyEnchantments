@@ -12,7 +12,6 @@ import me.badbones69.crazyenchantments.api.objects.PotionEffects;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import me.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import me.badbones69.crazyenchantments.processors.Processor;
@@ -172,11 +171,7 @@ public class Armor implements Listener {
                                                 }
                                             }.runTaskLater(ce.getPlugin(), 1);
                                             fall.add(player);
-                                            if (Version.isNewer(Version.v1_8_R3)) {
-                                                player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
-                                            } else {
-                                                ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 1, 1, player.getLocation(), 100);
-                                            }
+                                            player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
                                             new BukkitRunnable() {
                                                 @Override
                                                 public void run() {
@@ -196,10 +191,12 @@ public class Armor implements Listener {
                                         if (!event.isCancelled()) {
                                             double heal = ce.getLevel(armor, CEnchantments.ENLIGHTENED);
                                             //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                                            double maxHealth = ce.useHealthAttributes() ? player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : player.getMaxHealth();
+                                            double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
                                             if (player.getHealth() + heal < maxHealth) {
                                                 player.setHealth(player.getHealth() + heal);
                                             }
+
                                             if (player.getHealth() + heal >= maxHealth) {
                                                 player.setHealth(maxHealth);
                                             }
@@ -254,7 +251,7 @@ public class Armor implements Listener {
                                             loc.getWorld().spigot().strikeLightningEffect(loc, true);
                                             int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
                                             try {
-                                                loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                                                loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT"), (float) lightningSoundRange / 16f, 1);
                                             } catch (Exception ignore) {}
 
                                             //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
@@ -281,7 +278,7 @@ public class Armor implements Listener {
                     }
                     if (damager instanceof Player) {
                         for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
-                            if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (SupportedPlugins.FACTIONS_MASSIVE_CRAFT.isPluginLoaded() || SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
+                            if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
                                 int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
                                 new BukkitRunnable() {
                                     @Override
@@ -395,13 +392,12 @@ public class Armor implements Listener {
         }.runTaskAsynchronously(ce.getPlugin());
     }
     
-    @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
+    @SuppressWarnings({"squid:CallToDeprecatedMethod"})
     @EventHandler
     public void onMovement(PlayerMoveEvent e) {
         Location from = e.getFrom();
         Location to = e.getTo();
         if (Objects.requireNonNull(to).getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()) return;
-        
         armorMoveProcessor.add(e);
     }
     
@@ -411,7 +407,8 @@ public class Armor implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!(player.getKiller() instanceof Player)) return;
+                if (player.getKiller() == null) return;
+
                 Player killer = player.getKiller();
                 if (!support.allowsPVP(player.getLocation())) return;
                 if (CEnchantments.SELFDESTRUCT.isActivated()) {
@@ -465,5 +462,4 @@ public class Armor implements Listener {
             e.setCancelled(true);
         }
     }
-    
 }

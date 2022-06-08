@@ -26,7 +26,7 @@ public class AllyEnchantments implements Listener {
     
     private static AllyManager allyManager = AllyManager.getInstance();
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private HashMap<UUID, Calendar> allyCooldown = new HashMap<>();
+    private HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAllySpawn(EntityDamageByEntityEvent e) {
@@ -35,7 +35,7 @@ public class AllyEnchantments implements Listener {
             if (e.getEntity() instanceof Player && e.getDamager() instanceof LivingEntity) {// Player gets attacked
                 Player player = (Player) e.getEntity();
                 LivingEntity enemy = (LivingEntity) e.getDamager();
-                if (!inCooldown(player)) {
+                if (!inCoolDown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when getting attacked
                         if (ce.hasEnchantments(item)) {
@@ -76,7 +76,7 @@ public class AllyEnchantments implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (!inCooldown(player)) {
+                if (!inCoolDown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when attacking
                         if (ce.hasEnchantments(item)) {
@@ -145,9 +145,9 @@ public class AllyEnchantments implements Listener {
     }
     
     private void spawnAllies(Player player, LivingEntity enemy, AllyType allyType, int amount) {
-        Calendar cooldown = Calendar.getInstance();
-        cooldown.add(Calendar.MINUTE, 2);
-        allyCooldown.put(player.getUniqueId(), cooldown);
+        Calendar coolDown = Calendar.getInstance();
+        coolDown.add(Calendar.MINUTE, 2);
+        allyCoolDown.put(player.getUniqueId(), coolDown);
         for (int i = 0; i < amount; i++) {
             AllyMob ally = new AllyMob(player, allyType);
             ally.spawnAlly(60);
@@ -155,16 +155,15 @@ public class AllyEnchantments implements Listener {
         }
     }
     
-    private boolean inCooldown(Player player) {
-        if (allyCooldown.containsKey(player.getUniqueId())) {
+    private boolean inCoolDown(Player player) {
+        if (allyCoolDown.containsKey(player.getUniqueId())) {
             //Right now is before the player's cooldown ends.
-            if (Calendar.getInstance().before(allyCooldown.get(player.getUniqueId()))) {
+            if (Calendar.getInstance().before(allyCoolDown.get(player.getUniqueId()))) {
                 return true;
             }
             //Remove the player because their cooldown is over.
-            allyCooldown.remove(player.getUniqueId());
+            allyCoolDown.remove(player.getUniqueId());
         }
         return false;
     }
-    
 }

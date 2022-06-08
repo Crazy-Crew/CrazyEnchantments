@@ -55,5 +55,4 @@ public class LostBookController implements Listener {
             }
         }
     }
-    
 }

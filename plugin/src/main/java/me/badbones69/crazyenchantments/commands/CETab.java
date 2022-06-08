@@ -5,7 +5,6 @@ import me.badbones69.crazyenchantments.api.CrazyEnchantments;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.Category;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,6 @@ import java.util.List;
 public class CETab implements TabCompleter {
     
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
-    private boolean isV1_13_Up = Version.isNewer(Version.v1_12_R1);
     
     @Override
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
@@ -54,11 +52,7 @@ public class CETab implements TabCompleter {
                         } catch (NullPointerException ignore) {
                         }
                     }
-                    if (isV1_13_Up) {
-                        Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
-                    } else {
-                        Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getName().replace(" ", "_")));
-                    }
+                    Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
                     break;
                 case "spawn":
                     for (CEnchantment enchantment : ce.getRegisteredEnchantments()) {

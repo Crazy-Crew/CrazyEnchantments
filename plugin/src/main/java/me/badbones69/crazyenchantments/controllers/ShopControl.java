@@ -32,7 +32,7 @@ public class ShopControl implements Listener {
     
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private static ShopManager shopManager = ce.getShopManager();
-    private Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE", "ENCHANTMENT_TABLE").getMaterial();
+    private Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
     
     public static void openGUI(Player player) {
         player.openInventory(shopManager.getShopInventory(player));

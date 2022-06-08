@@ -46,5 +46,4 @@ public class CommandChecker implements Listener {
             }
         }.runTaskLater(ce.getPlugin(), 5);
     }
-    
 }

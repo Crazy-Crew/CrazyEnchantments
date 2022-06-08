@@ -14,7 +14,7 @@ public class WingsManager {
     public static final WingsManager instance = new WingsManager();
     private boolean isWingsEnabled;
     private boolean isCloudsEnabled;
-    private boolean isEnemeyCheckEnabled;
+    private boolean isEnemyCheckEnabled;
     private int enemyRadius;
     private List<Player> flyingPlayers = new ArrayList<>();
     private List<String> whitelistWorlds = new ArrayList<>();
@@ -34,7 +34,7 @@ public class WingsManager {
         FileConfiguration config = Files.CONFIG.getFile();
         String path = "Settings.EnchantmentOptions.Wings.";
         isCloudsEnabled = config.getBoolean(path + "Clouds");
-        isEnemeyCheckEnabled = config.getBoolean(path + "Enemy-Toggle");
+        isEnemyCheckEnabled = config.getBoolean(path + "Enemy-Toggle");
         enemyRadius = config.getInt(path + "Distance", 10);
         whitelistWorlds.clear();
         config.getStringList(path + "Worlds.Whitelisted").forEach(world -> whitelistWorlds.add(world.toLowerCase()));
@@ -55,8 +55,8 @@ public class WingsManager {
         return isCloudsEnabled;
     }
     
-    public boolean isEnemeyCheckEnabled() {
-        return isEnemeyCheckEnabled;
+    public boolean isEnemyCheckEnabled() {
+        return isEnemyCheckEnabled;
     }
     
     public int getEnemyRadius() {

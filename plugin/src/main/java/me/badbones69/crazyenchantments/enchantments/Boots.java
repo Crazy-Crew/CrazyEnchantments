@@ -6,7 +6,6 @@ import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.GameMode;
@@ -39,11 +38,7 @@ public class Boots implements Listener {
                     for (Player player : manager.getFlyingPlayers()) {
                         if (player.isFlying()) {
                             Location location = player.getLocation().subtract(0, .25, 0);
-                            if (Version.isNewer(Version.v1_8_R3)) {
-                                player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
-                            } else {
-                                ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, location, 100);
-                            }
+                            ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, location, 100);
                         }
                     }
                 }
@@ -57,10 +52,10 @@ public class Boots implements Listener {
     public void onEquip(ArmorEquipEvent e) {
         Player player = e.getPlayer();
         if (manager.isWingsEnabled()) {
-            if (ce.hasEnchantment(e.getNewArmorPiece(), CEnchantments.WINGS) && regionCheck(player) && gamemodeCheck(player)) {
+            if (ce.hasEnchantment(e.getNewArmorPiece(), CEnchantments.WINGS) && regionCheck(player) && gameModeCheck(player)) {
                 player.setAllowFlight(true);
             }
-            if (ce.hasEnchantment(e.getOldArmorPiece(), CEnchantments.WINGS) && gamemodeCheck(player)) {
+            if (ce.hasEnchantment(e.getOldArmorPiece(), CEnchantments.WINGS) && gameModeCheck(player)) {
                 player.setAllowFlight(false);
             }
         }
@@ -95,14 +90,14 @@ public class Boots implements Listener {
                     if (!areEnemiesNearby(player)) {
                         player.setAllowFlight(true);
                     } else {
-                        if (isFlying && gamemodeCheck(player)) {
+                        if (isFlying && gameModeCheck(player)) {
                             player.setFlying(false);
                             player.setAllowFlight(false);
                             manager.removeFlyingPlayer(player);
                         }
                     }
                 } else {
-                    if (isFlying && gamemodeCheck(player)) {
+                    if (isFlying && gameModeCheck(player)) {
                         player.setFlying(false);
                         player.setAllowFlight(false);
                         manager.removeFlyingPlayer(player);
@@ -137,7 +132,7 @@ public class Boots implements Listener {
         }
     }
     
-    private boolean gamemodeCheck(Player player) {
+    private boolean gameModeCheck(Player player) {
         return player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.ADVENTURE;
     }
     
@@ -146,7 +141,7 @@ public class Boots implements Listener {
     }
     
     private boolean areEnemiesNearby(Player player) {
-        if (manager.isEnemeyCheckEnabled() && !manager.inLimitlessFlightWorld(player)) {
+        if (manager.isEnemyCheckEnabled() && !manager.inLimitlessFlightWorld(player)) {
             for (Player otherPlayer : getNearByPlayers(player, manager.getEnemyRadius())) {
                 if (!(player.hasPermission("crazyenchantments.bypass.wings") && support.isFriendly(player, otherPlayer))) {
                     return true;
@@ -165,5 +160,4 @@ public class Boots implements Listener {
         }
         return players;
     }
-    
 }

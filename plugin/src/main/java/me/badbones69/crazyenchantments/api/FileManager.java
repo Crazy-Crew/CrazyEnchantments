@@ -1,6 +1,5 @@
 package me.badbones69.crazyenchantments.api;
 
-import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;

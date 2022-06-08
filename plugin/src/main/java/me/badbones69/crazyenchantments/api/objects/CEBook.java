@@ -218,7 +218,7 @@ public class CEBook {
                 .replace("%Success_Rate%", successRate + "").replace("%success_rate%", successRate + ""));
             }
         }
-        return ce.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlowing(glowing);
+        return ce.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
     }
     
     /**

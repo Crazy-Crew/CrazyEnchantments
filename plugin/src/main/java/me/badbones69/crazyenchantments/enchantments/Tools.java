@@ -8,7 +8,6 @@ import me.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -49,9 +48,11 @@ public class Tools implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         Block block = e.getBlock();
         Player player = e.getPlayer();
+
         if (e.isCancelled() || ce.isIgnoredEvent(e) || ignoreBlockTypes(block)) {
             return;
         }
+
         ItemStack item = Methods.getItemInHand(player);
         new BukkitRunnable() {
             @Override
@@ -67,30 +68,35 @@ public class Tools implements Listener {
                 //This checks if the block is a spawner and if so the spawner classes will take care of this.
                 //If Epic Spawners is enabled then telepathy will give the item from the API.
                 //Otherwise, CE will ignore the spawner in this event.
-                (block.getType() == ce.getMaterial("SPAWNER", "MOB_SPAWNER"))) {
+                (block.getType() == ce.getMaterial("SPAWNER"))) {
                     return;
                 }
+
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
                 Bukkit.getPluginManager().callEvent(event);
+
                 if (!event.isCancelled()) {
                     e.setExpToDrop(0);
-                    //setDropItems was added in 1.12+
-                    if (Version.isNewer(Version.v1_11_R1)) e.setDropItems(false);
+                    e.setDropItems(false);
                     TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
+
                     if (Methods.isInventoryFull(player)) {
                         player.getWorld().dropItem(player.getLocation(), drop.getItem());
                     } else {
                         player.getInventory().addItem(drop.getItem());
                     }
+
                     if (drop.getSugarCaneBlocks().isEmpty()) {
                         block.setType(Material.AIR);
                     } else {
                         drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
                     }
+
                     if (drop.hasXp()) {
                         ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
                         orb.setExperience(drop.getXp());
                     }
+
                     Methods.removeDurability(item, player);
                 }
             }
@@ -129,10 +135,11 @@ public class Tools implements Listener {
                     }
                 }
             }
-            if (block.getType() == ce.getMaterial("SUGAR_CANE", "SUGAR_CANE_BLOCK")) {
+            if (block.getType() == ce.getMaterial("SUGAR_CANE")) {
                 sugarCaneBlocks = getSugarCaneBlocks(block);
                 drop.setAmount(sugarCaneBlocks.size());
             }
+
             itemDrop.addAmount(drop.getAmount());
         }
 
@@ -140,41 +147,26 @@ public class Tools implements Listener {
             //In case the drop is still null as no drops were found.
             itemDrop = new ItemBuilder().setMaterial(block.getType());
         }
-        if (hasSilkTouch && Version.isOlder(Version.v1_14_R1)) {
-            if (block.getType() == Material.ANVIL) {
-                byte data = block.getData();
-                if (data == 4) {
-                    data = 1;
-                } else if (data == 8) {
-                    data = 2;
-                }
-                itemDrop.setMaterial(block.getType()).setDamage(data);
-            } else {
-                //Set the amount to 1 as some blocks like GlowStone try to give multiple blocks.
-                itemDrop.setMaterial(block.getType()).setDamage(block.getData()).setAmount(1);
-            }
-        }
+
         if (block.getType() == Material.COCOA) {
             //Coco drops 2-3 beans.
-            itemDrop.setMaterial("COCOA_BEANS", "INK_SACK:3")
+            itemDrop.setMaterial("COCOA_BEANS")
                     .setAmount(ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
         }
-        //Changes ink sacks to lapis if on 1.12.2-
-        if (Version.isOlder(Version.v1_13_R2) && itemDrop.getMaterial() == Material.matchMaterial("INK_SACK") && itemDrop.getDamage() != 3) {
-            itemDrop.setDamage(4);
-        }
+
         if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.matchMaterial("BEETROOT_SEEDS")) {
             itemDrop.setAmount(random.nextInt(3));//Wheat and BeetRoots drops 0-3 seeds.
-        } else if (itemDrop.getMaterial() == ce.getMaterial("POTATO", "POTATO_ITEM") || itemDrop.getMaterial() == ce.getMaterial("CARROT", "CARROT_ITEM")) {
+        } else if (itemDrop.getMaterial() == ce.getMaterial("POTATO") || itemDrop.getMaterial() == ce.getMaterial("CARROT")) {
             itemDrop.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
         }
+
         return new TelepathyDrop(itemDrop.build(), xp, sugarCaneBlocks);
     }
     
     private static List<Block> getSugarCaneBlocks(Block block) {
         List<Block> sugarCaneBlocks = new ArrayList<>();
         Block cane = block;
-        while (cane.getType() == ce.getMaterial("SUGAR_CANE", "SUGAR_CANE_BLOCK")) {
+        while (cane.getType() == ce.getMaterial("SUGAR_CANE")) {
             sugarCaneBlocks.add(cane);
             cane = cane.getLocation().add(0, 1, 0).getBlock();
         }
@@ -240,7 +232,7 @@ public class Tools implements Listener {
     }
     
     private static boolean isOre(Block block) {
-        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE")) {
             return true;
         }
         switch (block.getType()) {
@@ -259,7 +251,7 @@ public class Tools implements Listener {
     
     private static ItemStack getOreDrop(Block block) {
         ItemBuilder dropItem = new ItemBuilder();
-        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE")) {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
             switch (block.getType()) {
@@ -279,7 +271,7 @@ public class Tools implements Listener {
                     dropItem.setMaterial(Material.EMERALD);
                     break;
                 case LAPIS_ORE:
-                    dropItem.setMaterial("LAPIS_LAZULI", "INK_SACK:4");
+                    dropItem.setMaterial(Material.LAPIS_LAZULI);
                     break;
                 case REDSTONE_ORE:
                     dropItem.setMaterial(Material.REDSTONE);

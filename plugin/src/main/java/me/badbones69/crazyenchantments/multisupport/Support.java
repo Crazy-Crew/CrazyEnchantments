@@ -21,10 +21,15 @@ import java.util.Map;
 public class Support {
     
     private static Support instance = new Support();
-    private static FactionPlugin factionPlugin = null;
+
+    //private static FactionPlugin factionPlugin = null;
+
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+
     private WingsManager wingsManager;
+
     private WorldGuardVersion worldGuardVersion;
+
     private PlotSquaredVersion plotSquaredVersion;
     
     public static Support getInstance() {
@@ -39,12 +44,13 @@ public class Support {
     
     public boolean inTerritory(Player player) {
 
-        if (factionPlugin != null && factionPlugin.inTerritory(player)) {
-            return true;
-        }
-        if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.inTerritory(player)) {
-            return true;
-        }
+        //if (factionPlugin != null && factionPlugin.inTerritory(player)) {
+        //    return true;
+        //}
+
+        //if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.inTerritory(player)) {
+        //    return true;
+        //}
 
         return SupportedPlugins.PLOT_SQUARED.isPluginLoaded() && plotSquaredVersion.inTerritory(player);
     }
@@ -54,15 +60,16 @@ public class Support {
             Player player = (Player) pEntity;
             Player other = (Player) oEntity;
 
-            if (factionPlugin != null && factionPlugin.isFriendly(player, other)) {
-                return true;
-            }
+            //if (factionPlugin != null && factionPlugin.isFriendly(player, other)) {
+            //    return true;
+            //}
 
-            if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.isFriendly(player, other)) {
-                return true;
-            }
+            //if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() && SuperiorSkyblockSupport.isFriendly(player, other)) {
+            //    return true;
+            //}
 
-            return SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other);
+            //return SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other);
+            return SupportedPlugins.MCMMO.isPluginLoaded();
         }
         return false;
     }
@@ -76,9 +83,9 @@ public class Support {
     
     public boolean allowsPVP(Location location) {
 
-        if (SupportedPlugins.TOWNY.isPluginLoaded() && !TownySupport.allowsPvP(location)) {
-            return false;
-        }
+        //if (SupportedPlugins.TOWNY.isPluginLoaded() && !TownySupport.allowsPvP(location)) {
+        //    return false;
+        //}
 
         return !SupportedPlugins.WORLD_EDIT.isPluginLoaded() || !SupportedPlugins.WORLD_GUARD.isPluginLoaded() || worldGuardVersion.allowsPVP(location);
     }
@@ -122,32 +129,20 @@ public class Support {
     }
     
     public enum SupportedPlugins {
-        
-        MCMMO("mcMMO"),
+        MCMMO("MCMMO"),
         GRIEF_PREVENTION("GriefPrevention"),
         TOWNY("Towny"),
-
         VAULT("Vault"),
         WORLD_EDIT("WorldEdit"),
         WORLD_GUARD("WorldGuard"),
-        FACTIONS_MASSIVE_CRAFT("Factions"),
-        FACTIONS3("Factions"),
         FACTIONS_UUID("Factions"),
         SABER_FACTIONS("Factions"),
-        FEUDAL("Feudal"),
-        ACID_ISLAND("AcidIsland"),
-        ASKYBLOCK("ASkyBlock"),
-        SUPERIOR_SKYBLOCK("SuperiorSkyblock2"),
-        KINGDOMS("Kingdoms"),
         SILK_SPAWNERS("SilkSpawners"),
         SPARTAN("Spartan"),
         MOB_STACKER("MobStacker"),
         MOB_STACKER_2("MobStacker2"),
         STACK_MOB("StackMob"),
-        MEGA_SKILLS("MegaSkills"),
-        PRECIOUS_STONES("PreciousStones"),
-        PLOT_SQUARED("PlotSquared"),
-        FACTIONSX("FactionsX");
+        PLOT_SQUARED("PlotSquared");
         
         private String name;
         private static Map<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
@@ -194,10 +189,6 @@ public class Support {
                             int v = Methods.isInt(version.split("\\.")[0]) ? Integer.parseInt(version.split("\\.")[0]) : 2;
                             cachedPluginState.put(supportedPlugin, v >= 3);
                             break;
-                        case MCMMO:
-                            //CE does not support MCMMO classic. They use different website links in the plugin.yml.
-                            cachedPluginState.put(supportedPlugin, website.equalsIgnoreCase("https://www.mcmmo.org"));
-                            break;
                         default:
                             cachedPluginState.put(supportedPlugin, true);
                             break;
@@ -224,21 +215,20 @@ public class Support {
                 if (supportedPlugin.isPluginLoaded()) {
                     switch (supportedPlugin) {
                         case GRIEF_PREVENTION:
-                            factionPlugin = new GriefPreventionSupport();
+                        //    factionPlugin = new GriefPreventionSupport();
                             return;
                         case TOWNY:
-                            factionPlugin = new TownySupport();
+                        //    factionPlugin = new TownySupport();
                             return;
                         case FACTIONS_UUID:
-                            factionPlugin = new FactionsUUID();
+                        //    factionPlugin = new FactionsUUID();
                             return;
                         case SABER_FACTIONS:
-                            factionPlugin = new SaberFactionsSupport();
+                        //    factionPlugin = new SaberFactionsSupport();
                             return;
                     }
                 }
             }
         }
     }
-    
 }

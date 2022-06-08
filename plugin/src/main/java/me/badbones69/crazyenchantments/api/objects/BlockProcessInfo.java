@@ -18,7 +18,7 @@ public class BlockProcessInfo {
         this.item = item;
         this.block = block;
         this.drops = new ArrayList<>(block.getDrops(item));
-        isSpawner = block.getType() == CrazyEnchantments.getInstance().getMaterial("SPAWNER", "MOB_SPAWNER");
+        isSpawner = block.getType() == CrazyEnchantments.getInstance().getMaterial("SPAWNER");
     }
     
     public ItemStack getItem() {

@@ -124,7 +124,7 @@ public class Axes implements Listener {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
-                    e.getDrops().add(new ItemBuilder().setMaterial("PLAYER_HEAD", "397:3").setPlayer(player.getName()).build());
+                    e.getDrops().add(new ItemBuilder().setMaterial("PLAYER_HEAD").setPlayerName(player.getName()).build());
                 }
             }
         }
@@ -146,5 +146,4 @@ public class Axes implements Listener {
             }
         }
     }
-    
 }

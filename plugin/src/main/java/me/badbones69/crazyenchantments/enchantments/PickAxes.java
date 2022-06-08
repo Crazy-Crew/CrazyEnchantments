@@ -11,7 +11,6 @@ import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -265,11 +264,9 @@ public class PickAxes implements Listener {
                             orb.setExperience(Methods.percentPick(7, 3) * power);
                         }
                     }
-                    if (Version.isNewer(Version.v1_11_R1)) {
-                        e.setDropItems(false);
-                    } else {
-                        block.setType(Material.AIR);
-                    }
+
+                    e.setDropItems(false);
+
                     Methods.removeDurability(item, player);
                 }
             }
@@ -296,11 +293,9 @@ public class PickAxes implements Listener {
                         }
                     }
                 }
-                if (Version.isNewer(Version.v1_11_R1)) {
-                    e.setDropItems(false);
-                } else {
-                    block.setType(Material.AIR);
-                }
+
+                e.setDropItems(false);
+
                 Methods.removeDurability(item, player);
             }
         }
@@ -368,7 +363,7 @@ public class PickAxes implements Listener {
     }
     
     private boolean isOre(Material material) {
-        if (material == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+        if (material == ce.getMaterial("NETHER_QUARTZ_ORE")) {
             return true;
         }
         switch (material) {
@@ -401,7 +396,7 @@ public class PickAxes implements Listener {
     
     private ItemStack getOreDrop(Material material, int amount) {
         ItemBuilder dropItem = new ItemBuilder().setAmount(amount);
-        if (material == ce.getMaterial("NETHER_QUARTZ_ORE", "QUARTZ_ORE")) {
+        if (material == ce.getMaterial("NETHER_QUARTZ_ORE")) {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
             switch (material) {
@@ -432,7 +427,7 @@ public class PickAxes implements Listener {
                     break;
                 case DEEPSLATE_LAPIS_ORE:
                 case LAPIS_ORE:
-                    dropItem.setMaterial("LAPIS_LAZULI", "INK_SACK:4");
+                    dropItem.setMaterial(Material.LAPIS_LAZULI);
                     break;
                 case DEEPSLATE_REDSTONE_ORE:
                 case REDSTONE_ORE:

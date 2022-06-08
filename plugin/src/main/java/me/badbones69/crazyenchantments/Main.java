@@ -40,13 +40,7 @@ public class Main extends JavaPlugin implements Listener {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             ce.loadCEPlayer(player);
-            if (fixHealth) {
-                if (ce.useHealthAttributes()) {
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-                } else {
-                    player.setMaxHealth(20);
-                }
-            }
+            if (fixHealth) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         }
 
         getCommand("crazyenchantments").setExecutor(new CECommand());
@@ -115,21 +109,7 @@ public class Main extends JavaPlugin implements Listener {
         final Player player = e.getPlayer();
         ce.loadCEPlayer(player);
         ce.updatePlayerEffects(player);
-        if (fixHealth) {
-            if (ce.useHealthAttributes()) {
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-            } else {
-                player.setMaxHealth(20);
-            }
-        }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (player.isOp()) {
-                    Methods.hasUpdate(player);
-                }
-            }
-        }.runTaskLaterAsynchronously(this, 20);
+        if (fixHealth) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
     }
     
     @EventHandler

@@ -75,7 +75,7 @@ public enum Dust {
     
     public ItemStack getDust(int percent, int amount) {
         return itemBuilderDust.get(this)
-        .addLorePlaceholder("%Percent%", percent)
+        .addLorePlaceholder("%Percent%", String.valueOf(percent))
         .setAmount(amount).build();
     }
     

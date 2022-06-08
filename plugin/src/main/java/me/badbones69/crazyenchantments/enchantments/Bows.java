@@ -9,7 +9,6 @@ import me.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
 import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -40,9 +39,8 @@ public class Bows implements Listener {
     private CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private Support support = Support.getInstance();
     private List<EnchantedArrow> enchantedArrows = new ArrayList<>();
-    private Material web = new ItemBuilder().setMaterial("COBWEB", "WEB").getMaterial();
+    private Material web = new ItemBuilder().setMaterial("COBWEB").getMaterial();
     private List<Block> webBlocks = new ArrayList<>();
-    private boolean isv1_14_Up = Version.isNewer(Version.v1_13_R2);
     private BowEnchantmentManager manager = ce.getBowManager();
     
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -65,17 +63,18 @@ public class Bows implements Listener {
                                 enchantedArrows.add(new EnchantedArrow(spawnedArrow, e.getEntity(), bow, enchantments));
                                 spawnedArrow.setShooter(e.getEntity());
                                 spawnedArrow.setBounce(false);
-                                Vector v = new Vector(randomSpred(), 0, randomSpred());
+                                Vector v = new Vector(randomSpread(), 0, randomSpread());
                                 spawnedArrow.setVelocity(e.getProjectile().getVelocity().add(v));
+
                                 if (((Arrow) e.getProjectile()).isCritical()) {
                                     spawnedArrow.setCritical(true);
                                 }
+
                                 if (e.getProjectile().getFireTicks() > 0) {
                                     spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
                                 }
-                                if (isv1_14_Up) {
-                                    spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-                                }
+
+                                spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
                             }
                         }
                     } else {
@@ -83,7 +82,7 @@ public class Bows implements Listener {
                             Arrow spawnedArrow = e.getEntity().getWorld().spawn(e.getProjectile().getLocation(), Arrow.class);
                             spawnedArrow.setShooter(e.getEntity());
                             spawnedArrow.setBounce(false);
-                            Vector v = new Vector(randomSpred(), 0, randomSpred());
+                            Vector v = new Vector(randomSpread(), 0, randomSpread());
                             spawnedArrow.setVelocity(e.getProjectile().getVelocity().add(v));
                             if (((Arrow) e.getProjectile()).isCritical()) {
                                 spawnedArrow.setCritical(true);
@@ -91,9 +90,8 @@ public class Bows implements Listener {
                             if (e.getProjectile().getFireTicks() > 0) {
                                 spawnedArrow.setFireTicks(e.getProjectile().getFireTicks());
                             }
-                            if (isv1_14_Up) {
-                                spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-                            }
+
+                            spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
                         }
                     }
                 }
@@ -107,97 +105,98 @@ public class Bows implements Listener {
             EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
             if (arrow != null) {
                 if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow())) {
-                    if (Version.isNewer(Version.v1_10_R1)) {
-                        if (e.getHitEntity() == null) {//If the arrow hits a block.
-                            Location entityLocation = e.getEntity().getLocation();
-                            if (entityLocation.getBlock().getType() == Material.AIR) {
-                                entityLocation.getBlock().setType(web);
-                                webBlocks.add(entityLocation.getBlock());
-                                e.getEntity().remove();
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        entityLocation.getBlock().setType(Material.AIR);
-                                        webBlocks.remove(entityLocation.getBlock());
-                                    }
-                                }.runTaskLater(ce.getPlugin(), 5 * 20);
-                            }
-                        } else {//If the arrow hits an entity.
-                            List<Location> locations = getSquareArea(e.getHitEntity().getLocation());
-                            for (Location location : locations) {
-                                if (location.getBlock().getType() == Material.AIR) {
-                                    location.getBlock().setType(web);
-                                    webBlocks.add(location.getBlock());
-                                }
-                            }
+                    if (e.getHitEntity() == null) {//If the arrow hits a block.
+                        Location entityLocation = e.getEntity().getLocation();
+                        if (entityLocation.getBlock().getType() == Material.AIR) {
+                            entityLocation.getBlock().setType(web);
+                            webBlocks.add(entityLocation.getBlock());
                             e.getEntity().remove();
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    for (Location location : locations) {
-                                        if (location.getBlock().getType() == web) {
-                                            location.getBlock().setType(Material.AIR);
-                                            webBlocks.remove(location.getBlock());
-                                        }
-                                    }
+                                    entityLocation.getBlock().setType(Material.AIR);
+                                    webBlocks.remove(entityLocation.getBlock());
                                 }
                             }.runTaskLater(ce.getPlugin(), 5 * 20);
                         }
-                    } else {//If the arrow hits something.
-                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty()) {//Checking to make sure it doesn't hit an entity.
-                            Location entityLocation = e.getEntity().getLocation();
-                            if (entityLocation.getBlock().getType() == Material.AIR) {
-                                entityLocation.getBlock().setType(web);
-                                webBlocks.add(entityLocation.getBlock());
-                                e.getEntity().remove();
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        entityLocation.getBlock().setType(Material.AIR);
-                                        webBlocks.remove(entityLocation.getBlock());
-                                    }
-                                }.runTaskLater(ce.getPlugin(), 5 * 20);
+                    } else {//If the arrow hits an entity.
+                        List<Location> locations = getSquareArea(e.getHitEntity().getLocation());
+                        for (Location location : locations) {
+                            if (location.getBlock().getType() == Material.AIR) {
+                                location.getBlock().setType(web);
+                                webBlocks.add(location.getBlock());
                             }
                         }
+                        e.getEntity().remove();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                for (Location location : locations) {
+                                    if (location.getBlock().getType() == web) {
+                                        location.getBlock().setType(Material.AIR);
+                                        webBlocks.remove(location.getBlock());
+                                    }
+                                }
+                            }
+                        }.runTaskLater(ce.getPlugin(), 5 * 20);
                     }
-                }
-                if (CEnchantments.BOOM.isActivated() && arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
-                    Methods.explode(arrow.getShooter(), arrow.getArrow());
-                    arrow.getArrow().remove();
-                }
-                if (CEnchantments.LIGHTNING.isActivated() && arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
-                    Location location = arrow.getArrow().getLocation();
-                    Player shooter = (Player) arrow.getShooter();
-                    location.getWorld().spigot().strikeLightningEffect(location, true);
-                    int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
-                    try {
-                        location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
-                    } catch (Exception ignore) {}
+                } else {//If the arrow hits something.
+                    if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty()) {//Checking to make sure it doesn't hit an entity.
+                        Location entityLocation = e.getEntity().getLocation();
+                        if (entityLocation.getBlock().getType() == Material.AIR) {
+                            entityLocation.getBlock().setType(web);
+                            webBlocks.add(entityLocation.getBlock());
+                            e.getEntity().remove();
 
-                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        SpartanSupport.cancelNoSwing(shooter);
-                    }
-
-                    for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
-                        EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
-                        ce.addIgnoredEvent(damageByEntityEvent);
-                        ce.addIgnoredUUID(shooter.getUniqueId());
-                        Bukkit.getPluginManager().callEvent(damageByEntityEvent);
-                        if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
-                            entity.damage(5D);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    entityLocation.getBlock().setType(Material.AIR);
+                                    webBlocks.remove(entityLocation.getBlock());
+                                }
+                            }.runTaskLater(ce.getPlugin(), 5 * 20);
                         }
-                        ce.removeIgnoredEvent(damageByEntityEvent);
-                        ce.removeIgnoredUUID(shooter.getUniqueId());
                     }
                 }
-                //Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list so it can check.
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        enchantedArrows.remove(arrow);// Removes it from the list.
-                    }
-                }.runTaskLaterAsynchronously(ce.getPlugin(), 5);
             }
+            if (CEnchantments.BOOM.isActivated() && arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
+                Methods.explode(arrow.getShooter(), arrow.getArrow());
+                arrow.getArrow().remove();
+            }
+            if (CEnchantments.LIGHTNING.isActivated() && arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
+                Location location = arrow.getArrow().getLocation();
+                Player shooter = (Player) arrow.getShooter();
+                location.getWorld().spigot().strikeLightningEffect(location, true);
+                int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+
+                try {
+                    location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                } catch (Exception ignore) {}
+
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    SpartanSupport.cancelNoSwing(shooter);
+                }
+
+                for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
+                    EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
+                    ce.addIgnoredEvent(damageByEntityEvent);
+                    ce.addIgnoredUUID(shooter.getUniqueId());
+                    Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+                    if (!damageByEntityEvent.isCancelled() && support.allowsPVP(entity.getLocation()) && !support.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
+                        entity.damage(5D);
+                    }
+                    ce.removeIgnoredEvent(damageByEntityEvent);
+                    ce.removeIgnoredUUID(shooter.getUniqueId());
+                }
+            }
+
+            //Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    enchantedArrows.remove(arrow);// Removes it from the list.
+                }
+            }.runTaskLater(ce.getPlugin(), 5);
         }
     }
     
@@ -212,7 +211,7 @@ public class Bows implements Listener {
                 if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && support.isFriendly(arrow.getShooter(), e.getEntity())) {
                     int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
                     //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                    double maxHealth = ce.useHealthAttributes() ? entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() : entity.getMaxHealth();
+                    double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
                     if (entity.getHealth() < maxHealth) {
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
@@ -336,9 +335,8 @@ public class Bows implements Listener {
         return locations;
     }
     
-    private float randomSpred() {
+    private float randomSpread() {
         float spread = (float) .2;
         return -spread + (float) (Math.random() * (spread - -spread));
     }
-    
 }

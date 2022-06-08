@@ -35,7 +35,7 @@ public enum Scrolls {
             .setName(config.getString(path + "Name"))
             .setLore(config.getStringList(path + "Item-Lore"))
             .setMaterial(config.getString(path + "Item"))
-            .setGlowing(config.getBoolean(path + "Glowing")));
+            .setGlow(config.getBoolean(path + "Glowing")));
         }
     }
     

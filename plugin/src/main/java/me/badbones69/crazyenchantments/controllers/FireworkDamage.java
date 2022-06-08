@@ -59,5 +59,4 @@ public class FireworkDamage implements Listener {
             }.runTaskLater(ce.getPlugin(), 5);
         }
     }
-    
 }

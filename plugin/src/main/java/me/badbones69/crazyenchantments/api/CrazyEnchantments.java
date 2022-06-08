@@ -19,7 +19,6 @@ import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquared;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
-import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v6;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -46,9 +45,6 @@ public class CrazyEnchantments {
     private int rageMaxLevel;
     private boolean gkitzToggle;
     private boolean useUnsafeEnchantments;
-    private boolean useNewSounds = Version.isNewer(Version.v1_8_R3);
-    private boolean useHealthAttributes = Version.isNewer(Version.v1_8_R3);
-    private boolean useNewMaterial = Version.isNewer(Version.v1_12_R1);
     private boolean breakRageOnDamage;
     private boolean enchantStackedItems;
     private boolean maxEnchantmentCheck;
@@ -83,29 +79,39 @@ public class CrazyEnchantments {
      * Do not use unless needed.
      */
     public void load() {
+
         blockList.clear();
         gkitz.clear();
         registeredEnchantments.clear();
         categories.clear();
+
         SupportedPlugins.updatePluginStates();
+
         plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+
         //Loads the blacksmith manager
         blackSmithManager = BlackSmithManager.getInstance();
         blackSmithManager.load();
+
         //Loads the info menu manager and the enchantment types.
         infoMenuManager = InfoMenuManager.getInstance();
         infoMenuManager.load();
+
         CEnchantments.invalidateCachedEnchants();
-        nmsSupport = useNewMaterial ? new NMS_v1_13_Up() : new NMS_v1_12_2_Down();
+
+        nmsSupport = new NMS_v1_13_Up();
+
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration gkit = Files.GKITZ.getFile();
         FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
+
         for (String id : Files.BLOCKLIST.getFile().getStringList("Block-List")) {
             try {
                 blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
             } catch (Exception ignored) {
             }
         }
+
         whiteScrollProtectionName = Methods.color(config.getString("Settings.WhiteScroll.ProtectedName"));
         enchantmentBook = new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item"));
         useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
@@ -115,6 +121,7 @@ public class CrazyEnchantments {
         rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
         breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
         enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
+
         for (String category : config.getConfigurationSection("Categories").getKeys(false)) {
             String path = "Categories." + category;
             LostBook lostBook = new LostBook(
@@ -154,6 +161,7 @@ public class CrazyEnchantments {
             config.getInt(path + ".EnchOptions.LvlRange.Max"),
             config.getInt(path + ".EnchOptions.LvlRange.Min")));
         }
+
         for (CEnchantments cEnchantment : CEnchantments.values()) {
             String name = cEnchantment.getName();
             String path = "Enchantments." + name;
@@ -188,6 +196,7 @@ public class CrazyEnchantments {
                 enchantment.registerEnchantment();
             }
         }
+
         if (gkitzToggle) {
             for (String kit : gkit.getConfigurationSection("GKitz").getKeys(false)) {
                 String path = "GKitz." + kit + ".";
@@ -207,6 +216,7 @@ public class CrazyEnchantments {
                 gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, itemStrings, autoEquip));
             }
         }
+
         //Loads the scrolls
         Scrolls.loadScrolls();
         //Loads the dust
@@ -238,12 +248,12 @@ public class CrazyEnchantments {
         Boots.startWings();
 
         if (SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
-            worldGuardVersion = useNewMaterial ? new WorldGuard_v7() : new WorldGuard_v6();
+            worldGuardVersion = new WorldGuard_v7();
         }
 
-        //if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
-        //    plotSquaredVersion = useNewMaterial ? new PlotSquared() : new PlotSquaredLegacy();
-        //}
+        if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
+            plotSquaredVersion = new PlotSquared();
+        }
 
         Support.getInstance().load();
     }
@@ -427,37 +437,21 @@ public class CrazyEnchantments {
     }
     
     /**
-     * The material version needed to be used.
-     */
-    public boolean useNewMaterial() {
-        return useNewMaterial;
-    }
-    
-    /**
-     * @return true if needs to use health attributes and false if otherwise.
-     */
-    public boolean useHealthAttributes() {
-        return useHealthAttributes;
-    }
-    
-    /**
      * Get the correct sound for the version of minecraft.
-     * @param newSound The sound from 1.9+
-     * @param oldSound The sound from 1.8.8-
+     * @param sound The sound.
      * @return The Sound object of the current minecraft version.
      */
-    public Sound getSound(String newSound, String oldSound) {
-        return Sound.valueOf(useNewSounds ? newSound : oldSound);
+    public Sound getSound(String sound) {
+        return Sound.valueOf(sound);
     }
     
     /**
      * Get the correct material for the version of minecraft.
-     * @param newMaterial The material from 1.13+
-     * @param oldMaterial The material from 1.12.2-
+     * @param material The material.
      * @return The Material object of the current minecraft version.
      */
-    public Material getMaterial(String newMaterial, String oldMaterial) {
-        return Material.matchMaterial(useNewMaterial ? newMaterial : oldMaterial);
+    public Material getMaterial(String material) {
+        return Material.matchMaterial(material);
     }
     
     /**

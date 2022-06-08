@@ -36,7 +36,7 @@ public class ProtectionCrystal implements Listener {
         .setMaterial(config.getString("Settings.ProtectionCrystal.Item"))
         .setName(config.getString("Settings.ProtectionCrystal.Name"))
         .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
-        .setGlowing(config.getBoolean("Settings.ProtectionCrystal.Glowing"));
+        .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing"));
         protectionString = Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
     }
     

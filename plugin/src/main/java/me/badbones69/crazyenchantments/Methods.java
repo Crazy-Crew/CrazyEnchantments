@@ -8,7 +8,6 @@ import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.controllers.FireworkDamage;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.Version;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.*;
@@ -33,19 +32,15 @@ public class Methods {
     private static Random random = new Random();
     private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
     private static Support support = Support.getInstance();
-    private static boolean isV1_13_Up = Version.isNewer(Version.v1_12_R1);
     public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
     public static String color(String message) {
-        if (Version.isNewer(Version.v1_15_R1)) {
-            Matcher matcher = HEX_PATTERN.matcher(message);
-            StringBuffer buffer = new StringBuffer();
-            while (matcher.find()) {
-                matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
-            }
-            return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
     }
     
     public static String removeColor(String msg) {
@@ -107,19 +102,11 @@ public class Methods {
     }
     
     public static ItemStack getItemInHand(Player player) {
-        if (Version.isNewer(Version.v1_8_R3)) {
-            return player.getInventory().getItemInMainHand();
-        } else {
-            return player.getItemInHand();
-        }
+        return player.getInventory().getItemInMainHand();
     }
     
     public static void setItemInHand(Player player, ItemStack item) {
-        if (Version.isNewer(Version.v1_8_R3)) {
-            player.getInventory().setItemInMainHand(item);
-        } else {
-            player.setItemInHand(item);
-        }
+        player.getInventory().setItemInMainHand(item);
     }
     
     public static String getPrefix() {
@@ -397,21 +384,12 @@ public class Methods {
             HashMap<String, String> enchantments = getEnchantments();
             enchantmentName = stripString(enchantmentName);
             for (Enchantment enchantment : Enchantment.values()) {
-                if (isV1_13_Up) {
-                    //MC 1.13+ has the correct names.
-                    if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
-                        return enchantment;
-                    }
-                } else {
-                    if (stripString(enchantment.getName()).equalsIgnoreCase(enchantmentName) ||
-                    (enchantments.get(enchantment.getName()) != null &&
-                    stripString(enchantments.get(enchantment.getName())).equalsIgnoreCase(enchantmentName))) {
-                        return enchantment;
-                    }
+                //MC 1.13+ has the correct names.
+                if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
+                    return enchantment;
                 }
             }
-        } catch (Exception ignore) {
-        }
+        } catch (Exception ignore) {}
         return null;
     }
     
@@ -516,16 +494,11 @@ public class Methods {
     }
     
     public static void explode(Entity player) {
-        if (Version.isNewer(Version.v1_8_R3)) {
-            player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
-            player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
-            player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
-        } else {
-            ParticleEffect.FLAME.display(0, 0, 0, 1, 200, player.getLocation().add(0, 1, 0), 100);
-            ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, player.getLocation().add(0, 1, 0), 100);
-            ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, player.getLocation().add(0, 1, 0), 100);
-        }
-        player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE", "EXPLODE"), 1, 1);
+        player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
+        player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
+        player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
+
+        player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE"), 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(player.getLocation(), 3D, player)) {
             if (support.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
@@ -553,16 +526,11 @@ public class Methods {
     }
     
     public static void explode(Entity player, Entity arrow) {
-        if (Version.isNewer(Version.v1_8_R3)) {
-            arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
-            arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
-            arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
-        } else {
-            ParticleEffect.FLAME.display(0, 0, 0, 1, 200, arrow.getLocation().add(0, 1, 0), 100);
-            ParticleEffect.CLOUD.display(.4F, .5F, .4F, 1, 30, arrow.getLocation().add(0, 1, 0), 100);
-            ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 2, arrow.getLocation().add(0, 1, 0), 100);
-        }
-        player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE", "EXPLODE"), 1, 1);
+        arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
+        arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
+        arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
+
+        player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE"), 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)) {
             if (support.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
@@ -590,25 +558,23 @@ public class Methods {
     }
     
     public static ItemBuilder getRandomPaneColor() {
-        boolean newMaterial = ce.useNewMaterial();
         List<String> colors = Arrays.asList(
-        newMaterial ? "WHITE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:0",// 0
-        newMaterial ? "ORANGE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:1",// 1
-        newMaterial ? "MAGENTA_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:2",// 2
-        newMaterial ? "LIGHT_BLUE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:3",// 3
-        newMaterial ? "YELLOW_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:4",// 4
-        newMaterial ? "LIME_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:5",// 5
-        newMaterial ? "PINK_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:6",// 6
-        newMaterial ? "GRAY_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:7",// 7
+        "WHITE_STAINED_GLASS_PANE",
+        "ORANGE_STAINED_GLASS_PANE",
+        "MAGENTA_STAINED_GLASS_PANE",
+        "LIGHT_BLUE_STAINED_GLASS_PANE",
+        "YELLOW_STAINED_GLASS_PANE",
+        "LIME_STAINED_GLASS_PANE",
+        "PINK_STAINED_GLASS_PANE",
+        "GRAY_STAINED_GLASS_PANE",
         //Skipped 8 due to it being basically invisible in a GUI.
-        newMaterial ? "CYAN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:9",// 9
-        newMaterial ? "PURPLE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:10",// 10
-        newMaterial ? "BLUE_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:11",// 11
-        newMaterial ? "BROWN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:12",// 12
-        newMaterial ? "GREEN_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:13",// 13
-        newMaterial ? "RED_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:14",// 14
-        newMaterial ? "BLACK_STAINED_GLASS_PANE" : "STAINED_GLASS_PANE:15");// 15
+        "CYAN_STAINED_GLASS_PANE",
+        "PURPLE_STAINED_GLASS_PANE",
+        "BLUE_STAINED_GLASS_PANE",
+        "BROWN_STAINED_GLASS_PANE",
+        "GREEN_STAINED_GLASS_PANE",
+        "RED_STAINED_GLASS_PANE",
+        "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
-    
 }
