@@ -1,12 +1,14 @@
 plugins {
     java
+
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-allprojects {
-    apply(plugin = "java")
+rootProject.group = "me.badbones69"
+rootProject.version = "1.9-Dev-Build-v13"
 
-    group = "me.badbones69"
-    version = "1.8-Dev-Build-v12"
+subprojects {
+    apply(plugin = "java")
 
     repositories {
         // Plot Squared
@@ -23,5 +25,9 @@ allprojects {
 
     dependencies {
         compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
+    }
+
+    java {
+        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
