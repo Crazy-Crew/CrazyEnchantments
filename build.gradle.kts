@@ -20,4 +20,8 @@ allprojects {
         // World Edit / World Guard
         maven("https://maven.enginehub.org/repo/")
     }
+
+    dependencies {
+        compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
+    }
 }

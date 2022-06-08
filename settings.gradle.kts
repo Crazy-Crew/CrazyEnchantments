@@ -7,4 +7,4 @@ pluginManagement {
 
 rootProject.name = "Crazy-Enchantments"
 
-include("api", "plugin", "v1_12_2_down", "v1_13_up")
+include("api", "plugin", "modern")
