@@ -71,5 +71,4 @@ public class NMS_v1_12_2_Down implements NMSSupport {
             soil.setData((byte) 7);
         }
     }
-    
 }

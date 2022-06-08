@@ -23,7 +23,7 @@ public class Helmets implements Listener {
     private Support support = Support.getInstance();
     
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onMovment(PlayerMoveEvent e) {
+    public void onMovement(PlayerMoveEvent e) {
         Player player = e.getPlayer();
         if (CEnchantments.COMMANDER.isActivated()) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {

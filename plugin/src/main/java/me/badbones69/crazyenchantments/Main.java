@@ -5,14 +5,11 @@ import me.badbones69.crazyenchantments.api.FileManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
+import me.badbones69.crazyenchantments.api.support.SilkSpawnerSupport;
 import me.badbones69.crazyenchantments.commands.*;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
-import me.badbones69.premiumhooks.anticheat.DakataAntiCheatSupport;
-import me.badbones69.premiumhooks.spawners.SilkSpawnerSupport;
-import me.badbones69.premiumhooks.spawners.SilkSpawnersCandcSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -38,7 +35,9 @@ public class Main extends JavaPlugin implements Listener {
         SupportedPlugins.printHooks();
         Methods.hasUpdate();
         CurrencyAPI.loadCurrency();
+
         fixHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             ce.loadCEPlayer(player);
             if (fixHealth) {
@@ -49,6 +48,7 @@ public class Main extends JavaPlugin implements Listener {
                 }
             }
         }
+
         getCommand("crazyenchantments").setExecutor(new CECommand());
         getCommand("crazyenchantments").setTabCompleter(new CETab());
         getCommand("tinkerer").setExecutor(new TinkerCommand());
@@ -86,10 +86,8 @@ public class Main extends JavaPlugin implements Listener {
         pm.registerEvents(armor = new Armor(), this);
         pm.registerEvents(new Swords(), this);
         pm.registerEvents(new AllyEnchantments(), this);
-        if (SupportedPlugins.AAC.isPluginLoaded()) pm.registerEvents(new AACSupport(), this);
+
         if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) pm.registerEvents(new SilkSpawnerSupport(), this);
-        if (SupportedPlugins.SILK_SPAWNERS_CANDC.isPluginLoaded()) pm.registerEvents(new SilkSpawnersCandcSupport(), this);
-        if (SupportedPlugins.DAKATA.isPluginLoaded()) pm.registerEvents(new DakataAntiCheatSupport(), this);
         //==========================================================================\\
         new Metrics(this);// Starts up bStats
         new BukkitRunnable() {

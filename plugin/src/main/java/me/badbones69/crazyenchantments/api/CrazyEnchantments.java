@@ -21,7 +21,6 @@ import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersi
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v6;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
-import me.badbones69.premiumhooks.plotsquared.PlotSquaredLegacy;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -237,12 +236,15 @@ public class CrazyEnchantments {
         allyManager.load();
         //Starts the wings task
         Boots.startWings();
+
         if (SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
             worldGuardVersion = useNewMaterial ? new WorldGuard_v7() : new WorldGuard_v6();
         }
-        if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
-            plotSquaredVersion = useNewMaterial ? new PlotSquared() : new PlotSquaredLegacy();
-        }
+
+        //if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
+        //    plotSquaredVersion = useNewMaterial ? new PlotSquared() : new PlotSquaredLegacy();
+        //}
+
         Support.getInstance().load();
     }
     
@@ -296,7 +298,7 @@ public class CrazyEnchantments {
     
     /**
      * This backup all the players data stored by this plugin.
-     * @param player The player you wish to backup.
+     * @param player The player you wish to back up.
      */
     public void backupCEPlayer(Player player) {
         backupCEPlayer(getCEPlayer(player));
@@ -304,7 +306,7 @@ public class CrazyEnchantments {
     
     /**
      * This backup all the players data stored by this plugin.
-     * @param player The player you wish to backup.
+     * @param player The player you wish to back up.
      */
     public void backupCEPlayer(CEPlayer player) {
         FileConfiguration data = Files.DATA.getFile();
@@ -482,7 +484,7 @@ public class CrazyEnchantments {
     
     /**
      * Get all loaded gkitz.
-     * @return All of the loaded gkitz.
+     * @return All the loaded gkitz.
      */
     public List<GKitz> getGKitz() {
         return gkitz;
