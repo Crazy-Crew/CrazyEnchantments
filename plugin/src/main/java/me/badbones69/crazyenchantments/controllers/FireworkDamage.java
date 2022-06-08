@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.controllers;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +14,7 @@ import java.util.List;
 public class FireworkDamage implements Listener {
     
     private static List<Entity> fireworks = new ArrayList<>();
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     /**
      *

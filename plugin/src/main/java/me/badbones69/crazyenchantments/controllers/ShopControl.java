@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.enums.Messages;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 
 public class ShopControl implements Listener {
     
-    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static CrazyManager ce = CrazyManager.getInstance();
     private static ShopManager shopManager = ce.getShopManager();
     private Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
     

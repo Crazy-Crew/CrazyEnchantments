@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.api.enums;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import org.bukkit.inventory.ItemStack;
@@ -126,7 +126,7 @@ public enum CEnchantments {
     private int chance;
     private int chanceIncrease;
     
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     private CEnchantment cachedEnchantment = null;
     

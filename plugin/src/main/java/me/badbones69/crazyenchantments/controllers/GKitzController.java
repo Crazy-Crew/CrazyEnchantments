@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.controllers;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class GKitzController implements Listener {
     
-    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static CrazyManager ce = CrazyManager.getInstance();
     private InfoMenuManager infoManager = ce.getInfoMenuManager();
     
     public static void openGUI(Player player) {

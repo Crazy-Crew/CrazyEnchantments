@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class GKitz {
     private List<String> commands;
     private List<ItemStack> preview;
     private List<String> itemStrings;
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * Create a new gkit.

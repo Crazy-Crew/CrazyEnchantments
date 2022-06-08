@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.multisupport;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.multisupport.mobstackers.MobStacker;
 import me.badbones69.crazyenchantments.multisupport.mobstackers.MobStacker2;
@@ -9,7 +9,6 @@ import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersi
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
@@ -24,7 +23,7 @@ public class Support {
 
     //private static FactionPlugin factionPlugin = null;
 
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
 
     private WingsManager wingsManager;
 

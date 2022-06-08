@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 public class BlackSmithResult {
     
-    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static CrazyManager ce = CrazyManager.getInstance();
     private static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
     private int cost = 0;
     private ItemStack resultItem;

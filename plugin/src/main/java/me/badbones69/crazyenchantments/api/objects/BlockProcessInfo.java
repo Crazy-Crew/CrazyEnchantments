@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,7 +18,7 @@ public class BlockProcessInfo {
         this.item = item;
         this.block = block;
         this.drops = new ArrayList<>(block.getDrops(item));
-        isSpawner = block.getType() == CrazyEnchantments.getInstance().getMaterial("SPAWNER");
+        isSpawner = block.getType() == CrazyManager.getInstance().getMaterial("SPAWNER");
     }
     
     public ItemStack getItem() {

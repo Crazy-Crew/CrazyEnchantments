@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class EnchantedArrow {
     
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     private Arrow arrow;
     private ItemStack bow;

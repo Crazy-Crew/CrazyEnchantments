@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.commands;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.Dust;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.Category;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CETab implements TabCompleter {
     
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     @Override
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})

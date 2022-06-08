@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.api.managers;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
@@ -24,7 +24,7 @@ public class InfoMenuManager {
     private ItemStack backRight;
     private ItemStack backLeft;
     private List<EnchantmentType> enchantmentTypes = new ArrayList<>();
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     public static InfoMenuManager getInstance() {
         return instance;

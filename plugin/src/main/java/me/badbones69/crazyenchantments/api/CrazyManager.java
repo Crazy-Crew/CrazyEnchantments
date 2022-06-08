@@ -38,9 +38,9 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class CrazyEnchantments {
+public class CrazyManager {
     
-    private static CrazyEnchantments instance = new CrazyEnchantments();
+    private static CrazyManager instance = new CrazyManager();
     private Plugin plugin;
     private int rageMaxLevel;
     private boolean gkitzToggle;
@@ -70,7 +70,7 @@ public class CrazyEnchantments {
     private List<Event> ignoredEvents = new ArrayList<>();
     private List<UUID> ignoredUUIDs = new ArrayList<>();
     
-    public static CrazyEnchantments getInstance() {
+    public static CrazyManager getInstance() {
         return instance;
     }
     
@@ -129,10 +129,10 @@ public class CrazyEnchantments {
             config.getBoolean(path + ".LostBook.InGUI"),
             new ItemBuilder()
             .setMaterial(config.getString(path + ".LostBook.Item"))
-            .setPlayer(config.getString(path + ".LostBook.Player"))
+            .setPlayerName(config.getString(path + ".LostBook.Player"))
             .setName(config.getString(path + ".LostBook.Name"))
             .setLore(config.getStringList(path + ".LostBook.Lore"))
-            .setGlowing(config.getBoolean(path + ".LostBook.Glowing")),
+            .setGlow(config.getBoolean(path + ".LostBook.Glowing")),
             config.getInt(path + ".LostBook.Cost"),
             Currency.getCurrency(config.getString(path + ".LostBook.Currency")),
             config.getBoolean(path + ".LostBook.FireworkToggle"),
@@ -145,10 +145,10 @@ public class CrazyEnchantments {
             config.getBoolean(path + ".InGUI"),
             new ItemBuilder()
             .setMaterial(config.getString(path + ".Item"))
-            .setPlayer(config.getString(path + ".Player"))
+            .setPlayerName(config.getString(path + ".Player"))
             .setName(config.getString(path + ".Name"))
             .setLore(config.getStringList(path + ".Lore"))
-            .setGlowing(config.getBoolean(path + ".Glowing")),
+            .setGlow(config.getBoolean(path + ".Glowing")),
             config.getInt(path + ".Cost"),
             Currency.getCurrency(config.getString(path + ".Currency")),
             config.getInt(path + ".Rarity"),
@@ -207,7 +207,7 @@ public class CrazyEnchantments {
                 .setMaterial(gkit.getString(path + "Display.Item"))
                 .setName(gkit.getString(path + "Display.Name"))
                 .setLore(gkit.getStringList(path + "Display.Lore"))
-                .setGlowing(gkit.getBoolean(path + "Display.Glowing")).build());
+                .setGlow(gkit.getBoolean(path + "Display.Glowing")).build());
                 displayItem.setString("gkit", kit);
                 List<String> commands = gkit.getStringList(path + "Commands");
                 List<String> itemStrings = gkit.getStringList(path + "Items");

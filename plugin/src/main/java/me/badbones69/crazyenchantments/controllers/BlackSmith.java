@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.currencyapi.Currency;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.enums.Messages;
@@ -27,7 +27,7 @@ import java.util.List;
 public class BlackSmith implements Listener {
     
     private static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     private int mainSlot = 10;
     private int subSlot = 13;
     private static int resultSlot = 16;

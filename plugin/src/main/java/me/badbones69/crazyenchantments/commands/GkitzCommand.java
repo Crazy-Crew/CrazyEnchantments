@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.commands;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.api.objects.GKitz;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class GkitzCommand implements CommandExecutor {
     
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLable, String[] args) {

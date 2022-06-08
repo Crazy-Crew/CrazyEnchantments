@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.enchantments;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -23,7 +23,7 @@ import java.util.*;
 public class Hoes implements Listener {
     
     private static List<Material> harvesterCrops;
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     private List<Material> seedlings;
     private Random random = new Random();
     private Material soilBlock = ce.getMaterial("FARMLAND");

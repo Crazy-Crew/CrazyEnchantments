@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.controllers;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class InfoGUIControl implements Listener {
     
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     private InfoMenuManager manager = ce.getInfoMenuManager();
     
     @EventHandler

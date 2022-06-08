@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.controllers;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
@@ -29,7 +29,7 @@ import java.util.List;
 public class Scrambler implements Listener {
     
     public static HashMap<Player, BukkitTask> roll = new HashMap<>();
-    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static CrazyManager ce = CrazyManager.getInstance();
     private static ItemBuilder scramblerItem;
     private static ItemBuilder pointer;
     private static boolean animationToggle;

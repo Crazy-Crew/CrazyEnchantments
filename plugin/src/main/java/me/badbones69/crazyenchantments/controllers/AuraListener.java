@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.controllers;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
@@ -30,7 +30,7 @@ public class AuraListener implements Listener {
     CEnchantments.INTIMIDATE
     };
     
-    private final CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {

@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -9,7 +9,7 @@ public class GKitzItem {
     
     private ItemBuilder itemBuilder;
     private HashMap<CEnchantment, Integer> ceEnchantments;
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * Make an empty gkit item.

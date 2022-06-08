@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.controllers;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class CommandChecker implements Listener {
     
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     private List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
     private ItemStack air = new ItemStack(Material.AIR);
     

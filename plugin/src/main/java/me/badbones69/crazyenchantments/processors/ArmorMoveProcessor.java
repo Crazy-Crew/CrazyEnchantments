@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.processors;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,7 +23,7 @@ import java.util.Objects;
 public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private final Processor<Runnable> syncProcessor;
-    private final CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     private final Support support = Support.getInstance();
 
     public ArmorMoveProcessor() {

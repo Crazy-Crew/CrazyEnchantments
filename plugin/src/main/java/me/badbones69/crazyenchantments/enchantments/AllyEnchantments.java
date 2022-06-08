@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.enchantments;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.managers.AllyManager;
 import me.badbones69.crazyenchantments.api.objects.AllyMob;
@@ -25,7 +25,7 @@ import java.util.UUID;
 public class AllyEnchantments implements Listener {
     
     private static AllyManager allyManager = AllyManager.getInstance();
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     private HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
     
     @EventHandler(priority = EventPriority.HIGHEST)

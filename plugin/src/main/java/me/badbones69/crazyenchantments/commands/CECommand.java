@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.commands;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class CECommand implements CommandExecutor {
     
-    private CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private CrazyManager ce = CrazyManager.getInstance();
     private FileManager fileManager = FileManager.getInstance();
     
     @Override

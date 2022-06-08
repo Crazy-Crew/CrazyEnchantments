@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.Methods;
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import me.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import org.bukkit.Bukkit;
@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class CEnchantment {
     
-    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static CrazyManager ce = CrazyManager.getInstance();
     
     private String name;
     private String customName;

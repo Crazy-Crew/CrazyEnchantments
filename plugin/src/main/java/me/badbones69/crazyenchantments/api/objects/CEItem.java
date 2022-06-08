@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.CrazyEnchantments;
+import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,7 +16,7 @@ public class CEItem {
     private List<CEnchantment> cEnchantmentRemove;
     private Map<Enchantment, Integer> vanillaEnchantments;
     private Map<CEnchantment, Integer> cEnchantments;
-    private static CrazyEnchantments ce = CrazyEnchantments.getInstance();
+    private static CrazyManager ce = CrazyManager.getInstance();
     
     public CEItem(ItemStack item) {
         this.item = item;
