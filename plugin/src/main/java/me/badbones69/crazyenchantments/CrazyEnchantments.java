@@ -5,11 +5,9 @@ import me.badbones69.crazyenchantments.api.FileManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
-import me.badbones69.crazyenchantments.api.support.SilkSpawnerSupport;
 import me.badbones69.crazyenchantments.commands.*;
 import me.badbones69.crazyenchantments.controllers.*;
 import me.badbones69.crazyenchantments.enchantments.*;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -32,7 +30,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     public void onEnable() {
         fileManager.logInfo(true).setup(this);
         ce.load();
-        SupportedPlugins.printHooks();
+
         Methods.hasUpdate();
         CurrencyAPI.loadCurrency();
 
@@ -81,7 +79,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pm.registerEvents(new Swords(), this);
         pm.registerEvents(new AllyEnchantments(), this);
 
-        if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) pm.registerEvents(new SilkSpawnerSupport(), this);
+        // if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) pm.registerEvents(new SilkSpawnerSupport(), this);
 
         new BukkitRunnable() {
             @Override
