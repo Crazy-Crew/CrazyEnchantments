@@ -13,12 +13,9 @@ import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import me.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import me.badbones69.crazyenchantments.processors.Processor;
-import me.badbones69.premiumhooks.anticheat.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,7 +36,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -165,9 +161,9 @@ public class Armor implements Listener {
                                     public void run() {
                                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
                                         Bukkit.getPluginManager().callEvent(event);
-                                        if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                            AACSupport.exemptPlayerTime(player);
-                                        }
+                                        //if (SupportedPlugins.AAC.isPluginLoaded()) {
+                                        //    AACSupport.exemptPlayerTime(player);
+                                        //}
                                         if (!event.isCancelled()) {
                                             new BukkitRunnable() {
                                                 @Override
@@ -259,17 +255,12 @@ public class Armor implements Listener {
                                             int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
                                             try {
                                                 loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
-                                            } catch (Exception ignore) {
-                                            }
-                                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                                NoCheatPlusSupport.exemptPlayer(player);
-                                            }
-                                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                                                SpartanSupport.cancelNoSwing(player);
-                                            }
-                                            if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                                AACSupport.exemptPlayer(player);
-                                            }
+                                            } catch (Exception ignore) {}
+
+                                            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                                            //    NoCheatPlusSupport.exemptPlayer(player);
+                                            //}
+
                                             for (LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
                                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
                                                 ce.addIgnoredEvent(damageByEntityEvent);
@@ -282,12 +273,6 @@ public class Armor implements Listener {
                                                 ce.removeIgnoredUUID(player.getUniqueId());
                                             }
                                             damager.damage(5D);
-                                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                                NoCheatPlusSupport.unexemptPlayer(player);
-                                            }
-                                            if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                                AACSupport.unexemptPlayer(player);
-                                            }
                                         }
                                     }
                                 }.runTask(ce.getPlugin());

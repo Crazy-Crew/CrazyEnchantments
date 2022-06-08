@@ -15,9 +15,7 @@ import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
-import me.badbones69.premiumhooks.anticheat.SpartanSupport;
+import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -299,11 +297,8 @@ public class Swords implements Listener {
                         if (!event.isCancelled()) {
                             if (e.getEntity() instanceof Player && SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelSpeed((Player) e.getEntity());
-                                SpartanSupport.cancelFly((Player) e.getEntity());
-                                SpartanSupport.cancelClip((Player) e.getEntity());
                                 SpartanSupport.cancelNormalMovements((Player) e.getEntity());
                                 SpartanSupport.cancelNoFall((Player) e.getEntity());
-                                SpartanSupport.cancelJesus((Player) e.getEntity());
                             }
                             e.getEntity().setVelocity(damager.getLocation().getDirection().multiply(2).setY(1.25));
                         }
@@ -317,17 +312,12 @@ public class Swords implements Listener {
                             int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
                             try {
                                 loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
-                            } catch (Exception ignore) {
-                            }
-                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                NoCheatPlusSupport.exemptPlayer(damager);
-                            }
+                            } catch (Exception ignore) {}
+
                             if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelNoSwing(damager);
                             }
-                            if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                AACSupport.exemptPlayer(damager);
-                            }
+
                             for (LivingEntity entity : Methods.getNearbyLivingEntities(loc, 2D, damager)) {
                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, DamageCause.CUSTOM, 5D);
                                 ce.addIgnoredEvent(damageByEntityEvent);
@@ -341,12 +331,6 @@ public class Swords implements Listener {
                             }
                             en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
                             en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));
-                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                NoCheatPlusSupport.unexemptPlayer(damager);
-                            }
-                            if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                AACSupport.unexemptPlayer(damager);
-                            }
                         }
                     }
                     if (enchantments.contains(CEnchantments.SLOWMO.getEnchantment()) && CEnchantments.SLOWMO.chanceSuccessful(item)) {

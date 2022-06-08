@@ -9,9 +9,8 @@ import me.badbones69.crazyenchantments.controllers.FireworkDamage;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
+import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
-import me.badbones69.premiumhooks.anticheat.SpartanSupport;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -180,8 +179,8 @@ public class Methods {
                     }
                 }
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) {}
+
         player.updateInventory();
     }
     
@@ -540,14 +539,8 @@ public class Methods {
                                 if (en instanceof Player) {
                                     if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                         SpartanSupport.cancelSpeed((Player) player);
-                                        SpartanSupport.cancelFly((Player) player);
-                                        SpartanSupport.cancelClip((Player) player);
                                         SpartanSupport.cancelNormalMovements((Player) player);
                                         SpartanSupport.cancelNoFall((Player) player);
-                                        SpartanSupport.cancelJesus((Player) player);
-                                    }
-                                    if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                        AACSupport.exemptPlayerTime((Player) player);
                                     }
                                 }
                                 en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
@@ -583,14 +576,8 @@ public class Methods {
                                 if (en instanceof Player) {
                                     if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                         SpartanSupport.cancelSpeed((Player) player);
-                                        SpartanSupport.cancelFly((Player) player);
-                                        SpartanSupport.cancelClip((Player) player);
                                         SpartanSupport.cancelNormalMovements((Player) player);
                                         SpartanSupport.cancelNoFall((Player) player);
-                                        SpartanSupport.cancelJesus((Player) player);
-                                    }
-                                    if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                        AACSupport.exemptPlayerTime((Player) player);
                                     }
                                 }
                                 en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));

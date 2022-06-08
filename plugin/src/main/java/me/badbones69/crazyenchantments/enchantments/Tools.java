@@ -8,9 +8,7 @@ import me.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.premiumhooks.spawners.EpicSpawnersSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -68,8 +66,8 @@ public class Tools implements Listener {
                 if ((Hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
                 //This checks if the block is a spawner and if so the spawner classes will take care of this.
                 //If Epic Spawners is enabled then telepathy will give the item from the API.
-                //Otherwise CE will ignore the spawner in this event.
-                (!SupportedPlugins.EPIC_SPAWNERS.isPluginLoaded() && block.getType() == ce.getMaterial("SPAWNER", "MOB_SPAWNER"))) {
+                //Otherwise, CE will ignore the spawner in this event.
+                (block.getType() == ce.getMaterial("SPAWNER", "MOB_SPAWNER"))) {
                     return;
                 }
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
@@ -112,34 +110,32 @@ public class Tools implements Listener {
         boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
         ItemBuilder itemDrop = null;
         int xp = 0;
-        if (processInfo.isSpawner() && SupportedPlugins.EPIC_SPAWNERS.isPluginLoaded()) {
-            itemDrop = ItemBuilder.convertItemStack(EpicSpawnersSupport.getSpawner(block));
-        } else {
-            for (ItemStack drop : processInfo.getDrops()) {
-                if (itemDrop == null) {
-                    //Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
-                    itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
-                }
-                if (!hasSilkTouch) {
-                    if (hasFurnace && isOre) {
-                        itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(0);
-                    } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                        itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
-                    }
-                    if (hasOreXP(block)) {
-                        xp = Methods.percentPick(7, 3);
-                        if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                            xp += Methods.percentPick(7, 3) * ce.getLevel(item, CEnchantments.EXPERIENCE);
-                        }
-                    }
-                }
-                if (block.getType() == ce.getMaterial("SUGAR_CANE", "SUGAR_CANE_BLOCK")) {
-                    sugarCaneBlocks = getSugarCaneBlocks(block);
-                    drop.setAmount(sugarCaneBlocks.size());
-                }
-                itemDrop.addAmount(drop.getAmount());
+
+        for (ItemStack drop : processInfo.getDrops()) {
+            if (itemDrop == null) {
+                //Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
+                itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
             }
+            if (!hasSilkTouch) {
+                if (hasFurnace && isOre) {
+                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(0);
+                } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
+                }
+                if (hasOreXP(block)) {
+                    xp = Methods.percentPick(7, 3);
+                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+                        xp += Methods.percentPick(7, 3) * ce.getLevel(item, CEnchantments.EXPERIENCE);
+                    }
+                }
+            }
+            if (block.getType() == ce.getMaterial("SUGAR_CANE", "SUGAR_CANE_BLOCK")) {
+                sugarCaneBlocks = getSugarCaneBlocks(block);
+                drop.setAmount(sugarCaneBlocks.size());
+            }
+            itemDrop.addAmount(drop.getAmount());
         }
+
         if (itemDrop == null) {
             //In case the drop is still null as no drops were found.
             itemDrop = new ItemBuilder().setMaterial(block.getType());
@@ -161,7 +157,7 @@ public class Tools implements Listener {
         if (block.getType() == Material.COCOA) {
             //Coco drops 2-3 beans.
             itemDrop.setMaterial("COCOA_BEANS", "INK_SACK:3")
-            .setAmount(ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
+                    .setAmount(ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
         }
         //Changes ink sacks to lapis if on 1.12.2-
         if (Version.isOlder(Version.v1_13_R2) && itemDrop.getMaterial() == Material.matchMaterial("INK_SACK") && itemDrop.getDamage() != 3) {

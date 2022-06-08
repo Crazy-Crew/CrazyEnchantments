@@ -12,9 +12,7 @@ import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
-import me.badbones69.premiumhooks.anticheat.SpartanSupport;
+import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -92,17 +90,13 @@ public class PickAxes implements Listener {
                         @Override
                         public void run() {
                             HashMap<ItemStack, Integer> drops = new HashMap<>();
-                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                NoCheatPlusSupport.exemptPlayer(player);
-                            }
+
                             if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelFastBreak(player);
                                 SpartanSupport.cancelNoSwing(player);
                                 SpartanSupport.cancelBlockReach(player);
                             }
-                            if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                AACSupport.exemptPlayer(player);
-                            }
+
                             int xp = 0;
                             boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
                             boolean isOre = isOre(block.getType());
@@ -202,15 +196,11 @@ public class PickAxes implements Listener {
                                     }
                                 }
                             }
+
                             if (!damage) {
                                 Methods.removeDurability(item, player);
                             }
-                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                NoCheatPlusSupport.unexemptPlayer(player);
-                            }
-                            if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                AACSupport.unexemptPlayer(player);
-                            }
+
                             for (Entry<ItemStack, Integer> item : drops.entrySet()) {
                                 item.getKey().setAmount(item.getValue());
                                 if (Methods.isInventoryFull(player)) {

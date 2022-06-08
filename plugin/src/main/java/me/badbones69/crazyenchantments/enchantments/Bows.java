@@ -10,9 +10,7 @@ import me.badbones69.crazyenchantments.api.objects.*;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.Version;
-import me.badbones69.crazyenchantments.multisupport.anticheats.AACSupport;
-import me.badbones69.crazyenchantments.multisupport.anticheats.NoCheatPlusSupport;
-import me.badbones69.premiumhooks.anticheat.SpartanSupport;
+import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,7 +32,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,17 +172,12 @@ public class Bows implements Listener {
                     int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
                     try {
                         location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT", "ENTITY_LIGHTNING_IMPACT"), (float) lightningSoundRange / 16f, 1);
-                    } catch (Exception ignore) {
-                    }
-                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                        NoCheatPlusSupport.exemptPlayer(shooter);
-                    }
+                    } catch (Exception ignore) {}
+
                     if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                         SpartanSupport.cancelNoSwing(shooter);
                     }
-                    if (SupportedPlugins.AAC.isPluginLoaded()) {
-                        AACSupport.exemptPlayer(shooter);
-                    }
+
                     for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
                         EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
                         ce.addIgnoredEvent(damageByEntityEvent);
@@ -196,12 +188,6 @@ public class Bows implements Listener {
                         }
                         ce.removeIgnoredEvent(damageByEntityEvent);
                         ce.removeIgnoredUUID(shooter.getUniqueId());
-                    }
-                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                        NoCheatPlusSupport.unexemptPlayer(shooter);
-                    }
-                    if (SupportedPlugins.AAC.isPluginLoaded()) {
-                        AACSupport.unexemptPlayer(shooter);
                     }
                 }
                 //Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list so it can check.
@@ -281,17 +267,10 @@ public class Bows implements Listener {
                             if (!event.isCancelled()) {
                                 if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                     SpartanSupport.cancelSpeed(player);
-                                    SpartanSupport.cancelFly(player);
-                                    SpartanSupport.cancelClip(player);
                                     SpartanSupport.cancelNormalMovements(player);
                                     SpartanSupport.cancelNoFall(player);
-                                    SpartanSupport.cancelJesus(player);
                                 }
-                                if (SupportedPlugins.AAC.isPluginLoaded()) {
-                                    AACSupport.exemptPlayerTime(player);
-                                }
-                                //Posable fix
-                                //https://github.com/SirBlobman/CombatLogX/commit/16377215a2a474fb94aa0f5ed8d1f681d9dfbb02#diff-b859c5538c8ab4c9a26fa9f968d5fea1
+
                                 entity.setVelocity(v);
                             }
                         } else {
