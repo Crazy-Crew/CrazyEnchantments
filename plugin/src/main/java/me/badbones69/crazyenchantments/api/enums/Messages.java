@@ -3,7 +3,6 @@ package me.badbones69.crazyenchantments.api.enums;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.util.*;
 import java.util.Map.Entry;
 

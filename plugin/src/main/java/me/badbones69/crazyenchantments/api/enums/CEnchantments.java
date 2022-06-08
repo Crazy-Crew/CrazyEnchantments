@@ -206,7 +206,6 @@ public enum CEnchantments {
     
     /**
      * Get the chance the enchantment will activate.
-     *
      * Not all enchantments have a chance to activate.
      *
      * @return The chance of the enchantment activating.
@@ -217,7 +216,6 @@ public enum CEnchantments {
     
     /**
      * Get the amount the enchantment chance increases by every level.
-     *
      * Not all enchantments have a chance to activate.
      *
      * @return The amount the chance increases by every level.
