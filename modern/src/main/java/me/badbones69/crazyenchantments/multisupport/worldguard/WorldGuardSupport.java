@@ -10,14 +10,16 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-public class WorldGuard_v7 implements WorldGuardVersion {
+public class WorldGuardSupport implements WorldGuardVersion {
+
+    private final WorldGuard instance = WorldGuard.getInstance();
     
     @Override
     public boolean allowsPVP(Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
         try {
-            ApplicableRegionSet set = WorldGuard.getInstance().getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+            ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             return set.queryState(null, Flags.PVP) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;
@@ -29,7 +31,7 @@ public class WorldGuard_v7 implements WorldGuardVersion {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
         try {
-            ApplicableRegionSet set = WorldGuard.getInstance().getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+            ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             return set.queryState(null, Flags.BLOCK_BREAK) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;
@@ -41,7 +43,7 @@ public class WorldGuard_v7 implements WorldGuardVersion {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
         try {
-            ApplicableRegionSet set = WorldGuard.getInstance().getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+            ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             return set.queryState(null, Flags.OTHER_EXPLOSION) != StateFlag.State.DENY && set.queryState(null, Flags.TNT) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;
@@ -53,7 +55,7 @@ public class WorldGuard_v7 implements WorldGuardVersion {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
         try {
-            ApplicableRegionSet set = WorldGuard.getInstance().getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+            ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             for (ProtectedRegion region : set) {
                 if (regionName.equalsIgnoreCase(region.getId())) {
                     return true;
@@ -70,7 +72,7 @@ public class WorldGuard_v7 implements WorldGuardVersion {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
         try {
-            ApplicableRegionSet set = WorldGuard.getInstance().getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+            ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             for (ProtectedRegion region : set.getRegions()) {
                 if (region.getMembers().contains(player.getUniqueId())) {
                     return true;
@@ -87,7 +89,7 @@ public class WorldGuard_v7 implements WorldGuardVersion {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
         try {
-            ApplicableRegionSet set = WorldGuard.getInstance().getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+            ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             for (ProtectedRegion region : set.getRegions()) {
                 if (region.getOwners().contains(player.getUniqueId())) {
                     return true;

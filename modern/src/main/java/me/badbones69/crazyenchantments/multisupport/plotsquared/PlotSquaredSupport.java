@@ -4,7 +4,7 @@ import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import org.bukkit.entity.Player;
 
-public class PlotSquared implements PlotSquaredVersion {
+public class PlotSquaredSupport implements PlotSquaredVersion {
 
     public boolean inTerritory(Player player) {
         PlotPlayer<Player> plotPlayer = PlotPlayer.from(player);
