@@ -82,8 +82,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pm.registerEvents(new AllyEnchantments(), this);
 
         if (SupportedPlugins.SILK_SPAWNERS.isPluginLoaded()) pm.registerEvents(new SilkSpawnerSupport(), this);
-        //==========================================================================\\
-        new Metrics(this);// Starts up bStats
+
         new BukkitRunnable() {
             @Override
             public void run() {
