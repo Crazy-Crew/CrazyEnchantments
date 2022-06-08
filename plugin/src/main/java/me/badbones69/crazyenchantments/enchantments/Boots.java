@@ -7,9 +7,9 @@ import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
-import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,7 +37,7 @@ public class Boots implements Listener {
                     for (Player player : manager.getFlyingPlayers()) {
                         if (player.isFlying()) {
                             Location location = player.getLocation().subtract(0, .25, 0);
-                            ParticleEffect.CLOUD.display(.25F, 0, .25F, 0, 100, location, 100);
+                            player.getLocation().getWorld().spawnParticle(Particle.CLOUD, location, 30, .4F, .5F, .4F);
                         }
                     }
                 }

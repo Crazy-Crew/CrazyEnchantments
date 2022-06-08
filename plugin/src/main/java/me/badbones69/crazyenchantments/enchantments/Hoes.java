@@ -5,7 +5,6 @@ import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import me.badbones69.crazyenchantments.multisupport.particles.ParticleEffect;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -158,7 +157,7 @@ public class Hoes implements Listener {
     private void fullyGrowPlant(ItemStack hoe, Block block, Player player) {
         if (CEnchantments.GREENTHUMB.chanceSuccessful(hoe) || player.getGameMode() == GameMode.CREATIVE) {
             ce.getNMSSupport().fullyGrowPlant(block);
-            ParticleEffect.VILLAGER_HAPPY.display(.25F, .25F, .25F, 0, 20, block.getLocation().add(.5, .5, .5), 20);
+            player.getLocation().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation(), 20, .25F, .25F, .25F);
         }
     }
     
