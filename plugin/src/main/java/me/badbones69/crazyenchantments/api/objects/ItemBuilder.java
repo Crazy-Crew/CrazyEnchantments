@@ -1,7 +1,7 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import me.badbones69.crazyenchantments.multisupport.SkullCreator;
+import me.badbones69.crazyenchantments.SkullCreator;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;

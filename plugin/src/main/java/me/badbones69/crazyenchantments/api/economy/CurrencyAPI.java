@@ -1,5 +1,6 @@
-package me.badbones69.crazyenchantments.api.currencyapi;
+package me.badbones69.crazyenchantments.api.economy;
 
+import me.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import me.badbones69.crazyenchantments.api.enums.ShopOption;
 import me.badbones69.crazyenchantments.api.objects.Category;
 import me.badbones69.crazyenchantments.api.objects.LostBook;

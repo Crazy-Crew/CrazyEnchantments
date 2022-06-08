@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.events;
 
-import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import me.badbones69.crazyenchantments.api.economy.Currency;
 import me.badbones69.crazyenchantments.api.objects.CEBook;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import org.bukkit.event.Event;

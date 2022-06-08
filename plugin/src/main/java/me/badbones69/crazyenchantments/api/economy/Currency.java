@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.api.currencyapi;
+package me.badbones69.crazyenchantments.api.economy;
 
 public enum Currency {
     
@@ -47,5 +47,4 @@ public enum Currency {
     public String getName() {
         return name;
     }
-
 }

@@ -6,8 +6,8 @@ import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import me.badbones69.crazyenchantments.multisupport.Support;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.api.PluginSupport;
+import me.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -27,12 +27,12 @@ import java.util.List;
 public class Axes implements Listener {
     
     private CrazyManager ce = CrazyManager.getInstance();
-    private Support support = Support.getInstance();
+    private PluginSupport pluginSupport = PluginSupport.getInstance();
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (e.isCancelled() || ce.isIgnoredEvent(e)) return;
-        if (support.isFriendly(e.getDamager(), e.getEntity())) return;
+        if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
         if (e.getEntity() instanceof LivingEntity) {
             LivingEntity en = (LivingEntity) e.getEntity();
             if (e.getDamager() instanceof Player) {
@@ -102,7 +102,7 @@ public class Axes implements Listener {
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             for (Entity entity : damager.getNearbyEntities(3, 3, 3)) {
-                                if (!support.isFriendly(damager, entity)) {
+                                if (!pluginSupport.isFriendly(damager, entity)) {
                                     entity.setVelocity(entity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
                                 }
                             }
@@ -117,7 +117,7 @@ public class Axes implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
-        if (support.allowsPVP(player.getLocation()) && e.getEntity().getKiller() instanceof Player) {
+        if (pluginSupport.allowsPVP(player.getLocation()) && e.getEntity().getKiller() instanceof Player) {
             Player damager = e.getEntity().getKiller();
             ItemStack item = Methods.getItemInHand(damager);
             if (ce.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {

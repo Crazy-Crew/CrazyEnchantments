@@ -5,8 +5,8 @@ import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
-import me.badbones69.crazyenchantments.multisupport.Support;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.api.PluginSupport;
+import me.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -24,7 +24,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private final Processor<Runnable> syncProcessor;
     private final CrazyManager ce = CrazyManager.getInstance();
-    private final Support support = Support.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.getInstance();
 
     public ArmorMoveProcessor() {
         this.syncProcessor = new RunnableSyncProcessor(ce.getPlugin());
@@ -95,7 +95,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (entity instanceof Player) {
                             Player other = (Player) entity;
-                            if (support.isFriendly(player, other)) {
+                            if (pluginSupport.isFriendly(player, other)) {
                                 AngelUseEvent event = new AngelUseEvent(player, armor);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (!event.isCancelled()) {

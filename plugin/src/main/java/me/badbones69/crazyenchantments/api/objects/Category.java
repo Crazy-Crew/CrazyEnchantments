@@ -1,6 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import me.badbones69.crazyenchantments.api.economy.Currency;
 
 import java.util.ArrayList;
 import java.util.List;

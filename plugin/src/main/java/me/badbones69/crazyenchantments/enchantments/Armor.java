@@ -10,8 +10,8 @@ import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import me.badbones69.crazyenchantments.api.objects.PotionEffects;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
-import me.badbones69.crazyenchantments.multisupport.Support;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.api.PluginSupport;
+import me.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import me.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import me.badbones69.crazyenchantments.processors.Processor;
 import org.bukkit.*;
@@ -39,7 +39,7 @@ public class Armor implements Listener {
     private List<Player> fall = new ArrayList<>();
     private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
     private CrazyManager ce = CrazyManager.getInstance();
-    private Support support = Support.getInstance();
+    private PluginSupport pluginSupport = PluginSupport.getInstance();
     private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
     
     public Armor() {
@@ -113,7 +113,7 @@ public class Armor implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (support.isFriendly(e.getDamager(), e.getEntity())) return;
+                if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
                 if (e.getDamager() instanceof LivingEntity && e.getEntity() instanceof Player) {
                     final Player player = (Player) e.getEntity();
                     final LivingEntity damager = (LivingEntity) e.getDamager();
@@ -259,7 +259,7 @@ public class Armor implements Listener {
                                                 ce.addIgnoredEvent(damageByEntityEvent);
                                                 ce.addIgnoredUUID(player.getUniqueId());
                                                 Bukkit.getPluginManager().callEvent(damageByEntityEvent);
-                                                if (!damageByEntityEvent.isCancelled() && support.allowsPVP(en.getLocation()) && !support.isFriendly(player, en)) {
+                                                if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsPVP(en.getLocation()) && !pluginSupport.isFriendly(player, en)) {
                                                     en.damage(5D);
                                                 }
                                                 ce.removeIgnoredEvent(damageByEntityEvent);
@@ -283,7 +283,7 @@ public class Armor implements Listener {
                                         for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
                                             if (entity instanceof Player) {
                                                 Player other = (Player) entity;
-                                                if (support.isFriendly(damager, other)) {
+                                                if (pluginSupport.isFriendly(damager, other)) {
                                                     players++;
                                                 }
                                             }
@@ -313,14 +313,14 @@ public class Armor implements Listener {
             @Override
             public void run() {
                 if (!player.canSee(other) || !other.canSee(player)) return;
-                if (support.isVanished(player) || support.isVanished(other)) return;
+                if (pluginSupport.isVanished(player) || pluginSupport.isVanished(other)) return;
                 CEnchantments enchant = e.getEnchantment();
                 int level = e.getLevel();
                 //Debug code for checking.
 //                System.out.println("PvP: " + support.allowsPVP(other.getLocation()));
 //                System.out.println("Enemy: " + !support.isFriendly(player, other));
 //                System.out.println("NoBypass: " + !Methods.hasPermission(other, "bypass.aura", false));
-                if (support.allowsPVP(other.getLocation()) && !support.isFriendly(player, other) && !Methods.hasPermission(other, "bypass.aura", false)) {
+                if (pluginSupport.allowsPVP(other.getLocation()) && !pluginSupport.isFriendly(player, other) && !Methods.hasPermission(other, "bypass.aura", false)) {
                     Calendar cal = Calendar.getInstance();
                     HashMap<CEnchantments, Calendar> effect = new HashMap<>();
                     if (timer.containsKey(other)) {
@@ -406,7 +406,7 @@ public class Armor implements Listener {
                 if (player.getKiller() == null) return;
 
                 Player killer = player.getKiller();
-                if (!support.allowsPVP(player.getLocation())) return;
+                if (!pluginSupport.allowsPVP(player.getLocation())) return;
                 if (CEnchantments.SELFDESTRUCT.isActivated()) {
                     for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
                         if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {

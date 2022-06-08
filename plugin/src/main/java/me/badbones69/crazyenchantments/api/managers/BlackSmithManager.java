@@ -2,7 +2,7 @@ package me.badbones69.crazyenchantments.api.managers;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
-import me.badbones69.crazyenchantments.api.currencyapi.Currency;
+import me.badbones69.crazyenchantments.api.economy.Currency;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;

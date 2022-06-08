@@ -3,7 +3,7 @@ package me.badbones69.crazyenchantments.enchantments;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
-import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Helmets implements Listener {
     
     private CrazyManager ce = CrazyManager.getInstance();
-    private Support support = Support.getInstance();
+    private PluginSupport pluginSupport = PluginSupport.getInstance();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMovement(PlayerMoveEvent e) {
@@ -33,7 +33,7 @@ public class Helmets implements Listener {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (entity instanceof Player) {
                             Player other = (Player) entity;
-                            if (support.isFriendly(player, other)) {
+                            if (pluginSupport.isFriendly(player, other)) {
                                 players.add(other);
                             }
                         }

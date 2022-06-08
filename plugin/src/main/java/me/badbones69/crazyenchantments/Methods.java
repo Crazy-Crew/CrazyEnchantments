@@ -6,8 +6,8 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.controllers.FireworkDamage;
-import me.badbones69.crazyenchantments.multisupport.Support;
-import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
+import me.badbones69.crazyenchantments.api.PluginSupport;
+import me.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -30,7 +30,7 @@ public class Methods {
     
     private static Random random = new Random();
     private static CrazyManager ce = CrazyManager.getInstance();
-    private static Support support = Support.getInstance();
+    private static PluginSupport pluginSupport = PluginSupport.getInstance();
     public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
     public static String color(String message) {
@@ -499,13 +499,13 @@ public class Methods {
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(player.getLocation(), 3D, player)) {
-            if (support.allowsPVP(e.getLocation())) {
+            if (pluginSupport.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
                     e.remove();
                 } else {
                     if (e instanceof LivingEntity) {
                         LivingEntity en = (LivingEntity) e;
-                        if (!support.isFriendly(player, en)) {
+                        if (!pluginSupport.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {
@@ -531,13 +531,13 @@ public class Methods {
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)) {
-            if (support.allowsPVP(e.getLocation())) {
+            if (pluginSupport.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
                     e.remove();
                 } else {
                     if (e instanceof LivingEntity) {
                         LivingEntity en = (LivingEntity) e;
-                        if (!support.isFriendly(player, en)) {
+                        if (!pluginSupport.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {

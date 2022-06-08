@@ -3,7 +3,7 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.managers.AllyManager;
-import me.badbones69.crazyenchantments.multisupport.Support;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
@@ -19,7 +19,7 @@ public class AllyMob {
     private long spawnTime;
     private BukkitTask runnable;
     private CrazyManager ce = CrazyManager.getInstance();
-    private Support support = Support.getInstance();
+    private PluginSupport pluginSupport = PluginSupport.getInstance();
     private AllyMob instance;
     private static AllyManager allyManager = AllyManager.getInstance();
     
@@ -48,7 +48,8 @@ public class AllyMob {
     public void spawnAlly(Location location, long spawnTime) {
         this.spawnTime = spawnTime;
         ally = (LivingEntity) location.getWorld().spawnEntity(location, type.entityType);
-        support.noStack(ally);
+
+        // support.noStack(ally);
 
         ally.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(type.maxHealth);
 

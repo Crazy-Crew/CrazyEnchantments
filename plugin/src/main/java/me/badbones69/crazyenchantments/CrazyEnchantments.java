@@ -3,7 +3,7 @@ package me.badbones69.crazyenchantments;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
-import me.badbones69.crazyenchantments.api.currencyapi.CurrencyAPI;
+import me.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import me.badbones69.crazyenchantments.api.objects.CEPlayer;
 import me.badbones69.crazyenchantments.commands.*;
 import me.badbones69.crazyenchantments.controllers.*;

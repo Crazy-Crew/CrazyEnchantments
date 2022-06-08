@@ -1,6 +1,5 @@
-package me.badbones69.crazyenchantments.multisupport;
+package me.badbones69.crazyenchantments.api;
 
-import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.managers.WingsManager;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
@@ -14,11 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Support {
+public class PluginSupport {
     
-    private static final Support instance = new Support();
-
-    //private static FactionPlugin factionPlugin = null;
+    private static final PluginSupport instance = new PluginSupport();
 
     private final CrazyManager ce = CrazyManager.getInstance();
 
@@ -28,7 +25,7 @@ public class Support {
 
     private PlotSquaredVersion plotSquaredVersion;
     
-    public static Support getInstance() {
+    public static PluginSupport getInstance() {
         return instance;
     }
     
@@ -131,8 +128,13 @@ public class Support {
         VAULT("Vault"),
         WORLD_EDIT("WorldEdit"),
 
-        // Claim Plugins
+        // Region Protection
         WORLD_GUARD("WorldGuard"),
+
+        // Faction Plugins
+        FACTIONS_UUID("FactionsUUID"),
+
+        // PlotSquared
         PLOT_SQUARED("PlotSquared");
         
         private final String name;
