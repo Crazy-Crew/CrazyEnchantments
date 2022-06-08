@@ -14,10 +14,7 @@ import me.badbones69.crazyenchantments.multisupport.Support;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
 import me.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import me.badbones69.crazyenchantments.processors.Processor;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -250,7 +247,7 @@ public class Armor implements Listener {
                                             loc.getWorld().spigot().strikeLightningEffect(loc, true);
                                             int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
                                             try {
-                                                loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                                                loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                                             } catch (Exception ignore) {}
 
                                             //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {

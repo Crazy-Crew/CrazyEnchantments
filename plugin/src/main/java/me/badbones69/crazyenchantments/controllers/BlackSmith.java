@@ -33,9 +33,9 @@ public class BlackSmith implements Listener {
     private static int resultSlot = 16;
     private static List<Integer> resultBoarder = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
     private static List<Integer> otherBoarder = Arrays.asList(1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24);
-    private Sound click = ce.getSound("UI_BUTTON_CLICK");
-    private Sound levelUp = ce.getSound("ENTITY_PLAYER_LEVELUP");
-    private Sound villagerNo = ce.getSound("ENTITY_VILLAGER_NO");
+    private Sound click = Sound.UI_BUTTON_CLICK;
+    private Sound levelUp = Sound.ENTITY_PLAYER_LEVELUP;
+    private Sound villagerNo = Sound.ENTITY_VILLAGER_NO;
     
     public static void openBlackSmith(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 27, blackSmithManager.getMenuName());

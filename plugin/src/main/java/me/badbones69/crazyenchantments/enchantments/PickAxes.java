@@ -363,7 +363,7 @@ public class PickAxes implements Listener {
     }
     
     private boolean isOre(Material material) {
-        if (material == ce.getMaterial("NETHER_QUARTZ_ORE")) {
+        if (material == Material.NETHER_QUARTZ_ORE) {
             return true;
         }
         switch (material) {
@@ -396,7 +396,7 @@ public class PickAxes implements Listener {
     
     private ItemStack getOreDrop(Material material, int amount) {
         ItemBuilder dropItem = new ItemBuilder().setAmount(amount);
-        if (material == ce.getMaterial("NETHER_QUARTZ_ORE")) {
+        if (material == Material.NETHER_QUARTZ_ORE) {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
             switch (material) {

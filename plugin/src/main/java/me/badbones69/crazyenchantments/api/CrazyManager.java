@@ -23,7 +23,6 @@ import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -34,7 +33,6 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -108,8 +106,7 @@ public class CrazyManager {
         for (String id : Files.BLOCKLIST.getFile().getStringList("Block-List")) {
             try {
                 blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
         }
 
         whiteScrollProtectionName = Methods.color(config.getString("Settings.WhiteScroll.ProtectedName"));
@@ -382,14 +379,14 @@ public class CrazyManager {
     
     /**
      * Get the wings enchantment manager.
-     * @return The instance of the wings manager.
+     * @return The instance of the wings' manager.
      */
     public WingsManager getWingsManager() {
         return wingsManager;
     }
     
     /**
-     * Get the bow enchantments manager.
+     * Get the bow enchantments' manager.
      * @return The instance of the bow manager.
      */
     public BowEnchantmentManager getBowManager() {
@@ -434,24 +431,6 @@ public class CrazyManager {
     
     public boolean checkVanillaLimit() {
         return checkVanillaLimit;
-    }
-    
-    /**
-     * Get the correct sound for the version of minecraft.
-     * @param sound The sound.
-     * @return The Sound object of the current minecraft version.
-     */
-    public Sound getSound(String sound) {
-        return Sound.valueOf(sound);
-    }
-    
-    /**
-     * Get the correct material for the version of minecraft.
-     * @param material The material.
-     * @return The Material object of the current minecraft version.
-     */
-    public Material getMaterial(String material) {
-        return Material.matchMaterial(material);
     }
     
     /**
@@ -560,7 +539,7 @@ public class CrazyManager {
             if (enchantment.isActivated() && itemLore != null) {
                 for (String lore : itemLore) {
                     String[] split = lore.split(" ");
-                    // split can generate a empty array in rare case
+                    // split can generate an empty array in rare case
                     if (split.length > 0 && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) {
                         return true;
                     }
@@ -848,7 +827,7 @@ public class CrazyManager {
     /**
      * @param item Item you want to remove the enchantment from.
      * @param enchant Enchantment you want removed.
-     * @return Item with out the enchantment.
+     * @return Item without the enchantment.
      */
     public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
         List<String> newLore = new ArrayList<>();
@@ -1251,10 +1230,10 @@ public class CrazyManager {
             if (randomLevel > category.getMaxLevel()) {
                 randomLevel = 1 + random.nextInt(enchantmentMax);
             }
-            if (randomLevel < category.getMinLevel()) {//If i is smaller then the Min of the Category
+            if (randomLevel < category.getMinLevel()) {//If I is smaller then the Min of the Category
                 randomLevel = category.getMinLevel();
             }
-            if (randomLevel > enchantmentMax) {//If i is bigger then the Enchantment Max
+            if (randomLevel > enchantmentMax) {//If I is bigger then the Enchantment Max
                 randomLevel = enchantmentMax;
             }
         }
@@ -1345,37 +1324,24 @@ public class CrazyManager {
     }
     
     /**
-     * This converts an integer into a roman numeral if its between 1-10 other wise it will just be the number as a string.
+     * This converts an integer into a roman numeral if its between 1-10 otherwise it will just be the number as a string.
      * @param i The integer you want to convert.
-     * @return The integer as a roman numeral if between 1-10 other wise the number as a string.
+     * @return The integer as a roman numeral if between 1-10 otherwise the number as a string.
      */
     public String convertLevelString(int i) {
-        switch (i) {
-            case 0:
-            case 1:
-                return "I";
-            case 2:
-                return "II";
-            case 3:
-                return "III";
-            case 4:
-                return "IV";
-            case 5:
-                return "V";
-            case 6:
-                return "VI";
-            case 7:
-                return "VII";
-            case 8:
-                return "VIII";
-            case 9:
-                return "IX";
-            case 10:
-                return "X";
-            default:
-                return i + "";
-            
-        }
+        return switch (i) {
+            case 0, 1 -> "I";
+            case 2 -> "II";
+            case 3 -> "III";
+            case 4 -> "IV";
+            case 5 -> "V";
+            case 6 -> "VI";
+            case 7 -> "VII";
+            case 8 -> "VIII";
+            case 9 -> "IX";
+            case 10 -> "X";
+            default -> i + "";
+        };
     }
     
     /**

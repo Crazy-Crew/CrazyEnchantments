@@ -19,6 +19,7 @@ import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -312,7 +313,7 @@ public class Swords implements Listener {
                             loc.getWorld().spigot().strikeLightningEffect(loc, true);
                             int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
                             try {
-                                loc.getWorld().playSound(loc, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                                loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                             } catch (Exception ignore) {}
 
                             if (SupportedPlugins.SPARTAN.isPluginLoaded()) {

@@ -497,7 +497,7 @@ public class Methods {
         player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
         player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
 
-        player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE"), 1, 1);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(player.getLocation(), 3D, player)) {
             if (support.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
@@ -529,7 +529,7 @@ public class Methods {
         arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
         arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
 
-        player.getWorld().playSound(player.getLocation(), ce.getSound("ENTITY_GENERIC_EXPLODE"), 1, 1);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
         for (Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)) {
             if (support.allowsPVP(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {

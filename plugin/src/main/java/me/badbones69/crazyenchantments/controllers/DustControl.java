@@ -8,6 +8,7 @@ import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -209,7 +210,7 @@ public class DustControl implements Listener {
                     Methods.setItemInHand(player, Methods.removeItem(item));
                     player.getInventory().addItem(pickDust().getDust(Methods.percentPick(getPercent(Dust.MYSTERY_DUST, item) + 1, 1), 1));
                     player.updateInventory();
-                    player.playSound(player.getLocation(), ce.getSound("BLOCK_LAVA_POP"), 1, 1);
+                    player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
                     if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")) {
                         List<Color> colors = new ArrayList<>();
                         String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");

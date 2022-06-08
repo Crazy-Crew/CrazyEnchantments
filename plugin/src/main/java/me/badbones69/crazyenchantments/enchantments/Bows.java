@@ -13,6 +13,7 @@ import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractArrow;
@@ -170,7 +171,7 @@ public class Bows implements Listener {
                 int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
                 try {
-                    location.getWorld().playSound(location, ce.getSound("ENTITY_LIGHTNING_BOLT_IMPACT"), (float) lightningSoundRange / 16f, 1);
+                    location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                 } catch (Exception ignore) {}
 
                 if (SupportedPlugins.SPARTAN.isPluginLoaded()) {

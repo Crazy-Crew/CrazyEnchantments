@@ -25,8 +25,8 @@ public class Hoes implements Listener {
     private CrazyManager ce = CrazyManager.getInstance();
     private List<Material> seedlings;
     private Random random = new Random();
-    private Material soilBlock = ce.getMaterial("FARMLAND");
-    private Material grassBlock = ce.getMaterial("GRASS_BLOCK");
+    private Material soilBlock = Material.FARMLAND;
+    private Material grassBlock = Material.GRASS_BLOCK;
     private HashMap<Material, Material> planterSeeds;
     private HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
     
@@ -70,7 +70,7 @@ public class Hoes implements Listener {
                         }
                         if (soil.getType() != Material.SOUL_SAND) {
                             for (Block water : getAreaBlocks(soil, 4)) {
-                                if (water.getType() == Material.WATER || water.getType() == ce.getMaterial("WATER")) {
+                                if (water.getType() == Material.WATER) {
                                     ce.getNMSSupport().hydrateSoil(soil);
                                     break;
                                 }
@@ -117,19 +117,19 @@ public class Hoes implements Listener {
                             if (hasTelepathy) {
                                 List<ItemStack> droppedItems = new ArrayList<>();
                                 if (crop.getType() == Material.COCOA) {
-                                    droppedItems.add(new ItemBuilder().setMaterial("COCOA_BEANS").setAmount(random.nextInt(2) + 2).build());//Coco drops 2-3 beans.
-                                } else if (crop.getType() == ce.getMaterial("WHEAT")) {
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.COCOA_BEANS).setAmount(random.nextInt(2) + 2).build());//Coco drops 2-3 beans.
+                                } else if (crop.getType() == Material.WHEAT) {
                                     droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT).build());
-                                    droppedItems.add(new ItemBuilder().setMaterial("WHEAT_SEEDS").setAmount(random.nextInt(3)).build());//Wheat drops 0-3 seeds.
-                                } else if (crop.getType() == ce.getMaterial("BEETROOTS")) {
-                                    droppedItems.add(new ItemBuilder().setMaterial("BEETROOT").build());
-                                    droppedItems.add(new ItemBuilder().setMaterial("BEETROOT_SEEDS").setAmount(random.nextInt(3)).build());//BeetRoots drops 0-3 seeds.
-                                } else if (crop.getType() == ce.getMaterial("POTATOES")) {
-                                    droppedItems.add(new ItemBuilder().setMaterial("POTATO").setAmount(random.nextInt(4) + 1).build());//Potatoes drop 1-4 of them self's.
-                                } else if (crop.getType() == ce.getMaterial("CARROTS")) {
-                                    droppedItems.add(new ItemBuilder().setMaterial("CARROT").setAmount(random.nextInt(4) + 1).build());//Carrots drop 1-4 of them self's.
-                                } else if (crop.getType() == ce.getMaterial("NETHER_WART")) {
-                                    droppedItems.add(new ItemBuilder().setMaterial("NETHER_WART").setAmount(random.nextInt(3) + 2).build());//Nether Warts drop 2-4 of them self's.
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT_SEEDS).setAmount(random.nextInt(3)).build());//Wheat drops 0-3 seeds.
+                                } else if (crop.getType() == Material.BEETROOTS) {
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.BEETROOT).build());
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.BEETROOT_SEEDS).setAmount(random.nextInt(3)).build());//BeetRoots drops 0-3 seeds.
+                                } else if (crop.getType() == Material.POTATO) {
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.POTATO).setAmount(random.nextInt(4) + 1).build());//Potatoes drop 1-4 of them self's.
+                                } else if (crop.getType() == Material.CARROTS) {
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.CARROT).setAmount(random.nextInt(4) + 1).build());//Carrots drop 1-4 of them self's.
+                                } else if (crop.getType() == Material.NETHER_WART) {
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.NETHER_WART).setAmount(random.nextInt(3) + 2).build());//Nether Warts drop 2-4 of them self's.
                                 }
                                 if (!droppedItems.isEmpty()) {
                                     for (ItemStack droppedItem : droppedItems) {
@@ -170,11 +170,11 @@ public class Hoes implements Listener {
             seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
             playerSeedItem = player.getEquipment().getItemInOffHand();
             if (isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
-                if (playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART")) {
+                if (playerSeedItem != null && playerSeedItem.getType() != Material.NETHER_WART) {
                     seedType = null;
                 }
             } else {
-                if (playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART")) {
+                if (playerSeedItem != null && playerSeedItem.getType() == Material.NETHER_WART) {
                     seedType = null;//Makes sure nether warts are not put on soil.
                 }
             }
@@ -183,11 +183,11 @@ public class Hoes implements Listener {
                     seedType = getPlanterSeed(player.getInventory().getItem(slot));
                     playerSeedItem = player.getInventory().getItem(slot);
                     if (isSoulSand) {//If on soul sand we want it to plant Nether Warts not normal seeds.
-                        if (playerSeedItem != null && playerSeedItem.getType() != ce.getMaterial("NETHER_WART")) {
+                        if (playerSeedItem != null && playerSeedItem.getType() != Material.NETHER_WART) {
                             seedType = null;
                         }
                     } else {
-                        if (playerSeedItem != null && playerSeedItem.getType() == ce.getMaterial("NETHER_WART")) {
+                        if (playerSeedItem != null && playerSeedItem.getType() == Material.NETHER_WART) {
                             seedType = null;//Makes sure nether warts are not put on soil.
                         }
                     }
@@ -220,13 +220,13 @@ public class Hoes implements Listener {
         if (seedlings == null) {
             seedlings = new ArrayList<>();
                 seedlings.addAll(Arrays.asList(Material.WHEAT,
-                Material.matchMaterial("CARROTS"),
+                Material.CARROTS,
                 Material.MELON_STEM,
                 Material.PUMPKIN_STEM,
                 Material.COCOA,
-                Material.matchMaterial("BEETROOTS"),
-                Material.matchMaterial("POTATOES"),
-                Material.matchMaterial("NETHER_WART")));
+                Material.BEETROOTS,
+                Material.POTATOES,
+                Material.NETHER_WART));
         }
         return seedlings;
     }
@@ -238,11 +238,11 @@ public class Hoes implements Listener {
     private Material getPlanterSeed(Material material) {
         if (planterSeeds == null) {
             planterSeeds = new HashMap<>();//Key == Item : Value == BlockType
-            planterSeeds.put(Material.matchMaterial("WHEAT_SEEDS"), Material.matchMaterial("WHEAT"));
-            planterSeeds.put(Material.matchMaterial("BEETROOT_SEEDS"), Material.matchMaterial("BEETROOTS"));
-            planterSeeds.put(Material.matchMaterial("POTATO"), Material.matchMaterial("POTATOES"));
-            planterSeeds.put(Material.matchMaterial("CARROT"), Material.matchMaterial("CARROTS"));
-            planterSeeds.put(Material.matchMaterial("NETHER_WART"), Material.matchMaterial("NETHER_WART"));
+            planterSeeds.put(Material.WHEAT_SEEDS, Material.WHEAT);
+            planterSeeds.put(Material.BEETROOT_SEEDS, Material.BEETROOTS);
+            planterSeeds.put(Material.POTATO, Material.POTATOES);
+            planterSeeds.put(Material.CARROT, Material.CARROTS);
+            planterSeeds.put(Material.NETHER_WART, Material.NETHER_WART);
             planterSeeds.put(Material.MELON_SEEDS, Material.MELON_STEM);
             planterSeeds.put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
         }

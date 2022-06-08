@@ -68,7 +68,7 @@ public class Tools implements Listener {
                 //This checks if the block is a spawner and if so the spawner classes will take care of this.
                 //If Epic Spawners is enabled then telepathy will give the item from the API.
                 //Otherwise, CE will ignore the spawner in this event.
-                (block.getType() == ce.getMaterial("SPAWNER"))) {
+                (block.getType() == Material.SPAWNER)) {
                     return;
                 }
 
@@ -135,7 +135,7 @@ public class Tools implements Listener {
                     }
                 }
             }
-            if (block.getType() == ce.getMaterial("SUGAR_CANE")) {
+            if (block.getType() == Material.SUGAR_CANE) {
                 sugarCaneBlocks = getSugarCaneBlocks(block);
                 drop.setAmount(sugarCaneBlocks.size());
             }
@@ -150,13 +150,13 @@ public class Tools implements Listener {
 
         if (block.getType() == Material.COCOA) {
             //Coco drops 2-3 beans.
-            itemDrop.setMaterial("COCOA_BEANS")
+            itemDrop.setMaterial(Material.COCOA_BEANS)
                     .setAmount(ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
         }
 
-        if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.matchMaterial("BEETROOT_SEEDS")) {
+        if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.BEETROOT_SEEDS) {
             itemDrop.setAmount(random.nextInt(3));//Wheat and BeetRoots drops 0-3 seeds.
-        } else if (itemDrop.getMaterial() == ce.getMaterial("POTATO") || itemDrop.getMaterial() == ce.getMaterial("CARROT")) {
+        } else if (itemDrop.getMaterial() == Material.POTATO || itemDrop.getMaterial() == Material.CARROT) {
             itemDrop.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
         }
 
@@ -166,7 +166,7 @@ public class Tools implements Listener {
     private static List<Block> getSugarCaneBlocks(Block block) {
         List<Block> sugarCaneBlocks = new ArrayList<>();
         Block cane = block;
-        while (cane.getType() == ce.getMaterial("SUGAR_CANE")) {
+        while (cane.getType() == Material.SUGAR_CANE) {
             sugarCaneBlocks.add(cane);
             cane = cane.getLocation().add(0, 1, 0).getBlock();
         }
@@ -232,7 +232,7 @@ public class Tools implements Listener {
     }
     
     private static boolean isOre(Block block) {
-        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE")) {
+        if (block.getType() == Material.NETHER_QUARTZ_ORE) {
             return true;
         }
         switch (block.getType()) {
@@ -251,7 +251,7 @@ public class Tools implements Listener {
     
     private static ItemStack getOreDrop(Block block) {
         ItemBuilder dropItem = new ItemBuilder();
-        if (block.getType() == ce.getMaterial("NETHER_QUARTZ_ORE")) {
+        if (block.getType() == Material.NETHER_QUARTZ_ORE) {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
             switch (block.getType()) {
