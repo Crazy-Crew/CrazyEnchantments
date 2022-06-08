@@ -64,7 +64,7 @@ public class Scrambler implements Listener {
     }
     
     /**
-     * Get the scrambler itemstack.
+     * Get the scrambler item stack.
      * @return The scramblers.
      */
     public static ItemStack getScramblers() {
@@ -72,7 +72,7 @@ public class Scrambler implements Listener {
     }
     
     /**
-     * Get the scrambler itemstack.
+     * Get the scrambler item stack.
      * @param amount The amount you want.
      * @return The scramblers.
      */

@@ -18,10 +18,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import static me.badbones69.crazyenchantments.Methods.color;
 
-public class ItemBuilder {
+public class ItemBuilder implements Cloneable {
 
     private NBTItem nbtItem;
 
@@ -236,10 +235,6 @@ public class ItemBuilder {
     }
 
     /**
-     * Returns the crate name.
-     */
-
-    /**
      * Returns the enchantments on the Item.
      */
     public HashMap<Enchantment, Integer> getEnchantments() {
@@ -349,7 +344,6 @@ public class ItemBuilder {
                 if (potionColor != null) {
                     potionMeta.setColor(potionColor);
                 }
-
             }
 
             if (material == Material.TIPPED_ARROW && potionType != null) {
