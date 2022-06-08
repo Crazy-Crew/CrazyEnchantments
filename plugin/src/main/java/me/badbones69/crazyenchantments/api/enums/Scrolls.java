@@ -4,7 +4,6 @@ import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +19,7 @@ public enum Scrolls {
     private String configName;
     private List<String> knownNames;
     
-    private Scrolls(String name, String configName, List<String> knowNames) {
+    Scrolls(String name, String configName, List<String> knowNames) {
         this.name = name;
         this.knownNames = knowNames;
         this.configName = configName;
@@ -67,5 +66,4 @@ public enum Scrolls {
     public ItemStack getScroll(int amount) {
         return itemBuilderScrolls.get(this).setAmount(amount).build();
     }
-    
 }

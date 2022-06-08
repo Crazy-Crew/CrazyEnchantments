@@ -7,7 +7,6 @@ import me.badbones69.crazyenchantments.api.objects.AllyMob.AllyType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-
 import java.util.*;
 
 public class AllyManager {
@@ -110,5 +109,4 @@ public class AllyManager {
     public static AllyManager getInstance() {
         return instance;
     }
-    
 }

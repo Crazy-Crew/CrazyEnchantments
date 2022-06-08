@@ -27,5 +27,4 @@ public class UnregisterCEnchantmentEvent extends Event {
     public HandlerList getHandlers() {
         return handlers;
     }
-    
 }

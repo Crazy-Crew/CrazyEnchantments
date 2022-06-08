@@ -16,10 +16,10 @@ import me.badbones69.crazyenchantments.controllers.ScrollControl;
 import me.badbones69.crazyenchantments.enchantments.Boots;
 import me.badbones69.crazyenchantments.multisupport.*;
 import me.badbones69.crazyenchantments.multisupport.Support.SupportedPlugins;
-import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquared;
+import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredSupport;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
-import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuard_v7;
+import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -245,11 +245,11 @@ public class CrazyManager {
         Boots.startWings();
 
         if (SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
-            worldGuardVersion = new WorldGuard_v7();
+            worldGuardVersion = new WorldGuardSupport();
         }
 
         if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
-            plotSquaredVersion = new PlotSquared();
+            plotSquaredVersion = new PlotSquaredSupport();
         }
 
         Support.getInstance().load();
@@ -967,7 +967,6 @@ public class CrazyManager {
     }
     
     /**
-     *
      * @param player The player you are adding it to.
      * @param includedItem Include an item.
      * @param excludedItem Exclude an item.
@@ -1021,7 +1020,6 @@ public class CrazyManager {
     }
     
     /**
-     *
      * @return All the effects for each enchantment that needs it.
      */
     public Map<CEnchantments, HashMap<PotionEffectType, Integer>> getEnchantmentPotions() {
@@ -1155,7 +1153,6 @@ public class CrazyManager {
     }
     
     /**
-     *
      * @param book The book you are getting the level from.
      * @param enchant The enchantment you want the level from.
      * @return The level the enchantment has.
@@ -1165,7 +1162,6 @@ public class CrazyManager {
     }
     
     /**
-     *
      * @param item Item you are getting the level from.
      * @param enchant The enchantment you want the level from.
      * @return The level the enchantment has.
@@ -1194,7 +1190,6 @@ public class CrazyManager {
     }
     
     /**
-     *
      * @param item Item you are getting the level from.
      * @param enchant The enchantment you want the level from.
      * @return The level the enchantment has.
@@ -1241,7 +1236,6 @@ public class CrazyManager {
     }
     
     /**
-     *
      * @return The block list for blast.
      */
     public List<Material> getBlockList() {
@@ -1285,7 +1279,6 @@ public class CrazyManager {
     }
     
     /**
-     *
      * @return The max rage stack level.
      */
     public int getRageMaxLevel() {
@@ -1457,5 +1450,4 @@ public class CrazyManager {
         }
         return colors;
     }
-    
 }

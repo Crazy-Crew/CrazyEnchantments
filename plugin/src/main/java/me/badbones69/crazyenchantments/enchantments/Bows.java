@@ -160,14 +160,18 @@ public class Bows implements Listener {
                     }
                 }
             }
+
             if (CEnchantments.BOOM.isActivated() && arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
                 Methods.explode(arrow.getShooter(), arrow.getArrow());
                 arrow.getArrow().remove();
             }
+
             if (CEnchantments.LIGHTNING.isActivated() && arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
                 Location location = arrow.getArrow().getLocation();
+
                 Player shooter = (Player) arrow.getShooter();
                 location.getWorld().spigot().strikeLightningEffect(location, true);
+
                 int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
                 try {

@@ -5,7 +5,6 @@ import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
 import me.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -141,7 +140,7 @@ public enum CEnchantments {
      * @param name Name of the enchantment.
      * @param typeName Type of items it goes on.
      */
-    private CEnchantments(String name, String typeName) {
+    CEnchantments(String name, String typeName) {
         this.name = name;
         this.typeName = typeName;
         this.chance = 0;
@@ -156,7 +155,7 @@ public enum CEnchantments {
      * @param chance The chance the enchantment has to active.
      * @param chanceIncrease The amount the chance increases by every level.
      */
-    private CEnchantments(String name, String typeName, int chance, int chanceIncrease) {
+    CEnchantments(String name, String typeName, int chance, int chanceIncrease) {
         this.name = name;
         this.typeName = typeName;
         this.chance = chance;
@@ -314,5 +313,4 @@ public enum CEnchantments {
     public boolean hasChanceSystem() {
         return hasChanceSystem;
     }
-    
 }

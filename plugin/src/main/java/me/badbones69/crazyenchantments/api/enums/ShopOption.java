@@ -6,7 +6,6 @@ import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.HashMap;
 
 public enum ShopOption {
@@ -33,7 +32,7 @@ public enum ShopOption {
     private Option option;
     private boolean buyable;
     
-    private ShopOption(String optionPath, String path, String namePath, String lorePath, boolean buyable) {
+    ShopOption(String optionPath, String path, String namePath, String lorePath, boolean buyable) {
         this.optionPath = optionPath;
         this.path = path;
         this.namePath = namePath;
@@ -144,7 +143,5 @@ public enum ShopOption {
         public Currency getCurrency() {
             return currency;
         }
-        
     }
-    
 }

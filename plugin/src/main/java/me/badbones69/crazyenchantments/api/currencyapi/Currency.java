@@ -8,7 +8,7 @@ public enum Currency {
     
     private String name;
     
-    private Currency(String name) {
+    Currency(String name) {
         this.name = name;
     }
     
@@ -47,5 +47,5 @@ public enum Currency {
     public String getName() {
         return name;
     }
-    
+
 }

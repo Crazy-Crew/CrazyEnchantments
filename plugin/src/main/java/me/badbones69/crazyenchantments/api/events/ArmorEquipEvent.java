@@ -10,8 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * @Author Borlea
- * @Github https://github.com/borlea/
- * @Website http://codingforcookies.com/
  * @since Jul 30, 2015
  */
 public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
@@ -118,7 +116,7 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
          */
         DRAG,
         /**
-         * When you right click an armor piece in the hotbar without the inventory open to equip.
+         * When you right-click an armor piece in the hotbar without the inventory open to equip.
          */
         HOTBAR,
         /**
@@ -138,5 +136,4 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
          */
         DEATH
     }
-    
 }

@@ -24,7 +24,7 @@ public enum Dust {
     private int max;
     private int min;
     
-    private Dust(String name, String configName, List<String> knowNames) {
+    Dust(String name, String configName, List<String> knowNames) {
         this.name = name;
         this.knownNames = knowNames;
         this.configName = configName;
@@ -78,5 +78,4 @@ public enum Dust {
         .addLorePlaceholder("%Percent%", String.valueOf(percent))
         .setAmount(amount).build();
     }
-    
 }

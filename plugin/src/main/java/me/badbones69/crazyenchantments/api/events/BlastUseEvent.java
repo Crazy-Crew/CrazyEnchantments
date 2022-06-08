@@ -46,5 +46,4 @@ public class BlastUseEvent extends Event implements Cancellable {
     public HandlerList getHandlers() {
         return handlers;
     }
-    
 }

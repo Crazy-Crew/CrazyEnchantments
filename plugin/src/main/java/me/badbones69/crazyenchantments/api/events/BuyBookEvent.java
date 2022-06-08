@@ -50,7 +50,7 @@ public class BuyBookEvent extends Event {
     
     /**
      * Get the price they bought the book at.
-     * @return The price they payed.
+     * @return The price they paid.
      */
     public int getPrice() {
         return this.price;
@@ -67,5 +67,4 @@ public class BuyBookEvent extends Event {
     public HandlerList getHandlers() {
         return handlers;
     }
-    
 }

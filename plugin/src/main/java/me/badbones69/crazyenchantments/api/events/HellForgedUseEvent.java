@@ -24,7 +24,6 @@ public class HellForgedUseEvent extends Event implements Cancellable {
     }
     
     /**
-     *
      * @return The player using the enchantment.
      */
     public Player getPlayer() {
@@ -32,7 +31,6 @@ public class HellForgedUseEvent extends Event implements Cancellable {
     }
     
     /**
-     *
      * @return The item with the enchantment.
      */
     public ItemStack getItem() {
@@ -52,5 +50,4 @@ public class HellForgedUseEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
-    
 }

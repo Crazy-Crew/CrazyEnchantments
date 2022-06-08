@@ -34,4 +34,3 @@ public class SpartanSupport {
         API.cancelCheck(player, HackType.IrregularMovements, 80);
     }
 }
-

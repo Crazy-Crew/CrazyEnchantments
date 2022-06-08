@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -104,5 +103,4 @@ public class ShopManager {
     public boolean isEnchantmentTableShop() {
         return enchantmentTableShop;
     }
-    
 }

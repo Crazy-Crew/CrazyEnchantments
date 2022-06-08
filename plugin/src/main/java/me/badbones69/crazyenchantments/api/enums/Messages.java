@@ -94,12 +94,12 @@ public enum Messages {
     private String defaultMessage;
     private List<String> defaultListMessage;
     
-    private Messages(String path, String defaultMessage) {
+    Messages(String path, String defaultMessage) {
         this.path = path;
         this.defaultMessage = defaultMessage;
     }
     
-    private Messages(String path, List<String> defaultListMessage) {
+    Messages(String path, List<String> defaultListMessage) {
         this.path = path;
         this.defaultListMessage = defaultListMessage;
     }
@@ -248,5 +248,4 @@ public enum Messages {
     private List<String> getDefaultListMessage() {
         return defaultListMessage;
     }
-    
 }

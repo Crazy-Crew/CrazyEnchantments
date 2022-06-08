@@ -64,8 +64,7 @@ public class CurrencyAPI {
                 case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL -> takeTotalExperience(player, amount);
             }
-        } catch (Exception | NoClassDefFoundError ignored) {
-        }
+        } catch (Exception | NoClassDefFoundError ignored) {}
     }
     
     /**
@@ -81,8 +80,7 @@ public class CurrencyAPI {
                 case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
-        } catch (Exception | NoClassDefFoundError ignored) {
-        }
+        } catch (Exception | NoClassDefFoundError ignored) {}
     }
     
     /**
@@ -170,5 +168,4 @@ public class CurrencyAPI {
     public static void loadCurrency() {
         VaultSupport.loadVault();
     }
-    
 }

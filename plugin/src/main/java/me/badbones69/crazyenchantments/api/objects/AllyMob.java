@@ -9,7 +9,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.HashMap;
 
 public class AllyMob {
@@ -122,7 +121,7 @@ public class AllyMob {
         private EntityType entityType;
         private int maxHealth;
         
-        private AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
+        AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
             this.configName = configName;
             this.defaultName = defaultName;
             this.entityType = entityType;
@@ -149,5 +148,4 @@ public class AllyMob {
             return maxHealth;
         }
     }
-    
 }

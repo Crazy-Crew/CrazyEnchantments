@@ -10,51 +10,17 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * A library for the Bukkit API to create player skulls
  * from names, base64 strings, and texture URLs.
- *
  * Does not use any NMS code, and should work across all versions.
  *
  * @author Dean B on 12/28/2016.
  */
 public class SkullCreator {
-    
-    /**
-     * Creates a player skull based on a player's name.
-     *
-     * @param name The Player's name
-     * @return The head of the Player
-     *
-     * @deprecated names don't make for good identifiers
-     */
-    @Deprecated
-    public static ItemStack itemFromName(String name) {
-        ItemStack item = getPlayerSkullItem();
-        
-        return itemWithName(item, name);
-    }
-    
-    /**
-     * Creates a player skull based on a player's name.
-     *
-     * @param item The item to apply the name to
-     * @param name The Player's name
-     * @return The head of the Player
-     *
-     * @deprecated names don't make for good identifiers
-     */
-    @Deprecated
-    public static ItemStack itemWithName(ItemStack item, String name) {
-        notNull(item, "item");
-        notNull(name, "name");
-        
-        return Bukkit.getUnsafe().modifyItemStack(item,
-        "{SkullOwner:\"" + name + "\"}"
-        );
-    }
     
     /**
      * Creates a player skull with a UUID. 1.13 only.
@@ -80,7 +46,7 @@ public class SkullCreator {
         notNull(id, "id");
         
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(Bukkit.getOfflinePlayer(id));
+        Objects.requireNonNull(meta).setOwningPlayer(Bukkit.getOfflinePlayer(id));
         item.setItemMeta(meta);
         
         return item;
@@ -136,8 +102,7 @@ public class SkullCreator {
         
         UUID hashAsId = new UUID(base64.hashCode(), base64.hashCode());
         return Bukkit.getUnsafe().modifyItemStack(item,
-        "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}"
-        );
+        "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}");
     }
     
     /**
@@ -215,7 +180,6 @@ public class SkullCreator {
         try {
             Material.valueOf("PLAYER_HEAD");
             return true;
-            
         } catch (IllegalArgumentException e) { // If PLAYER_HEAD doesn't exist
             return false;
         }
@@ -244,7 +208,6 @@ public class SkullCreator {
     }
     
     private static String urlToBase64(String url) {
-        
         URI actualUrl;
         try {
             actualUrl = new URI(url);
@@ -254,22 +217,4 @@ public class SkullCreator {
         String toEncode = "{\"textures\":{\"SKIN\":{\"url\":\"" + actualUrl.toString() + "\"}}}";
         return Base64.getEncoder().encodeToString(toEncode.getBytes());
     }
-    
 }
-
-/* Format for skull
-{
-   display:{
-      Name:"Cheese"
-   },
-   SkullOwner:{
-      Id:"9c919b83-f3fe-456f-a824-7d1d08cc8bd2",
-      Properties:{
-         textures:[
-            {
-               Value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTU1ZDYxMWE4NzhlODIxMjMxNzQ5YjI5NjU3MDhjYWQ5NDI2NTA2NzJkYjA5ZTI2ODQ3YTg4ZTJmYWMyOTQ2In19fQ=="
-            }
-         ]
-      }
-   }
-}*/

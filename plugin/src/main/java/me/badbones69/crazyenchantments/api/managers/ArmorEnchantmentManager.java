@@ -40,5 +40,4 @@ public class ArmorEnchantmentManager {
     public List<ArmorEnchantment> getArmorEnchantments() {
         return armorEnchantments;
     }
-    
 }

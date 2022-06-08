@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.ArrayList;
 
 public class Helmets implements Listener {
@@ -30,6 +29,7 @@ public class Helmets implements Listener {
                 if (ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
                     int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
                     ArrayList<Player> players = new ArrayList<>();
+
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (entity instanceof Player) {
                             Player other = (Player) entity;
@@ -38,6 +38,7 @@ public class Helmets implements Listener {
                             }
                         }
                     }
+
                     if (!players.isEmpty()) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
                         Bukkit.getPluginManager().callEvent(event);
@@ -47,6 +48,7 @@ public class Helmets implements Listener {
                             }
                         }
                     }
+
                 }
             }
         }
