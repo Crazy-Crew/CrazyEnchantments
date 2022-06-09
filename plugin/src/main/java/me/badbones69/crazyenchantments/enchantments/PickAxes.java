@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments.enchantments;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.BlastUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
@@ -28,7 +29,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +61,7 @@ public class PickAxes implements Listener {
         Player player = e.getPlayer();
         Block block = e.getBlock();
         ItemStack item = Methods.getItemInHand(player);
+
         if (blocks.containsKey(player)) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (blocks.get(player).containsKey(block) && enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
@@ -70,6 +71,7 @@ public class PickAxes implements Listener {
                 List<Block> blockList = getBlocks(block.getLocation(), face, (ce.getLevel(item, CEnchantments.BLAST) - 1));
                 BlastUseEvent blastUseEvent = new BlastUseEvent(player, blockList);
                 Bukkit.getPluginManager().callEvent(blastUseEvent);
+
                 if (!blastUseEvent.isCancelled()) {
                     Location originalBlockLocation = block.getLocation();
                     List<BlockProcessInfo> finalBlockList = new ArrayList<>();
@@ -78,18 +80,19 @@ public class PickAxes implements Listener {
                             BlockBreakEvent event = new BlockBreakEvent(b, player);
                             ce.addIgnoredEvent(event);
                             Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) { //This stops players from breaking blocks that might be in protected areas.
+                            if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                                 finalBlockList.add(new BlockProcessInfo(item, b));
                             }
                             ce.removeIgnoredEvent(event);
                         }
                     }
-                    new BukkitRunnable() { // Run async to help offload some lag.
+
+                    new BukkitRunnable() { //Run async to help offload some lag.
                         @Override
                         public void run() {
                             HashMap<ItemStack, Integer> drops = new HashMap<>();
 
-                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                                 SpartanSupport.cancelFastBreak(player);
                                 SpartanSupport.cancelNoSwing(player);
                                 SpartanSupport.cancelBlockReach(player);
@@ -103,18 +106,20 @@ public class PickAxes implements Listener {
                             boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
                             boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
                             boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
+
                             for (BlockProcessInfo processInfo : finalBlockList) {
                                 Block block = processInfo.getBlock();
-                                if (player.getGameMode() == GameMode.CREATIVE) { //If the user is in creative mode.
+                                if (player.getGameMode() == GameMode.CREATIVE) { // If the user is in creative mode.
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
                                             block.setType(Material.AIR);
                                         }
                                     }.runTask(ce.getPlugin());
-                                } else { //If the user is in survival mode.
-                                    //This is to check if the original block the player broke was in the block list.
-                                    //If it is not then it should be broken and dropped on the ground.
+                                } else { // If the user is in survival mode.
+                                    // This is to check if the original block the player broke was in the block list.
+                                    // If it is not then it should be broken and dropped on the ground.
+
                                     if (block.getLocation().equals(originalBlockLocation) && !ce.getBlockList().contains(block.getType())) {
                                         new BukkitRunnable() {
                                             @Override
@@ -124,6 +129,7 @@ public class PickAxes implements Listener {
                                         }.runTask(ce.getPlugin());
                                         continue;
                                     }
+
                                     if (hasTelepathy) {
                                         TelepathyDrop drop = Tools.getTelepathyDrops(processInfo);
                                         drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
@@ -136,8 +142,7 @@ public class PickAxes implements Listener {
                                                 public void run() {
                                                     try {
                                                         block.getWorld().dropItem(block.getLocation(), finalDrop);
-                                                    } catch (IllegalArgumentException ignore) {
-                                                    }
+                                                    } catch (IllegalArgumentException ignore) {}
                                                 }
                                             }.runTask(ce.getPlugin());
                                         } else if (hasAutoSmelt && isOre) {
@@ -152,8 +157,7 @@ public class PickAxes implements Listener {
                                                     public void run() {
                                                         try {
                                                             block.getWorld().dropItem(block.getLocation(), finalDrop);
-                                                        } catch (IllegalArgumentException ignore) {
-                                                        }
+                                                        } catch (IllegalArgumentException ignore) {}
                                                     }
                                                 }.runTask(ce.getPlugin());
                                             }
@@ -165,8 +169,7 @@ public class PickAxes implements Listener {
                                                         public void run() {
                                                             try {
                                                                 block.getWorld().dropItem(block.getLocation(), drop);
-                                                            } catch (IllegalArgumentException ignore) {
-                                                            }
+                                                            } catch (IllegalArgumentException ignore) {}
                                                         }
                                                     }.runTask(ce.getPlugin());
                                                 }
@@ -175,7 +178,7 @@ public class PickAxes implements Listener {
                                                 }
                                             }
                                         }
-                                        //This is found here as telepathy takes care of this part.
+                                        // This is found here as telepathy takes care of this part.
                                         if (!hasSilkTouch && isOre) {
                                             xp = Methods.percentPick(7, 3);
                                             if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
@@ -189,6 +192,7 @@ public class PickAxes implements Listener {
                                             block.setType(Material.AIR);
                                         }
                                     }.runTask(ce.getPlugin());
+
                                     if (damage) {
                                         Methods.removeDurability(item, player);
                                     }
@@ -207,8 +211,7 @@ public class PickAxes implements Listener {
                                         public void run() {
                                             try {
                                                 player.getWorld().dropItem(player.getLocation(), item.getKey());
-                                            } catch (IllegalArgumentException ignore) {
-                                            }
+                                            } catch (IllegalArgumentException ignore) {}
                                         }
                                     }.runTask(ce.getPlugin());
                                 } else {
@@ -249,13 +252,15 @@ public class PickAxes implements Listener {
                 if (!event.isCancelled()) {
                     int dropAmount = 0;
                     dropAmount += ce.getLevel(item, CEnchantments.AUTOSMELT);
+
                     if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
                         dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
                     }
+
                     try {
                         block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
-                    } catch (IllegalArgumentException ignore) {
-                    }
+                    } catch (IllegalArgumentException ignore) {}
+
                     if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                         int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
                         if (isOre) {
@@ -274,18 +279,22 @@ public class PickAxes implements Listener {
                 Bukkit.getPluginManager().callEvent(event);
                 if (!event.isCancelled()) {
                     int dropAmount = 1;
+
                     if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
                         dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
                     }
+
                     if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) {
                         dropAmount += Methods.percentPick(4, 1);
                     }
+
                     try {
                         block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
-                    } catch (IllegalArgumentException ignore) {
-                    }
+                    } catch (IllegalArgumentException ignore) {}
+
                     if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                         int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
+
                         if (isOre) {
                             ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
                             orb.setExperience(Methods.percentPick(7, 3) * power);
@@ -294,7 +303,6 @@ public class PickAxes implements Listener {
                 }
 
                 e.setDropItems(false);
-
                 Methods.removeDurability(item, player);
             }
         }
@@ -303,6 +311,7 @@ public class PickAxes implements Listener {
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
                 Bukkit.getPluginManager().callEvent(event);
+
                 if (!event.isCancelled()) {
                     e.setExpToDrop(e.getExpToDrop() + (power + 2));
                 }
@@ -317,33 +326,34 @@ public class PickAxes implements Listener {
     private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
         switch (blockFace) {
-            case SOUTH:
+            case SOUTH -> {
                 loc.add(-1, 1, -depth);
                 loc2.add(1, -1, 0);
-                break;
-            case WEST:
+            }
+            case WEST -> {
                 loc.add(depth, 1, -1);
                 loc2.add(0, -1, 1);
-                break;
-            case EAST:
+            }
+            case EAST -> {
                 loc.add(-depth, 1, 1);
                 loc2.add(0, -1, -1);
-                break;
-            case NORTH:
+            }
+            case NORTH -> {
                 loc.add(1, 1, depth);
                 loc2.add(-1, -1, 0);
-                break;
-            case UP:
+            }
+            case UP -> {
                 loc.add(-1, -depth, -1);
                 loc2.add(1, 0, 1);
-                break;
-            case DOWN:
+            }
+            case DOWN -> {
                 loc.add(1, depth, 1);
                 loc2.add(-1, 0, -1);
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
+
         List<Block> blockList = new ArrayList<>();
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
         int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
@@ -365,28 +375,12 @@ public class PickAxes implements Listener {
         if (material == Material.NETHER_QUARTZ_ORE) {
             return true;
         }
-        switch (material) {
-            case DEEPSLATE_COAL_ORE:
-            case DEEPSLATE_COPPER_ORE:
-            case DEEPSLATE_DIAMOND_ORE:
-            case DEEPSLATE_EMERALD_ORE:
-            case DEEPSLATE_GOLD_ORE:
-            case DEEPSLATE_IRON_ORE:
-            case DEEPSLATE_LAPIS_ORE:
-            case DEEPSLATE_REDSTONE_ORE:
-            case COAL_ORE:
-            case IRON_ORE:
-            case GOLD_ORE:
-            case DIAMOND_ORE:
-            case EMERALD_ORE:
-            case LAPIS_ORE:
-            case REDSTONE_ORE:
-            case COPPER_ORE:
-            case NETHER_GOLD_ORE:
-                return true;
-            default:
-                return false;
-        }
+
+        return switch (material) {
+            case DEEPSLATE_COAL_ORE, DEEPSLATE_COPPER_ORE, DEEPSLATE_DIAMOND_ORE, DEEPSLATE_EMERALD_ORE, DEEPSLATE_GOLD_ORE, DEEPSLATE_IRON_ORE, DEEPSLATE_LAPIS_ORE, DEEPSLATE_REDSTONE_ORE, COAL_ORE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE, COPPER_ORE, NETHER_GOLD_ORE ->
+                    true;
+            default -> false;
+        };
     }
     
     private ItemStack getOreDrop(Material material) {
@@ -399,42 +393,15 @@ public class PickAxes implements Listener {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
             switch (material) {
-                case DEEPSLATE_COAL_ORE:
-                case COAL_ORE:
-                    dropItem.setMaterial(Material.COAL);
-                    break;
-                case DEEPSLATE_COPPER_ORE:
-                case COPPER_ORE:
-                    dropItem.setMaterial(Material.COPPER_INGOT);
-                    break;
-                case DEEPSLATE_DIAMOND_ORE:
-                case DIAMOND_ORE:
-                    dropItem.setMaterial(Material.DIAMOND);
-                    break;
-                case DEEPSLATE_EMERALD_ORE:
-                case EMERALD_ORE:
-                    dropItem.setMaterial(Material.EMERALD);
-                    break;
-                case DEEPSLATE_GOLD_ORE:
-                case GOLD_ORE:
-                case NETHER_GOLD_ORE:
-                    dropItem.setMaterial(Material.GOLD_INGOT);
-                    break;
-                case DEEPSLATE_IRON_ORE:
-                case IRON_ORE:
-                    dropItem.setMaterial(Material.IRON_INGOT);
-                    break;
-                case DEEPSLATE_LAPIS_ORE:
-                case LAPIS_ORE:
-                    dropItem.setMaterial(Material.LAPIS_LAZULI);
-                    break;
-                case DEEPSLATE_REDSTONE_ORE:
-                case REDSTONE_ORE:
-                    dropItem.setMaterial(Material.REDSTONE);
-                    break;
-                default:
-                    dropItem.setMaterial(Material.AIR);
-                    break;
+                case DEEPSLATE_COAL_ORE, COAL_ORE -> dropItem.setMaterial(Material.COAL);
+                case DEEPSLATE_COPPER_ORE, COPPER_ORE -> dropItem.setMaterial(Material.COPPER_INGOT);
+                case DEEPSLATE_DIAMOND_ORE, DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
+                case DEEPSLATE_EMERALD_ORE, EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
+                case DEEPSLATE_GOLD_ORE, GOLD_ORE, NETHER_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
+                case DEEPSLATE_IRON_ORE, IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
+                case DEEPSLATE_LAPIS_ORE, LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
+                case DEEPSLATE_REDSTONE_ORE, REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
+                default -> dropItem.setMaterial(Material.AIR);
             }
         }
         return dropItem.build();
@@ -443,5 +410,4 @@ public class PickAxes implements Listener {
     private int getRandomNumber(int range) {
         return range > 1 ? random.nextInt(range > 0 ? (range) : 1) : 1;
     }
-    
 }

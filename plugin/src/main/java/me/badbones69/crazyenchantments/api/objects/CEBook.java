@@ -4,7 +4,6 @@ import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +19,6 @@ public class CEBook {
     private CrazyManager ce = CrazyManager.getInstance();
     
     /**
-     *
      * @param enchantment Enchantment you want.
      */
     public CEBook(CEnchantment enchantment) {
@@ -28,7 +26,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param enchantment Enchantment you want.
      * @param level Tier of the enchantment.
      */
@@ -37,7 +34,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param enchantment Enchantment you want.
      * @param level Tier of the enchantment.
      * @param amount Amount of books you want.
@@ -50,13 +46,12 @@ public class CEBook {
         int successMax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Max");
         int successMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
         int destroyMax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
-        int destoryMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
-        this.destroyRate = percentPick(destroyMax, destoryMin);
+        int destroyMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
+        this.destroyRate = percentPick(destroyMax, destroyMin);
         this.successRate = percentPick(successMax, successMin);
     }
     
     /**
-     *
      * @param enchantment Enchantment you want.
      * @param level Tier of the enchantment.
      * @param category The category for the rates.
@@ -66,7 +61,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param enchantment Enchantment you want.
      * @param level Tier of the enchantment.
      * @param amount Amount of books you want.
@@ -82,7 +76,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param enchantment Enchantment you want.
      * @param level Tier of the enchantment.
      * @param amount Amount of books you want.
@@ -107,7 +100,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param enchantment Set the enchantment.
      */
     public CEBook setEnchantment(CEnchantment enchantment) {
@@ -124,7 +116,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param toggle Toggle on or off the glowing effect.
      */
     public CEBook setGlowing(boolean toggle) {
@@ -141,7 +132,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param amount Set the amount of books.
      */
     public CEBook setAmount(int amount) {
@@ -158,7 +148,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param level Set the tier of the enchantment.
      */
     public CEBook setLevel(int level) {
@@ -175,7 +164,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param destroyRate Set the destroy rate on the book.
      */
     public CEBook setDestroyRate(int destroyRate) {
@@ -192,7 +180,6 @@ public class CEBook {
     }
     
     /**
-     *
      * @param successRate Set the success rate on the book.
      */
     public CEBook setSuccessRate(int successRate) {
@@ -201,12 +188,12 @@ public class CEBook {
     }
     
     /**
-     *
      * @return Return the book as an ItemBuilder.
      */
     public ItemBuilder getItemBuilder() {
         String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + ce.convertLevelString(level);
         List<String> lore = new ArrayList<>();
+
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : enchantment.getInfoDescription()) {
@@ -218,11 +205,11 @@ public class CEBook {
                 .replace("%Success_Rate%", successRate + "").replace("%success_rate%", successRate + ""));
             }
         }
+
         return ce.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
     }
     
     /**
-     *
      * @return Return the book as an ItemStack.
      */
     public ItemStack buildBook() {
@@ -232,5 +219,4 @@ public class CEBook {
     private int percentPick(int max, int min) {
         return max == min ? max : min + new Random().nextInt(max - min);
     }
-    
 }

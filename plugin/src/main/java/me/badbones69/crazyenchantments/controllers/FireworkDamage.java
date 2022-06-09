@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,6 @@ public class FireworkDamage implements Listener {
     private CrazyManager ce = CrazyManager.getInstance();
     
     /**
-     *
      * @return All the active fireworks.
      */
     public static List<Entity> getFireworks() {
@@ -25,7 +23,6 @@ public class FireworkDamage implements Listener {
     }
     
     /**
-     *
      * @param firework The firework you want to add.
      */
     public static void addFirework(Entity firework) {
@@ -33,7 +30,6 @@ public class FireworkDamage implements Listener {
     }
     
     /**
-     *
      * @param firework The firework you are removing.
      */
     public static void removeFirework(Entity firework) {

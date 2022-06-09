@@ -30,12 +30,14 @@ public class LostBook {
         this.currency = currency;
         this.useFirework = !fireworkColors.isEmpty() && useFirework;
         this.fireworkColors = fireworkColors;
-        try {//If the sound doesn't exist it will not error.
+
+        try { // If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
         } catch (Exception e) {
             Bukkit.getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
             this.sound = null;
         }
+
         this.useSound = sound != null && useSound;
     }
     
@@ -91,5 +93,4 @@ public class LostBook {
         .setLore(file.getStringList("Settings.LostBook.Lore"))
         .setLorePlaceholders(placeholders);
     }
-    
 }

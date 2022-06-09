@@ -1,7 +1,6 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
-
 import java.util.List;
 
 public class BowEnchantment {
@@ -56,7 +55,7 @@ public class BowEnchantment {
     
     /**
      * Get the effects that will be placed on the entity that is hit.
-     * @return The a list of {@link PotionEffects} that will be on the player.
+     * @return The list of {@link PotionEffects} that will be on the player.
      */
     public List<PotionEffects> getPotionEffects() {
         return potionEffects;
@@ -85,5 +84,4 @@ public class BowEnchantment {
     public boolean isPotionEnchantment() {
         return isPotionEnchantment;
     }
-    
 }

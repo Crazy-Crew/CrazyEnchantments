@@ -13,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.HashMap;
 
 public class LostBookController implements Listener {
@@ -25,17 +24,21 @@ public class LostBookController implements Listener {
         Player player = e.getPlayer();
         if (e.getItem() != null && e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = Methods.getItemInHand(player);
+
             if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                 Category category = ce.getCategoryFromLostBook(item);
                 if (category != null) {
                     e.setCancelled(true);
+
                     if (Methods.isInventoryFull(player)) {
                         player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                         return;
                     }
+
                     LostBook lostBook = category.getLostBook();
                     Methods.removeItem(item, player);
                     CEBook book = ce.getRandomEnchantmentBook(category);
+
                     if (book != null) {
                         player.getInventory().addItem(book.buildBook());
                         player.updateInventory();

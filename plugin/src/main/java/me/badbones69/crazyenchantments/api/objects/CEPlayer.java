@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -124,8 +123,9 @@ public class CEPlayer {
      */
     public void giveGKit(GKitz kit) {
         for (ItemStack item : kit.getKitItems()) {
-            if (kit.canAutoEquipt()) {
+            if (kit.canAutoEquip()) {
                 if (item.getType().toString().toLowerCase().contains("helmet")) {
+
                     if (player.getEquipment().getHelmet() == null || player.getEquipment().getHelmet().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.HELMET, new ItemStack(Material.AIR), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -134,7 +134,9 @@ public class CEPlayer {
                         }
                         continue;
                     }
+
                 } else if (item.getType().toString().toLowerCase().contains("chestplate")) {
+
                     if (player.getEquipment().getChestplate() == null || player.getEquipment().getChestplate().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.CHESTPLATE, new ItemStack(Material.AIR), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -144,6 +146,7 @@ public class CEPlayer {
                         continue;
                     }
                 } else if (item.getType().toString().toLowerCase().contains("leggings")) {
+
                     if (player.getEquipment().getLeggings() == null || player.getEquipment().getLeggings().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.LEGGINGS, new ItemStack(Material.AIR), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -153,6 +156,7 @@ public class CEPlayer {
                         continue;
                     }
                 } else if (item.getType().toString().toLowerCase().contains("boots") && (player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR)) {
+
                     ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
@@ -161,18 +165,18 @@ public class CEPlayer {
                     continue;
                 }
             }
+
             if (Methods.isInventoryFull(player)) {
                 player.getWorld().dropItemNaturally(player.getLocation(), item);
             } else {
                 player.getInventory().addItem(item);
             }
+
         }
-        for (
-        String cmd : kit.getCommands()) {
+        for (String cmd : kit.getCommands()) {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
             .replace("%Player%", player.getName()).replace("%player%", player.getName()));
         }
-        
     }
     
     /**
@@ -234,11 +238,13 @@ public class CEPlayer {
      */
     public void addCooldown(Cooldown cooldown) {
         List<Cooldown> playerCooldowns = new ArrayList<>();
+
         for (Cooldown c : getCooldowns()) {
             if (c.getGKitz().getName().equalsIgnoreCase(cooldown.getGKitz().getName())) {
                 playerCooldowns.add(c);
             }
         }
+
         this.cooldowns.removeAll(playerCooldowns);
         this.cooldowns.add(cooldown);
     }
@@ -249,20 +255,26 @@ public class CEPlayer {
      */
     public void addCooldown(GKitz kit) {
         Calendar cooldown = Calendar.getInstance();
+
         for (String i : kit.getCooldown().split(" ")) {
+
             if (i.contains("D") || i.contains("d")) {
                 cooldown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
             }
+
             if (i.contains("H") || i.contains("h")) {
                 cooldown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
             }
+
             if (i.contains("M") || i.contains("m")) {
                 cooldown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
             }
+
             if (i.contains("S") || i.contains("s")) {
                 cooldown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
             }
         }
+
         addCooldown(new Cooldown(kit, cooldown));
     }
     
@@ -280,11 +292,13 @@ public class CEPlayer {
      */
     public void removeCooldown(GKitz kit) {
         List<Cooldown> playerCooldowns = new ArrayList<>();
+
         for (Cooldown cooldown : getCooldowns()) {
             if (cooldown.getGKitz().getName().equalsIgnoreCase(kit.getName())) {
                 playerCooldowns.add(cooldown);
             }
         }
+
         this.cooldowns.removeAll(playerCooldowns);
     }
     
@@ -347,5 +361,4 @@ public class CEPlayer {
     public void setRageTask(BukkitTask rageTask) {
         this.rageTask = rageTask;
     }
-    
 }

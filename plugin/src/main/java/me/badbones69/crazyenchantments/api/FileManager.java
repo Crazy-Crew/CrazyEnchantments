@@ -3,7 +3,6 @@ package me.badbones69.crazyenchantments.api;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,10 +14,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- *
  * @author BadBones69
  * @version v1.0
- *
  */
 public class FileManager {
     
@@ -67,7 +64,7 @@ public class FileManager {
             configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
             if (log) plugin.getLogger().info("Successfully loaded " + file.getFileName());
         }
-        //Starts to load all the custom files.
+        // Starts to load all the custom files.
         if (!homeFolders.isEmpty()) {
             if (log) plugin.getLogger().info("Loading custom files.");
             for (String homeFolder : homeFolders) {
@@ -291,8 +288,8 @@ public class FileManager {
     
     public enum Files {
         
-        //ENUM_NAME("fileName.yml", "fileLocation.yml"),
-        //ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
+        // ENUM_NAME("fileName.yml", "fileLocation.yml"),
+        // ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
         CONFIG("config.yml", "config.yml"),
         BLOCKLIST("BlockList.yml", "BlockList.yml"),
         DATA("Data.yml", "Data.yml"),
@@ -322,7 +319,7 @@ public class FileManager {
          * @param fileLocation The location of the file will be in the plugin's folder.
          * @param fileJar The location of the file in the jar.
          */
-        private Files(String fileName, String fileLocation, String fileJar) {
+        Files(String fileName, String fileLocation, String fileJar) {
             this.fileName = fileName;
             this.fileLocation = fileLocation;
             this.fileJar = fileJar;
@@ -370,7 +367,7 @@ public class FileManager {
         /**
          * Overrides the loaded state file and loads the file systems file.
          */
-        public void relaodFile() {
+        public void reloadFile() {
             getInstance().reloadFile(this);
         }
         

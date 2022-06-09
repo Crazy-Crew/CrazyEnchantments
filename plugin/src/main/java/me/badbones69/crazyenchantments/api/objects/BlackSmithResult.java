@@ -5,7 +5,6 @@ import me.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Map.Entry;
 
 public class BlackSmithResult {
@@ -17,14 +16,15 @@ public class BlackSmithResult {
     
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
         resultItem = mainItem.clone();
+
         if (mainItem.getType() == ce.getEnchantmentBook().getMaterial() && subItem.getType() == ce.getEnchantmentBook().getMaterial()) {
             CEBook mainBook = ce.getCEBook(mainItem);
             CEBook subBook = ce.getCEBook(subItem);
-            //Books are the same enchantment.
+            // Books are the same enchantment.
             if (mainBook.getEnchantment() == subBook.getEnchantment() &&
-            //Books have to be the same level.
+            // Books have to be the same level.
             mainBook.getLevel() == subBook.getLevel() &&
-            //Makes sure level doesn't go passed max.
+            // Makes sure level doesn't go passed max.
             mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
                 resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
                 cost += blackSmithManager.getBookUpgrade();
@@ -34,7 +34,8 @@ public class BlackSmithResult {
                 CEItem mainCE = new CEItem(resultItem);
                 CEItem subCE = new CEItem(subItem);
                 BlackSmithCompare compare = new BlackSmithCompare(mainCE, subCE);
-                //Checking for duplicate enchantments.
+
+                // Checking for duplicate enchantments.
                 for (Entry<Enchantment, Integer> entry : mainCE.getVanillaEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
                     int level = entry.getValue();
@@ -49,6 +50,7 @@ public class BlackSmithResult {
                         }
                     }
                 }
+
                 for (Entry<CEnchantment, Integer> entry : mainCE.getCEnchantments().entrySet()) {
                     CEnchantment enchantment = entry.getKey();
                     int level = entry.getValue();
@@ -63,7 +65,8 @@ public class BlackSmithResult {
                         }
                     }
                 }
-                //Checking for new enchantments.
+
+                // Checking for new enchantments.
                 for (Entry<Enchantment, Integer> entry : compare.getNewVanillaEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
                     if (enchantment.canEnchantItem(subItem) && ce.canAddEnchantment(player, mainItem)) {
@@ -71,6 +74,7 @@ public class BlackSmithResult {
                         cost += blackSmithManager.getAddEnchantment();
                     }
                 }
+
                 for (Entry<CEnchantment, Integer> entry : compare.getNewCEnchantments().entrySet()) {
                     CEnchantment enchantment = entry.getKey();
                     if (enchantment.canEnchantItem(subItem) && ce.canAddEnchantment(player, mainItem) && ce.canAddEnchantment(player, subItem)) {
@@ -78,6 +82,7 @@ public class BlackSmithResult {
                         cost += blackSmithManager.getAddEnchantment();
                     }
                 }
+
                 mainCE.build();
             }
         }
@@ -90,5 +95,4 @@ public class BlackSmithResult {
     public ItemStack getResultItem() {
         return resultItem;
     }
-    
 }

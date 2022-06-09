@@ -26,7 +26,6 @@ public class DisarmerUseEvent extends Event implements Cancellable {
     }
     
     /**
-     *
      * @return The player that uses the enchantment.
      */
     public Player getPlayer() {
@@ -34,7 +33,6 @@ public class DisarmerUseEvent extends Event implements Cancellable {
     }
     
     /**
-     *
      * @return The player that is attacking the player.
      */
     public Player getDamager() {
@@ -42,7 +40,6 @@ public class DisarmerUseEvent extends Event implements Cancellable {
     }
     
     /**
-     *
      * @return The item that uses the enchantment.
      */
     public ItemStack getItem() {

@@ -3,7 +3,6 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +19,7 @@ public class CEItem {
     
     public CEItem(ItemStack item) {
         this.item = item;
-        //Has to make a new map as .getEnchantments is a ImmutableMap.
+        // Has to make a new map as .getEnchantments is a ImmutableMap.
         vanillaEnchantments = new HashMap<>(item.getEnchantments());
         cEnchantments = ce.getEnchantments(item);
         vanillaEnchantmentRemove = new ArrayList<>();
@@ -43,12 +42,12 @@ public class CEItem {
         return vanillaEnchantments;
     }
     
-    public void setVanillaEnchantment(Enchantment enchantmnet, int level) {
-        vanillaEnchantments.put(enchantmnet, level);
+    public void setVanillaEnchantment(Enchantment enchantment, int level) {
+        vanillaEnchantments.put(enchantment, level);
     }
     
-    public void removeVanillaEnchantmnet(Enchantment enchantmnet) {
-        vanillaEnchantmentRemove.add(enchantmnet);
+    public void removeVanillaEnchantment(Enchantment enchantment) {
+        vanillaEnchantmentRemove.add(enchantment);
     }
     
     public boolean hasCEnchantment(CEnchantment enchantment) {
@@ -78,5 +77,4 @@ public class CEItem {
         ce.addEnchantments(item, cEnchantments);
         return item;
     }
-    
 }

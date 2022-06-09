@@ -25,7 +25,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.HashMap;
 
 public class ShopControl implements Listener {
@@ -49,10 +48,12 @@ public class ShopControl implements Listener {
             if (item != null) {
                 for (Category category : ce.getCategories()) {
                     if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
+
                         if (Methods.isInventoryFull(player)) {
                             player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                             return;
                         }
+
                         if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                             if (CurrencyAPI.canBuy(player, category)) {
                                 CurrencyAPI.takeCurrency(player, category);
@@ -62,20 +63,18 @@ public class ShopControl implements Listener {
                                 placeholders.put("%Money_Needed%", needed);
                                 placeholders.put("%XP%", needed);
                                 switch (category.getCurrency()) {
-                                    case VAULT:
-                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                        break;
-                                    case XP_LEVEL:
-                                        player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                        break;
-                                    case XP_TOTAL:
-                                        player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                        break;
+                                    case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+                                    case XP_LEVEL ->
+                                            player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+                                    case XP_TOTAL ->
+                                            player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
                                 }
                                 return;
                             }
                         }
+
                         CEBook book = ce.getRandomEnchantmentBook(category);
+
                         if (book != null) {
                             BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
                             Bukkit.getPluginManager().callEvent(event);
@@ -83,14 +82,18 @@ public class ShopControl implements Listener {
                         } else {
                             player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                         }
+
                         return;
                     }
                     LostBook lostBook = category.getLostBook();
+
                     if (lostBook.isInGUI() && item.isSimilar(lostBook.getDisplayItem().build())) {
+
                         if (Methods.isInventoryFull(player)) {
                             player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                             return;
                         }
+
                         if (lostBook.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                             if (CurrencyAPI.canBuy(player, lostBook)) {
                                 CurrencyAPI.takeCurrency(player, lostBook);
@@ -100,26 +103,24 @@ public class ShopControl implements Listener {
                                 placeholders.put("%Money_Needed%", needed);
                                 placeholders.put("%XP%", needed);
                                 switch (lostBook.getCurrency()) {
-                                    case VAULT:
-                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                        break;
-                                    case XP_LEVEL:
-                                        player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                        break;
-                                    case XP_TOTAL:
-                                        player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                        break;
+                                    case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+                                    case XP_LEVEL ->
+                                            player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+                                    case XP_TOTAL ->
+                                            player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
                                 }
                                 return;
                             }
                         }
+
                         player.getInventory().addItem(lostBook.getLostBook(category).build());
                         return;
                     }
                 }
+
                 for (ShopOption option : ShopOption.values()) {
                     if (option.isInGUI() && item.isSimilar(option.getItem())) {
-                        //If the option is buyable then it check to see if they player can buy it and take the money.
+                        // If the option is buyable then it check to see if they player can buy it and take the money.
                         if (option.isBuyable()) {
                             if (Methods.isInventoryFull(player)) {
                                 player.sendMessage(Messages.INVENTORY_FULL.getMessage());
@@ -134,57 +135,39 @@ public class ShopControl implements Listener {
                                     placeholders.put("%Money_Needed%", needed);
                                     placeholders.put("%XP%", needed);
                                     switch (option.getCurrency()) {
-                                        case VAULT:
-                                            player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                            break;
-                                        case XP_LEVEL:
-                                            player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                            break;
-                                        case XP_TOTAL:
-                                            player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                            break;
+                                        case VAULT ->
+                                                player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+                                        case XP_LEVEL ->
+                                                player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+                                        case XP_TOTAL ->
+                                                player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
                                     }
                                     return;
                                 }
                             }
                         }
+
                         switch (option) {
-                            case GKITZ:
+                            case GKITZ -> {
                                 if (!Methods.hasPermission(player, "gkitz", true)) return;
                                 GKitzController.openGUI(player);
-                                break;
-                            case BLACKSMITH:
+                            }
+                            case BLACKSMITH -> {
                                 if (!Methods.hasPermission(player, "blacksmith", true)) return;
                                 BlackSmith.openBlackSmith(player);
-                                break;
-                            case TINKER:
+                            }
+                            case TINKER -> {
                                 if (!Methods.hasPermission(player, "tinker", true)) return;
                                 Tinkerer.openTinker(player);
-                                break;
-                            case INFO:
-                                ce.getInfoMenuManager().openInfoMenu(player);
-                                break;
-                            case PROTECTION_CRYSTAL:
-                                player.getInventory().addItem(ProtectionCrystal.getCrystals());
-                                break;
-                            case SUCCESS_DUST:
-                                player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
-                                break;
-                            case DESTROY_DUST:
-                                player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
-                                break;
-                            case SCRAMBLER:
-                                player.getInventory().addItem(Scrambler.getScramblers());
-                                break;
-                            case BLACK_SCROLL:
-                                player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
-                                break;
-                            case WHITE_SCROLL:
-                                player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
-                                break;
-                            case TRANSMOG_SCROLL:
-                                player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
-                                break;
+                            }
+                            case INFO -> ce.getInfoMenuManager().openInfoMenu(player);
+                            case PROTECTION_CRYSTAL -> player.getInventory().addItem(ProtectionCrystal.getCrystals());
+                            case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
+                            case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
+                            case SCRAMBLER -> player.getInventory().addItem(Scrambler.getScramblers());
+                            case BLACK_SCROLL -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
+                            case WHITE_SCROLL -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
+                            case TRANSMOG_SCROLL -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
                         }
                         return;
                     }
@@ -204,5 +187,4 @@ public class ShopControl implements Listener {
             }
         }
     }
-    
 }

@@ -5,7 +5,6 @@ import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
 
 public class EnchantedArrow {
@@ -55,5 +54,4 @@ public class EnchantedArrow {
     public boolean hasEnchantment(CEnchantments enchantment) {
         return enchantments.contains(enchantment.getEnchantment());
     }
-    
 }

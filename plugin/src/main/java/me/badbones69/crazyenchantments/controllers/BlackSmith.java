@@ -19,7 +19,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -53,40 +52,45 @@ public class BlackSmith implements Listener {
             e.setCancelled(true);
             ItemStack item = e.getCurrentItem();
             if (item != null) {
-                if (e.getRawSlot() > 26) {// Click In Players Inventory
+                if (e.getRawSlot() > 26) { // Click In Players Inventory
                     if (item.getAmount() != 1) return;
                     if (ce.hasEnchantments(item) || ce.isEnchantmentBook(item)) {
-                        if (inventory.getItem(mainSlot) == null) {//Main item slot is empty
+                        if (inventory.getItem(mainSlot) == null) { // Main item slot is empty
                             e.setCurrentItem(new ItemStack(Material.AIR));
-                            inventory.setItem(mainSlot, item);//Moves clicked item to main slot
+                            inventory.setItem(mainSlot, item); // Moves clicked item to main slot
                             playSound(player, click);
-                            if (inventory.getItem(subSlot) != null) {//Sub item slot is not empty
+
+                            if (inventory.getItem(subSlot) != null) { // Sub item slot is not empty
                                 BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
                                 setResultBoarder(resultItem, inventory);
                             }
-                        } else {//Main item slot is not empty
+
+                        } else { // Main item slot is not empty
                             e.setCurrentItem(new ItemStack(Material.AIR));
-                            if (inventory.getItem(subSlot) != null) {//Sub item slot is not empty
-                                e.setCurrentItem(inventory.getItem(subSlot));//Moves sub slot item to clicked items slot
+
+                            if (inventory.getItem(subSlot) != null) { // Sub item slot is not empty
+                                e.setCurrentItem(inventory.getItem(subSlot)); // Moves sub slot item to clicked items slot
                             }
-                            inventory.setItem(subSlot, item);//Moves clicked item to sub slot
+
+                            inventory.setItem(subSlot, item); // Moves clicked item to sub slot
                             playSound(player, click);
                             BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
                             setResultBoarder(resultItem, inventory);
                         }
                     }
-                } else {// Click In the Black Smith
-                    if (e.getRawSlot() == mainSlot || e.getRawSlot() == subSlot) {//Clicked either the Main slot or Sub slot
-                        e.setCurrentItem(new ItemStack(Material.AIR));//Sets the clicked slot to air
+                } else { // Click In the Black Smith
+                    if (e.getRawSlot() == mainSlot || e.getRawSlot() == subSlot) { // Clicked either the Main slot or Sub slot
+                        e.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air
                         givePlayerItem(player, item);
                         inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
                         resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
                         playSound(player, click);
                     }
-                    if (e.getRawSlot() == resultSlot) {//Clicks the result item slot
-                        if (inventory.getItem(mainSlot) != null && inventory.getItem(subSlot) != null) {//Main and Sub items are not empty
+
+                    if (e.getRawSlot() == resultSlot) { // Clicks the result item slot
+                        if (inventory.getItem(mainSlot) != null && inventory.getItem(subSlot) != null) { // Main and Sub items are not empty
                             BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
-                            if (resultItem.getCost() > 0) {//Items are upgradeable
+                            if (resultItem.getCost() > 0) { // Items are upgradeable
                                 if (blackSmithManager.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                                     Currency currency = blackSmithManager.getCurrency();
                                     if (CurrencyAPI.canBuy(player, currency, resultItem.getCost())) {
@@ -98,15 +102,12 @@ public class BlackSmith implements Listener {
                                             placeholders.put("%Money_Needed%", needed);
                                             placeholders.put("%XP%", needed);
                                             switch (currency) {
-                                                case VAULT:
-                                                    player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                                    break;
-                                                case XP_LEVEL:
-                                                    player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                                    break;
-                                                case XP_TOTAL:
-                                                    player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                                    break;
+                                                case VAULT ->
+                                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+                                                case XP_LEVEL ->
+                                                        player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+                                                case XP_TOTAL ->
+                                                        player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
                                             }
                                         }
                                         return;
@@ -150,10 +151,10 @@ public class BlackSmith implements Listener {
     }
     
     private void setResultBoarder(BlackSmithResult resultItem, Inventory inventory) {
-        if (resultItem.getCost() > 0) {//Items are upgradable
+        if (resultItem.getCost() > 0) { // Items are upgradable
             inventory.setItem(resultSlot, Methods.addLore(resultItem.getResultItem(), getFoundString(resultItem)));
             resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getBlueGlass()));
-        } else {//Items are not upgradable
+        } else { // Items are not upgradable
             inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
             resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
         }
@@ -174,5 +175,4 @@ public class BlackSmith implements Listener {
     private void playSound(Player player, Sound sound) {
         player.playSound(player.getLocation(), sound, 1, 1);
     }
-    
 }

@@ -2,7 +2,6 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +68,7 @@ public class GKitz {
         return this.itemStrings;
     }
     
-    public boolean canAutoEquipt() {
+    public boolean canAutoEquip() {
         return this.autoEquip;
     }
     
@@ -82,6 +81,7 @@ public class GKitz {
         for (String itemString : itemStrings) {
             //This is used to convert old v1.7- gkit files to use newer way.
             StringBuilder newItemString = new StringBuilder();
+
             for (String option : itemString.split(", ")) {
                 if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
                     StringBuilder newOption = new StringBuilder();
@@ -92,10 +92,13 @@ public class GKitz {
                 }
                 newItemString.append(option).append(", ");
             }
+
             if (newItemString.length() > 0) {
                 itemString = newItemString.substring(0, newItemString.length() - 2);
             }
+
             GKitzItem item = new GKitzItem(ItemBuilder.convertString(itemString));
+
             for (String option : itemString.split(", ")) {
                 try {
                     CEnchantment enchantment = ce.getEnchantmentFromName(option.split(":")[0]);
@@ -110,12 +113,11 @@ public class GKitz {
                             item.addCEEnchantment(enchantment, Integer.parseInt(level));
                         }
                     }
-                } catch (Exception ignore) {
-                }
+                } catch (Exception ignore) {}
             }
+
             items.add(item.build());
         }
         return items;
     }
-    
 }

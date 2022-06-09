@@ -46,16 +46,20 @@ public class ScrollControl implements Listener {
         ItemStack scroll = e.getCursor();
         if (item != null && scroll != null) {
             InventoryType.SlotType slotType = e.getSlotType();
+
             if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) {
                 return;
             }
-            if (scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {//The scroll is a Transmog Scroll.
+
+            if (scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) { // The scroll is a Transmog Scroll.
+
                 if (scroll.getAmount() > 1) {
                     player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
                     return;
                 }
+
                 if (ce.hasEnchantments(item)) {
-                    //Checks to see if the item is already ordered.
+                    // Checks to see if the item is already ordered.
                     if (item.isSimilar(orderEnchantments(item.clone()))) {
                         return;
                     }
@@ -64,11 +68,14 @@ public class ScrollControl implements Listener {
                     player.setItemOnCursor(Methods.removeItem(scroll));
                     player.updateInventory();
                 }
-            } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) {//The scroll is a white scroll.
+
+            } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) { // The scroll is a white scroll.
+
                 if (scroll.getAmount() > 1) {
                     player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
                     return;
                 }
+
                 if (!ce.hasWhiteScrollProtection(item)) {
                     for (EnchantmentType enchantmentType : ce.getInfoMenuManager().getEnchantmentTypes()) {
                         if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
@@ -79,17 +86,20 @@ public class ScrollControl implements Listener {
                         }
                     }
                 }
-            } else if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) {//The scroll is a black scroll.
+            } else if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) { // The scroll is a black scroll.
+
                 if (scroll.getAmount() > 1) {
                     player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
                     return;
                 }
+
                 if (Methods.isInventoryFull(player)) {
                     player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                     return;
                 }
+
                 List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
-                if (!enchantments.isEmpty()) {//Item has enchantments
+                if (!enchantments.isEmpty()) { // Item has enchantments
                     e.setCancelled(true);
                     player.setItemOnCursor(Methods.removeItem(scroll));
                     if (blackScrollChanceToggle && !Methods.randomPicker(blackScrollChance, 100)) {
@@ -123,26 +133,33 @@ public class ScrollControl implements Listener {
         HashMap<CEnchantment, Integer> enchantmentLevels = new HashMap<>();
         HashMap<CEnchantment, Integer> categories = new HashMap<>();
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
+
         for (CEnchantment enchantment : ce.getEnchantmentsOnItem(item)) {
             enchantmentLevels.put(enchantment, ce.getLevel(item, enchantment));
             ce.removeEnchantment(item, enchantment);
             categories.put(enchantment, ce.getHighestEnchantmentCategory(enchantment).getRarity());
             newEnchantmentOrder.add(enchantment);
         }
+
         newEnchantmentOrder = orderInts(newEnchantmentOrder, categories);
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
+
         for (CEnchantment enchantment : newEnchantmentOrder) {
             lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + ce.convertLevelString(enchantmentLevels.get(enchantment)));
         }
+
         if (itemMeta.hasLore()) {
             lore.addAll(itemMeta.getLore());
         }
+
         itemMeta.setLore(lore);
-        //If adding suffix to the item name then it can run this.
+        // If adding suffix to the item name then it can run this.
+
         if (useSuffix) {
             String newName = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : Methods.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " ").toLowerCase()));
-            //Checks if the item has a custom name and if so checks to see if it already has the suffix.
+            // Checks if the item has a custom name and if so checks to see if it already has the suffix.
+
             if (itemMeta.hasDisplayName()) {
                 for (int i = 0; i <= 100; i++) {
                     String msg = suffix.replace("%Amount%", i + "").replace("%amount%", i + "");
@@ -153,11 +170,14 @@ public class ScrollControl implements Listener {
                 }
             }
             int amount = newEnchantmentOrder.size();
+
             if (countVanillaEnchantments) {
                 amount += item.getEnchantments().size();
             }
+
             itemMeta.setDisplayName(newName + suffix.replace("%Amount%", amount + "").replace("%amount%", amount + ""));
         }
+
         item.setItemMeta(itemMeta);
         return item;
     }
@@ -170,5 +190,4 @@ public class ScrollControl implements Listener {
         });
         return list;
     }
-    
 }

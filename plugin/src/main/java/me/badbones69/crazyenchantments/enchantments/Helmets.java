@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.enchantments;
 
 import me.badbones69.crazyenchantments.api.CrazyManager;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class Helmets implements Listener {
     
     private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.getInstance();
+    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMovement(PlayerMoveEvent e) {
@@ -46,7 +47,6 @@ public class Helmets implements Listener {
                             }
                         }
                     }
-
                 }
             }
         }

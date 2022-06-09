@@ -2,7 +2,6 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
 
 public class TelepathyDrop {
@@ -32,5 +31,4 @@ public class TelepathyDrop {
     public List<Block> getSugarCaneBlocks() {
         return sugarCaneBlocks;
     }
-    
 }

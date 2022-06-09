@@ -131,17 +131,20 @@ public class CurrencyAPI {
         player.setTotalExperience(total);
         player.setLevel(0);
         player.setExp(0);
+
         while (total > player.getExpToLevel()) {
             total -= player.getExpToLevel();
             player.setLevel(player.getLevel() + 1);
         }
+
         float xp = (float) total / (float) player.getExpToLevel();
         player.setExp(xp);
     }
     
-    private static int getTotalExperience(Player player) {// https://www.spigotmc.org/threads/72804
+    private static int getTotalExperience(Player player) { // https://www.spigotmc.org/threads/72804
         int experience;
         int level = player.getLevel();
+
         if (level >= 0 && level <= 15) {
             experience = (int) Math.ceil(Math.pow(level, 2) + (6 * level));
             int requiredExperience = 2 * level + 7;

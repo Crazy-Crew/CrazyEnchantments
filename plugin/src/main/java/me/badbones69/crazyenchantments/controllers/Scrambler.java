@@ -22,7 +22,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +85,6 @@ public class Scrambler implements Listener {
             if (slot != 4) {
                 inv.setItem(slot, Methods.getRandomPaneColor().setName(" ").build());
                 inv.setItem(slot + 18, Methods.getRandomPaneColor().setName(" ").build());
-                
             } else {
                 inv.setItem(slot, pointer.build());
                 inv.setItem(slot + 18, pointer.build());
@@ -97,9 +95,11 @@ public class Scrambler implements Listener {
     public static void openScrambler(Player player, ItemStack book) {
         Inventory inventory = Bukkit.createInventory(null, 27, guiName);
         setGlass(inventory);
+
         for (int slot = 9; slot > 8 && slot < 18; slot++) {
             inventory.setItem(slot, getNewScrambledBook(book));
         }
+
         player.openInventory(inventory);
         startScrambler(player, inventory, book);
     }
@@ -112,37 +112,43 @@ public class Scrambler implements Listener {
             
             @Override
             public void run() {
-                if (full <= 50) {//When Spinning
+                if (full <= 50) { // When Spinning
                     moveItems(inventory, player, book);
                     setGlass(inventory);
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                 }
+
                 open++;
                 if (open >= 5) {
                     player.openInventory(inventory);
                     open = 0;
                 }
+
                 full++;
                 if (full > 51) {
-                    if (slowSpin().contains(time)) {//When Slowing Down
+                    if (slowSpin().contains(time)) { // When Slowing Down
                         moveItems(inventory, player, book);
                         setGlass(inventory);
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                     }
+
                     time++;
-                    if (time == 60) {// When done
+
+                    if (time == 60) { // When done
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                         cancel();
                         roll.remove(player);
                         ItemStack item = inventory.getItem(13).clone();
                         item.setType(ce.getEnchantmentBookItem().getType());
                         item.setDurability(ce.getEnchantmentBookItem().getDurability());
+
                         if (Methods.isInventoryFull(player)) {
                             player.getWorld().dropItem(player.getLocation(), item);
                         } else {
                             player.getInventory().addItem(item);
                         }
-                    } else if (time > 60) {//Just in case the cancel fails.
+
+                    } else if (time > 60) { // Just in case the cancel fails.
                         cancel();
                     }
                 }
@@ -154,6 +160,7 @@ public class Scrambler implements Listener {
         List<Integer> slow = new ArrayList<>();
         int full = 120;
         int cut = 15;
+
         for (int i = 120; cut > 0; full--) {
             if (full <= i - cut || full >= i - cut) {
                 slow.add(i);
@@ -161,17 +168,21 @@ public class Scrambler implements Listener {
                 cut--;
             }
         }
+
         return slow;
     }
     
     private static void moveItems(Inventory inv, Player player, ItemStack book) {
         List<ItemStack> items = new ArrayList<>();
+
         for (int slot = 9; slot > 8 && slot < 17; slot++) {
             items.add(inv.getItem(slot));
         }
+
         ItemStack newBook = getNewScrambledBook(book);
         newBook.setType(Methods.getRandomPaneColor().getMaterial());
         inv.setItem(9, newBook);
+
         for (int i = 0; i < 8; i++) {
             inv.setItem(i + 10, items.get(i));
         }
@@ -186,6 +197,7 @@ public class Scrambler implements Listener {
             if (book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
                 if (book.getAmount() == 1 && scrambler.getAmount() == 1) {
                     if (getScramblers().isSimilar(scrambler) && ce.isEnchantmentBook(book)) {
+
                         if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
                             e.setCancelled(true);
                             player.setItemOnCursor(new ItemStack(Material.AIR));
@@ -198,6 +210,7 @@ public class Scrambler implements Listener {
                         } else {
                             player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
                         }
+
                     }
                 }
             }
@@ -229,8 +242,6 @@ public class Scrambler implements Listener {
         try {
             roll.get(player).cancel();
             roll.remove(player);
-        } catch (Exception ignore) {
-        }
+        } catch (Exception ignore) {}
     }
-    
 }

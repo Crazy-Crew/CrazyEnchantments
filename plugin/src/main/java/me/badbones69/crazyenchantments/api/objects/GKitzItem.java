@@ -2,7 +2,6 @@ package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.HashMap;
 
 public class GKitzItem {
@@ -28,7 +27,6 @@ public class GKitzItem {
     }
     
     /**
-     *
      * @return The ItemBuilder object that is set.
      */
     public ItemBuilder getItemBuilder() {
@@ -44,7 +42,6 @@ public class GKitzItem {
     }
     
     /**
-     *
      * @param enchant Crazy Enchantment
      * @param level Level of the enchantment
      */
@@ -53,7 +50,6 @@ public class GKitzItem {
     }
     
     /**
-     *
      * @param enchant Crazy Enchantment
      */
     public void removeCEEnchantment(CEnchantment enchant) {
@@ -61,7 +57,6 @@ public class GKitzItem {
     }
     
     /**
-     *
      * @return Returns a fully finished item.
      */
     public ItemStack build() {
@@ -71,5 +66,4 @@ public class GKitzItem {
         }
         return item;
     }
-    
 }

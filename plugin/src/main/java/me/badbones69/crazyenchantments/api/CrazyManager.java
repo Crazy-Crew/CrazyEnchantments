@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.api;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import me.badbones69.crazyenchantments.CrazyEnchantments;
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.economy.Currency;
@@ -19,7 +20,6 @@ import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredSuppo
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardSupport;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,7 +29,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
@@ -38,7 +38,7 @@ import java.util.Map.Entry;
 public class CrazyManager {
     
     private static CrazyManager instance = new CrazyManager();
-    private Plugin plugin;
+    private JavaPlugin plugin;
     private int rageMaxLevel;
     private boolean gkitzToggle;
     private boolean useUnsafeEnchantments;
@@ -82,9 +82,7 @@ public class CrazyManager {
         registeredEnchantments.clear();
         categories.clear();
 
-        SupportedPlugins.updatePluginStates();
-
-        plugin = Bukkit.getPluginManager().getPlugin("CrazyEnchantments");
+        plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
         //Loads the blacksmith manager
         blackSmithManager = BlackSmithManager.getInstance();
@@ -240,18 +238,17 @@ public class CrazyManager {
         //Loads the settings for the ally enchantments.
         allyManager = AllyManager.getInstance();
         allyManager.load();
-        //Starts the wings task
-        Boots.startWings();
 
-        if (SupportedPlugins.WORLD_GUARD.isPluginLoaded() && SupportedPlugins.WORLD_EDIT.isPluginLoaded()) {
+        //Starts the wings task
+        Boots.INSTANCE.startWings();
+
+        if (PluginSupport.SupportedPlugins.WORLDGUARD.isPluginLoaded(plugin) && PluginSupport.SupportedPlugins.WORLDEDIT.isPluginLoaded(plugin)) {
             worldGuardVersion = new WorldGuardSupport();
         }
 
-        if (SupportedPlugins.PLOT_SQUARED.isPluginLoaded()) {
+        if (PluginSupport.SupportedPlugins.PLOTSQUARED.isPluginLoaded(plugin)) {
             plotSquaredVersion = new PlotSquaredSupport();
         }
-
-        PluginSupport.getInstance().load();
     }
     
     /**
@@ -332,7 +329,7 @@ public class CrazyManager {
      * Gets the plugin.
      * @return The plugin as a Plugin object.
      */
-    public Plugin getPlugin() {
+    public JavaPlugin getPlugin() {
         return plugin;
     }
     

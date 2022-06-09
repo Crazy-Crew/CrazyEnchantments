@@ -24,7 +24,6 @@ public class AngelUseEvent extends Event implements Cancellable {
     }
     
     /**
-     *
      * @return The player that uses the enchantment.
      */
     public Player getPlayer() {
@@ -32,7 +31,6 @@ public class AngelUseEvent extends Event implements Cancellable {
     }
     
     /**
-     *
      * @return The item the enchantment is on.
      */
     public ItemStack getItem() {
@@ -52,5 +50,4 @@ public class AngelUseEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
-    
 }

@@ -14,5 +14,4 @@ public class RunnableSyncProcessor extends Processor<Runnable> {
     void process(final Runnable process) {
         Bukkit.getScheduler().runTask(this.plugin, process);
     }
-    
 }

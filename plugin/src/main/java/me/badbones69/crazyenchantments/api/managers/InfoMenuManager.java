@@ -48,6 +48,7 @@ public class InfoMenuManager {
         .setName(file.getString(path + ".Back-Item.Left.Name", "&b&lBack&7&l>>"))
         .setLore(file.getStringList(path + ".Back-Item.Left.Lore"))
         .build();
+
         for (String type : file.getConfigurationSection("Types").getKeys(false)) {
             EnchantmentType enchantmentType = new EnchantmentType(type);
             enchantmentTypes.add(enchantmentType);
@@ -97,6 +98,7 @@ public class InfoMenuManager {
         int slots = 9;
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
         Inventory inventory = Bukkit.createInventory(null, slots, inventoryName);
+
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
                 inventory.addItem(
@@ -107,6 +109,7 @@ public class InfoMenuManager {
                 .build());
             }
         }
+
         inventory.setItem(slots - 1, backRight);
         player.openInventory(inventory);
     }

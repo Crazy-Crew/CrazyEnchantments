@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.processors;
 
 import me.badbones69.crazyenchantments.api.CrazyManager;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
@@ -22,7 +23,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private final Processor<Runnable> syncProcessor;
     private final CrazyManager ce = CrazyManager.getInstance();
-    private final PluginSupport pluginSupport = PluginSupport.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
 
     public ArmorMoveProcessor() {
         this.syncProcessor = new RunnableSyncProcessor(ce.getPlugin());
@@ -46,7 +47,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             if (CEnchantments.NURSERY.isActivated() && ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
                 int heal = 1;
                 if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
-                    //Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                    // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                     double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
                     if (maxHealth > player.getHealth() && player.getHealth() > 0) {
                         syncProcessor.add(() -> {
@@ -72,7 +73,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
 
-                        if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                             SpartanSupport.cancelFastEat(player);
                         }
 
@@ -87,7 +88,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 });
             }
 
-            if ((CEnchantments.ANGEL.isActivated() && ce.hasEnchantment(armor, CEnchantments.ANGEL) && SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
+            if ((CEnchantments.ANGEL.isActivated() && ce.hasEnchantment(armor, CEnchantments.ANGEL) && PluginSupport.SupportedPlugins.FACTIONSUUID.isPluginLoaded(ce.getPlugin()))) {
                 final int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
                 syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
@@ -105,6 +106,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             }
             useHellForge(player, armor);
         }
+
         for (final ItemStack item : player.getInventory().getContents()) {
             useHellForge(player, item);
         }
@@ -113,6 +115,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
     private void useHellForge(Player player, ItemStack item) {
         if (ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
             int armorDurability = ((Damageable) item.getItemMeta()).getDamage();
+
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
                 new BukkitRunnable() {
                     @Override

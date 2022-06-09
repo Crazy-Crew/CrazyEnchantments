@@ -136,7 +136,6 @@ public enum CEnchantments {
     }
     
     /**
-     *
      * @param name Name of the enchantment.
      * @param typeName Type of items it goes on.
      */
@@ -149,7 +148,6 @@ public enum CEnchantments {
     }
     
     /**
-     *
      * @param name Name of the enchantment.
      * @param typeName Type of items it goes on.
      * @param chance The chance the enchantment has to active.
@@ -177,19 +175,20 @@ public enum CEnchantments {
         return null;
     }
     
-    public static List<CEnchantments> getFromeNames(List<CEnchantment> enchantments) {
+    public static List<CEnchantments> getFromNames(List<CEnchantment> enchantments) {
         List<CEnchantments> cEnchantments = new ArrayList<>();
+
         for (CEnchantment cEnchantment : enchantments) {
             CEnchantments enchantment = getFromName(cEnchantment.getName());
             if (enchantment != null) {
                 cEnchantments.add(enchantment);
             }
         }
+
         return cEnchantments;
     }
     
     /**
-     *
      * @return The name of the enchantment.
      */
     public String getName() {
@@ -197,7 +196,6 @@ public enum CEnchantments {
     }
     
     /**
-     *
      * @return The custom name in the Enchantment.yml.
      */
     public String getCustomName() {
@@ -225,15 +223,13 @@ public enum CEnchantments {
     }
     
     /**
-     *
      * @return The description of the enchantment in the Enchantments.yml.
      */
-    public List<String> getDiscription() {
+    public List<String> getDescription() {
         return getEnchantment().getInfoDescription();
     }
     
     /**
-     *
      * @return Return the color that goes on the Enchantment Book.
      */
     public String getBookColor() {
@@ -241,7 +237,6 @@ public enum CEnchantments {
     }
     
     /**
-     *
      * @return Returns the color that goes on the Enchanted Item.
      */
     public String getEnchantmentColor() {
@@ -249,7 +244,6 @@ public enum CEnchantments {
     }
     
     /**
-     *
      * @return The type the enchantment is.
      */
     public EnchantmentType getType() {
@@ -261,7 +255,6 @@ public enum CEnchantments {
     }
     
     /**
-     *
      * @return True if the enchantment is enabled and false if not.
      */
     public boolean isActivated() {
@@ -302,7 +295,7 @@ public enum CEnchantments {
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(ItemStack item) {
-        return ce.getEnchantmentFromName(name).chanceSuccesful(getLevel(item));
+        return ce.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
     }
     
     /**

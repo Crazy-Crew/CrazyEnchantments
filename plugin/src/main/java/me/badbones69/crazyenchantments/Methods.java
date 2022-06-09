@@ -3,6 +3,7 @@ package me.badbones69.crazyenchantments;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.controllers.FireworkDamage;
@@ -28,7 +29,7 @@ public class Methods {
     
     private static Random random = new Random();
     private static CrazyManager ce = CrazyManager.getInstance();
-    private static PluginSupport pluginSupport = PluginSupport.getInstance();
+    private static PluginSupport pluginSupport = PluginSupport.INSTANCE;
     public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
     public static String color(String message) {
@@ -311,7 +312,7 @@ public class Methods {
         return entities;
     }
     
-    public static List<Entity> getNearbyEntitiess(Location loc, double radius, Entity entity) {
+    public static List<Entity> getNearbyEntities(Location loc, double radius, Entity entity) {
         return entity.getNearbyEntities(radius, radius, radius);
     }
     
@@ -381,7 +382,7 @@ public class Methods {
             HashMap<String, String> enchantments = getEnchantments();
             enchantmentName = stripString(enchantmentName);
             for (Enchantment enchantment : Enchantment.values()) {
-                //MC 1.13+ has the correct names.
+                // MC 1.13+ has the correct names.
                 if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
                     return enchantment;
                 }
@@ -437,17 +438,21 @@ public class Methods {
         if (item.getType().getMaxDurability() == 0) {
             return;
         }
+
         if (item.hasItemMeta()) {
+
             try {
                 if (item.getItemMeta().isUnbreakable()) {
                     return;
                 }
-            } catch (NoSuchMethodError ignored) {
-            }
+            } catch (NoSuchMethodError ignored) {}
+
             NBTItem nbtItem = new NBTItem(item);
+
             if (nbtItem.hasNBTData() && nbtItem.hasKey("Unbreakable") && nbtItem.getBoolean("Unbreakable")) {
                 return;
             }
+
             if (item.getItemMeta().hasEnchants()) {
                 if (item.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
                     if (Methods.randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.DURABILITY))) {
@@ -461,6 +466,7 @@ public class Methods {
                 }
             }
         }
+
         if (item.getDurability() > item.getType().getMaxDurability()) {
             player.getInventory().remove(item);
         } else {
@@ -496,18 +502,17 @@ public class Methods {
         player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
-        for (Entity e : Methods.getNearbyEntitiess(player.getLocation(), 3D, player)) {
-            if (pluginSupport.allowsPVP(e.getLocation())) {
+        for (Entity e : Methods.getNearbyEntities(player.getLocation(), 3D, player)) {
+            if (pluginSupport.allowsCombat(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
                     e.remove();
                 } else {
-                    if (e instanceof LivingEntity) {
-                        LivingEntity en = (LivingEntity) e;
+                    if (e instanceof LivingEntity en) {
                         if (!pluginSupport.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {
-                                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                                         SpartanSupport.cancelSpeed((Player) player);
                                         SpartanSupport.cancelNormalMovements((Player) player);
                                         SpartanSupport.cancelNoFall((Player) player);
@@ -528,8 +533,8 @@ public class Methods {
         arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
-        for (Entity e : Methods.getNearbyEntitiess(arrow.getLocation(), 3D, arrow)) {
-            if (pluginSupport.allowsPVP(e.getLocation())) {
+        for (Entity e : Methods.getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
+            if (pluginSupport.allowsCombat(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
                     e.remove();
                 } else {
@@ -538,7 +543,7 @@ public class Methods {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {
-                                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                                         SpartanSupport.cancelSpeed((Player) player);
                                         SpartanSupport.cancelNormalMovements((Player) player);
                                         SpartanSupport.cancelNoFall((Player) player);
@@ -563,7 +568,7 @@ public class Methods {
         "LIME_STAINED_GLASS_PANE",
         "PINK_STAINED_GLASS_PANE",
         "GRAY_STAINED_GLASS_PANE",
-        //Skipped 8 due to it being basically invisible in a GUI.
+        // Skipped 8 due to it being basically invisible in a GUI.
         "CYAN_STAINED_GLASS_PANE",
         "PURPLE_STAINED_GLASS_PANE",
         "BLUE_STAINED_GLASS_PANE",

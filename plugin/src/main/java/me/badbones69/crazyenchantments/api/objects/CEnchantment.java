@@ -6,7 +6,6 @@ import me.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import me.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -90,9 +89,11 @@ public class CEnchantment {
     }
     
     public CEnchantment setBookColor(String bookColor) {
+
         if (bookColor.startsWith("&f")) {
             bookColor = bookColor.substring(2);
         }
+
         this.bookColor = Methods.color(bookColor);
         return this;
     }
@@ -137,7 +138,7 @@ public class CEnchantment {
         return chance > 0;
     }
     
-    public boolean chanceSuccesful(int enchantmentLevel) {
+    public boolean chanceSuccessful(int enchantmentLevel) {
         int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
         int pickedChance = new Random().nextInt(100) + 1;
         return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
@@ -149,9 +150,11 @@ public class CEnchantment {
     
     public CEnchantment setInfoDescription(List<String> infoDescription) {
         List<String> info = new ArrayList<>();
+
         for (String i : infoDescription) {
             info.add(Methods.color(i));
         }
+
         this.infoDescription = info;
         return this;
     }
@@ -168,12 +171,14 @@ public class CEnchantment {
     }
     
     public CEnchantment setCategories(List<String> categories) {
+
         for (String categoryString : categories) {
             Category category = ce.getCategory(categoryString);
             if (category != null) {
                 this.categories.add(category);
             }
         }
+
         return this;
     }
     
@@ -194,9 +199,11 @@ public class CEnchantment {
         RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(instance);
         Bukkit.getPluginManager().callEvent(event);
         ce.registerEnchantment(instance);
+
         if (enchantmentType != null) {
             enchantmentType.addEnchantment(instance);
         }
+
         for (Category category : categories) {
             category.addEnchantment(instance);
         }
@@ -206,9 +213,11 @@ public class CEnchantment {
         UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(instance);
         Bukkit.getPluginManager().callEvent(event);
         ce.unregisterEnchantment(instance);
+
         if (enchantmentType != null) {
             enchantmentType.removeEnchantment(instance);
         }
+
         for (Category category : categories) {
             category.removeEnchantment(instance);
         }
@@ -224,6 +233,7 @@ public class CEnchantment {
     
     public int getLevel(ItemStack item) {
         int level = 0;
+
         if (Methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.contains(customName)) {
@@ -232,10 +242,10 @@ public class CEnchantment {
                 }
             }
         }
+
         if (!ce.useUnsafeEnchantments() && level > maxLevel) {
             level = maxLevel;
         }
         return level;
     }
-    
 }

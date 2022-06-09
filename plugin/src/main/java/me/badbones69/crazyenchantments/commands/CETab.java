@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.StringUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,9 +21,9 @@ public class CETab implements TabCompleter {
     
     @Override
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
-    public List<String> onTabComplete(CommandSender sender, Command command, String commandLable, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
-        if (args.length == 1) {// /ce
+        if (args.length == 1) { // /ce
             if (hasPermission(sender, "access")) completions.add("help");
             if (hasPermission(sender, "debug")) completions.add("debug");
             if (hasPermission(sender, "limit")) completions.add("limit");
@@ -39,6 +38,7 @@ public class CETab implements TabCompleter {
             if (hasPermission(sender, "dust")) completions.add("dust");
             if (hasPermission(sender, "book")) completions.add("book");
             if (hasPermission(sender, "lostbook")) completions.add("lostbook");
+
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) {// /ce arg0
             switch (args[0].toLowerCase()) {
@@ -58,14 +58,12 @@ public class CETab implements TabCompleter {
                     for (CEnchantment enchantment : ce.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replace(" ", "_"));
-                        } catch (NullPointerException ignore) {
-                        }
+                        } catch (NullPointerException ignore) {}
                     }
                     for (Category category : ce.getCategories()) {
                         try {
                             completions.add(category.getName());
-                        } catch (NullPointerException ignore) {
-                        }
+                        } catch (NullPointerException ignore) {}
                     }
                     break;
                 case "scroll":
@@ -88,8 +86,7 @@ public class CETab implements TabCompleter {
                     for (Category category : ce.getCategories()) {
                         try {
                             completions.add(category.getName());
-                        } catch (NullPointerException ignore) {
-                        }
+                        } catch (NullPointerException ignore) {}
                     }
                     break;
             }
@@ -98,6 +95,7 @@ public class CETab implements TabCompleter {
             switch (args[0].toLowerCase()) {
                 case "book":
                     CEnchantment ceEnchantment = ce.getEnchantmentFromName(args[1]);
+
                     if (ceEnchantment != null) {
                         for (int i = 1; i <= ceEnchantment.getMaxLevel(); i++) completions.add(i + "");
                     }
@@ -105,6 +103,7 @@ public class CETab implements TabCompleter {
                 case "add":
                     ceEnchantment = ce.getEnchantmentFromName(args[1]);
                     Enchantment vanillaEnchantment = Methods.getEnchantment(args[1]);
+
                     if (vanillaEnchantment != null || ceEnchantment != null) {
                         int maxLevel = vanillaEnchantment != null ? vanillaEnchantment.getMaxLevel() : ceEnchantment.getMaxLevel();
                         for (int i = 1; i <= maxLevel; i++) completions.add(i + "");
@@ -149,23 +148,23 @@ public class CETab implements TabCompleter {
             }
         } else if (args.length == 5) {// /ce arg0 arg1 arg2
             switch (args[0].toLowerCase()) {
-                case "spawn":
+                case "spawn" -> {
                     completions.add("Level:");
                     completions.add("World:");
                     completions.add("X:");
                     completions.add("Y:");
                     completions.add("Z:");
-                    break;
-                case "dust":
+                }
+                case "dust" -> {
                     completions.add("1");
                     completions.add("25");
                     completions.add("50");
                     completions.add("75");
                     completions.add("100");
-                    break;
+                }
             }
             return StringUtil.copyPartialMatches(args[4], completions, new ArrayList<>());
-        } else {// /ce arg0 arg1 arg2 args3
+        } else { // /ce arg0 arg1 arg2 args3
             if (args[0].equalsIgnoreCase("spawn")) {
                 completions.add("Level:");
                 completions.add("World:");
@@ -181,5 +180,4 @@ public class CETab implements TabCompleter {
     private boolean hasPermission(CommandSender sender, String node) {
         return sender.hasPermission("crazyenchantments." + node) || sender.hasPermission("crazyenchantments.admin");
     }
-    
 }

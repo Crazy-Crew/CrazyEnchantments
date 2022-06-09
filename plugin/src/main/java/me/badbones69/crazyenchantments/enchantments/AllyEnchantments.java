@@ -36,18 +36,22 @@ public class AllyEnchantments implements Listener {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when getting attacked
                         if (ce.hasEnchantments(item)) {
+
                             if (ce.hasEnchantment(item, CEnchantments.TAMER)) {
                                 int power = ce.getLevel(item, CEnchantments.TAMER);
                                 spawnAllies(player, enemy, AllyType.WOLF, power);
                             }
+
                             if (ce.hasEnchantment(item, CEnchantments.GUARDS)) {
                                 int power = ce.getLevel(item, CEnchantments.GUARDS);
                                 spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
                             }
+
                             if (ce.hasEnchantment(item, CEnchantments.BEEKEEPER)) {
                                 int power = ce.getLevel(item, CEnchantments.BEEKEEPER);
                                 spawnAllies(player, enemy, AllyType.BEE, power);
                             }
+
                             if (enemy instanceof Player) {
                                 if (ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
                                     int power = ce.getLevel(item, CEnchantments.NECROMANCER);
@@ -65,14 +69,14 @@ public class AllyEnchantments implements Listener {
                     allyManager.setEnemy(player, enemy);
                 }
             }
-            if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {// Player attacks
-                Player player = (Player) e.getDamager();
-                LivingEntity enemy = (LivingEntity) e.getEntity();
-                //If the player is trying to hurt their own ally stop the damage.
+
+            if (e.getEntity() instanceof LivingEntity enemy && e.getDamager() instanceof Player player) { // Player attacks
+                // If the player is trying to hurt their own ally stop the damage.
                 if (allyManager.isAlly(player, enemy)) {
                     e.setCancelled(true);
                     return;
                 }
+
                 if (!inCoolDown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when attacking
@@ -126,8 +130,7 @@ public class AllyEnchantments implements Listener {
     public void onAllyDespawn(ChunkUnloadEvent e) {
         if (e.getChunk().getEntities().length > 0) {
             for (Entity entity : e.getChunk().getEntities()) {
-                if (entity instanceof LivingEntity) {
-                    LivingEntity livingEntity = (LivingEntity) entity;
+                if (entity instanceof LivingEntity livingEntity) {
                     if (allyManager.isAllyMob(livingEntity)) {
                         allyManager.getAllyMob(livingEntity).forceRemoveAlly();
                     }
@@ -154,11 +157,11 @@ public class AllyEnchantments implements Listener {
     
     private boolean inCoolDown(Player player) {
         if (allyCoolDown.containsKey(player.getUniqueId())) {
-            //Right now is before the player's cooldown ends.
+            // Right now is before the player's cooldown ends.
             if (Calendar.getInstance().before(allyCoolDown.get(player.getUniqueId()))) {
                 return true;
             }
-            //Remove the player because their cooldown is over.
+            // Remove the player because their cooldown is over.
             allyCoolDown.remove(player.getUniqueId());
         }
         return false;

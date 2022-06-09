@@ -1,10 +1,8 @@
 package me.badbones69.crazyenchantments.api.objects;
 
-import me.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,5 +35,4 @@ public class BlockProcessInfo {
     public boolean isSpawner() {
         return isSpawner;
     }
-    
 }

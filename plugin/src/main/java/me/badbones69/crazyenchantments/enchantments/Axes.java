@@ -2,6 +2,7 @@ package me.badbones69.crazyenchantments.enchantments;
 
 import me.badbones69.crazyenchantments.Methods;
 import me.badbones69.crazyenchantments.api.CrazyManager;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.CEnchantment;
@@ -25,7 +26,7 @@ import java.util.List;
 public class Axes implements Listener {
     
     private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.getInstance();
+    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -36,6 +37,7 @@ public class Axes implements Listener {
                 ItemStack item = Methods.getItemInHand(damager);
                 if (!e.getEntity().isDead()) {
                     List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+
                     if (CEnchantments.BERSERK.isActivated() && enchantments.contains(CEnchantments.BERSERK.getEnchantment()) && CEnchantments.BERSERK.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -44,6 +46,7 @@ public class Axes implements Listener {
                             damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
                         }
                     }
+
                     if (CEnchantments.BLESSED.isActivated() && enchantments.contains(CEnchantments.BLESSED.getEnchantment()) && CEnchantments.BLESSED.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -51,13 +54,14 @@ public class Axes implements Listener {
                             removeBadPotions(damager);
                         }
                     }
+
                     if (CEnchantments.FEEDME.isActivated() && enchantments.contains(CEnchantments.FEEDME.getEnchantment()) && CEnchantments.FEEDME.chanceSuccessful(item) && damager.getFoodLevel() < 20) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.FEEDME.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             int food = 2 * ce.getLevel(item, CEnchantments.FEEDME);
 
-                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                                 SpartanSupport.cancelFastEat(damager);
                             }
 
@@ -69,6 +73,7 @@ public class Axes implements Listener {
                             }
                         }
                     }
+
                     if (CEnchantments.REKT.isActivated() && enchantments.contains(CEnchantments.REKT.getEnchantment())) {
                         double damage = e.getDamage() * 2;
                         if (CEnchantments.REKT.chanceSuccessful(item)) {
@@ -79,6 +84,7 @@ public class Axes implements Listener {
                             }
                         }
                     }
+
                     if (CEnchantments.CURSED.isActivated() && enchantments.contains(CEnchantments.CURSED.getEnchantment()) && CEnchantments.CURSED.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -86,6 +92,7 @@ public class Axes implements Listener {
                             en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
                         }
                     }
+
                     if (CEnchantments.DIZZY.isActivated() && enchantments.contains(CEnchantments.DIZZY.getEnchantment()) && CEnchantments.DIZZY.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -93,6 +100,7 @@ public class Axes implements Listener {
                             en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (ce.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
                         }
                     }
+
                     if (CEnchantments.BATTLECRY.isActivated() && enchantments.contains(CEnchantments.BATTLECRY.getEnchantment()) && CEnchantments.BATTLECRY.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BATTLECRY.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
@@ -113,7 +121,7 @@ public class Axes implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
-        if (pluginSupport.allowsPVP(player.getLocation()) && e.getEntity().getKiller() instanceof Player) {
+        if (pluginSupport.allowsCombat(player.getLocation()) && e.getEntity().getKiller() != null) {
             Player damager = e.getEntity().getKiller();
             ItemStack item = Methods.getItemInHand(damager);
             if (ce.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {

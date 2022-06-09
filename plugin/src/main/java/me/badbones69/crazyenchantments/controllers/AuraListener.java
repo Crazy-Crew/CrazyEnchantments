@@ -37,20 +37,26 @@ public class AuraListener implements Listener {
         Player player = event.getPlayer();
         Location from = event.getFrom();
         Location to = event.getTo();
+
         if (to == null ||
         from.getBlockX() == to.getBlockX()
         && from.getBlockY() == to.getBlockY()
         && from.getBlockZ() == to.getBlockZ()) {
             return;
         }
+
         List<Player> players = getNearbyPlayers(player, 3);
+
         if (players.isEmpty()) {
             return;
         }
+
         EntityEquipment playerEquipment = player.getEquipment();
+
         if (playerEquipment == null) {
             return; // Should never happen
         }
+
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
             Map<CEnchantment, Integer> itemEnchantments = ce.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
@@ -64,18 +70,23 @@ public class AuraListener implements Listener {
                 }
             });
         }
+
         for (Player other : players) {
             EntityEquipment otherEquipment = other.getEquipment();
+
             if (otherEquipment == null) {
                 continue; // Should never happen
             }
-            for (ItemStack item : otherEquipment.getArmorContents()) {// The other players moving.
+
+            for (ItemStack item : otherEquipment.getArmorContents()) { // The other players moving.
                 Map<CEnchantment, Integer> itemEnchantments = ce.getEnchantments(item);
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
+
                     if (enchantmentEnum == null) {
                         return; // Not an aura enchantment
                     }
+
                     AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
                     Bukkit.getPluginManager().callEvent(auraEvent);
                 });
@@ -90,13 +101,14 @@ public class AuraListener implements Listener {
     // TODO: move into utils?
     private static List<Player> getNearbyPlayers(Player player, int radius) {
         List<Player> players = new ArrayList<>();
+
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
             if (!(entity instanceof Player) || entity.getUniqueId().toString().equals(player.getUniqueId().toString())) {
                 continue;
             }
             players.add((Player) entity);
         }
+
         return players;
     }
-    
 }

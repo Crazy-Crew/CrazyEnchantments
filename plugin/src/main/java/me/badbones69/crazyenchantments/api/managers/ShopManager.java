@@ -37,8 +37,10 @@ public class ShopManager {
         inventoryName = Methods.color(config.getString("Settings.InvName"));
         inventorySize = config.getInt("Settings.GUISize");
         enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
+
         for (String customItemString : config.getStringList("Settings.GUICustomization")) {
             int slot = 0;
+
             for (String option : customItemString.split(", ")) {
                 if (option.contains("Slot:")) {
                     option = option.replace("Slot:", "");
@@ -46,20 +48,26 @@ public class ShopManager {
                     break;
                 }
             }
+
             if (slot > inventorySize || slot <= 0) {
                 continue;
             }
+
             slot--;
             customizerItems.put(ItemBuilder.convertString(customItemString), slot);
         }
+
         for (Category category : ce.getCategories()) {
+
             if (category.isInGUI()) {
                 if (category.getSlot() > inventorySize) {
                     continue;
                 }
                 shopItems.put(category.getDisplayItem(), category.getSlot());
             }
+
             LostBook lostBook = category.getLostBook();
+
             if (lostBook.isInGUI()) {
                 if (lostBook.getSlot() > inventorySize) {
                     continue;
@@ -67,6 +75,7 @@ public class ShopManager {
                 shopItems.put(lostBook.getDisplayItem(), lostBook.getSlot());
             }
         }
+
         for (ShopOption option : ShopOption.values()) {
             if (option.isInGUI()) {
                 if (option.getSlot() > inventorySize) {
@@ -79,15 +88,19 @@ public class ShopManager {
     
     public Inventory getShopInventory(Player player) {
         HashMap<String, String> placeholders = new HashMap<>();
+
         for (Currency currency : Currency.values()) {
             placeholders.put("%" + currency.getName() + "%", CurrencyAPI.getCurrency(player, currency) + "");
         }
+
         Inventory inventory = Bukkit.createInventory(null, inventorySize, inventoryName);
+
         for (Entry<ItemBuilder, Integer> itemBuilders : customizerItems.entrySet()) {
             itemBuilders.getKey().setNamePlaceholders(placeholders)
             .setLorePlaceholders(placeholders);
             inventory.setItem(itemBuilders.getValue(), itemBuilders.getKey().build());
         }
+
         shopItems.keySet().forEach(itemBuilder -> inventory.setItem(shopItems.get(itemBuilder), itemBuilder.build()));
         return inventory;
     }

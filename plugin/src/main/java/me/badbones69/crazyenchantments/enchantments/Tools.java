@@ -60,14 +60,15 @@ public class Tools implements Listener {
                 updateEffects(player);
             }
         }.runTaskAsynchronously(ce.getPlugin());
+
         if (player.getGameMode() != GameMode.CREATIVE) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
-                //This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
+                // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
                 if ((Hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
-                //This checks if the block is a spawner and if so the spawner classes will take care of this.
-                //If Epic Spawners is enabled then telepathy will give the item from the API.
-                //Otherwise, CE will ignore the spawner in this event.
+                // This checks if the block is a spawner and if so the spawner classes will take care of this.
+                // If Epic Spawners is enabled then telepathy will give the item from the API.
+                // Otherwise, CE will ignore the spawner in this event.
                 (block.getType() == Material.SPAWNER)) {
                     return;
                 }
@@ -118,10 +119,12 @@ public class Tools implements Listener {
         int xp = 0;
 
         for (ItemStack drop : processInfo.getDrops()) {
+
             if (itemDrop == null) {
-                //Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
+                // Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
                 itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
             }
+
             if (!hasSilkTouch) {
                 if (hasFurnace && isOre) {
                     itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(0);
@@ -135,6 +138,7 @@ public class Tools implements Listener {
                     }
                 }
             }
+
             if (block.getType() == Material.SUGAR_CANE) {
                 sugarCaneBlocks = getSugarCaneBlocks(block);
                 drop.setAmount(sugarCaneBlocks.size());
@@ -144,12 +148,12 @@ public class Tools implements Listener {
         }
 
         if (itemDrop == null) {
-            //In case the drop is still null as no drops were found.
+            // In case the drop is still null as no drops were found.
             itemDrop = new ItemBuilder().setMaterial(block.getType());
         }
 
         if (block.getType() == Material.COCOA) {
-            //Coco drops 2-3 beans.
+            // Coco drops 2-3 beans.
             itemDrop.setMaterial(Material.COCOA_BEANS)
                     .setAmount(ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
         }
@@ -166,6 +170,7 @@ public class Tools implements Listener {
     private static List<Block> getSugarCaneBlocks(Block block) {
         List<Block> sugarCaneBlocks = new ArrayList<>();
         Block cane = block;
+
         while (cane.getType() == Material.SUGAR_CANE) {
             sugarCaneBlocks.add(cane);
             cane = cane.getLocation().add(0, 1, 0).getBlock();
@@ -177,6 +182,7 @@ public class Tools implements Listener {
     
     private void updateEffects(Player player) {
         ItemStack item = Methods.getItemInHand(player);
+
         if (ce.hasEnchantments(item)) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
@@ -193,6 +199,7 @@ public class Tools implements Listener {
                     }
                 }.runTask(ce.getPlugin());
             }
+
             if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
                 new BukkitRunnable() {
                     @Override
@@ -219,34 +226,20 @@ public class Tools implements Listener {
     }
     
     private static boolean hasOreXP(Block block) {
-        switch (block.getType()) {
-            case COAL_ORE:
-            case DIAMOND_ORE:
-            case EMERALD_ORE:
-            case LAPIS_ORE:
-            case REDSTONE_ORE:
-                return true;
-            default:
-                return false;
-        }
+        return switch (block.getType()) {
+            case COAL_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
+            default -> false;
+        };
     }
     
     private static boolean isOre(Block block) {
         if (block.getType() == Material.NETHER_QUARTZ_ORE) {
             return true;
         }
-        switch (block.getType()) {
-            case COAL_ORE:
-            case IRON_ORE:
-            case GOLD_ORE:
-            case DIAMOND_ORE:
-            case EMERALD_ORE:
-            case LAPIS_ORE:
-            case REDSTONE_ORE:
-                return true;
-            default:
-                return false;
-        }
+        return switch (block.getType()) {
+            case COAL_ORE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
+            default -> false;
+        };
     }
     
     private static ItemStack getOreDrop(Block block) {
@@ -255,33 +248,16 @@ public class Tools implements Listener {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
             switch (block.getType()) {
-                case COAL_ORE:
-                    dropItem.setMaterial(Material.COAL);
-                    break;
-                case IRON_ORE:
-                    dropItem.setMaterial(Material.IRON_INGOT);
-                    break;
-                case GOLD_ORE:
-                    dropItem.setMaterial(Material.GOLD_INGOT);
-                    break;
-                case DIAMOND_ORE:
-                    dropItem.setMaterial(Material.DIAMOND);
-                    break;
-                case EMERALD_ORE:
-                    dropItem.setMaterial(Material.EMERALD);
-                    break;
-                case LAPIS_ORE:
-                    dropItem.setMaterial(Material.LAPIS_LAZULI);
-                    break;
-                case REDSTONE_ORE:
-                    dropItem.setMaterial(Material.REDSTONE);
-                    break;
-                default:
-                    dropItem.setMaterial(Material.AIR);
-                    break;
+                case COAL_ORE -> dropItem.setMaterial(Material.COAL);
+                case IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
+                case GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
+                case DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
+                case EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
+                case LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
+                case REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
+                default -> dropItem.setMaterial(Material.AIR);
             }
         }
         return dropItem.build();
     }
-    
 }

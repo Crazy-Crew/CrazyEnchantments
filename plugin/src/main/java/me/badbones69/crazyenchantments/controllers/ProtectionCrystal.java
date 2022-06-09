@@ -63,7 +63,7 @@ public class ProtectionCrystal implements Listener {
      * @deprecated use {@link ProtectionCrystal#isProtectionSuccessful}.
      */
     @Deprecated
-    public static boolean isSuccessfull(Player player) {
+    public static boolean isSuccessful(Player player) {
         return isProtectionSuccessful(player);
     }
     
@@ -71,10 +71,13 @@ public class ProtectionCrystal implements Listener {
         if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) {
             return true;
         }
+
         FileConfiguration config = Files.CONFIG.getFile();
+
         if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")) {
             return Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
         }
+
         return true;
     }
     
@@ -91,43 +94,51 @@ public class ProtectionCrystal implements Listener {
     public void onInvClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         if (e.getInventory() != null) {
-            ItemStack crystalItem = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);// The Crystal.
-            ItemStack item = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);// The item your adding the protection to.
+            ItemStack crystalItem = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR); // The Crystal.
+            ItemStack item = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR); // The item your adding the protection to.
             if (item.getType() != Material.AIR && crystalItem.getType() != Material.AIR &&
-            //The item getting protected is not stacked.
+            // The item getting protected is not stacked.
             item.getAmount() == 1 &&
-            //Making sure they are not dropping crystals on top of other crystals.
+            // Making sure they are not dropping crystals on top of other crystals.
             !getCrystals().isSimilar(item) && crystalItem.isSimilar(getCrystals()) &&
-            //The item does not have protection on it.
+            // The item does not have protection on it.
             !isProtected(item)) {
-                //The crystal is not stacked.
+                // The crystal is not stacked.
+
                 if (crystalItem.getAmount() > 1) {
                     player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
                     return;
                 }
+
                 e.setCancelled(true);
                 player.setItemOnCursor(Methods.removeItem(crystalItem));
                 e.setCurrentItem(Methods.addLore(item, protectionString));
                 player.updateInventory();
             }
         }
-        
+
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(PlayerDeathEvent e) {
+
         if (e.getKeepInventory()) {
             return;
         }
+
         Player player = e.getEntity();
         List<ItemStack> savedItems = new ArrayList<>();
         List<ItemStack> droppedItems = new ArrayList<>();
+
         for (ItemStack item : e.getDrops()) {
+
             if (item != null) {
+
                 if (isProtected(item) && isProtectionSuccessful(player)) {
                     savedItems.add(item);
                     continue;
                 }
+
                 droppedItems.add(item);
             }
         }
@@ -140,7 +151,8 @@ public class ProtectionCrystal implements Listener {
     public void onPlayerRespawn(PlayerRespawnEvent e) {
         Player player = e.getPlayer();
         if (playersItems.containsKey(player.getUniqueId())) {
-            //If the config does not have the option then it will lose the protection by default.
+
+            // If the config does not have the option then it will lose the protection by default.
             if (Files.CONFIG.getFile().getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death", true)) {
                 for (ItemStack item : playersItems.get(player.getUniqueId())) {
                     player.getInventory().addItem(removeProtection(item));
@@ -161,5 +173,4 @@ public class ProtectionCrystal implements Listener {
             e.setCancelled(true);
         }
     }
-    
 }

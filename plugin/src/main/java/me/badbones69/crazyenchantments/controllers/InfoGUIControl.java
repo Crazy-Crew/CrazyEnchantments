@@ -18,14 +18,17 @@ public class InfoGUIControl implements Listener {
     public void infoClick(InventoryClickEvent e) {
         if (e.getInventory() != null && e.getView().getTitle().equals(manager.getInventoryName())) {
             e.setCancelled(true);
+
             if (e.getCurrentItem() != null) {
                 ItemStack item = e.getCurrentItem();
                 if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                     Player player = (Player) e.getWhoClicked();
+
                     if (item.isSimilar(manager.getBackLeftButton()) || item.isSimilar(manager.getBackRightButton())) {
                         manager.openInfoMenu(player);
                         return;
                     }
+
                     for (EnchantmentType enchantmentType : manager.getEnchantmentTypes()) {
                         if (item.isSimilar(enchantmentType.getDisplayItem())) {
                             manager.openInfoMenu(player, enchantmentType);

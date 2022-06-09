@@ -23,7 +23,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,9 +43,11 @@ public class Tinkerer implements Listener {
         slots.add(31);
         slots.add(40);
         slots.add(49);
+
         for (int i : slots) {
             inv.setItem(i, new ItemBuilder().setMaterial("WHITE_STAINED_GLASS_PANE").setName(" ").build());
         }
+
         inv.setItem(8, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
         .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
         .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
@@ -58,14 +59,17 @@ public class Tinkerer implements Listener {
         Player player = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && Methods.getItemInHand(player) != null) {
             ItemStack item = Methods.getItemInHand(player);
+
             if (item.getType() == new ItemBuilder().setMaterial(Files.TINKER.getFile().getString("Settings.BottleOptions.Item")).getMaterial() &&
             item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().hasDisplayName() &&
             item.getItemMeta().getDisplayName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.BottleOptions.Name")))) {
                 e.setCancelled(true);
                 Methods.setItemInHand(player, Methods.removeItem(item));
+
                 if (Currency.isCurrency(Files.TINKER.getFile().getString("Settings.Currency"))) {
                     CurrencyAPI.giveCurrency(player, Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")), getXP(item));
                 }
+
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             }
         }
@@ -78,6 +82,7 @@ public class Tinkerer implements Listener {
         if (inv != null && e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
             e.setCancelled(true);
             ItemStack current = e.getCurrentItem();
+
             if (current != null && current.getType() != Material.AIR && current.hasItemMeta() && (current.getItemMeta().hasLore() || current.getItemMeta().hasDisplayName() || current.getItemMeta().hasEnchants())) {
                 // Recycling things
                 if (current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
@@ -100,32 +105,39 @@ public class Tinkerer implements Listener {
                         e.getInventory().setItem(slot, new ItemStack(Material.AIR));
                         e.getInventory().setItem(getSlot().get(slot), new ItemStack(Material.AIR));
                     }
+
                     player.closeInventory();
+
                     if (total != 0) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give " + player.getName() + " " + total);
                     }
+
                     if (toggle) {
                         player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
                     }
+
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
                     return;
                 }
-                if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) {// Adding/Taking Items
-                    if (current.getType() == ce.getEnchantmentBookItem().getType()) {// Adding a book
+
+                if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) { //Adding/Taking Items
+                    if (current.getType() == ce.getEnchantmentBookItem().getType()) {//Adding a book
                         boolean toggle = false;
                         String enchant = "";
+
                         for (CEnchantment en : ce.getRegisteredEnchantments()) {
                             if (current.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
                                 enchant = en.getName();
                                 toggle = true;
                             }
                         }
+
                         if (toggle) {
-                            if (inTinker(e.getRawSlot())) {// Clicking in the Tinkers
+                            if (inTinker(e.getRawSlot())) { // Clicking in the Tinkers
                                 e.setCurrentItem(new ItemStack(Material.AIR));
                                 player.getInventory().addItem(current);
                                 inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
-                            } else {// Clicking in their inventory
+                            } else { // Clicking in their inventory
                                 if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
                                     player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
                                     return;
@@ -137,23 +149,29 @@ public class Tinkerer implements Listener {
                             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                         }
                     }
-                    if (getTotalXP(current) > 0 && current.getType() != ce.getEnchantmentBookItem().getType()) {// Adding an item
-                        if (inTinker(e.getRawSlot())) {// Clicking in the Tinkers
+
+                    if (getTotalXP(current) > 0 && current.getType() != ce.getEnchantmentBookItem().getType()) { //Adding an item
+                        if (inTinker(e.getRawSlot())) { // Clicking in the Tinkers
+
                             if (getSlot().containsKey(e.getRawSlot())) {
                                 e.setCurrentItem(new ItemStack(Material.AIR));
                                 player.getInventory().addItem(current);
                                 inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
                                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                             }
-                        } else {// Clicking in their inventory
+
+                        } else { // Clicking in their inventory
+
                             if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
                                 player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
                                 return;
                             }
+
                             if (current.getAmount() > 1) {
                                 player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
                                 return;
                             }
+
                             e.setCurrentItem(new ItemStack(Material.AIR));
                             inv.setItem(getSlot().get(inv.firstEmpty()), getBottle(current));
                             inv.setItem(inv.firstEmpty(), current);
@@ -230,22 +248,25 @@ public class Tinkerer implements Listener {
     }
     
     private boolean inTinker(int slot) {
-        //The last slot in the tinker is 54
+        // The last slot in the tinker is 54
         return slot < 54;
     }
     
     private int getTotalXP(ItemStack item) {
         int total = 0;
+
         if (ce.hasEnchantments(item)) {
             for (CEnchantment enchantment : ce.getEnchantmentsOnItem(item)) {
                 total += Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items");
             }
         }
+
         if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
             for (Enchantment enchantment : item.getEnchantments().keySet()) {
                 total += Files.TINKER.getFile().getInt("Tinker.Vanilla-Enchantments." + enchantment.getName());
             }
         }
+
         return total;
     }
     
@@ -255,19 +276,21 @@ public class Tinkerer implements Listener {
         for (String l : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
             l = Methods.color(l);
             String lo = item.getItemMeta().getLore().get(i);
+
             if (l.contains("%Total%")) {
                 String[] b = l.split("%Total%");
                 if (b.length >= 1) arg = lo.replace(b[0], "");
                 if (b.length >= 2) arg = arg.replace(b[1], "");
             }
+
             if (l.contains("%total%")) {
                 String[] b = l.split("%total%");
                 if (b.length >= 1) arg = lo.replace(b[0], "");
                 if (b.length >= 2) arg = arg.replace(b[1], "");
             }
+
             i++;
         }
         return Integer.parseInt(arg);
     }
-    
 }

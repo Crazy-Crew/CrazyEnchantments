@@ -1,6 +1,7 @@
 package me.badbones69.crazyenchantments.api.objects;
 
 import me.badbones69.crazyenchantments.api.CrazyManager;
+import me.badbones69.crazyenchantments.api.PluginSupport;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.managers.AllyManager;
 import org.bukkit.Location;
@@ -18,7 +19,7 @@ public class AllyMob {
     private long spawnTime;
     private BukkitTask runnable;
     private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.getInstance();
+    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
     private AllyMob instance;
     private static AllyManager allyManager = AllyManager.getInstance();
     

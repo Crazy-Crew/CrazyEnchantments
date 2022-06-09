@@ -27,7 +27,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.HashMap;
 
 public class EnchantmentControl implements Listener {
@@ -51,12 +50,14 @@ public class EnchantmentControl implements Listener {
                         int bookLevel = ceBook.getLevel();
                         boolean hasEnchantment = false;
                         boolean isLowerLevel = false;
+
                         if (ce.hasEnchantment(item, enchantment)) {
                             hasEnchantment = true;
                             if (ce.getLevel(item, enchantment) < bookLevel) {
                                 isLowerLevel = true;
                             }
                         }
+
                         if (hasEnchantment) {
                             if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
                                 e.setCancelled(true);
@@ -66,6 +67,7 @@ public class EnchantmentControl implements Listener {
                                     if (success || player.getGameMode() == GameMode.CREATIVE) {
                                         BookFailEvent bookApplyEvent = new BookFailEvent(player, item, ceBook);
                                         Bukkit.getPluginManager().callEvent(bookApplyEvent);
+
                                         if (!bookApplyEvent.isCancelled()) {
                                             e.setCurrentItem(ce.addEnchantment(item, enchantment, bookLevel));
                                             player.setItemOnCursor(new ItemStack(Material.AIR));
@@ -79,6 +81,7 @@ public class EnchantmentControl implements Listener {
                                     } else if (destroy) {
                                         BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, item, ceBook);
                                         Bukkit.getPluginManager().callEvent(bookDestroyEvent);
+
                                         if (!bookDestroyEvent.isCancelled()) {
                                             if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
                                                 if (ce.hasWhiteScrollProtection(item)) {
@@ -113,6 +116,7 @@ public class EnchantmentControl implements Listener {
                                     } else {
                                         BookFailEvent bookFailEvent = new BookFailEvent(player, item, ceBook);
                                         Bukkit.getPluginManager().callEvent(bookFailEvent);
+
                                         if (!bookFailEvent.isCancelled()) {
                                             player.setItemOnCursor(new ItemStack(Material.AIR));
                                             player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
@@ -124,11 +128,14 @@ public class EnchantmentControl implements Listener {
                             }
                             return;
                         }
+
                         if (!ce.canAddEnchantment(player, item)) {
                             player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
                             return;
                         }
+
                         e.setCancelled(true);
+
                         if (success || player.getGameMode() == GameMode.CREATIVE) {
                             ItemStack newItem = ce.addEnchantment(item, enchantment, ceBook.getLevel());
                             ItemStack oldItem = new ItemStack(Material.AIR);
@@ -142,6 +149,7 @@ public class EnchantmentControl implements Listener {
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                             return;
                         }
+
                         if (destroy) {
                             if (ce.hasWhiteScrollProtection(item)) {
                                 e.setCurrentItem(ce.removeWhiteScrollProtection(item));
@@ -164,6 +172,7 @@ public class EnchantmentControl implements Listener {
                             return;
                         }
                     }
+
                     player.sendMessage(Messages.BOOK_FAILED.getMessage());
                     player.setItemOnCursor(new ItemStack(Material.AIR));
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
@@ -206,5 +215,4 @@ public class EnchantmentControl implements Listener {
             }.runTaskLater(ce.getPlugin(), 5);
         }
     }
-    
 }

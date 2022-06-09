@@ -26,7 +26,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +42,10 @@ public class SignControl implements Listener {
         Location location = e.getClickedBlock().getLocation();
         Player player = e.getPlayer();
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
         if (e.getClickedBlock().getState() instanceof Sign) {
             FileConfiguration config = Files.CONFIG.getFile();
+
             for (String l : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
                 String type = Files.SIGNS.getFile().getString("Locations." + l + ".Type");
                 World world = Bukkit.getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
@@ -52,11 +53,13 @@ public class SignControl implements Listener {
                 int y = Files.SIGNS.getFile().getInt("Locations." + l + ".Y");
                 int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
                 Location loc = new Location(world, x, y, z);
+
                 if (location.equals(loc)) {
                     if (Methods.isInventoryFull(player)) {
                         player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                         return;
                     }
+
                     List<String> options = new ArrayList<>();
                     options.add("ProtectionCrystal");
                     options.add("Scrambler");
@@ -65,6 +68,7 @@ public class SignControl implements Listener {
                     options.add("BlackScroll");
                     options.add("WhiteScroll");
                     options.add("TransmogScroll");
+
                     for (String o : options) {
                         if (o.equalsIgnoreCase(type)) {
                             if (player.getGameMode() != GameMode.CREATIVE && Currency.isCurrency(config.getString("Settings.Costs." + o + ".Currency"))) {
@@ -79,49 +83,37 @@ public class SignControl implements Listener {
                                         placeholders.put("%Money_Needed%", needed);
                                         placeholders.put("%XP%", needed);
                                         switch (currency) {
-                                            case VAULT:
-                                                player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                                break;
-                                            case XP_LEVEL:
-                                                player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                                break;
-                                            case XP_TOTAL:
-                                                player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                                break;
+                                            case VAULT ->
+                                                    player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+                                            case XP_LEVEL ->
+                                                    player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+                                            case XP_TOTAL ->
+                                                    player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
                                         }
                                     }
                                     return;
                                 }
                             }
+
                             if (config.contains("Settings.SignOptions." + o + "Style.Buy-Message")) {
                                 player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions." + o + "Style.Buy-Message")));
                             }
+
                             switch (o) {
-                                case "ProtectionCrystal":
-                                    player.getInventory().addItem(ProtectionCrystal.getCrystals());
-                                    break;
-                                case "Scrambler":
-                                    player.getInventory().addItem(Scrambler.getScramblers());
-                                    break;
-                                case "DestroyDust":
-                                    player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
-                                    break;
-                                case "SuccessDust":
-                                    player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
-                                    break;
-                                case "BlackScroll":
-                                    player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
-                                    break;
-                                case "WhiteScroll":
-                                    player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
-                                    break;
-                                case "TransmogScroll":
-                                    player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
-                                    break;
+                                case "ProtectionCrystal" ->
+                                        player.getInventory().addItem(ProtectionCrystal.getCrystals());
+                                case "Scrambler" -> player.getInventory().addItem(Scrambler.getScramblers());
+                                case "DestroyDust" -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
+                                case "SuccessDust" -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
+                                case "BlackScroll" -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
+                                case "WhiteScroll" -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
+                                case "TransmogScroll" ->
+                                        player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
                             }
                             return;
                         }
                     }
+
                     Category category = ce.getCategory(type);
                     if (category != null) {
                         if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
@@ -132,28 +124,29 @@ public class SignControl implements Listener {
                                 HashMap<String, String> placeholders = new HashMap<>();
                                 placeholders.put("%Money_Needed%", needed);
                                 placeholders.put("%XP%", needed);
+
                                 switch (category.getCurrency()) {
-                                    case VAULT:
-                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                        break;
-                                    case XP_LEVEL:
-                                        player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                        break;
-                                    case XP_TOTAL:
-                                        player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                        break;
+                                    case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+                                    case XP_LEVEL ->
+                                            player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+                                    case XP_TOTAL ->
+                                            player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
                                 }
+
                                 return;
                             }
                         }
                         CEBook book = ce.getRandomEnchantmentBook(category);
+
                         if (book != null) {
                             ItemBuilder itemBuilder = book.getItemBuilder();
+
                             if (config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")) {
                                 player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
                                 .replace("%BookName%", itemBuilder.getName()).replace("%bookname%", itemBuilder.getName())
                                 .replace("%Category%", category.getName()).replace("%category%", category.getName())));
                             }
+
                             BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
                             Bukkit.getPluginManager().callEvent(event);
                             player.getInventory().addItem(itemBuilder.build());
@@ -194,6 +187,7 @@ public class SignControl implements Listener {
         Location loc = e.getBlock().getLocation();
         FileConfiguration signs = Files.SIGNS.getFile();
         String id = new Random().nextInt(Integer.MAX_VALUE) + "";
+
         for (int i = 0; i < 200; i++) {
             if (signs.contains("Locations." + id)) {
                 id = new Random().nextInt(Integer.MAX_VALUE) + "";
@@ -201,8 +195,10 @@ public class SignControl implements Listener {
                 break;
             }
         }
+
         String line1 = e.getLine(0);
         String line2 = e.getLine(1);
+
         if (Methods.hasPermission(player, "sign", false) && line1.equalsIgnoreCase("{CrazyEnchant}")) {
             for (Category category : ce.getCategories()) {
                 if (line2.equalsIgnoreCase("{" + category.getName() + "}")) {
@@ -219,6 +215,7 @@ public class SignControl implements Listener {
                     return;
                 }
             }
+
             HashMap<String, String> types = new HashMap<>();
             types.put("Crystal", "ProtectionCrystal");
             types.put("Scrambler", "Scrambler");
@@ -227,6 +224,7 @@ public class SignControl implements Listener {
             types.put("BlackScroll", "BlackScroll");
             types.put("WhiteScroll", "WhiteScroll");
             types.put("TransmogScroll", "TransmogScroll");
+
             for (Entry<String, String> type : types.entrySet()) {
                 if (line2.equalsIgnoreCase("{" + type.getKey() + "}")) {
                     e.setLine(0, Methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line1")));
@@ -251,5 +249,4 @@ public class SignControl implements Listener {
         .replace("%cost%", category.getCost() + "").replace("%Cost%", category.getCost() + "")
         .replace("%xp%", category.getCost() + "").replace("%XP%", category.getCost() + ""));
     }
-    
 }
