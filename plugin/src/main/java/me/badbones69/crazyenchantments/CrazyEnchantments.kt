@@ -71,7 +71,7 @@ class CrazyEnchantments : JavaPlugin(), Listener {
             Hoes(),
             Helmets(),
             PickAxes(),
-            Boots(),
+            Boots,
             Swords(),
             Armor().also { armor = it },
             AllyEnchantments()
