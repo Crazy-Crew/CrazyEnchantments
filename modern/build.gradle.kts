@@ -18,5 +18,9 @@ dependencies {
         exclude("com.destroystokyo.paper", "paper-api")
     }
 
+    compileOnly("uk.antiperson.stackmob:StackMob:5.5.3")
+
+    compileOnly("me.vagdedes:SpartanAPI:9.1")
+
     compileOnly(project(":api"))
 }
