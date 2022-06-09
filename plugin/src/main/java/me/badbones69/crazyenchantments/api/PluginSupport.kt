@@ -20,8 +20,8 @@ object PluginSupport {
         return SupportedPlugins.PLOTSQUARED.isPluginLoaded(getPlugin()) && plotSquaredVersion.inTerritory(player)
     }
 
-    fun isFriendly(player: Player, other: Player) {
-
+    fun isFriendly(entity: Entity, other: Entity): Boolean {
+        return true
     }
 
     fun isVanished(player: Player): Boolean {
@@ -43,17 +43,19 @@ object PluginSupport {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || worldGuardVersion.allowsExplosions(location)
     }
 
-    fun inWingsRegion(player: Player) {
+    fun inWingsRegion(player: Player): Boolean {
 
-        if (!SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) && !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin())) return
+        if (!SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) && !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin())) return true
 
         wings.regions.forEach {
-            if (worldGuardVersion.inRegion(it, player.location)) return
+            if (worldGuardVersion.inRegion(it, player.location)) return true
 
-            if (wings.canOwnersFly() && worldGuardVersion.isOwner(player)) return
+            if (wings.canOwnersFly() && worldGuardVersion.isOwner(player)) return true
 
-            if (wings.canMembersFly() && worldGuardVersion.isMember(player)) return
+            if (wings.canMembersFly() && worldGuardVersion.isMember(player)) return true
         }
+
+        return false
     }
 
     fun noStack(entity: Entity) {
@@ -70,15 +72,19 @@ object PluginSupport {
 
         // Anti Cheats
         SPARTAN("Spartan"),
+        VULCAN("Vulcan"),
 
         // Faction Plugins
         FACTIONSUUID("FactionsUUID"),
+
+        // Not yet developed by me.
         FACTIONSX("FactionsX"),
 
         // Region Protection
         WORLDGUARD("WorldGuard"),
         WORLDEDIT("WorldEdit"),
 
+        TOWNYADVANCED("TownyAdvanced"),
         PLOTSQUARED("PlotSquared");
 
         fun getName() = pluginName
