@@ -49,8 +49,7 @@ public class Swords implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (!e.isCancelled() && !ce.isIgnoredEvent(e) && !ce.isIgnoredUUID(e.getDamager().getUniqueId()) && !pluginSupport.isFriendly(e.getDamager(), e.getEntity())) {
-            if (ce.isBreakRageOnDamageOn() && e.getEntity() instanceof Player) {
-                Player player = (Player) e.getEntity();
+            if (ce.isBreakRageOnDamageOn() && e.getEntity() instanceof Player player) {
                 CEPlayer cePlayer = ce.getCEPlayer(player);
                 if (cePlayer != null) {
                     RageBreakEvent event = new RageBreakEvent(player, e.getDamager(), Methods.getItemInHand(player));
@@ -188,8 +187,8 @@ public class Swords implements Listener {
                             }.runTaskLater(ce.getPlugin(), 80));
                         }
                     }
-                    if (en instanceof Player && enchantments.contains(CEnchantments.SKILLSWIPE.getEnchantment())) {
-                        Player player = (Player) en;
+
+                    if (en instanceof Player player && enchantments.contains(CEnchantments.SKILLSWIPE.getEnchantment())) {
                         int amount = 4 + ce.getLevel(item, CEnchantments.SKILLSWIPE);
                         if (player.getTotalExperience() > 0) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.SKILLSWIPE, item);

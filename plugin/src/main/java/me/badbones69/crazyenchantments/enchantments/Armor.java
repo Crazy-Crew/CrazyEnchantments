@@ -112,9 +112,7 @@ public class Armor implements Listener {
             @Override
             public void run() {
                 if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
-                if (e.getDamager() instanceof LivingEntity && e.getEntity() instanceof Player) {
-                    final Player player = (Player) e.getEntity();
-                    final LivingEntity damager = (LivingEntity) e.getDamager();
+                if (e.getDamager() instanceof final LivingEntity damager && e.getEntity() instanceof final Player player) {
                     for (ItemStack armor : player.getEquipment().getArmorContents()) {
                         if (ce.hasEnchantments(armor)) {
                             for (ArmorEnchantment armorEnchantment : ce.getArmorManager().getArmorEnchantments()) {

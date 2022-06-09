@@ -31,10 +31,8 @@ public class Axes implements Listener {
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (e.isCancelled() || ce.isIgnoredEvent(e)) return;
         if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
-        if (e.getEntity() instanceof LivingEntity) {
-            LivingEntity en = (LivingEntity) e.getEntity();
-            if (e.getDamager() instanceof Player) {
-                Player damager = (Player) e.getDamager();
+        if (e.getEntity() instanceof LivingEntity en) {
+            if (e.getDamager() instanceof Player damager) {
                 ItemStack item = Methods.getItemInHand(damager);
                 if (!e.getEntity().isDead()) {
                     List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);

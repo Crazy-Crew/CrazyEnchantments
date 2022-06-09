@@ -31,10 +31,7 @@ public class AllyEnchantments implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAllySpawn(EntityDamageByEntityEvent e) {
         if (!e.isCancelled() && !ce.isIgnoredEvent(e)) {
-            Calendar rightNow = Calendar.getInstance();
-            if (e.getEntity() instanceof Player && e.getDamager() instanceof LivingEntity) {// Player gets attacked
-                Player player = (Player) e.getEntity();
-                LivingEntity enemy = (LivingEntity) e.getDamager();
+            if (e.getEntity() instanceof Player player && e.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
                 if (!inCoolDown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when getting attacked

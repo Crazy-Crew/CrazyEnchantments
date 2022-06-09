@@ -30,8 +30,7 @@ public class Helmets implements Listener {
                     ArrayList<Player> players = new ArrayList<>();
 
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-                        if (entity instanceof Player) {
-                            Player other = (Player) entity;
+                        if (entity instanceof Player other) {
                             if (pluginSupport.isFriendly(player, other)) {
                                 players.add(other);
                             }

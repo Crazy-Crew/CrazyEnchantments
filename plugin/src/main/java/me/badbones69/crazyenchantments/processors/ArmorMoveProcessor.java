@@ -91,8 +91,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 final int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
                 syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-                        if (entity instanceof Player) {
-                            Player other = (Player) entity;
+                        if (entity instanceof Player other) {
                             if (pluginSupport.isFriendly(player, other)) {
                                 AngelUseEvent event = new AngelUseEvent(player, armor);
                                 Bukkit.getPluginManager().callEvent(event);

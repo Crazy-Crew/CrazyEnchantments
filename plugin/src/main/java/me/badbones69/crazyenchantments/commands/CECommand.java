@@ -153,6 +153,7 @@ public class CECommand implements CommandExecutor {
                         } else {
                             EnchantmentType enchantmentType = ce.getInfoMenuManager().getFromName(args[1]);
                             if (enchantmentType != null) {
+                                assert sender instanceof Player;
                                 ce.getInfoMenuManager().openInfoMenu((Player) sender, enchantmentType);
                                 return true;
                             }

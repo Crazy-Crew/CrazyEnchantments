@@ -533,8 +533,7 @@ public class Methods {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
                     e.remove();
                 } else {
-                    if (e instanceof LivingEntity) {
-                        LivingEntity en = (LivingEntity) e;
+                    if (e instanceof LivingEntity en) {
                         if (!pluginSupport.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);

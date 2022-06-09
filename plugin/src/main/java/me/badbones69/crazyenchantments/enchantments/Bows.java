@@ -46,8 +46,7 @@ public class Bows implements Listener {
     public void onBowShoot(final EntityShootBowEvent e) {
         if (e.isCancelled() || ce.isIgnoredEvent(e) || ce.isIgnoredUUID(e.getEntity().getUniqueId())) return;
         ItemStack bow = e.getBow();
-        if (e.getProjectile() instanceof Arrow && ce.hasEnchantments(bow)) {
-            Arrow arrow = (Arrow) e.getProjectile();
+        if (e.getProjectile() instanceof Arrow arrow && ce.hasEnchantments(bow)) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(bow);
             enchantedArrows.add(new EnchantedArrow(arrow, e.getEntity(), bow, enchantments));
             if (CEnchantments.MULTIARROW.isActivated() && ce.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
@@ -205,8 +204,7 @@ public class Bows implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArrowDamage(EntityDamageByEntityEvent e) {
-        if (!ce.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity) {
-            LivingEntity entity = (LivingEntity) e.getEntity();
+        if (!ce.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity entity) {
             EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
             if (arrow != null) {
                 ItemStack bow = arrow.getBow();
