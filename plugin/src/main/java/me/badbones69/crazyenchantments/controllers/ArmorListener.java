@@ -84,10 +84,7 @@ public class ArmorListener implements Listener {
         if (shift) {
             newArmorType = ArmorType.matchType(e.getCurrentItem());
             if (newArmorType != null) {
-                boolean equipping = true;
-                if (e.getRawSlot() == newArmorType.getSlot()) {
-                    equipping = false;
-                }
+                boolean equipping = e.getRawSlot() != newArmorType.getSlot();
                 if (newArmorType.equals(ArmorType.HELMET) && (equipping == (e.getWhoClicked().getInventory().getHelmet() == null)) ||
                 newArmorType.equals(ArmorType.CHESTPLATE) && (equipping == (e.getWhoClicked().getInventory().getChestplate() == null)) ||
                 newArmorType.equals(ArmorType.LEGGINGS) && (equipping == (e.getWhoClicked().getInventory().getLeggings() == null)) ||
@@ -161,7 +158,6 @@ public class ArmorListener implements Listener {
                         if (e.getSlot() == ArmorType.BOOTS.getSlot()) {
                             I = e.getWhoClicked().getEquipment().getBoots();
                         }
-
                     }
 
                     if (I == null) {
@@ -226,6 +222,7 @@ public class ArmorListener implements Listener {
             if (e.isCancelled()) {
                 return;
             }
+
             final Player player = e.getPlayer();
 
             if (e.getClickedBlock() != null && e.getAction() == Action.RIGHT_CLICK_BLOCK) { // Having both of these checks is useless, might as well do it though.

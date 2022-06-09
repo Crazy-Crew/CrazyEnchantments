@@ -4,6 +4,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.FileManager.Files;
 import me.badbones69.crazyenchantments.api.PluginSupport;
+import me.badbones69.crazyenchantments.api.economy.Currency;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import me.badbones69.crazyenchantments.controllers.FireworkDamage;
@@ -555,6 +556,19 @@ public class Methods {
                     }
                 }
             }
+        }
+    }
+
+    public static void switchCurrency(Player player, Currency option, String one, String two, String cost) {
+        HashMap<String, String> placeholders = new HashMap<>();
+
+        placeholders.put(one, cost);
+        placeholders.put(two, cost);
+
+        switch (option) {
+            case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+            case XP_LEVEL -> player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+            case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
         }
     }
     

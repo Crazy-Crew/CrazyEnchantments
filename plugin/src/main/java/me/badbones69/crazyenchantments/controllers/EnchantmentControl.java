@@ -32,9 +32,7 @@ import java.util.HashMap;
 public class EnchantmentControl implements Listener {
     
     private static CrazyManager ce = CrazyManager.getInstance();
-    
-    private static HashMap<String, String> enchants = new HashMap<>();
-    
+
     @EventHandler
     public void addEnchantment(InventoryClickEvent e) {
         if (e.getCursor() != null && e.getCurrentItem() != null) {

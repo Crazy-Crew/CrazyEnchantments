@@ -166,10 +166,12 @@ public class DustControl implements Listener {
                     if (Methods.hasArgument("%success_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
                         int total = Methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100);
                         if (total >= 100) return;
+
                         if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
                             player.sendMessage(Methods.getPrefix() + Methods.color("&cPlease unstack the dust for them to work."));
                             return;
                         }
+
                         per += total;
                         if (per < 0) per = 0;
                         if (per > 100) per = 100;

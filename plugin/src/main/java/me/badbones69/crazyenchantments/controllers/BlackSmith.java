@@ -20,7 +20,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class BlackSmith implements Listener {
@@ -98,17 +97,7 @@ public class BlackSmith implements Listener {
                                     } else {
                                         String needed = (resultItem.getCost() - CurrencyAPI.getCurrency(player, currency)) + "";
                                         if (currency != null) {
-                                            HashMap<String, String> placeholders = new HashMap<>();
-                                            placeholders.put("%Money_Needed%", needed);
-                                            placeholders.put("%XP%", needed);
-                                            switch (currency) {
-                                                case VAULT ->
-                                                        player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                                case XP_LEVEL ->
-                                                        player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                                case XP_TOTAL ->
-                                                        player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                            }
+                                            Methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
                                         }
                                         return;
                                     }

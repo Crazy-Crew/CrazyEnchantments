@@ -78,18 +78,9 @@ public class SignControl implements Listener {
                                     CurrencyAPI.takeCurrency(player, currency, cost);
                                 } else {
                                     String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+
                                     if (currency != null) {
-                                        HashMap<String, String> placeholders = new HashMap<>();
-                                        placeholders.put("%Money_Needed%", needed);
-                                        placeholders.put("%XP%", needed);
-                                        switch (currency) {
-                                            case VAULT ->
-                                                    player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                            case XP_LEVEL ->
-                                                    player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                            case XP_TOTAL ->
-                                                    player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                        }
+                                        Methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
                                     }
                                     return;
                                 }
@@ -100,15 +91,13 @@ public class SignControl implements Listener {
                             }
 
                             switch (o) {
-                                case "ProtectionCrystal" ->
-                                        player.getInventory().addItem(ProtectionCrystal.getCrystals());
+                                case "ProtectionCrystal" -> player.getInventory().addItem(ProtectionCrystal.getCrystals());
                                 case "Scrambler" -> player.getInventory().addItem(Scrambler.getScramblers());
                                 case "DestroyDust" -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
                                 case "SuccessDust" -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                                 case "BlackScroll" -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
                                 case "WhiteScroll" -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
-                                case "TransmogScroll" ->
-                                        player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
+                                case "TransmogScroll" -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
                             }
                             return;
                         }
@@ -121,18 +110,7 @@ public class SignControl implements Listener {
                                 CurrencyAPI.takeCurrency(player, category);
                             } else {
                                 String needed = (category.getCost() - CurrencyAPI.getCurrency(player, category.getCurrency())) + "";
-                                HashMap<String, String> placeholders = new HashMap<>();
-                                placeholders.put("%Money_Needed%", needed);
-                                placeholders.put("%XP%", needed);
-
-                                switch (category.getCurrency()) {
-                                    case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                    case XP_LEVEL ->
-                                            player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                    case XP_TOTAL ->
-                                            player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                }
-
+                                Methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                 return;
                             }
                         }

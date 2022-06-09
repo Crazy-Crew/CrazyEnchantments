@@ -25,7 +25,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import java.util.HashMap;
 
 public class ShopControl implements Listener {
     
@@ -59,16 +58,7 @@ public class ShopControl implements Listener {
                                 CurrencyAPI.takeCurrency(player, category);
                             } else {
                                 String needed = (category.getCost() - CurrencyAPI.getCurrency(player, category.getCurrency())) + "";
-                                HashMap<String, String> placeholders = new HashMap<>();
-                                placeholders.put("%Money_Needed%", needed);
-                                placeholders.put("%XP%", needed);
-                                switch (category.getCurrency()) {
-                                    case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                    case XP_LEVEL ->
-                                            player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                    case XP_TOTAL ->
-                                            player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                }
+                                Methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                 return;
                             }
                         }
@@ -99,16 +89,7 @@ public class ShopControl implements Listener {
                                 CurrencyAPI.takeCurrency(player, lostBook);
                             } else {
                                 String needed = (lostBook.getCost() - CurrencyAPI.getCurrency(player, lostBook.getCurrency())) + "";
-                                HashMap<String, String> placeholders = new HashMap<>();
-                                placeholders.put("%Money_Needed%", needed);
-                                placeholders.put("%XP%", needed);
-                                switch (lostBook.getCurrency()) {
-                                    case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                    case XP_LEVEL ->
-                                            player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                    case XP_TOTAL ->
-                                            player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                }
+                                Methods.switchCurrency(player, lostBook.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                 return;
                             }
                         }
@@ -131,17 +112,7 @@ public class ShopControl implements Listener {
                                     CurrencyAPI.takeCurrency(player, option);
                                 } else {
                                     String needed = (option.getCost() - CurrencyAPI.getCurrency(player, option.getCurrency())) + "";
-                                    HashMap<String, String> placeholders = new HashMap<>();
-                                    placeholders.put("%Money_Needed%", needed);
-                                    placeholders.put("%XP%", needed);
-                                    switch (option.getCurrency()) {
-                                        case VAULT ->
-                                                player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-                                        case XP_LEVEL ->
-                                                player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-                                        case XP_TOTAL ->
-                                                player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
-                                    }
+                                    Methods.switchCurrency(player, option.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                     return;
                                 }
                             }
