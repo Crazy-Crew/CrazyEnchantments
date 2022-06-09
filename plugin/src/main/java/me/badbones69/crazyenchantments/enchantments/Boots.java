@@ -4,8 +4,6 @@ import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.CEnchantments;
 import me.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import me.badbones69.crazyenchantments.api.managers.WingsManager;
-import me.badbones69.crazyenchantments.api.PluginSupport;
-import me.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.GameMode;
 import org.bukkit.Location;

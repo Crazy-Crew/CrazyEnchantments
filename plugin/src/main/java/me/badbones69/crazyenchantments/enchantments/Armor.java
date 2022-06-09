@@ -10,8 +10,6 @@ import me.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import me.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import me.badbones69.crazyenchantments.api.objects.PotionEffects;
 import me.badbones69.crazyenchantments.controllers.ProtectionCrystal;
-import me.badbones69.crazyenchantments.api.PluginSupport;
-import me.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import me.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import me.badbones69.crazyenchantments.processors.Processor;
 import org.bukkit.*;

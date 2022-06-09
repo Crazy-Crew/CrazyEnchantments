@@ -15,7 +15,6 @@ import me.badbones69.crazyenchantments.controllers.Scrambler;
 import me.badbones69.crazyenchantments.controllers.ScrollControl;
 import me.badbones69.crazyenchantments.enchantments.Boots;
 import me.badbones69.crazyenchantments.multisupport.*;
-import me.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredSupport;
 import me.badbones69.crazyenchantments.multisupport.plotsquared.PlotSquaredVersion;
 import me.badbones69.crazyenchantments.multisupport.worldguard.WorldGuardVersion;

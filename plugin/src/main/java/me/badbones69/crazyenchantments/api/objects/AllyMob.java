@@ -3,7 +3,6 @@ package me.badbones69.crazyenchantments.api.objects;
 import me.badbones69.crazyenchantments.api.CrazyManager;
 import me.badbones69.crazyenchantments.api.enums.Messages;
 import me.badbones69.crazyenchantments.api.managers.AllyManager;
-import me.badbones69.crazyenchantments.api.PluginSupport;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
