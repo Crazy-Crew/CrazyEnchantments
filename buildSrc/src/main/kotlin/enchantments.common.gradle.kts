@@ -14,6 +14,9 @@ repositories {
     // Silk Spawners API
     maven("https://repo.dustplanet.de/artifactory/libs-release-local")
 
+    // FactionsUUID
+    maven("https://ci.ender.zone/plugin/repository/everything/")
+
     // NBT API | StackMob API
     maven("https://repo.codemc.org/repository/maven-public/")
 
