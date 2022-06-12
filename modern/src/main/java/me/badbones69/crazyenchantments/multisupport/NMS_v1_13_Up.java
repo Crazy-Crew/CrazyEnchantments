@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport;
+package com.badbones69.crazyenchantments.multisupport;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;

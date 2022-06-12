@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport.plotsquared;
+package com.badbones69.crazyenchantments.multisupport.plotsquared;
 
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;

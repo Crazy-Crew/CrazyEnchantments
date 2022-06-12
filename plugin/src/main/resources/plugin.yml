@@ -1,7 +1,7 @@
 name: CrazyEnchantments
 author: BadBones69
 api-version: 1.13
-main: me.badbones69.crazyenchantments.CrazyEnchantments
+main: com.badbones69.crazyenchantments.CrazyEnchantments
 version: 1.9-Dev-Build-v13
 softdepend: [ Vault, Factions, Towny, WorldGuard, WorldEdit, SilkSpawners, GriefPrevention, Spartan, CoreProtect, StackMob]
 website: https://www.spigotmc.org/resources/16470/

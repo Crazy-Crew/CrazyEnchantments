@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport.factions;
+package com.badbones69.crazyenchantments.multisupport.factions;
 
 import com.massivecraft.factions.*;
 import org.bukkit.block.Block;

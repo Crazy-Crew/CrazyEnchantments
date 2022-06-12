@@ -15,7 +15,7 @@ tasks {
     shadowJar {
         archiveFileName.set("Crazy-Enchantments-[v${rootProject.version}].jar")
 
-        val path = "me.badbones69.crazyenchantments.libs"
+        val path = "com.badbones69.crazyenchantments.libs"
 
         relocate("de.tr7zw", path)
     }

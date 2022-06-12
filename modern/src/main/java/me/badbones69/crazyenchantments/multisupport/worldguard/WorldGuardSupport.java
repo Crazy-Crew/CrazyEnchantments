@@ -1,4 +1,4 @@
-package me.badbones69.crazyenchantments.multisupport.worldguard;
+package com.badbones69.crazyenchantments.multisupport.worldguard;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;

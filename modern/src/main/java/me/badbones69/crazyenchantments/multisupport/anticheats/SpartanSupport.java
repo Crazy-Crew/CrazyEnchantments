@@ -1,7 +1,7 @@
-package me.badbones69.crazyenchantments.multisupport.anticheats;
+package com.badbones69.crazyenchantments.multisupport.anticheats;
 
-import me.vagdedes.spartan.api.API;
-import me.vagdedes.spartan.system.Enums.HackType;
+import com.vagdedes.spartan.api.API;
+import com.vagdedes.spartan.system.Enums.HackType;
 import org.bukkit.entity.Player;
 
 public class SpartanSupport {
