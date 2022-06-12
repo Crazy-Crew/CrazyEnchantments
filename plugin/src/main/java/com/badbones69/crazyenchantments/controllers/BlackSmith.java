@@ -122,21 +122,18 @@ public class BlackSmith implements Listener {
     
     @EventHandler
     public void onInvClose(InventoryCloseEvent e) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Inventory inventory = e.getInventory();
-                if (inventory != null && e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
-                    Player player = (Player) e.getPlayer();
-                    for (int slot : Arrays.asList(mainSlot, subSlot)) {
-                        if (inventory.getItem(slot) != null && inventory.getItem(slot).getType() != Material.AIR) {
-                            givePlayerItem(player, inventory.getItem(slot));
-                        }
-                    }
-                    inventory.clear();
+        Inventory inventory = e.getInventory();
+
+        if (inventory != null && e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
+            Player player = (Player) e.getPlayer();
+
+            for (int slot : Arrays.asList(mainSlot, subSlot)) {
+                if (inventory.getItem(slot) != null && inventory.getItem(slot).getType() != Material.AIR) {
+                    givePlayerItem(player, inventory.getItem(slot));
                 }
             }
-        }.runTaskLater(ce.getPlugin(), 0);
+            inventory.clear();
+        }
     }
     
     private void setResultBoarder(BlackSmithResult resultItem, Inventory inventory) {

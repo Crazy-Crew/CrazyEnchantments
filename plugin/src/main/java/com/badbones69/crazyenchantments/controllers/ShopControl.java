@@ -44,6 +44,7 @@ public class ShopControl implements Listener {
         if (inventory != null && e.getView().getTitle().equals(shopManager.getInventoryName())) {
             e.setCancelled(true);
             if (e.getRawSlot() >= inventory.getSize()) return;
+
             if (item != null) {
                 for (Category category : ce.getCategories()) {
                     if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
@@ -102,6 +103,7 @@ public class ShopControl implements Listener {
                 for (ShopOption option : ShopOption.values()) {
                     if (option.isInGUI() && item.isSimilar(option.getItem())) {
                         // If the option is buyable then it check to see if they player can buy it and take the money.
+
                         if (option.isBuyable()) {
                             if (Methods.isInventoryFull(player)) {
                                 player.sendMessage(Messages.INVENTORY_FULL.getMessage());

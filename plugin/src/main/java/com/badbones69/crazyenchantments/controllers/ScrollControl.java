@@ -59,10 +59,12 @@ public class ScrollControl implements Listener {
                 }
 
                 if (ce.hasEnchantments(item)) {
+
                     // Checks to see if the item is already ordered.
                     if (item.isSimilar(orderEnchantments(item.clone()))) {
                         return;
                     }
+
                     e.setCancelled(true);
                     e.setCurrentItem(orderEnchantments(item));
                     player.setItemOnCursor(Methods.removeItem(scroll));
@@ -102,10 +104,12 @@ public class ScrollControl implements Listener {
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     e.setCancelled(true);
                     player.setItemOnCursor(Methods.removeItem(scroll));
+
                     if (blackScrollChanceToggle && !Methods.randomPicker(blackScrollChance, 100)) {
                         player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
                         return;
                     }
+
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
                     player.getInventory().addItem(new CEBook(enchantment, ce.getLevel(item, enchantment), 1).buildBook());
                     e.setCurrentItem(ce.removeEnchantment(item, enchantment));

@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -41,6 +42,7 @@ public class Axes implements Listener {
                     if (CEnchantments.BERSERK.isActivated() && enchantments.contains(CEnchantments.BERSERK.getEnchantment()) && CEnchantments.BERSERK.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
                             damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (ce.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
@@ -50,6 +52,7 @@ public class Axes implements Listener {
                     if (CEnchantments.BLESSED.isActivated() && enchantments.contains(CEnchantments.BLESSED.getEnchantment()) && CEnchantments.BLESSED.chanceSuccessful(item)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
                         Bukkit.getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             removeBadPotions(damager);
                         }
@@ -79,6 +82,7 @@ public class Axes implements Listener {
                         if (CEnchantments.REKT.chanceSuccessful(item)) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
                             Bukkit.getPluginManager().callEvent(event);
+
                             if (!event.isCancelled()) {
                                 e.setDamage(damage);
                             }
@@ -127,8 +131,9 @@ public class Axes implements Listener {
             if (ce.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
                 Bukkit.getPluginManager().callEvent(event);
+
                 if (!event.isCancelled()) {
-                    e.getDrops().add(new ItemBuilder().setMaterial("PLAYER_HEAD").setPlayerName(player.getName()).build());
+                    e.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
                 }
             }
         }

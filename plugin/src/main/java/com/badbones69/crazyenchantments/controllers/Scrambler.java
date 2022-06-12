@@ -119,6 +119,7 @@ public class Scrambler implements Listener {
                 }
 
                 open++;
+
                 if (open >= 5) {
                     player.openInventory(inventory);
                     open = 0;

@@ -99,9 +99,11 @@ public class GKitzController implements Listener {
                         // Some debug code for when checking the math for slots.
                         // System.out.println((items.size() / 9) + " : " + ((items.size() / 9) * 9) + " : " + items.size() % 9 + " : " + slots);
                         Inventory previewInventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
+
                         for (ItemStack itemStack : items) {
                             previewInventory.addItem(itemStack);
                         }
+
                         previewInventory.setItem(slots - 1, infoManager.getBackRightButton());
                         player.openInventory(previewInventory);
                     } else {

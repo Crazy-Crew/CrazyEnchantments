@@ -75,6 +75,7 @@ public class EnchantmentControl implements Listener {
                                             player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
                                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                                         }
+
                                         return;
                                     } else if (destroy) {
                                         BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, item, ceBook);
@@ -107,6 +108,7 @@ public class EnchantmentControl implements Listener {
                                                     player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                                                 }
                                             }
+
                                             player.setItemOnCursor(new ItemStack(Material.AIR));
                                             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                                         }
@@ -120,6 +122,7 @@ public class EnchantmentControl implements Listener {
                                             player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
                                             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                                         }
+
                                         return;
                                     }
                                 }
@@ -138,10 +141,12 @@ public class EnchantmentControl implements Listener {
                             ItemStack newItem = ce.addEnchantment(item, enchantment, ceBook.getLevel());
                             ItemStack oldItem = new ItemStack(Material.AIR);
                             e.setCurrentItem(newItem);
+
                             if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                 ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), oldItem, newItem);
                                 Bukkit.getPluginManager().callEvent(event);
                             }
+
                             player.setItemOnCursor(new ItemStack(Material.AIR));
                             player.sendMessage(Messages.BOOK_WORKS.getMessage());
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -159,10 +164,12 @@ public class EnchantmentControl implements Listener {
                                 ItemStack newItem = new ItemStack(Material.AIR);
                                 ItemStack oldItem = new ItemStack(Material.AIR);
                                 player.setItemOnCursor(newItem);
+
                                 if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                     ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
                                     Bukkit.getPluginManager().callEvent(event);
                                 }
+
                                 e.setCurrentItem(oldItem);
                                 player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                             }
@@ -191,9 +198,11 @@ public class EnchantmentControl implements Listener {
                 e.setCancelled(true);
                 CEnchantment enchantment = ce.getCEBook(item).getEnchantment();
                 Player player = e.getPlayer();
+
                 if (enchantment.getInfoName().length() > 0) {
                     player.sendMessage(enchantment.getInfoName());
                 }
+
                 for (String descriptionLine : enchantment.getInfoDescription()) {
                     player.sendMessage(descriptionLine);
                 }

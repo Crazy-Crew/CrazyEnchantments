@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
@@ -8,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -22,6 +24,8 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,6 @@ import java.util.List;
 public class ArmorListener implements Listener {
     
     private final List<String> blockedMaterials;
-    private Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("CrazyEnchantments");
     
     public ArmorListener() {
         this.blockedMaterials = getBlocks();
@@ -139,7 +142,8 @@ public class ArmorListener implements Listener {
 
                 final ItemStack It = newArmorPiece.clone();
                 final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+
+                CrazyManager.getInstance().getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(CrazyManager.getInstance().getPlugin(), () -> {
                     ItemStack I = e.getWhoClicked().getInventory().getItem(e.getSlot());
                     if (e.getInventory().getType().equals(InventoryType.PLAYER)) {
 
@@ -219,9 +223,7 @@ public class ArmorListener implements Listener {
         if (e.getAction() == Action.PHYSICAL) return;
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
-            if (e.isCancelled()) {
-                return;
-            }
+            if (e.useInteractedBlock() == Event.Result.DENY || e.useItemInHand() == Event.Result.DENY) return;
 
             final Player player = e.getPlayer();
 
@@ -255,7 +257,11 @@ public class ArmorListener implements Listener {
             Location loc = e.getBlock().getLocation();
             for (Player p : loc.getWorld().getPlayers()) {
                 if (loc.getBlockY() - p.getLocation().getBlockY() >= -1 && loc.getBlockY() - p.getLocation().getBlockY() <= 1) {
-                    if (p.getInventory().getHelmet() == null && type.equals(ArmorType.HELMET) || p.getInventory().getChestplate() == null && type.equals(ArmorType.CHESTPLATE) || p.getInventory().getLeggings() == null && type.equals(ArmorType.LEGGINGS) || p.getInventory().getBoots() == null && type.equals(ArmorType.BOOTS)) {
+                    if (p.getInventory().getHelmet() == null
+                            && type.equals(ArmorType.HELMET) || p.getInventory().getChestplate() == null
+                            && type.equals(ArmorType.CHESTPLATE) || p.getInventory().getLeggings() == null
+                            && type.equals(ArmorType.LEGGINGS) || p.getInventory().getBoots() == null
+                            && type.equals(ArmorType.BOOTS)) {
 
                         if (e.getBlock().getState() instanceof org.bukkit.block.Dispenser) {
                             org.bukkit.block.Dispenser dispenser = (org.bukkit.block.Dispenser) e.getBlock().getState();
@@ -263,9 +269,18 @@ public class ArmorListener implements Listener {
                             BlockFace directionFacing = dis.getFacing();
 
                             // Someone told me not to do big if checks because it's hard to read, look at me doing it -_-
-                            if (directionFacing == BlockFace.EAST && p.getLocation().getBlockX() != loc.getBlockX() && p.getLocation().getX() <= loc.getX() + 2.3 && p.getLocation().getX() >= loc.getX() || directionFacing == BlockFace.WEST && p.getLocation().getX() >= loc.getX() - 1.3 && p.getLocation().getX() <= loc.getX() || directionFacing == BlockFace.SOUTH && p.getLocation().getBlockZ() != loc.getBlockZ() && p.getLocation().getZ() <= loc.getZ() + 2.3 && p.getLocation().getZ() >= loc.getZ() || directionFacing == BlockFace.NORTH && p.getLocation().getZ() >= loc.getZ() - 1.3 && p.getLocation().getZ() <= loc.getZ()) {
+                            if (directionFacing == BlockFace.EAST && p.getLocation().getBlockX() != loc.getBlockX()
+                                    && p.getLocation().getX() <= loc.getX() + 2.3 && p.getLocation().getX() >= loc.getX()
+                                    || directionFacing == BlockFace.WEST && p.getLocation().getX() >= loc.getX() - 1.3
+                                    && p.getLocation().getX() <= loc.getX() || directionFacing == BlockFace.SOUTH
+                                    && p.getLocation().getBlockZ() != loc.getBlockZ() && p.getLocation().getZ() <= loc.getZ() + 2.3
+                                    && p.getLocation().getZ() >= loc.getZ() || directionFacing == BlockFace.NORTH
+                                    && p.getLocation().getZ() >= loc.getZ() - 1.3
+                                    && p.getLocation().getZ() <= loc.getZ()) {
+
                                 ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.DISPENSER, ArmorType.matchType(e.getItem()), null, e.getItem());
                                 Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+
                                 if (armorEquipEvent.isCancelled()) {
                                     e.setCancelled(true);
                                 }
@@ -286,18 +301,22 @@ public class ArmorListener implements Listener {
             ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.BROKE, type, e.getBrokenItem(), null);
             Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
             if (armorEquipEvent.isCancelled()) {
-                ItemStack i = e.getBrokenItem().clone();
-                i.setAmount(1);
-                i.setDurability((short) (i.getDurability() - 1));
+                ItemStack item = e.getBrokenItem().clone();
+
+                ItemMeta itemMeta = item.getItemMeta();
+
+                if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(((Damageable) item.getItemMeta()).getDamage() - 1);
+
+                item.setItemMeta(itemMeta);
 
                 if (type.equals(ArmorType.HELMET)) {
-                    p.getInventory().setHelmet(i);
+                    p.getInventory().setHelmet(item);
                 } else if (type.equals(ArmorType.CHESTPLATE)) {
-                    p.getInventory().setChestplate(i);
+                    p.getInventory().setChestplate(item);
                 } else if (type.equals(ArmorType.LEGGINGS)) {
-                    p.getInventory().setLeggings(i);
+                    p.getInventory().setLeggings(item);
                 } else if (type.equals(ArmorType.BOOTS)) {
-                    p.getInventory().setBoots(i);
+                    p.getInventory().setBoots(item);
                 }
             }
         }
@@ -308,7 +327,7 @@ public class ArmorListener implements Listener {
         Player p = e.getEntity();
         for (ItemStack i : p.getInventory().getArmorContents()) {
             if (i != null && !i.getType().equals(Material.AIR)) {
-                Bukkit.getServer().getPluginManager().callEvent(new ArmorEquipEvent(p, EquipMethod.DEATH, ArmorType.matchType(i), i, null));
+                CrazyManager.getInstance().getPlugin().getServer().getPluginManager().callEvent(new ArmorEquipEvent(p, EquipMethod.DEATH, ArmorType.matchType(i), i, null));
                 // No way to cancel a death event.
             }
         }

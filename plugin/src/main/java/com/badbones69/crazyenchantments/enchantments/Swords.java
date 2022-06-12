@@ -103,7 +103,6 @@ public class Swords implements Listener {
                                     } else {
                                         player.getInventory().addItem(armor);
                                     }
-
                                 }
                             }
                         }
@@ -137,7 +136,6 @@ public class Swords implements Listener {
                             if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) {
                                 damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
                             }
-
                         }
                     }
 
@@ -216,6 +214,7 @@ public class Swords implements Listener {
                             if (damager.getHealth() + steal < maxHealth) {
                                 damager.setHealth(damager.getHealth() + steal);
                             }
+
                             if (damager.getHealth() + steal >= maxHealth) {
                                 damager.setHealth(maxHealth);
                             }
@@ -234,6 +233,7 @@ public class Swords implements Listener {
                             if (damager.getSaturation() + (2 * ce.getLevel(item, CEnchantments.NUTRITION)) <= 20) {
                                 damager.setSaturation(damager.getSaturation() + (2 * ce.getLevel(item, CEnchantments.NUTRITION)));
                             }
+
                             if (damager.getSaturation() + (2 * ce.getLevel(item, CEnchantments.NUTRITION)) >= 20) {
                                 damager.setSaturation(20);
                             }

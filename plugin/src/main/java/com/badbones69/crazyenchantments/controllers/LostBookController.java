@@ -45,9 +45,11 @@ public class LostBookController implements Listener {
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Found%", book.getItemBuilder().getName());
                         player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
+
                         if (lostBook.useFirework()) {
                             Methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
                         }
+
                         if (lostBook.playSound()) {
                             player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
                         }

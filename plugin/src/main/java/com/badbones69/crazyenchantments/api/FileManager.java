@@ -49,6 +49,7 @@ public class FileManager {
         for (Files file : Files.values()) {
             File newFile = new File(plugin.getDataFolder(), file.getFileLocation());
             if (log) plugin.getLogger().info("Loading the " + file.getFileName());
+
             if (!newFile.exists()) {
                 try {
                     File serverFile = new File(plugin.getDataFolder(), "/" + file.getFileLocation());
@@ -60,10 +61,12 @@ public class FileManager {
                     continue;
                 }
             }
+
             files.put(file, newFile);
             configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
             if (log) plugin.getLogger().info("Successfully loaded " + file.getFileName());
         }
+
         // Starts to load all the custom files.
         if (!homeFolders.isEmpty()) {
             if (log) plugin.getLogger().info("Loading custom files.");
@@ -71,10 +74,12 @@ public class FileManager {
                 File homeFile = new File(plugin.getDataFolder(), "/" + homeFolder);
                 if (homeFile.exists()) {
                     String[] list = homeFile.list();
+
                     if (list != null) {
                         for (String name : list) {
                             if (name.endsWith(".yml")) {
                                 CustomFile file = new CustomFile(name, homeFolder, plugin);
+
                                 if (file.exists()) {
                                     customFiles.add(file);
                                     if (log) plugin.getLogger().info( "Loaded new custom file: " + homeFolder + "/" + name + ".");
@@ -82,20 +87,22 @@ public class FileManager {
                             }
                         }
                     }
-                    
                 } else {
                     homeFile.mkdir();
                     if (log) plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
                     for (Entry<String, String> file : autoGenerateFiles.entrySet()) {
+
                         if (file.getValue().equalsIgnoreCase(homeFolder)) {
                             homeFolder = file.getValue();
                             try {
                                 File serverFile = new File(plugin.getDataFolder(), homeFolder + "/" + file.getKey());
                                 InputStream jarFile = getClass().getResourceAsStream((jarHomeFolders.getOrDefault(file.getKey(), homeFolder)) + "/" + file.getKey());
                                 copyFile(jarFile, serverFile);
+
                                 if (file.getKey().toLowerCase().endsWith(".yml")) {
                                     customFiles.add(new CustomFile(file.getKey(), homeFolder, plugin));
                                 }
+
                                 if (log) plugin.getLogger().info("Created new default file: " + homeFolder + "/" + file.getKey() + ".");
                             } catch (Exception e) {
                                 if (log) plugin.getLogger().info("Failed to create new default file: " + homeFolder + "/" + file.getKey() + "!");

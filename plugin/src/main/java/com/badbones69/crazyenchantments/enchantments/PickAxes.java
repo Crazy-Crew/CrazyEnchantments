@@ -110,23 +110,13 @@ public class PickAxes implements Listener {
                             for (BlockProcessInfo processInfo : finalBlockList) {
                                 Block block = processInfo.getBlock();
                                 if (player.getGameMode() == GameMode.CREATIVE) { // If the user is in creative mode.
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            block.setType(Material.AIR);
-                                        }
-                                    }.runTask(ce.getPlugin());
+                                    block.setType(Material.AIR);
                                 } else { // If the user is in survival mode.
                                     // This is to check if the original block the player broke was in the block list.
                                     // If it is not then it should be broken and dropped on the ground.
 
                                     if (block.getLocation().equals(originalBlockLocation) && !ce.getBlockList().contains(block.getType())) {
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                block.breakNaturally();
-                                            }
-                                        }.runTask(ce.getPlugin());
+                                        block.breakNaturally();
                                         continue;
                                     }
 
@@ -137,14 +127,9 @@ public class PickAxes implements Listener {
                                     } else {
                                         if (hasFurnace && isOre) {
                                             ItemStack finalDrop = getOreDrop(block.getType());
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    try {
-                                                        block.getWorld().dropItem(block.getLocation(), finalDrop);
-                                                    } catch (IllegalArgumentException ignore) {}
-                                                }
-                                            }.runTask(ce.getPlugin());
+                                            try {
+                                                block.getWorld().dropItem(block.getLocation(), finalDrop);
+                                            } catch (IllegalArgumentException ignore) {}
                                         } else if (hasAutoSmelt && isOre) {
                                             for (ItemStack drop : block.getDrops(item)) {
                                                 if (CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
@@ -152,26 +137,16 @@ public class PickAxes implements Listener {
                                                     drop.setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
                                                 }
                                                 ItemStack finalDrop = drop;
-                                                new BukkitRunnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        try {
-                                                            block.getWorld().dropItem(block.getLocation(), finalDrop);
-                                                        } catch (IllegalArgumentException ignore) {}
-                                                    }
-                                                }.runTask(ce.getPlugin());
+                                                try {
+                                                    block.getWorld().dropItem(block.getLocation(), finalDrop);
+                                                } catch (IllegalArgumentException ignore) {}
                                             }
                                         } else {
                                             for (ItemStack drop : block.getDrops(item)) {
                                                 if (drop.getType() != Material.AIR) {
-                                                    new BukkitRunnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            try {
-                                                                block.getWorld().dropItem(block.getLocation(), drop);
-                                                            } catch (IllegalArgumentException ignore) {}
-                                                        }
-                                                    }.runTask(ce.getPlugin());
+                                                    try {
+                                                        block.getWorld().dropItem(block.getLocation(), drop);
+                                                    } catch (IllegalArgumentException ignore) {}
                                                 }
                                                 if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
                                                     break;
@@ -186,12 +161,8 @@ public class PickAxes implements Listener {
                                             }
                                         }
                                     }
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            block.setType(Material.AIR);
-                                        }
-                                    }.runTask(ce.getPlugin());
+
+                                    block.setType(Material.AIR);
 
                                     if (damage) {
                                         Methods.removeDurability(item, player);
@@ -206,27 +177,16 @@ public class PickAxes implements Listener {
                             for (Entry<ItemStack, Integer> item : drops.entrySet()) {
                                 item.getKey().setAmount(item.getValue());
                                 if (Methods.isInventoryFull(player)) {
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                player.getWorld().dropItem(player.getLocation(), item.getKey());
-                                            } catch (IllegalArgumentException ignore) {}
-                                        }
-                                    }.runTask(ce.getPlugin());
+                                    try {
+                                        player.getWorld().dropItem(player.getLocation(), item.getKey());
+                                    } catch (IllegalArgumentException ignore) {}
                                 } else {
                                     player.getInventory().addItem(item.getKey());
                                 }
                             }
                             if (player.getGameMode() != GameMode.CREATIVE && xp > 0) {
-                                int finalXp = xp;
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                                        orb.setExperience(finalXp);
-                                    }
-                                }.runTask(ce.getPlugin());
+                                ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
+                                orb.setExperience(xp);
                             }
                         }
                     }.runTaskAsynchronously(ce.getPlugin());

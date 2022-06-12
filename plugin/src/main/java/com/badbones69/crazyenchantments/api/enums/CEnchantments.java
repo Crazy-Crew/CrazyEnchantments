@@ -172,6 +172,7 @@ public enum CEnchantments {
                 return ench;
             }
         }
+
         return null;
     }
     
@@ -269,6 +270,7 @@ public enum CEnchantments {
         if (cachedEnchantment == null) {
             cachedEnchantment = ce.getEnchantmentFromName(name);
         }
+
         return cachedEnchantment;
     }
     

@@ -54,12 +54,8 @@ public class Tools implements Listener {
         }
 
         ItemStack item = Methods.getItemInHand(player);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                updateEffects(player);
-            }
-        }.runTaskAsynchronously(ce.getPlugin());
+
+        updateEffects(player);
 
         if (player.getGameMode() != GameMode.CREATIVE) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
@@ -186,32 +182,24 @@ public class Tools implements Listener {
         if (ce.hasEnchantments(item)) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
             if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            int power = ce.getLevel(item, CEnchantments.HASTE);
-                            player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
-                        }
-                    }
-                }.runTask(ce.getPlugin());
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
+                Bukkit.getPluginManager().callEvent(event);
+
+                if (!event.isCancelled()) {
+                    int power = ce.getLevel(item, CEnchantments.HASTE);
+                    player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
+                }
             }
 
             if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
-                            player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
-                        }
-                    }
-                }.runTask(ce.getPlugin());
+                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
+                Bukkit.getPluginManager().callEvent(event);
+
+                if (!event.isCancelled()) {
+                    player.removePotionEffect(PotionEffectType.WATER_BREATHING);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
+                }
             }
         }
     }

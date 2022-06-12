@@ -61,19 +61,15 @@ public class Armor implements Listener {
                     for (CEnchantments enchantment : ce.getEnchantmentPotions().keySet()) {
                         if (enchantment.isActivated() && ce.hasEnchantment(oldItem, enchantment.getEnchantment())) {
                             Map<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-                                        if (type.getValue() < 0) {
-                                            player.removePotionEffect(type.getKey());
-                                        } else {
-                                            player.removePotionEffect(type.getKey());
-                                            player.addPotionEffect(new PotionEffect(type.getKey(), Integer.MAX_VALUE, type.getValue()));
-                                        }
-                                    }
+
+                            for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
+                                if (type.getValue() < 0) {
+                                    player.removePotionEffect(type.getKey());
+                                } else {
+                                    player.removePotionEffect(type.getKey());
+                                    player.addPotionEffect(new PotionEffect(type.getKey(), Integer.MAX_VALUE, type.getValue()));
                                 }
-                            }.runTask(ce.getPlugin());
+                            }
                         }
                     }
                 }
@@ -81,23 +77,15 @@ public class Armor implements Listener {
                     for (CEnchantments enchantment : ce.getEnchantmentPotions().keySet()) {
                         if (enchantment.isActivated() && ce.hasEnchantment(newItem, enchantment.getEnchantment())) {
                             Map<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, newItem, oldItem, enchantment);
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, enchantment.getEnchantment(), newItem);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled()) {
-                                        for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-                                            if (type.getValue() < 0) {
-                                                player.removePotionEffect(type.getKey());
-                                            } else {
-                                                player.removePotionEffect(type.getKey());
-                                                player.addPotionEffect(new PotionEffect(type.getKey(), Integer.MAX_VALUE, type.getValue()));
-                                            }
-                                        }
-                                    }
+
+                            for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
+                                if (type.getValue() < 0) {
+                                    player.removePotionEffect(type.getKey());
+                                } else {
+                                    player.removePotionEffect(type.getKey());
+                                    player.addPotionEffect(new PotionEffect(type.getKey(), Integer.MAX_VALUE, type.getValue()));
                                 }
-                            }.runTask(ce.getPlugin());
+                            }
                         }
                     }
                 }
@@ -119,157 +107,117 @@ public class Armor implements Listener {
                             for (ArmorEnchantment armorEnchantment : ce.getArmorManager().getArmorEnchantments()) {
                                 CEnchantments enchantment = armorEnchantment.getEnchantment();
                                 if (ce.hasEnchantment(armor, enchantment) && enchantment.chanceSuccessful(armor)) {
-                                    new BukkitRunnable() {
-                                        @Override
-                                        public void run() {
-                                            EnchantmentUseEvent event = new EnchantmentUseEvent(player, enchantment, armor);
-                                            Bukkit.getPluginManager().callEvent(event);
-                                            if (!event.isCancelled()) {
-                                                if (armorEnchantment.isPotionEnchantment()) {
-                                                    for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
-                                                        // Debug for the enchantment info.
-//                                                        System.out.println(
-//                                                        "===========================" + "\n"
-//                                                        + "Enchantment: " + enchantment.getName() + "\n"
-//                                                        + "Level: " + ce.getLevel(armor, enchantment) + "\n"
-//                                                        + "Effect: " + effect.getPotionEffect().getName() + "\n"
-//                                                        + "Duration: " + (effect.getDuration() / 20) + "s \n"
-//                                                        + "Amplifier: " + effect.getAmplifier() + "\n"
-//                                                        + "Amp + Lvl: " + ((armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + effect.getAmplifier()) + "\n" +
-//                                                        "===========================");
-                                                        damager.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + effect.getAmplifier()));
-                                                    }
-                                                } else {
-                                                    e.setDamage(e.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + armorEnchantment.getDamageAmplifier()));
-                                                }
+                                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, enchantment, armor);
+
+                                    Bukkit.getPluginManager().callEvent(event);
+                                    if (!event.isCancelled()) {
+                                        if (armorEnchantment.isPotionEnchantment()) {
+                                            for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
+                                                damager.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + effect.getAmplifier()));
                                             }
+                                        } else {
+                                            e.setDamage(e.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + armorEnchantment.getDamageAmplifier()));
                                         }
-                                    }.runTask(ce.getPlugin());
+                                    }
                                 }
                             }
                             if (player.getHealth() <= 8 && ce.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment()) && CEnchantments.ROCKET.chanceSuccessful(armor)) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
-                                        Bukkit.getPluginManager().callEvent(event);
+                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
+                                Bukkit.getPluginManager().callEvent(event);
 
                                         /*
                                         //if (SupportedPlugins.AAC.isPluginLoaded()) {
                                         //    AACSupport.exemptPlayerTime(player);
                                         // }*/
 
-                                        if (!event.isCancelled()) {
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1));
-                                                }
-                                            }.runTaskLater(ce.getPlugin(), 1);
-                                            fall.add(player);
-                                            player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
-                                            new BukkitRunnable() {
-                                                @Override
-                                                public void run() {
-                                                    fall.remove(player);
-                                                }
-                                            }.runTaskLater(ce.getPlugin(), 8 * 20);
+                                if (!event.isCancelled()) {
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1));
                                         }
-                                    }
-                                }.runTask(ce.getPlugin());
+                                    }.runTaskLater(ce.getPlugin(), 1);
+                                    fall.add(player);
+                                    player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            fall.remove(player);
+                                        }
+                                    }.runTaskLater(ce.getPlugin(), 8 * 20);
+                                }
                             }
                             if (ce.hasEnchantment(armor, CEnchantments.ENLIGHTENED) && CEnchantments.ENLIGHTENED.chanceSuccessful(armor) && player.getHealth() > 0) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED.getEnchantment(), armor);
-                                        Bukkit.getPluginManager().callEvent(event);
-                                        if (!event.isCancelled()) {
-                                            double heal = ce.getLevel(armor, CEnchantments.ENLIGHTENED);
-                                            // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                                            double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED.getEnchantment(), armor);
+                                Bukkit.getPluginManager().callEvent(event);
 
-                                            if (player.getHealth() + heal < maxHealth) {
-                                                player.setHealth(player.getHealth() + heal);
-                                            }
+                                if (!event.isCancelled()) {
+                                    double heal = ce.getLevel(armor, CEnchantments.ENLIGHTENED);
+                                    // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                                    double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-                                            if (player.getHealth() + heal >= maxHealth) {
-                                                player.setHealth(maxHealth);
-                                            }
-                                        }
+                                    if (player.getHealth() + heal < maxHealth) {
+                                        player.setHealth(player.getHealth() + heal);
                                     }
-                                }.runTask(ce.getPlugin());
+
+                                    if (player.getHealth() + heal >= maxHealth) {
+                                        player.setHealth(maxHealth);
+                                    }
+                                }
                             }
                             if (ce.hasEnchantment(armor, CEnchantments.MOLTEN) && CEnchantments.MOLTEN.chanceSuccessful(armor)) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MOLTEN.getEnchantment(), armor);
-                                        Bukkit.getPluginManager().callEvent(event);
-                                        if (!event.isCancelled()) {
-                                            damager.setFireTicks((ce.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
-                                        }
-                                    }
-                                }.runTask(ce.getPlugin());
+                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MOLTEN.getEnchantment(), armor);
+                                Bukkit.getPluginManager().callEvent(event);
+
+                                if (!event.isCancelled()) {
+                                    damager.setFireTicks((ce.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
+                                }
                             }
                             if (ce.hasEnchantment(armor, CEnchantments.SAVIOR) && CEnchantments.SAVIOR.chanceSuccessful(armor)) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SAVIOR.getEnchantment(), armor);
-                                        Bukkit.getPluginManager().callEvent(event);
-                                        if (!event.isCancelled()) {
-                                            e.setDamage(e.getDamage() / 2);
-                                        }
-                                    }
-                                }.runTask(ce.getPlugin());
+                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SAVIOR.getEnchantment(), armor);
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (!event.isCancelled()) {
+                                    e.setDamage(e.getDamage() / 2);
+                                }
                             }
                             if (ce.hasEnchantment(armor, CEnchantments.CACTUS) && CEnchantments.CACTUS.chanceSuccessful(armor)) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.CACTUS.getEnchantment(), armor);
-                                        Bukkit.getPluginManager().callEvent(event);
-                                        if (!event.isCancelled()) {
-                                            damager.damage(ce.getLevel(armor, CEnchantments.CACTUS));
-                                        }
-                                    }
-                                }.runTask(ce.getPlugin());
+                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.CACTUS.getEnchantment(), armor);
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (!event.isCancelled()) {
+                                    damager.damage(ce.getLevel(armor, CEnchantments.CACTUS));
+                                }
                             }
                             if (ce.hasEnchantment(armor, CEnchantments.STORMCALLER) && CEnchantments.STORMCALLER.chanceSuccessful(armor)) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER.getEnchantment(), armor);
-                                        Bukkit.getPluginManager().callEvent(event);
-                                        if (!event.isCancelled()) {
-                                            Location loc = damager.getLocation();
-                                            loc.getWorld().spigot().strikeLightningEffect(loc, true);
-                                            int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+                                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER.getEnchantment(), armor);
+                                Bukkit.getPluginManager().callEvent(event);
 
-                                            try {
-                                                loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
-                                            } catch (Exception ignore) {}
+                                if (!event.isCancelled()) {
+                                    Location loc = damager.getLocation();
+                                    loc.getWorld().spigot().strikeLightningEffect(loc, true);
+                                    int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+
+                                    try {
+                                        loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
+                                    } catch (Exception ignore) {}
                                             /*
                                             // if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
                                             //    NoCheatPlusSupport.exemptPlayer(player);
                                             // }*/
 
-                                            for (LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
-                                                EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
-                                                ce.addIgnoredEvent(damageByEntityEvent);
-                                                ce.addIgnoredUUID(player.getUniqueId());
-                                                Bukkit.getPluginManager().callEvent(damageByEntityEvent);
-                                                if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(en.getLocation()) && !pluginSupport.isFriendly(player, en)) {
-                                                    en.damage(5D);
-                                                }
-                                                ce.removeIgnoredEvent(damageByEntityEvent);
-                                                ce.removeIgnoredUUID(player.getUniqueId());
-                                            }
-                                            damager.damage(5D);
+                                    for (LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
+                                        EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
+                                        ce.addIgnoredEvent(damageByEntityEvent);
+                                        ce.addIgnoredUUID(player.getUniqueId());
+                                        Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+
+                                        if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(en.getLocation()) && !pluginSupport.isFriendly(player, en)) {
+                                            en.damage(5D);
                                         }
+                                        ce.removeIgnoredEvent(damageByEntityEvent);
+                                        ce.removeIgnoredUUID(player.getUniqueId());
                                     }
-                                }.runTask(ce.getPlugin());
+                                    damager.damage(5D);
+                                }
                             }
                         }
                     }
@@ -277,26 +225,23 @@ public class Armor implements Listener {
                         for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
                             if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (PluginSupport.SupportedPlugins.FACTIONSUUID.isPluginLoaded(ce.getPlugin()))) {
                                 int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        int players = 0;
-                                        for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
-                                            if (entity instanceof Player other) {
-                                                if (pluginSupport.isFriendly(damager, other)) {
-                                                    players++;
-                                                }
-                                            }
-                                        }
-                                        if (players > 0) {
-                                            EnchantmentUseEvent event = new EnchantmentUseEvent((Player) damager, CEnchantments.LEADERSHIP.getEnchantment(), armor);
-                                            Bukkit.getPluginManager().callEvent(event);
-                                            if (!event.isCancelled()) {
-                                                e.setDamage(e.getDamage() + (players / 2));
-                                            }
+                                int players = 0;
+
+                                for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
+                                    if (entity instanceof Player other) {
+                                        if (pluginSupport.isFriendly(damager, other)) {
+                                            players++;
                                         }
                                     }
-                                }.runTask(ce.getPlugin());
+                                }
+
+                                if (players > 0) {
+                                    EnchantmentUseEvent event = new EnchantmentUseEvent((Player) damager, CEnchantments.LEADERSHIP.getEnchantment(), armor);
+                                    Bukkit.getPluginManager().callEvent(event);
+                                    if (!event.isCancelled()) {
+                                        e.setDamage(e.getDamage() + (players / 2));
+                                    }
+                                }
                             }
                         }
                     }
@@ -316,72 +261,66 @@ public class Armor implements Listener {
                 if (pluginSupport.isVanished(player) || pluginSupport.isVanished(other)) return;
                 CEnchantments enchant = e.getEnchantment();
                 int level = e.getLevel();
-                /*// Debug code for checking.
-//                System.out.println("PvP: " + support.allowsPVP(other.getLocation()));
-//                System.out.println("Enemy: " + !support.isFriendly(player, other));
-//                System.out.println("NoBypass: " + !Methods.hasPermission(other, "bypass.aura", false));*/
+
                 if (pluginSupport.allowsCombat(other.getLocation()) && !pluginSupport.isFriendly(player, other) && !Methods.hasPermission(other, "bypass.aura", false)) {
                     Calendar cal = Calendar.getInstance();
                     HashMap<CEnchantments, Calendar> effect = new HashMap<>();
+
                     if (timer.containsKey(other)) {
                         effect = timer.get(other);
                     }
+
                     HashMap<CEnchantments, Calendar> finalEffect = effect;
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            switch (enchant) {
-                                case BLIZZARD:
-                                    if (CEnchantments.BLIZZARD.isActivated()) {
-                                        other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, level - 1));
-                                    }
-                                    break;
-                                case INTIMIDATE:
-                                    if (CEnchantments.INTIMIDATE.isActivated()) {
-                                        other.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3 * 20, level - 1));
-                                    }
-                                    break;
-                                case ACIDRAIN:
-                                    if (CEnchantments.ACIDRAIN.isActivated() && (!timer.containsKey(other) ||
-                                    (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
-                                    (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
-                                    cal.after(timer.get(other).get(enchant))
-                                    && CEnchantments.ACIDRAIN.chanceSuccessful()))) {
-                                        other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
-                                        int time = 35 - (level * 5);
-                                        cal.add(Calendar.SECOND, time > 0 ? time : 5);
-                                        finalEffect.put(enchant, cal);
-                                    }
-                                    break;
-                                case SANDSTORM:
-                                    if (CEnchantments.SANDSTORM.isActivated() && (!timer.containsKey(other) ||
-                                    (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
-                                    (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
-                                    cal.after(timer.get(other).get(enchant))
-                                    && CEnchantments.SANDSTORM.chanceSuccessful()))) {
-                                        other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
-                                        int time = 35 - (level * 5);
-                                        cal.add(Calendar.SECOND, time > 0 ? time : 5);
-                                        finalEffect.put(enchant, cal);
-                                    }
-                                    break;
-                                case RADIANT:
-                                    if (CEnchantments.RADIANT.isActivated() && (!timer.containsKey(other) ||
-                                    (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
-                                    (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
-                                    cal.after(timer.get(other).get(enchant))
-                                    && CEnchantments.RADIANT.chanceSuccessful()))) {
-                                        other.setFireTicks(5 * 20);
-                                        int time = 20 - (level * 5);
-                                        cal.add(Calendar.SECOND, Math.max(time, 0));
-                                        finalEffect.put(enchant, cal);
-                                    }
-                                    break;
-                                default:
-                                    break;
+                    switch (enchant) {
+                        case BLIZZARD:
+                            if (CEnchantments.BLIZZARD.isActivated()) {
+                                other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, level - 1));
                             }
-                        }
-                    }.runTask(ce.getPlugin());
+                            break;
+                        case INTIMIDATE:
+                            if (CEnchantments.INTIMIDATE.isActivated()) {
+                                other.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3 * 20, level - 1));
+                            }
+                            break;
+                        case ACIDRAIN:
+                            if (CEnchantments.ACIDRAIN.isActivated() && (!timer.containsKey(other) ||
+                                    (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
+                                    (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
+                                            cal.after(timer.get(other).get(enchant))
+                                            && CEnchantments.ACIDRAIN.chanceSuccessful()))) {
+                                other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
+                                int time = 35 - (level * 5);
+                                cal.add(Calendar.SECOND, time > 0 ? time : 5);
+                                finalEffect.put(enchant, cal);
+                            }
+                            break;
+                        case SANDSTORM:
+                            if (CEnchantments.SANDSTORM.isActivated() && (!timer.containsKey(other) ||
+                                    (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
+                                    (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
+                                            cal.after(timer.get(other).get(enchant))
+                                            && CEnchantments.SANDSTORM.chanceSuccessful()))) {
+                                other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
+                                int time = 35 - (level * 5);
+                                cal.add(Calendar.SECOND, time > 0 ? time : 5);
+                                finalEffect.put(enchant, cal);
+                            }
+                            break;
+                        case RADIANT:
+                            if (CEnchantments.RADIANT.isActivated() && (!timer.containsKey(other) ||
+                                    (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
+                                    (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
+                                            cal.after(timer.get(other).get(enchant))
+                                            && CEnchantments.RADIANT.chanceSuccessful()))) {
+                                other.setFireTicks(5 * 20);
+                                int time = 20 - (level * 5);
+                                cal.add(Calendar.SECOND, Math.max(time, 0));
+                                finalEffect.put(enchant, cal);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                     timer.put(other, effect);
                 }
             }
@@ -410,41 +349,32 @@ public class Armor implements Listener {
                 if (CEnchantments.SELFDESTRUCT.isActivated()) {
                     for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
                         if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT.getEnchantment(), item);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled()) {
-                                        Methods.explode(player);
-                                        List<ItemStack> items = new ArrayList<>();
-                                        for (ItemStack drop : e.getDrops()) {
-                                            if (drop != null && ProtectionCrystal.isProtected(drop) && ProtectionCrystal.isProtectionSuccessful(player)) {
-                                                items.add(drop);
-                                            }
-                                        }
-                                        e.getDrops().clear();
-                                        e.getDrops().addAll(items);
+
+                            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT.getEnchantment(), item);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                Methods.explode(player);
+                                List<ItemStack> items = new ArrayList<>();
+                                for (ItemStack drop : e.getDrops()) {
+                                    if (drop != null && ProtectionCrystal.isProtected(drop) && ProtectionCrystal.isProtectionSuccessful(player)) {
+                                        items.add(drop);
                                     }
                                 }
-                            }.runTask(ce.getPlugin());
+                                e.getDrops().clear();
+                                e.getDrops().addAll(items);
+                            }
                         }
                     }
                 }
                 if (CEnchantments.RECOVER.isActivated()) {
                     for (ItemStack item : Objects.requireNonNull(killer.getEquipment()).getArmorContents()) {
                         if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.RECOVER)) {
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.RECOVER.getEnchantment(), item);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled()) {
-                                        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8 * 20, 2));
-                                        killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
-                                    }
-                                }
-                            }.runTask(ce.getPlugin());
+                            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.RECOVER.getEnchantment(), item);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8 * 20, 2));
+                                killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
+                            }
                         }
                     }
                 }

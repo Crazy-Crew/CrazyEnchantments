@@ -150,6 +150,7 @@ public class Hoes implements Listener {
                                             }
                                         }
                                     }
+
                                     e.setDropItems(false);
                                     crop.setType(Material.AIR);
                                     continue;
@@ -178,6 +179,7 @@ public class Hoes implements Listener {
         if (plant.getType() == Material.AIR) {
             seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
             playerSeedItem = player.getEquipment().getItemInOffHand();
+
             if (isSoulSand) { // If on soul sand we want it to plant Nether Warts not normal seeds.
                 if (playerSeedItem != null && playerSeedItem.getType() != Material.NETHER_WART) {
                     seedType = null;
@@ -267,6 +269,7 @@ public class Hoes implements Listener {
                 BlockBreakEvent event = new BlockBreakEvent(crop, player);
                 ce.addIgnoredEvent(event);
                 Bukkit.getPluginManager().callEvent(event);
+
                 if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                     blockList.add(crop);
                     ce.removeIgnoredEvent(event);
@@ -283,12 +286,14 @@ public class Hoes implements Listener {
                 BlockBreakEvent event = new BlockBreakEvent(soil, player);
                 ce.addIgnoredEvent(event);
                 Bukkit.getPluginManager().callEvent(event);
+
                 if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                     soilBlocks.add(soil);
                     ce.removeIgnoredEvent(event);
                 }
             }
         }
+
         return soilBlocks;
     }
     
@@ -331,6 +336,7 @@ public class Hoes implements Listener {
             default -> {
             }
         }
+
         List<Block> blockList = new ArrayList<>();
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
         int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));

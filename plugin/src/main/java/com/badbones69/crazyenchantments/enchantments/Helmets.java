@@ -40,6 +40,7 @@ public class Helmets implements Listener {
 
                     if (!players.isEmpty()) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
+
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             for (Player other : players) {

@@ -114,6 +114,7 @@ public class SignControl implements Listener {
                                 return;
                             }
                         }
+
                         CEBook book = ce.getRandomEnchantmentBook(category);
 
                         if (book != null) {
@@ -149,6 +150,7 @@ public class SignControl implements Listener {
                 int y = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Y");
                 int z = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Z");
                 Location signLocation = new Location(world, x, y, z);
+
                 if (location.equals(signLocation)) {
                     Files.SIGNS.getFile().set("Locations." + locationName, null);
                     Files.SIGNS.saveFile();

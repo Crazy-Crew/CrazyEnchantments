@@ -172,9 +172,11 @@ public class CrazyManager {
                 .setCategories(enchants.getStringList(path + ".Categories"))
                 .setChance(cEnchantment.getChance())
                 .setChanceIncrease(cEnchantment.getChanceIncrease());
+
                 if (enchants.contains(path + ".Enchantment-Type")) {// Sets the custom type set in the enchantments.yml.
                     enchantment.setEnchantmentType(EnchantmentType.getFromName(enchants.getString(path + ".Enchantment-Type")));
                 }
+
                 if (cEnchantment.hasChanceSystem()) {
                     if (enchants.contains(path + ".Chance-System.Base")) {
                         enchantment.setChance(enchants.getInt(path + ".Chance-System.Base"));
@@ -261,11 +263,13 @@ public class CrazyManager {
         String uuid = player.getUniqueId().toString();
         int souls = 0;
         boolean isActive = false;
+
         if (data.contains("Players." + uuid + ".Souls-Information")) {
             souls = data.getInt("Players." + uuid + ".Souls-Information.Souls");
             isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
         }
         List<Cooldown> cooldowns = new ArrayList<>();
+
         for (GKitz kit : getGKitz()) {
             if (data.contains("Players." + uuid + ".GKitz." + kit.getName())) {
                 Calendar cooldown = Calendar.getInstance();
@@ -273,6 +277,7 @@ public class CrazyManager {
                 cooldowns.add(new Cooldown(kit, cooldown));
             }
         }
+
         addCEPlayer(new CEPlayer(player, souls, isActive, cooldowns));
     }
     
@@ -285,15 +290,19 @@ public class CrazyManager {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = player.getUniqueId().toString();
         CEPlayer p = getCEPlayer(player);
+
         if (p != null) {
+
             if (p.getSouls() > 0) {
                 data.set("Players." + uuid + ".Name", player.getName());
                 data.set("Players." + uuid + ".Souls-Information.Souls", p.getSouls());
                 data.set("Players." + uuid + ".Souls-Information.Is-Active", p.isSoulsActive());
             }
+
             for (Cooldown cooldown : p.getCooldowns()) {
                 data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
             }
+
             Files.DATA.saveFile();
         }
         removeCEPlayer(p);
@@ -314,14 +323,17 @@ public class CrazyManager {
     public void backupCEPlayer(CEPlayer player) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = player.getPlayer().getUniqueId().toString();
+
         if (player.getSouls() > 0) {
             data.set("Players." + uuid + ".Name", player.getPlayer().getName());
             data.set("Players." + uuid + ".Souls-Information.Souls", player.getSouls());
             data.set("Players." + uuid + ".Souls-Information.Is-Active", player.isSoulsActive());
         }
+
         for (Cooldown cooldown : player.getCooldowns()) {
             data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
         }
+
         Files.DATA.saveFile();
     }
     
@@ -532,6 +544,7 @@ public class CrazyManager {
         if (Methods.verifyItemLore(item)) {
             ItemMeta meta = item.getItemMeta();
             List<String> itemLore = meta.getLore();
+
             if (enchantment.isActivated() && itemLore != null) {
                 for (String lore : itemLore) {
                     String[] split = lore.split(" ");
@@ -681,6 +694,7 @@ public class CrazyManager {
                 }
             }
         }
+
         if (hasEnchantment(includedItem, enchantment)) {
             int level = getLevel(includedItem, enchantment);
             if (highest < level) {
@@ -725,6 +739,7 @@ public class CrazyManager {
                 }
             }
         }
+
         if (hasEnchantment(includedItem, enchantment)) {
             int level = getLevel(includedItem, enchantment);
             if (highest < level) {
@@ -790,28 +805,35 @@ public class CrazyManager {
         for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
+
             if (hasEnchantment(item, enchantment)) {
                 removeEnchantment(item, enchantment);
             }
+
             List<String> newLore = new ArrayList<>();
             List<String> lores = new ArrayList<>();
             HashMap<String, String> enchantmentStrings = new HashMap<>();
+
             for (CEnchantment en : getEnchantmentsOnItem(item)) {
                 enchantmentStrings.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
                 removeEnchantment(item, en);
             }
             ItemMeta meta = item.getItemMeta();
+
             if (meta != null && meta.hasLore()) {
                 List<String> itemLore = meta.getLore();
                 if (itemLore != null) {
                     lores.addAll(itemLore);
                 }
             }
+
             enchantmentStrings.put(enchantment.getName(), Methods.color(enchantment.getColor() + enchantment.getCustomName() + " " + convertLevelString(level)));
+
             for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
                 newLore.add(stringEntry.getValue());
             }
             newLore.addAll(lores);
+
             if (meta != null) {
                 meta.setLore(newLore);
             }
@@ -828,6 +850,7 @@ public class CrazyManager {
     public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
         List<String> newLore = new ArrayList<>();
         ItemMeta meta = item.getItemMeta();
+
         if (meta != null && meta.hasLore()) {
             List<String> itemLore = meta.getLore();
             if (itemLore != null) {
@@ -838,6 +861,7 @@ public class CrazyManager {
                 }
             }
         }
+
         if (meta != null) {
             meta.setLore(newLore);
         }
@@ -860,9 +884,11 @@ public class CrazyManager {
      * @return A Map of all enchantments and their levels on the item.
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
+
         if (!Methods.verifyItemLore(item)) {
             return Collections.emptyMap();
         }
+
         List<String> lore = item.getItemMeta().getLore();
         Map<CEnchantment, Integer> enchantments = null;
         for (String line : lore) {
@@ -875,17 +901,21 @@ public class CrazyManager {
                 if (!enchantment.isActivated()) {
                     continue;
                 }
+
                 if (!enchantmentName.equals(enchantment.getColor() + enchantment.getCustomName())) {
                     continue;
                 }
+
                 String levelString = line.substring(lastSpaceIndex + 1);
                 int level = convertLevelInteger(levelString);
                 if (level < 1) {
                     break; // Invalid level
                 }
+
                 if (enchantments == null) {
                     enchantments = new HashMap<>();
                 }
+
                 enchantments.put(enchantment, level);
                 break; // Next line
             }
@@ -893,6 +923,7 @@ public class CrazyManager {
         if (enchantments == null) {
             enchantments = Collections.emptyMap();
         }
+
         return enchantments;
     }
     
@@ -975,12 +1006,15 @@ public class CrazyManager {
         if (includedItem == null) {
             includedItem = new ItemStack(Material.AIR);
         }
+
         if (excludedItem == null) {
             excludedItem = new ItemStack(Material.AIR);
         }
+
         if (excludedItem.isSimilar(includedItem)) {
             excludedItem = new ItemStack(Material.AIR);
         }
+
         items.add(includedItem);
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> armorEffects = getEnchantmentPotions();
         for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
@@ -1007,6 +1041,7 @@ public class CrazyManager {
                 }
             }
         }
+
         for (PotionEffectType type : armorEffects.get(enchantment).keySet()) {
             if (!effects.containsKey(type)) {
                 effects.put(type, -1);
@@ -1068,6 +1103,7 @@ public class CrazyManager {
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.SPEED, -1);
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.INCREASE_DAMAGE, 0);
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP, 0);
+
         return enchants;
     }
     
@@ -1178,7 +1214,9 @@ public class CrazyManager {
                 }
             }
         }
+
         int level = convertLevelInteger(line.replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
+
         if (!useUnsafeEnchantments && level > enchant.getMaxLevel()) {
             level = enchant.getMaxLevel();
         }
@@ -1207,7 +1245,9 @@ public class CrazyManager {
                 }
             }
         }
+
         level = convertLevelInteger(line.replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
+
         if (!useUnsafeEnchantments && level > enchant.getEnchantment().getMaxLevel()) {
             level = enchant.getEnchantment().getMaxLevel();
         }
@@ -1221,9 +1261,11 @@ public class CrazyManager {
             if (randomLevel > category.getMaxLevel()) {
                 randomLevel = 1 + random.nextInt(enchantmentMax);
             }
+
             if (randomLevel < category.getMinLevel()) {//If I is smaller then the Min of the Category
                 randomLevel = category.getMinLevel();
             }
+
             if (randomLevel > enchantmentMax) {//If I is bigger then the Enchantment Max
                 randomLevel = enchantmentMax;
             }
@@ -1382,6 +1424,7 @@ public class CrazyManager {
         for (String itemString : itemStrings) {
             //This is used to convert old v1.7- gkit files to use newer way.
             StringBuilder newItemString = new StringBuilder();
+
             for (String option : itemString.split(", ")) {
                 if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
                     StringBuilder newOption = new StringBuilder();
@@ -1392,12 +1435,15 @@ public class CrazyManager {
                 }
                 newItemString.append(option).append(", ");
             }
+
             if (newItemString.length() > 0) {
                 itemString = newItemString.substring(0, newItemString.length() - 2);
             }
+
             ItemBuilder itemBuilder = ItemBuilder.convertString(itemString);
             List<String> customEnchantments = new ArrayList<>();
             HashMap<Enchantment, Integer> enchantments = new HashMap<>();
+
             for (String option : itemString.split(", ")) {
                 try {
                     Enchantment enchantment = Methods.getEnchantment(option.split(":")[0]);
@@ -1412,9 +1458,9 @@ public class CrazyManager {
                     } else if (cEnchantment != null) {
                         customEnchantments.add(cEnchantment.getColor() + cEnchantment.getCustomName() + " " + level);
                     }
-                } catch (Exception ignore) {
-                }
+                } catch (Exception ignore) {}
             }
+
             itemBuilder.getLore().addAll(0, customEnchantments);
             itemBuilder.setEnchantments(enchantments);
             NBTItem nbtItem = new NBTItem(itemBuilder.build());
@@ -1434,12 +1480,14 @@ public class CrazyManager {
         if (string.contains(", ")) {
             for (String name : string.split(", ")) {
                 Color color = Methods.getColor(name);
+
                 if (color != null) {
                     colors.add(color);
                 }
             }
         } else {
             Color color = Methods.getColor(string);
+
             if (color != null) {
                 colors.add(color);
             }

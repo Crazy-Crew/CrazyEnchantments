@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.enums;
 
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -58,7 +59,7 @@ public enum ShopOption {
                 config.getInt(costPath + "Cost", 100),
                 Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
             } catch (Exception e) {
-                Bukkit.getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
+                CrazyManager.getInstance().getPlugin().getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
                 e.printStackTrace();
             }
         }

@@ -61,9 +61,11 @@ public class AuraListener implements Listener {
             Map<CEnchantment, Integer> itemEnchantments = ce.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
+
                 if (enchantmentEnum == null) {
                     return; // Not an aura enchantment
                 }
+
                 for (Player other : players) {
                     AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
                     Bukkit.getPluginManager().callEvent(auraEvent);
