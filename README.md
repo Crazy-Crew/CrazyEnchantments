@@ -21,7 +21,7 @@ N/A
 <repository>
     <id>crazycrew-repo-releases</id>
     <name>CrazyCrew Team</name>
-    <url>https://repo.badbones69.com/releases</url>
+    <url>https://repo.badbones69.com/snapshots</url>
 </repository>
 
 <dependency>
