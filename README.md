@@ -19,7 +19,7 @@ N/A
 ## Maven:
 ```xml
 <repository>
-    <id>crazycrew-repo-releases</id>
+    <id>crazycrew-repo-snapshots</id>
     <name>CrazyCrew Team</name>
     <url>https://repo.badbones69.com/snapshots</url>
 </repository>
