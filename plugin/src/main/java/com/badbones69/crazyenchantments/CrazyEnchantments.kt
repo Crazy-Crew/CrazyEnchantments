@@ -20,7 +20,6 @@ class CrazyEnchantments : JavaPlugin(), Listener {
     private val manager = CrazyManager.getInstance()
     private val fileManager = FileManager.getInstance()
 
-    private val patchHealth = Files.CONFIG.file.getBoolean("Settings.Reset-Players-Max-Health")
     private var armor: Armor? = null
 
     // Avoid using @this
@@ -35,6 +34,8 @@ class CrazyEnchantments : JavaPlugin(), Listener {
         Methods.hasUpdate()
 
         CurrencyAPI.loadCurrency()
+
+        val patchHealth = Files.CONFIG.file.getBoolean("Settings.Reset-Players-Max-Health")
 
         plugin.server.onlinePlayers.forEach {
             manager.loadCEPlayer(it)
@@ -98,6 +99,8 @@ class CrazyEnchantments : JavaPlugin(), Listener {
         val player = e.player
         manager.loadCEPlayer(player)
         manager.updatePlayerEffects(player)
+
+        val patchHealth = Files.CONFIG.file.getBoolean("Settings.Reset-Players-Max-Health")
 
         if (patchHealth) player.getAttribute(generic)?.baseValue = player.getAttribute(generic)?.baseValue!!
     }

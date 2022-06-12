@@ -56,6 +56,10 @@ tasks.compileKotlin {
     }
 }
 
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
 tasks.compileJava {
     options.encoding = "UTF-8"
 }
