@@ -2,9 +2,13 @@ package com.badbones69.crazyenchantments.api
 
 import com.badbones69.crazyenchantments.getPlugin
 import com.badbones69.crazyenchantments.multisupport.factions.FactionsVersion
+import com.badbones69.crazyenchantments.multisupport.misc.TownySupport
+import com.badbones69.crazyenchantments.multisupport.misc.mobstacker.StackMobAntiSupport
+import com.badbones69.crazyenchantments.multisupport.skyblock.SuperiorSkyBlockSupport
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -30,9 +34,7 @@ object PluginSupport {
 
         if (factionPlugin != null && factionPlugin.isFriendly(player, secondPlayer)) return true
 
-        // Check if Superior skyBlock is loaded.
-        //             if (SupportedPlugins.SUPERIOR_SKYBLOCK.isPluginLoaded() &&
-        //             SuperiorSkyblockSupport.isFriendly(player, other)) {
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded(getPlugin()) && SuperiorSkyBlockSupport.isFriendly(player, other)) return true
 
         // Check if MCMMO is loaded.
         // SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other);
@@ -54,11 +56,7 @@ object PluginSupport {
     }
 
     fun allowsCombat(location: Location): Boolean {
-
-        //        if (SupportedPlugins.TOWNY.isPluginLoaded() &&
-        //        !TownySupport.allowsPvP(location)) {
-        //            return false;
-        //        }
+        if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded(getPlugin()) && !TownySupport.allowsCombat(location)) return false
 
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || worldGuardVersion.allowsPVP(location)
     }
@@ -86,8 +84,8 @@ object PluginSupport {
         return false
     }
 
-    fun noStack(entity: Entity) {
-
+    fun noStack(entity: LivingEntity) {
+        if (SupportedPlugins.STACKMOB.isPluginLoaded(getPlugin())) StackMobAntiSupport().preventStacking(entity)
     }
 
     enum class SupportedPlugins(private val pluginName: String) {
@@ -98,6 +96,12 @@ object PluginSupport {
         // Spawner Plugins
         SILKSPAWNERS("SilkSpawners"),
 
+        // Stacker Plugins
+
+        // StackMob by Anti Person
+        // Check StackMobAntiSupport for the Spigot URL
+        STACKMOB("StackMob"),
+
         // Anti Cheats
         SPARTAN("Spartan"),
         VULCAN("Vulcan"),
@@ -107,6 +111,9 @@ object PluginSupport {
 
         // Not yet developed by me.
         FACTIONSX("FactionsX"),
+
+        // Sky Block Plugins
+        SUPERIORSKYBLOCK("SuperiorSkyblock2"),
 
         // Region Protection
         WORLDGUARD("WorldGuard"),

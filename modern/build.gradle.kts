@@ -18,6 +18,7 @@ dependencies {
         exclude("com.destroystokyo.paper", "paper-api")
     }
 
+    // Stacker Plugins
     compileOnly("uk.antiperson.stackmob:StackMob:5.5.3")
 
     // Factions Plugins
@@ -26,11 +27,14 @@ dependencies {
     // SkyBlock Plugins
     compileOnly("com.github.OmerBenGera:SuperiorSkyblockAPI:b11")
 
-    // Anti Cheats
+    // Towny Plugins
+    compileOnly("com.palmergames.bukkit.towny:towny:0.98.2.0")
 
+    // Anti Cheats
     compileOnly("me.vagdedes:SpartanAPI:9.1")
 
-    // Base Project
+    compileOnly("me.frep:vulcan-api:1.0.0")
 
+    // Base Project
     compileOnly(project(":api"))
 }

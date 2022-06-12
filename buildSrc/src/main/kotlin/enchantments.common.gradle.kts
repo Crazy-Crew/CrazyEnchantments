@@ -20,6 +20,9 @@ repositories {
     // NBT API | StackMob API
     maven("https://repo.codemc.org/repository/maven-public/")
 
+    // Towny API
+    maven("https://repo.glaremasters.me/repository/towny/")
+
     // Spartan API
     maven("https://nexus.sparky.ac/repository/Sparky/")
 
@@ -29,10 +32,14 @@ repositories {
     // Vault API
     maven("https://jitpack.io")
 
+    // Our Repo
+    maven("https://repo.badbones69.com/releases")
+
     mavenCentral()
 }
 
 dependencies {
+
     compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
 
     compileOnly("org.apache.commons:commons-text:1.9")
