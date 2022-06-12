@@ -29,12 +29,14 @@ object PluginSupport {
     }
 
     fun isFriendly(entity: Entity, other: Entity): Boolean {
-        val player = entity as Player
-        val secondPlayer = other as Player
+        if (entity !is Player || other !is Player) return true
 
-        if (factionPlugin != null && factionPlugin.isFriendly(player, secondPlayer)) return true
+        if (factionPlugin != null && factionPlugin.isFriendly(entity, other)) return true
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded(getPlugin()) && SuperiorSkyBlockSupport.isFriendly(player, other)) return true
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded(getPlugin()) && SuperiorSkyBlockSupport.isFriendly(
+                entity,
+                other
+            )) return true
 
         // Check if MCMMO is loaded.
         // SupportedPlugins.MCMMO.isPluginLoaded() && MCMMOParty.isFriendly(player, other);
