@@ -84,6 +84,19 @@ dependencies {
     // Stacker Plugins.
     compileOnly("uk.antiperson.stackmob:StackMob:5.5.3")
 
+    // Spawner Plugins.
+    compileOnly("de.dustplanet:silkspawners:7.2.0") {
+        exclude("org.bukkit", "bukkit")
+        exclude("org.spigotmc", "spigot")
+        exclude("com.destroystokyo.paper", "paper")
+        exclude("com.sk89q", "worldguard")
+        exclude("com.sk89q", "worldedit")
+        exclude("com.massivecraft.massivecore", "MassiveCore")
+        exclude("com.massivecraft.factions", "Factions")
+        exclude("net.gravitydevelopment.updater", "updater")
+    }
+
+    // Misc Crap.
     compileOnly("org.apache.commons:commons-text:1.9")
 
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")

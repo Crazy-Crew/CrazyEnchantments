@@ -1,16 +1,17 @@
 package com.badbones69.crazyenchantments.api
 
-import com.badbones69.crazyenchantments.getPlugin
 import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion
 import com.badbones69.crazyenchantments.api.multisupport.misc.TownySupport
 import com.badbones69.crazyenchantments.api.multisupport.misc.mobstacker.StackMobAntiSupport
 import com.badbones69.crazyenchantments.api.multisupport.skyblock.SuperiorSkyBlockSupport
+import com.badbones69.crazyenchantments.getPlugin
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+
 
 object PluginSupport {
 
@@ -122,7 +123,7 @@ object PluginSupport {
 
         fun getName() = pluginName
 
-        fun isPluginLoaded(plugin: JavaPlugin) = plugin.server.pluginManager.isPluginEnabled(pluginName)
+        fun isPluginLoaded(plugin: JavaPlugin) = plugin.server.pluginManager.getPlugin(name) != null
 
     }
 }

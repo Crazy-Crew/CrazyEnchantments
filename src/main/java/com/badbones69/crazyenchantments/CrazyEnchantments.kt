@@ -3,7 +3,9 @@ package com.badbones69.crazyenchantments
 import com.badbones69.crazyenchantments.api.CrazyManager
 import com.badbones69.crazyenchantments.api.FileManager
 import com.badbones69.crazyenchantments.api.FileManager.Files
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI
+import com.badbones69.crazyenchantments.api.multisupport.misc.spawners.SilkSpawnerSupport
 import com.badbones69.crazyenchantments.commands.*
 import com.badbones69.crazyenchantments.controllers.*
 import com.badbones69.crazyenchantments.enchantments.*
@@ -18,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin
 class CrazyEnchantments : JavaPlugin(), Listener {
 
     private val manager = CrazyManager.getInstance()
+
     private val fileManager = FileManager.getInstance()
 
     private var armor: Armor? = null
@@ -29,9 +32,8 @@ class CrazyEnchantments : JavaPlugin(), Listener {
 
     override fun onEnable() {
         fileManager.logInfo(true).setup(plugin)
-        manager.load()
 
-        Methods.hasUpdate()
+        manager.load()
 
         CurrencyAPI.loadCurrency()
 
@@ -42,15 +44,21 @@ class CrazyEnchantments : JavaPlugin(), Listener {
             if (patchHealth) it.getAttribute(generic)?.baseValue = it.getAttribute(generic)?.baseValue!!
         }
 
-        getCommand("crazyenchantments")?.setExecutor(CECommand())
-        getCommand("crazyenchantments")?.tabCompleter = CETab()
-        getCommand("tinkerer")?.setExecutor(TinkerCommand())
-        getCommand("blacksmith")?.setExecutor(BlackSmithCommand())
-        getCommand("gkit")?.setExecutor(GkitzCommand())
-        getCommand("gkit")?.tabCompleter = GkitzTab()
+        plugin.server.scheduler.runTaskTimerAsynchronously(plugin, Runnable {
+            manager.cePlayers.forEach { manager.backupCEPlayer(it) }
+        }, 5 * 20 * 60, 5 * 20 * 60)
 
-        registerListener(
-            this,
+        enable()
+    }
+
+    override fun onDisable() {
+        disable()
+    }
+
+    private fun enable() {
+
+        listOf(
+            plugin,
             ShopControl(),
             InfoGUIControl(),
             LostBookController(),
@@ -76,21 +84,33 @@ class CrazyEnchantments : JavaPlugin(), Listener {
             Swords(),
             Armor().also { armor = it },
             AllyEnchantments()
-        )
+        ).onEach {loop ->
+            server.pluginManager.registerEvents(loop, plugin)
+        }
 
-        if (manager.isGkitzEnabled) registerListener(GKitzController())
+        if (manager.isGkitzEnabled) {
+            logger.info("Gkitz support is now enabled.")
+            server.pluginManager.registerEvents(GKitzController(), plugin)
+        }
 
-        // if (PluginSupport.SupportedPlugins.SILKSPAWNERS.isPluginLoaded(plugin))
+        if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded(plugin)) {
+            logger.info("Silk Spawners support is now enabled.")
+            server.pluginManager.registerEvents(SilkSpawnerSupport(), plugin)
+        }
 
-        plugin.server.scheduler.runTaskTimerAsynchronously(plugin, Runnable {
-               manager.cePlayers.forEach { manager.backupCEPlayer(it) }
-        }, 5 * 20 * 60, 5 * 20 * 60)
+        getCommand("crazyenchantments")?.setExecutor(CECommand())
+        getCommand("crazyenchantments")?.tabCompleter = CETab()
+        getCommand("tinkerer")?.setExecutor(TinkerCommand())
+        getCommand("blacksmith")?.setExecutor(BlackSmithCommand())
+        getCommand("gkit")?.setExecutor(GkitzCommand())
+        getCommand("gkit")?.tabCompleter = GkitzTab()
     }
 
-    override fun onDisable() {
+    private fun disable() {
         armor?.stop()
 
         if (manager.allyManager != null) manager.allyManager.forceRemoveAllies()
+
         server.onlinePlayers.forEach { manager.unloadCEPlayer(it) }
     }
 
@@ -110,7 +130,5 @@ class CrazyEnchantments : JavaPlugin(), Listener {
         manager.unloadCEPlayer(e.player)
     }
 }
-
-fun CrazyEnchantments.registerListener(vararg listeners: Listener) = listeners.toList().forEach { server.pluginManager.registerEvents(it, this) }
 
 fun getPlugin() = JavaPlugin.getPlugin(CrazyEnchantments::class.java)
