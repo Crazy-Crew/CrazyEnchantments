@@ -57,7 +57,7 @@ object Boots : Listener {
     @EventHandler
     private fun onFly(e: PlayerToggleFlightEvent) {
         val player = e.player
-        if (manager.isWingsEnabled && ce.hasEnchantment(player.equipment!!.boots, CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
+        if (manager.isWingsEnabled && ce.hasEnchantment(player.equipment.boots, CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
 
             if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(getPlugin())) {
                 SpartanSupport.cancelNormalMovements(player)
@@ -77,10 +77,10 @@ object Boots : Listener {
 
     @EventHandler
     private fun onMove(e: PlayerMoveEvent) {
-        if (e.from.blockX != e.to!!.blockX || e.from.blockY != e.to!!.blockY || e.from.blockZ != e.to!!.blockZ) {
+        if (e.from.blockX != e.to.blockX || e.from.blockY != e.to.blockY || e.from.blockZ != e.to.blockZ) {
             val player = e.player
             val isFlying = player.isFlying
-            if (manager.isWingsEnabled && ce.hasEnchantment(player.equipment!!.boots, CEnchantments.WINGS)) {
+            if (manager.isWingsEnabled && ce.hasEnchantment(player.equipment.boots, CEnchantments.WINGS)) {
                 if (regionCheck(player)) {
                     if (!areEnemiesNearby(player)) {
                         player.allowFlight = true
@@ -108,7 +108,7 @@ object Boots : Listener {
     @EventHandler
     private fun onJoin(e: PlayerJoinEvent) {
         val player = e.player
-        if (manager.isWingsEnabled && ce.hasEnchantment(player.equipment!!.boots, CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
+        if (manager.isWingsEnabled && ce.hasEnchantment(player.equipment.boots, CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
 
             if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(getPlugin())) {
                 SpartanSupport.cancelNormalMovements(player)
