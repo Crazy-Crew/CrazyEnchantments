@@ -243,7 +243,7 @@ public class CrazyManager {
         allyManager.load();
 
         //Starts the wings task
-        Boots.INSTANCE.startWings();
+        Boots.startWings();
 
         if (PluginSupport.SupportedPlugins.WORLDGUARD.isPluginLoaded(plugin) && PluginSupport.SupportedPlugins.WORLDEDIT.isPluginLoaded(plugin)) {
             worldGuardVersion = new WorldGuardSupport();

@@ -76,14 +76,19 @@ object PluginSupport {
 
         if (!SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) && !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin())) return true
 
-        wings.regions.forEach {
-            if (worldGuardVersion.inRegion(it, player.location)) return true
+        wings.regions.forEach {region ->
+            if (worldGuardVersion.inRegion(region, player.location)) {
+                return true
+            } else {
+                if (wings.canOwnersFly() && worldGuardVersion.isOwner(player)) {
+                    return true
+                }
 
-            if (wings.canOwnersFly() && worldGuardVersion.isOwner(player)) return true
-
-            if (wings.canMembersFly() && worldGuardVersion.isMember(player)) return true
+                if (wings.canMembersFly() && worldGuardVersion.isMember(player)) {
+                    return true
+                }
+            }
         }
-
         return false
     }
 

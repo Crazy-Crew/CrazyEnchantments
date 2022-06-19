@@ -36,12 +36,7 @@ public class Tools implements Listener {
     
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                updateEffects(e.getPlayer());
-            }
-        }.runTaskAsynchronously(ce.getPlugin());
+        updateEffects(e.getPlayer());
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
