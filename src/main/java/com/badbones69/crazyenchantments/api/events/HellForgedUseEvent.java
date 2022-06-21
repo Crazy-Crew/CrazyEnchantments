@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 public class HellForgedUseEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private ItemStack item;
+    private final Player player;
+    private final ItemStack item;
     private boolean cancel;
     
     public HellForgedUseEvent(Player player, ItemStack item) {

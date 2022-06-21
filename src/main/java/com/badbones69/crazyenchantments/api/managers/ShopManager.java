@@ -18,13 +18,13 @@ import java.util.Map.Entry;
 
 public class ShopManager {
     
-    private CrazyManager ce = CrazyManager.getInstance();
-    private static ShopManager instance = new ShopManager();
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private static final ShopManager instance = new ShopManager();
     private String inventoryName;
     private int inventorySize;
     private boolean enchantmentTableShop;
-    private HashMap<ItemBuilder, Integer> customizerItems = new HashMap<>();
-    private HashMap<ItemBuilder, Integer> shopItems = new HashMap<>();
+    private final HashMap<ItemBuilder, Integer> customizerItems = new HashMap<>();
+    private final HashMap<ItemBuilder, Integer> shopItems = new HashMap<>();
     
     public static ShopManager getInstance() {
         return instance;

@@ -37,9 +37,9 @@ import java.util.Random;
 
 public class PickAxes implements Listener {
     
-    private Random random = new Random();
-    private CrazyManager ce = CrazyManager.getInstance();
-    private HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+    private final Random random = new Random();
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockClick(PlayerInteractEvent e) {
@@ -86,6 +86,7 @@ public class PickAxes implements Listener {
                             ce.removeIgnoredEvent(event);
                         }
                     }
+
                     HashMap<ItemStack, Integer> drops = new HashMap<>();
 
                     if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
@@ -136,16 +137,14 @@ public class PickAxes implements Listener {
                                         ItemStack finalDrop = drop;
                                         try {
                                             block.getWorld().dropItem(block.getLocation(), finalDrop);
-                                        } catch (IllegalArgumentException ignore) {
-                                        }
+                                        } catch (IllegalArgumentException ignore) {}
                                     }
                                 } else {
                                     for (ItemStack drop : block.getDrops(currentItem)) {
                                         if (drop.getType() != Material.AIR) {
                                             try {
                                                 block.getWorld().dropItem(block.getLocation(), drop);
-                                            } catch (IllegalArgumentException ignore) {
-                                            }
+                                            } catch (IllegalArgumentException ignore) {}
                                         }
                                         if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
                                             break;
@@ -184,6 +183,7 @@ public class PickAxes implements Listener {
                             player.getInventory().addItem(item.getKey());
                         }
                     }
+
                     if (player.getGameMode() != GameMode.CREATIVE && xp > 0) {
                         ExperienceOrb orb = currentBlock.getWorld().spawn(currentBlock.getLocation().add(.5, .5, .5), ExperienceOrb.class);
                         orb.setExperience(xp);
@@ -221,10 +221,9 @@ public class PickAxes implements Listener {
 
                     if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                         int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
-                        if (isOre) {
-                            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                            orb.setExperience(Methods.percentPick(7, 3) * power);
-                        }
+
+                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                        orb.setExperience(Methods.percentPick(7, 3) * power);
                     }
 
                     e.setDropItems(false);
@@ -232,6 +231,7 @@ public class PickAxes implements Listener {
                     Methods.removeDurability(item, player);
                 }
             }
+
             if (CEnchantments.FURNACE.isActivated() && isOre && (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
                 Bukkit.getPluginManager().callEvent(event);
@@ -253,10 +253,8 @@ public class PickAxes implements Listener {
                     if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                         int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
 
-                        if (isOre) {
-                            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                            orb.setExperience(Methods.percentPick(7, 3) * power);
-                        }
+                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+                        orb.setExperience(Methods.percentPick(7, 3) * power);
                     }
                 }
 
@@ -264,6 +262,7 @@ public class PickAxes implements Listener {
                 Methods.removeDurability(item, player);
             }
         }
+
         if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) && isOre && (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
             int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
@@ -308,8 +307,7 @@ public class PickAxes implements Listener {
                 loc.add(1, depth, 1);
                 loc2.add(-1, 0, -1);
             }
-            default -> {
-            }
+            default -> {}
         }
 
         List<Block> blockList = new ArrayList<>();

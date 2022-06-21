@@ -11,12 +11,12 @@ import org.bukkit.inventory.ItemStack;
 public class BookApplyEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private int level;
+    private final Player player;
+    private final int level;
     private boolean cancelled;
-    private ItemStack enchantedItem;
-    private CEnchantment enchantment;
-    private CEBook ceBook;
+    private final ItemStack enchantedItem;
+    private final CEnchantment enchantment;
+    private final CEBook ceBook;
     
     public BookApplyEvent(Player player, ItemStack enchantedItem, CEBook ceBook) {
         this.level = ceBook.getLevel();

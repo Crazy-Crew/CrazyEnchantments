@@ -22,8 +22,8 @@ public class InfoMenuManager {
     private int inventorySize;
     private ItemStack backRight;
     private ItemStack backLeft;
-    private List<EnchantmentType> enchantmentTypes = new ArrayList<>();
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final List<EnchantmentType> enchantmentTypes = new ArrayList<>();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     public static InfoMenuManager getInstance() {
         return instance;

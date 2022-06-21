@@ -9,10 +9,10 @@ import org.bukkit.event.HandlerList;
 public class BuyBookEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
-    private int price;
-    private CEBook book;
-    private CEPlayer player;
-    private Currency currency;
+    private final int price;
+    private final CEBook book;
+    private final CEPlayer player;
+    private final Currency currency;
     
     /**
      * Called when a book is being bought with the signs and gui.

@@ -29,7 +29,7 @@ import java.util.List;
 public class Scrambler implements Listener {
     
     public static HashMap<Player, BukkitTask> roll = new HashMap<>();
-    private static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager ce = CrazyManager.getInstance();
     private static ItemBuilder scramblerItem;
     private static ItemBuilder pointer;
     private static boolean animationToggle;

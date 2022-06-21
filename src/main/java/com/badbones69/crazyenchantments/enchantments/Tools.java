@@ -23,16 +23,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.*;
 
 public class Tools implements Listener {
     
-    private static Random random = new Random();
-    private int potionTime = 5 * 20;
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private static List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
+    private final static Random random = new Random();
+    private final int potionTime = 5 * 20;
+    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
     
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
@@ -122,6 +120,7 @@ public class Tools implements Listener {
                 } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
                     itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
                 }
+
                 if (hasOreXP(block)) {
                     xp = Methods.percentPick(7, 3);
                     if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {

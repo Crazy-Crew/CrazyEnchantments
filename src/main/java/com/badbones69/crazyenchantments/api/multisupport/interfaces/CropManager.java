@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.api.multisupport.interfaces;
 
 import org.bukkit.block.Block;
 
-public interface NMSSupport {
+public interface CropManager {
     
     void fullyGrowPlant(Block block);
     

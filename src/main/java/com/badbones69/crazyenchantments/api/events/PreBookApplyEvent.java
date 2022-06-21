@@ -11,17 +11,17 @@ import org.bukkit.inventory.ItemStack;
 public class PreBookApplyEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private int level;
-    private boolean destroyed;
+    private final Player player;
+    private final int level;
+    private final boolean destroyed;
     private boolean cancelled;
-    private boolean successful;
-    private int successChance;
-    private int destroyChance;
-    private boolean creativeSuccess;
-    private ItemStack enchantedItem;
-    private CEnchantment enchantment;
-    private CEBook ceBook;
+    private final boolean successful;
+    private final int successChance;
+    private final int destroyChance;
+    private final boolean creativeSuccess;
+    private final ItemStack enchantedItem;
+    private final CEnchantment enchantment;
+    private final CEBook ceBook;
     
     public PreBookApplyEvent(Player player, ItemStack enchantedItem, CEBook ceBook, boolean creativeSuccess, boolean successful, boolean destroyed) {
         this.level = ceBook.getLevel();

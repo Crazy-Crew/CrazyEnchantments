@@ -22,8 +22,8 @@ import java.util.*;
 
 public class ScrollControl implements Listener {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private Random random = new Random();
+    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final Random random = new Random();
     private static String suffix;
     private static boolean countVanillaEnchantments;
     private static boolean useSuffix;
@@ -145,7 +145,7 @@ public class ScrollControl implements Listener {
             newEnchantmentOrder.add(enchantment);
         }
 
-        newEnchantmentOrder = orderInts(newEnchantmentOrder, categories);
+        orderInts(newEnchantmentOrder, categories);
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
 
@@ -173,6 +173,7 @@ public class ScrollControl implements Listener {
                     }
                 }
             }
+
             int amount = newEnchantmentOrder.size();
 
             if (countVanillaEnchantments) {

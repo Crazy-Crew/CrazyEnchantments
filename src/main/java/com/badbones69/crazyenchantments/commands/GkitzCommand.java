@@ -10,15 +10,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
 public class GkitzCommand implements CommandExecutor {
     
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         boolean isPlayer = sender instanceof Player;
         if (ce.isGkitzEnabled()) {
             if (args.length == 0) {

@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 public class Helmets implements Listener {
     
-    private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMovement(PlayerMoveEvent e) {

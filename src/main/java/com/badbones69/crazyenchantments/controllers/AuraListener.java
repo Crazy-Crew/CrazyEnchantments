@@ -45,7 +45,7 @@ public class AuraListener implements Listener {
             return;
         }
 
-        List<Player> players = getNearbyPlayers(player, 3);
+        List<Player> players = getNearbyPlayers(player);
 
         if (players.isEmpty()) {
             return;
@@ -53,8 +53,8 @@ public class AuraListener implements Listener {
 
         EntityEquipment playerEquipment = player.getEquipment();
 
-        if (playerEquipment == null) {
-            return; // Should never happen
+        if (playerEquipment.getHolder().isEmpty()) {
+            return;
         }
 
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
@@ -76,7 +76,7 @@ public class AuraListener implements Listener {
         for (Player other : players) {
             EntityEquipment otherEquipment = other.getEquipment();
 
-            if (otherEquipment == null) {
+            if (otherEquipment.getHolder().isEmpty()) {
                 continue; // Should never happen
             }
 
@@ -101,10 +101,10 @@ public class AuraListener implements Listener {
     }
     
     // TODO: move into utils?
-    private static List<Player> getNearbyPlayers(Player player, int radius) {
+    private static List<Player> getNearbyPlayers(Player player) {
         List<Player> players = new ArrayList<>();
 
-        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+        for (Entity entity : player.getNearbyEntities(3, 3, 3)) {
             if (!(entity instanceof Player) || entity.getUniqueId().toString().equals(player.getUniqueId().toString())) {
                 continue;
             }

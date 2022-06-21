@@ -26,8 +26,8 @@ import java.util.List;
 
 public class Axes implements Listener {
     
-    private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -119,7 +119,6 @@ public class Axes implements Listener {
                 }
             }
         }
-        
     }
     
     @EventHandler

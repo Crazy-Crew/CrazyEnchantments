@@ -18,15 +18,14 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Boots implements Listener {
 
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport support = PluginSupport.INSTANCE;
-    private static WingsManager manager = ce.getWingsManager();
+    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final PluginSupport support = PluginSupport.INSTANCE;
+    private final static WingsManager manager = ce.getWingsManager();
 
     public static void startWings() {
         if (manager.isCloudsEnabled() && manager.isWingsEnabled()) {
@@ -53,6 +52,7 @@ public class Boots implements Listener {
             if (ce.hasEnchantment(e.getNewArmorPiece(), CEnchantments.WINGS) && regionCheck(player) && gamemodeCheck(player)) {
                 player.setAllowFlight(true);
             }
+
             if (ce.hasEnchantment(e.getOldArmorPiece(), CEnchantments.WINGS) && gamemodeCheck(player)) {
                 player.setAllowFlight(false);
             }
@@ -102,6 +102,7 @@ public class Boots implements Listener {
                         manager.removeFlyingPlayer(player);
                     }
                 }
+
                 if (isFlying) {
                     manager.addFlyingPlayer(player);
                 }
@@ -116,6 +117,7 @@ public class Boots implements Listener {
             if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                 SpartanSupport.cancelNormalMovements(player);
             }
+
             player.setAllowFlight(true);
             manager.addFlyingPlayer(player);
         }

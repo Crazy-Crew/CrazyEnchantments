@@ -18,22 +18,21 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Arrays;
 import java.util.List;
 
 public class BlackSmith implements Listener {
     
-    private static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
-    private CrazyManager ce = CrazyManager.getInstance();
-    private int mainSlot = 10;
-    private int subSlot = 13;
-    private static int resultSlot = 16;
-    private static List<Integer> resultBoarder = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
-    private static List<Integer> otherBoarder = Arrays.asList(1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24);
-    private Sound click = Sound.UI_BUTTON_CLICK;
-    private Sound levelUp = Sound.ENTITY_PLAYER_LEVELUP;
-    private Sound villagerNo = Sound.ENTITY_VILLAGER_NO;
+    private static final BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final int mainSlot = 10;
+    private final int subSlot = 13;
+    private final static int resultSlot = 16;
+    private final static List<Integer> resultBoarder = Arrays.asList(7, 8, 9, 16, 18, 25, 26, 27);
+    private final static List<Integer> otherBoarder = Arrays.asList(1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24);
+    private final Sound click = Sound.UI_BUTTON_CLICK;
+    private final Sound levelUp = Sound.ENTITY_PLAYER_LEVELUP;
+    private final Sound villagerNo = Sound.ENTITY_VILLAGER_NO;
     
     public static void openBlackSmith(Player player) {
         Inventory inventory = Bukkit.createInventory(null, 27, blackSmithManager.getMenuName());
@@ -132,6 +131,7 @@ public class BlackSmith implements Listener {
                     givePlayerItem(player, inventory.getItem(slot));
                 }
             }
+
             inventory.clear();
         }
     }

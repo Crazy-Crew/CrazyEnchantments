@@ -36,12 +36,12 @@ import java.util.List;
 
 public class Bows implements Listener {
     
-    private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
-    private List<EnchantedArrow> enchantedArrows = new ArrayList<>();
-    private Material web = new ItemBuilder().setMaterial("COBWEB").getMaterial();
-    private List<Block> webBlocks = new ArrayList<>();
-    private BowEnchantmentManager manager = ce.getBowManager();
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final List<EnchantedArrow> enchantedArrows = new ArrayList<>();
+    private final Material web = new ItemBuilder().setMaterial("COBWEB").getMaterial();
+    private final List<Block> webBlocks = new ArrayList<>();
+    private final BowEnchantmentManager manager = ce.getBowManager();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBowShoot(final EntityShootBowEvent e) {
@@ -254,6 +254,7 @@ public class Bows implements Listener {
                             }
                         }
                         arrow.getArrow().remove();
+
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -288,6 +289,7 @@ public class Bows implements Listener {
                             entity.setVelocity(v);
                         }
                     }
+
                     for (BowEnchantment bowEnchantment : manager.getBowEnchantments()) {
                         CEnchantments enchantment = bowEnchantment.getEnchantment();
                         // No need to check if its active as if it is not then Bow Manager doesn't add it to the list of enchantments.

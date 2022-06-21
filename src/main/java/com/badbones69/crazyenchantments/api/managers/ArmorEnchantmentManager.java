@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ArmorEnchantmentManager {
     
-    private static ArmorEnchantmentManager instance = new ArmorEnchantmentManager();
-    private List<ArmorEnchantment> armorEnchantments = new ArrayList<>();
+    private static final ArmorEnchantmentManager instance = new ArmorEnchantmentManager();
+    private final List<ArmorEnchantment> armorEnchantments = new ArrayList<>();
     
     public static ArmorEnchantmentManager getInstance() {
         return instance;

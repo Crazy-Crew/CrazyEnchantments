@@ -10,8 +10,8 @@ import java.util.List;
 
 public class BowEnchantmentManager {
     
-    private static BowEnchantmentManager instance = new BowEnchantmentManager();
-    private List<BowEnchantment> bowEnchantments = new ArrayList<>();
+    private static final BowEnchantmentManager instance = new BowEnchantmentManager();
+    private final List<BowEnchantment> bowEnchantments = new ArrayList<>();
     
     public static BowEnchantmentManager getInstance() {
         return instance;

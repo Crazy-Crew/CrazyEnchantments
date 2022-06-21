@@ -25,8 +25,8 @@ import java.util.Random;
 
 public class DustControl implements Listener {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private Random random = new Random();
+    private static final CrazyManager ce = CrazyManager.getInstance();
+    private final Random random = new Random();
     
     private static void setLore(ItemStack item, int percent, String rate) {
         ItemMeta m = item.getItemMeta();

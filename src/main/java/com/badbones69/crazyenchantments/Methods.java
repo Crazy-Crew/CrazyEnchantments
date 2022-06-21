@@ -28,14 +28,14 @@ import java.util.regex.Pattern;
 
 public class Methods {
     
-    private static Random random = new Random();
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private static PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final static Random random = new Random();
+    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static PluginSupport pluginSupport = PluginSupport.INSTANCE;
     public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
     public static String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         while (matcher.find()) {
             matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
         }
@@ -89,11 +89,13 @@ public class Methods {
                         return item;
                     }
                 }
+
                 item.addUnsafeEnchantment(Enchantment.LUCK, 1);
                 ItemMeta meta = item.getItemMeta();
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 item.setItemMeta(meta);
             }
+
             return item;
         } catch (NoClassDefFoundError e) {
             return it;
@@ -155,6 +157,7 @@ public class Methods {
                     item.setAmount(item.getAmount() - amount);
                 }
             }
+
             if (!found) {
                 ItemStack offHand = player.getEquipment().getItemInOffHand();
                 if (offHand.isSimilar(item)) {
@@ -187,18 +190,23 @@ public class Methods {
     public static ItemStack addLore(ItemStack item, String i) {
         ArrayList<String> lore = new ArrayList<>();
         ItemMeta m = item.getItemMeta();
+
         if (item.getItemMeta().hasLore()) {
             lore.addAll(item.getItemMeta().getLore());
         }
+
         lore.add(color(i));
+
         if (lore.contains(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")))) {
             lore.remove(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
             lore.add(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
         }
+
         if (lore.contains(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
             lore.remove(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
             lore.add(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
         }
+
         m.setLore(lore);
         item.setItemMeta(m);
         return item;
@@ -216,6 +224,7 @@ public class Methods {
             c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes(StandardCharsets.UTF_8));
             String oldVersion = ce.getPlugin().getDescription().getVersion();
             String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
+
             if (!newVersion.equals(oldVersion)) {
                 if (player != null) {
                     player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
@@ -223,8 +232,7 @@ public class Methods {
                     Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
                 }
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
     
     public static int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
@@ -241,6 +249,7 @@ public class Methods {
                             toggle = true;
                         }
                     }
+
                     if (b.length >= 2) {
                         if (itemLine.toLowerCase().endsWith(b[1])) {
                             arg = arg.toLowerCase().replace(b[1], "");
@@ -248,19 +257,23 @@ public class Methods {
                             toggle = false;
                         }
                     }
+
                     if (toggle) {
                         break;
                     }
                 }
+
                 if (isInt(arg)) {
                     break;
                 }
             }
         }
+
         int percent = defaultValue;
         if (isInt(arg)) {
             percent = Integer.parseInt(arg);
         }
+
         return percent;
     }
     
@@ -278,6 +291,7 @@ public class Methods {
         if (max <= 0) {
             return true;
         }
+
         int chance = 1 + random.nextInt(max);
         return chance == 1;
     }
@@ -286,6 +300,7 @@ public class Methods {
         if (max <= min || max <= 0) {
             return true;
         }
+
         int chance = 1 + random.nextInt(max);
         return chance >= 1 && chance <= min;
     }
@@ -310,6 +325,7 @@ public class Methods {
                 entities.add((LivingEntity) en);
             }
         }
+
         return entities;
     }
     
@@ -336,42 +352,25 @@ public class Methods {
     }
     
     public static Color getColor(String color) {
-        switch (color.toUpperCase()) {
-            case "AQUA":
-                return Color.AQUA;
-            case "BLACK":
-                return Color.BLACK;
-            case "BLUE":
-                return Color.BLUE;
-            case "FUCHSIA":
-                return Color.FUCHSIA;
-            case "GRAY":
-                return Color.GRAY;
-            case "GREEN":
-                return Color.GREEN;
-            case "LIME":
-                return Color.LIME;
-            case "MAROON":
-                return Color.MAROON;
-            case "NAVY":
-                return Color.NAVY;
-            case "OLIVE":
-                return Color.OLIVE;
-            case "ORANGE":
-                return Color.ORANGE;
-            case "PURPLE":
-                return Color.PURPLE;
-            case "RED":
-                return Color.RED;
-            case "SILVER":
-                return Color.SILVER;
-            case "TEAL":
-                return Color.TEAL;
-            case "YELLOW":
-                return Color.YELLOW;
-            default:
-                return Color.WHITE;
-        }
+        return switch (color.toUpperCase()) {
+            case "AQUA" -> Color.AQUA;
+            case "BLACK" -> Color.BLACK;
+            case "BLUE" -> Color.BLUE;
+            case "FUCHSIA" -> Color.FUCHSIA;
+            case "GRAY" -> Color.GRAY;
+            case "GREEN" -> Color.GREEN;
+            case "LIME" -> Color.LIME;
+            case "MAROON" -> Color.MAROON;
+            case "NAVY" -> Color.NAVY;
+            case "OLIVE" -> Color.OLIVE;
+            case "ORANGE" -> Color.ORANGE;
+            case "PURPLE" -> Color.PURPLE;
+            case "RED" -> Color.RED;
+            case "SILVER" -> Color.SILVER;
+            case "TEAL" -> Color.TEAL;
+            case "YELLOW" -> Color.YELLOW;
+            default -> Color.WHITE;
+        };
     }
     
     public static String stripString(String string) {
@@ -488,6 +487,7 @@ public class Methods {
                                 }
                                 i++;
                             }
+
                             return true;
                         }
                     }
@@ -519,6 +519,7 @@ public class Methods {
                                         SpartanSupport.cancelNoFall((Player) player);
                                     }
                                 }
+
                                 en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
                             }
                         }
@@ -550,6 +551,7 @@ public class Methods {
                                         SpartanSupport.cancelNoFall((Player) player);
                                     }
                                 }
+
                                 en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
                             }
                         }

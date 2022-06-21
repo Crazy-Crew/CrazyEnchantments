@@ -89,7 +89,7 @@ public enum Messages {
     "&b/ce lostbook <category> [amount] [player] - &9Gives a player a lost book item.",
     "&b/ce spawn <enchantment/category> [(level:#/min-max)/world:<world>/x:#/y:#/z:#] - &9Drops an enchantment book at the specific coordinates."));
     
-    private String path;
+    private final String path;
     private String defaultMessage;
     private List<String> defaultListMessage;
     

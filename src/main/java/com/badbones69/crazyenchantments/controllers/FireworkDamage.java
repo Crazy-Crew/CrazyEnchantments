@@ -12,8 +12,8 @@ import java.util.List;
 
 public class FireworkDamage implements Listener {
     
-    private static List<Entity> fireworks = new ArrayList<>();
-    private CrazyManager ce = CrazyManager.getInstance();
+    private static final List<Entity> fireworks = new ArrayList<>();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * @return All the active fireworks.

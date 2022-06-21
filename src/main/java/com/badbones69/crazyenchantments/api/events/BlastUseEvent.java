@@ -11,9 +11,9 @@ import java.util.List;
 public class BlastUseEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
+    private final Player player;
     private boolean cancelled;
-    private List<Block> blockList;
+    private final List<Block> blockList;
     
     public BlastUseEvent(Player player, List<Block> blockList) {
         this.player = player;

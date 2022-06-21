@@ -29,7 +29,7 @@ import java.util.List;
 
 public class Tinkerer implements Listener {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager ce = CrazyManager.getInstance();
     
     public static void openTinker(Player player) {
         Inventory inv = Bukkit.createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
@@ -120,8 +120,8 @@ public class Tinkerer implements Listener {
                     return;
                 }
 
-                if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) { //Adding/Taking Items
-                    if (current.getType() == ce.getEnchantmentBookItem().getType()) {//Adding a book
+                if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) { // Adding/Taking Items
+                    if (current.getType() == ce.getEnchantmentBookItem().getType()) { // Adding a book
                         boolean toggle = false;
                         String enchant = "";
 
@@ -150,7 +150,7 @@ public class Tinkerer implements Listener {
                         }
                     }
 
-                    if (getTotalXP(current) > 0 && current.getType() != ce.getEnchantmentBookItem().getType()) { //Adding an item
+                    if (getTotalXP(current) > 0 && current.getType() != ce.getEnchantmentBookItem().getType()) { // Adding an item
                         if (inTinker(e.getRawSlot())) { // Clicking in the Tinkers
 
                             if (getSlot().containsKey(e.getRawSlot())) {
@@ -187,7 +187,8 @@ public class Tinkerer implements Listener {
     public void onInvClose(final InventoryCloseEvent e) {
         final Inventory inv = e.getInventory();
         final Player player = (Player) e.getPlayer();
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Bukkit.getPluginManager().getPlugin("CrazyEnchantments"), () -> {
+
+        ce.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), () -> {
             if (inv != null && e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
                 for (int slot : getSlot().keySet()) {
                     if (inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR) {
@@ -202,6 +203,7 @@ public class Tinkerer implements Listener {
                         }
                     }
                 }
+
                 inv.clear();
             }
         }, 0);

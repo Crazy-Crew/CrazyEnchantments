@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlackSmithManager {
     
-    private static BlackSmithManager instance = new BlackSmithManager();
+    private static final BlackSmithManager instance = new BlackSmithManager();
     private ItemStack denyBarrier;
     private ItemStack redGlass;
     private ItemStack blueGlass;

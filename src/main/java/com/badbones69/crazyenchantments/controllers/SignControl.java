@@ -34,7 +34,7 @@ import java.util.Random;
 
 public class SignControl implements Listener {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
+    private static final CrazyManager ce = CrazyManager.getInstance();
     
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {

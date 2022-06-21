@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
@@ -25,13 +24,13 @@ public enum ShopOption {
     WHITE_SCROLL("WhiteScroll", "WhiteScroll", "GUIName", "Lore", true),
     TRANSMOG_SCROLL("TransmogScroll", "TransmogScroll", "GUIName", "Lore", true);
     
-    private static HashMap<ShopOption, Option> shopOptions = new HashMap<>();
-    private String optionPath;
-    private String path;
-    private String namePath;
-    private String lorePath;
+    private static final HashMap<ShopOption, Option> shopOptions = new HashMap<>();
+    private final String optionPath;
+    private final String path;
+    private final String namePath;
+    private final String lorePath;
     private Option option;
-    private boolean buyable;
+    private final boolean buyable;
     
     ShopOption(String optionPath, String path, String namePath, String lorePath, boolean buyable) {
         this.optionPath = optionPath;

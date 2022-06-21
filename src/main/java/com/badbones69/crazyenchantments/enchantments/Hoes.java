@@ -21,11 +21,11 @@ import java.util.*;
 public class Hoes implements Listener {
     
     private static List<Material> harvesterCrops;
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     private List<Material> seedlings;
-    private Random random = new Random();
-    private Material soilBlock = Material.FARMLAND;
-    private Material grassBlock = Material.GRASS_BLOCK;
+    private final Random random = new Random();
+    private final Material soilBlock = Material.FARMLAND;
+    private final Material grassBlock = Material.GRASS_BLOCK;
     private HashMap<Material, Material> planterSeeds;
     private HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
     
@@ -85,7 +85,7 @@ public class Hoes implements Listener {
                         }
 
                         // Take durability from the hoe for each block set to a soil.
-                        if (player.getGameMode() != GameMode.CREATIVE) {// Take durability from players not in Creative
+                        if (player.getGameMode() != GameMode.CREATIVE) { // Take durability from players not in Creative
                             Methods.removeDurability(hoe, player);
                         }
                     }
@@ -125,19 +125,19 @@ public class Hoes implements Listener {
                                 List<ItemStack> droppedItems = new ArrayList<>();
 
                                 if (crop.getType() == Material.COCOA) {
-                                    droppedItems.add(new ItemBuilder().setMaterial(Material.COCOA_BEANS).setAmount(random.nextInt(2) + 2).build());//Coco drops 2-3 beans.
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.COCOA_BEANS).setAmount(random.nextInt(2) + 2).build()); // Coco drops 2-3 beans.
                                 } else if (crop.getType() == Material.WHEAT) {
                                     droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT).build());
-                                    droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT_SEEDS).setAmount(random.nextInt(3)).build());//Wheat drops 0-3 seeds.
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT_SEEDS).setAmount(random.nextInt(3)).build()); // Wheat drops 0-3 seeds.
                                 } else if (crop.getType() == Material.BEETROOTS) {
                                     droppedItems.add(new ItemBuilder().setMaterial(Material.BEETROOT).build());
-                                    droppedItems.add(new ItemBuilder().setMaterial(Material.BEETROOT_SEEDS).setAmount(random.nextInt(3)).build());//BeetRoots drops 0-3 seeds.
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.BEETROOT_SEEDS).setAmount(random.nextInt(3)).build()); // BeetRoots drops 0-3 seeds.
                                 } else if (crop.getType() == Material.POTATO) {
-                                    droppedItems.add(new ItemBuilder().setMaterial(Material.POTATO).setAmount(random.nextInt(4) + 1).build());//Potatoes drop 1-4 of them self's.
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.POTATO).setAmount(random.nextInt(4) + 1).build()); // Potatoes drop 1-4 of them self's.
                                 } else if (crop.getType() == Material.CARROTS) {
-                                    droppedItems.add(new ItemBuilder().setMaterial(Material.CARROT).setAmount(random.nextInt(4) + 1).build());//Carrots drop 1-4 of them self's.
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.CARROT).setAmount(random.nextInt(4) + 1).build()); // Carrots drop 1-4 of them self's.
                                 } else if (crop.getType() == Material.NETHER_WART) {
-                                    droppedItems.add(new ItemBuilder().setMaterial(Material.NETHER_WART).setAmount(random.nextInt(3) + 2).build());//Nether Warts drop 2-4 of them self's.
+                                    droppedItems.add(new ItemBuilder().setMaterial(Material.NETHER_WART).setAmount(random.nextInt(3) + 2).build()); // Nether Warts drop 2-4 of them self's.
                                 }
 
                                 if (!droppedItems.isEmpty()) {
@@ -351,6 +351,7 @@ public class Hoes implements Listener {
                 }
             }
         }
+
         return blockList;
     }
 }

@@ -43,8 +43,8 @@ import java.util.List;
 
 public class Swords implements Listener {
     
-    private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -429,7 +429,6 @@ public class Swords implements Listener {
                             ally.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 1));
                             ally.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0));
                             ally.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5 * 20, 1));
-                            
                         }
                     }
                 }

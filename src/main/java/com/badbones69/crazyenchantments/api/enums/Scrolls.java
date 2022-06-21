@@ -14,10 +14,10 @@ public enum Scrolls {
     WHITE_SCROLL("White-Scroll", "WhiteScroll", Arrays.asList("w", "white", "whitescroll")),
     TRANSMOG_SCROLL("Transmog-Scroll", "TransmogScroll", Arrays.asList("t", "transmog", "transmogscroll"));
     
-    private static HashMap<Scrolls, ItemBuilder> itemBuilderScrolls = new HashMap<>();
-    private String name;
-    private String configName;
-    private List<String> knownNames;
+    private static final HashMap<Scrolls, ItemBuilder> itemBuilderScrolls = new HashMap<>();
+    private final String name;
+    private final String configName;
+    private final List<String> knownNames;
     
     Scrolls(String name, String configName, List<String> knowNames) {
         this.name = name;

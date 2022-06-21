@@ -11,17 +11,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class CETab implements TabCompleter {
     
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     @Override
-    @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
-    public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) { // /ce
             if (hasPermission(sender, "access")) completions.add("help");
@@ -40,7 +41,7 @@ public class CETab implements TabCompleter {
             if (hasPermission(sender, "lostbook")) completions.add("lostbook");
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
-        } else if (args.length == 2) {// /ce arg0
+        } else if (args.length == 2) { // /ce arg0
             switch (args[0].toLowerCase()) {
                 case "info":
                 case "remove":
@@ -49,8 +50,7 @@ public class CETab implements TabCompleter {
                     for (CEnchantment enchantment : ce.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replace(" ", "_"));
-                        } catch (NullPointerException ignore) {
-                        }
+                        } catch (NullPointerException ignore) {}
                     }
                     Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
                     break;
@@ -99,6 +99,7 @@ public class CETab implements TabCompleter {
                     if (ceEnchantment != null) {
                         for (int i = 1; i <= ceEnchantment.getMaxLevel(); i++) completions.add(i + "");
                     }
+
                     break;
                 case "add":
                     ceEnchantment = ce.getEnchantmentFromName(args[1]);
@@ -108,6 +109,7 @@ public class CETab implements TabCompleter {
                         int maxLevel = vanillaEnchantment != null ? vanillaEnchantment.getMaxLevel() : ceEnchantment.getMaxLevel();
                         for (int i = 1; i <= maxLevel; i++) completions.add(i + "");
                     }
+
                     break;
                 case "spawn":
                     completions.add("Level:");
@@ -129,7 +131,7 @@ public class CETab implements TabCompleter {
                     break;
             }
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
-        } else if (args.length == 4) {// /ce arg0 arg1 arg2
+        } else if (args.length == 4) { // /ce arg0 arg1 arg2
             switch (args[0].toLowerCase()) {
                 case "spawn":
                     completions.add("Level:");
@@ -146,7 +148,7 @@ public class CETab implements TabCompleter {
                 default:
                     return StringUtil.copyPartialMatches(args[3], completions, new ArrayList<>());
             }
-        } else if (args.length == 5) {// /ce arg0 arg1 arg2
+        } else if (args.length == 5) { // /ce arg0 arg1 arg2
             switch (args[0].toLowerCase()) {
                 case "spawn" -> {
                     completions.add("Level:");

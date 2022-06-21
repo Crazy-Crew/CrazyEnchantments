@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
 import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -17,7 +16,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +23,7 @@ import java.util.UUID;
 
 public class ProtectionCrystal implements Listener {
     
-    private HashMap<UUID, List<ItemStack>> playersItems = new HashMap<>();
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final HashMap<UUID, List<ItemStack>> playersItems = new HashMap<>();
     private static ItemBuilder crystal;
     private static String protectionString;
     

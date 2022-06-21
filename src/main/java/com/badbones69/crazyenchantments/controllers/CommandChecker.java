@@ -14,9 +14,9 @@ import java.util.List;
 
 public class CommandChecker implements Listener {
     
-    private CrazyManager ce = CrazyManager.getInstance();
-    private List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
-    private ItemStack air = new ItemStack(Material.AIR);
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
+    private final ItemStack air = new ItemStack(Material.AIR);
     
     @EventHandler
     public void onInventoryClear(PlayerCommandPreprocessEvent e) {

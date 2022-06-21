@@ -19,16 +19,15 @@ import java.util.Map.Entry;
  */
 public class FileManager {
     
-    private static FileManager instance = new FileManager();
+    private static final FileManager instance = new FileManager();
     private Plugin plugin;
-    private String prefix = "";
     private boolean log = false;
-    private Map<Files, File> files = new HashMap<>();
-    private List<String> homeFolders = new ArrayList<>();
-    private List<CustomFile> customFiles = new ArrayList<>();
-    private Map<String, String> jarHomeFolders = new HashMap<>();
-    private Map<String, String> autoGenerateFiles = new HashMap<>();
-    private Map<Files, FileConfiguration> configurations = new HashMap<>();
+    private final Map<Files, File> files = new HashMap<>();
+    private final List<String> homeFolders = new ArrayList<>();
+    private final List<CustomFile> customFiles = new ArrayList<>();
+    private final Map<String, String> jarHomeFolders = new HashMap<>();
+    private final Map<String, String> autoGenerateFiles = new HashMap<>();
+    private final Map<Files, FileConfiguration> configurations = new HashMap<>();
     
     public static FileManager getInstance() {
         return instance;
@@ -39,12 +38,12 @@ public class FileManager {
      * @param plugin The plugin this is getting loading for.
      */
     public FileManager setup(Plugin plugin) {
-        prefix = "[" + plugin.getName() + "] ";
         this.plugin = plugin;
         if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
         files.clear();
         customFiles.clear();
         configurations.clear();
+
         //Loads all the normal static files.
         for (Files file : Files.values()) {
             File newFile = new File(plugin.getDataFolder(), file.getFileLocation());
@@ -112,6 +111,7 @@ public class FileManager {
                     }
                 }
             }
+
             if (log) plugin.getLogger().info("Finished loading custom files.");
         }
         return this;
@@ -200,7 +200,7 @@ public class FileManager {
      */
     public CustomFile getFile(String name) {
         for (CustomFile file : customFiles) {
-            if (file.getName().toLowerCase().equalsIgnoreCase(name.toLowerCase())) {
+            if (file.getName().equalsIgnoreCase(name)) {
                 return file;
             }
         }
@@ -307,9 +307,9 @@ public class FileManager {
         SIGNS("Signs.yml", "Signs.yml"),
         TINKER("Tinker.yml", "Tinker.yml");
         
-        private String fileName;
-        private String fileJar;
-        private String fileLocation;
+        private final String fileName;
+        private final String fileJar;
+        private final String fileLocation;
         
         /**
          * The files that the server will try and load.
@@ -382,10 +382,10 @@ public class FileManager {
     
     public class CustomFile {
         
-        private String name;
-        private Plugin plugin;
-        private String fileName;
-        private String homeFolder;
+        private final String name;
+        private final Plugin plugin;
+        private final String fileName;
+        private final String homeFolder;
         private FileConfiguration file;
         
         /**

@@ -16,12 +16,12 @@ public enum Dust {
     MYSTERY_DUST("Mystery-Dust", "MysteryDust", Arrays.asList("m", "mystery")),
     FAILED_DUST("Failed-Dust", "FailedDust", Arrays.asList("f", "failed"));
     
-    private static HashMap<Dust, ItemBuilder> itemBuilderDust = new HashMap<>();
-    private String name;
-    private String configName;
-    private List<String> knownNames;
-    private int max;
-    private int min;
+    private static final HashMap<Dust, ItemBuilder> itemBuilderDust = new HashMap<>();
+    private final String name;
+    private final String configName;
+    private final List<String> knownNames;
+    private final int max;
+    private final int min;
     
     Dust(String name, String configName, List<String> knowNames) {
         this.name = name;

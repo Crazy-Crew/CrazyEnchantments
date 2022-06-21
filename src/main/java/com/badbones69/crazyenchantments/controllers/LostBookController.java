@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class LostBookController implements Listener {
     
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent e) {

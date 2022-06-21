@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.api;
 
-import com.badbones69.crazyenchantments.api.multisupport.NMS_v1_13_Up;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.NMSSupport;
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManager;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
@@ -38,7 +37,7 @@ import java.util.Map.Entry;
 
 public class CrazyManager {
     
-    private static CrazyManager instance = new CrazyManager();
+    private final static CrazyManager instance = new CrazyManager();
     private JavaPlugin plugin;
     private int rageMaxLevel;
     private boolean gkitzToggle;
@@ -48,8 +47,8 @@ public class CrazyManager {
     private boolean maxEnchantmentCheck;
     private boolean checkVanillaLimit;
     private ItemBuilder enchantmentBook;
-    private NMSSupport nmsSupport;
-    private Random random = new Random();
+    private CropManager cropManager;
+    private final Random random = new Random();
     private String whiteScrollProtectionName;
     private BlackSmithManager blackSmithManager;
     private InfoMenuManager infoMenuManager;
@@ -60,13 +59,13 @@ public class CrazyManager {
     private AllyManager allyManager;
     private WorldGuardVersion worldGuardVersion;
     private PlotSquaredVersion plotSquaredVersion;
-    private List<Category> categories = new ArrayList<>();
-    private List<GKitz> gkitz = new ArrayList<>();
-    private List<CEPlayer> players = new ArrayList<>();
-    private List<Material> blockList = new ArrayList<>();
-    private List<CEnchantment> registeredEnchantments = new ArrayList<>();
-    private List<Event> ignoredEvents = new ArrayList<>();
-    private List<UUID> ignoredUUIDs = new ArrayList<>();
+    private final List<Category> categories = new ArrayList<>();
+    private final List<GKitz> gkitz = new ArrayList<>();
+    private final List<CEPlayer> players = new ArrayList<>();
+    private final List<Material> blockList = new ArrayList<>();
+    private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
+    private final List<Event> ignoredEvents = new ArrayList<>();
+    private final List<UUID> ignoredUUIDs = new ArrayList<>();
     
     public static CrazyManager getInstance() {
         return instance;
@@ -85,17 +84,17 @@ public class CrazyManager {
 
         plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-        //Loads the blacksmith manager
+        // Loads the blacksmith manager
         blackSmithManager = BlackSmithManager.getInstance();
         blackSmithManager.load();
 
-        //Loads the info menu manager and the enchantment types.
+        // Loads the info menu manager and the enchantment types.
         infoMenuManager = InfoMenuManager.getInstance();
         infoMenuManager.load();
 
         CEnchantments.invalidateCachedEnchants();
 
-        nmsSupport = new NMS_v1_13_Up();
+        cropManager = new com.badbones69.crazyenchantments.api.multisupport.CropManager();
 
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration gkit = Files.GKITZ.getFile();
@@ -160,7 +159,7 @@ public class CrazyManager {
         for (CEnchantments cEnchantment : CEnchantments.values()) {
             String name = cEnchantment.getName();
             String path = "Enchantments." + name;
-            if (enchants.contains(path)) {// To make sure the enchantment isn't broken.
+            if (enchants.contains(path)) { // To make sure the enchantment isn't broken.
                 CEnchantment enchantment = new CEnchantment(name)
                 .setCustomName(enchants.getString(path + ".Name"))
                 .setActivated(enchants.getBoolean(path + ".Enabled"))
@@ -174,7 +173,7 @@ public class CrazyManager {
                 .setChance(cEnchantment.getChance())
                 .setChanceIncrease(cEnchantment.getChanceIncrease());
 
-                if (enchants.contains(path + ".Enchantment-Type")) {// Sets the custom type set in the enchantments.yml.
+                if (enchants.contains(path + ".Enchantment-Type")) { // Sets the custom type set in the enchantments.yml.
                     enchantment.setEnchantmentType(EnchantmentType.getFromName(enchants.getString(path + ".Enchantment-Type")));
                 }
 
@@ -214,35 +213,35 @@ public class CrazyManager {
             }
         }
 
-        //Loads the scrolls
+        // Loads the scrolls
         Scrolls.loadScrolls();
-        //Loads the dust
+        // Loads the dust
         Dust.loadDust();
-        //Loads the protection crystals
+        // Loads the protection crystals
         ProtectionCrystal.loadProtectionCrystal();
-        //Loads the scrambler
+        // Loads the scrambler
         Scrambler.loadScrambler();
-        //Loads the Scroll Control settings
+        // Loads the Scroll Control settings
         ScrollControl.loadScrollControl();
-        //Loads the ShopOptions
+        // Loads the ShopOptions
         ShopOption.loadShopOptions();
-        //Loads the shop manager
+        // Loads the shop manager
         shopManager = ShopManager.getInstance();
         shopManager.load();
-        //Loads the settings for wings enchantment.
+        // Loads the settings for wings enchantment.
         wingsManager = WingsManager.getInstance();
         wingsManager.load();
-        //Loads the settings for the bow enchantments.
+        // Loads the settings for the bow enchantments.
         bowManager = BowEnchantmentManager.getInstance();
         bowManager.load();
-        //Loads the settings for the armor enchantments.
+        // Loads the settings for the armor enchantments.
         armorManager = ArmorEnchantmentManager.getInstance();
         armorManager.load();
-        //Loads the settings for the ally enchantments.
+        // Loads the settings for the ally enchantments.
         allyManager = AllyManager.getInstance();
         allyManager.load();
 
-        //Starts the wings task
+        // Starts the wings task
         Boots.startWings();
 
         if (PluginSupport.SupportedPlugins.WORLDGUARD.isPluginLoaded(plugin) && PluginSupport.SupportedPlugins.WORLDEDIT.isPluginLoaded(plugin)) {
@@ -269,6 +268,7 @@ public class CrazyManager {
             souls = data.getInt("Players." + uuid + ".Souls-Information.Souls");
             isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
         }
+
         List<Cooldown> cooldowns = new ArrayList<>();
 
         for (GKitz kit : getGKitz()) {
@@ -366,8 +366,8 @@ public class CrazyManager {
      * Get the NMS support class.
      * @return NMS support class.
      */
-    public NMSSupport getNMSSupport() {
-        return nmsSupport;
+    public CropManager getNMSSupport() {
+        return cropManager;
     }
     
     /**
@@ -819,6 +819,7 @@ public class CrazyManager {
                 enchantmentStrings.put(en.getName(), Methods.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
                 removeEnchantment(item, en);
             }
+
             ItemMeta meta = item.getItemMeta();
 
             if (meta != null && meta.hasLore()) {
@@ -833,11 +834,13 @@ public class CrazyManager {
             for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
                 newLore.add(stringEntry.getValue());
             }
+
             newLore.addAll(lores);
 
             if (meta != null) {
                 meta.setLore(newLore);
             }
+
             item.setItemMeta(meta);
         }
         return item;
@@ -866,6 +869,7 @@ public class CrazyManager {
         if (meta != null) {
             meta.setLore(newLore);
         }
+
         item.setItemMeta(meta);
         return item;
     }
@@ -897,6 +901,7 @@ public class CrazyManager {
             if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) {
                 continue; // Invalid line
             }
+
             String enchantmentName = line.substring(0, lastSpaceIndex);
             for (CEnchantment enchantment : registeredEnchantments) {
                 if (!enchantment.isActivated()) {
@@ -921,6 +926,7 @@ public class CrazyManager {
                 break; // Next line
             }
         }
+
         if (enchantments == null) {
             enchantments = Collections.emptyMap();
         }
@@ -1026,6 +1032,7 @@ public class CrazyManager {
                         if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) {
                             level = enchantments.getKey().getEnchantment().getMaxLevel();
                         }
+
                         for (PotionEffectType type : enchantments.getValue().keySet()) {
                             if (enchantments.getValue().containsKey(type)) {
                                 if (effects.containsKey(type)) {
@@ -1256,18 +1263,18 @@ public class CrazyManager {
     }
     
     public int randomLevel(CEnchantment enchantment, Category category) {
-        int enchantmentMax = enchantment.getMaxLevel(); //Max set by the enchantment
+        int enchantmentMax = enchantment.getMaxLevel(); // Max set by the enchantment
         int randomLevel = 1 + random.nextInt(enchantmentMax);
         if (category.useMaxLevel()) {
             if (randomLevel > category.getMaxLevel()) {
                 randomLevel = 1 + random.nextInt(enchantmentMax);
             }
 
-            if (randomLevel < category.getMinLevel()) {//If I is smaller then the Min of the Category
+            if (randomLevel < category.getMinLevel()) {// If I is smaller then the Min of the Category
                 randomLevel = category.getMinLevel();
             }
 
-            if (randomLevel > enchantmentMax) {//If I is bigger then the Enchantment Max
+            if (randomLevel > enchantmentMax) { // If I is bigger then the Enchantment Max
                 randomLevel = enchantmentMax;
             }
         }

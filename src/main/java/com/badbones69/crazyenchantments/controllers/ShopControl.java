@@ -28,9 +28,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShopControl implements Listener {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private static ShopManager shopManager = ce.getShopManager();
-    private Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
+    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static ShopManager shopManager = ce.getShopManager();
+    private final Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
     
     public static void openGUI(Player player) {
         player.openInventory(shopManager.getShopInventory(player));

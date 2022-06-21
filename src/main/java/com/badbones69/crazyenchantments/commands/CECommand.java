@@ -27,17 +27,19 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CECommand implements CommandExecutor {
     
-    private CrazyManager ce = CrazyManager.getInstance();
-    private FileManager fileManager = FileManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final FileManager fileManager = FileManager.getInstance();
     
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         boolean isPlayer = sender instanceof Player;
         if (args.length == 0) { // /ce
             if (!isPlayer) {
@@ -60,7 +62,7 @@ public class CECommand implements CommandExecutor {
                 }
                 case "reload" -> { // /ce reload
                     if (hasPermission(sender, "reload")) {
-                        ce.getCEPlayers().forEach(cePlayer -> ce.backupCEPlayer(cePlayer));
+                        ce.getCEPlayers().forEach(ce::backupCEPlayer);
                         fileManager.setup(ce.getPlugin());
                         ce.load();
                         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
@@ -71,6 +73,8 @@ public class CECommand implements CommandExecutor {
                     if (hasPermission(sender, "limit")) {
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%bypass%", sender.hasPermission("crazyenchantments.bypass.limit") + "");
+
+                        assert sender instanceof Player;
                         placeholders.put("%limit%", ce.getPlayerMaxEnchantments((Player) sender) + "");
                         placeholders.put("%vanilla%", ce.checkVanillaLimit() + "");
                         placeholders.put("%item%", ce.getEnchantmentAmount(Methods.getItemInHand((Player) sender)) + "");
@@ -645,6 +649,7 @@ public class CECommand implements CommandExecutor {
                                 }
                                 player = Methods.getPlayer(args[4]);
                             } else {
+                                assert sender instanceof Player;
                                 player = (Player) sender;
                             }
 

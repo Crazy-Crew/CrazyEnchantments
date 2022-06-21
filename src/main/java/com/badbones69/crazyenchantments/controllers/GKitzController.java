@@ -27,8 +27,8 @@ import java.util.List;
 
 public class GKitzController implements Listener {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private InfoMenuManager infoManager = ce.getInfoMenuManager();
+    private static final CrazyManager ce = CrazyManager.getInstance();
+    private final InfoMenuManager infoManager = ce.getInfoMenuManager();
     
     public static void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();

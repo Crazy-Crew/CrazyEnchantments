@@ -35,10 +35,10 @@ import java.util.Map.Entry;
 
 public class Armor implements Listener {
 
-    private List<Player> fall = new ArrayList<>();
+    private final List<Player> fall = new ArrayList<>();
     private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
-    private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
 
     public Armor() {
@@ -200,10 +200,7 @@ public class Armor implements Listener {
                                 loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                             } catch (Exception ignore) {}
 
-                                            /*
-                                            // if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                                            //    NoCheatPlusSupport.exemptPlayer(player);
-                                            // }*/
+                           // NCP Support.
 
                             for (LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
@@ -214,6 +211,7 @@ public class Armor implements Listener {
                                 if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(en.getLocation()) && !pluginSupport.isFriendly(player, en)) {
                                     en.damage(5D);
                                 }
+
                                 ce.removeIgnoredEvent(damageByEntityEvent);
                                 ce.removeIgnoredUUID(player.getUniqueId());
                             }
@@ -348,11 +346,13 @@ public class Armor implements Listener {
                     if (!event.isCancelled()) {
                         Methods.explode(player);
                         List<ItemStack> items = new ArrayList<>();
+
                         for (ItemStack drop : e.getDrops()) {
                             if (drop != null && ProtectionCrystal.isProtected(drop) && ProtectionCrystal.isProtectionSuccessful(player)) {
                                 items.add(drop);
                             }
                         }
+
                         e.getDrops().clear();
                         e.getDrops().addAll(items);
                     }

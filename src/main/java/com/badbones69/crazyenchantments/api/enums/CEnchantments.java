@@ -119,13 +119,13 @@ public enum CEnchantments {
     //	----------------All----------------  \\
     HELLFORGED("HellForged", "Damaged-Items", 5, 5);
     
-    private String name;
-    private String typeName;
-    private boolean hasChanceSystem;
-    private int chance;
-    private int chanceIncrease;
+    private final String name;
+    private final String typeName;
+    private final boolean hasChanceSystem;
+    private final int chance;
+    private final int chanceIncrease;
     
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     private CEnchantment cachedEnchantment = null;
     

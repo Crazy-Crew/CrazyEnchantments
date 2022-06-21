@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 public class RegisteredCEnchantmentEvent extends Event {
     
     private static final HandlerList handlers = new HandlerList();
-    private CEnchantment enchantment;
+    private final CEnchantment enchantment;
     
     public RegisteredCEnchantmentEvent(CEnchantment enchantment) {
         this.enchantment = enchantment;

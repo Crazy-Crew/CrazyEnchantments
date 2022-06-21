@@ -11,10 +11,10 @@ import java.util.*;
 
 public class AllyManager {
     
-    private static AllyManager instance = new AllyManager();
-    private List<AllyMob> allyMobs = new ArrayList<>();
-    private Map<UUID, List<AllyMob>> allyOwners = new HashMap<>();
-    private Map<AllyType, String> allyTypeNameCache = new HashMap<>();
+    private static final AllyManager instance = new AllyManager();
+    private final List<AllyMob> allyMobs = new ArrayList<>();
+    private final Map<UUID, List<AllyMob>> allyOwners = new HashMap<>();
+    private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
     
     public void load() {
         FileConfiguration config = Files.CONFIG.getFile();

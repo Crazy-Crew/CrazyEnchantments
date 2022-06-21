@@ -10,9 +10,9 @@ import org.bukkit.inventory.ItemStack;
 public class RageBreakEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private Entity damager;
-    private ItemStack weapon;
+    private final Player player;
+    private final Entity damager;
+    private final ItemStack weapon;
     private boolean cancel;
     
     public RageBreakEvent(Player player, Entity damager, ItemStack weapon) {

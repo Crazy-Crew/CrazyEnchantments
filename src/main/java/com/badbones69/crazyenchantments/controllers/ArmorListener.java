@@ -26,7 +26,6 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -263,8 +262,7 @@ public class ArmorListener implements Listener {
                             && type.equals(ArmorType.LEGGINGS) || p.getInventory().getBoots() == null
                             && type.equals(ArmorType.BOOTS)) {
 
-                        if (e.getBlock().getState() instanceof org.bukkit.block.Dispenser) {
-                            org.bukkit.block.Dispenser dispenser = (org.bukkit.block.Dispenser) e.getBlock().getState();
+                        if (e.getBlock().getState() instanceof org.bukkit.block.Dispenser dispenser) {
                             org.bukkit.material.Dispenser dis = (org.bukkit.material.Dispenser) dispenser.getData();
                             BlockFace directionFacing = dis.getFacing();
 
@@ -284,6 +282,7 @@ public class ArmorListener implements Listener {
                                 if (armorEquipEvent.isCancelled()) {
                                     e.setCancelled(true);
                                 }
+
                                 return;
                             }
                         }
