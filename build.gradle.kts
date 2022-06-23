@@ -81,8 +81,6 @@ dependencies {
     // Factions Plugins.
     compileOnly("com.massivecraft:Factions:1.6.9.5-U0.6.9")
 
-    compileOnly("com.github.cryptomorin:kingdoms:1.13.3")
-
     // Stacker Plugins.
     compileOnly("uk.antiperson.stackmob:StackMob:5.5.3")
 
