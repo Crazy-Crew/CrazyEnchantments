@@ -17,7 +17,7 @@ tasks.compileKotlin {
 }
 
 group = "com.badbones69.crazyenchantments"
-version = "1.19-1.9.1-${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
+version = "[1.18-1.19]-1.9.1-${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
 description = "A plugin full of Crazy Enchantments!"
 
 repositories {
@@ -80,6 +80,8 @@ dependencies {
 
     // Factions Plugins.
     compileOnly("com.massivecraft:Factions:1.6.9.5-U0.6.9")
+
+    compileOnly("com.github.cryptomorin:kingdoms:1.13.3")
 
     // Stacker Plugins.
     compileOnly("uk.antiperson.stackmob:StackMob:5.5.3")
