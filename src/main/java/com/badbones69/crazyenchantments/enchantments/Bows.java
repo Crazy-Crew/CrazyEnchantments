@@ -190,9 +190,11 @@ public class Bows implements Listener {
                     ce.addIgnoredEvent(damageByEntityEvent);
                     ce.addIgnoredUUID(shooter.getUniqueId());
                     Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+
                     if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(entity.getLocation()) && !pluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
                         entity.damage(5D);
                     }
+
                     ce.removeIgnoredEvent(damageByEntityEvent);
                     ce.removeIgnoredUUID(shooter.getUniqueId());
                 }

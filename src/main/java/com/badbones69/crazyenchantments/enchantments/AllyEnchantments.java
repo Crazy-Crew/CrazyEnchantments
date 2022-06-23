@@ -56,6 +56,7 @@ public class AllyEnchantments implements Listener {
                                     int power = ce.getLevel(item, CEnchantments.NECROMANCER);
                                     spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
                                 }
+
                                 if (ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
                                     int power = ce.getLevel(item, CEnchantments.INFESTATION);
                                     spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
@@ -84,15 +85,18 @@ public class AllyEnchantments implements Listener {
                                 int power = ce.getLevel(item, CEnchantments.TAMER);
                                 spawnAllies(player, enemy, AllyType.WOLF, power);
                             }
+
                             if (ce.hasEnchantment(item, CEnchantments.GUARDS)) {
                                 int power = ce.getLevel(item, CEnchantments.GUARDS);
                                 spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
                             }
+
                             if (enemy instanceof Player) {
                                 if (ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
                                     int power = ce.getLevel(item, CEnchantments.NECROMANCER);
                                     spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
                                 }
+
                                 if (ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
                                     int power = ce.getLevel(item, CEnchantments.INFESTATION);
                                     spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);

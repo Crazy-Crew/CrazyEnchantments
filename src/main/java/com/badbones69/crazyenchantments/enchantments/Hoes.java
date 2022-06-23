@@ -213,10 +213,13 @@ public class Hoes implements Listener {
                 if (soil.getType() != soilBlock && !isSoulSand) {
                     soil.setType(soilBlock);
                 }
+
                 if (player.getGameMode() != GameMode.CREATIVE) {
                     Methods.removeItem(playerSeedItem, player); // Take seed from player
                 }
+
                 plant.setType(seedType);
+
                 if (hasGreenThumb) {
                     fullyGrowPlant(hoe, plant, player);
                 }

@@ -57,6 +57,7 @@ public class Tinkerer implements Listener {
     @EventHandler
     public void onXPUse(PlayerInteractEvent e) {
         Player player = e.getPlayer();
+
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && Methods.getItemInHand(player) != null) {
             ItemStack item = Methods.getItemInHand(player);
 
@@ -88,6 +89,7 @@ public class Tinkerer implements Listener {
                 if (current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
                     int total = 0;
                     boolean toggle = false;
+
                     for (int slot : getSlot().keySet()) {
                         if (inv.getItem(getSlot().get(slot)) != null) {
                             if (Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")) == Currency.VAULT) {
@@ -102,6 +104,7 @@ public class Tinkerer implements Listener {
                             }
                             toggle = true;
                         }
+
                         e.getInventory().setItem(slot, new ItemStack(Material.AIR));
                         e.getInventory().setItem(getSlot().get(slot), new ItemStack(Material.AIR));
                     }
@@ -146,6 +149,7 @@ public class Tinkerer implements Listener {
                                 inv.setItem(getSlot().get(inv.firstEmpty()), Dust.MYSTERY_DUST.getDust(Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchant + ".Book"), 1));
                                 inv.setItem(inv.firstEmpty(), current);
                             }
+
                             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                         }
                     }
@@ -159,7 +163,6 @@ public class Tinkerer implements Listener {
                                 inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
                                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                             }
-
                         } else { // Clicking in their inventory
 
                             if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {

@@ -104,6 +104,7 @@ public class SignControl implements Listener {
                     }
 
                     Category category = ce.getCategory(type);
+
                     if (category != null) {
                         if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                             if (CurrencyAPI.canBuy(player, category)) {

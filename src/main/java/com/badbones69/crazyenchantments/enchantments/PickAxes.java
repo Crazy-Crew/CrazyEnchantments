@@ -80,9 +80,11 @@ public class PickAxes implements Listener {
                             BlockBreakEvent event = new BlockBreakEvent(b, player);
                             ce.addIgnoredEvent(event);
                             Bukkit.getPluginManager().callEvent(event);
+
                             if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                                 finalBlockList.add(new BlockProcessInfo(currentItem, b));
                             }
+
                             ce.removeIgnoredEvent(event);
                         }
                     }
@@ -151,6 +153,7 @@ public class PickAxes implements Listener {
                                         }
                                     }
                                 }
+
                                 // This is found here as telepathy takes care of this part.
                                 if (!hasSilkTouch && isOre) {
                                     xp = Methods.percentPick(7, 3);
@@ -177,8 +180,7 @@ public class PickAxes implements Listener {
                         if (Methods.isInventoryFull(player)) {
                             try {
                                 player.getWorld().dropItem(player.getLocation(), item.getKey());
-                            } catch (IllegalArgumentException ignore) {
-                            }
+                            } catch (IllegalArgumentException ignore) {}
                         } else {
                             player.getInventory().addItem(item.getKey());
                         }
@@ -317,6 +319,7 @@ public class PickAxes implements Listener {
         int bottomBlockY = (Math.min(loc.getBlockY(), loc2.getBlockY()));
         int topBlockZ = (Math.max(loc.getBlockZ(), loc2.getBlockZ()));
         int bottomBlockZ = (Math.min(loc.getBlockZ(), loc2.getBlockZ()));
+
         for (int x = bottomBlockX; x <= topBlockX; x++) {
             for (int z = bottomBlockZ; z <= topBlockZ; z++) {
                 for (int y = bottomBlockY; y <= topBlockY; y++) {

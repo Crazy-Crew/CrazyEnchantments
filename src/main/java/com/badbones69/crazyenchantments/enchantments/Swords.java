@@ -152,6 +152,7 @@ public class Swords implements Listener {
                                 }
 
                                 int rageUp = cePlayer.getRageLevel() + 1;
+
                                 if (cePlayer.getRageMultiplier().intValue() == rageUp) {
                                     if (Messages.RAGE_RAGE_UP.getMessage().length() > 0) {
                                         HashMap<String, String> placeholders = new HashMap<>();
@@ -184,7 +185,6 @@ public class Swords implements Listener {
                                     }
                                 }
                             }.runTaskLater(ce.getPlugin(), 80));
-
                         }
                     }
 
@@ -194,11 +194,13 @@ public class Swords implements Listener {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.SKILLSWIPE, item);
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
+
                                 if (CurrencyAPI.getCurrency(player, Currency.XP_TOTAL) >= amount) {
                                     CurrencyAPI.takeCurrency(player, Currency.XP_TOTAL, amount);
                                 } else {
                                     player.setTotalExperience(0);
                                 }
+
                                 CurrencyAPI.giveCurrency(damager, Currency.XP_TOTAL, amount);
                             }
                         }
@@ -211,6 +213,7 @@ public class Swords implements Listener {
                             int steal = ce.getLevel(item, CEnchantments.LIFESTEAL);
                             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                             double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
                             if (damager.getHealth() + steal < maxHealth) {
                                 damager.setHealth(damager.getHealth() + steal);
                             }
@@ -308,11 +311,13 @@ public class Swords implements Listener {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(damager, CEnchantments.OBLITERATE, item);
                         Bukkit.getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
+
                             if (e.getEntity() instanceof Player && PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                                 SpartanSupport.cancelSpeed((Player) e.getEntity());
                                 SpartanSupport.cancelNormalMovements((Player) e.getEntity());
                                 SpartanSupport.cancelNoFall((Player) e.getEntity());
                             }
+
                             e.getEntity().setVelocity(damager.getLocation().getDirection().multiply(2).setY(1.25));
                         }
                     }
@@ -338,9 +343,11 @@ public class Swords implements Listener {
                                 ce.addIgnoredEvent(damageByEntityEvent);
                                 ce.addIgnoredUUID(damager.getUniqueId());
                                 Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+
                                 if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(entity.getLocation()) && !pluginSupport.isFriendly(damager, entity)) {
                                     entity.damage(5D);
                                 }
+
                                 ce.removeIgnoredEvent(damageByEntityEvent);
                                 ce.removeIgnoredUUID(damager.getUniqueId());
                             }

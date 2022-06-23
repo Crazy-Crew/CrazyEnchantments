@@ -215,6 +215,7 @@ public class Armor implements Listener {
                                 ce.removeIgnoredEvent(damageByEntityEvent);
                                 ce.removeIgnoredUUID(player.getUniqueId());
                             }
+
                             damager.damage(5D);
                         }
                     }
@@ -337,6 +338,7 @@ public class Armor implements Listener {
 
         Player killer = player.getKiller();
         if (!pluginSupport.allowsCombat(player.getLocation())) return;
+
         if (CEnchantments.SELFDESTRUCT.isActivated()) {
             for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
                 if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {

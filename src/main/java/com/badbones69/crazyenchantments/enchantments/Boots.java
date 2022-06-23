@@ -49,6 +49,7 @@ public class Boots implements Listener {
     public void onEquip(ArmorEquipEvent e) {
         Player player = e.getPlayer();
         if (manager.isWingsEnabled()) {
+
             if (ce.hasEnchantment(e.getNewArmorPiece(), CEnchantments.WINGS) && regionCheck(player) && gamemodeCheck(player)) {
                 player.setAllowFlight(true);
             }
@@ -63,6 +64,7 @@ public class Boots implements Listener {
     public void onFly(PlayerToggleFlightEvent e) {
         Player player = e.getPlayer();
         if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
+
             if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                 SpartanSupport.cancelNormalMovements(player);
             }
@@ -114,6 +116,7 @@ public class Boots implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
+
             if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                 SpartanSupport.cancelNormalMovements(player);
             }

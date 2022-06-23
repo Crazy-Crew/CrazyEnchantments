@@ -148,6 +148,7 @@ public class Axes implements Listener {
         bad.add(PotionEffectType.SLOW_DIGGING);
         bad.add(PotionEffectType.WEAKNESS);
         bad.add(PotionEffectType.WITHER);
+
         for (PotionEffectType p : bad) {
             if (player.hasPotionEffect(p)) {
                 player.removePotionEffect(p);
