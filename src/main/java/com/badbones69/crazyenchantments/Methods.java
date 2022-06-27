@@ -128,11 +128,11 @@ public class Methods {
     }
     
     public static Player getPlayer(String name) {
-        return Bukkit.getServer().getPlayer(name);
+        return ce.getPlugin().getServer().getPlayer(name);
     }
     
     public static boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+        for (Player player : ce.getPlugin().getServer().getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(playerName)) {
                 return true;
             }
@@ -210,29 +210,6 @@ public class Methods {
         m.setLore(lore);
         item.setItemMeta(m);
         return item;
-    }
-    
-    public static void hasUpdate() {
-        hasUpdate(null);
-    }
-    
-    public static void hasUpdate(Player player) {
-        try {
-            HttpURLConnection c = (HttpURLConnection) new URL("http://www.spigotmc.org/api/general.php").openConnection();
-            c.setDoOutput(true);
-            c.setRequestMethod("POST");
-            c.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=16470").getBytes(StandardCharsets.UTF_8));
-            String oldVersion = ce.getPlugin().getDescription().getVersion();
-            String newVersion = new BufferedReader(new InputStreamReader(c.getInputStream())).readLine().replaceAll("[a-zA-Z ]", "");
-
-            if (!newVersion.equals(oldVersion)) {
-                if (player != null) {
-                    player.sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
-                } else {
-                    Bukkit.getConsoleSender().sendMessage(Methods.getPrefix() + Methods.color("&cYour server is running &7v" + oldVersion + "&c and the newest is &7v" + newVersion + "&c."));
-                }
-            }
-        } catch (Exception ignored) {}
     }
     
     public static int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
@@ -348,7 +325,7 @@ public class Methods {
         fm.setPower(0);
         fw.setFireworkMeta(fm);
         FireworkDamage.addFirework(fw);
-        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), fw :: detonate, 2);
+        ce.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), fw :: detonate, 2);
     }
     
     public static Color getColor(String color) {

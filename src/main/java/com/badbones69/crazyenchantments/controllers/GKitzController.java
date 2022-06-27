@@ -10,7 +10,6 @@ import com.badbones69.crazyenchantments.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.api.objects.Cooldown;
 import com.badbones69.crazyenchantments.api.objects.GKitz;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -32,7 +31,7 @@ public class GKitzController implements Listener {
     
     public static void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = Bukkit.createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
+        Inventory inventory = ce.getPlugin().getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
 
         for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
@@ -98,7 +97,7 @@ public class GKitzController implements Listener {
                         int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
                         // Some debug code for when checking the math for slots.
                         // System.out.println((items.size() / 9) + " : " + ((items.size() / 9) * 9) + " : " + items.size() % 9 + " : " + slots);
-                        Inventory previewInventory = Bukkit.createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
+                        Inventory previewInventory = ce.getPlugin().getServer().createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
 
                         for (ItemStack itemStack : items) {
                             previewInventory.addItem(itemStack);

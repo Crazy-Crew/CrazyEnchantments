@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,7 +51,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     if (maxHealth > player.getHealth() && player.getHealth() > 0) {
                         syncProcessor.add(() -> {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             if (!event.isCancelled() && player.getHealth() > 0) {
                                 if (player.getHealth() + heal <= maxHealth) {
                                     player.setHealth(player.getHealth() + heal);
@@ -69,7 +68,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             if (CEnchantments.IMPLANTS.isActivated() && ce.hasEnchantment(armor, CEnchantments.IMPLANTS) && CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
                 syncProcessor.add(() -> {
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS.getEnchantment(), armor);
-                    Bukkit.getPluginManager().callEvent(event);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
 
@@ -95,7 +94,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                         if (entity instanceof Player other) {
                             if (pluginSupport.isFriendly(player, other)) {
                                 AngelUseEvent event = new AngelUseEvent(player, armor);
-                                Bukkit.getPluginManager().callEvent(event);
+                                ce.getPlugin().getServer().getPluginManager().callEvent(event);
                                 if (!event.isCancelled()) {
                                     other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
                                 }
@@ -122,7 +121,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     public void run() {
                         int finalArmorDurability = armorDurability;
                         HellForgedUseEvent event = new HellForgedUseEvent(player, item);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             finalArmorDurability -= ce.getLevel(item, CEnchantments.HELLFORGED);
                             Damageable damageable = (Damageable) item.getItemMeta();

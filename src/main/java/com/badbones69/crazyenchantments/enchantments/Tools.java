@@ -8,7 +8,6 @@ import com.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -62,7 +61,7 @@ public class Tools implements Listener {
                 }
 
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     e.setExpToDrop(0);
@@ -177,7 +176,7 @@ public class Tools implements Listener {
             int potionTime = 5 * 20;
             if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     int power = ce.getLevel(item, CEnchantments.HASTE);
@@ -188,7 +187,7 @@ public class Tools implements Listener {
 
             if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     player.removePotionEffect(PotionEffectType.WATER_BREATHING);

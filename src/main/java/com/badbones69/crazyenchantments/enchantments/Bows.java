@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -55,7 +54,7 @@ public class Bows implements Listener {
                 if (CEnchantments.MULTIARROW.chanceSuccessful(bow)) {
                     if (e.getEntity() instanceof Player) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.MULTIARROW, bow);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             for (int i = 1; i <= power; i++) {
                                 Arrow spawnedArrow = e.getEntity().getWorld().spawn(e.getProjectile().getLocation(), Arrow.class);
@@ -182,8 +181,7 @@ public class Bows implements Listener {
 
                         try {
                             location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
-                        } catch (Exception ignore) {
-                        }
+                        } catch (Exception ignore) {}
 
                         if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                             SpartanSupport.cancelNoSwing(shooter);
@@ -193,7 +191,7 @@ public class Bows implements Listener {
                             EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
                             ce.addIgnoredEvent(damageByEntityEvent);
                             ce.addIgnoredUUID(shooter.getUniqueId());
-                            Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(damageByEntityEvent);
 
                             if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(entity.getLocation()) && !pluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
                                 entity.damage(5D);
@@ -230,7 +228,7 @@ public class Bows implements Listener {
                     if (entity.getHealth() < maxHealth) {
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
                                 if (entity.getHealth() + heal < maxHealth) {
                                     entity.setHealth(entity.getHealth() + heal);
@@ -280,7 +278,7 @@ public class Bows implements Listener {
 
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             Player player = (Player) e.getEntity();
                             if (!event.isCancelled()) {
 
@@ -304,7 +302,7 @@ public class Bows implements Listener {
 
                             if (entity instanceof Player) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), enchantment, bow);
-                                Bukkit.getPluginManager().callEvent(event);
+                                ce.getPlugin().getServer().getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     // If the EnchantmentUseEvent is cancelled then no need to keep going with this enchantment.
                                     continue;

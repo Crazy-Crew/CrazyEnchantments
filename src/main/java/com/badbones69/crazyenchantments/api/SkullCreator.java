@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.api;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
@@ -19,6 +18,8 @@ import java.util.UUID;
  * @author Dean B on 12/28/2016.
  */
 public class SkullCreator {
+
+    private static final CrazyManager ce = CrazyManager.getInstance();
 
     /**
      * Creates a player skull with a UUID. 1.13 only.
@@ -117,7 +118,7 @@ public class SkullCreator {
         notNull(id, "id");
 
         setBlockType(block);
-        ((Skull) block.getState()).setOwningPlayer(Bukkit.getOfflinePlayer(id));
+        ((Skull) block.getState()).setOwningPlayer(ce.getPlugin().getServer().getOfflinePlayer(id));
     }
 
     /**

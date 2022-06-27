@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -93,7 +92,7 @@ public class ShopManager {
             placeholders.put("%" + currency.getName() + "%", CurrencyAPI.getCurrency(player, currency) + "");
         }
 
-        Inventory inventory = Bukkit.createInventory(null, inventorySize, inventoryName);
+        Inventory inventory = ce.getPlugin().getServer().createInventory(null, inventorySize, inventoryName);
 
         for (Entry<ItemBuilder, Integer> itemBuilders : customizerItems.entrySet()) {
             itemBuilders.getKey().setNamePlaceholders(placeholders)

@@ -31,6 +31,9 @@ repositories {
     // MVDW API
     maven("https://repo.mvdw-software.com/content/groups/public/")
 
+    // FactionsUUID API
+    maven("https://ci.ender.zone/plugin/repository/everything/")
+
     // NBT API | StackMob API
     maven("https://repo.codemc.org/repository/maven-public/")
 
@@ -42,9 +45,6 @@ repositories {
 
     // Spartan API
     maven("https://nexus.sparky.ac/repository/Sparky/")
-
-    // FactionsUUID API
-    maven("https://ci.ender.zone/plugin/repository/everything/")
 
     // Our Repo
     maven("https://repo.badbones69.com/releases/")

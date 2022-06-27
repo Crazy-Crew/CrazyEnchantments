@@ -1,13 +1,11 @@
 package com.badbones69.crazyenchantments.commands;
 
 import com.badbones69.crazyenchantments.api.CrazyManager;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,14 +29,14 @@ public class GkitzTab implements TabCompleter {
                 }
 
                 if (ce.getGKitFromName(args[0]) != null) {
-                    Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                    ce.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 }
 
                 return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
             } else { // /gkit reset <kit>
 
                 if (args[0].equalsIgnoreCase("reset")) {
-                    Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                    ce.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 }
 
                 return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());

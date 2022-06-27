@@ -13,7 +13,6 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -68,7 +67,7 @@ public class ShopControl implements Listener {
 
                         if (book != null) {
                             BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             player.getInventory().addItem(book.buildBook());
                         } else {
                             player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));

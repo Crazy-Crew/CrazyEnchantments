@@ -5,14 +5,12 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -127,7 +125,7 @@ public class CETab implements TabCompleter {
                     break;
                 case "crystal":
                 case "scrambler":
-                    Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                    ce.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                     break;
             }
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
@@ -143,7 +141,7 @@ public class CETab implements TabCompleter {
                 case "scroll":
                 case "dust":
                 case "lostbook":
-                    Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                    ce.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                     break;
                 default:
                     return StringUtil.copyPartialMatches(args[3], completions, new ArrayList<>());

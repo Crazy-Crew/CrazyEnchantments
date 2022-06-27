@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +23,8 @@ public class CEPlayer {
     private boolean hasRage;
     private int rageLevel;
     private BukkitTask rageTask;
+
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * Used to make a new CEPlayer.
@@ -127,7 +128,7 @@ public class CEPlayer {
 
                     if (player.getEquipment().getHelmet() == null || player.getEquipment().getHelmet().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.HELMET, new ItemStack(Material.AIR), item);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             player.getEquipment().setHelmet(item);
                         }
@@ -138,7 +139,7 @@ public class CEPlayer {
 
                     if (player.getEquipment().getChestplate() == null || player.getEquipment().getChestplate().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.CHESTPLATE, new ItemStack(Material.AIR), item);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             player.getEquipment().setChestplate(item);
                         }
@@ -148,7 +149,7 @@ public class CEPlayer {
 
                     if (player.getEquipment().getLeggings() == null || player.getEquipment().getLeggings().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.LEGGINGS, new ItemStack(Material.AIR), item);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             player.getEquipment().setLeggings(item);
                         }
@@ -157,7 +158,7 @@ public class CEPlayer {
                 } else if (item.getType().toString().toLowerCase().contains("boots") && (player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR)) {
 
                     ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
-                    Bukkit.getPluginManager().callEvent(event);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         player.getEquipment().setBoots(item);
                     }
@@ -173,7 +174,7 @@ public class CEPlayer {
 
         }
         for (String cmd : kit.getCommands()) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd
+            ce.getPlugin().getServer().dispatchCommand(ce.getPlugin().getServer().getConsoleSender(), cmd
             .replace("%Player%", player.getName()).replace("%player%", player.getName()));
         }
     }

@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -32,7 +31,7 @@ public class Tinkerer implements Listener {
     private final static CrazyManager ce = CrazyManager.getInstance();
     
     public static void openTinker(Player player) {
-        Inventory inv = Bukkit.createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
+        Inventory inv = ce.getPlugin().getServer().createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
         inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
         .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
         .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
@@ -112,7 +111,7 @@ public class Tinkerer implements Listener {
                     player.closeInventory();
 
                     if (total != 0) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco give " + player.getName() + " " + total);
+                        ce.getPlugin().getServer().dispatchCommand(ce.getPlugin().getServer().getConsoleSender(), "eco give " + player.getName() + " " + total);
                     }
 
                     if (toggle) {

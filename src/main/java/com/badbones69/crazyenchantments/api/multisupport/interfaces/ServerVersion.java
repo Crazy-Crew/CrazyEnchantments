@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.api.multisupport.interfaces;
 
-import org.bukkit.Bukkit;
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import java.util.Arrays;
 
 /**
@@ -27,9 +27,11 @@ public enum ServerVersion {
     private static final String bukkitVersion;
     private static final boolean legacy;
 
+    private static final CrazyManager ce = CrazyManager.getInstance();
+
     static {
-        bukkitVersion = Bukkit.getBukkitVersion().split("-")[0];
-        String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        bukkitVersion = ce.getPlugin().getServer().getBukkitVersion().split("-")[0];
+        String version = ce.getPlugin().getServer().getClass().getPackage().getName().split("\\.")[3];
         String[] sections = version.split("_");
         currentVersion = ServerVersion.getSafe(sections[0] + "_" + sections[1]);
         legacy = isLessThan(ServerVersion.v1_13);

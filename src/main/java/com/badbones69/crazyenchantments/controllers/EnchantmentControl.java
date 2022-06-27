@@ -12,7 +12,6 @@ import com.badbones69.crazyenchantments.api.events.BookFailEvent;
 import com.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -60,11 +59,11 @@ public class EnchantmentControl implements Listener {
                             if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
                                 e.setCancelled(true);
                                 PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, item, ceBook, player.getGameMode() == GameMode.CREATIVE, success, destroy);
-                                Bukkit.getPluginManager().callEvent(preBookApplyEvent);
+                                ce.getPlugin().getServer().getPluginManager().callEvent(preBookApplyEvent);
                                 if (!preBookApplyEvent.isCancelled()) {
                                     if (success || player.getGameMode() == GameMode.CREATIVE) {
                                         BookFailEvent bookApplyEvent = new BookFailEvent(player, item, ceBook);
-                                        Bukkit.getPluginManager().callEvent(bookApplyEvent);
+                                        ce.getPlugin().getServer().getPluginManager().callEvent(bookApplyEvent);
 
                                         if (!bookApplyEvent.isCancelled()) {
                                             e.setCurrentItem(ce.addEnchantment(item, enchantment, bookLevel));
@@ -79,7 +78,7 @@ public class EnchantmentControl implements Listener {
                                         return;
                                     } else if (destroy) {
                                         BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, item, ceBook);
-                                        Bukkit.getPluginManager().callEvent(bookDestroyEvent);
+                                        ce.getPlugin().getServer().getPluginManager().callEvent(bookDestroyEvent);
 
                                         if (!bookDestroyEvent.isCancelled()) {
                                             if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
@@ -90,7 +89,7 @@ public class EnchantmentControl implements Listener {
                                                     ItemStack newItem = ce.removeEnchantment(item, enchantment);
                                                     if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
-                                                        Bukkit.getPluginManager().callEvent(event);
+                                                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                                                     }
                                                     player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
                                                 }
@@ -103,7 +102,7 @@ public class EnchantmentControl implements Listener {
                                                     e.setCurrentItem(newItem);
                                                     if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
-                                                        Bukkit.getPluginManager().callEvent(event);
+                                                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                                                     }
                                                     player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                                                 }
@@ -115,7 +114,7 @@ public class EnchantmentControl implements Listener {
                                         return;
                                     } else {
                                         BookFailEvent bookFailEvent = new BookFailEvent(player, item, ceBook);
-                                        Bukkit.getPluginManager().callEvent(bookFailEvent);
+                                        ce.getPlugin().getServer().getPluginManager().callEvent(bookFailEvent);
 
                                         if (!bookFailEvent.isCancelled()) {
                                             player.setItemOnCursor(new ItemStack(Material.AIR));
@@ -144,7 +143,7 @@ public class EnchantmentControl implements Listener {
 
                             if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                 ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), oldItem, newItem);
-                                Bukkit.getPluginManager().callEvent(event);
+                                ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             }
 
                             player.setItemOnCursor(new ItemStack(Material.AIR));
@@ -167,7 +166,7 @@ public class EnchantmentControl implements Listener {
 
                                 if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                     ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
-                                    Bukkit.getPluginManager().callEvent(event);
+                                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
                                 }
 
                                 e.setCurrentItem(oldItem);

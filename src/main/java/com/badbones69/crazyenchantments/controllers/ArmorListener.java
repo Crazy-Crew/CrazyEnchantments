@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -36,6 +35,8 @@ import java.util.List;
 public class ArmorListener implements Listener {
     
     private final List<String> blockedMaterials;
+
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     public ArmorListener() {
         this.blockedMaterials = getBlocks();
@@ -93,7 +94,7 @@ public class ArmorListener implements Listener {
                 newArmorType.equals(ArmorType.BOOTS) && (equipping == (e.getWhoClicked().getInventory().getBoots() == null))) {
                     ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, EquipMethod.SHIFT_CLICK, newArmorType,
                     equipping ? null : e.getCurrentItem(), equipping ? e.getCurrentItem() : null);
-                    Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
                     if (armorEquipEvent.isCancelled()) {
                         e.setCancelled(true);
                     }
@@ -174,7 +175,7 @@ public class ArmorListener implements Listener {
                     // I == the old item
                     // It == the new item
                     if (I.isSimilar(It) || (I.getType() == Material.AIR && It.getType() == Material.AIR)) {
-                        Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
                         if (armorEquipEvent.isCancelled()) {
                             e.setCancelled(true);
                         }
@@ -204,7 +205,7 @@ public class ArmorListener implements Listener {
                                 }
 
                                 ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
-                                Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+                                ce.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
 
                                 if (armorEquipEvent.isCancelled()) {
                                     e.setCancelled(true);
@@ -239,7 +240,7 @@ public class ArmorListener implements Listener {
             if (newArmorType != null) {
                 if (newArmorType.equals(ArmorType.HELMET) && e.getPlayer().getInventory().getHelmet() == null || newArmorType.equals(ArmorType.CHESTPLATE) && e.getPlayer().getInventory().getChestplate() == null || newArmorType.equals(ArmorType.LEGGINGS) && e.getPlayer().getInventory().getLeggings() == null || newArmorType.equals(ArmorType.BOOTS) && e.getPlayer().getInventory().getBoots() == null) {
                     ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(e.getPlayer(), EquipMethod.HOTBAR, ArmorType.matchType(e.getItem()), null, e.getItem());
-                    Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
                     if (armorEquipEvent.isCancelled()) {
                         e.setCancelled(true);
                         player.updateInventory();
@@ -277,7 +278,7 @@ public class ArmorListener implements Listener {
                                     && p.getLocation().getZ() <= loc.getZ()) {
 
                                 ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.DISPENSER, ArmorType.matchType(e.getItem()), null, e.getItem());
-                                Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+                                ce.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
 
                                 if (armorEquipEvent.isCancelled()) {
                                     e.setCancelled(true);
@@ -298,7 +299,8 @@ public class ArmorListener implements Listener {
         if (type != null) {
             Player p = e.getPlayer();
             ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.BROKE, type, e.getBrokenItem(), null);
-            Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+            ce.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
+
             if (armorEquipEvent.isCancelled()) {
                 ItemStack item = e.getBrokenItem().clone();
 

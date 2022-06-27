@@ -12,7 +12,6 @@ import com.badbones69.crazyenchantments.api.events.BuyBookEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -48,7 +47,7 @@ public class SignControl implements Listener {
 
             for (String l : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
                 String type = Files.SIGNS.getFile().getString("Locations." + l + ".Type");
-                World world = Bukkit.getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
+                World world = ce.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
                 int x = Files.SIGNS.getFile().getInt("Locations." + l + ".X");
                 int y = Files.SIGNS.getFile().getInt("Locations." + l + ".Y");
                 int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
@@ -128,7 +127,7 @@ public class SignControl implements Listener {
                             }
 
                             BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             player.getInventory().addItem(itemBuilder.build());
                         } else {
                             player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
@@ -146,7 +145,7 @@ public class SignControl implements Listener {
             Player player = e.getPlayer();
             Location location = e.getBlock().getLocation();
             for (String locationName : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
-                World world = Bukkit.getWorld(Files.SIGNS.getFile().getString("Locations." + locationName + ".World"));
+                World world = ce.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + locationName + ".World"));
                 int x = Files.SIGNS.getFile().getInt("Locations." + locationName + ".X");
                 int y = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Y");
                 int z = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Z");

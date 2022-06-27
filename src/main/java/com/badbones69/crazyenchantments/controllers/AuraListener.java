@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -14,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +66,7 @@ public class AuraListener implements Listener {
 
                 for (Player other : players) {
                     AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
-                    Bukkit.getPluginManager().callEvent(auraEvent);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(auraEvent);
                 }
             });
         }
@@ -90,7 +88,7 @@ public class AuraListener implements Listener {
                     }
 
                     AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
-                    Bukkit.getPluginManager().callEvent(auraEvent);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(auraEvent);
                 });
             }
         }

@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import com.badbones69.crazyenchantments.api.objects.BlackSmithResult;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -24,7 +23,7 @@ import java.util.List;
 public class BlackSmith implements Listener {
     
     private static final BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private static final CrazyManager ce = CrazyManager.getInstance();
     private final int mainSlot = 10;
     private final int subSlot = 13;
     private final static int resultSlot = 16;
@@ -35,7 +34,7 @@ public class BlackSmith implements Listener {
     private final Sound villagerNo = Sound.ENTITY_VILLAGER_NO;
     
     public static void openBlackSmith(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 27, blackSmithManager.getMenuName());
+        Inventory inventory = ce.getPlugin().getServer().createInventory(null, 27, blackSmithManager.getMenuName());
         otherBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getGrayGlass()));
         resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
         inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());

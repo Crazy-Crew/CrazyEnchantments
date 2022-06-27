@@ -12,7 +12,6 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +27,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +68,7 @@ public class PickAxes implements Listener {
                 blocks.remove(player);
                 List<Block> blockList = getBlocks(currentBlock.getLocation(), face, (ce.getLevel(currentItem, CEnchantments.BLAST) - 1));
                 BlastUseEvent blastUseEvent = new BlastUseEvent(player, blockList);
-                Bukkit.getPluginManager().callEvent(blastUseEvent);
+                ce.getPlugin().getServer().getPluginManager().callEvent(blastUseEvent);
 
                 if (!blastUseEvent.isCancelled()) {
                     Location originalBlockLocation = currentBlock.getLocation();
@@ -79,7 +77,7 @@ public class PickAxes implements Listener {
                         if (b.getType() != Material.AIR && (ce.getBlockList().contains(b.getType()) || b.getLocation().equals(originalBlockLocation))) {
                             BlockBreakEvent event = new BlockBreakEvent(b, player);
                             ce.addIgnoredEvent(event);
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                             if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                                 finalBlockList.add(new BlockProcessInfo(currentItem, b));
@@ -208,7 +206,8 @@ public class PickAxes implements Listener {
             (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.FURNACE.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
             CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
+
                 if (!event.isCancelled()) {
                     int dropAmount = 0;
                     dropAmount += ce.getLevel(item, CEnchantments.AUTOSMELT);
@@ -236,7 +235,8 @@ public class PickAxes implements Listener {
 
             if (CEnchantments.FURNACE.isActivated() && isOre && (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
+
                 if (!event.isCancelled()) {
                     int dropAmount = 1;
 
@@ -269,7 +269,7 @@ public class PickAxes implements Listener {
             int power = ce.getLevel(item, CEnchantments.EXPERIENCE);
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     e.setExpToDrop(e.getExpToDrop() + (power + 2));

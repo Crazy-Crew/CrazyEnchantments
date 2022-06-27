@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
@@ -197,7 +196,7 @@ public class CEnchantment {
     
     public void registerEnchantment() {
         RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(instance);
-        Bukkit.getPluginManager().callEvent(event);
+        ce.getPlugin().getServer().getPluginManager().callEvent(event);
         ce.registerEnchantment(instance);
 
         if (enchantmentType != null) {
@@ -211,7 +210,7 @@ public class CEnchantment {
     
     public void unregisterEnchantment() {
         UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(instance);
-        Bukkit.getPluginManager().callEvent(event);
+        ce.getPlugin().getServer().getPluginManager().callEvent(event);
         ce.unregisterEnchantment(instance);
 
         if (enchantmentType != null) {

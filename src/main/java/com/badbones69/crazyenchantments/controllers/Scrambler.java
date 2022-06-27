@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -93,7 +92,7 @@ public class Scrambler implements Listener {
     }
     
     public static void openScrambler(Player player, ItemStack book) {
-        Inventory inventory = Bukkit.createInventory(null, 27, guiName);
+        Inventory inventory = ce.getPlugin().getServer().createInventory(null, 27, guiName);
         setGlass(inventory);
 
         for (int slot = 9; slot > 8 && slot < 18; slot++) {

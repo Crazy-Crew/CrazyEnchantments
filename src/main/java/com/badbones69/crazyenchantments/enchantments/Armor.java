@@ -104,7 +104,7 @@ public class Armor implements Listener {
                         if (ce.hasEnchantment(armor, enchantment) && enchantment.chanceSuccessful(armor)) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, enchantment, armor);
 
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
                                 if (armorEnchantment.isPotionEnchantment()) {
                                     for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
@@ -119,7 +119,7 @@ public class Armor implements Listener {
 
                     if (player.getHealth() <= 8 && ce.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment()) && CEnchantments.ROCKET.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         // Anti cheat support here with AAC or any others.
 
@@ -145,7 +145,7 @@ public class Armor implements Listener {
 
                     if (ce.hasEnchantment(armor, CEnchantments.ENLIGHTENED) && CEnchantments.ENLIGHTENED.chanceSuccessful(armor) && player.getHealth() > 0) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) {
                             double heal = ce.getLevel(armor, CEnchantments.ENLIGHTENED);
@@ -164,7 +164,7 @@ public class Armor implements Listener {
 
                     if (ce.hasEnchantment(armor, CEnchantments.MOLTEN) && CEnchantments.MOLTEN.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MOLTEN.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) {
                             damager.setFireTicks((ce.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
@@ -173,7 +173,7 @@ public class Armor implements Listener {
 
                     if (ce.hasEnchantment(armor, CEnchantments.SAVIOR) && CEnchantments.SAVIOR.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SAVIOR.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             e.setDamage(e.getDamage() / 2);
                         }
@@ -181,7 +181,7 @@ public class Armor implements Listener {
 
                     if (ce.hasEnchantment(armor, CEnchantments.CACTUS) && CEnchantments.CACTUS.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.CACTUS.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
                             damager.damage(ce.getLevel(armor, CEnchantments.CACTUS));
                         }
@@ -189,7 +189,7 @@ public class Armor implements Listener {
 
                     if (ce.hasEnchantment(armor, CEnchantments.STORMCALLER) && CEnchantments.STORMCALLER.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER.getEnchantment(), armor);
-                        Bukkit.getPluginManager().callEvent(event);
+                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) {
                             Location loc = damager.getLocation();
@@ -206,7 +206,7 @@ public class Armor implements Listener {
                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
                                 ce.addIgnoredEvent(damageByEntityEvent);
                                 ce.addIgnoredUUID(player.getUniqueId());
-                                Bukkit.getPluginManager().callEvent(damageByEntityEvent);
+                                ce.getPlugin().getServer().getPluginManager().callEvent(damageByEntityEvent);
 
                                 if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(en.getLocation()) && !pluginSupport.isFriendly(player, en)) {
                                     en.damage(5D);
@@ -238,7 +238,7 @@ public class Armor implements Listener {
 
                         if (players > 0) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) damager, CEnchantments.LEADERSHIP.getEnchantment(), armor);
-                            Bukkit.getPluginManager().callEvent(event);
+                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
                                 e.setDamage(e.getDamage() + (players / 2));
                             }
@@ -344,7 +344,7 @@ public class Armor implements Listener {
                 if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
 
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT.getEnchantment(), item);
-                    Bukkit.getPluginManager().callEvent(event);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         Methods.explode(player);
                         List<ItemStack> items = new ArrayList<>();
@@ -366,7 +366,7 @@ public class Armor implements Listener {
             for (ItemStack item : Objects.requireNonNull(killer.getEquipment()).getArmorContents()) {
                 if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.RECOVER)) {
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.RECOVER.getEnchantment(), item);
-                    Bukkit.getPluginManager().callEvent(event);
+                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8 * 20, 2));
                         killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));

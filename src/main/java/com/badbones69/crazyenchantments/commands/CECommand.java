@@ -16,7 +16,6 @@ import com.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import com.badbones69.crazyenchantments.controllers.Scrambler;
 import com.badbones69.crazyenchantments.controllers.ShopControl;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,7 +27,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,7 +197,7 @@ public class CECommand implements CommandExecutor {
                         if (args.length >= 2) {
                             CEnchantment enchantment = ce.getEnchantmentFromName(args[1]);
                             Category category = ce.getCategory(args[1]);
-                            Location location = isPlayer ? ((Player) sender).getLocation() : new Location(Bukkit.getWorlds().get(0), 0, 0, 0);
+                            Location location = isPlayer ? ((Player) sender).getLocation() : new Location(ce.getPlugin().getServer().getWorlds().get(0), 0, 0, 0);
                             int level = 1;
 
                             if (enchantment == null && category == null) {
@@ -221,7 +219,7 @@ public class CECommand implements CommandExecutor {
                                             }
                                             break;
                                         case "world":
-                                            World world = Bukkit.getWorld(value);
+                                            World world = ce.getPlugin().getServer().getWorld(value);
                                             if (world != null) {
                                                 location.setWorld(world);
                                             }

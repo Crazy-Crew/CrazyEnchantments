@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.processors;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 public class RunnableSyncProcessor extends Processor<Runnable> {
@@ -12,6 +11,6 @@ public class RunnableSyncProcessor extends Processor<Runnable> {
     }
     
     void process(final Runnable process) {
-        Bukkit.getScheduler().runTask(this.plugin, process);
+        plugin.getServer().getScheduler().runTask(this.plugin, process);
     }
 }

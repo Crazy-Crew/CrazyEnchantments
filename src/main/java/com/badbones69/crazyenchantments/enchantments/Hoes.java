@@ -271,7 +271,7 @@ public class Hoes implements Listener {
             if (getHarvesterCrops().contains(crop.getType()) && ce.getNMSSupport().isFullyGrown(crop)) {
                 BlockBreakEvent event = new BlockBreakEvent(crop, player);
                 ce.addIgnoredEvent(event);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                     blockList.add(crop);
@@ -288,7 +288,7 @@ public class Hoes implements Listener {
             if (soil.getType() == grassBlock || soil.getType() == Material.DIRT || soil.getType() == Material.SOUL_SAND || soil.getType() == soilBlock) {
                 BlockBreakEvent event = new BlockBreakEvent(soil, player);
                 ce.addIgnoredEvent(event);
-                Bukkit.getPluginManager().callEvent(event);
+                ce.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                     soilBlocks.add(soil);

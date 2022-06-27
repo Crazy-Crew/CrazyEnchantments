@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -35,7 +34,7 @@ public class InfoMenuManager {
         String path = "Info-GUI-Settings";
         inventoryName = Methods.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
         inventorySize = file.getInt(path + ".Inventory.Size", 18);
-        inventoryMenu = Bukkit.createInventory(null, inventorySize, inventoryName);
+        inventoryMenu = ce.getPlugin().getServer().createInventory(null, inventorySize, inventoryName);
         backRight = new ItemBuilder()
         .setMaterial(file.getString(path + ".Back-Item.Right.Item", "NETHER_STAR"))
         .setPlayerName(file.getString(path + ".Back-Item.Right.Player"))
@@ -97,7 +96,7 @@ public class InfoMenuManager {
         List<CEnchantment> enchantments = enchantmentType.getEnchantments();
         int slots = 9;
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
-        Inventory inventory = Bukkit.createInventory(null, slots, inventoryName);
+        Inventory inventory = ce.getPlugin().getServer().createInventory(null, slots, inventoryName);
 
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
