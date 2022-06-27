@@ -102,7 +102,6 @@ public class Bows implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLand(ProjectileHitEvent e) {
-        try {
             if (e.getEntity() instanceof Arrow) {
                 EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
                 if (arrow != null) {
@@ -165,14 +164,14 @@ public class Bows implements Listener {
                     }
                 }
 
-                if (CEnchantments.BOOM.isActivated()) {
+                if (CEnchantments.BOOM.isActivated() && arrow != null) {
                     if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
                         Methods.explode(arrow.getShooter(), arrow.getArrow());
                         arrow.getArrow().remove();
                     }
                 }
 
-                if (CEnchantments.LIGHTNING.isActivated()) {
+                if (CEnchantments.LIGHTNING.isActivated() && arrow != null) {
                     if (arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
                         Location location = arrow.getArrow().getLocation();
 
@@ -214,7 +213,6 @@ public class Bows implements Listener {
                     }
                 }.runTaskLater(ce.getPlugin(), 5);
             }
-        } catch (Exception ignored) {}
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
