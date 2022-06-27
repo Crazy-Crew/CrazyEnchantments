@@ -28,14 +28,14 @@ public class Boots implements Listener {
     private final static WingsManager manager = ce.getWingsManager();
 
     public static void startWings() {
-        if (manager.isCloudsEnabled() && manager.isWingsEnabled()) {
+        if (manager.isWingsEnabled()) {
             manager.setWingsTask(new BukkitRunnable() {
                 @Override
                 public void run() {
                     for (Player player : manager.getFlyingPlayers()) {
-                        if (player.isFlying()) {
+                        if (player.isFlying() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && player.getEquipment().getBoots() != null) {
                             Location location = player.getLocation().subtract(0, .25, 0);
-                            player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
+                            if (manager.isCloudsEnabled()) player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
                         }
                     }
                 }
