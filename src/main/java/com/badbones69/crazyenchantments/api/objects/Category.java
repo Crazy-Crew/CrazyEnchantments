@@ -6,23 +6,23 @@ import java.util.List;
 
 public class Category {
     
-    private String name;
-    private int slot;
-    private boolean inGUI;
-    private ItemBuilder displayItem;
-    private int cost;
-    private Currency currency;
-    private int rarity;
-    private LostBook lostBook;
-    private int maxSuccessRate;
-    private int minSuccessRate;
-    private int maxDestroyRate;
-    private int minDestroyRate;
-    private boolean useMaxLevel;
-    private int maxLevel;
-    private int minLevel;
-    private List<CEnchantment> enchantmentList;
-    private List<CEnchantment> enabledEnchantments;
+    private final String name;
+    private final int slot;
+    private final boolean inGUI;
+    private final ItemBuilder displayItem;
+    private final int cost;
+    private final Currency currency;
+    private final int rarity;
+    private final LostBook lostBook;
+    private final int maxSuccessRate;
+    private final int minSuccessRate;
+    private final int maxDestroyRate;
+    private final int minDestroyRate;
+    private final boolean useMaxLevel;
+    private final int maxLevel;
+    private final int minLevel;
+    private final List<CEnchantment> enchantmentList;
+    private final List<CEnchantment> enabledEnchantments;
     
     public Category(String name, int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency, int rarity, LostBook lostBook,
     int maxSuccessRate, int minSuccessRate, int maxDestroyRate, int minDestroyRate, boolean useMaxLevel, int maxLevel, int minLevel) {

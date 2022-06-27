@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 
 public class BlackSmithCompare {
     
-    private Map<Enchantment, Integer> newVanillaEnchantments = new HashMap<>();
-    private Map<CEnchantment, Integer> newCEnchantments = new HashMap<>();
+    private final Map<Enchantment, Integer> newVanillaEnchantments = new HashMap<>();
+    private final Map<CEnchantment, Integer> newCEnchantments = new HashMap<>();
     
     public BlackSmithCompare(CEItem mainCE, CEItem subCE) {
 

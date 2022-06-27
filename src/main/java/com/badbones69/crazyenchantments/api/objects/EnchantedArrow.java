@@ -9,12 +9,12 @@ import java.util.List;
 
 public class EnchantedArrow {
     
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
     
-    private Arrow arrow;
-    private ItemStack bow;
-    private Entity shooter;
-    private List<CEnchantment> enchantments;
+    private final Arrow arrow;
+    private final ItemStack bow;
+    private final Entity shooter;
+    private final List<CEnchantment> enchantments;
     
     public EnchantedArrow(Arrow arrow, Entity shooter, ItemStack bow, List<CEnchantment> enchantments) {
         this.bow = bow;

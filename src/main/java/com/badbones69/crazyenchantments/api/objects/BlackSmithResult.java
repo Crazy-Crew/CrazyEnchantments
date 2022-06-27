@@ -9,8 +9,8 @@ import java.util.Map.Entry;
 
 public class BlackSmithResult {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
-    private static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
+    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
     private int cost = 0;
     private ItemStack resultItem;
     

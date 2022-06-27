@@ -16,7 +16,8 @@ public class CEBook {
     private boolean glowing;
     private int destroyRate;
     private int successRate;
-    private CrazyManager ce = CrazyManager.getInstance();
+
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * @param enchantment Enchantment you want.

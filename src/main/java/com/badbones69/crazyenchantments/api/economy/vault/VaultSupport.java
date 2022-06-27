@@ -10,7 +10,7 @@ public class VaultSupport {
     
     private static Economy vault = null;
 
-    private static CrazyManager crazyManager = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     
     public static Economy getVault() {
         return vault;

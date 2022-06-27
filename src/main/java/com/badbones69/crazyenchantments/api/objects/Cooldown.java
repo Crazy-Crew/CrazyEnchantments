@@ -5,8 +5,8 @@ import java.util.Calendar;
 
 public class Cooldown {
     
-    private GKitz gkit;
-    private Calendar cooldownTime;
+    private final GKitz gkit;
+    private final Calendar cooldownTime;
 
     public Cooldown() {
         this.gkit = null;

@@ -17,14 +17,13 @@ import java.util.List;
 public class CEPlayer {
     
     private int souls;
-    private Player player;
+    private final Player player;
     private boolean soulsActive;
-    private List<Cooldown> cooldowns;
+    private final List<Cooldown> cooldowns;
     private Double rageMultiplier;
     private boolean hasRage;
     private int rageLevel;
     private BukkitTask rageTask;
-    private CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * Used to make a new CEPlayer.

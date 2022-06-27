@@ -4,9 +4,9 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PotionEffects {
     
-    private PotionEffectType potionEffect;
-    private int amplifier;
-    private int duration;
+    private final PotionEffectType potionEffect;
+    private final int amplifier;
+    private final int duration;
     
     public PotionEffects(PotionEffectType potionEffect, int duration, int amplifier) {
         this.potionEffect = potionEffect;

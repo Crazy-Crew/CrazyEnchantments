@@ -28,7 +28,6 @@ import java.util.*;
 public class Tools implements Listener {
     
     private final static Random random = new Random();
-    private final int potionTime = 5 * 20;
     private final static CrazyManager ce = CrazyManager.getInstance();
     private final static List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
     
@@ -175,6 +174,7 @@ public class Tools implements Listener {
 
         if (ce.hasEnchantments(item)) {
             List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+            int potionTime = 5 * 20;
             if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
                 Bukkit.getPluginManager().callEvent(event);

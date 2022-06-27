@@ -110,11 +110,11 @@ public enum ShopOption {
     
     private static class Option {
         
-        private ItemBuilder itemBuilder;
-        private int slot;
-        private boolean inGUI;
-        private int cost;
-        private Currency currency;
+        private final ItemBuilder itemBuilder;
+        private final int slot;
+        private final boolean inGUI;
+        private final int cost;
+        private final Currency currency;
         
         public Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {
             this.itemBuilder = itemBuilder;

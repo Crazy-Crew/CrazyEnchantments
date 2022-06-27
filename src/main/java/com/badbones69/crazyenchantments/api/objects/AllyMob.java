@@ -13,15 +13,15 @@ import java.util.HashMap;
 
 public class AllyMob {
     
-    private AllyType type;
-    private Player owner;
+    private final AllyType type;
+    private final Player owner;
     private LivingEntity ally;
     private long spawnTime;
     private BukkitTask runnable;
-    private CrazyManager ce = CrazyManager.getInstance();
-    private PluginSupport pluginSupport = PluginSupport.INSTANCE;
-    private AllyMob instance;
-    private static AllyManager allyManager = AllyManager.getInstance();
+    private final CrazyManager ce = CrazyManager.getInstance();
+    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final AllyMob instance;
+    private final static AllyManager allyManager = AllyManager.getInstance();
     
     public AllyMob(Player owner, AllyType type) {
         this.type = type;
@@ -117,10 +117,10 @@ public class AllyMob {
         SILVERFISH("Silverfish", "&7%player%'s Silverfish", EntityType.SILVERFISH, 10),
         BEE("Bee", "&e%player%'s Bee", EntityType.BEE, 10);
         
-        private String configName;
-        private String defaultName;
-        private EntityType entityType;
-        private int maxHealth;
+        private final String configName;
+        private final String defaultName;
+        private final EntityType entityType;
+        private final int maxHealth;
         
         AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
             this.configName = configName;

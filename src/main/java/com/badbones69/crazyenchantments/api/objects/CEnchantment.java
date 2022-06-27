@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class CEnchantment {
     
-    private static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager ce = CrazyManager.getInstance();
     
     private String name;
     private String customName;
@@ -24,9 +24,9 @@ public class CEnchantment {
     private int chance;
     private int chanceIncrease;
     private List<String> infoDescription;
-    private List<Category> categories;
+    private final List<Category> categories;
     private EnchantmentType enchantmentType;
-    private CEnchantment instance;
+    private final CEnchantment instance;
     
     public CEnchantment(String name) {
         this.instance = this;

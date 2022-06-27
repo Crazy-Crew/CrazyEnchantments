@@ -8,10 +8,10 @@ import java.util.List;
 
 public class BlockProcessInfo {
     
-    private ItemStack item;
-    private Block block;
-    private List<ItemStack> drops;
-    private boolean isSpawner;
+    private final ItemStack item;
+    private final Block block;
+    private final List<ItemStack> drops;
+    private final boolean isSpawner;
     
     public BlockProcessInfo(ItemStack item, Block block) {
         this.item = item;

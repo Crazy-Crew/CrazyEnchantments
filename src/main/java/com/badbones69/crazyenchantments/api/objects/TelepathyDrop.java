@@ -6,9 +6,9 @@ import java.util.List;
 
 public class TelepathyDrop {
     
-    private ItemStack itemStack;
-    private int xp;
-    private List<Block> sugarCaneBlocks;
+    private final ItemStack itemStack;
+    private final int xp;
+    private final List<Block> sugarCaneBlocks;
     
     public TelepathyDrop(ItemStack itemStack, int xp, List<Block> sugarCaneBlocks) {
         this.itemStack = itemStack;

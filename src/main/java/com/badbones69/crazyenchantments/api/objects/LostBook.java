@@ -11,14 +11,14 @@ import java.util.List;
 
 public class LostBook {
     
-    private int slot;
-    private boolean inGUI;
-    private ItemBuilder displayItem;
-    private int cost;
-    private Currency currency;
-    private boolean useFirework;
-    private List<Color> fireworkColors;
-    private boolean useSound;
+    private final int slot;
+    private final boolean inGUI;
+    private final ItemBuilder displayItem;
+    private final int cost;
+    private final Currency currency;
+    private final boolean useFirework;
+    private final List<Color> fireworkColors;
+    private final boolean useSound;
     private Sound sound;
     
     public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency,

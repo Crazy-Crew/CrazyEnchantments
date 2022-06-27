@@ -6,7 +6,7 @@ public enum Currency {
     XP_LEVEL("XP_Level"),
     XP_TOTAL("XP_Total");
     
-    private String name;
+    private final String name;
     
     Currency(String name) {
         this.name = name;

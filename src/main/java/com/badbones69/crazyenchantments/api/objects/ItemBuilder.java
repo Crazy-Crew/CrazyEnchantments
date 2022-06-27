@@ -28,15 +28,15 @@ public class ItemBuilder implements Cloneable {
     private Material material;
     private int damage;
     private String itemName;
-    private List<String> itemLore;
+    private final List<String> itemLore;
     private int itemAmount;
 
     // Player
     private String player;
 
     // Skulls
-    private boolean isHash;
-    private boolean isURL;
+    private final boolean isHash;
+    private final boolean isURL;
     private boolean isHead;
 
     // Enchantments/Flags
@@ -45,7 +45,7 @@ public class ItemBuilder implements Cloneable {
     private boolean glowing;
 
     // Entities
-    private boolean isMobEgg;
+    private final boolean isMobEgg;
     private EntityType entityType;
 
     // Potions

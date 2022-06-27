@@ -7,8 +7,8 @@ import java.util.HashMap;
 public class GKitzItem {
     
     private ItemBuilder itemBuilder;
-    private HashMap<CEnchantment, Integer> ceEnchantments;
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final HashMap<CEnchantment, Integer> ceEnchantments;
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * Make an empty gkit item.

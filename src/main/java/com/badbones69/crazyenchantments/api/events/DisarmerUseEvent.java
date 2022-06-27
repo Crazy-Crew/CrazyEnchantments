@@ -9,9 +9,9 @@ import org.bukkit.inventory.ItemStack;
 public class DisarmerUseEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
-    private Player player;
-    private Player damager;
-    private ItemStack item;
+    private final Player player;
+    private final Player damager;
+    private final ItemStack item;
     private boolean cancel;
     
     public DisarmerUseEvent(Player player, Player damager, ItemStack item) {

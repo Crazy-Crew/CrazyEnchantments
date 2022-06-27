@@ -7,15 +7,16 @@ import java.util.List;
 
 public class GKitz {
     
-    private int slot;
-    private String name;
-    private String cooldown;
-    private boolean autoEquip;
-    private ItemStack displayItem;
-    private List<String> commands;
-    private List<ItemStack> preview;
-    private List<String> itemStrings;
-    private CrazyManager ce = CrazyManager.getInstance();
+    private final int slot;
+    private final String name;
+    private final String cooldown;
+    private final boolean autoEquip;
+    private final ItemStack displayItem;
+    private final List<String> commands;
+    private final List<ItemStack> preview;
+    private final List<String> itemStrings;
+
+    private final CrazyManager ce = CrazyManager.getInstance();
     
     /**
      * Create a new gkit.

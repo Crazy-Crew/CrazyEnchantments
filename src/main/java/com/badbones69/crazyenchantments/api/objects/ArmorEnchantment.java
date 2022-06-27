@@ -6,11 +6,11 @@ import java.util.List;
 
 public class ArmorEnchantment {
     
-    private CEnchantments enchantment;
+    private final CEnchantments enchantment;
     private List<PotionEffects> potionEffects;
     private double damageAmplifier;
-    private boolean isLevelAddedToAmplifier;
-    private boolean isPotionEnchantment;
+    private final boolean isLevelAddedToAmplifier;
+    private final boolean isPotionEnchantment;
     
     /**
      * Create an armor enchantment that does damage amplifying.

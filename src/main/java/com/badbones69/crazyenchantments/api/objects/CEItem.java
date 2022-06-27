@@ -10,12 +10,13 @@ import java.util.Map;
 
 public class CEItem {
     
-    private ItemStack item;
-    private List<Enchantment> vanillaEnchantmentRemove;
-    private List<CEnchantment> cEnchantmentRemove;
-    private Map<Enchantment, Integer> vanillaEnchantments;
-    private Map<CEnchantment, Integer> cEnchantments;
-    private static CrazyManager ce = CrazyManager.getInstance();
+    private final ItemStack item;
+    private final List<Enchantment> vanillaEnchantmentRemove;
+    private final List<CEnchantment> cEnchantmentRemove;
+    private final Map<Enchantment, Integer> vanillaEnchantments;
+    private final Map<CEnchantment, Integer> cEnchantments;
+
+    private final static CrazyManager ce = CrazyManager.getInstance();
     
     public CEItem(ItemStack item) {
         this.item = item;

@@ -10,11 +10,11 @@ import java.util.List;
 
 public class EnchantmentType {
     
-    private String name;
-    private int slot;
-    private ItemStack displayItem;
-    private List<CEnchantment> enchantments = new ArrayList<>();
-    private List<Material> enchantableMaterials = new ArrayList<>();
+    private final String name;
+    private final int slot;
+    private final ItemStack displayItem;
+    private final List<CEnchantment> enchantments = new ArrayList<>();
+    private final List<Material> enchantableMaterials = new ArrayList<>();
     
     public EnchantmentType(String name) {
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
