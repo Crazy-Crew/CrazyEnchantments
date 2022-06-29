@@ -63,7 +63,7 @@ public class Boots implements Listener {
     @EventHandler
     public void onFly(PlayerToggleFlightEvent e) {
         Player player = e.getPlayer();
-        if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
+        if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player) && player.getEquipment().getBoots() != null) {
 
             if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
                 SpartanSupport.cancelNormalMovements(player);
