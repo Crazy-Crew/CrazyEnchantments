@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.Methods
 import com.badbones69.crazyenchantments.api.multisupport.factions.FactionsUUIDSupport
 import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion
 import com.badbones69.crazyenchantments.api.multisupport.misc.TownySupport
-import com.badbones69.crazyenchantments.api.multisupport.misc.mobstacker.StackMobAntiSupport
 import com.badbones69.crazyenchantments.api.multisupport.skyblock.SuperiorSkyBlockSupport
 import org.bukkit.Location
 import org.bukkit.block.Block
@@ -94,7 +93,7 @@ object PluginSupport {
     }
 
     fun noStack(entity: LivingEntity) {
-        if (SupportedPlugins.STACKMOB.isPluginLoaded()) StackMobAntiSupport().preventStacking(entity)
+
     }
 
     enum class SupportedPlugins(private val pluginName: String) {
@@ -107,8 +106,8 @@ object PluginSupport {
 
         // Stacker Plugins
 
-        // StackMob by Anti Person
-        STACKMOB("StackMob"),
+        // WildStacker by Ome_R
+        // WILD_STACKER("WildStacker"),
 
         // Anti Cheats
         SPARTAN("Spartan"),

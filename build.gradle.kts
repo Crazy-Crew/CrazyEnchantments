@@ -34,7 +34,7 @@ repositories {
     // FactionsUUID API
     maven("https://ci.ender.zone/plugin/repository/everything/")
 
-    // NBT API | StackMob API
+    // NBT API
     maven("https://repo.codemc.org/repository/maven-public/")
 
     // Paper API
@@ -42,6 +42,8 @@ repositories {
 
     // Towny API
     maven("https://repo.glaremasters.me/repository/towny/")
+
+    maven("https://repo.bg-software.com/repository/api/")
 
     // Spartan API
     maven("https://nexus.sparky.ac/repository/Sparky/")
@@ -82,7 +84,7 @@ dependencies {
     compileOnly("com.massivecraft:Factions:1.6.9.5-U0.6.9")
 
     // Stacker Plugins.
-    compileOnly("uk.antiperson.stackmob:StackMob:5.5.3")
+    compileOnly("com.bgsoftware:WildStackerAPI:3.8.0")
 
     // Spawner Plugins.
     compileOnly("de.dustplanet:silkspawners:7.2.0") {

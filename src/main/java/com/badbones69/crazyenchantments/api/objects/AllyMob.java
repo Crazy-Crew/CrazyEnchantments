@@ -47,9 +47,10 @@ public class AllyMob {
     
     public void spawnAlly(Location location, long spawnTime) {
         this.spawnTime = spawnTime;
+
         ally = (LivingEntity) location.getWorld().spawnEntity(location, type.entityType);
 
-        // support.noStack(ally);
+        // PluginSupport.INSTANCE.noStack(ally);
 
         ally.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(type.maxHealth);
 
