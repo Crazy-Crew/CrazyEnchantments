@@ -2,7 +2,7 @@ name: CrazyEnchantments
 main: "${group}.CrazyEnchantments"
 author: BadBones69
 version: ${version}
-api-version: 1.13
+api-version: 1.18
 description: ${description}
 
 softdepend:
