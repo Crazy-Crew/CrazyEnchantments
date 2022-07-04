@@ -490,7 +490,7 @@ public class Methods {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {
-                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                         SpartanSupport.cancelSpeed((Player) player);
                                         SpartanSupport.cancelNormalMovements((Player) player);
                                         SpartanSupport.cancelNoFall((Player) player);
@@ -522,7 +522,7 @@ public class Methods {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
                                 if (en instanceof Player) {
-                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                         SpartanSupport.cancelSpeed((Player) player);
                                         SpartanSupport.cancelNormalMovements((Player) player);
                                         SpartanSupport.cancelNoFall((Player) player);

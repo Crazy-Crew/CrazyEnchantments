@@ -89,7 +89,7 @@ public class PickAxes implements Listener {
 
                     HashMap<ItemStack, Integer> drops = new HashMap<>();
 
-                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                         SpartanSupport.cancelFastBreak(player);
                         SpartanSupport.cancelNoSwing(player);
                         SpartanSupport.cancelBlockReach(player);

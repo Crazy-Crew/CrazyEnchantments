@@ -72,7 +72,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
 
-                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                             SpartanSupport.cancelFastEat(player);
                         }
 
@@ -87,7 +87,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 });
             }
 
-            if ((CEnchantments.ANGEL.isActivated() && ce.hasEnchantment(armor, CEnchantments.ANGEL) && PluginSupport.SupportedPlugins.FACTIONSUUID.isPluginLoaded(ce.getPlugin()))) {
+            if ((CEnchantments.ANGEL.isActivated() && ce.hasEnchantment(armor, CEnchantments.ANGEL) && PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
                 final int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
                 syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {

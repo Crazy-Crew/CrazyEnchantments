@@ -35,6 +35,8 @@ class CrazyEnchantments : JavaPlugin(), Listener {
 
         manager.load()
 
+        SupportedPlugins.printHooks()
+
         CurrencyAPI.loadCurrency()
 
         val patchHealth = Files.CONFIG.file.getBoolean("Settings.Reset-Players-Max-Health")
@@ -93,7 +95,7 @@ class CrazyEnchantments : JavaPlugin(), Listener {
             server.pluginManager.registerEvents(GKitzController(), plugin)
         }
 
-        if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded(plugin)) {
+        if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded()) {
             logger.info("Silk Spawners support is now enabled.")
             server.pluginManager.registerEvents(SilkSpawnerSupport(), plugin)
         }

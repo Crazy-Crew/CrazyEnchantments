@@ -2,7 +2,7 @@ name: CrazyEnchantments
 main: "${group}.CrazyEnchantments"
 author: BadBones69
 version: ${version}
-api-version: 1.18
+api-version: 1.13
 description: ${description}
 
 softdepend:
@@ -12,7 +12,7 @@ softdepend:
   - SuperiorSkyBlock
   - Spartan
   - Towny
-  - FactionsUUID
+  - Factions
   - StackMob
   - SilkSpawners
 

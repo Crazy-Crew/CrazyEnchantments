@@ -1,35 +1,37 @@
 package com.badbones69.crazyenchantments.api
 
+import com.badbones69.crazyenchantments.Methods
+import com.badbones69.crazyenchantments.api.multisupport.factions.FactionsUUIDSupport
 import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion
 import com.badbones69.crazyenchantments.api.multisupport.misc.TownySupport
 import com.badbones69.crazyenchantments.api.multisupport.misc.mobstacker.StackMobAntiSupport
 import com.badbones69.crazyenchantments.api.multisupport.skyblock.SuperiorSkyBlockSupport
-import com.badbones69.crazyenchantments.getPlugin
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
-
 
 object PluginSupport {
 
     private val manager = CrazyManager.getInstance()
 
+    private var factionPlugin: FactionsVersion? = null
+
     fun inTerritory(player: Player): Boolean {
-        return SupportedPlugins.PLOTSQUARED.isPluginLoaded(getPlugin()) && manager.plotSquaredSupport.inTerritory(player)
+        if (factionPlugin != null && factionPlugin?.inTerritory(player) == true) return true
+
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && SuperiorSkyBlockSupport.inTerritory(player)) return true
+
+        return SupportedPlugins.PLOTSQUARED.isPluginLoaded() && manager.plotSquaredSupport.inTerritory(player)
     }
 
     fun isFriendly(entity: Entity, other: Entity): Boolean {
         if (entity !is Player || other !is Player) return true
 
-        val factionPlugin: FactionsVersion? = null
+        if (factionPlugin != null && factionPlugin?.isFriendly(entity, other) == true) return true
 
-        if (factionPlugin != null && factionPlugin.isFriendly(entity, other)) return true
-
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded(getPlugin()) && SuperiorSkyBlockSupport.isFriendly(
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && SuperiorSkyBlockSupport.isFriendly(
                 entity,
                 other
             )) return true
@@ -44,32 +46,32 @@ object PluginSupport {
         player.getMetadata("vanished").forEach {
             if (it.asBoolean()) return true
         }
+
         return false
     }
 
     fun canBreakBlock(player: Player, block: Block): Boolean {
-        val factionPlugin: FactionsVersion? = null
-        if ((factionPlugin != null) && !factionPlugin.canBreakBlock(player, block)) return false
+        if ((factionPlugin != null) && factionPlugin?.canBreakBlock(player, block) == true) return false
 
         return true
     }
 
     fun allowsCombat(location: Location): Boolean {
-        if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded(getPlugin()) && !TownySupport.allowsCombat(location)) return false
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || manager.worldGuardSupport.allowsPVP(location)
+        if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded() && !TownySupport.allowsCombat(location)) return false
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || manager.worldGuardSupport.allowsPVP(location)
     }
 
     fun allowsDestruction(location: Location): Boolean {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || manager.worldGuardSupport.allowsBreak(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || manager.worldGuardSupport.allowsBreak(location)
     }
 
     fun allowsExplosions(location: Location): Boolean {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || manager.worldGuardSupport.allowsExplosions(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || manager.worldGuardSupport.allowsExplosions(location)
     }
 
     fun inWingsRegion(player: Player): Boolean {
 
-        if (!SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) && !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin())) return true
+        if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true
 
         val wings = manager.wingsManager
         val worldGuardVersion = manager.worldGuardSupport
@@ -87,11 +89,12 @@ object PluginSupport {
                 }
             }
         }
+
         return false
     }
 
     fun noStack(entity: LivingEntity) {
-        if (SupportedPlugins.STACKMOB.isPluginLoaded(getPlugin())) StackMobAntiSupport().preventStacking(entity)
+        if (SupportedPlugins.STACKMOB.isPluginLoaded()) StackMobAntiSupport().preventStacking(entity)
     }
 
     enum class SupportedPlugins(private val pluginName: String) {
@@ -112,7 +115,7 @@ object PluginSupport {
         VULCAN("Vulcan"),
 
         // Faction Plugins
-        FACTIONSUUID("FactionsUUID"),
+        FACTIONS_UUID("Factions"),
 
         // Sky Block Plugins
         SUPERIORSKYBLOCK("SuperiorSkyblock2"),
@@ -124,9 +127,70 @@ object PluginSupport {
         TOWNYADVANCED("TownyAdvanced"),
         PLOTSQUARED("PlotSquared");
 
+        companion object {
+            private val cachedPluginState = HashMap<SupportedPlugins, Boolean>()
+
+            fun updatePluginStates() {
+                if (cachedPluginState.isNotEmpty()) cachedPluginState.clear()
+
+                fun getPlugin(pluginName: String) = manager.plugin.server.pluginManager.getPlugin(pluginName)?.isEnabled == true && manager.plugin.server.pluginManager.getPlugin(pluginName) != null
+
+                values().forEach { supportedPlugins ->
+
+                    if (getPlugin(supportedPlugins.pluginName)) {
+
+                        val plugin = manager.plugin.server.pluginManager.getPlugin(supportedPlugins.pluginName)
+
+                        //val authors = plugin?.description?.authors
+                        //val version = plugin?.description?.version
+                        val website = plugin?.description?.website
+
+                        when (supportedPlugins) {
+                            FACTIONS_UUID -> {
+                                cachedPluginState[supportedPlugins] = website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/", ignoreCase = true)
+                                return@forEach
+                            }
+                            else -> {
+                                cachedPluginState[supportedPlugins] = true
+                                return@forEach
+                            }
+                        }
+                    } else {
+                        cachedPluginState[supportedPlugins] = false
+                    }
+                }
+
+                updateFactionsPlugins()
+            }
+
+            fun printHooks() {
+                if (cachedPluginState.isEmpty()) updatePluginStates()
+
+                manager.plugin.server.consoleSender.sendMessage(Methods.color("&4&lActive CrazyEnchantment Hooks:"))
+
+                cachedPluginState.keys.forEach {
+                    if (it.isPluginLoaded()) manager.plugin.server.consoleSender.sendMessage(Methods.color("&6&l ${it.name} : &a&lENABLED"))
+                }
+            }
+
+            private fun updateFactionsPlugins() {
+                values().forEach {
+                    if (it.isPluginLoaded()) {
+                        when (it) {
+                            FACTIONS_UUID -> {
+                                factionPlugin = FactionsUUIDSupport()
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+            }
+        }
+
         fun getName() = pluginName
 
-        fun isPluginLoaded(plugin: JavaPlugin) = plugin.server.pluginManager.getPlugin(name) != null
-
+        fun isPluginLoaded(): Boolean {
+            return cachedPluginState[this] == true
+        }
     }
 }

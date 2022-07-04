@@ -65,7 +65,7 @@ public class Boots implements Listener {
         Player player = e.getPlayer();
         if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player) && player.getEquipment().getBoots() != null) {
 
-            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                 SpartanSupport.cancelNormalMovements(player);
             }
 
@@ -117,7 +117,7 @@ public class Boots implements Listener {
         Player player = e.getPlayer();
         if (manager.isWingsEnabled() && ce.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && regionCheck(player) && !areEnemiesNearby(player)) {
 
-            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                 SpartanSupport.cancelNormalMovements(player);
             }
 

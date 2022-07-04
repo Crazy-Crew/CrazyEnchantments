@@ -7,6 +7,8 @@ import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion;
+import com.badbones69.crazyenchantments.api.multisupport.worldguard.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Location;
@@ -104,7 +106,7 @@ public class Bows implements Listener {
             if (e.getEntity() instanceof Arrow) {
                 EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
                 if (arrow != null) {
-                    if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow())) {
+                    if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow()) && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                         if (e.getHitEntity() == null) { // If the arrow hits a block.
                             Location entityLocation = e.getEntity().getLocation();
 
@@ -144,7 +146,7 @@ public class Bows implements Listener {
                             }.runTaskLater(ce.getPlugin(), 5 * 20);
                         }
                     } else { // If the arrow hits something.
-                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty()) { // Checking to make sure it doesn't hit an entity.
+                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty() && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) { // Checking to make sure it doesn't hit an entity.
                             Location entityLocation = e.getEntity().getLocation();
                             if (entityLocation.getBlock().getType() == Material.AIR) {
                                 entityLocation.getBlock().setType(web);
@@ -163,14 +165,14 @@ public class Bows implements Listener {
                     }
                 }
 
-                if (CEnchantments.BOOM.isActivated() && arrow != null) {
+                if (CEnchantments.BOOM.isActivated() && arrow != null && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                     if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
                         Methods.explode(arrow.getShooter(), arrow.getArrow());
                         arrow.getArrow().remove();
                     }
                 }
 
-                if (CEnchantments.LIGHTNING.isActivated() && arrow != null) {
+                if (CEnchantments.LIGHTNING.isActivated() && arrow != null && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                     if (arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
                         Location location = arrow.getArrow().getLocation();
 
@@ -183,7 +185,7 @@ public class Bows implements Listener {
                             location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                         } catch (Exception ignore) {}
 
-                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                             SpartanSupport.cancelNoSwing(shooter);
                         }
 
@@ -217,7 +219,7 @@ public class Bows implements Listener {
     public void onArrowDamage(EntityDamageByEntityEvent e) {
         if (!ce.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity entity) {
             EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
-            if (arrow != null) {
+            if (arrow != null && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                 ItemStack bow = arrow.getBow();
                 // Damaged player is friendly.
 
@@ -233,6 +235,7 @@ public class Bows implements Listener {
                                 if (entity.getHealth() + heal < maxHealth) {
                                     entity.setHealth(entity.getHealth() + heal);
                                 }
+
                                 if (entity.getHealth() + heal >= maxHealth) {
                                     entity.setHealth(maxHealth);
                                 }
@@ -241,6 +244,7 @@ public class Bows implements Listener {
                             if (entity.getHealth() + heal < maxHealth) {
                                 entity.setHealth(entity.getHealth() + heal);
                             }
+
                             if (entity.getHealth() + heal >= maxHealth) {
                                 entity.setHealth(maxHealth);
                             }
@@ -258,6 +262,7 @@ public class Bows implements Listener {
                                 webBlocks.add(location.getBlock());
                             }
                         }
+
                         arrow.getArrow().remove();
 
                         new BukkitRunnable() {
@@ -282,7 +287,7 @@ public class Bows implements Listener {
                             Player player = (Player) e.getEntity();
                             if (!event.isCancelled()) {
 
-                                if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                                if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                     SpartanSupport.cancelSpeed(player);
                                     SpartanSupport.cancelNormalMovements(player);
                                     SpartanSupport.cancelNoFall(player);

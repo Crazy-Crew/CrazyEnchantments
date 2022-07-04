@@ -84,6 +84,8 @@ public class CrazyManager {
 
         plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+        PluginSupport.SupportedPlugins.Companion.updatePluginStates();
+
         // Loads the blacksmith manager
         blackSmithManager = BlackSmithManager.getInstance();
         blackSmithManager.load();
@@ -159,6 +161,7 @@ public class CrazyManager {
         for (CEnchantments cEnchantment : CEnchantments.values()) {
             String name = cEnchantment.getName();
             String path = "Enchantments." + name;
+
             if (enchants.contains(path)) { // To make sure the enchantment isn't broken.
                 CEnchantment enchantment = new CEnchantment(name)
                 .setCustomName(enchants.getString(path + ".Name"))
@@ -189,6 +192,7 @@ public class CrazyManager {
                         enchantment.setChanceIncrease(cEnchantment.getChanceIncrease());
                     }
                 }
+
                 enchantment.registerEnchantment();
             }
         }
@@ -244,11 +248,11 @@ public class CrazyManager {
         // Starts the wings task
         Boots.startWings();
 
-        if (PluginSupport.SupportedPlugins.WORLDGUARD.isPluginLoaded(plugin) && PluginSupport.SupportedPlugins.WORLDEDIT.isPluginLoaded(plugin)) {
+        if (PluginSupport.SupportedPlugins.WORLDGUARD.isPluginLoaded() && PluginSupport.SupportedPlugins.WORLDEDIT.isPluginLoaded()) {
             worldGuardVersion = new WorldGuardSupport();
         }
 
-        if (PluginSupport.SupportedPlugins.PLOTSQUARED.isPluginLoaded(plugin)) {
+        if (PluginSupport.SupportedPlugins.PLOTSQUARED.isPluginLoaded()) {
             plotSquaredVersion = new PlotSquaredSupport();
         }
     }

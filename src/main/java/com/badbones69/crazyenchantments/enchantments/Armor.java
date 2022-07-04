@@ -224,7 +224,7 @@ public class Armor implements Listener {
 
             if (damager instanceof Player) {
                 for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
-                    if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (PluginSupport.SupportedPlugins.FACTIONSUUID.isPluginLoaded(ce.getPlugin()))) {
+                    if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
                         int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
                         int players = 0;
 

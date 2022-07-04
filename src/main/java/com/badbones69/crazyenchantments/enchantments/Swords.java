@@ -232,7 +232,7 @@ public class Swords implements Listener {
                         ce.getPlugin().getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {
 
-                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelFastEat(damager);
                             }
 
@@ -323,7 +323,7 @@ public class Swords implements Listener {
 
                         if (!event.isCancelled()) {
 
-                            if (e.getEntity() instanceof Player && PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                            if (e.getEntity() instanceof Player && PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelSpeed((Player) e.getEntity());
                                 SpartanSupport.cancelNormalMovements((Player) e.getEntity());
                                 SpartanSupport.cancelNoFall((Player) e.getEntity());
@@ -346,7 +346,7 @@ public class Swords implements Listener {
                                 loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                             } catch (Exception ignore) {}
 
-                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelNoSwing(damager);
                             }
 

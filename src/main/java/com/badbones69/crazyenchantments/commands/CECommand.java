@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
+import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Messages;
@@ -64,6 +65,8 @@ public class CECommand implements CommandExecutor {
                         fileManager.setup(ce.getPlugin());
                         ce.load();
                         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
+                        PluginSupport.SupportedPlugins.Companion.updatePluginStates();
+                        PluginSupport.SupportedPlugins.Companion.printHooks();
                     }
                     return true;
                 }

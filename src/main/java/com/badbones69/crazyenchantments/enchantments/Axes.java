@@ -64,7 +64,7 @@ public class Axes implements Listener {
                         if (!event.isCancelled()) {
                             int food = 2 * ce.getLevel(item, CEnchantments.FEEDME);
 
-                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded(ce.getPlugin())) {
+                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelFastEat(damager);
                             }
 
