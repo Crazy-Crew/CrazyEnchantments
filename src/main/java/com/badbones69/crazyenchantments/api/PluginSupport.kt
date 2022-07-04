@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.api
 
 import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion
 import com.badbones69.crazyenchantments.api.multisupport.misc.TownySupport
 import com.badbones69.crazyenchantments.api.multisupport.misc.mobstacker.StackMobAntiSupport
 import com.badbones69.crazyenchantments.api.multisupport.skyblock.SuperiorSkyBlockSupport
@@ -17,20 +18,14 @@ object PluginSupport {
 
     private val manager = CrazyManager.getInstance()
 
-    private val wings = manager.wingsManager
-
-    private val factionPlugin: FactionsVersion? = null
-
-    private val worldGuardVersion = manager.worldGuardSupport
-
-    private val plotSquaredVersion = manager.plotSquaredSupport
-
     fun inTerritory(player: Player): Boolean {
-        return SupportedPlugins.PLOTSQUARED.isPluginLoaded(getPlugin()) && plotSquaredVersion.inTerritory(player)
+        return SupportedPlugins.PLOTSQUARED.isPluginLoaded(getPlugin()) && manager.plotSquaredSupport.inTerritory(player)
     }
 
     fun isFriendly(entity: Entity, other: Entity): Boolean {
         if (entity !is Player || other !is Player) return true
+
+        val factionPlugin: FactionsVersion? = null
 
         if (factionPlugin != null && factionPlugin.isFriendly(entity, other)) return true
 
@@ -53,6 +48,7 @@ object PluginSupport {
     }
 
     fun canBreakBlock(player: Player, block: Block): Boolean {
+        val factionPlugin: FactionsVersion? = null
         if ((factionPlugin != null) && !factionPlugin.canBreakBlock(player, block)) return false
 
         return true
@@ -60,21 +56,23 @@ object PluginSupport {
 
     fun allowsCombat(location: Location): Boolean {
         if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded(getPlugin()) && !TownySupport.allowsCombat(location)) return false
-
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || worldGuardVersion.allowsPVP(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || manager.worldGuardSupport.allowsPVP(location)
     }
 
     fun allowsDestruction(location: Location): Boolean {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || worldGuardVersion.allowsBreak(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || manager.worldGuardSupport.allowsBreak(location)
     }
 
     fun allowsExplosions(location: Location): Boolean {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || worldGuardVersion.allowsExplosions(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) || !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin()) || manager.worldGuardSupport.allowsExplosions(location)
     }
 
     fun inWingsRegion(player: Player): Boolean {
 
         if (!SupportedPlugins.WORLDEDIT.isPluginLoaded(getPlugin()) && !SupportedPlugins.WORLDGUARD.isPluginLoaded(getPlugin())) return true
+
+        val wings = manager.wingsManager
+        val worldGuardVersion = manager.worldGuardSupport
 
         wings.regions.forEach {region ->
             if (worldGuardVersion.inRegion(region, player.location)) {
