@@ -34,3 +34,4 @@ commands:
 
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.7.0
+  - org.apache.commons:commons-text:1.9

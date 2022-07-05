@@ -119,8 +119,6 @@ dependencies {
 
 tasks {
     shadowJar {
-        minimize()
-
         archiveFileName.set("${rootProject.name}-[1.18-1.19]-v${rootProject.version}.jar")
 
         listOf(

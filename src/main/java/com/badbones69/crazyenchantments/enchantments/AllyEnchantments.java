@@ -151,6 +151,7 @@ public class AllyEnchantments implements Listener {
         Calendar coolDown = Calendar.getInstance();
         coolDown.add(Calendar.MINUTE, 2);
         allyCoolDown.put(player.getUniqueId(), coolDown);
+
         for (int i = 0; i < amount; i++) {
             AllyMob ally = new AllyMob(player, allyType);
             ally.spawnAlly(60);
