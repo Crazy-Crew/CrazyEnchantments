@@ -17,6 +17,8 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
@@ -36,22 +38,23 @@ public class AllyEnchantments implements Listener {
                         // Spawn allies when getting attacked
                         if (ce.hasEnchantments(item)) {
 
-                            if (ce.hasEnchantment(item, CEnchantments.TAMER)) {
-                                int power = ce.getLevel(item, CEnchantments.TAMER);
-                                spawnAllies(player, enemy, AllyType.WOLF, power);
-                            }
-
-                            if (ce.hasEnchantment(item, CEnchantments.GUARDS)) {
-                                int power = ce.getLevel(item, CEnchantments.GUARDS);
-                                spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
-                            }
-
-                            if (ce.hasEnchantment(item, CEnchantments.BEEKEEPER)) {
-                                int power = ce.getLevel(item, CEnchantments.BEEKEEPER);
-                                spawnAllies(player, enemy, AllyType.BEE, power);
-                            }
-
                             if (enemy instanceof Player) {
+
+                                if (ce.hasEnchantment(item, CEnchantments.TAMER)) {
+                                    int power = ce.getLevel(item, CEnchantments.TAMER);
+                                    spawnAllies(player, enemy, AllyType.WOLF, power);
+                                }
+
+                                if (ce.hasEnchantment(item, CEnchantments.GUARDS)) {
+                                    int power = ce.getLevel(item, CEnchantments.GUARDS);
+                                    spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
+                                }
+
+                                if (ce.hasEnchantment(item, CEnchantments.BEEKEEPER)) {
+                                    int power = ce.getLevel(item, CEnchantments.BEEKEEPER);
+                                    spawnAllies(player, enemy, AllyType.BEE, power);
+                                }
+
                                 if (ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
                                     int power = ce.getLevel(item, CEnchantments.NECROMANCER);
                                     spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);

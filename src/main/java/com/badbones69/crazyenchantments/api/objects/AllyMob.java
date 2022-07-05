@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
 
 public class AllyMob {
-    
+
     private final AllyType type;
     private final Player owner;
     private LivingEntity ally;
@@ -22,29 +22,29 @@ public class AllyMob {
     private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     private final AllyMob instance;
     private final static AllyManager allyManager = AllyManager.getInstance();
-    
+
     public AllyMob(Player owner, AllyType type) {
         this.type = type;
         this.owner = owner;
         instance = this;
     }
-    
+
     public AllyType getType() {
         return type;
     }
-    
+
     public Player getOwner() {
         return owner;
     }
-    
+
     public LivingEntity getAlly() {
         return ally;
     }
-    
+
     public void spawnAlly(long spawnTime) {
         spawnAlly(owner.getLocation(), spawnTime);
     }
-    
+
     public void spawnAlly(Location location, long spawnTime) {
         this.spawnTime = spawnTime;
 
@@ -63,35 +63,40 @@ public class AllyMob {
         startSpawnTimer();
         allyManager.addAllyMob(instance);
     }
-    
+
     public void forceRemoveAlly() {
         runnable.cancel();
         allyManager.removeAllyMob(instance);
         ally.remove();
     }
-    
+
     public void attackEnemy(LivingEntity enemy) {
         switch (ally.getType()) {
             case WOLF -> {
                 Wolf wolf = (Wolf) ally;
                 wolf.setTarget(enemy);
             }
+
             case IRON_GOLEM -> {
                 IronGolem iron = (IronGolem) ally;
                 iron.setTarget(enemy);
             }
+
             case ZOMBIE -> {
                 Zombie zom = (Zombie) ally;
                 zom.setTarget(enemy);
             }
+
             case ENDERMITE -> {
                 Endermite mite = (Endermite) ally;
                 mite.setTarget(enemy);
             }
+
             case SILVERFISH -> {
                 Silverfish sfish = (Silverfish) ally;
                 sfish.setTarget(enemy);
             }
+
             case BEE -> {
                 Bee bee = (Bee) ally;
                 bee.setTarget(enemy);
