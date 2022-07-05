@@ -39,7 +39,9 @@ public class FileManager {
      */
     public FileManager setup(Plugin plugin) {
         this.plugin = plugin;
+
         if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
+
         files.clear();
         customFiles.clear();
         configurations.clear();
@@ -47,6 +49,7 @@ public class FileManager {
         //Loads all the normal static files.
         for (Files file : Files.values()) {
             File newFile = new File(plugin.getDataFolder(), file.getFileLocation());
+
             if (log) plugin.getLogger().info("Loading the " + file.getFileName());
 
             if (!newFile.exists()) {
