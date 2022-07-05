@@ -127,7 +127,7 @@ object PluginSupport {
         PLOTSQUARED("PlotSquared");
 
         companion object {
-            private val cachedPluginState = HashMap<SupportedPlugins, Boolean>()
+            private val cachedPluginState = hashMapOf<SupportedPlugins, Boolean>()
 
             fun updatePluginStates() {
                 if (cachedPluginState.isNotEmpty()) cachedPluginState.clear()
