@@ -1,7 +1,7 @@
 plugins {
     java
 
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.0"
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -58,7 +58,6 @@ repositories {
     maven("https://jitpack.io/")
 
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
@@ -115,7 +114,7 @@ dependencies {
 
     implementation("de.tr7zw:nbt-data-api:2.10.0")
 
-    compileOnly(kotlin("stdlib", "1.6.21"))
+    compileOnly(kotlin("stdlib", "1.7.0"))
 }
 
 tasks {
