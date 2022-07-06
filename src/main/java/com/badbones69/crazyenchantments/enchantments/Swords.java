@@ -431,7 +431,8 @@ public class Swords implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent e) {
 
-        if (e.getEntity().getKiller() != null) {
+        if (e.getEntity().getKiller() instanceof Player) {
+
             Player damager = e.getEntity().getKiller();
             Player player = e.getEntity();
             ItemStack item = Methods.getItemInHand(damager);
@@ -451,6 +452,7 @@ public class Swords implements Listener {
                     if (pluginSupport.isFriendly(entity, player)) {
                         Player ally = (Player) entity;
                         ItemStack itemStack = Methods.getItemInHand(ally);
+
                         if (ce.hasEnchantment(itemStack, CEnchantments.REVENGE)) {
                             ally.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 1));
                             ally.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0));
