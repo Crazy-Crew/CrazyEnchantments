@@ -60,9 +60,11 @@ public class AllyManager {
     }
     
     public void forceRemoveAllies() {
-        allyMobs.forEach(ally -> ally.getAlly().remove());
-        allyMobs.clear();
-        allyOwners.clear();
+        if (!allyMobs.isEmpty()) {
+            allyMobs.forEach(ally -> ally.getAlly().remove());
+            allyMobs.clear();
+            allyOwners.clear();
+        }
     }
     
     public void forceRemoveAllies(Player owner) {

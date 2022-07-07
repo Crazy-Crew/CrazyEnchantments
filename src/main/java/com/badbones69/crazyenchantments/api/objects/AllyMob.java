@@ -60,7 +60,9 @@ public class AllyMob {
         placeholders.put("%Mob%", type.entityType.getName());
         ally.setCustomName(Messages.replacePlaceholders(placeholders, type.getName()));
         ally.setCustomNameVisible(true);
+
         startSpawnTimer();
+
         allyManager.addAllyMob(instance);
     }
 
@@ -105,13 +107,15 @@ public class AllyMob {
     }
     
     private void startSpawnTimer() {
-        runnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                allyManager.removeAllyMob(instance);
-                ally.remove();
-            }
-        }.runTaskLater(crazyManager.getPlugin(), spawnTime * 20);
+        if (ally != null) {
+            runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    allyManager.removeAllyMob(instance);
+                    ally.remove();
+                }
+            }.runTaskLater(crazyManager.getPlugin(), spawnTime * 20);
+        }
     }
     
     public enum AllyType {
