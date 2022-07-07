@@ -5,7 +5,7 @@
 ###################################################################
 Settings:
   Prefix: '&8[&aCrazyEnchants&8]: ' #The prefix in the messages
-  Update-Checker: true #Toggle on and off if you get an update message when you join if there is a new update.
+  Toggle-Metrics: true #Turn on and off if your server stats are sent to https://bstats.org/ - Requires a restart!
   Player-Info-Backup-Message: true #Toggle this on and off if you wish to see when the player's data gets backed up.
   Reset-Players-Max-Health: true #This is for some servers that get a health duplication glitch from plugins like CombatTagPlus(v1.2.3 down)
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
