@@ -14,6 +14,7 @@ public class BlackSmithCompare {
 
         for (Entry<Enchantment, Integer> entry : subCE.getVanillaEnchantments().entrySet()) {
             Enchantment enchantment = entry.getKey();
+
             if (!mainCE.hasVanillaEnchantment(enchantment)) {
                 newVanillaEnchantments.put(enchantment, entry.getValue());
             }
@@ -21,6 +22,7 @@ public class BlackSmithCompare {
 
         for (Entry<CEnchantment, Integer> entry : subCE.getCEnchantments().entrySet()) {
             CEnchantment enchantment = entry.getKey();
+
             if (!mainCE.hasCEnchantment(enchantment)) {
                 newCEnchantments.put(enchantment, entry.getValue());
             }
@@ -34,4 +36,5 @@ public class BlackSmithCompare {
     public Map<CEnchantment, Integer> getNewCEnchantments() {
         return newCEnchantments;
     }
+
 }

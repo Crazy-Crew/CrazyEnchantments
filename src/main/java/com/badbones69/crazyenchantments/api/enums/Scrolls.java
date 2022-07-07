@@ -28,6 +28,7 @@ public enum Scrolls {
     public static void loadScrolls() {
         FileConfiguration config = Files.CONFIG.getFile();
         itemBuilderScrolls.clear();
+
         for (Scrolls scroll : values()) {
             String path = "Settings." + scroll.getConfigName() + ".";
             itemBuilderScrolls.put(scroll, new ItemBuilder()
@@ -67,4 +68,5 @@ public enum Scrolls {
     public ItemStack getScroll(int amount) {
         return itemBuilderScrolls.get(this).setAmount(amount).build();
     }
+
 }

@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class InfoGUIControl implements Listener {
     
-    private final CrazyManager ce = CrazyManager.getInstance();
-    private final InfoMenuManager manager = ce.getInfoMenuManager();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
+    private final InfoMenuManager manager = crazyManager.getInfoMenuManager();
     
     @EventHandler
     public void infoClick(InventoryClickEvent e) {
@@ -21,6 +21,7 @@ public class InfoGUIControl implements Listener {
 
             if (e.getCurrentItem() != null) {
                 ItemStack item = e.getCurrentItem();
+
                 if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                     Player player = (Player) e.getWhoClicked();
 
@@ -39,4 +40,5 @@ public class InfoGUIControl implements Listener {
             }
         }
     }
+
 }

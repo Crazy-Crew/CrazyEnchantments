@@ -331,6 +331,7 @@ public class ItemBuilder implements Cloneable {
             ItemMeta itemMeta = item.getItemMeta();
             itemMeta.setDisplayName(getUpdatedName());
             itemMeta.setLore(getUpdatedLore());
+
             if (itemMeta instanceof org.bukkit.inventory.meta.Damageable)
                 ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
 
@@ -406,6 +407,7 @@ public class ItemBuilder implements Cloneable {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+
         return new ItemBuilder();
     }
 
@@ -476,6 +478,7 @@ public class ItemBuilder implements Cloneable {
         }
 
         if (this.material.name().contains("BANNER")) this.isBanner = true;
+
         return this;
     }
 
@@ -538,10 +541,12 @@ public class ItemBuilder implements Cloneable {
     public ItemBuilder setLore(List<String> lore) {
         if (lore != null) {
             this.itemLore.clear();
+
             for (String line : lore) {
                 this.itemLore.add(color(line));
             }
         }
+
         return this;
     }
 
@@ -586,12 +591,15 @@ public class ItemBuilder implements Cloneable {
      */
     public List<String> getUpdatedLore() {
         List<String> newLore = new ArrayList<>();
+
         for (String item : itemLore) {
             for (String placeholder : lorePlaceholders.keySet()) {
                 item = item.replace(placeholder, lorePlaceholders.get(placeholder)).replace(placeholder.toLowerCase(), lorePlaceholders.get(placeholder));
             }
+
             newLore.add(item);
         }
+
         return newLore;
     }
 
@@ -632,11 +640,11 @@ public class ItemBuilder implements Cloneable {
                     if (color != null) {
                         addPattern(new Pattern(color, pattern));
                     }
+
                     break;
                 }
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     /**
@@ -733,12 +741,15 @@ public class ItemBuilder implements Cloneable {
      */
     public ItemBuilder setFlagsFromStrings(List<String> flagStrings) {
         itemFlags.clear();
+
         for (String flagString : flagStrings) {
             ItemFlag flag = getFlag(flagString);
+
             if (flag != null) {
                 itemFlags.add(flag);
             }
         }
+
         return this;
     }
 
@@ -747,12 +758,13 @@ public class ItemBuilder implements Cloneable {
         for (String flagString : flagStrings) {
             try {
                 ItemFlag itemFlag = ItemFlag.valueOf(flagString.toUpperCase());
+
                 if (itemFlag != null) {
                     addItemFlag(itemFlag);
                 }
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
         }
+
         return this;
     }
 
@@ -764,9 +776,11 @@ public class ItemBuilder implements Cloneable {
      */
     public ItemBuilder addFlags(String flagString) {
         ItemFlag flag = getFlag(flagString);
+
         if (flag != null) {
             itemFlags.add(flag);
         }
+
         return this;
     }
 
@@ -814,6 +828,7 @@ public class ItemBuilder implements Cloneable {
                 return item;
             }
         }
+
         return item;
     }
 
@@ -916,10 +931,12 @@ public class ItemBuilder implements Cloneable {
      */
     public static ItemBuilder convertString(String itemString, String placeHolder) {
         ItemBuilder itemBuilder = new ItemBuilder();
+
         try {
             for (String optionString : itemString.split(", ")) {
                 String option = optionString.split(":")[0];
                 String value = optionString.replace(option + ":", "").replace(option, "");
+
                 switch (option.toLowerCase()) {
                     case "item":
                         itemBuilder.setMaterial(value);
@@ -972,14 +989,15 @@ public class ItemBuilder implements Cloneable {
                             for (PatternType pattern : PatternType.values()) {
                                 if (option.equalsIgnoreCase(pattern.name()) || value.equalsIgnoreCase(pattern.getIdentifier())) {
                                     DyeColor color = getDyeColor(value);
+
                                     if (color != null) {
                                         itemBuilder.addPattern(new Pattern(color, pattern));
                                     }
+
                                     break;
                                 }
                             }
-                        } catch (Exception ignored) {
-                        }
+                        } catch (Exception ignored) {}
 
                         break;
                 }
@@ -988,6 +1006,7 @@ public class ItemBuilder implements Cloneable {
             itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c" + (placeHolder != null ? placeHolder : "")));
             e.printStackTrace();
         }
+
         return itemBuilder;
     }
 
@@ -1026,6 +1045,7 @@ public class ItemBuilder implements Cloneable {
                             return;
                         }
                     }
+
                     item.addUnsafeEnchantment(Enchantment.LUCK, 1);
                     ItemMeta meta = item.getItemMeta();
                     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -1073,6 +1093,7 @@ public class ItemBuilder implements Cloneable {
                 return PotionType.WEAKNESS;
             }
         }
+
         return null;
     }
 
@@ -1120,11 +1141,13 @@ public class ItemBuilder implements Cloneable {
                 case "YELLOW":
                     return Color.YELLOW;
             }
+
             try {
                 String[] rgb = color.split(",");
                 return Color.fromRGB(Integer.parseInt(rgb[0]), Integer.parseInt(rgb[1]), Integer.parseInt(rgb[2]));
             } catch (Exception ignore) {}
         }
+
         return null;
     }
 
@@ -1145,6 +1168,7 @@ public class ItemBuilder implements Cloneable {
                 } catch (Exception ignore) {}
             }
         }
+
         return null;
     }
 
@@ -1161,13 +1185,16 @@ public class ItemBuilder implements Cloneable {
                 if (stripEnchantmentName(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
                     return enchantment;
                 }
+
                 HashMap<String, String> enchantments = getEnchantmentList();
+
                 if (stripEnchantmentName(enchantment.getName()).equalsIgnoreCase(enchantmentName) || (enchantments.get(enchantment.getName()) != null &&
                         stripEnchantmentName(enchantments.get(enchantment.getName())).equalsIgnoreCase(enchantmentName))) {
                     return enchantment;
                 }
             } catch (Exception ignore) {}
         }
+
         return null;
     }
 
@@ -1231,6 +1258,7 @@ public class ItemBuilder implements Cloneable {
         } catch (NumberFormatException nfe) {
             return false;
         }
+
         return true;
     }
 
@@ -1240,6 +1268,8 @@ public class ItemBuilder implements Cloneable {
                 return flag;
             }
         }
+
         return null;
     }
+
 }

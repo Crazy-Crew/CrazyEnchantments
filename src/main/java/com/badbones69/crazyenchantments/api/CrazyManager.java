@@ -38,7 +38,6 @@ import java.util.Map.Entry;
 public class CrazyManager {
     
     private final static CrazyManager instance = new CrazyManager();
-    private JavaPlugin plugin;
     private int rageMaxLevel;
     private boolean gkitzToggle;
     private boolean useUnsafeEnchantments;
@@ -66,9 +65,23 @@ public class CrazyManager {
     private final List<CEnchantment> registeredEnchantments = new ArrayList<>();
     private final List<Event> ignoredEvents = new ArrayList<>();
     private final List<UUID> ignoredUUIDs = new ArrayList<>();
+
+    private JavaPlugin plugin;
+
+    /**
+     * Get the CrazyEnchantments Plugin.
+     * @return The CrazyEnchantments Plugin object.
+     */
+    public JavaPlugin getPlugin() {
+        return plugin;
+    }
     
     public static CrazyManager getInstance() {
         return instance;
+    }
+
+    public void loadPlugin(JavaPlugin plugin) {
+        this.plugin = plugin;
     }
     
     /**
@@ -81,8 +94,6 @@ public class CrazyManager {
         gkitz.clear();
         registeredEnchantments.clear();
         categories.clear();
-
-        plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
         PluginSupport.SupportedPlugins.Companion.updatePluginStates();
 
@@ -340,14 +351,6 @@ public class CrazyManager {
         }
 
         Files.DATA.saveFile();
-    }
-    
-    /**
-     * Gets the plugin.
-     * @return The plugin as a Plugin object.
-     */
-    public JavaPlugin getPlugin() {
-        return plugin;
     }
     
     /**

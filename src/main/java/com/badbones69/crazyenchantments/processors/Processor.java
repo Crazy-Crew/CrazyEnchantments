@@ -38,4 +38,5 @@ public abstract class Processor<T> {
     public void stop() {
         thread.interrupt();
     }
+
 }

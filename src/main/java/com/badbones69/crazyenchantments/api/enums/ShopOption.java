@@ -39,13 +39,17 @@ public enum ShopOption {
         this.lorePath = lorePath;
         this.buyable = buyable;
     }
+
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     
     public static void loadShopOptions() {
         FileConfiguration config = Files.CONFIG.getFile();
         shopOptions.clear();
+
         for (ShopOption shopOption : values()) {
             String itemPath = "Settings." + shopOption.getPath() + ".";
             String costPath = "Settings.Costs." + shopOption.getOptionPath() + ".";
+
             try {
                 shopOptions.put(shopOption, new Option(new ItemBuilder()
                 .setName(config.getString(itemPath + shopOption.getNamePath()))
@@ -58,7 +62,7 @@ public enum ShopOption {
                 config.getInt(costPath + "Cost", 100),
                 Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
             } catch (Exception e) {
-                CrazyManager.getInstance().getPlugin().getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
+                crazyManager.getPlugin().getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
                 e.printStackTrace();
             }
         }
@@ -144,4 +148,5 @@ public enum ShopOption {
             return currency;
         }
     }
+
 }

@@ -25,4 +25,5 @@ public class PotionEffects {
     public int getAmplifier() {
         return amplifier;
     }
+
 }

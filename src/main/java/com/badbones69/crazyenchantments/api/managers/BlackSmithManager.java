@@ -89,4 +89,5 @@ public class BlackSmithManager {
     public boolean useMaxEnchantments() {
         return maxEnchantments;
     }
+
 }

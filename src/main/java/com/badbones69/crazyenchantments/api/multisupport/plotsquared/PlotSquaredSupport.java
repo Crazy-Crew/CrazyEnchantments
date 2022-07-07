@@ -12,4 +12,5 @@ public class PlotSquaredSupport implements PlotSquaredVersion {
         Plot plot = plotPlayer.getCurrentPlot();
         return plot != null && plot.isAdded(plotPlayer.getUUID());
     }
+
 }

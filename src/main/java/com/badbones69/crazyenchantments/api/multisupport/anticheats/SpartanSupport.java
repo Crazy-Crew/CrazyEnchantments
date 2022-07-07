@@ -33,4 +33,5 @@ public class SpartanSupport {
     public static void cancelNormalMovements(Player player) {
         API.cancelCheck(player, HackType.IrregularMovements, 80);
     }
+
 }

@@ -14,23 +14,25 @@ import java.util.List;
 
 public class CommandChecker implements Listener {
     
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
     private final ItemStack air = new ItemStack(Material.AIR);
     
     @EventHandler
     public void onInventoryClear(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
+
         if (clearInventoryCommands.contains(e.getMessage().toLowerCase())) {
-            for (CEnchantments enchantment : ce.getEnchantmentPotions().keySet()) {
+            for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
                 if (enchantment.isActivated()) {
                     for (ItemStack armor : player.getEquipment().getArmorContents()) {
                         if (armor != null) {
-                            ce.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player :: removePotionEffect);
+                            crazyManager.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player :: removePotionEffect);
                         }
                     }
                 }
             }
+
             updateEffects(player);
         } else if (e.getMessage().equalsIgnoreCase("/heal")) {
             updateEffects(player);
@@ -41,8 +43,9 @@ public class CommandChecker implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                ce.updatePlayerEffects(player);
+                crazyManager.updatePlayerEffects(player);
             }
-        }.runTaskLater(ce.getPlugin(), 5);
+        }.runTaskLater(crazyManager.getPlugin(), 5);
     }
+
 }

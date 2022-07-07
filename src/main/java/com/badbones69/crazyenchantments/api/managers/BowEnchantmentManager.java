@@ -40,4 +40,5 @@ public class BowEnchantmentManager {
     public List<BowEnchantment> getBowEnchantments() {
         return bowEnchantments;
     }
+
 }

@@ -50,4 +50,5 @@ public class TownySupport implements FactionsVersion {
 
         return true;
     }
+
 }

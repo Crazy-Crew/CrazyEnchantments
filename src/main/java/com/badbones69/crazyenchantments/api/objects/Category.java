@@ -115,6 +115,7 @@ public class Category {
     
     public void addEnchantment(CEnchantment enchantment) {
         enchantmentList.add(enchantment);
+
         if (enchantment.isActivated()) {
             enabledEnchantments.add(enchantment);
         }
@@ -124,4 +125,5 @@ public class Category {
         enchantmentList.remove(enchantment);
         enabledEnchantments.remove(enchantment);
     }
+
 }

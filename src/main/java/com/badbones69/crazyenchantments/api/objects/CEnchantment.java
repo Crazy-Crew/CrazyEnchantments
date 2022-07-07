@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class CEnchantment {
     
-    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     
     private String name;
     private String customName;
@@ -44,7 +44,7 @@ public class CEnchantment {
     }
     
     public static CEnchantment getCEnchantmentFromName(String enchantment) {
-        return ce.getEnchantmentFromName(enchantment);
+        return crazyManager.getEnchantmentFromName(enchantment);
     }
     
     public String getName() {
@@ -172,7 +172,8 @@ public class CEnchantment {
     public CEnchantment setCategories(List<String> categories) {
 
         for (String categoryString : categories) {
-            Category category = ce.getCategory(categoryString);
+            Category category = crazyManager.getCategory(categoryString);
+
             if (category != null) {
                 this.categories.add(category);
             }
@@ -196,8 +197,8 @@ public class CEnchantment {
     
     public void registerEnchantment() {
         RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(instance);
-        ce.getPlugin().getServer().getPluginManager().callEvent(event);
-        ce.registerEnchantment(instance);
+        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+        crazyManager.registerEnchantment(instance);
 
         if (enchantmentType != null) {
             enchantmentType.addEnchantment(instance);
@@ -210,8 +211,8 @@ public class CEnchantment {
     
     public void unregisterEnchantment() {
         UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(instance);
-        ce.getPlugin().getServer().getPluginManager().callEvent(event);
-        ce.unregisterEnchantment(instance);
+        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+        crazyManager.unregisterEnchantment(instance);
 
         if (enchantmentType != null) {
             enchantmentType.removeEnchantment(instance);
@@ -236,15 +237,17 @@ public class CEnchantment {
         if (Methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.contains(customName)) {
-                    level = ce.convertLevelInteger(lore.replace(color + customName + " ", ""));
+                    level = crazyManager.convertLevelInteger(lore.replace(color + customName + " ", ""));
                     break;
                 }
             }
         }
 
-        if (!ce.useUnsafeEnchantments() && level > maxLevel) {
+        if (!crazyManager.useUnsafeEnchantments() && level > maxLevel) {
             level = maxLevel;
         }
+
         return level;
     }
+
 }

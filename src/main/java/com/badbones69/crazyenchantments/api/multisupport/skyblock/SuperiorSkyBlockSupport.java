@@ -15,4 +15,5 @@ public class SuperiorSkyBlockSupport {
         SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player), otherPlayer = SuperiorSkyblockAPI.getPlayer(other);
         return superiorPlayer.getIsland() != null && superiorPlayer.getIsland().isMember(otherPlayer);
     }
+
 }

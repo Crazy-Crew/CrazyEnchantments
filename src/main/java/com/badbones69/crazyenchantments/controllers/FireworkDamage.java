@@ -13,7 +13,7 @@ import java.util.List;
 public class FireworkDamage implements Listener {
     
     private static final List<Entity> fireworks = new ArrayList<>();
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * @return All the active fireworks.
@@ -46,13 +46,15 @@ public class FireworkDamage implements Listener {
     @EventHandler
     public void onFireworkExplode(FireworkExplodeEvent e) {
         final Entity firework = e.getEntity();
+
         if (getFireworks().contains(firework)) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     fireworks.remove(firework);
                 }
-            }.runTaskLater(ce.getPlugin(), 5);
+            }.runTaskLater(crazyManager.getPlugin(), 5);
         }
     }
+
 }

@@ -17,8 +17,6 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
@@ -26,42 +24,42 @@ import java.util.UUID;
 public class AllyEnchantments implements Listener {
     
     private static final AllyManager allyManager = AllyManager.getInstance();
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAllySpawn(EntityDamageByEntityEvent e) {
-        if (!e.isCancelled() && !ce.isIgnoredEvent(e)) {
+        if (!e.isCancelled() && !crazyManager.isIgnoredEvent(e)) {
             if (e.getEntity() instanceof Player player && e.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
                 if (!inCoolDown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when getting attacked
-                        if (ce.hasEnchantments(item)) {
+                        if (crazyManager.hasEnchantments(item)) {
 
                             if (enemy instanceof Player) {
 
-                                if (ce.hasEnchantment(item, CEnchantments.TAMER)) {
-                                    int power = ce.getLevel(item, CEnchantments.TAMER);
+                                if (crazyManager.hasEnchantment(item, CEnchantments.TAMER)) {
+                                    int power = crazyManager.getLevel(item, CEnchantments.TAMER);
                                     spawnAllies(player, enemy, AllyType.WOLF, power);
                                 }
 
-                                if (ce.hasEnchantment(item, CEnchantments.GUARDS)) {
-                                    int power = ce.getLevel(item, CEnchantments.GUARDS);
+                                if (crazyManager.hasEnchantment(item, CEnchantments.GUARDS)) {
+                                    int power = crazyManager.getLevel(item, CEnchantments.GUARDS);
                                     spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
                                 }
 
-                                if (ce.hasEnchantment(item, CEnchantments.BEEKEEPER)) {
-                                    int power = ce.getLevel(item, CEnchantments.BEEKEEPER);
+                                if (crazyManager.hasEnchantment(item, CEnchantments.BEEKEEPER)) {
+                                    int power = crazyManager.getLevel(item, CEnchantments.BEEKEEPER);
                                     spawnAllies(player, enemy, AllyType.BEE, power);
                                 }
 
-                                if (ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
-                                    int power = ce.getLevel(item, CEnchantments.NECROMANCER);
+                                if (crazyManager.hasEnchantment(item, CEnchantments.NECROMANCER)) {
+                                    int power = crazyManager.getLevel(item, CEnchantments.NECROMANCER);
                                     spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
                                 }
 
-                                if (ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
-                                    int power = ce.getLevel(item, CEnchantments.INFESTATION);
+                                if (crazyManager.hasEnchantment(item, CEnchantments.INFESTATION)) {
+                                    int power = crazyManager.getLevel(item, CEnchantments.INFESTATION);
                                     spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
                                     spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
                                 }
@@ -83,25 +81,25 @@ public class AllyEnchantments implements Listener {
                 if (!inCoolDown(player)) {
                     for (ItemStack item : player.getEquipment().getArmorContents()) {
                         // Spawn allies when attacking
-                        if (ce.hasEnchantments(item)) {
-                            if (ce.hasEnchantment(item, CEnchantments.TAMER)) {
-                                int power = ce.getLevel(item, CEnchantments.TAMER);
+                        if (crazyManager.hasEnchantments(item)) {
+                            if (crazyManager.hasEnchantment(item, CEnchantments.TAMER)) {
+                                int power = crazyManager.getLevel(item, CEnchantments.TAMER);
                                 spawnAllies(player, enemy, AllyType.WOLF, power);
                             }
 
-                            if (ce.hasEnchantment(item, CEnchantments.GUARDS)) {
-                                int power = ce.getLevel(item, CEnchantments.GUARDS);
+                            if (crazyManager.hasEnchantment(item, CEnchantments.GUARDS)) {
+                                int power = crazyManager.getLevel(item, CEnchantments.GUARDS);
                                 spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
                             }
 
                             if (enemy instanceof Player) {
-                                if (ce.hasEnchantment(item, CEnchantments.NECROMANCER)) {
-                                    int power = ce.getLevel(item, CEnchantments.NECROMANCER);
+                                if (crazyManager.hasEnchantment(item, CEnchantments.NECROMANCER)) {
+                                    int power = crazyManager.getLevel(item, CEnchantments.NECROMANCER);
                                     spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
                                 }
 
-                                if (ce.hasEnchantment(item, CEnchantments.INFESTATION)) {
-                                    int power = ce.getLevel(item, CEnchantments.INFESTATION);
+                                if (crazyManager.hasEnchantment(item, CEnchantments.INFESTATION)) {
+                                    int power = crazyManager.getLevel(item, CEnchantments.INFESTATION);
                                     spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
                                     spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
                                 }
@@ -168,6 +166,7 @@ public class AllyEnchantments implements Listener {
             if (Calendar.getInstance().before(allyCoolDown.get(player.getUniqueId()))) {
                 return true;
             }
+
             // Remove the player because their cooldown is over.
             allyCoolDown.remove(player.getUniqueId());
         }

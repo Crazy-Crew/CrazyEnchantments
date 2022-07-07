@@ -18,7 +18,7 @@ public class AllyMob {
     private LivingEntity ally;
     private long spawnTime;
     private BukkitTask runnable;
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     private final AllyMob instance;
     private final static AllyManager allyManager = AllyManager.getInstance();
@@ -111,7 +111,7 @@ public class AllyMob {
                 allyManager.removeAllyMob(instance);
                 ally.remove();
             }
-        }.runTaskLater(ce.getPlugin(), spawnTime * 20);
+        }.runTaskLater(crazyManager.getPlugin(), spawnTime * 20);
     }
     
     public enum AllyType {
@@ -155,4 +155,5 @@ public class AllyMob {
             return maxHealth;
         }
     }
+
 }

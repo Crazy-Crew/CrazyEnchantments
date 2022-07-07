@@ -22,7 +22,7 @@ import java.util.*;
 
 public class ScrollControl implements Listener {
     
-    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     private final Random random = new Random();
     private static String suffix;
     private static boolean countVanillaEnchantments;
@@ -44,6 +44,7 @@ public class ScrollControl implements Listener {
         Player player = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
         ItemStack scroll = e.getCursor();
+
         if (item != null && scroll != null) {
             InventoryType.SlotType slotType = e.getSlotType();
 
@@ -58,7 +59,7 @@ public class ScrollControl implements Listener {
                     return;
                 }
 
-                if (ce.hasEnchantments(item)) {
+                if (crazyManager.hasEnchantments(item)) {
 
                     // Checks to see if the item is already ordered.
                     if (item.isSimilar(orderEnchantments(item.clone()))) {
@@ -78,11 +79,11 @@ public class ScrollControl implements Listener {
                     return;
                 }
 
-                if (!ce.hasWhiteScrollProtection(item)) {
-                    for (EnchantmentType enchantmentType : ce.getInfoMenuManager().getEnchantmentTypes()) {
+                if (!crazyManager.hasWhiteScrollProtection(item)) {
+                    for (EnchantmentType enchantmentType : crazyManager.getInfoMenuManager().getEnchantmentTypes()) {
                         if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                             e.setCancelled(true);
-                            e.setCurrentItem(ce.addWhiteScrollProtection(item));
+                            e.setCurrentItem(crazyManager.addWhiteScrollProtection(item));
                             player.setItemOnCursor(Methods.removeItem(scroll));
                             return;
                         }
@@ -100,7 +101,7 @@ public class ScrollControl implements Listener {
                     return;
                 }
 
-                List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+                List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     e.setCancelled(true);
                     player.setItemOnCursor(Methods.removeItem(scroll));
@@ -111,8 +112,8 @@ public class ScrollControl implements Listener {
                     }
 
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
-                    player.getInventory().addItem(new CEBook(enchantment, ce.getLevel(item, enchantment), 1).buildBook());
-                    e.setCurrentItem(ce.removeEnchantment(item, enchantment));
+                    player.getInventory().addItem(new CEBook(enchantment, crazyManager.getLevel(item, enchantment), 1).buildBook());
+                    e.setCurrentItem(crazyManager.removeEnchantment(item, enchantment));
                     player.updateInventory();
                 }
             }
@@ -123,6 +124,7 @@ public class ScrollControl implements Listener {
     public void onClick(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         ItemStack scroll = Methods.getItemInHand(player);
+
         if (scroll != null) {
             if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) {
                 e.setCancelled(true);
@@ -138,10 +140,10 @@ public class ScrollControl implements Listener {
         HashMap<CEnchantment, Integer> categories = new HashMap<>();
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
 
-        for (CEnchantment enchantment : ce.getEnchantmentsOnItem(item)) {
-            enchantmentLevels.put(enchantment, ce.getLevel(item, enchantment));
-            ce.removeEnchantment(item, enchantment);
-            categories.put(enchantment, ce.getHighestEnchantmentCategory(enchantment).getRarity());
+        for (CEnchantment enchantment : crazyManager.getEnchantmentsOnItem(item)) {
+            enchantmentLevels.put(enchantment, crazyManager.getLevel(item, enchantment));
+            crazyManager.removeEnchantment(item, enchantment);
+            categories.put(enchantment, crazyManager.getHighestEnchantmentCategory(enchantment).getRarity());
             newEnchantmentOrder.add(enchantment);
         }
 
@@ -150,7 +152,7 @@ public class ScrollControl implements Listener {
         ArrayList<String> lore = new ArrayList<>();
 
         for (CEnchantment enchantment : newEnchantmentOrder) {
-            lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + ce.convertLevelString(enchantmentLevels.get(enchantment)));
+            lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + crazyManager.convertLevelString(enchantmentLevels.get(enchantment)));
         }
 
         if (itemMeta.hasLore()) {
@@ -167,6 +169,7 @@ public class ScrollControl implements Listener {
             if (itemMeta.hasDisplayName()) {
                 for (int i = 0; i <= 100; i++) {
                     String msg = suffix.replace("%Amount%", i + "").replace("%amount%", i + "");
+
                     if (itemMeta.getDisplayName().endsWith(Methods.color(msg))) {
                         newName = itemMeta.getDisplayName().substring(0, itemMeta.getDisplayName().length() - msg.length());
                         break;
@@ -193,6 +196,8 @@ public class ScrollControl implements Listener {
             Integer string2 = map.get(a2);
             return string2.compareTo(string1);
         });
+
         return list;
     }
+
 }

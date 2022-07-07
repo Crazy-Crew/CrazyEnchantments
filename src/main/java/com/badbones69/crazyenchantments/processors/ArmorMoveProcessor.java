@@ -21,11 +21,11 @@ import java.util.Objects;
 public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private final Processor<Runnable> syncProcessor;
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
 
     public ArmorMoveProcessor() {
-        this.syncProcessor = new RunnableSyncProcessor(ce.getPlugin());
+        this.syncProcessor = new RunnableSyncProcessor();
     }
 
     public void stop() {
@@ -42,20 +42,23 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
         Player player = process.getPlayer();
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-            if (!ce.hasEnchantments(armor)) continue;
-            if (CEnchantments.NURSERY.isActivated() && ce.hasEnchantment(armor, CEnchantments.NURSERY)) {
+            if (!crazyManager.hasEnchantments(armor)) continue;
+
+            if (CEnchantments.NURSERY.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.NURSERY)) {
                 int heal = 1;
+
                 if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
                     // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                     double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
                     if (maxHealth > player.getHealth() && player.getHealth() > 0) {
                         syncProcessor.add(() -> {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
-                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
                             if (!event.isCancelled() && player.getHealth() > 0) {
                                 if (player.getHealth() + heal <= maxHealth) {
                                     player.setHealth(player.getHealth() + heal);
                                 }
+
                                 if (player.getHealth() + heal >= maxHealth) {
                                     player.setHealth(maxHealth);
                                 }
@@ -65,10 +68,11 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 }
             }
 
-            if (CEnchantments.IMPLANTS.isActivated() && ce.hasEnchantment(armor, CEnchantments.IMPLANTS) && CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
+            if (CEnchantments.IMPLANTS.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.IMPLANTS) && CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
                 syncProcessor.add(() -> {
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS.getEnchantment(), armor);
-                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
 
@@ -87,14 +91,17 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 });
             }
 
-            if ((CEnchantments.ANGEL.isActivated() && ce.hasEnchantment(armor, CEnchantments.ANGEL) && PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
-                final int radius = 4 + ce.getLevel(armor, CEnchantments.ANGEL);
+            if ((CEnchantments.ANGEL.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.ANGEL) && PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
+                final int radius = 4 + crazyManager.getLevel(armor, CEnchantments.ANGEL);
+
                 syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (entity instanceof Player other) {
                             if (pluginSupport.isFriendly(player, other)) {
                                 AngelUseEvent event = new AngelUseEvent(player, armor);
-                                ce.getPlugin().getServer().getPluginManager().callEvent(event);
+
+                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                                 if (!event.isCancelled()) {
                                     other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
                                 }
@@ -112,7 +119,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
     }
 
     private void useHellForge(Player player, ItemStack item) {
-        if (ce.hasEnchantment(item, CEnchantments.HELLFORGED)) {
+        if (crazyManager.hasEnchantment(item, CEnchantments.HELLFORGED)) {
             int armorDurability = ((Damageable) item.getItemMeta()).getDamage();
 
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
@@ -121,17 +128,19 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     public void run() {
                         int finalArmorDurability = armorDurability;
                         HellForgedUseEvent event = new HellForgedUseEvent(player, item);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
-                            finalArmorDurability -= ce.getLevel(item, CEnchantments.HELLFORGED);
+                            finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
                             Damageable damageable = (Damageable) item.getItemMeta();
+
                             if (damageable != null) {
                                 damageable.setDamage(Math.max(finalArmorDurability, 0));
                                 item.setItemMeta(damageable);
                             }
                         }
                     }
-                }.runTask(ce.getPlugin());
+                }.runTask(crazyManager.getPlugin());
             }
         }
     }

@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 public class BlackSmithResult {
     
-    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     private final static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
     private int cost = 0;
     private ItemStack resultItem;
@@ -17,9 +17,9 @@ public class BlackSmithResult {
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
         resultItem = mainItem.clone();
 
-        if (mainItem.getType() == ce.getEnchantmentBook().getMaterial() && subItem.getType() == ce.getEnchantmentBook().getMaterial()) {
-            CEBook mainBook = ce.getCEBook(mainItem);
-            CEBook subBook = ce.getCEBook(subItem);
+        if (mainItem.getType() == crazyManager.getEnchantmentBook().getMaterial() && subItem.getType() == crazyManager.getEnchantmentBook().getMaterial()) {
+            CEBook mainBook = crazyManager.getCEBook(mainItem);
+            CEBook subBook = crazyManager.getCEBook(subItem);
             // Books are the same enchantment.
             if (mainBook.getEnchantment() == subBook.getEnchantment() &&
             // Books have to be the same level.
@@ -40,6 +40,7 @@ public class BlackSmithResult {
                     Enchantment enchantment = entry.getKey();
                     int level = entry.getValue();
                     int subLevel = subCE.getVanillaEnchantmentLevel(enchantment);
+
                     if (enchantment.canEnchantItem(subItem) && subCE.hasVanillaEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setVanillaEnchantment(enchantment, level + 1);
@@ -55,6 +56,7 @@ public class BlackSmithResult {
                     CEnchantment enchantment = entry.getKey();
                     int level = entry.getValue();
                     int subLevel = subCE.getCEnchantmentLevel(enchantment);
+
                     if (enchantment.canEnchantItem(subItem) && subCE.hasCEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setCEnchantment(enchantment, level + 1);
@@ -69,7 +71,8 @@ public class BlackSmithResult {
                 // Checking for new enchantments.
                 for (Entry<Enchantment, Integer> entry : compare.getNewVanillaEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
-                    if (enchantment.canEnchantItem(subItem) && ce.canAddEnchantment(player, mainItem)) {
+
+                    if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem)) {
                         mainCE.setVanillaEnchantment(enchantment, entry.getValue());
                         cost += blackSmithManager.getAddEnchantment();
                     }
@@ -77,7 +80,8 @@ public class BlackSmithResult {
 
                 for (Entry<CEnchantment, Integer> entry : compare.getNewCEnchantments().entrySet()) {
                     CEnchantment enchantment = entry.getKey();
-                    if (enchantment.canEnchantItem(subItem) && ce.canAddEnchantment(player, mainItem) && ce.canAddEnchantment(player, subItem)) {
+
+                    if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem) && crazyManager.canAddEnchantment(player, subItem)) {
                         mainCE.setCEnchantment(enchantment, entry.getValue());
                         cost += blackSmithManager.getAddEnchantment();
                     }
@@ -95,4 +99,5 @@ public class BlackSmithResult {
     public ItemStack getResultItem() {
         return resultItem;
     }
+
 }

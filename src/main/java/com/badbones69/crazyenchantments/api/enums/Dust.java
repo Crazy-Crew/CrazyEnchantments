@@ -34,6 +34,7 @@ public enum Dust {
     public static void loadDust() {
         FileConfiguration config = Files.CONFIG.getFile();
         itemBuilderDust.clear();
+
         for (Dust dust : values()) {
             String path = "Settings.Dust." + dust.getConfigName() + ".";
             Dust.itemBuilderDust.put(dust, new ItemBuilder()
@@ -49,6 +50,7 @@ public enum Dust {
                 return dust;
             }
         }
+
         return null;
     }
     
@@ -77,4 +79,5 @@ public enum Dust {
         .addLorePlaceholder("%Percent%", String.valueOf(percent))
         .setAmount(amount).build();
     }
+
 }

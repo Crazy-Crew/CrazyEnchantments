@@ -136,4 +136,5 @@ public final class ArmorEquipEvent extends PlayerEvent implements Cancellable {
          */
         DEATH
     }
+
 }

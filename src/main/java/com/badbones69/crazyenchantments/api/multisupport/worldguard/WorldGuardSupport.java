@@ -19,6 +19,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     public boolean allowsPVP(Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
+
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             return set.queryState(null, Flags.PVP) != StateFlag.State.DENY;
@@ -31,6 +32,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     public boolean allowsBreak(Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
+
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             return set.queryState(null, Flags.BLOCK_BREAK) != StateFlag.State.DENY;
@@ -43,6 +45,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
     public boolean allowsExplosions(Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
+
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
             return set.queryState(null, Flags.OTHER_EXPLOSION) != StateFlag.State.DENY && set.queryState(null, Flags.TNT) != StateFlag.State.DENY;
@@ -55,8 +58,10 @@ public class WorldGuardSupport implements WorldGuardVersion {
     public boolean inRegion(String regionName, Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
+
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+
             for (ProtectedRegion region : set) {
                 if (regionName.equalsIgnoreCase(region.getId())) {
                     return true;
@@ -65,6 +70,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         } catch (NullPointerException e) {
             return false;
         }
+
         return false;
     }
     
@@ -72,8 +78,10 @@ public class WorldGuardSupport implements WorldGuardVersion {
     public boolean isMember(Player player) {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+
             for (ProtectedRegion region : set.getRegions()) {
                 if (region.getMembers().contains(player.getUniqueId())) {
                     return true;
@@ -82,6 +90,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         } catch (NullPointerException e) {
             return false;
         }
+
         return false;
     }
     
@@ -89,8 +98,10 @@ public class WorldGuardSupport implements WorldGuardVersion {
     public boolean isOwner(Player player) {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
+
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+
             for (ProtectedRegion region : set.getRegions()) {
                 if (region.getOwners().contains(player.getUniqueId())) {
                     return true;
@@ -99,6 +110,8 @@ public class WorldGuardSupport implements WorldGuardVersion {
         } catch (NullPointerException e) {
             return false;
         }
+
         return false;
     }
+
 }

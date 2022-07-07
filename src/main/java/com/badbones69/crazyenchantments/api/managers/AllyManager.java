@@ -19,6 +19,7 @@ public class AllyManager {
     public void load() {
         FileConfiguration config = Files.CONFIG.getFile();
         String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
+
         for (AllyType type : AllyType.values()) {
             allyTypeNameCache.put(type, Methods.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
         }
@@ -32,6 +33,7 @@ public class AllyManager {
         if (allyMob != null) {
             allyMobs.add(allyMob);
             UUID owner = allyMob.getOwner().getUniqueId();
+
             if (allyOwners.containsKey(owner)) {
                 allyOwners.get(owner).add(allyMob);
             } else {
@@ -46,8 +48,10 @@ public class AllyManager {
         if (allyMob != null) {
             allyMobs.remove(allyMob);
             UUID owner = allyMob.getOwner().getUniqueId();
+
             if (allyOwners.containsKey(owner)) {
                 allyOwners.get(owner).add(allyMob);
+
                 if (allyOwners.get(owner).isEmpty()) {
                     allyOwners.remove(owner);
                 }
@@ -66,6 +70,7 @@ public class AllyManager {
             ally.getAlly().remove();
             allyMobs.remove(ally);
         }
+
         allyOwners.remove(owner.getUniqueId());
     }
     
@@ -81,6 +86,7 @@ public class AllyManager {
         if (isAllyMob(livingEntity)) {
             return isAlly(player, getAllyMob(livingEntity));
         }
+
         return false;
     }
     
@@ -94,6 +100,7 @@ public class AllyManager {
                 return true;
             }
         }
+
         return false;
     }
     
@@ -103,10 +110,12 @@ public class AllyManager {
                 return ally;
             }
         }
+
         return null;
     }
     
     public static AllyManager getInstance() {
         return instance;
     }
+
 }

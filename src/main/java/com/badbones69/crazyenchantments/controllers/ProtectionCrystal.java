@@ -53,6 +53,7 @@ public class ProtectionCrystal implements Listener {
                 }
             }
         }
+
         return false;
     }
     
@@ -113,7 +114,6 @@ public class ProtectionCrystal implements Listener {
                 player.updateInventory();
             }
         }
-
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -139,6 +139,7 @@ public class ProtectionCrystal implements Listener {
                 droppedItems.add(item);
             }
         }
+
         e.getDrops().clear();
         e.getDrops().addAll(droppedItems);
         playersItems.put(player.getUniqueId(), savedItems);
@@ -147,6 +148,7 @@ public class ProtectionCrystal implements Listener {
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent e) {
         Player player = e.getPlayer();
+
         if (playersItems.containsKey(player.getUniqueId())) {
 
             // If the config does not have the option then it will lose the protection by default.
@@ -159,6 +161,7 @@ public class ProtectionCrystal implements Listener {
                     player.getInventory().addItem(item);
                 }
             }
+
             playersItems.remove(player.getUniqueId());
         }
     }
@@ -166,8 +169,10 @@ public class ProtectionCrystal implements Listener {
     @EventHandler
     public void onCrystalClick(PlayerInteractEvent e) {
         ItemStack item = Methods.getItemInHand(e.getPlayer());
+
         if (item != null && item.isSimilar(getCrystals())) {
             e.setCancelled(true);
         }
     }
+
 }

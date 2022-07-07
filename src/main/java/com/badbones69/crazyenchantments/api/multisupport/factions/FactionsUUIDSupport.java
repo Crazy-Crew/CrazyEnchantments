@@ -37,4 +37,5 @@ public class FactionsUUIDSupport implements FactionsVersion {
     private boolean isWilderness(Faction faction) {
         return faction != null && faction.isWilderness();
     }
+
 }

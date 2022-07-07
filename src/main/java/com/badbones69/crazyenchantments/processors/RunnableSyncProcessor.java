@@ -1,16 +1,12 @@
 package com.badbones69.crazyenchantments.processors;
 
-import org.bukkit.plugin.Plugin;
+import com.badbones69.crazyenchantments.api.CrazyManager;
 
 public class RunnableSyncProcessor extends Processor<Runnable> {
-    
-    private final Plugin plugin;
-    
-    public RunnableSyncProcessor(final Plugin plugin) {
-        this.plugin = plugin;
-    }
+
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     void process(final Runnable process) {
-        plugin.getServer().getScheduler().runTask(this.plugin, process);
+        crazyManager.getPlugin().getServer().getScheduler().runTask(crazyManager.getPlugin(), process);
     }
 }

@@ -62,6 +62,7 @@ public class ShopManager {
                 if (category.getSlot() > inventorySize) {
                     continue;
                 }
+
                 shopItems.put(category.getDisplayItem(), category.getSlot());
             }
 
@@ -71,6 +72,7 @@ public class ShopManager {
                 if (lostBook.getSlot() > inventorySize) {
                     continue;
                 }
+
                 shopItems.put(lostBook.getDisplayItem(), lostBook.getSlot());
             }
         }
@@ -80,6 +82,7 @@ public class ShopManager {
                 if (option.getSlot() > inventorySize) {
                     continue;
                 }
+
                 shopItems.put(option.getItemBuilder(), option.getSlot());
             }
         }
@@ -115,4 +118,5 @@ public class ShopManager {
     public boolean isEnchantmentTableShop() {
         return enchantmentTableShop;
     }
+
 }

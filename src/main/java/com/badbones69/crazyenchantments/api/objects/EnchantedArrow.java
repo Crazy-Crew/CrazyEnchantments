@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EnchantedArrow {
     
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     private final Arrow arrow;
     private final ItemStack bow;
@@ -36,11 +36,11 @@ public class EnchantedArrow {
     }
     
     public int getLevel(CEnchantments enchantment) {
-        return ce.getLevel(bow, enchantment);
+        return crazyManager.getLevel(bow, enchantment);
     }
     
     public int getLevel(CEnchantment enchantment) {
-        return ce.getLevel(bow, enchantment);
+        return crazyManager.getLevel(bow, enchantment);
     }
     
     public List<CEnchantment> getEnchantments() {
@@ -54,4 +54,5 @@ public class EnchantedArrow {
     public boolean hasEnchantment(CEnchantments enchantment) {
         return enchantments.contains(enchantment.getEnchantment());
     }
+
 }

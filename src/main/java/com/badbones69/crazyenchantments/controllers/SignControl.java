@@ -33,7 +33,7 @@ import java.util.Random;
 
 public class SignControl implements Listener {
     
-    private static final CrazyManager ce = CrazyManager.getInstance();
+    private static final CrazyManager crazyManager = CrazyManager.getInstance();
     
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -47,7 +47,7 @@ public class SignControl implements Listener {
 
             for (String l : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
                 String type = Files.SIGNS.getFile().getString("Locations." + l + ".Type");
-                World world = ce.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
+                World world = crazyManager.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
                 int x = Files.SIGNS.getFile().getInt("Locations." + l + ".X");
                 int y = Files.SIGNS.getFile().getInt("Locations." + l + ".Y");
                 int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
@@ -73,6 +73,7 @@ public class SignControl implements Listener {
                             if (player.getGameMode() != GameMode.CREATIVE && Currency.isCurrency(config.getString("Settings.Costs." + o + ".Currency"))) {
                                 Currency currency = Currency.getCurrency(config.getString("Settings.Costs." + o + ".Currency"));
                                 int cost = config.getInt("Settings.Costs." + o + ".Cost");
+
                                 if (CurrencyAPI.canBuy(player, currency, cost)) {
                                     CurrencyAPI.takeCurrency(player, currency, cost);
                                 } else {
@@ -81,6 +82,7 @@ public class SignControl implements Listener {
                                     if (currency != null) {
                                         Methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
                                     }
+
                                     return;
                                 }
                             }
@@ -98,11 +100,12 @@ public class SignControl implements Listener {
                                 case "WhiteScroll" -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
                                 case "TransmogScroll" -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
                             }
+
                             return;
                         }
                     }
 
-                    Category category = ce.getCategory(type);
+                    Category category = crazyManager.getCategory(type);
 
                     if (category != null) {
                         if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
@@ -115,7 +118,7 @@ public class SignControl implements Listener {
                             }
                         }
 
-                        CEBook book = ce.getRandomEnchantmentBook(category);
+                        CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
                         if (book != null) {
                             ItemBuilder itemBuilder = book.getItemBuilder();
@@ -126,12 +129,13 @@ public class SignControl implements Listener {
                                 .replace("%Category%", category.getName()).replace("%category%", category.getName())));
                             }
 
-                            BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                            BuyBookEvent event = new BuyBookEvent(crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
                             player.getInventory().addItem(itemBuilder.build());
                         } else {
                             player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                         }
+
                         return;
                     }
                 }
@@ -141,11 +145,12 @@ public class SignControl implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBreak(BlockBreakEvent e) {
-        if (!e.isCancelled() && !ce.isIgnoredEvent(e)) {
+        if (!e.isCancelled() && !crazyManager.isIgnoredEvent(e)) {
             Player player = e.getPlayer();
             Location location = e.getBlock().getLocation();
+
             for (String locationName : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
-                World world = ce.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + locationName + ".World"));
+                World world = crazyManager.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + locationName + ".World"));
                 int x = Files.SIGNS.getFile().getInt("Locations." + locationName + ".X");
                 int y = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Y");
                 int z = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Z");
@@ -180,7 +185,7 @@ public class SignControl implements Listener {
         String line2 = e.getLine(1);
 
         if (Methods.hasPermission(player, "sign", false) && line1.equalsIgnoreCase("{CrazyEnchant}")) {
-            for (Category category : ce.getCategories()) {
+            for (Category category : crazyManager.getCategories()) {
                 if (line2.equalsIgnoreCase("{" + category.getName() + "}")) {
                     e.setLine(0, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line1"), category));
                     e.setLine(1, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line2"), category));

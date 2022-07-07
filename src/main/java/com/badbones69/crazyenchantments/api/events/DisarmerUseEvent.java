@@ -59,4 +59,5 @@ public class DisarmerUseEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;
     }
+
 }

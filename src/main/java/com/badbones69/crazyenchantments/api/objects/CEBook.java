@@ -17,7 +17,7 @@ public class CEBook {
     private int destroyRate;
     private int successRate;
 
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * @param enchantment Enchantment you want.
@@ -192,7 +192,7 @@ public class CEBook {
      * @return Return the book as an ItemBuilder.
      */
     public ItemBuilder getItemBuilder() {
-        String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + ce.convertLevelString(level);
+        String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + crazyManager.convertLevelString(level);
         List<String> lore = new ArrayList<>();
 
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
@@ -207,7 +207,7 @@ public class CEBook {
             }
         }
 
-        return ce.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
+        return crazyManager.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
     }
     
     /**
@@ -220,4 +220,5 @@ public class CEBook {
     private int percentPick(int max, int min) {
         return max == min ? max : min + new Random().nextInt(max - min);
     }
+
 }

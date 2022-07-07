@@ -53,4 +53,5 @@ public class Cooldown {
         .replace("%Minute%", minute + "").replace("%minute%", minute + "")
         .replace("%Second%", second + "").replace("%second%", second + ""));
     }
+
 }

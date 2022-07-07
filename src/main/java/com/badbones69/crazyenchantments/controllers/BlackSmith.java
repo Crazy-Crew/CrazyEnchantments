@@ -23,7 +23,7 @@ import java.util.List;
 public class BlackSmith implements Listener {
     
     private static final BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
-    private static final CrazyManager ce = CrazyManager.getInstance();
+    private static final CrazyManager crazyManager = CrazyManager.getInstance();
     private final int mainSlot = 10;
     private final int subSlot = 13;
     private final static int resultSlot = 16;
@@ -34,7 +34,7 @@ public class BlackSmith implements Listener {
     private final Sound villagerNo = Sound.ENTITY_VILLAGER_NO;
     
     public static void openBlackSmith(Player player) {
-        Inventory inventory = ce.getPlugin().getServer().createInventory(null, 27, blackSmithManager.getMenuName());
+        Inventory inventory = crazyManager.getPlugin().getServer().createInventory(null, 27, blackSmithManager.getMenuName());
         otherBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getGrayGlass()));
         resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
         inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
@@ -45,13 +45,15 @@ public class BlackSmith implements Listener {
     public void onInvClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         Inventory inventory = e.getInventory();
+
         if (inventory != null && e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
             e.setCancelled(true);
             ItemStack item = e.getCurrentItem();
+
             if (item != null) {
                 if (e.getRawSlot() > 26) { // Click In Players Inventory
                     if (item.getAmount() != 1) return;
-                    if (ce.hasEnchantments(item) || ce.isEnchantmentBook(item)) {
+                    if (crazyManager.hasEnchantments(item) || crazyManager.isEnchantmentBook(item)) {
                         if (inventory.getItem(mainSlot) == null) { // Main item slot is empty
                             e.setCurrentItem(new ItemStack(Material.AIR));
                             inventory.setItem(mainSlot, item); // Moves clicked item to main slot
@@ -87,19 +89,23 @@ public class BlackSmith implements Listener {
                     if (e.getRawSlot() == resultSlot) { // Clicks the result item slot
                         if (inventory.getItem(mainSlot) != null && inventory.getItem(subSlot) != null) { // Main and Sub items are not empty
                             BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
+
                             if (resultItem.getCost() > 0) { // Items are upgradeable
                                 if (blackSmithManager.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                                     Currency currency = blackSmithManager.getCurrency();
+
                                     if (CurrencyAPI.canBuy(player, currency, resultItem.getCost())) {
                                         CurrencyAPI.takeCurrency(player, currency, resultItem.getCost());
                                     } else {
                                         String needed = (resultItem.getCost() - CurrencyAPI.getCurrency(player, currency)) + "";
+
                                         if (currency != null) {
                                             Methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
                                         }
                                         return;
                                     }
                                 }
+
                                 givePlayerItem(player, resultItem.getResultItem());
                                 inventory.setItem(mainSlot, new ItemStack(Material.AIR));
                                 inventory.setItem(subSlot, new ItemStack(Material.AIR));
@@ -160,4 +166,5 @@ public class BlackSmith implements Listener {
     private void playSound(Player player, Sound sound) {
         player.playSound(player.getLocation(), sound, 1, 1);
     }
+
 }

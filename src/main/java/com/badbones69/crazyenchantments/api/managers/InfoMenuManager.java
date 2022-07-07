@@ -85,6 +85,7 @@ public class InfoMenuManager {
                 return enchantmentType;
             }
         }
+
         return null;
     }
     
@@ -95,7 +96,9 @@ public class InfoMenuManager {
     public void openInfoMenu(Player player, EnchantmentType enchantmentType) {
         List<CEnchantment> enchantments = enchantmentType.getEnchantments();
         int slots = 9;
+
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
+
         Inventory inventory = ce.getPlugin().getServer().createInventory(null, slots, inventoryName);
 
         for (CEnchantment enchantment : enchantments) {
@@ -112,4 +115,5 @@ public class InfoMenuManager {
         inventory.setItem(slots - 1, backRight);
         player.openInventory(inventory);
     }
+
 }

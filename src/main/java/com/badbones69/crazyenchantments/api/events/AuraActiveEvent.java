@@ -66,4 +66,5 @@ public class AuraActiveEvent extends Event {
     public HandlerList getHandlers() {
         return handlers;
     }
+
 }

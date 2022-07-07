@@ -7,8 +7,6 @@ import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion;
-import com.badbones69.crazyenchantments.api.multisupport.worldguard.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Location;
@@ -37,26 +35,30 @@ import java.util.List;
 
 public class Bows implements Listener {
     
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     private final List<EnchantedArrow> enchantedArrows = new ArrayList<>();
     private final Material web = new ItemBuilder().setMaterial("COBWEB").getMaterial();
     private final List<Block> webBlocks = new ArrayList<>();
-    private final BowEnchantmentManager manager = ce.getBowManager();
+    private final BowEnchantmentManager manager = crazyManager.getBowManager();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBowShoot(final EntityShootBowEvent e) {
-        if (e.isCancelled() || ce.isIgnoredEvent(e) || ce.isIgnoredUUID(e.getEntity().getUniqueId())) return;
+        if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getEntity().getUniqueId())) return;
         ItemStack bow = e.getBow();
-        if (e.getProjectile() instanceof Arrow arrow && ce.hasEnchantments(bow)) {
-            List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(bow);
+
+        if (e.getProjectile() instanceof Arrow arrow && crazyManager.hasEnchantments(bow)) {
+            List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(bow);
             enchantedArrows.add(new EnchantedArrow(arrow, e.getEntity(), bow, enchantments));
-            if (CEnchantments.MULTIARROW.isActivated() && ce.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
-                int power = ce.getLevel(bow, CEnchantments.MULTIARROW);
+
+            if (CEnchantments.MULTIARROW.isActivated() && crazyManager.hasEnchantment(bow, CEnchantments.MULTIARROW)) {
+                int power = crazyManager.getLevel(bow, CEnchantments.MULTIARROW);
+
                 if (CEnchantments.MULTIARROW.chanceSuccessful(bow)) {
                     if (e.getEntity() instanceof Player) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.MULTIARROW, bow);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             for (int i = 1; i <= power; i++) {
                                 Arrow spawnedArrow = e.getEntity().getWorld().spawn(e.getProjectile().getLocation(), Arrow.class);
@@ -105,8 +107,9 @@ public class Bows implements Listener {
     public void onLand(ProjectileHitEvent e) {
             if (e.getEntity() instanceof Arrow) {
                 EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
+
                 if (arrow != null) {
-                    if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow()) && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+                    if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow()) && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                         if (e.getHitEntity() == null) { // If the arrow hits a block.
                             Location entityLocation = e.getEntity().getLocation();
 
@@ -120,7 +123,7 @@ public class Bows implements Listener {
                                         entityLocation.getBlock().setType(Material.AIR);
                                         webBlocks.remove(entityLocation.getBlock());
                                     }
-                                }.runTaskLater(ce.getPlugin(), 5 * 20);
+                                }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
                             }
                         } else { // If the arrow hits an entity.
                             List<Location> locations = getSquareArea(e.getHitEntity().getLocation());
@@ -133,6 +136,7 @@ public class Bows implements Listener {
                             }
 
                             e.getEntity().remove();
+
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
@@ -143,11 +147,12 @@ public class Bows implements Listener {
                                         }
                                     }
                                 }
-                            }.runTaskLater(ce.getPlugin(), 5 * 20);
+                            }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
                         }
                     } else { // If the arrow hits something.
-                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty() && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) { // Checking to make sure it doesn't hit an entity.
+                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty() && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) { // Checking to make sure it doesn't hit an entity.
                             Location entityLocation = e.getEntity().getLocation();
+
                             if (entityLocation.getBlock().getType() == Material.AIR) {
                                 entityLocation.getBlock().setType(web);
                                 webBlocks.add(entityLocation.getBlock());
@@ -159,20 +164,20 @@ public class Bows implements Listener {
                                         entityLocation.getBlock().setType(Material.AIR);
                                         webBlocks.remove(entityLocation.getBlock());
                                     }
-                                }.runTaskLater(ce.getPlugin(), 5 * 20);
+                                }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
                             }
                         }
                     }
                 }
 
-                if (CEnchantments.BOOM.isActivated() && arrow != null && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+                if (CEnchantments.BOOM.isActivated() && arrow != null && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                     if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
                         Methods.explode(arrow.getShooter(), arrow.getArrow());
                         arrow.getArrow().remove();
                     }
                 }
 
-                if (CEnchantments.LIGHTNING.isActivated() && arrow != null && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+                if (CEnchantments.LIGHTNING.isActivated() && arrow != null && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                     if (arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
                         Location location = arrow.getArrow().getLocation();
 
@@ -191,16 +196,16 @@ public class Bows implements Listener {
 
                         for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
                             EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
-                            ce.addIgnoredEvent(damageByEntityEvent);
-                            ce.addIgnoredUUID(shooter.getUniqueId());
-                            ce.getPlugin().getServer().getPluginManager().callEvent(damageByEntityEvent);
+                            crazyManager.addIgnoredEvent(damageByEntityEvent);
+                            crazyManager.addIgnoredUUID(shooter.getUniqueId());
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(damageByEntityEvent);
 
                             if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(entity.getLocation()) && !pluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
                                 entity.damage(5D);
                             }
 
-                            ce.removeIgnoredEvent(damageByEntityEvent);
-                            ce.removeIgnoredUUID(shooter.getUniqueId());
+                            crazyManager.removeIgnoredEvent(damageByEntityEvent);
+                            crazyManager.removeIgnoredUUID(shooter.getUniqueId());
                         }
                     }
                 }
@@ -211,15 +216,16 @@ public class Bows implements Listener {
                     public void run() {
                         enchantedArrows.remove(arrow); // Removes it from the list.
                     }
-                }.runTaskLater(ce.getPlugin(), 5);
+                }.runTaskLater(crazyManager.getPlugin(), 5);
             }
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArrowDamage(EntityDamageByEntityEvent e) {
-        if (!ce.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity entity) {
+        if (!crazyManager.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity entity) {
             EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
-            if (arrow != null && ce.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+
+            if (arrow != null && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
                 ItemStack bow = arrow.getBow();
                 // Damaged player is friendly.
 
@@ -227,10 +233,12 @@ public class Bows implements Listener {
                     int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
                     // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                     double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+
                     if (entity.getHealth() < maxHealth) {
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
-                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                             if (!event.isCancelled()) {
                                 if (entity.getHealth() + heal < maxHealth) {
                                     entity.setHealth(entity.getHealth() + heal);
@@ -256,6 +264,7 @@ public class Bows implements Listener {
                 if (!e.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity)) {
                     if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(bow)) {
                         List<Location> locations = getSquareArea(entity.getLocation());
+
                         for (Location location : locations) {
                             if (location.getBlock().getType() == Material.AIR) {
                                 location.getBlock().setType(web);
@@ -275,7 +284,7 @@ public class Bows implements Listener {
                                     }
                                 }
                             }
-                        }.runTaskLater(ce.getPlugin(), 5 * 20);
+                        }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
                     }
 
                     if (CEnchantments.PULL.isActivated() && arrow.hasEnchantment(CEnchantments.PULL) && CEnchantments.PULL.chanceSuccessful(bow)) {
@@ -283,8 +292,9 @@ public class Bows implements Listener {
 
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
-                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
                             Player player = (Player) e.getEntity();
+
                             if (!event.isCancelled()) {
 
                                 if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
@@ -307,7 +317,8 @@ public class Bows implements Listener {
 
                             if (entity instanceof Player) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), enchantment, bow);
-                                ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                                 if (event.isCancelled()) {
                                     // If the EnchantmentUseEvent is cancelled then no need to keep going with this enchantment.
                                     continue;
@@ -333,7 +344,7 @@ public class Bows implements Listener {
     
     @EventHandler
     public void onWebBreak(BlockBreakEvent e) {
-        if (!ce.isIgnoredEvent(e) && webBlocks.contains(e.getBlock())) {
+        if (!crazyManager.isIgnoredEvent(e) && webBlocks.contains(e.getBlock())) {
             e.setCancelled(true);
         }
     }
@@ -344,6 +355,7 @@ public class Bows implements Listener {
                 return enchantedArrow;
             }
         }
+
         return null;
     }
     

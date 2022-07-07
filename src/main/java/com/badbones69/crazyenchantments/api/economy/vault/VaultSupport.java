@@ -18,9 +18,11 @@ public class VaultSupport {
     public static void loadVault() {
         if (PluginSupport.SupportedPlugins.VAULT.isPluginLoaded()) {
             RegisteredServiceProvider<Economy> rsp = crazyManager.getPlugin().getServer().getServicesManager().getRegistration(Economy.class);
+
             if (rsp != null) {
                 vault = rsp.getProvider();
             }
         }
     }
+
 }

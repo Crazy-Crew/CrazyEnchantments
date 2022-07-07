@@ -95,4 +95,5 @@ public class ArmorEnchantment {
     public boolean isPotionEnchantment() {
         return isPotionEnchantment;
     }
+
 }

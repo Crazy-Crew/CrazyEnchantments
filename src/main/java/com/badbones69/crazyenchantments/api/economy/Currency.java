@@ -23,6 +23,7 @@ public enum Currency {
                 return true;
             }
         }
+
         return false;
     }
     
@@ -37,6 +38,7 @@ public enum Currency {
                 return c;
             }
         }
+
         return null;
     }
     
@@ -47,4 +49,5 @@ public enum Currency {
     public String getName() {
         return name;
     }
+
 }

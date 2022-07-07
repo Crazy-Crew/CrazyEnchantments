@@ -21,6 +21,7 @@ public class CropManager implements com.badbones69.crazyenchantments.api.multisu
         if (block.getBlockData() instanceof Ageable age) {
             return age.getAge() == age.getMaximumAge();
         }
+
         return false;
     }
     
@@ -30,4 +31,5 @@ public class CropManager implements com.badbones69.crazyenchantments.api.multisu
         farmland.setMoisture(farmland.getMaximumMoisture());
         soil.setBlockData(farmland);
     }
+
 }

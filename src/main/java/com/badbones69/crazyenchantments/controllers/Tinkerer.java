@@ -28,10 +28,10 @@ import java.util.List;
 
 public class Tinkerer implements Listener {
     
-    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     
     public static void openTinker(Player player) {
-        Inventory inv = ce.getPlugin().getServer().createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
+        Inventory inv = crazyManager.getPlugin().getServer().createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
         inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
         .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
         .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
@@ -111,7 +111,7 @@ public class Tinkerer implements Listener {
                     player.closeInventory();
 
                     if (total != 0) {
-                        ce.getPlugin().getServer().dispatchCommand(ce.getPlugin().getServer().getConsoleSender(), "eco give " + player.getName() + " " + total);
+                        crazyManager.getPlugin().getServer().dispatchCommand(crazyManager.getPlugin().getServer().getConsoleSender(), "eco give " + player.getName() + " " + total);
                     }
 
                     if (toggle) {
@@ -123,11 +123,11 @@ public class Tinkerer implements Listener {
                 }
 
                 if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) { // Adding/Taking Items
-                    if (current.getType() == ce.getEnchantmentBookItem().getType()) { // Adding a book
+                    if (current.getType() == crazyManager.getEnchantmentBookItem().getType()) { // Adding a book
                         boolean toggle = false;
                         String enchant = "";
 
-                        for (CEnchantment en : ce.getRegisteredEnchantments()) {
+                        for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
                             if (current.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
                                 enchant = en.getName();
                                 toggle = true;
@@ -153,7 +153,7 @@ public class Tinkerer implements Listener {
                         }
                     }
 
-                    if (getTotalXP(current) > 0 && current.getType() != ce.getEnchantmentBookItem().getType()) { // Adding an item
+                    if (getTotalXP(current) > 0 && current.getType() != crazyManager.getEnchantmentBookItem().getType()) { // Adding an item
                         if (inTinker(e.getRawSlot())) { // Clicking in the Tinkers
 
                             if (getSlot().containsKey(e.getRawSlot())) {
@@ -190,7 +190,7 @@ public class Tinkerer implements Listener {
         final Inventory inv = e.getInventory();
         final Player player = (Player) e.getPlayer();
 
-        ce.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), () -> {
+        crazyManager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(crazyManager.getPlugin(), () -> {
             if (inv != null && e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
                 for (int slot : getSlot().keySet()) {
                     if (inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR) {
@@ -259,8 +259,8 @@ public class Tinkerer implements Listener {
     private int getTotalXP(ItemStack item) {
         int total = 0;
 
-        if (ce.hasEnchantments(item)) {
-            for (CEnchantment enchantment : ce.getEnchantmentsOnItem(item)) {
+        if (crazyManager.hasEnchantments(item)) {
+            for (CEnchantment enchantment : crazyManager.getEnchantmentsOnItem(item)) {
                 total += Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items");
             }
         }

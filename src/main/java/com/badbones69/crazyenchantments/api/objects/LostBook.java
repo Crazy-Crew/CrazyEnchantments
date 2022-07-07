@@ -21,6 +21,8 @@ public class LostBook {
     private final boolean useSound;
     private Sound sound;
 
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
+
     public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency,
     boolean useFirework, List<Color> fireworkColors, boolean useSound, String sound) {
         this.slot = slot - 1;
@@ -34,8 +36,7 @@ public class LostBook {
         try { // If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
         } catch (Exception e) {
-            CrazyManager ce = CrazyManager.getInstance();
-            ce.getPlugin().getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
+            crazyManager.getPlugin().getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
             this.sound = null;
         }
 
@@ -94,4 +95,5 @@ public class LostBook {
         .setLore(file.getStringList("Settings.LostBook.Lore"))
         .setLorePlaceholders(placeholders);
     }
+
 }

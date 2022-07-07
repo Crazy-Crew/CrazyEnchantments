@@ -17,16 +17,18 @@ import java.util.HashMap;
 
 public class LostBookController implements Listener {
     
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent e) {
         Player player = e.getPlayer();
+
         if (e.getItem() != null && e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = Methods.getItemInHand(player);
 
             if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                Category category = ce.getCategoryFromLostBook(item);
+                Category category = crazyManager.getCategoryFromLostBook(item);
+
                 if (category != null) {
                     e.setCancelled(true);
 
@@ -37,7 +39,7 @@ public class LostBookController implements Listener {
 
                     LostBook lostBook = category.getLostBook();
                     Methods.removeItem(item, player);
-                    CEBook book = ce.getRandomEnchantmentBook(category);
+                    CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
                     if (book != null) {
                         player.getInventory().addItem(book.buildBook());
@@ -60,4 +62,5 @@ public class LostBookController implements Listener {
             }
         }
     }
+
 }

@@ -24,7 +24,7 @@ public class CEPlayer {
     private int rageLevel;
     private BukkitTask rageTask;
 
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * Used to make a new CEPlayer.
@@ -96,6 +96,7 @@ public class CEPlayer {
      */
     public void useSouls(int souls) {
         this.souls -= souls;
+
         if (this.souls < 0) {
             this.souls = 0;
         }
@@ -128,10 +129,12 @@ public class CEPlayer {
 
                     if (player.getEquipment().getHelmet() == null || player.getEquipment().getHelmet().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.HELMET, new ItemStack(Material.AIR), item);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             player.getEquipment().setHelmet(item);
                         }
+
                         continue;
                     }
 
@@ -139,29 +142,35 @@ public class CEPlayer {
 
                     if (player.getEquipment().getChestplate() == null || player.getEquipment().getChestplate().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.CHESTPLATE, new ItemStack(Material.AIR), item);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             player.getEquipment().setChestplate(item);
                         }
+
                         continue;
                     }
                 } else if (item.getType().toString().toLowerCase().contains("leggings")) {
 
                     if (player.getEquipment().getLeggings() == null || player.getEquipment().getLeggings().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.LEGGINGS, new ItemStack(Material.AIR), item);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             player.getEquipment().setLeggings(item);
                         }
+
                         continue;
                     }
                 } else if (item.getType().toString().toLowerCase().contains("boots") && (player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR)) {
 
                     ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
-                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                     if (!event.isCancelled()) {
                         player.getEquipment().setBoots(item);
                     }
+
                     continue;
                 }
             }
@@ -173,8 +182,9 @@ public class CEPlayer {
             }
 
         }
+
         for (String cmd : kit.getCommands()) {
-            ce.getPlugin().getServer().dispatchCommand(ce.getPlugin().getServer().getConsoleSender(), cmd
+            crazyManager.getPlugin().getServer().dispatchCommand(crazyManager.getPlugin().getServer().getConsoleSender(), cmd
             .replace("%Player%", player.getName()).replace("%player%", player.getName()));
         }
     }
@@ -207,6 +217,7 @@ public class CEPlayer {
                 return false;
             }
         }
+
         return true;
     }
     
@@ -229,6 +240,7 @@ public class CEPlayer {
                 return cooldown;
             }
         }
+
         return null;
     }
     
@@ -361,4 +373,5 @@ public class CEPlayer {
     public void setRageTask(BukkitTask rageTask) {
         this.rageTask = rageTask;
     }
+
 }

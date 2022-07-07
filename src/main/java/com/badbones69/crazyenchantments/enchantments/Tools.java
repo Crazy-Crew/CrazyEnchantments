@@ -22,12 +22,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Tools implements Listener {
     
     private final static Random random = new Random();
-    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     private final static List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
     
     @EventHandler
@@ -40,7 +44,7 @@ public class Tools implements Listener {
         Block block = e.getBlock();
         Player player = e.getPlayer();
 
-        if (e.isCancelled() || ce.isIgnoredEvent(e) || ignoreBlockTypes(block)) {
+        if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || ignoreBlockTypes(block)) {
             return;
         }
 
@@ -49,7 +53,8 @@ public class Tools implements Listener {
         updateEffects(player);
 
         if (player.getGameMode() != GameMode.CREATIVE) {
-            List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+            List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
                 // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
                 if ((Hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
@@ -61,7 +66,7 @@ public class Tools implements Listener {
                 }
 
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-                ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     e.setExpToDrop(0);
@@ -90,12 +95,12 @@ public class Tools implements Listener {
             }
         }
     }
-    
+
     @SuppressWarnings("squid:CallToDeprecatedMethod")
     public static TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
         ItemStack item = processInfo.getItem();
         Block block = processInfo.getBlock();
-        List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
         List<Block> sugarCaneBlocks = new ArrayList<>();
         boolean isOre = isOre(block);
         boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
@@ -116,13 +121,13 @@ public class Tools implements Listener {
                 if (hasFurnace && isOre) {
                     itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(0);
                 } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(ce.getLevel(item, CEnchantments.AUTOSMELT));
+                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(crazyManager.getLevel(item, CEnchantments.AUTOSMELT));
                 }
 
                 if (hasOreXP(block)) {
                     xp = Methods.percentPick(7, 3);
                     if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                        xp += Methods.percentPick(7, 3) * ce.getLevel(item, CEnchantments.EXPERIENCE);
+                        xp += Methods.percentPick(7, 3) * crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
                     }
                 }
             }
@@ -143,18 +148,18 @@ public class Tools implements Listener {
         if (block.getType() == Material.COCOA) {
             // Coco drops 2-3 beans.
             itemDrop.setMaterial(Material.COCOA_BEANS)
-                    .setAmount(ce.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
+                    .setAmount(crazyManager.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
         }
 
         if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.BEETROOT_SEEDS) {
-            itemDrop.setAmount(random.nextInt(3));//Wheat and BeetRoots drops 0-3 seeds.
+            itemDrop.setAmount(random.nextInt(3)); // Wheat and BeetRoots drops 0-3 seeds.
         } else if (itemDrop.getMaterial() == Material.POTATO || itemDrop.getMaterial() == Material.CARROT) {
-            itemDrop.setAmount(random.nextInt(4) + 1);//Carrots and Potatoes drop 1-4 of them self's.
+            itemDrop.setAmount(random.nextInt(4) + 1); // Carrots and Potatoes drop 1-4 of them self's.
         }
 
         return new TelepathyDrop(itemDrop.build(), xp, sugarCaneBlocks);
     }
-    
+
     private static List<Block> getSugarCaneBlocks(Block block) {
         List<Block> sugarCaneBlocks = new ArrayList<>();
         Block cane = block;
@@ -163,23 +168,24 @@ public class Tools implements Listener {
             sugarCaneBlocks.add(cane);
             cane = cane.getLocation().add(0, 1, 0).getBlock();
         }
-        
+
         Collections.reverse(sugarCaneBlocks);
         return sugarCaneBlocks;
     }
-    
+
     private void updateEffects(Player player) {
         ItemStack item = Methods.getItemInHand(player);
 
-        if (ce.hasEnchantments(item)) {
-            List<CEnchantment> enchantments = ce.getEnchantmentsOnItem(item);
+        if (crazyManager.hasEnchantments(item)) {
+            List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
             int potionTime = 5 * 20;
+
             if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-                ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
-                    int power = ce.getLevel(item, CEnchantments.HASTE);
+                    int power = crazyManager.getLevel(item, CEnchantments.HASTE);
                     player.removePotionEffect(PotionEffectType.FAST_DIGGING);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
                 }
@@ -187,7 +193,7 @@ public class Tools implements Listener {
 
             if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-                ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     player.removePotionEffect(PotionEffectType.WATER_BREATHING);
@@ -203,6 +209,7 @@ public class Tools implements Listener {
                 return true;
             }
         }
+
         return false;
     }
     
@@ -217,6 +224,7 @@ public class Tools implements Listener {
         if (block.getType() == Material.NETHER_QUARTZ_ORE) {
             return true;
         }
+
         return switch (block.getType()) {
             case COAL_ORE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
             default -> false;
@@ -225,6 +233,7 @@ public class Tools implements Listener {
     
     private static ItemStack getOreDrop(Block block) {
         ItemBuilder dropItem = new ItemBuilder();
+
         if (block.getType() == Material.NETHER_QUARTZ_ORE) {
             dropItem.setMaterial(Material.QUARTZ);
         } else {
@@ -239,6 +248,7 @@ public class Tools implements Listener {
                 default -> dropItem.setMaterial(Material.AIR);
             }
         }
+
         return dropItem.build();
     }
 }

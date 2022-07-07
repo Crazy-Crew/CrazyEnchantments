@@ -16,13 +16,13 @@ public class CEItem {
     private final Map<Enchantment, Integer> vanillaEnchantments;
     private final Map<CEnchantment, Integer> cEnchantments;
 
-    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     
     public CEItem(ItemStack item) {
         this.item = item;
         // Has to make a new map as .getEnchantments is a ImmutableMap.
         vanillaEnchantments = new HashMap<>(item.getEnchantments());
-        cEnchantments = ce.getEnchantments(item);
+        cEnchantments = crazyManager.getEnchantments(item);
         vanillaEnchantmentRemove = new ArrayList<>();
         cEnchantmentRemove = new ArrayList<>();
     }
@@ -74,8 +74,9 @@ public class CEItem {
     public ItemStack build() {
         vanillaEnchantmentRemove.forEach(enchantment -> item.removeEnchantment(enchantment));
         vanillaEnchantments.keySet().forEach(enchantment -> item.addUnsafeEnchantment(enchantment, vanillaEnchantments.get(enchantment)));
-        cEnchantmentRemove.forEach(enchantment -> ce.removeEnchantment(item, enchantment));
-        ce.addEnchantments(item, cEnchantments);
+        cEnchantmentRemove.forEach(enchantment -> crazyManager.removeEnchantment(item, enchantment));
+        crazyManager.addEnchantments(item, cEnchantments);
         return item;
     }
+
 }

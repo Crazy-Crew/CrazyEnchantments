@@ -7,4 +7,5 @@ class WildStackerSupport {
     fun preventStacking(entity: LivingEntity) {
 
     }
+
 }

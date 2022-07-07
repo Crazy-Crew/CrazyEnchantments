@@ -8,7 +8,7 @@ public class GKitzItem {
     
     private ItemBuilder itemBuilder;
     private final HashMap<CEnchantment, Integer> ceEnchantments;
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * Make an empty gkit item.
@@ -61,9 +61,12 @@ public class GKitzItem {
      */
     public ItemStack build() {
         ItemStack item = itemBuilder.build();
+
         for (CEnchantment enchantment : ceEnchantments.keySet()) {
-            ce.addEnchantment(item, enchantment, ceEnchantments.get(enchantment));
+            crazyManager.addEnchantment(item, enchantment, ceEnchantments.get(enchantment));
         }
+
         return item;
     }
+
 }

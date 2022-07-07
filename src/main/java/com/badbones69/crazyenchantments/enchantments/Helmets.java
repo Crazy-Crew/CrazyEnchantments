@@ -17,16 +17,17 @@ import java.util.ArrayList;
 
 public class Helmets implements Listener {
     
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onMovement(PlayerMoveEvent e) {
         Player player = e.getPlayer();
+
         if (CEnchantments.COMMANDER.isActivated()) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                if (ce.hasEnchantment(armor, CEnchantments.COMMANDER)) {
-                    int radius = 4 + ce.getLevel(armor, CEnchantments.COMMANDER);
+                if (crazyManager.hasEnchantment(armor, CEnchantments.COMMANDER)) {
+                    int radius = 4 + crazyManager.getLevel(armor, CEnchantments.COMMANDER);
                     ArrayList<Player> players = new ArrayList<>();
 
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
@@ -40,7 +41,8 @@ public class Helmets implements Listener {
                     if (!players.isEmpty()) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
 
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             for (Player other : players) {
                                 other.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
@@ -51,4 +53,5 @@ public class Helmets implements Listener {
             }
         }
     }
+
 }

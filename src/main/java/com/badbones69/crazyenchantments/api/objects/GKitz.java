@@ -16,7 +16,7 @@ public class GKitz {
     private final List<ItemStack> preview;
     private final List<String> itemStrings;
 
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * Create a new gkit.
@@ -86,11 +86,14 @@ public class GKitz {
             for (String option : itemString.split(", ")) {
                 if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
                     StringBuilder newOption = new StringBuilder();
+
                     for (String enchantment : option.toLowerCase().replace("customenchantments:", "").replace("enchantments:", "").split(",")) {
                         newOption.append(enchantment).append(", ");
                     }
+
                     option = newOption.substring(0, newOption.length() - 2);
                 }
+
                 newItemString.append(option).append(", ");
             }
 
@@ -102,11 +105,13 @@ public class GKitz {
 
             for (String option : itemString.split(", ")) {
                 try {
-                    CEnchantment enchantment = ce.getEnchantmentFromName(option.split(":")[0]);
+                    CEnchantment enchantment = crazyManager.getEnchantmentFromName(option.split(":")[0]);
                     String level = option.split(":")[1];
+
                     if (enchantment != null) {
                         if (level.contains("-")) {
-                            int randomLevel = ce.pickLevel(Integer.parseInt(level.split("-")[0]), Integer.parseInt(level.split("-")[1]));
+                            int randomLevel = crazyManager.pickLevel(Integer.parseInt(level.split("-")[0]), Integer.parseInt(level.split("-")[1]));
+
                             if (randomLevel > 0) {
                                 item.addCEEnchantment(enchantment, randomLevel);
                             }
@@ -119,6 +124,8 @@ public class GKitz {
 
             items.add(item.build());
         }
+
         return items;
     }
+
 }

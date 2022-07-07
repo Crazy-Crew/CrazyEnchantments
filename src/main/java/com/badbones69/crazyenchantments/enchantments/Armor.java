@@ -13,7 +13,10 @@ import com.badbones69.crazyenchantments.api.objects.PotionEffects;
 import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.processors.Processor;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -30,14 +33,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class Armor implements Listener {
 
     private final List<Player> fall = new ArrayList<>();
-    private HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
 
@@ -55,10 +63,10 @@ public class Armor implements Listener {
         ItemStack newItem = e.getNewArmorPiece();
         ItemStack oldItem = e.getOldArmorPiece();
 
-        if (ce.hasEnchantments(oldItem)) { // Removing the potion effects.
-            for (CEnchantments enchantment : ce.getEnchantmentPotions().keySet()) {
-                if (enchantment.isActivated() && ce.hasEnchantment(oldItem, enchantment.getEnchantment())) {
-                    Map<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment);
+        if (crazyManager.hasEnchantments(oldItem)) { // Removing the potion effects.
+            for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
+                if (enchantment.isActivated() && crazyManager.hasEnchantment(oldItem, enchantment.getEnchantment())) {
+                    Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment);
 
                     for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
                         if (type.getValue() < 0) {
@@ -72,10 +80,10 @@ public class Armor implements Listener {
             }
         }
 
-        if (ce.hasEnchantments(newItem)) { // Adding the potion effects.
-            for (CEnchantments enchantment : ce.getEnchantmentPotions().keySet()) {
-                if (enchantment.isActivated() && ce.hasEnchantment(newItem, enchantment.getEnchantment())) {
-                    Map<PotionEffectType, Integer> effects = ce.getUpdatedEffects(player, newItem, oldItem, enchantment);
+        if (crazyManager.hasEnchantments(newItem)) { // Adding the potion effects.
+            for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
+                if (enchantment.isActivated() && crazyManager.hasEnchantment(newItem, enchantment.getEnchantment())) {
+                    Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, newItem, oldItem, enchantment);
 
                     for (Entry<PotionEffectType, Integer> type : effects.entrySet()) {
                         if (type.getValue() < 0) {
@@ -93,33 +101,36 @@ public class Armor implements Listener {
     // todo Make INSOMNIA work correctly. It should double the damage a player with the armor enchantment on does.
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
-        if (e.isCancelled() || ce.isIgnoredEvent(e) || ce.isIgnoredUUID(e.getDamager().getUniqueId())) return;
+        if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getDamager().getUniqueId())) return;
 
         if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
+
         if (e.getDamager() instanceof final LivingEntity damager && e.getEntity() instanceof final Player player) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                if (ce.hasEnchantments(armor)) {
-                    for (ArmorEnchantment armorEnchantment : ce.getArmorManager().getArmorEnchantments()) {
+                if (crazyManager.hasEnchantments(armor)) {
+                    for (ArmorEnchantment armorEnchantment : crazyManager.getArmorManager().getArmorEnchantments()) {
                         CEnchantments enchantment = armorEnchantment.getEnchantment();
-                        if (ce.hasEnchantment(armor, enchantment) && enchantment.chanceSuccessful(armor)) {
+
+                        if (crazyManager.hasEnchantment(armor, enchantment) && enchantment.chanceSuccessful(armor)) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, enchantment, armor);
 
-                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                             if (!event.isCancelled()) {
                                 if (armorEnchantment.isPotionEnchantment()) {
                                     for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
-                                        damager.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + effect.getAmplifier()));
+                                        damager.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (armorEnchantment.isLevelAddedToAmplifier() ? crazyManager.getLevel(armor, enchantment) : 0) + effect.getAmplifier()));
                                     }
                                 } else {
-                                    e.setDamage(e.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? ce.getLevel(armor, enchantment) : 0) + armorEnchantment.getDamageAmplifier()));
+                                    e.setDamage(e.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? crazyManager.getLevel(armor, enchantment) : 0) + armorEnchantment.getDamageAmplifier()));
                                 }
                             }
                         }
                     }
 
-                    if (player.getHealth() <= 8 && ce.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment()) && CEnchantments.ROCKET.chanceSuccessful(armor)) {
+                    if (player.getHealth() <= 8 && crazyManager.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment()) && CEnchantments.ROCKET.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         // Anti cheat support here with AAC or any others.
 
@@ -129,7 +140,7 @@ public class Armor implements Listener {
                                 public void run() {
                                     player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1));
                                 }
-                            }.runTaskLater(ce.getPlugin(), 1);
+                            }.runTaskLater(crazyManager.getPlugin(), 1);
 
                             fall.add(player);
                             player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
@@ -139,16 +150,16 @@ public class Armor implements Listener {
                                 public void run() {
                                     fall.remove(player);
                                 }
-                            }.runTaskLater(ce.getPlugin(), 8 * 20);
+                            }.runTaskLater(crazyManager.getPlugin(), 8 * 20);
                         }
                     }
 
-                    if (ce.hasEnchantment(armor, CEnchantments.ENLIGHTENED) && CEnchantments.ENLIGHTENED.chanceSuccessful(armor) && player.getHealth() > 0) {
+                    if (crazyManager.hasEnchantment(armor, CEnchantments.ENLIGHTENED) && CEnchantments.ENLIGHTENED.chanceSuccessful(armor) && player.getHealth() > 0) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED.getEnchantment(), armor);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) {
-                            double heal = ce.getLevel(armor, CEnchantments.ENLIGHTENED);
+                            double heal = crazyManager.getLevel(armor, CEnchantments.ENLIGHTENED);
                             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                             double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
@@ -162,34 +173,36 @@ public class Armor implements Listener {
                         }
                     }
 
-                    if (ce.hasEnchantment(armor, CEnchantments.MOLTEN) && CEnchantments.MOLTEN.chanceSuccessful(armor)) {
+                    if (crazyManager.hasEnchantment(armor, CEnchantments.MOLTEN) && CEnchantments.MOLTEN.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.MOLTEN.getEnchantment(), armor);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) {
-                            damager.setFireTicks((ce.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
+                            damager.setFireTicks((crazyManager.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
                         }
                     }
 
-                    if (ce.hasEnchantment(armor, CEnchantments.SAVIOR) && CEnchantments.SAVIOR.chanceSuccessful(armor)) {
+                    if (crazyManager.hasEnchantment(armor, CEnchantments.SAVIOR) && CEnchantments.SAVIOR.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SAVIOR.getEnchantment(), armor);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
                             e.setDamage(e.getDamage() / 2);
                         }
                     }
 
-                    if (ce.hasEnchantment(armor, CEnchantments.CACTUS) && CEnchantments.CACTUS.chanceSuccessful(armor)) {
+                    if (crazyManager.hasEnchantment(armor, CEnchantments.CACTUS) && CEnchantments.CACTUS.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.CACTUS.getEnchantment(), armor);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                         if (!event.isCancelled()) {
-                            damager.damage(ce.getLevel(armor, CEnchantments.CACTUS));
+                            damager.damage(crazyManager.getLevel(armor, CEnchantments.CACTUS));
                         }
                     }
 
-                    if (ce.hasEnchantment(armor, CEnchantments.STORMCALLER) && CEnchantments.STORMCALLER.chanceSuccessful(armor)) {
+                    if (crazyManager.hasEnchantment(armor, CEnchantments.STORMCALLER) && CEnchantments.STORMCALLER.chanceSuccessful(armor)) {
                         EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER.getEnchantment(), armor);
-                        ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) {
                             Location loc = damager.getLocation();
@@ -204,16 +217,16 @@ public class Armor implements Listener {
 
                             for (LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
-                                ce.addIgnoredEvent(damageByEntityEvent);
-                                ce.addIgnoredUUID(player.getUniqueId());
-                                ce.getPlugin().getServer().getPluginManager().callEvent(damageByEntityEvent);
+                                crazyManager.addIgnoredEvent(damageByEntityEvent);
+                                crazyManager.addIgnoredUUID(player.getUniqueId());
+                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(damageByEntityEvent);
 
                                 if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(en.getLocation()) && !pluginSupport.isFriendly(player, en)) {
                                     en.damage(5D);
                                 }
 
-                                ce.removeIgnoredEvent(damageByEntityEvent);
-                                ce.removeIgnoredUUID(player.getUniqueId());
+                                crazyManager.removeIgnoredEvent(damageByEntityEvent);
+                                crazyManager.removeIgnoredUUID(player.getUniqueId());
                             }
 
                             damager.damage(5D);
@@ -224,8 +237,8 @@ public class Armor implements Listener {
 
             if (damager instanceof Player) {
                 for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
-                    if (ce.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
-                        int radius = 4 + ce.getLevel(armor, CEnchantments.LEADERSHIP);
+                    if (crazyManager.hasEnchantment(armor, CEnchantments.LEADERSHIP) && CEnchantments.LEADERSHIP.chanceSuccessful(armor) && (PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
+                        int radius = 4 + crazyManager.getLevel(armor, CEnchantments.LEADERSHIP);
                         int players = 0;
 
                         for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
@@ -238,7 +251,8 @@ public class Armor implements Listener {
 
                         if (players > 0) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) damager, CEnchantments.LEADERSHIP.getEnchantment(), armor);
-                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                             if (!event.isCancelled()) {
                                 e.setDamage(e.getDamage() + (players / 2));
                             }
@@ -253,8 +267,10 @@ public class Armor implements Listener {
     public void onAura(AuraActiveEvent e) {
         Player player = e.getPlayer();
         Player other = e.getOther();
+
         if (!player.canSee(other) || !other.canSee(player)) return;
         if (pluginSupport.isVanished(player) || pluginSupport.isVanished(other)) return;
+
         CEnchantments enchant = e.getEnchantment();
         int level = e.getLevel();
 
@@ -267,6 +283,7 @@ public class Armor implements Listener {
             }
 
             HashMap<CEnchantments, Calendar> finalEffect = effect;
+
             switch (enchant) {
                 case BLIZZARD:
                     if (CEnchantments.BLIZZARD.isActivated()) {
@@ -317,6 +334,7 @@ public class Armor implements Listener {
                 default:
                     break;
             }
+
             timer.put(other, effect);
         }
     }
@@ -326,25 +344,29 @@ public class Armor implements Listener {
     public void onMovement(PlayerMoveEvent e) {
         Location from = e.getFrom();
         Location to = e.getTo();
-        if (Objects.requireNonNull(to).getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ())
-            return;
+
+        if (Objects.requireNonNull(to).getBlockX() == from.getBlockX() && to.getBlockY() == from.getBlockY() && to.getBlockZ() == from.getBlockZ()) return;
+
         armorMoveProcessor.add(e);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent e) {
         Player player = e.getEntity();
+
         if (player.getKiller() == null) return;
 
         Player killer = player.getKiller();
+
         if (!pluginSupport.allowsCombat(player.getLocation())) return;
 
         if (CEnchantments.SELFDESTRUCT.isActivated()) {
             for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-                if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
+                if (crazyManager.hasEnchantments(item) && crazyManager.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
 
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT.getEnchantment(), item);
-                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                     if (!event.isCancelled()) {
                         Methods.explode(player);
                         List<ItemStack> items = new ArrayList<>();
@@ -364,9 +386,10 @@ public class Armor implements Listener {
 
         if (CEnchantments.RECOVER.isActivated()) {
             for (ItemStack item : Objects.requireNonNull(killer.getEquipment()).getArmorContents()) {
-                if (ce.hasEnchantments(item) && ce.hasEnchantment(item, CEnchantments.RECOVER)) {
+                if (crazyManager.hasEnchantments(item) && crazyManager.hasEnchantment(item, CEnchantments.RECOVER)) {
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.RECOVER.getEnchantment(), item);
-                    ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
                     if (!event.isCancelled()) {
                         killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8 * 20, 2));
                         killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));

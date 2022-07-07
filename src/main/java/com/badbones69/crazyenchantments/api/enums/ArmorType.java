@@ -26,6 +26,7 @@ public enum ArmorType {
     public static ArmorType matchType(final ItemStack itemStack) {
         if (ArmorListener.isAirOrNull(itemStack)) return null;
         String type = itemStack.getType().name();
+
         if (type.endsWith("_HELMET") || type.endsWith("_SKULL") || type.endsWith("PLAYER_HEAD")) return HELMET;
         else if (type.endsWith("_CHESTPLATE") || type.endsWith("ELYTRA")) return CHESTPLATE;
         else if (type.endsWith("_LEGGINGS")) return LEGGINGS;
@@ -36,4 +37,5 @@ public enum ArmorType {
     public int getSlot() {
         return slot;
     }
+
 }

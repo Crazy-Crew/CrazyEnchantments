@@ -120,6 +120,7 @@ public enum Messages {
         for (Messages message : values()) {
             if (!messages.contains("Messages." + message.getPath())) {
                 saveFile = true;
+
                 if (message.getDefaultMessage() != null) {
                     messages.set("Messages." + message.getPath(), message.getDefaultMessage());
                 } else {
@@ -156,6 +157,7 @@ public enum Messages {
     
     public static List<String> replacePlaceholders(HashMap<String, String> placeholders, List<String> messageList) {
         List<String> newMessageList = new ArrayList<>();
+
         for (String message : messageList) {
             for (String placeholder : placeholders.keySet()) {
                 newMessageList.add(message.replaceAll(placeholder, placeholders.get(placeholder))
@@ -256,4 +258,5 @@ public enum Messages {
     private List<String> getDefaultListMessage() {
         return defaultListMessage;
     }
+
 }

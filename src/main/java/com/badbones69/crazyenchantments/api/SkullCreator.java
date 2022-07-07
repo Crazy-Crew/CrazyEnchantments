@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 public class SkullCreator {
 
-    private static final CrazyManager ce = CrazyManager.getInstance();
+    private static final CrazyManager crazyManager = CrazyManager.getInstance();
 
     /**
      * Creates a player skull with a UUID. 1.13 only.
@@ -118,7 +118,7 @@ public class SkullCreator {
         notNull(id, "id");
 
         setBlockType(block);
-        ((Skull) block.getState()).setOwningPlayer(ce.getPlugin().getServer().getOfflinePlayer(id));
+        ((Skull) block.getState()).setOwningPlayer(crazyManager.getPlugin().getServer().getOfflinePlayer(id));
     }
 
     /**

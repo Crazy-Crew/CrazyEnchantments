@@ -28,7 +28,7 @@ public class AuraListener implements Listener {
     CEnchantments.INTIMIDATE
     };
     
-    private final CrazyManager ce = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
@@ -56,7 +56,7 @@ public class AuraListener implements Listener {
         }
 
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
-            Map<CEnchantment, Integer> itemEnchantments = ce.getEnchantments(item);
+            Map<CEnchantment, Integer> itemEnchantments = crazyManager.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
@@ -66,7 +66,7 @@ public class AuraListener implements Listener {
 
                 for (Player other : players) {
                     AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
-                    ce.getPlugin().getServer().getPluginManager().callEvent(auraEvent);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(auraEvent);
                 }
             });
         }
@@ -79,7 +79,7 @@ public class AuraListener implements Listener {
             }
 
             for (ItemStack item : otherEquipment.getArmorContents()) { // The other players moving.
-                Map<CEnchantment, Integer> itemEnchantments = ce.getEnchantments(item);
+                Map<CEnchantment, Integer> itemEnchantments = crazyManager.getEnchantments(item);
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
@@ -88,7 +88,7 @@ public class AuraListener implements Listener {
                     }
 
                     AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
-                    ce.getPlugin().getServer().getPluginManager().callEvent(auraEvent);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(auraEvent);
                 });
             }
         }
@@ -106,9 +106,11 @@ public class AuraListener implements Listener {
             if (!(entity instanceof Player) || entity.getUniqueId().toString().equals(player.getUniqueId().toString())) {
                 continue;
             }
+
             players.add((Player) entity);
         }
 
         return players;
     }
+
 }

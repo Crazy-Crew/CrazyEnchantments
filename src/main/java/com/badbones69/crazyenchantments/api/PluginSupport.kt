@@ -13,7 +13,7 @@ import org.bukkit.entity.Player
 
 object PluginSupport {
 
-    private val manager = CrazyManager.getInstance()
+    private val crazyManager = CrazyManager.getInstance()
 
     private var factionPlugin: FactionsVersion? = null
 
@@ -22,7 +22,7 @@ object PluginSupport {
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && SuperiorSkyBlockSupport.inTerritory(player)) return true
 
-        return SupportedPlugins.PLOTSQUARED.isPluginLoaded() && manager.plotSquaredSupport.inTerritory(player)
+        return SupportedPlugins.PLOTSQUARED.isPluginLoaded() && crazyManager.plotSquaredSupport.inTerritory(player)
     }
 
     fun isFriendly(entity: Entity, other: Entity): Boolean {
@@ -57,23 +57,23 @@ object PluginSupport {
 
     fun allowsCombat(location: Location): Boolean {
         if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded() && !TownySupport.allowsCombat(location)) return false
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || manager.worldGuardSupport.allowsPVP(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.worldGuardSupport.allowsPVP(location)
     }
 
     fun allowsDestruction(location: Location): Boolean {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || manager.worldGuardSupport.allowsBreak(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.worldGuardSupport.allowsBreak(location)
     }
 
     fun allowsExplosions(location: Location): Boolean {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || manager.worldGuardSupport.allowsExplosions(location)
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.worldGuardSupport.allowsExplosions(location)
     }
 
     fun inWingsRegion(player: Player): Boolean {
 
         if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true
 
-        val wings = manager.wingsManager
-        val worldGuardVersion = manager.worldGuardSupport
+        val wings = crazyManager.wingsManager
+        val worldGuardVersion = crazyManager.worldGuardSupport
 
         wings.regions.forEach {region ->
             if (worldGuardVersion.inRegion(region, player.location)) {
@@ -132,13 +132,13 @@ object PluginSupport {
             fun updatePluginStates() {
                 if (cachedPluginState.isNotEmpty()) cachedPluginState.clear()
 
-                fun getPlugin(pluginName: String) = manager.plugin.server.pluginManager.getPlugin(pluginName)?.isEnabled == true && manager.plugin.server.pluginManager.getPlugin(pluginName) != null
+                fun getPlugin(pluginName: String) = crazyManager.plugin.server.pluginManager.getPlugin(pluginName)?.isEnabled == true && crazyManager.plugin.server.pluginManager.getPlugin(pluginName) != null
 
                 values().forEach { supportedPlugins ->
 
                     if (getPlugin(supportedPlugins.pluginName)) {
 
-                        val plugin = manager.plugin.server.pluginManager.getPlugin(supportedPlugins.pluginName)
+                        val plugin = crazyManager.plugin.server.pluginManager.getPlugin(supportedPlugins.pluginName)
 
                         //val authors = plugin?.description?.authors
                         //val version = plugin?.description?.version
@@ -165,10 +165,10 @@ object PluginSupport {
             fun printHooks() {
                 if (cachedPluginState.isEmpty()) updatePluginStates()
 
-                manager.plugin.server.consoleSender.sendMessage(Methods.color("&4&lActive CrazyEnchantment Hooks:"))
+                crazyManager.plugin.server.consoleSender.sendMessage(Methods.color("&4&lActive CrazyEnchantment Hooks:"))
 
                 cachedPluginState.keys.forEach {
-                    if (it.isPluginLoaded()) manager.plugin.server.consoleSender.sendMessage(Methods.color("&6&l ${it.name} : &a&lENABLED"))
+                    if (it.isPluginLoaded()) crazyManager.plugin.server.consoleSender.sendMessage(Methods.color("&6&l ${it.name} : &a&lENABLED"))
                 }
             }
 
@@ -192,4 +192,5 @@ object PluginSupport {
             return cachedPluginState[this] == true
         }
     }
+
 }

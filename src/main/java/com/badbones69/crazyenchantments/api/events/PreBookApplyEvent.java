@@ -94,4 +94,5 @@ public class PreBookApplyEvent extends Event implements Cancellable {
     public HandlerList getHandlers() {
         return handlers;
     }
+
 }

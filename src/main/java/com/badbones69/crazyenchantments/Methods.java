@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class Methods {
     
     private final static Random random = new Random();
-    private final static CrazyManager ce = CrazyManager.getInstance();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     private final static PluginSupport pluginSupport = PluginSupport.INSTANCE;
     public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
     
@@ -128,11 +128,11 @@ public class Methods {
     }
     
     public static Player getPlayer(String name) {
-        return ce.getPlugin().getServer().getPlayer(name);
+        return crazyManager.getPlugin().getServer().getPlayer(name);
     }
     
     public static boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : ce.getPlugin().getServer().getOnlinePlayers()) {
+        for (Player player : crazyManager.getPlugin().getServer().getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(playerName)) {
                 return true;
             }
@@ -148,6 +148,7 @@ public class Methods {
     public static void removeItem(ItemStack item, Player player, int amount) {
         try {
             boolean found = false;
+
             if (player.getInventory().contains(item)) {
                 if (item.getAmount() <= amount) {
                     player.getInventory().removeItem(item);
@@ -160,6 +161,7 @@ public class Methods {
 
             if (!found) {
                 ItemStack offHand = player.getEquipment().getItemInOffHand();
+
                 if (offHand.isSimilar(item)) {
                     if ((amount - offHand.getAmount()) >= 0) {
                         player.getEquipment().setItemInOffHand(new ItemStack(Material.AIR, 1));
@@ -179,11 +181,13 @@ public class Methods {
     
     public static ItemStack removeItem(ItemStack item, int amount) {
         ItemStack itemStack = item.clone();
+
         if (item.getAmount() <= amount) {
             itemStack = new ItemStack(Material.AIR);
         } else {
             itemStack.setAmount(item.getAmount() - amount);
         }
+
         return itemStack;
     }
     
@@ -214,12 +218,16 @@ public class Methods {
     
     public static int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
         String arg = defaultValue + "";
+
         for (String originalLine : originalLore) {
             originalLine = Methods.color(originalLine).toLowerCase();
+
             if (originalLine.contains(argument.toLowerCase())) {
                 String[] b = originalLine.split(argument.toLowerCase());
+
                 for (String itemLine : item.getItemMeta().getLore()) {
-                    boolean toggle = false;// Checks to make sure the lore is the same.
+                    boolean toggle = false; // Checks to make sure the lore is the same.
+
                     if (b.length >= 1) {
                         if (itemLine.toLowerCase().startsWith(b[0])) {
                             arg = itemLine.toLowerCase().replace(b[0], "");
@@ -247,6 +255,7 @@ public class Methods {
         }
 
         int percent = defaultValue;
+
         if (isInt(arg)) {
             percent = Integer.parseInt(arg);
         }
@@ -257,10 +266,12 @@ public class Methods {
     public static boolean hasArgument(String arg, List<String> message) {
         for (String line : message) {
             line = Methods.color(line).toLowerCase();
+
             if (line.contains(arg.toLowerCase())) {
                 return true;
             }
         }
+
         return false;
     }
     
@@ -297,6 +308,7 @@ public class Methods {
     public static List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity entity) {
         List<Entity> out = entity.getNearbyEntities(radius, radius, radius);
         List<LivingEntity> entities = new ArrayList<>();
+
         for (Entity en : out) {
             if (en instanceof LivingEntity) {
                 entities.add((LivingEntity) en);
@@ -325,7 +337,7 @@ public class Methods {
         fm.setPower(0);
         fw.setFireworkMeta(fm);
         FireworkDamage.addFirework(fw);
-        ce.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(ce.getPlugin(), fw :: detonate, 2);
+        crazyManager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(crazyManager.getPlugin(), fw :: detonate, 2);
     }
     
     public static Color getColor(String color) {
@@ -356,8 +368,9 @@ public class Methods {
     
     public static Enchantment getEnchantment(String enchantmentName) {
         try {
-            HashMap<String, String> enchantments = getEnchantments();
+            // HashMap<String, String> enchantments = getEnchantments();
             enchantmentName = stripString(enchantmentName);
+
             for (Enchantment enchantment : Enchantment.values()) {
                 // MC 1.13+ has the correct names.
                 if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
@@ -365,6 +378,7 @@ public class Methods {
                 }
             }
         } catch (Exception ignore) {}
+
         return null;
     }
     
@@ -458,6 +472,7 @@ public class Methods {
                     if (one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())) {
                         if (one.getItemMeta().hasLore() && two.getItemMeta().hasLore()) {
                             int i = 0;
+
                             for (String lore : one.getItemMeta().getLore()) {
                                 if (!lore.equals(two.getItemMeta().getLore().get(i))) {
                                     return false;
@@ -470,6 +485,7 @@ public class Methods {
                     }
                 }
             }
+
         }
         return false;
     }
@@ -480,6 +496,7 @@ public class Methods {
         player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+
         for (Entity e : Methods.getNearbyEntities(player.getLocation(), 3D, player)) {
             if (pluginSupport.allowsCombat(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
@@ -489,6 +506,7 @@ public class Methods {
                         if (!pluginSupport.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
+
                                 if (en instanceof Player) {
                                     if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                         SpartanSupport.cancelSpeed((Player) player);
@@ -512,6 +530,7 @@ public class Methods {
         arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+
         for (Entity e : Methods.getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
             if (pluginSupport.allowsCombat(e.getLocation())) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {
@@ -521,6 +540,7 @@ public class Methods {
                         if (!pluginSupport.isFriendly(player, en)) {
                             if (!player.getName().equalsIgnoreCase(e.getName())) {
                                 en.damage(5D);
+
                                 if (en instanceof Player) {
                                     if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                         SpartanSupport.cancelSpeed((Player) player);
@@ -571,4 +591,5 @@ public class Methods {
         "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
+
 }

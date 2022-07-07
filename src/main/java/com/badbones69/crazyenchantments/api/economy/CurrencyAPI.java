@@ -172,4 +172,5 @@ public class CurrencyAPI {
     public static void loadCurrency() {
         VaultSupport.loadVault();
     }
+
 }

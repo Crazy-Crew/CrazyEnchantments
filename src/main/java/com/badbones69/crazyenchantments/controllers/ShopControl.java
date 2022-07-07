@@ -27,8 +27,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShopControl implements Listener {
     
-    private final static CrazyManager ce = CrazyManager.getInstance();
-    private final static ShopManager shopManager = ce.getShopManager();
+    private final static CrazyManager crazyManager = CrazyManager.getInstance();
+    private final static ShopManager shopManager = crazyManager.getShopManager();
     private final Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
     
     public static void openGUI(Player player) {
@@ -40,12 +40,14 @@ public class ShopControl implements Listener {
         ItemStack item = e.getCurrentItem();
         Inventory inventory = e.getInventory();
         Player player = (Player) e.getWhoClicked();
+
         if (inventory != null && e.getView().getTitle().equals(shopManager.getInventoryName())) {
             e.setCancelled(true);
+
             if (e.getRawSlot() >= inventory.getSize()) return;
 
             if (item != null) {
-                for (Category category : ce.getCategories()) {
+                for (Category category : crazyManager.getCategories()) {
                     if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
 
                         if (Methods.isInventoryFull(player)) {
@@ -63,11 +65,11 @@ public class ShopControl implements Listener {
                             }
                         }
 
-                        CEBook book = ce.getRandomEnchantmentBook(category);
+                        CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
                         if (book != null) {
-                            BuyBookEvent event = new BuyBookEvent(ce.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                            ce.getPlugin().getServer().getPluginManager().callEvent(event);
+                            BuyBookEvent event = new BuyBookEvent(crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
                             player.getInventory().addItem(book.buildBook());
                         } else {
                             player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
@@ -108,6 +110,7 @@ public class ShopControl implements Listener {
                                 player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                                 return;
                             }
+
                             if (option.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                                 if (CurrencyAPI.canBuy(player, option)) {
                                     CurrencyAPI.takeCurrency(player, option);
@@ -124,15 +127,18 @@ public class ShopControl implements Listener {
                                 if (!Methods.hasPermission(player, "gkitz", true)) return;
                                 GKitzController.openGUI(player);
                             }
+
                             case BLACKSMITH -> {
                                 if (!Methods.hasPermission(player, "blacksmith", true)) return;
                                 BlackSmith.openBlackSmith(player);
                             }
+
                             case TINKER -> {
                                 if (!Methods.hasPermission(player, "tinker", true)) return;
                                 Tinkerer.openTinker(player);
                             }
-                            case INFO -> ce.getInfoMenuManager().openInfoMenu(player);
+
+                            case INFO -> crazyManager.getInfoMenuManager().openInfoMenu(player);
                             case PROTECTION_CRYSTAL -> player.getInventory().addItem(ProtectionCrystal.getCrystals());
                             case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                             case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
@@ -141,6 +147,7 @@ public class ShopControl implements Listener {
                             case WHITE_SCROLL -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
                             case TRANSMOG_SCROLL -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
                         }
+
                         return;
                     }
                 }
@@ -153,6 +160,7 @@ public class ShopControl implements Listener {
         if (shopManager.isEnchantmentTableShop()) {
             Player player = e.getPlayer();
             Block block = e.getClickedBlock();
+
             if (block != null && e.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == enchantmentTable) {
                 e.setCancelled(true);
                 openGUI(player);
