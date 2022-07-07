@@ -111,6 +111,7 @@ object PluginSupport {
 
         // Anti Cheats
         SPARTAN("Spartan"),
+        NO_CHEAT_PLUS("NoCheatPlus"),
         VULCAN("Vulcan"),
 
         // Faction Plugins

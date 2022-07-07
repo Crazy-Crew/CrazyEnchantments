@@ -4,10 +4,13 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.api.multisupport.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.api.objects.PotionEffects;
 import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
@@ -213,7 +216,15 @@ public class Armor implements Listener {
                                 loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                             } catch (Exception ignore) {}
 
-                           // NCP Support.
+                           // AntiCheat Support.
+
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                                NoCheatPlusSupport.allowPlayer(player);
+                            }
+
+                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                                SpartanSupport.cancelNoSwing(player);
+                            }
 
                             for (LivingEntity en : Methods.getNearbyLivingEntities(loc, 2D, player)) {
                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
@@ -227,6 +238,10 @@ public class Armor implements Listener {
 
                                 crazyManager.removeIgnoredEvent(damageByEntityEvent);
                                 crazyManager.removeIgnoredUUID(player.getUniqueId());
+                            }
+
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                                NoCheatPlusSupport.denyPlayer(player);
                             }
 
                             damager.damage(5D);

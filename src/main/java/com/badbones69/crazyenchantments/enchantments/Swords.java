@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -11,6 +12,7 @@ import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.events.DisarmerUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.events.RageBreakEvent;
+import com.badbones69.crazyenchantments.api.multisupport.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -362,7 +364,11 @@ public class Swords implements Listener {
                                 loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                             } catch (Exception ignore) {}
 
-                            if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                                NoCheatPlusSupport.allowPlayer(damager);
+                            }
+
+                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                                 SpartanSupport.cancelNoSwing(damager);
                             }
 
@@ -382,6 +388,10 @@ public class Swords implements Listener {
 
                             en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
                             en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));
+
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                                NoCheatPlusSupport.denyPlayer(damager);
+                            }
                         }
                     }
 

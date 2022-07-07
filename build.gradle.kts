@@ -31,6 +31,9 @@ repositories {
     // MVDW API
     maven("https://repo.mvdw-software.com/content/groups/public/")
 
+    // NCP API
+    maven("https://repo.md-5.net/content/repositories/snapshots/")
+
     // FactionsUUID API
     maven("https://ci.ender.zone/plugin/repository/everything/")
 
@@ -105,7 +108,9 @@ dependencies {
     // Anti Cheats.
     compileOnly("me.vagdedes:SpartanAPI:9.1")
 
-    compileOnly("me.frep:vulcan-api:1.0.0")
+    //compileOnly("me.frep:vulcan-api:1.0.0")
+
+    compileOnly("fr.neatmonster:nocheatplus:3.16.1-SNAPSHOT")
 
     // Required.
     compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")

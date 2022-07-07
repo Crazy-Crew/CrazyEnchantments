@@ -4,9 +4,11 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.BlastUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.api.multisupport.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -93,7 +95,11 @@ public class PickAxes implements Listener {
 
                     HashMap<ItemStack, Integer> drops = new HashMap<>();
 
-                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                        NoCheatPlusSupport.allowPlayer(player);
+                    }
+
+                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                         SpartanSupport.cancelFastBreak(player);
                         SpartanSupport.cancelNoSwing(player);
                         SpartanSupport.cancelBlockReach(player);
@@ -179,6 +185,10 @@ public class PickAxes implements Listener {
 
                     if (!damage) {
                         Methods.removeDurability(currentItem, player);
+                    }
+
+                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                        NoCheatPlusSupport.denyPlayer(player);
                     }
 
                     for (Entry<ItemStack, Integer> item : drops.entrySet()) {
@@ -278,6 +288,7 @@ public class PickAxes implements Listener {
 
         if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) && isOre && (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
             int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
+
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
                 crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
@@ -295,6 +306,7 @@ public class PickAxes implements Listener {
     
     private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
+
         switch (blockFace) {
             case SOUTH -> {
                 loc.add(-1, 1, -depth);

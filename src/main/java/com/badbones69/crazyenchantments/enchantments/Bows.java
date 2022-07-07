@@ -4,9 +4,11 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
+import com.badbones69.crazyenchantments.api.multisupport.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Location;
@@ -190,6 +192,12 @@ public class Bows implements Listener {
                             location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
                         } catch (Exception ignore) {}
 
+                        // AntiCheat Support.
+
+                        if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                            NoCheatPlusSupport.allowPlayer(shooter);
+                        }
+
                         if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                             SpartanSupport.cancelNoSwing(shooter);
                         }
@@ -206,6 +214,10 @@ public class Bows implements Listener {
 
                             crazyManager.removeIgnoredEvent(damageByEntityEvent);
                             crazyManager.removeIgnoredUUID(shooter.getUniqueId());
+                        }
+
+                        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                            NoCheatPlusSupport.denyPlayer(shooter);
                         }
                     }
                 }
