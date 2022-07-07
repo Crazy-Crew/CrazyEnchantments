@@ -142,9 +142,9 @@ tasks {
         filesMatching("plugin.yml") {
             expand(
                 "name" to rootProject.name,
-                "group" to project.group,
-                "version" to project.version,
-                "description" to project.description
+                "group" to rootProject.group,
+                "version" to rootProject.version,
+                "description" to rootProject.description
             )
         }
     }
