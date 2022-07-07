@@ -17,7 +17,7 @@ tasks.compileKotlin {
 }
 
 group = "com.badbones69.crazyenchantments"
-version = "1.9.3-#${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
+version = "1.9.3-${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
 description = "A plugin full of Crazy Enchantments!"
 
 repositories {
