@@ -1,32 +1,41 @@
-# Crazy Enchantments
-Source Code for Crazy Enchantments
+## Crazy Enchantments
 
-## Build Status:
-[![Build Status](https://jenkins.badbones69.com/view/Modern/job/Crazy-Enchantments/badge/icon)](https://jenkins.badbones69.com/view/Modern/job/Crazy-Enchantments/)
+[![Join us on Discord](https://img.shields.io/discord/182615261403283459.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
 
-## Latest Version:
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-1.8--Dev--Build--v12-blue)](https://github.com/badbones69/Crazy-Enchantments/releases/latest)
+[![CrazyEnchantment's Stargazers](https://img.shields.io/github/stars/Crazy-Crew/Crazy-Enchantments?label=stars&logo=github)](https://github.com/Crazy-Crew/Crazy-Enchantments/stargazers)
+[![CrazyEnchantment's Forks](https://img.shields.io/github/forks/Crazy-Crew/Crazy-Enchantments?label=forks&logo=github)](https://github.com/Crazy-Crew/Crazy-Enchantments/network/members)
+[![CrazyEnchantment's Watchers](https://img.shields.io/github/watchers/Crazy-Crew/Crazy-Enchantments?label=watchers&logo=github)](https://github.com/Crazy-Crew/Crazy-Enchantments/watchers)
 
-## Support:
-https://discord.com/invite/MCuz8JG/
+CrazyEnchantments is an enchantments plugin with over 80+ enchantments.
 
-## Jenkins: 
-[https://jenkins.badbones69.com/job/Crazy-Enchantments/](https://jenkins.badbones69.com/view/Modern/job/Crazy-Enchantments/)
+## Contact
+[![Join us on Discord](https://img.shields.io/discord/182615261403283459.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.badbones69.com)
 
-## Repo:
-N/A
+Join us on [Discord](https://discord.badbones69.com)
 
-## Maven:
-```xml
-<repository>
-    <id>crazycrew-repo-snapshots</id>
-    <name>CrazyCrew Team</name>
-    <url>https://repo.badbones69.com/snapshots</url>
-</repository>
+## Downloads
+[![Build Status](https://jenkins.badbones69.com/view/Stable/job/Crazy-Enchantments/badge/icon)](https://jenkins.badbones69.com/view/Stable/job/Crazy-Enchantments/)
 
-<dependency>
-    <groupId>com.badbones69</groupId>
-    <artifactId>crazyenchantments-plugin</artifactId>
-    <version>{Latest Version}</version>
-</dependency>
-```
+Downloads can be obtained from the [spigot page](https://www.spigotmc.org/resources/crazy-enchantments.16470/) or the [Jenkins](https://jenkins.badbones69.com/view/Stable/job/Crazy-Enchantments/).
+
+## Plugin Data
+[![bStats Graph Data](https://bstats.org/signatures/bukkit/CrazyEnchantments.svg)](https://bstats.org/signatures/bukkit/CrazyEnchantments)
+
+## API
+In Progress.
+
+### Dependency Information
+
+#### Maven
+In Progress.
+
+#### Gradle
+In Progress.
+
+## Working with CrazyEnchantments.
+
+#### Contributing
+Fork the project & open a pull request.
+
+#### Compiling
+Clone the project & run the shadowJar task.
