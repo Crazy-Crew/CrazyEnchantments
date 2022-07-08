@@ -47,7 +47,7 @@ public class SkullCreator {
         SkullMeta meta = (SkullMeta) item.getItemMeta();
 
         assert meta != null;
-        meta.setOwningPlayer(CrazyManager.getInstance().getPlugin().getServer().getOfflinePlayer(id));
+        meta.setOwningPlayer(crazyManager.getPlugin().getServer().getOfflinePlayer(id));
         item.setItemMeta(meta);
 
         return item;
@@ -102,7 +102,7 @@ public class SkullCreator {
         notNull(base64, "base64");
 
         UUID hashAsId = new UUID(base64.hashCode(), base64.hashCode());
-        return CrazyManager.getInstance().getPlugin().getServer().getUnsafe().modifyItemStack(item,
+        return crazyManager.getPlugin().getServer().getUnsafe().modifyItemStack(item,
                 "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}"
         );
     }

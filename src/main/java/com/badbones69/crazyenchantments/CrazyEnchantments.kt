@@ -62,7 +62,7 @@ class CrazyEnchantments : JavaPlugin(), Listener {
     override fun onEnable() {
         crazyManager.loadPlugin(plugin)
 
-        fileManager.logInfo(true).setup()
+        fileManager.logInfo(true).setup(this)
 
         val metricsEnabled = Files.CONFIG.file.getBoolean("Settings.Toggle-Metrics")
 
