@@ -19,7 +19,7 @@ Join us on [Discord](https://discord.badbones69.com)
 Downloads can be obtained from the [spigot page](https://www.spigotmc.org/resources/crazy-enchantments.16470/) or the [Jenkins](https://jenkins.badbones69.com/view/Stable/job/Crazy-Enchantments/).
 
 ## Plugin Data
-[![bStats Graph Data](https://bstats.org/signatures/bukkit/CrazyEnchantments.svg)](https://bstats.org/signatures/bukkit/CrazyEnchantments)
+[![bStats Graph Data](https://bstats.org/signatures/bukkit/CrazyEnchantments.svg)](https://bstats.org/plugin/bukkit/CrazyEnchantments/4494)
 
 ## API
 In Progress.
