@@ -32,10 +32,10 @@ public class CEnchantment {
         this.name = name;
         this.customName = name;
         this.activated = true;
-        this.color = "&7";
-        this.bookColor = "&b&l";
+        this.color = Methods.color("&7");
+        this.bookColor = Methods.color("&b&l");
         this.maxLevel = 3;
-        this.infoName = "&7" + name;
+        this.infoName = Methods.color("&7" + name);
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();
