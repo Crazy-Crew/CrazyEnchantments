@@ -1,9 +1,8 @@
 package com.badbones69.crazyenchantments.api;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class FileManager {
     /**
      * Sets up the plugin and loads all necessary files.
      */
-    public FileManager setup(JavaPlugin plugin) {
+    public FileManager setup(CrazyEnchantments plugin) {
 
         if (!crazyManager.getPlugin().getDataFolder().exists()) crazyManager.getPlugin().getDataFolder().mkdirs();
 
@@ -398,7 +397,7 @@ public class FileManager {
         private final String name;
         private final String fileName;
         private final String homeFolder;
-        private final JavaPlugin plugin;
+        private final CrazyEnchantments plugin;
         private FileConfiguration file;
         
         /**
@@ -406,7 +405,7 @@ public class FileManager {
          * @param name Name of the file.
          * @param homeFolder The home folder of the file.
          */
-        public CustomFile(String name, String homeFolder, JavaPlugin plugin) {
+        public CustomFile(String name, String homeFolder, CrazyEnchantments plugin) {
             this.name = name.replace(".yml", "");
             this.fileName = name;
             this.plugin = plugin;

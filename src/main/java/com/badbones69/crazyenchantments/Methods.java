@@ -137,6 +137,7 @@ public class Methods {
                 return true;
             }
         }
+
         sender.sendMessage(Messages.NOT_ONLINE.getMessage());
         return false;
     }
@@ -213,6 +214,7 @@ public class Methods {
 
         m.setLore(lore);
         item.setItemMeta(m);
+
         return item;
     }
     

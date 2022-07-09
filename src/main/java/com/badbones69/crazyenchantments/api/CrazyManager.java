@@ -29,7 +29,6 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
@@ -66,13 +65,13 @@ public class CrazyManager {
     private final List<Event> ignoredEvents = new ArrayList<>();
     private final List<UUID> ignoredUUIDs = new ArrayList<>();
 
-    private JavaPlugin plugin;
+    private CrazyEnchantments plugin;
 
     /**
      * Get the CrazyEnchantments Plugin.
      * @return The CrazyEnchantments Plugin object.
      */
-    public JavaPlugin getPlugin() {
+    public CrazyEnchantments getPlugin() {
         return plugin;
     }
     
@@ -80,7 +79,7 @@ public class CrazyManager {
         return instance;
     }
 
-    public void loadPlugin(JavaPlugin plugin) {
+    public void loadPlugin(CrazyEnchantments plugin) {
         this.plugin = plugin;
     }
     
