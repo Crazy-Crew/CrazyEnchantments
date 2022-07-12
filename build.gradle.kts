@@ -119,6 +119,8 @@ dependencies {
 
     implementation("de.tr7zw:nbt-data-api:2.10.0")
 
+    implementation("io.papermc:paperlib:1.0.7")
+
     compileOnly(kotlin("stdlib", "1.7.0"))
 }
 

@@ -193,5 +193,4 @@ object PluginSupport {
             return cachedPluginState[this] == true
         }
     }
-
 }

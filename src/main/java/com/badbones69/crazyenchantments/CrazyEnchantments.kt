@@ -38,6 +38,7 @@ import com.badbones69.crazyenchantments.enchantments.Hoes
 import com.badbones69.crazyenchantments.enchantments.PickAxes
 import com.badbones69.crazyenchantments.enchantments.Swords
 import com.badbones69.crazyenchantments.enchantments.Tools
+import io.papermc.lib.PaperLib
 import org.bstats.bukkit.Metrics
 import org.bukkit.attribute.Attribute
 import org.bukkit.event.EventHandler
@@ -52,6 +53,8 @@ class CrazyEnchantments : JavaPlugin(), Listener {
 
     private val fileManager = FileManager.getInstance()
 
+    private var pluginEnabled = false
+
     private var armor: Armor? = null
 
     // Avoid using @this
@@ -60,24 +63,56 @@ class CrazyEnchantments : JavaPlugin(), Listener {
     private val generic = Attribute.GENERIC_MAX_HEALTH
 
     override fun onEnable() {
-        crazyManager.loadPlugin(plugin)
 
-        fileManager.logInfo(true).setup(this)
+        if (!PaperLib.isPaper()) {
+            logger.warning("====================================================")
+            logger.warning(" " + this.name + " works better if you use Paper ")
+            logger.warning(" as your server software.")
+            logger.warning(" ")
+            logger.warning(" Paper offers significant performance improvements,")
+            logger.warning(" bug fixes, security enhancements and optional")
+            logger.warning(" features for server owners to enhance their server.")
+            logger.warning(" ")
+            logger.warning(" All of your plugins should still work, and the")
+            logger.warning(" Paper community will gladly help you fix any issues.")
+            logger.warning("")
+            logger.warning(" Join the Purpur Community @ https://purpurmc.org/discord")
+            logger.warning("====================================================")
+            logger.warning("A few features might not work on Spigot so be warned.")
 
-        val metricsEnabled = Files.CONFIG.file.getBoolean("Settings.Toggle-Metrics")
-
-        if (Files.CONFIG.file.getString("Settings.Toggle-Metrics") != null) {
-            if (metricsEnabled) Metrics(plugin, 4494)
-        } else {
-            logger.warning("Metrics was automatically enabled.")
-            logger.warning("Please add Toggle-Metrics: false to the top of your config.yml")
-            logger.warning("https://github.com/Crazy-Crew/Crazy-Crates/blob/main/src/main/resources/config.yml")
-            logger.warning("An example if confused is linked above.")
-
-            Metrics(plugin, 4494)
+            // getServer().getPluginManager().disablePlugin(this);
         }
 
-        crazyManager.load()
+        runCatching {
+            crazyManager.loadPlugin(plugin)
+
+            fileManager.logInfo(true).setup(this)
+
+            val metricsEnabled = Files.CONFIG.file.getBoolean("Settings.Toggle-Metrics")
+
+            if (Files.CONFIG.file.getString("Settings.Toggle-Metrics") != null) {
+                if (metricsEnabled) Metrics(plugin, 4494)
+            } else {
+                logger.warning("Metrics was automatically enabled.")
+                logger.warning("Please add Toggle-Metrics: false to the top of your config.yml")
+                logger.warning("https://github.com/Crazy-Crew/Crazy-Crates/blob/main/src/main/resources/config.yml")
+                logger.warning("An example if confused is linked above.")
+
+                Metrics(plugin, 4494)
+            }
+
+            crazyManager.load()
+
+        }.onFailure {
+
+            logger.severe(it.message)
+
+            it.stackTrace.forEach { e -> logger.severe(e.toString()) }
+
+            pluginEnabled = false
+
+            return
+        }
 
         SupportedPlugins.printHooks()
 
@@ -96,9 +131,13 @@ class CrazyEnchantments : JavaPlugin(), Listener {
         }, 5 * 20 * 60, 5 * 20 * 60)
 
         enable()
+
+        pluginEnabled = true;
     }
 
     override fun onDisable() {
+        if (!pluginEnabled) return
+
         disable()
     }
 
