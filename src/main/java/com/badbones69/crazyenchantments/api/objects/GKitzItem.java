@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.HashMap;
 
 public class GKitzItem {

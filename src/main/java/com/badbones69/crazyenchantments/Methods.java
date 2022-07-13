@@ -1,14 +1,14 @@
 package com.badbones69.crazyenchantments;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.FireworkDamage;
-import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -17,11 +17,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

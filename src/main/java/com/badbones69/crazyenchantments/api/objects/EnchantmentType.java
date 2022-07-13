@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 

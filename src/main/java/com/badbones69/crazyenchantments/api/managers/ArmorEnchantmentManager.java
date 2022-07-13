@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.api.objects.PotionEffects;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

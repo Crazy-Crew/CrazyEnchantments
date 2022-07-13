@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.util.ArrayList;
 import java.util.List;
 

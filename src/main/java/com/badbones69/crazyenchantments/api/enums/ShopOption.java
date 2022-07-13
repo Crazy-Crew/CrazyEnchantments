@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.HashMap;
 
 public enum ShopOption {
