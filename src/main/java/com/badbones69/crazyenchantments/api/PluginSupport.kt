@@ -26,7 +26,7 @@ object PluginSupport {
     }
 
     fun isFriendly(entity: Entity, other: Entity): Boolean {
-        if (entity !is Player || other !is Player) return true
+        if (entity !is Player || other !is Player) return false
 
         if (factionPlugin != null && factionPlugin?.isFriendly(entity, other) == true) return true
 
