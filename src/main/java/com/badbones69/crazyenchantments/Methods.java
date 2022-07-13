@@ -27,7 +27,7 @@ public class Methods {
     private final static Random random = new Random();
     private final static CrazyManager crazyManager = CrazyManager.getInstance();
     private final static PluginSupport pluginSupport = PluginSupport.INSTANCE;
-    public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
+    public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
     
     public static String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
