@@ -5,9 +5,9 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -20,6 +20,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.ArrayList;
 import java.util.List;
 

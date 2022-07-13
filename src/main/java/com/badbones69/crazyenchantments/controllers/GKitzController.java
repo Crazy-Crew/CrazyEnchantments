@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.controllers;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -10,6 +9,7 @@ import com.badbones69.crazyenchantments.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.api.objects.Cooldown;
 import com.badbones69.crazyenchantments.api.objects.GKitz;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

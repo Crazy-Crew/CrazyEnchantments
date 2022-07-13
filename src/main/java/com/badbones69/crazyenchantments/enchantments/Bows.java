@@ -9,8 +9,8 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.api.objects.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+
 import java.util.ArrayList;
 import java.util.List;
 

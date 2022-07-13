@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.api.objects;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import com.badbones69.crazyenchantments.api.SkullCreator;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -16,8 +16,10 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static com.badbones69.crazyenchantments.Methods.color;
 
 public class ItemBuilder implements Cloneable {

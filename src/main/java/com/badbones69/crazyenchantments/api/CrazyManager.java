@@ -1,7 +1,5 @@
 package com.badbones69.crazyenchantments.api;
 
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManager;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -11,15 +9,17 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.managers.*;
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManager;
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.plotsquared.PlotSquaredVersion;
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion;
+import com.badbones69.crazyenchantments.api.multisupport.plotsquared.PlotSquaredSupport;
+import com.badbones69.crazyenchantments.api.multisupport.worldguard.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import com.badbones69.crazyenchantments.controllers.Scrambler;
 import com.badbones69.crazyenchantments.controllers.ScrollControl;
 import com.badbones69.crazyenchantments.enchantments.Boots;
-import com.badbones69.crazyenchantments.api.multisupport.plotsquared.PlotSquaredSupport;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.plotsquared.PlotSquaredVersion;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion;
-import com.badbones69.crazyenchantments.api.multisupport.worldguard.WorldGuardSupport;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -31,6 +31,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.*;
 import java.util.Map.Entry;
 

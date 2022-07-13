@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.Methods;
+
 import java.util.Calendar;
 
 public class Cooldown {

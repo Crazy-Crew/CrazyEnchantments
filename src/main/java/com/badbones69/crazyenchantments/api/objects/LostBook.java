@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.api.economy.Currency;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+
 import java.util.HashMap;
 import java.util.List;
 

@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.api;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

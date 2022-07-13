@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

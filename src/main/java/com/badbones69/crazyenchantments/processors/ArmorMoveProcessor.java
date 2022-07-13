@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.Objects;
 
 public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
