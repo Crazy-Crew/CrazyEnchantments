@@ -116,6 +116,8 @@ public class Bows implements Listener {
                         if (e.getHitEntity() == null) { // If the arrow hits a block.
                             Location entityLocation = e.getEntity().getLocation();
 
+                            System.out.println("Why are you here?");
+
                             if (entityLocation.getBlock().getType() == Material.AIR) {
                                 entityLocation.getBlock().setType(web);
                                 webBlocks.add(entityLocation.getBlock());
@@ -153,7 +155,7 @@ public class Bows implements Listener {
                             }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
                         }
                     } else { // If the arrow hits something.
-                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty() && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) { // Checking to make sure it doesn't hit an entity.
+                        if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow()) && e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty() && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) { // Checking to make sure it doesn't hit an entity.
                             Location entityLocation = e.getEntity().getLocation();
 
                             if (entityLocation.getBlock().getType() == Material.AIR) {
