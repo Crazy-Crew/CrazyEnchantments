@@ -74,6 +74,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
                 new Metrics(this, 4494);
             }
 
+            crazyManager.load();
+
 
         } catch (Exception e) {
             getLogger().severe(e.getMessage());
