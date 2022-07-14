@@ -116,8 +116,6 @@ public class Bows implements Listener {
                         if (e.getHitEntity() == null) { // If the arrow hits a block.
                             Location entityLocation = e.getEntity().getLocation();
 
-                            System.out.println("Why are you here?");
-
                             if (entityLocation.getBlock().getType() == Material.AIR) {
                                 entityLocation.getBlock().setType(web);
                                 webBlocks.add(entityLocation.getBlock());
