@@ -112,7 +112,7 @@ public class Bows implements Listener {
                 EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getEntity());
 
                 if (arrow != null) {
-                    if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow()) && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+                    if (CEnchantments.STICKY_SHOT.isActivated() && arrow.hasEnchantment(CEnchantments.STICKY_SHOT) && CEnchantments.STICKY_SHOT.chanceSuccessful(arrow.getBow()) && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) {
                         if (e.getHitEntity() == null) { // If the arrow hits a block.
                             Location entityLocation = e.getEntity().getLocation();
 
@@ -153,7 +153,7 @@ public class Bows implements Listener {
                             }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
                         }
                     } else { // If the arrow hits something.
-                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty() && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) { // Checking to make sure it doesn't hit an entity.
+                        if (e.getEntity().getNearbyEntities(.5, .5, .5).isEmpty() && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) { // Checking to make sure it doesn't hit an entity.
                             Location entityLocation = e.getEntity().getLocation();
 
                             if (entityLocation.getBlock().getType() == Material.AIR) {
@@ -173,14 +173,14 @@ public class Bows implements Listener {
                     }
                 }
 
-                if (CEnchantments.BOOM.isActivated() && arrow != null && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+                if (CEnchantments.BOOM.isActivated() && arrow != null && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) {
                     if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
                         Methods.explode(arrow.getShooter(), arrow.getArrow());
                         arrow.getArrow().remove();
                     }
                 }
 
-                if (CEnchantments.LIGHTNING.isActivated() && arrow != null && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+                if (CEnchantments.LIGHTNING.isActivated() && arrow != null && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) {
                     if (arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
                         Location location = arrow.getArrow().getLocation();
 
@@ -238,7 +238,7 @@ public class Bows implements Listener {
         if (!crazyManager.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity entity) {
             EnchantedArrow arrow = getEnchantedArrow((Arrow) e.getDamager());
 
-            if (arrow != null && crazyManager.getWorldGuardSupport().allowsPVP(arrow.getArrow().getLocation())) {
+            if (arrow != null && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) {
                 ItemStack bow = arrow.getBow();
                 // Damaged player is friendly.
 
