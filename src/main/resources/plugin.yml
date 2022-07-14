@@ -13,6 +13,7 @@ softdepend:
   - WorldEdit
   - PlotSquared
   - SuperiorSkyBlock
+  - GriefPrevention
   - Spartan
   - Towny
   - Factions
