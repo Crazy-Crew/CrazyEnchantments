@@ -28,7 +28,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private boolean pluginEnabled = false;
 
-    private Armor armor = null;
+    private Armor armor;
 
     private final Attribute generic = Attribute.GENERIC_MAX_HEALTH;
 
@@ -148,6 +148,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(new Scrambler(), this);
         pluginManager.registerEvents(new CommandChecker(), this);
         pluginManager.registerEvents(new FireworkDamage(), this);
+
+        pluginManager.registerEvents(this, this);
 
         if (crazyManager.isGkitzEnabled()) {
             getLogger().info("Gkitz support is now enabled.");
