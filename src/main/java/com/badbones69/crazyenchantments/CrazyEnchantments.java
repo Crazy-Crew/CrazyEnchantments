@@ -45,7 +45,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             getLogger().warning(" features for server owners to enhance their server.");
             getLogger().warning(" ");
             getLogger().warning(" All of your plugins will function the same,");
-            getLogger().warning(" as it is a drop in replacement over spigot.")
+            getLogger().warning(" as it is a drop in replacement over spigot.");
             getLogger().warning("");
             getLogger().warning(" Join the Purpur Community @ https://purpurmc.org/discord");
             getLogger().warning("====================================================");
