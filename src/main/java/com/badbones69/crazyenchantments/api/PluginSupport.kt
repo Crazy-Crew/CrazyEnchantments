@@ -172,7 +172,7 @@ object PluginSupport {
                 crazyManager.plugin.server.consoleSender.sendMessage(Methods.color("&4&lActive CrazyEnchantment Hooks:"))
 
                 cachedPluginState.keys.forEach {
-                    if (it.isPluginLoaded()) crazyManager.plugin.server.consoleSender.sendMessage(Methods.color("&6&l ${it.name} : &a&lENABLED"))
+                    if (it.isPluginLoaded()) crazyManager.plugin.server.consoleSender.sendMessage(Methods.color("&6&l ${it.pluginName} : &a&lENABLED"))
                 }
             }
 
