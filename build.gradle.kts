@@ -76,6 +76,8 @@ dependencies {
 
     compileOnly("com.plotsquared:PlotSquared-Core:6.8.1")
 
+    compileOnly("com.github.TechFortress:GriefPrevention:16.18")
+
     // SkyBlock Plugins.
     compileOnly("com.github.OmerBenGera:SuperiorSkyblockAPI:b11")
 

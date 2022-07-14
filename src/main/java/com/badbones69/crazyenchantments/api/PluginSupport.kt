@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.api
 import com.badbones69.crazyenchantments.Methods
 import com.badbones69.crazyenchantments.api.multisupport.factions.FactionsUUIDSupport
 import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion
+import com.badbones69.crazyenchantments.api.multisupport.misc.GriefPreventionSupport
 import com.badbones69.crazyenchantments.api.multisupport.misc.TownySupport
 import com.badbones69.crazyenchantments.api.multisupport.skyblock.SuperiorSkyBlockSupport
 import org.bukkit.Location
@@ -117,6 +118,8 @@ object PluginSupport {
         // Faction Plugins
         FACTIONS_UUID("Factions"),
 
+        GRIEF_PREVENTION("GriefPrevention"),
+
         // Sky Block Plugins
         SUPERIORSKYBLOCK("SuperiorSkyblock2"),
 
@@ -179,6 +182,9 @@ object PluginSupport {
                         when (it) {
                             FACTIONS_UUID -> {
                                 factionPlugin = FactionsUUIDSupport()
+                            }
+                            GRIEF_PREVENTION -> {
+                                factionPlugin = GriefPreventionSupport()
                             }
                             else -> {}
                         }
