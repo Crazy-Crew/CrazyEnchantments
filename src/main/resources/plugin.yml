@@ -1,0 +1,42 @@
+name: CrazyEnchantments
+main: "${group}.CrazyEnchantments"
+version: ${version}
+api-version: 1.13
+description: ${description}
+
+authors:
+  - BadBones69
+  - RyderBelserion
+
+softdepend:
+  - WorldGuard
+  - WorldEdit
+  - PlotSquared
+  - SuperiorSkyBlock
+  - GriefPrevention
+  - Spartan
+  - Towny
+  - Factions
+  - StackMob
+  - SilkSpawners
+  - Oraxen
+
+website: https://www.spigotmc.org/resources/16470/
+
+commands:
+  crazyenchantments:
+    description: Opens the Enchanter GUI.
+    aliases: [ ce, enchanter ]
+  tinkerer:
+    description: Opens the Tinker GUI.
+    aliases: tinker
+  blacksmith:
+    description: Opens the Black Smith GUI.
+    aliases: [ bsmith, blacks, bs ]
+  gkit:
+    description: Opens the GKitz GUI.
+    aliases: [ gkitz, gkits ]
+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.7.0
+  - org.apache.commons:commons-text:1.9
