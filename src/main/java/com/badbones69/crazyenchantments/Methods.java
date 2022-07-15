@@ -25,12 +25,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Methods {
-    
+
     private final static Random random = new Random();
     private final static CrazyManager crazyManager = CrazyManager.getInstance();
     private final static PluginSupport pluginSupport = PluginSupport.INSTANCE;
     public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
-    
+
     public static String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder();
@@ -39,11 +39,11 @@ public class Methods {
         }
         return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
     }
-    
+
     public static String removeColor(String msg) {
         return ChatColor.stripColor(msg);
     }
-    
+
     public static int getRandomNumber(String range) {
         int number = 1;
         String[] split = range.split("-");
@@ -54,7 +54,7 @@ public class Methods {
         }
         return number;
     }
-    
+
     public static boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
         if (sender instanceof Player) {
             return hasPermission((Player) sender, perm, toggle);
@@ -62,7 +62,7 @@ public class Methods {
             return true;
         }
     }
-    
+
     public static boolean hasPermission(Player player, String perm, boolean toggle) {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
@@ -73,11 +73,11 @@ public class Methods {
             return false;
         }
     }
-    
+
     public static ItemStack addGlow(ItemStack item) {
         return addGlow(item, true);
     }
-    
+
     public static ItemStack addGlow(ItemStack item, boolean toggle) {
         ItemStack it = item.clone();
         try {
@@ -99,23 +99,23 @@ public class Methods {
             return it;
         }
     }
-    
+
     public static ItemStack getItemInHand(Player player) {
         return player.getInventory().getItemInMainHand();
     }
-    
+
     public static void setItemInHand(Player player, ItemStack item) {
         player.getInventory().setItemInMainHand(item);
     }
-    
+
     public static String getPrefix() {
         return getPrefix("");
     }
-    
+
     public static String getPrefix(String string) {
         return color(Files.CONFIG.getFile().getString("Settings.Prefix") + string);
     }
-    
+
     public static boolean isInt(String s) {
         try {
             Integer.parseInt(s);
@@ -124,11 +124,11 @@ public class Methods {
         }
         return true;
     }
-    
+
     public static Player getPlayer(String name) {
         return crazyManager.getPlugin().getServer().getPlayer(name);
     }
-    
+
     public static boolean isPlayerOnline(String playerName, CommandSender sender) {
         for (Player player : crazyManager.getPlugin().getServer().getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(playerName)) {
@@ -139,11 +139,11 @@ public class Methods {
         sender.sendMessage(Messages.NOT_ONLINE.getMessage());
         return false;
     }
-    
+
     public static void removeItem(ItemStack item, Player player) {
         removeItem(item, player, 1);
     }
-    
+
     public static void removeItem(ItemStack item, Player player, int amount) {
         try {
             boolean found = false;
@@ -173,11 +173,11 @@ public class Methods {
 
         player.updateInventory();
     }
-    
+
     public static ItemStack removeItem(ItemStack item) {
         return removeItem(item, 1);
     }
-    
+
     public static ItemStack removeItem(ItemStack item, int amount) {
         ItemStack itemStack = item.clone();
 
@@ -189,7 +189,7 @@ public class Methods {
 
         return itemStack;
     }
-    
+
     public static ItemStack addLore(ItemStack item, String i) {
         ArrayList<String> lore = new ArrayList<>();
         ItemMeta m = item.getItemMeta();
@@ -215,7 +215,7 @@ public class Methods {
 
         return item;
     }
-    
+
     public static int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
         String arg = defaultValue + "";
 
@@ -262,7 +262,7 @@ public class Methods {
 
         return percent;
     }
-    
+
     public static boolean hasArgument(String arg, List<String> message) {
         for (String line : message) {
             line = Methods.color(line).toLowerCase();
@@ -274,7 +274,7 @@ public class Methods {
 
         return false;
     }
-    
+
     public static boolean randomPicker(int max) {
         if (max <= 0) {
             return true;
@@ -283,7 +283,7 @@ public class Methods {
         int chance = 1 + random.nextInt(max);
         return chance == 1;
     }
-    
+
     public static boolean randomPicker(int min, int max) {
         if (max <= min || max <= 0) {
             return true;
@@ -292,7 +292,7 @@ public class Methods {
         int chance = 1 + random.nextInt(max);
         return chance >= 1 && chance <= min;
     }
-    
+
     public static Integer percentPick(int max, int min) {
         if (max == min) {
             return max;
@@ -300,11 +300,11 @@ public class Methods {
             return min + random.nextInt(max - min);
         }
     }
-    
+
     public static boolean isInventoryFull(Player player) {
         return player.getInventory().firstEmpty() == -1;
     }
-    
+
     public static List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity entity) {
         List<Entity> out = entity.getNearbyEntities(radius, radius, radius);
         List<LivingEntity> entities = new ArrayList<>();
@@ -317,15 +317,15 @@ public class Methods {
 
         return entities;
     }
-    
+
     public static List<Entity> getNearbyEntities(Location loc, double radius, Entity entity) {
         return entity.getNearbyEntities(radius, radius, radius);
     }
-    
+
     public static void fireWork(Location loc, List<Color> colors) {
         fireWork(loc, new ArrayList<>(colors));
     }
-    
+
     public static void fireWork(Location loc, ArrayList<Color> colors) {
         Firework fw = loc.getWorld().spawn(loc, Firework.class);
         FireworkMeta fm = fw.getFireworkMeta();
@@ -339,7 +339,7 @@ public class Methods {
         FireworkDamage.addFirework(fw);
         crazyManager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(crazyManager.getPlugin(), fw :: detonate, 2);
     }
-    
+
     public static Color getColor(String color) {
         return switch (color.toUpperCase()) {
             case "AQUA" -> Color.AQUA;
@@ -361,11 +361,11 @@ public class Methods {
             default -> Color.WHITE;
         };
     }
-    
+
     public static String stripString(String string) {
         return string != null ? string.replace("-", "").replace("_", "").replace(" ", "") : "";
     }
-    
+
     public static Enchantment getEnchantment(String enchantmentName) {
         try {
             // HashMap<String, String> enchantments = getEnchantments();
@@ -381,7 +381,7 @@ public class Methods {
 
         return null;
     }
-    
+
     /**
      * Verify the ItemStack has a lore. This checks to make sure everything isn't null because recent minecraft updates cause NPEs.
      * @param item Itemstack you are checking.
@@ -390,7 +390,7 @@ public class Methods {
     public static boolean verifyItemLore(ItemStack item) {
         return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().getLore() != null && item.getItemMeta().hasLore();
     }
-    
+
     public static HashMap<String, String> getEnchantments() {
         HashMap<String, String> enchantments = new HashMap<>();
         enchantments.put("ARROW_DAMAGE", "Power");
@@ -450,7 +450,7 @@ public class Methods {
         }
         OraxenSupport.setDamage(item, newDamage);
     }
-    
+
     public static void removeDurability(ItemStack item, Player player) {
         if (getMaxDurability(item) == 0) {
             return;
@@ -490,7 +490,7 @@ public class Methods {
             setDurability(item, getDurability(item) + 1);
         }
     }
-    
+
     public static boolean isSimilar(ItemStack one, ItemStack two) {
         if (one.getType() == two.getType()) {
             if (one.hasItemMeta() && two.hasItemMeta()) {
@@ -515,7 +515,7 @@ public class Methods {
         }
         return false;
     }
-    
+
     public static void explode(Entity player) {
         player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
         player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
@@ -549,7 +549,7 @@ public class Methods {
             }
         }
     }
-    
+
     public static void explode(Entity player, Entity arrow) {
         arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
         arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
@@ -596,7 +596,7 @@ public class Methods {
             case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
         }
     }
-    
+
     public static ItemBuilder getRandomPaneColor() {
         List<String> colors = Arrays.asList(
         "WHITE_STAINED_GLASS_PANE",
