@@ -41,13 +41,12 @@ public class Bows implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBowShoot(final EntityShootBowEvent e) {
-        if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getEntity().getUniqueId()))
-            return;
+        if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getEntity().getUniqueId())) return;
 
         ItemStack bow = e.getBow();
         Entity entity = e.getEntity();
 
-        if (e.getProjectile() instanceof Arrow arrow && crazyManager.hasEnchantments(bow)) {
+        if (e.getProjectile() instanceof Arrow arrow && crazyManager.hasEnchantments(bow) && pluginSupport.allowsCombat(entity.getLocation())) {
 
             // Add the arrow to the list.
             bowUtils.addArrow(arrow, entity, bow);
@@ -80,20 +79,20 @@ public class Bows implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLand(ProjectileHitEvent e) {
-            if (e.getEntity() instanceof Arrow) {
+            if (e.getEntity() instanceof Arrow && pluginSupport.allowsCombat(e.getEntity().getLocation())) {
                 EnchantedArrow arrow = bowUtils.enchantedArrow((Arrow) e.getEntity());
 
                 // Spawn webs related to STICKY_SHOT
                 bowUtils.spawnWebs(e.getEntity(), e.getHitEntity());
 
-                if (CEnchantments.BOOM.isActivated() && arrow != null && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) {
+                if (CEnchantments.BOOM.isActivated() && arrow != null) {
                     if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
                         Methods.explode(arrow.getShooter(), arrow.getArrow());
                         arrow.getArrow().remove();
                     }
                 }
 
-                if (CEnchantments.LIGHTNING.isActivated() && arrow != null && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) {
+                if (CEnchantments.LIGHTNING.isActivated() && arrow != null) {
                     if (arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
                         Location location = arrow.getArrow().getLocation();
 
@@ -123,7 +122,7 @@ public class Bows implements Listener {
                             crazyManager.addIgnoredUUID(shooter.getUniqueId());
                             shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-                            if (!damageByEntityEvent.isCancelled() && pluginSupport.allowsCombat(entity.getLocation()) && !pluginSupport.isFriendly(arrow.getShooter(), entity)
+                            if (!damageByEntityEvent.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity)
                                     && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
                                 entity.damage(5D);
                             }
