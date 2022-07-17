@@ -137,38 +137,32 @@ public class BowUtils {
     }
 
     private void setWebBlocks(Entity hitEntity) {
+        for (Block block : getCube(hitEntity.getLocation(), 1)) {
 
-        for (Location location : getSquareArea(hitEntity.getLocation())) {
-            if (location.getBlock().getType() == Material.COBWEB) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        location.getBlock().setType(Material.AIR);
-                        webBlocks.remove(location.getBlock());
-                    }
-                }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
-            } else {
-                location.getBlock().setType(Material.COBWEB);
-                webBlocks.add(location.getBlock());
-            }
+            block.setType(Material.COBWEB);
+            webBlocks.add(block);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    webBlocks.remove(block);
+                }
+            }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
         }
     }
 
     // Sticky Shot End!
 
-    private List<Location> getSquareArea(Location location) {
-        final List<Location> locationList = new ArrayList<>();
+    private List<Block> getCube(Location start, int radius) {
+        List<Block> newBlocks = new ArrayList<>();
 
-        locationList.add(location.clone().add(1, 0, 1)); // Top Left
-        locationList.add(location.clone().add(1, 0, 0)); // Top Middle
-        locationList.add(location.clone().add(1, 0, -1)); // Top Right
-        locationList.add(location.clone().add(0, 0, 1)); // Center Left
-        locationList.add(location); // Center Middle
-        locationList.add(location.clone().add(0, 0, -1)); // Center Right
-        locationList.add(location.clone().add(-1, 0, 1)); // Bottom Left
-        locationList.add(location.clone().add(-1, 0, 0)); // Bottom Middle
-        locationList.add(location.clone().add(-1, 0, -1)); // Bottom Right
+        for (double x = start.getX() - radius; x <= start.getX() + radius; x++) {
+            for (double z = start.getZ() - radius; z <= start.getZ() + radius; z++) {
+                Location loc = new Location(start.getWorld(), x, start.getY(), z);
+                newBlocks.add(loc.getBlock());
+            }
+        }
 
-        return locationList;
+        return newBlocks;
     }
 }
