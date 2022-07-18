@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.AuraActiveEvent;
@@ -31,12 +32,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -96,6 +97,25 @@ public class Armor implements Listener {
             }
         }
     }
+
+    // Ryder start
+    @EventHandler
+    public void onArmorRightClickEquip(PlayerInteractEvent event) {
+        if (!event.getAction().isRightClick()) return;
+
+        Player player = event.getPlayer();
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        runEquip(player, ArmorType.matchType(itemStack), new ItemStack(Material.AIR), itemStack);
+    }
+
+    private void runEquip(Player player, ArmorType armorType, ItemStack itemStack, ItemStack activeItem) {
+        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, ArmorEquipEvent.EquipMethod.HOTBAR, armorType, itemStack, activeItem);
+        player.getServer().getPluginManager().callEvent(armorEquipEvent);
+    }
+    // Ryder end
+
 
     // todo Make INSOMNIA work correctly. It should double the damage a player with the armor enchantment on does.
     @EventHandler(priority = EventPriority.HIGHEST)
