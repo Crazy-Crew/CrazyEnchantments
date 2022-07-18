@@ -104,7 +104,13 @@ public class Armor implements Listener {
 
         Player player = event.getPlayer();
 
-        runEquip(player, ArmorType.matchType(player.getInventory().getItemInMainHand()), new ItemStack(Material.AIR), player.getInventory().getItemInMainHand());
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        // String name = itemStack.getType().name();
+
+        // if (!name.endsWith("_BOOTS") || !name.endsWith("_HELMET") || !name.endsWith("_CHESTPLATE") || !name.endsWith("_LEGGINGS")) return;
+
+        runEquip(player, ArmorType.matchType(itemStack), new ItemStack(Material.AIR), itemStack);
     }
 
     private void runEquip(Player player, ArmorType armorType, ItemStack itemStack, ItemStack activeItem) {
