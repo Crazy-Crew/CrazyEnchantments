@@ -115,7 +115,7 @@ public class PickAxes implements Listener {
 
                     for (BlockProcessInfo processInfo : finalBlockList) {
                         Block block = processInfo.getBlock();
-                        if (player.getGameMode() == GameMode.CREATIVE) { // If the user is in creative mode.
+                        if (player.getGameMode() == GameMode.CREATIVE || !crazyManager.isDropBlocksBlast()) { // If the user is in creative mode.
                             block.setType(Material.AIR);
                         } else { // If the user is in survival mode.
                             // This is to check if the original block the player broke was in the block list.
