@@ -79,20 +79,20 @@ public class PickAxes implements Listener {
                     Location originalBlockLocation = currentBlock.getLocation();
                     List<BlockProcessInfo> finalBlockList = new ArrayList<>();
 
-                    for (Block b : blockList) {
-                        if (b.getType() != Material.AIR && (crazyManager.getBlockList().contains(b.getType()) || b.getLocation().equals(originalBlockLocation))) {
-                            BlockBreakEvent event = new BlockBreakEvent(b, player);
+                    for (Block block : blockList) {
+                        if (block.getType() != Material.AIR && (crazyManager.getBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
+                            BlockBreakEvent event = new BlockBreakEvent(block, player);
                             crazyManager.addIgnoredEvent(event);
                             crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                             if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
-                                finalBlockList.add(new BlockProcessInfo(currentItem, b));
+                                finalBlockList.add(new BlockProcessInfo(currentItem, block));
                             }
 
                             crazyManager.removeIgnoredEvent(event);
                         }
                     }
-
+                    
                     HashMap<ItemStack, Integer> drops = new HashMap<>();
 
                     if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
