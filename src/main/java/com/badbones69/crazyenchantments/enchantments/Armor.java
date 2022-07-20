@@ -196,7 +196,7 @@ public class Armor implements Listener {
                         if (!event.isCancelled()) {
                             double damage = crazyManager.getLevel(armor, CEnchantments.INSOMNIA);
 
-                            e.setDamage(e.getDamage() + damage);
+                            damager.damage(e.getDamage() + damage);
                         }
                     }
 
