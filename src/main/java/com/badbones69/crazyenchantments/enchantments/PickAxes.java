@@ -93,8 +93,6 @@ public class PickAxes implements Listener {
                         }
                     }
                     
-                    HashMap<ItemStack, Integer> drops = new HashMap<>();
-
                     if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
                         NoCheatPlusSupport.allowPlayer(player);
                     }
@@ -106,6 +104,7 @@ public class PickAxes implements Listener {
                     }
 
                     int xp = 0;
+                    HashMap<ItemStack, Integer> drops = new HashMap<>();
                     boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
                     boolean isOre = isOre(currentBlock.getType());
                     boolean hasSilkTouch = currentItem.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
