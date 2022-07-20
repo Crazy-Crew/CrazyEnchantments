@@ -115,9 +115,7 @@ public class Armor implements Listener {
         player.getServer().getPluginManager().callEvent(armorEquipEvent);
     }
     // Ryder end
-
-
-    // todo Make INSOMNIA work correctly. It should double the damage a player with the armor enchantment on does.
+    
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getDamager().getUniqueId())) return;
@@ -132,7 +130,6 @@ public class Armor implements Listener {
 
                         if (crazyManager.hasEnchantment(armor, enchantment) && enchantment.chanceSuccessful(armor)) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, enchantment, armor);
-
                             crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                             if (!event.isCancelled()) {
@@ -189,6 +186,17 @@ public class Armor implements Listener {
                             if (player.getHealth() + heal >= maxHealth) {
                                 player.setHealth(maxHealth);
                             }
+                        }
+                    }
+
+                    if (crazyManager.hasEnchantment(armor, CEnchantments.INSOMNIA)) {
+                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.INSOMNIA.getEnchantment(), armor);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
+                        if (!event.isCancelled()) {
+                            double damage = crazyManager.getLevel(armor, CEnchantments.INSOMNIA);
+
+                            e.setDamage(e.getDamage() + damage);
                         }
                     }
 
