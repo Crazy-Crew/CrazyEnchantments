@@ -115,7 +115,7 @@ public class Armor implements Listener {
         player.getServer().getPluginManager().callEvent(armorEquipEvent);
     }
     // Ryder end
-    
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getDamager().getUniqueId())) return;

@@ -19,6 +19,7 @@ softdepend:
   - Factions
   - StackMob
   - SilkSpawners
+  - Vault
 
 website: https://www.spigotmc.org/resources/16470/
 
@@ -39,3 +40,5 @@ commands:
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.7.0
   - org.apache.commons:commons-text:1.9
+  - com.intellectualsites.informative-annotations:informative-annotations:1.2
+  - com.intellectualsites.paster:Paster:1.1.4
