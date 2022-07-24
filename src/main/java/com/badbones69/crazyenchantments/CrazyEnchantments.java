@@ -99,9 +99,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
         }
 
-        getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> {
-            crazyManager.getCEPlayers().forEach(crazyManager::backupCEPlayer);
-        }, 5 * 20 * 60, 5 * 20 * 60);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> crazyManager.getCEPlayers().forEach(crazyManager::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
 
 
         pluginEnabled = true;
