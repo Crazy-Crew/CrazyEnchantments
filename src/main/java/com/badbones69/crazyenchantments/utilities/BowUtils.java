@@ -101,7 +101,7 @@ public class BowUtils {
 
     private float randomSpread() {
         float spread = (float) .2;
-        return -spread + (float) (Math.random() * (spread - -spread));
+        return -spread + (float) (Math.random() * (spread + spread));
     }
 
     // Multi Arrow End!
