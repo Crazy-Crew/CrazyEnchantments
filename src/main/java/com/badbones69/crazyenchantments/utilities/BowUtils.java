@@ -58,7 +58,8 @@ public class BowUtils {
     }
 
     public boolean isBowEnchantActive(CEnchantments customEnchants) {
-        return customEnchants.isActivated() && customEnchants.chanceSuccessful(arrow.getItemStack());
+        EnchantedArrow enchantedArrow = enchantedArrow(arrow);
+        return customEnchants.isActivated() && customEnchants.chanceSuccessful(enchantedArrow.getBow()) && enchantedArrow.hasEnchantment(customEnchants);
     }
 
     public boolean allowsCombat() {
