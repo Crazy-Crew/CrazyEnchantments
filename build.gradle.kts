@@ -1,7 +1,7 @@
 plugins {
     java
 
-    kotlin("jvm") version "1.7.0"
+    kotlin("jvm") version "1.7.10"
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -117,7 +117,7 @@ dependencies {
     compileOnly("fr.neatmonster:nocheatplus:3.16.1-SNAPSHOT")
 
     // Required.
-    compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.1-R0.1-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.0")
 
@@ -125,7 +125,7 @@ dependencies {
 
     implementation("io.papermc:paperlib:1.0.7")
 
-    compileOnly(kotlin("stdlib", "1.7.0"))
+    compileOnly(kotlin("stdlib", "1.7.10"))
 }
 
 tasks {
