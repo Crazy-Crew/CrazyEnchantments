@@ -46,7 +46,7 @@ public class Bows implements Listener {
         ItemStack bow = e.getBow();
         Entity entity = e.getEntity();
 
-        if (e.getProjectile() instanceof Arrow arrow && crazyManager.hasEnchantments(bow) && pluginSupport.allowsCombat(entity.getLocation())) {
+        if (e.getProjectile() instanceof Arrow arrow && crazyManager.hasEnchantments(bow) && pluginSupport.allowsCombat(entity.getLocation()) && ((Arrow) e.getProjectile()).getShooter() instanceof Player) {
 
             // Add the arrow to the list.
             bowUtils.addArrow(arrow, entity, bow);
@@ -57,7 +57,7 @@ public class Bows implements Listener {
                 if (entity instanceof Player) {
 
                     EnchantmentUseEvent event = new EnchantmentUseEvent((Player) entity, CEnchantments.MULTIARROW, bow);
-                    entity.getServer().getPluginManager().callEvent(event);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                     if (!event.isCancelled()) {
                         for (int i = 1; i <= power; i++) {
@@ -79,7 +79,7 @@ public class Bows implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLand(ProjectileHitEvent e) {
-            if (e.getEntity() instanceof Arrow && pluginSupport.allowsCombat(e.getEntity().getLocation())) {
+            if (e.getEntity() instanceof Arrow && pluginSupport.allowsCombat(e.getEntity().getLocation()) && e.getEntity().getShooter() instanceof Player) {
                 EnchantedArrow arrow = bowUtils.enchantedArrow((Arrow) e.getEntity());
 
                 // Spawn webs related to STICKY_SHOT

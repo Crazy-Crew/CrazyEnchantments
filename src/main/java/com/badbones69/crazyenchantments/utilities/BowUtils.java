@@ -57,9 +57,10 @@ public class BowUtils {
         return customEnchant.isActivated() && customEnchant.chanceSuccessful(itemStack) && crazyManager.hasEnchantment(itemStack, customEnchant);
     }
 
-    public boolean isBowEnchantActive(CEnchantments customEnchants) {
+    public boolean isBowEnchantActive(CEnchantments customEnchant) {
         EnchantedArrow enchantedArrow = enchantedArrow(arrow);
-        return customEnchants.isActivated() && customEnchants.chanceSuccessful(enchantedArrow.getBow()) && enchantedArrow.hasEnchantment(customEnchants);
+
+        return customEnchant.isActivated() && customEnchant.chanceSuccessful(enchantedArrow.getBow()) && enchantedArrow.hasEnchantment(customEnchant) && crazyManager.hasEnchantment(enchantedArrow.getBow(), customEnchant);
     }
 
     public boolean allowsCombat() {
@@ -113,7 +114,7 @@ public class BowUtils {
     }
 
     public void spawnWebs(Entity entity, Entity hitEntity) {
-        if (arrow == null) return;
+        if (arrow == null || ! enchantedArrow(arrow).hasEnchantment(CEnchantments.STICKY_SHOT)) return;
 
         if (isBowEnchantActive(CEnchantments.STICKY_SHOT)) {
             if (hitEntity == null) {
@@ -123,7 +124,6 @@ public class BowUtils {
 
                 entityLocation.getBlock().setType(Material.COBWEB);
                 webBlocks.add(entityLocation.getBlock());
-
                 new BukkitRunnable() {
                     @Override
                     public void run() {
