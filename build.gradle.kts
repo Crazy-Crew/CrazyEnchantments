@@ -17,7 +17,7 @@ tasks.compileKotlin {
 }
 
 group = "com.badbones69.crazyenchantments"
-version = "1.9.4-${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
+version = "1.9.5-${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
 description = "A plugin full of Crazy Enchantments!"
 
 repositories {
@@ -130,7 +130,7 @@ dependencies {
 
 tasks {
     shadowJar {
-        archiveFileName.set("${rootProject.name}-[1.18-1.19]-v${rootProject.version}.jar")
+        archiveFileName.set("${rootProject.name}-[1.18-1.19]-[v${rootProject.version}].jar")
 
         listOf(
             "de.tr7zw",
