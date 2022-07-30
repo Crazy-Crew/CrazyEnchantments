@@ -83,7 +83,7 @@ public class Bows implements Listener {
             EnchantedArrow arrow = bowUtils.enchantedArrow((Arrow) e.getEntity());
 
             // Spawn webs related to STICKY_SHOT
-            bowUtils.spawnWebs(e.getEntity(), e.getHitEntity());
+            bowUtils.spawnWebs(e.getEntity(), e.getHitEntity(), arrow);
 
             if (CEnchantments.BOOM.isActivated() && arrow != null) {
                 if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
@@ -141,7 +141,7 @@ public class Bows implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    bowUtils.removeArrow();
+                    bowUtils.removeArrow(arrow);
                 }
             }.runTaskLater(crazyManager.getPlugin(), 5);
         }
@@ -164,7 +164,7 @@ public class Bows implements Listener {
                     if (entity.getHealth() < maxHealth) {
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
-                            entity.getServer().getPluginManager().callEvent(event);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                             if (!event.isCancelled()) {
                                 if (entity.getHealth() + heal < maxHealth) {
@@ -190,14 +190,14 @@ public class Bows implements Listener {
                 // Damaged player is an enemy.
                 if (!e.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity)) {
 
-                    bowUtils.spawnWebs(arrow.getShooter(), e.getEntity());
+                    bowUtils.spawnWebs(arrow.getShooter(), e.getEntity(), arrow);
 
                     if (CEnchantments.PULL.isActivated() && arrow.hasEnchantment(CEnchantments.PULL) && CEnchantments.PULL.chanceSuccessful(bow)) {
                         Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
 
                         if (entity instanceof Player) {
                             EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
-                            entity.getServer().getPluginManager().callEvent(event);
+                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                             Player player = (Player) e.getEntity();
 
@@ -224,7 +224,7 @@ public class Bows implements Listener {
 
                             if (entity instanceof Player) {
                                 EnchantmentUseEvent event = new EnchantmentUseEvent((Player) e.getEntity(), enchantment, bow);
-                                entity.getServer().getPluginManager().callEvent(event);
+                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                                 if (event.isCancelled()) {
                                     // If the EnchantmentUseEvent is cancelled then no need to keep going with this enchantment.

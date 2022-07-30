@@ -36,21 +36,21 @@ public class BowUtils {
 
     private final List<EnchantedArrow> enchantedArrows = new ArrayList<>();
 
-    private EnchantedArrow enchantedArrow;
+    private Arrow arrow;
 
     public void addArrow(Arrow arrow, Entity entity, ItemStack bow) {
         if (arrow == null) return;
+
+        this.arrow = arrow;
 
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(bow);
 
         EnchantedArrow enchantedArrow = new EnchantedArrow(arrow, entity, bow, enchantments);
 
         enchantedArrows.add(enchantedArrow);
-
-        this.enchantedArrow = enchantedArrow;
     }
 
-    public void removeArrow() {
+    public void removeArrow(EnchantedArrow enchantedArrow) {
         if (!enchantedArrows.contains(enchantedArrow) || enchantedArrow == null) return;
 
         enchantedArrows.remove(enchantedArrow);
@@ -58,12 +58,12 @@ public class BowUtils {
 
     public boolean isBowEnchantActive(CEnchantments customEnchant, ItemStack itemStack) {
         return customEnchant.isActivated() && customEnchant.chanceSuccessful(itemStack) &&
-                crazyManager.hasEnchantment(itemStack, customEnchant);
+                crazyManager.hasEnchantment(itemStack, customEnchant) && arrow != null;
     }
 
-    public boolean isBowEnchantActive(CEnchantments customEnchant) {
+    public boolean isBowEnchantActive(CEnchantments customEnchant, EnchantedArrow enchantedArrow) {
         return customEnchant.isActivated() &&
-                enchantedArrow.hasEnchantment(customEnchant) &&
+                enchantedArrow(arrow).hasEnchantment(customEnchant) &&
                 customEnchant.chanceSuccessful(enchantedArrow.getBow()) && crazyManager.hasEnchantments(enchantedArrow.getBow());
     }
 
@@ -117,10 +117,10 @@ public class BowUtils {
         return webBlocks;
     }
 
-    public void spawnWebs(Entity entity, Entity hitEntity) {
+    public void spawnWebs(Entity entity, Entity hitEntity, EnchantedArrow enchantedArrow) {
         if (enchantedArrow == null) return;
 
-        if (isBowEnchantActive(CEnchantments.STICKY_SHOT)) {
+        if (isBowEnchantActive(CEnchantments.STICKY_SHOT, enchantedArrow)) {
             if (hitEntity == null) {
                 Location entityLocation = entity.getLocation();
 
@@ -128,9 +128,6 @@ public class BowUtils {
 
                 entityLocation.getBlock().setType(Material.COBWEB);
                 webBlocks.add(entityLocation.getBlock());
-
-                System.out.println("Why are we here?");
-                System.out.println(isBowEnchantActive(CEnchantments.STICKY_SHOT));
 
                 entity.remove();
 
