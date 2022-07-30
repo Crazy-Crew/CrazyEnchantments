@@ -113,7 +113,7 @@ public class BowUtils {
     // Multi Arrow End!
 
     // Sticky Shot Start!
-    public List<Block> getWeBlocks() {
+    public List<Block> getWebBlocks() {
         return webBlocks;
     }
 

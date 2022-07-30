@@ -251,6 +251,6 @@ public class Bows implements Listener {
 
     @EventHandler
     public void onWebBreak(BlockBreakEvent e) {
-        if (!crazyManager.isIgnoredEvent(e) && bowUtils.getWeBlocks().contains(e.getBlock())) e.setCancelled(true);
+        if (!crazyManager.isIgnoredEvent(e) && bowUtils.getWebBlocks().contains(e.getBlock())) e.setCancelled(true);
     }
 }
