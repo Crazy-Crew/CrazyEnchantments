@@ -32,6 +32,7 @@ public class BowUtils {
 
     // Related to Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
+    // Sticky Shot End.
 
     private final List<EnchantedArrow> enchantedArrows = new ArrayList<>();
 
