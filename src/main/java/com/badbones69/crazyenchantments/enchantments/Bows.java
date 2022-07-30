@@ -39,14 +39,14 @@ public class Bows implements Listener {
 
     private final BowEnchantmentManager bowEnchantmentManager = BowEnchantmentManager.getInstance();
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent e) {
-        if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getEntity().getUniqueId())) return;
+        if (crazyManager.isIgnoredEvent(e) || crazyManager.isIgnoredUUID(e.getEntity().getUniqueId())) return;
 
         ItemStack bow = e.getBow();
         Entity entity = e.getEntity();
 
-        if (e.getProjectile() instanceof Arrow arrow && crazyManager.hasEnchantments(bow) && pluginSupport.allowsCombat(entity.getLocation()) && ((Arrow) e.getProjectile()).getShooter() instanceof Player) {
+        if (e.getProjectile() instanceof Arrow arrow && crazyManager.hasEnchantments(bow) && bowUtils.allowsCombat(entity) && ((Arrow) e.getProjectile()).getShooter() instanceof Player) {
 
             // Add the arrow to the list.
             bowUtils.addArrow(arrow, entity, bow);
@@ -62,7 +62,7 @@ public class Bows implements Listener {
                     if (!event.isCancelled()) {
                         for (int i = 1; i <= power; i++) {
                             // Handle the spawned arrows.
-                            bowUtils.spawnedArrow(entity, e.getProjectile(), bow);
+                            bowUtils.spawnArrows(entity, e.getProjectile(), bow);
                         }
                     }
 
@@ -71,82 +71,82 @@ public class Bows implements Listener {
 
                 for (int i = 1; i <= power; i++) {
                     // Handle the spawned arrows.
-                    bowUtils.spawnedArrow(entity, e.getProjectile(), bow);
+                    bowUtils.spawnArrows(entity, e.getProjectile(), bow);
                 }
             }
         }
     }
-    
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLand(ProjectileHitEvent e) {
-            if (e.getEntity() instanceof Arrow && pluginSupport.allowsCombat(e.getEntity().getLocation()) && e.getEntity().getShooter() instanceof Player) {
-                EnchantedArrow arrow = bowUtils.enchantedArrow((Arrow) e.getEntity());
+        if (e.getEntity() instanceof Arrow && bowUtils.allowsCombat(e.getEntity()) && e.getEntity().getShooter() instanceof Player) {
+            EnchantedArrow arrow = bowUtils.enchantedArrow((Arrow) e.getEntity());
 
-                // Spawn webs related to STICKY_SHOT
-                bowUtils.spawnWebs(e.getEntity(), e.getHitEntity());
+            // Spawn webs related to STICKY_SHOT
+            bowUtils.spawnWebs(e.getEntity(), e.getHitEntity());
 
-                if (CEnchantments.BOOM.isActivated() && arrow != null) {
-                    if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
-                        Methods.explode(arrow.getShooter(), arrow.getArrow());
-                        arrow.getArrow().remove();
-                    }
+            if (CEnchantments.BOOM.isActivated() && arrow != null) {
+                if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
+                    Methods.explode(arrow.getShooter(), arrow.getArrow());
+                    arrow.getArrow().remove();
                 }
-
-                if (CEnchantments.LIGHTNING.isActivated() && arrow != null) {
-                    if (arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
-                        Location location = arrow.getArrow().getLocation();
-
-                        Player shooter = (Player) arrow.getShooter();
-                        location.getWorld().spigot().strikeLightningEffect(location, true);
-
-                        int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
-
-                        try {
-                            location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
-                        } catch (Exception ignore) {}
-
-                        // AntiCheat Support.
-
-                        if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                            NoCheatPlusSupport.allowPlayer(shooter);
-                        }
-
-                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                            SpartanSupport.cancelNoSwing(shooter);
-                        }
-
-                        for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
-                            EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
-
-                            crazyManager.addIgnoredEvent(damageByEntityEvent);
-                            crazyManager.addIgnoredUUID(shooter.getUniqueId());
-                            shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
-
-                            if (!damageByEntityEvent.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity)
-                                    && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
-                                entity.damage(5D);
-                            }
-
-                            crazyManager.removeIgnoredEvent(damageByEntityEvent);
-                            crazyManager.removeIgnoredUUID(shooter.getUniqueId());
-                        }
-
-                        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                            NoCheatPlusSupport.denyPlayer(shooter);
-                        }
-                    }
-                }
-
-                // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        bowUtils.removeArrow();
-                    }
-                }.runTaskLater(crazyManager.getPlugin(), 5);
             }
+
+            if (CEnchantments.LIGHTNING.isActivated() && arrow != null) {
+                if (arrow.hasEnchantment(CEnchantments.LIGHTNING) && CEnchantments.LIGHTNING.chanceSuccessful(arrow.getBow())) {
+                    Location location = arrow.getArrow().getLocation();
+
+                    Player shooter = (Player) arrow.getShooter();
+                    location.getWorld().spigot().strikeLightningEffect(location, true);
+
+                    int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+
+                    try {
+                        location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
+                    } catch (Exception ignore) {}
+
+                    // AntiCheat Support.
+
+                    if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                        NoCheatPlusSupport.allowPlayer(shooter);
+                    }
+
+                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                        SpartanSupport.cancelNoSwing(shooter);
+                    }
+
+                    for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
+                        EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
+
+                        crazyManager.addIgnoredEvent(damageByEntityEvent);
+                        crazyManager.addIgnoredUUID(shooter.getUniqueId());
+                        shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
+
+                        if (!damageByEntityEvent.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity)
+                                && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
+                            entity.damage(5D);
+                        }
+
+                        crazyManager.removeIgnoredEvent(damageByEntityEvent);
+                        crazyManager.removeIgnoredUUID(shooter.getUniqueId());
+                    }
+
+                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
+                        NoCheatPlusSupport.denyPlayer(shooter);
+                    }
+                }
+            }
+
+            // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    bowUtils.removeArrow();
+                }
+            }.runTaskLater(crazyManager.getPlugin(), 5);
+        }
     }
-    
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArrowDamage(EntityDamageByEntityEvent e) {
         if (!crazyManager.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity entity) {
@@ -248,7 +248,7 @@ public class Bows implements Listener {
             }
         }
     }
-    
+
     @EventHandler
     public void onWebBreak(BlockBreakEvent e) {
         if (!crazyManager.isIgnoredEvent(e) && bowUtils.getWeBlocks().contains(e.getBlock())) e.setCancelled(true);
