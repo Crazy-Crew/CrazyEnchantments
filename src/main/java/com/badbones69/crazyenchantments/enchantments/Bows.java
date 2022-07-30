@@ -51,7 +51,7 @@ public class Bows implements Listener {
             // Add the arrow to the list.
             bowUtils.addArrow(arrow, entity, bow);
 
-            if (bowUtils.isBowEnchantActive(CEnchantments.MULTIARROW, bow)) {
+            if (bowUtils.isBowEnchantActive(CEnchantments.MULTIARROW, bow, arrow)) {
                 int power = crazyManager.getLevel(bow, CEnchantments.MULTIARROW);
 
                 if (entity instanceof Player) {
@@ -79,11 +79,11 @@ public class Bows implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLand(ProjectileHitEvent e) {
-        if (e.getEntity() instanceof Arrow && bowUtils.allowsCombat(e.getEntity()) && e.getEntity().getShooter() instanceof Player) {
-            EnchantedArrow arrow = bowUtils.enchantedArrow((Arrow) e.getEntity());
+        if (e.getEntity() instanceof Arrow entityArrow && bowUtils.allowsCombat(e.getEntity()) && e.getEntity().getShooter() instanceof Player) {
+            EnchantedArrow arrow = bowUtils.enchantedArrow(entityArrow);
 
             // Spawn webs related to STICKY_SHOT
-            bowUtils.spawnWebs(e.getEntity(), e.getHitEntity(), arrow);
+            bowUtils.spawnWebs(e.getEntity(), e.getHitEntity(), arrow, entityArrow);
 
             if (CEnchantments.BOOM.isActivated() && arrow != null) {
                 if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
@@ -149,7 +149,7 @@ public class Bows implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onArrowDamage(EntityDamageByEntityEvent e) {
-        if (!crazyManager.isIgnoredEvent(e) && e.getDamager() instanceof Arrow && e.getEntity() instanceof LivingEntity entity) {
+        if (!crazyManager.isIgnoredEvent(e) && e.getDamager() instanceof Arrow entityArrow && e.getEntity() instanceof LivingEntity entity) {
             EnchantedArrow arrow = bowUtils.enchantedArrow((Arrow) e.getDamager());
 
             if (arrow != null && pluginSupport.allowsCombat(arrow.getArrow().getLocation())) {
@@ -190,7 +190,7 @@ public class Bows implements Listener {
                 // Damaged player is an enemy.
                 if (!e.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity)) {
 
-                    bowUtils.spawnWebs(arrow.getShooter(), e.getEntity(), arrow);
+                    bowUtils.spawnWebs(arrow.getShooter(), e.getEntity(), arrow, entityArrow);
 
                     if (CEnchantments.PULL.isActivated() && arrow.hasEnchantment(CEnchantments.PULL) && CEnchantments.PULL.chanceSuccessful(bow)) {
                         Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
