@@ -32,43 +32,39 @@ public class BowUtils {
 
     // Related to Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
+    // Sticky Shot End.
 
     private final List<EnchantedArrow> enchantedArrows = new ArrayList<>();
-
-    private Arrow arrow;
 
     public void addArrow(Arrow arrow, Entity entity, ItemStack bow) {
         if (arrow == null) return;
 
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(bow);
 
-        this.arrow = arrow;
+        EnchantedArrow enchantedArrow = new EnchantedArrow(arrow, entity, bow, enchantments);
 
-        enchantedArrows.add(new EnchantedArrow(this.arrow, entity, bow, enchantments));
+        enchantedArrows.add(enchantedArrow);
     }
 
-    public void removeArrow() {
-        if (arrow == null || !enchantedArrows.contains(arrow)) return;
+    public void removeArrow(EnchantedArrow enchantedArrow) {
+        if (!enchantedArrows.contains(enchantedArrow) || enchantedArrow == null) return;
 
-        enchantedArrows.remove(arrow);
+        enchantedArrows.remove(enchantedArrow);
     }
 
-    public boolean isBowEnchantActive(CEnchantments customEnchant, ItemStack itemStack) {
-        return customEnchant.isActivated() && customEnchant.chanceSuccessful(itemStack) && crazyManager.hasEnchantment(itemStack, customEnchant);
+    public boolean isBowEnchantActive(CEnchantments customEnchant, ItemStack itemStack, Arrow arrow) {
+        return customEnchant.isActivated() && customEnchant.chanceSuccessful(itemStack) &&
+                crazyManager.hasEnchantment(itemStack, customEnchant) && arrow != null;
     }
 
-    public boolean isBowEnchantActive(CEnchantments customEnchant) {
-        EnchantedArrow enchantedArrow = enchantedArrow(arrow);
-
-        return customEnchant.isActivated() && customEnchant.chanceSuccessful(enchantedArrow.getBow()) && enchantedArrow.hasEnchantment(customEnchant) && crazyManager.hasEnchantment(enchantedArrow.getBow(), customEnchant);
+    public boolean isBowEnchantActive(CEnchantments customEnchant, EnchantedArrow enchantedArrow, Arrow arrow) {
+        return customEnchant.isActivated() &&
+                enchantedArrow(arrow).hasEnchantment(customEnchant) &&
+                customEnchant.chanceSuccessful(enchantedArrow.getBow()) && crazyManager.hasEnchantments(enchantedArrow.getBow());
     }
 
-    public boolean allowsCombat() {
-        return pluginSupport.allowsCombat(arrow.getLocation());
-    }
-
-    public boolean hasEnchant(CEnchantments customEnchant) {
-        return enchantedArrow(arrow).hasEnchantment(customEnchant);
+    public boolean allowsCombat(Entity entity) {
+        return pluginSupport.allowsCombat(entity.getLocation());
     }
 
     public EnchantedArrow enchantedArrow(Arrow arrow) {
@@ -83,10 +79,12 @@ public class BowUtils {
 
     // Multi Arrow Start!
 
-    public void spawnedArrow(Entity entity, Entity projectile, ItemStack bow) {
+    public void spawnArrows(Entity entity, Entity projectile, ItemStack bow) {
         Arrow spawnedArrow = entity.getWorld().spawn(projectile.getLocation(), Arrow.class);
 
-        addArrow(spawnedArrow, entity, bow);
+        EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, entity, bow, crazyManager.getEnchantmentsOnItem(bow));
+
+        enchantedArrows.add(enchantedMultiArrow);
 
         spawnedArrow.setShooter((ProjectileSource) entity);
 
@@ -99,6 +97,8 @@ public class BowUtils {
         if (projectile.getFireTicks() > 0) spawnedArrow.setFireTicks(projectile.getFireTicks());
 
         spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+
+        enchantedArrows.remove(enchantedMultiArrow);
     }
 
     private float randomSpread() {
@@ -109,14 +109,14 @@ public class BowUtils {
     // Multi Arrow End!
 
     // Sticky Shot Start!
-    public List<Block> getWeBlocks() {
+    public List<Block> getWebBlocks() {
         return webBlocks;
     }
 
-    public void spawnWebs(Entity entity, Entity hitEntity) {
-        if (arrow == null || ! enchantedArrow(arrow).hasEnchantment(CEnchantments.STICKY_SHOT)) return;
+    public void spawnWebs(Entity entity, Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
+        if (enchantedArrow == null) return;
 
-        if (isBowEnchantActive(CEnchantments.STICKY_SHOT)) {
+        if (isBowEnchantActive(CEnchantments.STICKY_SHOT, enchantedArrow, arrow)) {
             if (hitEntity == null) {
                 Location entityLocation = entity.getLocation();
 
@@ -124,6 +124,9 @@ public class BowUtils {
 
                 entityLocation.getBlock().setType(Material.COBWEB);
                 webBlocks.add(entityLocation.getBlock());
+
+                entity.remove();
+
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -132,6 +135,8 @@ public class BowUtils {
                     }
                 }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
             } else {
+                entity.remove();
+
                 setWebBlocks(hitEntity);
             }
         }
@@ -146,7 +151,10 @@ public class BowUtils {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    webBlocks.remove(block);
+                    if (block.getType() == Material.COBWEB) {
+                        block.setType(Material.AIR);
+                        webBlocks.remove(block);
+                    }
                 }
             }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
         }
