@@ -45,6 +45,8 @@ public class CrazyManager {
     private boolean enchantStackedItems;
     private boolean maxEnchantmentCheck;
     private boolean checkVanillaLimit;
+    
+    private boolean dropBlocksBlast;
     private ItemBuilder enchantmentBook;
     private CropManager cropManager;
     private final Random random = new Random();
@@ -128,7 +130,8 @@ public class CrazyManager {
         rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
         breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
         enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
-
+        setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
+        
         for (String category : config.getConfigurationSection("Categories").getKeys(false)) {
             String path = "Categories." + category;
             LostBook lostBook = new LostBook(
@@ -1293,6 +1296,20 @@ public class CrazyManager {
      */
     public List<Material> getBlockList() {
         return blockList;
+    }
+    
+    /**
+     * @return If the blast enchantment drops blocks.
+     */
+    public boolean isDropBlocksBlast() {
+        return dropBlocksBlast;
+    }
+    
+    /**
+     * @param dropBlocksBlast If the blast enchantment drops blocks.
+     */
+    public void setDropBlocksBlast(boolean dropBlocksBlast) {
+        this.dropBlocksBlast = dropBlocksBlast;
     }
     
     public List<Event> getIgnoredEvents() {

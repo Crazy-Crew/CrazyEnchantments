@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.api.multisupport.skyblock.SuperiorSkyBlo
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 
 object PluginSupport {
@@ -91,10 +90,6 @@ object PluginSupport {
         }
 
         return false
-    }
-
-    fun noStack(entity: LivingEntity) {
-
     }
 
     enum class SupportedPlugins(private val pluginName: String) {

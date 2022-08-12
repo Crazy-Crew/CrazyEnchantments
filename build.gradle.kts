@@ -1,7 +1,7 @@
 plugins {
     java
 
-    kotlin("jvm") version "1.7.0"
+    kotlin("jvm") version "1.7.10"
 
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -17,7 +17,7 @@ tasks.compileKotlin {
 }
 
 group = "com.badbones69.crazyenchantments"
-version = "1.9.4-${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
+version = "1.9.5-${System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"}"
 description = "A plugin full of Crazy Enchantments!"
 
 repositories {
@@ -74,7 +74,9 @@ dependencies {
         exclude("org.bstats", "bstats-bukkit")
     }
 
-    compileOnly("com.plotsquared:PlotSquared-Core:6.8.1")
+    compileOnly("com.plotsquared:PlotSquared-Core:6.9.0")
+    compileOnly("com.intellectualsites.paster:Paster:1.1.4")
+    compileOnly("com.intellectualsites.informative-annotations:informative-annotations:1.2")
 
     compileOnly("com.github.TechFortress:GriefPrevention:16.18")
 
@@ -118,7 +120,7 @@ dependencies {
     compileOnly("fr.neatmonster:nocheatplus:3.16.1-SNAPSHOT")
 
     // Required.
-    compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.1-R0.1-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.0")
 
@@ -126,12 +128,12 @@ dependencies {
 
     implementation("io.papermc:paperlib:1.0.7")
 
-    compileOnly(kotlin("stdlib", "1.7.0"))
+    compileOnly(kotlin("stdlib", "1.7.10"))
 }
 
 tasks {
     shadowJar {
-        archiveFileName.set("${rootProject.name}-[1.18-1.19]-v${rootProject.version}.jar")
+        archiveFileName.set("${rootProject.name}-[1.18-1.19]-[v${rootProject.version}].jar")
 
         listOf(
             "de.tr7zw",

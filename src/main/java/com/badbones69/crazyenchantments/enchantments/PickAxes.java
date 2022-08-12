@@ -79,22 +79,20 @@ public class PickAxes implements Listener {
                     Location originalBlockLocation = currentBlock.getLocation();
                     List<BlockProcessInfo> finalBlockList = new ArrayList<>();
 
-                    for (Block b : blockList) {
-                        if (b.getType() != Material.AIR && (crazyManager.getBlockList().contains(b.getType()) || b.getLocation().equals(originalBlockLocation))) {
-                            BlockBreakEvent event = new BlockBreakEvent(b, player);
+                    for (Block block : blockList) {
+                        if (block.getType() != Material.AIR && (crazyManager.getBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
+                            BlockBreakEvent event = new BlockBreakEvent(block, player);
                             crazyManager.addIgnoredEvent(event);
                             crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
                             if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
-                                finalBlockList.add(new BlockProcessInfo(currentItem, b));
+                                finalBlockList.add(new BlockProcessInfo(currentItem, block));
                             }
 
                             crazyManager.removeIgnoredEvent(event);
                         }
                     }
-
-                    HashMap<ItemStack, Integer> drops = new HashMap<>();
-
+                    
                     if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
                         NoCheatPlusSupport.allowPlayer(player);
                     }
@@ -106,6 +104,7 @@ public class PickAxes implements Listener {
                     }
 
                     int xp = 0;
+                    HashMap<ItemStack, Integer> drops = new HashMap<>();
                     boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
                     boolean isOre = isOre(currentBlock.getType());
                     boolean hasSilkTouch = currentItem.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
@@ -116,7 +115,7 @@ public class PickAxes implements Listener {
 
                     for (BlockProcessInfo processInfo : finalBlockList) {
                         Block block = processInfo.getBlock();
-                        if (player.getGameMode() == GameMode.CREATIVE) { // If the user is in creative mode.
+                        if (player.getGameMode() == GameMode.CREATIVE || !crazyManager.isDropBlocksBlast()) { // If the user is in creative mode.
                             block.setType(Material.AIR);
                         } else { // If the user is in survival mode.
                             // This is to check if the original block the player broke was in the block list.
