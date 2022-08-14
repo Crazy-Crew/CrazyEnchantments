@@ -434,7 +434,10 @@ public class Methods {
 
     public static int getDurability(ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
-            return ((Damageable) item.getItemMeta()).getDamage();
+            ItemMeta meta = item.getItemMeta();
+            if (meta instanceof Damageable)
+                return ((Damageable) item.getItemMeta()).getDamage();
+            return 0;
         }
         return OraxenSupport.getDamage(item);
     }
@@ -442,11 +445,13 @@ public class Methods {
     public static void setDurability(ItemStack item, int newDamage) {
         newDamage = Math.max(newDamage, 0);
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
-            Damageable damageable = (Damageable) item.getItemMeta();
-            if (damageable != null) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta instanceof Damageable) {
+                Damageable damageable = (Damageable) meta;
                 damageable.setDamage(newDamage);
-                item.setItemMeta((ItemMeta) damageable);
+                item.setItemMeta(damageable);
             }
+            return;
         }
         OraxenSupport.setDamage(item, newDamage);
     }

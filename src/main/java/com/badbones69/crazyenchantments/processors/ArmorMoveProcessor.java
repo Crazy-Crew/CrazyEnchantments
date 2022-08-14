@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.processors;
 
+import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -121,7 +122,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private void useHellForge(Player player, ItemStack item) {
         if (crazyManager.hasEnchantment(item, CEnchantments.HELLFORGED)) {
-            int armorDurability = ((Damageable) item.getItemMeta()).getDamage();
+            int armorDurability = Methods.getDurability(item);
 
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
                 new BukkitRunnable() {
@@ -133,12 +134,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
                         if (!event.isCancelled()) {
                             finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
-                            Damageable damageable = (Damageable) item.getItemMeta();
-
-                            if (damageable != null) {
-                                damageable.setDamage(Math.max(finalArmorDurability, 0));
-                                item.setItemMeta(damageable);
-                            }
+                            Methods.setDurability(item, finalArmorDurability);
                         }
                     }
                 }.runTask(crazyManager.getPlugin());
