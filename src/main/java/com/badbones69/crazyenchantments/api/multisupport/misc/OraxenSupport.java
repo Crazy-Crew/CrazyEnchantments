@@ -68,7 +68,7 @@ public class OraxenSupport {
                     PersistentDataType.INTEGER,
                     newDurability);
             int typeMaxDurability = itemStack.getType().getMaxDurability();
-            damageable.setDamage((int) (((double) newDurability / realMaxDurability) * typeMaxDurability));
+            damageable.setDamage(typeMaxDurability - (int) (((double) newDurability / realMaxDurability) * typeMaxDurability));
         }
 
         itemStack.setItemMeta(damageable);
