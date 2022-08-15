@@ -63,12 +63,14 @@ public class OraxenSupport {
             DurabilityMechanic durabilityMechanic = (DurabilityMechanic) durabilityFactory.getMechanic(itemId);
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
             int realMaxDurability = durabilityMechanic.getItemMaxDurability();
+            int newDurability = realMaxDurability - newDamage;
             persistentDataContainer.set(DurabilityMechanic.NAMESPACED_KEY,
                     PersistentDataType.INTEGER,
-                    realMaxDurability - newDamage);
-            damageable.setDamage(0);
+                    newDurability);
+            int typeMaxDurability = itemStack.getType().getMaxDurability();
+            damageable.setDamage((int) (((double) newDurability / realMaxDurability) * typeMaxDurability));
         }
 
-        itemStack.setItemMeta((ItemMeta) damageable);
+        itemStack.setItemMeta(damageable);
     }
 }
