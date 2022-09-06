@@ -117,7 +117,7 @@ dependencies {
     compileOnly("fr.neatmonster:nocheatplus:3.16.1-SNAPSHOT")
 
     // Required.
-    compileOnly("io.papermc.paper:paper-api:1.19.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.0")
 
