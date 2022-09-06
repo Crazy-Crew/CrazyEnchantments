@@ -74,7 +74,7 @@ dependencies {
         exclude("org.bstats", "bstats-bukkit")
     }
 
-    compileOnly("com.plotsquared:PlotSquared-Core:6.9.0")
+    compileOnly("com.plotsquared:PlotSquared-Core:6.9.4")
     compileOnly("com.intellectualsites.paster:Paster:1.1.4")
     compileOnly("com.intellectualsites.informative-annotations:informative-annotations:1.2")
 
