@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
@@ -319,11 +320,7 @@ public class ArmorListener implements Listener {
             if (armorEquipEvent.isCancelled()) {
                 ItemStack item = e.getBrokenItem().clone();
 
-                ItemMeta itemMeta = item.getItemMeta();
-
-                if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(((Damageable) item.getItemMeta()).getDamage() - 1);
-
-                item.setItemMeta(itemMeta);
+                Methods.setDurability(item, Methods.getDurability(item) - 1);
 
                 if (type.equals(ArmorType.HELMET)) {
                     p.getInventory().setHelmet(item);

@@ -123,7 +123,10 @@ object PluginSupport {
         WORLDEDIT("WorldEdit"),
 
         TOWNYADVANCED("TownyAdvanced"),
-        PLOTSQUARED("PlotSquared");
+        PLOTSQUARED("PlotSquared"),
+
+        // Custom Items
+        ORAXEN("Oraxen");
 
         companion object {
             private val cachedPluginState = hashMapOf<SupportedPlugins, Boolean>()
