@@ -57,7 +57,7 @@ repositories {
     // World Edit API / World Guard API
     maven("https://maven.enginehub.org/repo/")
 
-    // Vault API
+    // Vault API and Oraxen
     maven("https://jitpack.io/")
 
     mavenCentral()
@@ -79,6 +79,9 @@ dependencies {
     compileOnly("com.intellectualsites.informative-annotations:informative-annotations:1.2")
 
     compileOnly("com.github.TechFortress:GriefPrevention:16.18")
+
+    // Custom Items plugins
+    compileOnly("com.github.oraxen:oraxen:master-SNAPSHOT")
 
     // SkyBlock Plugins.
     compileOnly("com.github.OmerBenGera:SuperiorSkyblockAPI:b11")
