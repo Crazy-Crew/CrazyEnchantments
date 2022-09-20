@@ -17,7 +17,7 @@
 <a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/purpur_64h.png" height="50"></a>
 
   <p align="center">
-    A crates plugin that offers quality crates with ease!
+    Adds over 80 unique enchantments to your server and more! 
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyEnchantments/wiki"><strong>Explore the docs »</strong></a>
     <br />
