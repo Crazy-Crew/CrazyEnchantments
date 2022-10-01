@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
 import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -98,16 +99,14 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
                 syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-                        if (entity instanceof Player other) {
-                            if (pluginSupport.isFriendly(player, other)) {
-                                AngelUseEvent event = new AngelUseEvent(player, armor);
+                        if (!(entity instanceof Player other)) continue;
+                        if (!pluginSupport.isFriendly(player, other)) continue;
+                        AngelUseEvent event = new AngelUseEvent(player, armor);
 
-                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                                if (!event.isCancelled()) {
-                                    other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
-                                }
-                            }
+                        if (!event.isCancelled()) {
+                            other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
                         }
                     }
                 });
@@ -125,19 +124,16 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             int armorDurability = Methods.getDurability(item);
 
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        int finalArmorDurability = armorDurability;
-                        HellForgedUseEvent event = new HellForgedUseEvent(player, item);
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                Bukkit.getScheduler().runTask(crazyManager.getPlugin(), () -> {
+                    int finalArmorDurability = armorDurability;
+                    HellForgedUseEvent event = new HellForgedUseEvent(player, item);
+                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                        if (!event.isCancelled()) {
-                            finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
-                            Methods.setDurability(item, finalArmorDurability);
-                        }
+                    if (!event.isCancelled()) {
+                        finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
+                        Methods.setDurability(item, finalArmorDurability);
                     }
-                }.runTask(crazyManager.getPlugin());
+                });
             }
         }
     }

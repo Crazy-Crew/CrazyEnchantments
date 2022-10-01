@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.EnchantedArrow;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -127,16 +128,12 @@ public class BowUtils {
 
                 entity.remove();
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        entityLocation.getBlock().setType(Material.AIR);
-                        webBlocks.remove(entityLocation.getBlock());
-                    }
-                }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
+                Bukkit.getScheduler().runTaskLater(crazyManager.getPlugin(), () -> {
+                    entityLocation.getBlock().setType(Material.AIR);
+                    webBlocks.remove(entityLocation.getBlock());
+                }, 5 * 20);
             } else {
                 entity.remove();
-
                 setWebBlocks(hitEntity);
             }
         }
@@ -148,15 +145,12 @@ public class BowUtils {
             block.setType(Material.COBWEB);
             webBlocks.add(block);
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (block.getType() == Material.COBWEB) {
-                        block.setType(Material.AIR);
-                        webBlocks.remove(block);
-                    }
+            Bukkit.getScheduler().runTaskLater(crazyManager.getPlugin(), () -> {
+                if (block.getType() == Material.COBWEB) {
+                    block.setType(Material.AIR);
+                    webBlocks.remove(block);
                 }
-            }.runTaskLater(crazyManager.getPlugin(), 5 * 20);
+            }, 5 * 20);
         }
     }
 
