@@ -26,24 +26,22 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
 public class Tools implements Listener {
-    
+
     private final static Random random = new Random();
     private final static CrazyManager crazyManager = CrazyManager.getInstance();
     private final static List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
-    
+
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent e) {
         updateEffects(e.getPlayer());
     }
-    
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreak(BlockBreakEvent e) {
-        Block block = e.getBlock();
-        Player player = e.getPlayer();
 
-        if (e.isCancelled() || crazyManager.isIgnoredEvent(e) || ignoreBlockTypes(block)) {
-            return;
-        }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        Player player = event.getPlayer();
+
+        if (crazyManager.isIgnoredEvent(event) || ignoreBlockTypes(block)) return;
 
         ItemStack item = Methods.getItemInHand(player);
 
@@ -55,19 +53,18 @@ public class Tools implements Listener {
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
                 // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
                 if ((Hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
-                // This checks if the block is a spawner and if so the spawner classes will take care of this.
-                // If Epic Spawners is enabled then telepathy will give the item from the API.
-                // Otherwise, CE will ignore the spawner in this event.
-                (block.getType() == Material.SPAWNER)) {
-                    return;
-                }
+                        // This checks if the block is a spawner and if so the spawner classes will take care of this.
+                        // If Epic Spawners is enabled then telepathy will give the item from the API.
+                        // Otherwise, CE will ignore the spawner in this event.
+                        (block.getType() == Material.SPAWNER)) return;
 
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                if (!event.isCancelled()) {
-                    e.setExpToDrop(0);
-                    e.setDropItems(false);
+                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
+                crazyManager.getPlugin().getServer().getPluginManager().callEvent(useEvent);
+
+                if (!useEvent.isCancelled()) {
+                    event.setExpToDrop(0);
+                    event.setDropItems(false);
                     TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
 
                     if (Methods.isInventoryFull(player)) {
@@ -93,7 +90,6 @@ public class Tools implements Listener {
         }
     }
 
-    @SuppressWarnings("squid:CallToDeprecatedMethod")
     public static TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
         ItemStack item = processInfo.getItem();
         Block block = processInfo.getBlock();
@@ -172,34 +168,34 @@ public class Tools implements Listener {
 
     private void updateEffects(Player player) {
         ItemStack item = Methods.getItemInHand(player);
+        if (!crazyManager.hasEnchantments(item)) return;
 
-        if (crazyManager.hasEnchantments(item)) {
-            List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
-            int potionTime = 5 * 20;
+        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+        int potionTime = 5 * 20;
 
-            if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+        if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
+            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
+            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                if (!event.isCancelled()) {
-                    int power = crazyManager.getLevel(item, CEnchantments.HASTE);
-                    player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
-                }
-            }
-
-            if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
-
-                if (!event.isCancelled()) {
-                    player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
-                }
+            if (!event.isCancelled()) {
+                int power = crazyManager.getLevel(item, CEnchantments.HASTE);
+                player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
             }
         }
+
+        if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
+            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
+            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+
+            if (!event.isCancelled()) {
+                player.removePotionEffect(PotionEffectType.WATER_BREATHING);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
+            }
+        }
+
     }
-    
+
     private static boolean ignoreBlockTypes(Block block) {
         for (String name : ignoreBlockTypes) {
             if (block.getType().name().toLowerCase().contains(name)) {
@@ -209,25 +205,29 @@ public class Tools implements Listener {
 
         return false;
     }
-    
+
     private static boolean hasOreXP(Block block) {
         return switch (block.getType()) {
             case COAL_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
             default -> false;
         };
     }
-    
+
     private static boolean isOre(Block block) {
-        if (block.getType() == Material.NETHER_QUARTZ_ORE) {
-            return true;
-        }
 
         return switch (block.getType()) {
-            case COAL_ORE, IRON_ORE, GOLD_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
+            case COAL_ORE,
+                    IRON_ORE,
+                    GOLD_ORE,
+                    DIAMOND_ORE,
+                    EMERALD_ORE,
+                    LAPIS_ORE,
+                    REDSTONE_ORE,
+                    NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
     }
-    
+
     private static ItemStack getOreDrop(Block block) {
         ItemBuilder dropItem = new ItemBuilder();
 

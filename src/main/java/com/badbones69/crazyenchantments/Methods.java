@@ -169,7 +169,8 @@ public class Methods {
                     }
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         player.updateInventory();
     }
@@ -330,14 +331,14 @@ public class Methods {
         Firework fw = loc.getWorld().spawn(loc, Firework.class);
         FireworkMeta fm = fw.getFireworkMeta();
         fm.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
-        .withColor(colors)
-        .trail(false)
-        .flicker(false)
-        .build());
+                .withColor(colors)
+                .trail(false)
+                .flicker(false)
+                .build());
         fm.setPower(0);
         fw.setFireworkMeta(fm);
         FireworkDamage.addFirework(fw);
-        crazyManager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(crazyManager.getPlugin(), fw :: detonate, 2);
+        crazyManager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(crazyManager.getPlugin(), fw::detonate, 2);
     }
 
     public static Color getColor(String color) {
@@ -377,13 +378,15 @@ public class Methods {
                     return enchantment;
                 }
             }
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         return null;
     }
 
     /**
      * Verify the ItemStack has a lore. This checks to make sure everything isn't null because recent minecraft updates cause NPEs.
+     *
      * @param item Itemstack you are checking.
      * @return True if the item has a lore and no null issues.
      */
@@ -467,7 +470,8 @@ public class Methods {
                 if (item.getItemMeta().isUnbreakable()) {
                     return;
                 }
-            } catch (NoSuchMethodError ignored) {}
+            } catch (NoSuchMethodError ignored) {
+            }
 
             NBTItem nbtItem = new NBTItem(item);
 
@@ -497,28 +501,19 @@ public class Methods {
     }
 
     public static boolean isSimilar(ItemStack one, ItemStack two) {
-        if (one.getType() == two.getType()) {
-            if (one.hasItemMeta() && two.hasItemMeta()) {
-                if (one.getItemMeta().hasDisplayName() && two.getItemMeta().hasDisplayName()) {
-                    if (one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())) {
-                        if (one.getItemMeta().hasLore() && two.getItemMeta().hasLore()) {
-                            int i = 0;
+        if (one.getType().equals(two.getType())) return false;
+        if (!one.hasItemMeta() || !two.hasItemMeta()) return false;
+        if (!one.getItemMeta().hasDisplayName() || !two.getItemMeta().hasDisplayName()) return false;
+        if (!one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())) return false;
+        if (!one.getItemMeta().hasLore() || !two.getItemMeta().hasLore()) return false;
+        int i = 0;
 
-                            for (String lore : one.getItemMeta().getLore()) {
-                                if (!lore.equals(two.getItemMeta().getLore().get(i))) {
-                                    return false;
-                                }
-                                i++;
-                            }
-
-                            return true;
-                        }
-                    }
-                }
+        for (String lore : one.getItemMeta().getLore()) {
+            if (!lore.equals(two.getItemMeta().getLore().get(i++))) {
+                return false;
             }
-
         }
-        return false;
+        return true;
     }
 
     public static void explode(Entity player) {
@@ -528,29 +523,26 @@ public class Methods {
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 
-        for (Entity e : Methods.getNearbyEntities(player.getLocation(), 3D, player)) {
-            if (pluginSupport.allowsCombat(e.getLocation())) {
-                if (e.getType() == EntityType.DROPPED_ITEM) {
-                    e.remove();
-                } else {
-                    if (e instanceof LivingEntity en) {
-                        if (!pluginSupport.isFriendly(player, en)) {
-                            if (!player.getName().equalsIgnoreCase(e.getName())) {
-                                en.damage(5D);
+        for (Entity entity : Methods.getNearbyEntities(player.getLocation(), 3D, player)) {
+            if (pluginSupport.allowsCombat(entity.getLocation())) {
+                if (entity.getType() == EntityType.DROPPED_ITEM) {
+                    entity.remove();
+                    continue;
+                }
+                if (!(entity instanceof LivingEntity en)) continue;
+                if (pluginSupport.isFriendly(player, en)) continue;
+                if (player.getName().equalsIgnoreCase(entity.getName())) continue;
+                en.damage(5D);
 
-                                if (en instanceof Player) {
-                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                                        SpartanSupport.cancelSpeed((Player) player);
-                                        SpartanSupport.cancelNormalMovements((Player) player);
-                                        SpartanSupport.cancelNoFall((Player) player);
-                                    }
-                                }
-
-                                en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
-                            }
-                        }
+                if (en instanceof Player) {
+                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                        SpartanSupport.cancelSpeed((Player) player);
+                        SpartanSupport.cancelNormalMovements((Player) player);
+                        SpartanSupport.cancelNoFall((Player) player);
                     }
                 }
+
+                en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
             }
         }
     }
@@ -562,29 +554,25 @@ public class Methods {
 
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
 
-        for (Entity e : Methods.getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
-            if (pluginSupport.allowsCombat(e.getLocation())) {
-                if (e.getType() == EntityType.DROPPED_ITEM) {
-                    e.remove();
-                } else {
-                    if (e instanceof LivingEntity en) {
-                        if (!pluginSupport.isFriendly(player, en)) {
-                            if (!player.getName().equalsIgnoreCase(e.getName())) {
-                                en.damage(5D);
-
-                                if (en instanceof Player) {
-                                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                                        SpartanSupport.cancelSpeed((Player) player);
-                                        SpartanSupport.cancelNormalMovements((Player) player);
-                                        SpartanSupport.cancelNoFall((Player) player);
-                                    }
-                                }
-
-                                en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
-                            }
-                        }
-                    }
+        for (Entity entity : Methods.getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
+            if (pluginSupport.allowsCombat(entity.getLocation())) {
+                if (entity.getType() == EntityType.DROPPED_ITEM) {
+                    entity.remove();
+                    continue;
                 }
+                if (!(entity instanceof LivingEntity en)) continue;
+                if (pluginSupport.isFriendly(player, en)) continue;
+                if (player.getName().equalsIgnoreCase(entity.getName())) continue;
+                en.damage(5D);
+
+                en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
+                if (!(en instanceof Player)) continue;
+                if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    SpartanSupport.cancelSpeed((Player) player);
+                    SpartanSupport.cancelNormalMovements((Player) player);
+                    SpartanSupport.cancelNoFall((Player) player);
+                }
+
             }
         }
     }
@@ -604,22 +592,22 @@ public class Methods {
 
     public static ItemBuilder getRandomPaneColor() {
         List<String> colors = Arrays.asList(
-        "WHITE_STAINED_GLASS_PANE",
-        "ORANGE_STAINED_GLASS_PANE",
-        "MAGENTA_STAINED_GLASS_PANE",
-        "LIGHT_BLUE_STAINED_GLASS_PANE",
-        "YELLOW_STAINED_GLASS_PANE",
-        "LIME_STAINED_GLASS_PANE",
-        "PINK_STAINED_GLASS_PANE",
-        "GRAY_STAINED_GLASS_PANE",
-        // Skipped 8 due to it being basically invisible in a GUI.
-        "CYAN_STAINED_GLASS_PANE",
-        "PURPLE_STAINED_GLASS_PANE",
-        "BLUE_STAINED_GLASS_PANE",
-        "BROWN_STAINED_GLASS_PANE",
-        "GREEN_STAINED_GLASS_PANE",
-        "RED_STAINED_GLASS_PANE",
-        "BLACK_STAINED_GLASS_PANE");
+                "WHITE_STAINED_GLASS_PANE",
+                "ORANGE_STAINED_GLASS_PANE",
+                "MAGENTA_STAINED_GLASS_PANE",
+                "LIGHT_BLUE_STAINED_GLASS_PANE",
+                "YELLOW_STAINED_GLASS_PANE",
+                "LIME_STAINED_GLASS_PANE",
+                "PINK_STAINED_GLASS_PANE",
+                "GRAY_STAINED_GLASS_PANE",
+                // Skipped 8 due to it being basically invisible in a GUI.
+                "CYAN_STAINED_GLASS_PANE",
+                "PURPLE_STAINED_GLASS_PANE",
+                "BLUE_STAINED_GLASS_PANE",
+                "BROWN_STAINED_GLASS_PANE",
+                "GREEN_STAINED_GLASS_PANE",
+                "RED_STAINED_GLASS_PANE",
+                "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
 

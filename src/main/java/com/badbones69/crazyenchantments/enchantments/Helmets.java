@@ -21,9 +21,9 @@ public class Helmets implements Listener {
     private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onMovement(PlayerMoveEvent e) {
-        Player player = e.getPlayer();
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onMovement(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
 
         if (CEnchantments.COMMANDER.isActivated()) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
@@ -40,11 +40,11 @@ public class Helmets implements Listener {
                     }
 
                     if (!players.isEmpty()) {
-                        EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
+                        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
 
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(useEvent);
 
-                        if (!event.isCancelled()) {
+                        if (!useEvent.isCancelled()) {
                             for (Player other : players) {
                                 other.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
                             }

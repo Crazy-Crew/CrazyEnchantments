@@ -14,6 +14,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -177,7 +178,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         getServer().getOnlinePlayers().forEach(crazyManager::unloadCEPlayer);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
@@ -189,7 +190,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         crazyManager.unloadCEPlayer(event.getPlayer());
     }
