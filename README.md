@@ -90,7 +90,7 @@ Check our public [trello board](https://trello.com/b/AJvEmcbL) for our current p
 
 ## License
 
-Distributed under the GPU v3 License. See `LICENSE.MD` for more information.
+Distributed under the MIT License. See [`LICENSE`](/LICENSE) for more information.
 
 [discord-shield]: https://img.shields.io/discord/182615261403283459.svg?style=for-the-badge
 [discord-url]: https://discord.gg/crazycrew
