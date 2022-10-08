@@ -51,7 +51,7 @@
 ## Downloads
 https://www.spigotmc.org/resources/crazy-enchantments.16470/
 
-https://ci.badbones69.com/view/Stable/job/Crazy-Enchantments/
+https://ci.badbones69.com/view/Stable/job/CrazyEnchantments/
 
 ## Getting Started
 
