@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.Messages;
@@ -14,15 +15,20 @@ import java.util.HashMap;
 
 public class AllyMob {
 
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final AllyManager allyManager = plugin.getStarter().getAllyManager();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
     private final AllyType type;
     private final Player owner;
     private LivingEntity ally;
     private long spawnTime;
     private BukkitTask runnable;
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
-    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
     private final AllyMob instance;
-    private final static AllyManager allyManager = AllyManager.getInstance();
 
     public AllyMob(Player owner, AllyType type) {
         this.type = type;
@@ -50,8 +56,6 @@ public class AllyMob {
         this.spawnTime = spawnTime;
 
         ally = (LivingEntity) location.getWorld().spawnEntity(location, type.entityType);
-
-        // PluginSupport.INSTANCE.noStack(ally);
 
         ally.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(type.maxHealth);
 
@@ -132,6 +136,10 @@ public class AllyMob {
         private final String defaultName;
         private final EntityType entityType;
         private final int maxHealth;
+
+        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+        private final AllyManager allyManager = plugin.getStarter().getAllyManager();
         
         AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
             this.configName = configName;
@@ -160,5 +168,4 @@ public class AllyMob {
             return maxHealth;
         }
     }
-
 }

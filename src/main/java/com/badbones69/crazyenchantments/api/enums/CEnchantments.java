@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.api.enums;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -119,14 +119,16 @@ public enum CEnchantments {
     PLANTER("Planter", "Hoe"),
     //	----------------All----------------  \\
     HELLFORGED("HellForged", "Damaged-Items", 5, 5);
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private final String name;
     private final String typeName;
     private final boolean hasChanceSystem;
     private final int chance;
     private final int chanceIncrease;
-    
-    private final CrazyManager ce = CrazyManager.getInstance();
     
     private CEnchantment cachedEnchantment = null;
     
@@ -169,9 +171,7 @@ public enum CEnchantments {
      */
     public static CEnchantments getFromName(String enchant) {
         for (CEnchantments ench : values()) {
-            if (ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) {
-                return ench;
-            }
+            if (ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) return ench;
         }
 
         return null;
@@ -182,9 +182,8 @@ public enum CEnchantments {
 
         for (CEnchantment cEnchantment : enchantments) {
             CEnchantments enchantment = getFromName(cEnchantment.getName());
-            if (enchantment != null) {
-                cEnchantments.add(enchantment);
-            }
+
+            if (enchantment != null) cEnchantments.add(enchantment);
         }
 
         return cEnchantments;
@@ -268,9 +267,7 @@ public enum CEnchantments {
      * @return The enchantment this is tied to.
      */
     public CEnchantment getEnchantment() {
-        if (cachedEnchantment == null) {
-            cachedEnchantment = ce.getEnchantmentFromName(name);
-        }
+        if (cachedEnchantment == null) cachedEnchantment = crazyManager.getEnchantmentFromName(name);
 
         return cachedEnchantment;
     }
@@ -298,7 +295,7 @@ public enum CEnchantments {
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(ItemStack item) {
-        return ce.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
+        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
     }
     
     /**
@@ -307,5 +304,4 @@ public enum CEnchantments {
     public boolean hasChanceSystem() {
         return hasChanceSystem;
     }
-
 }

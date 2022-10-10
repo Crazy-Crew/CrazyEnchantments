@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -10,14 +11,16 @@ import java.util.List;
 import java.util.Map;
 
 public class CEItem {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private final ItemStack item;
     private final List<Enchantment> vanillaEnchantmentRemove;
     private final List<CEnchantment> cEnchantmentRemove;
     private final Map<Enchantment, Integer> vanillaEnchantments;
     private final Map<CEnchantment, Integer> cEnchantments;
-
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
     
     public CEItem(ItemStack item) {
         this.item = item;
@@ -79,5 +82,4 @@ public class CEItem {
         crazyManager.addEnchantments(item, cEnchantments);
         return item;
     }
-
 }

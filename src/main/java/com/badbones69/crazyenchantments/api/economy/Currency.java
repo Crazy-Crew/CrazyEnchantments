@@ -18,10 +18,8 @@ public enum Currency {
      * @return True if it is supported and false if not.
      */
     public static boolean isCurrency(String currency) {
-        for (Currency c : Currency.values()) {
-            if (currency.equalsIgnoreCase(c.getName())) {
-                return true;
-            }
+        for (Currency value : Currency.values()) {
+            if (currency.equalsIgnoreCase(value.getName())) return true;
         }
 
         return false;
@@ -33,10 +31,8 @@ public enum Currency {
      * @return The currency enum.
      */
     public static Currency getCurrency(String currency) {
-        for (Currency c : Currency.values()) {
-            if (currency.equalsIgnoreCase(c.getName())) {
-                return c;
-            }
+        for (Currency value : Currency.values()) {
+            if (currency.equalsIgnoreCase(value.getName())) return value;
         }
 
         return null;
@@ -49,5 +45,4 @@ public enum Currency {
     public String getName() {
         return name;
     }
-
 }

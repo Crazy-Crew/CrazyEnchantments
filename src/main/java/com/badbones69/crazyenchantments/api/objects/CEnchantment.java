@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
@@ -11,8 +12,10 @@ import java.util.List;
 import java.util.Random;
 
 public class CEnchantment {
-    
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private String name;
     private String customName;
@@ -44,7 +47,7 @@ public class CEnchantment {
         this.enchantmentType = null;
     }
     
-    public static CEnchantment getCEnchantmentFromName(String enchantment) {
+    public CEnchantment getCEnchantmentFromName(String enchantment) {
         return crazyManager.getEnchantmentFromName(enchantment);
     }
     
@@ -90,9 +93,7 @@ public class CEnchantment {
     
     public CEnchantment setBookColor(String bookColor) {
 
-        if (bookColor.startsWith("&f")) {
-            bookColor = bookColor.substring(2);
-        }
+        if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
 
         this.bookColor = Methods.color(bookColor);
         return this;
@@ -160,9 +161,8 @@ public class CEnchantment {
     }
     
     public CEnchantment addCategory(Category category) {
-        if (category != null) {
-            this.categories.add(category);
-        }
+        if (category != null) this.categories.add(category);
+
         return this;
     }
     
@@ -175,9 +175,7 @@ public class CEnchantment {
         for (String categoryString : categories) {
             Category category = crazyManager.getCategory(categoryString);
 
-            if (category != null) {
-                this.categories.add(category);
-            }
+            if (category != null) this.categories.add(category);
         }
 
         return this;
@@ -201,9 +199,7 @@ public class CEnchantment {
         crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
         crazyManager.registerEnchantment(instance);
 
-        if (enchantmentType != null) {
-            enchantmentType.addEnchantment(instance);
-        }
+        if (enchantmentType != null) enchantmentType.addEnchantment(instance);
 
         for (Category category : categories) {
             category.addEnchantment(instance);
@@ -215,9 +211,7 @@ public class CEnchantment {
         crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
         crazyManager.unregisterEnchantment(instance);
 
-        if (enchantmentType != null) {
-            enchantmentType.removeEnchantment(instance);
-        }
+        if (enchantmentType != null) enchantmentType.removeEnchantment(instance);
 
         for (Category category : categories) {
             category.removeEnchantment(instance);
@@ -244,11 +238,8 @@ public class CEnchantment {
             }
         }
 
-        if (!crazyManager.useUnsafeEnchantments() && level > maxLevel) {
-            level = maxLevel;
-        }
+        if (!crazyManager.useUnsafeEnchantments() && level > maxLevel) level = maxLevel;
 
         return level;
     }
-
 }

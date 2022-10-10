@@ -47,9 +47,7 @@ public enum Dust {
     
     public static Dust getFromName(String nameString) {
         for (Dust dust : Dust.values()) {
-            if (dust.getKnownNames().contains(nameString.toLowerCase())) {
-                return dust;
-            }
+            if (dust.getKnownNames().contains(nameString.toLowerCase())) return dust;
         }
 
         return null;
@@ -80,5 +78,4 @@ public enum Dust {
         .addLorePlaceholder("%Percent%", String.valueOf(percent))
         .setAmount(amount).build();
     }
-
 }

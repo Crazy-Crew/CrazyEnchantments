@@ -5,11 +5,11 @@ import org.bukkit.entity.Player;
 
 public class NoCheatPlusSupport {
 
-    public static void allowPlayer(Player player) {
+    public void allowPlayer(Player player) {
         NCPExemptionManager.exemptPermanently(player.getUniqueId());
     }
 
-    public static void denyPlayer(Player player) {
+    public void denyPlayer(Player player) {
         NCPExemptionManager.unexempt(player.getUniqueId());
     }
 }

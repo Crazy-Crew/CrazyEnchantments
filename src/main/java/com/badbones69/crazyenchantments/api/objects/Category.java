@@ -117,14 +117,11 @@ public class Category {
     public void addEnchantment(CEnchantment enchantment) {
         enchantmentList.add(enchantment);
 
-        if (enchantment.isActivated()) {
-            enabledEnchantments.add(enchantment);
-        }
+        if (enchantment.isActivated()) enabledEnchantments.add(enchantment);
     }
     
     public void removeEnchantment(CEnchantment enchantment) {
         enchantmentList.remove(enchantment);
         enabledEnchantments.remove(enchantment);
     }
-
 }

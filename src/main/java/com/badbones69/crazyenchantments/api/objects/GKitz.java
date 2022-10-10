@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.inventory.ItemStack;
 
@@ -7,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GKitz {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private final int slot;
     private final String name;
@@ -16,8 +21,6 @@ public class GKitz {
     private final List<String> commands;
     private final List<ItemStack> preview;
     private final List<String> itemStrings;
-
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * Create a new gkit.
@@ -98,9 +101,7 @@ public class GKitz {
                 newItemString.append(option).append(", ");
             }
 
-            if (newItemString.length() > 0) {
-                itemString = newItemString.substring(0, newItemString.length() - 2);
-            }
+            if (newItemString.length() > 0) itemString = newItemString.substring(0, newItemString.length() - 2);
 
             GKitzItem item = new GKitzItem(ItemBuilder.convertString(itemString));
 
@@ -113,9 +114,7 @@ public class GKitz {
                         if (level.contains("-")) {
                             int randomLevel = crazyManager.pickLevel(Integer.parseInt(level.split("-")[0]), Integer.parseInt(level.split("-")[1]));
 
-                            if (randomLevel > 0) {
-                                item.addCEEnchantment(enchantment, randomLevel);
-                            }
+                            if (randomLevel > 0) item.addCEEnchantment(enchantment, randomLevel);
                         } else {
                             item.addCEEnchantment(enchantment, Integer.parseInt(level));
                         }
@@ -128,5 +127,4 @@ public class GKitz {
 
         return items;
     }
-
 }

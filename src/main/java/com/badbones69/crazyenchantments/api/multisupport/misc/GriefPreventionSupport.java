@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class GriefPreventionSupport implements FactionsVersion {
+
     @Override
     public boolean isFriendly(Player player, Player other) {
         Claim claim = GriefPrevention.instance.dataStore.getClaimAt(player.getLocation(), true, null);

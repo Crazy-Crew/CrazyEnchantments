@@ -5,13 +5,11 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class WingsManager {
-    
-    public static final WingsManager instance = new WingsManager();
+
     private boolean isWingsEnabled;
     private boolean isCloudsEnabled;
     private boolean isEnemyCheckEnabled;
@@ -24,10 +22,6 @@ public class WingsManager {
     private boolean ownersCanFly;
     private boolean membersCanFly;
     private BukkitTask wingsTask;
-    
-    public static WingsManager getInstance() {
-        return instance;
-    }
     
     public void load() {
         isWingsEnabled = CEnchantments.WINGS.isActivated();
@@ -76,9 +70,7 @@ public class WingsManager {
     }
     
     public void addFlyingPlayer(Player player) {
-        if (!flyingPlayers.contains(player)) {
-            flyingPlayers.add(player);
-        }
+        if (!flyingPlayers.contains(player)) flyingPlayers.add(player);
     }
     
     public void removeFlyingPlayer(Player player) {
@@ -148,8 +140,6 @@ public class WingsManager {
     }
     
     public void endWingsTask() {
-        if (wingsTask != null) {
-            wingsTask.cancel();
-        }
+        if (wingsTask != null) wingsTask.cancel();
     }
 }

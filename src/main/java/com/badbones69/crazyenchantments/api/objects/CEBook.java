@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -10,6 +11,10 @@ import java.util.List;
 import java.util.Random;
 
 public class CEBook {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private CEnchantment enchantment;
     private int amount;
@@ -17,8 +22,6 @@ public class CEBook {
     private boolean glowing;
     private int destroyRate;
     private int successRate;
-
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * @param enchantment Enchantment you want.
@@ -221,5 +224,4 @@ public class CEBook {
     private int percentPick(int max, int min) {
         return max == min ? max : min + new Random().nextInt(max - min);
     }
-
 }

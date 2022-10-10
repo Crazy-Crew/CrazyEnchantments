@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.Messages;
@@ -17,15 +18,19 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 public class LostBookController implements Listener {
-    
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
-    
-    @EventHandler(priority = EventPriority.HIGHEST)
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBookClean(PlayerInteractEvent e) {
         Player player = e.getPlayer();
 
         if (e.getItem() != null && e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            ItemStack item = Methods.getItemInHand(player);
+            ItemStack item = methods.getItemInHand(player);
 
             if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                 Category category = crazyManager.getCategoryFromLostBook(item);
@@ -33,13 +38,13 @@ public class LostBookController implements Listener {
                 if (category != null) {
                     e.setCancelled(true);
 
-                    if (Methods.isInventoryFull(player)) {
+                    if (methods.isInventoryFull(player)) {
                         player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                         return;
                     }
 
                     LostBook lostBook = category.getLostBook();
-                    Methods.removeItem(item, player);
+                    methods.removeItem(item, player);
                     CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
                     if (book != null) {
@@ -49,13 +54,9 @@ public class LostBookController implements Listener {
                         placeholders.put("%Found%", book.getItemBuilder().getName());
                         player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
 
-                        if (lostBook.useFirework()) {
-                            Methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
-                        }
+                        if (lostBook.useFirework()) methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
 
-                        if (lostBook.playSound()) {
-                            player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
-                        }
+                        if (lostBook.playSound()) player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
                     } else {
                         player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                     }
@@ -63,5 +64,4 @@ public class LostBookController implements Listener {
             }
         }
     }
-
 }

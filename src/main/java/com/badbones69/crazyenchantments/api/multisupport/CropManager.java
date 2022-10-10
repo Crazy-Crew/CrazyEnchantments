@@ -1,10 +1,11 @@
 package com.badbones69.crazyenchantments.api.multisupport;
 
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManagerVersion;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.type.Farmland;
 
-public class CropManager implements com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManager {
+public class CropManager implements CropManagerVersion {
     
     @Override
     public void fullyGrowPlant(Block block) {
@@ -18,9 +19,7 @@ public class CropManager implements com.badbones69.crazyenchantments.api.multisu
     
     @Override
     public boolean isFullyGrown(Block block) {
-        if (block.getBlockData() instanceof Ageable age) {
-            return age.getAge() == age.getMaximumAge();
-        }
+        if (block.getBlockData() instanceof Ageable age) return age.getAge() == age.getMaximumAge();
 
         return false;
     }
@@ -31,5 +30,4 @@ public class CropManager implements com.badbones69.crazyenchantments.api.multisu
         farmland.setMoisture(farmland.getMaximumMoisture());
         soil.setBlockData(farmland);
     }
-
 }

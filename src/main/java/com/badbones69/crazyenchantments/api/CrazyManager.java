@@ -9,7 +9,7 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.managers.*;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManager;
+import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManagerVersion;
 import com.badbones69.crazyenchantments.api.multisupport.interfaces.plotsquared.PlotSquaredVersion;
 import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion;
 import com.badbones69.crazyenchantments.api.multisupport.plotsquared.PlotSquaredSupport;
@@ -48,7 +48,7 @@ public class CrazyManager {
     
     private boolean dropBlocksBlast;
     private ItemBuilder enchantmentBook;
-    private CropManager cropManager;
+    private CropManagerVersion cropManagerVersion;
     private final Random random = new Random();
     private String whiteScrollProtectionName;
     private BlackSmithManager blackSmithManager;
@@ -109,7 +109,7 @@ public class CrazyManager {
 
         CEnchantments.invalidateCachedEnchants();
 
-        cropManager = new com.badbones69.crazyenchantments.api.multisupport.CropManager();
+        cropManagerVersion = new com.badbones69.crazyenchantments.api.multisupport.CropManagerVersion();
 
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration gkit = Files.GKITZ.getFile();
@@ -376,8 +376,8 @@ public class CrazyManager {
      * Get the NMS support class.
      * @return NMS support class.
      */
-    public CropManager getNMSSupport() {
-        return cropManager;
+    public CropManagerVersion getNMSSupport() {
+        return cropManagerVersion;
     }
     
     /**

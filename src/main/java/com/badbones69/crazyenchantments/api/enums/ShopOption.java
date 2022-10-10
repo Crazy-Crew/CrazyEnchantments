@@ -149,5 +149,4 @@ public enum ShopOption {
             return currency;
         }
     }
-
 }

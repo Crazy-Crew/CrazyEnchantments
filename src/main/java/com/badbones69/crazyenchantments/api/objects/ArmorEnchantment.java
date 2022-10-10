@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -96,5 +95,4 @@ public class ArmorEnchantment {
     public boolean isPotionEnchantment() {
         return isPotionEnchantment;
     }
-
 }

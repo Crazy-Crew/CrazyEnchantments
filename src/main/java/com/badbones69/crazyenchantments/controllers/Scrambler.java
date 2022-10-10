@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -28,14 +29,19 @@ import java.util.List;
 
 public class Scrambler implements Listener {
 
-    public static HashMap<Player, BukkitTask> roll = new HashMap<>();
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
-    private static ItemBuilder scramblerItem;
-    private static ItemBuilder pointer;
-    private static boolean animationToggle;
-    private static String guiName;
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    public static void loadScrambler() {
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    public HashMap<Player, BukkitTask> roll = new HashMap<>();
+    private ItemBuilder scramblerItem;
+    private ItemBuilder pointer;
+    private boolean animationToggle;
+    private String guiName;
+
+    public void loadScrambler() {
         FileConfiguration config = Files.CONFIG.getFile();
         scramblerItem = new ItemBuilder()
         .setMaterial(config.getString("Settings.Scrambler.Item"))
@@ -55,7 +61,7 @@ public class Scrambler implements Listener {
      * @param book The old book.
      * @return A new scrambled book.
      */
-    public static ItemStack getNewScrambledBook(ItemStack book) {
+    public ItemStack getNewScrambledBook(ItemStack book) {
         if (crazyManager.isEnchantmentBook(book)) {
             CEnchantment enchantment = crazyManager.getEnchantmentBookEnchantment(book);
             return new CEBook(enchantment, crazyManager.getBookLevel(book, enchantment), crazyManager.getHighestEnchantmentCategory(enchantment)).buildBook();
@@ -68,7 +74,7 @@ public class Scrambler implements Listener {
      * Get the scrambler item stack.
      * @return The scramblers.
      */
-    public static ItemStack getScramblers() {
+    public ItemStack getScramblers() {
         return getScramblers(1);
     }
 
@@ -77,11 +83,11 @@ public class Scrambler implements Listener {
      * @param amount The amount you want.
      * @return The scramblers.
      */
-    public static ItemStack getScramblers(int amount) {
+    public ItemStack getScramblers(int amount) {
         return scramblerItem.clone().setAmount(amount).build();
     }
 
-    private static void setGlass(Inventory inv) {
+    private void setGlass(Inventory inv) {
         for (int slot = 0; slot < 9; slot++) {
             if (slot != 4) {
                 inv.setItem(slot, Methods.getRandomPaneColor().setName(" ").build());
@@ -93,7 +99,7 @@ public class Scrambler implements Listener {
         }
     }
 
-    public static void openScrambler(Player player, ItemStack book) {
+    public void openScrambler(Player player, ItemStack book) {
         Inventory inventory = crazyManager.getPlugin().getServer().createInventory(null, 27, guiName);
         setGlass(inventory);
 
@@ -105,7 +111,7 @@ public class Scrambler implements Listener {
         startScrambler(player, inventory, book);
     }
 
-    private static void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
+    private void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
         roll.put(player, new BukkitRunnable() {
             int time = 1;
             int full = 0;
@@ -114,7 +120,7 @@ public class Scrambler implements Listener {
             @Override
             public void run() {
                 if (full <= 50) { // When Spinning
-                    moveItems(inventory, player, book);
+                    moveItems(inventory, book);
                     setGlass(inventory);
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                 }
@@ -129,7 +135,7 @@ public class Scrambler implements Listener {
                 full++;
                 if (full > 51) {
                     if (slowSpin().contains(time)) { // When Slowing Down
-                        moveItems(inventory, player, book);
+                        moveItems(inventory, book);
                         setGlass(inventory);
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                     }
@@ -142,9 +148,9 @@ public class Scrambler implements Listener {
                         roll.remove(player);
                         ItemStack item = inventory.getItem(13).clone();
                         item.setType(crazyManager.getEnchantmentBookItem().getType());
-                        Methods.setDurability(item, Methods.getDurability(crazyManager.getEnchantmentBookItem()));
+                        methods.setDurability(item, methods.getDurability(crazyManager.getEnchantmentBookItem()));
 
-                        if (Methods.isInventoryFull(player)) {
+                        if (methods.isInventoryFull(player)) {
                             player.getWorld().dropItem(player.getLocation(), item);
                         } else {
                             player.getInventory().addItem(item);
@@ -158,7 +164,7 @@ public class Scrambler implements Listener {
         }.runTaskTimer(crazyManager.getPlugin(), 1, 1));
     }
 
-    private static List<Integer> slowSpin() {
+    private List<Integer> slowSpin() {
         List<Integer> slow = new ArrayList<>();
         int full = 120;
         int cut = 15;
@@ -174,7 +180,7 @@ public class Scrambler implements Listener {
         return slow;
     }
 
-    private static void moveItems(Inventory inv, Player player, ItemStack book) {
+    private void moveItems(Inventory inv, ItemStack book) {
         List<ItemStack> items = new ArrayList<>();
 
         for (int slot = 9; slot > 8 && slot < 17; slot++) {
@@ -182,7 +188,7 @@ public class Scrambler implements Listener {
         }
 
         ItemStack newBook = getNewScrambledBook(book);
-        newBook.setType(Methods.getRandomPaneColor().getMaterial());
+        newBook.setType(methods.getRandomPaneColor().getMaterial());
         inv.setItem(9, newBook);
 
         for (int i = 0; i < 8; i++) {
@@ -220,27 +226,23 @@ public class Scrambler implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         if (e.getInventory() != null) {
-            if (e.getView().getTitle().equals(guiName)) {
-                e.setCancelled(true);
-            }
+            if (e.getView().getTitle().equals(guiName)) e.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onScramblerClick(PlayerInteractEvent e) {
         ItemStack item = Methods.getItemInHand(e.getPlayer());
 
         if (item != null) {
-            if (getScramblers().isSimilar(item)) {
-                e.setCancelled(true);
-            }
+            if (getScramblers().isSimilar(item)) e.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
 
@@ -249,5 +251,4 @@ public class Scrambler implements Listener {
             roll.remove(player);
         } catch (Exception ignore) {}
     }
-
 }

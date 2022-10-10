@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
@@ -38,53 +39,39 @@ public class ArmorListener implements Listener {
     
     private final List<String> blockedMaterials;
 
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     public ArmorListener() {
         this.blockedMaterials = getBlocks();
     }
     
-    @EventHandler
-    public final void onInventoryClick(final InventoryClickEvent e) {
+    @EventHandler(ignoreCancelled = true)
+    public final void onInventoryClick(InventoryClickEvent e) {
         boolean shift = false;
         boolean numberkey = false;
         Player player = (Player) e.getWhoClicked();
 
-        if (e.isCancelled()) return;
+        if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT)) shift = true;
 
-        if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT)) {
-            shift = true;
-        }
-
-        if (e.getClick().equals(ClickType.NUMBER_KEY)) {
-            numberkey = true;
-        }
+        if (e.getClick().equals(ClickType.NUMBER_KEY)) numberkey = true;
 
         if ((e.getSlotType() != SlotType.ARMOR || e.getSlotType() != SlotType.QUICKBAR) &&
-        !(e.getInventory().getType().equals(InventoryType.CRAFTING) || e.getInventory().getType().equals(InventoryType.PLAYER))) {
-            return;
-        }
+        !(e.getInventory().getType().equals(InventoryType.CRAFTING) || e.getInventory().getType().equals(InventoryType.PLAYER))) return;
 
-        if (!(e.getWhoClicked() instanceof Player)) {
-            return;
-        }
-
-        if (e.getCurrentItem() == null) {
-            return;
-        }
+        if (!(e.getWhoClicked() instanceof Player) || e.getCurrentItem() == null) return;
 
         ArmorType newArmorType = ArmorType.matchType(shift ? e.getCurrentItem() : e.getCursor());
 
-        if (!shift && newArmorType != null && e.getRawSlot() != newArmorType.getSlot()) {
-            // Used for drag and drop checking to make sure you aren't trying to place a helmet in the boots place.
-            return;
-        }
+        // Used for drag and drop checking to make sure you aren't trying to place a helmet in the boots place.
+        if (!shift && newArmorType != null && e.getRawSlot() != newArmorType.getSlot()) return;
 
         if (e.getInventory().getType() == InventoryType.CRAFTING) {
             // Stops the activation when a player shift clicks from their small crafting option.
-            if (e.getRawSlot() >= 0 && e.getRawSlot() <= 4) {
-                return;
-            }
+            if (e.getRawSlot() >= 0 && e.getRawSlot() <= 4) return;
         }
 
         if (shift) {
@@ -98,25 +85,19 @@ public class ArmorListener implements Listener {
                 newArmorType.equals(ArmorType.BOOTS) && (equipping == (e.getWhoClicked().getInventory().getBoots() == null))) {
                     ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, EquipMethod.SHIFT_CLICK, newArmorType,
                     equipping ? null : e.getCurrentItem(), equipping ? e.getCurrentItem() : null);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
+                    plugin.getServer().getPluginManager().callEvent(armorEquipEvent);
 
-                    if (armorEquipEvent.isCancelled()) {
-                        e.setCancelled(true);
-                    }
+                    if (armorEquipEvent.isCancelled()) e.setCancelled(true);
                 }
             }
         } else {
             ItemStack newArmorPiece = e.getCursor();
 
-            if (newArmorPiece == null) {
-                newArmorPiece = new ItemStack(Material.AIR);
-            }
+            if (newArmorPiece == null) newArmorPiece = new ItemStack(Material.AIR);
 
             ItemStack oldArmorPiece = e.getCurrentItem();
 
-            if (oldArmorPiece == null) {
-                oldArmorPiece = new ItemStack(Material.AIR);
-            }
+            if (oldArmorPiece == null) oldArmorPiece = new ItemStack(Material.AIR);
 
             if (numberkey) {
                 if (e.getInventory().getType().equals(InventoryType.PLAYER)) { // Prevents shit in the 2by2 crafting
@@ -126,11 +107,11 @@ public class ArmorListener implements Listener {
                     // e.getSlot() == Armor slot, can't use e.getRawSlot() as that gives a hotbar slot ;-;
                     ItemStack hotbarItem = e.getInventory().getItem(e.getHotbarButton());
 
-                    if (hotbarItem != null) {// Equipping
+                    if (hotbarItem != null) { // Equipping
                         newArmorType = ArmorType.matchType(hotbarItem);
                         newArmorPiece = hotbarItem;
                         oldArmorPiece = e.getInventory().getItem(e.getSlot());
-                    } else {// Unequipping
+                    } else { // Unequipping
                         newArmorType = ArmorType.matchType(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR ? e.getCurrentItem() : e.getCursor());
                     }
                 }
@@ -143,9 +124,7 @@ public class ArmorListener implements Listener {
             if (newArmorType != null && e.getRawSlot() == newArmorType.getSlot()) {
                 EquipMethod method = EquipMethod.DRAG;
 
-                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) {
-                    method = EquipMethod.HOTBAR_SWAP;
-                }
+                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = EquipMethod.HOTBAR_SWAP;
 
                 final ItemStack It = newArmorPiece.clone();
                 final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
@@ -155,21 +134,13 @@ public class ArmorListener implements Listener {
 
                     if (e.getInventory().getType().equals(InventoryType.PLAYER)) {
 
-                        if (e.getSlot() == ArmorType.HELMET.getSlot()) {
-                            I = e.getWhoClicked().getEquipment().getHelmet();
-                        }
+                        if (e.getSlot() == ArmorType.HELMET.getSlot()) I = e.getWhoClicked().getEquipment().getHelmet();
 
-                        if (e.getSlot() == ArmorType.CHESTPLATE.getSlot()) {
-                            I = e.getWhoClicked().getEquipment().getChestplate();
-                        }
+                        if (e.getSlot() == ArmorType.CHESTPLATE.getSlot()) I = e.getWhoClicked().getEquipment().getChestplate();
 
-                        if (e.getSlot() == ArmorType.LEGGINGS.getSlot()) {
-                            I = e.getWhoClicked().getEquipment().getLeggings();
-                        }
+                        if (e.getSlot() == ArmorType.LEGGINGS.getSlot()) I = e.getWhoClicked().getEquipment().getLeggings();
 
-                        if (e.getSlot() == ArmorType.BOOTS.getSlot()) {
-                            I = e.getWhoClicked().getEquipment().getBoots();
-                        }
+                        if (e.getSlot() == ArmorType.BOOTS.getSlot()) I = e.getWhoClicked().getEquipment().getBoots();
                     }
 
                     if (I == null) {
@@ -183,11 +154,9 @@ public class ArmorListener implements Listener {
                     // I == the old item
                     // It == the new item
                     if (I.isSimilar(It) || (I.getType() == Material.AIR && It.getType() == Material.AIR)) {
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
+                        plugin.getServer().getPluginManager().callEvent(armorEquipEvent);
 
-                        if (armorEquipEvent.isCancelled()) {
-                            e.setCancelled(true);
-                        }
+                        if (armorEquipEvent.isCancelled()) e.setCancelled(true);
                     }
                 }, 0);
             } else {
@@ -199,29 +168,21 @@ public class ArmorListener implements Listener {
                             if (ArmorType.matchType(newArmorPiece) != null || newArmorPiece == null) {
 
                                 if (ArmorType.matchType(oldArmorPiece) != null) {
-                                    if (e.getRawSlot() != ArmorType.matchType(oldArmorPiece).getSlot()) {
-                                        return;
-                                    }
+                                    if (e.getRawSlot() != ArmorType.matchType(oldArmorPiece).getSlot()) return;
                                 }
 
                                 if (ArmorType.matchType(newArmorPiece) != null) {
-                                    if (e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()) {
-                                        return;
-                                    }
+                                    if (e.getRawSlot() != ArmorType.matchType(newArmorPiece).getSlot()) return;
                                 }
 
                                 EquipMethod method = EquipMethod.DRAG;
 
-                                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) {
-                                    method = EquipMethod.HOTBAR_SWAP;
-                                }
+                                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = EquipMethod.HOTBAR_SWAP;
 
                                 ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
-                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
+                                plugin.getServer().getPluginManager().callEvent(armorEquipEvent);
 
-                                if (armorEquipEvent.isCancelled()) {
-                                    e.setCancelled(true);
-                                }
+                                if (armorEquipEvent.isCancelled()) e.setCancelled(true);
                             }
                         }
                     }
@@ -230,7 +191,7 @@ public class ArmorListener implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerInteractEvent(PlayerInteractEvent e) {
         if (e.getAction() == Action.PHYSICAL) return;
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -253,7 +214,7 @@ public class ArmorListener implements Listener {
             if (newArmorType != null) {
                 if (newArmorType.equals(ArmorType.HELMET) && e.getPlayer().getInventory().getHelmet() == null || newArmorType.equals(ArmorType.CHESTPLATE) && e.getPlayer().getInventory().getChestplate() == null || newArmorType.equals(ArmorType.LEGGINGS) && e.getPlayer().getInventory().getLeggings() == null || newArmorType.equals(ArmorType.BOOTS) && e.getPlayer().getInventory().getBoots() == null) {
                     ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(e.getPlayer(), EquipMethod.HOTBAR, ArmorType.matchType(e.getItem()), null, e.getItem());
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
+                    plugin.getServer().getPluginManager().callEvent(armorEquipEvent);
 
                     if (armorEquipEvent.isCancelled()) {
                         e.setCancelled(true);
@@ -264,8 +225,10 @@ public class ArmorListener implements Listener {
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void dispenserFireEvent(BlockDispenseEvent e) {
+        if (crazyManager.isIgnoredEvent(e)) return;
+
         ArmorType type = ArmorType.matchType(e.getItem());
 
         if (ArmorType.matchType(e.getItem()) != null) {
@@ -293,11 +256,9 @@ public class ArmorListener implements Listener {
                                     && p.getLocation().getZ() <= loc.getZ()) {
 
                                 ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.DISPENSER, ArmorType.matchType(e.getItem()), null, e.getItem());
-                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
+                                plugin.getServer().getPluginManager().callEvent(armorEquipEvent);
 
-                                if (armorEquipEvent.isCancelled()) {
-                                    e.setCancelled(true);
-                                }
+                                if (armorEquipEvent.isCancelled()) e.setCancelled(true);
 
                                 return;
                             }
@@ -308,7 +269,7 @@ public class ArmorListener implements Listener {
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void itemBreakEvent(PlayerItemBreakEvent e) {
         ArmorType type = ArmorType.matchType(e.getBrokenItem());
 
@@ -320,7 +281,7 @@ public class ArmorListener implements Listener {
             if (armorEquipEvent.isCancelled()) {
                 ItemStack item = e.getBrokenItem().clone();
 
-                Methods.setDurability(item, Methods.getDurability(item) - 1);
+                methods.setDurability(item, Methods.getDurability(item) - 1);
 
                 if (type.equals(ArmorType.HELMET)) {
                     p.getInventory().setHelmet(item);
@@ -335,13 +296,13 @@ public class ArmorListener implements Listener {
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void playerDeathEvent(PlayerDeathEvent e) {
-        Player p = e.getEntity();
+        Player player = e.getEntity();
 
-        for (ItemStack i : p.getInventory().getArmorContents()) {
+        for (ItemStack i : player.getInventory().getArmorContents()) {
             if (i != null && !i.getType().equals(Material.AIR)) {
-                CrazyManager.getInstance().getPlugin().getServer().getPluginManager().callEvent(new ArmorEquipEvent(p, EquipMethod.DEATH, ArmorType.matchType(i), i, null));
+                plugin.getServer().getPluginManager().callEvent(new ArmorEquipEvent(player, EquipMethod.DEATH, ArmorType.matchType(i), i, null));
                 // No way to cancel a death event.
             }
         }
@@ -350,7 +311,7 @@ public class ArmorListener implements Listener {
     /**
      * A utility method to support versions that use null or air ItemStacks.
      */
-    public static boolean isAirOrNull(ItemStack item) {
+    public boolean isAirOrNull(ItemStack item) {
         return item == null || item.getType().equals(Material.AIR);
     }
     
@@ -408,5 +369,4 @@ public class ArmorListener implements Listener {
         blocks.add("SHULKER_BOX");
         return blocks;
     }
-
 }

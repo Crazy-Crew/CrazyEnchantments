@@ -63,9 +63,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
 
             for (ProtectedRegion region : set) {
-                if (regionName.equalsIgnoreCase(region.getId())) {
-                    return true;
-                }
+                if (regionName.equalsIgnoreCase(region.getId())) return true;
             }
         } catch (NullPointerException e) {
             return false;
@@ -83,9 +81,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
 
             for (ProtectedRegion region : set.getRegions()) {
-                if (region.getMembers().contains(player.getUniqueId())) {
-                    return true;
-                }
+                if (region.getMembers().contains(player.getUniqueId())) return true;
             }
         } catch (NullPointerException e) {
             return false;
@@ -103,9 +99,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
 
             for (ProtectedRegion region : set.getRegions()) {
-                if (region.getOwners().contains(player.getUniqueId())) {
-                    return true;
-                }
+                if (region.getOwners().contains(player.getUniqueId())) return true;
             }
         } catch (NullPointerException e) {
             return false;
@@ -113,5 +107,4 @@ public class WorldGuardSupport implements WorldGuardVersion {
 
         return false;
     }
-
 }

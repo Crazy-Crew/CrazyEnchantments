@@ -85,5 +85,4 @@ public class BowEnchantment {
     public boolean isPotionEnchantment() {
         return isPotionEnchantment;
     }
-
 }

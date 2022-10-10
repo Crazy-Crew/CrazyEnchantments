@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 
 public class BuyBookEvent extends Event {
     
-    private static final HandlerList handlers = new HandlerList();
+    private final HandlerList handlers = new HandlerList();
     private final int price;
     private final CEBook book;
     private final CEPlayer player;
@@ -26,10 +26,6 @@ public class BuyBookEvent extends Event {
         this.price = price;
         this.player = player;
         this.currency = currency;
-    }
-    
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
     
     /**
@@ -63,9 +59,14 @@ public class BuyBookEvent extends Event {
     public CEBook getBook() {
         return this.book;
     }
-    
+
+    /**
+     * Gets a list of handlers handling this event.
+     *
+     * @return A list of handlers handling this event.
+     */
+    @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-
 }

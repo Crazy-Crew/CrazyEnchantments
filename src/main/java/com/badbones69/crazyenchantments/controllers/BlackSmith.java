@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
@@ -22,9 +23,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BlackSmith implements Listener {
-    
-    private static final BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
-    private static final CrazyManager crazyManager = CrazyManager.getInstance();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
+
+    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     private final int mainSlot = 10;
     private final int subSlot = 13;
     private final static int resultSlot = 16;
@@ -34,20 +42,20 @@ public class BlackSmith implements Listener {
     private final Sound levelUp = Sound.ENTITY_PLAYER_LEVELUP;
     private final Sound villagerNo = Sound.ENTITY_VILLAGER_NO;
     
-    public static void openBlackSmith(Player player) {
-        Inventory inventory = crazyManager.getPlugin().getServer().createInventory(null, 27, blackSmithManager.getMenuName());
+    public void openBlackSmith(Player player) {
+        Inventory inventory = plugin.getServer().createInventory(null, 27, blackSmithManager.getMenuName());
         otherBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getGrayGlass()));
         resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
         inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
         player.openInventory(inventory);
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         Inventory inventory = e.getInventory();
 
-        if (inventory != null && e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
+        if (e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
             e.setCancelled(true);
             ItemStack item = e.getCurrentItem();
 
@@ -68,9 +76,9 @@ public class BlackSmith implements Listener {
                         } else { // Main item slot is not empty
                             e.setCurrentItem(new ItemStack(Material.AIR));
 
-                            if (inventory.getItem(subSlot) != null) { // Sub item slot is not empty
-                                e.setCurrentItem(inventory.getItem(subSlot)); // Moves sub slot item to clicked items slot
-                            }
+                            // Sub item slot is not empty
+                            // Moves sub slot item to clicked items slot
+                            if (inventory.getItem(subSlot) != null) e.setCurrentItem(inventory.getItem(subSlot));
 
                             inventory.setItem(subSlot, item); // Moves clicked item to sub slot
                             playSound(player, click);
@@ -95,14 +103,12 @@ public class BlackSmith implements Listener {
                                 if (blackSmithManager.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                                     Currency currency = blackSmithManager.getCurrency();
 
-                                    if (CurrencyAPI.canBuy(player, currency, resultItem.getCost())) {
-                                        CurrencyAPI.takeCurrency(player, currency, resultItem.getCost());
+                                    if (currencyAPI.canBuy(player, currency, resultItem.getCost())) {
+                                        currencyAPI.takeCurrency(player, currency, resultItem.getCost());
                                     } else {
-                                        String needed = (resultItem.getCost() - CurrencyAPI.getCurrency(player, currency)) + "";
+                                        String needed = (resultItem.getCost() - currencyAPI.getCurrency(player, currency)) + "";
 
-                                        if (currency != null) {
-                                            Methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
-                                        }
+                                        if (currency != null) methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
                                         return;
                                     }
                                 }
@@ -133,9 +139,7 @@ public class BlackSmith implements Listener {
             Player player = (Player) e.getPlayer();
 
             for (int slot : Arrays.asList(mainSlot, subSlot)) {
-                if (inventory.getItem(slot) != null && inventory.getItem(slot).getType() != Material.AIR) {
-                    givePlayerItem(player, inventory.getItem(slot));
-                }
+                if (inventory.getItem(slot) != null && inventory.getItem(slot).getType() != Material.AIR) givePlayerItem(player, inventory.getItem(slot));
             }
 
             inventory.clear();
@@ -153,7 +157,7 @@ public class BlackSmith implements Listener {
     }
     
     private void givePlayerItem(Player player, ItemStack item) {
-        if (Methods.isInventoryFull(player) || player.isDead()) {
+        if (methods.isInventoryFull(player) || player.isDead()) {
             player.getWorld().dropItem(player.getLocation(), item);
         } else {
             player.getInventory().addItem(item);
@@ -167,5 +171,4 @@ public class BlackSmith implements Listener {
     private void playSound(Player player, Sound sound) {
         player.playSound(player.getLocation(), sound, 1, 1);
     }
-
 }

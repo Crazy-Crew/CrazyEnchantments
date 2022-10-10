@@ -1,12 +1,12 @@
-name: CrazyEnchantments
-main: "${group}.CrazyEnchantments"
-version: ${version}
-api-version: 1.13
-description: ${description}
+name: "CrazyEnchantments"
 
-authors:
-  - BadBones69
-  - RyderBelserion
+main: "${group}.CrazyEnchantments"
+
+authors: [BadBones69, RyderBelserion]
+
+version: ${version}
+api-version: "1.19"
+description: ${description}
 
 softdepend:
   - WorldGuard
@@ -22,8 +22,6 @@ softdepend:
   - Vault
   - Oraxen
 
-website: https://www.spigotmc.org/resources/16470/
-
 commands:
   crazyenchantments:
     description: Opens the Enchanter GUI.
@@ -37,9 +35,3 @@ commands:
   gkit:
     description: Opens the GKitz GUI.
     aliases: [ gkitz, gkits ]
-
-libraries:
-  - org.jetbrains.kotlin:kotlin-stdlib:1.7.10
-  - org.apache.commons:commons-text:1.9
-  - com.intellectualsites.informative-annotations:informative-annotations:1.2
-  - com.intellectualsites.paster:Paster:1.1.4

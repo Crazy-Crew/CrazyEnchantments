@@ -36,5 +36,4 @@ public class BlockProcessInfo {
     public boolean isSpawner() {
         return isSpawner;
     }
-
 }

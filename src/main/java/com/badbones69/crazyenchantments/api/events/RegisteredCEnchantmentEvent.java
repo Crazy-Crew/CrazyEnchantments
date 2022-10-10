@@ -6,15 +6,11 @@ import org.bukkit.event.HandlerList;
 
 public class RegisteredCEnchantmentEvent extends Event {
     
-    private static final HandlerList handlers = new HandlerList();
+    private final HandlerList handlers = new HandlerList();
     private final CEnchantment enchantment;
     
     public RegisteredCEnchantmentEvent(CEnchantment enchantment) {
         this.enchantment = enchantment;
-    }
-    
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
     
     /**
@@ -23,9 +19,14 @@ public class RegisteredCEnchantmentEvent extends Event {
     public CEnchantment getEnchantment() {
         return enchantment;
     }
-    
+
+    /**
+     * Gets a list of handlers handling this event.
+     *
+     * @return A list of handlers handling this event.
+     */
+    @Override
     public HandlerList getHandlers() {
         return handlers;
     }
-
 }

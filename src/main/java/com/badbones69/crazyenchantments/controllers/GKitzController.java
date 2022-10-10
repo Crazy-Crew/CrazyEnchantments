@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -26,13 +27,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GKitzController implements Listener {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
     
-    private static final CrazyManager crazyManager = CrazyManager.getInstance();
-    private final InfoMenuManager infoManager = crazyManager.getInfoMenuManager();
-    
-    public static void openGUI(Player player) {
+    public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = crazyManager.getPlugin().getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
+        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
 
         for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
@@ -71,12 +75,12 @@ public class GKitzController implements Listener {
         player.openInventory(inventory);
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         Inventory inventory = e.getInventory();
         ItemStack item = e.getCurrentItem();
 
-        if (inventory != null && item != null && item.getType() != Material.AIR) {
+        if (item != null && item.getType() != Material.AIR) {
             Player player = (Player) e.getWhoClicked();
             CEPlayer cePlayer = crazyManager.getCEPlayer(player);
             NBTItem nbtItem = new NBTItem(item);
@@ -85,9 +89,7 @@ public class GKitzController implements Listener {
                 if (e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     e.setCancelled(true);
 
-                    if (e.getRawSlot() < inventory.getSize() && item.isSimilar(infoManager.getBackRightButton())) {
-                        openGUI(player);
-                    }
+                    if (e.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
 
                     return;
                 }
@@ -95,6 +97,7 @@ public class GKitzController implements Listener {
 
             if (e.getView().getTitle().equals(Methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 e.setCancelled(true);
+
                 if (e.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {
                     GKitz kit = crazyManager.getGKitFromName(nbtItem.getString("gkit"));
 
@@ -103,13 +106,13 @@ public class GKitzController implements Listener {
                         int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
                         // Some debug code for when checking the math for slots.
                         // System.out.println((items.size() / 9) + " : " + ((items.size() / 9) * 9) + " : " + items.size() % 9 + " : " + slots);
-                        Inventory previewInventory = crazyManager.getPlugin().getServer().createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
+                        Inventory previewInventory = plugin.getServer().createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
 
                         for (ItemStack itemStack : items) {
                             previewInventory.addItem(itemStack);
                         }
 
-                        previewInventory.setItem(slots - 1, infoManager.getBackRightButton());
+                        previewInventory.setItem(slots - 1, infoMenuManager.getBackRightButton());
                         player.openInventory(previewInventory);
                     } else {
                         HashMap<String, String> placeholders = new HashMap<>();
@@ -131,5 +134,4 @@ public class GKitzController implements Listener {
             }
         }
     }
-
 }

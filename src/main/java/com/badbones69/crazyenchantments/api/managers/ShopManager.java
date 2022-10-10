@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.managers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -12,23 +13,22 @@ import com.badbones69.crazyenchantments.api.objects.LostBook;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class ShopManager {
-    
-    private final CrazyManager ce = CrazyManager.getInstance();
-    private static final ShopManager instance = new ShopManager();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+
     private String inventoryName;
     private int inventorySize;
     private boolean enchantmentTableShop;
     private final HashMap<ItemBuilder, Integer> customizerItems = new HashMap<>();
     private final HashMap<ItemBuilder, Integer> shopItems = new HashMap<>();
-    
-    public static ShopManager getInstance() {
-        return instance;
-    }
     
     public void load() {
         customizerItems.clear();
@@ -49,20 +49,16 @@ public class ShopManager {
                 }
             }
 
-            if (slot > inventorySize || slot <= 0) {
-                continue;
-            }
+            if (slot > inventorySize || slot <= 0) continue;
 
             slot--;
             customizerItems.put(ItemBuilder.convertString(customItemString), slot);
         }
 
-        for (Category category : ce.getCategories()) {
+        for (Category category : crazyManager.getCategories()) {
 
             if (category.isInGUI()) {
-                if (category.getSlot() > inventorySize) {
-                    continue;
-                }
+                if (category.getSlot() > inventorySize) continue;
 
                 shopItems.put(category.getDisplayItem(), category.getSlot());
             }
@@ -70,9 +66,7 @@ public class ShopManager {
             LostBook lostBook = category.getLostBook();
 
             if (lostBook.isInGUI()) {
-                if (lostBook.getSlot() > inventorySize) {
-                    continue;
-                }
+                if (lostBook.getSlot() > inventorySize) continue;
 
                 shopItems.put(lostBook.getDisplayItem(), lostBook.getSlot());
             }
@@ -80,9 +74,7 @@ public class ShopManager {
 
         for (ShopOption option : ShopOption.values()) {
             if (option.isInGUI()) {
-                if (option.getSlot() > inventorySize) {
-                    continue;
-                }
+                if (option.getSlot() > inventorySize) continue;
 
                 shopItems.put(option.getItemBuilder(), option.getSlot());
             }
@@ -93,10 +85,10 @@ public class ShopManager {
         HashMap<String, String> placeholders = new HashMap<>();
 
         for (Currency currency : Currency.values()) {
-            placeholders.put("%" + currency.getName() + "%", CurrencyAPI.getCurrency(player, currency) + "");
+            placeholders.put("%" + currency.getName() + "%", currencyAPI.getCurrency(player, currency) + "");
         }
 
-        Inventory inventory = ce.getPlugin().getServer().createInventory(null, inventorySize, inventoryName);
+        Inventory inventory = plugin.getServer().createInventory(null, inventorySize, inventoryName);
 
         for (Entry<ItemBuilder, Integer> itemBuilders : customizerItems.entrySet()) {
             itemBuilders.getKey().setNamePlaceholders(placeholders)
@@ -119,5 +111,4 @@ public class ShopManager {
     public boolean isEnchantmentTableShop() {
         return enchantmentTableShop;
     }
-
 }

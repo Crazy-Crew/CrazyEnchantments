@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.Material;
@@ -14,12 +15,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CommandChecker implements Listener {
-    
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
     private final List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
     private final ItemStack air = new ItemStack(Material.AIR);
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInventoryClear(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
 
@@ -27,9 +31,7 @@ public class CommandChecker implements Listener {
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
                 if (enchantment.isActivated()) {
                     for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                        if (armor != null) {
-                            crazyManager.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player :: removePotionEffect);
-                        }
+                        if (armor != null) crazyManager.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player :: removePotionEffect);
                     }
                 }
             }
@@ -46,7 +48,6 @@ public class CommandChecker implements Listener {
             public void run() {
                 crazyManager.updatePlayerEffects(player);
             }
-        }.runTaskLater(crazyManager.getPlugin(), 5);
+        }.runTaskLater(plugin, 5);
     }
-
 }

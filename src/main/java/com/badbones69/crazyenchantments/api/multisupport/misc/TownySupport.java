@@ -27,9 +27,12 @@ public class TownySupport implements FactionsVersion {
         Resident resident = api.getResident(player.getName());
 
         try {
-            if (block != null && block.hasTown() && resident.hasTown() && resident.getTown().equals(block.getTown())) return true;
+            if (block != null && block.hasTown()) {
+                assert resident != null;
+                if (resident.hasTown() && resident.getTown().equals(block.getTown())) return true;
+            }
         } catch (NotRegisteredException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         return false;
@@ -43,12 +46,12 @@ public class TownySupport implements FactionsVersion {
 
         try {
             TownBlock block = TownyAPI.getInstance().getTownBlock(location);
+
             if (block != null && block.hasTown() && !block.getTown().isPVP()) return false;
         } catch (NotRegisteredException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         return true;
     }
-
 }

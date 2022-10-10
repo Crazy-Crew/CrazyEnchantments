@@ -7,12 +7,10 @@ import com.badbones69.crazyenchantments.api.objects.AllyMob.AllyType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-
 import java.util.*;
 
 public class AllyManager {
-    
-    private static final AllyManager instance = new AllyManager();
+
     private final List<AllyMob> allyMobs = new ArrayList<>();
     private final Map<UUID, List<AllyMob>> allyOwners = new HashMap<>();
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
@@ -53,9 +51,7 @@ public class AllyManager {
             if (allyOwners.containsKey(owner)) {
                 allyOwners.get(owner).add(allyMob);
 
-                if (allyOwners.get(owner).isEmpty()) {
-                    allyOwners.remove(owner);
-                }
+                if (allyOwners.get(owner).isEmpty()) allyOwners.remove(owner);
             }
         }
     }
@@ -86,9 +82,7 @@ public class AllyManager {
     }
     
     public boolean isAlly(Player player, LivingEntity livingEntity) {
-        if (isAllyMob(livingEntity)) {
-            return isAlly(player, getAllyMob(livingEntity));
-        }
+        if (isAllyMob(livingEntity)) return isAlly(player, getAllyMob(livingEntity));
 
         return false;
     }
@@ -99,9 +93,7 @@ public class AllyManager {
     
     public boolean isAllyMob(LivingEntity livingEntity) {
         for (AllyMob ally : allyMobs) {
-            if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) {
-                return true;
-            }
+            if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return true;
         }
 
         return false;
@@ -109,16 +101,9 @@ public class AllyManager {
     
     public AllyMob getAllyMob(LivingEntity livingEntity) {
         for (AllyMob ally : allyMobs) {
-            if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) {
-                return ally;
-            }
+            if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return ally;
         }
 
         return null;
     }
-    
-    public static AllyManager getInstance() {
-        return instance;
-    }
-
 }

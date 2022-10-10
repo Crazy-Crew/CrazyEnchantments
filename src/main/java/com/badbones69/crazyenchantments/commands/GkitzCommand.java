@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.commands;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.Messages;
@@ -10,16 +11,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 
 public class GkitzCommand implements CommandExecutor {
-    
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean isPlayer = sender instanceof Player;
 
         if (crazyManager.isGkitzEnabled()) {
@@ -30,9 +33,7 @@ public class GkitzCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (hasPermission(sender, "gkitz")) {
-                    GKitzController.openGUI((Player) sender);
-                }
+                if (hasPermission(sender, "gkitz")) GKitzController.openGUI((Player) sender);
 
             } else {
                 if (args[0].equalsIgnoreCase("reset")) { // /gkitz reset <kit> [player]
@@ -51,10 +52,10 @@ public class GkitzCommand implements CommandExecutor {
                             }
 
                             if (args.length >= 3) {
-                                if (!Methods.isPlayerOnline(args[2], sender)) {
+                                if (!methods.isPlayerOnline(args[2], sender)) {
                                     return true;
                                 } else {
-                                    player = Methods.getPlayer(args[2]);
+                                    player = methods.getPlayer(args[2]);
                                 }
                             } else {
                                 if (!isPlayer) {
@@ -90,11 +91,11 @@ public class GkitzCommand implements CommandExecutor {
                         }
 
                         if (args.length >= 2) {
-                            if (!Methods.isPlayerOnline(args[1], sender)) {
+                            if (!methods.isPlayerOnline(args[1], sender)) {
                                 return true;
                             } else {
                                 if (hasPermission(sender, "crazyenchantments.gkitz.give")) {
-                                    player = Methods.getPlayer(args[1]); // Targeting a player.
+                                    player = methods.getPlayer(args[1]); // Targeting a player.
                                     adminGive = true;
                                 } else {
                                     return true;
@@ -132,7 +133,6 @@ public class GkitzCommand implements CommandExecutor {
                             sender.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
                             return true;
                         }
-
                     }
                 }
             }
@@ -144,7 +144,6 @@ public class GkitzCommand implements CommandExecutor {
     }
     
     private boolean hasPermission(CommandSender sender, String permission) {
-        return Methods.hasPermission(sender, permission, true);
+        return methods.hasPermission(sender, permission, true);
     }
-
 }

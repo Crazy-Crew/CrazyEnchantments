@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import org.bukkit.entity.Arrow;
@@ -9,8 +10,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class EnchantedArrow {
-    
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private final Arrow arrow;
     private final ItemStack bow;
@@ -55,5 +58,4 @@ public class EnchantedArrow {
     public boolean hasEnchantment(CEnchantments enchantment) {
         return enchantments.contains(enchantment.getEnchantment());
     }
-
 }

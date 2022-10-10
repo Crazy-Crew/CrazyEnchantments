@@ -9,8 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class BlackSmithManager {
-    
-    private static final BlackSmithManager instance = new BlackSmithManager();
+
     private ItemStack denyBarrier;
     private ItemStack redGlass;
     private ItemStack blueGlass;
@@ -22,10 +21,6 @@ public class BlackSmithManager {
     private int levelUp;
     private int addEnchantment;
     private boolean maxEnchantments;
-    
-    public static BlackSmithManager getInstance() {
-        return instance;
-    }
     
     public void load() {
         FileConfiguration config = Files.CONFIG.getFile();
@@ -89,5 +84,4 @@ public class BlackSmithManager {
     public boolean useMaxEnchantments() {
         return maxEnchantments;
     }
-
 }

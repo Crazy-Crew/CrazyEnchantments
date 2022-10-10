@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import org.bukkit.enchantments.Enchantment;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,5 +36,4 @@ public class BlackSmithCompare {
     public Map<CEnchantment, Integer> getNewCEnchantments() {
         return newCEnchantments;
     }
-
 }

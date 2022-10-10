@@ -1,23 +1,26 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Map.Entry;
 
 public class BlackSmithResult {
-    
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
-    private final static BlackSmithManager blackSmithManager = BlackSmithManager.getInstance();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
     private int cost = 0;
     private ItemStack resultItem;
     
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
         resultItem = mainItem.clone();
 
+        BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
+
+        CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
         if (mainItem.getType() == crazyManager.getEnchantmentBook().getMaterial() && subItem.getType() == crazyManager.getEnchantmentBook().getMaterial()) {
             CEBook mainBook = crazyManager.getCEBook(mainItem);
             CEBook subBook = crazyManager.getCEBook(subItem);
@@ -100,5 +103,4 @@ public class BlackSmithResult {
     public ItemStack getResultItem() {
         return resultItem;
     }
-
 }

@@ -1,0 +1,72 @@
+[versions]
+
+# Spigot Team
+spigot = "1.19.2-R0.1-SNAPSHOT"
+
+# EngineHub Team
+engine-hub = "7.0.0-SNAPSHOT"
+
+# OmeR Team
+wildstacker-api = "3.8.0"
+superior-api = "b11"
+
+# Bukkit
+bukkit-bstats = "3.0.0"
+
+# Placeholders
+placeholder-api = "2.11.2"
+
+# Misc Libraries
+nbt-api = "2.10.0"
+vault-api = "1.7"
+
+plot-api = "6.10.0"
+ncp-api = "3.16.1-SNAPSHOT"
+gp-api = "16.18"
+
+silk-spawners-api = "7.2.0"
+
+massive-factions-api = "1.6.9.5-U0.6.9"
+
+oraxen-api = "master-SNAPSHOT"
+
+towny-api = "0.98.2.0"
+
+[libraries]
+
+# Spigot Team
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+
+# EngineHub Team
+bukkit-worldedit = { module = "com.sk89q.worldguard:worldguard-legacy", version.ref = "engine-hub" }
+bukkit-worldguard = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "engine-hub" }
+
+# OmeR Team
+superior-skyblock = { module = "com.github.OmerBenGera:SuperiorSkyblockAPI", version.ref = "superior-api" }
+wild-stacker = { module = "com.bgsoftware:WildStackerAPI", version.ref = "wildstacker-api" }
+
+# Bukkit
+bukkit-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bukkit-bstats" }
+
+# Placeholders
+placeholder-api = { module = "me.clip:placeholderapi", version.ref = "placeholder-api" }
+
+# NBT API Libraries
+nbt-api = { module = "de.tr7zw:nbt-data-api", version.ref = "nbt-api" }
+
+# Misc Libraries
+vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault-api" }
+
+plot-squared-api = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plot-api" }
+
+no-cheat-plus-api = { module = "fr.neatmonster:nocheatplus", version.ref = "ncp-api" }
+
+grief-prevention-api = { module = "com.github.TechFortress:GriefPrevention", version.ref = "gp-api" }
+
+silk-spawners-api = { module = "de.dustplanet:silkspawners", version.ref = "silk-spawners-api" }
+
+massive-factions-api = { module = "com.massivecraft:Factions", version.ref = "massive-factions-api" }
+
+oraxen-api = { module = "com.github.oraxen:oraxen", version.ref = "oraxen-api" }
+
+towny-api = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny-api" }

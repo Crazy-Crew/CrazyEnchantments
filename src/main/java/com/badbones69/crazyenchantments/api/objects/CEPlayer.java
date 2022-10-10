@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
@@ -15,6 +16,10 @@ import java.util.Calendar;
 import java.util.List;
 
 public class CEPlayer {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private int souls;
     private final Player player;
@@ -24,8 +29,6 @@ public class CEPlayer {
     private boolean hasRage;
     private int rageLevel;
     private BukkitTask rageTask;
-
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
     
     /**
      * Used to make a new CEPlayer.
@@ -98,9 +101,7 @@ public class CEPlayer {
     public void useSouls(int souls) {
         this.souls -= souls;
 
-        if (this.souls < 0) {
-            this.souls = 0;
-        }
+        if (this.souls < 0) this.souls = 0;
     }
     
     /**
@@ -132,9 +133,7 @@ public class CEPlayer {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.HELMET, new ItemStack(Material.AIR), item);
                         crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                        if (!event.isCancelled()) {
-                            player.getEquipment().setHelmet(item);
-                        }
+                        if (!event.isCancelled()) player.getEquipment().setHelmet(item);
 
                         continue;
                     }
@@ -145,9 +144,7 @@ public class CEPlayer {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.CHESTPLATE, new ItemStack(Material.AIR), item);
                         crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                        if (!event.isCancelled()) {
-                            player.getEquipment().setChestplate(item);
-                        }
+                        if (!event.isCancelled()) player.getEquipment().setChestplate(item);
 
                         continue;
                     }
@@ -157,9 +154,7 @@ public class CEPlayer {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.LEGGINGS, new ItemStack(Material.AIR), item);
                         crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                        if (!event.isCancelled()) {
-                            player.getEquipment().setLeggings(item);
-                        }
+                        if (!event.isCancelled()) player.getEquipment().setLeggings(item);
 
                         continue;
                     }
@@ -168,9 +163,7 @@ public class CEPlayer {
                     ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
                     crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
 
-                    if (!event.isCancelled()) {
-                        player.getEquipment().setBoots(item);
-                    }
+                    if (!event.isCancelled()) player.getEquipment().setBoots(item);
 
                     continue;
                 }
@@ -210,9 +203,7 @@ public class CEPlayer {
         } else {
             if (player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase())) {
                 for (Cooldown cooldown : getCooldowns()) {
-                    if (cooldown.getGKitz() == kit) {
-                        return cooldown.isCooldownOver();
-                    }
+                    if (cooldown.getGKitz() == kit) return cooldown.isCooldownOver();
                 }
             } else {
                 return false;
@@ -237,9 +228,7 @@ public class CEPlayer {
      */
     public Cooldown getCooldown(GKitz kit) {
         for (Cooldown cooldown : cooldowns) {
-            if (cooldown.getGKitz() == kit) {
-                return cooldown;
-            }
+            if (cooldown.getGKitz() == kit) return cooldown;
         }
 
         return null;
@@ -271,21 +260,13 @@ public class CEPlayer {
 
         for (String i : kit.getCooldown().split(" ")) {
 
-            if (i.contains("D") || i.contains("d")) {
-                cooldown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
-            }
+            if (i.contains("D") || i.contains("d")) cooldown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
 
-            if (i.contains("H") || i.contains("h")) {
-                cooldown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
-            }
+            if (i.contains("H") || i.contains("h")) cooldown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
 
-            if (i.contains("M") || i.contains("m")) {
-                cooldown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
-            }
+            if (i.contains("M") || i.contains("m")) cooldown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
 
-            if (i.contains("S") || i.contains("s")) {
-                cooldown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
-            }
+            if (i.contains("S") || i.contains("s")) cooldown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
         }
 
         addCooldown(new Cooldown(kit, cooldown));
@@ -307,9 +288,7 @@ public class CEPlayer {
         List<Cooldown> playerCooldowns = new ArrayList<>();
 
         for (Cooldown cooldown : getCooldowns()) {
-            if (cooldown.getGKitz().getName().equalsIgnoreCase(kit.getName())) {
-                playerCooldowns.add(cooldown);
-            }
+            if (cooldown.getGKitz().getName().equalsIgnoreCase(kit.getName())) playerCooldowns.add(cooldown);
         }
 
         this.cooldowns.removeAll(playerCooldowns);
@@ -374,5 +353,4 @@ public class CEPlayer {
     public void setRageTask(BukkitTask rageTask) {
         this.rageTask = rageTask;
     }
-
 }

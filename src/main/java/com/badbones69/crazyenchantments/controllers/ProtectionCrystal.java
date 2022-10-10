@@ -1,6 +1,8 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -23,12 +25,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class ProtectionCrystal implements Listener {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     private final HashMap<UUID, List<ItemStack>> playersItems = new HashMap<>();
-    private static ItemBuilder crystal;
-    private static String protectionString;
+    private ItemBuilder crystal;
+    private String protectionString;
     
-    public static void loadProtectionCrystal() {
+    public void loadProtectionCrystal() {
         FileConfiguration config = Files.CONFIG.getFile();
         crystal = new ItemBuilder()
         .setMaterial(config.getString("Settings.ProtectionCrystal.Item"))
@@ -38,20 +44,18 @@ public class ProtectionCrystal implements Listener {
         protectionString = Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
     }
     
-    public static ItemStack getCrystals() {
+    public ItemStack getCrystals() {
         return getCrystals(1);
     }
     
-    public static ItemStack getCrystals(int amount) {
+    public ItemStack getCrystals(int amount) {
         return crystal.clone().setAmount(amount).build();
     }
     
-    public static boolean isProtected(ItemStack item) {
+    public boolean isProtected(ItemStack item) {
         if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
             for (String lore : item.getItemMeta().getLore()) {
-                if (lore.contains(protectionString)) {
-                    return true;
-                }
+                if (lore.contains(protectionString)) return true;
             }
         }
 
@@ -62,25 +66,21 @@ public class ProtectionCrystal implements Listener {
      * @deprecated use {@link ProtectionCrystal#isProtectionSuccessful}.
      */
     @Deprecated
-    public static boolean isSuccessful(Player player) {
+    public boolean isSuccessful(Player player) {
         return isProtectionSuccessful(player);
     }
     
-    public static boolean isProtectionSuccessful(Player player) {
-        if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) {
-            return true;
-        }
+    public boolean isProtectionSuccessful(Player player) {
+        if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) return true;
 
         FileConfiguration config = Files.CONFIG.getFile();
 
-        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")) {
-            return Methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
-        }
+        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")) return methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
 
         return true;
     }
     
-    public static ItemStack removeProtection(ItemStack item) {
+    public ItemStack removeProtection(ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>(itemMeta.getLore());
         lore.remove(protectionString);
@@ -117,12 +117,10 @@ public class ProtectionCrystal implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent e) {
 
-        if (e.getKeepInventory()) {
-            return;
-        }
+        if (e.getKeepInventory()) return;
 
         Player player = e.getEntity();
         List<ItemStack> savedItems = new ArrayList<>();
@@ -146,7 +144,7 @@ public class ProtectionCrystal implements Listener {
         playersItems.put(player.getUniqueId(), savedItems);
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent e) {
         Player player = e.getPlayer();
 
@@ -167,13 +165,10 @@ public class ProtectionCrystal implements Listener {
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onCrystalClick(PlayerInteractEvent e) {
-        ItemStack item = Methods.getItemInHand(e.getPlayer());
+        ItemStack item = methods.getItemInHand(e.getPlayer());
 
-        if (item != null && item.isSimilar(getCrystals())) {
-            e.setCancelled(true);
-        }
+        if (item.isSimilar(getCrystals())) e.setCancelled(true);
     }
-
 }

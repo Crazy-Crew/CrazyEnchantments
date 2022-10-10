@@ -9,55 +9,39 @@ import com.badbones69.crazyenchantments.commands.*;
 import com.badbones69.crazyenchantments.controllers.*;
 import com.badbones69.crazyenchantments.enchantments.*;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import io.papermc.lib.PaperLib;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CrazyEnchantments extends JavaPlugin implements Listener {
 
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+    private static CrazyEnchantments plugin;
 
-    private final FileManager fileManager = FileManager.getInstance();
+    private Starter starter;
 
-    private boolean pluginEnabled = false;
+    private final FileManager fileManager = getStarter().getFileManager();
+
+    private final CrazyManager crazyManager = getStarter().getCrazyManager();
+
+    private final CurrencyAPI currencyAPI = getStarter().getCurrencyAPI();
 
     private Armor armor;
 
     private final Attribute generic = Attribute.GENERIC_MAX_HEALTH;
 
+    private boolean isEnabled = false;
+
     @Override
     public void onEnable() {
-
-        if (!PaperLib.isPaper()) {
-            getLogger().warning("====================================================");
-            getLogger().warning(" " + this.getName() + " works better if you use Paper ");
-            getLogger().warning(" as your server software.");
-            getLogger().warning(" ");
-            getLogger().warning(" Paper offers significant performance improvements,");
-            getLogger().warning(" bug fixes, security enhancements and optional");
-            getLogger().warning(" features for server owners to enhance their server.");
-            getLogger().warning(" ");
-            getLogger().warning(" All of your plugins will function the same,");
-            getLogger().warning(" as it is a drop in replacement over spigot.");
-            getLogger().warning("");
-            getLogger().warning(" Join the Purpur Community @ https://purpurmc.org/discord");
-            getLogger().warning("====================================================");
-
-            getLogger().warning("A few features might not work on Spigot so be warned.");
-
-            // getServer().getPluginManager().disablePlugin(this);
-        }
-
         try {
-            crazyManager.loadPlugin(this);
+            plugin = this;
+
+            starter = new Starter();
+
+            starter.run();
 
             fileManager.logInfo(true).setup(this);
 
@@ -78,19 +62,16 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             crazyManager.load();
 
         } catch (Exception e) {
-            getLogger().severe(e.getMessage());
+            e.printStackTrace();
 
-            for (StackTraceElement stack : e.getStackTrace()) {
-                getLogger().severe(String.valueOf(stack));
-            }
-
-            pluginEnabled = false;
+            isEnabled = false;
 
             return;
         }
 
-        SupportedPlugins.Companion.printHooks();
-        CurrencyAPI.loadCurrency();
+        SupportedPlugins.printHooks();
+
+        currencyAPI.loadCurrency();
 
         boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
 
@@ -102,15 +83,14 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> crazyManager.getCEPlayers().forEach(crazyManager::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
 
-
-        pluginEnabled = true;
+        isEnabled = true;
 
         enable();
     }
 
     @Override
     public void onDisable() {
-        if (pluginEnabled) return;
+        if (!isEnabled) return;
 
         disable();
     }
@@ -152,11 +132,13 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         if (crazyManager.isGkitzEnabled()) {
             getLogger().info("Gkitz support is now enabled.");
+
             getServer().getPluginManager().registerEvents(new GKitzController(), this);
         }
 
         if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded()) {
             getLogger().info("Silk Spawners support is now enabled.");
+
             getServer().getPluginManager().registerEvents(new SilkSpawnerSupport(), this);
         }
 
@@ -178,20 +160,11 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         getServer().getOnlinePlayers().forEach(crazyManager::unloadCEPlayer);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        crazyManager.loadCEPlayer(player);
-        crazyManager.updatePlayerEffects(player);
-
-        boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
-
-        if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
+    public static CrazyEnchantments getPlugin() {
+        return plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        crazyManager.unloadCEPlayer(event.getPlayer());
+    public Starter getStarter() {
+        return starter;
     }
 }

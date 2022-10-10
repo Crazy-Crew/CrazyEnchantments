@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.managers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -10,24 +11,21 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class InfoMenuManager {
-    
-    public static final InfoMenuManager instance = new InfoMenuManager();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
     private Inventory inventoryMenu;
     private String inventoryName;
     private int inventorySize;
     private ItemStack backRight;
     private ItemStack backLeft;
     private final List<EnchantmentType> enchantmentTypes = new ArrayList<>();
-    private final CrazyManager ce = CrazyManager.getInstance();
-    
-    public static InfoMenuManager getInstance() {
-        return instance;
-    }
     
     public void load() {
         enchantmentTypes.clear();
@@ -35,7 +33,7 @@ public class InfoMenuManager {
         String path = "Info-GUI-Settings";
         inventoryName = Methods.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
         inventorySize = file.getInt(path + ".Inventory.Size", 18);
-        inventoryMenu = ce.getPlugin().getServer().createInventory(null, inventorySize, inventoryName);
+        inventoryMenu = plugin.getServer().createInventory(null, inventorySize, inventoryName);
         backRight = new ItemBuilder()
         .setMaterial(file.getString(path + ".Back-Item.Right.Item", "NETHER_STAR"))
         .setPlayerName(file.getString(path + ".Back-Item.Right.Player"))
@@ -82,9 +80,7 @@ public class InfoMenuManager {
     
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : enchantmentTypes) {
-            if (enchantmentType.getName().equalsIgnoreCase(name)) {
-                return enchantmentType;
-            }
+            if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 
         return null;
@@ -100,12 +96,12 @@ public class InfoMenuManager {
 
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
 
-        Inventory inventory = ce.getPlugin().getServer().createInventory(null, slots, inventoryName);
+        Inventory inventory = plugin.getServer().createInventory(null, slots, inventoryName);
 
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
                 inventory.addItem(
-                ce.getEnchantmentBook()
+                crazyManager.getEnchantmentBook()
                 .setName(enchantment.getInfoName())
                 .setLore(enchantment.getInfoDescription())
                 .setGlow(true)
@@ -116,5 +112,4 @@ public class InfoMenuManager {
         inventory.setItem(slots - 1, backRight);
         player.openInventory(inventory);
     }
-
 }

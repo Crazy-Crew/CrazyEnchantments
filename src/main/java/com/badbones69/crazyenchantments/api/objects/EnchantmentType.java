@@ -1,15 +1,19 @@
 package com.badbones69.crazyenchantments.api.objects;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnchantmentType {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
     
     private final String name;
     private final int slot;
@@ -34,8 +38,8 @@ public class EnchantmentType {
         }
     }
     
-    public static EnchantmentType getFromName(String name) {
-        return InfoMenuManager.getInstance().getFromName(name);
+    public EnchantmentType getFromName(String name) {
+        return infoMenuManager.getFromName(name);
     }
     
     public String getName() {
@@ -69,5 +73,4 @@ public class EnchantmentType {
     public void removeEnchantment(CEnchantment enchantment) {
         enchantments.remove(enchantment);
     }
-
 }

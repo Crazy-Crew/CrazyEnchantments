@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.commands;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.Dust;
@@ -10,18 +11,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class CETab implements TabCompleter {
-    
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) { // /ce
             if (hasPermission(sender, "access")) completions.add("help");
@@ -42,10 +43,7 @@ public class CETab implements TabCompleter {
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) { // /ce arg0
             switch (args[0].toLowerCase()) {
-                case "info":
-                case "remove":
-                case "add":
-                case "book":
+                case "info", "remove", "add", "book" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replace(" ", "_"));
@@ -53,8 +51,9 @@ public class CETab implements TabCompleter {
                     }
 
                     Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
-                    break;
-                case "spawn":
+                }
+
+                case "spawn" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replace(" ", "_"));
@@ -66,43 +65,42 @@ public class CETab implements TabCompleter {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}
                     }
+                }
 
-                    break;
-                case "scroll":
+                case "scroll" -> {
                     completions.add("black");
                     completions.add("white");
                     completions.add("transmog");
-                    break;
-                case "crystal":
-                case "scrambler":
+                }
+
+                case "crystal", "scrambler" -> {
                     completions.add("1");
                     completions.add("32");
                     completions.add("64");
-                    break;
-                case "dust":
+                }
+
+                case "dust" -> {
                     for (Dust dust : Dust.values()) {
                         completions.addAll(dust.getKnownNames());
                     }
+                }
 
-                    break;
-                case "lostbook":
+                case "lostbook" -> {
                     for (Category category : crazyManager.getCategories()) {
                         try {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}
                     }
-
-                    break;
+                }
             }
+
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
         } else if (args.length == 3) {// /ce arg0 arg1
             switch (args[0].toLowerCase()) {
                 case "book":
                     CEnchantment ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
 
-                    if (ceEnchantment != null) {
-                        for (int i = 1; i <= ceEnchantment.getMaxLevel(); i++) completions.add(i + "");
-                    }
+                    if (ceEnchantment != null) for (int i = 1; i <= ceEnchantment.getMaxLevel(); i++) completions.add(i + "");
 
                     break;
                 case "add":
@@ -137,20 +135,18 @@ public class CETab implements TabCompleter {
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
         } else if (args.length == 4) { // /ce arg0 arg1 arg2
             switch (args[0].toLowerCase()) {
-                case "spawn":
+                case "spawn" -> {
                     completions.add("Level:");
                     completions.add("World:");
                     completions.add("X:");
                     completions.add("Y:");
                     completions.add("Z:");
-                    break;
-                case "scroll":
-                case "dust":
-                case "lostbook":
-                    crazyManager.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
-                    break;
-                default:
+                }
+                case "scroll", "dust", "lostbook" ->
+                        crazyManager.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                default -> {
                     return StringUtil.copyPartialMatches(args[3], completions, new ArrayList<>());
+                }
             }
         } else if (args.length == 5) { // /ce arg0 arg1 arg2
             switch (args[0].toLowerCase()) {

@@ -1,6 +1,8 @@
 package com.badbones69.crazyenchantments.api.enums;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -89,7 +91,11 @@ public enum Messages {
     "&b/ce book <enchantment> [level/min-max] [amount] [player] - &9Gives a player an enchantment Book.",
     "&b/ce lostbook <category> [amount] [player] - &9Gives a player a lost book item.",
     "&b/ce spawn <enchantment/category> [(level:#/min-max)/world:<world>/x:#/y:#/z:#] - &9Drops an enchantment book at the specific coordinates."));
-    
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private final String path;
     private String defaultMessage;
     private List<String> defaultListMessage;
@@ -130,14 +136,13 @@ public enum Messages {
             }
         }
 
-        if (saveFile) {
-            Files.MESSAGES.saveFile();
-        }
+        if (saveFile) Files.MESSAGES.saveFile();
     }
     
     public static String replacePlaceholders(String placeholder, String replacement, String message) {
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put(placeholder, replacement);
+
         return replacePlaceholders(placeholders, message);
     }
     
@@ -153,6 +158,7 @@ public enum Messages {
     public static List<String> replacePlaceholders(String placeholder, String replacement, List<String> messageList) {
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put(placeholder, replacement);
+
         return replacePlaceholders(placeholders, messageList);
     }
     
@@ -190,6 +196,7 @@ public enum Messages {
     public String getMessageNoPrefix(String placeholder, String replacement) {
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put(placeholder, replacement);
+
         return getMessage(placeholders, false);
     }
     
@@ -208,15 +215,15 @@ public enum Messages {
 
         if (isList) {
             if (exists) {
-                message = Methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
+                message = methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
             } else {
-                message = Methods.color(convertList(getDefaultListMessage()));
+                message = methods.color(convertList(getDefaultListMessage()));
             }
         } else {
             if (exists) {
-                message = Methods.color(Files.MESSAGES.getFile().getString("Messages." + path));
+                message = methods.color(Files.MESSAGES.getFile().getString("Messages." + path));
             } else {
-                message = Methods.color(getDefaultMessage());
+                message = methods.color(getDefaultMessage());
             }
         }
 
@@ -226,12 +233,12 @@ public enum Messages {
         }
 
         if (isList) { // Don't want to add a prefix to a list of messages.
-            return Methods.color(message);
+            return methods.color(message);
         } else { // If the message isn't a list.
             if (prefix) { // If the message needs a prefix.
-                return Methods.getPrefix(message);
+                return methods.getPrefix(message);
             } else { // If the message doesn't need a prefix.
-                return Methods.color(message);
+                return methods.color(message);
             }
         }
     }
@@ -259,5 +266,4 @@ public enum Messages {
     private List<String> getDefaultListMessage() {
         return defaultListMessage;
     }
-
 }
