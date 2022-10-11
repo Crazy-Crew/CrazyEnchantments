@@ -98,6 +98,9 @@ dependencies {
         exclude("org.bstats", "bstats-bukkit")
     }
 
+    // Anti-cheats
+    compileOnly(libs.ncp.api)
+
     // BG Software Team
     compileOnly(libs.superior.skyblock)
     compileOnly(libs.wild.stacker)
