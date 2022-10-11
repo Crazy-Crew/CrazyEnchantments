@@ -50,8 +50,8 @@ public class EnchantmentControl implements Listener {
                     Player player = (Player) e.getWhoClicked();
 
                     if (crazyManager.enchantStackedItems() || item.getAmount() == 1) {
-                        boolean success = Methods.randomPicker(ceBook.getSuccessRate(), 100);
-                        boolean destroy = Methods.randomPicker(ceBook.getDestroyRate(), 100);
+                        boolean success = methods.randomPicker(ceBook.getSuccessRate(), 100);
+                        boolean destroy = methods.randomPicker(ceBook.getDestroyRate(), 100);
                         int bookLevel = ceBook.getLevel();
                         boolean hasEnchantment = false;
                         boolean isLowerLevel = false;
@@ -66,7 +66,7 @@ public class EnchantmentControl implements Listener {
                             if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
                                 e.setCancelled(true);
                                 PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, item, ceBook, player.getGameMode() == GameMode.CREATIVE, success, destroy);
-                                crazyManager.getPlugin().getServer().getPluginManager().callEvent(preBookApplyEvent);
+                                plugin.getServer().getPluginManager().callEvent(preBookApplyEvent);
 
                                 if (!preBookApplyEvent.isCancelled()) {
                                     if (success || player.getGameMode() == GameMode.CREATIVE) {
@@ -98,7 +98,7 @@ public class EnchantmentControl implements Listener {
 
                                                     if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
-                                                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                                                        plugin.getServer().getPluginManager().callEvent(event);
                                                     }
 
                                                     player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
@@ -113,7 +113,7 @@ public class EnchantmentControl implements Listener {
 
                                                     if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
-                                                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                                                        plugin.getServer().getPluginManager().callEvent(event);
                                                     }
 
                                                     player.sendMessage(Messages.ITEM_DESTROYED.getMessage());

@@ -1,8 +1,10 @@
 package com.badbones69.crazyenchantments.enchantments;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
+import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.BlastUseEvent;
@@ -28,16 +30,22 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 
 public class PickAxes implements Listener {
 
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
+    private final Tools tools = plugin.getTools();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private final Random random = new Random();
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
     private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -45,7 +53,7 @@ public class PickAxes implements Listener {
         Player player = event.getPlayer();
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.BLAST.isActivated()) {
-            ItemStack item = Methods.getItemInHand(player);
+            ItemStack item = methods.getItemInHand(player);
             Block block = event.getClickedBlock();
 
             if (crazyManager.hasEnchantment(item, CEnchantments.BLAST)) {
@@ -61,7 +69,7 @@ public class PickAxes implements Listener {
         if (crazyManager.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated()) return;
         Player player = e.getPlayer();
         Block currentBlock = e.getBlock();
-        ItemStack currentItem = Methods.getItemInHand(player);
+        ItemStack currentItem = methods.getItemInHand(player);
 
         if (!blocks.containsKey(player)) return;
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(currentItem);
@@ -73,7 +81,7 @@ public class PickAxes implements Listener {
         blocks.remove(player);
         List<Block> blockList = getBlocks(currentBlock.getLocation(), face, (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
         BlastUseEvent blastUseEvent = new BlastUseEvent(player, blockList);
-        crazyManager.getPlugin().getServer().getPluginManager().callEvent(blastUseEvent);
+        plugin.getServer().getPluginManager().callEvent(blastUseEvent);
 
         if (!blastUseEvent.isCancelled()) {
             Location originalBlockLocation = currentBlock.getLocation();
@@ -83,24 +91,20 @@ public class PickAxes implements Listener {
                 if (block.getType() != Material.AIR && (crazyManager.getBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
                     BlockBreakEvent event = new BlockBreakEvent(block, player);
                     crazyManager.addIgnoredEvent(event);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                    plugin.getServer().getPluginManager().callEvent(event);
 
-                    if (!event.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
-                        finalBlockList.add(new BlockProcessInfo(currentItem, block));
-                    }
+                    if (!event.isCancelled()) finalBlockList.add(new BlockProcessInfo(currentItem, block));
 
                     crazyManager.removeIgnoredEvent(event);
                 }
             }
 
-            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                NoCheatPlusSupport.allowPlayer(player);
-            }
+            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.allowPlayer(player);
 
             if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                SpartanSupport.cancelFastBreak(player);
-                SpartanSupport.cancelNoSwing(player);
-                SpartanSupport.cancelBlockReach(player);
+                //SpartanSupport.cancelFastBreak(player);
+                //SpartanSupport.cancelNoSwing(player);
+                //SpartanSupport.cancelBlockReach(player);
             }
 
             int xp = 0;
@@ -127,7 +131,7 @@ public class PickAxes implements Listener {
                     }
 
                     if (hasTelepathy) {
-                        TelepathyDrop drop = Tools.getTelepathyDrops(processInfo);
+                        TelepathyDrop drop = tools.getTelepathyDrops(processInfo);
                         drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
                         xp += drop.getXp();
                     } else {
@@ -136,8 +140,7 @@ public class PickAxes implements Listener {
 
                             try {
                                 block.getWorld().dropItem(block.getLocation(), finalDrop);
-                            } catch (IllegalArgumentException ignore) {
-                            }
+                            } catch (IllegalArgumentException ignore) {}
                         } else if (hasAutoSmelt && isOre) {
                             for (ItemStack drop : block.getDrops(currentItem)) {
                                 if (CEnchantments.AUTOSMELT.chanceSuccessful(currentItem)) {
@@ -149,58 +152,45 @@ public class PickAxes implements Listener {
 
                                 try {
                                     block.getWorld().dropItem(block.getLocation(), finalDrop);
-                                } catch (IllegalArgumentException ignore) {
-                                }
+                                } catch (IllegalArgumentException ignore) {}
                             }
                         } else {
                             for (ItemStack drop : block.getDrops(currentItem)) {
                                 if (drop.getType() != Material.AIR) {
                                     try {
                                         block.getWorld().dropItem(block.getLocation(), drop);
-                                    } catch (IllegalArgumentException ignore) {
-                                    }
+                                    } catch (IllegalArgumentException ignore) {}
                                 }
 
-                                if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) {
-                                    break;
-                                }
+                                if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) break;
                             }
                         }
 
                         // This is found here as telepathy takes care of this part.
                         if (!hasSilkTouch && isOre) {
-                            xp = Methods.percentPick(7, 3);
+                            xp = methods.percentPick(7, 3);
 
-                            if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(currentItem)) {
-                                xp += Methods.percentPick(7, 3) * crazyManager.getLevel(currentItem, CEnchantments.EXPERIENCE);
-                            }
+                            if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(currentItem)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(currentItem, CEnchantments.EXPERIENCE);
                         }
                     }
 
                     block.setType(Material.AIR);
 
-                    if (damage) {
-                        Methods.removeDurability(currentItem, player);
-                    }
+                    if (damage) methods.removeDurability(currentItem, player);
                 }
             }
 
-            if (!damage) {
-                Methods.removeDurability(currentItem, player);
-            }
+            if (!damage) methods.removeDurability(currentItem, player);
 
-            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                NoCheatPlusSupport.denyPlayer(player);
-            }
+            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.denyPlayer(player);
 
             for (Entry<ItemStack, Integer> item : drops.entrySet()) {
                 item.getKey().setAmount(item.getValue());
 
-                if (Methods.isInventoryFull(player)) {
+                if (methods.isInventoryFull(player)) {
                     try {
                         player.getWorld().dropItem(player.getLocation(), item.getKey());
-                    } catch (IllegalArgumentException ignore) {
-                    }
+                    } catch (IllegalArgumentException ignore) {}
                 } else {
                     player.getInventory().addItem(item.getKey());
                 }
@@ -219,7 +209,7 @@ public class PickAxes implements Listener {
 
         Block block = e.getBlock();
         Player player = e.getPlayer();
-        ItemStack item = Methods.getItemInHand(player);
+        ItemStack item = methods.getItemInHand(player);
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
         boolean isOre = isOre(block.getType());
 
@@ -228,64 +218,38 @@ public class PickAxes implements Listener {
                     (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.FURNACE.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
                     CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
-                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                plugin.getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     int dropAmount = 0;
                     dropAmount += crazyManager.getLevel(item, CEnchantments.AUTOSMELT);
 
-                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                        dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-                    }
+                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 
-                    try {
-                        block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
-                    } catch (IllegalArgumentException ignore) {
-                    }
-
-                    if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                        int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
-
-                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                        orb.setExperience(Methods.percentPick(7, 3) * power);
-                    }
+                    tryCheck(block, item, enchantments, dropAmount);
 
                     e.setDropItems(false);
 
-                    Methods.removeDurability(item, player);
+                    methods.removeDurability(item, player);
                 }
             }
 
             if (CEnchantments.FURNACE.isActivated() && isOre && (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !(enchantments.contains(CEnchantments.BLAST.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
-                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                plugin.getServer().getPluginManager().callEvent(event);
 
                 if (!event.isCancelled()) {
                     int dropAmount = 1;
 
-                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && Methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) {
-                        dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-                    }
+                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 
-                    if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) {
-                        dropAmount += Methods.percentPick(4, 1);
-                    }
+                    if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += methods.percentPick(4, 1);
 
-                    try {
-                        block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
-                    } catch (IllegalArgumentException ignore) {
-                    }
-
-                    if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                        int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
-
-                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-                        orb.setExperience(Methods.percentPick(7, 3) * power);
-                    }
+                    tryCheck(block, item, enchantments, dropAmount);
                 }
 
                 e.setDropItems(false);
-                Methods.removeDurability(item, player);
+                methods.removeDurability(item, player);
             }
         }
 
@@ -294,17 +258,28 @@ public class PickAxes implements Listener {
 
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                 EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
-                crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                plugin.getServer().getPluginManager().callEvent(event);
 
-                if (!event.isCancelled()) {
-                    e.setExpToDrop(e.getExpToDrop() + (power + 2));
-                }
+                if (!event.isCancelled()) e.setExpToDrop(e.getExpToDrop() + (power + 2));
             }
         }
     }
 
+    private void tryCheck(Block block, ItemStack item, List<CEnchantment> enchantments, int dropAmount) {
+        try {
+            block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
+        } catch (IllegalArgumentException ignore) {}
+
+        if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+            int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
+
+            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+            orb.setExperience(methods.percentPick(7, 3) * power);
+        }
+    }
+
     private boolean hasSilkTouch(ItemStack item) {
-        return item.hasItemMeta() && item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
+        return item.hasItemMeta() && Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.SILK_TOUCH);
     }
 
     private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
@@ -341,27 +316,10 @@ public class PickAxes implements Listener {
                 loc2.add(-1, 0, -1);
             }
 
-            default -> {
-            }
+            default -> {}
         }
 
-        List<Block> blockList = new ArrayList<>();
-        int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
-        int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
-        int topBlockY = (Math.max(loc.getBlockY(), loc2.getBlockY()));
-        int bottomBlockY = (Math.min(loc.getBlockY(), loc2.getBlockY()));
-        int topBlockZ = (Math.max(loc.getBlockZ(), loc2.getBlockZ()));
-        int bottomBlockZ = (Math.min(loc.getBlockZ(), loc2.getBlockZ()));
-
-        for (int x = bottomBlockX; x <= topBlockX; x++) {
-            for (int z = bottomBlockZ; z <= topBlockZ; z++) {
-                for (int y = bottomBlockY; y <= topBlockY; y++) {
-                    blockList.add(loc.getWorld().getBlockAt(x, y, z));
-                }
-            }
-        }
-
-        return blockList;
+        return methods.getEnchantBlocks(loc, loc2);
     }
 
     private boolean isOre(Material material) {
@@ -417,6 +375,6 @@ public class PickAxes implements Listener {
     }
 
     private int getRandomNumber(int range) {
-        return range > 1 ? random.nextInt(range > 0 ? (range) : 1) : 1;
+        return range > 1 ? random.nextInt(range) : 1;
     }
 }

@@ -22,6 +22,8 @@ public class PluginSupport {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
+
     private final SuperiorSkyBlockSupport superiorSkyBlockSupport = plugin.getStarter().getSuperiorSkyBlockSupport();
 
     private static FactionsVersion factionsVersion = null;
@@ -73,7 +75,6 @@ public class PluginSupport {
     public boolean inWingsRegion(Player player) {
         if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
 
-        WingsManager wingsManager = crazyManager.getWingsManager();
         WorldGuardVersion worldGuardVersion = crazyManager.getWorldGuardSupport();
 
         for (String region : wingsManager.getRegions()) {

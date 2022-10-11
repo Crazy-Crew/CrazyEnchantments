@@ -123,6 +123,8 @@ public enum CEnchantments {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     private final String name;
     private final String typeName;
@@ -234,14 +236,14 @@ public enum CEnchantments {
      * @return Return the color that goes on the Enchantment Book.
      */
     public String getBookColor() {
-        return Methods.color(getEnchantment().getBookColor());
+        return methods.color(getEnchantment().getBookColor());
     }
     
     /**
      * @return Returns the color that goes on the Enchanted Item.
      */
     public String getEnchantmentColor() {
-        return Methods.color(getEnchantment().getColor());
+        return methods.color(getEnchantment().getColor());
     }
     
     /**

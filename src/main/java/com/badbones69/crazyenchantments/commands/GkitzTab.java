@@ -26,9 +26,7 @@ public class GkitzTab implements TabCompleter {
                 return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
             } else if (args.length == 2) { // /gkit reset
 
-                if (args[0].equalsIgnoreCase("reset")) {
-                    crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
-                }
+                if (args[0].equalsIgnoreCase("reset")) crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
 
                 if (crazyManager.getGKitFromName(args[0]) != null) plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
 

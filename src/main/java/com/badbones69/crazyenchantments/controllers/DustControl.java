@@ -52,7 +52,7 @@ public class DustControl implements Listener {
             if (l.contains("%Description%") || l.contains("%description%")) {
                 if (enchantment != null) {
                     for (String L : enchantment.getInfoDescription()) {
-                        lore.add(Methods.color(L));
+                        lore.add(methods.color(L));
                     }
                 }
 
@@ -61,15 +61,15 @@ public class DustControl implements Listener {
 
             if (rate.equalsIgnoreCase("Success")) {
                 l = l.replace("%Success_Rate%", percent + "").replace("%success_rate%", percent + "")
-                .replace("%Destroy_Rate%", Methods.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "")
-                .replace("%destroy_rate%", Methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "");
+                .replace("%Destroy_Rate%", methods.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "")
+                .replace("%destroy_rate%", methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "");
             } else {
                 l = l.replace("%Destroy_Rate%", percent + "").replace("%destroy_rate%", percent + "")
-                .replace("%Success_Rate%", Methods.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "")
-                .replace("%success_rate%", Methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "");
+                .replace("%Success_Rate%", methods.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "")
+                .replace("%success_rate%", methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "");
             }
 
-            if (line) lore.add(Methods.color(l));
+            if (line) lore.add(methods.color(l));
         }
 
         assert meta != null;
@@ -109,7 +109,7 @@ public class DustControl implements Listener {
             }
         }
 
-        return Methods.isInt(arg);
+        return methods.isInt(arg);
     }
     
     public int getPercent(Dust dust, ItemStack item) {
@@ -228,7 +228,7 @@ public class DustControl implements Listener {
         FileConfiguration config = Files.CONFIG.getFile();
 
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            ItemStack item = Methods.getItemInHand(player);
+            ItemStack item = methods.getItemInHand(player);
 
             if (item != null) {
                 if (hasPercent(Dust.SUCCESS_DUST, item)) {
@@ -250,17 +250,7 @@ public class DustControl implements Listener {
                         List<Color> colors = new ArrayList<>();
                         String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");
 
-                        if (colorString.contains(", ")) {
-                            for (String color : colorString.split(", ")) {
-                                Color c = methods.getColor(color);
-
-                                if (c != null) colors.add(c);
-                            }
-                        } else {
-                            Color c = methods.getColor(colorString);
-
-                            if (c != null) colors.add(c);
-                        }
+                        checkString(colors, colorString, methods);
 
                         methods.fireWork(player.getLocation().add(0, 1, 0), colors);
                     }
@@ -268,7 +258,21 @@ public class DustControl implements Listener {
             }
         }
     }
-    
+
+    public void checkString(List<Color> colors, String colorString, Methods methods) {
+        if (colorString.contains(", ")) {
+            for (String color : colorString.split(", ")) {
+                Color c = methods.getColor(color);
+
+                if (c != null) colors.add(c);
+            }
+        } else {
+            Color c = methods.getColor(colorString);
+
+            if (c != null) colors.add(c);
+        }
+    }
+
     private Dust pickDust() {
         List<Dust> dusts = new ArrayList<>();
 

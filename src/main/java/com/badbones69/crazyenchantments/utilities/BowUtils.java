@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.utilities;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.EnchantedArrow;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,22 +14,17 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BowUtils {
 
-    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private static final BowUtils instance = new BowUtils();
-
-    public static BowUtils getInstance() {
-        return instance;
-    }
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
 
     // Related to Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
@@ -65,14 +60,12 @@ public class BowUtils {
     }
 
     public boolean allowsCombat(Entity entity) {
-        return pluginSupport.allowsCombat(entity.getLocation());
+        return !pluginSupport.allowCombat(entity.getLocation());
     }
 
     public EnchantedArrow enchantedArrow(Arrow arrow) {
         for (EnchantedArrow enchArrow : enchantedArrows) {
-            if (enchArrow != null && enchArrow.getArrow() != null && enchArrow.getArrow().equals(arrow)) {
-                return enchArrow;
-            }
+            if (enchArrow != null && enchArrow.getArrow() != null && enchArrow.getArrow().equals(arrow)) return enchArrow;
         }
 
         return null;
@@ -128,7 +121,7 @@ public class BowUtils {
 
                 entity.remove();
 
-                Bukkit.getScheduler().runTaskLater(crazyManager.getPlugin(), () -> {
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                     entityLocation.getBlock().setType(Material.AIR);
                     webBlocks.remove(entityLocation.getBlock());
                 }, 5 * 20);
@@ -145,7 +138,7 @@ public class BowUtils {
             block.setType(Material.COBWEB);
             webBlocks.add(block);
 
-            Bukkit.getScheduler().runTaskLater(crazyManager.getPlugin(), () -> {
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                 if (block.getType() == Material.COBWEB) {
                     block.setType(Material.AIR);
                     webBlocks.remove(block);

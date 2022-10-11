@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -29,10 +30,16 @@ import java.util.List;
 
 public class Tinkerer implements Listener {
     
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     
-    public static void openTinker(Player player) {
-        Inventory inv = crazyManager.getPlugin().getServer().createInventory(null, 54, Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+    
+    public void openTinker(Player player) {
+        Inventory inv = plugin.getServer().createInventory(null, 54, methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
         inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
         .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
         .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
@@ -54,39 +61,38 @@ public class Tinkerer implements Listener {
         player.openInventory(inv);
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onXPUse(PlayerInteractEvent e) {
         Player player = e.getPlayer();
 
-        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && Methods.getItemInHand(player) != null) {
-            ItemStack item = Methods.getItemInHand(player);
+        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && methods.getItemInHand(player) != null) {
+            ItemStack item = methods.getItemInHand(player);
 
             if (item.getType() == new ItemBuilder().setMaterial(Files.TINKER.getFile().getString("Settings.BottleOptions.Item")).getMaterial() &&
             item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().hasDisplayName() &&
-            item.getItemMeta().getDisplayName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.BottleOptions.Name")))) {
+            item.getItemMeta().getDisplayName().equals(methods.color(Files.TINKER.getFile().getString("Settings.BottleOptions.Name")))) {
                 e.setCancelled(true);
-                Methods.setItemInHand(player, Methods.removeItem(item));
+                methods.setItemInHand(player, methods.removeItem(item));
 
-                if (Currency.isCurrency(Files.TINKER.getFile().getString("Settings.Currency"))) {
-                    CurrencyAPI.giveCurrency(player, Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")), getXP(item));
-                }
+                if (Currency.isCurrency(Files.TINKER.getFile().getString("Settings.Currency"))) currencyAPI.giveCurrency(player, Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")), getXP(item));
 
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             }
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         Inventory inv = e.getInventory();
         Player player = (Player) e.getWhoClicked();
-        if (inv != null && e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
+
+        if (inv != null && e.getView().getTitle().equals(methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
             e.setCancelled(true);
             ItemStack current = e.getCurrentItem();
 
             if (current != null && current.getType() != Material.AIR && current.hasItemMeta() && (current.getItemMeta().hasLore() || current.getItemMeta().hasDisplayName() || current.getItemMeta().hasEnchants())) {
                 // Recycling things
-                if (current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(Methods.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
+                if (current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(methods.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
                     int total = 0;
                     boolean toggle = false;
 
@@ -96,12 +102,13 @@ public class Tinkerer implements Listener {
                                 ItemStack item = inv.getItem(slot);
                                 total = total + getTotalXP(item);
                             } else {
-                                if (Methods.isInventoryFull(player)) {
+                                if (methods.isInventoryFull(player)) {
                                     player.getWorld().dropItem(player.getLocation(), inv.getItem(getSlot().get(slot)));
                                 } else {
                                     player.getInventory().addItem(inv.getItem(getSlot().get(slot)));
                                 }
                             }
+
                             toggle = true;
                         }
 
@@ -111,13 +118,9 @@ public class Tinkerer implements Listener {
 
                     player.closeInventory();
 
-                    if (total != 0) {
-                        crazyManager.getPlugin().getServer().dispatchCommand(crazyManager.getPlugin().getServer().getConsoleSender(), "eco give " + player.getName() + " " + total);
-                    }
+                    if (total != 0) plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "eco give " + player.getName() + " " + total);
 
-                    if (toggle) {
-                        player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
-                    }
+                    if (toggle) player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
 
                     player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
                     return;
@@ -129,7 +132,7 @@ public class Tinkerer implements Listener {
                         String enchant = "";
 
                         for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
-                            if (current.getItemMeta().getDisplayName().contains(Methods.color(en.getBookColor() + en.getCustomName()))) {
+                            if (current.getItemMeta().getDisplayName().contains(methods.color(en.getBookColor() + en.getCustomName()))) {
                                 enchant = en.getName();
                                 toggle = true;
                             }
@@ -145,6 +148,7 @@ public class Tinkerer implements Listener {
                                     player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
                                     return;
                                 }
+
                                 e.setCurrentItem(new ItemStack(Material.AIR));
                                 inv.setItem(getSlot().get(inv.firstEmpty()), Dust.MYSTERY_DUST.getDust(Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchant + ".Book"), 1));
                                 inv.setItem(inv.firstEmpty(), current);
@@ -186,19 +190,19 @@ public class Tinkerer implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInvClose(final InventoryCloseEvent e) {
-        final Inventory inv = e.getInventory();
-        final Player player = (Player) e.getPlayer();
+        Inventory inv = e.getInventory();
+        Player player = (Player) e.getPlayer();
 
-        crazyManager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(crazyManager.getPlugin(), () -> {
-            if (inv != null && e.getView().getTitle().equals(Methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+            if (inv != null && e.getView().getTitle().equals(methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
                 for (int slot : getSlot().keySet()) {
                     if (inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR) {
                         if (player.isDead()) {
                             player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
                         } else {
-                            if (Methods.isInventoryFull(player)) {
+                            if (methods.isInventoryFull(player)) {
                                 player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
                             } else {
                                 player.getInventory().addItem(inv.getItem(slot));
@@ -221,11 +225,13 @@ public class Tinkerer implements Listener {
             lore.add(l.replace("%Total%", getTotalXP(item) + "").replace("%total%", getTotalXP(item) + ""));
         }
 
+        assert id != null;
         return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).build();
     }
     
     private HashMap<Integer, Integer> getSlot() {
         HashMap<Integer, Integer> slots = new HashMap<>();
+
         slots.put(1, 5);
         slots.put(2, 6);
         slots.put(3, 7);
@@ -249,6 +255,7 @@ public class Tinkerer implements Listener {
         slots.put(46, 51);
         slots.put(47, 52);
         slots.put(48, 53);
+
         return slots;
     }
     
@@ -278,8 +285,9 @@ public class Tinkerer implements Listener {
     private Integer getXP(ItemStack item) {
         String arg = "";
         int i = 0;
+
         for (String l : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
-            l = Methods.color(l);
+            l = methods.color(l);
             String lo = item.getItemMeta().getLore().get(i);
 
             if (l.contains("%Total%")) {
@@ -296,6 +304,7 @@ public class Tinkerer implements Listener {
 
             i++;
         }
+
         return Integer.parseInt(arg);
     }
 }

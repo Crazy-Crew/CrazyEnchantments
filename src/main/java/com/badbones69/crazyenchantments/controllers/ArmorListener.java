@@ -129,7 +129,7 @@ public class ArmorListener implements Listener {
                 final ItemStack It = newArmorPiece.clone();
                 final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
 
-                CrazyManager.getInstance().getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(CrazyManager.getInstance().getPlugin(), () -> {
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                     ItemStack I = e.getWhoClicked().getInventory().getItem(e.getSlot());
 
                     if (e.getInventory().getType().equals(InventoryType.PLAYER)) {
@@ -276,12 +276,12 @@ public class ArmorListener implements Listener {
         if (type != null) {
             Player p = e.getPlayer();
             ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(p, EquipMethod.BROKE, type, e.getBrokenItem(), null);
-            crazyManager.getPlugin().getServer().getPluginManager().callEvent(armorEquipEvent);
+            plugin.getServer().getPluginManager().callEvent(armorEquipEvent);
 
             if (armorEquipEvent.isCancelled()) {
                 ItemStack item = e.getBrokenItem().clone();
 
-                methods.setDurability(item, Methods.getDurability(item) - 1);
+                methods.setDurability(item, methods.getDurability(item) - 1);
 
                 if (type.equals(ArmorType.HELMET)) {
                     p.getInventory().setHelmet(item);

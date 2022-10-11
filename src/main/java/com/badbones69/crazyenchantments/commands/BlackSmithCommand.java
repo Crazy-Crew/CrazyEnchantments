@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class BlackSmithCommand implements CommandExecutor {
 
@@ -23,7 +22,7 @@ public class BlackSmithCommand implements CommandExecutor {
             return true;
         }
 
-        if (hasPermission(sender)) BlackSmith.openBlackSmith((Player) sender);
+        // if (hasPermission(sender)) BlackSmith.openBlackSmith((Player) sender);
 
         return true;
     }

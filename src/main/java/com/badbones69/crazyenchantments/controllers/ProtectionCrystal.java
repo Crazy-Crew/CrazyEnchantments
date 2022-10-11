@@ -41,7 +41,7 @@ public class ProtectionCrystal implements Listener {
         .setName(config.getString("Settings.ProtectionCrystal.Name"))
         .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
         .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing"));
-        protectionString = Methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
+        protectionString = methods.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
     }
     
     public ItemStack getCrystals() {
@@ -49,7 +49,7 @@ public class ProtectionCrystal implements Listener {
     }
     
     public ItemStack getCrystals(int amount) {
-        return crystal.clone().setAmount(amount).build();
+        return crystal.copy().setAmount(amount).build();
     }
     
     public boolean isProtected(ItemStack item) {
@@ -89,9 +89,10 @@ public class ProtectionCrystal implements Listener {
         return item;
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
+
         if (e.getInventory() != null) {
             ItemStack crystalItem = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR); // The Crystal.
             ItemStack item = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR); // The item your adding the protection to.
@@ -110,8 +111,8 @@ public class ProtectionCrystal implements Listener {
                 }
 
                 e.setCancelled(true);
-                player.setItemOnCursor(Methods.removeItem(crystalItem));
-                e.setCurrentItem(Methods.addLore(item, protectionString));
+                player.setItemOnCursor(methods.removeItem(crystalItem));
+                e.setCurrentItem(methods.addLore(item, protectionString));
                 player.updateInventory();
             }
         }

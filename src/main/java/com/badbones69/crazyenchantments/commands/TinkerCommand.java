@@ -23,7 +23,7 @@ public class TinkerCommand implements CommandExecutor {
             return true;
         }
 
-        if (hasPermission(sender)) Tinkerer.openTinker((Player) sender);
+        // if (hasPermission(sender)) Tinkerer.openTinker((Player) sender);
 
         return true;
     }

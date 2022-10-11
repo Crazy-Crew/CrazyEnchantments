@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.managers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.AllyMob;
@@ -11,6 +12,10 @@ import java.util.*;
 
 public class AllyManager {
 
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private final List<AllyMob> allyMobs = new ArrayList<>();
     private final Map<UUID, List<AllyMob>> allyOwners = new HashMap<>();
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
@@ -20,7 +25,7 @@ public class AllyManager {
         String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
 
         for (AllyType type : AllyType.values()) {
-            allyTypeNameCache.put(type, Methods.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
+            allyTypeNameCache.put(type, methods.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
         }
     }
     

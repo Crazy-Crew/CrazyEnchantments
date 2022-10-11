@@ -25,7 +25,7 @@ public class FireworkDamage implements Listener {
         container.set(noDamage, PersistentDataType.STRING, "no-damage");
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Firework firework) {
 

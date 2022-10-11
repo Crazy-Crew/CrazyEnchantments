@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.enums;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -23,6 +24,10 @@ public enum Dust {
     private final List<String> knownNames;
     private final int max;
     private final int min;
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     Dust(String name, String configName, List<String> knowNames) {
         this.name = name;
@@ -70,7 +75,7 @@ public enum Dust {
     }
     
     public ItemStack getDust(int amount) {
-        return getDust(Methods.percentPick(max, min), amount);
+        return getDust(methods.percentPick(max, min), amount);
     }
     
     public ItemStack getDust(int percent, int amount) {

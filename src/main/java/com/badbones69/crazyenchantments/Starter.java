@@ -9,6 +9,9 @@ import com.badbones69.crazyenchantments.api.managers.*;
 import com.badbones69.crazyenchantments.api.SkullCreator;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
+import com.badbones69.crazyenchantments.controllers.Scrambler;
+import com.badbones69.crazyenchantments.utilities.BowUtils;
 
 public class Starter {
 
@@ -41,6 +44,9 @@ public class Starter {
 
     private PluginSupport pluginSupport;
 
+    // Plugin Utils
+    private BowUtils bowUtils;
+
     public void run() {
         // Managers
         fileManager = new FileManager();
@@ -72,6 +78,9 @@ public class Starter {
         if (PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
 
         if (PluginSupport.SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
+
+        // Plugin Utils
+        bowUtils = new BowUtils();
     }
 
     // Managers
@@ -139,5 +148,11 @@ public class Starter {
 
     public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
         return superiorSkyBlockSupport;
+    }
+
+    // Plugin Utils
+
+    public BowUtils getBowUtils() {
+        return bowUtils;
     }
 }

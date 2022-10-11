@@ -58,7 +58,7 @@ public class LostBookController implements Listener {
 
                         if (lostBook.playSound()) player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
                     } else {
-                        player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                        player.sendMessage(methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                     }
                 }
             }

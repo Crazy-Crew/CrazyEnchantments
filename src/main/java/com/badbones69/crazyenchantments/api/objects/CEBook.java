@@ -15,6 +15,8 @@ public class CEBook {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     private CEnchantment enchantment;
     private int amount;
@@ -202,10 +204,10 @@ public class CEBook {
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : enchantment.getInfoDescription()) {
-                    lore.add(Methods.color(enchantmentLine));
+                    lore.add(methods.color(enchantmentLine));
                 }
             } else {
-                lore.add(Methods.color(bookLine)
+                lore.add(methods.color(bookLine)
                 .replace("%Destroy_Rate%", destroyRate + "").replace("%destroy_rate%", destroyRate + "")
                 .replace("%Success_Rate%", successRate + "").replace("%success_rate%", successRate + ""));
             }

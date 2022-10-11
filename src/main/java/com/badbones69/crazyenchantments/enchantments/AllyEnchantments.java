@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.enchantments;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.managers.AllyManager;
@@ -24,8 +25,12 @@ import java.util.UUID;
 
 public class AllyEnchantments implements Listener {
 
-    private static final AllyManager allyManager = AllyManager.getInstance();
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final AllyManager allyManager = plugin.getStarter().getAllyManager();
+
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -33,37 +38,19 @@ public class AllyEnchantments implements Listener {
         if (crazyManager.isIgnoredEvent(e)) return;
 
         if (e.getEntity() instanceof Player player && e.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
-            if (!inCoolDown(player)) {
+            if (!inCoolDown(player) && player.getEquipment() != null) {
                 for (ItemStack item : player.getEquipment().getArmorContents()) {
                     // Spawn allies when getting attacked
                     if (crazyManager.hasEnchantments(item) && enemy instanceof Player) {
 
-                        if (crazyManager.hasEnchantment(item, CEnchantments.TAMER)) {
-                            int power = crazyManager.getLevel(item, CEnchantments.TAMER);
-                            spawnAllies(player, enemy, AllyType.WOLF, power);
-                        }
-
-                        if (crazyManager.hasEnchantment(item, CEnchantments.GUARDS)) {
-                            int power = crazyManager.getLevel(item, CEnchantments.GUARDS);
-                            spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
-                        }
+                        checkAllyType(enemy, player, item);
 
                         if (crazyManager.hasEnchantment(item, CEnchantments.BEEKEEPER)) {
                             int power = crazyManager.getLevel(item, CEnchantments.BEEKEEPER);
                             spawnAllies(player, enemy, AllyType.BEE, power);
                         }
 
-                        if (crazyManager.hasEnchantment(item, CEnchantments.NECROMANCER)) {
-                            int power = crazyManager.getLevel(item, CEnchantments.NECROMANCER);
-                            spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
-                        }
-
-                        if (crazyManager.hasEnchantment(item, CEnchantments.INFESTATION)) {
-                            int power = crazyManager.getLevel(item, CEnchantments.INFESTATION);
-                            spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
-                            spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
-                        }
-
+                        checkEnchantment(enemy, player, item);
                     }
                 }
             } else {
@@ -77,39 +64,46 @@ public class AllyEnchantments implements Listener {
                 e.setCancelled(true);
                 return;
             }
+
             if (inCoolDown(player)) {
                 allyManager.setEnemy(player, enemy);
                 return;
             }
+
             for (ItemStack item : player.getEquipment().getArmorContents()) {
                 // Spawn allies when attacking
                 if (crazyManager.hasEnchantments(item)) {
-                    if (crazyManager.hasEnchantment(item, CEnchantments.TAMER)) {
-                        int power = crazyManager.getLevel(item, CEnchantments.TAMER);
-                        spawnAllies(player, enemy, AllyType.WOLF, power);
-                    }
+                    checkAllyType(enemy, player, item);
 
-                    if (crazyManager.hasEnchantment(item, CEnchantments.GUARDS)) {
-                        int power = crazyManager.getLevel(item, CEnchantments.GUARDS);
-                        spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
-                    }
-
-                    if (enemy instanceof Player) {
-                        if (crazyManager.hasEnchantment(item, CEnchantments.NECROMANCER)) {
-                            int power = crazyManager.getLevel(item, CEnchantments.NECROMANCER);
-                            spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
-                        }
-
-                        if (crazyManager.hasEnchantment(item, CEnchantments.INFESTATION)) {
-                            int power = crazyManager.getLevel(item, CEnchantments.INFESTATION);
-                            spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
-                            spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
-                        }
-                    }
+                    if (enemy instanceof Player) checkEnchantment(enemy, player, item);
                 }
             }
         }
+    }
 
+    private void checkAllyType(LivingEntity enemy, Player player, ItemStack item) {
+        if (crazyManager.hasEnchantment(item, CEnchantments.TAMER)) {
+            int power = crazyManager.getLevel(item, CEnchantments.TAMER);
+            spawnAllies(player, enemy, AllyType.WOLF, power);
+        }
+
+        if (crazyManager.hasEnchantment(item, CEnchantments.GUARDS)) {
+            int power = crazyManager.getLevel(item, CEnchantments.GUARDS);
+            spawnAllies(player, enemy, AllyType.IRON_GOLEM, power);
+        }
+    }
+
+    private void checkEnchantment(LivingEntity enemy, Player player, ItemStack item) {
+        if (crazyManager.hasEnchantment(item, CEnchantments.NECROMANCER)) {
+            int power = crazyManager.getLevel(item, CEnchantments.NECROMANCER);
+            spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
+        }
+
+        if (crazyManager.hasEnchantment(item, CEnchantments.INFESTATION)) {
+            int power = crazyManager.getLevel(item, CEnchantments.INFESTATION);
+            spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
+            spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -117,12 +111,14 @@ public class AllyEnchantments implements Listener {
         if (!(event.getTarget() instanceof Player player)) return;
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
         if (!allyManager.isAlly(player, entity)) return;
+
         event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyDeath(EntityDeathEvent event) {
         if (!allyManager.isAllyMob(event.getEntity())) return;
+
         event.setDroppedExp(0);
         event.getDrops().clear();
     }
@@ -130,11 +126,11 @@ public class AllyEnchantments implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyDespawn(ChunkUnloadEvent event) {
         if (event.getChunk().getEntities().length < 1) return;
+
         for (Entity entity : event.getChunk().getEntities()) {
             if (!(entity instanceof LivingEntity livingEntity)) continue;
-            if (allyManager.isAllyMob(livingEntity)) {
-                allyManager.getAllyMob(livingEntity).forceRemoveAlly();
-            }
+
+            if (allyManager.isAllyMob(livingEntity)) allyManager.getAllyMob(livingEntity).forceRemoveAlly();
         }
     }
 
@@ -158,13 +154,12 @@ public class AllyEnchantments implements Listener {
     private boolean inCoolDown(Player player) {
         if (allyCoolDown.containsKey(player.getUniqueId())) {
             // Right now is before the player's cooldown ends.
-            if (Calendar.getInstance().before(allyCoolDown.get(player.getUniqueId()))) {
-                return true;
-            }
+            if (Calendar.getInstance().before(allyCoolDown.get(player.getUniqueId()))) return true;
 
             // Remove the player because their cooldown is over.
             allyCoolDown.remove(player.getUniqueId());
         }
+
         return false;
     }
 }

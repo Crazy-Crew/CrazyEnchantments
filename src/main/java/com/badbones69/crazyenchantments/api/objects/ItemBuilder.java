@@ -18,11 +18,8 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.badbones69.crazyenchantments.Methods.color;
 
 public class ItemBuilder {
 
@@ -287,13 +284,6 @@ public class ItemBuilder {
     }
 
     /**
-     * Returns the amount of the item stack.
-     */
-    public Integer getAmount() {
-        return itemAmount;
-    }
-
-    /**
      * Get the patterns on the banners.
      */
     public List<Pattern> getPatterns() {
@@ -401,6 +391,19 @@ public class ItemBuilder {
     /*
       Class based extensions.
      */
+
+    /**
+     * Get a clone of the object.
+     * @return a new cloned object.
+     */
+    public ItemBuilder copy() {
+        try {
+            return (ItemBuilder) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return new ItemBuilder();
+    }
 
     /**
      * Set the type of item the builder is set to.
@@ -675,11 +678,29 @@ public class ItemBuilder {
     }
 
     /**
+     * The amount of the item stack in the builder.
+     * @return The amount that is set in the builder.
+     */
+    public int getAmount() {
+        return itemAmount;
+    }
+
+    /**
      * @param amount The amount of the item stack.
      * @return The ItemBuilder with an updated item count.
      */
     public ItemBuilder setAmount(Integer amount) {
         this.itemAmount = amount;
+        return this;
+    }
+
+    /**
+     * Get the amount of the item stack in the builder.
+     * @param amount The amount that is in the item stack.
+     * @return The ItemBuilder with updated info.
+     */
+    public ItemBuilder addAmount(int amount) {
+        this.itemAmount += amount;
         return this;
     }
 

@@ -24,6 +24,8 @@ public class ShopManager {
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private String inventoryName;
     private int inventorySize;
     private boolean enchantmentTableShop;
@@ -34,7 +36,7 @@ public class ShopManager {
         customizerItems.clear();
         shopItems.clear();
         FileConfiguration config = Files.CONFIG.getFile();
-        inventoryName = Methods.color(config.getString("Settings.InvName"));
+        inventoryName = methods.color(config.getString("Settings.InvName"));
         inventorySize = config.getInt("Settings.GUISize");
         enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
 

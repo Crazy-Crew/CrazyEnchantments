@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.processors;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
@@ -20,9 +21,15 @@ import java.util.Objects;
 
 public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private final Processor<Runnable> syncProcessor;
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
-    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
 
     public ArmorMoveProcessor() {
         this.syncProcessor = new RunnableSyncProcessor();
@@ -53,15 +60,11 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     if (maxHealth > player.getHealth() && player.getHealth() > 0) {
                         syncProcessor.add(() -> {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
-                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                            plugin.getServer().getPluginManager().callEvent(event);
                             if (!event.isCancelled() && player.getHealth() > 0) {
-                                if (player.getHealth() + heal <= maxHealth) {
-                                    player.setHealth(player.getHealth() + heal);
-                                }
+                                if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
 
-                                if (player.getHealth() + heal >= maxHealth) {
-                                    player.setHealth(maxHealth);
-                                }
+                                if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
                             }
                         });
                     }
@@ -71,7 +74,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             if (CEnchantments.IMPLANTS.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.IMPLANTS) && CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
                 syncProcessor.add(() -> {
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS.getEnchantment(), armor);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                    plugin.getServer().getPluginManager().callEvent(event);
 
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
@@ -80,14 +83,9 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                             // SpartanSupport.cancelFastEat(player);
                         }
 
-                        if (player.getFoodLevel() + foodIncrease <= 20) {
-                            player.setFoodLevel(player.getFoodLevel() + foodIncrease);
-                        }
+                        if (player.getFoodLevel() + foodIncrease <= 20) player.setFoodLevel(player.getFoodLevel() + foodIncrease);
 
-                        if (player.getFoodLevel() + foodIncrease >= 20) {
-                            player.setFoodLevel(20);
-                        }
-
+                        if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
                     }
                 });
             }
@@ -101,11 +99,9 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                         if (!pluginSupport.isFriendly(player, other)) continue;
                         AngelUseEvent event = new AngelUseEvent(player, armor);
 
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                        plugin.getServer().getPluginManager().callEvent(event);
 
-                        if (!event.isCancelled()) {
-                            other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
-                        }
+                        if (!event.isCancelled()) other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
                     }
                 });
             }
@@ -119,17 +115,17 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private void useHellForge(Player player, ItemStack item) {
         if (crazyManager.hasEnchantment(item, CEnchantments.HELLFORGED)) {
-            int armorDurability = Methods.getDurability(item);
+            int armorDurability = methods.getDurability(item);
 
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
-                Bukkit.getScheduler().runTask(crazyManager.getPlugin(), () -> {
+                Bukkit.getScheduler().runTask(plugin, () -> {
                     int finalArmorDurability = armorDurability;
                     HellForgedUseEvent event = new HellForgedUseEvent(player, item);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                    plugin.getServer().getPluginManager().callEvent(event);
 
                     if (!event.isCancelled()) {
                         finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
-                        Methods.setDurability(item, finalArmorDurability);
+                        methods.setDurability(item, finalArmorDurability);
                     }
                 });
             }

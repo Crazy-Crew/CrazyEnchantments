@@ -16,6 +16,8 @@ public class CEnchantment {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     private String name;
     private String customName;
@@ -36,10 +38,10 @@ public class CEnchantment {
         this.name = name;
         this.customName = name;
         this.activated = true;
-        this.color = Methods.color("&7");
-        this.bookColor = Methods.color("&b&l");
+        this.color = methods.color("&7");
+        this.bookColor = methods.color("&b&l");
         this.maxLevel = 3;
-        this.infoName = Methods.color("&7" + name);
+        this.infoName = methods.color("&7" + name);
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();
@@ -83,7 +85,7 @@ public class CEnchantment {
     }
     
     public CEnchantment setColor(String color) {
-        this.color = Methods.color(color);
+        this.color = methods.color(color);
         return this;
     }
     
@@ -95,7 +97,7 @@ public class CEnchantment {
 
         if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
 
-        this.bookColor = Methods.color(bookColor);
+        this.bookColor = methods.color(bookColor);
         return this;
     }
     
@@ -113,7 +115,7 @@ public class CEnchantment {
     }
     
     public CEnchantment setInfoName(String infoName) {
-        this.infoName = Methods.color(infoName);
+        this.infoName = methods.color(infoName);
         return this;
     }
     
@@ -153,7 +155,7 @@ public class CEnchantment {
         List<String> info = new ArrayList<>();
 
         for (String i : infoDescription) {
-            info.add(Methods.color(i));
+            info.add(methods.color(i));
         }
 
         this.infoDescription = info;
@@ -196,7 +198,7 @@ public class CEnchantment {
     
     public void registerEnchantment() {
         RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(instance);
-        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+        plugin.getServer().getPluginManager().callEvent(event);
         crazyManager.registerEnchantment(instance);
 
         if (enchantmentType != null) enchantmentType.addEnchantment(instance);
@@ -208,7 +210,7 @@ public class CEnchantment {
     
     public void unregisterEnchantment() {
         UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(instance);
-        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+        plugin.getServer().getPluginManager().callEvent(event);
         crazyManager.unregisterEnchantment(instance);
 
         if (enchantmentType != null) enchantmentType.removeEnchantment(instance);
@@ -229,7 +231,7 @@ public class CEnchantment {
     public int getLevel(ItemStack item) {
         int level = 0;
 
-        if (Methods.verifyItemLore(item)) {
+        if (methods.verifyItemLore(item)) {
             for (String lore : item.getItemMeta().getLore()) {
                 if (lore.contains(customName)) {
                     level = crazyManager.convertLevelInteger(lore.replace(color + customName + " ", ""));

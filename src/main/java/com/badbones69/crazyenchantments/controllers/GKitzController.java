@@ -32,6 +32,8 @@ public class GKitzController implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
     
     public void openGUI(Player player) {
@@ -86,7 +88,7 @@ public class GKitzController implements Listener {
             NBTItem nbtItem = new NBTItem(item);
 
             for (GKitz kit : crazyManager.getGKitz()) {
-                if (e.getView().getTitle().equals(Methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
+                if (e.getView().getTitle().equals(methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     e.setCancelled(true);
 
                     if (e.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
@@ -95,7 +97,7 @@ public class GKitzController implements Listener {
                 }
             }
 
-            if (e.getView().getTitle().equals(Methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
+            if (e.getView().getTitle().equals(methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 e.setCancelled(true);
 
                 if (e.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {
@@ -124,7 +126,7 @@ public class GKitzController implements Listener {
                                 cePlayer.addCooldown(kit);
                                 player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
                             } else {
-                                player.sendMessage(Methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                                player.sendMessage(methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
                             }
                         } else {
                             player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));

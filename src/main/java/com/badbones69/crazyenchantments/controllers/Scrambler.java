@@ -35,7 +35,8 @@ public class Scrambler implements Listener {
 
     private final Methods methods = plugin.getStarter().getMethods();
 
-    public HashMap<Player, BukkitTask> roll = new HashMap<>();
+    private final HashMap<Player, BukkitTask> roll = new HashMap<>();
+
     private ItemBuilder scramblerItem;
     private ItemBuilder pointer;
     private boolean animationToggle;
@@ -53,7 +54,7 @@ public class Scrambler implements Listener {
         .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name"))
         .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
         animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle");
-        guiName = Methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
+        guiName = methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
     }
 
     /**
@@ -84,14 +85,14 @@ public class Scrambler implements Listener {
      * @return The scramblers.
      */
     public ItemStack getScramblers(int amount) {
-        return scramblerItem.clone().setAmount(amount).build();
+        return scramblerItem.copy().setAmount(amount).build();
     }
 
     private void setGlass(Inventory inv) {
         for (int slot = 0; slot < 9; slot++) {
             if (slot != 4) {
-                inv.setItem(slot, Methods.getRandomPaneColor().setName(" ").build());
-                inv.setItem(slot + 18, Methods.getRandomPaneColor().setName(" ").build());
+                inv.setItem(slot, methods.getRandomPaneColor().setName(" ").build());
+                inv.setItem(slot + 18, methods.getRandomPaneColor().setName(" ").build());
             } else {
                 inv.setItem(slot, pointer.build());
                 inv.setItem(slot + 18, pointer.build());
@@ -100,7 +101,7 @@ public class Scrambler implements Listener {
     }
 
     public void openScrambler(Player player, ItemStack book) {
-        Inventory inventory = crazyManager.getPlugin().getServer().createInventory(null, 27, guiName);
+        Inventory inventory = plugin.getServer().createInventory(null, 27, guiName);
         setGlass(inventory);
 
         for (int slot = 9; slot > 8 && slot < 18; slot++) {
@@ -161,7 +162,7 @@ public class Scrambler implements Listener {
                     }
                 }
             }
-        }.runTaskTimer(crazyManager.getPlugin(), 1, 1));
+        }.runTaskTimer(plugin, 1, 1));
     }
 
     private List<Integer> slowSpin() {
@@ -196,9 +197,10 @@ public class Scrambler implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onReRoll(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
+
         if (e.getClickedInventory() != null) {
             ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
             ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
@@ -235,7 +237,7 @@ public class Scrambler implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onScramblerClick(PlayerInteractEvent e) {
-        ItemStack item = Methods.getItemInHand(e.getPlayer());
+        ItemStack item = methods.getItemInHand(e.getPlayer());
 
         if (item != null) {
             if (getScramblers().isSimilar(item)) e.setCancelled(true);

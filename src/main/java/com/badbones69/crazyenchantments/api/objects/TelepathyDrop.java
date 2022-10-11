@@ -32,5 +32,4 @@ public class TelepathyDrop {
     public List<Block> getSugarCaneBlocks() {
         return sugarCaneBlocks;
     }
-
 }

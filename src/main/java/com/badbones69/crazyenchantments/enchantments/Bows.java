@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.enchantments;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -30,13 +31,17 @@ import org.bukkit.util.Vector;
 
 public class Bows implements Listener {
 
-    private final PluginSupport pluginSupport = PluginSupport.INSTANCE;
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final BowUtils bowUtils = BowUtils.getInstance();
+    private final BowEnchantmentManager bowEnchantmentManager = plugin.getStarter().getBowEnchantmentManager();
 
-    private final BowEnchantmentManager bowEnchantmentManager = BowEnchantmentManager.getInstance();
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final BowUtils bowUtils = plugin.getStarter().getBowUtils();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent event) {
@@ -47,7 +52,7 @@ public class Bows implements Listener {
         Entity entity = event.getEntity();
 
         if (!crazyManager.hasEnchantments(bow)) return;
-        if (!bowUtils.allowsCombat(entity)) return;
+        if (bowUtils.allowsCombat(entity)) return;
         if (arrow.getShooter() instanceof Player) return;
 
         // Add the arrow to the list.
@@ -58,7 +63,7 @@ public class Bows implements Listener {
 
         if (entity instanceof Player) {
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) entity, CEnchantments.MULTIARROW, bow);
-            crazyManager.getPlugin().getServer().getPluginManager().callEvent(useEvent);
+            plugin.getServer().getPluginManager().callEvent(useEvent);
 
             if (!useEvent.isCancelled()) {
                 for (int i = 1; i <= power; i++) {
@@ -66,6 +71,7 @@ public class Bows implements Listener {
                     bowUtils.spawnArrows(entity, arrow, bow);
                 }
             }
+
             return;
         }
 
@@ -73,13 +79,12 @@ public class Bows implements Listener {
             // Handle the spawned arrows.
             bowUtils.spawnArrows(entity, arrow, bow);
         }
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onLand(ProjectileHitEvent e) {
         if (!(e.getEntity() instanceof Arrow entityArrow)) return;
-        if (!bowUtils.allowsCombat(e.getEntity())) return;
+        if (bowUtils.allowsCombat(e.getEntity())) return;
         if (!(e.getEntity().getShooter() instanceof Player)) return;
         EnchantedArrow arrow = bowUtils.enchantedArrow(entityArrow);
 
@@ -88,7 +93,7 @@ public class Bows implements Listener {
 
         if (CEnchantments.BOOM.isActivated() && arrow != null) {
             if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
-                Methods.explode(arrow.getShooter(), arrow.getArrow());
+                methods.explode(arrow.getShooter(), arrow.getArrow());
                 arrow.getArrow().remove();
             }
         }
@@ -104,43 +109,33 @@ public class Bows implements Listener {
 
                 try {
                     location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
-                } catch (Exception ignore) {
-                }
+                } catch (Exception ignore) {}
 
                 // AntiCheat Support.
 
-                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                    NoCheatPlusSupport.allowPlayer(shooter);
-                }
+                //if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.allowPlayer(shooter);
 
-                if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    SpartanSupport.cancelNoSwing(shooter);
-                }
+                //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(shooter);
 
-                for (LivingEntity entity : Methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
+                for (LivingEntity entity : methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
                     EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
 
                     crazyManager.addIgnoredEvent(damageByEntityEvent);
                     crazyManager.addIgnoredUUID(shooter.getUniqueId());
                     shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-                    if (!damageByEntityEvent.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity)
-                            && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) {
-                        entity.damage(5D);
-                    }
+                    if (!damageByEntityEvent.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) entity.damage(5D);
 
                     crazyManager.removeIgnoredEvent(damageByEntityEvent);
                     crazyManager.removeIgnoredUUID(shooter.getUniqueId());
                 }
 
-                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) {
-                    NoCheatPlusSupport.denyPlayer(shooter);
-                }
+                //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.denyPlayer(shooter);
             }
         }
 
         // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
-        Bukkit.getScheduler().runTaskLater(crazyManager.getPlugin(), () -> bowUtils.removeArrow(arrow), 5);
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> bowUtils.removeArrow(arrow), 5);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -152,7 +147,7 @@ public class Bows implements Listener {
         EnchantedArrow arrow = bowUtils.enchantedArrow(entityArrow);
         if (arrow == null) return;
 
-        if (!pluginSupport.allowsCombat(arrow.getArrow().getLocation())) return;
+        if (!pluginSupport.allowCombat(arrow.getArrow().getLocation())) return;
         ItemStack bow = arrow.getBow();
         // Damaged player is friendly.
 
@@ -164,25 +159,17 @@ public class Bows implements Listener {
             if (entity.getHealth() < maxHealth) {
                 if (entity instanceof Player) {
                     EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(useEvent);
+                    plugin.getServer().getPluginManager().callEvent(useEvent);
 
                     if (!useEvent.isCancelled()) {
-                        if (entity.getHealth() + heal < maxHealth) {
-                            entity.setHealth(entity.getHealth() + heal);
-                        }
+                        if (entity.getHealth() + heal < maxHealth) entity.setHealth(entity.getHealth() + heal);
 
-                        if (entity.getHealth() + heal >= maxHealth) {
-                            entity.setHealth(maxHealth);
-                        }
+                        if (entity.getHealth() + heal >= maxHealth) entity.setHealth(maxHealth);
                     }
                 } else {
-                    if (entity.getHealth() + heal < maxHealth) {
-                        entity.setHealth(entity.getHealth() + heal);
-                    }
+                    if (entity.getHealth() + heal < maxHealth) entity.setHealth(entity.getHealth() + heal);
 
-                    if (entity.getHealth() + heal >= maxHealth) {
-                        entity.setHealth(maxHealth);
-                    }
+                    if (entity.getHealth() + heal >= maxHealth) entity.setHealth(maxHealth);
                 }
             }
         }
@@ -197,16 +184,17 @@ public class Bows implements Listener {
 
                 if (entity instanceof Player) {
                     EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(useEvent);
+                    plugin.getServer().getPluginManager().callEvent(useEvent);
 
                     Player player = (Player) e.getEntity();
 
                     if (!useEvent.isCancelled()) {
                         if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                            SpartanSupport.cancelSpeed(player);
-                            SpartanSupport.cancelNormalMovements(player);
-                            SpartanSupport.cancelNoFall(player);
+                            //SpartanSupport.cancelSpeed(player);
+                            //SpartanSupport.cancelNormalMovements(player);
+                            //SpartanSupport.cancelNoFall(player);
                         }
+
                         entity.setVelocity(v);
                     }
                 } else {
@@ -222,12 +210,9 @@ public class Bows implements Listener {
 
                     if (entity instanceof Player) {
                         EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) e.getEntity(), enchantment, bow);
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(useEvent);
+                        plugin.getServer().getPluginManager().callEvent(useEvent);
 
-                        if (useEvent.isCancelled()) {
-                            // If the EnchantmentUseEvent is cancelled then no need to keep going with this enchantment.
-                            continue;
-                        }
+                        if (useEvent.isCancelled()) continue;
                     }
 
                     // Code is ran if entity is not a player or if the entity is a player and the EnchantmentUseEvent is not cancelled.

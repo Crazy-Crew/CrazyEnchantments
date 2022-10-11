@@ -92,9 +92,9 @@ public enum Messages {
     "&b/ce lostbook <category> [amount] [player] - &9Gives a player a lost book item.",
     "&b/ce spawn <enchantment/category> [(level:#/min-max)/world:<world>/x:#/y:#/z:#] - &9Drops an enchantment book at the specific coordinates."));
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final static Methods methods = plugin.getStarter().getMethods();
 
     private final String path;
     private String defaultMessage;
@@ -114,7 +114,7 @@ public enum Messages {
         StringBuilder message = new StringBuilder();
 
         for (String line : list) {
-            message.append(Methods.color(line)).append("\n");
+            message.append(methods.color(line)).append("\n");
         }
 
         return message.toString();

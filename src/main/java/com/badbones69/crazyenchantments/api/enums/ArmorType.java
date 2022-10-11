@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.api.enums;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.controllers.ArmorListener;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,6 +13,10 @@ public enum ArmorType {
     HELMET(5), CHESTPLATE(6), LEGGINGS(7), BOOTS(8);
     
     private final int slot;
+
+    private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final static ArmorListener armorListener = plugin.getArmorListener();
     
     ArmorType(int slot) {
         this.slot = slot;
@@ -24,7 +29,7 @@ public enum ArmorType {
      * @return The parsed ArmorType, or null if not found.
      */
     public static ArmorType matchType(final ItemStack itemStack) {
-        if (ArmorListener.isAirOrNull(itemStack)) return null;
+        if (armorListener.isAirOrNull(itemStack)) return null;
 
         String type = itemStack.getType().name();
 

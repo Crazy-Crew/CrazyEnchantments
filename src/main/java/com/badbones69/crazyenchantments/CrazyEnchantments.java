@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.commands.*;
 import com.badbones69.crazyenchantments.controllers.*;
@@ -11,6 +12,7 @@ import com.badbones69.crazyenchantments.enchantments.*;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -25,6 +27,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private final FileManager fileManager = getStarter().getFileManager();
 
     private final CrazyManager crazyManager = getStarter().getCrazyManager();
+
+    private final AllyManager allyManager = getStarter().getAllyManager();
 
     private final CurrencyAPI currencyAPI = getStarter().getCurrencyAPI();
 
@@ -95,40 +99,69 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         disable();
     }
 
+    private EnchantmentControl enchantmentControl;
+    private SignControl signControl;
+    private DustControl dustControl;
+    private ScrollControl scrollControl;
+    private ShopControl shopControl;
+    private InfoGUIControl infoGUIControl;
+
+    private LostBookController lostBookController;
+
+    private Bows bows;
+    private Axes axes;
+    private Tools tools;
+    private Hoes hoes;
+    private Helmets helmets;
+    private PickAxes pickAxes;
+    private Boots boots;
+    private Swords swords;
+
+    private AllyEnchantments allyEnchantments;
+    private Tinkerer tinkerer;
+
+    private AuraListener auraListener;
+    private ArmorListener armorListener;
+
+    private BlackSmith blackSmith;
+    private ProtectionCrystal protectionCrystal;
+    private Scrambler scrambler;
+
+    private CommandChecker commandChecker;
+    private FireworkDamage fireworkDamage;
+
     private void enable() {
         PluginManager pluginManager = getServer().getPluginManager();
 
-        pluginManager.registerEvents(new EnchantmentControl(), this);
-        pluginManager.registerEvents(new SignControl(), this);
-        pluginManager.registerEvents(new DustControl(), this);
-        pluginManager.registerEvents(new ScrollControl(), this);
-        pluginManager.registerEvents(new ShopControl(), this);
-        pluginManager.registerEvents(new InfoGUIControl(), this);
+        pluginManager.registerEvents(enchantmentControl = new EnchantmentControl(), this);
+        pluginManager.registerEvents(signControl = new SignControl(), this);
+        pluginManager.registerEvents(dustControl = new DustControl(), this);
+        pluginManager.registerEvents(scrollControl = new ScrollControl(), this);
+        pluginManager.registerEvents(shopControl = new ShopControl(), this);
+        pluginManager.registerEvents(infoGUIControl = new InfoGUIControl(), this);
 
-        pluginManager.registerEvents(new LostBookController(), this);
+        pluginManager.registerEvents(lostBookController = new LostBookController(), this);
 
-        pluginManager.registerEvents(new Bows(), this);
-        pluginManager.registerEvents(new Axes(), this);
-        pluginManager.registerEvents(new Tools(), this);
-        pluginManager.registerEvents(new Hoes(), this);
-        pluginManager.registerEvents(new Helmets(), this);
-        pluginManager.registerEvents(new PickAxes(), this);
-        pluginManager.registerEvents(new Boots(), this);
-        pluginManager.registerEvents(new Swords(), this);
+        pluginManager.registerEvents(bows = new Bows(), this);
+        pluginManager.registerEvents(axes = new Axes(), this);
+        pluginManager.registerEvents(tools = new Tools(), this);
+        pluginManager.registerEvents(hoes = new Hoes(), this);
+        pluginManager.registerEvents(helmets = new Helmets(), this);
+        pluginManager.registerEvents(pickAxes = new PickAxes(), this);
+        pluginManager.registerEvents(boots = new Boots(), this);
+        pluginManager.registerEvents(swords = new Swords(), this);
         pluginManager.registerEvents(armor = new Armor(), this);
 
-        pluginManager.registerEvents(new AllyEnchantments(), this);
+        pluginManager.registerEvents(allyEnchantments = new AllyEnchantments(), this);
 
-        pluginManager.registerEvents(new Tinkerer(), this);
-        pluginManager.registerEvents(new AuraListener(), this);
-        pluginManager.registerEvents(new BlackSmith(), this);
-        pluginManager.registerEvents(new ArmorListener(), this);
-        pluginManager.registerEvents(new ProtectionCrystal(), this);
-        pluginManager.registerEvents(new Scrambler(), this);
-        pluginManager.registerEvents(new CommandChecker(), this);
-        pluginManager.registerEvents(new FireworkDamage(), this);
-
-        pluginManager.registerEvents(this, this);
+        pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
+        pluginManager.registerEvents(auraListener = new AuraListener(), this);
+        pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
+        pluginManager.registerEvents(armorListener = new ArmorListener(), this);
+        pluginManager.registerEvents(protectionCrystal = new ProtectionCrystal(), this);
+        pluginManager.registerEvents(scrambler = new Scrambler(), this);
+        pluginManager.registerEvents(commandChecker = new CommandChecker(), this);
+        pluginManager.registerEvents(fireworkDamage = new FireworkDamage(), this);
 
         if (crazyManager.isGkitzEnabled()) {
             getLogger().info("Gkitz support is now enabled.");
@@ -155,7 +188,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private void disable() {
         armor.stop();
 
-        if (crazyManager.getAllyManager() != null) crazyManager.getAllyManager().forceRemoveAllies();
+        if (allyManager != null) allyManager.forceRemoveAllies();
 
         getServer().getOnlinePlayers().forEach(crazyManager::unloadCEPlayer);
     }
@@ -166,5 +199,105 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public Starter getStarter() {
         return starter;
+    }
+
+    public Scrambler getScrambler() {
+        return scrambler;
+    }
+
+    public ProtectionCrystal getProtectionCrystal() {
+        return protectionCrystal;
+    }
+
+    public AllyEnchantments getAllyEnchantments() {
+        return allyEnchantments;
+    }
+
+    public Armor getArmor() {
+        return armor;
+    }
+
+    public ArmorListener getArmorListener() {
+        return armorListener;
+    }
+
+    public AuraListener getAuraListener() {
+        return auraListener;
+    }
+
+    public Axes getAxes() {
+        return axes;
+    }
+
+    public BlackSmith getBlackSmith() {
+        return blackSmith;
+    }
+
+    public Boots getBoots() {
+        return boots;
+    }
+
+    public Bows getBows() {
+        return bows;
+    }
+
+    public CommandChecker getCommandChecker() {
+        return commandChecker;
+    }
+
+    public DustControl getDustControl() {
+        return dustControl;
+    }
+
+    public EnchantmentControl getEnchantmentControl() {
+        return enchantmentControl;
+    }
+
+    public FireworkDamage getFireworkDamage() {
+        return fireworkDamage;
+    }
+
+    public Helmets getHelmets() {
+        return helmets;
+    }
+
+    public Hoes getHoes() {
+        return hoes;
+    }
+
+    public InfoGUIControl getInfoGUIControl() {
+        return infoGUIControl;
+    }
+
+    public LostBookController getLostBookController() {
+        return lostBookController;
+    }
+
+    public PickAxes getPickAxes() {
+        return pickAxes;
+    }
+
+    public ScrollControl getScrollControl() {
+        return scrollControl;
+    }
+
+    public SignControl getSignControl() {
+        return signControl;
+    }
+
+    public ShopControl getShopControl() {
+        return shopControl;
+    }
+
+    public Swords getSwords() {
+        return swords;
+    }
+
+    public Tinkerer getTinkerer() {
+        return tinkerer;
+    }
+
+    public Tools getTools() {
+        return tools;
     }
 }

@@ -148,7 +148,7 @@ public class BlackSmith implements Listener {
     
     private void setResultBoarder(BlackSmithResult resultItem, Inventory inventory) {
         if (resultItem.getCost() > 0) { // Items are upgradable
-            inventory.setItem(resultSlot, Methods.addLore(resultItem.getResultItem(), getFoundString(resultItem)));
+            inventory.setItem(resultSlot, methods.addLore(resultItem.getResultItem(), getFoundString(resultItem)));
             resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getBlueGlass()));
         } else { // Items are not upgradable
             inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());

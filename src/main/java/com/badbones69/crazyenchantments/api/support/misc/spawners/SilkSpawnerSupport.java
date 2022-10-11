@@ -41,7 +41,7 @@ public class SilkSpawnerSupport implements Listener {
             if (!player.hasPermission("silkspawners.silkdrop." + mob)) return;
 
             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), itemStack);
-            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             ItemStack spawnerItem = api.newSpawnerItem(e.getEntityID(), api.getCustomSpawnerName(api.getCreatureName(e.getEntityID())), 1, false);
 

@@ -20,6 +20,8 @@ public class InfoMenuManager {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private Inventory inventoryMenu;
     private String inventoryName;
     private int inventorySize;
@@ -31,7 +33,7 @@ public class InfoMenuManager {
         enchantmentTypes.clear();
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Info-GUI-Settings";
-        inventoryName = Methods.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
+        inventoryName = methods.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
         inventorySize = file.getInt(path + ".Inventory.Size", 18);
         inventoryMenu = plugin.getServer().createInventory(null, inventorySize, inventoryName);
         backRight = new ItemBuilder()

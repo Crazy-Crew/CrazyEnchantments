@@ -63,7 +63,7 @@ public class AuraListener implements Listener {
 
                 for (Player other : players) {
                     AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(auraEvent);
+                    plugin.getServer().getPluginManager().callEvent(auraEvent);
                 }
             });
         }

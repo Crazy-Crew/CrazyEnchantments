@@ -119,7 +119,7 @@ public class AllyMob {
                     allyManager.removeAllyMob(instance);
                     ally.remove();
                 }
-            }.runTaskLater(crazyManager.getPlugin(), spawnTime * 20);
+            }.runTaskLater(plugin, spawnTime * 20);
         }
     }
     

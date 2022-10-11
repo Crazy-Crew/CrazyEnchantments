@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.enchantments;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -27,11 +28,18 @@ import java.util.*;
 
 public class Tools implements Listener {
 
-    private final static Random random = new Random();
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
-    private final static List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    @EventHandler
+    private final Hoes hoes = plugin.getHoes();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+    
+    private final Random random = new Random();
+    private final List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
+
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerClick(PlayerInteractEvent e) {
         updateEffects(e.getPlayer());
     }
@@ -43,7 +51,7 @@ public class Tools implements Listener {
 
         if (crazyManager.isIgnoredEvent(event) || ignoreBlockTypes(block)) return;
 
-        ItemStack item = Methods.getItemInHand(player);
+        ItemStack item = methods.getItemInHand(player);
 
         updateEffects(player);
 
@@ -52,7 +60,7 @@ public class Tools implements Listener {
 
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
                 // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
-                if ((Hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
+                if ((hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
                         // This checks if the block is a spawner and if so the spawner classes will take care of this.
                         // If Epic Spawners is enabled then telepathy will give the item from the API.
                         // Otherwise, CE will ignore the spawner in this event.
@@ -60,14 +68,14 @@ public class Tools implements Listener {
 
 
                 EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-                crazyManager.getPlugin().getServer().getPluginManager().callEvent(useEvent);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
 
                 if (!useEvent.isCancelled()) {
                     event.setExpToDrop(0);
                     event.setDropItems(false);
                     TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
 
-                    if (Methods.isInventoryFull(player)) {
+                    if (methods.isInventoryFull(player)) {
                         player.getWorld().dropItem(player.getLocation(), drop.getItem());
                     } else {
                         player.getInventory().addItem(drop.getItem());
@@ -84,13 +92,13 @@ public class Tools implements Listener {
                         orb.setExperience(drop.getXp());
                     }
 
-                    Methods.removeDurability(item, player);
+                    methods.removeDurability(item, player);
                 }
             }
         }
     }
 
-    public static TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
+    public TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
         ItemStack item = processInfo.getItem();
         Block block = processInfo.getBlock();
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
@@ -105,10 +113,9 @@ public class Tools implements Listener {
 
         for (ItemStack drop : processInfo.getDrops()) {
 
-            if (itemDrop == null) {
-                // Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
-                itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
-            }
+            // Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
+
+            if (itemDrop == null) itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
 
             if (!hasSilkTouch) {
                 if (hasFurnace && isOre) {
@@ -118,10 +125,8 @@ public class Tools implements Listener {
                 }
 
                 if (hasOreXP(block)) {
-                    xp = Methods.percentPick(7, 3);
-                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                        xp += Methods.percentPick(7, 3) * crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
-                    }
+                    xp = methods.percentPick(7, 3);
+                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
                 }
             }
 
@@ -138,11 +143,8 @@ public class Tools implements Listener {
             itemDrop = new ItemBuilder().setMaterial(block.getType());
         }
 
-        if (block.getType() == Material.COCOA) {
-            // Coco drops 2-3 beans.
-            itemDrop.setMaterial(Material.COCOA_BEANS)
-                    .setAmount(crazyManager.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
-        }
+        // Coco drops 2-3 beans.
+        if (block.getType() == Material.COCOA) itemDrop.setMaterial(Material.COCOA_BEANS).setAmount(crazyManager.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
 
         if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.BEETROOT_SEEDS) {
             itemDrop.setAmount(random.nextInt(3)); // Wheat and BeetRoots drops 0-3 seeds.
@@ -153,7 +155,7 @@ public class Tools implements Listener {
         return new TelepathyDrop(itemDrop.build(), xp, sugarCaneBlocks);
     }
 
-    private static List<Block> getSugarCaneBlocks(Block block) {
+    private List<Block> getSugarCaneBlocks(Block block) {
         List<Block> sugarCaneBlocks = new ArrayList<>();
         Block cane = block;
 
@@ -167,7 +169,7 @@ public class Tools implements Listener {
     }
 
     private void updateEffects(Player player) {
-        ItemStack item = Methods.getItemInHand(player);
+        ItemStack item = methods.getItemInHand(player);
         if (!crazyManager.hasEnchantments(item)) return;
 
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
@@ -175,7 +177,7 @@ public class Tools implements Listener {
 
         if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 int power = crazyManager.getLevel(item, CEnchantments.HASTE);
@@ -186,7 +188,7 @@ public class Tools implements Listener {
 
         if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 player.removePotionEffect(PotionEffectType.WATER_BREATHING);
@@ -196,25 +198,22 @@ public class Tools implements Listener {
 
     }
 
-    private static boolean ignoreBlockTypes(Block block) {
+    private boolean ignoreBlockTypes(Block block) {
         for (String name : ignoreBlockTypes) {
-            if (block.getType().name().toLowerCase().contains(name)) {
-                return true;
-            }
+            if (block.getType().name().toLowerCase().contains(name)) return true;
         }
 
         return false;
     }
 
-    private static boolean hasOreXP(Block block) {
+    private boolean hasOreXP(Block block) {
         return switch (block.getType()) {
             case COAL_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
             default -> false;
         };
     }
 
-    private static boolean isOre(Block block) {
-
+    private boolean isOre(Block block) {
         return switch (block.getType()) {
             case COAL_ORE,
                     IRON_ORE,
@@ -228,7 +227,7 @@ public class Tools implements Listener {
         };
     }
 
-    private static ItemStack getOreDrop(Block block) {
+    private ItemStack getOreDrop(Block block) {
         ItemBuilder dropItem = new ItemBuilder();
 
         if (block.getType() == Material.NETHER_QUARTZ_ORE) {

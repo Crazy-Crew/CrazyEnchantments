@@ -20,6 +20,8 @@ public class CETab implements TabCompleter {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
     
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
@@ -105,7 +107,7 @@ public class CETab implements TabCompleter {
                     break;
                 case "add":
                     ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
-                    Enchantment vanillaEnchantment = Methods.getEnchantment(args[1]);
+                    Enchantment vanillaEnchantment = methods.getEnchantment(args[1]);
 
                     if (vanillaEnchantment != null || ceEnchantment != null) {
                         int maxLevel = vanillaEnchantment != null ? vanillaEnchantment.getMaxLevel() : ceEnchantment.getMaxLevel();
@@ -129,9 +131,10 @@ public class CETab implements TabCompleter {
                     break;
                 case "crystal":
                 case "scrambler":
-                    crazyManager.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                    plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                     break;
             }
+
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
         } else if (args.length == 4) { // /ce arg0 arg1 arg2
             switch (args[0].toLowerCase()) {
@@ -142,8 +145,9 @@ public class CETab implements TabCompleter {
                     completions.add("Y:");
                     completions.add("Z:");
                 }
+
                 case "scroll", "dust", "lostbook" ->
-                        crazyManager.getPlugin().getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 default -> {
                     return StringUtil.copyPartialMatches(args[3], completions, new ArrayList<>());
                 }

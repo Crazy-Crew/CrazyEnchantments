@@ -1,12 +1,11 @@
 package com.badbones69.crazyenchantments.api.enums;
 
-import com.badbones69.crazyenchantments.api.CrazyManager;
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.HashMap;
 
 public enum ShopOption {
@@ -41,7 +40,7 @@ public enum ShopOption {
         this.buyable = buyable;
     }
 
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
+    private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     
     public static void loadShopOptions() {
         FileConfiguration config = Files.CONFIG.getFile();
@@ -63,7 +62,7 @@ public enum ShopOption {
                 config.getInt(costPath + "Cost", 100),
                 Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
             } catch (Exception e) {
-                crazyManager.getPlugin().getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
+                plugin.getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
                 e.printStackTrace();
             }
         }
@@ -74,23 +73,23 @@ public enum ShopOption {
     }
     
     public ItemBuilder getItemBuilder() {
-        return shopOptions.get(this).getItemBuilder();
+        return shopOptions.get(this).itemBuilder();
     }
     
     public int getSlot() {
-        return shopOptions.get(this).getSlot();
+        return shopOptions.get(this).slot();
     }
     
     public boolean isInGUI() {
-        return shopOptions.get(this).isInGUI();
+        return shopOptions.get(this).inGUI();
     }
     
     public int getCost() {
-        return shopOptions.get(this).getCost();
+        return shopOptions.get(this).cost();
     }
     
     public Currency getCurrency() {
-        return shopOptions.get(this).getCurrency();
+        return shopOptions.get(this).currency();
     }
     
     private String getOptionPath() {
@@ -112,41 +111,6 @@ public enum ShopOption {
     public boolean isBuyable() {
         return buyable;
     }
-    
-    private static class Option {
-        
-        private final ItemBuilder itemBuilder;
-        private final int slot;
-        private final boolean inGUI;
-        private final int cost;
-        private final Currency currency;
-        
-        public Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {
-            this.itemBuilder = itemBuilder;
-            this.slot = slot;
-            this.inGUI = inGUI;
-            this.cost = cost;
-            this.currency = currency;
-        }
-        
-        public ItemBuilder getItemBuilder() {
-            return itemBuilder;
-        }
-        
-        public int getSlot() {
-            return slot;
-        }
-        
-        public boolean isInGUI() {
-            return inGUI;
-        }
-        
-        public int getCost() {
-            return cost;
-        }
-        
-        public Currency getCurrency() {
-            return currency;
-        }
-    }
+
+    private record Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {}
 }

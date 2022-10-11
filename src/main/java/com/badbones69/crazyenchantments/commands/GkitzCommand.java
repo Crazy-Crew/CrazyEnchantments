@@ -33,7 +33,7 @@ public class GkitzCommand implements CommandExecutor {
                     return true;
                 }
 
-                if (hasPermission(sender, "gkitz")) GKitzController.openGUI((Player) sender);
+                // if (hasPermission(sender, "gkitz")) GKitzController.openGUI((Player) sender);
 
             } else {
                 if (args[0].equalsIgnoreCase("reset")) { // /gkitz reset <kit> [player]
@@ -73,7 +73,7 @@ public class GkitzCommand implements CommandExecutor {
                             placeholders.put("%Kit%", kit.getName());
                             sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
                         } else {
-                            sender.sendMessage(Methods.getPrefix() + Methods.color("&c/GKitz Reset <Kit> [Player]"));
+                            sender.sendMessage(methods.getPrefix() + methods.color("&c/GKitz Reset <Kit> [Player]"));
                         }
                     }
                 } else {
@@ -126,7 +126,7 @@ public class GkitzCommand implements CommandExecutor {
                                     cePlayer.addCooldown(kit);
                                 }
                             } else {
-                                sender.sendMessage(Methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                                sender.sendMessage(methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
                                 return true;
                             }
                         } else {

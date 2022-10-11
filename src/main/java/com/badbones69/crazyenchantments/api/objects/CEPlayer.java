@@ -19,7 +19,7 @@ public class CEPlayer {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Methods methods = plugin.getStarter().getMethods();
     
     private int souls;
     private final Player player;
@@ -131,7 +131,7 @@ public class CEPlayer {
 
                     if (player.getEquipment().getHelmet() == null || player.getEquipment().getHelmet().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.HELMET, new ItemStack(Material.AIR), item);
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                        plugin.getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) player.getEquipment().setHelmet(item);
 
@@ -142,7 +142,7 @@ public class CEPlayer {
 
                     if (player.getEquipment().getChestplate() == null || player.getEquipment().getChestplate().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.CHESTPLATE, new ItemStack(Material.AIR), item);
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                        plugin.getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) player.getEquipment().setChestplate(item);
 
@@ -152,7 +152,7 @@ public class CEPlayer {
 
                     if (player.getEquipment().getLeggings() == null || player.getEquipment().getLeggings().getType() == Material.AIR) {
                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.LEGGINGS, new ItemStack(Material.AIR), item);
-                        crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                        plugin.getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) player.getEquipment().setLeggings(item);
 
@@ -161,7 +161,7 @@ public class CEPlayer {
                 } else if (item.getType().toString().toLowerCase().contains("boots") && (player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR)) {
 
                     ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
-                    crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                    plugin.getServer().getPluginManager().callEvent(event);
 
                     if (!event.isCancelled()) player.getEquipment().setBoots(item);
 
@@ -169,7 +169,7 @@ public class CEPlayer {
                 }
             }
 
-            if (Methods.isInventoryFull(player)) {
+            if (methods.isInventoryFull(player)) {
                 player.getWorld().dropItemNaturally(player.getLocation(), item);
             } else {
                 player.getInventory().addItem(item);
@@ -178,7 +178,7 @@ public class CEPlayer {
         }
 
         for (String cmd : kit.getCommands()) {
-            crazyManager.getPlugin().getServer().dispatchCommand(crazyManager.getPlugin().getServer().getConsoleSender(), cmd
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd
             .replace("%Player%", player.getName()).replace("%player%", player.getName()));
         }
     }
@@ -242,9 +242,7 @@ public class CEPlayer {
         List<Cooldown> playerCooldowns = new ArrayList<>();
 
         for (Cooldown c : getCooldowns()) {
-            if (c.getGKitz().getName().equalsIgnoreCase(cooldown.getGKitz().getName())) {
-                playerCooldowns.add(c);
-            }
+            if (c.getGKitz().getName().equalsIgnoreCase(cooldown.getGKitz().getName())) playerCooldowns.add(c);
         }
 
         this.cooldowns.removeAll(playerCooldowns);

@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
@@ -8,6 +9,7 @@ import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.events.BuyBookEvent;
+import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
@@ -27,15 +29,29 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShopControl implements Listener {
     
-    private final static CrazyManager crazyManager = CrazyManager.getInstance();
-    private final static ShopManager shopManager = crazyManager.getShopManager();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    
+    private final ShopManager shopManager = plugin.getStarter().getShopManager();
+
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
+
+    private final Scrambler scrambler = plugin.getStarter().getScrambler();
+
+    private final ProtectionCrystal protectionCrystal = plugin.getStarter().getProtectionCrystal();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+
     private final Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
     
-    public static void openGUI(Player player) {
+    public void openGUI(Player player) {
         player.openInventory(shopManager.getShopInventory(player));
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         ItemStack item = e.getCurrentItem();
         Inventory inventory = e.getInventory();
@@ -50,17 +66,17 @@ public class ShopControl implements Listener {
                 for (Category category : crazyManager.getCategories()) {
                     if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
 
-                        if (Methods.isInventoryFull(player)) {
+                        if (methods.isInventoryFull(player)) {
                             player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                             return;
                         }
 
                         if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
-                            if (CurrencyAPI.canBuy(player, category)) {
-                                CurrencyAPI.takeCurrency(player, category);
+                            if (currencyAPI.canBuy(player, category)) {
+                                currencyAPI.takeCurrency(player, category);
                             } else {
-                                String needed = (category.getCost() - CurrencyAPI.getCurrency(player, category.getCurrency())) + "";
-                                Methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
+                                String needed = (category.getCost() - currencyAPI.getCurrency(player, category.getCurrency())) + "";
+                                methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                 return;
                             }
                         }
@@ -69,10 +85,10 @@ public class ShopControl implements Listener {
 
                         if (book != null) {
                             BuyBookEvent event = new BuyBookEvent(crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                            plugin.getServer().getPluginManager().callEvent(event);
                             player.getInventory().addItem(book.buildBook());
                         } else {
-                            player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                            player.sendMessage(methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                         }
 
                         return;
@@ -81,17 +97,17 @@ public class ShopControl implements Listener {
 
                     if (lostBook.isInGUI() && item.isSimilar(lostBook.getDisplayItem().build())) {
 
-                        if (Methods.isInventoryFull(player)) {
+                        if (methods.isInventoryFull(player)) {
                             player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                             return;
                         }
 
                         if (lostBook.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
-                            if (CurrencyAPI.canBuy(player, lostBook)) {
-                                CurrencyAPI.takeCurrency(player, lostBook);
+                            if (currencyAPI.canBuy(player, lostBook)) {
+                                currencyAPI.takeCurrency(player, lostBook);
                             } else {
-                                String needed = (lostBook.getCost() - CurrencyAPI.getCurrency(player, lostBook.getCurrency())) + "";
-                                Methods.switchCurrency(player, lostBook.getCurrency(), "%Money_Needed%", "%XP%", needed);
+                                String needed = (lostBook.getCost() - currencyAPI.getCurrency(player, lostBook.getCurrency())) + "";
+                                methods.switchCurrency(player, lostBook.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                 return;
                             }
                         }
@@ -106,17 +122,17 @@ public class ShopControl implements Listener {
                         // If the option is buyable then it check to see if they player can buy it and take the money.
 
                         if (option.isBuyable()) {
-                            if (Methods.isInventoryFull(player)) {
+                            if (methods.isInventoryFull(player)) {
                                 player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                                 return;
                             }
 
                             if (option.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
-                                if (CurrencyAPI.canBuy(player, option)) {
-                                    CurrencyAPI.takeCurrency(player, option);
+                                if (currencyAPI.canBuy(player, option)) {
+                                    currencyAPI.takeCurrency(player, option);
                                 } else {
-                                    String needed = (option.getCost() - CurrencyAPI.getCurrency(player, option.getCurrency())) + "";
-                                    Methods.switchCurrency(player, option.getCurrency(), "%Money_Needed%", "%XP%", needed);
+                                    String needed = (option.getCost() - currencyAPI.getCurrency(player, option.getCurrency())) + "";
+                                    methods.switchCurrency(player, option.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                     return;
                                 }
                             }
@@ -124,25 +140,25 @@ public class ShopControl implements Listener {
 
                         switch (option) {
                             case GKITZ -> {
-                                if (!Methods.hasPermission(player, "gkitz", true)) return;
-                                GKitzController.openGUI(player);
+                                if (!methods.hasPermission(player, "gkitz", true)) return;
+                                //GKitzController.openGUI(player);
                             }
 
                             case BLACKSMITH -> {
-                                if (!Methods.hasPermission(player, "blacksmith", true)) return;
-                                BlackSmith.openBlackSmith(player);
+                                if (!methods.hasPermission(player, "blacksmith", true)) return;
+                                //BlackSmith.openBlackSmith(player);
                             }
 
                             case TINKER -> {
-                                if (!Methods.hasPermission(player, "tinker", true)) return;
-                                Tinkerer.openTinker(player);
+                                if (!methods.hasPermission(player, "tinker", true)) return;
+                                //Tinkerer.openTinker(player);
                             }
 
-                            case INFO -> crazyManager.getInfoMenuManager().openInfoMenu(player);
-                            case PROTECTION_CRYSTAL -> player.getInventory().addItem(ProtectionCrystal.getCrystals());
+                            case INFO -> infoMenuManager.openInfoMenu(player);
+                            case PROTECTION_CRYSTAL -> player.getInventory().addItem(protectionCrystal.getCrystals());
                             case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                             case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
-                            case SCRAMBLER -> player.getInventory().addItem(Scrambler.getScramblers());
+                            case SCRAMBLER -> player.getInventory().addItem(scrambler.getScramblers());
                             case BLACK_SCROLL -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
                             case WHITE_SCROLL -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
                             case TRANSMOG_SCROLL -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
@@ -155,7 +171,7 @@ public class ShopControl implements Listener {
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEnchantmentTableClick(PlayerInteractEvent e) {
         if (shopManager.isEnchantmentTableShop()) {
             Player player = e.getPlayer();

@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.controllers;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -25,22 +26,29 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 
 public class SignControl implements Listener {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+
+    private final ProtectionCrystal protectionCrystal = plugin.getStarter().getProtectionCrystal();
+
+    private final Scrambler scrambler = plugin.getStarter().getScrambler();
     
-    private static final CrazyManager crazyManager = CrazyManager.getInstance();
-    
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (e.getClickedBlock() == null) return;
         Location location = e.getClickedBlock().getLocation();
         Player player = e.getPlayer();
+
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         if (e.getClickedBlock().getState() instanceof Sign) {
@@ -48,14 +56,9 @@ public class SignControl implements Listener {
 
             for (String l : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
                 String type = Files.SIGNS.getFile().getString("Locations." + l + ".Type");
-                World world = crazyManager.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
-                int x = Files.SIGNS.getFile().getInt("Locations." + l + ".X");
-                int y = Files.SIGNS.getFile().getInt("Locations." + l + ".Y");
-                int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
-                Location loc = new Location(world, x, y, z);
 
-                if (location.equals(loc)) {
-                    if (Methods.isInventoryFull(player)) {
+                if (location.equals(getLocation(l))) {
+                    if (methods.isInventoryFull(player)) {
                         player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                         return;
                     }
@@ -75,26 +78,22 @@ public class SignControl implements Listener {
                                 Currency currency = Currency.getCurrency(config.getString("Settings.Costs." + o + ".Currency"));
                                 int cost = config.getInt("Settings.Costs." + o + ".Cost");
 
-                                if (CurrencyAPI.canBuy(player, currency, cost)) {
-                                    CurrencyAPI.takeCurrency(player, currency, cost);
+                                if (currencyAPI.canBuy(player, currency, cost)) {
+                                    currencyAPI.takeCurrency(player, currency, cost);
                                 } else {
-                                    String needed = (cost - CurrencyAPI.getCurrency(player, currency)) + "";
+                                    String needed = (cost - currencyAPI.getCurrency(player, currency)) + "";
 
-                                    if (currency != null) {
-                                        Methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
-                                    }
+                                    if (currency != null) methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
 
                                     return;
                                 }
                             }
 
-                            if (config.contains("Settings.SignOptions." + o + "Style.Buy-Message")) {
-                                player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions." + o + "Style.Buy-Message")));
-                            }
+                            if (config.contains("Settings.SignOptions." + o + "Style.Buy-Message")) player.sendMessage(methods.color(methods.getPrefix() + config.getString("Settings.SignOptions." + o + "Style.Buy-Message")));
 
                             switch (o) {
-                                case "ProtectionCrystal" -> player.getInventory().addItem(ProtectionCrystal.getCrystals());
-                                case "Scrambler" -> player.getInventory().addItem(Scrambler.getScramblers());
+                                case "ProtectionCrystal" -> player.getInventory().addItem(protectionCrystal.getCrystals());
+                                case "Scrambler" -> player.getInventory().addItem(scrambler.getScramblers());
                                 case "DestroyDust" -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
                                 case "SuccessDust" -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                                 case "BlackScroll" -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
@@ -110,11 +109,11 @@ public class SignControl implements Listener {
 
                     if (category != null) {
                         if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
-                            if (CurrencyAPI.canBuy(player, category)) {
-                                CurrencyAPI.takeCurrency(player, category);
+                            if (currencyAPI.canBuy(player, category)) {
+                                currencyAPI.takeCurrency(player, category);
                             } else {
-                                String needed = (category.getCost() - CurrencyAPI.getCurrency(player, category.getCurrency())) + "";
-                                Methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
+                                String needed = (category.getCost() - currencyAPI.getCurrency(player, category.getCurrency())) + "";
+                                methods.switchCurrency(player, category.getCurrency(), "%Money_Needed%", "%XP%", needed);
                                 return;
                             }
                         }
@@ -125,16 +124,16 @@ public class SignControl implements Listener {
                             ItemBuilder itemBuilder = book.getItemBuilder();
 
                             if (config.contains("Settings.SignOptions.CategoryShopStyle.Buy-Message")) {
-                                player.sendMessage(Methods.color(Methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
+                                player.sendMessage(methods.color(methods.getPrefix() + config.getString("Settings.SignOptions.CategoryShopStyle.Buy-Message")
                                 .replace("%BookName%", itemBuilder.getName()).replace("%bookname%", itemBuilder.getName())
                                 .replace("%Category%", category.getName()).replace("%category%", category.getName())));
                             }
 
                             BuyBookEvent event = new BuyBookEvent(crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                            crazyManager.getPlugin().getServer().getPluginManager().callEvent(event);
+                            plugin.getServer().getPluginManager().callEvent(event);
                             player.getInventory().addItem(itemBuilder.build());
                         } else {
-                            player.sendMessage(Methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                            player.sendMessage(methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                         }
 
                         return;
@@ -143,21 +142,24 @@ public class SignControl implements Listener {
             }
         }
     }
-    
-    @EventHandler(priority = EventPriority.MONITOR)
+
+    private Location getLocation(String l) {
+        World world = plugin.getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + l + ".World"));
+        int x = Files.SIGNS.getFile().getInt("Locations." + l + ".X");
+        int y = Files.SIGNS.getFile().getInt("Locations." + l + ".Y");
+        int z = Files.SIGNS.getFile().getInt("Locations." + l + ".Z");
+
+        return new Location(world, x, y, z);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent e) {
-        if (!e.isCancelled() && !crazyManager.isIgnoredEvent(e)) {
+        if (!crazyManager.isIgnoredEvent(e)) {
             Player player = e.getPlayer();
             Location location = e.getBlock().getLocation();
 
             for (String locationName : Files.SIGNS.getFile().getConfigurationSection("Locations").getKeys(false)) {
-                World world = crazyManager.getPlugin().getServer().getWorld(Files.SIGNS.getFile().getString("Locations." + locationName + ".World"));
-                int x = Files.SIGNS.getFile().getInt("Locations." + locationName + ".X");
-                int y = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Y");
-                int z = Files.SIGNS.getFile().getInt("Locations." + locationName + ".Z");
-                Location signLocation = new Location(world, x, y, z);
-
-                if (location.equals(signLocation)) {
+                if (location.equals(getLocation(locationName))) {
                     Files.SIGNS.getFile().set("Locations." + locationName, null);
                     Files.SIGNS.saveFile();
                     player.sendMessage(Messages.BREAK_ENCHANTMENT_SHOP_SIGN.getMessage());
@@ -167,7 +169,7 @@ public class SignControl implements Listener {
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onSignMake(SignChangeEvent e) {
         Player player = e.getPlayer();
         Location loc = e.getBlock().getLocation();
@@ -185,19 +187,16 @@ public class SignControl implements Listener {
         String line1 = e.getLine(0);
         String line2 = e.getLine(1);
 
-        if (Methods.hasPermission(player, "sign", false) && line1.equalsIgnoreCase("{CrazyEnchant}")) {
+        if (methods.hasPermission(player, "sign", false) && line1.equalsIgnoreCase("{CrazyEnchant}")) {
             for (Category category : crazyManager.getCategories()) {
+                assert line2 != null;
                 if (line2.equalsIgnoreCase("{" + category.getName() + "}")) {
-                    e.setLine(0, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line1"), category));
-                    e.setLine(1, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line2"), category));
-                    e.setLine(2, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line3"), category));
-                    e.setLine(3, placeHolders(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line4"), category));
+                    e.setLine(0, placeHolders(Objects.requireNonNull(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line1")), category));
+                    e.setLine(1, placeHolders(Objects.requireNonNull(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line2")), category));
+                    e.setLine(2, placeHolders(Objects.requireNonNull(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line3")), category));
+                    e.setLine(3, placeHolders(Objects.requireNonNull(Files.CONFIG.getFile().getString("Settings.SignOptions.CategoryShopStyle.Line4")), category));
                     signs.set("Locations." + id + ".Type", category.getName());
-                    signs.set("Locations." + id + ".World", loc.getWorld().getName());
-                    signs.set("Locations." + id + ".X", loc.getBlockX());
-                    signs.set("Locations." + id + ".Y", loc.getBlockY());
-                    signs.set("Locations." + id + ".Z", loc.getBlockZ());
-                    Files.SIGNS.saveFile();
+                    checkSignLocation(loc, signs, id);
                     return;
                 }
             }
@@ -212,25 +211,29 @@ public class SignControl implements Listener {
             types.put("TransmogScroll", "TransmogScroll");
 
             for (Entry<String, String> type : types.entrySet()) {
+                assert line2 != null;
                 if (line2.equalsIgnoreCase("{" + type.getKey() + "}")) {
-                    e.setLine(0, Methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line1")));
-                    e.setLine(1, Methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line2")));
-                    e.setLine(2, Methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line3")));
-                    e.setLine(3, Methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line4")));
+                    e.setLine(0, methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line1")));
+                    e.setLine(1, methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line2")));
+                    e.setLine(2, methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line3")));
+                    e.setLine(3, methods.color(Files.CONFIG.getFile().getString("Settings.SignOptions." + type.getValue() + "Style.Line4")));
                     signs.set("Locations." + id + ".Type", type.getValue());
-                    signs.set("Locations." + id + ".World", loc.getWorld().getName());
-                    signs.set("Locations." + id + ".X", loc.getBlockX());
-                    signs.set("Locations." + id + ".Y", loc.getBlockY());
-                    signs.set("Locations." + id + ".Z", loc.getBlockZ());
-                    Files.SIGNS.saveFile();
-                    return;
+                    checkSignLocation(loc, signs, id);
                 }
             }
         }
     }
-    
+
+    private void checkSignLocation(Location loc, FileConfiguration signs, String id) {
+        signs.set("Locations." + id + ".World", Objects.requireNonNull(loc.getWorld()).getName());
+        signs.set("Locations." + id + ".X", loc.getBlockX());
+        signs.set("Locations." + id + ".Y", loc.getBlockY());
+        signs.set("Locations." + id + ".Z", loc.getBlockZ());
+        Files.SIGNS.saveFile();
+    }
+
     private String placeHolders(String msg, Category category) {
-        return Methods.color(msg
+        return methods.color(msg
         .replace("%category%", category.getName()).replace("%Category%", category.getName())
         .replace("%cost%", category.getCost() + "").replace("%Cost%", category.getCost() + "")
         .replace("%xp%", category.getCost() + "").replace("%XP%", category.getCost() + ""));

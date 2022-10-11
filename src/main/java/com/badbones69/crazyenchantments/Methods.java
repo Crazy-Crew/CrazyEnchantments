@@ -1,22 +1,27 @@
 package com.badbones69.crazyenchantments;
 
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.controllers.FireworkDamage;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -558,6 +563,60 @@ public class Methods {
                 }
             }
         }
+    }
+
+    public void loopEffectsMap(Map<PotionEffectType, Integer> effects, Player player) {
+        for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
+            if (type.getValue() < 0) {
+                player.removePotionEffect(type.getKey());
+            } else {
+                player.removePotionEffect(type.getKey());
+                player.addPotionEffect(new PotionEffect(type.getKey(), Integer.MAX_VALUE, type.getValue()));
+            }
+        }
+    }
+
+    public List<Block> getEnchantBlocks(Location loc, Location loc2) {
+        List<Block> blockList = new ArrayList<>();
+        int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
+        int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
+        int topBlockY = (Math.max(loc.getBlockY(), loc2.getBlockY()));
+        int bottomBlockY = (Math.min(loc.getBlockY(), loc2.getBlockY()));
+        int topBlockZ = (Math.max(loc.getBlockZ(), loc2.getBlockZ()));
+        int bottomBlockZ = (Math.min(loc.getBlockZ(), loc2.getBlockZ()));
+
+        for (int x = bottomBlockX; x <= topBlockX; x++) {
+            for (int z = bottomBlockZ; z <= topBlockZ; z++) {
+                for (int y = bottomBlockY; y <= topBlockY; y++) {
+                    blockList.add(Objects.requireNonNull(loc.getWorld()).getBlockAt(x, y, z));
+                }
+            }
+        }
+
+        return blockList;
+    }
+
+    public void entityEvent(Player damager, LivingEntity entity, EntityDamageByEntityEvent damageByEntityEvent, CrazyManager crazyManager, CrazyEnchantments plugin, PluginSupport pluginSupport) {
+        crazyManager.addIgnoredEvent(damageByEntityEvent);
+        crazyManager.addIgnoredUUID(damager.getUniqueId());
+        plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
+
+        if (!damageByEntityEvent.isCancelled() && pluginSupport.allowCombat(entity.getLocation()) && !pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+
+        crazyManager.removeIgnoredEvent(damageByEntityEvent);
+        crazyManager.removeIgnoredUUID(damager.getUniqueId());
+    }
+
+    public Location checkEntity(LivingEntity en) {
+        Location loc = en.getLocation();
+        Objects.requireNonNull(loc.getWorld()).spigot().strikeLightningEffect(loc, true);
+        int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+
+        try {
+            loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
+        } catch (Exception ignore) {}
+
+        return loc;
     }
 
     public void switchCurrency(Player player, Currency option, String one, String two, String cost) {

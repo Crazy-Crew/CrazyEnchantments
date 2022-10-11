@@ -1,16 +1,17 @@
 package com.badbones69.crazyenchantments.api.objects;
 
-import com.badbones69.crazyenchantments.api.CrazyManager;
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.util.HashMap;
 import java.util.List;
 
 public class LostBook {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     
     private final int slot;
     private final boolean inGUI;
@@ -21,8 +22,6 @@ public class LostBook {
     private final List<Color> fireworkColors;
     private final boolean useSound;
     private Sound sound;
-
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
 
     public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency,
     boolean useFirework, List<Color> fireworkColors, boolean useSound, String sound) {
@@ -37,7 +36,7 @@ public class LostBook {
         try { // If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
         } catch (Exception e) {
-            crazyManager.getPlugin().getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
+            plugin.getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
             this.sound = null;
         }
 
