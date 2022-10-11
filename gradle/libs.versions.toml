@@ -6,9 +6,9 @@ spigot = "1.19.2-R0.1-SNAPSHOT"
 # EngineHub Team
 engine-hub = "7.0.0-SNAPSHOT"
 
-# OmeR Team
-wildstacker-api = "3.8.0"
-superior-api = "b11"
+# BG-Software Team
+bg-skyblock-api = "2022.8.1"
+bg-stacker-api = "2022.5"
 
 # Bukkit
 bukkit-bstats = "3.0.0"
@@ -20,17 +20,21 @@ placeholder-api = "2.11.2"
 nbt-api = "2.10.0"
 vault-api = "1.7"
 
-plot-api = "6.10.0"
 ncp-api = "3.16.1-SNAPSHOT"
-gp-api = "16.18"
 
 silk-spawners-api = "7.2.0"
 
-massive-factions-api = "1.6.9.5-U0.6.9"
-
 oraxen-api = "master-SNAPSHOT"
 
-towny-api = "0.98.2.0"
+# Claim Plugins
+factions-uuid-api = "1.6.9.5-U0.6.9"
+
+towny-api = "0.98.3.10"
+
+plot-bom = "1.16"
+plot-api = "6.10.1"
+
+gp-api = "16.18"
 
 [libraries]
 
@@ -42,8 +46,8 @@ bukkit-worldedit = { module = "com.sk89q.worldguard:worldguard-legacy", version.
 bukkit-worldguard = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "engine-hub" }
 
 # OmeR Team
-superior-skyblock = { module = "com.github.OmerBenGera:SuperiorSkyblockAPI", version.ref = "superior-api" }
-wild-stacker = { module = "com.bgsoftware:WildStackerAPI", version.ref = "wildstacker-api" }
+superior-skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "bg-skyblock-api" }
+wild-stacker = { module = "com.bgsoftware:WildStackerAPI", version.ref = "bg-stacker-api" }
 
 # Bukkit
 bukkit-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bukkit-bstats" }
@@ -51,22 +55,26 @@ bukkit-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bukkit-bst
 # Placeholders
 placeholder-api = { module = "me.clip:placeholderapi", version.ref = "placeholder-api" }
 
-# NBT API Libraries
-nbt-api = { module = "de.tr7zw:nbt-data-api", version.ref = "nbt-api" }
-
 # Misc Libraries
+nbt-api = { module = "de.tr7zw:nbt-data-api", version.ref = "nbt-api" }
 vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault-api" }
 
-plot-squared-api = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plot-api" }
-
-no-cheat-plus-api = { module = "fr.neatmonster:nocheatplus", version.ref = "ncp-api" }
-
-grief-prevention-api = { module = "com.github.TechFortress:GriefPrevention", version.ref = "gp-api" }
+ncp-api = { module = "fr.neatmonster:nocheatplus", version.ref = "ncp-api" }
 
 silk-spawners-api = { module = "de.dustplanet:silkspawners", version.ref = "silk-spawners-api" }
 
-massive-factions-api = { module = "com.massivecraft:Factions", version.ref = "massive-factions-api" }
-
 oraxen-api = { module = "com.github.oraxen:oraxen", version.ref = "oraxen-api" }
+
+# Claim Plugins
+
+grief-prevention-api = { module = "com.github.TechFortress:GriefPrevention", version.ref = "gp-api" }
+
+plot-squared-bukkit = { module = "com.plotsquared:PlotSquared-Bukkit", version.ref = "plot-api"}
+
+factions-uuid-api = { module = "com.massivecraft:Factions", version.ref = "factions-uuid-api" }
+
+plot-squared-core = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plot-api"}
+
+plot-squared-bom = { module = "com.intellectualsites.bom:bom-1.18.x", version.ref = "plot-bom" }
 
 towny-api = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny-api" }

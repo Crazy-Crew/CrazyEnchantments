@@ -25,6 +25,11 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 
     /**
+     * Paper Team
+     */
+    maven("https://repo.papermc.io/repository/maven-public/")
+
+    /**
      * SilkSpawners Team
      */
     maven("https://repo.dustplanet.de/artifactory/libs-release-local/")
@@ -50,7 +55,7 @@ repositories {
     maven("https://repo.glaremasters.me/repository/towny/")
 
     /**
-     * SuperiorSkyBlock Team
+     * BG Software Team
      */
     maven("https://repo.bg-software.com/repository/api/")
 
@@ -74,6 +79,11 @@ repositories {
 
 dependencies {
 
+    // TODO() Disabled because its asking for things to be added that I don't want at the moment.
+    //implementation(libs.plot.squared.bom)
+    //compileOnly(libs.plot.squared.bukkit) { isTransitive = false }
+    //compileOnly(libs.plot.squared.core)
+
     implementation(libs.bukkit.bstats)
 
     implementation(libs.nbt.api)
@@ -88,22 +98,25 @@ dependencies {
         exclude("org.bstats", "bstats-bukkit")
     }
 
-    // OmeR Team
+    // BG Software Team
     compileOnly(libs.superior.skyblock)
     compileOnly(libs.wild.stacker)
-    // OmeR Team End
-
-    compileOnly(libs.grief.prevention.api)
-
-    compileOnly(libs.massive.factions.api)
+    // BG Software End
 
     compileOnly(libs.silk.spawners.api) {
         exclude("org.bukkit", "bukkit")
         exclude("org.spigotmc", "spigot")
         exclude("com.destroystokyo.paper", "paper")
+        exclude("com.sk89q", "worldguard")
+        exclude("com.sk89q", "worldedit")
+        exclude("com.massivecraft.massivecore", "MassiveCore")
+        exclude("com.massivecraft.factions", "Factions")
+        exclude("net.gravitydevelopment.updater", "updater")
     }
 
-    compileOnly(libs.plot.squared.api)
+    compileOnly(libs.factions.uuid.api)
+
+    compileOnly(libs.grief.prevention.api)
 
     compileOnly(libs.oraxen.api)
 
