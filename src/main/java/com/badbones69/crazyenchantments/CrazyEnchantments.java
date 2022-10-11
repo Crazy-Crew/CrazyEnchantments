@@ -1,10 +1,9 @@
 package com.badbones69.crazyenchantments;
 
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
-import com.badbones69.crazyenchantments.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.commands.*;
 import com.badbones69.crazyenchantments.controllers.*;
@@ -12,7 +11,6 @@ import com.badbones69.crazyenchantments.enchantments.*;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -30,6 +28,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private boolean isEnabled = false;
 
+    PluginManager pluginManager = getServer().getPluginManager();
+
     @Override
     public void onEnable() {
         try {
@@ -40,6 +40,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             starter.run();
 
             starter.getFileManager().logInfo(true).setup();
+
+            starter.getCrazyManager().load();
 
             boolean metricsEnabled = Files.CONFIG.getFile().getBoolean("Settings.Toggle-Metrics");
             String metrics = Files.CONFIG.getFile().getString("Settings.Toggle-Metrics");
@@ -55,7 +57,19 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
                 new Metrics(this, 4494);
             }
 
-            starter.getCrazyManager().load();
+            SupportedPlugins.printHooks();
+
+            starter.getCurrencyAPI().loadCurrency();
+
+            boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
+
+            for (Player player : getServer().getOnlinePlayers()) {
+                starter.getCrazyManager().loadCEPlayer(player);
+
+                if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
+            }
+
+            getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> starter.getCrazyManager().getCEPlayers().forEach(starter.getCrazyManager()::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,20 +78,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             return;
         }
-
-        SupportedPlugins.printHooks();
-
-        starter.getCurrencyAPI().loadCurrency();
-
-        boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
-
-        for (Player player : getServer().getOnlinePlayers()) {
-            starter.getCrazyManager().loadCEPlayer(player);
-
-            if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
-        }
-
-        getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> starter.getCrazyManager().getCEPlayers().forEach(starter.getCrazyManager()::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
 
         isEnabled = true;
 
@@ -123,7 +123,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private FireworkDamage fireworkDamage;
 
     private void enable() {
-        PluginManager pluginManager = getServer().getPluginManager();
 
         pluginManager.registerEvents(enchantmentControl = new EnchantmentControl(), this);
         pluginManager.registerEvents(signControl = new SignControl(), this);

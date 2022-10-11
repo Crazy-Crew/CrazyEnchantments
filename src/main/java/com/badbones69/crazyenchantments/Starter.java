@@ -9,8 +9,6 @@ import com.badbones69.crazyenchantments.api.managers.*;
 import com.badbones69.crazyenchantments.api.SkullCreator;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
-import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
-import com.badbones69.crazyenchantments.controllers.Scrambler;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
 
 public class Starter {
@@ -36,18 +34,21 @@ public class Starter {
     private CurrencyAPI currencyAPI;
 
     // Plugin Support
-    private OraxenSupport oraxenSupport;
-
-    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
 
     private VaultSupport vaultSupport;
 
     private PluginSupport pluginSupport;
 
+    private OraxenSupport oraxenSupport;
+
+    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
+
     // Plugin Utils
     private BowUtils bowUtils;
 
     public void run() {
+        PluginSupport.SupportedPlugins.updateCachedPluginState();
+
         // Managers
         fileManager = new FileManager();
         crazyManager = new CrazyManager();

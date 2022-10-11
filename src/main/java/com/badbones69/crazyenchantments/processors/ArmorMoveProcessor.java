@@ -79,9 +79,9 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
 
-                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                        //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                             // SpartanSupport.cancelFastEat(player);
-                        }
+                        //}
 
                         if (player.getFoodLevel() + foodIncrease <= 20) player.setFoodLevel(player.getFoodLevel() + foodIncrease);
 

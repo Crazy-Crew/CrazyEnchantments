@@ -516,11 +516,11 @@ public class Methods {
                 en.damage(5D);
 
                 if (en instanceof Player) {
-                    if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                         //SpartanSupport.cancelSpeed((Player) player);
                         //SpartanSupport.cancelNormalMovements((Player) player);
                         //SpartanSupport.cancelNoFall((Player) player);
-                    }
+                    //}
                 }
 
                 en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
@@ -556,11 +556,11 @@ public class Methods {
                 en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
                 if (!(en instanceof Player)) continue;
 
-                if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                     // SpartanSupport.cancelSpeed((Player) player);
                     // SpartanSupport.cancelNormalMovements((Player) player);
                     // SpartanSupport.cancelNoFall((Player) player);
-                }
+                //}
             }
         }
     }

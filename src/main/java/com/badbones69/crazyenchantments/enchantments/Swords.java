@@ -314,11 +314,11 @@ public class Swords implements Listener {
 
             if (!event.isCancelled()) {
 
-                if (e.getEntity() instanceof Player && PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                //if (e.getEntity() instanceof Player && PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                     //SpartanSupport.cancelSpeed((Player) e.getEntity());
                     //SpartanSupport.cancelNormalMovements((Player) e.getEntity());
                     //SpartanSupport.cancelNoFall((Player) e.getEntity());
-                }
+                //}
 
                 e.getEntity().setVelocity(damager.getLocation().getDirection().multiply(2).setY(1.25));
             }

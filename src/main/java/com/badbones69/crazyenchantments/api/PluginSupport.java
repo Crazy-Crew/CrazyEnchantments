@@ -106,9 +106,9 @@ public class PluginSupport {
         // WILD_STACKER("WildStacker"),
 
         // Anti Cheats
-        SPARTAN("Spartan"),
-        NO_CHEAT_PLUS("NoCheatPlus"),
-        VULCAN("Vulcan"),
+        //SPARTAN("Spartan"),
+        //NO_CHEAT_PLUS("NoCheatPlus"),
+        //VULCAN("Vulcan"),
 
         // Faction Plugins
         FACTIONS_UUID("Factions"),
@@ -123,7 +123,6 @@ public class PluginSupport {
         WORLDEDIT("WorldEdit"),
 
         TOWNYADVANCED("TownyAdvanced"),
-        //PLOTSQUARED("PlotSquared"),
 
         // Custom Items
         ORAXEN("Oraxen");
@@ -147,35 +146,33 @@ public class PluginSupport {
         public static void updateCachedPluginState() {
             if (!cachedPluginState.isEmpty()) cachedPluginState.clear();
 
-            for (SupportedPlugins supportedsPlugins : values()) {
+            for (SupportedPlugins supportedPlugins : values()) {
 
-                Plugin grabbedPlugin = plugin.getServer().getPluginManager().getPlugin(supportedsPlugins.pluginName);
+                Plugin grabbedPlugin = plugin.getServer().getPluginManager().getPlugin(supportedPlugins.pluginName);
 
                 if (grabbedPlugin != null) {
                     if (plugin.isEnabled()) {
 
                         String website = plugin.getDescription().getWebsite();
 
-                        switch (supportedsPlugins) {
+                        switch (supportedPlugins) {
                             case FACTIONS_UUID -> {
                                 if (website != null) {
-                                    cachedPluginState.put(supportedsPlugins, website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
+                                    cachedPluginState.put(supportedPlugins, website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
                                 }
                             }
 
-                            case VAULT -> {
-
-                            }
-
                             default -> {
-                                cachedPluginState.put(supportedsPlugins, true);
+                                System.out.println(supportedPlugins.pluginName);
+
+                                cachedPluginState.put(supportedPlugins, true);
                                 return;
                             }
                         }
 
                     }
                 } else {
-                    cachedPluginState.put(supportedsPlugins, false);
+                    cachedPluginState.put(supportedPlugins, false);
                 }
             }
 
@@ -198,6 +195,7 @@ public class PluginSupport {
                     switch (supportedsPlugins) {
                         case FACTIONS_UUID -> factionsVersion = new FactionsUUIDSupport();
                         case GRIEF_PREVENTION -> factionsVersion = new GriefPreventionSupport();
+                        case TOWNYADVANCED -> factionsVersion = new TownySupport();
                         default -> {}
                     }
                 }

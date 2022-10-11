@@ -189,11 +189,11 @@ public class Bows implements Listener {
                     Player player = (Player) e.getEntity();
 
                     if (!useEvent.isCancelled()) {
-                        if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                        //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
                             //SpartanSupport.cancelSpeed(player);
                             //SpartanSupport.cancelNormalMovements(player);
                             //SpartanSupport.cancelNoFall(player);
-                        }
+                        //}
 
                         entity.setVelocity(v);
                     }

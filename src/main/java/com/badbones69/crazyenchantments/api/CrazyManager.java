@@ -90,13 +90,10 @@ public class CrazyManager {
      * Do not use unless needed.
      */
     public void load() {
-
         blockList.clear();
         gkitz.clear();
         registeredEnchantments.clear();
         categories.clear();
-
-        PluginSupport.SupportedPlugins.updateCachedPluginState();
 
         // Loads the blacksmith manager
         blackSmithManager.load();
@@ -106,7 +103,7 @@ public class CrazyManager {
 
         CEnchantments.invalidateCachedEnchants();
 
-        // cropManagerVersion = new CropManagerVersion();
+        //cropManagerVersion = new CropManagerVersion();
 
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration gkit = Files.GKITZ.getFile();

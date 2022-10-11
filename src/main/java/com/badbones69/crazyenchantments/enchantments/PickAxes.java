@@ -101,11 +101,11 @@ public class PickAxes implements Listener {
 
             //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.allowPlayer(player);
 
-            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+            //if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
                 //SpartanSupport.cancelFastBreak(player);
                 //SpartanSupport.cancelNoSwing(player);
                 //SpartanSupport.cancelBlockReach(player);
-            }
+            //}
 
             int xp = 0;
             HashMap<ItemStack, Integer> drops = new HashMap<>();
