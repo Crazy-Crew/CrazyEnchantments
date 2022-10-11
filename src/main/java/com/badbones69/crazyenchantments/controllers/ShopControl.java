@@ -37,9 +37,9 @@ public class ShopControl implements Listener {
 
     private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
 
-    private final Scrambler scrambler = plugin.getStarter().getScrambler();
+    private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
 
-    private final ProtectionCrystal protectionCrystal = plugin.getStarter().getProtectionCrystal();
+    private final Scrambler scrambler = plugin.getScrambler();
 
     private final Methods methods = plugin.getStarter().getMethods();
 

@@ -38,7 +38,7 @@ public class GKitzController implements Listener {
     
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), Methods.color(gkitz.getString("Settings.Inventory-Name")));
+        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), methods.color(gkitz.getString("Settings.Inventory-Name")));
 
         for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
             int slot = 0;

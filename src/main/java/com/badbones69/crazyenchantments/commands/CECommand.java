@@ -44,9 +44,11 @@ public class CECommand implements CommandExecutor {
 
     private final Methods methods = plugin.getStarter().getMethods();
 
-    private final Scrambler scrambler = plugin.getStarter().getScrambler();
+    private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
 
-    private final ProtectionCrystal protectionCrystal = plugin.getStarter().getProtectionCrystal();
+    private final Scrambler scrambler = plugin.getScrambler();
+
+    private final ShopControl shopControl = plugin.getShopControl();
     
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -58,15 +60,13 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
-            if (hasPermission(sender, "gui")) ShopControl.openGUI((Player) sender);
+            if (hasPermission(sender, "gui")) shopControl.openGUI((Player) sender);
 
             return true;
         } else {
             switch (args[0].toLowerCase()) {
                 case "help" -> { // /ce help
-                    if (hasPermission(sender, "access")) {
-                        sender.sendMessage(Messages.HELP.getMessage());
-                    }
+                    if (hasPermission(sender, "access")) sender.sendMessage(Messages.HELP.getMessage());
 
                     return true;
                 }
@@ -186,13 +186,13 @@ public class CECommand implements CommandExecutor {
                                 return true;
                             }
 
-                            crazyManager.getInfoMenuManager().openInfoMenu((Player) sender);
+                            infoMenuManager.openInfoMenu((Player) sender);
                         } else {
-                            EnchantmentType enchantmentType = crazyManager.getInfoMenuManager().getFromName(args[1]);
+                            EnchantmentType enchantmentType = infoMenuManager.getFromName(args[1]);
 
                             if (enchantmentType != null) {
                                 assert sender instanceof Player;
-                                crazyManager.getInfoMenuManager().openInfoMenu((Player) sender, enchantmentType);
+                                infoMenuManager.openInfoMenu((Player) sender, enchantmentType);
                                 return true;
                             }
 
@@ -214,7 +214,7 @@ public class CECommand implements CommandExecutor {
                         if (args.length >= 2) {
                             CEnchantment enchantment = crazyManager.getEnchantmentFromName(args[1]);
                             Category category = crazyManager.getCategory(args[1]);
-                            Location location = isPlayer ? ((Player) sender).getLocation() : new Location(crazyManager.getPlugin().getServer().getWorlds().get(0), 0, 0, 0);
+                            Location location = isPlayer ? ((Player) sender).getLocation() : new Location(plugin.getServer().getWorlds().get(0), 0, 0, 0);
                             int level = 1;
 
                             if (enchantment == null && category == null) {
@@ -238,7 +238,7 @@ public class CECommand implements CommandExecutor {
                                         }
 
                                         case "world" -> {
-                                            World world = crazyManager.getPlugin().getServer().getWorld(value);
+                                            World world = plugin.getServer().getWorld(value);
                                             if (world != null) location.setWorld(world);
                                         }
 

@@ -39,9 +39,9 @@ public class SignControl implements Listener {
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
-    private final ProtectionCrystal protectionCrystal = plugin.getStarter().getProtectionCrystal();
+    private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
 
-    private final Scrambler scrambler = plugin.getStarter().getScrambler();
+    private final Scrambler scrambler = plugin.getScrambler();
     
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
