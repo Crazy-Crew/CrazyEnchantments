@@ -24,14 +24,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private Starter starter;
 
-    private final FileManager fileManager = getStarter().getFileManager();
-
-    private final CrazyManager crazyManager = getStarter().getCrazyManager();
-
-    private final AllyManager allyManager = getStarter().getAllyManager();
-
-    private final CurrencyAPI currencyAPI = getStarter().getCurrencyAPI();
-
     private Armor armor;
 
     private final Attribute generic = Attribute.GENERIC_MAX_HEALTH;
@@ -47,7 +39,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             starter.run();
 
-            fileManager.logInfo(true).setup();
+            starter.getFileManager().logInfo(true).setup();
 
             boolean metricsEnabled = Files.CONFIG.getFile().getBoolean("Settings.Toggle-Metrics");
             String metrics = Files.CONFIG.getFile().getString("Settings.Toggle-Metrics");
@@ -63,7 +55,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
                 new Metrics(this, 4494);
             }
 
-            crazyManager.load();
+            starter.getCrazyManager().load();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,17 +67,17 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         SupportedPlugins.printHooks();
 
-        currencyAPI.loadCurrency();
+        starter.getCurrencyAPI().loadCurrency();
 
         boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
 
         for (Player player : getServer().getOnlinePlayers()) {
-            crazyManager.loadCEPlayer(player);
+            starter.getCrazyManager().loadCEPlayer(player);
 
             if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
         }
 
-        getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> crazyManager.getCEPlayers().forEach(crazyManager::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> starter.getCrazyManager().getCEPlayers().forEach(starter.getCrazyManager()::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
 
         isEnabled = true;
 
@@ -163,7 +155,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(commandChecker = new CommandChecker(), this);
         pluginManager.registerEvents(fireworkDamage = new FireworkDamage(), this);
 
-        if (crazyManager.isGkitzEnabled()) {
+        if (starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("Gkitz support is now enabled.");
 
             getServer().getPluginManager().registerEvents(new GKitzController(), this);
@@ -188,9 +180,9 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private void disable() {
         armor.stop();
 
-        if (allyManager != null) allyManager.forceRemoveAllies();
+        if (starter.getAllyManager() != null) starter.getAllyManager().forceRemoveAllies();
 
-        getServer().getOnlinePlayers().forEach(crazyManager::unloadCEPlayer);
+        getServer().getOnlinePlayers().forEach(starter.getCrazyManager()::unloadCEPlayer);
     }
 
     public static CrazyEnchantments getPlugin() {
