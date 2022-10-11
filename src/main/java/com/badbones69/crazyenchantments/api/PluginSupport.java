@@ -18,16 +18,18 @@ import java.util.HashMap;
 
 public class PluginSupport {
 
-    private final CrazyManager crazyManager = CrazyManager.getInstance();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final SuperiorSkyBlockSupport superiorSkyBlockSupport = plugin.getStarter().getSuperiorSkyBlockSupport();
 
     private static FactionsVersion factionsVersion = null;
 
     public boolean inTerritory(Player player) {
         if (factionsVersion != null && factionsVersion.inTerritory(player)) return true;
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && SuperiorSkyBlockSupport.inTerritory(player)) return true;
-
-        return SupportedPlugins.PLOTSQUARED.isPluginLoaded() && crazyManager.getPlotSquaredSupport().inTerritory(player);
+        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.inTerritory(player);
     }
 
     public boolean isFriendly(Entity entity, Entity other) {
@@ -39,7 +41,7 @@ public class PluginSupport {
 
             if (factionsVersion != null && factionsVersion.isFriendly(player, otherEntity)) return true;
 
-            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && SuperiorSkyBlockSupport.isFriendly(player, otherEntity)) return true;
+            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.isFriendly(player, otherEntity)) return true;
 
             return SupportedPlugins.MCMMO.isPluginLoaded();
         }
@@ -120,7 +122,7 @@ public class PluginSupport {
         WORLDEDIT("WorldEdit"),
 
         TOWNYADVANCED("TownyAdvanced"),
-        PLOTSQUARED("PlotSquared"),
+        //PLOTSQUARED("PlotSquared"),
 
         // Custom Items
         ORAXEN("Oraxen");
@@ -131,13 +133,15 @@ public class PluginSupport {
             this.pluginName = pluginName;
         }
 
-        private static final HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
+        private final static HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
 
         public boolean isPluginLoaded() {
             return cachedPluginState.get(this);
         }
 
-        private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+        private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+        private final static Methods methods = plugin.getStarter().getMethods();
 
         public static void updateCachedPluginState() {
             if (!cachedPluginState.isEmpty()) cachedPluginState.clear();
@@ -180,10 +184,10 @@ public class PluginSupport {
         public static void printHooks() {
             if (cachedPluginState.isEmpty()) updateCachedPluginState();
 
-            plugin.getServer().getConsoleSender().sendMessage(Methods.color("&4&lActive CrazyEnchantment Hooks:"));
+            plugin.getServer().getConsoleSender().sendMessage(methods.color("&4&lActive CrazyEnchantment Hooks:"));
 
             cachedPluginState.keySet().forEach(supportedsPlugins -> {
-                if (supportedsPlugins.isPluginLoaded()) plugin.getServer().getConsoleSender().sendMessage(Methods.color("&6&l " + supportedsPlugins.pluginName + " : &a&lENABLED"));
+                if (supportedsPlugins.isPluginLoaded()) plugin.getServer().getConsoleSender().sendMessage(methods.color("&6&l " + supportedsPlugins.pluginName + " : &a&lENABLED"));
             });
         }
 
