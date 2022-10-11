@@ -12,11 +12,11 @@ import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 
 public class Starter {
 
+    // Managers
     private FileManager fileManager;
 
     private CrazyManager crazyManager;
 
-    // Managers
     private AllyManager allyManager;
     private ArmorEnchantmentManager armorEnchantmentManager;
     private BlackSmithManager blackSmithManager;
@@ -25,17 +25,24 @@ public class Starter {
     private ShopManager shopManager;
     private WingsManager wingsManager;
 
+    // Misc
     private Methods methods;
 
     private SkullCreator skullCreator;
+
+    private CurrencyAPI currencyAPI;
+
+    // Plugin Support
+    private OraxenSupport oraxenSupport;
+
+    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
 
     private VaultSupport vaultSupport;
 
     private PluginSupport pluginSupport;
 
-    private CurrencyAPI currencyAPI;
-
     public void run() {
+        // Managers
         fileManager = new FileManager();
         crazyManager = new CrazyManager();
 
@@ -48,17 +55,26 @@ public class Starter {
         shopManager = new ShopManager();
         wingsManager = new WingsManager();
 
+        // Misc
+
         methods = new Methods();
 
         skullCreator = new SkullCreator();
+
+        currencyAPI = new CurrencyAPI();
+
+        // Plugin Support
 
         vaultSupport = new VaultSupport();
 
         pluginSupport = new PluginSupport();
 
-        currencyAPI = new CurrencyAPI();
+        if (PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
+
+        if (PluginSupport.SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
     }
 
+    // Managers
     public FileManager getFileManager() {
         return fileManager;
     }
@@ -95,6 +111,7 @@ public class Starter {
         return wingsManager;
     }
 
+    // Misc
     public Methods getMethods() {
         return methods;
     }
@@ -103,6 +120,11 @@ public class Starter {
         return skullCreator;
     }
 
+    public CurrencyAPI getCurrencyAPI() {
+        return currencyAPI;
+    }
+
+    // Plugin Support
     public VaultSupport getVaultSupport() {
         return vaultSupport;
     }
@@ -111,7 +133,11 @@ public class Starter {
         return pluginSupport;
     }
 
-    public CurrencyAPI getCurrencyAPI() {
-        return currencyAPI;
+    public OraxenSupport getOraxenSupport() {
+        return oraxenSupport;
+    }
+
+    public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
+        return superiorSkyBlockSupport;
     }
 }
