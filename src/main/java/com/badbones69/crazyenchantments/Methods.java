@@ -23,11 +23,17 @@ import java.util.regex.Pattern;
 
 public class Methods {
 
-    private final static Random random = new Random();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    public final static Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
+    private final OraxenSupport oraxenSupport = plugin.getStarter().getOraxenSupport();
 
-    public static String color(String message) {
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
+    private final Random random = new Random();
+
+    public final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
+
+    public String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder();
 
@@ -38,11 +44,11 @@ public class Methods {
         return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
     }
 
-    public static String removeColor(String msg) {
+    public String removeColor(String msg) {
         return ChatColor.stripColor(msg);
     }
 
-    public static int getRandomNumber(String range) {
+    public int getRandomNumber(String range) {
         int number = 1;
         String[] split = range.split("-");
 
@@ -55,7 +61,7 @@ public class Methods {
         return number;
     }
 
-    public static boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
+    public boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
         if (sender instanceof Player) {
             return hasPermission((Player) sender, perm, toggle);
         } else {
@@ -63,29 +69,26 @@ public class Methods {
         }
     }
 
-    public static boolean hasPermission(Player player, String perm, boolean toggle) {
+    public boolean hasPermission(Player player, String perm, boolean toggle) {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
-            if (toggle) {
-                player.sendMessage(Messages.NO_PERMISSION.getMessage());
-            }
+            if (toggle) player.sendMessage(Messages.NO_PERMISSION.getMessage());
+
             return false;
         }
     }
 
-    public static ItemStack addGlow(ItemStack item) {
+    public ItemStack addGlow(ItemStack item) {
         return addGlow(item, true);
     }
 
-    public static ItemStack addGlow(ItemStack item, boolean toggle) {
+    public ItemStack addGlow(ItemStack item, boolean toggle) {
         ItemStack it = item.clone();
         try {
             if (toggle) {
                 if (item.hasItemMeta()) {
-                    if (item.getItemMeta().hasEnchants()) {
-                        return item;
-                    }
+                    if (item.getItemMeta().hasEnchants()) return item;
                 }
 
                 item.addUnsafeEnchantment(Enchantment.LUCK, 1);
@@ -100,51 +103,50 @@ public class Methods {
         }
     }
 
-    public static ItemStack getItemInHand(Player player) {
+    public ItemStack getItemInHand(Player player) {
         return player.getInventory().getItemInMainHand();
     }
 
-    public static void setItemInHand(Player player, ItemStack item) {
+    public void setItemInHand(Player player, ItemStack item) {
         player.getInventory().setItemInMainHand(item);
     }
 
-    public static String getPrefix() {
+    public String getPrefix() {
         return getPrefix("");
     }
 
-    public static String getPrefix(String string) {
+    public String getPrefix(String string) {
         return color(Files.CONFIG.getFile().getString("Settings.Prefix") + string);
     }
 
-    public static boolean isInt(String s) {
+    public boolean isInt(String s) {
         try {
             Integer.parseInt(s);
         } catch (NumberFormatException nfe) {
             return false;
         }
+
         return true;
     }
 
-    public static Player getPlayer(String name) {
-        return crazyManager.getPlugin().getServer().getPlayer(name);
+    public Player getPlayer(String name) {
+        return plugin.getServer().getPlayer(name);
     }
 
-    public static boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : crazyManager.getPlugin().getServer().getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(playerName)) {
-                return true;
-            }
+    public boolean isPlayerOnline(String playerName, CommandSender sender) {
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            if (player.getName().equalsIgnoreCase(playerName)) return true;
         }
 
         sender.sendMessage(Messages.NOT_ONLINE.getMessage());
         return false;
     }
 
-    public static void removeItem(ItemStack item, Player player) {
+    public void removeItem(ItemStack item, Player player) {
         removeItem(item, player, 1);
     }
 
-    public static void removeItem(ItemStack item, Player player, int amount) {
+    public void removeItem(ItemStack item, Player player, int amount) {
         try {
             boolean found = false;
 
@@ -169,17 +171,16 @@ public class Methods {
                     }
                 }
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
 
         player.updateInventory();
     }
 
-    public static ItemStack removeItem(ItemStack item) {
+    public ItemStack removeItem(ItemStack item) {
         return removeItem(item, 1);
     }
 
-    public static ItemStack removeItem(ItemStack item, int amount) {
+    public ItemStack removeItem(ItemStack item, int amount) {
         ItemStack itemStack = item.clone();
 
         if (item.getAmount() <= amount) {
@@ -191,13 +192,11 @@ public class Methods {
         return itemStack;
     }
 
-    public static ItemStack addLore(ItemStack item, String i) {
+    public ItemStack addLore(ItemStack item, String i) {
         ArrayList<String> lore = new ArrayList<>();
         ItemMeta m = item.getItemMeta();
 
-        if (item.getItemMeta().hasLore()) {
-            lore.addAll(item.getItemMeta().getLore());
-        }
+        if (item.getItemMeta().hasLore()) lore.addAll(item.getItemMeta().getLore());
 
         lore.add(color(i));
 
@@ -217,11 +216,11 @@ public class Methods {
         return item;
     }
 
-    public static int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
+    public int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
         String arg = defaultValue + "";
 
         for (String originalLine : originalLore) {
-            originalLine = Methods.color(originalLine).toLowerCase();
+            originalLine = color(originalLine).toLowerCase();
 
             if (originalLine.contains(argument.toLowerCase())) {
                 String[] b = originalLine.split(argument.toLowerCase());
@@ -244,57 +243,45 @@ public class Methods {
                         }
                     }
 
-                    if (toggle) {
-                        break;
-                    }
+                    if (toggle) break;
                 }
 
-                if (isInt(arg)) {
-                    break;
-                }
+                if (isInt(arg)) break;
             }
         }
 
         int percent = defaultValue;
 
-        if (isInt(arg)) {
-            percent = Integer.parseInt(arg);
-        }
+        if (isInt(arg)) percent = Integer.parseInt(arg);
 
         return percent;
     }
 
-    public static boolean hasArgument(String arg, List<String> message) {
+    public boolean hasArgument(String arg, List<String> message) {
         for (String line : message) {
-            line = Methods.color(line).toLowerCase();
+            line = color(line).toLowerCase();
 
-            if (line.contains(arg.toLowerCase())) {
-                return true;
-            }
+            if (line.contains(arg.toLowerCase())) return true;
         }
 
         return false;
     }
 
-    public static boolean randomPicker(int max) {
-        if (max <= 0) {
-            return true;
-        }
+    public boolean randomPicker(int max) {
+        if (max <= 0) return true;
 
         int chance = 1 + random.nextInt(max);
         return chance == 1;
     }
 
-    public static boolean randomPicker(int min, int max) {
-        if (max <= min || max <= 0) {
-            return true;
-        }
+    public boolean randomPicker(int min, int max) {
+        if (max <= min || max <= 0) return true;
 
         int chance = 1 + random.nextInt(max);
-        return chance >= 1 && chance <= min;
+        return chance <= min;
     }
 
-    public static Integer percentPick(int max, int min) {
+    public Integer percentPick(int max, int min) {
         if (max == min) {
             return max;
         } else {
@@ -302,46 +289,47 @@ public class Methods {
         }
     }
 
-    public static boolean isInventoryFull(Player player) {
+    public boolean isInventoryFull(Player player) {
         return player.getInventory().firstEmpty() == -1;
     }
 
-    public static List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity entity) {
+    public List<LivingEntity> getNearbyLivingEntities(Location loc, double radius, Entity entity) {
         List<Entity> out = entity.getNearbyEntities(radius, radius, radius);
         List<LivingEntity> entities = new ArrayList<>();
 
         for (Entity en : out) {
-            if (en instanceof LivingEntity) {
-                entities.add((LivingEntity) en);
-            }
+            if (en instanceof LivingEntity) entities.add((LivingEntity) en);
         }
 
         return entities;
     }
 
-    public static List<Entity> getNearbyEntities(Location loc, double radius, Entity entity) {
+    public List<Entity> getNearbyEntities(Location loc, double radius, Entity entity) {
         return entity.getNearbyEntities(radius, radius, radius);
     }
 
-    public static void fireWork(Location loc, List<Color> colors) {
+    public void fireWork(Location loc, List<Color> colors) {
         fireWork(loc, new ArrayList<>(colors));
     }
 
-    public static void fireWork(Location loc, ArrayList<Color> colors) {
-        Firework fw = loc.getWorld().spawn(loc, Firework.class);
-        FireworkMeta fm = fw.getFireworkMeta();
-        fm.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
+    public void fireWork(Location loc, ArrayList<Color> colors) {
+        Firework firework = loc.getWorld().spawn(loc, Firework.class);
+        FireworkMeta fireworkMeta = firework.getFireworkMeta();
+        fireworkMeta.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
                 .withColor(colors)
                 .trail(false)
                 .flicker(false)
                 .build());
-        fm.setPower(0);
-        fw.setFireworkMeta(fm);
-        FireworkDamage.addFirework(fw);
-        crazyManager.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(crazyManager.getPlugin(), fw::detonate, 2);
+
+        fireworkMeta.setPower(0);
+        firework.setFireworkMeta(fireworkMeta);
+
+        // FireworkDamage.addFirework(fw);
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
     }
 
-    public static Color getColor(String color) {
+    public Color getColor(String color) {
         return switch (color.toUpperCase()) {
             case "AQUA" -> Color.AQUA;
             case "BLACK" -> Color.BLACK;
@@ -363,23 +351,20 @@ public class Methods {
         };
     }
 
-    public static String stripString(String string) {
+    public String stripString(String string) {
         return string != null ? string.replace("-", "").replace("_", "").replace(" ", "") : "";
     }
 
-    public static Enchantment getEnchantment(String enchantmentName) {
+    public Enchantment getEnchantment(String enchantmentName) {
         try {
             // HashMap<String, String> enchantments = getEnchantments();
             enchantmentName = stripString(enchantmentName);
 
             for (Enchantment enchantment : Enchantment.values()) {
                 // MC 1.13+ has the correct names.
-                if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
-                    return enchantment;
-                }
+                if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) return enchantment;
             }
-        } catch (Exception ignore) {
-        }
+        } catch (Exception ignore) {}
 
         return null;
     }
@@ -390,11 +375,11 @@ public class Methods {
      * @param item Itemstack you are checking.
      * @return True if the item has a lore and no null issues.
      */
-    public static boolean verifyItemLore(ItemStack item) {
+    public boolean verifyItemLore(ItemStack item) {
         return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().getLore() != null && item.getItemMeta().hasLore();
     }
 
-    public static HashMap<String, String> getEnchantments() {
+    public HashMap<String, String> getEnchantments() {
         HashMap<String, String> enchantments = new HashMap<>();
         enchantments.put("ARROW_DAMAGE", "Power");
         enchantments.put("ARROW_FIRE", "Flame");
@@ -428,66 +413,61 @@ public class Methods {
         return enchantments;
     }
 
-    public static int getMaxDurability(ItemStack item) {
-        if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
-            return item.getType().getMaxDurability();
-        }
-        return OraxenSupport.getMaxDurability(item);
+    public int getMaxDurability(ItemStack item) {
+        if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) return item.getType().getMaxDurability();
+
+        return oraxenSupport.getMaxDurability(item);
     }
 
-    public static int getDurability(ItemStack item) {
+    public int getDurability(ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
             ItemMeta meta = item.getItemMeta();
-            if (meta instanceof Damageable)
-                return ((Damageable) item.getItemMeta()).getDamage();
+            if (meta instanceof Damageable) return ((Damageable) item.getItemMeta()).getDamage();
             return 0;
         }
-        return OraxenSupport.getDamage(item);
+
+        return oraxenSupport.getDamage(item);
     }
 
-    public static void setDurability(ItemStack item, int newDamage) {
+    public void setDurability(ItemStack item, int newDamage) {
         newDamage = Math.max(newDamage, 0);
+
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
             ItemMeta meta = item.getItemMeta();
-            if (meta instanceof Damageable) {
-                Damageable damageable = (Damageable) meta;
+
+            if (meta instanceof Damageable damageable) {
                 damageable.setDamage(newDamage);
                 item.setItemMeta(damageable);
             }
+
             return;
         }
-        OraxenSupport.setDamage(item, newDamage);
+
+        oraxenSupport.setDamage(item, newDamage);
     }
 
-    public static void removeDurability(ItemStack item, Player player) {
-        if (getMaxDurability(item) == 0) {
-            return;
-        }
+    public void removeDurability(ItemStack item, Player player) {
+        if (getMaxDurability(item) == 0) return;
 
         if (item.hasItemMeta()) {
-
             try {
-                if (item.getItemMeta().isUnbreakable()) {
-                    return;
-                }
-            } catch (NoSuchMethodError ignored) {
-            }
+                if (item.getItemMeta().isUnbreakable()) return;
+            } catch (NoSuchMethodError ignored) {}
 
             NBTItem nbtItem = new NBTItem(item);
 
-            if (nbtItem.hasNBTData() && nbtItem.hasKey("Unbreakable") && nbtItem.getBoolean("Unbreakable")) {
-                return;
-            }
+            if (nbtItem.hasNBTData() && nbtItem.hasKey("Unbreakable") && nbtItem.getBoolean("Unbreakable")) return;
 
             if (item.getItemMeta().hasEnchants()) {
                 if (item.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
-                    if (Methods.randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.DURABILITY))) {
+                    if (randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.DURABILITY))) {
                         if (getDurability(item) > getMaxDurability(item)) {
                             player.getInventory().remove(item);
                         } else {
                             setDurability(item, getDurability(item) + 1);
                         }
                     }
+
                     return;
                 }
             }
@@ -500,7 +480,7 @@ public class Methods {
         }
     }
 
-    public static boolean isSimilar(ItemStack one, ItemStack two) {
+    public boolean isSimilar(ItemStack one, ItemStack two) {
         if (one.getType().equals(two.getType())) return false;
         if (!one.hasItemMeta() || !two.hasItemMeta()) return false;
         if (!one.getItemMeta().hasDisplayName() || !two.getItemMeta().hasDisplayName()) return false;
@@ -509,26 +489,22 @@ public class Methods {
         int i = 0;
 
         for (String lore : one.getItemMeta().getLore()) {
-            if (!lore.equals(two.getItemMeta().getLore().get(i++))) {
-                return false;
-            }
+            if (!lore.equals(two.getItemMeta().getLore().get(i++))) return false;
         }
+
         return true;
     }
 
-    public static void explode(Entity player) {
-        player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
-        player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
-        player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
+    public void explode(Entity player) {
+        spawnParticles(player, player.getWorld(), player.getLocation());
 
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
-
-        for (Entity entity : Methods.getNearbyEntities(player.getLocation(), 3D, player)) {
-            if (pluginSupport.allowsCombat(entity.getLocation())) {
+        for (Entity entity : getNearbyEntities(player.getLocation(), 3D, player)) {
+            if (pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
+
                 if (!(entity instanceof LivingEntity en)) continue;
                 if (pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
@@ -536,9 +512,9 @@ public class Methods {
 
                 if (en instanceof Player) {
                     if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        SpartanSupport.cancelSpeed((Player) player);
-                        SpartanSupport.cancelNormalMovements((Player) player);
-                        SpartanSupport.cancelNoFall((Player) player);
+                        //SpartanSupport.cancelSpeed((Player) player);
+                        //SpartanSupport.cancelNormalMovements((Player) player);
+                        //SpartanSupport.cancelNoFall((Player) player);
                     }
                 }
 
@@ -547,19 +523,26 @@ public class Methods {
         }
     }
 
-    public static void explode(Entity player, Entity arrow) {
-        arrow.getLocation().getWorld().spawnParticle(Particle.FLAME, arrow.getLocation(), 200);
-        arrow.getLocation().getWorld().spawnParticle(Particle.CLOUD, arrow.getLocation(), 30, .4F, .5F, .4F);
-        arrow.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, arrow.getLocation(), 2);
+    private void spawnParticles(Entity player, World world, Location location) {
+        if (player.getLocation().getWorld() != null) {
+            player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
+            player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
+            player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
+        }
 
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+        world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+    }
 
-        for (Entity entity : Methods.getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
-            if (pluginSupport.allowsCombat(entity.getLocation())) {
+    public void explode(Entity player, Entity arrow) {
+        spawnParticles(arrow, player.getWorld(), player.getLocation());
+
+        for (Entity entity : getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
+            if (pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
+
                 if (!(entity instanceof LivingEntity en)) continue;
                 if (pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
@@ -567,17 +550,17 @@ public class Methods {
 
                 en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
                 if (!(en instanceof Player)) continue;
-                if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    SpartanSupport.cancelSpeed((Player) player);
-                    SpartanSupport.cancelNormalMovements((Player) player);
-                    SpartanSupport.cancelNoFall((Player) player);
-                }
 
+                if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    // SpartanSupport.cancelSpeed((Player) player);
+                    // SpartanSupport.cancelNormalMovements((Player) player);
+                    // SpartanSupport.cancelNoFall((Player) player);
+                }
             }
         }
     }
 
-    public static void switchCurrency(Player player, Currency option, String one, String two, String cost) {
+    public void switchCurrency(Player player, Currency option, String one, String two, String cost) {
         HashMap<String, String> placeholders = new HashMap<>();
 
         placeholders.put(one, cost);
@@ -590,7 +573,7 @@ public class Methods {
         }
     }
 
-    public static ItemBuilder getRandomPaneColor() {
+    public ItemBuilder getRandomPaneColor() {
         List<String> colors = Arrays.asList(
                 "WHITE_STAINED_GLASS_PANE",
                 "ORANGE_STAINED_GLASS_PANE",
@@ -610,5 +593,4 @@ public class Methods {
                 "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
-
 }
