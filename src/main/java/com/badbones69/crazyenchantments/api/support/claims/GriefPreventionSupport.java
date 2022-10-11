@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.multisupport.misc;
+package com.badbones69.crazyenchantments.api.support.claims;
 
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import org.bukkit.block.Block;

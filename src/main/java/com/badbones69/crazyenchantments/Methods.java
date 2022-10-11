@@ -1,12 +1,10 @@
 package com.badbones69.crazyenchantments;
 
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
-import com.badbones69.crazyenchantments.api.multisupport.anticheats.SpartanSupport;
-import com.badbones69.crazyenchantments.api.multisupport.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.FireworkDamage;
 import de.tr7zw.changeme.nbtapi.NBTItem;

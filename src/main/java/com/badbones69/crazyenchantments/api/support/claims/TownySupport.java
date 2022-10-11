@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.multisupport.misc;
+package com.badbones69.crazyenchantments.api.support.claims;
 
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;

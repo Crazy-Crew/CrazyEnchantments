@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.multisupport.interfaces.plotsquared;
+package com.badbones69.crazyenchantments.api.support.interfaces.claims;
 
 import org.bukkit.entity.Player;
 

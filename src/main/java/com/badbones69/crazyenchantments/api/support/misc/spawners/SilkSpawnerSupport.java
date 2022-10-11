@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.multisupport.misc.spawners;
+package com.badbones69.crazyenchantments.api.support.misc.spawners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;

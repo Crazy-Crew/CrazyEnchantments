@@ -9,11 +9,11 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.managers.*;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManagerVersion;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.plotsquared.PlotSquaredVersion;
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard.WorldGuardVersion;
-import com.badbones69.crazyenchantments.api.multisupport.plotsquared.PlotSquaredSupport;
-import com.badbones69.crazyenchantments.api.multisupport.worldguard.WorldGuardSupport;
+import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.PlotSquaredVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
+import com.badbones69.crazyenchantments.api.support.claims.PlotSquaredSupport;
+import com.badbones69.crazyenchantments.api.support.claims.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import com.badbones69.crazyenchantments.controllers.Scrambler;
@@ -109,7 +109,7 @@ public class CrazyManager {
 
         CEnchantments.invalidateCachedEnchants();
 
-        cropManagerVersion = new com.badbones69.crazyenchantments.api.multisupport.CropManagerVersion();
+        cropManagerVersion = new com.badbones69.crazyenchantments.api.support.CropManagerVersion();
 
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration gkit = Files.GKITZ.getFile();

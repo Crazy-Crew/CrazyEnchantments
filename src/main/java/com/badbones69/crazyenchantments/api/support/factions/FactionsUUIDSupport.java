@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.multisupport.factions;
+package com.badbones69.crazyenchantments.api.support.factions;
 
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.factions.FactionsVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
 import com.massivecraft.factions.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

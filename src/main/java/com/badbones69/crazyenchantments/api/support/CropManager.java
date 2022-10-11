@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.multisupport;
+package com.badbones69.crazyenchantments.api.support;
 
-import com.badbones69.crazyenchantments.api.multisupport.interfaces.CropManagerVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersion;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.type.Farmland;

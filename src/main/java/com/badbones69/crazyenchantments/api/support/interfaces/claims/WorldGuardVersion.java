@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.multisupport.interfaces.worldguard;
+package com.badbones69.crazyenchantments.api.support.interfaces.claims;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

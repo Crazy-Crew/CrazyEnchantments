@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.multisupport.anticheats;
+package com.badbones69.crazyenchantments.api.support.anticheats;
 
 import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
 import org.bukkit.entity.Player;

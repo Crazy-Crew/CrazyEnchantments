@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
-import com.badbones69.crazyenchantments.api.multisupport.misc.spawners.SilkSpawnerSupport;
+import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.commands.*;
 import com.badbones69.crazyenchantments.controllers.*;
 import com.badbones69.crazyenchantments.enchantments.*;

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.multisupport.interfaces;
+package com.badbones69.crazyenchantments.api.support.interfaces;
 
 import org.bukkit.block.Block;
 
