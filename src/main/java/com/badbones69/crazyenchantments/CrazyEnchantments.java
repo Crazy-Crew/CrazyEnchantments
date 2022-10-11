@@ -43,7 +43,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             starter.run();
 
-            fileManager.logInfo(true).setup(this);
+            fileManager.logInfo(true).setup();
 
             boolean metricsEnabled = Files.CONFIG.getFile().getBoolean("Settings.Toggle-Metrics");
             String metrics = Files.CONFIG.getFile().getString("Settings.Toggle-Metrics");
