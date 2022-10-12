@@ -137,7 +137,7 @@ java {
 tasks {
     shadowJar {
         if (buildNumber != null) {
-            archiveFileName.set("${rootProject.name}-[v${jenkinsVersion}.jar")
+            archiveFileName.set("${rootProject.name}-[v${jenkinsVersion}].jar")
         } else {
             archiveFileName.set("${rootProject.name}-[v${rootProject.version}].jar")
         }
