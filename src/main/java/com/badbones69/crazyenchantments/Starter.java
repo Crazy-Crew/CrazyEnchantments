@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.api.managers.*;
 import com.badbones69.crazyenchantments.api.SkullCreator;
+import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
@@ -43,6 +44,8 @@ public class Starter {
 
     private SuperiorSkyBlockSupport superiorSkyBlockSupport;
 
+    private NoCheatPlusSupport noCheatPlusSupport;
+
     // Plugin Utils
     private BowUtils bowUtils;
 
@@ -75,6 +78,8 @@ public class Starter {
         vaultSupport = new VaultSupport();
 
         pluginSupport = new PluginSupport();
+
+        noCheatPlusSupport = new NoCheatPlusSupport();
 
         if (PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
 
@@ -145,6 +150,10 @@ public class Starter {
 
     public OraxenSupport getOraxenSupport() {
         return oraxenSupport;
+    }
+
+    public NoCheatPlusSupport getNoCheatPlusSupport() {
+        return noCheatPlusSupport;
     }
 
     public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {

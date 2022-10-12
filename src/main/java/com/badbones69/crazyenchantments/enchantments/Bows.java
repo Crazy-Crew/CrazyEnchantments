@@ -37,6 +37,8 @@ public class Bows implements Listener {
 
     private final BowEnchantmentManager bowEnchantmentManager = plugin.getStarter().getBowEnchantmentManager();
 
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getStarter().getNoCheatPlusSupport();
+
     private final Methods methods = plugin.getStarter().getMethods();
 
     private final BowUtils bowUtils = plugin.getStarter().getBowUtils();
@@ -113,7 +115,7 @@ public class Bows implements Listener {
 
                 // AntiCheat Support.
 
-                //if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.allowPlayer(shooter);
+                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(shooter);
 
                 //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(shooter);
 
@@ -130,7 +132,7 @@ public class Bows implements Listener {
                     crazyManager.removeIgnoredUUID(shooter.getUniqueId());
                 }
 
-                //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.denyPlayer(shooter);
+                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.denyPlayer(shooter);
             }
         }
 

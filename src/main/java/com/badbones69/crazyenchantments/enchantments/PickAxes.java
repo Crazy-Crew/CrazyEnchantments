@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.BlastUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
@@ -29,7 +28,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -40,6 +38,8 @@ public class PickAxes implements Listener {
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
     private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getStarter().getNoCheatPlusSupport();
 
     private final Tools tools = plugin.getTools();
 
@@ -182,7 +182,7 @@ public class PickAxes implements Listener {
 
             if (!damage) methods.removeDurability(currentItem, player);
 
-            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.denyPlayer(player);
+            if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
             for (Entry<ItemStack, Integer> item : drops.entrySet()) {
                 item.getKey().setAmount(item.getValue());

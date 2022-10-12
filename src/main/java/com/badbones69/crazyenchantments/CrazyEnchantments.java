@@ -39,7 +39,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             starter.run();
 
-            starter.getFileManager().logInfo(true).setup();
+            starter.getFileManager().setLog(true).setup();
 
             starter.getCrazyManager().load();
 
@@ -51,7 +51,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             } else {
                 getLogger().warning("Metrics was automatically enabled.");
                 getLogger().warning("Please add Toggle-Metrics: false to the top of your config.yml");
-                getLogger().warning("https://github.com/Crazy-Crew/Crazy-Crates/blob/main/src/main/resources/config.yml");
+                getLogger().warning("https://github.com/Crazy-Crew/CrazyEnchantments/blob/main/src/main/resources/config.yml");
                 getLogger().warning("An example if confused is linked above.");
 
                 new Metrics(this, 4494);

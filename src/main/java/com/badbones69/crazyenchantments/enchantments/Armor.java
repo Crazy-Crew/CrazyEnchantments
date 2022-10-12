@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.api.objects.PotionEffects;
+import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.processors.Processor;
@@ -46,6 +47,8 @@ public class Armor implements Listener {
     private final ArmorEnchantmentManager armorEnchantmentManager = plugin.getStarter().getArmorEnchantmentManager();
 
     private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getStarter().getNoCheatPlusSupport();
 
     private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
 
@@ -218,7 +221,7 @@ public class Armor implements Listener {
                                 methods.entityEvent(player, en, damageByEntityEvent, crazyManager, plugin, pluginSupport);
                             }
 
-                            // if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.denyPlayer(player);
+                            if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
                             damager.damage(5D);
                         }

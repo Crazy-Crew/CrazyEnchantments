@@ -48,6 +48,8 @@ public class Swords implements Listener {
 
     private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
 
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getStarter().getNoCheatPlusSupport();
+
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
     private final Methods methods = plugin.getStarter().getMethods();
@@ -329,7 +331,7 @@ public class Swords implements Listener {
             plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-                //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.allowPlayer(damager);
+                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(damager);
 
                 //if (SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(damager);
 
@@ -341,7 +343,7 @@ public class Swords implements Listener {
                 en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
                 en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));
 
-                // if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.denyPlayer(damager);
+                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.denyPlayer(damager);
             }
         }
 

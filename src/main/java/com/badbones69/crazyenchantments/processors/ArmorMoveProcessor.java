@@ -118,7 +118,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             int armorDurability = methods.getDurability(item);
 
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                plugin.getServer().getScheduler().runTask(plugin, () -> {
                     int finalArmorDurability = armorDurability;
                     HellForgedUseEvent event = new HellForgedUseEvent(player, item);
                     plugin.getServer().getPluginManager().callEvent(event);
