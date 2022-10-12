@@ -140,15 +140,15 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         pluginManager.registerEvents(lostBookController = new LostBookController(), this);
 
-        //pluginManager.registerEvents(bows = new Bows(), this);
-        //pluginManager.registerEvents(axes = new Axes(), this);
-        //pluginManager.registerEvents(tools = new Tools(), this);
-        //pluginManager.registerEvents(hoes = new Hoes(), this);
-        //pluginManager.registerEvents(helmets = new Helmets(), this);
-        //pluginManager.registerEvents(pickAxes = new PickAxes(), this);
-        //pluginManager.registerEvents(boots = new Boots(), this);
-        //pluginManager.registerEvents(swords = new Swords(), this);
-        //pluginManager.registerEvents(armor = new Armor(), this);
+        pluginManager.registerEvents(bows = new Bows(), this);
+        pluginManager.registerEvents(axes = new Axes(), this);
+        pluginManager.registerEvents(tools = new Tools(), this);
+        pluginManager.registerEvents(hoes = new Hoes(), this);
+        pluginManager.registerEvents(helmets = new Helmets(), this);
+        pluginManager.registerEvents(pickAxes = new PickAxes(), this);
+        pluginManager.registerEvents(boots = new Boots(), this);
+        pluginManager.registerEvents(swords = new Swords(), this);
+        pluginManager.registerEvents(armor = new Armor(), this);
 
         pluginManager.registerEvents(allyEnchantments = new AllyEnchantments(), this);
 
