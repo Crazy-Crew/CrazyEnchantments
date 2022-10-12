@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 /**
  * @author BadBones69
- * @version v1.0
+ * @version v1.1
  */
 public class FileManager {
 
@@ -44,7 +44,7 @@ public class FileManager {
         for (Files file : Files.values()) {
             File newFile = new File(plugin.getDataFolder(), file.getFileLocation());
 
-            if (log) plugin.getLogger().info("Loading the " + file.getFileName());
+            if (isLogging()) plugin.getLogger().info("Loading the " + file.getFileName());
 
             if (!newFile.exists()) {
                 try {
@@ -52,7 +52,7 @@ public class FileManager {
                     InputStream jarFile = getClass().getResourceAsStream("/" + file.getFileJar());
                     copyFile(jarFile, serverFile);
                 } catch (Exception e) {
-                    if (log) plugin.getLogger().info("Failed to load file: " + file.getFileName());
+                    if (isLogging()) plugin.getLogger().info("Failed to load file: " + file.getFileName());
 
                     e.printStackTrace();
                     continue;
@@ -62,12 +62,12 @@ public class FileManager {
             files.put(file, newFile);
             configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
 
-            if (log) plugin.getLogger().info("Successfully loaded " + file.getFileName());
+            if (isLogging()) plugin.getLogger().info("Successfully loaded " + file.getFileName());
         }
 
         // Starts to load all the custom files.
         if (!homeFolders.isEmpty()) {
-            if (log) plugin.getLogger().info("Loading custom files.");
+            if (isLogging()) plugin.getLogger().info("Loading custom files.");
 
             for (String homeFolder : homeFolders) {
                 File homeFile = new File(plugin.getDataFolder(), "/" + homeFolder);
@@ -83,14 +83,14 @@ public class FileManager {
                                 if (file.exists()) {
                                     customFiles.add(file);
 
-                                    if (log) plugin.getLogger().info( "Loaded new custom file: " + homeFolder + "/" + name + ".");
+                                    if (isLogging()) plugin.getLogger().info( "Loaded new custom file: " + homeFolder + "/" + name + ".");
                                 }
                             }
                         }
                     }
                 } else {
                     homeFile.mkdir();
-                    if (log) plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
+                    if (isLogging()) plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
 
                     for (Entry<String, String> file : autoGenerateFiles.entrySet()) {
 
@@ -106,9 +106,9 @@ public class FileManager {
                                     customFiles.add(new CustomFile(file.getKey(), homeFolder));
                                 }
 
-                                if (log) plugin.getLogger().info("Created new default file: " + homeFolder + "/" + file.getKey() + ".");
+                                if (isLogging()) plugin.getLogger().info("Created new default file: " + homeFolder + "/" + file.getKey() + ".");
                             } catch (Exception e) {
-                                if (log) plugin.getLogger().info("Failed to create new default file: " + homeFolder + "/" + file.getKey() + "!");
+                                if (isLogging()) plugin.getLogger().info("Failed to create new default file: " + homeFolder + "/" + file.getKey() + "!");
 
                                 e.printStackTrace();
                             }
@@ -117,7 +117,7 @@ public class FileManager {
                 }
             }
 
-            if (log) plugin.getLogger().info("Finished loading custom files.");
+            if (isLogging()) plugin.getLogger().info("Finished loading custom files.");
         }
         return this;
     }
@@ -126,7 +126,7 @@ public class FileManager {
      * Turn on the logger system for the FileManager.
      * @param log True to turn it on and false for it to be off.
      */
-    public FileManager logInfo(boolean log) {
+    public FileManager setLog(boolean log) {
         this.log = log;
         return this;
     }
@@ -235,13 +235,13 @@ public class FileManager {
             try {
                 file.getFile().save(new File(plugin.getDataFolder(), file.getHomeFolder() + "/" + file.getFileName()));
 
-                if (log) plugin.getLogger().info("Successfully saved the " + file.getFileName() + ".");
+                if (isLogging()) plugin.getLogger().info("Successfully saved the " + file.getFileName() + ".");
             } catch (Exception e) {
                plugin.getLogger().info("Could not save " + file.getFileName() + "!");
                 e.printStackTrace();
             }
         } else {
-            if (log) plugin.getLogger().info("The file " + name + ".yml could not be found!");
+            if (isLogging()) plugin.getLogger().info("The file " + name + ".yml could not be found!");
         }
     }
     
@@ -269,13 +269,13 @@ public class FileManager {
         if (file != null) {
             try {
                 file.file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
-                if (log) plugin.getLogger().info("Successfully reload the " + file.getFileName() + ".");
+                if (isLogging()) plugin.getLogger().info("Successfully reload the " + file.getFileName() + ".");
             } catch (Exception e) {
                 plugin.getLogger().info("Could not reload the " + file.getFileName() + "!");
                 e.printStackTrace();
             }
         } else {
-            if (log) plugin.getLogger().info("The file " + name + ".yml could not be found!");
+            if (isLogging()) plugin.getLogger().info("The file " + name + ".yml could not be found!");
         }
     }
     
@@ -419,7 +419,7 @@ public class FileManager {
             } else {
                 new File(plugin.getDataFolder(), "/" + homeFolder).mkdir();
 
-                if (log) plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
+                if (isLogging()) plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
 
                 file = null;
             }
@@ -474,7 +474,7 @@ public class FileManager {
                 try {
                     file.save(new File(plugin.getDataFolder(), homeFolder + "/" + fileName));
 
-                    if (log) plugin.getLogger().info("Successfully saved the " + fileName + ".");
+                    if (isLogging()) plugin.getLogger().info("Successfully saved the " + fileName + ".");
                     return true;
                 } catch (Exception e) {
                     plugin.getLogger().info("Could not save " + fileName + "!");
@@ -482,7 +482,7 @@ public class FileManager {
                     return false;
                 }
             } else {
-                if (log) plugin.getLogger().info("There was a null custom file that could not be found!");
+                if (isLogging()) plugin.getLogger().info("There was a null custom file that could not be found!");
             }
             return false;
         }
@@ -496,7 +496,7 @@ public class FileManager {
                 try {
                     file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + homeFolder + "/" + fileName));
 
-                    if (log) plugin.getLogger().info("Successfully reload the " + fileName + ".");
+                    if (isLogging()) plugin.getLogger().info("Successfully reload the " + fileName + ".");
 
                     return true;
                 } catch (Exception e) {
@@ -504,7 +504,7 @@ public class FileManager {
                     e.printStackTrace();
                 }
             } else {
-                if (log) plugin.getLogger().info("There was a null custom file that was not found!");
+                if (isLogging()) plugin.getLogger().info("There was a null custom file that was not found!");
             }
 
             return false;
