@@ -42,31 +42,44 @@ public class Starter {
     private BowUtils bowUtils;
 
     public void run() {
-
         // Managers
         fileManager = new FileManager();
         crazyManager = new CrazyManager();
 
-        allyManager = new AllyManager();
-
-        armorEnchantmentManager = new ArmorEnchantmentManager();
-        blackSmithManager = new BlackSmithManager();
-        bowEnchantmentManager = new BowEnchantmentManager();
-        infoMenuManager = new InfoMenuManager();
-        shopManager = new ShopManager();
-        wingsManager = new WingsManager();
+        fileManager.setLog(true).setup();
 
         // Misc
 
-        methods = new Methods();
-
-        skullCreator = new SkullCreator();
+        // Currency
+        vaultSupport = new VaultSupport();
 
         currencyAPI = new CurrencyAPI();
 
-        // Plugin Support
+        currencyAPI.loadCurrency();
 
-        vaultSupport = new VaultSupport();
+        // Utilities
+        methods = new Methods();
+
+        PluginSupport.updateCachedPluginState();
+        PluginSupport.printHooks(methods);
+
+        skullCreator = new SkullCreator();
+
+        // Other Managers
+        allyManager = new AllyManager();
+
+        armorEnchantmentManager = new ArmorEnchantmentManager();
+
+        blackSmithManager = new BlackSmithManager();
+        blackSmithManager.load();
+
+        bowEnchantmentManager = new BowEnchantmentManager();
+
+        infoMenuManager = new InfoMenuManager();
+        infoMenuManager.load();
+
+        shopManager = new ShopManager();
+        wingsManager = new WingsManager();
 
         // Plugin Utils
         bowUtils = new BowUtils();

@@ -38,6 +38,9 @@ gp-api = "16.18"
 
 [libraries]
 
+# Paper Team
+paper = { module = "io.papermc.paper:paper-api", version.ref = "spigot" }
+
 # Spigot Team
 spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
 

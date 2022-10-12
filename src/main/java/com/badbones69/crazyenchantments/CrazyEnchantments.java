@@ -40,37 +40,37 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             starter.run();
 
-            starter.getFileManager().setLog(true).setup();
+            enable();
 
-            starter.getCrazyManager().load();
+            starter.getCrazyManager().load(starter.getMethods());
 
-            boolean metricsEnabled = Files.CONFIG.getFile().getBoolean("Settings.Toggle-Metrics");
-            String metrics = Files.CONFIG.getFile().getString("Settings.Toggle-Metrics");
+            System.out.println(starter.getBlackSmithManager().getCurrency().getName());
 
-            if (metrics != null) {
-                if (metricsEnabled) new Metrics(this, 4494);
-            } else {
-                getLogger().warning("Metrics was automatically enabled.");
-                getLogger().warning("Please add Toggle-Metrics: false to the top of your config.yml");
-                getLogger().warning("https://github.com/Crazy-Crew/CrazyEnchantments/blob/main/src/main/resources/config.yml");
-                getLogger().warning("An example if confused is linked above.");
+            //boolean metricsEnabled = Files.CONFIG.getFile().getBoolean("Settings.Toggle-Metrics");
+            //String metrics = Files.CONFIG.getFile().getString("Settings.Toggle-Metrics");
 
-                new Metrics(this, 4494);
-            }
+            //if (metrics != null) {
+            //    if (metricsEnabled) new Metrics(this, 4494);
+            //} else {
+            //    getLogger().warning("Metrics was automatically enabled.");
+            //    getLogger().warning("Please add Toggle-Metrics: false to the top of your config.yml");
+            //    getLogger().warning("https://github.com/Crazy-Crew/CrazyEnchantments/blob/main/src/main/resources/config.yml");
+            //    getLogger().warning("An example if confused is linked above.");
 
-            SupportedPlugins.printHooks();
+            //    new Metrics(this, 4494);
+            //}
 
-            starter.getCurrencyAPI().loadCurrency();
+            //SupportedPlugins.printHooks();
 
-            boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
+            //boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
 
-            for (Player player : getServer().getOnlinePlayers()) {
-                starter.getCrazyManager().loadCEPlayer(player);
+            //for (Player player : getServer().getOnlinePlayers()) {
+            //    starter.getCrazyManager().loadCEPlayer(player);
 
-                if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
-            }
+            //    if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
+            //}
 
-            getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> starter.getCrazyManager().getCEPlayers().forEach(starter.getCrazyManager()::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
+            //getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> starter.getCrazyManager().getCEPlayers().forEach(starter.getCrazyManager()::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,14 +82,14 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         isEnabled = true;
 
-        enable();
+        //enable();
     }
 
     @Override
     public void onDisable() {
         if (!isEnabled) return;
 
-        disable();
+        //disable();
     }
 
     private EnchantmentControl enchantmentControl;
@@ -140,15 +140,15 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         pluginManager.registerEvents(lostBookController = new LostBookController(), this);
 
-        pluginManager.registerEvents(bows = new Bows(), this);
-        pluginManager.registerEvents(axes = new Axes(), this);
-        pluginManager.registerEvents(tools = new Tools(), this);
-        pluginManager.registerEvents(hoes = new Hoes(), this);
-        pluginManager.registerEvents(helmets = new Helmets(), this);
-        pluginManager.registerEvents(pickAxes = new PickAxes(), this);
-        pluginManager.registerEvents(boots = new Boots(), this);
-        pluginManager.registerEvents(swords = new Swords(), this);
-        pluginManager.registerEvents(armor = new Armor(), this);
+        //pluginManager.registerEvents(bows = new Bows(), this);
+        //pluginManager.registerEvents(axes = new Axes(), this);
+        //pluginManager.registerEvents(tools = new Tools(), this);
+        //pluginManager.registerEvents(hoes = new Hoes(), this);
+        //pluginManager.registerEvents(helmets = new Helmets(), this);
+        //pluginManager.registerEvents(pickAxes = new PickAxes(), this);
+        //pluginManager.registerEvents(boots = new Boots(), this);
+        //pluginManager.registerEvents(swords = new Swords(), this);
+        //pluginManager.registerEvents(armor = new Armor(), this);
 
         pluginManager.registerEvents(allyEnchantments = new AllyEnchantments(), this);
 
@@ -160,9 +160,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(scrambler = new Scrambler(), this);
         pluginManager.registerEvents(commandChecker = new CommandChecker(), this);
         pluginManager.registerEvents(fireworkDamage = new FireworkDamage(), this);
-
-        SupportedPlugins.updateCachedPluginState();
-        SupportedPlugins.printHooks();
 
         if (starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("Gkitz support is now enabled.");

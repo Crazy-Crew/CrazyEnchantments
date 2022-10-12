@@ -89,17 +89,17 @@ public class CrazyManager {
      * Loads all the data for Crazy Enchantments plugin.
      * Do not use unless needed.
      */
-    public void load() {
+    public void load(Methods methods) {
         blockList.clear();
         gkitz.clear();
         registeredEnchantments.clear();
         categories.clear();
 
         // Loads the blacksmith manager
-        blackSmithManager.load();
+        //blackSmithManager.load();
 
         // Loads the info menu manager and the enchantment types.
-        infoMenuManager.load();
+        //infoMenuManager.load();
 
         CEnchantments.invalidateCachedEnchants();
 

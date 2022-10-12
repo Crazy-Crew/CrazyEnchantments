@@ -74,10 +74,10 @@ public class CECommand implements CommandExecutor {
                     if (hasPermission(sender, "reload")) {
                         crazyManager.getCEPlayers().forEach(crazyManager::backupCEPlayer);
                         fileManager.setup();
-                        crazyManager.load();
+                        crazyManager.load(methods);
                         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
-                        PluginSupport.SupportedPlugins.updateCachedPluginState();
-                        PluginSupport.SupportedPlugins.printHooks();
+                        PluginSupport.updateCachedPluginState();
+                        PluginSupport.printHooks(methods);
                     }
 
                     return true;

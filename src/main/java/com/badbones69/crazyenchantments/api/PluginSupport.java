@@ -90,6 +90,62 @@ public class PluginSupport {
         return false;
     }
 
+    private final static Methods methods = plugin.getStarter().getMethods();
+
+    private final static HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
+
+
+    public static void updateCachedPluginState() {
+        if (!cachedPluginState.isEmpty()) cachedPluginState.clear();
+
+        for (SupportedPlugins supportedPlugins : SupportedPlugins.values()) {
+
+            Plugin grabbedPlugin = plugin.getServer().getPluginManager().getPlugin(supportedPlugins.pluginName);
+
+            if (grabbedPlugin != null) {
+                if (plugin.isEnabled()) {
+
+                    String website = plugin.getDescription().getWebsite();
+
+                    if (supportedPlugins == SupportedPlugins.FACTIONS_UUID) {
+                        if (website != null) cachedPluginState.put(supportedPlugins, website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
+                    } else {
+                        cachedPluginState.put(supportedPlugins, true);
+                        return;
+                    }
+
+                }
+            } else {
+                cachedPluginState.put(supportedPlugins, false);
+            }
+        }
+
+        updateFactionsPlugins();
+    }
+
+    public static void printHooks(Methods methods) {
+        if (cachedPluginState.isEmpty()) updateCachedPluginState();
+
+        plugin.getServer().getConsoleSender().sendMessage(methods.color("&4&lActive CrazyEnchantment Hooks:"));
+
+        cachedPluginState.keySet().forEach(supportedsPlugins -> {
+            if (supportedsPlugins.isPluginLoaded()) plugin.getServer().getConsoleSender().sendMessage(methods.color("&6&l " + supportedsPlugins.pluginName + " : &a&lENABLED"));
+        });
+    }
+
+    private static void updateFactionsPlugins() {
+        for (SupportedPlugins supportedsPlugins : SupportedPlugins.values()) {
+            if (supportedsPlugins.isPluginLoaded()) {
+                switch (supportedsPlugins) {
+                    case FACTIONS_UUID -> factionsVersion = new FactionsUUIDSupport();
+                    case GRIEF_PREVENTION -> factionsVersion = new GriefPreventionSupport();
+                    case TOWNYADVANCED -> factionsVersion = new TownySupport();
+                    default -> {}
+                }
+            }
+        }
+    }
+
     public enum SupportedPlugins {
         // Economy Plugins
         VAULT("Vault"),
@@ -133,65 +189,8 @@ public class PluginSupport {
             this.pluginName = pluginName;
         }
 
-        private final static HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
-
         public boolean isPluginLoaded() {
-            return cachedPluginState.get(this);
-        }
-
-        private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-
-        private final static Methods methods = plugin.getStarter().getMethods();
-
-        public static void updateCachedPluginState() {
-            if (!cachedPluginState.isEmpty()) cachedPluginState.clear();
-
-            for (SupportedPlugins supportedPlugins : values()) {
-
-                Plugin grabbedPlugin = plugin.getServer().getPluginManager().getPlugin(supportedPlugins.pluginName);
-
-                if (grabbedPlugin != null) {
-                    if (plugin.isEnabled()) {
-
-                        String website = plugin.getDescription().getWebsite();
-
-                        if (supportedPlugins == SupportedPlugins.FACTIONS_UUID) {
-                            if (website != null) cachedPluginState.put(supportedPlugins, website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
-                        } else {
-                            cachedPluginState.put(supportedPlugins, true);
-                            return;
-                        }
-
-                    }
-                } else {
-                    cachedPluginState.put(supportedPlugins, false);
-                }
-            }
-
-            updateFactionsPlugins();
-        }
-
-        public static void printHooks() {
-            if (cachedPluginState.isEmpty()) updateCachedPluginState();
-
-            plugin.getServer().getConsoleSender().sendMessage(methods.color("&4&lActive CrazyEnchantment Hooks:"));
-
-            cachedPluginState.keySet().forEach(supportedsPlugins -> {
-                if (supportedsPlugins.isPluginLoaded()) plugin.getServer().getConsoleSender().sendMessage(methods.color("&6&l " + supportedsPlugins.pluginName + " : &a&lENABLED"));
-            });
-        }
-
-        private static void updateFactionsPlugins() {
-            for (SupportedPlugins supportedsPlugins : values()) {
-                if (supportedsPlugins.isPluginLoaded()) {
-                    switch (supportedsPlugins) {
-                        case FACTIONS_UUID -> factionsVersion = new FactionsUUIDSupport();
-                        case GRIEF_PREVENTION -> factionsVersion = new GriefPreventionSupport();
-                        case TOWNYADVANCED -> factionsVersion = new TownySupport();
-                        default -> {}
-                    }
-                }
-            }
+            return plugin.getServer().getPluginManager().getPlugin(pluginName) != null;
         }
     }
 }
