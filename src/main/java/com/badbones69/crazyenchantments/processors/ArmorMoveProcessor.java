@@ -25,8 +25,6 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
-
     private final Methods methods = plugin.getStarter().getMethods();
 
     private final Processor<Runnable> syncProcessor;
@@ -96,7 +94,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (!(entity instanceof Player other)) continue;
-                        if (!pluginSupport.isFriendly(player, other)) continue;
+                        if (!PluginSupport.isFriendly(player, other)) continue;
                         AngelUseEvent event = new AngelUseEvent(player, armor);
 
                         plugin.getServer().getPluginManager().callEvent(event);

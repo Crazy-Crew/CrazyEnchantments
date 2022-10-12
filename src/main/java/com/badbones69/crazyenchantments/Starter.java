@@ -38,19 +38,10 @@ public class Starter {
 
     private VaultSupport vaultSupport;
 
-    private PluginSupport pluginSupport;
-
-    private OraxenSupport oraxenSupport;
-
-    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
-
-    private NoCheatPlusSupport noCheatPlusSupport;
-
     // Plugin Utils
     private BowUtils bowUtils;
 
     public void run() {
-        PluginSupport.SupportedPlugins.updateCachedPluginState();
 
         // Managers
         fileManager = new FileManager();
@@ -76,14 +67,6 @@ public class Starter {
         // Plugin Support
 
         vaultSupport = new VaultSupport();
-
-        pluginSupport = new PluginSupport();
-
-        noCheatPlusSupport = new NoCheatPlusSupport();
-
-        if (PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
-
-        if (PluginSupport.SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
         // Plugin Utils
         bowUtils = new BowUtils();
@@ -142,22 +125,6 @@ public class Starter {
     // Plugin Support
     public VaultSupport getVaultSupport() {
         return vaultSupport;
-    }
-
-    public PluginSupport getPluginSupport() {
-        return pluginSupport;
-    }
-
-    public OraxenSupport getOraxenSupport() {
-        return oraxenSupport;
-    }
-
-    public NoCheatPlusSupport getNoCheatPlusSupport() {
-        return noCheatPlusSupport;
-    }
-
-    public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
-        return superiorSkyBlockSupport;
     }
 
     // Plugin Utils

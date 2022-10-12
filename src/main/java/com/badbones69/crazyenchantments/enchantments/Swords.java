@@ -46,9 +46,7 @@ public class Swords implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
-
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getStarter().getNoCheatPlusSupport();
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
@@ -58,7 +56,7 @@ public class Swords implements Listener {
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (crazyManager.isIgnoredEvent(e)) return;
         if (crazyManager.isIgnoredUUID(e.getDamager().getUniqueId())) return;
-        if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
+        if (PluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
 
         if (crazyManager.isBreakRageOnDamageOn() && e.getEntity() instanceof Player player) {
             CEPlayer cePlayer = crazyManager.getCEPlayer(player);
@@ -337,7 +335,7 @@ public class Swords implements Listener {
 
                 for (LivingEntity entity :methods.getNearbyLivingEntities(methods.checkEntity(en), 2D, damager)) {
                     EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.CUSTOM, 5D);
-                    methods.entityEvent(damager, entity, damageByEntityEvent, crazyManager, plugin, pluginSupport);
+                    methods.entityEvent(damager, entity, damageByEntityEvent);
                 }
 
                 en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
@@ -415,7 +413,7 @@ public class Swords implements Listener {
 
         if (CEnchantments.REVENGE.isActivated()) {
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                if (!pluginSupport.isFriendly(entity, player)) continue;
+                if (!PluginSupport.isFriendly(entity, player)) continue;
                 Player ally = (Player) entity;
                 ItemStack itemStack = methods.getItemInHand(ally);
 
@@ -453,7 +451,7 @@ public class Swords implements Listener {
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
 
                         for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
-                            if (pluginSupport.isFriendly(entity, damager)) ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
+                            if (PluginSupport.isFriendly(entity, damager)) ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
                         }
                     }
                 }

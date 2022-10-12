@@ -24,8 +24,6 @@ public class BowUtils {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
-
     // Related to Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
     // Sticky Shot End.
@@ -60,7 +58,7 @@ public class BowUtils {
     }
 
     public boolean allowsCombat(Entity entity) {
-        return !pluginSupport.allowCombat(entity.getLocation());
+        return !PluginSupport.allowCombat(entity.getLocation());
     }
 
     public EnchantedArrow enchantedArrow(Arrow arrow) {

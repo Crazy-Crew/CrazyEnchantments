@@ -18,23 +18,23 @@ import java.util.HashMap;
 
 public class PluginSupport {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private static final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
+    private static final WingsManager wingsManager = plugin.getStarter().getWingsManager();
 
-    private final SuperiorSkyBlockSupport superiorSkyBlockSupport = plugin.getStarter().getSuperiorSkyBlockSupport();
+    private static final SuperiorSkyBlockSupport superiorSkyBlockSupport = plugin.getSuperiorSkyBlockSupport();
 
     private static FactionsVersion factionsVersion = null;
 
-    public boolean inTerritory(Player player) {
+    public static boolean inTerritory(Player player) {
         if (factionsVersion != null && factionsVersion.inTerritory(player)) return true;
 
         return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.inTerritory(player);
     }
 
-    public boolean isFriendly(Entity entity, Entity other) {
+    public static boolean isFriendly(Entity entity, Entity other) {
 
         if (entity instanceof Player || other instanceof Player) {
             assert entity instanceof Player;
@@ -51,7 +51,7 @@ public class PluginSupport {
         return false;
     }
 
-    public boolean isVanished(Player player) {
+    public static boolean isVanished(Player player) {
         for (MetadataValue meta : player.getMetadata("vanished")) {
             if (meta.asBoolean()) return true;
         }
@@ -59,20 +59,20 @@ public class PluginSupport {
         return false;
     }
 
-    public boolean allowCombat(Location location) {
+    public static boolean allowCombat(Location location) {
         if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded() && !TownySupport.allowsCombat(location)) return false;
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsPVP(location);
     }
 
-    public boolean allowDestruction(Location location) {
+    public static boolean allowDestruction(Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsBreak(location);
     }
 
-    public boolean allowExplosion(Location location) {
+    public static boolean allowExplosion(Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsExplosions(location);
     }
 
-    public boolean inWingsRegion(Player player) {
+    public static boolean inWingsRegion(Player player) {
         if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
 
         WorldGuardVersion worldGuardVersion = crazyManager.getWorldGuardSupport();
@@ -155,19 +155,11 @@ public class PluginSupport {
 
                         String website = plugin.getDescription().getWebsite();
 
-                        switch (supportedPlugins) {
-                            case FACTIONS_UUID -> {
-                                if (website != null) {
-                                    cachedPluginState.put(supportedPlugins, website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
-                                }
-                            }
-
-                            default -> {
-                                System.out.println(supportedPlugins.pluginName);
-
-                                cachedPluginState.put(supportedPlugins, true);
-                                return;
-                            }
+                        if (supportedPlugins == SupportedPlugins.FACTIONS_UUID) {
+                            if (website != null) cachedPluginState.put(supportedPlugins, website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
+                        } else {
+                            cachedPluginState.put(supportedPlugins, true);
+                            return;
                         }
 
                     }

@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments;
 
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
@@ -122,6 +123,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private CommandChecker commandChecker;
     private FireworkDamage fireworkDamage;
 
+    private OraxenSupport oraxenSupport;
+
+    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
+
+    private NoCheatPlusSupport noCheatPlusSupport;
+
     private void enable() {
 
         pluginManager.registerEvents(enchantmentControl = new EnchantmentControl(), this);
@@ -154,6 +161,9 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(commandChecker = new CommandChecker(), this);
         pluginManager.registerEvents(fireworkDamage = new FireworkDamage(), this);
 
+        SupportedPlugins.updateCachedPluginState();
+        SupportedPlugins.printHooks();
+
         if (starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("Gkitz support is now enabled.");
 
@@ -165,6 +175,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             getServer().getPluginManager().registerEvents(new SilkSpawnerSupport(), this);
         }
+
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
+
+        if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
+
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
         getCommand("crazyenchantments").setExecutor(new CECommand());
         getCommand("crazyenchantments").setTabCompleter(new CETab());
@@ -290,5 +306,17 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public Tools getTools() {
         return tools;
+    }
+
+    public OraxenSupport getOraxenSupport() {
+        return oraxenSupport;
+    }
+
+    public NoCheatPlusSupport getNoCheatPlusSupport() {
+        return noCheatPlusSupport;
+    }
+
+    public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
+        return superiorSkyBlockSupport;
     }
 }

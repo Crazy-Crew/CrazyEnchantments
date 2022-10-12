@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.enchantments;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
@@ -30,8 +29,6 @@ public class Hoes implements Listener {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
 
     private final Methods methods = plugin.getStarter().getMethods();
 

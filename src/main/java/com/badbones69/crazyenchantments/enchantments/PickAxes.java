@@ -37,9 +37,7 @@ public class PickAxes implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
-
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getStarter().getNoCheatPlusSupport();
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
 
     private final Tools tools = plugin.getTools();
 

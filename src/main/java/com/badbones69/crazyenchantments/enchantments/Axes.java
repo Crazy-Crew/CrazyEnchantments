@@ -32,12 +32,10 @@ public class Axes implements Listener {
 
     private final Methods methods = plugin.getStarter().getMethods();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
-
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (crazyManager.isIgnoredEvent(e)) return;
-        if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
+        if (PluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
 
         if (!(e.getEntity() instanceof LivingEntity entity)) return;
         if (!(e.getDamager() instanceof Player damager)) return;
@@ -109,7 +107,7 @@ public class Axes implements Listener {
 
             if (!useEvent.isCancelled()) {
                 for (Entity nearbyEntity : damager.getNearbyEntities(3, 3, 3)) {
-                    if (!pluginSupport.isFriendly(damager, nearbyEntity)) nearbyEntity.setVelocity(nearbyEntity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
+                    if (!PluginSupport.isFriendly(damager, nearbyEntity)) nearbyEntity.setVelocity(nearbyEntity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
                 }
             }
         }
@@ -121,7 +119,7 @@ public class Axes implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (pluginSupport.allowCombat(player.getLocation()) && event.getEntity().getKiller() != null) {
+        if (PluginSupport.allowCombat(player.getLocation()) && event.getEntity().getKiller() != null) {
             Player damager = event.getEntity().getKiller();
             ItemStack item = methods.getItemInHand(damager);
 

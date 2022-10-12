@@ -46,9 +46,7 @@ public class Armor implements Listener {
 
     private final ArmorEnchantmentManager armorEnchantmentManager = plugin.getStarter().getArmorEnchantmentManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
-
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getStarter().getNoCheatPlusSupport();
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
 
     private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
 
@@ -113,7 +111,7 @@ public class Armor implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (crazyManager.isIgnoredEvent(event) || crazyManager.isIgnoredUUID(event.getDamager().getUniqueId())) return;
-        if (pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
+        if (PluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (event.getDamager() instanceof LivingEntity damager && event.getEntity() instanceof Player player && player.getEquipment() != null) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
@@ -212,13 +210,13 @@ public class Armor implements Listener {
 
                             // AntiCheat Support.
 
-                            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.allowPlayer(player);
+                            if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
                             //if (SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(player);
 
                             for (LivingEntity en : methods.getNearbyLivingEntities(damager.getLocation(), 2D, player)) {
                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
-                                methods.entityEvent(player, en, damageByEntityEvent, crazyManager, plugin, pluginSupport);
+                                methods.entityEvent(player, en, damageByEntityEvent);
                             }
 
                             if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
@@ -238,7 +236,7 @@ public class Armor implements Listener {
                         for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
                             if (!(entity instanceof Player other)) continue;
 
-                            if (pluginSupport.isFriendly(damager, other)) players++;
+                            if (PluginSupport.isFriendly(damager, other)) players++;
                         }
 
                         if (players > 0) {
@@ -259,12 +257,12 @@ public class Armor implements Listener {
         Player other = event.getOther();
 
         if (!player.canSee(other) || !other.canSee(player)) return;
-        if (pluginSupport.isVanished(player) || pluginSupport.isVanished(other)) return;
+        if (PluginSupport.isVanished(player) || PluginSupport.isVanished(other)) return;
 
         CEnchantments enchant = event.getEnchantment();
         int level = event.getLevel();
 
-        if (pluginSupport.allowCombat(other.getLocation()) && !pluginSupport.isFriendly(player, other) && !methods.hasPermission(other, "bypass.aura", false)) {
+        if (PluginSupport.allowCombat(other.getLocation()) && !PluginSupport.isFriendly(player, other) && !methods.hasPermission(other, "bypass.aura", false)) {
             Calendar cal = Calendar.getInstance();
             HashMap<CEnchantments, Calendar> effect = new HashMap<>();
 
@@ -331,7 +329,7 @@ public class Armor implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onMovement(PlayerMoveEvent event) {
-        // if (!event.hasChangedBlock()) return;
+        if (event.getFrom() == event.getTo()) return;
 
         armorMoveProcessor.add(event);
     }
@@ -344,7 +342,7 @@ public class Armor implements Listener {
 
         Player killer = player.getKiller();
 
-        if (!pluginSupport.allowCombat(player.getLocation())) return;
+        if (!PluginSupport.allowCombat(player.getLocation())) return;
 
         if (CEnchantments.SELFDESTRUCT.isActivated()) {
             for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {

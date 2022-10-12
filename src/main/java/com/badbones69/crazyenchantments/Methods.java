@@ -30,9 +30,9 @@ public class Methods {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final OraxenSupport oraxenSupport = plugin.getStarter().getOraxenSupport();
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final OraxenSupport oraxenSupport = plugin.getOraxenSupport();
 
     private final Random random = new Random();
 
@@ -504,14 +504,14 @@ public class Methods {
         spawnParticles(player, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(player.getLocation(), 3D, player)) {
-            if (pluginSupport.allowCombat(entity.getLocation())) {
+            if (PluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (pluginSupport.isFriendly(player, en)) continue;
+                if (PluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
                 en.damage(5D);
 
@@ -542,14 +542,14 @@ public class Methods {
         spawnParticles(arrow, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
-            if (pluginSupport.allowCombat(entity.getLocation())) {
+            if (PluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (pluginSupport.isFriendly(player, en)) continue;
+                if (PluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
                 en.damage(5D);
 
@@ -596,12 +596,12 @@ public class Methods {
         return blockList;
     }
 
-    public void entityEvent(Player damager, LivingEntity entity, EntityDamageByEntityEvent damageByEntityEvent, CrazyManager crazyManager, CrazyEnchantments plugin, PluginSupport pluginSupport) {
+    public void entityEvent(Player damager, LivingEntity entity, EntityDamageByEntityEvent damageByEntityEvent) {
         crazyManager.addIgnoredEvent(damageByEntityEvent);
         crazyManager.addIgnoredUUID(damager.getUniqueId());
         plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && pluginSupport.allowCombat(entity.getLocation()) && !pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        if (!damageByEntityEvent.isCancelled() && PluginSupport.allowCombat(entity.getLocation()) && !PluginSupport.isFriendly(damager, entity)) entity.damage(5D);
 
         crazyManager.removeIgnoredEvent(damageByEntityEvent);
         crazyManager.removeIgnoredUUID(damager.getUniqueId());
