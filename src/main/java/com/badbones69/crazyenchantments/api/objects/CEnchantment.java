@@ -5,8 +5,8 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
+import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,7 +18,7 @@ public class CEnchantment {
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
     private final Methods methods = plugin.getStarter().getMethods();
-    
+
     private String name;
     private String customName;
     private boolean activated;
@@ -32,7 +32,7 @@ public class CEnchantment {
     private final List<Category> categories;
     private EnchantmentType enchantmentType;
     private final CEnchantment instance;
-    
+
     public CEnchantment(String name) {
         this.instance = this;
         this.name = name;
@@ -48,51 +48,51 @@ public class CEnchantment {
         this.categories = new ArrayList<>();
         this.enchantmentType = null;
     }
-    
+
     public CEnchantment getCEnchantmentFromName(String enchantment) {
         return crazyManager.getEnchantmentFromName(enchantment);
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public CEnchantment setName(String name) {
         this.name = name;
         return this;
     }
-    
+
     public String getCustomName() {
         return customName;
     }
-    
+
     public CEnchantment setCustomName(String customName) {
         this.customName = customName;
         return this;
     }
-    
+
     public boolean isActivated() {
         return activated;
     }
-    
+
     public CEnchantment setActivated(boolean activated) {
         this.activated = activated;
         return this;
     }
-    
+
     public String getColor() {
         return color;
     }
-    
+
     public CEnchantment setColor(String color) {
         this.color = methods.color(color);
         return this;
     }
-    
+
     public String getBookColor() {
         return bookColor;
     }
-    
+
     public CEnchantment setBookColor(String bookColor) {
 
         if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
@@ -100,57 +100,57 @@ public class CEnchantment {
         this.bookColor = methods.color(bookColor);
         return this;
     }
-    
+
     public int getMaxLevel() {
         return maxLevel;
     }
-    
+
     public CEnchantment setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
         return this;
     }
-    
+
     public String getInfoName() {
         return infoName;
     }
-    
+
     public CEnchantment setInfoName(String infoName) {
         this.infoName = methods.color(infoName);
         return this;
     }
-    
+
     public int getChance() {
         return chance;
     }
-    
+
     public CEnchantment setChance(int chance) {
         this.chance = chance;
         return this;
     }
-    
+
     public int getChanceIncrease() {
         return chanceIncrease;
     }
-    
+
     public CEnchantment setChanceIncrease(int chanceIncrease) {
         this.chanceIncrease = chanceIncrease;
         return this;
     }
-    
+
     public boolean hasChanceSystem() {
         return chance > 0;
     }
-    
+
     public boolean chanceSuccessful(int enchantmentLevel) {
         int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
         int pickedChance = new Random().nextInt(100) + 1;
         return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
     }
-    
+
     public List<String> getInfoDescription() {
         return infoDescription;
     }
-    
+
     public CEnchantment setInfoDescription(List<String> infoDescription) {
         List<String> info = new ArrayList<>();
 
@@ -161,17 +161,17 @@ public class CEnchantment {
         this.infoDescription = info;
         return this;
     }
-    
+
     public CEnchantment addCategory(Category category) {
         if (category != null) this.categories.add(category);
 
         return this;
     }
-    
+
     public List<Category> getCategories() {
         return categories;
     }
-    
+
     public CEnchantment setCategories(List<String> categories) {
 
         for (String categoryString : categories) {
@@ -182,20 +182,20 @@ public class CEnchantment {
 
         return this;
     }
-    
+
     public EnchantmentType getEnchantmentType() {
         return enchantmentType;
     }
-    
+
     public boolean canEnchantItem(ItemStack item) {
         return enchantmentType != null && enchantmentType.canEnchantItem(item);
     }
-    
+
     public CEnchantment setEnchantmentType(EnchantmentType enchantmentType) {
         this.enchantmentType = enchantmentType;
         return this;
     }
-    
+
     public void registerEnchantment() {
         RegisteredCEnchantmentEvent event = new RegisteredCEnchantmentEvent(instance);
         plugin.getServer().getPluginManager().callEvent(event);
@@ -207,7 +207,7 @@ public class CEnchantment {
             category.addEnchantment(instance);
         }
     }
-    
+
     public void unregisterEnchantment() {
         UnregisterCEnchantmentEvent event = new UnregisterCEnchantmentEvent(instance);
         plugin.getServer().getPluginManager().callEvent(event);
@@ -219,7 +219,7 @@ public class CEnchantment {
             category.removeEnchantment(instance);
         }
     }
-    
+
     /**
      * @deprecated use {@link CEnchantment#getLevel(ItemStack)}.
      */
@@ -227,7 +227,7 @@ public class CEnchantment {
     public int getPower(ItemStack item) {
         return getLevel(item);
     }
-    
+
     public int getLevel(ItemStack item) {
         int level = 0;
 

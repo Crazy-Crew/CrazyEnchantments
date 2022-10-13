@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -32,6 +33,8 @@ public class Methods {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
     private final OraxenSupport oraxenSupport = plugin.getOraxenSupport();
 
     private final Random random = new Random();
@@ -51,6 +54,28 @@ public class Methods {
 
     public String removeColor(String msg) {
         return ChatColor.stripColor(msg);
+    }
+
+    public EnchantmentType getFromName(String name) {
+        for (EnchantmentType enchantmentType : plugin.getStarter().getCrazyManager().getInfoMenuManager().getEnchantmentTypes()) {
+            if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
+        }
+
+        return null;
+    }
+
+    public void checkString(List<Color> colors, String colorString, Methods methods) {
+        if (colorString.contains(", ")) {
+            for (String color : colorString.split(", ")) {
+                Color c = methods.getColor(color);
+
+                if (c != null) colors.add(c);
+            }
+        } else {
+            Color c = methods.getColor(colorString);
+
+            if (c != null) colors.add(c);
+        }
     }
 
     public int getRandomNumber(String range) {
@@ -504,14 +529,14 @@ public class Methods {
         spawnParticles(player, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(player.getLocation(), 3D, player)) {
-            if (PluginSupport.allowCombat(entity.getLocation())) {
+            if (pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (PluginSupport.isFriendly(player, en)) continue;
+                if (pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
                 en.damage(5D);
 
@@ -542,14 +567,14 @@ public class Methods {
         spawnParticles(arrow, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(arrow.getLocation(), 3D, arrow)) {
-            if (PluginSupport.allowCombat(entity.getLocation())) {
+            if (pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (PluginSupport.isFriendly(player, en)) continue;
+                if (pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
                 en.damage(5D);
 
@@ -601,7 +626,7 @@ public class Methods {
         crazyManager.addIgnoredUUID(damager.getUniqueId());
         plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && PluginSupport.allowCombat(entity.getLocation()) && !PluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        if (!damageByEntityEvent.isCancelled() && pluginSupport.allowCombat(entity.getLocation()) && !pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
 
         crazyManager.removeIgnoredEvent(damageByEntityEvent);
         crazyManager.removeIgnoredUUID(damager.getUniqueId());

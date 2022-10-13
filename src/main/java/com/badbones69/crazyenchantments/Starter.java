@@ -7,9 +7,6 @@ import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.api.managers.*;
 import com.badbones69.crazyenchantments.api.SkullCreator;
-import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
-import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
 
 public class Starter {
@@ -19,11 +16,12 @@ public class Starter {
 
     private CrazyManager crazyManager;
 
+    private PluginSupport pluginSupport;
+
     private AllyManager allyManager;
     private ArmorEnchantmentManager armorEnchantmentManager;
     private BlackSmithManager blackSmithManager;
     private BowEnchantmentManager bowEnchantmentManager;
-    private InfoMenuManager infoMenuManager;
     private ShopManager shopManager;
     private WingsManager wingsManager;
 
@@ -44,45 +42,39 @@ public class Starter {
     public void run() {
         // Managers
         fileManager = new FileManager();
+
+        methods = new Methods();
+
         crazyManager = new CrazyManager();
 
-        fileManager.setLog(true).setup();
+        pluginSupport = new PluginSupport();
 
         // Misc
 
         // Currency
-        vaultSupport = new VaultSupport();
+        //vaultSupport = new VaultSupport();
 
-        currencyAPI = new CurrencyAPI();
+        //currencyAPI = new CurrencyAPI();
 
-        currencyAPI.loadCurrency();
+        //currencyAPI.loadCurrency();
 
-        // Utilities
-        methods = new Methods();
-
-        PluginSupport.updateCachedPluginState();
-        PluginSupport.printHooks(methods);
-
-        skullCreator = new SkullCreator();
+        //skullCreator = new SkullCreator();
 
         // Other Managers
-        allyManager = new AllyManager();
+        //allyManager = new AllyManager();
 
-        armorEnchantmentManager = new ArmorEnchantmentManager();
+        //armorEnchantmentManager = new ArmorEnchantmentManager();
 
-        blackSmithManager = new BlackSmithManager();
-        blackSmithManager.load();
+        //blackSmithManager = new BlackSmithManager();
+        //blackSmithManager.load();
 
-        bowEnchantmentManager = new BowEnchantmentManager();
+        //bowEnchantmentManager = new BowEnchantmentManager();
 
-        infoMenuManager = new InfoMenuManager();
-        infoMenuManager.load();
-
-        shopManager = new ShopManager();
-        wingsManager = new WingsManager();
+        //shopManager = new ShopManager();
+        //wingsManager = new WingsManager();
 
         // Plugin Utils
-        bowUtils = new BowUtils();
+        //bowUtils = new BowUtils();
     }
 
     // Managers
@@ -92,6 +84,14 @@ public class Starter {
 
     public CrazyManager getCrazyManager() {
         return crazyManager;
+    }
+
+    public Methods getMethods() {
+        return methods;
+    }
+
+    public PluginSupport getPluginSupport() {
+        return pluginSupport;
     }
 
     public AllyManager getAllyManager() {
@@ -110,21 +110,12 @@ public class Starter {
         return bowEnchantmentManager;
     }
 
-    public InfoMenuManager getInfoMenuManager() {
-        return infoMenuManager;
-    }
-
     public ShopManager getShopManager() {
         return shopManager;
     }
 
     public WingsManager getWingsManager() {
         return wingsManager;
-    }
-
-    // Misc
-    public Methods getMethods() {
-        return methods;
     }
 
     public SkullCreator getSkullCreator() {
@@ -136,12 +127,24 @@ public class Starter {
     }
 
     // Plugin Support
+
     public VaultSupport getVaultSupport() {
         return vaultSupport;
     }
 
-    // Plugin Utils
+    //public OraxenSupport getOraxenSupport() {
+    //    return oraxenSupport;
+    //}
 
+    //public NoCheatPlusSupport getNoCheatPlusSupport() {
+    //    return noCheatPlusSupport;
+    //}
+
+    //public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
+    //    return superiorSkyBlockSupport;
+    //}
+
+    // Plugin Utils
     public BowUtils getBowUtils() {
         return bowUtils;
     }

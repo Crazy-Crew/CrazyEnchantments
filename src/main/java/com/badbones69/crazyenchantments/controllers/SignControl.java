@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.api.events.BuyBookEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -39,13 +40,14 @@ public class SignControl implements Listener {
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
-    private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
+    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
 
     private final Scrambler scrambler = plugin.getScrambler();
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (e.getClickedBlock() == null) return;
+        
         Location location = e.getClickedBlock().getLocation();
         Player player = e.getPlayer();
 
@@ -168,7 +170,7 @@ public class SignControl implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onSignMake(SignChangeEvent e) {
         Player player = e.getPlayer();

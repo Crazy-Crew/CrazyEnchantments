@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.controllers;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
-import com.badbones69.crazyenchantments.api.objects.EnchantmentType;
+import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,8 +13,8 @@ public class InfoGUIControl implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
-    
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
+
     @EventHandler(ignoreCancelled = true)
     public void infoClick(InventoryClickEvent e) {
         if (e.getView().getTitle().equals(infoMenuManager.getInventoryName())) {

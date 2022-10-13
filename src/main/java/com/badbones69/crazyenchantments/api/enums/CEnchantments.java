@@ -4,14 +4,14 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.EnchantmentType;
+import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public enum CEnchantments {
-    
+
     //	----------------Boots----------------  \\
     GEARS("Gears", "Boots"),
     WINGS("Wings", "Boots"),
@@ -125,21 +125,21 @@ public enum CEnchantments {
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
     private final Methods methods = plugin.getStarter().getMethods();
-    
+
     private final String name;
     private final String typeName;
     private final boolean hasChanceSystem;
     private final int chance;
     private final int chanceIncrease;
-    
+
     private CEnchantment cachedEnchantment = null;
-    
+
     public static void invalidateCachedEnchants() {
         for (CEnchantments value : values()) {
             value.cachedEnchantment = null;
         }
     }
-    
+
     /**
      * @param name Name of the enchantment.
      * @param typeName Type of items it goes on.
@@ -151,7 +151,7 @@ public enum CEnchantments {
         this.chanceIncrease = 0;
         this.hasChanceSystem = false;
     }
-    
+
     /**
      * @param name Name of the enchantment.
      * @param typeName Type of items it goes on.
@@ -165,7 +165,7 @@ public enum CEnchantments {
         this.chanceIncrease = chanceIncrease;
         this.hasChanceSystem = true;
     }
-    
+
     /**
      * Get a CEnchantments from the enchantment name.
      * @param enchant The name of the enchantment.
@@ -178,7 +178,7 @@ public enum CEnchantments {
 
         return null;
     }
-    
+
     public static List<CEnchantments> getFromNames(List<CEnchantment> enchantments) {
         List<CEnchantments> cEnchantments = new ArrayList<>();
 
@@ -190,21 +190,21 @@ public enum CEnchantments {
 
         return cEnchantments;
     }
-    
+
     /**
      * @return The name of the enchantment.
      */
     public String getName() {
         return name;
     }
-    
+
     /**
      * @return The custom name in the Enchantment.yml.
      */
     public String getCustomName() {
         return getEnchantment().getCustomName();
     }
-    
+
     /**
      * Get the chance the enchantment will activate.
      * Not all enchantments have a chance to activate.
@@ -214,7 +214,7 @@ public enum CEnchantments {
     public int getChance() {
         return chance;
     }
-    
+
     /**
      * Get the amount the enchantment chance increases by every level.
      * Not all enchantments have a chance to activate.
@@ -224,46 +224,46 @@ public enum CEnchantments {
     public int getChanceIncrease() {
         return chanceIncrease;
     }
-    
+
     /**
      * @return The description of the enchantment in the Enchantments.yml.
      */
     public List<String> getDescription() {
         return getEnchantment().getInfoDescription();
     }
-    
+
     /**
      * @return Return the color that goes on the Enchantment Book.
      */
     public String getBookColor() {
         return methods.color(getEnchantment().getBookColor());
     }
-    
+
     /**
      * @return Returns the color that goes on the Enchanted Item.
      */
     public String getEnchantmentColor() {
         return methods.color(getEnchantment().getColor());
     }
-    
+
     /**
      * @return The type the enchantment is.
      */
     public EnchantmentType getType() {
         if (getEnchantment() == null || getEnchantment().getEnchantmentType() == null) {
-            return EnchantmentType.getFromName(typeName);
+            return methods.getFromName(typeName);
         } else {
             return getEnchantment().getEnchantmentType();
         }
     }
-    
+
     /**
      * @return True if the enchantment is enabled and false if not.
      */
     public boolean isActivated() {
         return getEnchantment() != null && getEnchantment().isActivated();
     }
-    
+
     /**
      * Get the enchantment that this is tied to.
      * @return The enchantment this is tied to.
@@ -273,7 +273,7 @@ public enum CEnchantments {
 
         return cachedEnchantment;
     }
-    
+
     /**
      * Get the level of the enchantment on an item.
      * @param item The item that is being checked.
@@ -282,7 +282,7 @@ public enum CEnchantments {
     public int getLevel(ItemStack item) {
         return getEnchantment().getLevel(item);
     }
-    
+
     /**
      * Check to see if the enchantment's chance is successful.
      * @return True if the chance was successful and false if not.
@@ -290,7 +290,7 @@ public enum CEnchantments {
     public boolean chanceSuccessful() {
         return chance >= 100 || chance <= 0 || (new Random().nextInt(100) + 1) <= chance;
     }
-    
+
     /**
      * Check to see if the enchantment's chance is successful.
      * @param item The item being checked.
@@ -299,7 +299,7 @@ public enum CEnchantments {
     public boolean chanceSuccessful(ItemStack item) {
         return crazyManager.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
     }
-    
+
     /**
      * Check if the CEnchantments uses a chance system.
      */

@@ -46,17 +46,19 @@ public class Swords implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
     private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
-
-    private final Methods methods = plugin.getStarter().getMethods();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         if (crazyManager.isIgnoredEvent(e)) return;
         if (crazyManager.isIgnoredUUID(e.getDamager().getUniqueId())) return;
-        if (PluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
+        if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
 
         if (crazyManager.isBreakRageOnDamageOn() && e.getEntity() instanceof Player player) {
             CEPlayer cePlayer = crazyManager.getCEPlayer(player);
@@ -413,7 +415,7 @@ public class Swords implements Listener {
 
         if (CEnchantments.REVENGE.isActivated()) {
             for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                if (!PluginSupport.isFriendly(entity, player)) continue;
+                if (!pluginSupport.isFriendly(entity, player)) continue;
                 Player ally = (Player) entity;
                 ItemStack itemStack = methods.getItemInHand(ally);
 
@@ -451,7 +453,7 @@ public class Swords implements Listener {
                         damager.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
 
                         for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
-                            if (PluginSupport.isFriendly(entity, damager)) ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
+                            if (pluginSupport.isFriendly(entity, damager)) ((Player) entity).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 10 * 20, 1));
                         }
                     }
                 }

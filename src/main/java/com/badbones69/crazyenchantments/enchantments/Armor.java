@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.enchantments;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -14,7 +13,7 @@ import com.badbones69.crazyenchantments.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.api.objects.PotionEffects;
 import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
+import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.processors.Processor;
 import org.bukkit.*;
@@ -36,7 +35,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
-import java.util.Map.Entry;
 
 public class Armor implements Listener {
 
@@ -44,13 +42,15 @@ public class Armor implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
     private final ArmorEnchantmentManager armorEnchantmentManager = plugin.getStarter().getArmorEnchantmentManager();
 
     private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
 
-    private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
-
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
 
     private final List<Player> fall = new ArrayList<>();
     private final HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
@@ -111,7 +111,7 @@ public class Armor implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (crazyManager.isIgnoredEvent(event) || crazyManager.isIgnoredUUID(event.getDamager().getUniqueId())) return;
-        if (PluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
+        if (pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (event.getDamager() instanceof LivingEntity damager && event.getEntity() instanceof Player player && player.getEquipment() != null) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
@@ -236,7 +236,7 @@ public class Armor implements Listener {
                         for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
                             if (!(entity instanceof Player other)) continue;
 
-                            if (PluginSupport.isFriendly(damager, other)) players++;
+                            if (pluginSupport.isFriendly(damager, other)) players++;
                         }
 
                         if (players > 0) {
@@ -257,12 +257,12 @@ public class Armor implements Listener {
         Player other = event.getOther();
 
         if (!player.canSee(other) || !other.canSee(player)) return;
-        if (PluginSupport.isVanished(player) || PluginSupport.isVanished(other)) return;
+        if (pluginSupport.isVanished(player) || pluginSupport.isVanished(other)) return;
 
         CEnchantments enchant = event.getEnchantment();
         int level = event.getLevel();
 
-        if (PluginSupport.allowCombat(other.getLocation()) && !PluginSupport.isFriendly(player, other) && !methods.hasPermission(other, "bypass.aura", false)) {
+        if (pluginSupport.allowCombat(other.getLocation()) && !pluginSupport.isFriendly(player, other) && !methods.hasPermission(other, "bypass.aura", false)) {
             Calendar cal = Calendar.getInstance();
             HashMap<CEnchantments, Calendar> effect = new HashMap<>();
 
@@ -342,7 +342,7 @@ public class Armor implements Listener {
 
         Player killer = player.getKiller();
 
-        if (!PluginSupport.allowCombat(player.getLocation())) return;
+        if (!pluginSupport.allowCombat(player.getLocation())) return;
 
         if (CEnchantments.SELFDESTRUCT.isActivated()) {
             for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {

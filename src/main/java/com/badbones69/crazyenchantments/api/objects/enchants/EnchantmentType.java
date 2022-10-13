@@ -1,8 +1,10 @@
-package com.badbones69.crazyenchantments.api.objects;
+package com.badbones69.crazyenchantments.api.objects.enchants;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
+import com.badbones69.crazyenchantments.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -12,16 +14,16 @@ import java.util.Objects;
 
 public class EnchantmentType {
 
-    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private static final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
-    
-    private static String displayName = null;
-    private static int slot = 0;
-    private static ItemStack displayItem = null;
-    private static final List<CEnchantment> enchantments = new ArrayList<>();
-    private static final List<Material> enchantableMaterials = new ArrayList<>();
-    
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final String displayName;
+    private final int slot;
+    private final ItemStack displayItem;
+    private final List<CEnchantment> enchantments = new ArrayList<>();
+    private final List<Material> enchantableMaterials = new ArrayList<>();
+
     public EnchantmentType(String name) {
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Types." + name;
@@ -37,40 +39,40 @@ public class EnchantmentType {
             if (material != null) enchantableMaterials.add(material);
         }
     }
-    
-    public static EnchantmentType getFromName(String name) {
-        return infoMenuManager.getFromName(name);
+
+    public EnchantmentType getFromName(String name) {
+        return methods.getFromName(name);
     }
-    
-    public static String getName() {
+
+    public String getName() {
         return displayName;
     }
-    
-    public static int getSlot() {
+
+    public int getSlot() {
         return slot;
     }
-    
-    public static ItemStack getDisplayItem() {
+
+    public ItemStack getDisplayItem() {
         return displayItem;
     }
-    
-    public static List<Material> getEnchantableMaterials() {
+
+    public List<Material> getEnchantableMaterials() {
         return enchantableMaterials;
     }
-    
-    public static boolean canEnchantItem(ItemStack item) {
+
+    public boolean canEnchantItem(ItemStack item) {
         return enchantableMaterials.contains(item.getType());
     }
-    
-    public static List<CEnchantment> getEnchantments() {
+
+    public List<CEnchantment> getEnchantments() {
         return enchantments;
     }
-    
-    public static void addEnchantment(CEnchantment enchantment) {
+
+    public void addEnchantment(CEnchantment enchantment) {
         enchantments.add(enchantment);
     }
-    
-    public static void removeEnchantment(CEnchantment enchantment) {
+
+    public void removeEnchantment(CEnchantment enchantment) {
         enchantments.remove(enchantment);
     }
 }

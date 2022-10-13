@@ -34,7 +34,7 @@ public class GKitzController implements Listener {
 
     private final Methods methods = plugin.getStarter().getMethods();
 
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
     
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();

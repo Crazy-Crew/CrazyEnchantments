@@ -21,7 +21,9 @@ public class Helmets implements Listener {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-    
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onMovement(PlayerMoveEvent event) {
         Player player = event.getPlayer();
@@ -34,7 +36,7 @@ public class Helmets implements Listener {
 
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (entity instanceof Player other) {
-                            if (PluginSupport.isFriendly(player, other)) players.add(other);
+                            if (pluginSupport.isFriendly(player, other)) players.add(other);
                         }
                     }
 

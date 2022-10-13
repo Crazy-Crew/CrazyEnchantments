@@ -8,7 +8,6 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,6 +23,8 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
 
     private final Methods methods = plugin.getStarter().getMethods();
 
@@ -94,7 +95,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (!(entity instanceof Player other)) continue;
-                        if (!PluginSupport.isFriendly(player, other)) continue;
+                        if (!pluginSupport.isFriendly(player, other)) continue;
                         AngelUseEvent event = new AngelUseEvent(player, armor);
 
                         plugin.getServer().getPluginManager().callEvent(event);

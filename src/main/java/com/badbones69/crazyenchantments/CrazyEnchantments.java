@@ -1,18 +1,15 @@
 package com.badbones69.crazyenchantments;
 
-import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
-import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
-import com.badbones69.crazyenchantments.commands.*;
 import com.badbones69.crazyenchantments.controllers.*;
 import com.badbones69.crazyenchantments.enchantments.*;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import org.bstats.bukkit.Metrics;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Player;
+import com.badbones69.crazyenchantments.listeners.ArmorListener;
+import com.badbones69.crazyenchantments.listeners.AuraListener;
+import com.badbones69.crazyenchantments.listeners.DustControlListener;
+import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
+import com.badbones69.crazyenchantments.listeners.server.ServerReadyListener;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,11 +20,10 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private Starter starter;
 
-    private Armor armor;
-
-    private final Attribute generic = Attribute.GENERIC_MAX_HEALTH;
-
     private boolean isEnabled = false;
+
+    // Listeners
+    private ProtectionCrystalListener protectionCrystalListener;
 
     PluginManager pluginManager = getServer().getPluginManager();
 
@@ -38,40 +34,16 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             starter = new Starter();
 
+            // Create all instances we need.
             starter.run();
 
-            enable();
+            // Set up all our files.
+            starter.getFileManager().setLog(true).setup();
 
-            starter.getCrazyManager().load(starter.getMethods());
+            // Register any events we need to before we load CrazyManager!
+            pluginManager.registerEvents(new ServerReadyListener(), this);
 
-            System.out.println(starter.getBlackSmithManager().getCurrency().getName());
-
-            //boolean metricsEnabled = Files.CONFIG.getFile().getBoolean("Settings.Toggle-Metrics");
-            //String metrics = Files.CONFIG.getFile().getString("Settings.Toggle-Metrics");
-
-            //if (metrics != null) {
-            //    if (metricsEnabled) new Metrics(this, 4494);
-            //} else {
-            //    getLogger().warning("Metrics was automatically enabled.");
-            //    getLogger().warning("Please add Toggle-Metrics: false to the top of your config.yml");
-            //    getLogger().warning("https://github.com/Crazy-Crew/CrazyEnchantments/blob/main/src/main/resources/config.yml");
-            //    getLogger().warning("An example if confused is linked above.");
-
-            //    new Metrics(this, 4494);
-            //}
-
-            //SupportedPlugins.printHooks();
-
-            //boolean patchHealth = Files.CONFIG.getFile().getBoolean("Settings.Reset-Players-Max-Health");
-
-            //for (Player player : getServer().getOnlinePlayers()) {
-            //    starter.getCrazyManager().loadCEPlayer(player);
-
-            //    if (patchHealth) player.getAttribute(generic).setBaseValue(player.getAttribute(generic).getBaseValue());
-            //}
-
-            //getServer().getScheduler().runTaskTimerAsynchronously(this, bukkitTask -> starter.getCrazyManager().getCEPlayers().forEach(starter.getCrazyManager()::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
-
+            pluginManager.registerEvents(protectionCrystalListener = new ProtectionCrystalListener(), this);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -82,7 +54,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         isEnabled = true;
 
-        //enable();
+        enable();
     }
 
     @Override
@@ -94,7 +66,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private EnchantmentControl enchantmentControl;
     private SignControl signControl;
-    private DustControl dustControl;
     private ScrollControl scrollControl;
     private ShopControl shopControl;
     private InfoGUIControl infoGUIControl;
@@ -117,84 +88,82 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private ArmorListener armorListener;
 
     private BlackSmith blackSmith;
-    private ProtectionCrystal protectionCrystal;
     private Scrambler scrambler;
 
     private CommandChecker commandChecker;
     private FireworkDamage fireworkDamage;
 
-    private OraxenSupport oraxenSupport;
-
-    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
-
-    private NoCheatPlusSupport noCheatPlusSupport;
+    // Listeners
 
     private void enable() {
+        // Load what we need to properly enable the plugin.
+        starter.getCrazyManager().load();
 
-        pluginManager.registerEvents(enchantmentControl = new EnchantmentControl(), this);
-        pluginManager.registerEvents(signControl = new SignControl(), this);
-        pluginManager.registerEvents(dustControl = new DustControl(), this);
-        pluginManager.registerEvents(scrollControl = new ScrollControl(), this);
-        pluginManager.registerEvents(shopControl = new ShopControl(), this);
-        pluginManager.registerEvents(infoGUIControl = new InfoGUIControl(), this);
+        pluginManager.registerEvents(new DustControlListener(), this);
 
-        pluginManager.registerEvents(lostBookController = new LostBookController(), this);
+        //pluginManager.registerEvents(enchantmentControl = new EnchantmentControl(), this);
+        //pluginManager.registerEvents(signControl = new SignControl(), this);
+        //pluginManager.registerEvents(scrollControl = new ScrollControl(), this);
+        //pluginManager.registerEvents(shopControl = new ShopControl(), this);
+        //pluginManager.registerEvents(infoGUIControl = new InfoGUIControl(), this);
 
-        pluginManager.registerEvents(bows = new Bows(), this);
-        pluginManager.registerEvents(axes = new Axes(), this);
-        pluginManager.registerEvents(tools = new Tools(), this);
-        pluginManager.registerEvents(hoes = new Hoes(), this);
-        pluginManager.registerEvents(helmets = new Helmets(), this);
-        pluginManager.registerEvents(pickAxes = new PickAxes(), this);
-        pluginManager.registerEvents(boots = new Boots(), this);
-        pluginManager.registerEvents(swords = new Swords(), this);
-        pluginManager.registerEvents(armor = new Armor(), this);
+        //pluginManager.registerEvents(lostBookController = new LostBookController(), this);
 
-        pluginManager.registerEvents(allyEnchantments = new AllyEnchantments(), this);
+        //pluginManager.registerEvents(bows = new Bows(), this);
+        //pluginManager.registerEvents(axes = new Axes(), this);
+        //pluginManager.registerEvents(tools = new Tools(), this);
+        //pluginManager.registerEvents(hoes = new Hoes(), this);
+        //pluginManager.registerEvents(helmets = new Helmets(), this);
+        //pluginManager.registerEvents(pickAxes = new PickAxes(), this);
+        //pluginManager.registerEvents(boots = new Boots(), this);
+        //pluginManager.registerEvents(swords = new Swords(), this);
+        //pluginManager.registerEvents(armor = new Armor(), this);
 
-        pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
-        pluginManager.registerEvents(auraListener = new AuraListener(), this);
-        pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
-        pluginManager.registerEvents(armorListener = new ArmorListener(), this);
-        pluginManager.registerEvents(protectionCrystal = new ProtectionCrystal(), this);
-        pluginManager.registerEvents(scrambler = new Scrambler(), this);
-        pluginManager.registerEvents(commandChecker = new CommandChecker(), this);
-        pluginManager.registerEvents(fireworkDamage = new FireworkDamage(), this);
+        //pluginManager.registerEvents(allyEnchantments = new AllyEnchantments(), this);
 
-        if (starter.getCrazyManager().isGkitzEnabled()) {
-            getLogger().info("Gkitz support is now enabled.");
+        //pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
+        //pluginManager.registerEvents(auraListener = new AuraListener(), this);
+        //pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
+        //pluginManager.registerEvents(armorListener = new ArmorListener(), this);
+        //pluginManager.registerEvents(protectionCrystal = new ProtectionCrystal(), this);
+        //pluginManager.registerEvents(scrambler = new Scrambler(), this);
+        //pluginManager.registerEvents(commandChecker = new CommandChecker(), this);
+        //pluginManager.registerEvents(fireworkDamage = new FireworkDamage(), this);
 
-            getServer().getPluginManager().registerEvents(new GKitzController(), this);
-        }
+        //if (starter.getCrazyManager().isGkitzEnabled()) {
+        //    getLogger().info("Gkitz support is now enabled.");
 
-        if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded()) {
-            getLogger().info("Silk Spawners support is now enabled.");
+        //    getServer().getPluginManager().registerEvents(new GKitzController(), this);
+        //}
 
-            getServer().getPluginManager().registerEvents(new SilkSpawnerSupport(), this);
-        }
+        //if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded()) {
+        //    getLogger().info("Silk Spawners support is now enabled.");
 
-        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
+        //    getServer().getPluginManager().registerEvents(new SilkSpawnerSupport(), this);
+        //}
 
-        if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
+        //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
+        //if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
 
-        getCommand("crazyenchantments").setExecutor(new CECommand());
-        getCommand("crazyenchantments").setTabCompleter(new CETab());
+        //if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
-        getCommand("tinkerer").setExecutor(new TinkerCommand());
-        getCommand("blacksmith").setExecutor(new BlackSmithCommand());
+        //getCommand("crazyenchantments").setExecutor(new CECommand());
+        //getCommand("crazyenchantments").setTabCompleter(new CETab());
 
-        getCommand("gkit").setExecutor(new GkitzCommand());
-        getCommand("gkit").setTabCompleter(new GkitzTab());
+        //getCommand("tinkerer").setExecutor(new TinkerCommand());
+        //getCommand("blacksmith").setExecutor(new BlackSmithCommand());
+
+        //getCommand("gkit").setExecutor(new GkitzCommand());
+        //getCommand("gkit").setTabCompleter(new GkitzTab());
     }
 
     private void disable() {
-        armor.stop();
+        //armor.stop();
 
-        if (starter.getAllyManager() != null) starter.getAllyManager().forceRemoveAllies();
+        //if (starter.getAllyManager() != null) starter.getAllyManager().forceRemoveAllies();
 
-        getServer().getOnlinePlayers().forEach(starter.getCrazyManager()::unloadCEPlayer);
+        //getServer().getOnlinePlayers().forEach(starter.getCrazyManager()::unloadCEPlayer);
     }
 
     public static CrazyEnchantments getPlugin() {
@@ -205,21 +174,9 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         return starter;
     }
 
-    public Scrambler getScrambler() {
-        return scrambler;
-    }
-
-    public ProtectionCrystal getProtectionCrystal() {
-        return protectionCrystal;
-    }
-
-    public AllyEnchantments getAllyEnchantments() {
-        return allyEnchantments;
-    }
-
-    public Armor getArmor() {
-        return armor;
-    }
+    /**
+     * Listeners
+     */
 
     public ArmorListener getArmorListener() {
         return armorListener;
@@ -229,44 +186,56 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         return auraListener;
     }
 
-    public Axes getAxes() {
-        return axes;
+    public ProtectionCrystalListener getProtectionCrystalListener() {
+        return protectionCrystalListener;
     }
 
-    public BlackSmith getBlackSmith() {
-        return blackSmith;
+    /**
+     * Armor Listeners
+     */
+
+    public Helmets getHelmets() {
+        return helmets;
+    }
+
+    public Armor getArmor() {
+        return null;
     }
 
     public Boots getBoots() {
         return boots;
     }
 
+    public Axes getAxes() {
+        return axes;
+    }
+
     public Bows getBows() {
         return bows;
     }
 
-    public CommandChecker getCommandChecker() {
-        return commandChecker;
+    public Hoes getHoes() {
+        return hoes;
     }
 
-    public DustControl getDustControl() {
-        return dustControl;
+    public PickAxes getPickAxes() {
+        return pickAxes;
     }
+
+    public Swords getSwords() {
+        return swords;
+    }
+
+    public Tools getTools() {
+        return tools;
+    }
+
+    /**
+     * Plugin Controllers
+     */
 
     public EnchantmentControl getEnchantmentControl() {
         return enchantmentControl;
-    }
-
-    public FireworkDamage getFireworkDamage() {
-        return fireworkDamage;
-    }
-
-    public Helmets getHelmets() {
-        return helmets;
-    }
-
-    public Hoes getHoes() {
-        return hoes;
     }
 
     public InfoGUIControl getInfoGUIControl() {
@@ -275,10 +244,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public LostBookController getLostBookController() {
         return lostBookController;
-    }
-
-    public PickAxes getPickAxes() {
-        return pickAxes;
     }
 
     public ScrollControl getScrollControl() {
@@ -293,27 +258,47 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         return shopControl;
     }
 
-    public Swords getSwords() {
-        return swords;
+    /**
+     * Plugin Support
+     */
+
+    public NoCheatPlusSupport getNoCheatPlusSupport() {
+        return null;
+    }
+
+    public OraxenSupport getOraxenSupport() {
+        return null;
+    }
+
+    public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
+        return null;
+    }
+
+    /**
+     * Misc
+     */
+
+    public CommandChecker getCommandChecker() {
+        return commandChecker;
+    }
+
+    public FireworkDamage getFireworkDamage() {
+        return fireworkDamage;
     }
 
     public Tinkerer getTinkerer() {
         return tinkerer;
     }
 
-    public Tools getTools() {
-        return tools;
+    public Scrambler getScrambler() {
+        return scrambler;
     }
 
-    public OraxenSupport getOraxenSupport() {
-        return oraxenSupport;
+    public BlackSmith getBlackSmith() {
+        return blackSmith;
     }
 
-    public NoCheatPlusSupport getNoCheatPlusSupport() {
-        return noCheatPlusSupport;
-    }
-
-    public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
-        return superiorSkyBlockSupport;
+    public AllyEnchantments getAllyEnchantments() {
+        return allyEnchantments;
     }
 }

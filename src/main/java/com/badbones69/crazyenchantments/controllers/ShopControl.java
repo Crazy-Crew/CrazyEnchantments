@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,16 +29,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class ShopControl implements Listener {
-    
+
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-    
+
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-    
+
     private final ShopManager shopManager = plugin.getStarter().getShopManager();
 
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
 
-    private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
+    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
 
     private final Scrambler scrambler = plugin.getScrambler();
 
@@ -46,11 +47,11 @@ public class ShopControl implements Listener {
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
     private final Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
-    
+
     public void openGUI(Player player) {
         player.openInventory(shopManager.getShopInventory(player));
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         ItemStack item = e.getCurrentItem();
@@ -170,7 +171,7 @@ public class ShopControl implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onEnchantmentTableClick(PlayerInteractEvent e) {
         if (shopManager.isEnchantmentTableShop()) {

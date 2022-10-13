@@ -28,6 +28,8 @@ public class Boots implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
     private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
 
     public void startWings() {
@@ -140,13 +142,13 @@ public class Boots implements Listener {
     }
 
     private boolean regionCheck(Player player) {
-        return wingsManager.inLimitlessFlightWorld(player) || (!wingsManager.inBlacklistedWorld(player) && (PluginSupport.inTerritory(player) || PluginSupport.inWingsRegion(player) || wingsManager.inWhitelistedWorld(player)));
+        return wingsManager.inLimitlessFlightWorld(player) || (!wingsManager.inBlacklistedWorld(player) && (pluginSupport.inTerritory(player) || pluginSupport.inWingsRegion(player) || wingsManager.inWhitelistedWorld(player)));
     }
 
     private boolean areEnemiesNearby(Player player) {
         if (wingsManager.isEnemyCheckEnabled() && !wingsManager.inLimitlessFlightWorld(player)) {
             for (Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
-                if (!(player.hasPermission("crazyenchantments.bypass.wings") && PluginSupport.isFriendly(player, otherPlayer))) return true;
+                if (!(player.hasPermission("crazyenchantments.bypass.wings") && pluginSupport.isFriendly(player, otherPlayer))) return true;
             }
         }
 

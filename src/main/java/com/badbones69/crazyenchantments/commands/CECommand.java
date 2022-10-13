@@ -14,10 +14,9 @@ import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
-import com.badbones69.crazyenchantments.api.objects.EnchantmentType;
-import com.badbones69.crazyenchantments.controllers.ProtectionCrystal;
 import com.badbones69.crazyenchantments.controllers.Scrambler;
 import com.badbones69.crazyenchantments.controllers.ShopControl;
+import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -38,18 +37,20 @@ public class CECommand implements CommandExecutor {
 
     private final FileManager fileManager = plugin.getStarter().getFileManager();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
 
     private final Methods methods = plugin.getStarter().getMethods();
 
-    private final ProtectionCrystal protectionCrystal = plugin.getProtectionCrystal();
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
+
+    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
 
     private final Scrambler scrambler = plugin.getScrambler();
 
     private final ShopControl shopControl = plugin.getShopControl();
-    
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         boolean isPlayer = sender instanceof Player;
@@ -74,10 +75,10 @@ public class CECommand implements CommandExecutor {
                     if (hasPermission(sender, "reload")) {
                         crazyManager.getCEPlayers().forEach(crazyManager::backupCEPlayer);
                         fileManager.setup();
-                        crazyManager.load(methods);
+                        crazyManager.load();
                         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
-                        PluginSupport.updateCachedPluginState();
-                        PluginSupport.printHooks(methods);
+
+                        pluginSupport.updateCachedPluginState();
                     }
 
                     return true;
@@ -140,9 +141,9 @@ public class CECommand implements CommandExecutor {
 
                         sender.sendMessage(methods.getPrefix("&cEnchantment Types and amount of items in each:"));
 
-                        for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
-                            sender.sendMessage(methods.color("&c" + enchantmentType.getName() + ": &6" + enchantmentType.getEnchantableMaterials().size()));
-                        }
+                        //for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
+                        //    sender.sendMessage(methods.color("&c" + enchantmentType.getName() + ": &6" + enchantmentType.getEnchantableMaterials().size()));
+                        //}
                     }
 
                     return true;
@@ -165,7 +166,7 @@ public class CECommand implements CommandExecutor {
                             file.set(path + ".Color", "&7");
                             file.set(path + ".BookColor", "&b&l");
                             file.set(path + ".MaxPower", 1);
-                            file.set(path + ".Enchantment-Type", enchantment.getType().getName());
+                            //file.set(path + ".Enchantment-Type", enchantment.getType().getName());
                             file.set(path + ".Info.Name", "&e&l" + enchantment.getName() + " &7(&bI&7)");
                             file.set(path + ".Info.Description", enchantment.getDescription());
                             List<String> categories = new ArrayList<>();
@@ -188,13 +189,13 @@ public class CECommand implements CommandExecutor {
 
                             infoMenuManager.openInfoMenu((Player) sender);
                         } else {
-                            EnchantmentType enchantmentType = infoMenuManager.getFromName(args[1]);
+                            //EnchantmentType enchantmentType = infoMenuManager.getFromName(args[1]);
 
-                            if (enchantmentType != null) {
-                                assert sender instanceof Player;
-                                infoMenuManager.openInfoMenu((Player) sender, enchantmentType);
-                                return true;
-                            }
+                            //if (enchantmentType != null) {
+                            //    assert sender instanceof Player;
+                                //infoMenuManager.openInfoMenu((Player) sender, enchantmentType);
+                           //     return true;
+                            //}
 
                             CEnchantment enchantment = crazyManager.getEnchantmentFromName(args[1]);
                             if (enchantment != null) {
@@ -707,7 +708,7 @@ public class CECommand implements CommandExecutor {
             }
         }
     }
-    
+
     private boolean hasPermission(CommandSender sender, String permission) {
         return methods.hasPermission(sender, permission, true);
     }

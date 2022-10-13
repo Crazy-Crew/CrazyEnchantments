@@ -5,8 +5,8 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.EnchantmentType;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -28,7 +28,7 @@ public class InfoMenuManager {
     private ItemStack backRight;
     private ItemStack backLeft;
     private final List<EnchantmentType> enchantmentTypes = new ArrayList<>();
-    
+
     public void load() {
         enchantmentTypes.clear();
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
@@ -55,43 +55,35 @@ public class InfoMenuManager {
             inventoryMenu.setItem(enchantmentType.getSlot(), enchantmentType.getDisplayItem());
         }
     }
-    
+
     public Inventory getInventoryMenu() {
         return inventoryMenu;
     }
-    
+
     public String getInventoryName() {
         return inventoryName;
     }
-    
+
     public int getInventorySize() {
         return inventorySize;
     }
-    
+
     public List<EnchantmentType> getEnchantmentTypes() {
         return enchantmentTypes;
     }
-    
+
     public ItemStack getBackRightButton() {
         return backRight;
     }
-    
+
     public ItemStack getBackLeftButton() {
         return backLeft;
     }
-    
-    public EnchantmentType getFromName(String name) {
-        for (EnchantmentType enchantmentType : enchantmentTypes) {
-            if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
-        }
 
-        return null;
-    }
-    
     public void openInfoMenu(Player player) {
         player.openInventory(inventoryMenu);
     }
-    
+
     public void openInfoMenu(Player player, EnchantmentType enchantmentType) {
         List<CEnchantment> enchantments = enchantmentType.getEnchantments();
         int slots = 9;

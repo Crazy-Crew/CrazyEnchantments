@@ -35,11 +35,13 @@ public class Bows implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final Methods methods = plugin.getStarter().getMethods();
+
+    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+
     private final BowEnchantmentManager bowEnchantmentManager = plugin.getStarter().getBowEnchantmentManager();
 
     private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
-
-    private final Methods methods = plugin.getStarter().getMethods();
 
     private final BowUtils bowUtils = plugin.getStarter().getBowUtils();
 
@@ -124,7 +126,7 @@ public class Bows implements Listener {
                     crazyManager.addIgnoredUUID(shooter.getUniqueId());
                     shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-                    if (!damageByEntityEvent.isCancelled() && !PluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) entity.damage(5D);
+                    if (!damageByEntityEvent.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) entity.damage(5D);
 
                     crazyManager.removeIgnoredEvent(damageByEntityEvent);
                     crazyManager.removeIgnoredUUID(shooter.getUniqueId());
@@ -147,11 +149,11 @@ public class Bows implements Listener {
         EnchantedArrow arrow = bowUtils.enchantedArrow(entityArrow);
         if (arrow == null) return;
 
-        if (!PluginSupport.allowCombat(arrow.getArrow().getLocation())) return;
+        if (!pluginSupport.allowCombat(arrow.getArrow().getLocation())) return;
         ItemStack bow = arrow.getBow();
         // Damaged player is friendly.
 
-        if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && PluginSupport.isFriendly(arrow.getShooter(), e.getEntity())) {
+        if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && pluginSupport.isFriendly(arrow.getShooter(), e.getEntity())) {
             int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
@@ -175,7 +177,7 @@ public class Bows implements Listener {
         }
 
         // Damaged player is an enemy.
-        if (!PluginSupport.isFriendly(arrow.getShooter(), entity)) {
+        if (!pluginSupport.isFriendly(arrow.getShooter(), entity)) {
 
             bowUtils.spawnWebs(arrow.getShooter(), e.getEntity(), arrow, entityArrow);
 

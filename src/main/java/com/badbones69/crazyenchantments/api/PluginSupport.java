@@ -18,24 +18,23 @@ import java.util.HashMap;
 
 public class PluginSupport {
 
-    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private static final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private static final WingsManager wingsManager = plugin.getStarter().getWingsManager();
+    private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
 
-    private static final SuperiorSkyBlockSupport superiorSkyBlockSupport = plugin.getSuperiorSkyBlockSupport();
+    private final SuperiorSkyBlockSupport superiorSkyBlockSupport = plugin.getSuperiorSkyBlockSupport();
 
-    private static FactionsVersion factionsVersion = null;
+    private FactionsVersion factionsVersion = null;
 
-    public static boolean inTerritory(Player player) {
+    public boolean inTerritory(Player player) {
         if (factionsVersion != null && factionsVersion.inTerritory(player)) return true;
 
         return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.inTerritory(player);
     }
 
-    public static boolean isFriendly(Entity entity, Entity other) {
-
+    public boolean isFriendly(Entity entity, Entity other) {
         if (entity instanceof Player || other instanceof Player) {
             assert entity instanceof Player;
             Player player = (Player) entity;
@@ -51,7 +50,7 @@ public class PluginSupport {
         return false;
     }
 
-    public static boolean isVanished(Player player) {
+    public boolean isVanished(Player player) {
         for (MetadataValue meta : player.getMetadata("vanished")) {
             if (meta.asBoolean()) return true;
         }
@@ -59,20 +58,20 @@ public class PluginSupport {
         return false;
     }
 
-    public static boolean allowCombat(Location location) {
+    public boolean allowCombat(Location location) {
         if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded() && !TownySupport.allowsCombat(location)) return false;
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsPVP(location);
     }
 
-    public static boolean allowDestruction(Location location) {
+    public boolean allowDestruction(Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsBreak(location);
     }
 
-    public static boolean allowExplosion(Location location) {
+    public boolean allowExplosion(Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsExplosions(location);
     }
 
-    public static boolean inWingsRegion(Player player) {
+    public boolean inWingsRegion(Player player) {
         if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
 
         WorldGuardVersion worldGuardVersion = crazyManager.getWorldGuardSupport();
@@ -90,12 +89,11 @@ public class PluginSupport {
         return false;
     }
 
-    private final static Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = plugin.getStarter().getMethods();
 
-    private final static HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
+    private final HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
 
-
-    public static void updateCachedPluginState() {
+    public void updateCachedPluginState() {
         if (!cachedPluginState.isEmpty()) cachedPluginState.clear();
 
         for (SupportedPlugins supportedPlugins : SupportedPlugins.values()) {
@@ -123,7 +121,7 @@ public class PluginSupport {
         updateFactionsPlugins();
     }
 
-    public static void printHooks(Methods methods) {
+    public void printHooks() {
         if (cachedPluginState.isEmpty()) updateCachedPluginState();
 
         plugin.getServer().getConsoleSender().sendMessage(methods.color("&4&lActive CrazyEnchantment Hooks:"));
@@ -133,7 +131,7 @@ public class PluginSupport {
         });
     }
 
-    private static void updateFactionsPlugins() {
+    private void updateFactionsPlugins() {
         for (SupportedPlugins supportedsPlugins : SupportedPlugins.values()) {
             if (supportedsPlugins.isPluginLoaded()) {
                 switch (supportedsPlugins) {
@@ -180,6 +178,8 @@ public class PluginSupport {
 
         TOWNYADVANCED("TownyAdvanced"),
 
+        PLOT_SQUARED("PlotSquared"),
+
         // Custom Items
         ORAXEN("Oraxen");
 
@@ -188,6 +188,8 @@ public class PluginSupport {
         SupportedPlugins(String pluginName) {
             this.pluginName = pluginName;
         }
+
+        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
         public boolean isPluginLoaded() {
             return plugin.getServer().getPluginManager().getPlugin(pluginName) != null;
