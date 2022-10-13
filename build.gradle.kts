@@ -62,7 +62,7 @@ repositories {
     /**
      * Spartan Team
      */
-    maven("https://nexus.sparky.ac/repository/Sparky/")
+    // maven("https://nexus.sparky.ac/repository/Sparky/")
 
     /**
      * EngineHub Team
@@ -80,9 +80,13 @@ repositories {
 dependencies {
 
     // TODO() Disabled because its asking for things to be added that I don't want at the moment.
-    //implementation(libs.plot.squared.bom)
+    // implementation(libs.plot.squared.bom)
+    compileOnly(libs.plot.squared.core)
+
     //compileOnly(libs.plot.squared.bukkit) { isTransitive = false }
-    //compileOnly(libs.plot.squared.core)
+
+    implementation("com.intellectualsites.paster:Paster:1.1.4")
+    implementation("com.intellectualsites.informative-annotations:informative-annotations:1.2")
 
     implementation(libs.bukkit.bstats)
 
@@ -115,6 +119,7 @@ dependencies {
         exclude("com.massivecraft.massivecore", "MassiveCore")
         exclude("com.massivecraft.factions", "Factions")
         exclude("net.gravitydevelopment.updater", "updater")
+        exclude("com.intellectualsites", "Pipeline")
     }
 
     compileOnly(libs.factions.uuid.api)
@@ -127,7 +132,7 @@ dependencies {
 
     compileOnly(libs.vault.api)
 
-    compileOnly(libs.spigot)
+    compileOnly(libs.paper)
 }
 
 java {
