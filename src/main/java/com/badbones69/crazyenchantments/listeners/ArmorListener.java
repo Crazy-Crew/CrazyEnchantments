@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.controllers;
+package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
@@ -25,9 +25,6 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +33,7 @@ import java.util.List;
  * @since Jul 30, 2015
  */
 public class ArmorListener implements Listener {
-    
+
     private final List<String> blockedMaterials;
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
@@ -44,11 +41,11 @@ public class ArmorListener implements Listener {
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
     private final Methods methods = plugin.getStarter().getMethods();
-    
+
     public ArmorListener() {
         this.blockedMaterials = getBlocks();
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public final void onInventoryClick(InventoryClickEvent e) {
         boolean shift = false;
@@ -190,7 +187,7 @@ public class ArmorListener implements Listener {
             }
         }
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerInteractEvent(PlayerInteractEvent e) {
         if (e.getAction() == Action.PHYSICAL) return;
@@ -224,7 +221,7 @@ public class ArmorListener implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void dispenserFireEvent(BlockDispenseEvent e) {
         if (crazyManager.isIgnoredEvent(e)) return;
@@ -268,7 +265,7 @@ public class ArmorListener implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void itemBreakEvent(PlayerItemBreakEvent e) {
         ArmorType type = ArmorType.matchType(e.getBrokenItem());
@@ -295,7 +292,7 @@ public class ArmorListener implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void playerDeathEvent(PlayerDeathEvent e) {
         Player player = e.getEntity();
@@ -307,14 +304,14 @@ public class ArmorListener implements Listener {
             }
         }
     }
-    
+
     /**
      * A utility method to support versions that use null or air ItemStacks.
      */
     public boolean isAirOrNull(ItemStack item) {
         return item == null || item.getType().equals(Material.AIR);
     }
-    
+
     private List<String> getBlocks() {
         List<String> blocks = new ArrayList<>();
         blocks.add("DAYLIGHT_DETECTOR");

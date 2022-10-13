@@ -1,7 +1,6 @@
-package com.badbones69.crazyenchantments.controllers;
+package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.AuraActiveEvent;
@@ -15,14 +14,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class AuraListener implements Listener {
-    
+
     private final CEnchantments[] AURA_ENCHANTMENTS = {
     CEnchantments.BLIZZARD,
     CEnchantments.ACIDRAIN,
@@ -34,7 +32,7 @@ public class AuraListener implements Listener {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-    
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerMoveEvent(PlayerMoveEvent event) {
         Player player = event.getPlayer();
@@ -86,7 +84,7 @@ public class AuraListener implements Listener {
             }
         }
     }
-    
+
     private CEnchantments getAuraEnchantmentEnum(CEnchantment enchantment) {
         return Arrays.stream(AURA_ENCHANTMENTS).filter(enchantmentEnum -> enchantmentEnum.getName().equals(enchantment.getName())).findFirst().orElse(null);
     }

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.controllers;
+package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
@@ -17,15 +17,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class DustControl implements Listener {
+public class DustControlListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
@@ -34,7 +32,7 @@ public class DustControl implements Listener {
     private final Methods methods = plugin.getStarter().getMethods();
 
     private final Random random = new Random();
-    
+
     private void setLore(ItemStack item, int percent, String rate) {
         ItemMeta meta = item.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
@@ -76,7 +74,7 @@ public class DustControl implements Listener {
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
-    
+
     public boolean hasPercent(Dust dust, ItemStack item) {
         String arg = "";
 
@@ -111,7 +109,7 @@ public class DustControl implements Listener {
 
         return methods.isInt(arg);
     }
-    
+
     public int getPercent(Dust dust, ItemStack item) {
         String arg = "";
 
@@ -150,9 +148,9 @@ public class DustControl implements Listener {
             return 0;
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
-    public void onInvClick(InventoryClickEvent e) {
+    public void onInventoryClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
 
         if (e.getCurrentItem() != null && e.getCursor() != null) {
@@ -221,7 +219,7 @@ public class DustControl implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void openDust(PlayerInteractEvent e) {
         Player player = e.getPlayer();
@@ -250,26 +248,12 @@ public class DustControl implements Listener {
                         List<Color> colors = new ArrayList<>();
                         String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");
 
-                        checkString(colors, colorString, methods);
+                        methods.checkString(colors, colorString, methods);
 
                         methods.fireWork(player.getLocation().add(0, 1, 0), colors);
                     }
                 }
             }
-        }
-    }
-
-    public void checkString(List<Color> colors, String colorString, Methods methods) {
-        if (colorString.contains(", ")) {
-            for (String color : colorString.split(", ")) {
-                Color c = methods.getColor(color);
-
-                if (c != null) colors.add(c);
-            }
-        } else {
-            Color c = methods.getColor(colorString);
-
-            if (c != null) colors.add(c);
         }
     }
 
