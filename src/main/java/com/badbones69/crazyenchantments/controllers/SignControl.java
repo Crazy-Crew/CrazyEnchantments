@@ -40,9 +40,9 @@ public class SignControl implements Listener {
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
-    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
+    //private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
 
-    private final Scrambler scrambler = plugin.getScrambler();
+    //private final Scrambler scrambler = plugin.getScrambler();
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -94,8 +94,8 @@ public class SignControl implements Listener {
                             if (config.contains("Settings.SignOptions." + o + "Style.Buy-Message")) player.sendMessage(methods.color(methods.getPrefix() + config.getString("Settings.SignOptions." + o + "Style.Buy-Message")));
 
                             switch (o) {
-                                case "ProtectionCrystal" -> player.getInventory().addItem(protectionCrystal.getCrystals());
-                                case "Scrambler" -> player.getInventory().addItem(scrambler.getScramblers());
+                                //case "ProtectionCrystal" -> player.getInventory().addItem(protectionCrystal.getCrystals());
+                                //case "Scrambler" -> player.getInventory().addItem(scrambler.getScramblers());
                                 case "DestroyDust" -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
                                 case "SuccessDust" -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                                 case "BlackScroll" -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());

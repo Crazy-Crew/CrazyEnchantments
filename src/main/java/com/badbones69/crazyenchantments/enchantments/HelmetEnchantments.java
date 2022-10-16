@@ -32,6 +32,7 @@ public class HelmetEnchantments implements Listener {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
                 if (crazyManager.hasEnchantment(armor, CEnchantments.COMMANDER)) {
                     int radius = 4 + crazyManager.getLevel(armor, CEnchantments.COMMANDER);
+
                     ArrayList<Player> players = new ArrayList<>();
 
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {

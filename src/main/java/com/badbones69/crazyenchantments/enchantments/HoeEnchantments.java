@@ -6,6 +6,9 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,30 +32,14 @@ public class HoeEnchantments implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
+    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
+
     private final Methods methods = plugin.getStarter().getMethods();
-
-    private List<Material> harvesterCrops;
-    private List<Material> seedlings;
-
-    private HashMap<Material, Material> planterSeeds;
 
     private final Random random = new Random();
     private final Material soilBlock = Material.FARMLAND;
     private final Material grassBlock = Material.GRASS_BLOCK;
     private final HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
-
-    /**
-     * Only has crop blocks
-     */
-    public List<Material> getHarvesterCrops() {
-        if (harvesterCrops == null) {
-            harvesterCrops = new ArrayList<>();
-            harvesterCrops.addAll(Arrays.asList(Material.WHEAT, Material.matchMaterial("CARROTS"), Material.matchMaterial("BEETROOTS"), Material.matchMaterial("POTATOES"), Material.matchMaterial("NETHER_WART")));
-            harvesterCrops.add(Material.COCOA);
-        }
-
-        return harvesterCrops;
-    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent e) {
@@ -66,12 +53,13 @@ public class HoeEnchantments implements Listener {
             List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(hoe);
 
             // Crop is not fully grown
-            if (CEnchantments.GREENTHUMB.isActivated() && enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment()) && getSeedlings().contains(block.getType()) && !crazyManager.getNMSSupport().isFullyGrown(block)) {
+            if (CEnchantments.GREENTHUMB.isActivated() && enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment()) && enchantmentSettings.getSeedlings().contains(block.getType()) && !crazyManager.getNMSSupport().isFullyGrown(block)) {
                 fullyGrowPlant(hoe, block, player);
 
                 if (player.getGameMode() != GameMode.CREATIVE) methods.removeDurability(hoe, player);
             }
 
+            assert block != null;
             if (block.getType() == grassBlock || block.getType() == Material.DIRT || block.getType() == Material.SOUL_SAND || block.getType() == soilBlock) {
                 boolean hasGreenThumb = CEnchantments.GREENTHUMB.isActivated() && enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment());
 
@@ -113,7 +101,7 @@ public class HoeEnchantments implements Listener {
             Player player = event.getPlayer();
             Block plant = event.getBlock();
 
-            if (!getHarvesterCrops().contains(plant.getType())) return;
+            if (!enchantmentSettings.getHarvesterCrops().contains(plant.getType())) return;
 
             ItemStack hoe = methods.getItemInHand(player);
             List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(hoe);
@@ -224,42 +212,15 @@ public class HoeEnchantments implements Listener {
         return false;
     }
 
-    /**
-     * Includes crop blocks and stems
-     */
-    private List<Material> getSeedlings() {
-        if (seedlings == null) {
-            seedlings = new ArrayList<>();
-            seedlings.addAll(Arrays.asList(Material.WHEAT, Material.CARROTS, Material.MELON_STEM, Material.PUMPKIN_STEM, Material.COCOA, Material.BEETROOTS, Material.POTATOES, Material.NETHER_WART));
-        }
-
-        return seedlings;
-    }
-
     private Material getPlanterSeed(ItemStack item) {
-        return item != null ? getPlanterSeed(item.getType()) : null;
-    }
-
-    private Material getPlanterSeed(Material material) {
-        if (planterSeeds == null) {
-            planterSeeds = new HashMap<>(); // Key == Item : Value == BlockType
-            planterSeeds.put(Material.WHEAT_SEEDS, Material.WHEAT);
-            planterSeeds.put(Material.BEETROOT_SEEDS, Material.BEETROOTS);
-            planterSeeds.put(Material.POTATO, Material.POTATOES);
-            planterSeeds.put(Material.CARROT, Material.CARROTS);
-            planterSeeds.put(Material.NETHER_WART, Material.NETHER_WART);
-            planterSeeds.put(Material.MELON_SEEDS, Material.MELON_STEM);
-            planterSeeds.put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
-        }
-
-        return material != null ? planterSeeds.get(material) : null;
+        return item != null ? enchantmentSettings.getPlanterSeed(item.getType()) : null;
     }
 
     private List<Block> getAreaCrops(Player player, Block block, BlockFace blockFace) {
         List<Block> blockList = new ArrayList<>();
 
         for (Block crop : getAreaBlocks(block, blockFace, 0, 1)) { // Radius of 1 is 3x3
-            if (getHarvesterCrops().contains(crop.getType()) && crazyManager.getNMSSupport().isFullyGrown(crop)) {
+            if (enchantmentSettings.getHarvesterCrops().contains(crop.getType()) && crazyManager.getNMSSupport().isFullyGrown(crop)) {
                 BlockBreakEvent useEvent = new BlockBreakEvent(crop, player);
                 crazyManager.addIgnoredEvent(useEvent);
                 plugin.getServer().getPluginManager().callEvent(useEvent);

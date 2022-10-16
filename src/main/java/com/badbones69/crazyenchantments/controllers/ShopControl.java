@@ -15,7 +15,6 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
-import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,9 +37,9 @@ public class ShopControl implements Listener {
 
     private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
 
-    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
+    // private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
 
-    private final Scrambler scrambler = plugin.getScrambler();
+    // private final Scrambler scrambler = plugin.getScrambler();
 
     private final Methods methods = plugin.getStarter().getMethods();
 
@@ -156,10 +155,10 @@ public class ShopControl implements Listener {
                             }
 
                             case INFO -> infoMenuManager.openInfoMenu(player);
-                            case PROTECTION_CRYSTAL -> player.getInventory().addItem(protectionCrystal.getCrystals());
+                            //case PROTECTION_CRYSTAL -> player.getInventory().addItem(protectionCrystal.getCrystals());
                             case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                             case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
-                            case SCRAMBLER -> player.getInventory().addItem(scrambler.getScramblers());
+                            //case SCRAMBLER -> player.getInventory().addItem(scrambler.getScramblers());
                             case BLACK_SCROLL -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
                             case WHITE_SCROLL -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
                             case TRANSMOG_SCROLL -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());

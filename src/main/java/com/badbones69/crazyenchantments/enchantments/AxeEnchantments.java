@@ -40,6 +40,7 @@ public class AxeEnchantments implements Listener {
 
         if (!(e.getEntity() instanceof LivingEntity entity)) return;
         if (!(e.getDamager() instanceof Player damager)) return;
+
         ItemStack item = methods.getItemInHand(damager);
 
         if (entity.isDead()) return;
@@ -143,8 +144,8 @@ public class AxeEnchantments implements Listener {
         bad.add(PotionEffectType.WEAKNESS);
         bad.add(PotionEffectType.WITHER);
 
-        for (PotionEffectType p : bad) {
-            if (player.hasPotionEffect(p)) player.removePotionEffect(p);
+        for (PotionEffectType potionEffectType : bad) {
+            if (player.hasPotionEffect(potionEffectType)) player.removePotionEffect(potionEffectType);
         }
     }
 }

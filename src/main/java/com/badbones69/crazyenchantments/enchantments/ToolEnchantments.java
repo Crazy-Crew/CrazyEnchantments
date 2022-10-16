@@ -7,12 +7,12 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.google.common.collect.Lists;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,12 +31,11 @@ public class ToolEnchantments implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final HoeEnchantments hoeEnchantments = plugin.getHoes();
+    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
 
     private final Methods methods = plugin.getStarter().getMethods();
 
-    private final Random random = new Random();
-    private final List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
+    private final List<String> ignoreBlockTypes = Lists.newArrayList("air", "shulker_box", "chest", "head", "skull");
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerClick(PlayerInteractEvent e) {
@@ -59,12 +58,11 @@ public class ToolEnchantments implements Listener {
 
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
                 // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
-                if ((hoeEnchantments.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
+                if ((enchantmentSettings.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
                         // This checks if the block is a spawner and if so the spawner classes will take care of this.
                         // If Epic Spawners is enabled then telepathy will give the item from the API.
                         // Otherwise, CE will ignore the spawner in this event.
                         (block.getType() == Material.SPAWNER)) return;
-
 
                 EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
                 plugin.getServer().getPluginManager().callEvent(useEvent);
@@ -72,7 +70,7 @@ public class ToolEnchantments implements Listener {
                 if (!useEvent.isCancelled()) {
                     event.setExpToDrop(0);
                     event.setDropItems(false);
-                    TelepathyDrop drop = getTelepathyDrops(new BlockProcessInfo(item, block));
+                    TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(item, block));
 
                     if (methods.isInventoryFull(player)) {
                         player.getWorld().dropItem(player.getLocation(), drop.getItem());
@@ -95,76 +93,6 @@ public class ToolEnchantments implements Listener {
                 }
             }
         }
-    }
-
-    public TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
-        ItemStack item = processInfo.getItem();
-        Block block = processInfo.getBlock();
-        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
-        List<Block> sugarCaneBlocks = new ArrayList<>();
-        boolean isOre = isOre(block);
-        boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
-        boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
-        boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
-        boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
-        ItemBuilder itemDrop = null;
-        int xp = 0;
-
-        for (ItemStack drop : processInfo.getDrops()) {
-
-            // Amount is set to 0 as it adds to the drop amount and so it would add 1 to many.
-
-            if (itemDrop == null) itemDrop = new ItemBuilder().setMaterial(drop.getType()).setAmount(0);
-
-            if (!hasSilkTouch) {
-                if (hasFurnace && isOre) {
-                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(0);
-                } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(crazyManager.getLevel(item, CEnchantments.AUTOSMELT));
-                }
-
-                if (hasOreXP(block)) {
-                    xp = methods.percentPick(7, 3);
-                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
-                }
-            }
-
-            if (block.getType() == Material.SUGAR_CANE) {
-                sugarCaneBlocks = getSugarCaneBlocks(block);
-                drop.setAmount(sugarCaneBlocks.size());
-            }
-
-            itemDrop.addAmount(drop.getAmount());
-        }
-
-        if (itemDrop == null) {
-            // In case the drop is still null as no drops were found.
-            itemDrop = new ItemBuilder().setMaterial(block.getType());
-        }
-
-        // Coco drops 2-3 beans.
-        if (block.getType() == Material.COCOA) itemDrop.setMaterial(Material.COCOA_BEANS).setAmount(crazyManager.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
-
-        if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.BEETROOT_SEEDS) {
-            itemDrop.setAmount(random.nextInt(3)); // Wheat and BeetRoots drops 0-3 seeds.
-        } else if (itemDrop.getMaterial() == Material.POTATO || itemDrop.getMaterial() == Material.CARROT) {
-            itemDrop.setAmount(random.nextInt(4) + 1); // Carrots and Potatoes drop 1-4 of them self's.
-        }
-
-        return new TelepathyDrop(itemDrop.build(), xp, sugarCaneBlocks);
-    }
-
-    private List<Block> getSugarCaneBlocks(Block block) {
-        List<Block> sugarCaneBlocks = new ArrayList<>();
-        Block cane = block;
-
-        while (cane.getType() == Material.SUGAR_CANE) {
-            sugarCaneBlocks.add(cane);
-            cane = cane.getLocation().add(0, 1, 0).getBlock();
-        }
-
-        Collections.reverse(sugarCaneBlocks);
-        return sugarCaneBlocks;
     }
 
     private void updateEffects(Player player) {
@@ -203,47 +131,5 @@ public class ToolEnchantments implements Listener {
         }
 
         return false;
-    }
-
-    private boolean hasOreXP(Block block) {
-        return switch (block.getType()) {
-            case COAL_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
-            default -> false;
-        };
-    }
-
-    private boolean isOre(Block block) {
-        return switch (block.getType()) {
-            case COAL_ORE,
-                    IRON_ORE,
-                    GOLD_ORE,
-                    DIAMOND_ORE,
-                    EMERALD_ORE,
-                    LAPIS_ORE,
-                    REDSTONE_ORE,
-                    NETHER_QUARTZ_ORE -> true;
-            default -> false;
-        };
-    }
-
-    private ItemStack getOreDrop(Block block) {
-        ItemBuilder dropItem = new ItemBuilder();
-
-        if (block.getType() == Material.NETHER_QUARTZ_ORE) {
-            dropItem.setMaterial(Material.QUARTZ);
-        } else {
-            switch (block.getType()) {
-                case COAL_ORE -> dropItem.setMaterial(Material.COAL);
-                case IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
-                case GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
-                case DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
-                case EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
-                case LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
-                case REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
-                default -> dropItem.setMaterial(Material.AIR);
-            }
-        }
-
-        return dropItem.build();
     }
 }

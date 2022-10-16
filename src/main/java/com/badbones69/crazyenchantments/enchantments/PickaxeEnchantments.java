@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -37,9 +38,9 @@ public class PickaxeEnchantments implements Listener {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
+    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
 
-    private final ToolEnchantments toolEnchantments = plugin.getTools();
+    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
 
     private final Methods methods = plugin.getStarter().getMethods();
 
@@ -129,7 +130,7 @@ public class PickaxeEnchantments implements Listener {
                     }
 
                     if (hasTelepathy) {
-                        TelepathyDrop drop = toolEnchantments.getTelepathyDrops(processInfo);
+                        TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(processInfo);
                         drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
                         xp += drop.getXp();
                     } else {
