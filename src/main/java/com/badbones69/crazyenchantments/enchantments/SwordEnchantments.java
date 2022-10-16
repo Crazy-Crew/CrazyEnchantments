@@ -3,9 +3,7 @@ package com.badbones69.crazyenchantments.enchantments;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -17,9 +15,7 @@ import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSuppor
 import com.badbones69.crazyenchantments.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -37,10 +33,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.*;
 
-public class Swords implements Listener {
+public class SwordEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 

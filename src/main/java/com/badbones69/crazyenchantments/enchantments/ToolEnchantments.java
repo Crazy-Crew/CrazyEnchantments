@@ -23,19 +23,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.*;
 
-public class Tools implements Listener {
+public class ToolEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-    
+
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
-    private final Hoes hoes = plugin.getHoes();
+    private final HoeEnchantments hoeEnchantments = plugin.getHoes();
 
     private final Methods methods = plugin.getStarter().getMethods();
-    
+
     private final Random random = new Random();
     private final List<String> ignoreBlockTypes = Arrays.asList("air", "shulker_box", "chest", "head", "skull");
 
@@ -60,7 +59,7 @@ public class Tools implements Listener {
 
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
                 // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
-                if ((hoes.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
+                if ((hoeEnchantments.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
                         // This checks if the block is a spawner and if so the spawner classes will take care of this.
                         // If Epic Spawners is enabled then telepathy will give the item from the API.
                         // Otherwise, CE will ignore the spawner in this event.

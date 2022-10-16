@@ -12,8 +12,8 @@ import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.api.objects.PotionEffects;
-import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.processors.Processor;
 import org.bukkit.*;
@@ -36,11 +36,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 
-public class Armor implements Listener {
+public class ArmorEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    // Settings
+    private final ProtectionCrystalSettings protectionCrystalSettings = plugin.getProtectionCrystalSettings();
+    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
 
     private final Methods methods = plugin.getStarter().getMethods();
 
@@ -48,16 +52,9 @@ public class Armor implements Listener {
 
     private final ArmorEnchantmentManager armorEnchantmentManager = plugin.getStarter().getArmorEnchantmentManager();
 
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
-
-    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
-
-    private final List<Player> fall = new ArrayList<>();
-    private final HashMap<Player, HashMap<CEnchantments, Calendar>> timer = new HashMap<>();
-
     private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
 
-    public Armor() {
+    public ArmorEnchantments() {
         armorMoveProcessor.start();
     }
 
@@ -144,11 +141,12 @@ public class Armor implements Listener {
                         if (!useEvent.isCancelled()) {
                             plugin.getServer().getScheduler().runTaskLater(plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
 
-                            fall.add(player);
+                            enchantmentSettings.addFallenPlayer(player);
+
                             player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
 
                             plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                                fall.remove(player);
+                                enchantmentSettings.removeFallenPlayer(player);
                             }, 8 * 20);
 
                         }
@@ -210,7 +208,7 @@ public class Armor implements Listener {
 
                             // AntiCheat Support.
 
-                            if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+                            //if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
                             //if (SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(player);
 
@@ -219,7 +217,7 @@ public class Armor implements Listener {
                                 methods.entityEvent(player, en, damageByEntityEvent);
                             }
 
-                            if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+                            //if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
                             damager.damage(5D);
                         }
@@ -266,9 +264,7 @@ public class Armor implements Listener {
             Calendar cal = Calendar.getInstance();
             HashMap<CEnchantments, Calendar> effect = new HashMap<>();
 
-            if (timer.containsKey(other)) {
-                effect = timer.get(other);
-            }
+            if (enchantmentSettings.containsTimerPlayer(other)) effect = enchantmentSettings.getTimerPlayer(other);
 
             HashMap<CEnchantments, Calendar> finalEffect = effect;
 
@@ -282,10 +278,10 @@ public class Armor implements Listener {
                 }
 
                 case ACIDRAIN -> {
-                    if (CEnchantments.ACIDRAIN.isActivated() && (!timer.containsKey(other) ||
-                            (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
-                            (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
-                                    cal.after(timer.get(other).get(enchant))
+                    if (CEnchantments.ACIDRAIN.isActivated() && (!enchantmentSettings.containsTimerPlayer(other) ||
+                            (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
+                            (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
+                                    cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))
                                     && CEnchantments.ACIDRAIN.chanceSuccessful()))) {
                         other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
                         int time = 35 - (level * 5);
@@ -295,10 +291,10 @@ public class Armor implements Listener {
                 }
 
                 case SANDSTORM -> {
-                    if (CEnchantments.SANDSTORM.isActivated() && (!timer.containsKey(other) ||
-                            (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
-                            (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
-                                    cal.after(timer.get(other).get(enchant))
+                    if (CEnchantments.SANDSTORM.isActivated() && (!enchantmentSettings.containsTimerPlayer(other) ||
+                            (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
+                            (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
+                                    cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))
                                     && CEnchantments.SANDSTORM.chanceSuccessful()))) {
                         other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
                         int time = 35 - (level * 5);
@@ -308,10 +304,10 @@ public class Armor implements Listener {
                 }
 
                 case RADIANT -> {
-                    if (CEnchantments.RADIANT.isActivated() && (!timer.containsKey(other) ||
-                            (timer.containsKey(other) && !timer.get(other).containsKey(enchant)) ||
-                            (timer.containsKey(other) && timer.get(other).containsKey(enchant) &&
-                                    cal.after(timer.get(other).get(enchant))
+                    if (CEnchantments.RADIANT.isActivated() && (!enchantmentSettings.containsTimerPlayer(other) ||
+                            (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
+                            (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
+                                    cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))
                                     && CEnchantments.RADIANT.chanceSuccessful()))) {
                         other.setFireTicks(5 * 20);
                         int time = 20 - (level * 5);
@@ -323,7 +319,7 @@ public class Armor implements Listener {
                 default -> {}
             }
 
-            timer.put(other, effect);
+            enchantmentSettings.addTimerPlayer(player, effect);
         }
     }
 
@@ -356,7 +352,7 @@ public class Armor implements Listener {
                         List<ItemStack> items = new ArrayList<>();
 
                         for (ItemStack drop : e.getDrops()) {
-                            if (drop != null && protectionCrystal.isProtected(drop) && protectionCrystal.isProtectionSuccessful(player)) items.add(drop);
+                            if (drop != null && protectionCrystalSettings.isProtected(drop) && protectionCrystalSettings.isProtectionSuccessful(player)) items.add(drop);
                         }
 
                         e.getDrops().clear();
@@ -384,7 +380,7 @@ public class Armor implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerFallDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        if (!fall.contains(player)) return;
+        if (!enchantmentSettings.containsFallenPlayer(player)) return;
         if (!DamageCause.FALL.equals(event.getCause())) return;
         event.setCancelled(true);
     }

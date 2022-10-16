@@ -31,7 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class PickAxes implements Listener {
+public class PickaxeEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
@@ -39,7 +39,7 @@ public class PickAxes implements Listener {
 
     private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
 
-    private final Tools tools = plugin.getTools();
+    private final ToolEnchantments toolEnchantments = plugin.getTools();
 
     private final Methods methods = plugin.getStarter().getMethods();
 
@@ -129,7 +129,7 @@ public class PickAxes implements Listener {
                     }
 
                     if (hasTelepathy) {
-                        TelepathyDrop drop = tools.getTelepathyDrops(processInfo);
+                        TelepathyDrop drop = toolEnchantments.getTelepathyDrops(processInfo);
                         drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
                         xp += drop.getXp();
                     } else {

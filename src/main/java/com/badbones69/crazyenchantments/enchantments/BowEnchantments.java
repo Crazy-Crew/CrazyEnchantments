@@ -5,14 +5,12 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -29,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
-public class Bows implements Listener {
+public class BowEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 

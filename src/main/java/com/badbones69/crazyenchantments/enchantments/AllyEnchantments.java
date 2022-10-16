@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.api.objects.AllyMob.AllyType;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,10 +19,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.UUID;
 
 public class AllyEnchantments implements Listener {
 
@@ -31,7 +29,7 @@ public class AllyEnchantments implements Listener {
 
     private final AllyManager allyManager = plugin.getStarter().getAllyManager();
 
-    private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
+    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAllySpawn(EntityDamageByEntityEvent e) {
@@ -142,7 +140,8 @@ public class AllyEnchantments implements Listener {
     private void spawnAllies(Player player, LivingEntity enemy, AllyType allyType, int amount) {
         Calendar coolDown = Calendar.getInstance();
         coolDown.add(Calendar.MINUTE, 2);
-        allyCoolDown.put(player.getUniqueId(), coolDown);
+
+        enchantmentSettings.addAllyCooldown(player, coolDown);
 
         for (int i = 0; i < amount; i++) {
             AllyMob ally = new AllyMob(player, allyType);
@@ -152,12 +151,12 @@ public class AllyEnchantments implements Listener {
     }
 
     private boolean inCoolDown(Player player) {
-        if (allyCoolDown.containsKey(player.getUniqueId())) {
+        if (enchantmentSettings.containsAllyPlayer(player)) {
             // Right now is before the player's cooldown ends.
-            if (Calendar.getInstance().before(allyCoolDown.get(player.getUniqueId()))) return true;
+            if (Calendar.getInstance().before(enchantmentSettings.getAllyPlayer(player))) return true;
 
             // Remove the player because their cooldown is over.
-            allyCoolDown.remove(player.getUniqueId());
+            enchantmentSettings.removeAllyCooldown(player);
         }
 
         return false;
