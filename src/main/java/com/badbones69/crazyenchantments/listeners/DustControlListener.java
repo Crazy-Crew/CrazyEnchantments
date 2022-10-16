@@ -76,41 +76,22 @@ public class DustControlListener implements Listener {
     }
 
     public boolean hasPercent(Dust dust, ItemStack item) {
-        String arg = "";
+        String argument = verifyInteger(dust, item);
 
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-            List<String> lore = item.getItemMeta().getLore();
-            List<String> fileLore = Files.CONFIG.getFile().getStringList("Settings.Dust." + dust.getConfigName() + ".Lore");
-            int i = 0;
-
-            if (lore != null && lore.size() == fileLore.size()) {
-                for (String l : fileLore) {
-                    l = methods.color(l);
-                    String lo = lore.get(i);
-
-                    if (l.contains("%Percent%")) {
-                        String[] b = l.split("%Percent%");
-                        if (b.length >= 1) arg = lo.replace(b[0], "");
-                        if (b.length >= 2) arg = arg.replace(b[1], "");
-                        break;
-                    }
-
-                    if (l.contains("%percent%")) {
-                        String[] b = l.split("%percent%");
-                        if (b.length >= 1) arg = lo.replace(b[0], "");
-                        if (b.length >= 2) arg = arg.replace(b[1], "");
-                        break;
-                    }
-
-                    i++;
-                }
-            }
-        }
-
-        return methods.isInt(arg);
+        return methods.isInt(argument);
     }
 
     public int getPercent(Dust dust, ItemStack item) {
+        String argument = verifyInteger(dust, item);
+
+        if (methods.isInt(argument)) {
+            return Integer.parseInt(argument);
+        } else {
+            return 0;
+        }
+    }
+
+    private String verifyInteger(Dust dust, ItemStack item) {
         String arg = "";
 
         if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
@@ -142,11 +123,7 @@ public class DustControlListener implements Listener {
             }
         }
 
-        if (methods.isInt(arg)) {
-            return Integer.parseInt(arg);
-        } else {
-            return 0;
-        }
+        return arg;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -230,13 +207,9 @@ public class DustControlListener implements Listener {
 
             if (item != null) {
                 if (hasPercent(Dust.SUCCESS_DUST, item)) {
-
                     if (methods.isSimilar(item, Dust.SUCCESS_DUST.getDust(getPercent(Dust.SUCCESS_DUST, item), 1))) e.setCancelled(true);
-
                 } else if (hasPercent(Dust.DESTROY_DUST, item)) {
-
                     if (methods.isSimilar(item, Dust.DESTROY_DUST.getDust(getPercent(Dust.DESTROY_DUST, item), 1))) e.setCancelled(true);
-
                 } else if (hasPercent(Dust.MYSTERY_DUST, item) && methods.isSimilar(item, Dust.MYSTERY_DUST.getDust(getPercent(Dust.MYSTERY_DUST, item), 1))) {
                     e.setCancelled(true);
                     methods.setItemInHand(player, methods.removeItem(item));
