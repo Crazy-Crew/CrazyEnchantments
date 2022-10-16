@@ -23,21 +23,20 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Tinkerer implements Listener {
-    
+
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-    
+
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-    
+
     private final Methods methods = plugin.getStarter().getMethods();
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
-    
+
     public void openTinker(Player player) {
         Inventory inv = plugin.getServer().createInventory(null, 54, methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
         inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
@@ -60,7 +59,7 @@ public class Tinkerer implements Listener {
         .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
         player.openInventory(inv);
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onXPUse(PlayerInteractEvent e) {
         Player player = e.getPlayer();
@@ -80,13 +79,13 @@ public class Tinkerer implements Listener {
             }
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         Inventory inv = e.getInventory();
         Player player = (Player) e.getWhoClicked();
 
-        if (inv != null && e.getView().getTitle().equals(methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
+        if (e.getView().getTitle().equals(methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
             e.setCancelled(true);
             ItemStack current = e.getCurrentItem();
 
@@ -189,14 +188,14 @@ public class Tinkerer implements Listener {
             }
         }
     }
-    
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInvClose(final InventoryCloseEvent e) {
         Inventory inv = e.getInventory();
         Player player = (Player) e.getPlayer();
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            if (inv != null && e.getView().getTitle().equals(methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
+            if (e.getView().getTitle().equals(methods.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
                 for (int slot : getSlot().keySet()) {
                     if (inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR) {
                         if (player.isDead()) {
@@ -215,7 +214,7 @@ public class Tinkerer implements Listener {
             }
         }, 0);
     }
-    
+
     private ItemStack getBottle(ItemStack item) {
         String id = Files.TINKER.getFile().getString("Settings.BottleOptions.Item");
         String name = Files.TINKER.getFile().getString("Settings.BottleOptions.Name");
@@ -228,7 +227,7 @@ public class Tinkerer implements Listener {
         assert id != null;
         return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).build();
     }
-    
+
     private HashMap<Integer, Integer> getSlot() {
         HashMap<Integer, Integer> slots = new HashMap<>();
 
@@ -258,12 +257,12 @@ public class Tinkerer implements Listener {
 
         return slots;
     }
-    
+
     private boolean inTinker(int slot) {
         // The last slot in the tinker is 54
         return slot < 54;
     }
-    
+
     private int getTotalXP(ItemStack item) {
         int total = 0;
 
@@ -281,7 +280,7 @@ public class Tinkerer implements Listener {
 
         return total;
     }
-    
+
     private Integer getXP(ItemStack item) {
         String arg = "";
         int i = 0;

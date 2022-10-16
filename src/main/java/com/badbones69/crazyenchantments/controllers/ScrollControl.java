@@ -107,6 +107,7 @@ public class ScrollControl implements Listener {
                 }
 
                 List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     e.setCancelled(true);
                     player.setItemOnCursor(methods.removeItem(scroll));
@@ -126,7 +127,7 @@ public class ScrollControl implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onClick(PlayerInteractEvent e) {
+    public void onScrollClick(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         ItemStack scroll = methods.getItemInHand(player);
 
@@ -140,7 +141,7 @@ public class ScrollControl implements Listener {
         }
     }
 
-    public ItemStack orderEnchantments(ItemStack item) {
+    private ItemStack orderEnchantments(ItemStack item) {
         HashMap<CEnchantment, Integer> enchantmentLevels = new HashMap<>();
         HashMap<CEnchantment, Integer> categories = new HashMap<>();
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
@@ -192,13 +193,11 @@ public class ScrollControl implements Listener {
         return item;
     }
 
-    private List<CEnchantment> orderInts(List<CEnchantment> list, final Map<CEnchantment, Integer> map) {
+    private void orderInts(List<CEnchantment> list, final Map<CEnchantment, Integer> map) {
         list.sort((a1, a2) -> {
             Integer string1 = map.get(a1);
             Integer string2 = map.get(a2);
             return string2.compareTo(string1);
         });
-
-        return list;
     }
 }

@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class CommandChecker implements Listener {
 
     private final List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
     private final ItemStack air = new ItemStack(Material.AIR);
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClear(PlayerCommandPreprocessEvent e) {
         Player player = e.getPlayer();
@@ -41,7 +40,7 @@ public class CommandChecker implements Listener {
             updateEffects(player);
         }
     }
-    
+
     private void updateEffects(Player player) {
         new BukkitRunnable() {
             @Override

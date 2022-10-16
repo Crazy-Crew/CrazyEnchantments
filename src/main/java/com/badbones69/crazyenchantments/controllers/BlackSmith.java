@@ -18,7 +18,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -131,11 +130,11 @@ public class BlackSmith implements Listener {
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onInvClose(InventoryCloseEvent e) {
         Inventory inventory = e.getInventory();
 
-        if (inventory != null && e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
+        if (e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
             Player player = (Player) e.getPlayer();
 
             for (int slot : Arrays.asList(mainSlot, subSlot)) {

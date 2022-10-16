@@ -227,7 +227,7 @@ public class EnchantmentControl implements Listener {
     public void onMilkDrink(PlayerItemConsumeEvent e) {
         Player player = e.getPlayer();
 
-        if (e.getItem() != null && e.getItem().getType() == Material.MILK_BUCKET) {
+        if (e.getItem().getType() == Material.MILK_BUCKET) {
             new BukkitRunnable() {
                 @Override
                 public void run() {

@@ -89,7 +89,7 @@ public class AuraListener implements Listener {
         return Arrays.stream(AURA_ENCHANTMENTS).filter(enchantmentEnum -> enchantmentEnum.getName().equals(enchantment.getName())).findFirst().orElse(null);
     }
 
-    private static List<Player> getNearbyPlayers(Player player) {
+    private List<Player> getNearbyPlayers(Player player) {
         List<Player> players = new ArrayList<>();
 
         for (Entity entity : player.getNearbyEntities(3, 3, 3)) {

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.controllers;
+package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import org.bukkit.NamespacedKey;
@@ -10,11 +10,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-public class FireworkDamage implements Listener {
+public class FireworkDamageListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    NamespacedKey noDamage = new NamespacedKey(plugin, "no-damage");
+    private final NamespacedKey noDamage = new NamespacedKey(plugin, "no-damage");
 
     /**
      * @param firework The firework you want to add.

@@ -21,7 +21,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +34,7 @@ public class GKitzController implements Listener {
     private final Methods methods = plugin.getStarter().getMethods();
 
     private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
-    
+
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
         Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), methods.color(gkitz.getString("Settings.Inventory-Name")));
@@ -76,7 +75,7 @@ public class GKitzController implements Listener {
 
         player.openInventory(inventory);
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
         Inventory inventory = e.getInventory();

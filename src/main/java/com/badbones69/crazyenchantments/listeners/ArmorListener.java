@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
+import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -49,12 +50,12 @@ public class ArmorListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public final void onInventoryClick(InventoryClickEvent e) {
         boolean shift = false;
-        boolean numberkey = false;
+        boolean numberKey = false;
         Player player = (Player) e.getWhoClicked();
 
         if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT)) shift = true;
 
-        if (e.getClick().equals(ClickType.NUMBER_KEY)) numberkey = true;
+        if (e.getClick().equals(ClickType.NUMBER_KEY)) numberKey = true;
 
         if ((e.getSlotType() != SlotType.ARMOR || e.getSlotType() != SlotType.QUICKBAR) &&
         !(e.getInventory().getType().equals(InventoryType.CRAFTING) || e.getInventory().getType().equals(InventoryType.PLAYER))) return;
@@ -96,17 +97,17 @@ public class ArmorListener implements Listener {
 
             if (oldArmorPiece == null) oldArmorPiece = new ItemStack(Material.AIR);
 
-            if (numberkey) {
+            if (numberKey) {
                 if (e.getInventory().getType().equals(InventoryType.PLAYER)) { // Prevents shit in the 2by2 crafting
                     // e.getClickedInventory() == The players inventory
                     // e.getHotBarButton() == key people are pressing to equip or unequip the item to or from.
                     // e.getRawSlot() == The slot the item is going to.
                     // e.getSlot() == Armor slot, can't use e.getRawSlot() as that gives a hotbar slot ;-;
-                    ItemStack hotbarItem = e.getInventory().getItem(e.getHotbarButton());
+                    ItemStack hotBarItem = e.getInventory().getItem(e.getHotbarButton());
 
-                    if (hotbarItem != null) { // Equipping
-                        newArmorType = ArmorType.matchType(hotbarItem);
-                        newArmorPiece = hotbarItem;
+                    if (hotBarItem != null) { // Equipping
+                        newArmorType = ArmorType.matchType(hotBarItem);
+                        newArmorPiece = hotBarItem;
                         oldArmorPiece = e.getInventory().getItem(e.getSlot());
                     } else { // Unequipping
                         newArmorType = ArmorType.matchType(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR ? e.getCurrentItem() : e.getCursor());
@@ -121,7 +122,7 @@ public class ArmorListener implements Listener {
             if (newArmorType != null && e.getRawSlot() == newArmorType.getSlot()) {
                 EquipMethod method = EquipMethod.DRAG;
 
-                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = EquipMethod.HOTBAR_SWAP;
+                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberKey) method = EquipMethod.HOTBAR_SWAP;
 
                 final ItemStack It = newArmorPiece.clone();
                 final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
@@ -174,7 +175,7 @@ public class ArmorListener implements Listener {
 
                                 EquipMethod method = EquipMethod.DRAG;
 
-                                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = EquipMethod.HOTBAR_SWAP;
+                                if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberKey) method = EquipMethod.HOTBAR_SWAP;
 
                                 ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, method, newArmorType, oldArmorPiece, newArmorPiece);
                                 plugin.getServer().getPluginManager().callEvent(armorEquipEvent);

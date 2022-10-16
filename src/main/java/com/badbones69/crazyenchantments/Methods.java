@@ -22,7 +22,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -115,6 +114,7 @@ public class Methods {
 
     public ItemStack addGlow(ItemStack item, boolean toggle) {
         ItemStack it = item.clone();
+
         try {
             if (toggle) {
                 if (item.hasItemMeta()) {
