@@ -1,7 +1,10 @@
 [versions]
 
-# Spigot Team
-spigot = "1.19.2-R0.1-SNAPSHOT"
+# Spigot/Paper Team
+minecraft = "1.19.2-R0.1-SNAPSHOT"
+
+# Triumph Team
+triumph-gui = "3.1.2"
 
 # EngineHub Team
 engine-hub = "7.0.0-SNAPSHOT"
@@ -26,12 +29,15 @@ silk-spawners-api = "7.2.0"
 
 oraxen-api = "master-SNAPSHOT"
 
+spartan-api = "9.1"
+
 # Claim Plugins
 factions-uuid-api = "1.6.9.5-U0.6.9"
 
 towny-api = "0.98.3.10"
 
-plot-bom = "1.16"
+plot-annotations = "1.2"
+plot-paster = "1.1.4"
 plot-api = "6.10.1"
 
 gp-api = "16.18"
@@ -39,10 +45,13 @@ gp-api = "16.18"
 [libraries]
 
 # Paper Team
-paper = { module = "io.papermc.paper:paper-api", version.ref = "spigot" }
+paper = { module = "io.papermc.paper:paper-api", version.ref = "minecraft" }
 
 # Spigot Team
-spigot = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+spigot = { module = "org.spigotmc:spigot-api", version.ref = "minecraft" }
+
+# Triumph Team
+triumph-gui = { module = "dev.triumphteam:triumph-gui", version.ref = "triumph-gui" }
 
 # EngineHub Team
 bukkit-worldedit = { module = "com.sk89q.worldguard:worldguard-legacy", version.ref = "engine-hub" }
@@ -68,16 +77,18 @@ silk-spawners-api = { module = "de.dustplanet:silkspawners", version.ref = "silk
 
 oraxen-api = { module = "com.github.oraxen:oraxen", version.ref = "oraxen-api" }
 
+spartan-api = { module = "me.vagdedes.spartan:SpartanAPI", version.ref = "spartan-api" }
+
 # Claim Plugins
 
 grief-prevention-api = { module = "com.github.TechFortress:GriefPrevention", version.ref = "gp-api" }
 
-plot-squared-bukkit = { module = "com.plotsquared:PlotSquared-Bukkit", version.ref = "plot-api"}
-
 factions-uuid-api = { module = "com.massivecraft:Factions", version.ref = "factions-uuid-api" }
 
-plot-squared-core = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plot-api"}
+plot-squared-annotations = { module = "com.intellectualsites.informative-annotations:informative-annotations", version.ref = "plot-annotations" }
 
-plot-squared-bom = { module = "com.intellectualsites.bom:bom-1.18.x", version.ref = "plot-bom" }
+plot-squared-paster = { module = "com.intellectualsites.paster:Paster", version.ref = "plot-paster" }
+
+plot-squared-core = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plot-api"}
 
 towny-api = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny-api" }

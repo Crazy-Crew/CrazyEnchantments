@@ -60,9 +60,10 @@ repositories {
     maven("https://repo.bg-software.com/repository/api/")
 
     /**
-     * Spartan Team
+     * CrazyCrew Repository
+     * All 3rd party dependencies
      */
-    // maven("https://nexus.sparky.ac/repository/Sparky/")
+    maven("https://repo.badbones69.com/plugins/")
 
     /**
      * EngineHub Team
@@ -78,15 +79,8 @@ repositories {
 }
 
 dependencies {
-
-    // TODO() Disabled because its asking for things to be added that I don't want at the moment.
-    // implementation(libs.plot.squared.bom)
-    compileOnly(libs.plot.squared.core)
-
-    //compileOnly(libs.plot.squared.bukkit) { isTransitive = false }
-
-    implementation("com.intellectualsites.paster:Paster:1.1.4")
-    implementation("com.intellectualsites.informative-annotations:informative-annotations:1.2")
+    implementation(libs.plot.squared.annotations)
+    implementation(libs.plot.squared.paster)
 
     implementation(libs.bukkit.bstats)
 
@@ -102,8 +96,12 @@ dependencies {
         exclude("org.bstats", "bstats-bukkit")
     }
 
+    compileOnly(libs.plot.squared.core)
+
     // Anti-cheats
     compileOnly(libs.ncp.api)
+
+    compileOnly(libs.spartan.api)
 
     // BG Software Team
     compileOnly(libs.superior.skyblock)
