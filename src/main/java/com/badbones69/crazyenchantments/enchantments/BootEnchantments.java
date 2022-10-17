@@ -1,11 +1,14 @@
 package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.managers.WingsManager;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -26,11 +29,17 @@ public class BootEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
+    // Plugin Support.
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
+
+    // Plugin Managers.
+    private final WingsManager wingsManager = starter.getWingsManager();
 
     public void startWings() {
         if (wingsManager.isWingsEnabled()) {
@@ -70,7 +79,7 @@ public class BootEnchantments implements Listener {
         if (!regionCheck(player)) return;
         if (areEnemiesNearby(player)) return;
 
-        // if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNormalMovements(player);
+        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNormalMovements(player);
 
         if (event.isFlying()) {
             if (player.getAllowFlight()) {
@@ -121,7 +130,7 @@ public class BootEnchantments implements Listener {
         if (!regionCheck(player)) return;
         if (areEnemiesNearby(player)) return;
 
-        // if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNormalMovements(player);
+        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNormalMovements(player);
 
         player.setAllowFlight(true);
         wingsManager.addFlyingPlayer(player);

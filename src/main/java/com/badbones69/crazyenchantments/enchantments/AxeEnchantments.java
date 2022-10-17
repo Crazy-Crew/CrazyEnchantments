@@ -2,12 +2,15 @@ package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -27,11 +30,16 @@ public class AxeEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
+
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -70,7 +78,7 @@ public class AxeEnchantments implements Listener {
             if (!useEvent.isCancelled()) {
                 int food = 2 * crazyManager.getLevel(item, CEnchantments.FEEDME);
 
-                // if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelFastEat(damager);
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(damager);
 
                 if (damager.getFoodLevel() + food < 20) damager.setFoodLevel((int) (damager.getSaturation() + food));
 

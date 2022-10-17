@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.controllers;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
@@ -31,11 +32,14 @@ public class Tinkerer implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    // Economy Management.
+    private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
     public void openTinker(Player player) {
         Inventory inv = plugin.getServer().createInventory(null, 54, methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));

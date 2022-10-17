@@ -2,11 +2,11 @@ package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
-import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -35,13 +35,15 @@ import java.util.List;
  */
 public class ArmorListener implements Listener {
 
-    private final List<String> blockedMaterials;
-
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = starter.getMethods();
+
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final List<String> blockedMaterials;
 
     public ArmorListener() {
         this.blockedMaterials = getBlocks();

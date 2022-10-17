@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.controllers;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
@@ -25,13 +26,18 @@ public class BlackSmith implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
+    private final Methods methods = starter.getMethods();
 
-    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    // Plugin Managers.
+    private final BlackSmithManager blackSmithManager = starter.getBlackSmithManager();
+
+    // Economy Management.
+    private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
+
     private final int mainSlot = 10;
     private final int subSlot = 13;
     private final static int resultSlot = 16;

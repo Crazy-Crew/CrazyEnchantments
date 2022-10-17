@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.commands;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,7 +14,9 @@ public class GkitzTab implements TabCompleter {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
+
+    private final CrazyManager crazyManager = starter.getCrazyManager();
     
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {

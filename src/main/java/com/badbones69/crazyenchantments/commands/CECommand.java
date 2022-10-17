@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.commands;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -14,8 +15,9 @@ import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
-import com.badbones69.crazyenchantments.controllers.Scrambler;
-import com.badbones69.crazyenchantments.controllers.ShopControl;
+import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.listeners.ScramblerListener;
+import com.badbones69.crazyenchantments.listeners.ShopListener;
 import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,21 +37,28 @@ public class CECommand implements CommandExecutor {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final FileManager fileManager = plugin.getStarter().getFileManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final FileManager fileManager = starter.getFileManager();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
+    // Settings.
+    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
-    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
 
-    private final Scrambler scrambler = plugin.getScrambler();
+    // Plugin Managers.
+    private final InfoMenuManager infoMenuManager = crazyManager.getInfoMenuManager();
 
-    private final ShopControl shopControl = plugin.getShopControl();
+    // Listeners
+    private final ScramblerListener scramblerListener = plugin.getScramblerListener();
+
+    // Economy Management.
+    private final ShopListener shopListener = plugin.getShopListener();
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -61,7 +70,7 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
-            if (hasPermission(sender, "gui")) shopControl.openGUI((Player) sender);
+            if (hasPermission(sender, "gui")) shopListener.openGUI((Player) sender);
 
             return true;
         } else {
@@ -359,7 +368,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        player.getInventory().addItem(scrambler.getScramblers(amount));
+                        player.getInventory().addItem(scramblerListener.getScramblers(amount));
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Amount%", amount + "");
                         placeholders.put("%Player%", player.getName());
@@ -402,7 +411,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        player.getInventory().addItem(protectionCrystal.getCrystals(amount));
+                        player.getInventory().addItem(protectionCrystalSettings.getCrystals(amount));
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Amount%", amount + "");
                         placeholders.put("%Player%", player.getName());

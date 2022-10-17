@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -20,9 +21,12 @@ public class HelmetEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onMovement(PlayerMoveEvent event) {

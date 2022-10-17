@@ -2,8 +2,10 @@ package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -15,6 +17,7 @@ import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSuppor
 import com.badbones69.crazyenchantments.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -39,15 +42,20 @@ public class SwordEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final Methods methods = starter.getMethods();
 
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
 
-    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+    private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+
+    // Economy Management.
+    private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -241,7 +249,7 @@ public class SwordEnchantments implements Listener {
 
             if (!event.isCancelled()) {
 
-                // if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelFastEat(damager);
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(damager);
 
                 if (damager.getSaturation() + (2 * crazyManager.getLevel(item, CEnchantments.NUTRITION)) <= 20) damager.setSaturation(damager.getSaturation() + (2 * crazyManager.getLevel(item, CEnchantments.NUTRITION)));
 
@@ -326,9 +334,9 @@ public class SwordEnchantments implements Listener {
             plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(damager);
+                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(damager);
 
-                //if (SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(damager);
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(damager);
 
                 for (LivingEntity entity :methods.getNearbyLivingEntities(methods.checkEntity(en), 2D, damager)) {
                     EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.CUSTOM, 5D);
@@ -338,7 +346,7 @@ public class SwordEnchantments implements Listener {
                 en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
                 en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));
 
-                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.denyPlayer(damager);
+                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.denyPlayer(damager);
             }
         }
 

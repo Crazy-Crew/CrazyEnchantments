@@ -2,14 +2,17 @@ package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -31,17 +34,22 @@ public class BowEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final BowEnchantmentManager bowEnchantmentManager = plugin.getStarter().getBowEnchantmentManager();
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
 
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
+    private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
-    private final BowUtils bowUtils = plugin.getStarter().getBowUtils();
+    // Plugin Managers.
+    private final BowEnchantmentManager bowEnchantmentManager = starter.getBowEnchantmentManager();
+
+    private final BowUtils bowUtils = starter.getBowUtils();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent event) {
@@ -113,9 +121,9 @@ public class BowEnchantments implements Listener {
 
                 // AntiCheat Support.
 
-                if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(shooter);
+                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(shooter);
 
-                //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(shooter);
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(shooter);
 
                 for (LivingEntity entity : methods.getNearbyLivingEntities(location, 2D, arrow.getArrow())) {
                     EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
@@ -189,11 +197,11 @@ public class BowEnchantments implements Listener {
                     Player player = (Player) e.getEntity();
 
                     if (!useEvent.isCancelled()) {
-                        //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                            //SpartanSupport.cancelSpeed(player);
-                            //SpartanSupport.cancelNormalMovements(player);
-                            //SpartanSupport.cancelNoFall(player);
-                        //}
+                        if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                            spartanSupport.cancelSpeed(player);
+                            spartanSupport.cancelNormalMovements(player);
+                            spartanSupport.cancelNoFall(player);
+                        }
 
                         entity.setVelocity(v);
                     }
@@ -228,8 +236,6 @@ public class BowEnchantments implements Listener {
                 }
             }
         }
-
-
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

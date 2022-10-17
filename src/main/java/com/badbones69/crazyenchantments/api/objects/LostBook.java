@@ -95,5 +95,4 @@ public class LostBook {
         .setLore(file.getStringList("Settings.LostBook.Lore"))
         .setLorePlaceholders(placeholders);
     }
-
 }

@@ -18,9 +18,9 @@ public class SilkSpawnerSupport implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-
     private final Methods methods = plugin.getStarter().getMethods();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
     private final SilkUtil api = SilkUtil.hookIntoSilkSpanwers();
 

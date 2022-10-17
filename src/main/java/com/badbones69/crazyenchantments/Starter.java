@@ -3,148 +3,174 @@ package com.badbones69.crazyenchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.api.SkullCreator;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.api.managers.*;
-import com.badbones69.crazyenchantments.api.SkullCreator;
+import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
 
 public class Starter {
 
-    // Managers
     private FileManager fileManager;
-
     private CrazyManager crazyManager;
-
-    private PluginSupport pluginSupport;
-
-    private AllyManager allyManager;
-    private ArmorEnchantmentManager armorEnchantmentManager;
-    private BlackSmithManager blackSmithManager;
-    private BowEnchantmentManager bowEnchantmentManager;
-    private ShopManager shopManager;
-    private WingsManager wingsManager;
-
-    // Misc
     private Methods methods;
-
     private SkullCreator skullCreator;
 
+    // Settings.
+    private ProtectionCrystalSettings protectionCrystalSettings;
+    private EnchantmentSettings enchantmentSettings;
+
+    // Plugin Support.
+    private PluginSupport pluginSupport;
+    private VaultSupport vaultSupport;
+    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
+    private OraxenSupport oraxenSupport;
+    private NoCheatPlusSupport noCheatPlusSupport;
+    private SpartanSupport spartanSupport;
+
+    // Plugin Managers.
+    private ArmorEnchantmentManager armorEnchantmentManager;
+    private BowEnchantmentManager bowEnchantmentManager;
+    private BlackSmithManager blackSmithManager;
+    private WingsManager wingsManager;
+    private AllyManager allyManager;
+    private ShopManager shopManager;
+
+    // Economy Management.
     private CurrencyAPI currencyAPI;
 
-    // Plugin Support
-
-    private VaultSupport vaultSupport;
-
-    // Plugin Utils
+    // Plugin Utils.
     private BowUtils bowUtils;
 
     public void run() {
-        // Managers
         fileManager = new FileManager();
-
         methods = new Methods();
-
         crazyManager = new CrazyManager();
+        skullCreator = new SkullCreator();
 
+        // Set up all our files.
+        fileManager.setLog(true).setup();
+
+        // Settings.
+        protectionCrystalSettings = new ProtectionCrystalSettings();
+        enchantmentSettings = new EnchantmentSettings();
+
+        // Plugin Support.
         pluginSupport = new PluginSupport();
 
-        // Misc
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
-        // Currency
-        //vaultSupport = new VaultSupport();
+        if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
+        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport = new SpartanSupport();
 
-        //currencyAPI = new CurrencyAPI();
+        // Plugin Managers.
+        armorEnchantmentManager = new ArmorEnchantmentManager();
+        bowEnchantmentManager = new BowEnchantmentManager();
+        blackSmithManager = new BlackSmithManager();
+        wingsManager = new WingsManager();
+        allyManager = new AllyManager();
+        shopManager = new ShopManager();
 
-        //currencyAPI.loadCurrency();
+        // Economy Management.
+        currencyAPI = new CurrencyAPI();
 
-        //skullCreator = new SkullCreator();
-
-        // Other Managers
-        //allyManager = new AllyManager();
-
-        //armorEnchantmentManager = new ArmorEnchantmentManager();
-
-        //blackSmithManager = new BlackSmithManager();
-        //blackSmithManager.load();
-
-        //bowEnchantmentManager = new BowEnchantmentManager();
-
-        //shopManager = new ShopManager();
-        //wingsManager = new WingsManager();
-
-        // Plugin Utils
-        //bowUtils = new BowUtils();
+        // Plugin Utils.
+        bowUtils = new BowUtils();
     }
 
-    // Managers
     public FileManager getFileManager() {
         return fileManager;
-    }
-
-    public CrazyManager getCrazyManager() {
-        return crazyManager;
     }
 
     public Methods getMethods() {
         return methods;
     }
 
-    public PluginSupport getPluginSupport() {
-        return pluginSupport;
-    }
-
-    public AllyManager getAllyManager() {
-        return allyManager;
-    }
-
-    public ArmorEnchantmentManager getArmorEnchantmentManager() {
-        return armorEnchantmentManager;
-    }
-
-    public BlackSmithManager getBlackSmithManager() {
-        return blackSmithManager;
-    }
-
-    public BowEnchantmentManager getBowEnchantmentManager() {
-        return bowEnchantmentManager;
-    }
-
-    public ShopManager getShopManager() {
-        return shopManager;
-    }
-
-    public WingsManager getWingsManager() {
-        return wingsManager;
+    public CrazyManager getCrazyManager() {
+        return crazyManager;
     }
 
     public SkullCreator getSkullCreator() {
         return skullCreator;
     }
 
-    public CurrencyAPI getCurrencyAPI() {
-        return currencyAPI;
+    // Settings.
+    public ProtectionCrystalSettings getProtectionCrystalSettings() {
+        return protectionCrystalSettings;
     }
 
-    // Plugin Support
+    public EnchantmentSettings getEnchantmentSettings() {
+        return enchantmentSettings;
+    }
+
+    // Plugin Support.
+    public PluginSupport getPluginSupport() {
+        return pluginSupport;
+    }
 
     public VaultSupport getVaultSupport() {
         return vaultSupport;
     }
 
-    //public OraxenSupport getOraxenSupport() {
-    //    return oraxenSupport;
-    //}
+    public void setVaultSupport(VaultSupport vaultSupport) {
+        this.vaultSupport = vaultSupport;
+    }
 
-    //public NoCheatPlusSupport getNoCheatPlusSupport() {
-    //    return noCheatPlusSupport;
-    //}
+    public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
+        return superiorSkyBlockSupport;
+    }
 
-    //public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
-    //    return superiorSkyBlockSupport;
-    //}
+    public OraxenSupport getOraxenSupport() {
+        return oraxenSupport;
+    }
 
-    // Plugin Utils
+    public NoCheatPlusSupport getNoCheatPlusSupport() {
+        return noCheatPlusSupport;
+    }
+
+    public SpartanSupport getSpartanSupport() {
+        return spartanSupport;
+    }
+
+    // Economy Management.
+    public CurrencyAPI getCurrencyAPI() {
+        return currencyAPI;
+    }
+
+    // Plugin Managers.
+    public ArmorEnchantmentManager getArmorEnchantmentManager() {
+        return armorEnchantmentManager;
+    }
+
+    public BowEnchantmentManager getBowEnchantmentManager() {
+        return bowEnchantmentManager;
+    }
+
+    public BlackSmithManager getBlackSmithManager() {
+        return blackSmithManager;
+    }
+
+    public WingsManager getWingsManager() {
+        return wingsManager;
+    }
+
+    public AllyManager getAllyManager() {
+        return allyManager;
+    }
+
+    public ShopManager getShopManager() {
+        return shopManager;
+    }
+
+    // Plugin Utils.
     public BowUtils getBowUtils() {
         return bowUtils;
     }

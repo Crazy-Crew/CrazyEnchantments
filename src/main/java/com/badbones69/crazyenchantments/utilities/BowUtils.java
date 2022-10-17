@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.utilities;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -22,13 +23,15 @@ public class BowUtils {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    // Related to Sticky Shot
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
+
+    // Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
-    // Sticky Shot End.
 
     private final List<EnchantedArrow> enchantedArrows = new ArrayList<>();
 

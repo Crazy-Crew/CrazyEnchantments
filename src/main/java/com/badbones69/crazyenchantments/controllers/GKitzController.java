@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.controllers;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
@@ -29,11 +30,14 @@ public class GKitzController implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    // Plugin Managers.
+    private final InfoMenuManager infoMenuManager = crazyManager.getInfoMenuManager();
 
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
@@ -105,8 +109,7 @@ public class GKitzController implements Listener {
                     if (e.getAction() == InventoryAction.PICKUP_HALF) {
                         List<ItemStack> items = kit.getPreviewItems();
                         int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
-                        // Some debug code for when checking the math for slots.
-                        // System.out.println((items.size() / 9) + " : " + ((items.size() / 9) * 9) + " : " + items.size() % 9 + " : " + slots);
+
                         Inventory previewInventory = plugin.getServer().createInventory(null, slots, kit.getDisplayItem().getItemMeta().getDisplayName());
 
                         for (ItemStack itemStack : items) {

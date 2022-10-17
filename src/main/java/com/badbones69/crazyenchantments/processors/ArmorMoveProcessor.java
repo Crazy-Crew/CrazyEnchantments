@@ -2,12 +2,15 @@ package com.badbones69.crazyenchantments.processors;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,11 +24,16 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final Methods methods = starter.getMethods();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
+
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     private final Processor<Runnable> syncProcessor;
 
@@ -77,9 +85,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
 
-                        //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                            // SpartanSupport.cancelFastEat(player);
-                        //}
+                        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
 
                         if (player.getFoodLevel() + foodIncrease <= 20) player.setFoodLevel(player.getFoodLevel() + foodIncrease);
 
@@ -88,7 +94,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                 });
             }
 
-            if ((CEnchantments.ANGEL.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.ANGEL) && PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
+            if ((CEnchantments.ANGEL.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.ANGEL) && SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
                 final int radius = 4 + crazyManager.getLevel(armor, CEnchantments.ANGEL);
 
                 syncProcessor.add(() -> {

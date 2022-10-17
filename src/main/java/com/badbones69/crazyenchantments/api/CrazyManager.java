@@ -1,18 +1,25 @@
 package com.badbones69.crazyenchantments.api;
 
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.managers.*;
+import com.badbones69.crazyenchantments.api.support.CropManager;
+import com.badbones69.crazyenchantments.api.support.claims.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersion;
 import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
 import com.badbones69.crazyenchantments.api.objects.*;
-import com.badbones69.crazyenchantments.controllers.Scrambler;
-import com.badbones69.crazyenchantments.controllers.ScrollControl;
+import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.enchantments.BootEnchantments;
+import com.badbones69.crazyenchantments.listeners.ScramblerListener;
+import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import com.google.common.collect.Lists;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -35,26 +42,33 @@ public class CrazyManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
 
-    // Listeners
+    private final Methods methods = starter.getMethods();
 
-    private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
+    // Settings.
+    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
-    // Not Listeners
-    private final Scrambler scrambler = plugin.getScrambler();
-
-    private final ScrollControl scrollControl = plugin.getScrollControl();
+    // Listeners.
+    private final ScramblerListener scramblerListener = plugin.getScramblerListener();
+    private final ScrollListener scrollListener = plugin.getScrollListener();
+    private final BootEnchantments bootEnchantments = plugin.getBootEnchantments();
 
     private CropManagerVersion cropManagerVersion;
     private WorldGuardVersion worldGuardVersion;
 
-    // Plugin Managers
+    // Plugin Managers.
     private BlackSmithManager blackSmithManager;
 
     private InfoMenuManager infoMenuManager;
 
-    // Arrays
+    private final AllyManager allyManager = starter.getAllyManager();
+    private final WingsManager wingsManager = starter.getWingsManager();
+    private final ShopManager shopManager = starter.getShopManager();
+    private final BowEnchantmentManager bowEnchantmentManager = starter.getBowEnchantmentManager();
+    private final ArmorEnchantmentManager armorEnchantmentManager = starter.getArmorEnchantmentManager();
+
+    // Arrays.
     private final List<Category> categories = Lists.newArrayList();
     private final List<GKitz> gkitz = Lists.newArrayList();
     private final List<CEPlayer> players = Lists.newArrayList();
@@ -262,15 +276,13 @@ public class CrazyManager {
         Dust.loadDust();
 
         // Loads the protection crystals
-        protectionCrystal.loadProtectionCrystal();
+        protectionCrystalSettings.loadProtectionCrystal();
         // Loads the scrambler
-        scrambler.loadScrambler();
+        scramblerListener.loadScrambler();
         // Loads the Scroll Control settings
-        scrollControl.loadScrollControl();
+        scrollListener.loadScrollControl();
 
-        /*
-
-        //cropManagerVersion = new CropManagerVersion()
+        cropManagerVersion = new CropManager();
 
         // Loads the scrolls
         Scrolls.loadScrolls();
@@ -296,9 +308,9 @@ public class CrazyManager {
         allyManager.load();
 
         // Starts the wings task
-        boots.startWings();
+        bootEnchantments.startWings();
 
-        if (PluginSupport.SupportedPlugins.WORLDGUARD.isPluginLoaded() && PluginSupport.SupportedPlugins.WORLDEDIT.isPluginLoaded()) worldGuardVersion = new WorldGuardSupport();*/
+        if (SupportedPlugins.WORLDGUARD.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) worldGuardVersion = new WorldGuardSupport();
     }
 
     /**

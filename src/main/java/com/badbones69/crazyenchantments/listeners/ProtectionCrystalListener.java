@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
@@ -26,28 +27,12 @@ public class ProtectionCrystalListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
 
-    private final ProtectionCrystalSettings protectionCrystalSettings = plugin.getProtectionCrystalSettings();
+    private final Methods methods = starter.getMethods();
 
-    private ItemBuilder crystal;
-
-    public void loadProtectionCrystal() {
-        FileConfiguration config = Files.CONFIG.getFile();
-        crystal = new ItemBuilder()
-        .setMaterial(Objects.requireNonNull(config.getString("Settings.ProtectionCrystal.Item")))
-        .setName(config.getString("Settings.ProtectionCrystal.Name"))
-        .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
-        .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing"));
-    }
-
-    public ItemStack getCrystals() {
-        return getCrystals(1);
-    }
-
-    public ItemStack getCrystals(int amount) {
-        return crystal.copy().setAmount(amount).build();
-    }
+    // Settings.
+    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent e) {
@@ -60,7 +45,7 @@ public class ProtectionCrystalListener implements Listener {
             // The item getting protected is not stacked.
             item.getAmount() == 1 &&
             // Making sure they are not dropping crystals on top of other crystals.
-            !getCrystals().isSimilar(item) && crystalItem.isSimilar(getCrystals()) &&
+            !protectionCrystalSettings.getCrystals().isSimilar(item) && crystalItem.isSimilar(protectionCrystalSettings.getCrystals()) &&
             // The item does not have protection on it.
             !protectionCrystalSettings.isProtected(item)) {
                 // The crystal is not stacked.
@@ -131,6 +116,6 @@ public class ProtectionCrystalListener implements Listener {
     public void onCrystalClick(PlayerInteractEvent e) {
         ItemStack item = methods.getItemInHand(e.getPlayer());
 
-        if (item.isSimilar(getCrystals())) e.setCancelled(true);
+        if (item.isSimilar(protectionCrystalSettings.getCrystals())) e.setCancelled(true);
     }
 }

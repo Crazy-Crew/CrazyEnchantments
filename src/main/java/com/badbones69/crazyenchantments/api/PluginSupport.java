@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.api;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.api.support.factions.FactionsUUIDSupport;
 import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
@@ -20,11 +21,15 @@ public class PluginSupport {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final SuperiorSkyBlockSupport superiorSkyBlockSupport = plugin.getSuperiorSkyBlockSupport();
+    // Plugin Support.
+    private final SuperiorSkyBlockSupport superiorSkyBlockSupport = starter.getSuperiorSkyBlockSupport();
+
+    // Managers.
+    private final WingsManager wingsManager = starter.getWingsManager();
 
     private FactionsVersion factionsVersion = null;
 
@@ -160,7 +165,7 @@ public class PluginSupport {
         // WILD_STACKER("WildStacker"),
 
         // Anti Cheats
-        //SPARTAN("Spartan"),
+        SPARTAN("Spartan"),
         NO_CHEAT_PLUS("NoCheatPlus"),
         //VULCAN("Vulcan"),
 

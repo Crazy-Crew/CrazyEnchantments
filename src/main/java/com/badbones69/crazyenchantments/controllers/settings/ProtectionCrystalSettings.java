@@ -2,25 +2,46 @@ package com.badbones69.crazyenchantments.controllers.settings;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager;
+import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 
 public class ProtectionCrystalSettings {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
+
+    private final Methods methods = starter.getMethods();
 
     private final String protectionString = methods.color(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
+
+    private ItemBuilder crystal;
+
+    public void loadProtectionCrystal() {
+        FileConfiguration config = FileManager.Files.CONFIG.getFile();
+        crystal = new ItemBuilder()
+                .setMaterial(Objects.requireNonNull(config.getString("Settings.ProtectionCrystal.Item")))
+                .setName(config.getString("Settings.ProtectionCrystal.Name"))
+                .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
+                .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing"));
+    }
+
+    public ItemStack getCrystals() {
+        return getCrystals(1);
+    }
+
+    public ItemStack getCrystals(int amount) {
+        return crystal.copy().setAmount(amount).build();
+    }
 
     /**
      * Add a player to the map to protect items.

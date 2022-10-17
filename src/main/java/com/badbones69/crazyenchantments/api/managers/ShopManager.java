@@ -20,11 +20,11 @@ public class ShopManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
+    private final Methods methods = plugin.getStarter().getMethods();
+
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
-
-    private final Methods methods = plugin.getStarter().getMethods();
 
     private String inventoryName;
     private int inventorySize;

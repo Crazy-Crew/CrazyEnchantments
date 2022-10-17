@@ -3,11 +3,14 @@ package com.badbones69.crazyenchantments;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.listeners.FireworkDamageListener;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -30,15 +33,23 @@ public class Methods {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final OraxenSupport oraxenSupport = plugin.getOraxenSupport();
+    // Plugin Support.
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
+
+    private final OraxenSupport oraxenSupport = starter.getOraxenSupport();
+
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+
+    // Plugin Listeners.
+    private final FireworkDamageListener fireworkDamageListener = plugin.getFireworkDamageListener();
 
     private final Random random = new Random();
 
-    public final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
+    private final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
 
     public String color(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
@@ -354,7 +365,7 @@ public class Methods {
         fireworkMeta.setPower(0);
         firework.setFireworkMeta(fireworkMeta);
 
-        // FireworkDamage.addFirework(fw);
+        fireworkDamageListener.addFirework(firework);
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
     }
@@ -541,11 +552,11 @@ public class Methods {
                 en.damage(5D);
 
                 if (en instanceof Player) {
-                    //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        //SpartanSupport.cancelSpeed((Player) player);
-                        //SpartanSupport.cancelNormalMovements((Player) player);
-                        //SpartanSupport.cancelNoFall((Player) player);
-                    //}
+                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                        spartanSupport.cancelSpeed((Player) player);
+                        spartanSupport.cancelNormalMovements((Player) player);
+                        spartanSupport.cancelNoFall((Player) player);
+                    }
                 }
 
                 en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
@@ -581,11 +592,11 @@ public class Methods {
                 en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
                 if (!(en instanceof Player)) continue;
 
-                //if (PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    // SpartanSupport.cancelSpeed((Player) player);
-                    // SpartanSupport.cancelNormalMovements((Player) player);
-                    // SpartanSupport.cancelNoFall((Player) player);
-                //}
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    spartanSupport.cancelSpeed((Player) player);
+                    spartanSupport.cancelNormalMovements((Player) player);
+                    spartanSupport.cancelNoFall((Player) player);
+                }
             }
         }
     }

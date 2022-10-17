@@ -2,8 +2,10 @@ package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
@@ -12,6 +14,8 @@ import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.api.objects.PotionEffects;
+import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
@@ -40,17 +44,24 @@ public class ArmorEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    // Settings
-    private final ProtectionCrystalSettings protectionCrystalSettings = plugin.getProtectionCrystalSettings();
-    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
+    private final Methods methods = starter.getMethods();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final PluginSupport pluginSupport = plugin.getStarter().getPluginSupport();
+    // Settings.
+    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
+    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
 
-    private final ArmorEnchantmentManager armorEnchantmentManager = plugin.getStarter().getArmorEnchantmentManager();
+    // Plugin Support.
+    private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
+
+    // Plugin Managers.
+    private final ArmorEnchantmentManager armorEnchantmentManager = starter.getArmorEnchantmentManager();
 
     private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
 
@@ -208,16 +219,16 @@ public class ArmorEnchantments implements Listener {
 
                             // AntiCheat Support.
 
-                            //if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
-                            //if (SupportedPlugins.SPARTAN.isPluginLoaded()) SpartanSupport.cancelNoSwing(player);
+                            if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(player);
 
                             for (LivingEntity en : methods.getNearbyLivingEntities(damager.getLocation(), 2D, player)) {
                                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
                                 methods.entityEvent(player, en, damageByEntityEvent);
                             }
 
-                            //if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+                            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
                             damager.damage(5D);
                         }
@@ -382,6 +393,7 @@ public class ArmorEnchantments implements Listener {
         if (!(event.getEntity() instanceof Player player)) return;
         if (!enchantmentSettings.containsFallenPlayer(player)) return;
         if (!DamageCause.FALL.equals(event.getCause())) return;
+
         event.setCancelled(true);
     }
 }

@@ -13,12 +13,11 @@ public class ServerReadyListener implements Listener {
 
     private final Starter starter = plugin.getStarter();
 
+    // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
     @EventHandler(ignoreCancelled = true)
     public void onServerReady(ServerLoadEvent event) {
-        plugin.getLogger().info("Guten Tag!");
-
         pluginSupport.updateCachedPluginState();
         pluginSupport.printHooks();
     }

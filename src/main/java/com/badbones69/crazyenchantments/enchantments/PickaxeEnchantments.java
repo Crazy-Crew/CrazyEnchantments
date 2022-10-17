@@ -2,9 +2,10 @@ package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.BlastUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
@@ -13,6 +14,7 @@ import com.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
+import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -36,13 +38,18 @@ public class PickaxeEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-
-    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
-
-    private final NoCheatPlusSupport noCheatPlusSupport = plugin.getNoCheatPlusSupport();
+    private final Starter starter = plugin.getStarter();
 
     private final Methods methods = plugin.getStarter().getMethods();
+
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+    // Settings.
+    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
+
+    // Plugin Support.
+    private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     private final Random random = new Random();
     private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
@@ -98,13 +105,13 @@ public class PickaxeEnchantments implements Listener {
                 }
             }
 
-            //if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) NoCheatPlusSupport.allowPlayer(player);
+            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
-            //if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                //SpartanSupport.cancelFastBreak(player);
-                //SpartanSupport.cancelNoSwing(player);
-                //SpartanSupport.cancelBlockReach(player);
-            //}
+            if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                spartanSupport.cancelFastBreak(player);
+                spartanSupport.cancelNoSwing(player);
+                spartanSupport.cancelBlockReach(player);
+            }
 
             int xp = 0;
             HashMap<ItemStack, Integer> drops = new HashMap<>();
@@ -181,7 +188,7 @@ public class PickaxeEnchantments implements Listener {
 
             if (!damage) methods.removeDurability(currentItem, player);
 
-            if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
             for (Entry<ItemStack, Integer> item : drops.entrySet()) {
                 item.getKey().setAmount(item.getValue());

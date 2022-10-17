@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.enchantments;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.managers.AllyManager;
@@ -25,11 +26,15 @@ public class AllyEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final AllyManager allyManager = plugin.getStarter().getAllyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final EnchantmentSettings enchantmentSettings = plugin.getEnchantmentSettings();
+    // Settings.
+    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
+
+    // Plugin Managers.
+    private final AllyManager allyManager = starter.getAllyManager();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAllySpawn(EntityDamageByEntityEvent e) {
