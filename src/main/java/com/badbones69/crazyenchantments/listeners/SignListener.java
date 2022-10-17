@@ -1,7 +1,8 @@
-package com.badbones69.crazyenchantments.controllers;
+package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
@@ -13,7 +14,9 @@ import com.badbones69.crazyenchantments.api.events.BuyBookEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
+import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -30,19 +33,24 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class SignControl implements Listener {
+public class SignListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    //private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
+    // Settings.
+    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
-    //private final Scrambler scrambler = plugin.getScrambler();
+    // Plugin Listeners.
+    private final ScramblerListener scramblerListener = plugin.getScramblerListener();
+
+    // Economy Management.
+    private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
@@ -94,8 +102,8 @@ public class SignControl implements Listener {
                             if (config.contains("Settings.SignOptions." + o + "Style.Buy-Message")) player.sendMessage(methods.color(methods.getPrefix() + config.getString("Settings.SignOptions." + o + "Style.Buy-Message")));
 
                             switch (o) {
-                                //case "ProtectionCrystal" -> player.getInventory().addItem(protectionCrystal.getCrystals());
-                                //case "Scrambler" -> player.getInventory().addItem(scrambler.getScramblers());
+                                case "ProtectionCrystal" -> player.getInventory().addItem(protectionCrystalSettings.getCrystals());
+                                case "Scrambler" -> player.getInventory().addItem(scramblerListener.getScramblers());
                                 case "DestroyDust" -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
                                 case "SuccessDust" -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                                 case "BlackScroll" -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());

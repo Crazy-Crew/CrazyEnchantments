@@ -1,7 +1,8 @@
-package com.badbones69.crazyenchantments.controllers;
+package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.enums.Dust;
@@ -15,6 +16,9 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
+import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,22 +31,28 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class ShopControl implements Listener {
+public class ShopListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final ShopManager shopManager = plugin.getStarter().getShopManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getCrazyManager().getInfoMenuManager();
+    private final Methods methods = starter.getMethods();
 
-    // private final ProtectionCrystalListener protectionCrystal = plugin.getProtectionCrystalListener();
+    // Settings.
+    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
-    // private final Scrambler scrambler = plugin.getScrambler();
+    // Plugin Managers.
+    private final ShopManager shopManager = starter.getShopManager();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final InfoMenuManager infoMenuManager = crazyManager.getInfoMenuManager();
 
+    // Plugin Listeners.
+    private final ScramblerListener scramblerListener = plugin.getScramblerListener();
+
+    // Economy Management.
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
 
     private final Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
@@ -155,10 +165,10 @@ public class ShopControl implements Listener {
                             }
 
                             case INFO -> infoMenuManager.openInfoMenu(player);
-                            //case PROTECTION_CRYSTAL -> player.getInventory().addItem(protectionCrystal.getCrystals());
+                            case PROTECTION_CRYSTAL -> player.getInventory().addItem(protectionCrystalSettings.getCrystals());
+                            case SCRAMBLER -> player.getInventory().addItem(scramblerListener.getScramblers());
                             case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                             case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
-                            //case SCRAMBLER -> player.getInventory().addItem(scrambler.getScramblers());
                             case BLACK_SCROLL -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
                             case WHITE_SCROLL -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
                             case TRANSMOG_SCROLL -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
