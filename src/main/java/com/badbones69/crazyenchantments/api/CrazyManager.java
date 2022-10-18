@@ -22,7 +22,6 @@ import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.WingsUtils;
 import com.google.common.collect.Lists;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -105,37 +104,19 @@ public class CrazyManager {
 
         FileConfiguration blocks = Files.BLOCKLIST.getFile();
 
-        // Check if metrics is enabled & exists.
-        boolean metricsEnabled = config.getBoolean("Settings.Toggle-Metrics");
-        String metricsOption = config.getString("Settings.Toggle-Metrics");
-
-        if (metricsOption != null) {
-            if (metricsEnabled) new Metrics(plugin, 4494);
-        } else {
-            plugin.getLogger().warning("Metrics was automatically enabled.");
-            plugin.getLogger().warning("Please add Toggle-Metrics: false to the top of your config.yml");
-            plugin.getLogger().warning("https://github.com/Crazy-Crew/CrazyEnchantments/blob/main/src/main/resources/config.yml");
-            plugin.getLogger().warning("An example if confused is linked above.");
-
-            new Metrics(plugin, 4494);
-        }
-
         blockList.clear();
-
         gkitz.clear();
         registeredEnchantments.clear();
-
         categories.clear();
 
         // Check if we should patch player health.
-
         boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health");
 
         plugin.getServer().getOnlinePlayers().forEach(player -> {
             // Load our players.
             loadCEPlayer(player);
 
-            // Check if we need to patch playerHealth
+            // Check if we need to patch playerHealth.
             Attribute genericAttribute = Attribute.GENERIC_MAX_HEALTH;
 
             double baseValue = player.getAttribute(genericAttribute).getBaseValue();

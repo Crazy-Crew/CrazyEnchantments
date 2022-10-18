@@ -8,6 +8,8 @@ import com.badbones69.crazyenchantments.commands.*;
 import com.badbones69.crazyenchantments.controllers.GKitzController;
 import com.badbones69.crazyenchantments.enchantments.*;
 import com.badbones69.crazyenchantments.listeners.*;
+import org.bstats.bukkit.Metrics;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,10 +49,22 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
                 starter.getVaultSupport().loadVault();
             } else {
-                plugin.getLogger().warning("Vault was not found so support for economies was not enabled.");
+                plugin.getLogger().warning("Vault was not found so support for any economy was not enabled.");
             }
 
             FileConfiguration config = Files.CONFIG.getFile();
+
+            String metricsPath = config.getString("Settings.Toggle-Metrics");
+            boolean metricsEnabled = config.getBoolean("Settings.Toggle-Metrics");
+
+            if (metricsPath == null) {
+                config.set("Settings.Toggle-Metrics", false);
+
+                Files.CONFIG.saveFile();
+            }
+
+            if (metricsEnabled) new Metrics(this, 4494);
+
             pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
             pluginManager.registerEvents(scramblerListener = new ScramblerListener(), this);
             pluginManager.registerEvents(armorListener = new ArmorListener(), this);
