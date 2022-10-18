@@ -17,10 +17,9 @@ import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersio
 import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.enchantments.BootEnchantments;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ScrollListener;
-import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
+import com.badbones69.crazyenchantments.utilities.WingsUtils;
 import com.google.common.collect.Lists;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bstats.bukkit.Metrics;
@@ -52,7 +51,6 @@ public class CrazyManager {
     // Listeners.
     private final ScramblerListener scramblerListener = plugin.getScramblerListener();
     private final ScrollListener scrollListener = plugin.getScrollListener();
-    private final BootEnchantments bootEnchantments = plugin.getBootEnchantments();
 
     private CropManagerVersion cropManagerVersion;
     private WorldGuardVersion worldGuardVersion;
@@ -63,7 +61,11 @@ public class CrazyManager {
     private InfoMenuManager infoMenuManager;
 
     private final AllyManager allyManager = starter.getAllyManager();
+
+    // Wings.
     private final WingsManager wingsManager = starter.getWingsManager();
+    private final WingsUtils wingsUtils = starter.getWingsUtils();
+
     private final ShopManager shopManager = starter.getShopManager();
     private final BowEnchantmentManager bowEnchantmentManager = starter.getBowEnchantmentManager();
     private final ArmorEnchantmentManager armorEnchantmentManager = starter.getArmorEnchantmentManager();
@@ -76,6 +78,7 @@ public class CrazyManager {
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
     private final List<Event> ignoredEvents = Lists.newArrayList();
     private final List<UUID> ignoredUUIDs = Lists.newArrayList();
+
     // Random
     private final Random random = new Random();
 

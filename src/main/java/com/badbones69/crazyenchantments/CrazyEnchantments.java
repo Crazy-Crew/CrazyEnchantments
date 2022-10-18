@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments;
 
+import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
@@ -22,14 +23,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     // Plugin Listeners.
     PluginManager pluginManager = getServer().getPluginManager();
 
-    private ProtectionCrystalListener protectionCrystalListener;
     private FireworkDamageListener fireworkDamageListener;
     private ScramblerListener scramblerListener;
     private ScrollListener scrollListener;
     private ArmorListener armorListener;
     private ShopListener shopListener;
 
-    private BootEnchantments bootEnchantments;
     private ArmorEnchantments armorEnchantments;
 
     @Override
@@ -51,15 +50,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
                 plugin.getLogger().warning("Vault was not found so support for economies was not enabled.");
             }
 
-            pluginManager.registerEvents(protectionCrystalListener = new ProtectionCrystalListener(), this);
+            FileConfiguration config = Files.CONFIG.getFile();
             pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
             pluginManager.registerEvents(scramblerListener = new ScramblerListener(), this);
             pluginManager.registerEvents(armorListener = new ArmorListener(), this);
             pluginManager.registerEvents(scrollListener = new ScrollListener(), this);
             pluginManager.registerEvents(shopListener = new ShopListener(), this);
-
-            pluginManager.registerEvents(bootEnchantments = new BootEnchantments(), this);
-            pluginManager.registerEvents(armorEnchantments = new ArmorEnchantments(), this);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -86,17 +82,20 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         pluginManager.registerEvents(new DustControlListener(), this);
 
+        pluginManager.registerEvents(new PickaxeEnchantments(), this);
+        pluginManager.registerEvents(new HelmetEnchantments(), this);
+        pluginManager.registerEvents(new SwordEnchantments(), this);
+        pluginManager.registerEvents(armorEnchantments = new ArmorEnchantments(), this);
         pluginManager.registerEvents(new AllyEnchantments(), this);
+        pluginManager.registerEvents(new ToolEnchantments(), this);
+        pluginManager.registerEvents(new BootEnchantments(), this);
         pluginManager.registerEvents(new AxeEnchantments(), this);
         pluginManager.registerEvents(new BowEnchantments(), this);
-        pluginManager.registerEvents(new HelmetEnchantments(), this);
         pluginManager.registerEvents(new HoeEnchantments(), this);
-        pluginManager.registerEvents(new PickaxeEnchantments(), this);
-        pluginManager.registerEvents(new SwordEnchantments(), this);
-        pluginManager.registerEvents(new ToolEnchantments(), this);
 
-        pluginManager.registerEvents(new AuraListener(), this);
+        pluginManager.registerEvents(new ProtectionCrystalListener(), this);
         pluginManager.registerEvents(new FireworkDamageListener(), this);
+        pluginManager.registerEvents(new AuraListener(), this);
 
         if (starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("G-Kitz support is now enabled.");
@@ -137,10 +136,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     }
 
     // Plugin Listeners.
-    public ProtectionCrystalListener getProtectionCrystalListener() {
-        return protectionCrystalListener;
-    }
-
     public FireworkDamageListener getFireworkDamageListener() {
         return fireworkDamageListener;
     }
@@ -159,12 +154,5 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public ShopListener getShopListener() {
         return shopListener;
-    }
-
-    public ArmorEnchantments getArmorEnchantments() {
-        return armorEnchantments;
-    }
-    public BootEnchantments getBootEnchantments() {
-        return bootEnchantments;
     }
 }

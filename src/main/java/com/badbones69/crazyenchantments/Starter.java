@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
+import com.badbones69.crazyenchantments.utilities.WingsUtils;
 
 public class Starter {
 
@@ -26,6 +27,10 @@ public class Starter {
     // Settings.
     private ProtectionCrystalSettings protectionCrystalSettings;
     private EnchantmentSettings enchantmentSettings;
+
+    // Plugin Utils.
+    private BowUtils bowUtils;
+    private WingsUtils wingsUtils;
 
     // Plugin Support.
     private PluginSupport pluginSupport;
@@ -46,9 +51,6 @@ public class Starter {
     // Economy Management.
     private CurrencyAPI currencyAPI;
 
-    // Plugin Utils.
-    private BowUtils bowUtils;
-
     public void run() {
         fileManager = new FileManager();
         methods = new Methods();
@@ -57,6 +59,10 @@ public class Starter {
 
         // Set up all our files.
         fileManager.setLog(true).setup();
+
+        // Plugin Utils.
+        bowUtils = new BowUtils();
+        wingsUtils = new WingsUtils();
 
         // Settings.
         protectionCrystalSettings = new ProtectionCrystalSettings();
@@ -81,9 +87,6 @@ public class Starter {
 
         // Economy Management.
         currencyAPI = new CurrencyAPI();
-
-        // Plugin Utils.
-        bowUtils = new BowUtils();
     }
 
     public FileManager getFileManager() {
@@ -173,5 +176,9 @@ public class Starter {
     // Plugin Utils.
     public BowUtils getBowUtils() {
         return bowUtils;
+    }
+
+    public WingsUtils getWingsUtils() {
+        return wingsUtils;
     }
 }

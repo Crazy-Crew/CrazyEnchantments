@@ -76,24 +76,6 @@ public class PluginSupport {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsExplosions(location);
     }
 
-    public boolean inWingsRegion(Player player) {
-        if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
-
-        WorldGuardVersion worldGuardVersion = crazyManager.getWorldGuardSupport();
-
-        for (String region : wingsManager.getRegions()) {
-            if (worldGuardVersion.inRegion(region, player.getLocation())) {
-                return true;
-            } else {
-                if (wingsManager.canOwnersFly() && worldGuardVersion.isOwner(player)) return true;
-
-                if (wingsManager.canMembersFly() && worldGuardVersion.isMember(player)) return true;
-            }
-        }
-
-        return false;
-    }
-
     private final Methods methods = plugin.getStarter().getMethods();
 
     private final HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
