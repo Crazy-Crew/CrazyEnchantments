@@ -73,19 +73,24 @@ public class PickaxeEnchantments implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlastBreak(BlockBreakEvent e) {
         if (crazyManager.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated()) return;
+
         Player player = e.getPlayer();
         Block currentBlock = e.getBlock();
         ItemStack currentItem = methods.getItemInHand(player);
 
         if (!blocks.containsKey(player)) return;
+
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(currentItem);
+
         if (!blocks.get(player).containsKey(currentBlock)) return;
 
         if (!enchantments.contains(CEnchantments.BLAST.getEnchantment())) return;
+
         e.setCancelled(true);
         BlockFace face = blocks.get(player).get(currentBlock);
         blocks.remove(player);
         List<Block> blockList = getBlocks(currentBlock.getLocation(), face, (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
+
         BlastUseEvent blastUseEvent = new BlastUseEvent(player, blockList);
         plugin.getServer().getPluginManager().callEvent(blastUseEvent);
 

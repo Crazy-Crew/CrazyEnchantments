@@ -52,6 +52,7 @@ public class AxeEnchantments implements Listener {
         ItemStack item = methods.getItemInHand(damager);
 
         if (entity.isDead()) return;
+
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
 
         if (CEnchantments.BERSERK.isActivated() && enchantments.contains(CEnchantments.BERSERK.getEnchantment()) && CEnchantments.BERSERK.chanceSuccessful(item)) {

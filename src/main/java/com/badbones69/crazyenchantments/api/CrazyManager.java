@@ -259,24 +259,24 @@ public class CrazyManager {
         // Load all dust types.
         Dust.loadDust();
 
-        // Loads the protection crystals
+        // Loads the protection crystals.
         protectionCrystalSettings.loadProtectionCrystal();
-        // Loads the scrambler
+        // Loads the scrambler.
         scramblerListener.loadScrambler();
-        // Loads the Scroll Control settings
+        // Loads the Scroll Control settings.
         scrollListener.loadScrollControl();
 
         cropManagerVersion = new CropManager();
 
-        // Loads the scrolls
+        // Loads the scrolls.
         Scrolls.loadScrolls();
-        // Loads the dust
+        // Loads the dust.
         Dust.loadDust();
 
-        // Loads the ShopOptions
+        // Loads the ShopOptions.
         ShopOption.loadShopOptions();
 
-        // Loads the shop manager
+        // Loads the shop manager.
         shopManager.load();
 
         // Loads the settings for wings enchantment.
@@ -291,8 +291,8 @@ public class CrazyManager {
         // Loads the settings for the ally enchantments.
         allyManager.load();
 
-        // Starts the wings task
-        bootEnchantments.startWings();
+        // Starts the wings task.
+        wingsUtils.startWings();
 
         if (SupportedPlugins.WORLDGUARD.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) worldGuardVersion = new WorldGuardSupport();
     }
@@ -334,24 +334,24 @@ public class CrazyManager {
     public void unloadCEPlayer(Player player) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = player.getUniqueId().toString();
-        CEPlayer p = getCEPlayer(player);
+        CEPlayer cePlayer = getCEPlayer(player);
 
-        if (p != null) {
+        if (cePlayer != null) {
 
-            if (p.getSouls() > 0) {
+            if (cePlayer.getSouls() > 0) {
                 data.set("Players." + uuid + ".Name", player.getName());
-                data.set("Players." + uuid + ".Souls-Information.Souls", p.getSouls());
-                data.set("Players." + uuid + ".Souls-Information.Is-Active", p.isSoulsActive());
+                data.set("Players." + uuid + ".Souls-Information.Souls", cePlayer.getSouls());
+                data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
             }
 
-            for (Cooldown cooldown : p.getCooldowns()) {
+            for (Cooldown cooldown : cePlayer.getCooldowns()) {
                 data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
             }
 
             Files.DATA.saveFile();
         }
 
-        removeCEPlayer(p);
+        removeCEPlayer(cePlayer);
     }
 
     /**
@@ -364,19 +364,19 @@ public class CrazyManager {
 
     /**
      * This backup all the players data stored by this plugin.
-     * @param player The player you wish to back up.
+     * @param cePlayer The player you wish to back up.
      */
-    public void backupCEPlayer(CEPlayer player) {
+    public void backupCEPlayer(CEPlayer cePlayer) {
         FileConfiguration data = Files.DATA.getFile();
-        String uuid = player.getPlayer().getUniqueId().toString();
+        String uuid = cePlayer.getPlayer().getUniqueId().toString();
 
-        if (player.getSouls() > 0) {
-            data.set("Players." + uuid + ".Name", player.getPlayer().getName());
-            data.set("Players." + uuid + ".Souls-Information.Souls", player.getSouls());
-            data.set("Players." + uuid + ".Souls-Information.Is-Active", player.isSoulsActive());
+        if (cePlayer.getSouls() > 0) {
+            data.set("Players." + uuid + ".Name", cePlayer.getPlayer().getName());
+            data.set("Players." + uuid + ".Souls-Information.Souls", cePlayer.getSouls());
+            data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
         }
 
-        for (Cooldown cooldown : player.getCooldowns()) {
+        for (Cooldown cooldown : cePlayer.getCooldowns()) {
             data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
         }
 
@@ -384,7 +384,6 @@ public class CrazyManager {
     }
 
     /**
-     * Get the World Guard support class.
      * @return World Guard support class.
      */
     public WorldGuardVersion getWorldGuardSupport() {
@@ -392,7 +391,6 @@ public class CrazyManager {
     }
 
     /**
-     * Get the NMS support class.
      * @return NMS support class.
      */
     public CropManagerVersion getNMSSupport() {
@@ -466,8 +464,8 @@ public class CrazyManager {
      * @return The player but as a CEPlayer. Will return null if not found.
      */
     public CEPlayer getCEPlayer(Player player) {
-        for (CEPlayer p : getCEPlayers()) {
-            if (p.getPlayer() == player) return p;
+        for (CEPlayer cePlayer : getCEPlayers()) {
+            if (cePlayer.getPlayer() == player) return cePlayer;
         }
 
         return null;
@@ -520,7 +518,7 @@ public class CrazyManager {
             if (enchantment.isActivated() && itemLore != null) {
                 for (String lore : itemLore) {
                     String[] split = lore.split(" ");
-                    // split can generate an empty array in rare case
+                    // Split can generate an empty array in rare case.
                     if (split.length > 0 && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) return true;
                 }
             }
@@ -594,6 +592,7 @@ public class CrazyManager {
         try {
             List<CEnchantment> enchantments = category.getEnabledEnchantments();
             CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
+
             return new CEBook(enchantment, randomLevel(enchantment, category), 1, category);
         } catch (Exception e) {
             plugin.getLogger().info("The category " + category.getName() + " has no enchantments."
@@ -653,19 +652,13 @@ public class CrazyManager {
      * @return The highest level of the enchantment that the player currently has.
      */
     public int getHighestEnchantmentLevel(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantment enchantment) {
-        int highest = 0;
+        int highest;
 
-        for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!armor.isSimilar(excludedItem) && hasEnchantment(armor, enchantment)) {
-                int level = getLevel(armor, enchantment);
-                if (highest < level) {
-                    highest = level;
-                }
-            }
-        }
+        highest = checkHighEnchant(player, excludedItem, enchantment);
 
         if (hasEnchantment(includedItem, enchantment)) {
             int level = getLevel(includedItem, enchantment);
+
             if (highest < level) highest = level;
         }
 
@@ -679,11 +672,16 @@ public class CrazyManager {
      * @return The highest level of the enchantment that the player currently has.
      */
     public int getHighestEnchantmentLevelExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
+        return checkHighEnchant(player, excludedItem, enchantment);
+    }
+
+    private int checkHighEnchant(Player player, ItemStack excludedItem, CEnchantment enchantment) {
         int highest = 0;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             if (!armor.isSimilar(excludedItem) && hasEnchantment(armor, enchantment)) {
                 int level = getLevel(armor, enchantment);
+
                 if (highest < level) highest = level;
             }
         }
@@ -703,6 +701,7 @@ public class CrazyManager {
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             if (hasEnchantment(armor, enchantment)) {
                 int level = getLevel(armor, enchantment);
+
                 if (highest < level) highest = level;
             }
         }
@@ -763,6 +762,7 @@ public class CrazyManager {
      */
     public ItemStack addEnchantment(ItemStack item, CEnchantment enchantment, int level) {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
+
         enchantments.put(enchantment, level);
         return addEnchantments(item, enchantments);
     }
@@ -852,12 +852,15 @@ public class CrazyManager {
 
         List<String> lore = item.getItemMeta().getLore();
         Map<CEnchantment, Integer> enchantments = null;
+
+        assert lore != null;
         for (String line : lore) {
             int lastSpaceIndex = line.lastIndexOf(' ');
 
             if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) continue;
 
             String enchantmentName = line.substring(0, lastSpaceIndex);
+
             for (CEnchantment enchantment : registeredEnchantments) {
                 if (!enchantment.isActivated()) continue;
 
@@ -1075,6 +1078,7 @@ public class CrazyManager {
             for (CEnchantment enchantment : registeredEnchantments) {
                 String bookNameCheck = book.getItemMeta().getDisplayName();
                 String[] split = bookNameCheck.split(" ");
+
                 if (bookNameCheck.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) return true;
             }
         }
@@ -1092,6 +1096,7 @@ public class CrazyManager {
             for (CEnchantment enchantment : registeredEnchantments) {
                 String bookNameCheck = book.getItemMeta().getDisplayName();
                 String[] split = bookNameCheck.split(" ");
+
                 if (bookNameCheck.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) return enchantment;
             }
         }
@@ -1112,6 +1117,7 @@ public class CrazyManager {
 
             if (perm.startsWith("crazyenchantments.limit.")) {
                 perm = perm.replace("crazyenchantments.limit.", "");
+
                 if (methods.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
             }
         }
@@ -1140,26 +1146,7 @@ public class CrazyManager {
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
-        String line = "";
-
-        if (methods.verifyItemLore(item)) {
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta != null && meta.hasLore()) {
-                List<String> itemLore = meta.getLore();
-
-                if (itemLore != null) {
-                    for (String lore : itemLore) {
-                        if (lore.contains(enchant.getCustomName())) {
-                            line = lore;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        int level = convertLevelInteger(line.replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
+        int level = convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
 
         if (!useUnsafeEnchantments && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
@@ -1173,6 +1160,15 @@ public class CrazyManager {
      */
     public int getLevel(ItemStack item, CEnchantments enchant) {
         int level;
+
+        level = convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
+
+        if (!useUnsafeEnchantments && level > enchant.getEnchantment().getMaxLevel()) level = enchant.getEnchantment().getMaxLevel();
+
+        return level;
+    }
+
+    private String checkLevels(ItemStack item, String customName) {
         String line = "";
 
         if (methods.verifyItemLore(item)) {
@@ -1183,7 +1179,7 @@ public class CrazyManager {
 
                 if (itemLore != null) {
                     for (String lore : itemLore) {
-                        if (lore.contains(enchant.getCustomName())) {
+                        if (lore.contains(customName)) {
                             line = lore;
                             break;
                         }
@@ -1192,16 +1188,13 @@ public class CrazyManager {
             }
         }
 
-        level = convertLevelInteger(line.replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
-
-        if (!useUnsafeEnchantments && level > enchant.getEnchantment().getMaxLevel()) level = enchant.getEnchantment().getMaxLevel();
-
-        return level;
+        return line;
     }
 
     public int randomLevel(CEnchantment enchantment, Category category) {
-        int enchantmentMax = enchantment.getMaxLevel(); // Max set by the enchantment
+        int enchantmentMax = enchantment.getMaxLevel(); // Max set by the enchantment.
         int randomLevel = 1 + random.nextInt(enchantmentMax);
+
         if (category.useMaxLevel()) {
             if (randomLevel > category.getMaxLevel()) randomLevel = 1 + random.nextInt(enchantmentMax);
 
@@ -1395,23 +1388,7 @@ public class CrazyManager {
 
         for (String itemString : itemStrings) {
             // This is used to convert old v1.7- gkit files to use newer way.
-            StringBuilder newItemString = new StringBuilder();
-
-            for (String option : itemString.split(", ")) {
-                if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
-                    StringBuilder newOption = new StringBuilder();
-
-                    for (String enchantment : option.toLowerCase().replace("customenchantments:", "").replace("enchantments:", "").split(",")) {
-                        newOption.append(enchantment).append(", ");
-                    }
-
-                    option = newOption.substring(0, newOption.length() - 2);
-                }
-
-                newItemString.append(option).append(", ");
-            }
-
-            if (newItemString.length() > 0) itemString = newItemString.substring(0, newItemString.length() - 2);
+            itemString = getNewItemString(itemString);
 
             ItemBuilder itemBuilder = ItemBuilder.convertString(itemString);
             List<String> customEnchantments = new ArrayList<>();
@@ -1437,13 +1414,36 @@ public class CrazyManager {
 
             itemBuilder.getLore().addAll(0, customEnchantments);
             itemBuilder.setEnchantments(enchantments);
+
             NBTItem nbtItem = new NBTItem(itemBuilder.build());
             // This is done so items do not stack if there are multiple of the same.
+
             nbtItem.setInteger("random-number", random.nextInt(Integer.MAX_VALUE));
             items.add(nbtItem.getItem());
         }
 
         return items;
+    }
+
+    public String getNewItemString(String itemString) {
+        StringBuilder newItemString = new StringBuilder();
+
+        for (String option : itemString.split(", ")) {
+            if (option.toLowerCase().startsWith("enchantments:") || option.toLowerCase().startsWith("customenchantments:")) {
+                StringBuilder newOption = new StringBuilder();
+
+                for (String enchantment : option.toLowerCase().replace("customenchantments:", "").replace("enchantments:", "").split(",")) {
+                    newOption.append(enchantment).append(", ");
+                }
+
+                option = newOption.substring(0, newOption.length() - 2);
+            }
+
+            newItemString.append(option).append(", ");
+        }
+
+        if (newItemString.length() > 0) itemString = newItemString.substring(0, newItemString.length() - 2);
+        return itemString;
     }
 
     public int pickLevel(int min, int max) {

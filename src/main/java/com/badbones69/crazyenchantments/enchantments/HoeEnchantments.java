@@ -56,7 +56,7 @@ public class HoeEnchantments implements Listener {
             Block block = e.getClickedBlock();
             List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(hoe);
 
-            // Crop is not fully grown
+            // Crop is not fully grown.
             if (CEnchantments.GREENTHUMB.isActivated() && enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment()) && enchantmentSettings.getSeedlings().contains(block.getType()) && !crazyManager.getNMSSupport().isFullyGrown(block)) {
                 fullyGrowPlant(hoe, block, player);
 
@@ -258,7 +258,7 @@ public class HoeEnchantments implements Listener {
     }
 
     private List<Block> getAreaBlocks(Block block) {
-        return getAreaBlocks(block, BlockFace.UP, 0, 1); // Radius of 1 is 3x3
+        return getAreaBlocks(block, BlockFace.UP, 0, 1); // Radius of 1 is 3x3.
     }
 
     private List<Block> getAreaBlocks(Block block, int radius) {

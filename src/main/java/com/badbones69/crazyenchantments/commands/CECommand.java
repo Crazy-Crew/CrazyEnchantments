@@ -15,10 +15,10 @@ import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
+import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ShopListener;
-import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -29,6 +29,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +62,7 @@ public class CECommand implements CommandExecutor {
     private final ShopListener shopListener = plugin.getShopListener();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         boolean isPlayer = sender instanceof Player;
 
         if (args.length == 0) { // /ce
@@ -95,12 +96,14 @@ public class CECommand implements CommandExecutor {
                 case "limit" -> {
                     if (hasPermission(sender, "limit")) {
                         HashMap<String, String> placeholders = new HashMap<>();
+
                         placeholders.put("%bypass%", sender.hasPermission("crazyenchantments.bypass.limit") + "");
 
                         assert sender instanceof Player;
                         placeholders.put("%limit%", crazyManager.getPlayerMaxEnchantments((Player) sender) + "");
                         placeholders.put("%vanilla%", crazyManager.checkVanillaLimit() + "");
                         placeholders.put("%item%", crazyManager.getEnchantmentAmount(methods.getItemInHand((Player) sender)) + "");
+
                         sender.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
                     }
 
@@ -122,13 +125,13 @@ public class CECommand implements CommandExecutor {
                         } else {
 
                             if (!brokenEnchantments.isEmpty()) {
-                                int i = 1;
+                                int amount = 1;
                                 sender.sendMessage(methods.getPrefix("&cMissing Enchantments:"));
                                 sender.sendMessage(methods.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
 
                                 for (String broke : brokenEnchantments) {
-                                    sender.sendMessage(methods.color("&c#" + i + ": &6" + broke));
-                                    i++;
+                                    sender.sendMessage(methods.color("&c#" + amount + ": &6" + broke));
+                                    amount++;
                                 }
 
                                 sender.sendMessage(methods.color("&7- &cMissing from the Enchantments.yml"));
@@ -150,9 +153,7 @@ public class CECommand implements CommandExecutor {
 
                         sender.sendMessage(methods.getPrefix("&cEnchantment Types and amount of items in each:"));
 
-                        //for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
-                        //    sender.sendMessage(methods.color("&c" + enchantmentType.getName() + ": &6" + enchantmentType.getEnchantableMaterials().size()));
-                        //}
+                        infoMenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(methods.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
                     }
 
                     return true;
@@ -175,7 +176,7 @@ public class CECommand implements CommandExecutor {
                             file.set(path + ".Color", "&7");
                             file.set(path + ".BookColor", "&b&l");
                             file.set(path + ".MaxPower", 1);
-                            //file.set(path + ".Enchantment-Type", enchantment.getType().getName());
+                            file.set(path + ".Enchantment-Type", enchantment.getType().getName());
                             file.set(path + ".Info.Name", "&e&l" + enchantment.getName() + " &7(&bI&7)");
                             file.set(path + ".Info.Description", enchantment.getDescription());
                             List<String> categories = new ArrayList<>();
@@ -198,13 +199,13 @@ public class CECommand implements CommandExecutor {
 
                             infoMenuManager.openInfoMenu((Player) sender);
                         } else {
-                            //EnchantmentType enchantmentType = infoMenuManager.getFromName(args[1]);
+                            EnchantmentType enchantmentType = methods.getFromName(args[1]);
 
-                            //if (enchantmentType != null) {
-                            //    assert sender instanceof Player;
-                                //infoMenuManager.openInfoMenu((Player) sender, enchantmentType);
-                           //     return true;
-                            //}
+                            if (enchantmentType != null) {
+                                assert sender instanceof Player;
+                                infoMenuManager.openInfoMenu((Player) sender, enchantmentType);
+                                return true;
+                            }
 
                             CEnchantment enchantment = crazyManager.getEnchantmentFromName(args[1]);
                             if (enchantment != null) {
@@ -269,10 +270,12 @@ public class CECommand implements CommandExecutor {
 
                             location.getWorld().dropItemNaturally(location, category == null ? new CEBook(enchantment, level).buildBook() : category.getLostBook().getLostBook(category).build());
                             HashMap<String, String> placeholders = new HashMap<>();
+
                             placeholders.put("%World%", location.getWorld().getName());
                             placeholders.put("%X%", location.getBlockX() + "");
                             placeholders.put("%Y%", location.getBlockY() + "");
                             placeholders.put("%Z%", location.getBlockZ() + "");
+
                             sender.sendMessage(Messages.SPAWNED_BOOK.getMessage(placeholders));
 
                             return true;
@@ -307,7 +310,6 @@ public class CECommand implements CommandExecutor {
                             }
 
                             if (args.length >= 4) {
-
                                 if (!methods.isPlayerOnline(args[3], sender)) return true;
 
                                 player = methods.getPlayer(args[3]);
@@ -391,8 +393,7 @@ public class CECommand implements CommandExecutor {
 
                         if (args.length >= 2) {
                             if (!methods.isInt(args[1])) {
-                                sender.sendMessage(Messages.NOT_A_NUMBER.getMessage()
-                                        .replace("%Arg%", args[1]).replace("%arg%", args[1]));
+                                sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[1]).replace("%arg%", args[1]));
                                 return true;
                             }
 
@@ -509,7 +510,7 @@ public class CECommand implements CommandExecutor {
                 case "scroll" -> { // /ce scroll <scroll> [amount] [player]
                     if (hasPermission(sender, "scroll")) {
                         if (args.length >= 2) {
-                            int i = 1;
+                            int amount = 1;
                             String name = sender.getName();
 
                             if (args.length >= 3) {
@@ -518,7 +519,7 @@ public class CECommand implements CommandExecutor {
                                     return true;
                                 }
 
-                                i = Integer.parseInt(args[2]);
+                                amount = Integer.parseInt(args[2]);
                             }
 
                             if (args.length >= 4) {
@@ -535,7 +536,7 @@ public class CECommand implements CommandExecutor {
                             Scrolls scroll = Scrolls.getFromName(args[1]);
 
                             if (scroll != null) {
-                                methods.getPlayer(name).getInventory().addItem(scroll.getScroll(i));
+                                methods.getPlayer(name).getInventory().addItem(scroll.getScroll(amount));
                                 return true;
                             }
                         }

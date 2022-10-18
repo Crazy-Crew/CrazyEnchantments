@@ -176,8 +176,8 @@ public class ScrollListener implements Listener {
             // Checks if the item has a custom name and if so checks to see if it already has the suffix.
 
             if (itemMeta.hasDisplayName()) {
-                for (int i = 0; i <= 100; i++) {
-                    String msg = suffix.replace("%Amount%", i + "").replace("%amount%", i + "");
+                for (int amount = 0; amount <= 100; amount++) {
+                    String msg = suffix.replace("%Amount%", amount + "").replace("%amount%", amount + "");
 
                     if (itemMeta.getDisplayName().endsWith(methods.color(msg))) {
                         newName = itemMeta.getDisplayName().substring(0, itemMeta.getDisplayName().length() - msg.length());

@@ -33,7 +33,6 @@ public class FileManager {
      * Sets up the plugin and loads all necessary files.
      */
     public FileManager setup() {
-
         if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
 
         files.clear();
@@ -44,7 +43,7 @@ public class FileManager {
         for (Files file : Files.values()) {
             File newFile = new File(plugin.getDataFolder(), file.getFileLocation());
 
-            if (isLogging()) plugin.getLogger().info("Loading the " + file.getFileName());
+            if (isLogging()) plugin.getLogger().info("Loading the " + file.getFileName() + ".");
 
             if (!newFile.exists()) {
                 try {
@@ -52,7 +51,7 @@ public class FileManager {
                     InputStream jarFile = getClass().getResourceAsStream("/" + file.getFileJar());
                     copyFile(jarFile, serverFile);
                 } catch (Exception e) {
-                    if (isLogging()) plugin.getLogger().info("Failed to load file: " + file.getFileName());
+                    if (isLogging()) plugin.getLogger().info("Failed to load file: " + file.getFileName() + ".");
 
                     e.printStackTrace();
                     continue;
@@ -62,7 +61,7 @@ public class FileManager {
             files.put(file, newFile);
             configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
 
-            if (isLogging()) plugin.getLogger().info("Successfully loaded " + file.getFileName());
+            if (isLogging()) plugin.getLogger().info("Successfully loaded " + file.getFileName() + ".");
         }
 
         // Starts to load all the custom files.
@@ -268,7 +267,7 @@ public class FileManager {
         CustomFile file = getFile(name);
         if (file != null) {
             try {
-                file.file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
+                file.file = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName() + "."));
                 if (isLogging()) plugin.getLogger().info("Successfully reload the " + file.getFileName() + ".");
             } catch (Exception e) {
                 plugin.getLogger().info("Could not reload the " + file.getFileName() + "!");
@@ -288,7 +287,7 @@ public class FileManager {
     }
     
     /**
-     * Was found here: https://bukkit.org/threads/extracting-file-from-jar.16962
+     * Was found here: <a href="https://bukkit.org/threads/extracting-file-from-jar.16962">...</a>
      */
     private void copyFile(InputStream in, File out) throws Exception {
         try (InputStream fis = in; FileOutputStream fos = new FileOutputStream(out)) {

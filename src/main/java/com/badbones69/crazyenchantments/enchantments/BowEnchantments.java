@@ -96,7 +96,7 @@ public class BowEnchantments implements Listener {
         if (!(e.getEntity().getShooter() instanceof Player)) return;
         EnchantedArrow arrow = bowUtils.enchantedArrow(entityArrow);
 
-        // Spawn webs related to STICKY_SHOT
+        // Spawn webs related to STICKY_SHOT.
         bowUtils.spawnWebs(e.getEntity(), e.getHitEntity(), arrow, entityArrow);
 
         if (CEnchantments.BOOM.isActivated() && arrow != null) {
@@ -120,7 +120,6 @@ public class BowEnchantments implements Listener {
                 } catch (Exception ignore) {}
 
                 // AntiCheat Support.
-
                 if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(shooter);
 
                 if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(shooter);

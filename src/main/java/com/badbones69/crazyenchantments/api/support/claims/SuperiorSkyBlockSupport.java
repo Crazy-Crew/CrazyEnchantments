@@ -8,11 +8,13 @@ public class SuperiorSkyBlockSupport {
 
     public boolean inTerritory(Player player) {
         SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
+
         return superiorPlayer.isInsideIsland();
     }
 
     public boolean isFriendly(Player player, Player other) {
         SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player), otherPlayer = SuperiorSkyblockAPI.getPlayer(other);
+
         return superiorPlayer.getIsland() != null && superiorPlayer.getIsland().isMember(otherPlayer);
     }
 }

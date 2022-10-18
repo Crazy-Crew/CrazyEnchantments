@@ -206,7 +206,6 @@ public class EnchantmentControl implements Listener {
     
     @EventHandler(ignoreCancelled = true)
     public void onDescriptionSend(PlayerInteractEvent e) {
-
         if (e.getHand() != EquipmentSlot.HAND) return;
 
         if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description")) {

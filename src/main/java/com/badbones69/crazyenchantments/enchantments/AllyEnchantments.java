@@ -99,11 +99,13 @@ public class AllyEnchantments implements Listener {
     private void checkEnchantment(LivingEntity enemy, Player player, ItemStack item) {
         if (crazyManager.hasEnchantment(item, CEnchantments.NECROMANCER)) {
             int power = crazyManager.getLevel(item, CEnchantments.NECROMANCER);
+
             spawnAllies(player, enemy, AllyType.ZOMBIE, power * 2);
         }
 
         if (crazyManager.hasEnchantment(item, CEnchantments.INFESTATION)) {
             int power = crazyManager.getLevel(item, CEnchantments.INFESTATION);
+
             spawnAllies(player, enemy, AllyType.ENDERMITE, power * 3);
             spawnAllies(player, enemy, AllyType.SILVERFISH, power * 3);
         }
@@ -112,7 +114,9 @@ public class AllyEnchantments implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyTarget(EntityTargetEvent event) {
         if (!(event.getTarget() instanceof Player player)) return;
+
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
+
         if (!allyManager.isAlly(player, entity)) return;
 
         event.setCancelled(true);

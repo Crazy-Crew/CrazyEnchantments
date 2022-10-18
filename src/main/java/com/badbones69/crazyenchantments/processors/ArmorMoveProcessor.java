@@ -67,6 +67,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                         syncProcessor.add(() -> {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
                             plugin.getServer().getPluginManager().callEvent(event);
+
                             if (!event.isCancelled() && player.getHealth() > 0) {
                                 if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
 
@@ -101,8 +102,8 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (!(entity instanceof Player other)) continue;
                         if (!pluginSupport.isFriendly(player, other)) continue;
-                        AngelUseEvent event = new AngelUseEvent(player, armor);
 
+                        AngelUseEvent event = new AngelUseEvent(player, armor);
                         plugin.getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
@@ -124,6 +125,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
                 plugin.getServer().getScheduler().runTask(plugin, () -> {
                     int finalArmorDurability = armorDurability;
+
                     HellForgedUseEvent event = new HellForgedUseEvent(player, item);
                     plugin.getServer().getPluginManager().callEvent(event);
 

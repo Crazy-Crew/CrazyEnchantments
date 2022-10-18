@@ -80,6 +80,7 @@ public class SwordEnchantments implements Listener {
                 }
             }
         }
+
         if (!(e.getEntity() instanceof LivingEntity en)) return;
         if (!(e.getDamager() instanceof final Player damager)) return;
 
@@ -248,7 +249,6 @@ public class SwordEnchantments implements Listener {
             plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-
                 if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(damager);
 
                 if (damager.getSaturation() + (2 * crazyManager.getLevel(item, CEnchantments.NUTRITION)) <= 20) damager.setSaturation(damager.getSaturation() + (2 * crazyManager.getLevel(item, CEnchantments.NUTRITION)));

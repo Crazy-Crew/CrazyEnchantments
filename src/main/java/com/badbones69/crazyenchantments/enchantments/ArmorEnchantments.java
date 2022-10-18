@@ -156,9 +156,7 @@ public class ArmorEnchantments implements Listener {
 
                             player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
 
-                            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                                enchantmentSettings.removeFallenPlayer(player);
-                            }, 8 * 20);
+                            plugin.getServer().getScheduler().runTaskLater(plugin, () -> enchantmentSettings.removeFallenPlayer(player), 8 * 20);
 
                         }
                     }

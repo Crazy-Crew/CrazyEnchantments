@@ -41,40 +41,39 @@ public class DustControlListener implements Listener {
         ArrayList<String> lore = new ArrayList<>();
         CEnchantment enchantment = null;
 
-        for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
-            String ench = en.getCustomName();
+        for (CEnchantment registeredEnchantments : crazyManager.getRegisteredEnchantments()) {
+            String ench = registeredEnchantments.getCustomName();
 
-            if (item.getItemMeta().getDisplayName().contains(ench)) enchantment = en;
+            if (item.getItemMeta().getDisplayName().contains(ench)) enchantment = registeredEnchantments;
         }
 
-        for (String l : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
-            boolean line = true;
+        for (String lores : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
+            boolean hasLine = true;
 
-            if (l.contains("%Description%") || l.contains("%description%")) {
+            if (lores.contains("%Description%") || lores.contains("%description%")) {
                 if (enchantment != null) {
-                    for (String L : enchantment.getInfoDescription()) {
-                        lore.add(methods.color(L));
-                    }
+                    enchantment.getInfoDescription().forEach(lines -> lore.add(methods.color(lines)));
                 }
 
-                line = false;
+                hasLine = false;
             }
 
             if (rate.equalsIgnoreCase("Success")) {
-                l = l.replace("%Success_Rate%", percent + "").replace("%success_rate%", percent + "")
+                lores = lores.replace("%Success_Rate%", percent + "").replace("%success_rate%", percent + "")
                 .replace("%Destroy_Rate%", methods.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "")
                 .replace("%destroy_rate%", methods.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "");
             } else {
-                l = l.replace("%Destroy_Rate%", percent + "").replace("%destroy_rate%", percent + "")
+                lores = lores.replace("%Destroy_Rate%", percent + "").replace("%destroy_rate%", percent + "")
                 .replace("%Success_Rate%", methods.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "")
                 .replace("%success_rate%", methods.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "");
             }
 
-            if (line) lore.add(methods.color(l));
+            if (hasLine) lore.add(methods.color(lores));
         }
 
         assert meta != null;
         meta.setLore(lore);
+
         item.setItemMeta(meta);
     }
 
@@ -100,28 +99,30 @@ public class DustControlListener implements Listener {
         if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
             List<String> lore = item.getItemMeta().getLore();
             List<String> fileLore = Files.CONFIG.getFile().getStringList("Settings.Dust." + dust.getConfigName() + ".Lore");
-            int i = 0;
+            int amount = 0;
 
             if (lore != null && lore.size() == fileLore.size()) {
-                for (String l : fileLore) {
-                    l = methods.color(l);
-                    String lo = lore.get(i);
+                for (String lores : fileLore) {
+                    lores = methods.color(lores);
+                    String getLore = lore.get(amount);
 
-                    if (l.contains("%Percent%")) {
-                        String[] b = l.split("%Percent%");
-                        if (b.length >= 1) arg = lo.replace(b[0], "");
-                        if (b.length >= 2) arg = arg.replace(b[1], "");
+                    if (lores.contains("%Percent%")) {
+                        String[] loreSplit = lores.split("%Percent%");
+                        if (loreSplit.length >= 1) arg = getLore.replace(loreSplit[0], "");
+                        if (loreSplit.length >= 2) arg = arg.replace(loreSplit[1], "");
+
                         break;
                     }
 
-                    if (l.contains("%percent%")) {
-                        String[] b = l.split("%percent%");
-                        if (b.length >= 1) arg = lo.replace(b[0], "");
-                        if (b.length >= 2) arg = arg.replace(b[1], "");
+                    if (lores.contains("%percent%")) {
+                        String[] loreSplit = lores.split("%percent%");
+                        if (loreSplit.length >= 1) arg = getLore.replace(loreSplit[0], "");
+                        if (loreSplit.length >= 2) arg = arg.replace(loreSplit[1], "");
+
                         break;
                     }
 
-                    i++;
+                    amount++;
                 }
             }
         }
@@ -163,10 +164,14 @@ public class DustControlListener implements Listener {
                         }
 
                         per += total;
+
                         if (per < 0) per = 0;
                         if (per > 100) per = 100;
+
                         e.setCancelled(true);
+
                         setLore(book, per, "Success");
+
                         player.setItemOnCursor(methods.removeItem(dust));
                         player.updateInventory();
                     }
@@ -188,10 +193,14 @@ public class DustControlListener implements Listener {
                         }
 
                         per = total - per;
+
                         if (per < 0) per = 0;
                         if (per > 100) per = 100;
+
                         e.setCancelled(true);
+
                         setLore(book, per, "Destroy");
+
                         player.setItemOnCursor(methods.removeItem(dust));
                         player.updateInventory();
                     }

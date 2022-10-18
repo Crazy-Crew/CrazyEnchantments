@@ -65,46 +65,47 @@ public class BlackSmith implements Listener {
             ItemStack item = e.getCurrentItem();
 
             if (item != null) {
-                if (e.getRawSlot() > 26) { // Click In Players Inventory
+                if (e.getRawSlot() > 26) { // Click in players inventory.
                     if (item.getAmount() != 1) return;
+
                     if (crazyManager.hasEnchantments(item) || crazyManager.isEnchantmentBook(item)) {
-                        if (inventory.getItem(mainSlot) == null) { // Main item slot is empty
+                        if (inventory.getItem(mainSlot) == null) { // Main item slot is empty.
                             e.setCurrentItem(new ItemStack(Material.AIR));
-                            inventory.setItem(mainSlot, item); // Moves clicked item to main slot
+                            inventory.setItem(mainSlot, item); // Moves clicked item to main slot.
                             playSound(player, click);
 
-                            if (inventory.getItem(subSlot) != null) { // Sub item slot is not empty
+                            if (inventory.getItem(subSlot) != null) { // Sub item slot is not empty.
                                 BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
                                 setResultBoarder(resultItem, inventory);
                             }
 
-                        } else { // Main item slot is not empty
+                        } else { // Main item slot is not empty.
                             e.setCurrentItem(new ItemStack(Material.AIR));
 
-                            // Sub item slot is not empty
-                            // Moves sub slot item to clicked items slot
+                            // Sub item slot is not empty.
+                            // Moves sub slot item to clicked items slot.
                             if (inventory.getItem(subSlot) != null) e.setCurrentItem(inventory.getItem(subSlot));
 
-                            inventory.setItem(subSlot, item); // Moves clicked item to sub slot
+                            inventory.setItem(subSlot, item); // Moves clicked item to sub slot.
                             playSound(player, click);
                             BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
                             setResultBoarder(resultItem, inventory);
                         }
                     }
-                } else { // Click In the Black Smith
-                    if (e.getRawSlot() == mainSlot || e.getRawSlot() == subSlot) { // Clicked either the Main slot or Sub slot
-                        e.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air
+                } else { // Menu click in black smith.
+                    if (e.getRawSlot() == mainSlot || e.getRawSlot() == subSlot) { // Clicked either the main slot or sub slot.
+                        e.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air.
                         givePlayerItem(player, item);
                         inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
                         resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
                         playSound(player, click);
                     }
 
-                    if (e.getRawSlot() == resultSlot) { // Clicks the result item slot
-                        if (inventory.getItem(mainSlot) != null && inventory.getItem(subSlot) != null) { // Main and Sub items are not empty
+                    if (e.getRawSlot() == resultSlot) { // Clicks the result item slot.
+                        if (inventory.getItem(mainSlot) != null && inventory.getItem(subSlot) != null) { // Main and sub items are not empty.
                             BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
 
-                            if (resultItem.getCost() > 0) { // Items are upgradeable
+                            if (resultItem.getCost() > 0) { // Items are upgradeable.
                                 if (blackSmithManager.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                                     Currency currency = blackSmithManager.getCurrency();
 
@@ -119,6 +120,7 @@ public class BlackSmith implements Listener {
                                 }
 
                                 givePlayerItem(player, resultItem.getResultItem());
+
                                 inventory.setItem(mainSlot, new ItemStack(Material.AIR));
                                 inventory.setItem(subSlot, new ItemStack(Material.AIR));
                                 playSound(player, levelUp);
@@ -152,10 +154,10 @@ public class BlackSmith implements Listener {
     }
     
     private void setResultBoarder(BlackSmithResult resultItem, Inventory inventory) {
-        if (resultItem.getCost() > 0) { // Items are upgradable
+        if (resultItem.getCost() > 0) { // Items are upgradable.
             inventory.setItem(resultSlot, methods.addLore(resultItem.getResultItem(), getFoundString(resultItem)));
             resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getBlueGlass()));
-        } else { // Items are not upgradable
+        } else { // Items are not upgradable.
             inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
             resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
         }

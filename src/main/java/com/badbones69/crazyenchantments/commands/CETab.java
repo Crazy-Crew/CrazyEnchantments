@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +29,9 @@ public class CETab implements TabCompleter {
     private final CrazyManager crazyManager = starter.getCrazyManager();
     
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
+
         if (args.length == 1) { // /ce
             if (hasPermission(sender, "access")) completions.add("help");
             if (hasPermission(sender, "debug")) completions.add("debug");
@@ -105,7 +108,7 @@ public class CETab implements TabCompleter {
                 case "book":
                     CEnchantment ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
 
-                    if (ceEnchantment != null) for (int i = 1; i <= ceEnchantment.getMaxLevel(); i++) completions.add(i + "");
+                    if (ceEnchantment != null) for (int amount = 1; amount <= ceEnchantment.getMaxLevel(); amount++) completions.add(amount + "");
 
                     break;
                 case "add":
@@ -114,7 +117,7 @@ public class CETab implements TabCompleter {
 
                     if (vanillaEnchantment != null || ceEnchantment != null) {
                         int maxLevel = vanillaEnchantment != null ? vanillaEnchantment.getMaxLevel() : ceEnchantment.getMaxLevel();
-                        for (int i = 1; i <= maxLevel; i++) completions.add(i + "");
+                        for (int amount = 1; amount <= maxLevel; amount++) completions.add(amount + "");
                     }
 
                     break;

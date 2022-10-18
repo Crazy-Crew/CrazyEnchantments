@@ -22,11 +22,13 @@ public class FactionsUUIDSupport implements FactionsVersion {
 
     public boolean inTerritory(Player player) {
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
+
         return !isWilderness(fPlayer) && (fPlayer.isInOwnTerritory() || fPlayer.isInAllyTerritory());
     }
 
     public boolean canBreakBlock(Player player, Block block) {
         Faction fBlock = Board.getInstance().getFactionAt(new FLocation(block.getLocation()));
+
         return isWilderness(fBlock) || FPlayers.getInstance().getByPlayer(player).getFaction() == fBlock;
     }
 

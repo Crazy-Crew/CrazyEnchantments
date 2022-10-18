@@ -4,11 +4,11 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.enums.Messages;
-import com.badbones69.crazyenchantments.controllers.Tinkerer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class TinkerCommand implements CommandExecutor {
 
@@ -19,7 +19,7 @@ public class TinkerCommand implements CommandExecutor {
     private final Methods methods = starter.getMethods();
     
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());

@@ -22,6 +22,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
 
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+
             return set.queryState(null, Flags.PVP) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;
@@ -35,6 +36,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
 
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+
             return set.queryState(null, Flags.BLOCK_BREAK) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;
@@ -48,6 +50,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
 
         try {
             ApplicableRegionSet set = instance.getPlatform().getRegionContainer().get(world).getApplicableRegions(v);
+
             return set.queryState(null, Flags.OTHER_EXPLOSION) != StateFlag.State.DENY && set.queryState(null, Flags.TNT) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;

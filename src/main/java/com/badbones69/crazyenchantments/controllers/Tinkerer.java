@@ -27,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Tinkerer implements Listener {
 
@@ -43,10 +44,13 @@ public class Tinkerer implements Listener {
 
     public void openTinker(Player player) {
         Inventory inv = plugin.getServer().createInventory(null, 54, methods.color(Files.TINKER.getFile().getString("Settings.GUIName")));
+
         inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
         .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
         .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
+
         List<Integer> slots = new ArrayList<>();
+
         slots.add(4);
         slots.add(13);
         slots.add(22);
@@ -94,7 +98,7 @@ public class Tinkerer implements Listener {
             ItemStack current = e.getCurrentItem();
 
             if (current != null && current.getType() != Material.AIR && current.hasItemMeta() && (current.getItemMeta().hasLore() || current.getItemMeta().hasDisplayName() || current.getItemMeta().hasEnchants())) {
-                // Recycling things
+                // Recycling things.
                 if (current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(methods.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
                     int total = 0;
                     boolean toggle = false;
@@ -129,8 +133,8 @@ public class Tinkerer implements Listener {
                     return;
                 }
 
-                if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) { // Adding/Taking Items
-                    if (current.getType() == crazyManager.getEnchantmentBookItem().getType()) { // Adding a book
+                if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) { // Adding/taking items.
+                    if (current.getType() == crazyManager.getEnchantmentBookItem().getType()) { // Adding a book.
                         boolean toggle = false;
                         String enchant = "";
 
@@ -142,11 +146,11 @@ public class Tinkerer implements Listener {
                         }
 
                         if (toggle) {
-                            if (inTinker(e.getRawSlot())) { // Clicking in the Tinkers
+                            if (inTinker(e.getRawSlot())) { // Clicking in the tinkers.
                                 e.setCurrentItem(new ItemStack(Material.AIR));
                                 player.getInventory().addItem(current);
                                 inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
-                            } else { // Clicking in their inventory
+                            } else { // Clicking in their inventory.
                                 if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
                                     player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
                                     return;
@@ -161,8 +165,8 @@ public class Tinkerer implements Listener {
                         }
                     }
 
-                    if (getTotalXP(current) > 0 && current.getType() != crazyManager.getEnchantmentBookItem().getType()) { // Adding an item
-                        if (inTinker(e.getRawSlot())) { // Clicking in the Tinkers
+                    if (getTotalXP(current) > 0 && current.getType() != crazyManager.getEnchantmentBookItem().getType()) { // Adding an item.
+                        if (inTinker(e.getRawSlot())) { // Clicking in the tinkers.
 
                             if (getSlot().containsKey(e.getRawSlot())) {
                                 e.setCurrentItem(new ItemStack(Material.AIR));
@@ -170,7 +174,7 @@ public class Tinkerer implements Listener {
                                 inv.setItem(getSlot().get(e.getRawSlot()), new ItemStack(Material.AIR));
                                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
                             }
-                        } else { // Clicking in their inventory
+                        } else { // Clicking in their inventory.
 
                             if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
                                 player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
@@ -263,7 +267,7 @@ public class Tinkerer implements Listener {
     }
 
     private boolean inTinker(int slot) {
-        // The last slot in the tinker is 54
+        // The last slot in the tinker is 54.
         return slot < 54;
     }
 
@@ -287,25 +291,25 @@ public class Tinkerer implements Listener {
 
     private Integer getXP(ItemStack item) {
         String arg = "";
-        int i = 0;
+        int amount = 0;
 
-        for (String l : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
-            l = methods.color(l);
-            String lo = item.getItemMeta().getLore().get(i);
+        for (String lore : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
+            lore = methods.color(lore);
+            String itemLore = Objects.requireNonNull(item.getItemMeta().getLore()).get(amount);
 
-            if (l.contains("%Total%")) {
-                String[] b = l.split("%Total%");
-                if (b.length >= 1) arg = lo.replace(b[0], "");
+            if (lore.contains("%Total%")) {
+                String[] b = lore.split("%Total%");
+                if (b.length >= 1) arg = itemLore.replace(b[0], "");
                 if (b.length >= 2) arg = arg.replace(b[1], "");
             }
 
-            if (l.contains("%total%")) {
-                String[] b = l.split("%total%");
-                if (b.length >= 1) arg = lo.replace(b[0], "");
+            if (lore.contains("%total%")) {
+                String[] b = lore.split("%total%");
+                if (b.length >= 1) arg = itemLore.replace(b[0], "");
                 if (b.length >= 2) arg = arg.replace(b[1], "");
             }
 
-            i++;
+            amount++;
         }
 
         return Integer.parseInt(arg);

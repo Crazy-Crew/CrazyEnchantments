@@ -27,6 +27,7 @@ public class CropManager implements CropManagerVersion {
     @Override
     public void hydrateSoil(Block soil) {
         Farmland farmland = (Farmland) soil.getBlockData();
+
         farmland.setMoisture(farmland.getMaximumMoisture());
         soil.setBlockData(farmland);
     }

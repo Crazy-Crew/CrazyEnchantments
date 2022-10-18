@@ -225,12 +225,11 @@ public class SkullCreator {
         }
     }
 
-    private void notNull(Object o, String name) {
-        if (o == null) throw new NullPointerException(name + " should not be null!");
+    private void notNull(Object object, String name) {
+        if (object == null) throw new NullPointerException(name + " should not be null!");
     }
 
     private String urlToBase64(String url) {
-
         URI actualUrl;
 
         try {

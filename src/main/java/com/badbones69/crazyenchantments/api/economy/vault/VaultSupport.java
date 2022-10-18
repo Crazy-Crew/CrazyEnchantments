@@ -15,10 +15,10 @@ public class VaultSupport {
     }
 
     public void loadVault() {
-        RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+        RegisteredServiceProvider<Economy> serviceProvider = plugin.getServer().getServicesManager().getRegistration(Economy.class);
 
         plugin.getLogger().info("Vault was found so support has been enabled.");
 
-        if (rsp != null) vault = rsp.getProvider();
+        if (serviceProvider != null) vault = serviceProvider.getProvider();
     }
 }

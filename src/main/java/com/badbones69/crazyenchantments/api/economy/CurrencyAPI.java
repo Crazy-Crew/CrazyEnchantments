@@ -170,9 +170,9 @@ public class CurrencyAPI {
             return experience;
         }
     }
-    
+
     /**
-     * Loads the vault currency if it is on the server.
+     * Loads the currency if it is on the server.
      */
     public void loadCurrency() {
         vaultSupport.loadVault();

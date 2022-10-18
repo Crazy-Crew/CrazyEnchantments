@@ -172,10 +172,10 @@ public class ScramblerListener implements Listener {
         int full = 120;
         int cut = 15;
 
-        for (int i = 120; cut > 0; full--) {
-            if (full <= i - cut || full >= i - cut) {
-                slow.add(i);
-                i = i - cut;
+        for (int amount = 120; cut > 0; full--) {
+            if (full <= amount - cut || full >= amount - cut) {
+                slow.add(amount);
+                amount = amount - cut;
                 cut--;
             }
         }
@@ -194,8 +194,8 @@ public class ScramblerListener implements Listener {
         newBook.setType(methods.getRandomPaneColor().getMaterial());
         inv.setItem(9, newBook);
 
-        for (int i = 0; i < 8; i++) {
-            inv.setItem(i + 10, items.get(i));
+        for (int amount = 0; amount < 8; amount++) {
+            inv.setItem(amount + 10, items.get(amount));
         }
     }
 

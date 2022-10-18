@@ -29,6 +29,7 @@ public class TownySupport implements FactionsVersion {
         try {
             if (block != null && block.hasTown()) {
                 assert resident != null;
+
                 if (resident.hasTown() && resident.getTown().equals(block.getTown())) return true;
             }
         } catch (NotRegisteredException e) {
