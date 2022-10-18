@@ -318,12 +318,11 @@ public class SwordEnchantments implements Listener {
             plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-
-                //if (e.getEntity() instanceof Player && PluginSupport.SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    //SpartanSupport.cancelSpeed((Player) e.getEntity());
-                    //SpartanSupport.cancelNormalMovements((Player) e.getEntity());
-                    //SpartanSupport.cancelNoFall((Player) e.getEntity());
-                //}
+                if (e.getEntity() instanceof Player && SupportedPlugins.SPARTAN.isPluginLoaded()) {
+                    spartanSupport.cancelSpeed((Player) e.getEntity());
+                    spartanSupport.cancelNormalMovements((Player) e.getEntity());
+                    spartanSupport.cancelNoFall((Player) e.getEntity());
+                }
 
                 e.getEntity().setVelocity(damager.getLocation().getDirection().multiply(2).setY(1.25));
             }
