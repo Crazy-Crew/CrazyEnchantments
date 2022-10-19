@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -46,6 +47,7 @@ public class PickaxeEnchantments implements Listener {
 
     // Settings.
     private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Plugin Support.
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
@@ -80,7 +82,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (!blocks.containsKey(player)) return;
 
-        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(currentItem);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
 
         if (!blocks.get(player).containsKey(currentBlock)) return;
 
@@ -221,7 +223,7 @@ public class PickaxeEnchantments implements Listener {
         Block block = e.getBlock();
         Player player = e.getPlayer();
         ItemStack item = methods.getItemInHand(player);
-        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         boolean isOre = isOre(block.getType());
 
         if (player.getGameMode() != GameMode.CREATIVE) {

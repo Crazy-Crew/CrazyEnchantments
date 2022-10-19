@@ -1,11 +1,13 @@
 package com.badbones69.crazyenchantments.listeners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,7 +28,7 @@ public class AuraListener implements Listener {
 
     private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final CEnchantments[] AURA_ENCHANTMENTS = {
             CEnchantments.BLIZZARD,
@@ -56,7 +58,7 @@ public class AuraListener implements Listener {
         if (playerEquipment.getHolder().isEmpty()) return;
 
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
-            Map<CEnchantment, Integer> itemEnchantments = crazyManager.getEnchantments(item);
+            Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
@@ -75,7 +77,7 @@ public class AuraListener implements Listener {
             if (otherEquipment.getHolder().isEmpty()) continue;
 
             for (ItemStack item : otherEquipment.getArmorContents()) { // The other players moving.
-                Map<CEnchantment, Integer> itemEnchantments = crazyManager.getEnchantments(item);
+                Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 

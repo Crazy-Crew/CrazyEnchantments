@@ -104,7 +104,7 @@ public class CECommand implements CommandExecutor {
                         assert sender instanceof Player;
                         placeholders.put("%limit%", crazyManager.getPlayerMaxEnchantments((Player) sender) + "");
                         placeholders.put("%vanilla%", crazyManager.checkVanillaLimit() + "");
-                        placeholders.put("%item%", crazyManager.getEnchantmentAmount(methods.getItemInHand((Player) sender)) + "");
+                        placeholders.put("%item%", enchantmentBookSettings.getEnchantmentAmount(methods.getItemInHand((Player) sender), crazyManager.checkVanillaLimit()) + "");
 
                         sender.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
                     }
@@ -633,7 +633,7 @@ public class CECommand implements CommandExecutor {
                                 return true;
                             } else {
                                 if (enchantmentBookSettings.hasEnchantment(item, ceEnchantment)) {
-                                    methods.setItemInHand(player, crazyManager.removeEnchantment(item, ceEnchantment));
+                                    methods.setItemInHand(player, enchantmentBookSettings.removeEnchantment(item, ceEnchantment));
                                     HashMap<String, String> placeholders = new HashMap<>();
                                     placeholders.put("%Enchantment%", ceEnchantment.getCustomName());
                                     player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders));

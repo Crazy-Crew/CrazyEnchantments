@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
-import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
@@ -19,6 +18,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -30,8 +30,6 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Methods {
 
@@ -655,6 +653,49 @@ public class Methods {
                 }
             }
         }
+    }
+
+    public String getWhiteScrollProtectionName() {
+        String protectNamed;
+
+        FileConfiguration config = Files.CONFIG.getFile();
+
+        protectNamed = starter.color(config.getString("Settings.WhiteScroll.ProtectedName"));
+
+        return protectNamed;
+    }
+
+    public boolean hasWhiteScrollProtection(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null && meta.hasLore()) {
+            List<String> itemLore = meta.getLore();
+
+            if (itemLore != null) {
+                for (String lore : itemLore) {
+                    if (lore.equals(getWhiteScrollProtectionName())) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public ItemStack addWhiteScrollProtection(ItemStack item) {
+        return ItemBuilder.convertItemStack(item).addLore(getWhiteScrollProtectionName()).build();
+    }
+
+    public ItemStack removeWhiteScrollProtection(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+
+        if (itemMeta != null && itemMeta.hasLore()) {
+            List<String> newLore = new ArrayList<>(Objects.requireNonNull(itemMeta.getLore()));
+            newLore.remove(getWhiteScrollProtectionName());
+            itemMeta.setLore(newLore);
+            item.setItemMeta(itemMeta);
+        }
+
+        return item;
     }
 
     /**

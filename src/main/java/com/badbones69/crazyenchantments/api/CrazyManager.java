@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.api;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -23,7 +22,6 @@ import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.WingsUtils;
 import com.google.common.collect.Lists;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -90,7 +88,6 @@ public class CrazyManager {
     private boolean checkVanillaLimit;
 
     private boolean dropBlocksBlast;
-    private String whiteScrollProtectionName;
 
     /**
      * Loads everything for the Crazy Enchantments plugin.
@@ -143,7 +140,8 @@ public class CrazyManager {
         // Loads the info menu manager and the enchantment types.
         infoMenuManager.load();
 
-        whiteScrollProtectionName = starter.color(config.getString("Settings.WhiteScroll.ProtectedName"));
+        methods.getWhiteScrollProtectionName();
+
         enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(Objects.requireNonNull(config.getString("Settings.Enchantment-Book-Item"))));
         useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
         maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle");
@@ -517,7 +515,7 @@ public class CrazyManager {
         highest = checkHighEnchant(player, excludedItem, enchantment);
 
         if (enchantmentBookSettings.hasEnchantment(includedItem, enchantment)) {
-            int level = getLevel(includedItem, enchantment);
+            int level = enchantmentBookSettings.getLevel(includedItem, enchantment);
 
             if (highest < level) highest = level;
         }
@@ -540,7 +538,7 @@ public class CrazyManager {
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             if (!armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantment)) {
-                int level = getLevel(armor, enchantment);
+                int level = enchantmentBookSettings.getLevel(armor, enchantment);
 
                 if (highest < level) highest = level;
             }
@@ -560,14 +558,14 @@ public class CrazyManager {
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
             if (enchantmentBookSettings.hasEnchantment(armor, enchantment)) {
-                int level = getLevel(armor, enchantment);
+                int level = enchantmentBookSettings.getLevel(armor, enchantment);
 
                 if (highest < level) highest = level;
             }
         }
 
         if (enchantmentBookSettings.hasEnchantment(includedItem, enchantment)) {
-            int level = getLevel(includedItem, enchantment);
+            int level = enchantmentBookSettings.getLevel(includedItem, enchantment);
             if (highest < level) highest = level;
         }
 
@@ -632,15 +630,15 @@ public class CrazyManager {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
 
-            if (enchantmentBookSettings.hasEnchantment(item, enchantment)) removeEnchantment(item, enchantment);
+            if (enchantmentBookSettings.hasEnchantment(item, enchantment)) enchantmentBookSettings.removeEnchantment(item, enchantment);
 
             List<String> newLore = new ArrayList<>();
             List<String> lores = new ArrayList<>();
             HashMap<String, String> enchantmentStrings = new HashMap<>();
 
-            for (CEnchantment en : getEnchantmentsOnItem(item)) {
-                enchantmentStrings.put(en.getName(), starter.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
-                removeEnchantment(item, en);
+            for (CEnchantment en : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
+                enchantmentStrings.put(en.getName(), starter.color(en.getColor() + en.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentBookSettings.getLevel(item, en))));
+                enchantmentBookSettings.removeEnchantment(item, en);
             }
 
             ItemMeta meta = item.getItemMeta();
@@ -651,7 +649,7 @@ public class CrazyManager {
                 if (itemLore != null) lores.addAll(itemLore);
             }
 
-            enchantmentStrings.put(enchantment.getName(), starter.color(enchantment.getColor() + enchantment.getCustomName() + " " + convertLevelString(level)));
+            enchantmentStrings.put(enchantment.getName(), starter.color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level)));
 
             for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
                 newLore.add(stringEntry.getValue());
@@ -662,127 +660,6 @@ public class CrazyManager {
             if (meta != null) meta.setLore(newLore);
 
             item.setItemMeta(meta);
-        }
-
-        return item;
-    }
-
-    /**
-     * @param item Item you want to remove the enchantment from.
-     * @param enchant Enchantment you want removed.
-     * @return Item without the enchantment.
-     */
-    public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
-        List<String> newLore = new ArrayList<>();
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta != null && meta.hasLore()) {
-            List<String> itemLore = meta.getLore();
-
-            if (itemLore != null) {
-                for (String lore : itemLore) {
-                    if (!lore.contains(enchant.getCustomName())) newLore.add(lore);
-                }
-            }
-        }
-
-        if (meta != null) meta.setLore(newLore);
-
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    /**
-     * Note: If the enchantment is not active it will not be added to the list.
-     * @param item Item you want to get the enchantments from.
-     * @return A list of enchantments the item has.
-     */
-    public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
-        return new ArrayList<>(getEnchantments(item).keySet());
-    }
-
-    /**
-     * Note: If the enchantment is not active it will not be added to the Map.
-     * @param item Item you want to get the enchantments from.
-     * @return A Map of all enchantments and their levels on the item.
-     */
-    public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
-
-        if (!enchantmentBookSettings.verifyItemLore(item)) return Collections.emptyMap();
-
-        List<String> lore = item.getItemMeta().getLore();
-        Map<CEnchantment, Integer> enchantments = null;
-
-        assert lore != null;
-        for (String line : lore) {
-            int lastSpaceIndex = line.lastIndexOf(' ');
-
-            if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) continue;
-
-            String enchantmentName = line.substring(0, lastSpaceIndex);
-
-            for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
-                if (!enchantment.isActivated()) continue;
-
-                if (!enchantmentName.equals(enchantment.getColor() + enchantment.getCustomName())) continue;
-
-                String levelString = line.substring(lastSpaceIndex + 1);
-                int level = methods.convertLevelInteger(levelString);
-
-                if (level < 1) break;
-
-                if (enchantments == null) enchantments = new HashMap<>();
-
-                enchantments.put(enchantment, level);
-                break; // Next line
-            }
-        }
-
-        if (enchantments == null) enchantments = Collections.emptyMap();
-
-        return enchantments;
-    }
-
-    public int getEnchantmentAmount(ItemStack item) {
-        int amount = getEnchantmentsOnItem(item).size();
-
-        if (checkVanillaLimit) {
-            if (item.hasItemMeta()) {
-                if (item.getItemMeta().hasEnchants()) amount += item.getItemMeta().getEnchants().size();
-            }
-        }
-
-        return amount;
-    }
-
-    public boolean hasWhiteScrollProtection(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta != null && meta.hasLore()) {
-            List<String> itemLore = meta.getLore();
-
-            if (itemLore != null) {
-                for (String lore : itemLore) {
-                    if (lore.equals(whiteScrollProtectionName)) return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public ItemStack addWhiteScrollProtection(ItemStack item) {
-        return ItemBuilder.convertItemStack(item).addLore(whiteScrollProtectionName).build();
-    }
-
-    public ItemStack removeWhiteScrollProtection(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-
-        if (itemMeta != null && itemMeta.hasLore()) {
-            List<String> newLore = new ArrayList<>(Objects.requireNonNull(itemMeta.getLore()));
-            newLore.remove(whiteScrollProtectionName);
-            itemMeta.setLore(newLore);
-            item.setItemMeta(itemMeta);
         }
 
         return item;
@@ -829,7 +706,7 @@ public class CrazyManager {
             if (enchantments.getKey().isActivated()) {
                 for (ItemStack armor : items) {
                     if (armor != null && !armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantments.getKey().getEnchantment())) {
-                        int level = getLevel(armor, enchantments.getKey().getEnchantment());
+                        int level = enchantmentBookSettings.getLevel(armor, enchantments.getKey().getEnchantment());
 
                         if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
 
@@ -935,22 +812,9 @@ public class CrazyManager {
     }
 
     public boolean canAddEnchantment(Player player, ItemStack item) {
-        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) return getEnchantmentAmount(item) < getPlayerMaxEnchantments(player);
+        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) return enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) < getPlayerMaxEnchantments(player);
 
         return true;
-    }
-
-    /**
-     * @param item Item you are getting the level from.
-     * @param enchant The enchantment you want the level from.
-     * @return The level the enchantment has.
-     */
-    public int getLevel(ItemStack item, CEnchantment enchant) {
-        int level = methods.convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
-
-        if (!useUnsafeEnchantments && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
-
-        return level;
     }
 
     /**
@@ -961,34 +825,11 @@ public class CrazyManager {
     public int getLevel(ItemStack item, CEnchantments enchant) {
         int level;
 
-        level = methods.convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
+        level = methods.convertLevelInteger(enchantmentBookSettings.checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
 
         if (!useUnsafeEnchantments && level > enchant.getEnchantment().getMaxLevel()) level = enchant.getEnchantment().getMaxLevel();
 
         return level;
-    }
-
-    private String checkLevels(ItemStack item, String customName) {
-        String line = "";
-
-        if (enchantmentBookSettings.verifyItemLore(item)) {
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta != null && meta.hasLore()) {
-                List<String> itemLore = meta.getLore();
-
-                if (itemLore != null) {
-                    for (String lore : itemLore) {
-                        if (lore.contains(customName)) {
-                            line = lore;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return line;
     }
 
     public int randomLevel(CEnchantment enchantment, Category category) {
@@ -1095,27 +936,6 @@ public class CrazyManager {
      */
     public boolean enchantStackedItems() {
         return enchantStackedItems;
-    }
-
-    /**
-     * This converts an integer into a roman numeral if its between 1-10 otherwise it will just be the number as a string.
-     * @param i The integer you want to convert.
-     * @return The integer as a roman numeral if between 1-10 otherwise the number as a string.
-     */
-    public String convertLevelString(int i) {
-        return switch (i) {
-            case 0, 1 -> "I";
-            case 2 -> "II";
-            case 3 -> "III";
-            case 4 -> "IV";
-            case 5 -> "V";
-            case 6 -> "VI";
-            case 7 -> "VII";
-            case 8 -> "VIII";
-            case 9 -> "IX";
-            case 10 -> "X";
-            default -> i + "";
-        };
     }
 
     private void addCEPlayer(CEPlayer player) {

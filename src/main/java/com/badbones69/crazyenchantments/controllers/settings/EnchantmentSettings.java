@@ -27,6 +27,8 @@ public class EnchantmentSettings {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     // Cool-downs
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
 
@@ -169,7 +171,7 @@ public class EnchantmentSettings {
     public TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
         ItemStack item = processInfo.getItem();
         Block block = processInfo.getBlock();
-        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         List<Block> sugarCaneBlocks = new ArrayList<>();
         boolean isOre = isOre(block);
         boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);

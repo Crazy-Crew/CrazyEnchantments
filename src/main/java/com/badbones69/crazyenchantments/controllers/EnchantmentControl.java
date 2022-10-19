@@ -65,7 +65,7 @@ public class EnchantmentControl implements Listener {
                         if (enchantmentBookSettings.hasEnchantment(item, enchantment)) {
                             hasEnchantment = true;
 
-                            if (crazyManager.getLevel(item, enchantment) < bookLevel) isLowerLevel = true;
+                            if (enchantmentBookSettings.getLevel(item, enchantment) < bookLevel) isLowerLevel = true;
                         }
 
                         if (hasEnchantment) {
@@ -96,11 +96,11 @@ public class EnchantmentControl implements Listener {
 
                                         if (!bookDestroyEvent.isCancelled()) {
                                             if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
-                                                if (crazyManager.hasWhiteScrollProtection(item)) {
-                                                    e.setCurrentItem(crazyManager.removeWhiteScrollProtection(item));
+                                                if (methods.hasWhiteScrollProtection(item)) {
+                                                    e.setCurrentItem(methods.removeWhiteScrollProtection(item));
                                                     player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                                 } else {
-                                                    ItemStack newItem = crazyManager.removeEnchantment(item, enchantment);
+                                                    ItemStack newItem = enchantmentBookSettings.removeEnchantment(item, enchantment);
 
                                                     if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
                                                         ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
@@ -110,8 +110,8 @@ public class EnchantmentControl implements Listener {
                                                     player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
                                                 }
                                             } else {
-                                                if (crazyManager.hasWhiteScrollProtection(item)) {
-                                                    e.setCurrentItem(crazyManager.removeWhiteScrollProtection(item));
+                                                if (methods.hasWhiteScrollProtection(item)) {
+                                                    e.setCurrentItem(methods.removeWhiteScrollProtection(item));
                                                     player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                                 } else {
                                                     ItemStack newItem = new ItemStack(Material.AIR);
@@ -173,8 +173,8 @@ public class EnchantmentControl implements Listener {
                         }
 
                         if (destroy) {
-                            if (crazyManager.hasWhiteScrollProtection(item)) {
-                                e.setCurrentItem(crazyManager.removeWhiteScrollProtection(item));
+                            if (methods.hasWhiteScrollProtection(item)) {
+                                e.setCurrentItem(methods.removeWhiteScrollProtection(item));
                                 player.setItemOnCursor(new ItemStack(Material.AIR));
                                 player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);

@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.utilities;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
@@ -28,6 +29,8 @@ public class BowUtils {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
+    private final Methods methods = starter.getMethods();
+
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Plugin Support.
@@ -41,7 +44,7 @@ public class BowUtils {
     public void addArrow(Arrow arrow, Entity entity, ItemStack bow) {
         if (arrow == null) return;
 
-        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(bow);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(bow);
 
         EnchantedArrow enchantedArrow = new EnchantedArrow(arrow, entity, bow, enchantments);
 
@@ -82,7 +85,7 @@ public class BowUtils {
     public void spawnArrows(Entity entity, Entity projectile, ItemStack bow) {
         Arrow spawnedArrow = entity.getWorld().spawn(projectile.getLocation(), Arrow.class);
 
-        EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, entity, bow, crazyManager.getEnchantmentsOnItem(bow));
+        EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, entity, bow, enchantmentBookSettings.getEnchantmentsOnItem(bow));
 
         enchantedArrows.add(enchantedMultiArrow);
 

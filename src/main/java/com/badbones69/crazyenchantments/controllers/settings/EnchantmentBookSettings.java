@@ -12,16 +12,13 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class EnchantmentBookSettings {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
-
-    private final FileManager fileManager = starter.getFileManager();
 
     private final Methods methods = starter.getMethods();
 
@@ -30,6 +27,12 @@ public class EnchantmentBookSettings {
     private final List<Category> categories = Lists.newArrayList();
 
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
+
+    public boolean useUnsafeEnchantments() {
+        FileConfiguration config = FileManager.Files.CONFIG.getFile();
+
+        return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
+    }
 
     /**
      * Get the enchantment from an enchantment book.
@@ -212,6 +215,69 @@ public class EnchantmentBookSettings {
     }
 
     /**
+     * Note: If the enchantment is not active it will not be added to the Map.
+     * @param item Item you want to get the enchantments from.
+     * @return A Map of all enchantments and their levels on the item.
+     */
+    public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
+
+        if (!verifyItemLore(item)) return Collections.emptyMap();
+
+        List<String> lore = item.getItemMeta().getLore();
+        Map<CEnchantment, Integer> enchantments = null;
+
+        assert lore != null;
+        for (String line : lore) {
+            int lastSpaceIndex = line.lastIndexOf(' ');
+
+            if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) continue;
+
+            String enchantmentName = line.substring(0, lastSpaceIndex);
+
+            for (CEnchantment enchantment : getRegisteredEnchantments()) {
+                if (!enchantment.isActivated()) continue;
+
+                if (!enchantmentName.equals(enchantment.getColor() + enchantment.getCustomName())) continue;
+
+                String levelString = line.substring(lastSpaceIndex + 1);
+                int level = methods.convertLevelInteger(levelString);
+
+                if (level < 1) break;
+
+                if (enchantments == null) enchantments = new HashMap<>();
+
+                enchantments.put(enchantment, level);
+                break; // Next line
+            }
+        }
+
+        if (enchantments == null) enchantments = Collections.emptyMap();
+
+        return enchantments;
+    }
+
+    /**
+     * Note: If the enchantment is not active it will not be added to the list.
+     * @param item Item you want to get the enchantments from.
+     * @return A list of enchantments the item has.
+     */
+    public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
+        return new ArrayList<>(getEnchantments(item).keySet());
+    }
+
+    public int getEnchantmentAmount(ItemStack item, boolean checkVanillaLimit) {
+        int amount = getEnchantmentsOnItem(item).size();
+
+        if (checkVanillaLimit) {
+            if (item.hasItemMeta()) {
+                if (item.getItemMeta().hasEnchants()) amount += item.getItemMeta().getEnchants().size();
+            }
+        }
+
+        return amount;
+    }
+
+    /**
      * Get all the categories that can be used.
      * @return List of all the categories.
      */
@@ -293,5 +359,87 @@ public class EnchantmentBookSettings {
         methods.checkString(colors, string, methods);
 
         return colors;
+    }
+
+    /**
+     * This converts an integer into a roman numeral if its between 1-10 otherwise it will just be the number as a string.
+     * @param i The integer you want to convert.
+     * @return The integer as a roman numeral if between 1-10 otherwise the number as a string.
+     */
+    public String convertLevelString(int i) {
+        return switch (i) {
+            case 0, 1 -> "I";
+            case 2 -> "II";
+            case 3 -> "III";
+            case 4 -> "IV";
+            case 5 -> "V";
+            case 6 -> "VI";
+            case 7 -> "VII";
+            case 8 -> "VIII";
+            case 9 -> "IX";
+            case 10 -> "X";
+            default -> i + "";
+        };
+    }
+
+    /**
+     * @param item Item you are getting the level from.
+     * @param enchant The enchantment you want the level from.
+     * @return The level the enchantment has.
+     */
+    public int getLevel(ItemStack item, CEnchantment enchant) {
+        int level = methods.convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
+
+        if (!useUnsafeEnchantments() && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
+
+        return level;
+    }
+
+    /**
+     * @param item Item you want to remove the enchantment from.
+     * @param enchant Enchantment you want removed.
+     * @return Item without the enchantment.
+     */
+    public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
+        List<String> newLore = new ArrayList<>();
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null && meta.hasLore()) {
+            List<String> itemLore = meta.getLore();
+
+            if (itemLore != null) {
+                for (String lore : itemLore) {
+                    if (!lore.contains(enchant.getCustomName())) newLore.add(lore);
+                }
+            }
+        }
+
+        if (meta != null) meta.setLore(newLore);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public String checkLevels(ItemStack item, String customName) {
+        String line = "";
+
+        if (verifyItemLore(item)) {
+            ItemMeta meta = item.getItemMeta();
+
+            if (meta != null && meta.hasLore()) {
+                List<String> itemLore = meta.getLore();
+
+                if (itemLore != null) {
+                    for (String lore : itemLore) {
+                        if (lore.contains(customName)) {
+                            line = lore;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return line;
     }
 }

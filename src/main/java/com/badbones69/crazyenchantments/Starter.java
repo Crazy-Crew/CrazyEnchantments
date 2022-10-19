@@ -80,8 +80,8 @@ public class Starter {
 
         // Settings.
         protectionCrystalSettings = new ProtectionCrystalSettings();
-        enchantmentSettings = new EnchantmentSettings();
         enchantmentBookSettings = new EnchantmentBookSettings();
+        enchantmentSettings = new EnchantmentSettings();
 
         // Economy Management.
         currencyAPI = new CurrencyAPI();

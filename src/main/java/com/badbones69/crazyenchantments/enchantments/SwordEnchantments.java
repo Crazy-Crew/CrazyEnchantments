@@ -92,7 +92,7 @@ public class SwordEnchantments implements Listener {
 
         if (e.getEntity().isDead()) return;
 
-        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         boolean isEntityPlayer = e.getEntity() instanceof Player;
 
         if (isEntityPlayer && enchantments.contains(CEnchantments.DISARMER.getEnchantment())) {

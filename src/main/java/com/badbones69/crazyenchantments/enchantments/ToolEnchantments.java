@@ -61,7 +61,7 @@ public class ToolEnchantments implements Listener {
         updateEffects(player);
 
         if (player.getGameMode() != GameMode.CREATIVE) {
-            List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+            List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
 
             if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
                 // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
@@ -106,7 +106,7 @@ public class ToolEnchantments implements Listener {
         ItemStack item = methods.getItemInHand(player);
         if (!enchantmentBookSettings.hasEnchantments(item)) return;
 
-        List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         int potionTime = 5 * 20;
 
         if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {

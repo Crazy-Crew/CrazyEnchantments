@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -40,6 +41,8 @@ public class HoeEnchantments implements Listener {
     // Settings.
     private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     private final Random random = new Random();
     private final Material soilBlock = Material.FARMLAND;
     private final Material grassBlock = Material.GRASS_BLOCK;
@@ -54,7 +57,7 @@ public class HoeEnchantments implements Listener {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack hoe = methods.getItemInHand(player);
             Block block = e.getClickedBlock();
-            List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(hoe);
+            List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(hoe);
 
             // Crop is not fully grown.
             if (CEnchantments.GREENTHUMB.isActivated() && enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment()) && enchantmentSettings.getSeedlings().contains(block.getType()) && !crazyManager.getNMSSupport().isFullyGrown(block)) {
@@ -108,7 +111,7 @@ public class HoeEnchantments implements Listener {
             if (!enchantmentSettings.getHarvesterCrops().contains(plant.getType())) return;
 
             ItemStack hoe = methods.getItemInHand(player);
-            List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(hoe);
+            List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(hoe);
             if (!blocks.containsKey(player.getUniqueId())) return;
             if (enchantments.isEmpty()) return;
             if (!CEnchantments.HARVESTER.isActivated()) return;

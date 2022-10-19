@@ -1,8 +1,10 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +14,11 @@ public class EnchantedArrow {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
+
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
     
     private final Arrow arrow;
     private final ItemStack bow;
@@ -43,7 +49,7 @@ public class EnchantedArrow {
     }
     
     public int getLevel(CEnchantment enchantment) {
-        return crazyManager.getLevel(bow, enchantment);
+        return enchantmentBookSettings.getLevel(bow, enchantment);
     }
     
     public List<CEnchantment> getEnchantments() {

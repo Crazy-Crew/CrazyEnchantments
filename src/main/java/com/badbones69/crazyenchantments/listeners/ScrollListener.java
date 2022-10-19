@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.listeners;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
@@ -31,8 +30,6 @@ public class ScrollListener implements Listener {
     private final Starter starter = plugin.getStarter();
 
     private final Methods methods = starter.getMethods();
-
-    private final CrazyManager crazyManager = starter.getCrazyManager();
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
@@ -91,11 +88,11 @@ public class ScrollListener implements Listener {
                     return;
                 }
 
-                if (!crazyManager.hasWhiteScrollProtection(item)) {
+                if (!methods.hasWhiteScrollProtection(item)) {
                     for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
                         if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                             e.setCancelled(true);
-                            e.setCurrentItem(crazyManager.addWhiteScrollProtection(item));
+                            e.setCurrentItem(methods.addWhiteScrollProtection(item));
                             player.setItemOnCursor(methods.removeItem(scroll));
                             return;
                         }
@@ -113,7 +110,7 @@ public class ScrollListener implements Listener {
                     return;
                 }
 
-                List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
+                List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
 
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     e.setCancelled(true);
@@ -125,8 +122,8 @@ public class ScrollListener implements Listener {
                     }
 
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
-                    player.getInventory().addItem(new CEBook(enchantment, crazyManager.getLevel(item, enchantment), 1).buildBook());
-                    e.setCurrentItem(crazyManager.removeEnchantment(item, enchantment));
+                    player.getInventory().addItem(new CEBook(enchantment, enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
+                    e.setCurrentItem(enchantmentBookSettings.removeEnchantment(item, enchantment));
                     player.updateInventory();
                 }
             }
@@ -153,9 +150,9 @@ public class ScrollListener implements Listener {
         HashMap<CEnchantment, Integer> categories = new HashMap<>();
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
 
-        for (CEnchantment enchantment : crazyManager.getEnchantmentsOnItem(item)) {
-            enchantmentLevels.put(enchantment, crazyManager.getLevel(item, enchantment));
-            crazyManager.removeEnchantment(item, enchantment);
+        for (CEnchantment enchantment : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
+            enchantmentLevels.put(enchantment, enchantmentBookSettings.getLevel(item, enchantment));
+            enchantmentBookSettings.removeEnchantment(item, enchantment);
             categories.put(enchantment, methods.getHighestEnchantmentCategory(enchantment).getRarity());
             newEnchantmentOrder.add(enchantment);
         }
@@ -165,7 +162,7 @@ public class ScrollListener implements Listener {
         ArrayList<String> lore = new ArrayList<>();
 
         for (CEnchantment enchantment : newEnchantmentOrder) {
-            lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + crazyManager.convertLevelString(enchantmentLevels.get(enchantment)));
+            lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentLevels.get(enchantment)));
         }
 
         assert itemMeta != null;

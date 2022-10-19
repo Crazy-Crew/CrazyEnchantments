@@ -278,7 +278,7 @@ public class Tinkerer implements Listener {
         int total = 0;
 
         if (enchantmentBookSettings.hasEnchantments(item)) {
-            for (CEnchantment enchantment : crazyManager.getEnchantmentsOnItem(item)) {
+            for (CEnchantment enchantment : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
                 total += Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items");
             }
         }

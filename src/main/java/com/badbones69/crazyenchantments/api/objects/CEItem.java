@@ -1,7 +1,9 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
@@ -13,8 +15,12 @@ public class CEItem {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-    
+    private final Starter starter = plugin.getStarter();
+
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     private final ItemStack item;
     private final List<Enchantment> vanillaEnchantmentRemove;
     private final List<CEnchantment> cEnchantmentRemove;
@@ -25,7 +31,8 @@ public class CEItem {
         this.item = item;
         // Has to make a new map as .getEnchantments is a ImmutableMap.
         vanillaEnchantments = new HashMap<>(item.getEnchantments());
-        cEnchantments = crazyManager.getEnchantments(item);
+        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+        cEnchantments = enchantmentBookSettings.getEnchantments(item);
         vanillaEnchantmentRemove = new ArrayList<>();
         cEnchantmentRemove = new ArrayList<>();
     }
@@ -77,7 +84,7 @@ public class CEItem {
     public ItemStack build() {
         vanillaEnchantmentRemove.forEach(enchantment -> item.removeEnchantment(enchantment));
         vanillaEnchantments.keySet().forEach(enchantment -> item.addUnsafeEnchantment(enchantment, vanillaEnchantments.get(enchantment)));
-        cEnchantmentRemove.forEach(enchantment -> crazyManager.removeEnchantment(item, enchantment));
+        cEnchantmentRemove.forEach(enchantment -> enchantmentBookSettings.removeEnchantment(item, enchantment));
         crazyManager.addEnchantments(item, cEnchantments);
 
         return item;
