@@ -12,12 +12,18 @@ import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSuppor
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.listeners.ArmorListener;
+import com.badbones69.crazyenchantments.listeners.ScramblerListener;
+import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
 import com.badbones69.crazyenchantments.utilities.WingsUtils;
 
 public class Starter {
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private FileManager fileManager;
     private CrazyManager crazyManager;
@@ -27,6 +33,7 @@ public class Starter {
     // Settings.
     private ProtectionCrystalSettings protectionCrystalSettings;
     private EnchantmentSettings enchantmentSettings;
+    private EnchantmentBookSettings enchantmentBookSettings;
 
     // Plugin Utils.
     private BowUtils bowUtils;
@@ -44,6 +51,8 @@ public class Starter {
     private ArmorEnchantmentManager armorEnchantmentManager;
     private BowEnchantmentManager bowEnchantmentManager;
     private BlackSmithManager blackSmithManager;
+
+    private InfoMenuManager infoMenuManager;
     private WingsManager wingsManager;
     private AllyManager allyManager;
     private ShopManager shopManager;
@@ -51,31 +60,28 @@ public class Starter {
     // Economy Management.
     private CurrencyAPI currencyAPI;
 
+    // Listeners.
+    private ScramblerListener scramblerListener;
+    private ScrollListener scrollListener;
+    private ArmorListener armorListener;
+
     public void run() {
         fileManager = new FileManager();
         methods = new Methods();
-        crazyManager = new CrazyManager();
-        skullCreator = new SkullCreator();
 
         // Set up all our files.
         fileManager.setLog(true).setup();
 
-        // Plugin Utils.
-        bowUtils = new BowUtils();
-        wingsUtils = new WingsUtils();
-
         // Settings.
         protectionCrystalSettings = new ProtectionCrystalSettings();
         enchantmentSettings = new EnchantmentSettings();
+        enchantmentBookSettings = new EnchantmentBookSettings();
 
         // Plugin Support.
         pluginSupport = new PluginSupport();
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
-
-        if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
-        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
-        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport = new SpartanSupport();
+        infoMenuManager = new InfoMenuManager();
+        shopManager = new ShopManager();
 
         // Plugin Managers.
         armorEnchantmentManager = new ArmorEnchantmentManager();
@@ -83,7 +89,24 @@ public class Starter {
         blackSmithManager = new BlackSmithManager();
         wingsManager = new WingsManager();
         allyManager = new AllyManager();
-        shopManager = new ShopManager();
+
+        // Plugin Utils.
+        bowUtils = new BowUtils();
+        wingsUtils = new WingsUtils();
+
+        // Listeners.
+        plugin.pluginManager.registerEvents(scramblerListener = new ScramblerListener(), plugin);
+        plugin.pluginManager.registerEvents(scrollListener = new ScrollListener(), plugin);
+        plugin.pluginManager.registerEvents(armorListener = new ArmorListener(), plugin);
+
+        crazyManager = new CrazyManager();
+        skullCreator = new SkullCreator();
+
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
+
+        if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
+        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport = new SpartanSupport();
 
         // Economy Management.
         currencyAPI = new CurrencyAPI();
@@ -105,6 +128,10 @@ public class Starter {
         return skullCreator;
     }
 
+    public InfoMenuManager getInfoMenuManager() {
+        return infoMenuManager;
+    }
+
     // Settings.
     public ProtectionCrystalSettings getProtectionCrystalSettings() {
         return protectionCrystalSettings;
@@ -112,6 +139,10 @@ public class Starter {
 
     public EnchantmentSettings getEnchantmentSettings() {
         return enchantmentSettings;
+    }
+
+    public EnchantmentBookSettings getEnchantmentBookSettings() {
+        return enchantmentBookSettings;
     }
 
     // Plugin Support.
@@ -171,6 +202,19 @@ public class Starter {
 
     public ShopManager getShopManager() {
         return shopManager;
+    }
+
+    // Listeners.
+    public ScramblerListener getScramblerListener() {
+        return scramblerListener;
+    }
+
+    public ArmorListener getArmorListener() {
+        return armorListener;
+    }
+
+    public ScrollListener getScrollListener() {
+        return scrollListener;
     }
 
     // Plugin Utils.

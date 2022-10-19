@@ -23,12 +23,9 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private Starter starter;
 
     // Plugin Listeners.
-    PluginManager pluginManager = getServer().getPluginManager();
+    public PluginManager pluginManager = getServer().getPluginManager();
 
     private FireworkDamageListener fireworkDamageListener;
-    private ScramblerListener scramblerListener;
-    private ScrollListener scrollListener;
-    private ArmorListener armorListener;
     private ShopListener shopListener;
 
     private ArmorEnchantments armorEnchantments;
@@ -49,7 +46,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
                 starter.getVaultSupport().loadVault();
             } else {
-                plugin.getLogger().warning("Vault was not found so support for any economy was not enabled.");
+                plugin.getLogger().warning("Vault was not found so support for any economy so was not enabled.");
             }
 
             FileConfiguration config = Files.CONFIG.getFile();
@@ -66,9 +63,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             if (metricsEnabled) new Metrics(this, 4494);
 
             pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
-            pluginManager.registerEvents(scramblerListener = new ScramblerListener(), this);
-            pluginManager.registerEvents(armorListener = new ArmorListener(), this);
-            pluginManager.registerEvents(scrollListener = new ScrollListener(), this);
             pluginManager.registerEvents(shopListener = new ShopListener(), this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,19 +148,11 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         return fireworkDamageListener;
     }
 
-    public ScrollListener getScrollListener() {
-        return scrollListener;
-    }
-
-    public ArmorListener getArmorListener() {
-        return armorListener;
-    }
-
-    public ScramblerListener getScramblerListener() {
-        return scramblerListener;
-    }
-
     public ShopListener getShopListener() {
         return shopListener;
+    }
+
+    public PluginManager getPluginManager() {
+        return pluginManager;
     }
 }

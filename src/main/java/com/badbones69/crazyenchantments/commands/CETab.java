@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -27,6 +28,8 @@ public class CETab implements TabCompleter {
     private final Methods methods = starter.getMethods();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
     
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
@@ -68,7 +71,7 @@ public class CETab implements TabCompleter {
                         } catch (NullPointerException ignore) {}
                     }
 
-                    for (Category category : crazyManager.getCategories()) {
+                    for (Category category : enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}
@@ -94,7 +97,7 @@ public class CETab implements TabCompleter {
                 }
 
                 case "lostbook" -> {
-                    for (Category category : crazyManager.getCategories()) {
+                    for (Category category : enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}

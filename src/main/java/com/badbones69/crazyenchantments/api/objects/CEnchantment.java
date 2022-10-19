@@ -2,22 +2,29 @@ package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class CEnchantment {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Methods methods = starter.getMethods();
+
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private String name;
     private String customName;
@@ -98,6 +105,7 @@ public class CEnchantment {
         if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
 
         this.bookColor = methods.color(bookColor);
+
         return this;
     }
 
@@ -107,6 +115,7 @@ public class CEnchantment {
 
     public CEnchantment setMaxLevel(int maxLevel) {
         this.maxLevel = maxLevel;
+
         return this;
     }
 
@@ -116,6 +125,7 @@ public class CEnchantment {
 
     public CEnchantment setInfoName(String infoName) {
         this.infoName = methods.color(infoName);
+
         return this;
     }
 
@@ -125,6 +135,7 @@ public class CEnchantment {
 
     public CEnchantment setChance(int chance) {
         this.chance = chance;
+
         return this;
     }
 
@@ -134,6 +145,7 @@ public class CEnchantment {
 
     public CEnchantment setChanceIncrease(int chanceIncrease) {
         this.chanceIncrease = chanceIncrease;
+
         return this;
     }
 
@@ -144,6 +156,7 @@ public class CEnchantment {
     public boolean chanceSuccessful(int enchantmentLevel) {
         int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
         int pickedChance = new Random().nextInt(100) + 1;
+
         return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
     }
 
@@ -154,11 +167,10 @@ public class CEnchantment {
     public CEnchantment setInfoDescription(List<String> infoDescription) {
         List<String> info = new ArrayList<>();
 
-        for (String i : infoDescription) {
-            info.add(methods.color(i));
-        }
+        infoDescription.forEach(lore -> info.add(methods.color(lore)));
 
         this.infoDescription = info;
+
         return this;
     }
 
@@ -175,7 +187,7 @@ public class CEnchantment {
     public CEnchantment setCategories(List<String> categories) {
 
         for (String categoryString : categories) {
-            Category category = crazyManager.getCategory(categoryString);
+            Category category = enchantmentBookSettings.getCategory(categoryString);
 
             if (category != null) this.categories.add(category);
         }
@@ -193,6 +205,7 @@ public class CEnchantment {
 
     public CEnchantment setEnchantmentType(EnchantmentType enchantmentType) {
         this.enchantmentType = enchantmentType;
+
         return this;
     }
 
@@ -203,9 +216,7 @@ public class CEnchantment {
 
         if (enchantmentType != null) enchantmentType.addEnchantment(instance);
 
-        for (Category category : categories) {
-            category.addEnchantment(instance);
-        }
+        categories.forEach(category -> category.addEnchantment(instance));
     }
 
     public void unregisterEnchantment() {
@@ -215,9 +226,7 @@ public class CEnchantment {
 
         if (enchantmentType != null) enchantmentType.removeEnchantment(instance);
 
-        for (Category category : categories) {
-            category.removeEnchantment(instance);
-        }
+        categories.forEach(category -> category.addEnchantment(instance));
     }
 
     /**
@@ -232,7 +241,7 @@ public class CEnchantment {
         int level = 0;
 
         if (methods.verifyItemLore(item)) {
-            for (String lore : item.getItemMeta().getLore()) {
+            for (String lore : Objects.requireNonNull(item.getItemMeta().getLore())) {
                 if (lore.contains(customName)) {
                     level = crazyManager.convertLevelInteger(lore.replace(color + customName + " ", ""));
                     break;

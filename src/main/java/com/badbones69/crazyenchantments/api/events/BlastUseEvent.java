@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BlastUseEvent extends Event implements Cancellable {
     
-    private final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private boolean cancelled;
     private final List<Block> blockList;
@@ -46,6 +46,10 @@ public class BlastUseEvent extends Event implements Cancellable {
      */
     @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

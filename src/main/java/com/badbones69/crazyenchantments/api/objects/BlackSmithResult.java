@@ -1,8 +1,10 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.managers.BlackSmithManager;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +13,10 @@ import java.util.Map.Entry;
 public class BlackSmithResult {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final Starter starter = plugin.getStarter();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private int cost = 0;
     private ItemStack resultItem;
@@ -21,7 +27,7 @@ public class BlackSmithResult {
         BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
 
         CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-        if (mainItem.getType() == crazyManager.getEnchantmentBook().getMaterial() && subItem.getType() == crazyManager.getEnchantmentBook().getMaterial()) {
+        if (mainItem.getType() == enchantmentBookSettings.getEnchantmentBook().getMaterial() && subItem.getType() == enchantmentBookSettings.getEnchantmentBook().getMaterial()) {
             CEBook mainBook = crazyManager.getCEBook(mainItem);
             CEBook subBook = crazyManager.getCEBook(subItem);
             // Books are the same enchantment.
@@ -42,6 +48,7 @@ public class BlackSmithResult {
                 // Checking for duplicate enchantments.
                 for (Entry<Enchantment, Integer> entry : mainCE.getVanillaEnchantments().entrySet()) {
                     Enchantment enchantment = entry.getKey();
+
                     int level = entry.getValue();
                     int subLevel = subCE.getVanillaEnchantmentLevel(enchantment);
 
@@ -58,6 +65,7 @@ public class BlackSmithResult {
 
                 for (Entry<CEnchantment, Integer> entry : mainCE.getCEnchantments().entrySet()) {
                     CEnchantment enchantment = entry.getKey();
+
                     int level = entry.getValue();
                     int subLevel = subCE.getCEnchantmentLevel(enchantment);
 

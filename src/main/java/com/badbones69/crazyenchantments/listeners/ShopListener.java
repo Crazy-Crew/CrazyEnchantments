@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
@@ -44,13 +45,15 @@ public class ShopListener implements Listener {
     // Settings.
     private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     // Plugin Managers.
     private final ShopManager shopManager = starter.getShopManager();
 
-    private final InfoMenuManager infoMenuManager = crazyManager.getInfoMenuManager();
+    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
 
     // Plugin Listeners.
-    private final ScramblerListener scramblerListener = plugin.getScramblerListener();
+    private final ScramblerListener scramblerListener = starter.getScramblerListener();
 
     // Economy Management.
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
@@ -73,7 +76,7 @@ public class ShopListener implements Listener {
             if (e.getRawSlot() >= inventory.getSize()) return;
 
             if (item != null) {
-                for (Category category : crazyManager.getCategories()) {
+                for (Category category : enchantmentBookSettings.getCategories()) {
                     if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
 
                         if (methods.isInventoryFull(player)) {

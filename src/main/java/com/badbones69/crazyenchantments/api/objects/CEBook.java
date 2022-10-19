@@ -2,8 +2,10 @@ package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +15,14 @@ public class CEBook {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-    
+    private final Methods methods = starter.getMethods();
+
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     private CEnchantment enchantment;
     private int amount;
     private int level;
@@ -110,6 +116,7 @@ public class CEBook {
      */
     public CEBook setEnchantment(CEnchantment enchantment) {
         this.enchantment = enchantment;
+
         return this;
     }
     
@@ -126,6 +133,7 @@ public class CEBook {
      */
     public CEBook setGlowing(boolean toggle) {
         this.glowing = toggle;
+
         return this;
     }
     
@@ -142,6 +150,7 @@ public class CEBook {
      */
     public CEBook setAmount(int amount) {
         this.amount = amount;
+
         return this;
     }
     
@@ -158,6 +167,7 @@ public class CEBook {
      */
     public CEBook setLevel(int level) {
         this.level = level;
+
         return this;
     }
     
@@ -174,6 +184,7 @@ public class CEBook {
      */
     public CEBook setDestroyRate(int destroyRate) {
         this.destroyRate = destroyRate;
+
         return this;
     }
     
@@ -190,6 +201,7 @@ public class CEBook {
      */
     public CEBook setSuccessRate(int successRate) {
         this.successRate = successRate;
+
         return this;
     }
     
@@ -212,7 +224,7 @@ public class CEBook {
             }
         }
 
-        return crazyManager.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
+        return enchantmentBookSettings.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
     }
     
     /**

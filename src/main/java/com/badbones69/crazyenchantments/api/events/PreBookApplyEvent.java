@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class PreBookApplyEvent extends Event implements Cancellable {
     
-    private final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final int level;
     private final boolean destroyed;
@@ -94,6 +94,10 @@ public class PreBookApplyEvent extends Event implements Cancellable {
      */
     @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

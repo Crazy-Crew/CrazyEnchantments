@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 
 public class AuraActiveEvent extends Event {
     
-    private final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private final Player other;
     private final Player player;
     private final int level;
@@ -66,6 +66,10 @@ public class AuraActiveEvent extends Event {
      */
     @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

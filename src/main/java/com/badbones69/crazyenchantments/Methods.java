@@ -67,7 +67,7 @@ public class Methods {
     }
 
     public EnchantmentType getFromName(String name) {
-        for (EnchantmentType enchantmentType : plugin.getStarter().getCrazyManager().getInfoMenuManager().getEnchantmentTypes()) {
+        for (EnchantmentType enchantmentType : starter.getInfoMenuManager().getEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 

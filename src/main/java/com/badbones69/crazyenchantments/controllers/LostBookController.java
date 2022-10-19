@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,6 +28,8 @@ public class LostBookController implements Listener {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBookClean(PlayerInteractEvent e) {
         Player player = e.getPlayer();
@@ -35,7 +38,7 @@ public class LostBookController implements Listener {
             ItemStack item = methods.getItemInHand(player);
 
             if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                Category category = crazyManager.getCategoryFromLostBook(item);
+                Category category = enchantmentBookSettings.getCategoryFromLostBook(item);
 
                 if (category != null) {
                     e.setCancelled(true);

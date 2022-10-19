@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.api.managers;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
@@ -10,6 +11,7 @@ import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -20,11 +22,13 @@ public class ShopManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Methods methods = starter.getMethods();
 
-    private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
+    private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private String inventoryName;
     private int inventorySize;
@@ -57,7 +61,7 @@ public class ShopManager {
             customizerItems.put(ItemBuilder.convertString(customItemString), slot);
         }
 
-        for (Category category : crazyManager.getCategories()) {
+        for (Category category : enchantmentBookSettings.getCategories()) {
 
             if (category.isInGUI()) {
                 if (category.getSlot() > inventorySize) continue;

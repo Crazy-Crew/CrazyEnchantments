@@ -19,10 +19,11 @@ public class AllyMob {
 
     private final AllyType type;
     private final Player owner;
+    private final AllyMob instance;
+
     private LivingEntity ally;
     private long spawnTime;
     private BukkitTask runnable;
-    private final AllyMob instance;
 
     public AllyMob(Player owner, AllyType type) {
         this.type = type;
@@ -54,9 +55,11 @@ public class AllyMob {
         ally.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(type.maxHealth);
 
         ally.setHealth(type.maxHealth);
+
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("%Player%", owner.getName());
         placeholders.put("%Mob%", type.entityType.getName());
+
         ally.setCustomName(Messages.replacePlaceholders(placeholders, type.getName()));
         ally.setCustomNameVisible(true);
 

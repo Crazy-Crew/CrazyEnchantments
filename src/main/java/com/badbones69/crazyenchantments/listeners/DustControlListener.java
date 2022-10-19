@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -33,6 +34,8 @@ public class DustControlListener implements Listener {
     private final Methods methods = starter.getMethods();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final Random random = new Random();
 
@@ -139,7 +142,7 @@ public class DustControlListener implements Listener {
             ItemStack dust = e.getCursor();
 
             if (book.getAmount() == 1 && book.hasItemMeta() && dust.hasItemMeta() && book.getItemMeta().hasLore() && dust.getItemMeta().hasLore() && book.getItemMeta().hasDisplayName() &&
-            dust.getItemMeta().hasDisplayName() && book.getType() == crazyManager.getEnchantmentBookItem().getType()) {
+            dust.getItemMeta().hasDisplayName() && book.getType() == enchantmentBookSettings.getEnchantmentBookItem().getType()) {
                 boolean toggle = false;
                 String name = book.getItemMeta().getDisplayName();
 

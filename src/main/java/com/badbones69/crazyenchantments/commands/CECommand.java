@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ShopListener;
@@ -48,15 +49,16 @@ public class CECommand implements CommandExecutor {
 
     // Settings.
     private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
     // Plugin Managers.
-    private final InfoMenuManager infoMenuManager = crazyManager.getInfoMenuManager();
+    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
 
     // Listeners
-    private final ScramblerListener scramblerListener = plugin.getScramblerListener();
+    private final ScramblerListener scramblerListener = starter.getScramblerListener();
 
     // Economy Management.
     private final ShopListener shopListener = plugin.getShopListener();
@@ -180,7 +182,7 @@ public class CECommand implements CommandExecutor {
                             file.set(path + ".Info.Name", "&e&l" + enchantment.getName() + " &7(&bI&7)");
                             file.set(path + ".Info.Description", enchantment.getDescription());
                             List<String> categories = new ArrayList<>();
-                            crazyManager.getCategories().forEach(category -> categories.add(category.getName()));
+                            enchantmentBookSettings.getCategories().forEach(category -> categories.add(category.getName()));
                             file.set(path + ".Categories", categories);
                             Files.ENCHANTMENTS.saveFile();
                         }
@@ -224,7 +226,7 @@ public class CECommand implements CommandExecutor {
                     if (hasPermission(sender, "spawn")) {
                         if (args.length >= 2) {
                             CEnchantment enchantment = crazyManager.getEnchantmentFromName(args[1]);
-                            Category category = crazyManager.getCategory(args[1]);
+                            Category category = enchantmentBookSettings.getCategory(args[1]);
                             Location location = isPlayer ? ((Player) sender).getLocation() : new Location(plugin.getServer().getWorlds().get(0), 0, 0, 0);
                             int level = 1;
 
@@ -298,7 +300,7 @@ public class CECommand implements CommandExecutor {
 
                             int amount = 1;
                             Player player;
-                            Category category = crazyManager.getCategory(args[1]);
+                            Category category = enchantmentBookSettings.getCategory(args[1]);
 
                             if (args.length >= 3) {
                                 if (!methods.isInt(args[2])) {

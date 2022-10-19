@@ -34,7 +34,7 @@ public class ScrollListener implements Listener {
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
     // Plugin Managers.
-    private final InfoMenuManager infoMenuManager = crazyManager.getInfoMenuManager();
+    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
 
     private final Random random = new Random();
     private String suffix;

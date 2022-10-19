@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -36,6 +37,8 @@ public class ScramblerListener implements Listener {
     private final Methods methods = starter.getMethods();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final HashMap<Player, BukkitTask> roll = new HashMap<>();
 
@@ -150,8 +153,8 @@ public class ScramblerListener implements Listener {
                         cancel();
                         roll.remove(player);
                         ItemStack item = inventory.getItem(13).clone();
-                        item.setType(crazyManager.getEnchantmentBookItem().getType());
-                        methods.setDurability(item, methods.getDurability(crazyManager.getEnchantmentBookItem()));
+                        item.setType(enchantmentBookSettings.getEnchantmentBookItem().getType());
+                        methods.setDurability(item, methods.getDurability(enchantmentBookSettings.getEnchantmentBookItem()));
 
                         if (methods.isInventoryFull(player)) {
                             player.getWorld().dropItem(player.getLocation(), item);

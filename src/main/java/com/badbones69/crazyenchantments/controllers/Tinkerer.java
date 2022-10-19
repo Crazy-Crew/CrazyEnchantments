@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -38,6 +39,8 @@ public class Tinkerer implements Listener {
     private final Methods methods = starter.getMethods();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Economy Management.
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
@@ -134,7 +137,7 @@ public class Tinkerer implements Listener {
                 }
 
                 if (!current.getType().toString().endsWith("STAINED_GLASS_PANE")) { // Adding/taking items.
-                    if (current.getType() == crazyManager.getEnchantmentBookItem().getType()) { // Adding a book.
+                    if (current.getType() == enchantmentBookSettings.getEnchantmentBookItem().getType()) { // Adding a book.
                         boolean toggle = false;
                         String enchant = "";
 
@@ -165,7 +168,7 @@ public class Tinkerer implements Listener {
                         }
                     }
 
-                    if (getTotalXP(current) > 0 && current.getType() != crazyManager.getEnchantmentBookItem().getType()) { // Adding an item.
+                    if (getTotalXP(current) > 0 && current.getType() != enchantmentBookSettings.getEnchantmentBookItem().getType()) { // Adding an item.
                         if (inTinker(e.getRawSlot())) { // Clicking in the tinkers.
 
                             if (getSlot().containsKey(e.getRawSlot())) {

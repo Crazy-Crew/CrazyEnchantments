@@ -36,6 +36,7 @@ public class EnchantmentType {
 
         for (String type : file.getStringList(path + ".Enchantable-Items")) {
             Material material = new ItemBuilder().setMaterial(type).getMaterial();
+
             if (material != null) enchantableMaterials.add(material);
         }
     }

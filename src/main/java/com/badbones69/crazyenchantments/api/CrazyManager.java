@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.api.support.claims.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersion;
 import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
 import com.badbones69.crazyenchantments.api.objects.*;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ScrollListener;
@@ -46,18 +47,17 @@ public class CrazyManager {
 
     // Settings.
     private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Listeners.
-    private final ScramblerListener scramblerListener = plugin.getScramblerListener();
-    private final ScrollListener scrollListener = plugin.getScrollListener();
+    private final ScramblerListener scramblerListener = starter.getScramblerListener();
+    private final ScrollListener scrollListener = starter.getScrollListener();
 
     private CropManagerVersion cropManagerVersion;
     private WorldGuardVersion worldGuardVersion;
 
     // Plugin Managers.
     private BlackSmithManager blackSmithManager;
-
-    private InfoMenuManager infoMenuManager;
 
     private final AllyManager allyManager = starter.getAllyManager();
 
@@ -69,8 +69,9 @@ public class CrazyManager {
     private final BowEnchantmentManager bowEnchantmentManager = starter.getBowEnchantmentManager();
     private final ArmorEnchantmentManager armorEnchantmentManager = starter.getArmorEnchantmentManager();
 
+    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
+
     // Arrays.
-    private final List<Category> categories = Lists.newArrayList();
     private final List<GKitz> gkitz = Lists.newArrayList();
     private final List<CEPlayer> players = Lists.newArrayList();
     private final List<Material> blockList = Lists.newArrayList();
@@ -90,7 +91,6 @@ public class CrazyManager {
     private boolean checkVanillaLimit;
 
     private boolean dropBlocksBlast;
-    private ItemBuilder enchantmentBook;
     private String whiteScrollProtectionName;
 
     /**
@@ -107,7 +107,7 @@ public class CrazyManager {
         blockList.clear();
         gkitz.clear();
         registeredEnchantments.clear();
-        categories.clear();
+        enchantmentBookSettings.getCategories().clear();
 
         // Check if we should patch player health.
         boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health");
@@ -142,11 +142,10 @@ public class CrazyManager {
         blackSmithManager.load();
 
         // Loads the info menu manager and the enchantment types.
-        infoMenuManager = new InfoMenuManager();
         infoMenuManager.load();
 
         whiteScrollProtectionName = methods.color(config.getString("Settings.WhiteScroll.ProtectedName"));
-        enchantmentBook = new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item"));
+        enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(Objects.requireNonNull(config.getString("Settings.Enchantment-Book-Item"))));
         useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
         maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle");
         checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments");
@@ -156,45 +155,7 @@ public class CrazyManager {
         enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
         setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
 
-        for (String category : config.getConfigurationSection("Categories").getKeys(false)) {
-            String path = "Categories." + category;
-            LostBook lostBook = new LostBook(
-                    config.getInt(path + ".LostBook.Slot"),
-                    config.getBoolean(path + ".LostBook.InGUI"),
-                    new ItemBuilder()
-                    .setMaterial(config.getString(path + ".LostBook.Item"))
-                    .setPlayerName(config.getString(path + ".LostBook.Player"))
-                    .setName(config.getString(path + ".LostBook.Name"))
-                    .setLore(config.getStringList(path + ".LostBook.Lore"))
-                    .setGlow(config.getBoolean(path + ".LostBook.Glowing")),
-                    config.getInt(path + ".LostBook.Cost"),
-                    Currency.getCurrency(config.getString(path + ".LostBook.Currency")),
-                    config.getBoolean(path + ".LostBook.FireworkToggle"),
-                    getColors(config.getString(path + ".LostBook.FireworkColors")),
-                    config.getBoolean(path + ".LostBook.Sound-Toggle"),
-                    config.getString(path + ".LostBook.Sound"));
-            categories.add(new Category(
-                    category,
-                    config.getInt(path + ".Slot"),
-                    config.getBoolean(path + ".InGUI"),
-                    new ItemBuilder()
-                    .setMaterial(config.getString(path + ".Item"))
-                    .setPlayerName(config.getString(path + ".Player"))
-                    .setName(config.getString(path + ".Name"))
-                    .setLore(config.getStringList(path + ".Lore"))
-                    .setGlow(config.getBoolean(path + ".Glowing")),
-                    config.getInt(path + ".Cost"),
-                    Currency.getCurrency(config.getString(path + ".Currency")),
-                    config.getInt(path + ".Rarity"),
-                    lostBook,
-                    config.getInt(path + ".EnchOptions.SuccessPercent.Max"),
-                    config.getInt(path + ".EnchOptions.SuccessPercent.Min"),
-                    config.getInt(path + ".EnchOptions.DestroyPercent.Max"),
-                    config.getInt(path + ".EnchOptions.DestroyPercent.Min"),
-                    config.getBoolean(path + ".EnchOptions.MaxLvlToggle"),
-                    config.getInt(path + ".EnchOptions.LvlRange.Max"),
-                    config.getInt(path + ".EnchOptions.LvlRange.Min")));
-        }
+        enchantmentBookSettings.populateMaps();
 
         for (CEnchantments cEnchantment : CEnchantments.values()) {
             String name = cEnchantment.getName();
@@ -480,20 +441,6 @@ public class CrazyManager {
     }
 
     /**
-     * @return a clone of the ItemBuilder of the enchantment book.
-     */
-    public ItemBuilder getEnchantmentBook() {
-        return enchantmentBook.copy();
-    }
-
-    /**
-     * @return the itemstack of the enchantment book.
-     */
-    public ItemStack getEnchantmentBookItem() {
-        return enchantmentBook.build();
-    }
-
-    /**
      * @param item Item you want to check to see if it has enchantments.
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
@@ -553,39 +500,6 @@ public class CrazyManager {
         }
 
         return topCategory;
-    }
-
-    /**
-     * Get all the categories that can be used.
-     * @return List of all the categories.
-     */
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    /**
-     * @param name The name of the category you want.
-     * @return The category object.
-     */
-    public Category getCategory(String name) {
-        for (Category category : categories) {
-            if (category.getName().equalsIgnoreCase(name)) return category;
-        }
-
-        return null;
-    }
-
-    /**
-     * Get the category of a lostbook from an itemstack.
-     * @param item The itemstack you are checking.
-     * @return The category it has or null if not found.
-     */
-    public Category getCategoryFromLostBook(ItemStack item) {
-        for (Category category : categories) {
-            if (item.isSimilar(category.getLostBook().getLostBook(category).build())) return category;
-        }
-
-        return null;
     }
 
     public CEBook getRandomEnchantmentBook(Category category) {
@@ -1074,7 +988,7 @@ public class CrazyManager {
      * @return True if it is and false if not.
      */
     public boolean isEnchantmentBook(ItemStack book) {
-        if (book != null && book.getType() == enchantmentBook.getMaterial() && book.hasItemMeta() && book.getItemMeta().hasDisplayName()) {
+        if (book != null && book.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && book.hasItemMeta() && book.getItemMeta().hasDisplayName()) {
             for (CEnchantment enchantment : registeredEnchantments) {
                 String bookNameCheck = book.getItemMeta().getDisplayName();
                 String[] split = bookNameCheck.split(" ");
@@ -1092,7 +1006,7 @@ public class CrazyManager {
      * @return The enchantment the book is.
      */
     public CEnchantment getEnchantmentBookEnchantment(ItemStack book) {
-        if (book != null && book.getType() == enchantmentBook.getMaterial() && book.hasItemMeta() && book.getItemMeta().hasDisplayName()) {
+        if (book != null && book.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && book.hasItemMeta() && book.getItemMeta().hasDisplayName()) {
             for (CEnchantment enchantment : registeredEnchantments) {
                 String bookNameCheck = book.getItemMeta().getDisplayName();
                 String[] split = bookNameCheck.split(" ");
@@ -1450,18 +1364,7 @@ public class CrazyManager {
         return min + random.nextInt((max + 1) - min);
     }
 
-    private List<Color> getColors(String string) {
-        List<Color> colors = new ArrayList<>();
-        methods.checkString(colors, string, methods);
-
-        return colors;
-    }
-
     public BlackSmithManager getBlackSmithManager() {
         return blackSmithManager;
-    }
-
-    public InfoMenuManager getInfoMenuManager() {
-        return infoMenuManager;
     }
 }

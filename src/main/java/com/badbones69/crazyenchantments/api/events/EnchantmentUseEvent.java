@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class EnchantmentUseEvent extends Event implements Cancellable {
     
-    private final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final CEnchantment enchantment;
     private boolean cancel;
@@ -68,6 +68,10 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
      */
     @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

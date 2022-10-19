@@ -2,11 +2,12 @@ package com.badbones69.crazyenchantments.api.managers;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.api.CrazyManager;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -18,9 +19,11 @@ public class InfoMenuManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Methods methods = starter.getMethods();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private Inventory inventoryMenu;
     private String inventoryName;
@@ -95,7 +98,7 @@ public class InfoMenuManager {
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
                 inventory.addItem(
-                crazyManager.getEnchantmentBook()
+                enchantmentBookSettings.getEnchantmentBook()
                 .setName(enchantment.getInfoName())
                 .setLore(enchantment.getInfoDescription())
                 .setGlow(true)

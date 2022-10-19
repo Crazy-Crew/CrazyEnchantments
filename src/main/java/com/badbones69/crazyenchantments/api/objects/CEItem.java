@@ -79,6 +79,7 @@ public class CEItem {
         vanillaEnchantments.keySet().forEach(enchantment -> item.addUnsafeEnchantment(enchantment, vanillaEnchantments.get(enchantment)));
         cEnchantmentRemove.forEach(enchantment -> crazyManager.removeEnchantment(item, enchantment));
         crazyManager.addEnchantments(item, cEnchantments);
+
         return item;
     }
 }

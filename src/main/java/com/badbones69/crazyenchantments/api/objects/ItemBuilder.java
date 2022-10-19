@@ -185,6 +185,7 @@ public class ItemBuilder {
      */
     public NBTItem getNBTItem() {
         nbtItem = new NBTItem(build());
+
         return nbtItem;
     }
 
@@ -405,6 +406,7 @@ public class ItemBuilder {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+
         return new ItemBuilder();
     }
 
@@ -417,6 +419,7 @@ public class ItemBuilder {
     public ItemBuilder setMaterial(Material material) {
         this.material = material;
         this.isHead = material == Material.PLAYER_HEAD;
+
         return this;
     }
 
@@ -485,6 +488,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setDamage(int damage) {
         this.damage = damage;
+
         return this;
     }
 
@@ -513,6 +517,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setNamePlaceholders(HashMap<String, String> placeholders) {
         this.namePlaceholders = placeholders;
+
         return this;
     }
 
@@ -525,6 +530,7 @@ public class ItemBuilder {
      */
     public ItemBuilder addNamePlaceholder(String placeholder, String argument) {
         this.namePlaceholders.put(placeholder, argument);
+
         return this;
     }
 
@@ -536,6 +542,7 @@ public class ItemBuilder {
      */
     public ItemBuilder removeNamePlaceholder(String placeholder) {
         this.namePlaceholders.remove(placeholder);
+
         return this;
     }
 
@@ -549,9 +556,7 @@ public class ItemBuilder {
         if (lore != null) {
             this.itemLore.clear();
 
-            for (String line : lore) {
-                this.itemLore.add(methods.color(line));
-            }
+            lore.forEach(line -> this.itemLore.add(methods.color(line)));
         }
 
         return this;
@@ -577,6 +582,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setLorePlaceholders(HashMap<String, String> placeholders) {
         this.lorePlaceholders = placeholders;
+
         return this;
     }
 
@@ -589,6 +595,7 @@ public class ItemBuilder {
      */
     public ItemBuilder addLorePlaceholder(String placeholder, String argument) {
         this.lorePlaceholders.put(placeholder, argument);
+
         return this;
     }
 
@@ -619,6 +626,7 @@ public class ItemBuilder {
      */
     public ItemBuilder removeLorePlaceholder(String placeholder) {
         this.lorePlaceholders.remove(placeholder);
+
         return this;
     }
 
@@ -628,6 +636,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setEntityType(EntityType entityType) {
         this.entityType = entityType;
+
         return this;
     }
 
@@ -659,6 +668,7 @@ public class ItemBuilder {
      */
     public ItemBuilder addPatterns(List<String> patterns) {
         patterns.forEach(this :: addPatterns);
+
         return this;
     }
 
@@ -668,6 +678,7 @@ public class ItemBuilder {
      */
     public ItemBuilder addPattern(Pattern pattern) {
         patterns.add(pattern);
+
         return this;
     }
 
@@ -677,6 +688,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setPattern(List<Pattern> patterns) {
         this.patterns = patterns;
+
         return this;
     }
 
@@ -694,6 +706,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setAmount(Integer amount) {
         this.itemAmount = amount;
+
         return this;
     }
 
@@ -704,6 +717,7 @@ public class ItemBuilder {
      */
     public ItemBuilder addAmount(int amount) {
         this.itemAmount += amount;
+
         return this;
     }
 
@@ -745,6 +759,7 @@ public class ItemBuilder {
      */
     public ItemBuilder addEnchantments(Enchantment enchantment, Integer level) {
         this.enchantments.put(enchantment, level);
+
         return this;
     }
 
@@ -756,6 +771,7 @@ public class ItemBuilder {
      */
     public ItemBuilder removeEnchantments(Enchantment enchantment) {
         this.enchantments.remove(enchantment);
+
         return this;
     }
 
@@ -824,6 +840,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setItemFlags(List<ItemFlag> itemFlags) {
         this.itemFlags = itemFlags;
+
         return this;
     }
 
@@ -833,6 +850,7 @@ public class ItemBuilder {
      */
     public ItemBuilder hideItemFlags(boolean hideItemFlags) {
         this.hideItemFlags = hideItemFlags;
+
         return this;
     }
 
@@ -862,6 +880,7 @@ public class ItemBuilder {
      */
     private ItemBuilder setReferenceItem(ItemStack referenceItem) {
         this.referenceItem = referenceItem;
+
         return this;
     }
 
@@ -871,6 +890,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setUnbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
+
         return this;
     }
 
@@ -880,6 +900,7 @@ public class ItemBuilder {
      */
     public ItemBuilder setGlow(boolean glow) {
         this.glowing = glow;
+
         return this;
     }
 
@@ -923,8 +944,10 @@ public class ItemBuilder {
 
         if (item.hasItemMeta()) {
             ItemMeta itemMeta = item.getItemMeta();
+
             assert itemMeta != null;
             itemBuilder.setName(itemMeta.getDisplayName()).setLore(itemMeta.getLore());
+
             NBTItem nbt = new NBTItem(item);
 
             if (nbt.hasKey("Unbreakable")) itemBuilder.setUnbreakable(nbt.getBoolean("Unbreakable"));
@@ -968,13 +991,11 @@ public class ItemBuilder {
                         itemBuilder.setName(value);
                         break;
                     case "amount":
-
                         try {
                             itemBuilder.setAmount(Integer.parseInt(value));
                         } catch (NumberFormatException e) {
                             itemBuilder.setAmount(1);
                         }
-
                         break;
                     case "lore":
                         itemBuilder.setLore(Arrays.asList(value.split(",")));
