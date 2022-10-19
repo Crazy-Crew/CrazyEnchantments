@@ -224,7 +224,7 @@ public class CEBook {
             }
         }
 
-        return enchantmentBookSettings.getEnchantmentBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
+        return enchantmentBookSettings.getNormalBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
     }
     
     /**
