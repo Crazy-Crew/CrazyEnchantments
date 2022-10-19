@@ -46,7 +46,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
                 starter.getVaultSupport().loadVault();
             } else {
-                plugin.getLogger().warning("Vault was not found so support for any economy so was not enabled.");
+                plugin.getLogger().warning("Vault was not found so support for any economy was not enabled.");
             }
 
             FileConfiguration config = Files.CONFIG.getFile();
