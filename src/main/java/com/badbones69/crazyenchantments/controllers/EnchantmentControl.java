@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.api.events.BookFailEvent;
 import com.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -40,13 +41,15 @@ public class EnchantmentControl implements Listener {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     @EventHandler(ignoreCancelled = true)
     public void addEnchantment(InventoryClickEvent e) {
         if (e.getCursor() != null && e.getCurrentItem() != null) {
             ItemStack item = e.getCurrentItem();
 
-            if (crazyManager.isEnchantmentBook(e.getCursor())) {
-                CEBook ceBook = crazyManager.getCEBook(e.getCursor());
+            if (enchantmentBookSettings.isEnchantmentBook(e.getCursor())) {
+                CEBook ceBook = enchantmentBookSettings.getCEBook(e.getCursor());
                 CEnchantment enchantment = ceBook.getEnchantment();
 
                 if (enchantment != null && enchantment.canEnchantItem(item) && ceBook.getAmount() == 1) {
@@ -59,7 +62,7 @@ public class EnchantmentControl implements Listener {
                         boolean hasEnchantment = false;
                         boolean isLowerLevel = false;
 
-                        if (crazyManager.hasEnchantment(item, enchantment)) {
+                        if (enchantmentBookSettings.hasEnchantment(item, enchantment)) {
                             hasEnchantment = true;
 
                             if (crazyManager.getLevel(item, enchantment) < bookLevel) isLowerLevel = true;
@@ -211,9 +214,9 @@ public class EnchantmentControl implements Listener {
         if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
             ItemStack item = methods.getItemInHand(e.getPlayer());
 
-            if (crazyManager.isEnchantmentBook(item)) {
+            if (enchantmentBookSettings.isEnchantmentBook(item)) {
                 e.setCancelled(true);
-                CEnchantment enchantment = crazyManager.getCEBook(item).getEnchantment();
+                CEnchantment enchantment = enchantmentBookSettings.getCEBook(item).getEnchantment();
                 Player player = e.getPlayer();
 
                 if (enchantment.getInfoName().length() > 0) player.sendMessage(enchantment.getInfoName());

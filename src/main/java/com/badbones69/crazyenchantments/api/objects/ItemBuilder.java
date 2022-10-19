@@ -506,7 +506,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated name.
      */
     public ItemBuilder setName(String itemName) {
-        if (itemName != null) this.itemName = methods.color(itemName);
+        if (itemName != null) this.itemName = starter.color(itemName);
 
         return this;
     }
@@ -556,7 +556,7 @@ public class ItemBuilder {
         if (lore != null) {
             this.itemLore.clear();
 
-            lore.forEach(line -> this.itemLore.add(methods.color(line)));
+            lore.forEach(line -> this.itemLore.add(starter.color(line)));
         }
 
         return this;
@@ -569,7 +569,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addLore(String lore) {
-        if (lore != null) this.itemLore.add(methods.color(lore));
+        if (lore != null) this.itemLore.add(starter.color(lore));
 
         return this;
     }

@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.api.objects.AllyMob.AllyType;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -33,6 +34,8 @@ public class AllyEnchantments implements Listener {
     // Settings.
     private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     // Plugin Managers.
     private final AllyManager allyManager = starter.getAllyManager();
 
@@ -43,8 +46,8 @@ public class AllyEnchantments implements Listener {
         if (e.getEntity() instanceof Player player && e.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
             if (!inCoolDown(player) && player.getEquipment() != null) {
                 for (ItemStack item : player.getEquipment().getArmorContents()) {
-                    // Spawn allies when getting attacked
-                    if (crazyManager.hasEnchantments(item) && enemy instanceof Player) {
+                    // Spawn allies when getting attacked.
+                    if (enchantmentBookSettings.hasEnchantments(item) && enemy instanceof Player) {
 
                         checkAllyType(enemy, player, item);
 
@@ -75,7 +78,7 @@ public class AllyEnchantments implements Listener {
 
             for (ItemStack item : player.getEquipment().getArmorContents()) {
                 // Spawn allies when attacking
-                if (crazyManager.hasEnchantments(item)) {
+                if (enchantmentBookSettings.hasEnchantments(item)) {
                     checkAllyType(enemy, player, item);
 
                     if (enemy instanceof Player) checkEnchantment(enemy, player, item);

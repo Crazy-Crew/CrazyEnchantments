@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.api.enums;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
@@ -122,9 +123,11 @@ public enum CEnchantments {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final Methods methods = starter.getMethods();
 
     private final String name;
     private final String typeName;
@@ -236,14 +239,14 @@ public enum CEnchantments {
      * @return Return the color that goes on the Enchantment Book.
      */
     public String getBookColor() {
-        return methods.color(getEnchantment().getBookColor());
+        return starter.color(getEnchantment().getBookColor());
     }
 
     /**
      * @return Returns the color that goes on the Enchanted Item.
      */
     public String getEnchantmentColor() {
-        return methods.color(getEnchantment().getColor());
+        return starter.color(getEnchantment().getColor());
     }
 
     /**

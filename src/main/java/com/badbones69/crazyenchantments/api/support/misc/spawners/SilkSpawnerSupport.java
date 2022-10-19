@@ -2,9 +2,11 @@ package com.badbones69.crazyenchantments.api.support.misc.spawners;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import de.dustplanet.silkspawners.events.SilkSpawnersSpawnerBreakEvent;
 import de.dustplanet.util.SilkUtil;
 import org.bukkit.Material;
@@ -18,9 +20,11 @@ public class SilkSpawnerSupport implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final Methods methods = starter.getMethods();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final SilkUtil api = SilkUtil.hookIntoSilkSpanwers();
 
@@ -35,7 +39,7 @@ public class SilkSpawnerSupport implements Listener {
         assert player != null;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (crazyManager.hasEnchantment(itemStack, CEnchantments.TELEPATHY.getEnchantment())) {
+        if (enchantmentBookSettings.hasEnchantment(itemStack, CEnchantments.TELEPATHY.getEnchantment())) {
             String mob = api.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
 
             if (!player.hasPermission("silkspawners.silkdrop." + mob)) return;

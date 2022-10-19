@@ -40,7 +40,7 @@ public class ShopManager {
         customizerItems.clear();
         shopItems.clear();
         FileConfiguration config = Files.CONFIG.getFile();
-        inventoryName = methods.color(config.getString("Settings.InvName"));
+        inventoryName = starter.color(config.getString("Settings.InvName"));
         inventorySize = config.getInt("Settings.GUISize");
         enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
 

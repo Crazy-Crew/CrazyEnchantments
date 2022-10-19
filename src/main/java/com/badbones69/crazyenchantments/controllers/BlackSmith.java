@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.managers.BlackSmithManager;
 import com.badbones69.crazyenchantments.api.objects.BlackSmithResult;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -34,6 +35,8 @@ public class BlackSmith implements Listener {
 
     // Plugin Managers.
     private final BlackSmithManager blackSmithManager = starter.getBlackSmithManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Economy Management.
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
@@ -68,7 +71,7 @@ public class BlackSmith implements Listener {
                 if (e.getRawSlot() > 26) { // Click in players inventory.
                     if (item.getAmount() != 1) return;
 
-                    if (crazyManager.hasEnchantments(item) || crazyManager.isEnchantmentBook(item)) {
+                    if (enchantmentBookSettings.hasEnchantments(item) || enchantmentBookSettings.isEnchantmentBook(item)) {
                         if (inventory.getItem(mainSlot) == null) { // Main item slot is empty.
                             e.setCurrentItem(new ItemStack(Material.AIR));
                             inventory.setItem(mainSlot, item); // Moves clicked item to main slot.

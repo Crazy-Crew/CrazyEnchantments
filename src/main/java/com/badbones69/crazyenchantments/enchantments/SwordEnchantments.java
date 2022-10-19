@@ -18,6 +18,7 @@ import com.badbones69.crazyenchantments.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -45,6 +46,8 @@ public class SwordEnchantments implements Listener {
     private final Starter starter = plugin.getStarter();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final Methods methods = starter.getMethods();
 
@@ -437,7 +440,7 @@ public class SwordEnchantments implements Listener {
             Player damager = event.getEntity().getKiller();
             ItemStack item = methods.getItemInHand(damager);
 
-            if (crazyManager.hasEnchantments(item)) {
+            if (enchantmentBookSettings.hasEnchantments(item)) {
                 if (crazyManager.hasEnchantment(item, CEnchantments.INQUISITIVE) && CEnchantments.INQUISITIVE.chanceSuccessful(item)) {
                     EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.INQUISITIVE, item);
                     plugin.getServer().getPluginManager().callEvent(useEvent);

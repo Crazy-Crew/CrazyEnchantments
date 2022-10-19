@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.api.objects.PotionEffects;
 import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
@@ -52,6 +53,8 @@ public class ArmorEnchantments implements Listener {
 
     // Settings.
     private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
     private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
 
     // Plugin Support.
@@ -79,18 +82,18 @@ public class ArmorEnchantments implements Listener {
         ItemStack newItem = event.getNewArmorPiece();
         ItemStack oldItem = event.getOldArmorPiece();
 
-        if (crazyManager.hasEnchantments(oldItem)) { // Removing the potion effects.
+        if (enchantmentBookSettings.hasEnchantments(oldItem)) { // Removing the potion effects.
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
-                if (enchantment.isActivated() && crazyManager.hasEnchantment(oldItem, enchantment.getEnchantment())) {
+                if (enchantment.isActivated() && enchantmentBookSettings.hasEnchantment(oldItem, enchantment.getEnchantment())) {
                     Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment);
                     methods.loopEffectsMap(effects, player);
                 }
             }
         }
 
-        if (crazyManager.hasEnchantments(newItem)) { // Adding the potion effects.
+        if (enchantmentBookSettings.hasEnchantments(newItem)) { // Adding the potion effects.
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
-                if (enchantment.isActivated() && crazyManager.hasEnchantment(newItem, enchantment.getEnchantment())) {
+                if (enchantment.isActivated() && enchantmentBookSettings.hasEnchantment(newItem, enchantment.getEnchantment())) {
                     Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, newItem, oldItem, enchantment);
                     methods.loopEffectsMap(effects, player);
                 }
@@ -123,7 +126,7 @@ public class ArmorEnchantments implements Listener {
 
         if (event.getDamager() instanceof LivingEntity damager && event.getEntity() instanceof Player player && player.getEquipment() != null) {
             for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                if (crazyManager.hasEnchantments(armor)) {
+                if (enchantmentBookSettings.hasEnchantments(armor)) {
                     for (ArmorEnchantment armorEnchantment : armorEnchantmentManager.getArmorEnchantments()) {
                         CEnchantments enchantment = armorEnchantment.getEnchantment();
 
@@ -143,7 +146,7 @@ public class ArmorEnchantments implements Listener {
                         }
                     }
 
-                    if (player.getHealth() <= 8 && crazyManager.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment()) && CEnchantments.ROCKET.chanceSuccessful(armor)) {
+                    if (player.getHealth() <= 8 && enchantmentBookSettings.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment()) && CEnchantments.ROCKET.chanceSuccessful(armor)) {
                         EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
                         plugin.getServer().getPluginManager().callEvent(useEvent);
 
@@ -351,7 +354,7 @@ public class ArmorEnchantments implements Listener {
 
         if (CEnchantments.SELFDESTRUCT.isActivated()) {
             for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-                if (crazyManager.hasEnchantments(item) && crazyManager.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
+                if (enchantmentBookSettings.hasEnchantments(item) && enchantmentBookSettings.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
 
                     EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT.getEnchantment(), item);
                     plugin.getServer().getPluginManager().callEvent(useEvent);
@@ -373,7 +376,7 @@ public class ArmorEnchantments implements Listener {
 
         if (CEnchantments.RECOVER.isActivated()) {
             for (ItemStack item : Objects.requireNonNull(killer.getEquipment()).getArmorContents()) {
-                if (crazyManager.hasEnchantments(item) && crazyManager.hasEnchantment(item, CEnchantments.RECOVER)) {
+                if (enchantmentBookSettings.hasEnchantments(item) && crazyManager.hasEnchantment(item, CEnchantments.RECOVER)) {
                     EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.RECOVER.getEnchantment(), item);
                     plugin.getServer().getPluginManager().callEvent(useEvent);
 

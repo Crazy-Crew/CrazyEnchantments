@@ -12,6 +12,7 @@ import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSuppor
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.controllers.EnchantmentControl;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
@@ -20,6 +21,10 @@ import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
 import com.badbones69.crazyenchantments.utilities.WingsUtils;
+import org.bukkit.ChatColor;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Starter {
 
@@ -67,18 +72,19 @@ public class Starter {
 
     public void run() {
         fileManager = new FileManager();
-        methods = new Methods();
 
         // Set up all our files.
         fileManager.setLog(true).setup();
 
-        // Economy Management.
-        currencyAPI = new CurrencyAPI();
+        methods = new Methods();
 
         // Settings.
         protectionCrystalSettings = new ProtectionCrystalSettings();
         enchantmentSettings = new EnchantmentSettings();
         enchantmentBookSettings = new EnchantmentBookSettings();
+
+        // Economy Management.
+        currencyAPI = new CurrencyAPI();
 
         // Plugin Support.
         pluginSupport = new PluginSupport();
@@ -103,6 +109,9 @@ public class Starter {
         plugin.pluginManager.registerEvents(armorListener = new ArmorListener(), plugin);
 
         crazyManager = new CrazyManager();
+
+        plugin.pluginManager.registerEvents(new EnchantmentControl(), plugin);
+
         skullCreator = new SkullCreator();
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
@@ -110,6 +119,29 @@ public class Starter {
         if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
         if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport = new SpartanSupport();
+    }
+
+    private final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
+
+    public String color(String message) {
+        Matcher matcher = HEX_PATTERN.matcher(message);
+        StringBuilder buffer = new StringBuilder();
+
+        while (matcher.find()) {
+            matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
+        }
+
+        return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+    }
+
+    public boolean isInt(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+
+        return true;
     }
 
     public FileManager getFileManager() {

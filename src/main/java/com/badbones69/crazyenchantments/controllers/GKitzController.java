@@ -41,7 +41,7 @@ public class GKitzController implements Listener {
 
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), methods.color(gkitz.getString("Settings.Inventory-Name")));
+        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), starter.color(gkitz.getString("Settings.Inventory-Name")));
 
         for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
@@ -91,7 +91,7 @@ public class GKitzController implements Listener {
             NBTItem nbtItem = new NBTItem(item);
 
             for (GKitz kit : crazyManager.getGKitz()) {
-                if (e.getView().getTitle().equals(methods.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
+                if (e.getView().getTitle().equals(starter.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     e.setCancelled(true);
 
                     if (e.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
@@ -100,7 +100,7 @@ public class GKitzController implements Listener {
                 }
             }
 
-            if (e.getView().getTitle().equals(methods.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
+            if (e.getView().getTitle().equals(starter.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 e.setCancelled(true);
 
                 if (e.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {

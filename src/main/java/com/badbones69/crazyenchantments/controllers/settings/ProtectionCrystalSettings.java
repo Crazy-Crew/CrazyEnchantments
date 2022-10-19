@@ -19,7 +19,7 @@ public class ProtectionCrystalSettings {
 
     private final Methods methods = starter.getMethods();
 
-    private final String protectionString = methods.color(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
+    private final String protectionString = starter.color(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 

@@ -2,13 +2,17 @@ package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
+
 import java.util.Calendar;
 
 public class Cooldown {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Starter starter = plugin.getStarter();
+
+    private final Methods methods = starter.getMethods();
     
     private final GKitz gkit;
     private final Calendar cooldownTime;
@@ -53,7 +57,7 @@ public class Cooldown {
             second += total;
         }
 
-        return methods.color(message.replace("%Day%", day + "").replace("%day%", day + "")
+        return starter.color(message.replace("%Day%", day + "").replace("%day%", day + "")
         .replace("%Hour%", hour + "").replace("%hour%", hour + "")
         .replace("%Minute%", minute + "").replace("%minute%", minute + "")
         .replace("%Second%", second + "").replace("%second%", second + ""));

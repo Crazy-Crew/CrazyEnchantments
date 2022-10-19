@@ -107,7 +107,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         pluginManager.registerEvents(new InfoGUIControl(), this);
         pluginManager.registerEvents(new LostBookController(), this);
-        pluginManager.registerEvents(new EnchantmentControl(), this);
         pluginManager.registerEvents(new CommandChecker(), this);
         pluginManager.registerEvents(new BlackSmith(), this);
         pluginManager.registerEvents(new Tinkerer(), this);

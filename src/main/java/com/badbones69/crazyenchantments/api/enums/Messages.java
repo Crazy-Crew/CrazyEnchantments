@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.api.enums;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.*;
@@ -91,8 +92,10 @@ public enum Messages {
     "&b/ce spawn <enchantment/category> [(level:#/min-max)/world:<world>/x:#/y:#/z:#] - &9Drops an enchantment book at the specific coordinates."));
 
     private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    
+    private final static Starter starter = plugin.getStarter();
 
-    private final static Methods methods = plugin.getStarter().getMethods();
+    private final static Methods methods = starter.getMethods();
 
     private final String path;
     private String defaultMessage;
@@ -112,7 +115,7 @@ public enum Messages {
         StringBuilder message = new StringBuilder();
 
         for (String line : list) {
-            message.append(methods.color(line)).append("\n");
+            message.append(starter.color(line)).append("\n");
         }
 
         return message.toString();
@@ -213,15 +216,15 @@ public enum Messages {
 
         if (isList) {
             if (exists) {
-                message = methods.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
+                message = starter.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
             } else {
-                message = methods.color(convertList(getDefaultListMessage()));
+                message = starter.color(convertList(getDefaultListMessage()));
             }
         } else {
             if (exists) {
-                message = methods.color(Files.MESSAGES.getFile().getString("Messages." + path));
+                message = starter.color(Files.MESSAGES.getFile().getString("Messages." + path));
             } else {
-                message = methods.color(getDefaultMessage());
+                message = starter.color(getDefaultMessage());
             }
         }
 
@@ -231,12 +234,12 @@ public enum Messages {
         }
 
         if (isList) { // Don't want to add a prefix to a list of messages.
-            return methods.color(message);
+            return starter.color(message);
         } else { // If the message isn't a list.
             if (prefix) { // If the message needs a prefix.
                 return methods.getPrefix(message);
             } else { // If the message doesn't need a prefix.
-                return methods.color(message);
+                return starter.color(message);
             }
         }
     }

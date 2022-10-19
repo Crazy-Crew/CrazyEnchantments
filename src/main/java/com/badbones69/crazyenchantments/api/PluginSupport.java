@@ -1,12 +1,9 @@
 package com.badbones69.crazyenchantments.api;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.api.support.factions.FactionsUUIDSupport;
 import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
 import com.badbones69.crazyenchantments.api.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.api.support.claims.TownySupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
@@ -28,9 +25,6 @@ public class PluginSupport {
     // Plugin Support.
     private final SuperiorSkyBlockSupport superiorSkyBlockSupport = starter.getSuperiorSkyBlockSupport();
 
-    // Managers.
-    private final WingsManager wingsManager = starter.getWingsManager();
-
     private FactionsVersion factionsVersion = null;
 
     public boolean inTerritory(Player player) {
@@ -39,15 +33,12 @@ public class PluginSupport {
         return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.inTerritory(player);
     }
 
-    public boolean isFriendly(Entity entity, Entity other) {
-        if (entity instanceof Player || other instanceof Player) {
-            assert entity instanceof Player;
-            Player player = (Player) entity;
-            Player otherEntity = (Player) other;
+    public boolean isFriendly(Entity pEntity, Entity oEntity) {
+        if (pEntity instanceof Player player && oEntity instanceof Player) {
 
-            if (factionsVersion != null && factionsVersion.isFriendly(player, otherEntity)) return true;
+            if (factionsVersion != null && factionsVersion.isFriendly(player, (Player) oEntity)) return true;
 
-            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.isFriendly(player, otherEntity)) return true;
+            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.isFriendly(player, (Player) oEntity)) return true;
 
             return SupportedPlugins.MCMMO.isPluginLoaded();
         }
@@ -75,8 +66,6 @@ public class PluginSupport {
     public boolean allowExplosion(Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsExplosions(location);
     }
-
-    private final Methods methods = plugin.getStarter().getMethods();
 
     private final HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
 
@@ -111,17 +100,17 @@ public class PluginSupport {
     public void printHooks() {
         if (cachedPluginState.isEmpty()) updateCachedPluginState();
 
-        plugin.getServer().getConsoleSender().sendMessage(methods.color("&4&lActive CrazyEnchantment Hooks:"));
+        plugin.getServer().getConsoleSender().sendMessage(starter.color("&4&lActive CrazyEnchantment Hooks:"));
 
-        cachedPluginState.keySet().forEach(supportedsPlugins -> {
-            if (supportedsPlugins.isPluginLoaded()) plugin.getServer().getConsoleSender().sendMessage(methods.color("&6&l " + supportedsPlugins.pluginName + " : &a&lENABLED"));
+        cachedPluginState.keySet().forEach(supportedPlugins -> {
+            if (supportedPlugins.isPluginLoaded()) plugin.getServer().getConsoleSender().sendMessage(starter.color("&6&l " + supportedPlugins.pluginName + " : &a&lENABLED"));
         });
     }
 
     private void updateFactionsPlugins() {
-        for (SupportedPlugins supportedsPlugins : SupportedPlugins.values()) {
-            if (supportedsPlugins.isPluginLoaded()) {
-                switch (supportedsPlugins) {
+        for (SupportedPlugins supportedPlugins : SupportedPlugins.values()) {
+            if (supportedPlugins.isPluginLoaded()) {
+                switch (supportedPlugins) {
                     case FACTIONS_UUID -> factionsVersion = new FactionsUUIDSupport();
                     case GRIEF_PREVENTION -> factionsVersion = new GriefPreventionSupport();
                     case TOWNYADVANCED -> factionsVersion = new TownySupport();

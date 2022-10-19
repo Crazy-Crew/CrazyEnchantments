@@ -36,8 +36,6 @@ public class ScramblerListener implements Listener {
 
     private final Methods methods = starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final HashMap<Player, BukkitTask> roll = new HashMap<>();
@@ -59,21 +57,7 @@ public class ScramblerListener implements Listener {
         .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name"))
         .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
         animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle");
-        guiName = methods.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
-    }
-
-    /**
-     * Get a new book that has been scrambled.
-     * @param book The old book.
-     * @return A new scrambled book.
-     */
-    public ItemStack getNewScrambledBook(ItemStack book) {
-        if (crazyManager.isEnchantmentBook(book)) {
-            CEnchantment enchantment = crazyManager.getEnchantmentBookEnchantment(book);
-            return new CEBook(enchantment, crazyManager.getBookLevel(book, enchantment), crazyManager.getHighestEnchantmentCategory(enchantment)).buildBook();
-        }
-
-        return new ItemStack(Material.AIR);
+        guiName = starter.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
     }
 
     /**
@@ -110,7 +94,7 @@ public class ScramblerListener implements Listener {
         setGlass(inventory);
 
         for (int slot = 9; slot > 8 && slot < 18; slot++) {
-            inventory.setItem(slot, getNewScrambledBook(book));
+            inventory.setItem(slot, enchantmentBookSettings.getNewScrambledBook(book));
         }
 
         player.openInventory(inventory);
@@ -193,7 +177,7 @@ public class ScramblerListener implements Listener {
             items.add(inv.getItem(slot));
         }
 
-        ItemStack newBook = getNewScrambledBook(book);
+        ItemStack newBook = enchantmentBookSettings.getNewScrambledBook(book);
         newBook.setType(methods.getRandomPaneColor().getMaterial());
         inv.setItem(9, newBook);
 
@@ -212,7 +196,7 @@ public class ScramblerListener implements Listener {
 
             if (book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
                 if (book.getAmount() == 1 && scrambler.getAmount() == 1) {
-                    if (getScramblers().isSimilar(scrambler) && crazyManager.isEnchantmentBook(book)) {
+                    if (getScramblers().isSimilar(scrambler) && enchantmentBookSettings.isEnchantmentBook(book)) {
 
                         if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
                             e.setCancelled(true);
@@ -222,7 +206,7 @@ public class ScramblerListener implements Listener {
                                 e.setCurrentItem(new ItemStack(Material.AIR));
                                 openScrambler(player, book);
                             } else {
-                                e.setCurrentItem(getNewScrambledBook(book));
+                                e.setCurrentItem(enchantmentBookSettings.getNewScrambledBook(book));
                             }
                         } else {
                             player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());

@@ -215,10 +215,10 @@ public class CEBook {
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : enchantment.getInfoDescription()) {
-                    lore.add(methods.color(enchantmentLine));
+                    lore.add(starter.color(enchantmentLine));
                 }
             } else {
-                lore.add(methods.color(bookLine)
+                lore.add(starter.color(bookLine)
                 .replace("%Destroy_Rate%", destroyRate + "").replace("%destroy_rate%", destroyRate + "")
                 .replace("%Success_Rate%", successRate + "").replace("%success_rate%", successRate + ""));
             }

@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.api.events.AngelUseEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.events.HellForgedUseEvent;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -35,6 +36,8 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     private final Processor<Runnable> syncProcessor;
 
     public ArmorMoveProcessor() {
@@ -55,7 +58,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
         Player player = process.getPlayer();
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-            if (!crazyManager.hasEnchantments(armor)) continue;
+            if (!enchantmentBookSettings.hasEnchantments(armor)) continue;
 
             if (CEnchantments.NURSERY.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.NURSERY)) {
                 int heal = 1;

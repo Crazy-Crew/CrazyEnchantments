@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.google.common.collect.Lists;
 import org.bukkit.GameMode;
@@ -38,6 +39,8 @@ public class ToolEnchantments implements Listener {
 
     // Settings.
     private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final List<String> ignoreBlockTypes = Lists.newArrayList("air", "shulker_box", "chest", "head", "skull");
 
@@ -101,7 +104,7 @@ public class ToolEnchantments implements Listener {
 
     private void updateEffects(Player player) {
         ItemStack item = methods.getItemInHand(player);
-        if (!crazyManager.hasEnchantments(item)) return;
+        if (!enchantmentBookSettings.hasEnchantments(item)) return;
 
         List<CEnchantment> enchantments = crazyManager.getEnchantmentsOnItem(item);
         int potionTime = 5 * 20;

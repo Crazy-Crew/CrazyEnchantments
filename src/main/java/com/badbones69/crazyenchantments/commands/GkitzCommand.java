@@ -80,7 +80,7 @@ public class GkitzCommand implements CommandExecutor {
 
                             sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
                         } else {
-                            sender.sendMessage(methods.getPrefix() + methods.color("&c/GKitz Reset <Kit> [Player]"));
+                            sender.sendMessage(methods.getPrefix() + starter.color("&c/GKitz Reset <Kit> [Player]"));
                         }
                     }
                 } else {

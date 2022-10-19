@@ -45,10 +45,10 @@ public class CEnchantment {
         this.name = name;
         this.customName = name;
         this.activated = true;
-        this.color = methods.color("&7");
-        this.bookColor = methods.color("&b&l");
+        this.color = starter.color("&7");
+        this.bookColor = starter.color("&b&l");
         this.maxLevel = 3;
-        this.infoName = methods.color("&7" + name);
+        this.infoName = starter.color("&7" + name);
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();
@@ -92,7 +92,7 @@ public class CEnchantment {
     }
 
     public CEnchantment setColor(String color) {
-        this.color = methods.color(color);
+        this.color = starter.color(color);
         return this;
     }
 
@@ -104,7 +104,7 @@ public class CEnchantment {
 
         if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
 
-        this.bookColor = methods.color(bookColor);
+        this.bookColor = starter.color(bookColor);
 
         return this;
     }
@@ -124,7 +124,7 @@ public class CEnchantment {
     }
 
     public CEnchantment setInfoName(String infoName) {
-        this.infoName = methods.color(infoName);
+        this.infoName = starter.color(infoName);
 
         return this;
     }
@@ -167,7 +167,7 @@ public class CEnchantment {
     public CEnchantment setInfoDescription(List<String> infoDescription) {
         List<String> info = new ArrayList<>();
 
-        infoDescription.forEach(lore -> info.add(methods.color(lore)));
+        infoDescription.forEach(lore -> info.add(starter.color(lore)));
 
         this.infoDescription = info;
 
@@ -240,10 +240,10 @@ public class CEnchantment {
     public int getLevel(ItemStack item) {
         int level = 0;
 
-        if (methods.verifyItemLore(item)) {
+        if (enchantmentBookSettings.verifyItemLore(item)) {
             for (String lore : Objects.requireNonNull(item.getItemMeta().getLore())) {
                 if (lore.contains(customName)) {
-                    level = crazyManager.convertLevelInteger(lore.replace(color + customName + " ", ""));
+                    level = methods.convertLevelInteger(lore.replace(color + customName + " ", ""));
                     break;
                 }
             }

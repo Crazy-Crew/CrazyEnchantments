@@ -132,13 +132,13 @@ public class CECommand implements CommandExecutor {
                                 sender.sendMessage(methods.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
 
                                 for (String broke : brokenEnchantments) {
-                                    sender.sendMessage(methods.color("&c#" + amount + ": &6" + broke));
+                                    sender.sendMessage(starter.color("&c#" + amount + ": &6" + broke));
                                     amount++;
                                 }
 
-                                sender.sendMessage(methods.color("&7- &cMissing from the Enchantments.yml"));
-                                sender.sendMessage(methods.color("&7- &c<Enchantment Name>: option was changed"));
-                                sender.sendMessage(methods.color("&7- &cYaml format has been broken."));
+                                sender.sendMessage(starter.color("&7- &cMissing from the Enchantments.yml"));
+                                sender.sendMessage(starter.color("&7- &c<Enchantment Name>: option was changed"));
+                                sender.sendMessage(starter.color("&7- &cYaml format has been broken."));
                             }
 
                             if (!brokenEnchantmentTypes.isEmpty()) {
@@ -147,7 +147,7 @@ public class CECommand implements CommandExecutor {
                                 sender.sendMessage(methods.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
 
                                 for (String broke : brokenEnchantmentTypes) {
-                                    sender.sendMessage(methods.color("&c#" + i + ": &6" + broke));
+                                    sender.sendMessage(starter.color("&c#" + i + ": &6" + broke));
                                     i++;
                                 }
                             }
@@ -155,7 +155,7 @@ public class CECommand implements CommandExecutor {
 
                         sender.sendMessage(methods.getPrefix("&cEnchantment Types and amount of items in each:"));
 
-                        infoMenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(methods.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
+                        infoMenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(starter.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
                     }
 
                     return true;
@@ -169,7 +169,7 @@ public class CECommand implements CommandExecutor {
                             if (!file.contains("Enchantments." + enchantment.getName())) brokenEnchantments.add(enchantment);
                         }
 
-                        sender.sendMessage(methods.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
+                        sender.sendMessage(starter.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
 
                         for (CEnchantments enchantment : brokenEnchantments) {
                             String path = "Enchantments." + enchantment.getName();
@@ -239,7 +239,7 @@ public class CECommand implements CommandExecutor {
                                 try {
                                     String option = optionString.split(":")[0];
                                     String value = optionString.split(":")[1];
-                                    boolean isInt = methods.isInt(value);
+                                    boolean isInt = starter.isInt(value);
 
                                     switch (option.toLowerCase()) {
                                         case "level" -> {
@@ -283,7 +283,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        sender.sendMessage(methods.getPrefix() + methods.color("&c/ce Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#]"));
+                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#]"));
                     }
 
                     return true;
@@ -303,7 +303,7 @@ public class CECommand implements CommandExecutor {
                             Category category = enchantmentBookSettings.getCategory(args[1]);
 
                             if (args.length >= 3) {
-                                if (!methods.isInt(args[2])) {
+                                if (!starter.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -335,7 +335,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        sender.sendMessage(methods.getPrefix() + methods.color("&c/ce LostBook <Category> [Amount] [Player]"));
+                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce LostBook <Category> [Amount] [Player]"));
                     }
 
                     return true;
@@ -352,7 +352,7 @@ public class CECommand implements CommandExecutor {
                         }
 
                         if (args.length >= 2) {
-                            if (!methods.isInt(args[1])) {
+                            if (!starter.isInt(args[1])) {
                                 sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[1]).replace("%arg%", args[1]));
                                 return true;
                             }
@@ -394,7 +394,7 @@ public class CECommand implements CommandExecutor {
                         }
 
                         if (args.length >= 2) {
-                            if (!methods.isInt(args[1])) {
+                            if (!starter.isInt(args[1])) {
                                 sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[1]).replace("%arg%", args[1]));
                                 return true;
                             }
@@ -438,7 +438,7 @@ public class CECommand implements CommandExecutor {
                             }
 
                             if (args.length >= 3) {
-                                if (!methods.isInt(args[2])) {
+                                if (!starter.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -460,7 +460,7 @@ public class CECommand implements CommandExecutor {
                             }
 
                             if (args.length >= 5) {
-                                if (!methods.isInt(args[4])) {
+                                if (!starter.isInt(args[4])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[4]).replace("%arg%", args[4]));
                                     return true;
                                 }
@@ -503,7 +503,7 @@ public class CECommand implements CommandExecutor {
                             }
                         }
 
-                        sender.sendMessage(methods.getPrefix() + methods.color("&c/ce Dust <Success/Destroy/Mystery> <Amount> [Player] [Percent]"));
+                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Dust <Success/Destroy/Mystery> <Amount> [Player] [Percent]"));
                     }
 
                     return true;
@@ -516,7 +516,7 @@ public class CECommand implements CommandExecutor {
                             String name = sender.getName();
 
                             if (args.length >= 3) {
-                                if (!methods.isInt(args[2])) {
+                                if (!starter.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -543,7 +543,7 @@ public class CECommand implements CommandExecutor {
                             }
                         }
 
-                        sender.sendMessage(methods.getPrefix() + methods.color("&c/ce Scroll <White/Black/Transmog> [Amount] [Player]"));
+                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Scroll <White/Black/Transmog> [Amount] [Player]"));
                     }
 
                     return true;
@@ -561,7 +561,7 @@ public class CECommand implements CommandExecutor {
                             String level = "1";
 
                             if (args.length >= 3) {
-                                if (!methods.isInt(args[2])) {
+                                if (!starter.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -632,7 +632,7 @@ public class CECommand implements CommandExecutor {
                                 methods.setItemInHand(player, clone);
                                 return true;
                             } else {
-                                if (crazyManager.hasEnchantment(item, ceEnchantment)) {
+                                if (enchantmentBookSettings.hasEnchantment(item, ceEnchantment)) {
                                     methods.setItemInHand(player, crazyManager.removeEnchantment(item, ceEnchantment));
                                     HashMap<String, String> placeholders = new HashMap<>();
                                     placeholders.put("%Enchantment%", ceEnchantment.getCustomName());
@@ -646,7 +646,7 @@ public class CECommand implements CommandExecutor {
                             sender.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
                         }
 
-                        sender.sendMessage(methods.getPrefix() + methods.color("&c/ce Remove <Enchantment>"));
+                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Remove <Enchantment>"));
                     }
 
                     return true;
@@ -667,7 +667,7 @@ public class CECommand implements CommandExecutor {
                             Player player;
 
                             if (args.length >= 3) {
-                                if (methods.isInt(args[2])) {
+                                if (starter.isInt(args[2])) {
                                     level = Integer.parseInt(args[2]);
                                 } else if (args[2].contains("-")) {
                                     level = methods.getRandomNumber(args[2]);
@@ -678,7 +678,7 @@ public class CECommand implements CommandExecutor {
                             }
 
                             if (args.length >= 4) {
-                                if (!methods.isInt(args[3])) {
+                                if (!starter.isInt(args[3])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[3]).replace("%arg%", args[3]));
                                     return true;
                                 }
@@ -707,7 +707,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        sender.sendMessage(methods.getPrefix() + methods.color("&c/ce Book <Enchantment> [Lvl] [Amount] [Player]"));
+                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Book <Enchantment> [Lvl] [Amount] [Player]"));
                     }
 
                     return true;

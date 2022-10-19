@@ -6,10 +6,14 @@ import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.objects.CEBook;
+import com.badbones69.crazyenchantments.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.listeners.FireworkDamageListener;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
@@ -47,20 +51,9 @@ public class Methods {
     // Plugin Listeners.
     private final FireworkDamageListener fireworkDamageListener = plugin.getFireworkDamageListener();
 
+    private EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     private final Random random = new Random();
-
-    private final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
-
-    public String color(String message) {
-        Matcher matcher = HEX_PATTERN.matcher(message);
-        StringBuilder buffer = new StringBuilder();
-
-        while (matcher.find()) {
-            matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
-        }
-
-        return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
-    }
 
     public String removeColor(String msg) {
         return ChatColor.stripColor(msg);
@@ -92,7 +85,7 @@ public class Methods {
         int number = 1;
         String[] split = range.split("-");
 
-        if (isInt(split[0]) && isInt(split[1])) {
+        if (starter.isInt(split[0]) && starter.isInt(split[1])) {
             int max = Integer.parseInt(split[1]) + 1;
             int min = Integer.parseInt(split[0]);
             number = min + random.nextInt(max - min);
@@ -157,17 +150,7 @@ public class Methods {
     }
 
     public String getPrefix(String string) {
-        return color(Files.CONFIG.getFile().getString("Settings.Prefix") + string);
-    }
-
-    public boolean isInt(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-
-        return true;
+        return starter.color(Files.CONFIG.getFile().getString("Settings.Prefix") + string);
     }
 
     public Player getPlayer(String name) {
@@ -239,16 +222,16 @@ public class Methods {
 
         if (item.getItemMeta().hasLore()) lore.addAll(item.getItemMeta().getLore());
 
-        lore.add(color(i));
+        lore.add(starter.color(i));
 
-        if (lore.contains(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")))) {
-            lore.remove(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-            lore.add(color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+        if (lore.contains(starter.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")))) {
+            lore.remove(starter.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+            lore.add(starter.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
         }
 
-        if (lore.contains(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
-            lore.remove(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
-            lore.add(color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+        if (lore.contains(starter.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
+            lore.remove(starter.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+            lore.add(starter.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
         }
 
         m.setLore(lore);
@@ -257,50 +240,9 @@ public class Methods {
         return item;
     }
 
-    public int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
-        String arg = defaultValue + "";
-
-        for (String originalLine : originalLore) {
-            originalLine = color(originalLine).toLowerCase();
-
-            if (originalLine.contains(argument.toLowerCase())) {
-                String[] b = originalLine.split(argument.toLowerCase());
-
-                for (String itemLine : item.getItemMeta().getLore()) {
-                    boolean toggle = false; // Checks to make sure the lore is the same.
-
-                    if (b.length >= 1) {
-                        if (itemLine.toLowerCase().startsWith(b[0])) {
-                            arg = itemLine.toLowerCase().replace(b[0], "");
-                            toggle = true;
-                        }
-                    }
-
-                    if (b.length >= 2) {
-                        if (itemLine.toLowerCase().endsWith(b[1])) {
-                            arg = arg.toLowerCase().replace(b[1], "");
-                        } else {
-                            toggle = false;
-                        }
-                    }
-
-                    if (toggle) break;
-                }
-
-                if (isInt(arg)) break;
-            }
-        }
-
-        int percent = defaultValue;
-
-        if (isInt(arg)) percent = Integer.parseInt(arg);
-
-        return percent;
-    }
-
     public boolean hasArgument(String arg, List<String> message) {
         for (String line : message) {
-            line = color(line).toLowerCase();
+            line = starter.color(line).toLowerCase();
 
             if (line.contains(arg.toLowerCase())) return true;
         }
@@ -408,16 +350,6 @@ public class Methods {
         } catch (Exception ignore) {}
 
         return null;
-    }
-
-    /**
-     * Verify the ItemStack has a lore. This checks to make sure everything isn't null because recent minecraft updates cause NPEs.
-     *
-     * @param item Itemstack you are checking.
-     * @return True if the item has a lore and no null issues.
-     */
-    public boolean verifyItemLore(ItemStack item) {
-        return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().getLore() != null && item.getItemMeta().hasLore();
     }
 
     public HashMap<String, String> getEnchantments() {
@@ -666,6 +598,82 @@ public class Methods {
             case XP_LEVEL -> player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
             case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
         }
+    }
+
+    /**
+     * This converts a String into a number if using a roman numeral from I-X.
+     * @param i The string you want to convert.
+     * @return The roman numeral as a number.
+     */
+    public int convertLevelInteger(String i) {
+        switch (i) {
+            case "I" -> {
+                return 1;
+            }
+
+            case "II" -> {
+                return 2;
+            }
+
+            case "III" -> {
+                return 3;
+            }
+
+            case "IV" -> {
+                return 4;
+            }
+
+            case "V" -> {
+                return 5;
+            }
+
+            case "VI" -> {
+                return 6;
+            }
+
+            case "VII" -> {
+                return 7;
+            }
+
+            case "VIII" -> {
+                return 8;
+            }
+
+            case "IX" -> {
+                return 9;
+            }
+
+            case "X" -> {
+                return 10;
+            }
+
+            default -> {
+                if (starter.isInt(i)) {
+                    return Integer.parseInt(i);
+                } else {
+                    return 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * Get the highest category rarity the enchantment is in.
+     * @param enchantment The enchantment you are checking.
+     * @return The highest category based on the rarities.
+     */
+    public Category getHighestEnchantmentCategory(CEnchantment enchantment) {
+        Category topCategory = null;
+        int rarity = 0;
+
+        for (Category category : enchantment.getCategories()) {
+            if (category.getRarity() >= rarity) {
+                rarity = category.getRarity();
+                topCategory = category;
+            }
+        }
+
+        return topCategory;
     }
 
     public ItemBuilder getRandomPaneColor() {

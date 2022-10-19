@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.managers.BlackSmithManager;
@@ -18,6 +19,8 @@ public class BlackSmithResult {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
+    private final Methods methods = starter.getMethods();
+
     private int cost = 0;
     private ItemStack resultItem;
     
@@ -28,8 +31,8 @@ public class BlackSmithResult {
 
         CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
         if (mainItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && subItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial()) {
-            CEBook mainBook = crazyManager.getCEBook(mainItem);
-            CEBook subBook = crazyManager.getCEBook(subItem);
+            CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
+            CEBook subBook = enchantmentBookSettings.getCEBook(subItem);
             // Books are the same enchantment.
             if (mainBook.getEnchantment() == subBook.getEnchantment() &&
             // Books have to be the same level.

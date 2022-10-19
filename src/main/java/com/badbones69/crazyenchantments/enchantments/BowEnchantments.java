@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -40,6 +41,8 @@ public class BowEnchantments implements Listener {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
@@ -59,7 +62,7 @@ public class BowEnchantments implements Listener {
         ItemStack bow = event.getBow();
         Entity entity = event.getEntity();
 
-        if (!crazyManager.hasEnchantments(bow)) return;
+        if (!enchantmentBookSettings.hasEnchantments(bow)) return;
         if (bowUtils.allowsCombat(entity)) return;
         if (arrow.getShooter() instanceof Player) return;
 

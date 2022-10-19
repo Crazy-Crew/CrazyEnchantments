@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.EnchantedArrow;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,6 +27,8 @@ public class BowUtils {
     private final Starter starter = plugin.getStarter();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
+
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
@@ -59,7 +62,7 @@ public class BowUtils {
     public boolean isBowEnchantActive(CEnchantments customEnchant, EnchantedArrow enchantedArrow, Arrow arrow) {
         return customEnchant.isActivated() &&
                 enchantedArrow(arrow).hasEnchantment(customEnchant) &&
-                customEnchant.chanceSuccessful(enchantedArrow.getBow()) && crazyManager.hasEnchantments(enchantedArrow.getBow());
+                customEnchant.chanceSuccessful(enchantedArrow.getBow()) && enchantmentBookSettings.hasEnchantments(enchantedArrow.getBow());
     }
 
     public boolean allowsCombat(Entity entity) {

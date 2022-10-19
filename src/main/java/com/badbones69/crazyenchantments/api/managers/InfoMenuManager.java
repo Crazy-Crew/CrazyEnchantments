@@ -36,7 +36,7 @@ public class InfoMenuManager {
         enchantmentTypes.clear();
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Info-GUI-Settings";
-        inventoryName = methods.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
+        inventoryName = starter.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
         inventorySize = file.getInt(path + ".Inventory.Size", 18);
         inventoryMenu = plugin.getServer().createInventory(null, inventorySize, inventoryName);
         backRight = new ItemBuilder()

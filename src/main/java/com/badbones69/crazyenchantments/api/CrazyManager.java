@@ -75,7 +75,6 @@ public class CrazyManager {
     private final List<GKitz> gkitz = Lists.newArrayList();
     private final List<CEPlayer> players = Lists.newArrayList();
     private final List<Material> blockList = Lists.newArrayList();
-    private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
     private final List<Event> ignoredEvents = Lists.newArrayList();
     private final List<UUID> ignoredUUIDs = Lists.newArrayList();
 
@@ -106,7 +105,7 @@ public class CrazyManager {
 
         blockList.clear();
         gkitz.clear();
-        registeredEnchantments.clear();
+        enchantmentBookSettings.getRegisteredEnchantments().clear();
         enchantmentBookSettings.getCategories().clear();
 
         // Check if we should patch player health.
@@ -144,7 +143,7 @@ public class CrazyManager {
         // Loads the info menu manager and the enchantment types.
         infoMenuManager.load();
 
-        whiteScrollProtectionName = methods.color(config.getString("Settings.WhiteScroll.ProtectedName"));
+        whiteScrollProtectionName = starter.color(config.getString("Settings.WhiteScroll.ProtectedName"));
         enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(Objects.requireNonNull(config.getString("Settings.Enchantment-Book-Item"))));
         useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
         maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle");
@@ -441,65 +440,12 @@ public class CrazyManager {
     }
 
     /**
-     * @param item Item you want to check to see if it has enchantments.
-     * @return True if it has enchantments / False if it doesn't have enchantments.
-     */
-    public boolean hasEnchantments(ItemStack item) {
-        for (CEnchantment enchantment : registeredEnchantments) {
-            if (hasEnchantment(item, enchantment)) return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param item Item that you want to check if it has an enchantment.
-     * @param enchantment The enchantment you want to check if the item has.
-     * @return True if the item has the enchantment / False if it doesn't have the enchantment.
-     */
-    public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-        if (methods.verifyItemLore(item)) {
-            ItemMeta meta = item.getItemMeta();
-            List<String> itemLore = meta.getLore();
-
-            if (enchantment.isActivated() && itemLore != null) {
-                for (String lore : itemLore) {
-                    String[] split = lore.split(" ");
-                    // Split can generate an empty array in rare case.
-                    if (split.length > 0 && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * @param item Item that you want to check if it has an enchantment.
      * @param enchantment The enchantment you want to check if the item has.
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
     public boolean hasEnchantment(ItemStack item, CEnchantments enchantment) {
-        return hasEnchantment(item, enchantment.getEnchantment());
-    }
-
-    /**
-     * Get the highest category rarity the enchantment is in.
-     * @param enchantment The enchantment you are checking.
-     * @return The highest category based on the rarities.
-     */
-    public Category getHighestEnchantmentCategory(CEnchantment enchantment) {
-        Category topCategory = null;
-        int rarity = 0;
-
-        for (Category category : enchantment.getCategories()) {
-            if (category.getRarity() >= rarity) {
-                rarity = category.getRarity();
-                topCategory = category;
-            }
-        }
-
-        return topCategory;
+        return enchantmentBookSettings.hasEnchantment(item, enchantment.getEnchantment());
     }
 
     public CEBook getRandomEnchantmentBook(Category category) {
@@ -524,10 +470,10 @@ public class CrazyManager {
      */
     public boolean playerHasEnchantmentOn(Player player, ItemStack includeItem, ItemStack excludeItem, CEnchantment enchantment) {
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!armor.isSimilar(excludeItem) && hasEnchantment(armor, enchantment)) return true;
+            if (!armor.isSimilar(excludeItem) && enchantmentBookSettings.hasEnchantment(armor, enchantment)) return true;
         }
 
-        return hasEnchantment(includeItem, enchantment);
+        return enchantmentBookSettings.hasEnchantment(includeItem, enchantment);
     }
 
     /**
@@ -538,7 +484,7 @@ public class CrazyManager {
      */
     public boolean playerHasEnchantmentOnExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!armor.isSimilar(excludedItem) && hasEnchantment(armor, enchantment)) return true;
+            if (!armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantment)) return true;
         }
 
         return false;
@@ -552,10 +498,10 @@ public class CrazyManager {
      */
     public boolean playerHasEnchantmentOnInclude(Player player, ItemStack includedItem, CEnchantment enchantment) {
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (hasEnchantment(armor, enchantment)) return true;
+            if (enchantmentBookSettings.hasEnchantment(armor, enchantment)) return true;
         }
 
-        return hasEnchantment(includedItem, enchantment);
+        return enchantmentBookSettings.hasEnchantment(includedItem, enchantment);
     }
 
     /**
@@ -570,7 +516,7 @@ public class CrazyManager {
 
         highest = checkHighEnchant(player, excludedItem, enchantment);
 
-        if (hasEnchantment(includedItem, enchantment)) {
+        if (enchantmentBookSettings.hasEnchantment(includedItem, enchantment)) {
             int level = getLevel(includedItem, enchantment);
 
             if (highest < level) highest = level;
@@ -593,7 +539,7 @@ public class CrazyManager {
         int highest = 0;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!armor.isSimilar(excludedItem) && hasEnchantment(armor, enchantment)) {
+            if (!armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantment)) {
                 int level = getLevel(armor, enchantment);
 
                 if (highest < level) highest = level;
@@ -613,14 +559,14 @@ public class CrazyManager {
         int highest = 0;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (hasEnchantment(armor, enchantment)) {
+            if (enchantmentBookSettings.hasEnchantment(armor, enchantment)) {
                 int level = getLevel(armor, enchantment);
 
                 if (highest < level) highest = level;
             }
         }
 
-        if (hasEnchantment(includedItem, enchantment)) {
+        if (enchantmentBookSettings.hasEnchantment(includedItem, enchantment)) {
             int level = getLevel(includedItem, enchantment);
             if (highest < level) highest = level;
         }
@@ -633,7 +579,7 @@ public class CrazyManager {
      * @return A list of all the registered enchantments in the plugin.
      */
     public List<CEnchantment> getRegisteredEnchantments() {
-        return new ArrayList<>(registeredEnchantments);
+        return new ArrayList<>(enchantmentBookSettings.getRegisteredEnchantments());
     }
 
     /**
@@ -644,7 +590,7 @@ public class CrazyManager {
     public CEnchantment getEnchantmentFromName(String enchantmentString) {
         enchantmentString = methods.stripString(enchantmentString);
 
-        for (CEnchantment enchantment : registeredEnchantments) {
+        for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
             if (methods.stripString(enchantment.getName()).equalsIgnoreCase(enchantmentString) ||
             methods.stripString(enchantment.getCustomName()).equalsIgnoreCase(enchantmentString)) return enchantment;
         }
@@ -657,7 +603,7 @@ public class CrazyManager {
      * @param enchantment The enchantment you wish to register.
      */
     public void registerEnchantment(CEnchantment enchantment) {
-        registeredEnchantments.add(enchantment);
+        enchantmentBookSettings.getRegisteredEnchantments().add(enchantment);
     }
 
     /**
@@ -665,7 +611,7 @@ public class CrazyManager {
      * @param enchantment The enchantment you wish to unregister.
      */
     public void unregisterEnchantment(CEnchantment enchantment) {
-        registeredEnchantments.remove(enchantment);
+        enchantmentBookSettings.getRegisteredEnchantments().remove(enchantment);
     }
 
     /**
@@ -686,14 +632,14 @@ public class CrazyManager {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
 
-            if (hasEnchantment(item, enchantment)) removeEnchantment(item, enchantment);
+            if (enchantmentBookSettings.hasEnchantment(item, enchantment)) removeEnchantment(item, enchantment);
 
             List<String> newLore = new ArrayList<>();
             List<String> lores = new ArrayList<>();
             HashMap<String, String> enchantmentStrings = new HashMap<>();
 
             for (CEnchantment en : getEnchantmentsOnItem(item)) {
-                enchantmentStrings.put(en.getName(), methods.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
+                enchantmentStrings.put(en.getName(), starter.color(en.getColor() + en.getCustomName() + " " + convertLevelString(getLevel(item, en))));
                 removeEnchantment(item, en);
             }
 
@@ -705,7 +651,7 @@ public class CrazyManager {
                 if (itemLore != null) lores.addAll(itemLore);
             }
 
-            enchantmentStrings.put(enchantment.getName(), methods.color(enchantment.getColor() + enchantment.getCustomName() + " " + convertLevelString(level)));
+            enchantmentStrings.put(enchantment.getName(), starter.color(enchantment.getColor() + enchantment.getCustomName() + " " + convertLevelString(level)));
 
             for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
                 newLore.add(stringEntry.getValue());
@@ -762,7 +708,7 @@ public class CrazyManager {
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
 
-        if (!methods.verifyItemLore(item)) return Collections.emptyMap();
+        if (!enchantmentBookSettings.verifyItemLore(item)) return Collections.emptyMap();
 
         List<String> lore = item.getItemMeta().getLore();
         Map<CEnchantment, Integer> enchantments = null;
@@ -775,13 +721,13 @@ public class CrazyManager {
 
             String enchantmentName = line.substring(0, lastSpaceIndex);
 
-            for (CEnchantment enchantment : registeredEnchantments) {
+            for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
                 if (!enchantment.isActivated()) continue;
 
                 if (!enchantmentName.equals(enchantment.getColor() + enchantment.getCustomName())) continue;
 
                 String levelString = line.substring(lastSpaceIndex + 1);
-                int level = convertLevelInteger(levelString);
+                int level = methods.convertLevelInteger(levelString);
 
                 if (level < 1) break;
 
@@ -850,7 +796,7 @@ public class CrazyManager {
         if (player != null) {
             for (CEnchantments ench : getEnchantmentPotions().keySet()) {
                 for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                    if (ench.isActivated() && hasEnchantment(armor, ench.getEnchantment())) {
+                    if (ench.isActivated() && enchantmentBookSettings.hasEnchantment(armor, ench.getEnchantment())) {
                         Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
                         methods.loopEffectsMap(effects, player);
                     }
@@ -882,7 +828,7 @@ public class CrazyManager {
         for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
             if (enchantments.getKey().isActivated()) {
                 for (ItemStack armor : items) {
-                    if (armor != null && !armor.isSimilar(excludedItem) && hasEnchantment(armor, enchantments.getKey().getEnchantment())) {
+                    if (armor != null && !armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantments.getKey().getEnchantment())) {
                         int level = getLevel(armor, enchantments.getKey().getEnchantment());
 
                         if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
@@ -968,57 +914,6 @@ public class CrazyManager {
     }
 
     /**
-     * This method converts an ItemStack into a CEBook.
-     * @param book The ItemStack you are converting.
-     * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
-     */
-    public CEBook getCEBook(ItemStack book) {
-        try {
-            return new CEBook(getEnchantmentBookEnchantment(book), getBookLevel(book, getEnchantmentBookEnchantment(book)), book.getAmount())
-            .setSuccessRate(methods.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100))
-            .setDestroyRate(methods.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0));
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * Check if an itemstack is an enchantment book.
-     * @param book The item you are checking.
-     * @return True if it is and false if not.
-     */
-    public boolean isEnchantmentBook(ItemStack book) {
-        if (book != null && book.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && book.hasItemMeta() && book.getItemMeta().hasDisplayName()) {
-            for (CEnchantment enchantment : registeredEnchantments) {
-                String bookNameCheck = book.getItemMeta().getDisplayName();
-                String[] split = bookNameCheck.split(" ");
-
-                if (bookNameCheck.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get the enchantment from an enchantment book.
-     * @param book The book you want the enchantment from.
-     * @return The enchantment the book is.
-     */
-    public CEnchantment getEnchantmentBookEnchantment(ItemStack book) {
-        if (book != null && book.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && book.hasItemMeta() && book.getItemMeta().hasDisplayName()) {
-            for (CEnchantment enchantment : registeredEnchantments) {
-                String bookNameCheck = book.getItemMeta().getDisplayName();
-                String[] split = bookNameCheck.split(" ");
-
-                if (bookNameCheck.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) return enchantment;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Get a players max amount of enchantments.
      * @param player The player you are checking.
      * @return The max amount of enchantments a player can have on an item.
@@ -1032,7 +927,7 @@ public class CrazyManager {
             if (perm.startsWith("crazyenchantments.limit.")) {
                 perm = perm.replace("crazyenchantments.limit.", "");
 
-                if (methods.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
+                if (starter.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
             }
         }
 
@@ -1046,21 +941,12 @@ public class CrazyManager {
     }
 
     /**
-     * @param book The book you are getting the level from.
-     * @param enchant The enchantment you want the level from.
-     * @return The level the enchantment has.
-     */
-    public int getBookLevel(ItemStack book, CEnchantment enchant) {
-        return convertLevelInteger(book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName() + " ", ""));
-    }
-
-    /**
      * @param item Item you are getting the level from.
      * @param enchant The enchantment you want the level from.
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
-        int level = convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
+        int level = methods.convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
 
         if (!useUnsafeEnchantments && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
@@ -1075,7 +961,7 @@ public class CrazyManager {
     public int getLevel(ItemStack item, CEnchantments enchant) {
         int level;
 
-        level = convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
+        level = methods.convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
 
         if (!useUnsafeEnchantments && level > enchant.getEnchantment().getMaxLevel()) level = enchant.getEnchantment().getMaxLevel();
 
@@ -1085,7 +971,7 @@ public class CrazyManager {
     private String checkLevels(ItemStack item, String customName) {
         String line = "";
 
-        if (methods.verifyItemLore(item)) {
+        if (enchantmentBookSettings.verifyItemLore(item)) {
             ItemMeta meta = item.getItemMeta();
 
             if (meta != null && meta.hasLore()) {
@@ -1230,63 +1116,6 @@ public class CrazyManager {
             case 10 -> "X";
             default -> i + "";
         };
-    }
-
-    /**
-     * This converts a String into a number if using a roman numeral from I-X.
-     * @param i The string you want to convert.
-     * @return The roman numeral as a number.
-     */
-    public int convertLevelInteger(String i) {
-        switch (i) {
-            case "I" -> {
-                return 1;
-            }
-
-            case "II" -> {
-                return 2;
-            }
-
-            case "III" -> {
-                return 3;
-            }
-
-            case "IV" -> {
-                return 4;
-            }
-
-            case "V" -> {
-                return 5;
-            }
-
-            case "VI" -> {
-                return 6;
-            }
-
-            case "VII" -> {
-                return 7;
-            }
-
-            case "VIII" -> {
-                return 8;
-            }
-
-            case "IX" -> {
-                return 9;
-            }
-
-            case "X" -> {
-                return 10;
-            }
-
-            default -> {
-                if (methods.isInt(i)) {
-                    return Integer.parseInt(i);
-                } else {
-                    return 0;
-                }
-            }
-        }
     }
 
     private void addCEPlayer(CEPlayer player) {

@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -33,6 +34,8 @@ public class ScrollListener implements Listener {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+
     // Plugin Managers.
     private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
 
@@ -45,7 +48,7 @@ public class ScrollListener implements Listener {
 
     public void loadScrollControl() {
         FileConfiguration config = Files.CONFIG.getFile();
-        suffix = methods.color(config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]"));
+        suffix = starter.color(config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]"));
         countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments");
         useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle");
         blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
@@ -70,7 +73,7 @@ public class ScrollListener implements Listener {
                     return;
                 }
 
-                if (crazyManager.hasEnchantments(item)) {
+                if (enchantmentBookSettings.hasEnchantments(item)) {
 
                     // Checks to see if the item is already ordered.
                     if (item.isSimilar(orderEnchantments(item.clone()))) return;
@@ -153,7 +156,7 @@ public class ScrollListener implements Listener {
         for (CEnchantment enchantment : crazyManager.getEnchantmentsOnItem(item)) {
             enchantmentLevels.put(enchantment, crazyManager.getLevel(item, enchantment));
             crazyManager.removeEnchantment(item, enchantment);
-            categories.put(enchantment, crazyManager.getHighestEnchantmentCategory(enchantment).getRarity());
+            categories.put(enchantment, methods.getHighestEnchantmentCategory(enchantment).getRarity());
             newEnchantmentOrder.add(enchantment);
         }
 
@@ -172,14 +175,14 @@ public class ScrollListener implements Listener {
         // If adding suffix to the item name then it can run this.
 
         if (useSuffix) {
-            String newName = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : methods.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " ").toLowerCase()));
+            String newName = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : starter.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " ").toLowerCase()));
             // Checks if the item has a custom name and if so checks to see if it already has the suffix.
 
             if (itemMeta.hasDisplayName()) {
                 for (int amount = 0; amount <= 100; amount++) {
                     String msg = suffix.replace("%Amount%", amount + "").replace("%amount%", amount + "");
 
-                    if (itemMeta.getDisplayName().endsWith(methods.color(msg))) {
+                    if (itemMeta.getDisplayName().endsWith(starter.color(msg))) {
                         newName = itemMeta.getDisplayName().substring(0, itemMeta.getDisplayName().length() - msg.length());
                         break;
                     }
