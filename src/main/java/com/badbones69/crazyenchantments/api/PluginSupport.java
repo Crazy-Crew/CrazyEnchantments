@@ -34,11 +34,11 @@ public class PluginSupport {
     }
 
     public boolean isFriendly(Entity pEntity, Entity oEntity) {
-        if (pEntity instanceof Player player && oEntity instanceof Player) {
+        if (pEntity instanceof Player player && oEntity instanceof Player otherPlayer) {
 
-            if (factionsVersion != null && factionsVersion.isFriendly(player, (Player) oEntity)) return true;
+            if (factionsVersion != null && factionsVersion.isFriendly(player, otherPlayer)) return true;
 
-            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.isFriendly(player, (Player) oEntity)) return true;
+            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.isFriendly(player, otherPlayer)) return true;
 
             return SupportedPlugins.MCMMO.isPluginLoaded();
         }
