@@ -27,7 +27,7 @@ public class BlackSmithResult {
         BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
 
         CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
-        if (mainItem.getType() == enchantmentBookSettings.getEnchantmentBook().getMaterial() && subItem.getType() == enchantmentBookSettings.getEnchantmentBook().getMaterial()) {
+        if (mainItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && subItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial()) {
             CEBook mainBook = crazyManager.getCEBook(mainItem);
             CEBook subBook = crazyManager.getCEBook(subItem);
             // Books are the same enchantment.

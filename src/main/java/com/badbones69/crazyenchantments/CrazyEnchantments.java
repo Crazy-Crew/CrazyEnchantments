@@ -5,7 +5,7 @@ import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.commands.*;
-import com.badbones69.crazyenchantments.controllers.GKitzController;
+import com.badbones69.crazyenchantments.controllers.*;
 import com.badbones69.crazyenchantments.enchantments.*;
 import com.badbones69.crazyenchantments.listeners.*;
 import org.bstats.bukkit.Metrics;
@@ -104,6 +104,13 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(new ProtectionCrystalListener(), this);
         pluginManager.registerEvents(new FireworkDamageListener(), this);
         pluginManager.registerEvents(new AuraListener(), this);
+
+        pluginManager.registerEvents(new InfoGUIControl(), this);
+        pluginManager.registerEvents(new LostBookController(), this);
+        pluginManager.registerEvents(new EnchantmentControl(), this);
+        pluginManager.registerEvents(new CommandChecker(), this);
+        pluginManager.registerEvents(new BlackSmith(), this);
+        pluginManager.registerEvents(new Tinkerer(), this);
 
         if (starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("G-Kitz support is now enabled.");

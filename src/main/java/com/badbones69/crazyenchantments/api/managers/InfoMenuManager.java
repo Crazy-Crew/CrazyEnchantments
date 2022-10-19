@@ -98,7 +98,7 @@ public class InfoMenuManager {
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
                 inventory.addItem(
-                enchantmentBookSettings.getEnchantmentBook()
+                enchantmentBookSettings.getNormalBook()
                 .setName(enchantment.getInfoName())
                 .setLore(enchantment.getInfoDescription())
                 .setGlow(true)

@@ -39,7 +39,7 @@ public class ProtectionCrystalSettings {
     }
 
     public ItemStack getCrystals(int amount) {
-        return crystal.copy().setAmount(amount).build();
+        return crystal.setAmount(amount).build();
     }
 
     /**

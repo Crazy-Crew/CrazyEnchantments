@@ -90,7 +90,7 @@ public class ScramblerListener implements Listener {
      * @return The scramblers.
      */
     public ItemStack getScramblers(int amount) {
-        return scramblerItem.copy().setAmount(amount).build();
+        return scramblerItem.setAmount(amount).build();
     }
 
     private void setGlass(Inventory inv) {
@@ -125,7 +125,7 @@ public class ScramblerListener implements Listener {
 
             @Override
             public void run() {
-                if (full <= 50) { // When Spinning
+                if (full <= 50) { // When spinning.
                     moveItems(inventory, book);
                     setGlass(inventory);
                     player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);

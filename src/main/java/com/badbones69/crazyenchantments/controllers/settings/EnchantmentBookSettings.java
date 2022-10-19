@@ -10,7 +10,6 @@ import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
 import com.google.common.collect.Lists;
 import org.bukkit.Color;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
@@ -27,13 +26,6 @@ public class EnchantmentBookSettings {
     private ItemBuilder enchantmentBook;
 
     private final List<Category> categories = Lists.newArrayList();
-
-    /**
-     * @return a clone of the ItemBuilder of the enchantment book.
-     */
-    public ItemBuilder getEnchantmentBook() {
-        return enchantmentBook.copy();
-    }
 
     public ItemBuilder getNormalBook() {
         return enchantmentBook;

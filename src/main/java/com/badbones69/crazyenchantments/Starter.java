@@ -72,6 +72,9 @@ public class Starter {
         // Set up all our files.
         fileManager.setLog(true).setup();
 
+        // Economy Management.
+        currencyAPI = new CurrencyAPI();
+
         // Settings.
         protectionCrystalSettings = new ProtectionCrystalSettings();
         enchantmentSettings = new EnchantmentSettings();
@@ -107,9 +110,6 @@ public class Starter {
         if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
         if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport = new SpartanSupport();
-
-        // Economy Management.
-        currencyAPI = new CurrencyAPI();
     }
 
     public FileManager getFileManager() {
