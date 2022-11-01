@@ -18,7 +18,6 @@ public class ServerReadyListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onServerReady(ServerLoadEvent event) {
-        pluginSupport.updateCachedPluginState();
-        pluginSupport.printHooks();
+        pluginSupport.updateHooks();
     }
 }

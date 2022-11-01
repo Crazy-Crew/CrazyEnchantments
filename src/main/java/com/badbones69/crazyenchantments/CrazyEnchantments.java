@@ -115,10 +115,13 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             pluginManager.registerEvents(gKitzController = new GKitzController(), this);
         }
 
-        if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded()) {
-            getLogger().info("SilkSpawners support is now enabled.");
-
+        if (SupportedPlugins.SILK_SPAWNERS.isCachedPluginLoaded()) {
+            getLogger().fine("Silk Spawners support is enabled.");
             pluginManager.registerEvents(new SilkSpawnerSupport(), this);
+        }
+
+        if (SupportedPlugins.SILK_SPAWNERS_V2.isCachedPluginLoaded()) {
+            getLogger().fine("Silk Spawners support by Candc is enabled.");
         }
 
         getCommand("crazyenchantments").setExecutor(new CECommand());

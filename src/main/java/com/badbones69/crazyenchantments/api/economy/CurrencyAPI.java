@@ -2,7 +2,7 @@ package com.badbones69.crazyenchantments.api.economy;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.PluginSupport;
+import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.objects.Category;
@@ -179,13 +179,15 @@ public class CurrencyAPI {
      * Loads the currency if it is on the server.
      */
     public void loadCurrency() {
-        // Load vault support.
-        if (PluginSupport.SupportedPlugins.VAULT.isPluginLoaded()) {
-            starter.setVaultSupport(new VaultSupport());
+        for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
 
-            vaultSupport.loadVault();
-        } else {
-            plugin.getLogger().warning("Vault was not found so support for any economy was not enabled.");
+            if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
+                switch (supportedPlugin) {
+                    case VAULT -> starter.setVaultSupport(new VaultSupport());
+                }
+            } else {
+                plugin.getLogger().warning("No economy found. Any economy based feature will not work.");
+            }
         }
     }
 }

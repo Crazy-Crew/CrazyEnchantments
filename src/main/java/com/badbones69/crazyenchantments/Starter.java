@@ -188,6 +188,8 @@ public class Starter {
 
     public void setVaultSupport(VaultSupport vaultSupport) {
         this.vaultSupport = vaultSupport;
+
+        vaultSupport.loadVault();
     }
 
     public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {

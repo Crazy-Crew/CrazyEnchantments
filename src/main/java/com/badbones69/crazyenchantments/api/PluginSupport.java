@@ -7,12 +7,14 @@ import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVe
 import com.badbones69.crazyenchantments.api.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.api.support.claims.TownySupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
+import com.google.common.collect.Maps;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
-import java.util.HashMap;
+
+import java.util.Map;
 
 public class PluginSupport {
 
@@ -26,6 +28,8 @@ public class PluginSupport {
     private final SuperiorSkyBlockSupport superiorSkyBlockSupport = starter.getSuperiorSkyBlockSupport();
 
     private FactionsVersion factionsVersion = null;
+
+    private final Map<SupportedPlugins, Boolean> cachedPlugins = Maps.newHashMap();
 
     public boolean inTerritory(Player player) {
         if (factionsVersion != null && factionsVersion.inTerritory(player)) return true;
@@ -67,57 +71,61 @@ public class PluginSupport {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsExplosions(location);
     }
 
-    private final HashMap<SupportedPlugins, Boolean> cachedPluginState = new HashMap<>();
+    public void updateHooks() {
+        cachedPlugins.clear();
 
-    public void updateCachedPluginState() {
-        if (!cachedPluginState.isEmpty()) cachedPluginState.clear();
+        for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
+            if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
 
-        for (SupportedPlugins supportedPlugins : SupportedPlugins.values()) {
+                String website = supportedPlugin.getLoadedPlugin().getDescription().getWebsite();
+                // List<String> author = supportedPlugin.getLoadedPlugin().getDescription().getAuthors();
+                String main = supportedPlugin.getLoadedPlugin().getDescription().getMain();
 
-            Plugin grabbedPlugin = plugin.getServer().getPluginManager().getPlugin(supportedPlugins.pluginName);
-
-            if (grabbedPlugin != null) {
-                if (plugin.isEnabled()) {
-
-                    String website = plugin.getDescription().getWebsite();
-
-                    if (supportedPlugins == SupportedPlugins.FACTIONS_UUID) {
-                        if (website != null) cachedPluginState.put(supportedPlugins, website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
-                    } else {
-                        cachedPluginState.put(supportedPlugins, true);
-                        return;
+                switch (supportedPlugin) {
+                    case FACTIONS_UUID -> {
+                        if (website != null) supportedPlugin.addPlugin(website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
                     }
 
+                    case MCMMO -> {
+                        if (website != null) supportedPlugin.addPlugin(website.equals("https://www.mcmmo.org"));
+                    }
+
+                    case SILK_SPAWNERS -> supportedPlugin.addPlugin(main.equals("de.dustplanet.silkspawners.SilkSpawners"));
+
+                    case SILK_SPAWNERS_V2 -> supportedPlugin.addPlugin(main.equals("de.corneliusmay.silkspawners.plugin.SilkSpawners"));
+
+                    default -> supportedPlugin.addPlugin(true);
                 }
+
+                updateClaimHooks(supportedPlugin);
             } else {
-                cachedPluginState.put(supportedPlugins, false);
+                supportedPlugin.addPlugin(false);
             }
         }
 
-        updateFactionsPlugins();
+        printHooks();
+    }
+
+    public void updateClaimHooks(SupportedPlugins supportedPlugin) {
+        switch (supportedPlugin) {
+            case GRIEF_PREVENTION -> factionsVersion = new GriefPreventionSupport();
+            case TOWNYADVANCED -> factionsVersion = new TownySupport();
+            case FACTIONS_UUID -> factionsVersion = new FactionsUUIDSupport();
+        }
     }
 
     public void printHooks() {
-        if (cachedPluginState.isEmpty()) updateCachedPluginState();
+        if (cachedPlugins.isEmpty()) updateHooks();
 
-        plugin.getServer().getConsoleSender().sendMessage(starter.color("&4&lActive CrazyEnchantment Hooks:"));
+        plugin.getLogger().info(starter.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
 
-        cachedPluginState.keySet().forEach(supportedPlugins -> {
-            if (supportedPlugins.isPluginLoaded()) plugin.getServer().getConsoleSender().sendMessage(starter.color("&6&l " + supportedPlugins.pluginName + " : &a&lENABLED"));
-        });
-    }
-
-    private void updateFactionsPlugins() {
-        for (SupportedPlugins supportedPlugins : SupportedPlugins.values()) {
-            if (supportedPlugins.isPluginLoaded()) {
-                switch (supportedPlugins) {
-                    case FACTIONS_UUID -> factionsVersion = new FactionsUUIDSupport();
-                    case GRIEF_PREVENTION -> factionsVersion = new GriefPreventionSupport();
-                    case TOWNYADVANCED -> factionsVersion = new TownySupport();
-                    default -> {}
-                }
+        cachedPlugins.keySet().forEach(value -> {
+            if (value.isPluginLoaded()) {
+                plugin.getLogger().info(starter.color("&6&l" + value.name() + " &a&lFOUND"));
+            } else {
+                plugin.getLogger().info(starter.color("&6&l" + value.name() + " &c&lNOT FOUND"));
             }
-        }
+        });
     }
 
     public enum SupportedPlugins {
@@ -125,7 +133,8 @@ public class PluginSupport {
         VAULT("Vault"),
 
         // Spawner Plugins
-        SILKSPAWNERS("SilkSpawners"),
+        SILK_SPAWNERS("SilkSpawners"),
+        SILK_SPAWNERS_V2("SilkSpawners_V2"),
 
         // Random Plugins
         MCMMO("McMMO"),
@@ -167,8 +176,32 @@ public class PluginSupport {
 
         private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
+        private final Starter starter = plugin.getStarter();
+
+        private final PluginSupport pluginSupport = starter.getPluginSupport();
+
         public boolean isPluginLoaded() {
             return plugin.getServer().getPluginManager().getPlugin(pluginName) != null;
+        }
+
+        public Plugin getLoadedPlugin() {
+            return plugin.getServer().getPluginManager().getPlugin(pluginName);
+        }
+
+        public boolean isCachedPluginLoaded() {
+            return pluginSupport.cachedPlugins.get(this);
+        }
+
+        public void addPlugin(boolean value) {
+            pluginSupport.cachedPlugins.put(this, value);
+        }
+
+        public void removePlugin() {
+            pluginSupport.cachedPlugins.remove(this);
+        }
+
+        public boolean isPluginEnabled() {
+            return pluginSupport.cachedPlugins.get(this);
         }
     }
 }

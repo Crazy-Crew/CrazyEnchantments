@@ -30,7 +30,6 @@ public class SilkSpawnerSupport implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onSpawnerBreak(SilkSpawnersSpawnerBreakEvent e) {
-
         Player player = e.getPlayer();
         Block block = e.getBlock();
 

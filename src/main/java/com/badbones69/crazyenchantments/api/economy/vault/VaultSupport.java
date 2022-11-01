@@ -17,8 +17,6 @@ public class VaultSupport {
     public void loadVault() {
         RegisteredServiceProvider<Economy> serviceProvider = plugin.getServer().getServicesManager().getRegistration(Economy.class);
 
-        plugin.getLogger().info("Vault was found so support has been enabled.");
-
         if (serviceProvider != null) vault = serviceProvider.getProvider();
     }
 }

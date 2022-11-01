@@ -90,7 +90,7 @@ public class CECommand implements CommandExecutor {
                         crazyManager.load();
                         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
 
-                        pluginSupport.updateCachedPluginState();
+                        pluginSupport.updateHooks();
                     }
 
                     return true;
