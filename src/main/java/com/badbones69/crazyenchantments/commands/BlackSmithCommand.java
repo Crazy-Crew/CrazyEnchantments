@@ -25,7 +25,7 @@ public class BlackSmithCommand implements CommandExecutor {
             return true;
         }
 
-        // if (hasPermission(sender)) BlackSmith.openBlackSmith((Player) sender);
+        if (hasPermission(sender)) plugin.getBlackSmith().openBlackSmith((Player) sender);
 
         return true;
     }

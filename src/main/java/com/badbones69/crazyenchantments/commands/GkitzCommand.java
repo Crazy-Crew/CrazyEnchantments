@@ -38,7 +38,7 @@ public class GkitzCommand implements CommandExecutor {
                     return true;
                 }
 
-                // if (hasPermission(sender, "gkitz")) GKitzController.openGUI((Player) sender);
+                if (hasPermission(sender, "gkitz")) plugin.getgKitzController().openGUI((Player) sender);
 
             } else {
                 if (args[0].equalsIgnoreCase("reset")) { // /gkitz reset <kit> [player]

@@ -30,6 +30,11 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private ArmorEnchantments armorEnchantments;
 
+    // Menus.
+    private Tinkerer tinkerer;
+    private BlackSmith blackSmith;
+    private GKitzController gKitzController;
+
     @Override
     public void onEnable() {
         try {
@@ -40,14 +45,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             // Create all instances we need.
             starter.run();
 
-            // Load vault support.
-            if (SupportedPlugins.VAULT.isPluginLoaded()) {
-                starter.setVaultSupport(new VaultSupport());
-
-                starter.getVaultSupport().loadVault();
-            } else {
-                plugin.getLogger().warning("Vault was not found so support for any economy was not enabled.");
-            }
+            starter.getCurrencyAPI().loadCurrency();
 
             FileConfiguration config = Files.CONFIG.getFile();
 
@@ -108,13 +106,13 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(new InfoGUIControl(), this);
         pluginManager.registerEvents(new LostBookController(), this);
         pluginManager.registerEvents(new CommandChecker(), this);
-        pluginManager.registerEvents(new BlackSmith(), this);
-        pluginManager.registerEvents(new Tinkerer(), this);
+        pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
+        pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
 
         if (starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("G-Kitz support is now enabled.");
 
-            pluginManager.registerEvents(new GKitzController(), this);
+            pluginManager.registerEvents(gKitzController = new GKitzController(), this);
         }
 
         if (SupportedPlugins.SILKSPAWNERS.isPluginLoaded()) {
@@ -160,5 +158,17 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public PluginManager getPluginManager() {
         return pluginManager;
+    }
+
+    public Tinkerer getTinkerer() {
+        return tinkerer;
+    }
+
+    public BlackSmith getBlackSmith() {
+        return blackSmith;
+    }
+
+    public GKitzController getgKitzController() {
+        return gKitzController;
     }
 }
