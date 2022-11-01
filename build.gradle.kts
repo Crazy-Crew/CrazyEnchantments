@@ -6,10 +6,10 @@ plugins {
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-val jenkinsVersion = "1.9.5-b$buildNumber"
+val jenkinsVersion = "1.9.6-b$buildNumber"
 
 group = "com.badbones69.crazyenchantments"
-version = "1.9.5"
+version = "1.9.6"
 description = "Adds over 80 unique enchantments to your server and more! "
 
 repositories {
