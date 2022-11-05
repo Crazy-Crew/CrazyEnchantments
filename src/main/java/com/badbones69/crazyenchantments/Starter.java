@@ -99,16 +99,16 @@ public class Starter {
         wingsManager = new WingsManager();
         allyManager = new AllyManager();
 
-        // Plugin Utils.
-        bowUtils = new BowUtils();
-        wingsUtils = new WingsUtils();
-
         // Listeners.
         plugin.pluginManager.registerEvents(scramblerListener = new ScramblerListener(), plugin);
         plugin.pluginManager.registerEvents(scrollListener = new ScrollListener(), plugin);
         plugin.pluginManager.registerEvents(armorListener = new ArmorListener(), plugin);
 
         crazyManager = new CrazyManager();
+
+        // Plugin Utils.
+        wingsUtils = new WingsUtils();
+        bowUtils = new BowUtils();
 
         plugin.pluginManager.registerEvents(new EnchantmentControl(), plugin);
 

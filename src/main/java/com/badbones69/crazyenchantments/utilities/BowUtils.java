@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.utilities;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
@@ -28,8 +27,6 @@ public class BowUtils {
     private final Starter starter = plugin.getStarter();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
-
-    private final Methods methods = starter.getMethods();
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
