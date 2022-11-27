@@ -1,6 +1,6 @@
 <br />
 
-[![CrazyEnchantments](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/banners/CrazyEnchantments.png)](https://www.spigotmc.org/resources/crazy-enchantments.16470/)
+[![CrazyEnchantments](https://github.com/RyderBelserion/Assets/blob/main/crazycrew/old/banners/CrazyEnchantments.png?raw=true)](https://www.spigotmc.org/resources/crazy-enchantments.16470/)
 
 <div align="center">
 
@@ -12,7 +12,7 @@
 [![Contact][discord-shield]][discord-url]
 ![CodeFactor][codefactor-shield]
 
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/unsupported/spigot_64h.png" height="50"></a>
+<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/spigot_64h.png" height="50"></a>
 <a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/paper_64h.png" height="50"></a>
 <a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/purpur_64h.png" height="50"></a>
 
