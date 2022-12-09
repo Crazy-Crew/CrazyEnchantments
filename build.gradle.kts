@@ -6,28 +6,17 @@ plugins {
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-val jenkinsVersion = "1.9.6-b$buildNumber"
+val jenkinsVersion = "1.9.7-b$buildNumber"
 
 group = "com.badbones69.crazyenchantments"
-version = "1.9.6"
+version = "1.9.7"
 description = "Adds over 80 unique enchantments to your server and more! "
 
 repositories {
-
     /**
      * PAPI Team
      */
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-
-    /**
-     * Spigot Team
-     */
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-
-    /**
-     * Paper Team
-     */
-    maven("https://repo.papermc.io/repository/maven-public/")
 
     /**
      * SilkSpawners Team
@@ -43,6 +32,11 @@ repositories {
      * FactionsUUID API
      */
     maven("https://ci.ender.zone/plugin/repository/everything/")
+
+    /**
+     * Paper Team
+     */
+    maven("https://repo.papermc.io/repository/maven-public/")
 
     /**
      * NBT API
@@ -79,36 +73,19 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.plot.squared.annotations)
-    implementation(libs.plot.squared.paster)
+    implementation("com.intellectualsites.informative-annotations", "informative-annotations", "1.2")
+    implementation("com.intellectualsites.paster", "Paster", "1.1.4")
+    
+    implementation("de.tr7zw", "nbt-data-api", "2.10.0")
 
-    implementation(libs.bukkit.bstats)
+    implementation("org.bstats", "bstats-bukkit", "3.0.0")
 
-    implementation(libs.nbt.api)
+    compileOnly("io.papermc.paper", "paper-api", "1.19.3-R0.1-SNAPSHOT")
 
-    compileOnly(libs.bukkit.worldguard) {
-        exclude("org.bukkit", "bukkit")
-        exclude("org.bstats", "bstats-bukkit")
-    }
+    compileOnly("com.bgsoftware", "SuperiorSkyblockAPI", "2022.8.1")
+    compileOnly("com.bgsoftware", "WildStackerAPI", "2022.5")
 
-    compileOnly(libs.bukkit.worldedit) {
-        exclude("org.bukkit", "bukkit")
-        exclude("org.bstats", "bstats-bukkit")
-    }
-
-    compileOnly(libs.plot.squared.core)
-
-    // Anti-cheats
-    compileOnly(libs.ncp.api)
-
-    compileOnly(libs.spartan.api)
-
-    // BG Software Team
-    compileOnly(libs.superior.skyblock)
-    compileOnly(libs.wild.stacker)
-    // BG Software End
-
-    compileOnly(libs.silk.spawners.api) {
+    compileOnly("de.dustplanet", "silkspawners", "7.2.0") {
         exclude("org.bukkit", "bukkit")
         exclude("org.spigotmc", "spigot")
         exclude("com.destroystokyo.paper", "paper")
@@ -120,17 +97,35 @@ dependencies {
         exclude("com.intellectualsites", "Pipeline")
     }
 
-    compileOnly(libs.factions.uuid.api)
+    compileOnly("com.github.TechFortress", "GriefPrevention", "16.18")
 
-    compileOnly(libs.grief.prevention.api)
+    compileOnly("com.massivecraft", "Factions", "1.6.9.5-U0.6.9")
 
-    compileOnly(libs.oraxen.api)
+    compileOnly("com.palmergames.bukkit.towny", "towny", "0.98.3.10")
 
-    compileOnly(libs.towny.api)
+    compileOnly("com.github.oraxen", "oraxen", "master-SNAPSHOT")
 
-    compileOnly(libs.vault.api)
+    compileOnly("fr.neatmonster", "nocheatplus", "3.16.1-SNAPSHOT")
+    compileOnly("me.vagdedes.spartan", "SpartanAPI", "9.1")
 
-    compileOnly(libs.paper)
+    compileOnly("com.plotsquared", "PlotSquared-Core", "6.10.1")
+
+    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.9") {
+        exclude("org.bukkit", "bukkit")
+        exclude("org.bstats", "bstats-bukkit")
+    }
+
+    compileOnly("com.sk89q.worldguard", "worldguard-bukkit", "7.1.0-SNAPSHOT") {
+        exclude("org.bukkit", "bukkit")
+        exclude("org.bstats", "bstats-bukkit")
+    }
+
+    compileOnly("me.clip", "placeholderapi", "2.11.2") {
+        exclude(group = "org.spigotmc", module = "spigot")
+        exclude(group = "org.bukkit", module = "bukkit")
+    }
+
+    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7")
 }
 
 java {
