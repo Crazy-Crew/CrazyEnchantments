@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.api.support.misc;
 
-import io.th0rgal.oraxen.items.OraxenItems;
+import io.th0rgal.oraxen.api.OraxenItems;
 import io.th0rgal.oraxen.mechanics.provided.gameplay.durability.DurabilityMechanic;
 import io.th0rgal.oraxen.mechanics.provided.gameplay.durability.DurabilityMechanicFactory;
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +34,7 @@ public class OraxenSupport {
         if (!durabilityFactory.isNotImplementedIn(itemId)) {
             DurabilityMechanic durabilityMechanic = (DurabilityMechanic) durabilityFactory.getMechanic(itemId);
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-            Integer currentDurability = persistentDataContainer.get(DurabilityMechanic.NAMESPACED_KEY, PersistentDataType.INTEGER);
+            Integer currentDurability = persistentDataContainer.get(DurabilityMechanic.DURAB_KEY, PersistentDataType.INTEGER);
 
             if (currentDurability == null) return damageable.getDamage();
 
@@ -59,7 +59,7 @@ public class OraxenSupport {
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
             int realMaxDurability = durabilityMechanic.getItemMaxDurability();
             int newDurability = realMaxDurability - newDamage;
-            persistentDataContainer.set(DurabilityMechanic.NAMESPACED_KEY, PersistentDataType.INTEGER, newDurability);
+            persistentDataContainer.set(DurabilityMechanic.DURAB_KEY, PersistentDataType.INTEGER, newDurability);
             int typeMaxDurability = itemStack.getType().getMaxDurability();
             damageable.setDamage(typeMaxDurability - (int) (((double) newDurability / realMaxDurability) * typeMaxDurability));
         }
