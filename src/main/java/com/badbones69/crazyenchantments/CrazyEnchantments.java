@@ -2,13 +2,15 @@ package com.badbones69.crazyenchantments;
 
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.commands.*;
 import com.badbones69.crazyenchantments.controllers.*;
 import com.badbones69.crazyenchantments.enchantments.*;
 import com.badbones69.crazyenchantments.listeners.*;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -17,8 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private static CrazyEnchantments plugin;
-
-    private boolean isEnabled = false;
 
     private Starter starter;
 
@@ -37,48 +37,36 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        try {
-            plugin = this;
+        plugin = this;
 
-            starter = new Starter();
+        starter = new Starter();
 
-            // Create all instances we need.
-            starter.run();
+        // Create all instances we need.
+        starter.run();
 
-            starter.getCurrencyAPI().loadCurrency();
+        starter.getCurrencyAPI().loadCurrency();
 
-            FileConfiguration config = Files.CONFIG.getFile();
+        FileConfiguration config = Files.CONFIG.getFile();
 
-            String metricsPath = config.getString("Settings.Toggle-Metrics");
-            boolean metricsEnabled = config.getBoolean("Settings.Toggle-Metrics");
+        String metricsPath = config.getString("Settings.Toggle-Metrics");
+        boolean metricsEnabled = config.getBoolean("Settings.Toggle-Metrics");
 
-            if (metricsPath == null) {
-                config.set("Settings.Toggle-Metrics", false);
+        if (metricsPath == null) {
+            config.set("Settings.Toggle-Metrics", false);
 
-                Files.CONFIG.saveFile();
-            }
-
-            if (metricsEnabled) new Metrics(this, 4494);
-
-            pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
-            pluginManager.registerEvents(shopListener = new ShopListener(), this);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            isEnabled = false;
-
-            return;
+            Files.CONFIG.saveFile();
         }
 
-        isEnabled = true;
+        if (metricsEnabled) new Metrics(this, 4494);
+
+        pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
+        pluginManager.registerEvents(shopListener = new ShopListener(), this);
 
         enable();
     }
 
     @Override
     public void onDisable() {
-        if (!isEnabled) return;
-
         disable();
     }
 
@@ -120,18 +108,14 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             pluginManager.registerEvents(new SilkSpawnerSupport(), this);
         }
 
-        if (SupportedPlugins.SILK_SPAWNERS_V2.isCachedPluginLoaded()) {
-            getLogger().fine("Silk Spawners support by Candc is enabled.");
-        }
+        if (SupportedPlugins.SILK_SPAWNERS_V2.isCachedPluginLoaded()) getLogger().fine("Silk Spawners support by Candc is enabled.");
 
-        getCommand("crazyenchantments").setExecutor(new CECommand());
-        getCommand("crazyenchantments").setTabCompleter(new CETab());
+        registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
 
-        getCommand("tinkerer").setExecutor(new TinkerCommand());
-        getCommand("blacksmith").setExecutor(new BlackSmithCommand());
+        registerCommand(getCommand("tinkerer"), null, new TinkerCommand());
+        registerCommand(getCommand("blacksmith"), null, new BlackSmithCommand());
 
-        getCommand("gkit").setExecutor(new GkitzCommand());
-        getCommand("gkit").setTabCompleter(new GkitzTab());
+        registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
     }
 
     private void disable() {
@@ -140,6 +124,14 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         if (starter.getAllyManager() != null) starter.getAllyManager().forceRemoveAllies();
 
         getServer().getOnlinePlayers().forEach(starter.getCrazyManager()::unloadCEPlayer);
+    }
+
+    private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
+        if (pluginCommand != null) {
+            pluginCommand.setExecutor(commandExecutor);
+
+            if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
+        }
     }
 
     public static CrazyEnchantments getPlugin() {

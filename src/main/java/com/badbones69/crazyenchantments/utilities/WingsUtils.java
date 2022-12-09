@@ -20,17 +20,17 @@ import java.util.List;
 
 public class WingsUtils {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = plugin.getStarter();
+    private static final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private static final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
+    private static final PluginSupport pluginSupport = starter.getPluginSupport();
 
-    private final WingsManager wingsManager = starter.getWingsManager();
+    private static final WingsManager wingsManager = starter.getWingsManager();
 
-    public void startWings() {
+    public static void startWings() {
         if (wingsManager.isWingsEnabled()) {
             wingsManager.setWingsTask(new BukkitRunnable() {
                 @Override
@@ -49,7 +49,7 @@ public class WingsUtils {
         }
     }
 
-    public void checkArmor(ItemStack newArmorPiece, boolean newArmor, ItemStack oldArmorPiece, Player player) {
+    public static void checkArmor(ItemStack newArmorPiece, boolean newArmor, ItemStack oldArmorPiece, Player player) {
         CEnchantments wings = CEnchantments.WINGS;
 
         if (newArmor) {
@@ -61,11 +61,11 @@ public class WingsUtils {
         if (crazyManager.hasEnchantment(oldArmorPiece, wings) && checkGameMode(player)) player.setAllowFlight(false);
     }
 
-    public boolean checkGameMode(Player player) {
+    public static boolean checkGameMode(Player player) {
         return player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.ADVENTURE;
     }
 
-    private boolean inWingsRegion(Player player) {
+    private static boolean inWingsRegion(Player player) {
         if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
 
         WorldGuardVersion worldGuardVersion = crazyManager.getWorldGuardSupport();
@@ -83,11 +83,11 @@ public class WingsUtils {
         return false;
     }
 
-    public boolean checkRegion(Player player) {
+    public static boolean checkRegion(Player player) {
         return wingsManager.inLimitlessFlightWorld(player) || (!wingsManager.inBlacklistedWorld(player) && (pluginSupport.inTerritory(player) || inWingsRegion(player) || wingsManager.inWhitelistedWorld(player)));
     }
 
-    public boolean isEnemiesNearby(Player player) {
+    public static boolean isEnemiesNearby(Player player) {
         if (wingsManager.isEnemyCheckEnabled() && !wingsManager.inLimitlessFlightWorld(player)) {
             for (Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
                 if (!(player.hasPermission("crazyenchantments.bypass.wings") && pluginSupport.isFriendly(player, otherPlayer))) return true;
@@ -97,7 +97,7 @@ public class WingsUtils {
         return false;
     }
 
-    private List<Player> getNearbyPlayers(Player player, int radius) {
+    private static List<Player> getNearbyPlayers(Player player, int radius) {
         List<Player> players = new ArrayList<>();
 
         for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {

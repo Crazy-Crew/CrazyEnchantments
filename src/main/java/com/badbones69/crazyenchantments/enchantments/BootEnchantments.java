@@ -33,7 +33,6 @@ public class BootEnchantments implements Listener {
     private final WingsManager wingsManager = starter.getWingsManager();
 
     // Utils
-    private final WingsUtils wingsUtils = starter.getWingsUtils();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEquip(ArmorEquipEvent event) {
@@ -42,10 +41,10 @@ public class BootEnchantments implements Listener {
         Player player = event.getPlayer();
 
         // Check the new armor piece.
-        wingsUtils.checkArmor(event.getNewArmorPiece(), true, null, player);
+        WingsUtils.checkArmor(event.getNewArmorPiece(), true, null, player);
 
         // Check the old armor piece.
-        wingsUtils.checkArmor(null, false, event.getOldArmorPiece(), player);
+        WingsUtils.checkArmor(null, false, event.getOldArmorPiece(), player);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -57,8 +56,7 @@ public class BootEnchantments implements Listener {
         if (player.getEquipment().getBoots() == null) return;
         if (!crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) return;
 
-        if (wingsUtils.checkRegion(player)) return;
-        if (wingsUtils.isEnemiesNearby(player)) return;
+        if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 
         if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNormalMovements(player);
 
@@ -81,18 +79,18 @@ public class BootEnchantments implements Listener {
         boolean isFlying = player.isFlying();
 
         if (wingsManager.isWingsEnabled() && crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
-            if (wingsUtils.checkRegion(player)) {
-                if (!wingsUtils.isEnemiesNearby(player)) {
+            if (WingsUtils.checkRegion(player)) {
+                if (!WingsUtils.isEnemiesNearby(player)) {
                     player.setAllowFlight(true);
                 } else {
-                    if (isFlying && wingsUtils.checkGameMode(player)) {
+                    if (isFlying && WingsUtils.checkGameMode(player)) {
                         player.setFlying(false);
                         player.setAllowFlight(false);
                         wingsManager.removeFlyingPlayer(player);
                     }
                 }
             } else {
-                if (isFlying && wingsUtils.checkGameMode(player)) {
+                if (isFlying && WingsUtils.checkGameMode(player)) {
                     player.setFlying(false);
                     player.setAllowFlight(false);
                     wingsManager.removeFlyingPlayer(player);
@@ -110,8 +108,7 @@ public class BootEnchantments implements Listener {
 
         if (!crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) return;
 
-        if (wingsUtils.checkRegion(player)) return;
-        if (wingsUtils.isEnemiesNearby(player)) return;
+        if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 
         if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNormalMovements(player);
 
@@ -123,8 +120,7 @@ public class BootEnchantments implements Listener {
     public void onLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (!wingsManager.isWingsEnabled()) return;
-        if (!wingsManager.isFlyingPlayer(player)) return;
+        if (!wingsManager.isWingsEnabled() || !wingsManager.isFlyingPlayer(player)) return;
 
         player.setFlying(false);
         player.setAllowFlight(false);

@@ -61,7 +61,6 @@ public class CrazyManager {
 
     // Wings.
     private final WingsManager wingsManager = starter.getWingsManager();
-    private final WingsUtils wingsUtils = starter.getWingsUtils();
 
     private final ShopManager shopManager = starter.getShopManager();
     private final BowEnchantmentManager bowEnchantmentManager = starter.getBowEnchantmentManager();
@@ -252,7 +251,7 @@ public class CrazyManager {
         allyManager.load();
 
         // Starts the wings task.
-        wingsUtils.startWings();
+        WingsUtils.startWings();
 
         if (SupportedPlugins.WORLDGUARD.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) worldGuardVersion = new WorldGuardSupport();
     }

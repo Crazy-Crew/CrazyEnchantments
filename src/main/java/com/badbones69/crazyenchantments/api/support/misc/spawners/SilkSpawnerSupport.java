@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.api.support.misc.spawners;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;

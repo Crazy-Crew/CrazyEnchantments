@@ -42,7 +42,7 @@ public class Starter {
 
     // Plugin Utils.
     private BowUtils bowUtils;
-    private WingsUtils wingsUtils;
+    //private WingsUtils wingsUtils;
 
     // Plugin Support.
     private PluginSupport pluginSupport;
@@ -107,7 +107,7 @@ public class Starter {
         crazyManager = new CrazyManager();
 
         // Plugin Utils.
-        wingsUtils = new WingsUtils();
+        // wingsUtils = new WingsUtils();
         bowUtils = new BowUtils();
 
         plugin.pluginManager.registerEvents(new EnchantmentControl(), plugin);
@@ -256,7 +256,7 @@ public class Starter {
         return bowUtils;
     }
 
-    public WingsUtils getWingsUtils() {
-        return wingsUtils;
-    }
+    //public WingsUtils getWingsUtils() {
+    //    return wingsUtils;
+    //}
 }
