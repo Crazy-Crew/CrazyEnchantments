@@ -185,9 +185,11 @@ public class CurrencyAPI {
                 switch (supportedPlugin) {
                     case VAULT -> starter.setVaultSupport(new VaultSupport());
                 }
-            } else {
-                plugin.getLogger().warning("No economy found. Any economy based feature will not work.");
+
+                return;
             }
         }
+
+        plugin.getLogger().warning("No eco plugin found or the eco plugin didn't enable. Any economy based feature will not work.");
     }
 }
