@@ -1,6 +1,6 @@
 <br />
 
-[![CrazyEnchantments](https://github.com/RyderBelserion/Assets/blob/main/crazycrew/old/banners/CrazyEnchantments.png?raw=true)](https://www.spigotmc.org/resources/crazy-enchantments.16470/)
+[![CrazyEnchantments](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/new/crazyenchantments/Banner.png)](https://www.spigotmc.org/resources/crazy-enchantments.16470/)
 
 <div align="center">
 
