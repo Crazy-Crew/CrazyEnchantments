@@ -106,6 +106,8 @@ public class BootEnchantments implements Listener {
         if (!wingsManager.isWingsEnabled()) return;
         Player player = event.getPlayer();
 
+        crazyManager.loadCEPlayer(player);
+
         if (!crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
@@ -119,6 +121,8 @@ public class BootEnchantments implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+
+        crazyManager.unloadCEPlayer(player);
 
         if (!wingsManager.isWingsEnabled() || !wingsManager.isFlyingPlayer(player)) return;
 
