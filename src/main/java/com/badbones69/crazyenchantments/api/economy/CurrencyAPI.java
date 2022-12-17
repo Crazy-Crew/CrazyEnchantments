@@ -15,8 +15,6 @@ public class CurrencyAPI {
 
     private final Starter starter = plugin.getStarter();
 
-    private final VaultSupport vaultSupport = starter.getVaultSupport();
-    
     /**
      * Get the amount that a player has from a specific currency.
      * @param player The player you wish to get the amount from.
@@ -26,7 +24,7 @@ public class CurrencyAPI {
     public int getCurrency(Player player, Currency currency) {
         try {
             return switch (currency) {
-                case VAULT -> (int) vaultSupport.getVault().getBalance(player);
+                case VAULT -> (int) starter.getVaultSupport().getVault().getBalance(player);
                 case XP_LEVEL -> player.getLevel();
                 case XP_TOTAL -> getTotalExperience(player);
             };
@@ -70,7 +68,7 @@ public class CurrencyAPI {
     public void takeCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> vaultSupport.getVault().withdrawPlayer(player, amount);
+                case VAULT -> starter.getVaultSupport().getVault().withdrawPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL -> takeTotalExperience(player, amount);
             }
@@ -86,7 +84,7 @@ public class CurrencyAPI {
     public void giveCurrency(Player player, Currency currency, int amount) {
         try {
             switch (currency) {
-                case VAULT -> vaultSupport.getVault().depositPlayer(player, amount);
+                case VAULT -> starter.getVaultSupport().getVault().depositPlayer(player, amount);
                 case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
