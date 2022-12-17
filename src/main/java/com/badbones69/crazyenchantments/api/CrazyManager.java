@@ -69,11 +69,11 @@ public class CrazyManager {
     private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
 
     // Arrays.
-    private final List<GKitz> gkitz = Lists.newArrayList();
-    private final List<CEPlayer> players = Lists.newArrayList();
-    private final List<Material> blockList = Lists.newArrayList();
-    private final List<Event> ignoredEvents = Lists.newArrayList();
-    private final List<UUID> ignoredUUIDs = Lists.newArrayList();
+    private final List<GKitz> gkitz = new ArrayList<>();
+    private final List<CEPlayer> players = new ArrayList<>();
+    private final List<Material> blockList = new ArrayList<>();
+    private final List<Event> ignoredEvents = new ArrayList<>();
+    private final List<UUID> ignoredUUIDs = new ArrayList<>();
 
     // Random
     private final Random random = new Random();
