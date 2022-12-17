@@ -1,14 +1,18 @@
 name: Auto Assign
+
 on:
   issues:
-    types: [opened]
+    types: [opened, edited, labeled, unlabeled]
   pull_request:
-    types: [opened]
+    types: [opened, edited, labeled, unlabeled]
+
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: wow-actions/auto-assign@v1
+      - uses: wow-actions/auto-assign@v2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONFIG_FILE: .github/auto-assign.yml
+          reviewers: |
+            RyderBelserion
+          assignees: RyderBelserion

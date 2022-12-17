@@ -156,7 +156,7 @@ tasks {
     }
 
     modrinth {
-        token.set("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")
+        token.set(System.getenv("MODRINTH_TOKEN"))
         projectId.set("crazyenchantments")
         versionName.set("${rootProject.name} ${project.version} Update")
         versionNumber.set("${project.version}")
