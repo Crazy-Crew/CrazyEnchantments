@@ -1,6 +1,6 @@
 name: "CrazyEnchantments"
 
-main: "${group}.CrazyEnchantments"
+main: "${group}"
 
 authors: [BadBones69, RyderBelserion]
 
