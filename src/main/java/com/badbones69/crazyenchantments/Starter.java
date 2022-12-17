@@ -96,6 +96,7 @@ public class Starter {
         armorEnchantmentManager = new ArmorEnchantmentManager();
         bowEnchantmentManager = new BowEnchantmentManager();
         blackSmithManager = new BlackSmithManager();
+        blackSmithManager.load();
         wingsManager = new WingsManager();
         allyManager = new AllyManager();
 

@@ -135,8 +135,7 @@ public class CrazyManager {
         });
 
         // Loads the blacksmith manager.
-        blackSmithManager = new BlackSmithManager();
-        blackSmithManager.load();
+        blackSmithManager = starter.getBlackSmithManager();
 
         // Loads the info menu manager and the enchantment types.
         infoMenuManager.load();
