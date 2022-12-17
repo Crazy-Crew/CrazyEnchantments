@@ -13,6 +13,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+
+import java.util.List;
 import java.util.Map;
 
 public class PluginSupport {
@@ -77,7 +79,8 @@ public class PluginSupport {
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
 
                 String website = supportedPlugin.getLoadedPlugin().getDescription().getWebsite();
-                // List<String> author = supportedPlugin.getLoadedPlugin().getDescription().getAuthors();
+                List<String> author = supportedPlugin.getLoadedPlugin().getDescription().getAuthors();
+                String name = supportedPlugin.getLoadedPlugin().getDescription().getName();
                 String main = supportedPlugin.getLoadedPlugin().getDescription().getMain();
 
                 switch (supportedPlugin) {
@@ -89,9 +92,13 @@ public class PluginSupport {
                         if (website != null) supportedPlugin.addPlugin(website.equals("https://www.mcmmo.org"));
                     }
 
-                    case SILK_SPAWNERS -> supportedPlugin.addPlugin(main.equals("de.dustplanet.silkspawners.SilkSpawners"));
+                    case SILK_SPAWNERS -> supportedPlugin.addPlugin(name.equals("SilkSpawners"));
 
-                    case SILK_SPAWNERS_V2 -> supportedPlugin.addPlugin(main.equals("de.corneliusmay.silkspawners.plugin.SilkSpawners"));
+                    case SILK_SPAWNERS_V2 -> {
+                        supportedPlugin.addPlugin(name.equals("SilkSpawners_v2"));
+
+                        plugin.getLogger().warning("Silk Spawners v2 by CANDC does not have any support yet.");
+                    }
 
                     default -> supportedPlugin.addPlugin(true);
                 }
