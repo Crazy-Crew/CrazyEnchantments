@@ -86,9 +86,6 @@ public class Starter {
         // Economy Management.
         currencyAPI = new CurrencyAPI();
 
-        // Plugin Support.
-        pluginSupport = new PluginSupport();
-
         infoMenuManager = new InfoMenuManager();
         shopManager = new ShopManager();
 
@@ -106,6 +103,9 @@ public class Starter {
         plugin.pluginManager.registerEvents(armorListener = new ArmorListener(), plugin);
 
         crazyManager = new CrazyManager();
+
+        // Plugin Support.
+        pluginSupport = new PluginSupport();
 
         // Plugin Utils.
         // wingsUtils = new WingsUtils();
