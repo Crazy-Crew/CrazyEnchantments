@@ -14,12 +14,14 @@ import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
+import com.badbones69.crazyenchantments.api.objects.GKitz;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.controllers.BlackSmith;
+import com.badbones69.crazyenchantments.controllers.GKitzController;
+import com.badbones69.crazyenchantments.controllers.Tinkerer;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
-import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -51,6 +53,12 @@ public class ShopListener implements Listener {
     private final ShopManager shopManager = starter.getShopManager();
 
     private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
+
+    private final Tinkerer tinkerer = plugin.getTinkerer();
+
+    private final BlackSmith blackSmith = plugin.getBlackSmith();
+
+    private final GKitzController gKitzController = plugin.getgKitzController();
 
     // Plugin Listeners.
     private final ScramblerListener scramblerListener = starter.getScramblerListener();
@@ -154,17 +162,17 @@ public class ShopListener implements Listener {
                         switch (option) {
                             case GKITZ -> {
                                 if (!methods.hasPermission(player, "gkitz", true)) return;
-                                //GKitzController.openGUI(player);
+                                gKitzController.openGUI(player);
                             }
 
                             case BLACKSMITH -> {
                                 if (!methods.hasPermission(player, "blacksmith", true)) return;
-                                //BlackSmith.openBlackSmith(player);
+                                blackSmith.openBlackSmith(player);
                             }
 
                             case TINKER -> {
                                 if (!methods.hasPermission(player, "tinker", true)) return;
-                                //Tinkerer.openTinker(player);
+                                tinkerer.openTinker(player);
                             }
 
                             case INFO -> infoMenuManager.openInfoMenu(player);
