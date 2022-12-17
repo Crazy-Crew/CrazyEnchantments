@@ -76,7 +76,7 @@ dependencies {
     implementation("com.intellectualsites.informative-annotations", "informative-annotations", "1.2")
     implementation("com.intellectualsites.paster", "Paster", "1.1.4")
     
-    implementation("de.tr7zw", "nbt-data-api", "2.10.0")
+    implementation("de.tr7zw", "nbt-data-api", "2.11.1")
 
     implementation("org.bstats", "bstats-bukkit", "3.0.0")
 
