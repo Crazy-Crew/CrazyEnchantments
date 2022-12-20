@@ -14,11 +14,9 @@ import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
-import com.badbones69.crazyenchantments.api.objects.GKitz;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
 import com.badbones69.crazyenchantments.controllers.BlackSmith;
-import com.badbones69.crazyenchantments.controllers.GKitzController;
 import com.badbones69.crazyenchantments.controllers.Tinkerer;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
@@ -57,8 +55,6 @@ public class ShopListener implements Listener {
     private final Tinkerer tinkerer = plugin.getTinkerer();
 
     private final BlackSmith blackSmith = plugin.getBlackSmith();
-
-    private final GKitzController gKitzController = plugin.getgKitzController();
 
     // Plugin Listeners.
     private final ScramblerListener scramblerListener = starter.getScramblerListener();
@@ -162,7 +158,8 @@ public class ShopListener implements Listener {
                         switch (option) {
                             case GKITZ -> {
                                 if (!methods.hasPermission(player, "gkitz", true)) return;
-                                gKitzController.openGUI(player);
+                                if (!crazyManager.isGkitzEnabled()) return;
+                                plugin.getgKitzController().openGUI(player);
                             }
 
                             case BLACKSMITH -> {

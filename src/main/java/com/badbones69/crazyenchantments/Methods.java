@@ -13,7 +13,6 @@ import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.listeners.FireworkDamageListener;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -45,9 +44,6 @@ public class Methods {
     private final OraxenSupport oraxenSupport = starter.getOraxenSupport();
 
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
-
-    // Plugin Listeners.
-    private final FireworkDamageListener fireworkDamageListener = plugin.getFireworkDamageListener();
 
     private EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
@@ -305,7 +301,7 @@ public class Methods {
         fireworkMeta.setPower(0);
         firework.setFireworkMeta(fireworkMeta);
 
-        fireworkDamageListener.addFirework(firework);
+        plugin.getFireworkDamageListener().addFirework(firework);
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
     }
@@ -452,7 +448,7 @@ public class Methods {
     }
 
     public boolean isSimilar(ItemStack one, ItemStack two) {
-        if (one.getType().equals(two.getType())) return false;
+        if (!one.getType().equals(two.getType())) return false;
         if (!one.hasItemMeta() || !two.hasItemMeta()) return false;
         if (!one.getItemMeta().hasDisplayName() || !two.getItemMeta().hasDisplayName()) return false;
         if (!one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())) return false;

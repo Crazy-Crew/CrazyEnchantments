@@ -61,13 +61,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
         pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
-
-        if (starter.getCrazyManager().isGkitzEnabled()) {
-            getLogger().info("G-Kitz support is now enabled.");
-
-            pluginManager.registerEvents(gKitzController = new GKitzController(), this);
-        }
-
         pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
         pluginManager.registerEvents(shopListener = new ShopListener(), this);
 
@@ -103,6 +96,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(new InfoGUIControl(), this);
         pluginManager.registerEvents(new LostBookController(), this);
         pluginManager.registerEvents(new CommandChecker(), this);
+
+        if (starter.getCrazyManager().isGkitzEnabled()) {
+            getLogger().info("G-Kitz support is now enabled.");
+
+            pluginManager.registerEvents(gKitzController = new GKitzController(), this);
+        }
 
         if (SupportedPlugins.SILK_SPAWNERS.isCachedPluginLoaded()) {
             getLogger().fine("Silk Spawners support is enabled.");
