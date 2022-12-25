@@ -103,10 +103,12 @@ public class BootEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
-        if (!wingsManager.isWingsEnabled()) return;
+
         Player player = event.getPlayer();
 
         crazyManager.loadCEPlayer(player);
+
+        if (!wingsManager.isWingsEnabled()) return;
 
         if (!crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) return;
 
