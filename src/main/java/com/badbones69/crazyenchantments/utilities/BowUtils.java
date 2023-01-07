@@ -30,9 +30,6 @@ public class BowUtils {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    // Plugin Support.
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
-
     // Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
 
@@ -66,7 +63,7 @@ public class BowUtils {
     }
 
     public boolean allowsCombat(Entity entity) {
-        return !pluginSupport.allowCombat(entity.getLocation());
+        return !starter.getPluginSupport().allowCombat(entity.getLocation());
     }
 
     public EnchantedArrow enchantedArrow(Arrow arrow) {

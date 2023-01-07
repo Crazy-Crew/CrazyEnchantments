@@ -64,7 +64,7 @@ public class BowEnchantments implements Listener {
 
         if (!enchantmentBookSettings.hasEnchantments(bow)) return;
         if (bowUtils.allowsCombat(entity)) return;
-        if (arrow.getShooter() instanceof Player) return;
+        if (!(arrow.getShooter() instanceof Player)) return;
 
         // Add the arrow to the list.
         bowUtils.addArrow(arrow, entity, bow);
