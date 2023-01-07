@@ -49,9 +49,12 @@
 </details>
 
 ## Downloads
-https://www.spigotmc.org/resources/crazy-enchantments.16470/
+https://modrinth.com/plugin/crazyenchantments
 
-https://ci.badbones69.com/view/Stable/job/CrazyEnchantments/
+## Snapshot Builds
+### Get the latest changes before marked as release.
+All snapshot builds will be labeled with Beta on Modrinth.<br>
+> https://modrinth.com/plugin/crazyenchantments/versions
 
 ## Getting Started
 
@@ -61,7 +64,7 @@ How to get started with contributing / maintaining your own version of CrazyEnch
 
 A list of things necessary to make sure you can build CrazyEnchantments properly.
 * Intellij IDEA
-    * https://www.jetbrains.com/idea/download/
+    * > https://www.jetbrains.com/idea/download/
 * Gradle
 
 ### Installation
