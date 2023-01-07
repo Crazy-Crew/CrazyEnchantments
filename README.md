@@ -89,24 +89,24 @@ Check our public [trello board](https://trello.com/b/AJvEmcbL) for our current p
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request
+5. Open a Pull Request to add your feature/fix to the `beta` branch.
 
 ## License
 
 Distributed under the MIT License. See [`LICENSE`](/LICENSE) for more information.
 
-[discord-shield]: https://img.shields.io/discord/182615261403283459.svg?style=for-the-badge
+[discord-shield]: https://img.shields.io/discord/182615261403283459.svg?style=flat&logo=appveyor
 [discord-url]: https://discord.gg/crazycrew
 
-[contributors-shield]: https://img.shields.io/github/contributors/Crazy-Crew/CrazyEnchantments.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [contributors-url]: https://github.com/Crazy-Crew/CrazyEnchantments/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Crazy-Crew/CrazyEnchantments.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [forks-url]: https://github.com/Crazy-Crew/CrazyEnchantments/network/members
-[stars-shield]: https://img.shields.io/github/stars/Crazy-Crew/CrazyEnchantments.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [stars-url]: https://github.com/Crazy-Crew/CrazyEnchantments/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Crazy-Crew/CrazyEnchantments.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [issues-url]: https://github.com/Crazy-Crew/CrazyEnchantments/issues
-[license-shield]: https://img.shields.io/github/license/Crazy-Crew/CrazyEnchantments.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/Crazy-Crew/CrazyEnchantments.svg?style=flat&logo=appveyor
 [license-url]: https://github.com/Crazy-Crew/CrazyEnchantments/blob/master/LICENSE
 
-[codefactor-shield]: https://img.shields.io/codefactor/grade/github/crazy-crew/CrazyEnchantments/main?style=for-the-badge
+[codefactor-shield]: https://img.shields.io/codefactor/grade/github/crazy-crew/CrazyEnchantments/main?style=flat&logo=appveyor
