@@ -8,9 +8,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-project.group = "${extra["plugin_group"]}.CrazyEnchantments"
-project.version = "${extra["plugin_version"]}"
-project.description = "Adds over 80 unique enchantments to your server and more! "
+project.description = "Adds over 80 unique enchantments to your server and more!"
 
 repositories {
     /**
@@ -132,16 +130,19 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-val buildVersion = "${project.version}-SNAPSHOT"
-val isSnapshot = true
+val isSnapshot = false
+
+fun getPluginVersion(): String {
+    return if (isSnapshot) "${project.version}-SNAPSHOT" else project.version.toString()
+}
+
+fun getPluginVersionType(): String {
+    return if (isSnapshot) "beta" else "release"
+}
 
 tasks {
     shadowJar {
-        if (isSnapshot) {
-            archiveFileName.set("${rootProject.name}-${buildVersion}.jar")
-        } else {
-            archiveFileName.set("${rootProject.name}-${project.version}.jar")
-        }
+        archiveFileName.set("${rootProject.name}-${getPluginVersion()}.jar")
 
         listOf(
             "de.tr7zw",
@@ -159,17 +160,10 @@ tasks {
         token.set(System.getenv("MODRINTH_TOKEN"))
         projectId.set("crazyenchantments")
 
-        if (isSnapshot) {
-            versionName.set("${rootProject.name} $buildVersion")
-            versionNumber.set(buildVersion)
+        versionName.set("${rootProject.name} ${getPluginVersion()}")
+        versionNumber.set(getPluginVersion())
 
-            versionType.set("beta")
-        } else {
-            versionName.set("${rootProject.name} ${project.version}")
-            versionNumber.set("${project.version}")
-
-            versionType.set("release")
-        }
+        versionType.set(getPluginVersionType())
 
         uploadFile.set(shadowJar.get())
 
@@ -197,7 +191,7 @@ tasks {
             expand(
                 "name" to rootProject.name,
                 "group" to project.group,
-                "version" to if (isSnapshot) buildVersion else project.version,
+                "version" to getPluginVersion(),
                 "description" to project.description
             )
         }
@@ -220,9 +214,9 @@ publishing {
 
     publications {
         create<MavenPublication>("maven") {
-            groupId = "${extra["plugin_group"]}"
+            groupId = "${project.group}"
             artifactId = rootProject.name.toLowerCase()
-            version = if (isSnapshot) buildVersion else "${project.version}"
+            version = getPluginVersion()
             from(components["java"])
         }
     }
