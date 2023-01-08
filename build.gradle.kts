@@ -130,14 +130,14 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-val isSnapshot = false
+val isBeta = false
 
 fun getPluginVersion(): String {
-    return if (isSnapshot) "${project.version}-SNAPSHOT" else project.version.toString()
+    return if (isBeta) "${project.version}-BETA" else project.version.toString()
 }
 
 fun getPluginVersionType(): String {
-    return if (isSnapshot) "beta" else "release"
+    return if (isBeta) "beta" else "release"
 }
 
 tasks {
@@ -200,7 +200,7 @@ tasks {
 }
 
 publishing {
-    val mavenExt: String = if (isSnapshot) "snapshots" else "releases"
+    val mavenExt: String = if (isBeta) "beta" else "releases"
 
     repositories {
         maven("https://repo.crazycrew.us/$mavenExt") {

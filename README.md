@@ -12,9 +12,9 @@
 [![Contact][discord-shield]][discord-url]
 ![CodeFactor][codefactor-shield]
 
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/unsupported/spigot_64h.png" height="50"></a>
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/paper_64h.png" height="50"></a>
-<a href="/#"><img src="https://raw.githubusercontent.com/intergrav/devins-badges/v2/assets/cozy/supported/purpur_64h.png" height="50"></a>
+![Spigot](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/unsupported/spigot_vector.svg)
+![Paper](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/paper_vector.svg)
+![Purpur](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/purpur_vector.svg)
 
   <p align="center">
     Adds over 80 unique enchantments to your server and more!
@@ -49,11 +49,11 @@
 </details>
 
 ## Downloads
-https://modrinth.com/plugin/crazyenchantments
+> https://modrinth.com/plugin/crazyenchantments
 
-## Snapshot Builds
+## Beta Builds
 ### Get the latest changes before marked as release.
-All snapshot builds will be labeled with Beta on Modrinth.<br>
+All beta builds will be on Modrinth.<br>
 > https://modrinth.com/plugin/crazyenchantments/versions
 
 ## Getting Started
@@ -89,7 +89,7 @@ Check our public [trello board](https://trello.com/b/AJvEmcbL) for our current p
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request to add your feature/fix to the `beta` branch.
+5. Open a Pull Request to add your feature/fix.
 
 ## License
 
