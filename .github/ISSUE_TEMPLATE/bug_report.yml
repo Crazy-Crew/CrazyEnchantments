@@ -11,7 +11,7 @@ body:
       value: |
         Note: Search to see if an issue already exists for the bug you are reporting.
 
-        What plugin version are you on? Type /version <plugin-name>
+        What plugin version are you on? Type /version `plugin-name`
 
         Add any gif / imgur links if need be.
 
