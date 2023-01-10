@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[Bug Report] "
+title: "[Bug Report]"
 labels: ''
 assignees: ''
 
@@ -12,7 +12,7 @@ A clear and concise description of what the bug is.
 
 **Versions (please complete the following information):**
  - Minecraft Server Version: [e.g. 1.19]
- - Plugin Version: [e.g. 1.11.6-SNAPSHOT]
+ - Plugin Version: [e.g. 1.9.8]
 
 *Do **NOT** say Latest use `/version crazyenchantments` in the console.
 

@@ -173,9 +173,9 @@ tasks {
         //<h3>The first release for CrazyEnchantments on Modrinth! 🎉🎉🎉🎉🎉<h3> If we want a header.
         changelog.set("""
             <h3>The first release for CrazyEnchantments on Modrinth! 🎉🎉🎉🎉🎉<h3>
-              <h2>Changes:</h2>
+              <h4>Changes:</h4>
                <p>Added 1.18.2 support.</p>
-              <h2>Bugs Squashed:</h2>
+              <h4>Bugs Squashed:</h4>
                <p>Fixed a bug with /gkitz</p>
                <p>Fixed a bug with wings</p>
                <p>Fixed some npes</p>
