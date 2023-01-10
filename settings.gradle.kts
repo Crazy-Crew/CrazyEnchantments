@@ -1,0 +1,1 @@
+rootProject.name = extra["name"] as String
