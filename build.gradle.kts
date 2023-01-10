@@ -8,8 +8,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-project.description = "Adds over 80 unique enchantments to your server and more!"
-
 repositories {
     /**
      * PAPI Team
@@ -127,10 +125,10 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(extra["java_version"].toString()))
 }
 
-val isBeta = false
+val isBeta: Boolean = extra["isBeta"].toString().toBoolean()
 
 fun getPluginVersion(): String {
     return if (isBeta) "${project.version}-BETA" else project.version.toString()
@@ -142,25 +140,25 @@ fun getPluginVersionType(): String {
 
 tasks {
     shadowJar {
-        archiveFileName.set("${rootProject.name}-${getPluginVersion()}.jar")
+        archiveFileName.set("${project.name}-${getPluginVersion()}.jar")
 
         listOf(
             "de.tr7zw",
             "org.bstats"
         ).forEach {
-            relocate(it, "${rootProject.group}.plugin.lib.$it")
+            relocate(it, "${project.group}.plugin.lib.$it")
         }
     }
 
     compileJava {
-        options.release.set(17)
+        options.release.set(extra["java_version"].toString().toInt())
     }
 
     modrinth {
         token.set(System.getenv("MODRINTH_TOKEN"))
-        projectId.set("crazyenchantments")
+        projectId.set(project.name.toLowerCase())
 
-        versionName.set("${rootProject.name} ${getPluginVersion()}")
+        versionName.set("${project.name} ${getPluginVersion()}")
         versionNumber.set(getPluginVersion())
 
         versionType.set(getPluginVersionType())
@@ -189,11 +187,11 @@ tasks {
     processResources {
         filesMatching("plugin.yml") {
             expand(
-                "name" to rootProject.name,
+                "name" to project.name,
                 "group" to project.group,
                 "version" to getPluginVersion(),
                 "description" to project.description,
-                "website" to "https://modrinth.com/plugin/crazyenchantments"
+                "website" to "https://modrinth.com/plugin/${project.name.toLowerCase()}"
             )
         }
     }
@@ -216,7 +214,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "${project.group}"
-            artifactId = rootProject.name.toLowerCase()
+            artifactId = project.name.toLowerCase()
             version = getPluginVersion()
             from(components["java"])
         }
