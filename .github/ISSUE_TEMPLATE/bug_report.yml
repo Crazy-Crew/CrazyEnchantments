@@ -1,0 +1,56 @@
+name: Bug Report
+description: Create a report to help us improve our plugins.
+title: "[Bug]: "
+labels: [bug]
+assignees:
+ - ryderbelserion
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Note: Search to see if an issue already exists for the bug you are reporting.
+
+        What plugin version are you on? Type /version <plugin-name>
+
+        Add any gif / imgur links if need be.
+
+        If you have any large stack traces / errors, Please use https://mclo.gs/
+  - type: dropdown
+    id: version
+    attributes:
+      label: Server Version
+      description: What server version are you on?
+      options:
+        - 1.8.8 
+        - 1.12.2
+        - 1.16.5
+        - 1.19
+    validations:
+      required: true
+  - type: textarea
+    id: bug
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Change value in placeholder.yml '...'
+        3. Run command '...'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+    validations:
+      required: false
