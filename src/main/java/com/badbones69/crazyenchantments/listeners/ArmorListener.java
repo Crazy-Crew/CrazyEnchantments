@@ -8,7 +8,9 @@ import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Dispenser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -228,7 +230,7 @@ public class ArmorListener implements Listener {
     public void dispenserFireEvent(BlockDispenseEvent e) {
         ArmorType type = ArmorType.matchType(e.getItem());
 
-        if (ArmorType.matchType(e.getItem()) != null) {
+        if (type != null) {
             Location loc = e.getBlock().getLocation();
             for (Player worldPlayer : loc.getWorld().getPlayers()) {
                 if (loc.getBlockY() - worldPlayer.getLocation().getBlockY() >= -1 && loc.getBlockY() - worldPlayer.getLocation().getBlockY() <= 1) {
@@ -238,9 +240,9 @@ public class ArmorListener implements Listener {
                             && type.equals(ArmorType.LEGGINGS) || worldPlayer.getInventory().getBoots() == null
                             && type.equals(ArmorType.BOOTS)) {
 
-                        if (e.getBlock().getState() instanceof org.bukkit.block.Dispenser dispenser) {
-                            org.bukkit.material.Dispenser dis = (org.bukkit.material.Dispenser) dispenser.getData();
-                            BlockFace directionFacing = dis.getFacing();
+                        if (e.getBlock().getState() instanceof org.bukkit.block.Dispenser block) {
+                            Dispenser dispenser = (Dispenser) block.getBlockData();
+                            BlockFace directionFacing = dispenser.getFacing();
 
                             // Someone told me not to do big if checks because it's hard to read, look at me doing it -_-.
                             if (directionFacing == BlockFace.EAST && worldPlayer.getLocation().getBlockX() != loc.getBlockX()
