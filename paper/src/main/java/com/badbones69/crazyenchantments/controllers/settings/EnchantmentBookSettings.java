@@ -73,8 +73,11 @@ public class EnchantmentBookSettings {
             if (enchantment.isActivated() && itemLore != null) {
                 for (String lore : itemLore) {
                     String[] split = lore.split(" ");
+
                     // Split can generate an empty array in rare case.
-                    if (split.length > 0 && lore.replace(" " + split[split.length - 1], "").equals(enchantment.getColor() + enchantment.getCustomName())) return true;
+                    String stripped = methods.removeColor(lore.replace(" " + split[split.length - 1], ""));
+
+                    if (stripped.equals(enchantment.getCustomName())) return true;
                 }
             }
         }
@@ -245,7 +248,9 @@ public class EnchantmentBookSettings {
             for (CEnchantment enchantment : getRegisteredEnchantments()) {
                 if (!enchantment.isActivated()) continue;
 
-                if (!enchantmentName.equals(enchantment.getColor() + enchantment.getCustomName())) continue;
+                String stripped = methods.removeColor(enchantmentName);
+
+                if (!stripped.equals(enchantment.getCustomName())) continue;
 
                 String levelString = line.substring(lastSpaceIndex + 1);
                 int level = methods.convertLevelInteger(levelString);

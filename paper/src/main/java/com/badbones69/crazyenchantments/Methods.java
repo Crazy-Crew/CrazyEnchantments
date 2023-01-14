@@ -536,14 +536,19 @@ public class Methods {
         }
     }
 
-    public void loopEffectsMap(Map<PotionEffectType, Integer> effects, Player player) {
+    public void checkPotions(Map<PotionEffectType, Integer> effects, Player player) {
         for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-            if (type.getValue() < 0) {
-                player.removePotionEffect(type.getKey());
-            } else {
-                player.removePotionEffect(type.getKey());
-                player.addPotionEffect(new PotionEffect(type.getKey(), Integer.MAX_VALUE, type.getValue()));
+            Integer value = type.getValue();
+            PotionEffectType key = type.getKey();
+
+            if (value < 0) {
+                player.removePotionEffect(key);
+                return;
             }
+
+            player.removePotionEffect(key);
+            PotionEffect potionEffect = new PotionEffect(key, Integer.MAX_VALUE, value);
+            player.addPotionEffect(potionEffect);
         }
     }
 

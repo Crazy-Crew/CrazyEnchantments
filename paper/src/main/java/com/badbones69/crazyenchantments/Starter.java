@@ -45,12 +45,11 @@ public class Starter {
 
     // Plugin Utils.
     private BowUtils bowUtils;
-    //private WingsUtils wingsUtils;
 
     // Plugin Support.
+    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
     private PluginSupport pluginSupport;
     private VaultSupport vaultSupport;
-    private SuperiorSkyBlockSupport superiorSkyBlockSupport;
     private OraxenSupport oraxenSupport;
     private NoCheatPlusSupport noCheatPlusSupport;
     private SpartanSupport spartanSupport;
@@ -252,8 +251,4 @@ public class Starter {
     public BowUtils getBowUtils() {
         return bowUtils;
     }
-
-    //public WingsUtils getWingsUtils() {
-    //    return wingsUtils;
-    //}
 }

@@ -92,7 +92,7 @@ public class ArmorEnchantments implements Listener {
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
                 if (enchantment.isActivated() && enchantmentBookSettings.hasEnchantment(oldItem, enchantment.getEnchantment())) {
                     Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment);
-                    methods.loopEffectsMap(effects, player);
+                    methods.checkPotions(effects, player);
                 }
             }
         }
@@ -101,7 +101,10 @@ public class ArmorEnchantments implements Listener {
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
                 if (enchantment.isActivated() && enchantmentBookSettings.hasEnchantment(newItem, enchantment.getEnchantment())) {
                     Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, newItem, oldItem, enchantment);
-                    methods.loopEffectsMap(effects, player);
+
+                    EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, enchantment.getEnchantment(), newItem);
+                    plugin.getPluginManager().callEvent(enchantmentUseEvent);
+                    if (!enchantmentUseEvent.isCancelled()) methods.checkPotions(effects, player);
                 }
             }
         }
