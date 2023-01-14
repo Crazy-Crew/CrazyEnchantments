@@ -47,13 +47,10 @@ releaseBuild {
             changelog.set("""
             <h3>The first release for CrazyEnchantments on Modrinth! 🎉🎉🎉🎉🎉<h3>
               <h4>Changes:</h4>
-               <p>Added 1.18.2 support.</p>
+               <p>Cleaned up loading ce players</p>
+               <p>Cleaned up dispenser code for armor</p>
               <h4>Bugs Squashed:</h4>
-               <p>Fixed a bug with /gkitz</p>
-               <p>Fixed a bug with wings</p>
-               <p>Fixed some npes</p>
-               <p>Fixed bow enchantments</p>
-               <p>Fixed vault economy</p>
+               <p>Fixed a bug with armor listener</p>
             """.trimIndent())
         }
 

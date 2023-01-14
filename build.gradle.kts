@@ -33,16 +33,11 @@ releaseBuild {
                         "Download Link: https://modrinth.com/$pageExtension/${pluginName.toLowerCase()}/version/$pluginVersion"
                     )
 
-                    if (isBeta()) {
-                        this.field(
-                            "API Update",
-                            "Version $pluginVersion has been pushed to https://repo.crazycrew.us/#/beta/"
-                        )
-                    }
+                    val urlExt = if (isBeta()) "beta" else "releases"
 
-                    if (!isBeta()) this.field(
+                    this.field(
                         "API Update",
-                        "Version $pluginVersion has been pushed to https://repo.crazycrew.us/#/releases/"
+                        "Version $pluginVersion has been pushed to https://repo.crazycrew.us/#/$urlExt/"
                     )
                 }
 
