@@ -121,7 +121,9 @@ public class CrazyManager {
             if (playerHealthPatch) player.getAttribute(genericAttribute).setBaseValue(baseValue);
 
             // Loop through all players & back them up.
-            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, task -> getCEPlayers().forEach(this::backupCEPlayer), 5 * 20 * 60, 5 * 20 * 60);
+            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, task -> {
+                getCEPlayers().forEach(name -> backupCEPlayer(name.getPlayer()));
+            }, 5 * 20 * 60, 5 * 20 * 60);
         });
 
         // Invalidate cached enchants.
@@ -324,7 +326,7 @@ public class CrazyManager {
      * This backup all the players data stored by this plugin.
      * @param cePlayer The player you wish to back up.
      */
-    public void backupCEPlayer(CEPlayer cePlayer) {
+    private void backupCEPlayer(CEPlayer cePlayer) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = cePlayer.getPlayer().getUniqueId().toString();
 

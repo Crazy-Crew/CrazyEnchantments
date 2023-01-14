@@ -38,6 +38,11 @@ public class GkitzCommand implements CommandExecutor {
                     return true;
                 }
 
+                Player player = (Player) sender;
+
+                // Load it because if they are ever null.
+                if (crazyManager.getCEPlayer(player) == null) crazyManager.loadCEPlayer(player);
+
                 if (hasPermission(sender, "gkitz")) plugin.getgKitzController().openGUI((Player) sender);
 
             } else {

@@ -85,7 +85,7 @@ public class CECommand implements CommandExecutor {
                 }
                 case "reload" -> { // /ce reload
                     if (hasPermission(sender, "reload")) {
-                        crazyManager.getCEPlayers().forEach(crazyManager::backupCEPlayer);
+                        crazyManager.getCEPlayers().forEach(name -> crazyManager.backupCEPlayer(name.getPlayer()));
                         fileManager.setup();
                         crazyManager.load();
                         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());

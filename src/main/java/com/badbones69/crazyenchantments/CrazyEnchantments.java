@@ -12,7 +12,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -59,6 +62,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         }
 
         if (metricsEnabled) new Metrics(this, 4494);
+
+        pluginManager.registerEvents(this, this);
 
         pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
         pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
@@ -134,6 +139,16 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        this.getStarter().getCrazyManager().loadCEPlayer(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        this.getStarter().getCrazyManager().unloadCEPlayer(event.getPlayer());
     }
 
     public static CrazyEnchantments getPlugin() {

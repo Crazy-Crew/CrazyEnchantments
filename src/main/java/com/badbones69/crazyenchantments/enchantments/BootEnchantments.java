@@ -103,10 +103,7 @@ public class BootEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
-
         Player player = event.getPlayer();
-
-        crazyManager.loadCEPlayer(player);
 
         if (!wingsManager.isWingsEnabled()) return;
 
@@ -123,8 +120,6 @@ public class BootEnchantments implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-
-        crazyManager.unloadCEPlayer(player);
 
         if (!wingsManager.isWingsEnabled() || !wingsManager.isFlyingPlayer(player)) return;
 
