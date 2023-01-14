@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.api.enums;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.listeners.ArmorListener;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,9 +16,7 @@ public enum ArmorType {
 
     private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final static Starter starter = plugin.getStarter();
-
-    private final static ArmorListener armorListener = starter.getArmorListener();
+    private final static ArmorListener armorListener = plugin.getArmorListener();
 
     ArmorType(int slot) {
         this.slot = slot;

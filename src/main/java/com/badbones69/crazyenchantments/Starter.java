@@ -20,9 +20,7 @@ import com.badbones69.crazyenchantments.listeners.ArmorListener;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
-import com.badbones69.crazyenchantments.utilities.WingsUtils;
 import org.bukkit.ChatColor;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,7 +66,6 @@ public class Starter {
     // Listeners.
     private ScramblerListener scramblerListener;
     private ScrollListener scrollListener;
-    private ArmorListener armorListener;
 
     public void run() {
         fileManager = new FileManager();
@@ -100,7 +97,6 @@ public class Starter {
         // Listeners.
         plugin.pluginManager.registerEvents(scramblerListener = new ScramblerListener(), plugin);
         plugin.pluginManager.registerEvents(scrollListener = new ScrollListener(), plugin);
-        plugin.pluginManager.registerEvents(armorListener = new ArmorListener(), plugin);
 
         crazyManager = new CrazyManager();
 
@@ -242,10 +238,6 @@ public class Starter {
     // Listeners.
     public ScramblerListener getScramblerListener() {
         return scramblerListener;
-    }
-
-    public ArmorListener getArmorListener() {
-        return armorListener;
     }
 
     public ScrollListener getScrollListener() {

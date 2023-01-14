@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.listeners;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
@@ -40,8 +39,6 @@ public class ArmorListener implements Listener {
     private final Starter starter = plugin.getStarter();
 
     private final Methods methods = starter.getMethods();
-
-    private final CrazyManager crazyManager = starter.getCrazyManager();
 
     private final List<String> blockedMaterials;
 
@@ -229,8 +226,6 @@ public class ArmorListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void dispenserFireEvent(BlockDispenseEvent e) {
-        if (crazyManager.isIgnoredEvent(e)) return;
-
         ArmorType type = ArmorType.matchType(e.getItem());
 
         if (ArmorType.matchType(e.getItem()) != null) {

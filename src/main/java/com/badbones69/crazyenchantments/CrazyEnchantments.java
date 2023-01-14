@@ -27,6 +27,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private FireworkDamageListener fireworkDamageListener;
     private ShopListener shopListener;
+    private ArmorListener armorListener;
 
     private ArmorEnchantments armorEnchantments;
 
@@ -63,6 +64,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
         pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
         pluginManager.registerEvents(shopListener = new ShopListener(), this);
+        pluginManager.registerEvents(armorListener = new ArmorListener(), plugin);
 
         enable();
     }
@@ -149,6 +151,9 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public ShopListener getShopListener() {
         return shopListener;
+
+    public ArmorListener getArmorListener() {
+        return this.armorListener;
     }
 
     public PluginManager getPluginManager() {
