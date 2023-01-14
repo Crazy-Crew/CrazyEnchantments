@@ -41,8 +41,6 @@ public class ArmorListener implements Listener {
 
     private final Methods methods = starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
     private final List<String> blockedMaterials;
 
     public ArmorListener() {
@@ -229,7 +227,7 @@ public class ArmorListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void dispenserFireEvent(BlockDispenseEvent e) {
-        if (crazyManager.isIgnoredEvent(e)) return;
+        if (starter.getCrazyManager().isIgnoredEvent(e)) return;
 
         ArmorType type = ArmorType.matchType(e.getItem());
 
