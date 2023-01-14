@@ -677,6 +677,7 @@ public class CrazyManager {
                 for (ItemStack armor : player.getEquipment().getArmorContents()) {
                     if (ench.isActivated() && enchantmentBookSettings.hasEnchantment(armor, ench.getEnchantment())) {
                         Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
+
                         methods.loopEffectsMap(effects, player);
                     }
                 }

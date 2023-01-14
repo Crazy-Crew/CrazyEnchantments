@@ -109,7 +109,6 @@ public class Starter {
         pluginSupport = new PluginSupport();
 
         // Plugin Utils.
-        // wingsUtils = new WingsUtils();
         bowUtils = new BowUtils();
 
         plugin.pluginManager.registerEvents(new EnchantmentControl(), plugin);

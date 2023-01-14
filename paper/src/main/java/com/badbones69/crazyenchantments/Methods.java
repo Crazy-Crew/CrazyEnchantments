@@ -12,7 +12,6 @@ import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -35,7 +34,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -57,8 +55,6 @@ public class Methods {
     private final OraxenSupport oraxenSupport = starter.getOraxenSupport();
 
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
-
-    private EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final Random random = new Random();
 
