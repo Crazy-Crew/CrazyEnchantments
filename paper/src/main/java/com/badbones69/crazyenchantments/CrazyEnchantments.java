@@ -31,6 +31,7 @@ import com.badbones69.crazyenchantments.listeners.DustControlListener;
 import com.badbones69.crazyenchantments.listeners.FireworkDamageListener;
 import com.badbones69.crazyenchantments.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.listeners.ShopListener;
+import com.badbones69.crazyenchantments.listeners.server.WorldSwitchListener;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -85,6 +86,14 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             Files.CONFIG.saveFile();
         }
 
+        String refreshEffects = config.getString("Settings.Refresh-Potion-Effects-On-World-Change");
+
+        if (refreshEffects == null) {
+            config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
+            
+            Files.CONFIG.saveFile();
+        }
+
         if (metricsEnabled) new Metrics(this, 4494);
 
         pluginManager.registerEvents(this, this);
@@ -127,6 +136,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(new InfoGUIControl(), this);
         pluginManager.registerEvents(new LostBookController(), this);
         pluginManager.registerEvents(new CommandChecker(), this);
+
+        pluginManager.registerEvents(new WorldSwitchListener(), this);
 
         if (starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("G-Kitz support is now enabled.");
