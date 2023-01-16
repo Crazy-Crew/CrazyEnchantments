@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.List;
 
 public class ToolEnchantments implements Listener {
@@ -52,55 +53,47 @@ public class ToolEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        Block block = event.getBlock();
+
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+        if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(event.getBlock())) return;
+
         Player player = event.getPlayer();
-
-        if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(block)) return;
-
-        ItemStack item = methods.getItemInHand(player);
+        ItemStack brokenBlock = new ItemStack(event.getBlock().getType());
+        ItemStack tool = methods.getItemInHand(player);
 
         updateEffects(player);
 
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(tool);
 
-            if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
-                // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
-                if ((enchantmentSettings.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
-                        // This checks if the block is a spawner and if so the spawner classes will take care of this.
-                        // If Epic Spawners is enabled then telepathy will give the item from the API.
-                        // Otherwise, CE will ignore the spawner in this event.
-                        (block.getType() == Material.SPAWNER)) return;
+        if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) || enchantments.contains(CEnchantments.BLAST.getEnchantment())) return;
 
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
+        if ((enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
+            (brokenBlock.getType() == Material.SPAWNER)) return;
+        // This checks if the block is a spawner and if so the spawner classes will take care of this.
+        // If Epic Spawners is enabled then telepathy will give the item from the API.
+        // Otherwise, CE will ignore the spawner in this event.
 
-                if (!useEvent.isCancelled()) {
-                    event.setExpToDrop(0);
-                    event.setDropItems(false);
-                    TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(item, block));
+        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, tool);
+        plugin.getServer().getPluginManager().callEvent(useEvent);
 
-                    if (methods.isInventoryFull(player)) {
-                        player.getWorld().dropItem(player.getLocation(), drop.getItem());
-                    } else {
-                        player.getInventory().addItem(drop.getItem());
-                    }
+        if (useEvent.isCancelled()) return;
 
-                    if (drop.getSugarCaneBlocks().isEmpty()) {
-                        block.setType(Material.AIR);
-                    } else {
-                        drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
-                    }
+        event.setExpToDrop(0);
+        event.setDropItems(false);
 
-                    if (drop.hasXp()) {
-                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                        orb.setExperience(drop.getXp());
-                    }
+        TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
 
-                    methods.removeDurability(item, player);
-                }
-            }
+        if (methods.isInventoryFull(player)) {
+            player.getWorld().dropItemNaturally(player.getLocation(), drop.getItem());
+        } else {
+            player.getInventory().addItem(drop.getItem());
         }
+
+        if (!(drop.getSugarCaneBlocks().isEmpty())) drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
+
+        if (drop.hasXp()) event.getBlock().getWorld().spawn(event.getBlock().getLocation().add(.5, .5, .5), ExperienceOrb.class).setExperience(drop.getXp());
+
+        methods.removeDurability(tool, player);
     }
 
     private void updateEffects(Player player) {
