@@ -77,7 +77,16 @@ public class Starter {
         // Set up all our files.
         fileManager.setLog(true).setup();
 
+        crazyManager = new CrazyManager();
+        // Plugin Support.
+        pluginSupport = new PluginSupport();
+        // Plugin Utils required by methods
+        if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
+        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport = new SpartanSupport();
+
+        // Methods
         methods = new Methods();
+        crazyManager.initMethods();
 
         // Settings.
         protectionCrystalSettings = new ProtectionCrystalSettings();
@@ -102,11 +111,6 @@ public class Starter {
         plugin.pluginManager.registerEvents(scramblerListener = new ScramblerListener(), plugin);
         plugin.pluginManager.registerEvents(scrollListener = new ScrollListener(), plugin);
 
-        crazyManager = new CrazyManager();
-
-        // Plugin Support.
-        pluginSupport = new PluginSupport();
-
         // Plugin Utils.
         bowUtils = new BowUtils();
 
@@ -116,9 +120,7 @@ public class Starter {
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
-        if (SupportedPlugins.ORAXEN.isPluginLoaded()) oraxenSupport = new OraxenSupport();
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport = new NoCheatPlusSupport();
-        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport = new SpartanSupport();
     }
 
     private final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
