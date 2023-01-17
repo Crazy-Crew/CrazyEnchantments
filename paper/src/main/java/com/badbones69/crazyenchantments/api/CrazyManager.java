@@ -41,7 +41,7 @@ public class CrazyManager {
 
     private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private Methods methods;
 
     // Settings.
     private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
@@ -87,6 +87,10 @@ public class CrazyManager {
     private boolean checkVanillaLimit;
 
     private boolean dropBlocksBlast;
+
+    public void initMethods() {
+        methods = starter.getMethods();
+    }
 
     /**
      * Loads everything for the Crazy Enchantments plugin.
