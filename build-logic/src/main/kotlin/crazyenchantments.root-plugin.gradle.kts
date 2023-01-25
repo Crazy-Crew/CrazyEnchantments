@@ -4,7 +4,19 @@ import task.ReleaseWebhook
 import task.WebhookExtension
 
 plugins {
-    id("crazyenchantments.common-plugin")
+    id("crazyenchantments.base-plugin")
+}
+
+repositories {
+    maven("https://repo.triumphteam.dev/snapshots/")
+
+    maven("https://repo.crazycrew.us/plugins/")
+
+    maven("https://libraries.minecraft.net/")
+
+    maven("https://jitpack.io/")
+
+    mavenCentral()
 }
 
 tasks {

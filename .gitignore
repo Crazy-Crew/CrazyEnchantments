@@ -1,12 +1,18 @@
 .gradle
 .idea
 
+build
+
 build-logic/.gradle
 build-logic/build
 
-paper/build
-paper/run/*
+core/build
 
-!paper/run/eula.txt
+platforms/paper/build
+platforms/paper/run/*
 
-common/build
+!platforms/paper/run/eula.txt
+!platforms/paper/run/bukkit.yml
+!platforms/paper/run/spigot.yml
+!platforms/paper/run/server.properties
+!platforms/paper/run/config

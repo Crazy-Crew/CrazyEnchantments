@@ -12,7 +12,6 @@
 [![Contact][discord-shield]][discord-url]
 ![CodeFactor][codefactor-shield]
 
-![Spigot](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/unsupported/spigot_vector.svg)
 ![Paper](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/paper_vector.svg)
 ![Purpur](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/purpur_vector.svg)
 

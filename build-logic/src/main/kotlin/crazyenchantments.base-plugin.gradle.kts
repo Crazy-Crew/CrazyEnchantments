@@ -1,17 +1,20 @@
 plugins {
     `java-library`
+
+    `maven-publish`
+
+    id("com.github.hierynomus.license")
+
+    id("com.github.johnrengelman.shadow")
 }
 
-repositories {
-    maven("https://repo.crazycrew.us/plugins/")
+license {
+    header = rootProject.file("LICENSE")
+    encoding = "UTF-8"
 
-    maven("https://repo.triumphteam.dev/snapshots/")
+    mapping("java", "JAVADOC_STYLE")
 
-    maven("https://libraries.minecraft.net/")
-
-    maven("https://jitpack.io/")
-
-    mavenCentral()
+    include("**/*.java")
 }
 
 java {

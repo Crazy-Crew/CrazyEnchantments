@@ -1,0 +1,20 @@
+[versions]
+
+# Gradle
+shadow = "7.1.2"
+ktor = "2.2.2"
+kotlin = "1.7.21"
+license = "0.16.1"
+coroutines = "1.6.4"
+
+[libraries]
+jetbrains = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+license = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "license" }
+shadowJar = { module = "gradle.plugin.com.github.johnrengelman:shadow", version.ref = "shadow" }
+
+ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-cn = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktor"}
+
+kotlinx = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines"}
