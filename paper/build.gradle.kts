@@ -45,12 +45,10 @@ releaseBuild {
 
             //<h3>The first release for CrazyEnchantments on Modrinth! 🎉🎉🎉🎉🎉<h3> If we want a header.
             changelog.set("""
-            <h3>The first release for CrazyEnchantments on Modrinth! 🎉🎉🎉🎉🎉<h3>
               <h4>Changes:</h4>
-               <p>Cleaned up loading ce players</p>
-               <p>Cleaned up dispenser code for armor</p>
+               <p>N/A</p>
               <h4>Bugs Squashed:</h4>
-               <p>Fixed a bug with armor listener</p>
+               <p>Fixed even more npe's courtesy of Cruz Calvo</p>
             """.trimIndent())
         }
 
