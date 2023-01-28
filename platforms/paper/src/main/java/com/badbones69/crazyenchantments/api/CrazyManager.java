@@ -39,17 +39,15 @@ public class CrazyManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = plugin.getStarter();
-
-    private Methods methods;
+    private final Methods methods = plugin.getStarter().getMethods();
 
     // Settings.
-    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final ProtectionCrystalSettings protectionCrystalSettings = plugin.getStarter().getProtectionCrystalSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = plugin.getStarter().getEnchantmentBookSettings();
 
     // Listeners.
-    private final ScramblerListener scramblerListener = starter.getScramblerListener();
-    private final ScrollListener scrollListener = starter.getScrollListener();
+    private final ScramblerListener scramblerListener = plugin.getStarter().getScramblerListener();
+    private final ScrollListener scrollListener = plugin.getStarter().getScrollListener();
 
     private CropManagerVersion cropManagerVersion;
     private WorldGuardVersion worldGuardVersion;
@@ -57,16 +55,16 @@ public class CrazyManager {
     // Plugin Managers.
     private BlackSmithManager blackSmithManager;
 
-    private final AllyManager allyManager = starter.getAllyManager();
+    private final AllyManager allyManager = plugin.getStarter().getAllyManager();
 
     // Wings.
-    private final WingsManager wingsManager = starter.getWingsManager();
+    private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
 
-    private final ShopManager shopManager = starter.getShopManager();
-    private final BowEnchantmentManager bowEnchantmentManager = starter.getBowEnchantmentManager();
-    private final ArmorEnchantmentManager armorEnchantmentManager = starter.getArmorEnchantmentManager();
+    private final ShopManager shopManager = plugin.getStarter().getShopManager();
+    private final BowEnchantmentManager bowEnchantmentManager = plugin.getStarter().getBowEnchantmentManager();
+    private final ArmorEnchantmentManager armorEnchantmentManager = plugin.getStarter().getArmorEnchantmentManager();
 
-    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
+    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
 
     // Arrays.
     private final List<GKitz> gkitz = new ArrayList<>();
@@ -88,10 +86,6 @@ public class CrazyManager {
 
     private boolean dropBlocksBlast;
 
-    public void initMethods() {
-        methods = starter.getMethods();
-    }
-
     /**
      * Loads everything for the Crazy Enchantments plugin.
      * Do not use unless needed.
@@ -108,7 +102,7 @@ public class CrazyManager {
         enchantmentBookSettings.getRegisteredEnchantments().clear();
         enchantmentBookSettings.getCategories().clear();
 
-        starter.getPluginSupport().updateHooks();
+        plugin.getStarter().getPluginSupport().updateHooks();
 
         // Check if we should patch player health.
         boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health");
@@ -141,7 +135,7 @@ public class CrazyManager {
         });
 
         // Loads the blacksmith manager.
-        blackSmithManager = starter.getBlackSmithManager();
+        blackSmithManager = plugin.getStarter().getBlackSmithManager();
 
         // Loads the info menu manager and the enchantment types.
         infoMenuManager.load();
@@ -643,7 +637,7 @@ public class CrazyManager {
             HashMap<String, String> enchantmentStrings = new HashMap<>();
 
             for (CEnchantment en : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
-                enchantmentStrings.put(en.getName(), starter.color(en.getColor() + en.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentBookSettings.getLevel(item, en))));
+                enchantmentStrings.put(en.getName(), plugin.getStarter().color(en.getColor() + en.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentBookSettings.getLevel(item, en))));
                 enchantmentBookSettings.removeEnchantment(item, en);
             }
 
@@ -655,7 +649,7 @@ public class CrazyManager {
                 if (itemLore != null) lores.addAll(itemLore);
             }
 
-            enchantmentStrings.put(enchantment.getName(), starter.color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level)));
+            enchantmentStrings.put(enchantment.getName(), plugin.getStarter().color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level)));
 
             for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
                 newLore.add(stringEntry.getValue());
@@ -810,7 +804,7 @@ public class CrazyManager {
             if (perm.startsWith("crazyenchantments.limit.")) {
                 perm = perm.replace("crazyenchantments.limit.", "");
 
-                if (starter.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
+                if (plugin.getStarter().isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
             }
         }
 
