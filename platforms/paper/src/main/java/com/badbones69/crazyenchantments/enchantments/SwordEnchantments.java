@@ -348,6 +348,7 @@ public class SwordEnchantments implements Listener {
                     methods.entityEvent(damager, entity, damageByEntityEvent);
                 }
 
+                en.getWorld().strikeLightningEffect(en.getLocation());
                 en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
                 en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));
 
