@@ -279,14 +279,24 @@ public class Tinkerer implements Listener {
         int total = 0;
 
         if (enchantmentBookSettings.hasEnchantments(item)) {
-            for (CEnchantment enchantment : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
-                total += Files.TINKER.getFile().getInt("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items");
+            for (CEnchantment enchantment : enchantmentBookSettings.getEnchantments(item).keySet()) {
+                String[] values = Files.TINKER.getFile().getString("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items").replaceAll(" ", "").split(",");
+                int baseAmount = Integer.parseInt(values[0]);
+                int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+                int enchantmentLevel = enchantmentBookSettings.getEnchantments(item).get(enchantment);
+
+                total += baseAmount + enchantmentLevel * multiplier;
             }
         }
 
         if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
             for (Enchantment enchantment : item.getEnchantments().keySet()) {
-                total += Files.TINKER.getFile().getInt("Tinker.Vanilla-Enchantments." + enchantment.getName());
+                String[] values = Files.TINKER.getFile().getString("Tinker.Vanilla-Enchantments." + enchantment.getName()).replaceAll(" ", "").split(",");
+                int baseAmount = Integer.parseInt(values[0]);
+                int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+                int enchantmentLevel = item.getEnchantments().get(enchantment);
+
+                total += baseAmount + enchantmentLevel * multiplier;
             }
         }
 
