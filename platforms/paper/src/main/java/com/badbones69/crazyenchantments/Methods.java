@@ -534,7 +534,7 @@ public class Methods {
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public Location checkEntity(LivingEntity en) {
+    public void checkEntity(LivingEntity en) {
         Location loc = en.getLocation();
         if (loc.getWorld() != null) loc.getWorld().spigot().strikeLightning(loc, true);
         int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
@@ -542,8 +542,6 @@ public class Methods {
         try {
             loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
         } catch (Exception ignore) {}
-
-        return loc;
     }
 
     public void switchCurrency(Player player, Currency option, String one, String two, String cost) {
