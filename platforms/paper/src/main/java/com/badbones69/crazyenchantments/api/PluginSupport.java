@@ -25,9 +25,6 @@ public class PluginSupport {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    // Plugin Support.
-    private final SuperiorSkyBlockSupport superiorSkyBlockSupport = starter.getSuperiorSkyBlockSupport();
-
     private FactionsVersion factionsVersion = null;
 
     private final Map<SupportedPlugins, Boolean> cachedPlugins = Maps.newHashMap();
@@ -35,7 +32,7 @@ public class PluginSupport {
     public boolean inTerritory(Player player) {
         if (factionsVersion != null && factionsVersion.inTerritory(player)) return true;
 
-        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.inTerritory(player);
+        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && starter.getSuperiorSkyBlockSupport().inTerritory(player);
     }
 
     public boolean isFriendly(Entity pEntity, Entity oEntity) {
@@ -43,7 +40,7 @@ public class PluginSupport {
 
             if (factionsVersion != null && factionsVersion.isFriendly(player, otherPlayer)) return true;
 
-            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && superiorSkyBlockSupport.isFriendly(player, otherPlayer)) return true;
+            if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
             return SupportedPlugins.MCMMO.isPluginLoaded();
         }

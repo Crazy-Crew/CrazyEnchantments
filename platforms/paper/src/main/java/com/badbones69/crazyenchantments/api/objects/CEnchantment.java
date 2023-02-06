@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
@@ -242,7 +243,7 @@ public class CEnchantment {
     public int getLevel(ItemStack item) {
         int level = 0;
 
-        if (enchantmentBookSettings.verifyItemLore(item)) {
+        if (ItemUtils.verifyItemLore(item)) {
             for (String lore : Objects.requireNonNull(item.getItemMeta().getLore())) {
                 if (lore.contains(customName)) {
                     level = NumberUtils.convertLevelInteger(lore.replace(color + customName + " ", ""));

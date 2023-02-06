@@ -1,8 +1,5 @@
 package com.badbones69.crazyenchantments.controllers.settings;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
@@ -11,6 +8,8 @@ import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
+import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
 import org.bukkit.Color;
@@ -62,7 +61,7 @@ public class EnchantmentBookSettings {
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
     public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-        if (verifyItemLore(item)) {
+        if (ItemUtils.verifyItemLore(item)) {
             ItemMeta meta = item.getItemMeta();
             List<String> itemLore = meta.getLore();
 
@@ -140,16 +139,6 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     * Verify the ItemStack has a lore. This checks to make sure everything isn't null because recent minecraft updates cause NPEs.
-     *
-     * @param item Itemstack you are checking.
-     * @return True if the item has a lore and no null issues.
-     */
-    public boolean verifyItemLore(ItemStack item) {
-        return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().getLore() != null && item.getItemMeta().hasLore();
-    }
-
-    /**
      * @param item Item you want to check to see if it has enchantments.
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
@@ -169,7 +158,7 @@ public class EnchantmentBookSettings {
     public ItemStack getNewScrambledBook(ItemStack book) {
         if (isEnchantmentBook(book)) {
             CEnchantment enchantment = getEnchantmentBookEnchantment(book);
-            return new CEBook(enchantment, getBookLevel(book, enchantment), methods.getHighestEnchantmentCategory(enchantment)).buildBook();
+            return new CEBook(enchantment, getBookLevel(book, enchantment), EnchantUtils.getHighestEnchantmentCategory(enchantment)).buildBook();
         }
 
         return new ItemStack(Material.AIR);
@@ -228,7 +217,7 @@ public class EnchantmentBookSettings {
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
 
-        if (!verifyItemLore(item)) return Collections.emptyMap();
+        if (!ItemUtils.verifyItemLore(item)) return Collections.emptyMap();
 
         List<String> lore = item.getItemMeta().getLore();
         Map<CEnchantment, Integer> enchantments = null;

@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.api;
 
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
@@ -10,6 +9,9 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.managers.*;
+import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
+import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
+import com.badbones69.crazyenchantments.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.api.support.CropManager;
 import com.badbones69.crazyenchantments.api.support.claims.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersion;
@@ -28,7 +30,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -71,8 +72,6 @@ public class CrazyManager {
     private final List<GKitz> gkitz = new ArrayList<>();
     private final List<CEPlayer> players = new ArrayList<>();
     private final List<Material> blockList = new ArrayList<>();
-    private final List<Event> ignoredEvents = new ArrayList<>();
-    private final List<UUID> ignoredUUIDs = new ArrayList<>();
 
     // Random
     private final Random random = new Random();
@@ -272,17 +271,17 @@ public class CrazyManager {
             isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
         }
 
-        List<Cooldown> cooldowns = new ArrayList<>();
+        List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
 
         for (GKitz kit : getGKitz()) {
             if (data.contains("Players." + uuid + ".GKitz." + kit.getName())) {
-                Calendar cooldown = Calendar.getInstance();
-                cooldown.setTimeInMillis(data.getLong("Players." + uuid + ".GKitz." + kit.getName()));
-                cooldowns.add(new Cooldown(kit, cooldown));
+                Calendar coolDown = Calendar.getInstance();
+                coolDown.setTimeInMillis(data.getLong("Players." + uuid + ".GKitz." + kit.getName()));
+                gkitCoolDowns.add(new GkitCoolDown(kit, coolDown));
             }
         }
 
-        addCEPlayer(new CEPlayer(player, souls, isActive, cooldowns));
+        addCEPlayer(new CEPlayer(player, souls, isActive, gkitCoolDowns));
     }
 
     /**
@@ -303,8 +302,8 @@ public class CrazyManager {
                 data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
             }
 
-            for (Cooldown cooldown : cePlayer.getCooldowns()) {
-                data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
+            for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
+                data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
             }
 
             Files.DATA.saveFile();
@@ -335,8 +334,8 @@ public class CrazyManager {
             data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
         }
 
-        for (Cooldown cooldown : cePlayer.getCooldowns()) {
-            data.set("Players." + uuid + ".GKitz." + cooldown.getGKitz().getName(), cooldown.getCooldown().getTimeInMillis());
+        for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
+            data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
         }
 
         Files.DATA.saveFile();
@@ -805,7 +804,7 @@ public class CrazyManager {
             if (perm.startsWith("crazyenchantments.limit.")) {
                 perm = perm.replace("crazyenchantments.limit.", "");
 
-                if (plugin.getStarter().isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
+                if (NumberUtils.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
             }
         }
 
@@ -826,7 +825,7 @@ public class CrazyManager {
     public int getLevel(ItemStack item, CEnchantments enchant) {
         int level;
 
-        level = methods.convertLevelInteger(enchantmentBookSettings.checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
+        level = NumberUtils.convertLevelInteger(NumberUtils.checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
 
         if (!useUnsafeEnchantments && level > enchant.getEnchantment().getMaxLevel()) level = enchant.getEnchantment().getMaxLevel();
 
@@ -867,38 +866,6 @@ public class CrazyManager {
      */
     public void setDropBlocksBlast(boolean dropBlocksBlast) {
         this.dropBlocksBlast = dropBlocksBlast;
-    }
-
-    public List<Event> getIgnoredEvents() {
-        return ignoredEvents;
-    }
-
-    public boolean isIgnoredEvent(Event event) {
-        return ignoredEvents.contains(event);
-    }
-
-    public void addIgnoredEvent(Event event) {
-        if (!ignoredEvents.contains(event)) ignoredEvents.add(event);
-    }
-
-    public void removeIgnoredUUID(UUID uuid) {
-        ignoredUUIDs.remove(uuid);
-    }
-
-    public List<UUID> getIgnoredUUIDs() {
-        return ignoredUUIDs;
-    }
-
-    public boolean isIgnoredUUID(UUID uuid) {
-        return ignoredUUIDs.contains(uuid);
-    }
-
-    public void addIgnoredUUID(UUID uuid) {
-        if (!ignoredUUIDs.contains(uuid)) ignoredUUIDs.add(uuid);
-    }
-
-    public void removeIgnoredEvent(Event event) {
-        ignoredEvents.remove(event);
     }
 
     /**
