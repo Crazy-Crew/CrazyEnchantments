@@ -5,6 +5,8 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
+import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
+import com.badbones69.crazyenchantments.api.objects.gkitz.GkitCoolDown;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +24,7 @@ public class CEPlayer {
     private int souls;
     private final Player player;
     private boolean soulsActive;
-    private final List<Cooldown> cooldowns;
+    private final List<GkitCoolDown> gkitCoolDowns;
     private Double rageMultiplier;
     private boolean hasRage;
     private int rageLevel;
@@ -33,12 +35,12 @@ public class CEPlayer {
      * @param player The player.
      * @param souls How many souls they have.
      * @param soulsActive If the soul uses is active.
-     * @param cooldowns The cooldowns the player has.
+     * @param gkitCoolDowns The cool-downs the player has.
      */
-    public CEPlayer(Player player, int souls, boolean soulsActive, List<Cooldown> cooldowns) {
+    public CEPlayer(Player player, int souls, boolean soulsActive, List<GkitCoolDown> gkitCoolDowns) {
         this.souls = souls;
         this.player = player;
-        this.cooldowns = cooldowns;
+        this.gkitCoolDowns = gkitCoolDowns;
         this.soulsActive = soulsActive;
         this.hasRage = false;
         this.rageLevel = 0;
@@ -191,17 +193,17 @@ public class CEPlayer {
     }
     
     /**
-     * If the player can use the gkit. Checks their cooldowns and permissions.
+     * If the player can use the gkit. Checks their cool-downs and permissions.
      * @param kit The gkit you want to check.
-     * @return True if they don't have a cooldown and they have permission.
+     * @return True if they don't have a cool-down, and they have permission.
      */
     public boolean canUseGKit(GKitz kit) {
         if (player.hasPermission("crazyenchantments.bypass.gkitz")) {
             return true;
         } else {
             if (player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase())) {
-                for (Cooldown cooldown : getCooldowns()) {
-                    if (cooldown.getGKitz() == kit) return cooldown.isCooldownOver();
+                for (GkitCoolDown gkitCooldown : getCoolDowns()) {
+                    if (gkitCooldown.getGKitz() == kit) return gkitCooldown.isCoolDownOver();
                 }
             } else {
                 return false;
@@ -212,82 +214,82 @@ public class CEPlayer {
     }
     
     /**
-     * Get all the cooldowns the player has.
-     * @return The cooldowns the player has.
+     * Get all the cool-downs the player has.
+     * @return The cool-downs the player has.
      */
-    public List<Cooldown> getCooldowns() {
-        return this.cooldowns;
+    public List<GkitCoolDown> getCoolDowns() {
+        return this.gkitCoolDowns;
     }
     
     /**
-     * Get a cooldown of a gkit.
+     * Get a cool-down of a gkit.
      * @param kit The gkit you are checking.
-     * @return The cooldown object the player has.
+     * @return The cool-down object the player has.
      */
-    public Cooldown getCooldown(GKitz kit) {
-        for (Cooldown cooldown : cooldowns) {
-            if (cooldown.getGKitz() == kit) return cooldown;
+    public GkitCoolDown getCoolDown(GKitz kit) {
+        for (GkitCoolDown gkitCoolDown : gkitCoolDowns) {
+            if (gkitCoolDown.getGKitz() == kit) return gkitCoolDown;
         }
 
         return null;
     }
     
     /**
-     * Add a cooldown to a player.
-     * @param cooldown The cooldown you are adding.
+     * Add a cool-down to a player.
+     * @param gkitCoolDown The cool-down you are adding.
      */
-    public void addCooldown(Cooldown cooldown) {
-        List<Cooldown> playerCooldowns = new ArrayList<>();
+    public void addCoolDown(GkitCoolDown gkitCoolDown) {
+        List<GkitCoolDown> playerGkitCoolDowns = new ArrayList<>();
 
-        for (Cooldown c : getCooldowns()) {
-            if (c.getGKitz().getName().equalsIgnoreCase(cooldown.getGKitz().getName())) playerCooldowns.add(c);
+        for (GkitCoolDown c : getCoolDowns()) {
+            if (c.getGKitz().getName().equalsIgnoreCase(gkitCoolDown.getGKitz().getName())) playerGkitCoolDowns.add(c);
         }
 
-        this.cooldowns.removeAll(playerCooldowns);
-        this.cooldowns.add(cooldown);
+        this.gkitCoolDowns.removeAll(playerGkitCoolDowns);
+        this.gkitCoolDowns.add(gkitCoolDown);
     }
     
     /**
-     * Add a cooldown of a gkit to a player.
-     * @param kit The gkit you want to get the cooldown for.
+     * Add a cool-down of a gkit to a player.
+     * @param kit The gkit you want to get the cool-down for.
      */
-    public void addCooldown(GKitz kit) {
-        Calendar cooldown = Calendar.getInstance();
+    public void addCoolDown(GKitz kit) {
+        Calendar coolDown = Calendar.getInstance();
 
         for (String i : kit.getCooldown().split(" ")) {
 
-            if (i.contains("D") || i.contains("d")) cooldown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
+            if (i.contains("D") || i.contains("d")) coolDown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
 
-            if (i.contains("H") || i.contains("h")) cooldown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
+            if (i.contains("H") || i.contains("h")) coolDown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
 
-            if (i.contains("M") || i.contains("m")) cooldown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
+            if (i.contains("M") || i.contains("m")) coolDown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
 
-            if (i.contains("S") || i.contains("s")) cooldown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
+            if (i.contains("S") || i.contains("s")) coolDown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
         }
 
-        addCooldown(new Cooldown(kit, cooldown));
+        addCoolDown(new GkitCoolDown(kit, coolDown));
     }
     
     /**
-     * Remove a cooldown from a player.
-     * @param cooldown The cooldown you want to remove.
+     * Remove a cool-down from a player.
+     * @param gkitCoolDown The cool-down you want to remove.
      */
-    public void removeCooldown(Cooldown cooldown) {
-        this.cooldowns.remove(cooldown);
+    public void removeCoolDown(GkitCoolDown gkitCoolDown) {
+        this.gkitCoolDowns.remove(gkitCoolDown);
     }
     
     /**
-     * Remove a cooldown from a player.
-     * @param kit The gkit cooldown you want to remove.
+     * Remove a cool-down from a player.
+     * @param kit The gkit cool-down you want to remove.
      */
-    public void removeCooldown(GKitz kit) {
-        List<Cooldown> playerCooldowns = new ArrayList<>();
+    public void removeCoolDown(GKitz kit) {
+        List<GkitCoolDown> playerGkitCoolDowns = new ArrayList<>();
 
-        for (Cooldown cooldown : getCooldowns()) {
-            if (cooldown.getGKitz().getName().equalsIgnoreCase(kit.getName())) playerCooldowns.add(cooldown);
+        for (GkitCoolDown gkitCoolDown : getCoolDowns()) {
+            if (gkitCoolDown.getGKitz().getName().equalsIgnoreCase(kit.getName())) playerGkitCoolDowns.add(gkitCoolDown);
         }
 
-        this.cooldowns.removeAll(playerCooldowns);
+        this.gkitCoolDowns.removeAll(playerGkitCoolDowns);
     }
     
     /**

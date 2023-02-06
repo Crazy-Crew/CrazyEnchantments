@@ -1,13 +1,12 @@
-package com.badbones69.crazyenchantments.api.managers;
+package com.badbones69.crazyenchantments.api.managers.guis;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -19,11 +18,7 @@ public class InfoMenuManager {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = plugin.getStarter();
-
-    private final Methods methods = starter.getMethods();
-
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = plugin.getStarter().getEnchantmentBookSettings();
 
     private Inventory inventoryMenu;
     private String inventoryName;
@@ -36,7 +31,7 @@ public class InfoMenuManager {
         enchantmentTypes.clear();
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Info-GUI-Settings";
-        inventoryName = starter.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
+        inventoryName = ColorUtils.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
         inventorySize = file.getInt(path + ".Inventory.Size", 18);
         inventoryMenu = plugin.getServer().createInventory(null, inventorySize, inventoryName);
         backRight = new ItemBuilder()

@@ -178,12 +178,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        this.getStarter().getCrazyManager().loadCEPlayer(event.getPlayer());
+        this.starter.getCrazyManager().loadCEPlayer(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        this.getStarter().getCrazyManager().unloadCEPlayer(event.getPlayer());
+        this.starter.getCrazyManager().unloadCEPlayer(event.getPlayer());
     }
 
     public static CrazyEnchantments getPlugin() {
@@ -191,16 +191,16 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     }
 
     public Starter getStarter() {
-        return starter;
+        return this.starter;
     }
 
     // Plugin Listeners.
     public FireworkDamageListener getFireworkDamageListener() {
-        return fireworkDamageListener;
+        return this.fireworkDamageListener;
     }
 
     public ShopListener getShopListener() {
-        return shopListener;
+        return this.shopListener;
     }
 
     public ArmorListener getArmorListener() {
@@ -208,18 +208,18 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     }
 
     public PluginManager getPluginManager() {
-        return pluginManager;
+        return this.pluginManager;
     }
 
     public Tinkerer getTinkerer() {
-        return tinkerer;
+        return this.tinkerer;
     }
 
     public BlackSmith getBlackSmith() {
-        return blackSmith;
+        return this.blackSmith;
     }
 
     public GKitzController getgKitzController() {
-        return gKitzController;
+        return this.gKitzController;
     }
 }

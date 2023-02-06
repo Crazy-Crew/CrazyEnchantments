@@ -22,7 +22,6 @@ public class GkitzTab implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
-
         if (sender.hasPermission("crazyenchantments.reset")) {
             if (args.length == 1) { // /gkit
                 completions.add("reset");

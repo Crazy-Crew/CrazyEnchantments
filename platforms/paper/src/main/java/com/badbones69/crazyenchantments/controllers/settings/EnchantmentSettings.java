@@ -43,7 +43,7 @@ public class EnchantmentSettings {
      * @param player - The player to add.
      * @param calendar - The calendar instance.
      */
-    public void addAllyCooldown(Player player, Calendar calendar) {
+    public void addAllyCoolDown(Player player, Calendar calendar) {
         allyCoolDown.put(player.getUniqueId(), calendar);
     }
 
@@ -51,7 +51,7 @@ public class EnchantmentSettings {
      * Remove a player from the map.
      * @param player - The player to remove.
      */
-    public void removeAllyCooldown(Player player) {
+    public void removeAllyCoolDown(Player player) {
         allyCoolDown.remove(player.getUniqueId());
     }
 

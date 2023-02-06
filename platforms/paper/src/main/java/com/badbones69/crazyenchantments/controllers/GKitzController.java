@@ -6,10 +6,10 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
-import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
+import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEPlayer;
-import com.badbones69.crazyenchantments.api.objects.Cooldown;
-import com.badbones69.crazyenchantments.api.objects.GKitz;
+import com.badbones69.crazyenchantments.api.objects.gkitz.GkitCoolDown;
+import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -65,11 +65,11 @@ public class GKitzController implements Listener {
             ItemStack displayItem = kit.getDisplayItem().clone();
             ItemMeta itemMeta = displayItem.getItemMeta();
             List<String> lore = new ArrayList<>();
-            Cooldown cooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCooldown(kit) : new Cooldown();
+            GkitCoolDown gkitCooldown = !cePlayer.canUseGKit(kit) && cePlayer.hasGkitPermission(kit) ? cePlayer.getCoolDown(kit) : new GkitCoolDown();
 
             if (displayItem.hasItemMeta() && displayItem.getItemMeta().hasLore()) {
                 for (String line : displayItem.getItemMeta().getLore()) {
-                    lore.add(cooldown.getCooldownLeft(line));
+                    lore.add(gkitCooldown.getCoolDownLeft(line));
                 }
             }
 
@@ -126,7 +126,7 @@ public class GKitzController implements Listener {
                         if (cePlayer.hasGkitPermission(kit)) {
                             if (cePlayer.canUseGKit(kit)) {
                                 cePlayer.giveGKit(kit);
-                                cePlayer.addCooldown(kit);
+                                cePlayer.addCoolDown(kit);
                                 player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
                             } else {
                                 player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));

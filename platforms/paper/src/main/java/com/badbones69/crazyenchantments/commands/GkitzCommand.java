@@ -6,7 +6,8 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.CEPlayer;
-import com.badbones69.crazyenchantments.api.objects.GKitz;
+import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -74,7 +75,7 @@ public class GkitzCommand implements CommandExecutor {
                                 }
                             }
 
-                            crazyManager.getCEPlayer(player).removeCooldown(kit);
+                            crazyManager.getCEPlayer(player).removeCoolDown(kit);
                             HashMap<String, String> placeholders = new HashMap<>();
 
                             placeholders.put("%Player%", player.getName());
@@ -133,7 +134,7 @@ public class GkitzCommand implements CommandExecutor {
                                 if (adminGive) {
                                     sender.sendMessage(Messages.GIVEN_GKIT.getMessage(placeholders));
                                 } else {
-                                    cePlayer.addCooldown(kit);
+                                    cePlayer.addCoolDown(kit);
                                 }
                             } else {
                                 sender.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
