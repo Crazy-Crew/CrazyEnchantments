@@ -2,6 +2,9 @@ package task
 
 import com.google.gson.annotations.SerializedName
 import java.awt.Color
+import java.io.UnsupportedEncodingException
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -37,6 +40,26 @@ abstract class WebhookExtension {
             false,
             embeds.toList()
         )
+    }
+
+    class Gravatar {
+
+        private fun hexCode(array: ByteArray): String {
+            val sb = StringBuffer()
+            for (i in array.indices) {
+                sb.append(Integer.toHexString((array[i].toInt() and 0xFF) or 0x100).substring(1, 3))
+            }
+
+            return sb.toString()
+        }
+
+        fun md5Hex(message: String): String? {
+            try {
+                val md = MessageDigest.getInstance("MD5")
+                return hexCode(md.digest(message.toByteArray(charset("CP1252"))))
+            } catch (_: NoSuchAlgorithmException) {} catch (_: UnsupportedEncodingException) { }
+            return null
+        }
     }
 
     class EmbedsBuilder {
