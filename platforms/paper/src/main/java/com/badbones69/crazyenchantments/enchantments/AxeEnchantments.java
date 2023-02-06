@@ -12,6 +12,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -46,7 +47,7 @@ public class AxeEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
-        if (crazyManager.isIgnoredEvent(e)) return;
+        if (EventUtils.isIgnoredEvent(e)) return;
         if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
 
         if (!(e.getEntity() instanceof LivingEntity entity)) return;

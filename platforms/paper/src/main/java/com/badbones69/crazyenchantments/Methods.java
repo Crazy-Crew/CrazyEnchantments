@@ -12,6 +12,7 @@ import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
@@ -523,14 +524,14 @@ public class Methods {
     }
 
     public void entityEvent(Player damager, LivingEntity entity, EntityDamageByEntityEvent damageByEntityEvent) {
-        crazyManager.addIgnoredEvent(damageByEntityEvent);
-        crazyManager.addIgnoredUUID(damager.getUniqueId());
+        EventUtils.addIgnoredEvent(damageByEntityEvent);
+        EventUtils.addIgnoredUUID(damager.getUniqueId());
         plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
         if (!damageByEntityEvent.isCancelled() && pluginSupport.allowCombat(entity.getLocation()) && !pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
 
-        crazyManager.removeIgnoredEvent(damageByEntityEvent);
-        crazyManager.removeIgnoredUUID(damager.getUniqueId());
+        EventUtils.removeIgnoredEvent(damageByEntityEvent);
+        EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
     public Location checkEntity(LivingEntity en) {

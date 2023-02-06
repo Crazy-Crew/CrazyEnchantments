@@ -21,6 +21,7 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.processors.Processor;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -130,7 +131,7 @@ public class ArmorEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
-        if (crazyManager.isIgnoredEvent(event) || crazyManager.isIgnoredUUID(event.getDamager().getUniqueId())) return;
+        if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getDamager().getUniqueId())) return;
         if (pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (event.getDamager() instanceof LivingEntity damager && event.getEntity() instanceof Player player && player.getEquipment() != null) {

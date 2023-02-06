@@ -17,6 +17,7 @@ import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -78,7 +79,7 @@ public class PickaxeEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlastBreak(BlockBreakEvent e) {
-        if (crazyManager.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated()) return;
+        if (EventUtils.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated()) return;
 
         Player player = e.getPlayer();
         Block currentBlock = e.getBlock();
@@ -107,12 +108,12 @@ public class PickaxeEnchantments implements Listener {
             for (Block block : blockList) {
                 if (block.getType() != Material.AIR && (crazyManager.getBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
                     BlockBreakEvent event = new BlockBreakEvent(block, player);
-                    crazyManager.addIgnoredEvent(event);
+                    EventUtils.addIgnoredEvent(event);
                     plugin.getServer().getPluginManager().callEvent(event);
 
                     if (!event.isCancelled()) finalBlockList.add(new BlockProcessInfo(currentItem, block));
 
-                    crazyManager.removeIgnoredEvent(event);
+                    EventUtils.removeIgnoredEvent(event);
                 }
             }
 
@@ -222,7 +223,7 @@ public class PickaxeEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent e) {
-        if (crazyManager.isIgnoredEvent(e)) return;
+        if (EventUtils.isIgnoredEvent(e)) return;
 
         Block block = e.getBlock();
         Player player = e.getPlayer();

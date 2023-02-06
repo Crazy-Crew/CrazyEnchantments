@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -106,7 +107,7 @@ public class HoeEnchantments implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.isCancelled() && !crazyManager.isIgnoredEvent(event)) {
+        if (!event.isCancelled() && !EventUtils.isIgnoredEvent(event)) {
             Player player = event.getPlayer();
             Block plant = event.getBlock();
 
@@ -231,12 +232,12 @@ public class HoeEnchantments implements Listener {
         for (Block crop : getAreaBlocks(block, blockFace, 0, 1)) { // Radius of 1 is 3x3
             if (enchantmentSettings.getHarvesterCrops().contains(crop.getType()) && crazyManager.getNMSSupport().isFullyGrown(crop)) {
                 BlockBreakEvent useEvent = new BlockBreakEvent(crop, player);
-                crazyManager.addIgnoredEvent(useEvent);
+                EventUtils.addIgnoredEvent(useEvent);
                 plugin.getServer().getPluginManager().callEvent(useEvent);
 
                 if (!useEvent.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                     blockList.add(crop);
-                    crazyManager.removeIgnoredEvent(useEvent);
+                    EventUtils.removeIgnoredEvent(useEvent);
                 }
             }
         }
@@ -249,12 +250,12 @@ public class HoeEnchantments implements Listener {
         for (Block soil : getAreaBlocks(block)) {
             if (soil.getType() == grassBlock || soil.getType() == Material.DIRT || soil.getType() == Material.SOUL_SAND || soil.getType() == soilBlock) {
                 BlockBreakEvent useEvent = new BlockBreakEvent(soil, player);
-                crazyManager.addIgnoredEvent(useEvent);
+                EventUtils.addIgnoredEvent(useEvent);
                 plugin.getServer().getPluginManager().callEvent(useEvent);
 
                 if (!useEvent.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
                     soilBlocks.add(soil);
-                    crazyManager.removeIgnoredEvent(useEvent);
+                    EventUtils.removeIgnoredEvent(useEvent);
                 }
             }
         }

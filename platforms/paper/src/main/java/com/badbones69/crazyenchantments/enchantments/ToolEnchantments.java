@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import com.google.common.collect.Lists;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -54,7 +55,7 @@ public class ToolEnchantments implements Listener {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        if (crazyManager.isIgnoredEvent(event) || ignoreBlockTypes(block)) return;
+        if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(block)) return;
 
         ItemStack item = methods.getItemInHand(player);
 

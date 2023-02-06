@@ -19,6 +19,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
@@ -65,8 +66,7 @@ public class SwordEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
-        if (crazyManager.isIgnoredEvent(e)) return;
-        if (crazyManager.isIgnoredUUID(e.getDamager().getUniqueId())) return;
+        if (EventUtils.isIgnoredEvent(e) || EventUtils.isIgnoredUUID(e.getDamager().getUniqueId())) return;
         if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
 
         if (crazyManager.isBreakRageOnDamageOn() && e.getEntity() instanceof Player player) {

@@ -6,12 +6,13 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
+import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -158,7 +159,7 @@ public class ScrollListener implements Listener {
         for (CEnchantment enchantment : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
             enchantmentLevels.put(enchantment, enchantmentBookSettings.getLevel(item, enchantment));
             enchantmentBookSettings.removeEnchantment(item, enchantment);
-            categories.put(enchantment, methods.getHighestEnchantmentCategory(enchantment).getRarity());
+            categories.put(enchantment, EnchantUtils.getHighestEnchantmentCategory(enchantment).getRarity());
             newEnchantmentOrder.add(enchantment);
         }
 

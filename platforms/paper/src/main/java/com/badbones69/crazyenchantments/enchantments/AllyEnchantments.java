@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -41,7 +42,7 @@ public class AllyEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAllySpawn(EntityDamageByEntityEvent e) {
-        if (crazyManager.isIgnoredEvent(e)) return;
+        if (EventUtils.isIgnoredEvent(e)) return;
 
         if (e.getEntity() instanceof Player player && e.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
             if (!inCoolDown(player) && player.getEquipment() != null) {
@@ -153,7 +154,7 @@ public class AllyEnchantments implements Listener {
         Calendar coolDown = Calendar.getInstance();
         coolDown.add(Calendar.MINUTE, 2);
 
-        enchantmentSettings.addAllyCooldown(player, coolDown);
+        enchantmentSettings.addAllyCoolDown(player, coolDown);
 
         for (int i = 0; i < amount; i++) {
             AllyMob ally = new AllyMob(player, allyType);
@@ -164,11 +165,11 @@ public class AllyEnchantments implements Listener {
 
     private boolean inCoolDown(Player player) {
         if (enchantmentSettings.containsAllyPlayer(player)) {
-            // Right now is before the player's cooldown ends.
+            // Right now is before the player's cool-down ends.
             if (Calendar.getInstance().before(enchantmentSettings.getAllyPlayer(player))) return true;
 
-            // Remove the player because their cooldown is over.
-            enchantmentSettings.removeAllyCooldown(player);
+            // Remove the player because their cool-down is over.
+            enchantmentSettings.removeAllyCoolDown(player);
         }
 
         return false;

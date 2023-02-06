@@ -17,6 +17,7 @@ import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSuppor
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
+import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -61,7 +62,7 @@ public class BowEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent event) {
-        if (crazyManager.isIgnoredEvent(event) || crazyManager.isIgnoredUUID(event.getEntity().getUniqueId())) return;
+        if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getEntity().getUniqueId())) return;
         if (!(event.getProjectile() instanceof Arrow arrow)) return;
 
         ItemStack bow = event.getBow();
@@ -135,14 +136,14 @@ public class BowEnchantments implements Listener {
                 for (LivingEntity entity : methods.getNearbyLivingEntities(2D, arrow.getArrow())) {
                     EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
 
-                    crazyManager.addIgnoredEvent(damageByEntityEvent);
-                    crazyManager.addIgnoredUUID(shooter.getUniqueId());
+                    EventUtils.addIgnoredEvent(damageByEntityEvent);
+                    EventUtils.addIgnoredUUID(shooter.getUniqueId());
                     shooter.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
                     if (!damageByEntityEvent.isCancelled() && !pluginSupport.isFriendly(arrow.getShooter(), entity) && !arrow.getShooter().getUniqueId().equals(entity.getUniqueId())) entity.damage(5D);
 
-                    crazyManager.removeIgnoredEvent(damageByEntityEvent);
-                    crazyManager.removeIgnoredUUID(shooter.getUniqueId());
+                    EventUtils.removeIgnoredEvent(damageByEntityEvent);
+                    EventUtils.removeIgnoredUUID(shooter.getUniqueId());
                 }
 
                 if (PluginSupport.SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.denyPlayer(shooter);
@@ -155,7 +156,7 @@ public class BowEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onArrowDamage(EntityDamageByEntityEvent e) {
-        if (crazyManager.isIgnoredEvent(e)) return;
+        if (EventUtils.isIgnoredEvent(e)) return;
         if (!(e.getDamager() instanceof Arrow entityArrow)) return;
         if (!(e.getEntity() instanceof LivingEntity entity)) return;
 
@@ -247,6 +248,6 @@ public class BowEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onWebBreak(BlockBreakEvent event) {
-        if (!crazyManager.isIgnoredEvent(event) && bowUtils.getWebBlocks().contains(event.getBlock())) event.setCancelled(true);
+        if (!EventUtils.isIgnoredEvent(event) && bowUtils.getWebBlocks().contains(event.getBlock())) event.setCancelled(true);
     }
 }
