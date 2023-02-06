@@ -32,7 +32,7 @@ superiorskyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version = "2
 
 griefprevention = { module = "com.github.TechFortress:GriefPrevention", version = "16.18" }
 massivecraft = { module = "com.massivecraft:Factions", version = "1.6.9.5-U0.6.9" }
-towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.98.3.10" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.98.6.0" }
 
 # Stackers
 wildstacker = { module = "com.bgsoftware:WildStackerAPI", version = "2022.5" }

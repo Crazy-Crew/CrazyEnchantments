@@ -176,7 +176,7 @@ public class PluginSupport {
         WORLDGUARD("WorldGuard"),
         WORLDEDIT("WorldEdit"),
 
-        TOWNYADVANCED("TownyAdvanced"),
+        TOWNYADVANCED("Towny"),
 
         PLOT_SQUARED("PlotSquared"),
 

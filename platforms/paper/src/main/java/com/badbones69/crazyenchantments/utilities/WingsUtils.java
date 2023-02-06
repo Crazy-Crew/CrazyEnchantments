@@ -66,7 +66,7 @@ public class WingsUtils {
     }
 
     private static boolean inWingsRegion(Player player) {
-        if (!SupportedPlugins.WORLDEDIT.isPluginLoaded() && !SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
+        if (!SupportedPlugins.WORLDGUARD.isPluginLoaded()) return true;
 
         WorldGuardVersion worldGuardVersion = starter.getPluginSupport().getWorldGuardUtils().getWorldGuardSupport();
 
