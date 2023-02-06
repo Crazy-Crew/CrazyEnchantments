@@ -65,12 +65,13 @@ public class EnchantmentBookSettings {
             ItemMeta meta = item.getItemMeta();
             List<String> itemLore = meta.getLore();
 
-            if (enchantment.isActivated() && itemLore != null) {
-                for (String lore : itemLore) {
-                    String[] split = lore.split(" ");
+            if (enchantment.isActivated()) {
+                for (String line : itemLore) {
+                    if (line.equals("") || line.equals(" ")) continue;
+                    String[] split = line.split(" ");
 
                     // Split can generate an empty array in rare case.
-                    String stripped = ColorUtils.removeColor(lore.replace(" " + split[split.length - 1], ""));
+                    String stripped = ColorUtils.removeColor(line.replace(" " + split[split.length - 1], ""));
 
                     if (stripped.equals(enchantment.getCustomName())) return true;
                 }
