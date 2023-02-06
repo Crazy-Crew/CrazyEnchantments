@@ -12,6 +12,7 @@ import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -67,7 +68,7 @@ public class Methods {
         int number = 1;
         String[] split = range.split("-");
 
-        if (starter.isInt(split[0]) && starter.isInt(split[1])) {
+        if (NumberUtils.isInt(split[0]) && NumberUtils.isInt(split[1])) {
             int max = Integer.parseInt(split[1]) + 1;
             int min = Integer.parseInt(split[0]);
             number = min + random.nextInt(max - min);
@@ -557,63 +558,6 @@ public class Methods {
         }
     }
 
-    /**
-     * This converts a String into a number if using a roman numeral from I-X.
-     * @param i The string you want to convert.
-     * @return The roman numeral as a number.
-     */
-    public int convertLevelInteger(String i) {
-        switch (i) {
-            case "I" -> {
-                return 1;
-            }
-
-            case "II" -> {
-                return 2;
-            }
-
-            case "III" -> {
-                return 3;
-            }
-
-            case "IV" -> {
-                return 4;
-            }
-
-            case "V" -> {
-                return 5;
-            }
-
-            case "VI" -> {
-                return 6;
-            }
-
-            case "VII" -> {
-                return 7;
-            }
-
-            case "VIII" -> {
-                return 8;
-            }
-
-            case "IX" -> {
-                return 9;
-            }
-
-            case "X" -> {
-                return 10;
-            }
-
-            default -> {
-                if (starter.isInt(i)) {
-                    return Integer.parseInt(i);
-                } else {
-                    return 0;
-                }
-            }
-        }
-    }
-
     public String getWhiteScrollProtectionName() {
         String protectNamed;
 
@@ -659,25 +603,6 @@ public class Methods {
         }
 
         return item;
-    }
-
-    /**
-     * Get the highest category rarity the enchantment is in.
-     * @param enchantment The enchantment you are checking.
-     * @return The highest category based on the rarities.
-     */
-    public Category getHighestEnchantmentCategory(CEnchantment enchantment) {
-        Category topCategory = null;
-        int rarity = 0;
-
-        for (Category category : enchantment.getCategories()) {
-            if (category.getRarity() >= rarity) {
-                rarity = category.getRarity();
-                topCategory = category;
-            }
-        }
-
-        return topCategory;
     }
 
     public ItemBuilder getRandomPaneColor() {

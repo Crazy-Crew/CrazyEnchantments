@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -127,13 +128,13 @@ public class EnchantmentBookSettings {
                     if (toggle) break;
                 }
 
-                if (starter.isInt(arg)) break;
+                if (NumberUtils.isInt(arg)) break;
             }
         }
 
         int percent = defaultValue;
 
-        if (starter.isInt(arg)) percent = Integer.parseInt(arg);
+        if (NumberUtils.isInt(arg)) percent = Integer.parseInt(arg);
 
         return percent;
     }
@@ -180,7 +181,7 @@ public class EnchantmentBookSettings {
      * @return The level the enchantment has.
      */
     public int getBookLevel(ItemStack book, CEnchantment enchant) {
-        return methods.convertLevelInteger(book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName() + " ", ""));
+        return NumberUtils.convertLevelInteger(book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName() + " ", ""));
     }
 
     /**
@@ -243,12 +244,12 @@ public class EnchantmentBookSettings {
             for (CEnchantment enchantment : getRegisteredEnchantments()) {
                 if (!enchantment.isActivated()) continue;
 
-                String stripped = methods.removeColor(enchantmentName);
+                String stripped = ColorUtils.removeColor(enchantmentName);
 
                 if (!stripped.equals(enchantment.getCustomName())) continue;
 
                 String levelString = line.substring(lastSpaceIndex + 1);
-                int level = methods.convertLevelInteger(levelString);
+                int level = NumberUtils.convertLevelInteger(levelString);
 
                 if (level < 1) break;
 
@@ -364,7 +365,7 @@ public class EnchantmentBookSettings {
 
     private List<Color> getColors(String string) {
         List<Color> colors = new ArrayList<>();
-        methods.checkString(colors, string, methods);
+        ColorUtils.color(colors, string);
 
         return colors;
     }
@@ -396,7 +397,7 @@ public class EnchantmentBookSettings {
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
-        int level = methods.convertLevelInteger(checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
+        int level = NumberUtils.convertLevelInteger(NumberUtils.checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
 
         if (!useUnsafeEnchantments() && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
@@ -426,28 +427,5 @@ public class EnchantmentBookSettings {
 
         item.setItemMeta(meta);
         return item;
-    }
-
-    public String checkLevels(ItemStack item, String customName) {
-        String line = "";
-
-        if (verifyItemLore(item)) {
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta != null && meta.hasLore()) {
-                List<String> itemLore = meta.getLore();
-
-                if (itemLore != null) {
-                    for (String lore : itemLore) {
-                        if (lore.contains(customName)) {
-                            line = lore;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return line;
     }
 }

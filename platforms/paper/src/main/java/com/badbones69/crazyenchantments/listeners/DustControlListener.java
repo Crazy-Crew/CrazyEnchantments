@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -84,13 +85,13 @@ public class DustControlListener implements Listener {
     public boolean hasPercent(Dust dust, ItemStack item) {
         String argument = verifyInteger(dust, item);
 
-        return starter.isInt(argument);
+        return NumberUtils.isInt(argument);
     }
 
     public int getPercent(Dust dust, ItemStack item) {
         String argument = verifyInteger(dust, item);
 
-        if (starter.isInt(argument)) {
+        if (NumberUtils.isInt(argument)) {
             return Integer.parseInt(argument);
         } else {
             return 0;

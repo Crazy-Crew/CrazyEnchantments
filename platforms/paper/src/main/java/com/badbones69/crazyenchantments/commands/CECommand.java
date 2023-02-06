@@ -21,6 +21,7 @@ import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSe
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ShopListener;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -240,7 +241,7 @@ public class CECommand implements CommandExecutor {
                                 try {
                                     String option = optionString.split(":")[0];
                                     String value = optionString.split(":")[1];
-                                    boolean isInt = starter.isInt(value);
+                                    boolean isInt = NumberUtils.isInt(value);
 
                                     switch (option.toLowerCase()) {
                                         case "level" -> {
@@ -304,7 +305,7 @@ public class CECommand implements CommandExecutor {
                             Category category = enchantmentBookSettings.getCategory(args[1]);
 
                             if (args.length >= 3) {
-                                if (!starter.isInt(args[2])) {
+                                if (!NumberUtils.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -353,7 +354,7 @@ public class CECommand implements CommandExecutor {
                         }
 
                         if (args.length >= 2) {
-                            if (!starter.isInt(args[1])) {
+                            if (!NumberUtils.isInt(args[1])) {
                                 sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[1]).replace("%arg%", args[1]));
                                 return true;
                             }
@@ -395,7 +396,7 @@ public class CECommand implements CommandExecutor {
                         }
 
                         if (args.length >= 2) {
-                            if (!starter.isInt(args[1])) {
+                            if (!NumberUtils.isInt(args[1])) {
                                 sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[1]).replace("%arg%", args[1]));
                                 return true;
                             }
@@ -439,7 +440,7 @@ public class CECommand implements CommandExecutor {
                             }
 
                             if (args.length >= 3) {
-                                if (!starter.isInt(args[2])) {
+                                if (!NumberUtils.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -461,7 +462,7 @@ public class CECommand implements CommandExecutor {
                             }
 
                             if (args.length >= 5) {
-                                if (!starter.isInt(args[4])) {
+                                if (!NumberUtils.isInt(args[4])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[4]).replace("%arg%", args[4]));
                                     return true;
                                 }
@@ -517,7 +518,7 @@ public class CECommand implements CommandExecutor {
                             String name = sender.getName();
 
                             if (args.length >= 3) {
-                                if (!starter.isInt(args[2])) {
+                                if (!NumberUtils.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -562,7 +563,7 @@ public class CECommand implements CommandExecutor {
                             String level = "1";
 
                             if (args.length >= 3) {
-                                if (!starter.isInt(args[2])) {
+                                if (!NumberUtils.isInt(args[2])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[2]).replace("%arg%", args[2]));
                                     return true;
                                 }
@@ -668,7 +669,7 @@ public class CECommand implements CommandExecutor {
                             Player player;
 
                             if (args.length >= 3) {
-                                if (starter.isInt(args[2])) {
+                                if (NumberUtils.isInt(args[2])) {
                                     level = Integer.parseInt(args[2]);
                                 } else if (args[2].contains("-")) {
                                     level = methods.getRandomNumber(args[2]);
@@ -679,7 +680,7 @@ public class CECommand implements CommandExecutor {
                             }
 
                             if (args.length >= 4) {
-                                if (!starter.isInt(args[3])) {
+                                if (!NumberUtils.isInt(args[3])) {
                                     sender.sendMessage(Messages.NOT_A_NUMBER.getMessage().replace("%Arg%", args[3]).replace("%arg%", args[3]));
                                     return true;
                                 }
