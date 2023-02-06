@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.api;
 
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
@@ -13,7 +12,6 @@ import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.api.support.CropManager;
-import com.badbones69.crazyenchantments.api.support.claims.WorldGuardSupport;
 import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersion;
 import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
 import com.badbones69.crazyenchantments.api.objects.*;
@@ -52,7 +50,6 @@ public class CrazyManager {
     private final ScrollListener scrollListener = plugin.getStarter().getScrollListener();
 
     private CropManagerVersion cropManagerVersion;
-    private WorldGuardVersion worldGuardVersion;
 
     // Plugin Managers.
     private BlackSmithManager blackSmithManager;
@@ -251,8 +248,6 @@ public class CrazyManager {
 
         // Starts the wings task.
         WingsUtils.startWings();
-
-        if (SupportedPlugins.WORLDGUARD.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) worldGuardVersion = new WorldGuardSupport();
     }
 
     /**
@@ -339,13 +334,6 @@ public class CrazyManager {
         }
 
         Files.DATA.saveFile();
-    }
-
-    /**
-     * @return World Guard support class.
-     */
-    public WorldGuardVersion getWorldGuardSupport() {
-        return worldGuardVersion;
     }
 
     /**

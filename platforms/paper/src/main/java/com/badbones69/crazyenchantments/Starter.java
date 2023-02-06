@@ -100,9 +100,12 @@ public class Starter {
         this.plugin.pluginManager.registerEvents(this.scramblerListener = new ScramblerListener(), this.plugin);
         this.plugin.pluginManager.registerEvents(this.scrollListener = new ScrollListener(), this.plugin);
 
-        this.plugin.pluginManager.registerEvents(new EnchantmentControl(), this.plugin);
-
         this.skullCreator = new SkullCreator();
+
+        // Plugin Support.
+        this.pluginSupport = new PluginSupport();
+
+        this.pluginSupport.initializeWorldGuard();
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
@@ -115,11 +118,10 @@ public class Starter {
 
         this.enchantmentSettings = new EnchantmentSettings();
 
-        // Plugin Support.
-        this.pluginSupport = new PluginSupport();
-
         // Plugin Utils.
         this.bowUtils = new BowUtils();
+
+        this.plugin.pluginManager.registerEvents(new EnchantmentControl(), this.plugin);
     }
 
     public FileManager getFileManager() {

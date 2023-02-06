@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVe
 import com.badbones69.crazyenchantments.api.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.api.support.claims.TownySupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.utilities.WorldGuardUtils;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.common.collect.Maps;
 import org.bukkit.Location;
@@ -23,11 +24,18 @@ public class PluginSupport {
 
     private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
     private FactionsVersion factionsVersion = null;
 
+    private WorldGuardUtils worldGuardUtils;
+
     private final Map<SupportedPlugins, Boolean> cachedPlugins = Maps.newHashMap();
+
+    public void initializeWorldGuard() {
+        if (SupportedPlugins.WORLDEDIT.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) {
+            this.worldGuardUtils = new WorldGuardUtils();
+            this.worldGuardUtils.init();
+        }
+    }
 
     public boolean inTerritory(Player player) {
         if (factionsVersion != null && factionsVersion.inTerritory(player)) return true;
@@ -58,15 +66,15 @@ public class PluginSupport {
 
     public boolean allowCombat(Location location) {
         if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded() && !TownySupport.allowsCombat(location)) return false;
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsPVP(location);
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsPVP(location);
     }
 
     public boolean allowDestruction(Location location) {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsBreak(location);
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsBreak(location);
     }
 
     public boolean allowExplosion(Location location) {
-        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || crazyManager.getWorldGuardSupport().allowsExplosions(location);
+        return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsExplosions(location);
     }
 
     public void updateHooks() {
@@ -107,6 +115,10 @@ public class PluginSupport {
         }
 
         printHooks();
+    }
+
+    public WorldGuardUtils getWorldGuardUtils() {
+        return this.worldGuardUtils;
     }
 
     public void updateClaimHooks(SupportedPlugins supportedPlugin) {
