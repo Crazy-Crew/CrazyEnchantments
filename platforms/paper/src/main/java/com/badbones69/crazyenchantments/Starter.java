@@ -25,9 +25,6 @@ import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSe
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.BowUtils;
-import org.bukkit.ChatColor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Starter {
 
@@ -124,15 +121,11 @@ public class Starter {
 
     private final Pattern HEX_PATTERN = Pattern.compile("#[a-fA-F\\d]{6}");
 
-    public String color(String message) {
-        Matcher matcher = HEX_PATTERN.matcher(message);
-        StringBuilder buffer = new StringBuilder();
+        // Plugin Support.
+        this.pluginSupport = new PluginSupport();
 
-        while (matcher.find()) {
-            matcher.appendReplacement(buffer, net.md_5.bungee.api.ChatColor.of(matcher.group()).toString());
-        }
-
-        return ChatColor.translateAlternateColorCodes('&', matcher.appendTail(buffer).toString());
+        // Plugin Utils.
+        this.bowUtils = new BowUtils();
     }
 
     public boolean isInt(String s) {

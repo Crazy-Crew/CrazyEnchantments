@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,7 +55,7 @@ public class ProtectionCrystalListener implements Listener {
 
                 e.setCancelled(true);
                 player.setItemOnCursor(methods.removeItem(crystalItem));
-                e.setCurrentItem(methods.addLore(item, starter.color(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"))));
+                e.setCurrentItem(methods.addLore(item, ColorUtils.color(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"))));
                 player.updateInventory();
             }
         }
@@ -62,7 +63,6 @@ public class ProtectionCrystalListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent e) {
-
         if (e.getKeepInventory()) return;
 
         Player player = e.getEntity();

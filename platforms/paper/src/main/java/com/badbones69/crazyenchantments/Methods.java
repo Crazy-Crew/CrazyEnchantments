@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments;
 
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
@@ -12,8 +11,8 @@ import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -47,8 +46,6 @@ public class Methods {
 
     private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
     // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
@@ -58,30 +55,12 @@ public class Methods {
 
     private final Random random = new Random();
 
-    public String removeColor(String msg) {
-        return ChatColor.stripColor(msg);
-    }
-
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : starter.getInfoMenuManager().getEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 
         return null;
-    }
-
-    public void checkString(List<Color> colors, String colorString, Methods methods) {
-        if (colorString.contains(", ")) {
-            for (String color : colorString.split(", ")) {
-                Color c = methods.getColor(color);
-
-                if (c != null) colors.add(c);
-            }
-        } else {
-            Color c = methods.getColor(colorString);
-
-            if (c != null) colors.add(c);
-        }
     }
 
     public int getRandomNumber(String range) {
@@ -146,14 +125,6 @@ public class Methods {
 
     public void setItemInHand(Player player, ItemStack item) {
         player.getInventory().setItemInMainHand(item);
-    }
-
-    public String getPrefix() {
-        return getPrefix("");
-    }
-
-    public String getPrefix(String string) {
-        return starter.color(Files.CONFIG.getFile().getString("Settings.Prefix") + string);
     }
 
     public Player getPlayer(String name) {
@@ -225,16 +196,16 @@ public class Methods {
 
         if (item.getItemMeta().hasLore()) lore.addAll(item.getItemMeta().getLore());
 
-        lore.add(starter.color(i));
+        lore.add(ColorUtils.color(i));
 
-        if (lore.contains(starter.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")))) {
-            lore.remove(starter.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-            lore.add(starter.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+        if (lore.contains(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")))) {
+            lore.remove(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+            lore.add(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
         }
 
-        if (lore.contains(starter.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
-            lore.remove(starter.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
-            lore.add(starter.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+        if (lore.contains(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
+            lore.remove(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+            lore.add(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
         }
 
         m.setLore(lore);
@@ -245,7 +216,7 @@ public class Methods {
 
     public boolean hasArgument(String arg, List<String> message) {
         for (String line : message) {
-            line = starter.color(line).toLowerCase();
+            line = ColorUtils.color(line).toLowerCase();
 
             if (line.contains(arg.toLowerCase())) return true;
         }
@@ -313,28 +284,6 @@ public class Methods {
         plugin.getFireworkDamageListener().addFirework(firework);
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
-    }
-
-    public Color getColor(String color) {
-        return switch (color.toUpperCase()) {
-            case "AQUA" -> Color.AQUA;
-            case "BLACK" -> Color.BLACK;
-            case "BLUE" -> Color.BLUE;
-            case "FUCHSIA" -> Color.FUCHSIA;
-            case "GRAY" -> Color.GRAY;
-            case "GREEN" -> Color.GREEN;
-            case "LIME" -> Color.LIME;
-            case "MAROON" -> Color.MAROON;
-            case "NAVY" -> Color.NAVY;
-            case "OLIVE" -> Color.OLIVE;
-            case "ORANGE" -> Color.ORANGE;
-            case "PURPLE" -> Color.PURPLE;
-            case "RED" -> Color.RED;
-            case "SILVER" -> Color.SILVER;
-            case "TEAL" -> Color.TEAL;
-            case "YELLOW" -> Color.YELLOW;
-            default -> Color.WHITE;
-        };
     }
 
     public String stripString(String string) {
@@ -670,7 +619,7 @@ public class Methods {
 
         FileConfiguration config = Files.CONFIG.getFile();
 
-        protectNamed = starter.color(config.getString("Settings.WhiteScroll.ProtectedName"));
+        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
 
         return protectNamed;
     }

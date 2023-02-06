@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,6 +25,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ScramblerListener implements Listener {
 
@@ -45,16 +47,16 @@ public class ScramblerListener implements Listener {
     public void loadScrambler() {
         FileConfiguration config = Files.CONFIG.getFile();
         scramblerItem = new ItemBuilder()
-        .setMaterial(config.getString("Settings.Scrambler.Item"))
+        .setMaterial(Objects.requireNonNull(config.getString("Settings.Scrambler.Item")))
         .setName(config.getString("Settings.Scrambler.Name"))
         .setLore(config.getStringList("Settings.Scrambler.Lore"))
         .setGlow(config.getBoolean("Settings.Scrambler.Glowing"));
         pointer = new ItemBuilder()
-        .setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item"))
+        .setMaterial(Objects.requireNonNull(config.getString("Settings.Scrambler.GUI.Pointer.Item")))
         .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name"))
         .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
         animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle");
-        guiName = starter.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
+        guiName = ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
     }
 
     /**
@@ -216,9 +218,7 @@ public class ScramblerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent e) {
-        if (e.getInventory() != null) {
-            if (e.getView().getTitle().equals(guiName)) e.setCancelled(true);
-        }
+        if (e.getView().getTitle().equals(guiName)) e.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -231,12 +231,10 @@ public class ScramblerListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onLeave(PlayerQuitEvent e) {
+    public void onPlayerLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
 
-        try {
-            roll.get(player).cancel();
-            roll.remove(player);
-        } catch (Exception ignore) {}
+        roll.get(player).cancel();
+        roll.remove(player);
     }
 }

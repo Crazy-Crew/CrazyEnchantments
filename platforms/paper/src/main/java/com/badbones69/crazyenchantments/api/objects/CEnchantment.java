@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +46,10 @@ public class CEnchantment {
         this.name = name;
         this.customName = name;
         this.activated = true;
-        this.color = starter.color("&7");
-        this.bookColor = starter.color("&b&l");
+        this.color = ColorUtils.color("&7");
+        this.bookColor = ColorUtils.color("&b&l");
         this.maxLevel = 3;
-        this.infoName = starter.color("&7" + name);
+        this.infoName = ColorUtils.color("&7" + name);
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();
@@ -92,7 +93,7 @@ public class CEnchantment {
     }
 
     public CEnchantment setColor(String color) {
-        this.color = starter.color(color);
+        this.color = ColorUtils.color(color);
         return this;
     }
 
@@ -104,7 +105,7 @@ public class CEnchantment {
 
         if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
 
-        this.bookColor = starter.color(bookColor);
+        this.bookColor = ColorUtils.color(bookColor);
 
         return this;
     }
@@ -124,7 +125,7 @@ public class CEnchantment {
     }
 
     public CEnchantment setInfoName(String infoName) {
-        this.infoName = starter.color(infoName);
+        this.infoName = ColorUtils.color(infoName);
 
         return this;
     }
@@ -167,7 +168,7 @@ public class CEnchantment {
     public CEnchantment setInfoDescription(List<String> infoDescription) {
         List<String> info = new ArrayList<>();
 
-        infoDescription.forEach(lore -> info.add(starter.color(lore)));
+        infoDescription.forEach(lore -> info.add(ColorUtils.color(lore)));
 
         this.infoDescription = info;
 

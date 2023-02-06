@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -55,7 +56,7 @@ public class DustControlListener implements Listener {
 
             if (lores.contains("%Description%") || lores.contains("%description%")) {
                 if (enchantment != null) {
-                    enchantment.getInfoDescription().forEach(lines -> lore.add(starter.color(lines)));
+                    enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.color(lines)));
                 }
 
                 hasLine = false;
@@ -71,7 +72,7 @@ public class DustControlListener implements Listener {
                 .replace("%success_rate%", enchantmentBookSettings.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "");
             }
 
-            if (hasLine) lore.add(starter.color(lores));
+            if (hasLine) lore.add(ColorUtils.color(lores));
         }
 
         assert meta != null;
@@ -106,7 +107,7 @@ public class DustControlListener implements Listener {
 
             if (lore != null && lore.size() == fileLore.size()) {
                 for (String lores : fileLore) {
-                    lores = starter.color(lores);
+                    lores = ColorUtils.color(lores);
                     String getLore = lore.get(amount);
 
                     if (lores.contains("%Percent%")) {
@@ -147,12 +148,12 @@ public class DustControlListener implements Listener {
                 String name = book.getItemMeta().getDisplayName();
 
                 for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
-                    if (name.contains(starter.color(en.getBookColor() + en.getCustomName()))) toggle = true;
+                    if (name.contains(ColorUtils.color(en.getBookColor() + en.getCustomName()))) toggle = true;
                 }
 
                 if (!toggle) return;
 
-                if (dust.getItemMeta().getDisplayName().equals(starter.color(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Name"))) &&
+                if (dust.getItemMeta().getDisplayName().equals(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Name"))) &&
                 dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Item")).getMaterial()) {
                     int per = getPercent(Dust.SUCCESS_DUST, dust);
 
@@ -162,7 +163,7 @@ public class DustControlListener implements Listener {
                         if (total >= 100) return;
 
                         if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                            player.sendMessage(methods.getPrefix() + starter.color("&cPlease unstack the dust for them to work."));
+                            player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
                             return;
                         }
 
@@ -182,7 +183,7 @@ public class DustControlListener implements Listener {
                     return;
                 }
 
-                if (dust.getItemMeta().getDisplayName().equals(starter.color(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Name"))) &&
+                if (dust.getItemMeta().getDisplayName().equals(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Name"))) &&
                 dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Item")).getMaterial()) {
                     int per = getPercent(Dust.DESTROY_DUST, dust);
 
@@ -191,7 +192,7 @@ public class DustControlListener implements Listener {
                         if (total <= 0) return;
 
                         if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                            player.sendMessage(methods.getPrefix() + starter.color("&cPlease unstack the dust for them to work."));
+                            player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
                             return;
                         }
 
@@ -236,7 +237,7 @@ public class DustControlListener implements Listener {
                         List<Color> colors = new ArrayList<>();
                         String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");
 
-                        methods.checkString(colors, colorString, methods);
+                        ColorUtils.color(colors, colorString);
 
                         methods.fireWork(player.getLocation().add(0, 1, 0), colors);
                     }

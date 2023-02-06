@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.SkullCreator;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -459,8 +460,8 @@ public class ItemBuilder {
                 this.damage = Integer.parseInt(metaData);
             } else { // Value is something else.
                 this.potionType = getPotionType(PotionEffectType.getByName(metaData));
-                this.potionColor = methods.getColor(metaData);
-                this.armorColor = methods.getColor(metaData);
+                this.potionColor = ColorUtils.getColor(metaData);
+                this.armorColor = ColorUtils.getColor(metaData);
             }
 
         } else if (material.contains("#")) {
@@ -514,7 +515,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated name.
      */
     public ItemBuilder setName(String itemName) {
-        if (itemName != null) this.itemName = starter.color(itemName);
+        if (itemName != null) this.itemName = ColorUtils.color(itemName);
 
         return this;
     }
@@ -564,7 +565,7 @@ public class ItemBuilder {
         if (lore != null) {
             this.itemLore.clear();
 
-            lore.forEach(line -> this.itemLore.add(starter.color(line)));
+            lore.forEach(line -> this.itemLore.add(ColorUtils.color(line)));
         }
 
         return this;
@@ -577,7 +578,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addLore(String lore) {
-        if (lore != null) this.itemLore.add(starter.color(lore));
+        if (lore != null) this.itemLore.add(ColorUtils.color(lore));
 
         return this;
     }

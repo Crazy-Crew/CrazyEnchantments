@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.common.collect.Lists;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -23,12 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 public class EnchantmentBookSettings {
-
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-
-    private final Starter starter = plugin.getStarter();
-
-    private final Methods methods = starter.getMethods();
 
     private ItemBuilder enchantmentBook;
 
@@ -75,7 +70,7 @@ public class EnchantmentBookSettings {
                     String[] split = lore.split(" ");
 
                     // Split can generate an empty array in rare case.
-                    String stripped = methods.removeColor(lore.replace(" " + split[split.length - 1], ""));
+                    String stripped = ColorUtils.removeColor(lore.replace(" " + split[split.length - 1], ""));
 
                     if (stripped.equals(enchantment.getCustomName())) return true;
                 }
@@ -106,7 +101,7 @@ public class EnchantmentBookSettings {
         String arg = defaultValue + "";
 
         for (String originalLine : originalLore) {
-            originalLine = starter.color(originalLine).toLowerCase();
+            originalLine = ColorUtils.color(originalLine).toLowerCase();
 
             if (originalLine.contains(argument.toLowerCase())) {
                 String[] b = originalLine.split(argument.toLowerCase());

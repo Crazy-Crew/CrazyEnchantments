@@ -83,7 +83,7 @@ public class GkitzCommand implements CommandExecutor {
 
                             sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
                         } else {
-                            sender.sendMessage(methods.getPrefix() + starter.color("&c/GKitz Reset <Kit> [Player]"));
+                            sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/GKitz Reset <Kit> [Player]"));
                         }
                     }
                 } else {
@@ -136,7 +136,7 @@ public class GkitzCommand implements CommandExecutor {
                                     cePlayer.addCooldown(kit);
                                 }
                             } else {
-                                sender.sendMessage(methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                                sender.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
                                 return true;
                             }
                         } else {

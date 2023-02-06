@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
@@ -239,14 +240,14 @@ public enum CEnchantments {
      * @return Return the color that goes on the Enchantment Book.
      */
     public String getBookColor() {
-        return starter.color(getEnchantment().getBookColor());
+        return ColorUtils.color(getEnchantment().getBookColor());
     }
 
     /**
      * @return Returns the color that goes on the Enchanted Item.
      */
     public String getEnchantmentColor() {
-        return starter.color(getEnchantment().getColor());
+        return ColorUtils.color(getEnchantment().getColor());
     }
 
     /**

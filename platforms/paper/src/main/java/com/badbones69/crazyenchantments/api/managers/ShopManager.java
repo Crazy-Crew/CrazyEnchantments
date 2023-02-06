@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.api.managers;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
@@ -11,6 +10,7 @@ import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -22,8 +22,6 @@ public class ShopManager {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
-
-    private final Methods methods = starter.getMethods();
 
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
@@ -39,7 +37,7 @@ public class ShopManager {
         customizerItems.clear();
         shopItems.clear();
         FileConfiguration config = Files.CONFIG.getFile();
-        inventoryName = starter.color(config.getString("Settings.InvName"));
+        inventoryName = ColorUtils.color(config.getString("Settings.InvName"));
         inventorySize = config.getInt("Settings.GUISize");
         enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
 

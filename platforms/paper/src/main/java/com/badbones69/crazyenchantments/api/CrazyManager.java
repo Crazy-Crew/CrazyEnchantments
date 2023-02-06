@@ -20,7 +20,8 @@ import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSe
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.WingsUtils;
-import com.google.common.collect.Lists;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -637,7 +638,7 @@ public class CrazyManager {
             HashMap<String, String> enchantmentStrings = new HashMap<>();
 
             for (CEnchantment en : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
-                enchantmentStrings.put(en.getName(), plugin.getStarter().color(en.getColor() + en.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentBookSettings.getLevel(item, en))));
+                enchantmentStrings.put(en.getName(), ColorUtils.color(en.getColor() + en.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentBookSettings.getLevel(item, en))));
                 enchantmentBookSettings.removeEnchantment(item, en);
             }
 
@@ -649,7 +650,7 @@ public class CrazyManager {
                 if (itemLore != null) lores.addAll(itemLore);
             }
 
-            enchantmentStrings.put(enchantment.getName(), plugin.getStarter().color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level)));
+            enchantmentStrings.put(enchantment.getName(), ColorUtils.color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level)));
 
             for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
                 newLore.add(stringEntry.getValue());

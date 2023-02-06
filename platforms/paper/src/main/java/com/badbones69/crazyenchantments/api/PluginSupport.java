@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVe
 import com.badbones69.crazyenchantments.api.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.api.support.claims.TownySupport;
 import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.common.collect.Maps;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -122,13 +123,13 @@ public class PluginSupport {
     public void printHooks() {
         if (cachedPlugins.isEmpty()) updateHooks();
 
-        plugin.getLogger().info(starter.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
+        plugin.getLogger().info(ColorUtils.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
 
         cachedPlugins.keySet().forEach(value -> {
             if (value.isPluginLoaded()) {
-                plugin.getLogger().info(starter.color("&6&l" + value.name() + " &a&lFOUND"));
+                plugin.getLogger().info(ColorUtils.color("&6&l" + value.name() + " &a&lFOUND"));
             } else {
-                plugin.getLogger().info(starter.color("&6&l" + value.name() + " &c&lNOT FOUND"));
+                plugin.getLogger().info(ColorUtils.color("&6&l" + value.name() + " &c&lNOT FOUND"));
             }
         });
     }

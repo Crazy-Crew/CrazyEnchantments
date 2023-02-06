@@ -41,7 +41,7 @@ public class GKitzController implements Listener {
 
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), starter.color(gkitz.getString("Settings.Inventory-Name")));
+        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), ColorUtils.color(gkitz.getString("Settings.Inventory-Name")));
 
         for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
@@ -91,7 +91,7 @@ public class GKitzController implements Listener {
             NBTItem nbtItem = new NBTItem(item);
 
             for (GKitz kit : crazyManager.getGKitz()) {
-                if (e.getView().getTitle().equals(starter.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
+                if (e.getView().getTitle().equals(ColorUtils.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     e.setCancelled(true);
 
                     if (e.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
@@ -100,7 +100,7 @@ public class GKitzController implements Listener {
                 }
             }
 
-            if (e.getView().getTitle().equals(starter.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
+            if (e.getView().getTitle().equals(ColorUtils.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 e.setCancelled(true);
 
                 if (e.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {
@@ -128,7 +128,7 @@ public class GKitzController implements Listener {
                                 cePlayer.addCooldown(kit);
                                 player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
                             } else {
-                                player.sendMessage(methods.getPrefix() + cePlayer.getCooldown(kit).getCooldownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                                player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
                             }
                         } else {
                             player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));

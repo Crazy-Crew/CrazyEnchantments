@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSett
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ShopListener;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -123,39 +124,39 @@ public class CECommand implements CommandExecutor {
                         }
 
                         if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
-                            sender.sendMessage(methods.getPrefix("&aAll enchantments are loaded."));
+                            sender.sendMessage(ColorUtils.getPrefix("&aAll enchantments are loaded."));
                         } else {
 
                             if (!brokenEnchantments.isEmpty()) {
                                 int amount = 1;
-                                sender.sendMessage(methods.getPrefix("&cMissing Enchantments:"));
-                                sender.sendMessage(methods.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
+                                sender.sendMessage(ColorUtils.getPrefix("&cMissing Enchantments:"));
+                                sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
 
                                 for (String broke : brokenEnchantments) {
-                                    sender.sendMessage(starter.color("&c#" + amount + ": &6" + broke));
+                                    sender.sendMessage(ColorUtils.color("&c#" + amount + ": &6" + broke));
                                     amount++;
                                 }
 
-                                sender.sendMessage(starter.color("&7- &cMissing from the Enchantments.yml"));
-                                sender.sendMessage(starter.color("&7- &c<Enchantment Name>: option was changed"));
-                                sender.sendMessage(starter.color("&7- &cYaml format has been broken."));
+                                sender.sendMessage(ColorUtils.color("&7- &cMissing from the Enchantments.yml"));
+                                sender.sendMessage(ColorUtils.color("&7- &c<Enchantment Name>: option was changed"));
+                                sender.sendMessage(ColorUtils.color("&7- &cYaml format has been broken."));
                             }
 
                             if (!brokenEnchantmentTypes.isEmpty()) {
                                 int i = 1;
-                                sender.sendMessage(methods.getPrefix("&cEnchantments with null types:"));
-                                sender.sendMessage(methods.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
+                                sender.sendMessage(ColorUtils.getPrefix("&cEnchantments with null types:"));
+                                sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
 
                                 for (String broke : brokenEnchantmentTypes) {
-                                    sender.sendMessage(starter.color("&c#" + i + ": &6" + broke));
+                                    sender.sendMessage(ColorUtils.color("&c#" + i + ": &6" + broke));
                                     i++;
                                 }
                             }
                         }
 
-                        sender.sendMessage(methods.getPrefix("&cEnchantment Types and amount of items in each:"));
+                        sender.sendMessage(ColorUtils.getPrefix("&cEnchantment Types and amount of items in each:"));
 
-                        infoMenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(starter.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
+                        infoMenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
                     }
 
                     return true;
@@ -169,7 +170,7 @@ public class CECommand implements CommandExecutor {
                             if (!file.contains("Enchantments." + enchantment.getName())) brokenEnchantments.add(enchantment);
                         }
 
-                        sender.sendMessage(starter.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
+                        sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
 
                         for (CEnchantments enchantment : brokenEnchantments) {
                             String path = "Enchantments." + enchantment.getName();
@@ -283,7 +284,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#]"));
+                        sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#]"));
                     }
 
                     return true;
@@ -335,7 +336,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce LostBook <Category> [Amount] [Player]"));
+                        sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce LostBook <Category> [Amount] [Player]"));
                     }
 
                     return true;
@@ -503,7 +504,7 @@ public class CECommand implements CommandExecutor {
                             }
                         }
 
-                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Dust <Success/Destroy/Mystery> <Amount> [Player] [Percent]"));
+                        sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Dust <Success/Destroy/Mystery> <Amount> [Player] [Percent]"));
                     }
 
                     return true;
@@ -543,7 +544,7 @@ public class CECommand implements CommandExecutor {
                             }
                         }
 
-                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Scroll <White/Black/Transmog> [Amount] [Player]"));
+                        sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Scroll <White/Black/Transmog> [Amount] [Player]"));
                     }
 
                     return true;
@@ -594,7 +595,7 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        sender.sendMessage(methods.getPrefix("&c/ce add <Enchantment> [LvL]"));
+                        sender.sendMessage(ColorUtils.getPrefix("&c/ce add <Enchantment> [LvL]"));
                     }
 
                     return true;
@@ -646,7 +647,7 @@ public class CECommand implements CommandExecutor {
                             sender.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
                         }
 
-                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Remove <Enchantment>"));
+                        sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Remove <Enchantment>"));
                     }
 
                     return true;
@@ -707,14 +708,14 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        sender.sendMessage(methods.getPrefix() + starter.color("&c/ce Book <Enchantment> [Lvl] [Amount] [Player]"));
+                        sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Book <Enchantment> [Lvl] [Amount] [Player]"));
                     }
 
                     return true;
                 }
 
                 default -> {
-                    sender.sendMessage(methods.getPrefix("&cDo /ce help for more info."));
+                    sender.sendMessage(ColorUtils.getPrefix("&cDo /ce help for more info."));
                     return false;
                 }
             }

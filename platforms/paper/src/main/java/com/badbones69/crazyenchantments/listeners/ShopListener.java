@@ -10,7 +10,7 @@ import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.events.BuyBookEvent;
-import com.badbones69.crazyenchantments.api.managers.InfoMenuManager;
+import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.controllers.BlackSmith;
 import com.badbones69.crazyenchantments.controllers.Tinkerer;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -105,7 +106,7 @@ public class ShopListener implements Listener {
                             plugin.getServer().getPluginManager().callEvent(event);
                             player.getInventory().addItem(book.buildBook());
                         } else {
-                            player.sendMessage(methods.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                            player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                         }
 
                         return;

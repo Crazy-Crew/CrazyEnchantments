@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -49,7 +50,7 @@ public class ScrollListener implements Listener {
 
     public void loadScrollControl() {
         FileConfiguration config = Files.CONFIG.getFile();
-        suffix = starter.color(config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]"));
+        suffix = ColorUtils.color(config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]"));
         countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments");
         useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle");
         blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
@@ -176,14 +177,14 @@ public class ScrollListener implements Listener {
         // If adding suffix to the item name then it can run this.
 
         if (useSuffix) {
-            String newName = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : starter.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " ").toLowerCase()));
+            String newName = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : ColorUtils.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " ").toLowerCase()));
             // Checks if the item has a custom name and if so checks to see if it already has the suffix.
 
             if (itemMeta.hasDisplayName()) {
                 for (int amount = 0; amount <= 100; amount++) {
                     String msg = suffix.replace("%Amount%", amount + "").replace("%amount%", amount + "");
 
-                    if (itemMeta.getDisplayName().endsWith(starter.color(msg))) {
+                    if (itemMeta.getDisplayName().endsWith(ColorUtils.color(msg))) {
                         newName = itemMeta.getDisplayName().substring(0, itemMeta.getDisplayName().length() - msg.length());
                         break;
                     }
