@@ -1,6 +1,6 @@
 <br />
 
-[![CrazyEnchantments](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/new/crazyenchantments/Banner.png)](https://www.spigotmc.org/resources/crazy-enchantments.16470/)
+[![CrazyEnchantments](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/new/crazyenchantments/Banner.png)](https://modrinth.com/plugin/crazyenchantments)
 
 <div align="center">
 
@@ -23,9 +23,9 @@
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyEnchantments/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/discussions/categories/feature-rquests">Request Feature</a>
+    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/features?discussions_q=label%3Acrazyenchantments+category%3AFeatures">Request Feature</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/discussions/categories/support">Get Support</a>
+    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/support?discussions_q=label%3Acrazyenchantments+category%3ASupport">Get Support</a>
   </p>
 </div>
 
@@ -88,7 +88,7 @@ Check our public [trello board](https://trello.com/b/AJvEmcbL) for our current p
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request to add your feature/fix.
+5. Open a Pull Request to the dev branch to add your feature/fix.
 
 ## License
 
