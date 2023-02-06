@@ -234,7 +234,9 @@ public class ScramblerListener implements Listener {
     public void onPlayerLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
 
-        roll.get(player).cancel();
-        roll.remove(player);
+        try {
+            roll.get(player).cancel();
+            roll.remove(player);
+        } catch (Exception ignored) {}
     }
 }
