@@ -31,7 +31,7 @@ public class PluginSupport {
     private final Map<SupportedPlugins, Boolean> cachedPlugins = Maps.newHashMap();
 
     public void initializeWorldGuard() {
-        if (SupportedPlugins.WORLDEDIT.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) {
+        if (SupportedPlugins.WORLDGUARD.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) {
             this.worldGuardUtils = new WorldGuardUtils();
             this.worldGuardUtils.init();
         }
