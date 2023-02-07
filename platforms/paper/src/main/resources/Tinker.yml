@@ -1,4 +1,5 @@
 Settings:
+  Tinker-Version: 1.1
   GUIName: '&7&lThe &4&lCrazy &c&lTinkerer' #Name of the Tinker GUI
   Currency: XP_Total #The currency you wish to use.
   TradeButton: '&eClick to accept the trade' #The Red Buttons in the Tinkerer
@@ -13,7 +14,7 @@ Settings:
 Tinker:
   Vanilla-Enchantments:
     #Armor Enchantments
-    PROTECTION_ENVIRONMENTAL: '24, 1' #Amount of Xp(Lvl/Total) or Money
+    PROTECTION_ENVIRONMENTAL: '24, 1' #<Base amount of Xp(Lvl/Total)/Money>, <Amount per level>.
     PROTECTION_FIRE: '20, 1'
     PROTECTION_EXPLOSIONS: '20, 1'
     PROTECTION_PROJECTILE: '20, 1'

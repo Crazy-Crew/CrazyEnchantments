@@ -16,6 +16,7 @@ import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.configs.ConvertTinker;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
@@ -80,6 +81,20 @@ public class CECommand implements CommandExecutor {
             return true;
         } else {
             switch (args[0].toLowerCase()) {
+                case "convert" -> {
+                    if (hasPermission(sender, "convert")) {
+                        sender.sendMessage(
+                          """
+                          \n=======================================================
+                          Trying to update config files.
+                          If you have any issues, Please contact Discord Support.
+                          https://discord.gg/crazycrew
+                          Make sure to check console for more information.
+                          =======================================================""");
+                        ConvertTinker.convert();
+                    }
+                    return true;
+                }
                 case "help" -> { // /ce help
                     if (hasPermission(sender, "access")) sender.sendMessage(Messages.HELP.getMessage());
 
