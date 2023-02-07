@@ -20,9 +20,8 @@ public class ConvertTinker {
 
         YamlConfiguration yamlConfiguration = YamlConfiguration.loadConfiguration(file);
 
-        if (!(yamlConfiguration.contains("Settings.Tinker-Version"))) {
-            plugin.getLogger().warning("Could not find Tinker-Version, I am assuming configurations have been converted.");
-            plugin.getLogger().warning("Make sure to add Tinker-Version: 0 under the Tinker.yml settings section if you haven't done so yet.");
+        if (TINKER.getDouble("Settings.Tinker-Version") >= tinkerVersion) {
+            plugin.getLogger().info("Tinker.yml is up to date.");
             return;
         }
 
@@ -39,7 +38,6 @@ public class ConvertTinker {
         for (String settings : secondConfiguration.getConfigurationSection("Settings").getKeys(false)) {
             yamlConfiguration.set("Settings." + settings, secondConfiguration.get("Settings." + settings));
         }
-        yamlConfiguration.set("Settings.Tinker-Version", TinkerVersion);
 
         //Vanilla Enchantments
         for (String enchantment : secondConfiguration.getConfigurationSection("Tinker.Vanilla-Enchantments").getKeys(false)) {

@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments;
 
+import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.support.misc.spawners.SilkSpawnerSupport;
@@ -76,6 +77,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         starter.getCurrencyAPI().loadCurrency();
 
         FileConfiguration config = Files.CONFIG.getFile();
+        FileConfiguration tinker = Files.TINKER.getFile();
 
         String metricsPath = config.getString("Settings.Toggle-Metrics");
         boolean metricsEnabled = config.getBoolean("Settings.Toggle-Metrics");
@@ -92,6 +94,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
             
             Files.CONFIG.saveFile();
+        }
+
+        if (tinker.get("Settings.Tinker-Version") == null) {
+            tinker.set("Settings.Tinker-Version", 1.0);
+
+            FileManager.Files.TINKER.saveFile();
         }
 
         if (metricsEnabled) new Metrics(this, 4494);
