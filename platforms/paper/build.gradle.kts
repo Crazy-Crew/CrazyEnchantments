@@ -125,6 +125,7 @@ tasks {
                 <h4>Changes:</h4>
                  <p>Added 1.17.1 support back.</p>
                  <p>Ability to set Base EXP while also scaling each level off the base level in /tinkerer. (TDL)</p>
+                 <p>Added permissions to plugin.yml & new wildcards. <a href="https://github.com/Crazy-Crew/CrazyEnchantments/blob/dev/platforms/paper/src/main/resources/plugin.yml">Click Me</a></p>
                 <h4>Under the hood changes</h4>
                  <p>Re-organized the build script for the last time.</p>
                  <p>Cleaned up a few pieces of code.</p>
@@ -155,7 +156,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = projectGroup
-            artifactId = "$projectNameLowerCase-paper"
+            artifactId = "$projectNameLowerCase-paper-api"
             version = finalVersion
 
             from(components["java"])
