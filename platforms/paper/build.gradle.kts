@@ -124,11 +124,16 @@ tasks {
             """
                 <h4>Changes:</h4>
                  <p>Added 1.17.1 support back.</p>
+                 <p>Ability to set Base EXP while also scaling each level off the base level in /tinkerer. (TDL)</p>
                 <h4>Under the hood changes</h4>
                  <p>Re-organized the build script for the last time.</p>
                  <p>Cleaned up a few pieces of code.</p>
+                 <p>Cleaned up a few typos</p>
+                 <p>Reduced dependency on CrazyManager class by using static classes</p>
                 <h4>Bug Fixes:</h4>
-                 <p>N/A</p>
+                 <p>Fixed an NPE with SuperiorSkyBlock.</p>
+                 <p>Fixed a few more startup npe's</p>
+                 <p>Fixed worldguard support</p>
             """.trimIndent()
         )
     }
