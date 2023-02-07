@@ -83,14 +83,14 @@ public class CECommand implements CommandExecutor {
             switch (args[0].toLowerCase()) {
                 case "convert" -> {
                     if (hasPermission(sender, "convert")) {
-                        sender.sendMessage(
-                          """
-                          \n=======================================================
-                          Trying to update config files.
-                          If you have any issues, Please contact Discord Support.
-                          https://discord.gg/crazycrew
-                          Make sure to check console for more information.
-                          =======================================================""");
+                        sender.sendMessage(ColorUtils.color("""
+                                \n&8&m=======================================================
+                                &eTrying to update config files.
+                                &eIf you have any issues, Please contact Discord Support.
+                                &f&nhttps://discord.gg/crazycrew&r
+                                &eMake sure to check console for more information.
+                                &8&m=======================================================
+                                """));
                         ConvertTinker.convert();
                     }
                     return true;
