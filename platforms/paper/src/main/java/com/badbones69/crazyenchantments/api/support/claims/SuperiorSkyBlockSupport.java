@@ -13,7 +13,7 @@ public class SuperiorSkyBlockSupport {
     }
 
     public boolean isFriendly(Player player, Player other) {
-        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player), otherPlayer = SuperiorSkyblockAPI.getPlayer(other);
+        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player.getUniqueId()), otherPlayer = SuperiorSkyblockAPI.getPlayer(other.getUniqueId());
 
         return superiorPlayer.getIsland() != null && superiorPlayer.getIsland().isMember(otherPlayer);
     }

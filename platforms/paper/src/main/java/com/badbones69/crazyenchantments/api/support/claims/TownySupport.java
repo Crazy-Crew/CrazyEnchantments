@@ -24,7 +24,7 @@ public class TownySupport implements FactionsVersion {
 
         TownBlock block = api.getTownBlock(player.getLocation());
 
-        Resident resident = api.getResident(player.getName());
+        Resident resident = api.getResident(player.getUniqueId());
 
         try {
             if (block != null && block.hasTown()) {
