@@ -36,3 +36,104 @@ commands:
   gkit:
     description: Opens the GKitz GUI.
     aliases: [ gkitz, gkits ]
+
+permissions:
+  crazyenchantments.tinker:
+    default: true
+
+  crazyenchantments.blacksmith:
+    default: true
+
+  crazyenchantments.gkitz:
+    default: true
+
+  crazyenchantments.gui:
+    default: true
+
+  crazyenchantments.limit:
+    default: true
+
+  crazyenchantments.limit.3:
+    default: true
+
+  crazyenchantments.sign:
+    default: false
+
+  crazyenchantments.player.*:
+    default: false
+    children:
+      crazyenchantments.tinker: true
+      crazyenchantments.blacksmith: true
+      crazyenchantments.gkitz: true
+      crazyenchantments.gui: true
+      crazyenchantments.limit: true
+      crazyenchantments.info: true
+      crazyenchantments.limit.3: true
+      crazyenchantments.sign: true
+
+  crazyenchantments.admin.*:
+    default: false
+    children:
+      crazyenchantments.bypass.limit: true
+      crazyenchantments.bypass.aura: true
+      crazyenchantments.bypass.wings: true
+      crazyenchantments.bypass.gkitz: true
+      crazyenchantments.bypass.protectioncrystal: true
+      crazyenchantments.admin: true
+
+  crazyenchantments.admin:
+    default: false
+
+  crazyenchantments.bypass.limit:
+    default: false
+
+  crazyenchantments.bypass.aura:
+    default: false
+
+  crazyenchantments.bypass.wings:
+    default: false
+
+  crazyenchantments.bypass.gkitz:
+    default: false
+
+  crazyenchantments.bypass.protectioncrystal:
+    default: false
+
+  crazyenchantments.gkitz.give:
+    default: op
+
+  crazyenchantments.reset:
+    default: op
+
+  crazyenchantments.access:
+    default: op
+
+  crazyenchantments.reload:
+    default: op
+
+  crazyenchantments.remove:
+    default: op
+
+  crazyenchantments.add:
+    default: op
+
+  crazyenchantments.spawn:
+    default: op
+
+  crazyenchantments.scroll:
+    default: op
+
+  crazyenchantments.crystal:
+    default: op
+
+  crazyenchantments.scrambler:
+    default: op
+
+  crazyenchantments.dust:
+    default: op
+
+  crazyenchantments.book:
+    default: op
+
+  crazyenchantments.lostbook:
+    default: op
