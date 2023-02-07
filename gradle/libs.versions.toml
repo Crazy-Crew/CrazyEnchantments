@@ -31,7 +31,7 @@ plotsquared_paster = { module = "com.intellectualsites.paster:Paster", version =
 superiorskyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version = "2022.8.1" }
 
 griefprevention = { module = "com.github.TechFortress:GriefPrevention", version = "16.18" }
-massivecraft = { module = "com.massivecraft:Factions", version = "1.6.9.5-U0.6.9" }
+massivecraft = { module = "com.massivecraft:Factions", version = "1.6.9.5-U0.6.26-b316" }
 towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.98.6.0" }
 
 # Stackers
