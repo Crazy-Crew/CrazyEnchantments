@@ -29,7 +29,12 @@ dependencies {
 
     compileOnly(libs.superiorskyblock)
 
-    compileOnly(libs.massivecraft)
+    compileOnly(libs.massivecraft) {
+        exclude("org.kitteh")
+        exclude("org.spongepowered")
+        exclude("com.darkblade12")
+    }
+
     compileOnly(libs.towny)
 
     // Stackers/Spawners
@@ -46,6 +51,8 @@ dependencies {
         exclude("net.gravitydevelopment.updater", "updater")
         exclude("com.intellectualsites", "Pipeline")
     }
+
+    //compileOnly(libs.silkspawners.v2)
 
     // Protection
     compileOnly(libs.worldedit.api)

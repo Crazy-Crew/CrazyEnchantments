@@ -37,6 +37,7 @@ towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.98.6.0" }
 # Stackers
 wildstacker = { module = "com.bgsoftware:WildStackerAPI", version = "2022.5" }
 silkspawners = { module = "de.dustplanet:silkspawners", version = "7.2.0" }
+silkspawners_v2 = { module = "de.corneliusmay:SilkSpawners_v2", version = "1.0-SNAPSHOT" }
 
 # Holograms
 holographic_displays = { module = "me.filoghost.holographicdisplays:holographicdisplays-api", version = "3.0.0" }
@@ -50,7 +51,7 @@ placeholder_api = { module = "me.clip:placeholderapi", version = "2.11.2" }
 
 # Item Plugins
 itemsadder_api = { module = "com.github.LoneDev6:api-itemsadder", version = "3.0.0" }
-oraxen = { module = "com.github.oraxen:oraxen", version = "master-SNAPSHOT" }
+oraxen = { module = "io.th0rgal:oraxen", version = "1.151.1" }
 
 # WorldGuard/WorldEdit
 worldguard_api = { module = "com.sk89q.worldguard:worldguard-bukkit", version = "7.1.0-SNAPSHOT" }
