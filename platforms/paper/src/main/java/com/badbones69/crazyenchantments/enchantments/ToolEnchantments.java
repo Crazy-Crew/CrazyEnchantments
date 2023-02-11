@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSett
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import com.google.common.collect.Lists;
+import com.plotsquared.core.collection.QuadMap;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -28,10 +29,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
+import java.util.Random;
 
 public class ToolEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final Random random = new Random();
 
     private final Starter starter = plugin.getStarter();
 
@@ -81,19 +85,50 @@ public class ToolEnchantments implements Listener {
         event.setExpToDrop(0);
         event.setDropItems(false);
 
-        TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
-
-        if (methods.isInventoryFull(player)) {
-            player.getWorld().dropItemNaturally(player.getLocation(), drop.getItem());
+        if (enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType())) {
+            giveCropDrops(player, event.getBlock());
         } else {
-            player.getInventory().addItem(drop.getItem());
+            TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
+
+            giveDrops(player, drop.getItem());
+
+            if (!(drop.getSugarCaneBlocks().isEmpty())) drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
+
+            if (drop.hasXp()) event.getBlock().getWorld().spawn(event.getBlock().getLocation().add(.5, .5, .5), ExperienceOrb.class).setExperience(drop.getXp());
         }
-
-        if (!(drop.getSugarCaneBlocks().isEmpty())) drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
-
-        if (drop.hasXp()) event.getBlock().getWorld().spawn(event.getBlock().getLocation().add(.5, .5, .5), ExperienceOrb.class).setExperience(drop.getXp());
-
         methods.removeDurability(tool, player);
+    }
+
+    private void giveDrops(Player player, ItemStack item) {
+        if (methods.isInventoryFull(player)) {
+            player.getWorld().dropItemNaturally(player.getLocation(), item);
+        } else {
+            player.getInventory().addItem(item);
+        }
+    }
+
+    public void giveCropDrops(Player player, Block crop) {
+        switch (crop.getType()) {
+            case COCOA ->
+                    giveDrops(player, new ItemStack(Material.COCOA_BEANS, random.nextInt(2) + 2)); // Coco drops 2-3 beans.
+            case WHEAT -> {
+                giveDrops(player, new ItemStack(Material.WHEAT));
+                int amount = random.nextInt(3);
+                if (amount > 0) giveDrops(player, new ItemStack(Material.WHEAT_SEEDS, amount)); // Wheat drops 0-3 seeds.
+            }
+            case BEETROOTS -> {
+                giveDrops(player, new ItemStack(Material.BEETROOT));
+                int amount = random.nextInt(3);
+                if (amount > 0)
+                    giveDrops(player, new ItemStack(Material.BEETROOT_SEEDS, amount)); // BeetRoots drops 0-3 seeds.
+            }
+            case POTATO ->
+                    giveDrops(player, new ItemStack(Material.POTATO, random.nextInt(4) + 1)); // Potatoes drop 1-4 of them self's.
+            case CARROTS ->
+                    giveDrops(player, new ItemStack(Material.CARROT, random.nextInt(4) + 1)); // Carrots drop 1-4 of them self's.
+            case NETHER_WART ->
+                    giveDrops(player, new ItemStack(Material.NETHER_WART, random.nextInt(3) + 2)); // Nether Warts drop 2-4 of them self's.
+        }
     }
 
     private void updateEffects(Player player) {
