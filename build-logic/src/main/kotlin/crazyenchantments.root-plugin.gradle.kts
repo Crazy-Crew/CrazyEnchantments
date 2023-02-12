@@ -22,7 +22,7 @@ tasks {
     val webhookExtension = extensions.create("webhook", WebhookExtension::class)
 
     // Register the task
-    register<ReleaseWebhook>("releaseWebhook") {
+    register<ReleaseWebhook>("webhook") {
         extension = webhookExtension
     }
 }

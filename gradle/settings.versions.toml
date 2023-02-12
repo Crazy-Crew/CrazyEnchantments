@@ -1,7 +1,7 @@
 [versions]
 
 # Project Settings
-projectVersion = "1.9.8.2"
+projectVersion = "1.9.8.1"
 
 projectGroup = "com.badbones69.crazyenchantments"
 projectName = "CrazyEnchantments"
