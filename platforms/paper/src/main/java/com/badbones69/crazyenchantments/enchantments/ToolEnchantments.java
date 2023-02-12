@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSett
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import com.google.common.collect.Lists;
+import com.plotsquared.core.collection.QuadMap;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,11 +27,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.List;
+import java.util.Random;
 
 public class ToolEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+
+    private final Random random = new Random();
 
     private final Starter starter = plugin.getStarter();
 
@@ -52,54 +57,77 @@ public class ToolEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
-        Block block = event.getBlock();
+
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+        if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(event.getBlock())) return;
+
         Player player = event.getPlayer();
-
-        if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(block)) return;
-
-        ItemStack item = methods.getItemInHand(player);
+        ItemStack brokenBlock = new ItemStack(event.getBlock().getType());
+        ItemStack tool = methods.getItemInHand(player);
 
         updateEffects(player);
 
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(tool);
 
-            if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) && !enchantments.contains(CEnchantments.BLAST.getEnchantment())) {
-                // This checks if the player is breaking a crop with harvester one. The harvester enchantment will control what happens with telepathy here.
-                if ((enchantmentSettings.getHarvesterCrops().contains(block.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
-                        // This checks if the block is a spawner and if so the spawner classes will take care of this.
-                        // If Epic Spawners is enabled then telepathy will give the item from the API.
-                        // Otherwise, CE will ignore the spawner in this event.
-                        (block.getType() == Material.SPAWNER)) return;
+        if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) || enchantments.contains(CEnchantments.BLAST.getEnchantment())) return;
 
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, item);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
+        if ((enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
+            (brokenBlock.getType() == Material.SPAWNER)) return;
+        // This checks if the block is a spawner and if so the spawner classes will take care of this.
+        // If Epic Spawners is enabled then telepathy will give the item from the API.
+        // Otherwise, CE will ignore the spawner in this event.
 
-                if (!useEvent.isCancelled()) {
-                    event.setExpToDrop(0);
-                    event.setDropItems(false);
-                    TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(item, block));
+        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, tool);
+        plugin.getServer().getPluginManager().callEvent(useEvent);
 
-                    if (methods.isInventoryFull(player)) {
-                        player.getWorld().dropItem(player.getLocation(), drop.getItem());
-                    } else {
-                        player.getInventory().addItem(drop.getItem());
-                    }
+        if (useEvent.isCancelled()) return;
 
-                    if (drop.getSugarCaneBlocks().isEmpty()) {
-                        block.setType(Material.AIR);
-                    } else {
-                        drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
-                    }
+        event.setExpToDrop(0);
+        event.setDropItems(false);
 
-                    if (drop.hasXp()) {
-                        ExperienceOrb orb = block.getWorld().spawn(block.getLocation().add(.5, .5, .5), ExperienceOrb.class);
-                        orb.setExperience(drop.getXp());
-                    }
+        if (enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType())) {
+            giveCropDrops(player, event.getBlock());
+        } else {
+            TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
 
-                    methods.removeDurability(item, player);
-                }
+            giveDrops(player, drop.getItem());
+
+            if (!(drop.getSugarCaneBlocks().isEmpty())) drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
+
+            if (drop.hasXp()) event.getBlock().getWorld().spawn(event.getBlock().getLocation().add(.5, .5, .5), ExperienceOrb.class).setExperience(drop.getXp());
+        }
+        methods.removeDurability(tool, player);
+    }
+
+    private void giveDrops(Player player, ItemStack item) {
+        if (methods.isInventoryFull(player)) {
+            player.getWorld().dropItemNaturally(player.getLocation(), item);
+        } else {
+            player.getInventory().addItem(item);
+        }
+    }
+
+    public void giveCropDrops(Player player, Block crop) {
+        switch (crop.getType()) {
+            case COCOA ->
+                    giveDrops(player, new ItemStack(Material.COCOA_BEANS, random.nextInt(2) + 2)); // Coco drops 2-3 beans.
+            case WHEAT -> {
+                giveDrops(player, new ItemStack(Material.WHEAT));
+                int amount = random.nextInt(3);
+                if (amount > 0) giveDrops(player, new ItemStack(Material.WHEAT_SEEDS, amount)); // Wheat drops 0-3 seeds.
             }
+            case BEETROOTS -> {
+                giveDrops(player, new ItemStack(Material.BEETROOT));
+                int amount = random.nextInt(3);
+                if (amount > 0)
+                    giveDrops(player, new ItemStack(Material.BEETROOT_SEEDS, amount)); // BeetRoots drops 0-3 seeds.
+            }
+            case POTATO ->
+                    giveDrops(player, new ItemStack(Material.POTATO, random.nextInt(4) + 1)); // Potatoes drop 1-4 of them self's.
+            case CARROTS ->
+                    giveDrops(player, new ItemStack(Material.CARROT, random.nextInt(4) + 1)); // Carrots drop 1-4 of them self's.
+            case NETHER_WART ->
+                    giveDrops(player, new ItemStack(Material.NETHER_WART, random.nextInt(3) + 2)); // Nether Warts drop 2-4 of them self's.
         }
     }
 

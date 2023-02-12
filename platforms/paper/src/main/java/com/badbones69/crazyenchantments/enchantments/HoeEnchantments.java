@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
@@ -25,11 +24,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+
+import java.util.*;
 
 public class HoeEnchantments implements Listener {
 
@@ -128,39 +124,10 @@ public class HoeEnchantments implements Listener {
 
             for (Block crop : getAreaCrops(player, plant, blockFace)) {
                 if (hasTelepathy) {
-                    List<ItemStack> droppedItems = new ArrayList<>();
-
-                    if (crop.getType() == Material.COCOA) {
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.COCOA_BEANS).setAmount(random.nextInt(2) + 2).build()); // Coco drops 2-3 beans.
-                    } else if (crop.getType() == Material.WHEAT) {
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT).build());
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.WHEAT_SEEDS).setAmount(random.nextInt(3)).build()); // Wheat drops 0-3 seeds.
-                    } else if (crop.getType() == Material.BEETROOTS) {
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.BEETROOT).build());
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.BEETROOT_SEEDS).setAmount(random.nextInt(3)).build()); // BeetRoots drops 0-3 seeds.
-                    } else if (crop.getType() == Material.POTATO) {
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.POTATO).setAmount(random.nextInt(4) + 1).build()); // Potatoes drop 1-4 of them self's.
-                    } else if (crop.getType() == Material.CARROTS) {
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.CARROT).setAmount(random.nextInt(4) + 1).build()); // Carrots drop 1-4 of them self's.
-                    } else if (crop.getType() == Material.NETHER_WART) {
-                        droppedItems.add(new ItemBuilder().setMaterial(Material.NETHER_WART).setAmount(random.nextInt(3) + 2).build()); // Nether Warts drop 2-4 of them self's.
-                    }
-
-                    if (!droppedItems.isEmpty()) {
-                        for (ItemStack droppedItem : droppedItems) {
-                            if (droppedItem.getAmount() > 0) {
-                                if (methods.isInventoryFull(player)) {
-                                    player.getWorld().dropItem(player.getLocation(), droppedItem);
-                                } else {
-                                    player.getInventory().addItem(droppedItem);
-                                }
-                            }
-                        }
-
-                        event.setDropItems(false);
-                        crop.setType(Material.AIR);
-                        continue;
-                    }
+                    giveCropDrops(player, crop);
+                    event.setDropItems(false);
+                    crop.setType(Material.AIR);
+                    continue;
                 }
 
                 crop.breakNaturally();
@@ -168,10 +135,41 @@ public class HoeEnchantments implements Listener {
         }
     }
 
+    private void giveCropDrops(Player player, Block crop) {
+        switch (crop.getType()) {
+            case COCOA ->
+                    giveDrops(player, new ItemStack(Material.COCOA_BEANS, random.nextInt(2) + 2)); // Coco drops 2-3 beans.
+            case WHEAT -> {
+                giveDrops(player, new ItemStack(Material.WHEAT));
+                int amount = random.nextInt(3);
+                if (amount > 0) giveDrops(player, new ItemStack(Material.WHEAT_SEEDS, amount)); // Wheat drops 0-3 seeds.
+            }
+            case BEETROOTS -> {
+                giveDrops(player, new ItemStack(Material.BEETROOT));
+                int amount = random.nextInt(3);
+                if (amount > 0)
+                    giveDrops(player, new ItemStack(Material.BEETROOT_SEEDS, amount)); // BeetRoots drops 0-3 seeds.
+            }
+            case POTATO ->
+                    giveDrops(player, new ItemStack(Material.POTATO, random.nextInt(4) + 1)); // Potatoes drop 1-4 of them self's.
+            case CARROTS ->
+                    giveDrops(player, new ItemStack(Material.CARROT, random.nextInt(4) + 1)); // Carrots drop 1-4 of them self's.
+            case NETHER_WART ->
+                    giveDrops(player, new ItemStack(Material.NETHER_WART, random.nextInt(3) + 2)); // Nether Warts drop 2-4 of them self's.
+        }
+    }
+    private void giveDrops(Player player, ItemStack item) {
+        if (methods.isInventoryFull(player)) {
+            player.getWorld().dropItemNaturally(player.getLocation(), item);
+        } else {
+            player.getInventory().addItem(item);
+        }
+    }
+
     private void fullyGrowPlant(ItemStack hoe, Block block, Player player) {
         if (CEnchantments.GREENTHUMB.chanceSuccessful(hoe) || player.getGameMode() == GameMode.CREATIVE) {
             crazyManager.getNMSSupport().fullyGrowPlant(block);
-            player.getLocation().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation(), 20, .25F, .25F, .25F);
+            player.getLocation().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, block.getLocation(), 20, .25F, .25F, .25F);
         }
     }
 
@@ -186,9 +184,9 @@ public class HoeEnchantments implements Listener {
             playerSeedItem = player.getEquipment().getItemInOffHand();
 
             if (isSoulSand) { // If on soul sand we want it to plant Nether Warts not normal seeds.
-                if (playerSeedItem != null && playerSeedItem.getType() != Material.NETHER_WART) seedType = null;
+                if (playerSeedItem.getType() != Material.NETHER_WART) seedType = null;
             } else {
-                if (playerSeedItem != null && playerSeedItem.getType() == Material.NETHER_WART) seedType = null;
+                if (playerSeedItem.getType() == Material.NETHER_WART) seedType = null;
             }
 
             if (seedType == null) {
