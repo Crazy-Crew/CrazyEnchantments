@@ -129,19 +129,24 @@ tasks {
         //<h3>The first release for CrazyEnchantments on Modrinth! 🎉🎉🎉🎉🎉<h3><br> If we want a header.
         changelog.set(
             """
+                <h3>⚠️ Warning: A fair bit has changed so please take a backup of your configurations JUST in case ⚠️</h3>
                 <h4>Changes:</h4>
                  <p>Added 1.17.1 support back.</p>
                  <p>Ability to set Base EXP while also scaling each level off the base level in /tinkerer. (TDL)</p>
                  <p>Added permissions to plugin.yml & new wildcards. <a href="https://github.com/Crazy-Crew/CrazyEnchantments/blob/dev/platforms/paper/src/main/resources/plugin.yml">Click Me</a></p>
+                 <p>Changed particles from hoe enchantments to be on the crop instead of the player. <a href="https://github.com/Crazy-Crew/CrazyEnchantments/pull/694">Click Me</a></p>
                 <h4>Under the hood changes</h4>
                  <p>Re-organized the build script for the last time.</p>
                  <p>Cleaned up a few pieces of code.</p>
                  <p>Cleaned up a few typos</p>
                  <p>Reduced dependency on CrazyManager class by using static classes</p>
+                 <p>Re-organized a few files <a href="https://github.com/Crazy-Crew/CrazyEnchantments/pull/694">Click Me</a></p>
                 <h4>Bug Fixes:</h4>
                  <p>Fixed an NPE with SuperiorSkyBlock.</p>
                  <p>Fixed a few more startup npe's</p>
                  <p>Fixed worldguard support</p>
+                 <p>Fixed the telepathy double drop bug <a href="https://github.com/Crazy-Crew/CrazyEnchantments/pull/694">Click Me</a></p>
+                 <p>Fix telepathy with crops throwing an error due to trying to create item stacks of size 0. <a href="https://github.com/Crazy-Crew/CrazyEnchantments/pull/694">Click Me</a></p>
             """.trimIndent()
         )
     }
