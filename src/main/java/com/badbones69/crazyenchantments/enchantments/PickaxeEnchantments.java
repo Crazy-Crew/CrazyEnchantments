@@ -348,25 +348,16 @@ public class PickaxeEnchantments implements Listener {
     private boolean isOre(Material material) {
 
         return switch (material) {
-            case DEEPSLATE_COAL_ORE,
-                    DEEPSLATE_COPPER_ORE,
-                    DEEPSLATE_DIAMOND_ORE,
-                    DEEPSLATE_EMERALD_ORE,
-                    DEEPSLATE_GOLD_ORE,
-                    DEEPSLATE_IRON_ORE,
-                    DEEPSLATE_LAPIS_ORE,
-                    DEEPSLATE_REDSTONE_ORE,
-                    COAL_ORE,
-                    IRON_ORE,
-                    GOLD_ORE,
-                    DIAMOND_ORE,
-                    EMERALD_ORE,
-                    LAPIS_ORE,
-                    REDSTONE_ORE,
-                    COPPER_ORE,
-                    NETHER_GOLD_ORE,
-                    NETHER_QUARTZ_ORE ->
-                    true;
+            case COAL_ORE, DEEPSLATE_COAL_ORE,
+                 COPPER_ORE, DEEPSLATE_COPPER_ORE,
+                 DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
+                 EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
+                 GOLD_ORE, DEEPSLATE_GOLD_ORE,
+                 IRON_ORE, DEEPSLATE_IRON_ORE,
+                 LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
+                 REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
+                 NETHER_GOLD_ORE,
+                 NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
     }
@@ -378,20 +369,18 @@ public class PickaxeEnchantments implements Listener {
     private ItemStack getOreDrop(Material material, int amount) {
         ItemBuilder dropItem = new ItemBuilder().setAmount(amount);
 
-        if (material == Material.NETHER_QUARTZ_ORE) {
-            dropItem.setMaterial(Material.QUARTZ);
-        } else {
-            switch (material) {
-                case DEEPSLATE_COAL_ORE, COAL_ORE -> dropItem.setMaterial(Material.COAL);
-                case DEEPSLATE_COPPER_ORE, COPPER_ORE -> dropItem.setMaterial(Material.COPPER_INGOT);
-                case DEEPSLATE_DIAMOND_ORE, DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
-                case DEEPSLATE_EMERALD_ORE, EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
-                case DEEPSLATE_GOLD_ORE, GOLD_ORE, NETHER_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
-                case DEEPSLATE_IRON_ORE, IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
-                case DEEPSLATE_LAPIS_ORE, LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
-                case DEEPSLATE_REDSTONE_ORE, REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
-                default -> dropItem.setMaterial(Material.AIR);
-            }
+        switch (material) {
+            case COAL_ORE, DEEPSLATE_COAL_ORE -> dropItem.setMaterial(Material.COAL);
+            case COPPER_ORE, DEEPSLATE_COPPER_ORE -> dropItem.setMaterial(Material.COPPER_INGOT);
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
+            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
+            case IRON_ORE, DEEPSLATE_IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
+            case NETHER_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_NUGGET);
+            case NETHER_QUARTZ_ORE -> dropItem.setMaterial(Material.QUARTZ);
+            default -> dropItem.setMaterial(Material.AIR);
         }
 
         return dropItem.build();

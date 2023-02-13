@@ -246,21 +246,28 @@ public class EnchantmentSettings {
 
     private boolean hasOreXP(Block block) {
         return switch (block.getType()) {
-            case COAL_ORE, DIAMOND_ORE, EMERALD_ORE, LAPIS_ORE, REDSTONE_ORE -> true;
+            case COAL_ORE, DEEPSLATE_COAL_ORE,
+                 DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
+                 EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
+                 LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
+                 REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
+                 NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
     }
 
     private boolean isOre(Block block) {
         return switch (block.getType()) {
-            case COAL_ORE,
-                    IRON_ORE,
-                    GOLD_ORE,
-                    DIAMOND_ORE,
-                    EMERALD_ORE,
-                    LAPIS_ORE,
-                    REDSTONE_ORE,
-                    NETHER_QUARTZ_ORE -> true;
+            case COAL_ORE, DEEPSLATE_COAL_ORE,
+                 COPPER_ORE, DEEPSLATE_COPPER_ORE,
+                 DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
+                 EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
+                 GOLD_ORE, DEEPSLATE_GOLD_ORE,
+                 IRON_ORE, DEEPSLATE_IRON_ORE,
+                 LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
+                 REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
+                 NETHER_GOLD_ORE,
+                 NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
     }
@@ -268,19 +275,18 @@ public class EnchantmentSettings {
     private ItemStack getOreDrop(Block block) {
         ItemBuilder dropItem = new ItemBuilder();
 
-        if (block.getType() == Material.NETHER_QUARTZ_ORE) {
-            dropItem.setMaterial(Material.QUARTZ);
-        } else {
-            switch (block.getType()) {
-                case COAL_ORE -> dropItem.setMaterial(Material.COAL);
-                case IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
-                case GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
-                case DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
-                case EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
-                case LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
-                case REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
-                default -> dropItem.setMaterial(Material.AIR);
-            }
+        switch (block.getType()) {
+            case COAL_ORE, DEEPSLATE_COAL_ORE -> dropItem.setMaterial(Material.COAL);
+            case COPPER_ORE, DEEPSLATE_COPPER_ORE -> dropItem.setMaterial(Material.COPPER_INGOT);
+            case IRON_ORE, DEEPSLATE_IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
+            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
+            case NETHER_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_NUGGET);
+            case NETHER_QUARTZ_ORE -> dropItem.setMaterial(Material.QUARTZ);
+            default -> dropItem.setMaterial(Material.AIR);
         }
 
         return dropItem.build();
