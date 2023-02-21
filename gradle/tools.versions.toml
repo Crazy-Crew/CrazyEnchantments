@@ -2,7 +2,7 @@
 
 # Gradle
 shadow = "7.1.2"
-ktor = "2.2.2"
+ktor = "2.2.3"
 kotlin = "1.7.21"
 license = "0.16.1"
 coroutines = "1.6.4"

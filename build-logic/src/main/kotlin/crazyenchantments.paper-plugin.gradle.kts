@@ -53,20 +53,7 @@ repositories {
     maven("https://repo.bg-software.com/repository/api/")
 
     /**
-     * CrazyCrew Repository
-     * All 3rd party dependencies
-     */
-    maven("https://repo.crazycrew.us/plugins/")
-
-    /**
      * EngineHub Team
      */
     maven("https://maven.enginehub.org/repo/")
-
-    /**
-     * Everything else we need.
-     */
-    maven("https://jitpack.io/")
-
-    mavenCentral()
 }

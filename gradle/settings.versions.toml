@@ -12,5 +12,4 @@ projectExtension = "plugin"
 
 [plugins]
 
-minotaur = { id = "com.modrinth.minotaur", version = "2.6.0" }
-run-paper = { id = "xyz.jpenilla.run-paper", version = "2.0.0" }
+minotaur = { id = "com.modrinth.minotaur", version = "2.7.2" }

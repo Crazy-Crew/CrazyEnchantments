@@ -4,7 +4,6 @@ plugins {
     id("crazyenchantments.paper-plugin")
 
     alias(settings.plugins.minotaur)
-    alias(settings.plugins.run.paper)
 }
 
 dependencies {
@@ -78,8 +77,6 @@ val projectVersion = settings.versions.projectVersion.get()
 
 val finalVersion = if (isBeta) "$projectVersion+Beta" else projectVersion
 
-val projectNameLowerCase = projectName.toLowerCase()
-
 val repo = if (isBeta) "beta" else "releases"
 val type = if (isBeta) "beta" else "release"
 
@@ -93,13 +90,9 @@ tasks {
         ).forEach { relocate(it, "$projectGroup.plugin.library.$it") }
     }
 
-    runServer {
-        minecraftVersion("1.19.3")
-    }
-
     modrinth {
         token.set(System.getenv("MODRINTH_TOKEN"))
-        projectId.set(projectNameLowerCase)
+        projectId.set(projectName.lowercase())
 
         versionName.set("$projectName $finalVersion")
         versionNumber.set(finalVersion)
@@ -158,7 +151,7 @@ tasks {
                 "group" to projectGroup,
                 "version" to finalVersion,
                 "description" to projectDescription,
-                "website" to "https://modrinth.com/$projectExt/$projectNameLowerCase"
+                "website" to "https://modrinth.com/$projectExt/${projectName.lowercase()}"
             )
         }
     }
@@ -168,7 +161,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = projectGroup
-            artifactId = "$projectNameLowerCase-paper-api"
+            artifactId = "${projectName.lowercase()}-paper-api"
             version = finalVersion
 
             from(components["java"])

@@ -47,13 +47,12 @@
   </ol>
 </details>
 
-## Downloads
-> https://modrinth.com/plugin/crazyenchantments
+## Resource Page
 
-## Beta Builds
-### Get the latest changes before marked as release.
-All beta builds will be on Modrinth.<br>
-> https://modrinth.com/plugin/crazyenchantments/versions
+### Beta Builds
+All beta builds will be on Modrinth marked as beta.<br>
+
+<a href="https://modrinth.com/plugin/crazyenchantments">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/modrinth_64h.png)</a>
 
 ## Getting Started
 
