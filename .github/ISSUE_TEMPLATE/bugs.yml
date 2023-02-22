@@ -1,3 +1,5 @@
+name: "Bug Report"
+description: "Create a report to help us improve the plugin."
 title: "[Bug Report]: "
 labels: ["bug"]
 
@@ -37,7 +39,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: version
+    id: platform
     attributes:
       label: Server Platform
       description: What server platform are you using?
