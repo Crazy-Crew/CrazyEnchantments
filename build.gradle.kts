@@ -5,7 +5,6 @@ plugins {
     id("crazyenchantments.root-plugin")
 }
 
-val legacyUpdate = Color(255, 73, 110)
 val releaseUpdate = Color(27, 217, 106)
 val betaUpdate = Color(255, 163, 71)
 
@@ -14,10 +13,10 @@ val projectVersion = settings.versions.projectVersion.get()
 val projectName = settings.versions.projectName.get()
 val projectExt = settings.versions.projectExtension.get()
 
-val finalVersion = if (isBeta) "$projectVersion+Beta" else projectVersion
+val finalVersion = if (isBeta) "$projectVersion+beta" else projectVersion
 
 val color = if (isBeta) betaUpdate else releaseUpdate
-val repo = if (isBeta) "beta" else "releases"
+val repo = if (isBeta) "beta" else "release"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")

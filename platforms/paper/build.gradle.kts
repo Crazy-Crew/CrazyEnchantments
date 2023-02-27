@@ -75,19 +75,18 @@ val isBeta = settings.versions.projectBeta.get().toBoolean()
 
 val projectVersion = settings.versions.projectVersion.get()
 
-val finalVersion = if (isBeta) "$projectVersion+Beta" else projectVersion
+val finalVersion = if (isBeta) "$projectVersion+beta" else projectVersion
 
-val repo = if (isBeta) "beta" else "releases"
 val type = if (isBeta) "beta" else "release"
 
 tasks {
     shadowJar {
-        archiveFileName.set("${projectName}+$finalVersion.jar")
+        archiveFileName.set("${projectName}+${projectDir.name}+$finalVersion.jar")
 
         listOf(
             "de.tr7zw.changeme.nbtapi",
             "org.bstats"
-        ).forEach { relocate(it, "$projectGroup.plugin.library.$it") }
+        ).forEach { relocate(it, "$projectGroup.library.$it") }
     }
 
     modrinth {
@@ -158,50 +157,8 @@ tasks {
 }
 
 publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = projectGroup
-            artifactId = "${projectName.lowercase()}-paper-api"
-            version = finalVersion
-
-            from(components["java"])
-
-            pom {
-                name.set(projectName)
-
-                description.set(projectDescription)
-                url.set(projectGithub)
-
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://www.opensource.org/licenses/mit-license.php")
-                    }
-                }
-
-                developers {
-                    developer {
-                        id.set("ryderbelserion")
-                        name.set("Ryder Belserion")
-                    }
-
-                    developer {
-                        id.set("badbones69")
-                        name.set("BadBones69")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:git://github.com/Crazy-Crew/$projectName.git")
-                    developerConnection.set("scm:git:ssh://github.com/Crazy-Crew/$projectName.git")
-                    url.set(projectGithub)
-                }
-            }
-        }
-    }
-
     repositories {
-        maven("https://repo.crazycrew.us/$repo") {
+        maven("https://repo.crazycrew.us/$type") {
             name = "crazycrew"
             // Used for locally publishing.
             // credentials(PasswordCredentials::class)
@@ -210,6 +167,16 @@ publishing {
                 username = System.getenv("REPOSITORY_USERNAME")
                 password = System.getenv("REPOSITORY_PASSWORD")
             }
+        }
+    }
+
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = projectGroup
+            artifactId = "${projectName.lowercase()}-${projectDir.name}-api"
+            version = finalVersion
+
+            from(components["java"])
         }
     }
 }
