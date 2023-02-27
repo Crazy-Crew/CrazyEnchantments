@@ -16,7 +16,7 @@ val projectExt = settings.versions.projectExtension.get()
 val finalVersion = if (isBeta) "$projectVersion+beta" else projectVersion
 
 val color = if (isBeta) betaUpdate else releaseUpdate
-val repo = if (isBeta) "beta" else "release"
+val repo = if (isBeta) "beta" else "releases"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
