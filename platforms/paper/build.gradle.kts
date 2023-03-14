@@ -4,6 +4,7 @@ plugins {
     id("crazyenchantments.paper-plugin")
 
     alias(settings.plugins.minotaur)
+    alias(settings.plugins.run.paper)
 }
 
 dependencies {
