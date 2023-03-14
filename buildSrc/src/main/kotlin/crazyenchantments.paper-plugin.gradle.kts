@@ -23,19 +23,10 @@ repositories {
      */
     maven("https://ci.ender.zone/plugin/repository/everything/")
 
-    repositories {
-        exclusiveContent {
-            forRepository {
-                maven("https://repo.papermc.io/repository/maven-public/")
-            }
-
-            filter {
-                includeGroup("io.papermc.paper")
-                includeGroup("com.mojang")
-                includeGroup("net.md-5")
-            }
-        }
-    }
+    /**
+     * Paper Team
+     */
+    maven("https://repo.papermc.io/repository/maven-public/")
 
     /**
      * NBT API
