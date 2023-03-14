@@ -1,14 +1,9 @@
 [versions]
 
 # Project Settings
-projectVersion = "1.9.8.1"
-
-projectGroup = "com.badbones69.crazyenchantments"
-projectName = "CrazyEnchantments"
-projectDescription = "Adds over 80 unique enchantments to your server and more!"
-projectGithub = "https://github.com/Crazy-Crew/CrazyEnchantments"
-projectBeta = "true"
-projectExtension = "plugin"
+github = "https://github.com/Crazy-Crew/CrazyEnchantments"
+beta = "true"
+extension = "plugin"
 
 [plugins]
 

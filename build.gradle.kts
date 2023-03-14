@@ -8,22 +8,18 @@ plugins {
 val releaseUpdate = Color(27, 217, 106)
 val betaUpdate = Color(255, 163, 71)
 
-val isBeta = settings.versions.projectBeta.get().toBoolean()
-val projectVersion = settings.versions.projectVersion.get()
-val projectName = settings.versions.projectName.get()
-val projectExt = settings.versions.projectExtension.get()
+val beta = settings.versions.beta.get().toBoolean()
+val extension = settings.versions.extension.get()
 
-val finalVersion = if (isBeta) "$projectVersion+beta" else projectVersion
-
-val color = if (isBeta) betaUpdate else releaseUpdate
-val repo = if (isBeta) "beta" else "releases"
+val color = if (beta) betaUpdate else releaseUpdate
+val repo = if (beta) "beta" else "releases"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
 
     this.username("Ryder Belserion")
 
-    this.content("New version of $projectName is ready! <@&929463452232192063>")
+    this.content("New version of ${rootProject.name} is ready! <@&1029922295210311681>")
 
     this.embeds {
         this.embed {
@@ -31,20 +27,20 @@ webhook {
 
             this.fields {
                 this.field(
-                    "Version $finalVersion",
-                    "Download Link: https://modrinth.com/$projectExt/${projectName.lowercase()}/version/$finalVersion"
+                    "Version ${rootProject.version}",
+                    "Download Link: https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
                 )
 
                 this.field(
                     "API Update",
-                    "Version $finalVersion has been pushed to https://repo.crazycrew.us/#/$repo"
+                    "Version ${rootProject.version} has been pushed to https://repo.crazycrew.us/#/$repo"
                 )
             }
 
             this.author(
-                projectName,
-                "https://modrinth.com/$projectExt/${projectName.lowercase()}/versions",
-                "https://cdn-raw.modrinth.com/data/krxPuhWb/1c347285ccaef4e5214787acc5dcd2fbe9719875.png"
+                rootProject.name,
+                "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions",
+                "https://cdn-raw.modrinth.com/data/EMORKQjj/1cf7fffa9bf92d1bc292983dc320984cc764b51e.png"
             )
         }
     }
