@@ -1,6 +1,7 @@
 package task
 
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.headers
@@ -15,7 +16,6 @@ import kotlinx.coroutines.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.extra
 
 /** Task to send webhooks to discord. */
 abstract class ReleaseWebhook : DefaultTask() {
