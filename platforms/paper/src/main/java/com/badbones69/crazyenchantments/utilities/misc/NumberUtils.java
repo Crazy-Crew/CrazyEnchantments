@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.utilities.misc;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.List;
 
 public class NumberUtils {

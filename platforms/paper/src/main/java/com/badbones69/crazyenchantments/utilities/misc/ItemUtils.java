@@ -13,5 +13,4 @@ public class ItemUtils {
     public static boolean verifyItemLore(ItemStack item) {
         return item != null && item.getItemMeta() != null && item.hasItemMeta() && item.getItemMeta().getLore() != null && item.getItemMeta().hasLore();
     }
-
 }

@@ -1,7 +1,11 @@
 package com.badbones69.crazyenchantments.api.support.factions;
 
 import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
