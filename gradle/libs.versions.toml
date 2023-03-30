@@ -3,6 +3,9 @@
 # Minecraft
 paper = "1.19.4-R0.1-SNAPSHOT"
 
+# CrazyCore
+crazycore = "1.0.1.3"
+
 # Adventure
 kyori = "4.13.0"
 
@@ -11,6 +14,10 @@ kyori = "4.13.0"
 # Minecraft
 papermc = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 paperlib = { module = "io.papermc:paperlib", version = "1.0.8-SNAPSHOT" }
+
+# Configurations
+config_me = { module = "ch.jalu:configme", version = "1.3.0" }
+yaml = { module = "me.carleslc.Simple-YAML:Simple-Yaml", version = "1.8.3" }
 
 # Adventure
 kyori = { module = "net.kyori:adventure-api", version.ref = "kyori" }
@@ -38,14 +45,13 @@ towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.98.6.0" }
 # Stackers
 wildstacker = { module = "com.bgsoftware:WildStackerAPI", version = "2022.5" }
 silkspawners = { module = "de.dustplanet:silkspawners", version = "7.2.0" }
-silkspawners_v2 = { module = "de.corneliusmay:SilkSpawners_v2", version = "1.0-SNAPSHOT" }
 
 # Holograms
 holographic_displays = { module = "me.filoghost.holographicdisplays:holographicdisplays-api", version = "3.0.0" }
 decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.7.8" }
 
-cmi_api = { module = "com.Zrips.CMI:CMI-API", version = "9.2.6.1" }
-cmi_lib = { module = "net.Zrips.CMILib:CMI-Lib", version = "1.2.4.1" }
+cmi_api = { module = "com.Zrips.CMI:CMI-API", version = "9.3.2.1" }
+cmi_lib = { module = "net.Zrips.CMILib:CMI-Lib", version = "1.2.4.5" }
 
 # Placeholders
 placeholder_api = { module = "me.clip:placeholderapi", version = "2.11.2" }

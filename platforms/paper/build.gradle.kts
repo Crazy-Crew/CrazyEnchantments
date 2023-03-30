@@ -42,7 +42,7 @@ dependencies {
 
     compileOnly(libs.silkspawners) {
         exclude("org.bukkit", "bukkit")
-        exclude("org.spigotmc", "spigot")
+        exclude("org.spigot", "spigot")
         exclude("com.destroystokyo.paper", "paper")
         exclude("com.sk89q", "worldguard")
         exclude("com.sk89q", "worldedit")
@@ -51,8 +51,6 @@ dependencies {
         exclude("net.gravitydevelopment.updater", "updater")
         exclude("com.intellectualsites", "Pipeline")
     }
-
-    //compileOnly(libs.silkspawners.v2)
 
     // Protection
     compileOnly(libs.worldedit.api)
@@ -145,7 +143,7 @@ publishing {
         maven("https://repo.crazycrew.us/$repo") {
             name = "crazycrew"
             // Used for locally publishing.
-            // credentials(PasswordCredentials::class)
+            credentials(PasswordCredentials::class)
 
             credentials {
                 username = System.getenv("REPOSITORY_USERNAME")
