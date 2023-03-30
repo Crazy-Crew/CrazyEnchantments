@@ -27,7 +27,7 @@ kyori-mm = { module = "net.kyori:adventure-text-minimessage", version.ref = "kyo
 triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-SNAPSHOT" }
 
 # Misc
-nbt_api = { module = "de.tr7zw:item-nbt-api", version = "2.11.1" }
+nbt_api = { module = "de.tr7zw:item-nbt-api", version = "2.11.2" }
 bstats_bukkit = { module = "org.bstats:bstats-bukkit", version = "3.0.0" }
 vault_api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7" }
 
@@ -58,7 +58,7 @@ placeholder_api = { module = "me.clip:placeholderapi", version = "2.11.2" }
 
 # Item Plugins
 itemsadder_api = { module = "com.github.LoneDev6:api-itemsadder", version = "3.0.0" }
-oraxen = { module = "io.th0rgal:oraxen", version = "1.151.1" }
+oraxen = { module = "io.th0rgal:oraxen-api", version = "1.154.2" }
 
 # WorldGuard/WorldEdit
 worldguard_api = { module = "com.sk89q.worldguard:worldguard-bukkit", version = "7.1.0-SNAPSHOT" }
@@ -66,5 +66,5 @@ worldguard_api = { module = "com.sk89q.worldguard:worldguard-bukkit", version = 
 worldedit_api = { module = "com.sk89q.worldedit:worldedit-bukkit", version = "7.2.9" }
 
 # AntiCheats
-spartan = { module = "me.vagdedes.spartan:SpartanAPI", version = "9.1" }
+spartan = { module = "me.vagdedes.spartan:SpartanAPI", version = "9.0" }
 nocheatplus = { module = "fr.neatmonster:nocheatplus", version = "3.16.1-SNAPSHOT" }

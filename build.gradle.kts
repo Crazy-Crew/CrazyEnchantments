@@ -14,12 +14,16 @@ val extension = settings.versions.extension.get()
 val color = if (beta) betaUpdate else releaseUpdate
 val repo = if (beta) "beta" else "releases"
 
+val url = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions"
+val download = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
+val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready! <@&1029922295210311681>"
+
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
 
     this.username("Ryder Belserion")
 
-    this.content("New version of ${rootProject.name} is ready! <@&1029922295210311681>")
+    this.content(msg)
 
     this.embeds {
         this.embed {
@@ -28,7 +32,7 @@ webhook {
             this.fields {
                 this.field(
                     "Version ${rootProject.version}",
-                    "Download Link: https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
+                    "Download Link: $url"
                 )
 
                 this.field(
@@ -39,7 +43,7 @@ webhook {
 
             this.author(
                 rootProject.name,
-                "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions",
+                url,
                 "https://cdn-raw.modrinth.com/data/EMORKQjj/1cf7fffa9bf92d1bc292983dc320984cc764b51e.png"
             )
         }

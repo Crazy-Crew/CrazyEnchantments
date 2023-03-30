@@ -8,7 +8,7 @@ plugins {
 }
 
 dependencies {
-    // NBT API / BSTATS
+    // Nbt Api / Bstats
     implementation(libs.nbt.api)
     implementation(libs.bstats.bukkit)
 
@@ -43,6 +43,7 @@ dependencies {
     compileOnly(libs.silkspawners) {
         exclude("org.bukkit", "bukkit")
         exclude("org.spigot", "spigot")
+        exclude("org.spigotmc", "spigot")
         exclude("com.destroystokyo.paper", "paper")
         exclude("com.sk89q", "worldguard")
         exclude("com.sk89q", "worldedit")
