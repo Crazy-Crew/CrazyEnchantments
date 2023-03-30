@@ -8,6 +8,7 @@ plugins {
 
 val releaseUpdate = Color(27, 217, 106)
 val betaUpdate = Color(255, 163, 71)
+val changeLogs = Color(37, 137, 204)
 
 val beta = settings.versions.beta.get().toBoolean()
 val extension = settings.versions.extension.get()
@@ -51,6 +52,35 @@ webhook {
                 url,
                 "https://git.crazycrew.us/ryderbelserion/assets/raw/branch/main/crazycrew/png/${rootProject.name}Website.png"
             )
+        }
+
+        this.embed {
+            this.color(changeLogs)
+
+            this.title("Change Logs")
+
+            this.fields {
+                this.field(
+                    "Changes",
+                    """
+                        » Added a permission requirement to the Blast Enchant: **crazyenchantments.blast.use**
+                    """.trimIndent()
+                )
+
+                this.field(
+                    "Fixes",
+                    """
+                        » N/A
+                    """.trimIndent()
+                )
+
+                this.field(
+                    "Removed",
+                    """
+                        » N/A
+                    """.trimIndent()
+                )
+            }
         }
     }
 }
