@@ -1,3 +1,4 @@
+import com.lordcodes.turtle.shellRun
 import task.WebhookExtension
 import java.awt.Color
 
@@ -17,6 +18,10 @@ val repo = if (beta) "beta" else "releases"
 val url = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions"
 val download = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
 val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready! <@&1029922295210311681>"
+
+val hash = shellRun("git", listOf("rev-parse", "--short", "HEAD"))
+
+rootProject.version = if (beta) hash else "1.9.8.2"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")

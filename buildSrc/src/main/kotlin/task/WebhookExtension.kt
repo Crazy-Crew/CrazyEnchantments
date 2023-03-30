@@ -17,15 +17,15 @@ abstract class WebhookExtension {
     private val embeds: MutableList<Embed> = mutableListOf()
 
     fun content(content: String) {
-        this.content = content;
+        this.content = content
     }
 
     fun username(username: String) {
-        this.username = username;
+        this.username = username
     }
 
     fun avatar(avatar: String) {
-        this.avatar = avatar;
+        this.avatar = avatar
     }
 
     fun embeds(builder: EmbedsBuilder.() -> Unit) {

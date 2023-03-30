@@ -20,4 +20,6 @@ dependencies {
     implementation("io.ktor:ktor-serialization-gson:$ktor")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+    implementation("com.lordcodes.turtle:turtle:0.8.0")
 }
