@@ -19,7 +19,7 @@
 Enchantments:
   #Do not change this line.
   Glowing: #Do not change these lines. If so you will get errors in the console.
-    #Whether or not an enchantment is active
+    #Whether an enchantment is active
     Enabled: true
     #The in-game name of the enchantment.
     Name: 'Glowing'

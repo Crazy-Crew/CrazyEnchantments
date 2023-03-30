@@ -28,13 +28,13 @@ Settings:
     - 'Slot:27, Item:BLACK_STAINED_GLASS_PANE, Name: '
 ###################################
 #             Items: Options
-# Item:<Item Name> - The item that it will be. You can use meta data for the items. List of names: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+# Item:<Item Name> - The item that it will be. You can use metadata for the items. List of names: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 # Amount: <Number> - Choose how many of the item you get.
 # Name: <Name> - The display name that goes on the item.
 # Lore: <Line 1>,<Line 2>,<Line 3>,<Line 4> - The lore that will go under the enchantments. Split lines with a ','
 # <Enchantment>:<Level> - Choose vanilla enchantments here.
 # <Custom Enchantment>:<Level> - Choose a custom enchantments here.
-# To chose a random level for the custom or vanilla enchantments use like this '<Custom/Enchantment>:<Min Level>-<Max Level>'
+# To choose a random level for the custom or vanilla enchantments use like this '<Custom/Enchantment>:<Min Level>-<Max Level>'
 # Example of this is shows here.
 # Overload:1-5, Hulk:1-5 << this will add Hulk and Overload and pick a random level from 1-5 and set it as the power.
 ###################################
