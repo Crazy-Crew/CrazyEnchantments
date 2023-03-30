@@ -117,6 +117,7 @@ tasks {
                 <h4>Changes:</h4>
                  <p>Added 1.19.4 support</p>
                  <p>Removed 1.18.2 and below support</p>
+                 <p>Added a permission requirement to the Blast Enchant: **crazyenchantments.blast.use**</p>
                 <h4>Under the hood changes</h4>
                  <p>Simplified build script</p>
                 <h4>Bug Fixes:</h4>

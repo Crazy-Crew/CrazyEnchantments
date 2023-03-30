@@ -63,7 +63,7 @@ webhook {
                 this.field(
                     "Changes",
                     """
-                        » Added a permission requirement to the Blast Enchant: **crazyenchantments.blast.use**
+                        » N/A
                     """.trimIndent()
                 )
 
