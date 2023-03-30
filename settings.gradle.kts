@@ -17,6 +17,8 @@ pluginManagement {
     }
 }
 
+rootProject.name = "CrazyEnchantments"
+
 val lowerCase = rootProject.name.lowercase()
 
 listOf("paper").forEach(::includePlatform)
