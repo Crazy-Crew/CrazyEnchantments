@@ -44,7 +44,7 @@ webhook {
             this.author(
                 rootProject.name,
                 url,
-                "https://cdn-raw.modrinth.com/data/EMORKQjj/1cf7fffa9bf92d1bc292983dc320984cc764b51e.png"
+                "https://git.crazycrew.us/ryderbelserion/assets/raw/branch/main/crazycrew/png/${rootProject.name}Website.png"
             )
         }
     }
