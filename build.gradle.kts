@@ -57,30 +57,12 @@ webhook {
         this.embed {
             this.color(changeLogs)
 
-            this.title("Change Logs")
+            this.title("What changed?")
 
-            this.fields {
-                this.field(
-                    "Changes",
-                    """
-                        » N/A
-                    """.trimIndent()
-                )
-
-                this.field(
-                    "Fixes",
-                    """
-                        » N/A
-                    """.trimIndent()
-                )
-
-                this.field(
-                    "Removed",
-                    """
-                        » N/A
-                    """.trimIndent()
-                )
-            }
+            this.description("""
+                Changes:
+                » N/A
+            """.trimIndent())
         }
     }
 }
