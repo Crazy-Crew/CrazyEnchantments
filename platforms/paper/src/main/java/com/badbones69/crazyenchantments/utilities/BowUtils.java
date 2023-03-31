@@ -109,26 +109,26 @@ public class BowUtils {
         return webBlocks;
     }
 
-    public void spawnWebs(Entity entity, Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
+    public void spawnWebs(Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
         if (enchantedArrow == null) return;
 
         if (isBowEnchantActive(CEnchantments.STICKY_SHOT, enchantedArrow, arrow)) {
             if (hitEntity == null) {
-                Location entityLocation = entity.getLocation();
+                Location entityLocation = arrow.getLocation();
 
                 if (entityLocation.getBlock().getType() != Material.AIR) return;
 
                 entityLocation.getBlock().setType(Material.COBWEB);
                 webBlocks.add(entityLocation.getBlock());
 
-                entity.remove();
+                arrow.remove();
 
                 plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                     entityLocation.getBlock().setType(Material.AIR);
                     webBlocks.remove(entityLocation.getBlock());
                 }, 5 * 20);
             } else {
-                entity.remove();
+                arrow.remove();
                 setWebBlocks(hitEntity);
             }
         }
