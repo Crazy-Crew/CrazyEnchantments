@@ -37,18 +37,18 @@ webhook {
 
             this.fields {
                 this.field(
-                    "Version ${rootProject.version}",
-                    "Download Link: $url"
+                    "Download: ",
+                    url
                 )
 
                 this.field(
-                    "API Update",
-                    "Version **${rootProject.version}** has been pushed to https://repo.crazycrew.us/#/$repo"
+                    "API: ",
+                    "https://repo.crazycrew.us/#/$repo/${rootProject.group.toString().replace(".", "/")}/${rootProject.name.lowercase()}-api/${rootProject.version}"
                 )
             }
 
             this.author(
-                rootProject.name,
+                "${rootProject.name} | Version ${rootProject.version}",
                 url,
                 "https://git.crazycrew.us/ryderbelserion/assets/raw/branch/main/crazycrew/png/${rootProject.name}Website.png"
             )
