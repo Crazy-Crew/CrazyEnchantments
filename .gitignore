@@ -10,3 +10,5 @@ platforms/paper/run/*
 !platforms/paper/run/eula.txt
 
 build
+
+jars
