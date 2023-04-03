@@ -47,12 +47,13 @@
   </ol>
 </details>
 
-## Resource Page
+### Resource Page
+<a href="https://modrinth.com/plugin/crazyenchantments">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/modrinth_46h.png)</a>
 
 ### Beta Builds
-All beta builds will be on Modrinth marked as beta.<br>
+<p>Get the latest changes before marked as release.</p>
 
-<a href="https://modrinth.com/plugin/crazyenchantments">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/modrinth_64h.png)</a>
+> https://ci.crazycrew.us/job/CrazyEnchantments/
 
 ## Getting Started
 
