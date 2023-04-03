@@ -50,7 +50,7 @@ webhook {
             this.author(
                 "${rootProject.name} | Version ${rootProject.version}",
                 url,
-                "https://git.crazycrew.us/ryderbelserion/assets/raw/branch/main/crazycrew/png/${rootProject.name}Website.png"
+                "https://raw.githubusercontent.com/RyderBelserion/assets/main/crazycrew/png/${rootProject.name}Website.png"
             )
         }
 
