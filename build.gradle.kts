@@ -4,6 +4,8 @@ import java.awt.Color
 
 plugins {
     id("crazyenchantments.root-plugin")
+
+    id("featherpatcher") version "8ef64e4"
 }
 
 val releaseUpdate = Color(27, 217, 106)
@@ -65,4 +67,6 @@ webhook {
             """.trimIndent())
         }
     }
+
+    this.url("DISCORD_WEBHOOK")
 }
