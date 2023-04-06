@@ -3,14 +3,11 @@
 # Minecraft
 paper = "1.19.4-R0.1-SNAPSHOT"
 
-# CrazyCore
-crazycore = "1.0.1.3"
-
 # Adventure
 kyori = "4.13.0"
 
 ktor = "2.2.4"
-kotlin = "1.8.20-RC"
+kotlin = "1.8.20"
 
 [libraries]
 
@@ -83,6 +80,6 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "
 kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin"}
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.4" }
 
-shadow = { module = "com.github.johnrengelman:shadow", version = "8.1.0" }
+shadow = { module = "com.github.johnrengelman:shadow", version = "8.1.1" }
 
 turtle = { module = "com.lordcodes.turtle:turtle", version = "0.8.0" }
