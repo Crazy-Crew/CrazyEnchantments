@@ -74,6 +74,18 @@ public class Starter {
         // Set up all our files.
         this.fileManager.setLog(true).setup();
 
+        // Plugin Support.
+        this.pluginSupport = new PluginSupport();
+
+        this.pluginSupport.initializeWorldGuard();
+
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
+
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport = new NoCheatPlusSupport();
+
+        if (SupportedPlugins.ORAXEN.isPluginLoaded()) this.oraxenSupport = new OraxenSupport();
+        if (SupportedPlugins.SPARTAN.isPluginLoaded()) this.spartanSupport = new SpartanSupport();
+
         // Methods
         this.methods = new Methods();
 
@@ -101,18 +113,6 @@ public class Starter {
         this.plugin.pluginManager.registerEvents(this.scrollListener = new ScrollListener(), this.plugin);
 
         this.skullCreator = new SkullCreator();
-
-        // Plugin Support.
-        this.pluginSupport = new PluginSupport();
-
-        this.pluginSupport.initializeWorldGuard();
-
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
-
-        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport = new NoCheatPlusSupport();
-
-        if (SupportedPlugins.ORAXEN.isPluginLoaded()) this.oraxenSupport = new OraxenSupport();
-        if (SupportedPlugins.SPARTAN.isPluginLoaded()) this.spartanSupport = new SpartanSupport();
 
         this.crazyManager = new CrazyManager();
 

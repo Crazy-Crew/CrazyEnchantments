@@ -106,7 +106,7 @@ public class BowEnchantments implements Listener {
         EnchantedArrow arrow = bowUtils.enchantedArrow(entityArrow);
 
         // Spawn webs related to STICKY_SHOT.
-        bowUtils.spawnWebs(e.getEntity(), e.getHitEntity(), arrow, entityArrow);
+        bowUtils.spawnWebs(e.getHitEntity(), arrow, entityArrow);
 
         if (CEnchantments.BOOM.isActivated() && arrow != null) {
             if (arrow.hasEnchantment(CEnchantments.BOOM) && CEnchantments.BOOM.chanceSuccessful(arrow.getBow())) {
@@ -193,7 +193,7 @@ public class BowEnchantments implements Listener {
         // Damaged player is an enemy.
         if (!pluginSupport.isFriendly(arrow.getShooter(), entity)) {
 
-            bowUtils.spawnWebs(arrow.getShooter(), e.getEntity(), arrow, entityArrow);
+            bowUtils.spawnWebs(e.getEntity(), arrow, entityArrow);
 
             if (CEnchantments.PULL.isActivated() && arrow.hasEnchantment(CEnchantments.PULL) && CEnchantments.PULL.chanceSuccessful(bow)) {
                 Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
