@@ -5,7 +5,7 @@ import java.awt.Color
 plugins {
     id("crazyenchantments.root-plugin")
 
-    id("featherpatcher") version "8ef64e4"
+    id("featherpatcher") version "0.0.0.2"
 }
 
 val releaseUpdate = Color(27, 217, 106)
@@ -24,7 +24,7 @@ val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New ver
 
 val hash = shellRun("git", listOf("rev-parse", "--short", "HEAD"))
 
-rootProject.version = if (beta) hash else "1.9.8.3"
+rootProject.version = if (beta) hash else "1.9.8.2"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
