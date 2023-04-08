@@ -119,7 +119,8 @@ tasks {
                 <h4>Under the hood changes</h4>
                  <p>Simplified build script</p>
                 <h4>Bug Fixes:</h4>
-                 <p>N/A</p>
+                 <p>Fix the NPE that was caused by Entity#remove being called on players. (#699)</p>
+                 <p>Fixes the problem that ocures when you have worldguard and worldedit on the server while using specific enchantments which was caused by PluginSupport in Methods being null. (#699)</p>
             """.trimIndent()
         )
     }

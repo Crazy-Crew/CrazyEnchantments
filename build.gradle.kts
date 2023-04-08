@@ -24,7 +24,7 @@ val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New ver
 
 val hash = shellRun("git", listOf("rev-parse", "--short", "HEAD"))
 
-rootProject.version = if (beta) hash else "1.9.8.2"
+rootProject.version = if (beta) hash else "1.9.8.3"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
