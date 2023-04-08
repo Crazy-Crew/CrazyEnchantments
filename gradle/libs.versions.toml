@@ -80,8 +80,6 @@ kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "
 kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin"}
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.4" }
 
-minotaur = { module = "com.modrinth.minotaur:Minotaur", version = "2.7.5" }
-
 shadow = { module = "com.github.johnrengelman:shadow", version = "8.1.1" }
 
 turtle = { module = "com.lordcodes.turtle:turtle", version = "0.8.0" }
