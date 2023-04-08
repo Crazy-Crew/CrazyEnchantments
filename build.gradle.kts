@@ -20,7 +20,7 @@ val repo = if (beta) "beta" else "releases"
 
 val url = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions"
 val download = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
-val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready! <@&1029922295210311681>"
+val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready!"
 
 val desc = if (beta) """
     Changes:
