@@ -2,7 +2,7 @@
 
 # Project Settings
 github = "https://github.com/Crazy-Crew/CrazyEnchantments"
-beta = "false"
+beta = "true"
 extension = "plugin"
 
 [plugins]
