@@ -1,0 +1,85 @@
+[versions]
+
+# Minecraft
+paper = "1.19.4-R0.1-SNAPSHOT"
+
+# Adventure
+kyori = "4.13.0"
+
+ktor = "2.2.4"
+kotlin = "1.8.20"
+
+[libraries]
+
+# Minecraft
+papermc = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+paperlib = { module = "io.papermc:paperlib", version = "1.0.8-SNAPSHOT" }
+paperweight = { module = "io.papermc.paperweight:paperweight-userdev", version = "1.5.4" }
+
+# Configurations
+config_me = { module = "ch.jalu:configme", version = "1.3.0" }
+yaml = { module = "me.carleslc.Simple-YAML:Simple-Yaml", version = "1.8.3" }
+
+# Adventure
+kyori = { module = "net.kyori:adventure-api", version.ref = "kyori" }
+kyori-mm = { module = "net.kyori:adventure-text-minimessage", version.ref = "kyori" }
+
+# Triumph Team
+triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-SNAPSHOT" }
+
+# Misc
+nbt_api = { module = "de.tr7zw:item-nbt-api", version = "2.11.2" }
+bstats_bukkit = { module = "org.bstats:bstats-bukkit", version = "3.0.0" }
+vault_api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7" }
+
+# Claims/Protection
+plotsquared = { module = "com.plotsquared:PlotSquared-Core", version = "6.10.1" }
+plotsquared_annotations = { module = "com.intellectualsites.informative-annotations:informative-annotations", version = "1.2" }
+plotsquared_paster = { module = "com.intellectualsites.paster:Paster", version = "1.1.4"}
+
+superiorskyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version = "2022.8.1" }
+
+griefprevention = { module = "com.github.TechFortress:GriefPrevention", version = "16.18" }
+massivecraft = { module = "com.massivecraft:Factions", version = "1.6.9.5-U0.6.26-b316" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.98.6.0" }
+
+# Stackers
+wildstacker = { module = "com.bgsoftware:WildStackerAPI", version = "2022.5" }
+silkspawners = { module = "de.dustplanet:silkspawners", version = "7.2.0" }
+
+# Holograms
+holographic_displays = { module = "me.filoghost.holographicdisplays:holographicdisplays-api", version = "3.0.0" }
+decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.7.8" }
+
+cmi_api = { module = "com.Zrips.CMI:CMI-API", version = "9.3.2.1" }
+cmi_lib = { module = "net.Zrips.CMILib:CMI-Lib", version = "1.2.4.5" }
+
+# Placeholders
+placeholder_api = { module = "me.clip:placeholderapi", version = "2.11.2" }
+
+# Item Plugins
+itemsadder_api = { module = "com.github.LoneDev6:api-itemsadder", version = "3.0.0" }
+oraxen = { module = "io.th0rgal:oraxen-api", version = "1.154.2" }
+
+# WorldGuard/WorldEdit
+worldguard_api = { module = "com.sk89q.worldguard:worldguard-bukkit", version = "7.1.0-SNAPSHOT" }
+
+worldedit_api = { module = "com.sk89q.worldedit:worldedit-bukkit", version = "7.2.9" }
+
+# AntiCheats
+spartan = { module = "me.vagdedes.spartan:SpartanAPI", version = "9.0" }
+nocheatplus = { module = "fr.neatmonster:nocheatplus", version = "3.16.1-SNAPSHOT" }
+
+# Kotlin
+ktor-core = { module = "io.ktor:ktor-client-core-jvm", version.ref = "ktor" }
+ktor-cio = { module = "io.ktor:ktor-client-cio-jvm", version.ref = "ktor" }
+ktor-content = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktor" }
+
+kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin"}
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.4" }
+
+shadow = { module = "com.github.johnrengelman:shadow", version = "8.1.1" }
+
+turtle = { module = "com.lordcodes.turtle:turtle", version = "0.8.0" }

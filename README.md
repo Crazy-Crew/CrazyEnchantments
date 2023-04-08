@@ -1,8 +1,8 @@
 <br />
 
-[![CrazyEnchantments](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/new/crazyenchantments/Banner.png)](https://www.spigotmc.org/resources/crazy-enchantments.16470/)
-
 <div align="center">
+
+[![CrazyEnchantments](https://raw.githubusercontent.com/RyderBelserion/Assets/main/crazycrew/webp/CrazyEnchantmentsBanner.webp)](https://modrinth.com/plugin/crazyenchantments)
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -12,7 +12,6 @@
 [![Contact][discord-shield]][discord-url]
 ![CodeFactor][codefactor-shield]
 
-![Spigot](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/unsupported/spigot_vector.svg)
 ![Paper](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/paper_vector.svg)
 ![Purpur](https://cdn.jsdelivr.net/gh/intergrav/devins-badges/assets/compact/supported/purpur_vector.svg)
 
@@ -24,9 +23,9 @@
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyEnchantments/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/discussions/categories/feature-rquests">Request Feature</a>
+    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/features?discussions_q=label%3Acrazyenchantments+category%3AFeatures">Request Feature</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/discussions/categories/support">Get Support</a>
+    <a href="https://github.com/orgs/Crazy-Crew/discussions/categories/support?discussions_q=label%3Acrazyenchantments+category%3ASupport">Get Support</a>
   </p>
 </div>
 
@@ -48,13 +47,13 @@
   </ol>
 </details>
 
-## Downloads
-> https://modrinth.com/plugin/crazyenchantments
+### Resource Page
+<a href="https://modrinth.com/plugin/crazyenchantments">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/modrinth_46h.png)</a>
 
-## Beta Builds
-### Get the latest changes before marked as release.
-All beta builds will be on Modrinth.<br>
-> https://modrinth.com/plugin/crazyenchantments/versions
+### Beta Builds
+<p>Get the latest changes before marked as release.</p>
+
+> https://ci.crazycrew.us/job/CrazyEnchantments/
 
 ## Getting Started
 
@@ -89,7 +88,7 @@ Check our public [trello board](https://trello.com/b/AJvEmcbL) for our current p
 2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
 3. Commit your Changes (`git commit -m 'your amazing feature.'`)
 4. Push to the Branch (`git push`)
-5. Open a Pull Request to add your feature/fix.
+5. Open a Pull Request to the dev branch to add your feature/fix.
 
 ## License
 

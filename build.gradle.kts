@@ -1,52 +1,72 @@
+import com.lordcodes.turtle.shellRun
+import task.WebhookExtension
 import java.awt.Color
 
 plugins {
     id("crazyenchantments.root-plugin")
+
+    id("featherpatcher") version "8ef64e4"
 }
 
-val legacyUpdate = Color(255, 73, 110)
 val releaseUpdate = Color(27, 217, 106)
 val betaUpdate = Color(255, 163, 71)
+val changeLogs = Color(37, 137, 204)
 
-releaseBuild {
-    val pluginVersion = getProjectVersion()
-    val pluginName = getProjectName()
+val beta = settings.versions.beta.get().toBoolean()
+val extension = settings.versions.extension.get()
 
-    val versionColor = if (isBeta()) betaUpdate else releaseUpdate
+val color = if (beta) betaUpdate else releaseUpdate
+val repo = if (beta) "beta" else "releases"
 
-    val pageExtension = getExtension()
+val url = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions"
+val download = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
+val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready! <@&1029922295210311681>"
 
-    webhook {
-        this.avatar("https://cdn.discordapp.com/avatars/209853986646261762/eefe3c03882cbb885d98107857d0b022.png")
+val hash = shellRun("git", listOf("rev-parse", "--short", "HEAD"))
 
-        this.username("Ryder Belserion")
+rootProject.version = if (beta) hash else "1.9.8.3"
 
-        this.content("New version of $pluginName is ready! <@&929463452232192063>")
+webhook {
+    this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
 
-        this.embeds {
-            this.embed {
-                this.color(versionColor)
+    this.username("Ryder Belserion")
 
-                this.fields {
-                    this.field(
-                        "Version $pluginVersion",
-                        "Download Link: https://modrinth.com/$pageExtension/${pluginName.toLowerCase()}/version/$pluginVersion"
-                    )
+    this.content(msg)
 
-                    val urlExt = if (isBeta()) "beta" else "releases"
+    this.embeds {
+        this.embed {
+            this.color(color)
 
-                    this.field(
-                        "API Update",
-                        "Version $pluginVersion has been pushed to https://repo.crazycrew.us/#/$urlExt/"
-                    )
-                }
+            this.fields {
+                this.field(
+                    "Download: ",
+                    url
+                )
 
-                this.author(
-                    pluginName,
-                    "https://modrinth.com/$pageExtension/${pluginName.toLowerCase()}/versions",
-                    "https://cdn-raw.modrinth.com/data/krxPuhWb/1c347285ccaef4e5214787acc5dcd2fbe9719875.png"
+                this.field(
+                    "API: ",
+                    "https://repo.crazycrew.us/#/$repo/${rootProject.group.toString().replace(".", "/")}/${rootProject.name.lowercase()}-api/${rootProject.version}"
                 )
             }
+
+            this.author(
+                "${rootProject.name} | Version ${rootProject.version}",
+                url,
+                "https://raw.githubusercontent.com/RyderBelserion/assets/main/crazycrew/png/${rootProject.name}Website.png"
+            )
+        }
+
+        this.embed {
+            this.color(changeLogs)
+
+            this.title("What changed?")
+
+            this.description("""
+                Changes:
+                » N/A
+            """.trimIndent())
         }
     }
+
+    this.url("DISCORD_WEBHOOK")
 }

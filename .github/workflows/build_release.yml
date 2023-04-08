@@ -45,7 +45,6 @@ jobs:
 
       - name: Update Notification
         run: |
-          ./gradlew releaseBuild --stacktrace
-          ./gradlew releaseWebhook --stacktrace
+          ./gradlew webhook --stacktrace
         env:
           DISCORD_WEBHOOK: ${{ secrets.CRAZYCREW_WEBHOOK }}
