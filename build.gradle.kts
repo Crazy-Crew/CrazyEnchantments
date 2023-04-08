@@ -54,7 +54,7 @@ tasks {
 
         uploadFile.set(layout.buildDirectory.file("$file/${rootProject.name}-Paper-${rootProject.version}.jar"))
 
-        autoAddDependsOn.set(false)
+        autoAddDependsOn.set(true)
 
         gameVersions.addAll(
             listOf(
