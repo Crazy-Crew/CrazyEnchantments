@@ -97,7 +97,7 @@ tasks {
 
         versionType.set(type)
 
-        uploadFile.set(reobfJar.get())
+        uploadFile.set(layout.buildDirectory.file("$file/${rootProject.name}-Paper-${rootProject.version}.jar"))
 
         autoAddDependsOn.set(true)
 
