@@ -72,6 +72,10 @@ val beta = settings.versions.beta.get().toBoolean()
 
 val type = if (beta) "beta" else "release"
 
+tasks.named("build") {
+    dependsOn("modrinth")
+}
+
 tasks {
     shadowJar {
         listOf(
