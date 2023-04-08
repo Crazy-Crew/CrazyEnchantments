@@ -56,8 +56,6 @@ tasks {
 
         autoAddDependsOn.set(false)
 
-        debugMode.set(beta)
-
         gameVersions.addAll(
             listOf(
                 "1.19",
