@@ -18,7 +18,6 @@ val extension = settings.versions.extension.get()
 val color = if (beta) betaUpdate else releaseUpdate
 val repo = if (beta) "beta" else "releases"
 
-val url = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/versions"
 val download = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
 val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready! <@&929463452232192063>"
 
@@ -45,7 +44,7 @@ webhook {
             this.fields {
                 this.field(
                     "Download: ",
-                    url
+                    download
                 )
 
                 this.field(
@@ -56,7 +55,7 @@ webhook {
 
             this.author(
                 "${rootProject.name} | Version ${rootProject.version}",
-                url,
+                download,
                 "https://raw.githubusercontent.com/RyderBelserion/assets/main/crazycrew/png/${rootProject.name}Website.png"
             )
         }
