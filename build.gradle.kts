@@ -33,7 +33,7 @@ val hash = shellRun("git", listOf("rev-parse", "--short", "HEAD"))
 rootProject.version = if (beta) hash else "1.9.8.2"
 
 tasks.named("build") {
-    dependsOn("publish", "webhook", "modrinth")
+    dependsOn("publish", "webhook")
 }
 
 webhook {
