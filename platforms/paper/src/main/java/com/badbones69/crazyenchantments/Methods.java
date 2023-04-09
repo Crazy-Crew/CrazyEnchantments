@@ -490,12 +490,8 @@ public class Methods {
             Integer value = type.getValue();
             PotionEffectType key = type.getKey();
 
-            if (value < 0) {
-                player.removePotionEffect(key);
-                return;
-            }
-
             player.removePotionEffect(key);
+            if (value < 0) continue;
             PotionEffect potionEffect = new PotionEffect(key, Integer.MAX_VALUE, value);
             player.addPotionEffect(potionEffect);
         }
