@@ -127,46 +127,30 @@ public class CEPlayer {
     public void giveGKit(GKitz kit) {
         for (ItemStack item : kit.getKitItems()) {
             if (kit.canAutoEquip()) {
-                if (item.getType().toString().toLowerCase().contains("helmet")) {
 
-                    if (player.getEquipment().getHelmet() == null || player.getEquipment().getHelmet().getType() == Material.AIR) {
-                        ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.HELMET, new ItemStack(Material.AIR), item);
-                        plugin.getServer().getPluginManager().callEvent(event);
-
-                        if (!event.isCancelled()) player.getEquipment().setHelmet(item);
-
+                switch (item.getType().toString().toLowerCase()) {
+                    case "helmet" -> {
+                        if (player.getEquipment().getHelmet() != null) break;
+                        player.getEquipment().setHelmet(item);
                         continue;
                     }
-
-                } else if (item.getType().toString().toLowerCase().contains("chestplate")) {
-
-                    if (player.getEquipment().getChestplate() == null || player.getEquipment().getChestplate().getType() == Material.AIR) {
-                        ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.CHESTPLATE, new ItemStack(Material.AIR), item);
-                        plugin.getServer().getPluginManager().callEvent(event);
-
-                        if (!event.isCancelled()) player.getEquipment().setChestplate(item);
-
+                    case "Chestplate" -> {
+                        if (player.getEquipment().getChestplate() != null) break;
+                        player.getEquipment().setChestplate(item);
                         continue;
                     }
-                } else if (item.getType().toString().toLowerCase().contains("leggings")) {
-
-                    if (player.getEquipment().getLeggings() == null || player.getEquipment().getLeggings().getType() == Material.AIR) {
-                        ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.LEGGINGS, new ItemStack(Material.AIR), item);
-                        plugin.getServer().getPluginManager().callEvent(event);
-
-                        if (!event.isCancelled()) player.getEquipment().setLeggings(item);
-
+                    case "leggings" -> {
+                        if (player.getEquipment().getLeggings() != null) break;
+                        player.getEquipment().setLeggings(item);
                         continue;
                     }
-                } else if (item.getType().toString().toLowerCase().contains("boots") && (player.getEquipment().getBoots() == null || player.getEquipment().getBoots().getType() == Material.AIR)) {
-
-                    ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.BOOTS, new ItemStack(Material.AIR), item);
-                    plugin.getServer().getPluginManager().callEvent(event);
-
-                    if (!event.isCancelled()) player.getEquipment().setBoots(item);
-
-                    continue;
+                    case "boots" -> {
+                        if (player.getEquipment().getBoots() != null) break;
+                        player.getEquipment().setBoots(item);
+                        continue;
+                    }
                 }
+
             }
 
             if (methods.isInventoryFull(player)) {

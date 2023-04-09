@@ -13,7 +13,6 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSett
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import com.google.common.collect.Lists;
-import com.plotsquared.core.collection.QuadMap;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

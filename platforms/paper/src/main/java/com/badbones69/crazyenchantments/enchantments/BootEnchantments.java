@@ -5,10 +5,10 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.utilities.WingsUtils;
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,16 +35,16 @@ public class BootEnchantments implements Listener {
     // Utils
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onEquip(ArmorEquipEvent event) {
+    public void onEquip(PlayerArmorChangeEvent event) {
         if (!wingsManager.isWingsEnabled()) return;
 
         Player player = event.getPlayer();
 
         // Check the new armor piece.
-        WingsUtils.checkArmor(event.getNewArmorPiece(), true, null, player);
+        WingsUtils.checkArmor(event.getNewItem(), true, null, player);
 
         // Check the old armor piece.
-        WingsUtils.checkArmor(null, false, event.getOldArmorPiece(), player);
+        WingsUtils.checkArmor(null, false, event.getOldItem(), player);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

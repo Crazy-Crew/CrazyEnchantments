@@ -5,10 +5,7 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.enums.Messages;
-import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
-import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 import com.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.api.events.BookFailEvent;
 import com.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
@@ -23,12 +20,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.HashMap;
 
 public class EnchantmentControl implements Listener {
@@ -100,13 +97,6 @@ public class EnchantmentControl implements Listener {
                                                     e.setCurrentItem(methods.removeWhiteScrollProtection(item));
                                                     player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                                 } else {
-                                                    ItemStack newItem = enchantmentBookSettings.removeEnchantment(item, enchantment);
-
-                                                    if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
-                                                        ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), item, newItem);
-                                                        plugin.getServer().getPluginManager().callEvent(event);
-                                                    }
-
                                                     player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
                                                 }
                                             } else {
@@ -116,12 +106,6 @@ public class EnchantmentControl implements Listener {
                                                 } else {
                                                     ItemStack newItem = new ItemStack(Material.AIR);
                                                     e.setCurrentItem(newItem);
-
-                                                    if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
-                                                        ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
-                                                        plugin.getServer().getPluginManager().callEvent(event);
-                                                    }
-
                                                     player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                                                 }
                                             }
@@ -158,14 +142,7 @@ public class EnchantmentControl implements Listener {
 
                         if (success || player.getGameMode() == GameMode.CREATIVE) {
                             ItemStack newItem = crazyManager.addEnchantment(item, enchantment, ceBook.getLevel());
-                            ItemStack oldItem = new ItemStack(Material.AIR);
                             e.setCurrentItem(newItem);
-
-                            if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
-                                ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.DRAG, ArmorType.matchType(item), oldItem, newItem);
-                                plugin.getServer().getPluginManager().callEvent(event);
-                            }
-
                             player.setItemOnCursor(new ItemStack(Material.AIR));
                             player.sendMessage(Messages.BOOK_WORKS.getMessage());
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -183,12 +160,6 @@ public class EnchantmentControl implements Listener {
                                 ItemStack newItem = new ItemStack(Material.AIR);
                                 ItemStack oldItem = new ItemStack(Material.AIR);
                                 player.setItemOnCursor(newItem);
-
-                                if (e.getInventory().getType() == InventoryType.CRAFTING && e.getRawSlot() >= 5 && e.getRawSlot() <= 8) {
-                                    ArmorEquipEvent event = new ArmorEquipEvent(player, EquipMethod.BROKE, ArmorType.matchType(item), item, newItem);
-                                    plugin.getServer().getPluginManager().callEvent(event);
-                                }
-
                                 e.setCurrentItem(oldItem);
                                 player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                             }

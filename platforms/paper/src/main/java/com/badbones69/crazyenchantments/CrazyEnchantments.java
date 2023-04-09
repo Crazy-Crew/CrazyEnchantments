@@ -26,7 +26,6 @@ import com.badbones69.crazyenchantments.enchantments.HoeEnchantments;
 import com.badbones69.crazyenchantments.enchantments.PickaxeEnchantments;
 import com.badbones69.crazyenchantments.enchantments.SwordEnchantments;
 import com.badbones69.crazyenchantments.enchantments.ToolEnchantments;
-import com.badbones69.crazyenchantments.listeners.ArmorListener;
 import com.badbones69.crazyenchantments.listeners.AuraListener;
 import com.badbones69.crazyenchantments.listeners.DustControlListener;
 import com.badbones69.crazyenchantments.listeners.FireworkDamageListener;
@@ -56,8 +55,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private FireworkDamageListener fireworkDamageListener;
     private ShopListener shopListener;
-    private ArmorListener armorListener;
-
     private ArmorEnchantments armorEnchantments;
 
     // Menus.
@@ -110,7 +107,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
         pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
         pluginManager.registerEvents(shopListener = new ShopListener(), this);
-        pluginManager.registerEvents(armorListener = new ArmorListener(), plugin);
 
         enable();
     }
@@ -204,10 +200,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public ShopListener getShopListener() {
         return this.shopListener;
-    }
-
-    public ArmorListener getArmorListener() {
-        return this.armorListener;
     }
 
     public PluginManager getPluginManager() {

@@ -6,9 +6,7 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.api.enums.ArmorType;
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
 import com.badbones69.crazyenchantments.api.events.AuraActiveEvent;
 import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.api.managers.ArmorEnchantmentManager;
@@ -22,6 +20,7 @@ import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSe
 import com.badbones69.crazyenchantments.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.processors.Processor;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -31,22 +30,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+
+import java.util.*;
 
 public class ArmorEnchantments implements Listener {
 
@@ -84,10 +77,10 @@ public class ArmorEnchantments implements Listener {
     }
 
     @EventHandler
-    public void onEquip(ArmorEquipEvent event) {
+    public void onEquip(PlayerArmorChangeEvent event) {
         Player player = event.getPlayer();
-        ItemStack newItem = event.getNewArmorPiece();
-        ItemStack oldItem = event.getOldArmorPiece();
+        ItemStack newItem = event.getNewItem();
+        ItemStack oldItem = event.getOldItem();
 
         if (enchantmentBookSettings.hasEnchantments(oldItem)) { // Removing the potion effects.
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
@@ -110,25 +103,6 @@ public class ArmorEnchantments implements Listener {
             }
         }
     }
-
-    // Ryder start
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onArmorRightClickEquip(PlayerInteractEvent event) {
-        if (!(event.getAction() == Action.RIGHT_CLICK_AIR) || !(event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
-
-        Player player = event.getPlayer();
-
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-
-        runEquip(player, ArmorType.matchType(itemStack), new ItemStack(Material.AIR), itemStack);
-    }
-
-    private void runEquip(Player player, ArmorType armorType, ItemStack itemStack, ItemStack activeItem) {
-        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(player, ArmorEquipEvent.EquipMethod.HOTBAR, armorType, itemStack, activeItem);
-        player.getServer().getPluginManager().callEvent(armorEquipEvent);
-    }
-    // Ryder end
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getDamager().getUniqueId())) return;
