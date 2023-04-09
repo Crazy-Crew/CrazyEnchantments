@@ -2,15 +2,12 @@ package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.api.enums.ArmorType;
-import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent;
-import com.badbones69.crazyenchantments.api.events.ArmorEquipEvent.EquipMethod;
 import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.api.objects.gkitz.GkitCoolDown;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -127,14 +124,13 @@ public class CEPlayer {
     public void giveGKit(GKitz kit) {
         for (ItemStack item : kit.getKitItems()) {
             if (kit.canAutoEquip()) {
-
-                switch (item.getType().toString().toLowerCase()) {
+                switch (item.getType().toString().contains("_") ? item.getType().toString().toLowerCase().split("_")[1] : "No") {
                     case "helmet" -> {
                         if (player.getEquipment().getHelmet() != null) break;
                         player.getEquipment().setHelmet(item);
                         continue;
                     }
-                    case "Chestplate" -> {
+                    case "chestplate" -> {
                         if (player.getEquipment().getChestplate() != null) break;
                         player.getEquipment().setChestplate(item);
                         continue;
