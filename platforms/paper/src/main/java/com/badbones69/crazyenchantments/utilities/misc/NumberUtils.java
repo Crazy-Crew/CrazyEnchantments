@@ -76,23 +76,14 @@ public class NumberUtils {
     public static String checkLevels(ItemStack item, String customName) {
         String line = "";
 
-        if (ItemUtils.verifyItemLore(item)) {
-            ItemMeta meta = item.getItemMeta();
+        if (!ItemUtils.verifyItemLore(item)) return "";
 
-            if (meta != null && meta.hasLore()) {
-                List<String> itemLore = meta.getLore();
-
-                if (itemLore != null) {
-                    for (String lore : itemLore) {
-                        if (lore.contains(customName)) {
-                            line = lore;
-                            break;
-                        }
-                    }
-                }
+        for (String lore : item.getItemMeta().getLore()) {
+            if (lore.contains(customName)) {
+                line = lore;
+                break;
             }
         }
-
         return line;
     }
 }
