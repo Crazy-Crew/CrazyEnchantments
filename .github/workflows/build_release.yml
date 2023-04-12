@@ -29,9 +29,6 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Shadow Jar
-        run: ./gradlew shadowJar --stacktrace
-
       - name: Modrinth Publish
         run: ./gradlew modrinth --stacktrace
         env:

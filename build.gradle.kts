@@ -18,17 +18,12 @@ val extension = settings.versions.extension.get()
 val color = if (beta) betaUpdate else releaseUpdate
 val repo = if (beta) "beta" else "releases"
 
-val download = if (beta) "https://ci.crazycrew.us/job/${rootProject.name}/" else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
-val msg = if (beta) "New version of ${rootProject.name} is ready!" else "New version of ${rootProject.name} is ready! <@&929463452232192063>"
+val download = "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
+val msg = "New version of ${rootProject.name} is ready! <@&929463452232192063>"
 
-val hash = shellRun("git", listOf("rev-parse", "--short", "HEAD"))
+rootProject.version = "1.9.8.2"
 
-rootProject.version = if (beta) hash else "1.9.8.2"
-
-val desc = if (beta) """
-    Changes:
-    » N/A
-""".trimIndent() else "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
+val desc = "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
@@ -65,7 +60,11 @@ webhook {
 
             this.title("What changed?")
 
-            this.description(desc)
+            this.description("""
+                > 
+                
+                Full Changelog -> $desc
+            """.trimIndent())
         }
     }
 
