@@ -18,12 +18,11 @@ val extension = settings.versions.extension.get()
 val color = if (beta) betaUpdate else releaseUpdate
 val repo = if (beta) "beta" else "releases"
 
-val download = "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
 val msg = "New version of ${rootProject.name} is ready! <@&929463452232192063>"
 
 rootProject.version = "1.9.8.2"
 
-val desc = "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
+val download = "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
 
 webhook {
     this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
@@ -63,7 +62,7 @@ webhook {
             this.description("""
                 > 
                 
-                Full Changelog -> $desc
+                Full Changelog -> $download
             """.trimIndent())
         }
     }
