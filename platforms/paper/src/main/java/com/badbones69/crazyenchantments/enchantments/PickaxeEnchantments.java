@@ -205,6 +205,8 @@ public class PickaxeEnchantments implements Listener {
             for (Entry<ItemStack, Integer> item : drops.entrySet()) {
                 item.getKey().setAmount(item.getValue());
 
+                if (item.getKey().getType().equals(Material.SPAWNER)) continue; // Removes the handling of spawners by this plugin.
+
                 if (methods.isInventoryFull(player)) {
                     try {
                         player.getWorld().dropItem(player.getLocation(), item.getKey());
@@ -284,6 +286,7 @@ public class PickaxeEnchantments implements Listener {
     }
 
     private void tryCheck(Block block, ItemStack item, List<CEnchantment> enchantments, int dropAmount) {
+        if (block.getType() == Material.SPAWNER) return; // No more handling Spawners!!!
         try {
             block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
         } catch (IllegalArgumentException ignore) {}
