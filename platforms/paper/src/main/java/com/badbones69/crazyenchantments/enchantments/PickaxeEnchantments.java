@@ -94,6 +94,7 @@ public class PickaxeEnchantments implements Listener {
         if (!enchantments.contains(CEnchantments.BLAST.getEnchantment())) return;
 
         e.setCancelled(true);
+
         BlockFace face = blocks.get(player).get(currentBlock);
         blocks.remove(player);
         List<Block> blockList = getBlocks(currentBlock.getLocation(), face, (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
@@ -108,6 +109,7 @@ public class PickaxeEnchantments implements Listener {
             for (Block block : blockList) {
                 if (block.getType() != Material.AIR && (crazyManager.getBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
                     BlockBreakEvent event = new BlockBreakEvent(block, player);
+                    event.setDropItems(false);
                     EventUtils.addIgnoredEvent(event);
                     plugin.getServer().getPluginManager().callEvent(event);
 
@@ -138,7 +140,7 @@ public class PickaxeEnchantments implements Listener {
             for (BlockProcessInfo processInfo : finalBlockList) {
                 Block block = processInfo.getBlock();
                 if (player.getGameMode() == GameMode.CREATIVE || !crazyManager.isDropBlocksBlast()) { // If the user is in creative mode.
-                    block.setType(Material.AIR);
+                    block.breakNaturally();
                 } else { // If the user is in survival mode.
                     // This is to check if the original block the player broke was in the block list.
                     // If it is not then it should be broken and dropped on the ground.
