@@ -157,7 +157,7 @@ public class BowUtils {
         for (double x = start.getX() - radius; x <= start.getX() + radius; x++) {
             for (double z = start.getZ() - radius; z <= start.getZ() + radius; z++) {
                 Location loc = new Location(start.getWorld(), x, start.getY(), z);
-                newBlocks.add(loc.getBlock());
+                if (loc.getBlock().getType() == Material.AIR) newBlocks.add(loc.getBlock());
             }
         }
 
