@@ -41,7 +41,7 @@ val desc = """
   * Fixed the effect removal for enchantments that give more than one effect.
   * Removed the old way of handling armor equips & replace it with an improved implementation using PaperMC.
   * Fixed the g-kit auto equip which didn't account for materials.
-  * Improved performance by cutting down on getLore() misuse
+  * Improved performance by cutting down on getLore() misuse.
   * Partially remove the handling of spawners from the plugin to prevent dupes.
   * Fixes the shulker dupe that was created by CustomItems trying to also handle the BlockBreakEvents fired by blast.
            
