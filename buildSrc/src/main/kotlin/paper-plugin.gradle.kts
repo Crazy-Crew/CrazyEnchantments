@@ -1,10 +1,16 @@
+import org.gradle.kotlin.dsl.maven
+
 plugins {
-    id("crazyenchantments.root-plugin")
+    id("root-plugin")
+
+    id("com.github.johnrengelman.shadow")
 
     id("io.papermc.paperweight.userdev")
 }
 
 repositories {
+    maven("https://repo.papermc.io/repository/maven-public/")
+
     /**
      * PAPI Team
      */
@@ -60,11 +66,10 @@ tasks {
         dependsOn(reobfJar)
     }
 
-    reobfJar {
-        val file = File("$rootDir/jars")
-
-        if (!file.exists()) file.mkdirs()
-
-        outputJar.set(layout.buildDirectory.file("$file/${rootProject.name}-Paper-${rootProject.version}.jar"))
+    shadowJar {
+        listOf(
+            "de.tr7zw.changeme.nbtapi",
+            "org.bstats"
+        ).forEach { pack -> relocate(pack, "${rootProject.group}.$pack") }
     }
 }

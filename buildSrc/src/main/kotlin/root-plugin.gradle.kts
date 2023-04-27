@@ -1,11 +1,15 @@
 plugins {
     `java-library`
     `maven-publish`
-
-    id("com.github.johnrengelman.shadow")
 }
 
 repositories {
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+
+    maven("https://repo.codemc.org/repository/maven-public/")
+
+    maven("https://repo.aikar.co/content/groups/aikar/")
+
     maven("https://repo.triumphteam.dev/snapshots/")
 
     maven("https://repo.crazycrew.us/api/")
@@ -23,13 +27,7 @@ tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
-    }
 
-    javadoc {
-        options.encoding = Charsets.UTF_8.name()
-    }
-
-    processResources {
-        filteringCharset = Charsets.UTF_8.name()
+        options.compilerArgs = listOf("-parameters")
     }
 }
