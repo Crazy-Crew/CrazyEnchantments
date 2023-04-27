@@ -1,5 +1,6 @@
 plugins {
     id("paper-plugin")
+    id("library-plugin")
 }
 
 dependencies {
@@ -73,6 +74,6 @@ tasks {
 
         if (!file.exists()) file.mkdirs()
 
-        outputJar.set(layout.buildDirectory.file("$file/${rootProject.name}-Paper-${rootProject.version}.jar"))
+        outputJar.set(layout.buildDirectory.file("$file/${rootProject.name}-${rootProject.version}.jar"))
     }
 }
