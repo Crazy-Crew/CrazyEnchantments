@@ -1,71 +1,78 @@
-import com.lordcodes.turtle.shellRun
-import task.WebhookExtension
-import java.awt.Color
-
 plugins {
-    id("crazyenchantments.root-plugin")
-
-    id("featherpatcher") version "0.0.0.2"
+    id("paper-plugin")
 }
 
-val releaseUpdate = Color(27, 217, 106)
-val betaUpdate = Color(255, 163, 71)
-val changeLogs = Color(37, 137, 204)
+dependencies {
+    // Nbt Api / Bstats
+    implementation(libs.nbt.api)
+    implementation(libs.bstats.bukkit)
 
-val beta = settings.versions.beta.get().toBoolean()
-val extension = settings.versions.extension.get()
+    // PaperMC
+    compileOnly(libs.papermc)
 
-val color = if (beta) betaUpdate else releaseUpdate
-val repo = if (beta) "beta" else "releases"
+    // Custom Items
+    compileOnly(libs.oraxen)
 
-val msg = "New version of ${rootProject.name} is ready! <@&929463452232192063>"
+    // Anticheats
+    compileOnly(libs.nocheatplus)
+    compileOnly(libs.spartan)
 
-rootProject.version = "1.9.8.2"
+    // Claims
+    compileOnly(libs.plotsquared)
+    compileOnly(libs.plotsquared.annotations)
+    compileOnly(libs.plotsquared.paster)
 
-val download = "https://modrinth.com/$extension/${rootProject.name.lowercase()}/version/${rootProject.version}"
+    compileOnly(libs.superiorskyblock)
 
-webhook {
-    this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
-
-    this.username("Ryder Belserion")
-
-    this.content(msg)
-
-    this.embeds {
-        this.embed {
-            this.color(color)
-
-            this.fields {
-                this.field(
-                    "Download: ",
-                    download
-                )
-
-                this.field(
-                    "API: ",
-                    "https://repo.crazycrew.us/#/$repo/${rootProject.group.toString().replace(".", "/")}/${rootProject.name.lowercase()}-api/${rootProject.version}"
-                )
-            }
-
-            this.author(
-                "${rootProject.name} | Version ${rootProject.version}",
-                download,
-                "https://raw.githubusercontent.com/RyderBelserion/assets/main/crazycrew/png/${rootProject.name}Website.png"
-            )
-        }
-
-        this.embed {
-            this.color(changeLogs)
-
-            this.title("What changed?")
-
-            this.description("""
-                > 
-                
-                Full Changelog -> $download
-            """.trimIndent())
-        }
+    compileOnly(libs.massivecraft) {
+        exclude("org.kitteh")
+        exclude("org.spongepowered")
+        exclude("com.darkblade12")
     }
 
-    this.url("DISCORD_WEBHOOK")
+    compileOnly(libs.towny)
+
+    // Stackers/Spawners
+    compileOnly(libs.wildstacker)
+
+    compileOnly(libs.silkspawners) {
+        exclude("org.bukkit", "bukkit")
+        exclude("org.spigot", "spigot")
+        exclude("org.spigotmc", "spigot")
+        exclude("com.destroystokyo.paper", "paper")
+        exclude("com.sk89q", "worldguard")
+        exclude("com.sk89q", "worldedit")
+        exclude("com.massivecraft.massivecore", "MassiveCore")
+        exclude("com.massivecraft.factions", "Factions")
+        exclude("net.gravitydevelopment.updater", "updater")
+        exclude("com.intellectualsites", "Pipeline")
+    }
+
+    // Protection
+    compileOnly(libs.worldedit.api)
+
+    compileOnly(libs.griefprevention)
+
+    compileOnly(libs.worldguard.api)
+
+    // Misc
+    compileOnly(libs.placeholder.api)
+    compileOnly(libs.vault.api)
+}
+
+tasks {
+    shadowJar {
+        listOf(
+            "de.tr7zw.changeme.nbtapi",
+            "org.bstats"
+        ).forEach { pack -> relocate(pack, "${rootProject.group}.$pack") }
+    }
+
+    reobfJar {
+        val file = File("$rootDir/jars")
+
+        if (!file.exists()) file.mkdirs()
+
+        outputJar.set(layout.buildDirectory.file("$file/${rootProject.name}-Paper-${rootProject.version}.jar"))
+    }
 }

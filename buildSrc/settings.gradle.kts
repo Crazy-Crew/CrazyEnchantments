@@ -5,5 +5,9 @@ dependencyResolutionManagement {
         }
     }
 
-    repositories.gradlePluginPortal()
+    repositories {
+        gradlePluginPortal()
+
+        maven("https://repo.crazycrew.us/api/")
+    }
 }

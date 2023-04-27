@@ -1,14 +1,9 @@
 .gradle
 .idea
 
+build
+
 buildSrc/.gradle
 buildSrc/build
-
-platforms/paper/build
-platforms/paper/run/*
-
-!platforms/paper/run/eula.txt
-
-build
 
 jars

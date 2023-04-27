@@ -4,20 +4,18 @@ plugins {
 
 repositories {
     gradlePluginPortal()
+
+    maven("https://repo.crazycrew.us/api/")
 }
 
 dependencies {
-    implementation(libs.kotlin)
     implementation(libs.shadow)
 
     implementation(libs.paperweight)
+    implementation(libs.featherweight)
 
-    implementation(libs.ktor.core)
-    implementation(libs.ktor.cio)
-    implementation(libs.ktor.content)
-    implementation(libs.ktor.gson)
-
-    implementation(libs.kotlin.coroutines)
+    implementation(libs.minotaur)
+    implementation(libs.hangar)
 
     implementation(libs.turtle)
 }
