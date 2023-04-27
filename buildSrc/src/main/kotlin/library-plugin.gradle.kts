@@ -1,9 +1,6 @@
 import java.awt.Color
 import java.io.File
 import task.WebhookExtension
-import io.papermc.hangarpublishplugin.model.Platforms
-import com.lordcodes.turtle.shellRun
-import com.ryderbelserion.feather.git.Patcher
 import java.io.ByteArrayOutputStream
 
 plugins {
@@ -31,7 +28,7 @@ val downloads = """
 """.trimIndent()
 
 // The commit id for the "main" branch prior to merging a pull request.
-val start = "d0585eb"
+val start = "771117"
 
 // The commit id AFTER merging the pull request so the last commit before you release.
 val end = "008b197"
@@ -41,10 +38,12 @@ val commitLog = getGitHistory().joinToString(separator = "") { formatGitLog(it) 
 val desc = """
   # Release ${rootProject.version}
   ### Changes         
-  * Changes it from using the CraftItemEvent to PrepareCraftItemEvent
-  * Added 2 new config options
-    * `Prevent-Using-Vouchers-In-Recipes.Toggle` which defaults to true, Prevents crafting recipes from being complete when including a voucher.
-    * `Prevent-Using-Vouchers-In-Recipes.Alert` which defaults to false, Sends a message when an item that is a voucher is in the Crafting Table's 9 slots.
+  * Fixed the effect removal for enchantments that give more than one effect.
+  * Removed the old way of handling armor equips & replace it with an improved implementation using PaperMC.
+  * Fixed the g-kit auto equip which didn't account for materials.
+  * Improved performance by cutting down on getLore() misuse
+  * Partially remove the handling of spawners from the plugin to prevent dupes.
+  * Fixes the shulker dupe that was created by CustomItems trying to also handle the BlockBreakEvents fired by blast.
            
   ### Commits
             
@@ -121,6 +120,23 @@ webhook {
 
     this.embeds {
         this.embed {
+            this.color(logColor)
+
+            this.title("READ ME")
+
+            this.description("""
+                TDL has fixed a few bugs however in doing so, Spigot compatibility is no more. You must use https://papermc.io from this point on.
+                
+                What this also means as according to spigot
+                 » Resources must support the latest stable version of Spigot
+                 
+                We no longer support the latest stable version of Spigot so we cannot update any new versions on SpigotMC.
+                
+                Please read the full change log and take backups just to be safe before updating CrazyEnchantments.
+            """.trimIndent())
+        }
+
+        this.embed {
             this.color(color)
 
             this.fields {
@@ -137,7 +153,7 @@ webhook {
 
             this.author(
                 "${rootProject.name} | Version ${rootProject.version}",
-                null,
+                downloads,
                 "https://raw.githubusercontent.com/RyderBelserion/assets/main/crazycrew/png/${rootProject.name}Website.png"
             )
         }
