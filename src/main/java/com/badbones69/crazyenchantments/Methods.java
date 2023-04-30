@@ -492,9 +492,19 @@ public class Methods {
 
             player.removePotionEffect(key);
             if (value < 0) continue;
-            PotionEffect potionEffect = new PotionEffect(key, Integer.MAX_VALUE, value);
+            PotionEffect potionEffect = new PotionEffect(key, getInfinity(), value);
             player.addPotionEffect(potionEffect);
         }
+    }
+
+    public int getInfinity() {
+
+        int versionInt = Integer.parseInt(plugin.getServer().getVersion().split("MC:")[1]
+                .replace(")", "")
+                .replace(".", "")
+                .replace(" ", ""));
+
+        return versionInt >= 1194 ? -1 : Integer.MAX_VALUE;
     }
 
     public List<Block> getEnchantBlocks(Location loc, Location loc2) {
