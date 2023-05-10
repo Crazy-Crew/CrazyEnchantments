@@ -82,6 +82,14 @@ public class ArmorEnchantments implements Listener {
         ItemStack newItem = event.getNewItem();
         ItemStack oldItem = event.getOldItem();
 
+        if (newItem.getType().equals(oldItem.getType())
+                && newItem.hasItemMeta()
+                && newItem.getItemMeta().hasLore()
+                && oldItem.hasItemMeta()
+                && oldItem.getItemMeta().hasLore()
+                && Objects.equals(newItem.lore(), oldItem.lore())
+        ) return;
+
         if (enchantmentBookSettings.hasEnchantments(oldItem)) { // Removing the potion effects.
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
                 if (enchantment.isActivated() && enchantmentBookSettings.hasEnchantment(oldItem, enchantment.getEnchantment())) {

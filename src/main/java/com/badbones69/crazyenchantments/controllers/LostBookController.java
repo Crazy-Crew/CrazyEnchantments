@@ -31,7 +31,7 @@ public class LostBookController implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent e) {
         Player player = e.getPlayer();
 

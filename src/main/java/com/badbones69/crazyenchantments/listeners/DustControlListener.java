@@ -214,7 +214,7 @@ public class DustControlListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void openDust(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         FileConfiguration config = Files.CONFIG.getFile();

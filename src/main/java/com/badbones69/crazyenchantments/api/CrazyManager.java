@@ -825,7 +825,7 @@ public class CrazyManager {
         int randomLevel = 1 + random.nextInt(enchantmentMax);
 
         if (category.useMaxLevel()) {
-            if (randomLevel > category.getMaxLevel()) randomLevel = 1 + random.nextInt(enchantmentMax);
+            if (randomLevel > category.getMaxLevel()) randomLevel = 1 + random.nextInt(category.getMaxLevel());
 
             if (randomLevel < category.getMinLevel()) randomLevel = category.getMinLevel();
 

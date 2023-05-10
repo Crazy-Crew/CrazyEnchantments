@@ -178,7 +178,7 @@ public class EnchantmentControl implements Listener {
         }
     }
     
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onDescriptionSend(PlayerInteractEvent e) {
         if (e.getHand() != EquipmentSlot.HAND) return;
 
