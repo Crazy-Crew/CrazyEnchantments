@@ -81,6 +81,7 @@ permissions:
       crazyenchantments.bypass.wings: true
       crazyenchantments.bypass.gkitz: true
       crazyenchantments.bypass.protectioncrystal: true
+      crazyenchantments.blast.use: true
       crazyenchantments.admin: true
 
   crazyenchantments.admin:
