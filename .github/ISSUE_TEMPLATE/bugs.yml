@@ -35,7 +35,7 @@ body:
         - 1.8.8
         - 1.12.2
         - 1.16.5
-        - 1.19.3
+        - 1.19.4
     validations:
       required: true
   - type: dropdown
