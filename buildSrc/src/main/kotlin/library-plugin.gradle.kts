@@ -57,10 +57,6 @@ val desc = """
 """.trimIndent()
 
 val versions = listOf(
-    "1.19",
-    "1.19.1",
-    "1.19.2",
-    "1.19.3",
     "1.19.4"
 )
 
