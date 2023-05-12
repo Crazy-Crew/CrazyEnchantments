@@ -28,10 +28,10 @@ val downloads = """
 """.trimIndent()
 
 // The commit id for the "main" branch prior to merging a pull request.
-val start = "771117"
+val start = "36ed8e3"
 
 // The commit id AFTER merging the pull request so the last commit before you release.
-val end = "9deae3"
+val end = "ddd1fb9"
 
 val commitLog = getGitHistory().joinToString(separator = "") { formatGitLog(it) }
 
