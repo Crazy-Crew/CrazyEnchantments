@@ -38,12 +38,10 @@ val commitLog = getGitHistory().joinToString(separator = "") { formatGitLog(it) 
 val desc = """
   # Release ${rootProject.version}
   ### Changes         
-  * Fixed the effect removal for enchantments that give more than one effect.
-  * Removed the old way of handling armor equips & replace it with an improved implementation using PaperMC.
-  * Fixed the g-kit auto equip which didn't account for materials.
-  * Improved performance by cutting down on getLore() misuse.
-  * Partially remove the handling of spawners from the plugin to prevent dupes.
-  * Fixes the shulker dupe that was created by CustomItems trying to also handle the BlockBreakEvents fired by blast.
+  * Added missing ores for Telepathy.
+  * Fixed the problems with `PlayerArmorChangeEvent which was caused by the event being called on damage.
+  * Fixed the category level selections option not working.
+  * Bring back right-clicking air which stopped working as it is a cancelled event.
            
   ### Commits
             
