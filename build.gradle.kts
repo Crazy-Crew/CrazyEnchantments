@@ -1,6 +1,6 @@
 plugins {
     id("paper-plugin")
-    id("library-plugin")
+    //id("library-plugin")
 }
 
 dependencies {
