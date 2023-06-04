@@ -12,7 +12,6 @@
         <list>
           <option value="modrinth" />
           <option value="publish" />
-          <option value="webhook" />
         </list>
       </option>
       <option name="vmOptions" />

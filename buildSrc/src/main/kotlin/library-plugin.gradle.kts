@@ -10,12 +10,7 @@ plugins {
     id("com.modrinth.minotaur")
 }
 
-val releaseColor = Color(27, 217, 106)
-val betaColor = Color(255, 163, 71)
-val logColor = Color(37, 137, 204)
-
 val isBeta = false
-val color = if (isBeta) logColor else releaseColor
 val repo = if (isBeta) "beta" else "releases"
 
 val type = if (isBeta) "beta" else "release"
@@ -28,7 +23,7 @@ val downloads = """
 """.trimIndent()
 
 // The commit id for the "main" branch prior to merging a pull request.
-val start = "36ed8e3"
+val start = "9deae3"
 
 // The commit id AFTER merging the pull request so the last commit before you release.
 val end = "ddd1fb9"
@@ -103,57 +98,6 @@ tasks {
 
         changelog.set(desc)
     }
-}
-
-webhook {
-    this.avatar("https://en.gravatar.com/avatar/${WebhookExtension.Gravatar().md5Hex("no-reply@ryderbelserion.com")}.jpeg")
-
-    this.username("Ryder Belserion")
-
-    this.content(msg)
-
-    this.embeds {
-        this.embed {
-            this.color(logColor)
-
-            this.title("READ ME")
-
-            this.description("""
-                TDL has fixed a few bugs however in doing so, Spigot compatibility is no more. You must use https://papermc.io from this point on.
-                
-                What this also means as according to spigot
-                 » Resources must support the latest stable version of Spigot
-                 
-                We no longer support the latest stable version of Spigot so we cannot update any new versions on SpigotMC.
-                
-                Please read the full change log and take backups just to be safe before updating CrazyEnchantments.
-            """.trimIndent())
-        }
-
-        this.embed {
-            this.color(color)
-
-            this.fields {
-                this.field(
-                    "Download: ",
-                    downloads
-                )
-
-                this.field(
-                    "API: ",
-                    "https://repo.crazycrew.us/#/$repo/${rootProject.group.toString().replace(".", "/")}/${rootProject.name.lowercase()}-api/${rootProject.version}"
-                )
-            }
-
-            this.author(
-                "${rootProject.name} | Version ${rootProject.version}",
-                downloads,
-                "https://raw.githubusercontent.com/RyderBelserion/assets/main/crazycrew/png/${rootProject.name}Website.png"
-            )
-        }
-    }
-
-    this.url("DISCORD_WEBHOOK")
 }
 
 publishing {
