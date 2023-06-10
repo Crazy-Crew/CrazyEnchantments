@@ -504,7 +504,7 @@ public class Methods {
                 .replace(".", "")
                 .replace(" ", ""));
 
-        return versionInt >= 1194 ? -1 : Integer.MAX_VALUE;
+        return versionInt >= 1194 || versionInt == 120 ? -1 : Integer.MAX_VALUE;
     }
 
     public List<Block> getEnchantBlocks(Location loc, Location loc2) {
