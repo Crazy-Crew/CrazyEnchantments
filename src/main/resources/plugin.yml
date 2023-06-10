@@ -3,7 +3,7 @@ main: com.badbones69.crazyenchantments.CrazyEnchantments
 
 authors: [BadBones69, RyderBelserion, TDL]
 
-version: '1.9.9.2'
+version: '1.9.9.3'
 api-version: '1.19'
 description: 'Adds over 80 unique enchantments to your server and more!'
 website: 'https://github.com/Crazy-Crew/CrazyEnchantments'
