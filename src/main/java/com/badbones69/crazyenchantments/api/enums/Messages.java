@@ -144,9 +144,9 @@ public enum Messages {
     }
     
     public static String replacePlaceholders(HashMap<String, String> placeholders, String message) {
-        for (String placeholder : placeholders.keySet()) {
-            message = message.replaceAll(placeholder, placeholders.get(placeholder))
-            .replaceAll(placeholder.toLowerCase(), placeholders.get(placeholder));
+        for (Entry<String, String> placeholder : placeholders.entrySet()) {
+            message = message.replaceAll(placeholder.getKey(), placeholder.getValue())
+            .replaceAll(placeholder.getKey().toLowerCase(), placeholder.getValue());
         }
 
         return message;
@@ -163,9 +163,9 @@ public enum Messages {
         List<String> newMessageList = new ArrayList<>();
 
         for (String message : messageList) {
-            for (String placeholder : placeholders.keySet()) {
-                newMessageList.add(message.replaceAll(placeholder, placeholders.get(placeholder))
-                .replaceAll(placeholder.toLowerCase(), placeholders.get(placeholder)));
+            for (Entry<String, String> placeholder : placeholders.entrySet()) {
+                newMessageList.add(message.replaceAll(placeholder.getKey(), placeholder.getValue())
+                .replaceAll(placeholder.getKey().toLowerCase(), placeholder.getValue()));
             }
         }
 

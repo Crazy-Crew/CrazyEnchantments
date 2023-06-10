@@ -17,6 +17,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jline.utils.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -92,7 +94,7 @@ public class EnchantmentBookSettings {
                     .setSuccessRate(getPercent("%success_rate%", book, FileManager.Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100))
                     .setDestroyRate(getPercent("%destroy_rate%", book, FileManager.Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
         return null;

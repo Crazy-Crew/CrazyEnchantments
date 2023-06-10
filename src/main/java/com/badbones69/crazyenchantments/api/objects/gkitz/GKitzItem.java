@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GKitzItem {
 
@@ -33,21 +34,6 @@ public class GKitzItem {
     }
     
     /**
-     * @return The ItemBuilder object that is set.
-     */
-    public ItemBuilder getItemBuilder() {
-        return itemBuilder;
-    }
-    
-    /**
-     * Set the ItemBuilder for the gkit item.
-     * @param itemBuilder The Item you wish the given item to be.
-     */
-    public void setItemBuilder(ItemBuilder itemBuilder) {
-        this.itemBuilder = itemBuilder;
-    }
-    
-    /**
      * @param enchant Crazy Enchantment
      * @param level Level of the enchantment
      */
@@ -56,20 +42,13 @@ public class GKitzItem {
     }
     
     /**
-     * @param enchant Crazy Enchantment
-     */
-    public void removeCEEnchantment(CEnchantment enchant) {
-        ceEnchantments.remove(enchant);
-    }
-    
-    /**
      * @return Returns a fully finished item.
      */
     public ItemStack build() {
         ItemStack item = itemBuilder.build();
 
-        for (CEnchantment enchantment : ceEnchantments.keySet()) {
-            crazyManager.addEnchantment(item, enchantment, ceEnchantments.get(enchantment));
+        for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchantments.entrySet()) {
+            item = crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());
         }
 
         return item;

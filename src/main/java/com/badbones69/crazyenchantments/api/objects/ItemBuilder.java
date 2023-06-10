@@ -24,11 +24,9 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import org.jline.utils.Log;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ItemBuilder {
@@ -311,8 +309,8 @@ public class ItemBuilder {
     public String getUpdatedName() {
         String newName = itemName;
 
-        for (String placeholder : namePlaceholders.keySet()) {
-            newName = newName.replace(placeholder, namePlaceholders.get(placeholder)).replace(placeholder.toLowerCase(), namePlaceholders.get(placeholder));
+        for (Map.Entry<String, String> placeholder : namePlaceholders.entrySet()) {
+            newName = newName.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
         }
 
         return newName;
@@ -413,7 +411,7 @@ public class ItemBuilder {
         try {
             return (ItemBuilder) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
         return new ItemBuilder();
@@ -617,8 +615,8 @@ public class ItemBuilder {
         List<String> newLore = new ArrayList<>();
 
         for (String item : itemLore) {
-            for (String placeholder : lorePlaceholders.keySet()) {
-                item = item.replace(placeholder, lorePlaceholders.get(placeholder)).replace(placeholder.toLowerCase(), lorePlaceholders.get(placeholder));
+            for (Map.Entry<String, String> placeholder : lorePlaceholders.entrySet()) {
+                item = item.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
             }
 
             newLore.add(item);
@@ -1039,7 +1037,7 @@ public class ItemBuilder {
             }
         } catch (Exception e) {
             itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c" + (placeHolder != null ? placeHolder : "")));
-            e.printStackTrace();
+            Log.error(e);
         }
 
         return itemBuilder;

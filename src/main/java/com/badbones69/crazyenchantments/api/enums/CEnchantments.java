@@ -292,7 +292,7 @@ public enum CEnchantments {
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful() {
-        return chance >= 100 || chance <= 0 || (new Random().nextInt(100) + 1) <= chance;
+        return chance >= 100 || chance <= 0 || methods.getRandomNumber ("0-100") <= chance;
     }
 
     /**
