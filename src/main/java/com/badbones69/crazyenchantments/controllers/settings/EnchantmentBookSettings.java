@@ -397,7 +397,17 @@ public class EnchantmentBookSettings {
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
-        int level = NumberUtils.convertLevelInteger(NumberUtils.checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
+
+        // PDC Start
+        Gson g = new Gson();
+
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
+
+        String data = item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+
+        int level = data == null ? 0 : g.fromJson(data, Enchant.class).getLevel(enchant.getName());
+
+        // PDC End
 
         if (!useUnsafeEnchantments() && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
