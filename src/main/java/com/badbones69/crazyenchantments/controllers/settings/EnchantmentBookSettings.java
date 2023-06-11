@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.controllers.settings;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
@@ -228,39 +229,26 @@ public class EnchantmentBookSettings {
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
 
-        if (!ItemUtils.verifyItemLore(item)) return Collections.emptyMap();
+        Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
-        List<String> lore = item.getItemMeta().getLore();
-        Map<CEnchantment, Integer> enchantments = null;
+    // PDC Start
+        Gson g = new Gson();
 
-        assert lore != null;
-        for (String line : lore) {
-            int lastSpaceIndex = line.lastIndexOf(' ');
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
 
-            if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) continue;
+        String data = item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
 
-            String enchantmentName = line.substring(0, lastSpaceIndex);
+        if (data == null) return Collections.emptyMap();
 
-            for (CEnchantment enchantment : getRegisteredEnchantments()) {
-                if (!enchantment.isActivated()) continue;
+        Enchant enchants = g.fromJson(data, Enchant.class);
 
-                String stripped = ColorUtils.removeColor(enchantmentName);
+        if (enchants.isEmpty()) return Collections.emptyMap();
 
-                if (!stripped.equals(enchantment.getCustomName())) continue;
-
-                String levelString = line.substring(lastSpaceIndex + 1);
-                int level = NumberUtils.convertLevelInteger(levelString);
-
-                if (level < 1) break;
-
-                if (enchantments == null) enchantments = new HashMap<>();
-
-                enchantments.put(enchantment, level);
-                break; // Next line
-            }
+        for (CEnchantment enchantment : getRegisteredEnchantments()) {
+            if (!enchantment.isActivated()) continue;
+            if (enchants.hasEnchantment(enchantment.getName())) enchantments.put(enchantment, enchants.getLevel(enchantment.getName()));
         }
-
-        if (enchantments == null) enchantments = Collections.emptyMap();
+    // PDC End
 
         return enchantments;
     }
