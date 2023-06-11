@@ -1,7 +1,9 @@
 package com.badbones69.crazyenchantments.controllers.settings;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
+import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
@@ -12,11 +14,15 @@ import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jline.utils.Log;
 
 import java.util.ArrayList;
@@ -30,6 +36,8 @@ public class EnchantmentBookSettings {
     private ItemBuilder enchantmentBook;
 
     private final List<Category> categories = Lists.newArrayList();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
 
@@ -58,29 +66,29 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     * @param item Item that you want to check if it has an enchantment.
+     * @param item        Item that you want to check if it has an enchantment.
      * @param enchantment The enchantment you want to check if the item has.
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
     public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-        if (ItemUtils.verifyItemLore(item)) {
-            ItemMeta meta = item.getItemMeta();
-            List<String> itemLore = meta.getLore();
 
-            if (enchantment.isActivated()) {
-                for (String line : itemLore) {
-                    if (line.equals("") || line.equals(" ")) continue;
-                    String[] split = line.split(" ");
+    // PDC Start
+        Gson g = new Gson();
 
-                    // Split can generate an empty array in rare case.
-                    String stripped = ColorUtils.removeColor(line.replace(" " + split[split.length - 1], ""));
+        if (item == null || item.getItemMeta() == null) return false;
 
-                    if (stripped.equals(enchantment.getCustomName())) return true;
-                }
-            }
-        }
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
 
-        return false;
+        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+
+        if (!data.has(key)) return false;
+
+        String itemData = data.get(key, PersistentDataType.STRING);
+        if (itemData == null) return false;
+
+        return g.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
+
+    // PDC End
     }
 
     /**
@@ -410,14 +418,44 @@ public class EnchantmentBookSettings {
 
             if (itemLore != null) {
                 for (String lore : itemLore) {
-                    if (!lore.contains(enchant.getCustomName())) newLore.add(lore);
+                    if (!lore.contains(enchant.getCustomName())) {
+                        newLore.add(lore);
+                    };
                 }
             }
         }
 
         if (meta != null) meta.setLore(newLore);
 
+    // PDC Start
+        Gson g = new Gson();
+
+        String data;
+        Enchant eData;
+
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
+
+        assert meta != null;
+        data = meta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        if (data != null) {
+            eData = g.fromJson(data, Enchant.class);
+        } else {
+            eData = new Enchant(new HashMap<>());
+        }
+
+
+        eData.removeEnchantment(enchant.getName());
+
+        if (eData.isEmpty()) {
+            meta.getPersistentDataContainer().remove(key);
+        } else {
+            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, g.toJson(eData));
+        }
+
+    // PDC End
+
         item.setItemMeta(meta);
+
         return item;
     }
 }

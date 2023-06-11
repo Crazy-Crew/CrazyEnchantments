@@ -7,14 +7,14 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
+import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.managers.*;
 import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
+import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.api.support.CropManager;
 import com.badbones69.crazyenchantments.api.support.interfaces.CropManagerVersion;
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
-import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.listeners.ScramblerListener;
@@ -22,8 +22,10 @@ import com.badbones69.crazyenchantments.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.utilities.WingsUtils;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
+import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -31,7 +33,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -613,7 +617,8 @@ public class CrazyManager {
         return addEnchantments(item, enchantments);
     }
 
-    public ItemStack addEnchantments(ItemStack item, Map<CEnchantment, Integer> enchantments) {
+    public ItemStack addEnchantments(ItemStack item1, Map<CEnchantment, Integer> enchantments) {
+        ItemStack item = item1.clone();
         for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
@@ -639,6 +644,7 @@ public class CrazyManager {
 
             enchantmentStrings.put(enchantment.getName(), ColorUtils.color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level)));
 
+
             for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
                 newLore.add(stringEntry.getValue());
             }
@@ -647,7 +653,31 @@ public class CrazyManager {
 
             if (meta != null) meta.setLore(newLore);
 
+        // PDC Start
+            Gson g = new Gson();
+
+            String data;
+            Enchant eData;
+
+            NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
+
+
+            data = item1.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+            if (data != null) {
+                eData = g.fromJson(data, Enchant.class);
+            } else {
+                eData = new Enchant(new HashMap<>());
+            }
+
+            for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
+                eData.addEnchantment(x.getKey().getName(), x.getValue());
+            }
+
+            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, g.toJson(eData));
+        // PDC End
+
             item.setItemMeta(meta);
+
         }
 
         return item;
