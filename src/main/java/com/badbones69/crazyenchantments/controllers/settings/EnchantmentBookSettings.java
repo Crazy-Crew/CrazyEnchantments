@@ -229,6 +229,8 @@ public class EnchantmentBookSettings {
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
 
+        if (item == null || item.getItemMeta() == null) return Collections.emptyMap();
+
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
     // PDC Start
