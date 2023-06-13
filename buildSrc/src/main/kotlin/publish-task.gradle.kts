@@ -20,16 +20,36 @@ val end = "52b8d7"
 val commitLog = getGitHistory().joinToString(separator = "") { formatGitLog(it) }
 
 val desc = """
+# Warning: As of this update, Enchants previously added to items will no longer work so you should not use this on an already existing server.
+# We are having 
+    
 ## Changes:
  * Added 1.20 support.
+ * Slight code enhancements
+ * A more random type of random
+ * Slowly start changing to Adventure API
+ ### Optimizations:
+ * Reduce some checks that should not be needed.
+ * Changed over to using JSON strings for enchantment storage in PDC.
+ * Adds in PDC and changes the check to see if an item has enchantments over to PDC.
+ * Opens up how you can customize lore a lot more in the future.
+ * Should provide better performance.
+ * Information for checks has been moved over to being under PDC, so lore no longer has an impact.
+  * Adding enchants
+  * Removing enchants
+  * Checking levels.
+  
+## PDC should have a substantial increase for server performance when using our plugins. Enchants previously added to items will no longer work so you should not use this on an already existing server.
 
 ## API:
  * N/A
 
 ## Bugs:
- * Fixes NPE caused by /gkit reset with no other args.
- * Fixes infinite effect length for 1.20
- * Removes an error that gets thrown on crash that would only be thrown if the plugin didn't load up properly before.
+* Fixes infinite effect length for 1.20.
+* Removes an error that gets throw on crash that would only be thrown if the plugin doesn't load up properly before.
+* Fixes NPE caused by /gkit reset with no other args.
+* Fix for gkit no adding any crazyEnchantments. (Which might have been added in with the PDC changes)
+
  * Submit any bugs @ https://github.com/Crazy-Crew/${rootProject.name}/issues 
 
 ## Commits
