@@ -1,7 +1,7 @@
 plugins {
     id("paper-plugin")
 
-    //id("publish-task")
+    id("publish-task")
 
     id("xyz.jpenilla.run-paper") version "2.1.0"
 }

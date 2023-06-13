@@ -48,7 +48,7 @@ worldguard_api = { module = "com.sk89q.worldguard:worldguard-bukkit", version = 
 worldedit_api = { module = "com.sk89q.worldedit:worldedit-bukkit", version = "7.2.9" }
 
 # AntiCheats
-spartan = { module = "me.vagdedes.spartan:SpartanAPI", version = "9.1" }
+spartan = { module = "me.vagdedes:spartanapi", version = "9.1" }
 nocheatplus = { module = "fr.neatmonster:nocheatplus", version = "3.16.1-SNAPSHOT" }
 
 [plugins]
