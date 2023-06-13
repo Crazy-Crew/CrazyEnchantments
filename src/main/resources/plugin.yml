@@ -1,12 +1,13 @@
-name: CrazyEnchantments
-main: com.badbones69.crazyenchantments.CrazyEnchantments
+name: 'CrazyEnvoys'
+main: '${group}.CrazyEnchantments'
 
 authors: [BadBones69, RyderBelserion, TDL]
 
-version: '1.9.9.3'
+version: '${version}'
 api-version: '1.20'
-description: 'Adds over 80 unique enchantments to your server and more!'
-website: 'https://github.com/Crazy-Crew/CrazyEnchantments'
+description: '${description}'
+
+website: '${website}'
 
 softdepend:
   - WorldGuard
