@@ -1,22 +1,18 @@
 [libraries]
 
 # Minecraft
-papermc = { module = "io.papermc.paper:paper-api", version = "1.19.4-R0.1-SNAPSHOT" }
+papermc = { module = "io.papermc.paper:paper-api", version = "1.20-R0.1-SNAPSHOT" }
 hangar = { module = "io.papermc:hangar-publish-plugin", version = "0.0.5" }
 
-minotaur = { module = "com.modrinth.minotaur:Minotaur", version = "2.7.2" }
-paperweight = { module = "io.papermc.paperweight:paperweight-userdev", version = "1.5.3" }
-featherweight = { module = "com.ryderbelserion.feather:feather-plugin", version = "0.0.0.2" }
+minotaur = { module = "com.modrinth.minotaur:Minotaur", version = "2.8.0" }
+paperweight = { module = "io.papermc.paperweight:paperweight-userdev", version = "1.5.5" }
+featherweight = { module = "com.ryderbelserion.feather:feather-plugin", version = "0.0.0.4" }
 
 shadow = { module = "com.github.johnrengelman:shadow", version = "8.1.1" }
-
 turtle = { module = "com.lordcodes.turtle:turtle", version = "0.8.0" }
 
-# CrazyCrew
-crazycore = { module = "us.crazycrew.crazycore:crazycore-api", version = "2.0.0.4" }
-
 # Misc
-nbt_api = { module = "de.tr7zw:item-nbt-api", version = "2.11.2" }
+nbt_api = { module = "de.tr7zw:item-nbt-api", version = "2.11.3" }
 bstats_bukkit = { module = "org.bstats:bstats-bukkit", version = "3.0.0" }
 vault_api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7" }
 
@@ -36,12 +32,9 @@ wildstacker = { module = "com.bgsoftware:WildStackerAPI", version = "2022.5" }
 silkspawners = { module = "de.dustplanet:silkspawners", version = "7.2.0" }
 
 # Holograms
-holographic_displays = { module = "me.filoghost.holographicdisplays:holographicdisplays-api", version = "3.0.0" }
-decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.7.8" }
-
-# CMI
-cmi_api = { module = "com.Zrips.CMI:CMI-API", version = "9.3.1.5" }
-cmi_lib = { module = "net.zrips.CMILib:cmi-lib-api", version = "1.2.5.3" }
+decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.8.1" }
+fancy_holograms = { module = "de.oliver:FancyHolograms", version = "1.1.0" }
+fancy_npcs = { module = "de.oliver:FancyNpcs", version = "1.2.0" }
 
 # Placeholders
 placeholder_api = { module = "me.clip:placeholderapi", version = "2.11.3" }
@@ -57,3 +50,7 @@ worldedit_api = { module = "com.sk89q.worldedit:worldedit-bukkit", version = "7.
 # AntiCheats
 spartan = { module = "me.vagdedes.spartan:SpartanAPI", version = "9.0" }
 nocheatplus = { module = "fr.neatmonster:nocheatplus", version = "3.16.1-SNAPSHOT" }
+
+[plugins]
+
+run-paper = { id = "xyz.jpenilla.run-paper", version = "2.1.0" }
