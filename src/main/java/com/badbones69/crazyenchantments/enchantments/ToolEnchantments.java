@@ -23,11 +23,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class ToolEnchantments implements Listener {
@@ -49,9 +51,10 @@ public class ToolEnchantments implements Listener {
 
     private final List<String> ignoreBlockTypes = Lists.newArrayList("air", "shulker_box", "chest", "head", "skull");
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler()
     public void onPlayerClick(PlayerInteractEvent e) {
-        updateEffects(e.getPlayer());
+        //Check what hand is being used as the event fires for each hand.
+        if (Objects.equals(e.getHand(), EquipmentSlot.HAND)) updateEffects(e.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -64,7 +67,7 @@ public class ToolEnchantments implements Listener {
         ItemStack brokenBlock = new ItemStack(event.getBlock().getType());
         ItemStack tool = methods.getItemInHand(player);
 
-        updateEffects(player);
+        //updateEffects(player); //Click event should be enough to handle this.
 
         List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(tool);
 

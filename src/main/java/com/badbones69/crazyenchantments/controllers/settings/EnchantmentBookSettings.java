@@ -1,7 +1,10 @@
 package com.badbones69.crazyenchantments.controllers.settings;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
+import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.Category;
@@ -12,11 +15,17 @@ import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.jline.utils.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +37,8 @@ public class EnchantmentBookSettings {
     private ItemBuilder enchantmentBook;
 
     private final List<Category> categories = Lists.newArrayList();
+
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
 
@@ -56,29 +67,29 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     * @param item Item that you want to check if it has an enchantment.
+     * @param item        Item that you want to check if it has an enchantment.
      * @param enchantment The enchantment you want to check if the item has.
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
     public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-        if (ItemUtils.verifyItemLore(item)) {
-            ItemMeta meta = item.getItemMeta();
-            List<String> itemLore = meta.getLore();
 
-            if (enchantment.isActivated()) {
-                for (String line : itemLore) {
-                    if (line.equals("") || line.equals(" ")) continue;
-                    String[] split = line.split(" ");
+    // PDC Start
+        Gson g = new Gson();
 
-                    // Split can generate an empty array in rare case.
-                    String stripped = ColorUtils.removeColor(line.replace(" " + split[split.length - 1], ""));
+        if (item == null || item.getItemMeta() == null) return false;
 
-                    if (stripped.equals(enchantment.getCustomName())) return true;
-                }
-            }
-        }
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
 
-        return false;
+        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+
+        if (!data.has(key)) return false;
+
+        String itemData = data.get(key, PersistentDataType.STRING);
+        if (itemData == null) return false;
+
+        return g.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
+
+    // PDC End
     }
 
     /**
@@ -92,7 +103,7 @@ public class EnchantmentBookSettings {
                     .setSuccessRate(getPercent("%success_rate%", book, FileManager.Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100))
                     .setDestroyRate(getPercent("%destroy_rate%", book, FileManager.Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
         return null;
@@ -218,39 +229,28 @@ public class EnchantmentBookSettings {
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
 
-        if (!ItemUtils.verifyItemLore(item)) return Collections.emptyMap();
+        if (item == null || item.getItemMeta() == null) return Collections.emptyMap();
 
-        List<String> lore = item.getItemMeta().getLore();
-        Map<CEnchantment, Integer> enchantments = null;
+        Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
-        assert lore != null;
-        for (String line : lore) {
-            int lastSpaceIndex = line.lastIndexOf(' ');
+    // PDC Start
+        Gson g = new Gson();
 
-            if (lastSpaceIndex < 1 || lastSpaceIndex + 1 > line.length()) continue;
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
 
-            String enchantmentName = line.substring(0, lastSpaceIndex);
+        String data = item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
 
-            for (CEnchantment enchantment : getRegisteredEnchantments()) {
-                if (!enchantment.isActivated()) continue;
+        if (data == null) return Collections.emptyMap();
 
-                String stripped = ColorUtils.removeColor(enchantmentName);
+        Enchant enchants = g.fromJson(data, Enchant.class);
 
-                if (!stripped.equals(enchantment.getCustomName())) continue;
+        if (enchants.isEmpty()) return Collections.emptyMap();
 
-                String levelString = line.substring(lastSpaceIndex + 1);
-                int level = NumberUtils.convertLevelInteger(levelString);
-
-                if (level < 1) break;
-
-                if (enchantments == null) enchantments = new HashMap<>();
-
-                enchantments.put(enchantment, level);
-                break; // Next line
-            }
+        for (CEnchantment enchantment : getRegisteredEnchantments()) {
+            if (!enchantment.isActivated()) continue;
+            if (enchants.hasEnchantment(enchantment.getName())) enchantments.put(enchantment, enchants.getLevel(enchantment.getName()));
         }
-
-        if (enchantments == null) enchantments = Collections.emptyMap();
+    // PDC End
 
         return enchantments;
     }
@@ -387,7 +387,17 @@ public class EnchantmentBookSettings {
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
-        int level = NumberUtils.convertLevelInteger(NumberUtils.checkLevels(item, enchant.getCustomName()).replace(enchant.getColor() + enchant.getCustomName() + " ", ""));
+
+        // PDC Start
+        Gson g = new Gson();
+
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
+
+        String data = item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+
+        int level = data == null ? 0 : g.fromJson(data, Enchant.class).getLevel(enchant.getName());
+
+        // PDC End
 
         if (!useUnsafeEnchantments() && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
@@ -408,14 +418,44 @@ public class EnchantmentBookSettings {
 
             if (itemLore != null) {
                 for (String lore : itemLore) {
-                    if (!lore.contains(enchant.getCustomName())) newLore.add(lore);
+                    if (!lore.contains(enchant.getCustomName())) {
+                        newLore.add(lore);
+                    };
                 }
             }
         }
 
         if (meta != null) meta.setLore(newLore);
 
+    // PDC Start
+        Gson g = new Gson();
+
+        String data;
+        Enchant eData;
+
+        NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
+
+        assert meta != null;
+        data = meta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        if (data != null) {
+            eData = g.fromJson(data, Enchant.class);
+        } else {
+            eData = new Enchant(new HashMap<>());
+        }
+
+
+        eData.removeEnchantment(enchant.getName());
+
+        if (eData.isEmpty()) {
+            meta.getPersistentDataContainer().remove(key);
+        } else {
+            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, g.toJson(eData));
+        }
+
+    // PDC End
+
         item.setItemMeta(meta);
+
         return item;
     }
 }

@@ -6,6 +6,8 @@ import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.jline.utils.Log;
+
 import java.util.HashMap;
 
 public enum ShopOption {
@@ -63,7 +65,7 @@ public enum ShopOption {
                 Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
             } catch (Exception e) {
                 plugin.getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
-                e.printStackTrace();
+                Log.error(e);
             }
         }
     }

@@ -47,45 +47,44 @@ public class GkitzCommand implements CommandExecutor {
             } else {
                 if (args[0].equalsIgnoreCase("reset")) { // /gkitz reset <kit> [player]
                     if (hasPermission(sender, "reset")) {
-                        GKitz kit = crazyManager.getGKitFromName(args[1]);
                         Player player;
-
-                        if (args.length >= 2) {
-
-                            if (kit == null) {
-                                HashMap<String, String> placeholders = new HashMap<>();
-                                placeholders.put("%Kit%", args[1]);
-                                placeholders.put("%Gkit%", args[1]);
-                                sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
-                                return true;
-                            }
-
-                            if (args.length >= 3) {
-                                if (!methods.isPlayerOnline(args[2], sender)) {
-                                    return true;
-                                } else {
-                                    player = methods.getPlayer(args[2]);
-                                }
-                            } else {
-                                if (!isPlayer) {
-                                    sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-                                    return true;
-                                } else {
-                                    player = (Player) sender;
-                                }
-                            }
-
-                            crazyManager.getCEPlayer(player).removeCoolDown(kit);
-                            HashMap<String, String> placeholders = new HashMap<>();
-
-                            placeholders.put("%Player%", player.getName());
-                            placeholders.put("%Gkit%", kit.getName());
-                            placeholders.put("%Kit%", kit.getName());
-
-                            sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
-                        } else {
+                        if (args.length < 2) {
                             sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/GKitz Reset <Kit> [Player]"));
+                            return true;
                         }
+                        GKitz kit = crazyManager.getGKitFromName(args[1]);
+
+                        if (kit == null) {
+                            HashMap<String, String> placeholders = new HashMap<>();
+                            placeholders.put("%Kit%", args[1]);
+                            placeholders.put("%Gkit%", args[1]);
+                            sender.sendMessage(Messages.NOT_A_GKIT.getMessage(placeholders));
+                            return true;
+                        }
+
+                        if (args.length >= 3) {
+                            if (!methods.isPlayerOnline(args[2], sender)) {
+                                    return true;
+                            } else {
+                                player = methods.getPlayer(args[2]);
+                            }
+                        } else {
+                            if (!isPlayer) {
+                                sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                                return true;
+                            } else {
+                                player = (Player) sender;
+                            }
+                        }
+
+                        crazyManager.getCEPlayer(player).removeCoolDown(kit);
+                        HashMap<String, String> placeholders = new HashMap<>();
+
+                        placeholders.put("%Player%", player.getName());
+                        placeholders.put("%Gkit%", kit.getName());
+                        placeholders.put("%Kit%", kit.getName());
+                        sender.sendMessage(Messages.RESET_GKIT.getMessage(placeholders));
+
                     }
                 } else {
                     if (hasPermission(sender, "gkitz")) {

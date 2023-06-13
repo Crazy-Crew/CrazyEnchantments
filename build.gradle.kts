@@ -1,6 +1,9 @@
 plugins {
     id("paper-plugin")
-    //id("library-plugin")
+
+    //id("publish-task")
+
+    id("xyz.jpenilla.run-paper") version "2.1.0"
 }
 
 dependencies {
@@ -75,5 +78,17 @@ tasks {
         if (!file.exists()) file.mkdirs()
 
         outputJar.set(layout.buildDirectory.file("$file/${rootProject.name}-${rootProject.version}.jar"))
+    }
+
+    processResources {
+        filesMatching("plugin.yml") {
+            expand(
+                "name" to rootProject.name,
+                "group" to rootProject.group,
+                "version" to rootProject.version,
+                "description" to rootProject.description,
+                "website" to "https://modrinth.com/plugin/${rootProject.name.lowercase()}"
+            )
+        }
     }
 }

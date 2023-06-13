@@ -5,21 +5,15 @@ import com.badbones69.crazyenchantments.api.PluginSupport;
 import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -28,17 +22,13 @@ import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+
+import java.util.*;
 
 public class Methods {
 
@@ -70,11 +60,15 @@ public class Methods {
         if (NumberUtils.isInt(split[0]) && NumberUtils.isInt(split[1])) {
             int max = Integer.parseInt(split[1]) + 1;
             int min = Integer.parseInt(split[0]);
-            number = min + random.nextInt(max - min);
+
+            number = getRandomNumber(min, max);
+
         }
 
         return number;
     }
+
+    public int getRandomNumber(int min, int max) { return min + random.nextInt(max - min); }
 
     public boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
         if (sender instanceof Player) {
@@ -170,8 +164,6 @@ public class Methods {
                 }
             }
         } catch (Exception ignored) {}
-
-        player.updateInventory();
     }
 
     public ItemStack removeItem(ItemStack item) {
@@ -191,26 +183,7 @@ public class Methods {
     }
 
     public ItemStack addLore(ItemStack item, String i) {
-        ArrayList<String> lore = new ArrayList<>();
-        ItemMeta m = item.getItemMeta();
-
-        if (item.getItemMeta().hasLore()) lore.addAll(item.getItemMeta().getLore());
-
-        lore.add(ColorUtils.color(i));
-
-        if (lore.contains(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")))) {
-            lore.remove(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-            lore.add(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-        }
-
-        if (lore.contains(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")))) {
-            lore.remove(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
-            lore.add(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
-        }
-
-        m.setLore(lore);
-        item.setItemMeta(m);
-
+        Objects.requireNonNull(item.lore()).add(ColorUtils.legacyTranslateColourCodes(i));
         return item;
     }
 
@@ -381,7 +354,7 @@ public class Methods {
 
             NBTItem nbtItem = new NBTItem(item);
 
-            if (nbtItem.hasNBTData() && nbtItem.hasKey("Unbreakable") && nbtItem.getBoolean("Unbreakable")) return;
+            if (nbtItem.hasNBTData() && nbtItem.hasTag("Unbreakable") && nbtItem.getBoolean("Unbreakable")) return;
 
             if (item.getItemMeta().hasEnchants()) {
                 if (item.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
@@ -504,7 +477,7 @@ public class Methods {
                 .replace(".", "")
                 .replace(" ", ""));
 
-        return versionInt >= 1194 ? -1 : Integer.MAX_VALUE;
+        return versionInt >= 1194 || versionInt == 120 ? -1 : Integer.MAX_VALUE;
     }
 
     public List<Block> getEnchantBlocks(Location loc, Location loc2) {
@@ -628,4 +601,5 @@ public class Methods {
                 "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
+
 }

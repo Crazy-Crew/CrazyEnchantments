@@ -1,6 +1,9 @@
 package com.badbones69.crazyenchantments.utilities.misc;
 
 import com.badbones69.crazyenchantments.api.FileManager;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import java.util.List;
@@ -58,7 +61,7 @@ public class ColorUtils {
     }
 
     public static String removeColor(String msg) {
-        return ChatColor.stripColor(msg);
+        return PlainTextComponentSerializer.plainText().serialize(LegacyComponentSerializer.legacySection().deserialize(msg));
     }
 
     public static String getPrefix(String string) {
@@ -67,5 +70,9 @@ public class ColorUtils {
 
     public static String getPrefix() {
         return getPrefix("");
+    }
+
+    public static TextComponent legacyTranslateColourCodes(String input) {
+        return LegacyComponentSerializer.legacy('&').deserialize(input);
     }
 }

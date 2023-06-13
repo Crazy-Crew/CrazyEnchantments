@@ -12,10 +12,10 @@ import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 public class CEnchantment {
 
@@ -158,7 +158,7 @@ public class CEnchantment {
 
     public boolean chanceSuccessful(int enchantmentLevel) {
         int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
-        int pickedChance = new Random().nextInt(100) + 1;
+        int pickedChance = methods.getRandomNumber (0, 100);
 
         return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
     }

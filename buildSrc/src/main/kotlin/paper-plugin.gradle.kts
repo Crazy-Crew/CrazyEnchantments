@@ -9,8 +9,6 @@ plugins {
 }
 
 repositories {
-    maven("https://repo.papermc.io/repository/maven-public/")
-
     /**
      * PAPI Team
      */
@@ -41,6 +39,8 @@ repositories {
      */
     maven("https://repo.codemc.org/repository/maven-public/")
 
+    maven("https://repo.papermc.io/repository/maven-public/")
+
     /**
      * Towny Team
      */
@@ -51,6 +51,10 @@ repositories {
      */
     maven("https://repo.bg-software.com/repository/api/")
 
+    maven("https://repo.fancyplugins.de/snapshots/")
+
+    maven("https://repo.fancyplugins.de/releases/")
+
     /**
      * EngineHub Team
      */
@@ -58,7 +62,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20-R0.1-SNAPSHOT")
 }
 
 tasks {
@@ -69,6 +73,7 @@ tasks {
     shadowJar {
         listOf(
             "de.tr7zw.changeme.nbtapi",
+            "dev.triumphteam",
             "org.bstats"
         ).forEach { pack -> relocate(pack, "${rootProject.group}.$pack") }
     }

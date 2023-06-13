@@ -3,14 +3,13 @@ package com.badbones69.crazyenchantments.api.objects;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class CEBook {
 
@@ -19,8 +18,6 @@ public class CEBook {
     private final Starter starter = plugin.getStarter();
 
     private final Methods methods = starter.getMethods();
-
-    private final CrazyManager crazyManager = starter.getCrazyManager();
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
@@ -60,8 +57,8 @@ public class CEBook {
         int successMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
         int destroyMax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
         int destroyMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
-        this.destroyRate = percentPick(destroyMax, destroyMin);
-        this.successRate = percentPick(successMax, successMin);
+        this.destroyRate = methods.percentPick(destroyMax, destroyMin);
+        this.successRate = methods.percentPick(successMax, successMin);
     }
     
     /**
@@ -84,8 +81,8 @@ public class CEBook {
         this.amount = amount;
         this.level = level;
         this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
-        this.destroyRate = percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
-        this.successRate = percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
+        this.destroyRate = methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
+        this.successRate = methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
     
     /**
@@ -220,8 +217,8 @@ public class CEBook {
                 }
             } else {
                 lore.add(ColorUtils.color(bookLine)
-                .replace("%Destroy_Rate%", destroyRate + "").replace("%destroy_rate%", destroyRate + "")
-                .replace("%Success_Rate%", successRate + "").replace("%success_rate%", successRate + ""));
+                .replace("%Destroy_Rate%", String.valueOf(destroyRate)).replace("%destroy_rate%", String.valueOf(destroyRate))
+                .replace("%Success_Rate%", String.valueOf(successRate)).replace("%success_rate%", String.valueOf(successRate)));
             }
         }
 
@@ -234,8 +231,5 @@ public class CEBook {
     public ItemStack buildBook() {
         return getItemBuilder().build();
     }
-    
-    private int percentPick(int max, int min) {
-        return max == min ? max : min + new Random().nextInt(max - min);
-    }
+
 }

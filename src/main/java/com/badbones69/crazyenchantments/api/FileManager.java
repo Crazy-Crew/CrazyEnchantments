@@ -4,6 +4,8 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jline.utils.Log;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -56,7 +58,7 @@ public class FileManager {
                 } catch (Exception e) {
                     if (isLogging()) plugin.getLogger().info("Failed to load file: " + file.getFileName() + ".");
 
-                    e.printStackTrace();
+                    Log.error(e);
                     continue;
                 }
             }
@@ -112,7 +114,7 @@ public class FileManager {
                             } catch (Exception e) {
                                 if (isLogging()) plugin.getLogger().info("Failed to create new default file: " + homeFolder + "/" + file.getKey() + "!");
 
-                                e.printStackTrace();
+                                Log.error(e);
                             }
                         }
                     }
@@ -223,7 +225,7 @@ public class FileManager {
             configurations.get(file).save(files.get(file));
         } catch (IOException e) {
             plugin.getLogger().info("Could not save " + file.getFileName() + "!");
-            e.printStackTrace();
+            Log.error(e);
         }
     }
     
@@ -240,7 +242,7 @@ public class FileManager {
                 if (isLogging()) plugin.getLogger().info("Successfully saved the " + file.getFileName() + ".");
             } catch (Exception e) {
                plugin.getLogger().info("Could not save " + file.getFileName() + "!");
-                e.printStackTrace();
+                Log.error(e);
             }
         } else {
             if (isLogging()) plugin.getLogger().info("The file " + name + ".yml could not be found!");
@@ -274,7 +276,7 @@ public class FileManager {
                 if (isLogging()) plugin.getLogger().info("Successfully reload the " + file.getFileName() + ".");
             } catch (Exception e) {
                 plugin.getLogger().info("Could not reload the " + file.getFileName() + "!");
-                e.printStackTrace();
+                Log.error(e);
             }
         } else {
             if (isLogging()) plugin.getLogger().info("The file " + name + ".yml could not be found!");
@@ -479,7 +481,7 @@ public class FileManager {
                     return true;
                 } catch (Exception e) {
                     plugin.getLogger().info("Could not save " + fileName + "!");
-                    e.printStackTrace();
+                    Log.error(e);
                     return false;
                 }
             } else {
@@ -502,7 +504,7 @@ public class FileManager {
                     return true;
                 } catch (Exception e) {
                     plugin.getLogger().info("Could not reload the " + fileName + "!");
-                    e.printStackTrace();
+                    Log.error(e);
                 }
             } else {
                 if (isLogging()) plugin.getLogger().info("There was a null custom file that was not found!");

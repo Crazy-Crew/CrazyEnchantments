@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.jline.utils.Log;
 
 public class TownySupport implements FactionsVersion {
 
@@ -33,7 +34,7 @@ public class TownySupport implements FactionsVersion {
                 if (resident.hasTown() && resident.getTown().equals(block.getTown())) return true;
             }
         } catch (NotRegisteredException e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
         return false;
@@ -58,7 +59,7 @@ public class TownySupport implements FactionsVersion {
 
             if (block != null && block.hasTown() && !block.getTown().isPVP()) return false;
         } catch (NotRegisteredException e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
         return true;
