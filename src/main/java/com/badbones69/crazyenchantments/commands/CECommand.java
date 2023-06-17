@@ -653,7 +653,7 @@ public class CECommand implements CommandExecutor {
                                     methods.setItemInHand(player, enchantmentBookSettings.removeEnchantment(item, ceEnchantment));
                                     HashMap<String, String> placeholders = new HashMap<>();
                                     placeholders.put("%Enchantment%", ceEnchantment.getCustomName());
-                                    player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders));
+                                    player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders).replaceAll("&", ""));
                                     return true;
                                 }
                             }
