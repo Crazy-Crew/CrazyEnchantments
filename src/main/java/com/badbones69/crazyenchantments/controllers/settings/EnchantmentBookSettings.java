@@ -416,7 +416,10 @@ public class EnchantmentBookSettings {
         List<Component> lore = meta.lore();
 
         assert lore != null;
-        lore.removeIf(loreComponent -> ((TextComponent) loreComponent.children().get(0)).content().contains(enchant.getCustomName()));
+        lore.removeIf(loreComponent -> loreComponent.children().size() > 0 ?
+                ((TextComponent) loreComponent.children().get(0)).content().contains(enchant.getCustomName()) :
+                ((TextComponent) loreComponent).content().contains(enchant.getCustomName())
+        );
 
         meta.lore(lore);
 
