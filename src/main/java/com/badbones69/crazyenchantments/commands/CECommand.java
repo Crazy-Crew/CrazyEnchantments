@@ -116,12 +116,12 @@ public class CECommand implements CommandExecutor {
                     if (hasPermission(sender, "limit")) {
                         HashMap<String, String> placeholders = new HashMap<>();
 
-                        placeholders.put("%bypass%", sender.hasPermission("crazyenchantments.bypass.limit") + "");
+                        placeholders.put("%bypass%", String.valueOf(sender.hasPermission("crazyenchantments.bypass.limit")));
 
                         assert sender instanceof Player;
-                        placeholders.put("%limit%", crazyManager.getPlayerMaxEnchantments((Player) sender) + "");
-                        placeholders.put("%vanilla%", crazyManager.checkVanillaLimit() + "");
-                        placeholders.put("%item%", enchantmentBookSettings.getEnchantmentAmount(methods.getItemInHand((Player) sender), crazyManager.checkVanillaLimit()) + "");
+                        placeholders.put("%limit%", String.valueOf(crazyManager.getPlayerMaxEnchantments((Player) sender)));
+                        placeholders.put("%vanilla%", String.valueOf(crazyManager.checkVanillaLimit()));
+                        placeholders.put("%item%", String.valueOf(enchantmentBookSettings.getEnchantmentAmount(methods.getItemInHand((Player) sender), crazyManager.checkVanillaLimit())));
 
                         sender.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
                     }
@@ -291,9 +291,9 @@ public class CECommand implements CommandExecutor {
                             HashMap<String, String> placeholders = new HashMap<>();
 
                             placeholders.put("%World%", location.getWorld().getName());
-                            placeholders.put("%X%", location.getBlockX() + "");
-                            placeholders.put("%Y%", location.getBlockY() + "");
-                            placeholders.put("%Z%", location.getBlockZ() + "");
+                            placeholders.put("%X%", String.valueOf(location.getBlockX()));
+                            placeholders.put("%Y%", String.valueOf(location.getBlockY()));
+                            placeholders.put("%Z%", String.valueOf(location.getBlockZ()));
 
                             sender.sendMessage(Messages.SPAWNED_BOOK.getMessage(placeholders));
 
@@ -391,7 +391,7 @@ public class CECommand implements CommandExecutor {
 
                         player.getInventory().addItem(scramblerListener.getScramblers(amount));
                         HashMap<String, String> placeholders = new HashMap<>();
-                        placeholders.put("%Amount%", amount + "");
+                        placeholders.put("%Amount%", String.valueOf(amount));
                         placeholders.put("%Player%", player.getName());
                         sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
                         player.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
@@ -433,7 +433,7 @@ public class CECommand implements CommandExecutor {
 
                         player.getInventory().addItem(protectionCrystalSettings.getCrystals(amount));
                         HashMap<String, String> placeholders = new HashMap<>();
-                        placeholders.put("%Amount%", amount + "");
+                        placeholders.put("%Amount%", String.valueOf(amount));
                         placeholders.put("%Player%", player.getName());
                         sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
                         player.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
@@ -496,7 +496,7 @@ public class CECommand implements CommandExecutor {
                                 }
 
                                 HashMap<String, String> placeholders = new HashMap<>();
-                                placeholders.put("%Amount%", amount + "");
+                                placeholders.put("%Amount%", String.valueOf(amount));
                                 placeholders.put("%Player%", player.getName());
 
                                 switch (dust) {
