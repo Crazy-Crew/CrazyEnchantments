@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -407,7 +408,9 @@ public class EnchantmentBookSettings {
         List<Component> lore = meta.lore();
 
         if (lore != null) {
-            lore.removeIf(loreComponent -> LegacyComponentSerializer.legacyAmpersand().serialize(loreComponent).contains(enchant.getCustomName().replace('&', '§')));
+
+            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                    .contains(enchant.getCustomName().replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
             meta.lore(lore);
         }
     // PDC Start

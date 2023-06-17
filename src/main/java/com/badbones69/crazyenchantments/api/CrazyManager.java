@@ -25,6 +25,7 @@ import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -583,7 +584,9 @@ public class CrazyManager {
 
         for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
             if (methods.stripString(enchantment.getName()).equalsIgnoreCase(enchantmentString) ||
-            methods.stripString(enchantment.getCustomName()).equalsIgnoreCase(enchantmentString)) return enchantment;
+            methods.stripString(enchantment.getCustomName()).equalsIgnoreCase(enchantmentString) ||
+            enchantment.getCustomName().replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                    .equalsIgnoreCase(enchantmentString.replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))) return enchantment;
         }
 
         return null;
@@ -632,7 +635,7 @@ public class CrazyManager {
 
             if (lore == null) lore = List.of();
 
-            lore.add(Component.text(loreString));
+            lore.add(LegacyComponentSerializer.legacy('&').deserialize(loreString));
 
             meta.lore(lore);
 
