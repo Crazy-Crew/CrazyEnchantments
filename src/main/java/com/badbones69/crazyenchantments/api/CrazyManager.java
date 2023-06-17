@@ -24,6 +24,8 @@ import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -35,6 +37,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -624,34 +627,16 @@ public class CrazyManager {
             int level = entry.getValue();
 
             if (enchantmentBookSettings.hasEnchantment(item, enchantment)) enchantmentBookSettings.removeEnchantment(item, enchantment);
-
-            List<String> newLore = new ArrayList<>();
-            List<String> lores = new ArrayList<>();
-            HashMap<String, String> enchantmentStrings = new HashMap<>();
-
-            for (CEnchantment en : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
-                enchantmentStrings.put(en.getName(), ColorUtils.color(en.getColor() + en.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentBookSettings.getLevel(item, en))));
-                enchantmentBookSettings.removeEnchantment(item, en);
-            }
-
+            
+            String loreString = ColorUtils.color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level));
             ItemMeta meta = item.getItemMeta();
+            List<Component> lore = meta.lore();
 
-            if (meta != null && meta.hasLore()) {
-                List<String> itemLore = meta.getLore();
+            if (lore == null) lore = List.of();
 
-                if (itemLore != null) lores.addAll(itemLore);
-            }
+            lore.add(Component.text(loreString));
 
-            enchantmentStrings.put(enchantment.getName(), ColorUtils.color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level)));
-
-
-            for (Entry<String, String> stringEntry : enchantmentStrings.entrySet()) {
-                newLore.add(stringEntry.getValue());
-            }
-
-            newLore.addAll(lores);
-
-            if (meta != null) meta.setLore(newLore);
+            meta.lore(lore);
 
         // PDC Start
             Gson g = new Gson();
