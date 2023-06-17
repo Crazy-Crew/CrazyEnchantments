@@ -23,6 +23,7 @@ import com.badbones69.crazyenchantments.utilities.WingsUtils;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
+import com.palmergames.adventure.text.minimessage.MiniMessage;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -631,13 +632,14 @@ public class CrazyManager {
 
             if (enchantmentBookSettings.hasEnchantment(item, enchantment)) enchantmentBookSettings.removeEnchantment(item, enchantment);
             
-            String loreString = ColorUtils.color(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level));
+            String loreString = enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level);
             ItemMeta meta = item.getItemMeta();
             List<Component> lore = meta.lore();
 
             if (lore == null) lore = new ArrayList<>();
 
             lore.add(LegacyComponentSerializer.legacy('&').deserialize(loreString));
+
             meta.lore(lore);
 
         // PDC Start
