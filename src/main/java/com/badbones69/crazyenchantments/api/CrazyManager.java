@@ -25,7 +25,9 @@ import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minecraft.network.chat.TextColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -585,8 +587,8 @@ public class CrazyManager {
         for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
             if (methods.stripString(enchantment.getName()).equalsIgnoreCase(enchantmentString) ||
             methods.stripString(enchantment.getCustomName()).equalsIgnoreCase(enchantmentString) ||
-            enchantment.getCustomName().replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                    .equalsIgnoreCase(enchantmentString.replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))) return enchantment;
+            enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                    .equalsIgnoreCase(enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))) return enchantment;
         }
 
         return null;
@@ -633,10 +635,9 @@ public class CrazyManager {
             ItemMeta meta = item.getItemMeta();
             List<Component> lore = meta.lore();
 
-            if (lore == null) lore = List.of();
+            if (lore == null) lore = new ArrayList<>();
 
             lore.add(LegacyComponentSerializer.legacy('&').deserialize(loreString));
-
             meta.lore(lore);
 
         // PDC Start

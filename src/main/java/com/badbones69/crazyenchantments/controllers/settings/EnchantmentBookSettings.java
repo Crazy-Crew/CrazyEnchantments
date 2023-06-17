@@ -409,8 +409,8 @@ public class EnchantmentBookSettings {
 
         if (lore != null) {
 
-            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                    .contains(enchant.getCustomName().replaceAll("([&§]#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                    .contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
             meta.lore(lore);
         }
     // PDC Start
