@@ -11,7 +11,7 @@ import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -407,11 +407,7 @@ public class EnchantmentBookSettings {
         List<Component> lore = meta.lore();
 
         if (lore != null) {
-            lore.removeIf(loreComponent -> loreComponent.children().size() > 0 ?
-                    ((TextComponent) loreComponent.children().get(0)).content().contains(enchant.getCustomName()) :
-                    ((TextComponent) loreComponent).content().contains(enchant.getCustomName())
-            );
-
+            lore.removeIf(loreComponent -> LegacyComponentSerializer.legacyAmpersand().serialize(loreComponent).contains(enchant.getCustomName().replace('&', '§')));
             meta.lore(lore);
         }
     // PDC Start

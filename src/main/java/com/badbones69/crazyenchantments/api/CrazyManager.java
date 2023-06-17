@@ -25,7 +25,6 @@ import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -37,7 +36,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.Map.Entry;
