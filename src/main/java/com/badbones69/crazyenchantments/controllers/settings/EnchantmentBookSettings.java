@@ -16,6 +16,8 @@ import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -24,13 +26,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
 import org.jline.utils.Log;
+import org.w3c.dom.Text;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Supplier;
 
 public class EnchantmentBookSettings {
 
@@ -110,7 +111,7 @@ public class EnchantmentBookSettings {
     }
 
     public int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
-        String arg = defaultValue + "";
+        String arg = String.valueOf(defaultValue);
 
         for (String originalLine : originalLore) {
             originalLine = ColorUtils.color(originalLine).toLowerCase();
@@ -377,7 +378,7 @@ public class EnchantmentBookSettings {
             case 8 -> "VIII";
             case 9 -> "IX";
             case 10 -> "X";
-            default -> i + "";
+            default -> String.valueOf(i);
         };
     }
 
@@ -410,22 +411,14 @@ public class EnchantmentBookSettings {
      * @return Item without the enchantment.
      */
     public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
-        List<String> newLore = new ArrayList<>();
+
         ItemMeta meta = item.getItemMeta();
+        List<Component> lore = meta.lore();
 
-        if (meta != null && meta.hasLore()) {
-            List<String> itemLore = meta.getLore();
+        assert lore != null;
+        lore.removeIf(loreComponent -> ((TextComponent) loreComponent.children().get(0)).content().contains(enchant.getCustomName()));
 
-            if (itemLore != null) {
-                for (String lore : itemLore) {
-                    if (!lore.contains(enchant.getCustomName())) {
-                        newLore.add(lore);
-                    };
-                }
-            }
-        }
-
-        if (meta != null) meta.setLore(newLore);
+        meta.lore(lore);
 
     // PDC Start
         Gson g = new Gson();
@@ -435,7 +428,6 @@ public class EnchantmentBookSettings {
 
         NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
 
-        assert meta != null;
         data = meta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
         if (data != null) {
             eData = g.fromJson(data, Enchant.class);
