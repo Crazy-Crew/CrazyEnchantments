@@ -588,8 +588,8 @@ public class CrazyManager {
         for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
             if (methods.stripString(enchantment.getName()).equalsIgnoreCase(enchantmentString) ||
             methods.stripString(enchantment.getCustomName()).equalsIgnoreCase(enchantmentString) ||
-            enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                    .equalsIgnoreCase(enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))) return enchantment;
+            enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "")
+                    .equalsIgnoreCase(enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", ""))) return enchantment;
         }
 
         return null;
