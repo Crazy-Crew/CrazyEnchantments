@@ -1,18 +1,12 @@
 package com.badbones69.crazyenchantments.controllers.settings;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.api.objects.CEBook;
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.Category;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
-import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -26,12 +20,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Nullable;
 import org.jline.utils.Log;
-import org.w3c.dom.Text;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 public class EnchantmentBookSettings {
 
@@ -415,14 +406,14 @@ public class EnchantmentBookSettings {
         ItemMeta meta = item.getItemMeta();
         List<Component> lore = meta.lore();
 
-        assert lore != null;
-        lore.removeIf(loreComponent -> loreComponent.children().size() > 0 ?
-                ((TextComponent) loreComponent.children().get(0)).content().contains(enchant.getCustomName()) :
-                ((TextComponent) loreComponent).content().contains(enchant.getCustomName())
-        );
+        if (lore != null) {
+            lore.removeIf(loreComponent -> loreComponent.children().size() > 0 ?
+                    ((TextComponent) loreComponent.children().get(0)).content().contains(enchant.getCustomName()) :
+                    ((TextComponent) loreComponent).content().contains(enchant.getCustomName())
+            );
 
-        meta.lore(lore);
-
+            meta.lore(lore);
+        }
     // PDC Start
         Gson g = new Gson();
 
