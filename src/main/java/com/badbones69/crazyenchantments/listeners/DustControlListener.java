@@ -57,19 +57,27 @@ public class DustControlListener implements Listener {
 
         if (rate.equalsIgnoreCase("Success")) {
             data.setSuccessChance(percent);
-            Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore").forEach(line ->
-                    lore.add(ColorUtils.legacyTranslateColourCodes(line
-                            .replace("%Success_Rate%", String.valueOf(percent)).replace("%success_sate%", String.valueOf(percent))
-                            .replace("%Destroy_Rate%", String.valueOf(data.getDestroyChance())).replace("%Destroy_Rate%", String.valueOf(data.getDestroyChance()))
-                    )));
         } else {
             data.setDestroyChance(percent);
-            Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore").forEach(line ->
-                    lore.add(ColorUtils.legacyTranslateColourCodes(line
-                            .replace("%Destroy_Rate%", String.valueOf(percent)).replace("%destroy_rate%", String.valueOf(percent))
-                            .replace("%Success_Rate%", String.valueOf(data.getSuccessChance())).replace("%success_rate%", String.valueOf(data.getSuccessChance()))
-                    )));
         }
+
+        for (String line : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
+
+            if (line.toLowerCase().contains("description")) {
+                enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.legacyTranslateColourCodes(lines)));
+                continue;
+            }
+            lore.add(ColorUtils.legacyTranslateColourCodes(line
+                    .replaceAll("%Success_Rate%|%success_rate%", String.valueOf(data.getSuccessChance()))
+                    .replaceAll("%Destroy_Rate%|%destroy_rate%", String.valueOf(data.getDestroyChance()))));
+        }
+
+        Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore").forEach(line ->
+                lore.add(ColorUtils.legacyTranslateColourCodes(line
+                        .replaceAll("%Success_Rate%|%success_rate%", String.valueOf(data.getSuccessChance()))
+                        .replaceAll("%Destroy_Rate%|%destroy_rate%", String.valueOf(data.getDestroyChance()))
+                )));
+
 
         meta.getPersistentDataContainer().set(bookKey, PersistentDataType.STRING, gson.toJson(data));
         meta.lore(lore);
