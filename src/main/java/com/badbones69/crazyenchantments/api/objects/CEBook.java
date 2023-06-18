@@ -246,7 +246,7 @@ public class CEBook {
 
         String data = g.toJson(new EnchantedBook(enchantment.getName(), successRate, destroyRate, level), EnchantedBook.class);
 
-        meta.getPersistentDataContainer().set(storedEnchant, PersistentDataType.STRING, g.toJson(data));
+        meta.getPersistentDataContainer().set(storedEnchant, PersistentDataType.STRING, data);
     // PDC End
         item.setItemMeta(meta);
 

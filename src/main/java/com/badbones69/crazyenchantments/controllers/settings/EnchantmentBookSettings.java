@@ -199,7 +199,18 @@ public class EnchantmentBookSettings {
      * @return True if it is and false if not.
      */
     public boolean isEnchantmentBook(ItemStack book) {
-        return getEnchantmentBookEnchantment(book) != null;
+
+        if (book == null || book.getItemMeta() == null) return false;
+        if (!book.getItemMeta().getPersistentDataContainer().has(storedEnchantments)) return false;
+
+        String dataString = book.getItemMeta().getPersistentDataContainer().get(storedEnchantments, PersistentDataType.STRING);
+        EnchantedBook data = gson.fromJson(dataString, EnchantedBook.class);
+
+        for (CEnchantment enchantment : getRegisteredEnchantments()) {
+            if (enchantment.getName().equalsIgnoreCase(data.getName())) return true;
+        }
+
+        return false;
     }
 
     public List<CEnchantment> getRegisteredEnchantments() {
