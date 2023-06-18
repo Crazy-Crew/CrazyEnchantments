@@ -93,6 +93,8 @@ public class DustControlListener implements Listener {
             ItemStack book = e.getCurrentItem();
             ItemStack dust = e.getCursor();
 
+            if (book.getItemMeta() == null || dust.getItemMeta() == null) return;
+
         // PDC Start
             Gson g = new Gson();
 
