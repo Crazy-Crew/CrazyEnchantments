@@ -7,10 +7,12 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.pdc.DustData;
+import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.gson.Gson;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
@@ -44,43 +46,33 @@ public class DustControlListener implements Listener {
 
     private final Random random = new Random();
 
-    private void setLore(ItemStack item, int percent, String rate) {
+    private final Gson gson = new Gson();
+
+    private final NamespacedKey dustKey = new NamespacedKey(plugin, "Crazy_Dust");
+    private final NamespacedKey bookKey = new NamespacedKey(plugin, "Stored_Enchantments");
+
+    private void setBookLore(ItemStack item, int percent, String rate, CEnchantment enchantment, EnchantedBook data) {
         ItemMeta meta = item.getItemMeta();
-        ArrayList<String> lore = new ArrayList<>();
-        CEnchantment enchantment = null;
+        List<Component> lore = new ArrayList<>();
 
-        for (CEnchantment registeredEnchantments : crazyManager.getRegisteredEnchantments()) {
-            String ench = registeredEnchantments.getCustomName();
-
-            if (item.getItemMeta().getDisplayName().contains(ench)) enchantment = registeredEnchantments;
+        if (rate.equalsIgnoreCase("Success")) {
+            data.setSuccessChance(percent);
+            Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore").forEach(line ->
+                    lore.add(ColorUtils.legacyTranslateColourCodes(line
+                            .replace("%Success_Rate%", String.valueOf(percent)).replace("%success_sate%", String.valueOf(percent))
+                            .replace("%Destroy_Rate%", String.valueOf(data.getDestroyChance())).replace("%Destroy_Rate%", String.valueOf(data.getDestroyChance()))
+                    )));
+        } else {
+            data.setDestroyChance(percent);
+            Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore").forEach(line ->
+                    lore.add(ColorUtils.legacyTranslateColourCodes(line
+                            .replace("%Destroy_Rate%", String.valueOf(percent)).replace("%destroy_rate%", String.valueOf(percent))
+                            .replace("%Success_Rate%", String.valueOf(data.getSuccessChance())).replace("%success_rate%", String.valueOf(data.getSuccessChance()))
+                    )));
         }
 
-        for (String lores : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
-            boolean hasLine = true;
-
-            if (lores.contains("%Description%") || lores.contains("%description%")) {
-                if (enchantment != null) {
-                    enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.color(lines)));
-                }
-
-                hasLine = false;
-            }
-
-            if (rate.equalsIgnoreCase("Success")) {
-                lores = lores.replace("%Success_Rate%", String.valueOf(percent)).replace("%success_rate%", String.valueOf(percent))
-                .replace("%Destroy_Rate%", String.valueOf(enchantmentBookSettings.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0)))
-                .replace("%destroy_rate%", String.valueOf(enchantmentBookSettings.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0)));
-            } else {
-                lores = lores.replace("%Destroy_Rate%", String.valueOf(percent)).replace("%destroy_rate%", String.valueOf(percent))
-                .replace("%Success_Rate%", String.valueOf(enchantmentBookSettings.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100)))
-                .replace("%success_rate%", String.valueOf(enchantmentBookSettings.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100)));
-            }
-
-            if (hasLine) lore.add(ColorUtils.color(lores));
-        }
-
-        assert meta != null;
-        meta.setLore(lore);
+        meta.getPersistentDataContainer().set(bookKey, PersistentDataType.STRING, gson.toJson(data));
+        meta.lore(lore);
 
         item.setItemMeta(meta);
     }
@@ -93,81 +85,80 @@ public class DustControlListener implements Listener {
             ItemStack book = e.getCurrentItem();
             ItemStack dust = e.getCursor();
 
-            if (book.getItemMeta() == null || dust.getItemMeta() == null) return;
+            if (!(book.hasItemMeta() && dust.hasItemMeta())) return;
+            if (book.getAmount() > 1) return;
 
         // PDC Start
-            Gson g = new Gson();
-
-            NamespacedKey dustKey = new NamespacedKey(plugin, "Crazy_Dust");
-            //NamespacedKey bookKey = new NamespacedKey(plugin, "Crazy_Books");
-
-            DustData dustData = g.fromJson(dust.getItemMeta().getPersistentDataContainer().get(dustKey, PersistentDataType.STRING), DustData.class);
-            //DustData bookData = g.fromJson(book.getItemMeta().getPersistentDataContainer().get(bookKey, PersistentDataType.STRING), DustData.class); //Once Books have PDC
+            DustData dustData = gson.fromJson(dust.getItemMeta().getPersistentDataContainer().get(dustKey, PersistentDataType.STRING), DustData.class);
+            EnchantedBook bookData = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(bookKey, PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
         // PDC End
+            if (bookData == null || dustData == null) return;
 
-            if (book.getAmount() == 1 && book.hasItemMeta() && dust.hasItemMeta() && book.getItemMeta().hasLore() && dust.getItemMeta().hasLore() && book.getItemMeta().hasDisplayName() &&
-            dust.getItemMeta().hasDisplayName() && book.getType() == enchantmentBookSettings.getEnchantmentBookItem().getType()) {
-                boolean toggle = false;
-                String name = book.getItemMeta().getDisplayName();
+            boolean toggle = false;
 
-                for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
-                    if (name.contains(ColorUtils.color(en.getBookColor() + en.getCustomName()))) toggle = true;
+
+            CEnchantment enchantment = null;
+            for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
+                if (en.getName().equalsIgnoreCase(bookData.getName())) {
+                    enchantment = en;
+                    toggle = true;
+                    break;
                 }
+            }
 
-                if (!toggle) return;
+            if (!toggle) return;
 
 
-                if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
-                    int per = dustData.getChance();
+            if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
+                int per = dustData.getChance();
 
-                    if (methods.hasArgument("%success_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-                        int total = enchantmentBookSettings.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100);
+                if (methods.hasArgument("%success_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
+                    int total = bookData.getSuccessChance();
 
-                        if (total >= 100) return;
+                    if (total >= 100) return;
 
-                        if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                            player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
-                            return;
-                        }
-
-                        per += total;
-
-                        if (per < 0) per = 0;
-                        if (per > 100) per = 100;
-
-                        e.setCancelled(true);
-
-                        setLore(book, per, "Success");
-
-                        player.setItemOnCursor(methods.removeItem(dust));
+                    if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
+                        player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                        return;
                     }
 
-                    return;
+                    per += total;
+
+                    if (per < 0) per = 0;
+                    if (per > 100) per = 100;
+
+                    e.setCancelled(true);
+
+                    setBookLore(book, per, "Success", enchantment, bookData);
+
+                    player.setItemOnCursor(methods.removeItem(dust));
                 }
 
-                if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
-                    int per = dustData.getChance();
+                return;
+            }
 
-                    if (methods.hasArgument("%destroy_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-                        int total = enchantmentBookSettings.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0);
-                        if (total <= 0) return;
+            if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
+                int per = dustData.getChance();
 
-                        if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                            player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
-                            return;
-                        }
+                if (methods.hasArgument("%destroy_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
+                    int total = enchantmentBookSettings.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0);
+                    if (total <= 0) return;
 
-                        per = total - per;
-
-                        if (per < 0) per = 0;
-                        if (per > 100) per = 100;
-
-                        e.setCancelled(true);
-
-                        setLore(book, per, "Destroy");
-
-                        player.setItemOnCursor(methods.removeItem(dust));
+                    if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
+                        player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                        return;
                     }
+
+                    per = total - per;
+
+                    if (per < 0) per = 0;
+                    if (per > 100) per = 100;
+
+                    e.setCancelled(true);
+
+                    setBookLore(book, per, "Destroy", enchantment, bookData);
+
+                    player.setItemOnCursor(methods.removeItem(dust));
                 }
             }
         }
@@ -182,12 +173,9 @@ public class DustControlListener implements Listener {
             ItemStack item = methods.getItemInHand(player);
 
         // PDC Start
-            Gson g = new Gson();
-
             NamespacedKey key = new NamespacedKey(plugin, "Crazy_Dust");
 
-            DustData data = g.fromJson(item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING), DustData.class);
-
+            DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING), DustData.class);
         // PDC End
 
             if (data.getConfigName().equals(Dust.SUCCESS_DUST.getConfigName())) {
