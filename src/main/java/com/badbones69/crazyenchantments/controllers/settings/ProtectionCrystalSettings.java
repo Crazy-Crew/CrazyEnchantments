@@ -165,7 +165,7 @@ public class ProtectionCrystalSettings {
         ItemMeta meta = item.getItemMeta();
         List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
 
-        if (meta.getPersistentDataContainer().has(isProtected)) meta.getPersistentDataContainer().remove(isProtected);
+        meta.getPersistentDataContainer().set(isProtected, PersistentDataType.BOOLEAN, true);
 
         assert lore != null;
         lore.add(ColorUtils.legacyTranslateColourCodes(protectionString));
