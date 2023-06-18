@@ -164,7 +164,6 @@ public class EnchantmentControl implements Listener {
                                 player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                             }
 
-                            player.updateInventory();
                             return;
                         }
                     }

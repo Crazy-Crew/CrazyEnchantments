@@ -56,7 +56,6 @@ public class ProtectionCrystalListener implements Listener {
                 e.setCancelled(true);
                 player.setItemOnCursor(methods.removeItem(crystalItem));
                 e.setCurrentItem(methods.addLore(item, ColorUtils.color(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"))));
-                player.updateInventory();
             }
         }
     }

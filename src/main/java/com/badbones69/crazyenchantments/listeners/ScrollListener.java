@@ -84,7 +84,6 @@ public class ScrollListener implements Listener {
                     e.setCancelled(true);
                     e.setCurrentItem(orderEnchantments(item));
                     player.setItemOnCursor(methods.removeItem(scroll));
-                    player.updateInventory();
                 }
 
             } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) { // The scroll is a white scroll.

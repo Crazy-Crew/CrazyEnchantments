@@ -55,7 +55,6 @@ public class LostBookController implements Listener {
 
                     if (book != null) {
                         player.getInventory().addItem(book.buildBook());
-                        player.updateInventory();
 
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Found%", book.getItemBuilder().getName());
