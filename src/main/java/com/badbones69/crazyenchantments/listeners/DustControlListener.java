@@ -6,13 +6,14 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Dust;
+import com.badbones69.crazyenchantments.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
-import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
+import com.google.gson.Gson;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -23,6 +24,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -64,13 +67,13 @@ public class DustControlListener implements Listener {
             }
 
             if (rate.equalsIgnoreCase("Success")) {
-                lores = lores.replace("%Success_Rate%", percent + "").replace("%success_rate%", percent + "")
-                .replace("%Destroy_Rate%", enchantmentBookSettings.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "")
-                .replace("%destroy_rate%", enchantmentBookSettings.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0) + "");
+                lores = lores.replace("%Success_Rate%", String.valueOf(percent)).replace("%success_rate%", String.valueOf(percent))
+                .replace("%Destroy_Rate%", String.valueOf(enchantmentBookSettings.getPercent("%Destroy_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0)))
+                .replace("%destroy_rate%", String.valueOf(enchantmentBookSettings.getPercent("%destroy_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0)));
             } else {
-                lores = lores.replace("%Destroy_Rate%", percent + "").replace("%destroy_rate%", percent + "")
-                .replace("%Success_Rate%", enchantmentBookSettings.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "")
-                .replace("%success_rate%", enchantmentBookSettings.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100) + "");
+                lores = lores.replace("%Destroy_Rate%", String.valueOf(percent)).replace("%destroy_rate%", String.valueOf(percent))
+                .replace("%Success_Rate%", String.valueOf(enchantmentBookSettings.getPercent("%Success_Rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100)))
+                .replace("%success_rate%", String.valueOf(enchantmentBookSettings.getPercent("%success_rate%", item, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100)));
             }
 
             if (hasLine) lore.add(ColorUtils.color(lores));
@@ -82,66 +85,23 @@ public class DustControlListener implements Listener {
         item.setItemMeta(meta);
     }
 
-    public boolean hasPercent(Dust dust, ItemStack item) {
-        String argument = verifyInteger(dust, item);
-
-        return NumberUtils.isInt(argument);
-    }
-
-    public int getPercent(Dust dust, ItemStack item) {
-        String argument = verifyInteger(dust, item);
-
-        if (NumberUtils.isInt(argument)) {
-            return Integer.parseInt(argument);
-        } else {
-            return 0;
-        }
-    }
-
-    private String verifyInteger(Dust dust, ItemStack item) {
-        String arg = "";
-
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-            List<String> lore = item.getItemMeta().getLore();
-            List<String> fileLore = Files.CONFIG.getFile().getStringList("Settings.Dust." + dust.getConfigName() + ".Lore");
-            int amount = 0;
-
-            if (lore != null && lore.size() == fileLore.size()) {
-                for (String lores : fileLore) {
-                    lores = ColorUtils.color(lores);
-                    String getLore = lore.get(amount);
-
-                    if (lores.contains("%Percent%")) {
-                        String[] loreSplit = lores.split("%Percent%");
-                        if (loreSplit.length >= 1) arg = getLore.replace(loreSplit[0], "");
-                        if (loreSplit.length >= 2) arg = arg.replace(loreSplit[1], "");
-
-                        break;
-                    }
-
-                    if (lores.contains("%percent%")) {
-                        String[] loreSplit = lores.split("%percent%");
-                        if (loreSplit.length >= 1) arg = getLore.replace(loreSplit[0], "");
-                        if (loreSplit.length >= 2) arg = arg.replace(loreSplit[1], "");
-
-                        break;
-                    }
-
-                    amount++;
-                }
-            }
-        }
-
-        return arg;
-    }
-
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent e) {
+    public void onInventoryClick(InventoryClickEvent e) { //Dust Use
         Player player = (Player) e.getWhoClicked();
 
         if (e.getCurrentItem() != null && e.getCursor() != null) {
             ItemStack book = e.getCurrentItem();
             ItemStack dust = e.getCursor();
+
+        // PDC Start
+            Gson g = new Gson();
+
+            NamespacedKey dustKey = new NamespacedKey(plugin, "Crazy_Dust");
+            //NamespacedKey bookKey = new NamespacedKey(plugin, "Crazy_Books");
+
+            DustData dustData = g.fromJson(dust.getItemMeta().getPersistentDataContainer().get(dustKey, PersistentDataType.STRING), DustData.class);
+            //DustData bookData = g.fromJson(book.getItemMeta().getPersistentDataContainer().get(bookKey, PersistentDataType.STRING), DustData.class); //Once Books have PDC
+        // PDC End
 
             if (book.getAmount() == 1 && book.hasItemMeta() && dust.hasItemMeta() && book.getItemMeta().hasLore() && dust.getItemMeta().hasLore() && book.getItemMeta().hasDisplayName() &&
             dust.getItemMeta().hasDisplayName() && book.getType() == enchantmentBookSettings.getEnchantmentBookItem().getType()) {
@@ -154,9 +114,9 @@ public class DustControlListener implements Listener {
 
                 if (!toggle) return;
 
-                if (dust.getItemMeta().getDisplayName().equals(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Name"))) &&
-                dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.SuccessDust.Item")).getMaterial()) {
-                    int per = getPercent(Dust.SUCCESS_DUST, dust);
+
+                if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
+                    int per = dustData.getChance();
 
                     if (methods.hasArgument("%success_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
                         int total = enchantmentBookSettings.getPercent("%success_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100);
@@ -178,15 +138,13 @@ public class DustControlListener implements Listener {
                         setLore(book, per, "Success");
 
                         player.setItemOnCursor(methods.removeItem(dust));
-                        player.updateInventory();
                     }
 
                     return;
                 }
 
-                if (dust.getItemMeta().getDisplayName().equals(ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Name"))) &&
-                dust.getType() == new ItemBuilder().setMaterial(Files.CONFIG.getFile().getString("Settings.Dust.DestroyDust.Item")).getMaterial()) {
-                    int per = getPercent(Dust.DESTROY_DUST, dust);
+                if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
+                    int per = dustData.getChance();
 
                     if (methods.hasArgument("%destroy_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
                         int total = enchantmentBookSettings.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0);
@@ -207,7 +165,6 @@ public class DustControlListener implements Listener {
                         setLore(book, per, "Destroy");
 
                         player.setItemOnCursor(methods.removeItem(dust));
-                        player.updateInventory();
                     }
                 }
             }
@@ -222,26 +179,36 @@ public class DustControlListener implements Listener {
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack item = methods.getItemInHand(player);
 
-            if (item != null) {
-                if (hasPercent(Dust.SUCCESS_DUST, item)) {
-                    if (methods.isSimilar(item, Dust.SUCCESS_DUST.getDust(getPercent(Dust.SUCCESS_DUST, item), 1))) e.setCancelled(true);
-                } else if (hasPercent(Dust.DESTROY_DUST, item)) {
-                    if (methods.isSimilar(item, Dust.DESTROY_DUST.getDust(getPercent(Dust.DESTROY_DUST, item), 1))) e.setCancelled(true);
-                } else if (hasPercent(Dust.MYSTERY_DUST, item) && methods.isSimilar(item, Dust.MYSTERY_DUST.getDust(getPercent(Dust.MYSTERY_DUST, item), 1))) {
-                    e.setCancelled(true);
-                    methods.setItemInHand(player, methods.removeItem(item));
-                    player.getInventory().addItem(pickDust().getDust(methods.percentPick(getPercent(Dust.MYSTERY_DUST, item) + 1, 1), 1));
-                    player.updateInventory();
-                    player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
+        // PDC Start
+            Gson g = new Gson();
 
-                    if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")) {
-                        List<Color> colors = new ArrayList<>();
-                        String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");
+            NamespacedKey key = new NamespacedKey(plugin, "Crazy_Dust");
 
-                        ColorUtils.color(colors, colorString);
+            DustData data = g.fromJson(item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING), DustData.class);
 
-                        methods.fireWork(player.getLocation().add(0, 1, 0), colors);
-                    }
+        // PDC End
+
+            if (data.getConfigName().equals(Dust.SUCCESS_DUST.getConfigName())) {
+                e.setCancelled(true);
+            } else if (data.getConfigName().equals(Dust.DESTROY_DUST.getConfigName())) {
+                e.setCancelled(true);
+            } else if(data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
+                e.setCancelled(true);
+                methods.setItemInHand(player, methods.removeItem(item));
+
+                ItemStack item2 = pickDust().getDust(methods.percentPick(data.getChance() + 1, 1), 1);
+
+                player.getInventory().addItem(item2);
+
+                player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
+
+                if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")) {
+                    List<Color> colors = new ArrayList<>();
+                    String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");
+
+                    ColorUtils.color(colors, colorString);
+
+                    methods.fireWork(player.getLocation().add(0, 1, 0), colors);
                 }
             }
         }

@@ -3,9 +3,15 @@ package com.badbones69.crazyenchantments.api.enums;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
+import com.badbones69.crazyenchantments.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import com.google.gson.Gson;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +57,8 @@ public enum Dust {
     
     public static Dust getFromName(String nameString) {
         for (Dust dust : Dust.values()) {
-            if (dust.getKnownNames().contains(nameString.toLowerCase())) return dust;
+            if (dust.getKnownNames().contains(nameString.toLowerCase()) ||
+            dust.getConfigName().contains(nameString)) return dust;
         }
 
         return null;
@@ -70,16 +77,31 @@ public enum Dust {
     }
     
     public ItemStack getDust() {
+
         return getDust(1);
     }
     
     public ItemStack getDust(int amount) {
+
         return getDust(methods.percentPick(max, min), amount);
     }
     
     public ItemStack getDust(int percent, int amount) {
-        return itemBuilderDust.get(this)
-        .addLorePlaceholder("%Percent%", String.valueOf(percent))
-        .setAmount(amount).build();
+        ItemStack item = itemBuilderDust.get(this)
+                .addLorePlaceholder("%Percent%", String.valueOf(percent))
+                .setAmount(amount).build();
+
+        // PDC Start
+                Gson g = new Gson();
+
+                NamespacedKey key = new NamespacedKey(plugin, "Crazy_Dust");
+
+                ItemMeta meta = item.getItemMeta();
+                meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, g.toJson(new DustData(getConfigName(), min, max, percent)));
+                item.setItemMeta(meta);
+        // PDC End
+
+        return item;
     }
+
 }
