@@ -638,7 +638,7 @@ public class CrazyManager {
 
             if (lore == null) lore = new ArrayList<>();
 
-            lore.add(LegacyComponentSerializer.legacy('&').deserialize(loreString));
+            lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
 
             meta.lore(lore);
 
@@ -652,11 +652,8 @@ public class CrazyManager {
 
 
             data = item1.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
-            if (data != null) {
-                eData = g.fromJson(data, Enchant.class);
-            } else {
-                eData = new Enchant(new HashMap<>());
-            }
+
+            eData =  data != null ? g.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
             for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
                 eData.addEnchantment(x.getKey().getName(), x.getValue());
@@ -666,7 +663,6 @@ public class CrazyManager {
         // PDC End
 
             item.setItemMeta(meta);
-
         }
 
         return item;
