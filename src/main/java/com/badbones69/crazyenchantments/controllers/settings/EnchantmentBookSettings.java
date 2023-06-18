@@ -60,7 +60,7 @@ public class EnchantmentBookSettings {
         EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(storedEnchantments, PersistentDataType.STRING), EnchantedBook.class);
     // PDC Enc
         for (CEnchantment enchantment : getRegisteredEnchantments()) {
-            if(enchantment.getName().equalsIgnoreCase(data.getName())) return enchantment;
+            if (enchantment.getName().equalsIgnoreCase(data.getName())) return enchantment;
         }
 
         return null;
@@ -199,16 +199,7 @@ public class EnchantmentBookSettings {
      * @return True if it is and false if not.
      */
     public boolean isEnchantmentBook(ItemStack book) {
-        if (book != null && book.getType() == getNormalBook().getMaterial() && book.hasItemMeta() && book.getItemMeta().hasDisplayName()) {
-            for (CEnchantment enchantment : getRegisteredEnchantments()) {
-                String bookNameCheck = book.getItemMeta().getDisplayName();
-                String[] split = bookNameCheck.split(" ");
-
-                if (bookNameCheck.replace(" " + split[split.length - 1], "").equals(enchantment.getBookColor() + enchantment.getCustomName())) return true;
-            }
-        }
-
-        return false;
+        return getEnchantmentBookEnchantment(book) != null;
     }
 
     public List<CEnchantment> getRegisteredEnchantments() {

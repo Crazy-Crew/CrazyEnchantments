@@ -46,7 +46,7 @@ public class EnchantmentControl implements Listener {
         ItemStack book = e.getCursor();
 
         if (book == null || item == null) return;
-        if(book.getAmount() > 1 || item.getAmount() > 1) return;
+        if (book.getAmount() > 1 || item.getAmount() > 1) return;
         if (!enchantmentBookSettings.isEnchantmentBook(book) || enchantmentBookSettings.isEnchantmentBook(item)) return;
 
         CEBook ceBook = enchantmentBookSettings.getCEBook(book);
