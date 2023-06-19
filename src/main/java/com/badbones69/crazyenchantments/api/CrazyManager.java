@@ -826,13 +826,7 @@ public class CrazyManager {
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantments enchant) {
-        int level;
-
-        level = NumberUtils.convertLevelInteger(NumberUtils.checkLevels(item, enchant.getCustomName()).replace(enchant.getEnchantment().getColor() + enchant.getCustomName() + " ", ""));
-
-        if (!useUnsafeEnchantments && level > enchant.getEnchantment().getMaxLevel()) level = enchant.getEnchantment().getMaxLevel();
-
-        return level;
+        return enchantmentBookSettings.getLevel(item, enchant.getEnchantment());
     }
 
     public int randomLevel(CEnchantment enchantment, Category category) {
