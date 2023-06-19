@@ -176,10 +176,9 @@ public class DustControlListener implements Listener {
             ItemStack item = methods.getItemInHand(player);
 
         // PDC Start
-            NamespacedKey key = new NamespacedKey(plugin, "Crazy_Dust");
-
-            DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING), DustData.class);
+            DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(dustKey, PersistentDataType.STRING), DustData.class);
         // PDC End
+            if (data == null) return;
 
             if (data.getConfigName().equals(Dust.SUCCESS_DUST.getConfigName())) {
                 e.setCancelled(true);
