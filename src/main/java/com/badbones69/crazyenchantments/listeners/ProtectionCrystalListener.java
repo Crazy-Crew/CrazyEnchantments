@@ -37,7 +37,7 @@ public class ProtectionCrystalListener implements Listener {
 
         ItemStack crystalItem = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
         ItemStack item = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
-
+        
         if (item.getType() == Material.AIR || crystalItem.getType() == Material.AIR) return;
         if (!protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;
         if (protectionCrystalSettings.isProtectionCrystal(item)) return;
@@ -104,6 +104,7 @@ public class ProtectionCrystalListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onCrystalClick(PlayerInteractEvent e) {
         ItemStack item = methods.getItemInHand(e.getPlayer());
+        if (!item.hasItemMeta()) return;
         if (protectionCrystalSettings.isProtectionCrystal(item)) e.setCancelled(true);
     }
 }
