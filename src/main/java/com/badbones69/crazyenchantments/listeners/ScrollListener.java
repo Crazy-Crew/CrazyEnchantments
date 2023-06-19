@@ -134,7 +134,7 @@ public class ScrollListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler()
     public void onScrollClick(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         ItemStack scroll = methods.getItemInHand(player);
