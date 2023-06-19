@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSett
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
@@ -63,21 +64,15 @@ public class DustControlListener implements Listener {
 
         for (String line : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
 
-            if (line.toLowerCase().contains("description")) {
+            if (line.toLowerCase().contains("%description%")) {
                 enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.legacyTranslateColourCodes(lines)));
                 continue;
             }
-            lore.add(ColorUtils.legacyTranslateColourCodes(line
-                    .replaceAll("%Success_Rate%|%success_rate%", String.valueOf(data.getSuccessChance()))
-                    .replaceAll("%Destroy_Rate%|%destroy_rate%", String.valueOf(data.getDestroyChance()))));
+            TextComponent lineToAdd = ColorUtils.legacyTranslateColourCodes(line
+                    .replaceAll("(%Success_Rate%|%success_rate%)", String.valueOf(data.getSuccessChance()))
+                    .replaceAll("(%Destroy_Rate%|%destroy_rate%)", String.valueOf(data.getDestroyChance())));
+            lore.add(lineToAdd);
         }
-
-        Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore").forEach(line ->
-                lore.add(ColorUtils.legacyTranslateColourCodes(line
-                        .replaceAll("%Success_Rate%|%success_rate%", String.valueOf(data.getSuccessChance()))
-                        .replaceAll("%Destroy_Rate%|%destroy_rate%", String.valueOf(data.getDestroyChance()))
-                )));
-
 
         meta.getPersistentDataContainer().set(bookKey, PersistentDataType.STRING, gson.toJson(data));
         meta.lore(lore);
