@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.api.events.BookFailEvent;
 import com.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
@@ -96,15 +97,15 @@ public class EnchantmentControl implements Listener {
 
                                 if (!bookDestroyEvent.isCancelled()) {
                                     if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
-                                        if (methods.hasWhiteScrollProtection(item)) {
-                                            e.setCurrentItem(methods.removeWhiteScrollProtection(item));
+                                        if (Scrolls.hasWhiteScrollProtection(item)) {
+                                            e.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                                             player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                         } else {
                                             player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
                                         }
                                     } else {
-                                        if (methods.hasWhiteScrollProtection(item)) {
-                                            e.setCurrentItem(methods.removeWhiteScrollProtection(item));
+                                        if (Scrolls.hasWhiteScrollProtection(item)) {
+                                            e.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                                             player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                         } else {
                                             ItemStack newItem = new ItemStack(Material.AIR);
@@ -153,8 +154,8 @@ public class EnchantmentControl implements Listener {
                 }
 
                 if (destroy) {
-                    if (methods.hasWhiteScrollProtection(item)) {
-                        e.setCurrentItem(methods.removeWhiteScrollProtection(item));
+                    if (Scrolls.hasWhiteScrollProtection(item)) {
+                        e.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                         player.setItemOnCursor(new ItemStack(Material.AIR));
                         player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);

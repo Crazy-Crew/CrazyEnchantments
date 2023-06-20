@@ -3,6 +3,9 @@ package com.badbones69.crazyenchantments.api.enums;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -10,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -87,4 +91,58 @@ public enum Scrolls {
         item.setItemMeta(meta);
         return item;
     }
+
+    private static final NamespacedKey whiteScrollProtectionKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "White_Scroll_Protection");
+    public static String getWhiteScrollProtectionName() {
+        String protectNamed;
+
+        FileConfiguration config = Files.CONFIG.getFile();
+
+        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
+
+        return protectNamed;
+    }
+
+    public static boolean hasWhiteScrollProtection(ItemStack item) {
+        if (!item.hasItemMeta()) return false;
+        return item.getItemMeta().getPersistentDataContainer().has(whiteScrollProtectionKey);
+    }
+
+    public static ItemStack addWhiteScrollProtection(ItemStack item) {
+        assert item.hasItemMeta();
+        ItemMeta meta = item.getItemMeta();
+        List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
+
+        assert lore != null;
+        lore.add(ColorUtils.legacyTranslateColourCodes(getWhiteScrollProtectionName()));
+        meta.getPersistentDataContainer().set(whiteScrollProtectionKey, PersistentDataType.BOOLEAN, true);
+
+        meta.lore(lore);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public static ItemStack removeWhiteScrollProtection(ItemStack item) {
+        if (!item.hasItemMeta()) return item;
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta.getPersistentDataContainer().has(whiteScrollProtectionKey, PersistentDataType.BOOLEAN)) meta.getPersistentDataContainer().remove(whiteScrollProtectionKey);
+
+        if (item.lore() == null) {
+            item.setItemMeta(meta);
+            return item;
+        }
+
+        List<Component> lore = item.lore();
+
+        lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                .contains(getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+        meta.lore(lore);
+
+        meta.lore(lore);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
 }

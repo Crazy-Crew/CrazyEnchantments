@@ -494,59 +494,6 @@ public class Methods {
         }
     }
 
-    private final NamespacedKey whiteScrollProtectionKey = new NamespacedKey(plugin, "White_Scroll_Protection");
-    public String getWhiteScrollProtectionName() {
-        String protectNamed;
-
-        FileConfiguration config = Files.CONFIG.getFile();
-
-        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
-
-        return protectNamed;
-    }
-
-    public boolean hasWhiteScrollProtection(ItemStack item) {
-        if (!item.hasItemMeta()) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(whiteScrollProtectionKey);
-    }
-
-    public ItemStack addWhiteScrollProtection(ItemStack item) {
-        assert item.hasItemMeta();
-        ItemMeta meta = item.getItemMeta();
-        List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
-
-        assert lore != null;
-        lore.add(ColorUtils.legacyTranslateColourCodes(getWhiteScrollProtectionName()));
-        meta.getPersistentDataContainer().set(whiteScrollProtectionKey, PersistentDataType.BOOLEAN, true);
-
-        meta.lore(lore);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    public ItemStack removeWhiteScrollProtection(ItemStack item) {
-        if (!item.hasItemMeta()) return item;
-
-        ItemMeta meta = item.getItemMeta();
-        if (meta.getPersistentDataContainer().has(whiteScrollProtectionKey, PersistentDataType.BOOLEAN)) meta.getPersistentDataContainer().remove(whiteScrollProtectionKey);
-
-        if (item.lore() == null) {
-            item.setItemMeta(meta);
-            return item;
-        }
-
-        List<Component> lore = item.lore();
-
-        lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                .contains(getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
-        meta.lore(lore);
-
-        meta.lore(lore);
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
     public ItemBuilder getRandomPaneColor() {
         List<String> colors = Arrays.asList(
                 "WHITE_STAINED_GLASS_PANE",

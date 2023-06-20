@@ -142,7 +142,7 @@ public class CrazyManager {
         // Loads the info menu manager and the enchantment types.
         infoMenuManager.load();
 
-        methods.getWhiteScrollProtectionName();
+        Scrolls.getWhiteScrollProtectionName();
 
         enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(Objects.requireNonNull(config.getString("Settings.Enchantment-Book-Item"))));
         useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");

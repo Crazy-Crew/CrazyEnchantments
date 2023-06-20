@@ -101,11 +101,11 @@ public class ScrollListener implements Listener {
                 }
             }
             case "WhiteScroll" -> {
-                if (!methods.hasWhiteScrollProtection(item)) {
+                if (!Scrolls.hasWhiteScrollProtection(item)) {
                     for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
                         if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                             e.setCancelled(true);
-                            e.setCurrentItem(methods.addWhiteScrollProtection(item));
+                            e.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
                             player.setItemOnCursor(methods.removeItem(scroll));
                             return;
                         }
