@@ -20,7 +20,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -85,31 +84,6 @@ public class Methods {
             if (toggle) player.sendMessage(Messages.NO_PERMISSION.getMessage());
 
             return false;
-        }
-    }
-
-    public ItemStack addGlow(ItemStack item) {
-        return addGlow(item, true);
-    }
-
-    public ItemStack addGlow(ItemStack item, boolean toggle) {
-        ItemStack it = item.clone();
-
-        try {
-            if (toggle) {
-                if (item.hasItemMeta()) {
-                    if (item.getItemMeta().hasEnchants()) return item;
-                }
-
-                item.addUnsafeEnchantment(Enchantment.LUCK, 1);
-                ItemMeta meta = item.getItemMeta();
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                item.setItemMeta(meta);
-            }
-
-            return item;
-        } catch (NoClassDefFoundError e) {
-            return it;
         }
     }
 
@@ -195,13 +169,6 @@ public class Methods {
         }
 
         return false;
-    }
-
-    public boolean randomPicker(int max) {
-        if (max <= 0) return true;
-
-        int chance = 1 + random.nextInt(max);
-        return chance == 1;
     }
 
     public boolean randomPicker(int min, int max) {
@@ -376,21 +343,6 @@ public class Methods {
         } else {
             setDurability(item, getDurability(item) + 1);
         }
-    }
-
-    public boolean isSimilar(ItemStack one, ItemStack two) {
-        if (!one.getType().equals(two.getType())) return false;
-        if (!one.hasItemMeta() || !two.hasItemMeta()) return false;
-        if (!one.getItemMeta().hasDisplayName() || !two.getItemMeta().hasDisplayName()) return false;
-        if (!one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())) return false;
-        if (!one.getItemMeta().hasLore() || !two.getItemMeta().hasLore()) return false;
-        int i = 0;
-
-        for (String lore : one.getItemMeta().getLore()) {
-            if (!lore.equals(two.getItemMeta().getLore().get(i++))) return false;
-        }
-
-        return true;
     }
 
     public void explode(Entity player) {
