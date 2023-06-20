@@ -13,7 +13,10 @@ import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.*;
+import org.bukkit.Color;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,10 +27,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Methods {
 
@@ -486,6 +494,7 @@ public class Methods {
         }
     }
 
+    private final NamespacedKey whiteScrollProtectionKey = new NamespacedKey(plugin, "White_Scroll_Protection");
     public String getWhiteScrollProtectionName() {
         String protectNamed;
 
@@ -497,38 +506,43 @@ public class Methods {
     }
 
     public boolean hasWhiteScrollProtection(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta != null && meta.hasLore()) {
-            List<String> itemLore = meta.getLore();
-
-            if (itemLore != null) {
-                for (String lore : itemLore) {
-                    if (lore.equals(getWhiteScrollProtectionName())) return true;
-                }
-            }
-        }
-
-        return false;
+        if (!item.hasItemMeta()) return false;
+        return item.getItemMeta().getPersistentDataContainer().has(whiteScrollProtectionKey);
     }
 
     public ItemStack addWhiteScrollProtection(ItemStack item) {
-        return ItemBuilder.convertItemStack(item).addLore(getWhiteScrollProtectionName()).build();
+        assert item.hasItemMeta();
+        ItemMeta meta = item.getItemMeta();
+        List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
+
+        assert lore != null;
+        lore.add(ColorUtils.legacyTranslateColourCodes(getWhiteScrollProtectionName()));
+        meta.getPersistentDataContainer().set(whiteScrollProtectionKey, PersistentDataType.BOOLEAN, true);
+
+        meta.lore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     public ItemStack removeWhiteScrollProtection(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+        if (!item.hasItemMeta()) return item;
 
-        if (itemMeta != null && itemMeta.hasLore()) {
-            if (itemMeta.getLore() != null) {
-                List<String> newLore = new ArrayList<>(itemMeta.getLore());
+        ItemMeta meta = item.getItemMeta();
+        if (meta.getPersistentDataContainer().has(whiteScrollProtectionKey, PersistentDataType.BOOLEAN)) meta.getPersistentDataContainer().remove(whiteScrollProtectionKey);
 
-                newLore.remove(getWhiteScrollProtectionName());
-                itemMeta.setLore(newLore);
-            }
-
-            item.setItemMeta(itemMeta);
+        if (item.lore() == null) {
+            item.setItemMeta(meta);
+            return item;
         }
+
+        List<Component> lore = item.lore();
+
+        lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                .contains(getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+        meta.lore(lore);
+
+        meta.lore(lore);
+        item.setItemMeta(meta);
 
         return item;
     }
