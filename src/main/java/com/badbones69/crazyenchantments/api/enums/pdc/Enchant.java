@@ -1,5 +1,8 @@
 package com.badbones69.crazyenchantments.api.enums.pdc;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
+import org.bukkit.NamespacedKey;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -7,6 +10,7 @@ import java.util.Set;
 public class Enchant {
 
     private final HashMap<String, Integer> enchants;
+    private final NamespacedKey nameSpacedKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "CrazyEnchants");
 
     public Enchant(HashMap<String, Integer> enchants) {
         this.enchants = enchants == null ? new HashMap<>() : enchants;
@@ -57,5 +61,9 @@ public class Enchant {
      * @return true if there are no enchantments on the item.
      */
     public boolean isEmpty() { return enchants.isEmpty(); }
+
+    public NamespacedKey getKey() {
+        return nameSpacedKey;
+    }
 
 }

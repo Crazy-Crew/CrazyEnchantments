@@ -1,9 +1,15 @@
 package com.badbones69.crazyenchantments.api.enums;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -58,12 +64,27 @@ public enum Scrolls {
     public String getConfigName() {
         return configName;
     }
-    
-    public ItemStack getScroll() {
-        return itemBuilderScrolls.get(this).build();
+
+    private static final NamespacedKey scroll = new NamespacedKey(CrazyEnchantments.getPlugin(), "Crazy_Scroll");
+
+    public static Scrolls getFromPDC(ItemStack item) {
+        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+        if (!item.hasItemMeta() || !data.has(scroll)) return null;
+
+        return getFromName(data.get(scroll, PersistentDataType.STRING));
     }
-    
+    public ItemStack getScroll() {
+        ItemStack item = itemBuilderScrolls.get(this).build();
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, configName);
+        item.setItemMeta(meta);
+        return item;
+    }
     public ItemStack getScroll(int amount) {
-        return itemBuilderScrolls.get(this).setAmount(amount).build();
+        ItemStack item = itemBuilderScrolls.get(this).setAmount(amount).build();
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, configName);
+        item.setItemMeta(meta);
+        return item;
     }
 }

@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSett
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -64,59 +65,27 @@ public class ScrollListener implements Listener {
         ItemStack item = e.getCurrentItem();
         ItemStack scroll = e.getCursor();
 
-        if (item != null && scroll != null) {
-            InventoryType.SlotType slotType = e.getSlotType();
+        if (item == null || item.getType() == Material.AIR || scroll == null || scroll.getType() == Material.AIR) return;
 
-            if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) return;
+        InventoryType.SlotType slotType = e.getSlotType();
 
-            if (scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) { // The scroll is a Transmog Scroll.
+        if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) return;
 
-                if (scroll.getAmount() > 1) {
-                    player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
-                    return;
-                }
+        Scrolls type = Scrolls.getFromPDC(scroll);
+        if (type == null) return;
 
-                if (enchantmentBookSettings.hasEnchantments(item)) {
+        if (scroll.getAmount() > 1) {
+            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            return;
+        }
 
-                    // Checks to see if the item is already ordered.
-                    if (item.isSimilar(orderEnchantments(item.clone()))) return;
-
-                    e.setCancelled(true);
-                    e.setCurrentItem(orderEnchantments(item));
-                    player.setItemOnCursor(methods.removeItem(scroll));
-                }
-
-            } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll())) { // The scroll is a white scroll.
-
-                if (scroll.getAmount() > 1) {
-                    player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
-                    return;
-                }
-
-                if (!methods.hasWhiteScrollProtection(item)) {
-                    for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
-                        if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
-                            e.setCancelled(true);
-                            e.setCurrentItem(methods.addWhiteScrollProtection(item));
-                            player.setItemOnCursor(methods.removeItem(scroll));
-                            return;
-                        }
-                    }
-                }
-            } else if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) { // The scroll is a black scroll.
-
-                if (scroll.getAmount() > 1) {
-                    player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
-                    return;
-                }
-
+        switch (type.getConfigName()) {
+            case "BlackScroll" -> {
                 if (methods.isInventoryFull(player)) {
                     player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                     return;
                 }
-
                 List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
-
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     e.setCancelled(true);
                     player.setItemOnCursor(methods.removeItem(scroll));
@@ -129,6 +98,29 @@ public class ScrollListener implements Listener {
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
                     player.getInventory().addItem(new CEBook(enchantment, enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
                     e.setCurrentItem(enchantmentBookSettings.removeEnchantment(item, enchantment));
+                }
+            }
+            case "WhiteScroll" -> {
+                if (!methods.hasWhiteScrollProtection(item)) {
+                    for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
+                        if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
+                            e.setCancelled(true);
+                            e.setCurrentItem(methods.addWhiteScrollProtection(item));
+                            player.setItemOnCursor(methods.removeItem(scroll));
+                            return;
+                        }
+                    }
+                }
+            }
+            case "TransmogScroll" -> {
+                if (enchantmentBookSettings.hasEnchantments(item)) {
+
+                    // Checks to see if the item is already ordered.
+                    if (item.isSimilar(orderEnchantments(item.clone()))) return;
+
+                    e.setCancelled(true);
+                    e.setCurrentItem(orderEnchantments(item));
+                    player.setItemOnCursor(methods.removeItem(scroll));
                 }
             }
         }

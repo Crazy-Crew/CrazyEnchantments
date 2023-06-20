@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

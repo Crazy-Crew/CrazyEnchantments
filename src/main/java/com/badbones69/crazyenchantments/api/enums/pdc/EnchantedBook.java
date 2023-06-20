@@ -1,11 +1,15 @@
 package com.badbones69.crazyenchantments.api.enums.pdc;
 
+import com.badbones69.crazyenchantments.CrazyEnchantments;
+import org.bukkit.NamespacedKey;
+
 public class EnchantedBook {
 
     private final String name;
     private int success;
     private int destroy;
     private int level;
+    private final NamespacedKey nameSpacedKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "Stored_Enchantments");
 
     public EnchantedBook(String enchantmentName, int success, int destroy, int level) {
         this.name = enchantmentName;
@@ -37,6 +41,9 @@ public class EnchantedBook {
     }
     public void setLevel(int newLevel) {
         this.level = newLevel;
+    }
+    public NamespacedKey getKey() {
+        return nameSpacedKey;
     }
 
 }
