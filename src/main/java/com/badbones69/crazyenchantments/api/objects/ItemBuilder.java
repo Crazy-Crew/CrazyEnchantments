@@ -9,6 +9,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -87,6 +89,8 @@ public class ItemBuilder {
     // Custom Data
     private int customModelData;
     private boolean useCustomModelData;
+    private NamespacedKey nameSpacedKey;
+    private String nameSpacedData;
 
     /**
      * Create a blank item builder.
@@ -344,6 +348,7 @@ public class ItemBuilder {
             assert itemMeta != null;
             itemMeta.setDisplayName(getUpdatedName());
             itemMeta.setLore(getUpdatedLore());
+            if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
 
             if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
 
@@ -1242,5 +1247,17 @@ public class ItemBuilder {
         }
 
         return null;
+    }
+
+    /**
+     * @param key The name spaced key value.
+     * @param data The data that the key holds.
+     * @return The ItemBuilder with an updated item count.
+     */
+    public ItemBuilder setStringPDC(NamespacedKey key, String data) {
+        this.nameSpacedKey = key;
+        this.nameSpacedData = data;
+
+        return this;
     }
 }

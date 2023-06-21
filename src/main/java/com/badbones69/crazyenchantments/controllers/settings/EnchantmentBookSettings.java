@@ -346,19 +346,8 @@ public class EnchantmentBookSettings {
 
         return null;
     }
+    
 
-    /**
-     * Get the category of a lostbook from an itemstack.
-     * @param item The itemstack you are checking.
-     * @return The category it has or null if not found.
-     */
-    public Category getCategoryFromLostBook(ItemStack item) {
-        for (Category category : categories) {
-            if (item.isSimilar(category.getLostBook().getLostBook(category).build())) return category;
-        }
-
-        return null;
-    }
 
     private List<Color> getColors(String string) {
         List<Color> colors = new ArrayList<>();
