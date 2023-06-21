@@ -53,4 +53,4 @@ nocheatplus = { module = "fr.neatmonster:nocheatplus", version = "3.16.1-SNAPSHO
 
 [plugins]
 
-run-paper = { id = "xyz.jpenilla.run-paper", version = "2.1.0" }
+#run-paper = { id = "xyz.jpenilla.run-paper", version = "2.1.0" }
