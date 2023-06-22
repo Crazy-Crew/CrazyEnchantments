@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
@@ -15,7 +16,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,10 +37,6 @@ public class EnchantmentBookSettings {
 
     private final Gson gson = new Gson();
 
-    private final NamespacedKey storedEnchantments = new NamespacedKey(plugin, "Stored_Enchantments");
-    
-    private final NamespacedKey crazyEnchants = new NamespacedKey(plugin, "CrazyEnchants");
-
     public boolean useUnsafeEnchantments() {
         FileConfiguration config = FileManager.Files.CONFIG.getFile();
 
@@ -57,7 +53,7 @@ public class EnchantmentBookSettings {
         if (book.getItemMeta() == null) return null;
 
     // PDC Start
-        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(storedEnchantments, PersistentDataType.STRING), EnchantedBook.class);
+        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
     // PDC Enc
         for (CEnchantment enchantment : getRegisteredEnchantments()) {
             if (enchantment.getName().equalsIgnoreCase(data.getName())) return enchantment;
@@ -79,9 +75,9 @@ public class EnchantmentBookSettings {
 
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
 
-        if (!data.has(crazyEnchants)) return false;
+        if (!data.has(DataKeys.ENCHANTMENTS.getKey())) return false;
 
-        String itemData = data.get(crazyEnchants, PersistentDataType.STRING);
+        String itemData = data.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
         if (itemData == null) return false;
 
         return gson.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
@@ -95,8 +91,8 @@ public class EnchantmentBookSettings {
      * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
      */
     public CEBook getCEBook(ItemStack book) {
-        
-        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(storedEnchantments, PersistentDataType.STRING), EnchantedBook.class);
+
+        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
        
         CEnchantment enchantment = null;
         for (CEnchantment enchant : getRegisteredEnchantments()) {
@@ -201,9 +197,9 @@ public class EnchantmentBookSettings {
     public boolean isEnchantmentBook(ItemStack book) {
 
         if (book == null || book.getItemMeta() == null) return false;
-        if (!book.getItemMeta().getPersistentDataContainer().has(storedEnchantments)) return false;
+        if (!book.getItemMeta().getPersistentDataContainer().has(DataKeys.STORED_ENCHANTMENTS.getKey())) return false;
 
-        String dataString = book.getItemMeta().getPersistentDataContainer().get(storedEnchantments, PersistentDataType.STRING);
+        String dataString = book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING);
         EnchantedBook data = gson.fromJson(dataString, EnchantedBook.class);
 
         for (CEnchantment enchantment : getRegisteredEnchantments()) {
@@ -245,7 +241,7 @@ public class EnchantmentBookSettings {
 
     // PDC Start
 
-        String data = item.getItemMeta().getPersistentDataContainer().get(crazyEnchants, PersistentDataType.STRING);
+        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
         if (data == null) return Collections.emptyMap();
 
@@ -385,7 +381,7 @@ public class EnchantmentBookSettings {
     public int getLevel(ItemStack item, CEnchantment enchant) {
 
         // PDC Start
-        String data = item.getItemMeta().getPersistentDataContainer().get(crazyEnchants, PersistentDataType.STRING);
+        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
         int level = data == null ? 0 : gson.fromJson(data, Enchant.class).getLevel(enchant.getName());
         // PDC End
@@ -415,7 +411,7 @@ public class EnchantmentBookSettings {
         String data;
         Enchant eData;
 
-        data = meta.getPersistentDataContainer().get(crazyEnchants, PersistentDataType.STRING);
+        data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
         if (data != null) {
             eData = gson.fromJson(data, Enchant.class);
         } else {
@@ -426,9 +422,9 @@ public class EnchantmentBookSettings {
         eData.removeEnchantment(enchant.getName());
 
         if (eData.isEmpty()) {
-            meta.getPersistentDataContainer().remove(crazyEnchants);
+            meta.getPersistentDataContainer().remove(DataKeys.ENCHANTMENTS.getKey());
         } else {
-            meta.getPersistentDataContainer().set(crazyEnchants, PersistentDataType.STRING, gson.toJson(eData));
+            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(eData));
         }
     // PDC End
 

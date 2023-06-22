@@ -5,11 +5,11 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -70,8 +70,6 @@ public class ScramblerListener implements Listener {
         return getScramblers(1);
     }
 
-    private final NamespacedKey scramblerKey = new NamespacedKey(plugin, "isScrambler");
-
     /**
      * Get the scrambler item stack.
      * @param amount The amount you want.
@@ -80,13 +78,13 @@ public class ScramblerListener implements Listener {
     public ItemStack getScramblers(int amount) {
         ItemStack item = scramblerItem.setAmount(amount).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(scramblerKey, PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(DataKeys.SCRAMBLER.getKey(), PersistentDataType.BOOLEAN, true);
         item.setItemMeta(meta);
         return item;
     }
     public boolean isScrambler(ItemStack item) {
         if (!item.hasItemMeta()) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(scramblerKey);
+        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.SCRAMBLER.getKey());
     }
 
     private void setGlass(Inventory inv) {

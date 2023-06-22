@@ -4,20 +4,17 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.gson.Gson;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CEBook {
 
@@ -242,11 +239,10 @@ public class CEBook {
 
     // PDC Start
         Gson g = new Gson();
-        NamespacedKey storedEnchant = new NamespacedKey(plugin, "Stored_Enchantments");
 
         String data = g.toJson(new EnchantedBook(enchantment.getName(), successRate, destroyRate, level), EnchantedBook.class);
 
-        meta.getPersistentDataContainer().set(storedEnchant, PersistentDataType.STRING, data);
+        meta.getPersistentDataContainer().set(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING, data);
     // PDC End
         item.setItemMeta(meta);
 

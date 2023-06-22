@@ -11,8 +11,6 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
-import com.badbones69.crazyenchantments.api.enums.pdc.DustData;
-import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
@@ -25,10 +23,8 @@ import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ShopListener;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
-import com.google.gson.Gson;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -37,13 +33,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CECommand implements CommandExecutor {
 

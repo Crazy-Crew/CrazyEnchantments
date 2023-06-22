@@ -4,11 +4,11 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,10 +26,6 @@ public class ProtectionCrystalSettings {
     private final Methods methods = starter.getMethods();
 
     private final String protectionString = ColorUtils.color(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
-
-    private final NamespacedKey isProtected = new NamespacedKey(plugin, "isProtected");
-
-    private final NamespacedKey isProtectionCrystal = new NamespacedKey(plugin, "is_Protections_Crystal");
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
@@ -52,7 +48,7 @@ public class ProtectionCrystalSettings {
 
         ItemStack item = crystal.setAmount(amount).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(isProtectionCrystal, PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(DataKeys.PROTECTION_CRYSTAL.getKey(), PersistentDataType.BOOLEAN, true);
 
         item.setItemMeta(meta);
 
@@ -120,7 +116,7 @@ public class ProtectionCrystalSettings {
      * @return True if yes otherwise false.
      */
     public boolean isProtected(ItemStack item) {
-        return item.getItemMeta().getPersistentDataContainer().has(isProtected);
+        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.PROTECTED_ITEM.getKey());
     }
 
     /**
@@ -129,7 +125,7 @@ public class ProtectionCrystalSettings {
      * @return True if the item is a protection crystal.
      */
     public boolean isProtectionCrystal(ItemStack item) {
-        return item.getItemMeta().getPersistentDataContainer().has(isProtectionCrystal);
+        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.PROTECTION_CRYSTAL.getKey());
     }
 
     /**
@@ -139,7 +135,7 @@ public class ProtectionCrystalSettings {
      */
     public ItemStack removeProtection(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta.getPersistentDataContainer().has(isProtected)) meta.getPersistentDataContainer().remove(isProtected);
+        if (meta.getPersistentDataContainer().has(DataKeys.PROTECTED_ITEM.getKey())) meta.getPersistentDataContainer().remove(DataKeys.PROTECTED_ITEM.getKey());
 
         if (!(item.lore() == null)) {
             List<Component> lore = item.lore();
@@ -165,7 +161,7 @@ public class ProtectionCrystalSettings {
         ItemMeta meta = item.getItemMeta();
         List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
 
-        meta.getPersistentDataContainer().set(isProtected, PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(DataKeys.PROTECTED_ITEM.getKey(), PersistentDataType.BOOLEAN, true);
 
         assert lore != null;
         lore.add(ColorUtils.legacyTranslateColourCodes(protectionString));

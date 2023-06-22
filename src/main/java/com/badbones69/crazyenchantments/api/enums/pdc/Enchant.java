@@ -10,7 +10,6 @@ import java.util.Set;
 public class Enchant {
 
     private final HashMap<String, Integer> enchants;
-    private final NamespacedKey nameSpacedKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "CrazyEnchants");
 
     public Enchant(HashMap<String, Integer> enchants) {
         this.enchants = enchants == null ? new HashMap<>() : enchants;
@@ -61,9 +60,5 @@ public class Enchant {
      * @return true if there are no enchantments on the item.
      */
     public boolean isEmpty() { return enchants.isEmpty(); }
-
-    public NamespacedKey getKey() {
-        return nameSpacedKey;
-    }
 
 }

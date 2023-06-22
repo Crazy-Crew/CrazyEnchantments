@@ -5,12 +5,12 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.Category;
 import com.badbones69.crazyenchantments.api.objects.LostBook;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,9 +34,6 @@ public class LostBookController implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    private final NamespacedKey lostBookKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "Lost_Book_Type");
-
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent e) {
         Player player = e.getPlayer();
@@ -47,7 +44,7 @@ public class LostBookController implements Listener {
         ItemStack item = methods.getItemInHand(player);
 
         if (!item.hasItemMeta()) return;
-        String data = item.getItemMeta().getPersistentDataContainer().get(lostBookKey, PersistentDataType.STRING);
+        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.LOST_BOOK.getKey(), PersistentDataType.STRING);
         if (data == null) return;
 
         for (Category eachCategory : enchantmentBookSettings.getCategories()) {

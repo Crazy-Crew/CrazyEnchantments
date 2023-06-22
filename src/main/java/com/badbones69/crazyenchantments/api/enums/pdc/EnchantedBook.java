@@ -9,7 +9,6 @@ public class EnchantedBook {
     private int success;
     private int destroy;
     private int level;
-    private final NamespacedKey nameSpacedKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "Stored_Enchantments");
 
     public EnchantedBook(String enchantmentName, int success, int destroy, int level) {
         this.name = enchantmentName;
@@ -39,11 +38,8 @@ public class EnchantedBook {
     public int getLevel() {
         return this.level;
     }
+
     public void setLevel(int newLevel) {
         this.level = newLevel;
     }
-    public NamespacedKey getKey() {
-        return nameSpacedKey;
-    }
-
 }

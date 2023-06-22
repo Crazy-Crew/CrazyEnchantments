@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.managers.*;
 import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.*;
@@ -26,7 +27,6 @@ import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -644,10 +644,7 @@ public class CrazyManager {
             String data;
             Enchant eData;
 
-            NamespacedKey key = new NamespacedKey(plugin, "CrazyEnchants");
-
-
-            data = item1.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+            data = item1.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
             eData =  data != null ? g.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
@@ -655,7 +652,7 @@ public class CrazyManager {
                 eData.addEnchantment(x.getKey().getName(), x.getValue());
             }
 
-            meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, g.toJson(eData));
+            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, g.toJson(eData));
         // PDC End
 
             item.setItemMeta(meta);

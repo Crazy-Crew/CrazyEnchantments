@@ -4,8 +4,8 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.pdc.DustData;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -94,10 +94,8 @@ public enum Dust {
         // PDC Start
                 Gson g = new Gson();
 
-                NamespacedKey key = new NamespacedKey(plugin, "Crazy_Dust");
-
                 ItemMeta meta = item.getItemMeta();
-                meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, g.toJson(new DustData(getConfigName(), min, max, percent)));
+                meta.getPersistentDataContainer().set(DataKeys.DUST.getKey(), PersistentDataType.STRING, g.toJson(new DustData(getConfigName(), min, max, percent)));
                 item.setItemMeta(meta);
         // PDC End
 
