@@ -8,9 +8,6 @@ import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -631,7 +628,7 @@ public class ItemBuilder {
         List<Component> newLore = new ArrayList<>();
 
         for (Component line : itemLore) {
-            String newLine = LegacyComponentSerializer.legacyAmpersand().serialize(line); //PlainTextComponentSerializer.plainText().serialize(line);
+            String newLine = ColorUtils.toLegacy(line);
             for (Map.Entry<String, String> placeholder : lorePlaceholders.entrySet()) {
                 newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
             }
