@@ -56,9 +56,6 @@ public class CrazyManager {
 
     private CropManagerVersion cropManagerVersion;
 
-    // Plugin Managers.
-    private BlackSmithManager blackSmithManager;
-
     private final AllyManager allyManager = plugin.getStarter().getAllyManager();
 
     // Wings.
@@ -121,9 +118,9 @@ public class CrazyManager {
             if (playerHealthPatch) player.getAttribute(genericAttribute).setBaseValue(baseValue);
 
             // Loop through all players & back them up.
-            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, task -> {
-                getCEPlayers().forEach(name -> backupCEPlayer(name.getPlayer()));
-            }, 5 * 20 * 60, 5 * 20 * 60);
+            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, task ->
+                    getCEPlayers().forEach(name ->
+                            backupCEPlayer(name.getPlayer())), 5 * 20 * 60, 5 * 20 * 60);
         });
 
         // Invalidate cached enchants.
@@ -135,9 +132,6 @@ public class CrazyManager {
                 blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
             } catch (Exception ignored) {}
         });
-
-        // Loads the blacksmith manager.
-        blackSmithManager = plugin.getStarter().getBlackSmithManager();
 
         // Loads the info menu manager and the enchantment types.
         infoMenuManager.load();
@@ -348,18 +342,6 @@ public class CrazyManager {
         return cropManagerVersion;
     }
 
-    /**
-     * Check if the config has unsafe enchantments enabled.
-     * @return True if enabled and false if not.
-     */
-    public boolean useUnsafeEnchantments() {
-        return useUnsafeEnchantments;
-    }
-
-    public boolean useMaxEnchantmentLimit() {
-        return maxEnchantmentCheck;
-    }
-
     public boolean checkVanillaLimit() {
         return checkVanillaLimit;
     }
@@ -391,22 +373,6 @@ public class CrazyManager {
      */
     public List<GKitz> getGKitz() {
         return gkitz;
-    }
-
-    /**
-     * Add a new GKit to the plugin.
-     * @param kit The kit you wish to add.
-     */
-    public void addGKit(GKitz kit) {
-        gkitz.add(kit);
-    }
-
-    /**
-     * Remove a kit that is in the plugin.
-     * @param kit The kit you wish to remove.
-     */
-    public void removeGKit(GKitz kit) {
-        gkitz.remove(kit);
     }
 
     /**
@@ -450,119 +416,6 @@ public class CrazyManager {
             + " Please add enchantments to the category in the Enchantments.yml. If you do not wish to have the category feel free to delete it from the Config.yml.");
             return null;
         }
-    }
-
-    /**
-     * @param player The player you want to check if they have the enchantment on their armor.
-     * @param includeItem The item you want to include.
-     * @param excludeItem The item you want to exclude.
-     * @param enchantment The enchantment you are checking.
-     * @return True if a piece of armor has the enchantment and false if not.
-     */
-    public boolean playerHasEnchantmentOn(Player player, ItemStack includeItem, ItemStack excludeItem, CEnchantment enchantment) {
-        for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!armor.isSimilar(excludeItem) && enchantmentBookSettings.hasEnchantment(armor, enchantment)) return true;
-        }
-
-        return enchantmentBookSettings.hasEnchantment(includeItem, enchantment);
-    }
-
-    /**
-     * @param player The player you want to check if they have the enchantment on their armor.
-     * @param excludedItem The item you want to exclude.
-     * @param enchantment The enchantment you are checking.
-     * @return True if a piece of armor has the enchantment and false if not.
-     */
-    public boolean playerHasEnchantmentOnExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
-        for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantment)) return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param player The player you want to check if they have the enchantment on their armor.
-     * @param includedItem The item you want to include.
-     * @param enchantment The enchantment you are checking.
-     * @return True if a piece of armor has the enchantment and false if not.
-     */
-    public boolean playerHasEnchantmentOnInclude(Player player, ItemStack includedItem, CEnchantment enchantment) {
-        for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (enchantmentBookSettings.hasEnchantment(armor, enchantment)) return true;
-        }
-
-        return enchantmentBookSettings.hasEnchantment(includedItem, enchantment);
-    }
-
-    /**
-     * @param player The player you want to get the highest level of an enchantment from.
-     * @param includedItem The item you want to include.
-     * @param excludedItem The item you want to exclude.
-     * @param enchantment The enchantment you are checking.
-     * @return The highest level of the enchantment that the player currently has.
-     */
-    public int getHighestEnchantmentLevel(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantment enchantment) {
-        int highest;
-
-        highest = checkHighEnchant(player, excludedItem, enchantment);
-
-        if (enchantmentBookSettings.hasEnchantment(includedItem, enchantment)) {
-            int level = enchantmentBookSettings.getLevel(includedItem, enchantment);
-
-            if (highest < level) highest = level;
-        }
-
-        return highest;
-    }
-
-    /**
-     * @param player The player you want to get the highest level of an enchantment from.
-     * @param excludedItem The item you want to exclude.
-     * @param enchantment The enchantment you are checking.
-     * @return The highest level of the enchantment that the player currently has.
-     */
-    public int getHighestEnchantmentLevelExclude(Player player, ItemStack excludedItem, CEnchantment enchantment) {
-        return checkHighEnchant(player, excludedItem, enchantment);
-    }
-
-    private int checkHighEnchant(Player player, ItemStack excludedItem, CEnchantment enchantment) {
-        int highest = 0;
-
-        for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantment)) {
-                int level = enchantmentBookSettings.getLevel(armor, enchantment);
-
-                if (highest < level) highest = level;
-            }
-        }
-
-        return highest;
-    }
-
-    /**
-     * @param player The player you want to get the highest level of an enchantment from.
-     * @param includedItem The item you want to include.
-     * @param enchantment The enchantment you are checking.
-     * @return The highest level of the enchantment that the player currently has.
-     */
-    public int getHighestEnchantmentLevelInclude(Player player, ItemStack includedItem, CEnchantment enchantment) {
-        int highest = 0;
-
-        for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (enchantmentBookSettings.hasEnchantment(armor, enchantment)) {
-                int level = enchantmentBookSettings.getLevel(armor, enchantment);
-
-                if (highest < level) highest = level;
-            }
-        }
-
-        if (enchantmentBookSettings.hasEnchantment(includedItem, enchantment)) {
-            int level = enchantmentBookSettings.getLevel(includedItem, enchantment);
-            if (highest < level) highest = level;
-        }
-
-        return highest;
     }
 
     /**
@@ -866,22 +719,6 @@ public class CrazyManager {
     }
 
     /**
-     * Set the max rage stack level.
-     * @param level The new max stack level of the rage enchantment.
-     */
-    public void setRageMaxLevel(int level) {
-        rageMaxLevel = level;
-    }
-
-    /**
-     * Set if a player takes damage the current rage stack on the player will be lost.
-     * @param toggle True if they lose the rage stack on damage and false if not.
-     */
-    public void setBreakRageOnDamage(boolean toggle) {
-        breakRageOnDamage = toggle;
-    }
-
-    /**
      * Check if players lose their current rage stack on damage.
      * @return True if they do and false if not.
      */
@@ -969,9 +806,5 @@ public class CrazyManager {
 
     public int pickLevel(int min, int max) {
         return min + random.nextInt((max + 1) - min);
-    }
-
-    public BlackSmithManager getBlackSmithManager() {
-        return blackSmithManager;
     }
 }

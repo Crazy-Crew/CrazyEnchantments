@@ -2,11 +2,10 @@ package com.badbones69.crazyenchantments.api;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.support.factions.FactionsUUIDSupport;
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
 import com.badbones69.crazyenchantments.api.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.api.support.claims.TownySupport;
-import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.api.support.factions.FactionsUUIDSupport;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
 import com.badbones69.crazyenchantments.utilities.WorldGuardUtils;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.common.collect.Maps;
@@ -15,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+
 import java.util.List;
 import java.util.Map;
 
@@ -84,9 +84,7 @@ public class PluginSupport {
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
 
                 String website = supportedPlugin.getLoadedPlugin().getDescription().getWebsite();
-                List<String> author = supportedPlugin.getLoadedPlugin().getDescription().getAuthors();
                 String name = supportedPlugin.getLoadedPlugin().getDescription().getName();
-                String main = supportedPlugin.getLoadedPlugin().getDescription().getMain();
 
                 switch (supportedPlugin) {
                     case FACTIONS_UUID -> {

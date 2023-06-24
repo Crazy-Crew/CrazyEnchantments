@@ -40,14 +40,7 @@ public class TownySupport implements FactionsVersion {
         return false;
     }
 
-    public boolean canBreakBlock(Player player, Block block) {
-        TownyAPI api = TownyAPI.getInstance();
-
-        if (api == null) return true;
-
-
-        return true;
-    }
+    public boolean canBreakBlock(Player player, Block block) { return true; }
 
     public static boolean allowsCombat(Location location) {
         TownyAPI api = TownyAPI.getInstance();
