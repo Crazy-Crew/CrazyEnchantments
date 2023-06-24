@@ -9,13 +9,10 @@ import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
-import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
-import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CEnchantment {
 
