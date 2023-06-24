@@ -39,6 +39,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class CrazyManager {
 
@@ -770,7 +771,7 @@ public class CrazyManager {
                 } catch (Exception ignore) {}
             }
 
-            itemBuilder.getLore().addAll(0, customEnchantments);
+            itemBuilder.getLore().addAll(0, customEnchantments.stream().map(ColorUtils::legacyTranslateColourCodes).toList());
             itemBuilder.setEnchantments(enchantments);
 
             NBTItem nbtItem = new NBTItem(itemBuilder.build());
