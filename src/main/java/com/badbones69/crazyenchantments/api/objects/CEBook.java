@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -211,7 +212,7 @@ public class CEBook {
      * @return Return the book as an ItemBuilder.
      */
     public ItemBuilder getItemBuilder() {
-        String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level);
+        String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
         List<String> lore = new ArrayList<>();
 
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {

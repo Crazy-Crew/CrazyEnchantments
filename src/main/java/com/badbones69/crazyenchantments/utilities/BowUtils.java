@@ -112,30 +112,30 @@ public class BowUtils {
     public void spawnWebs(Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
         if (enchantedArrow == null) return;
 
-        if (isBowEnchantActive(CEnchantments.STICKY_SHOT, enchantedArrow, arrow)) {
-            if (hitEntity == null) {
-                Location entityLocation = arrow.getLocation();
+        if (!isBowEnchantActive(CEnchantments.STICKY_SHOT, enchantedArrow, arrow)) return;
 
-                if (entityLocation.getBlock().getType() != Material.AIR) return;
+        if (hitEntity == null) {
+            Location entityLocation = arrow.getLocation();
 
-                entityLocation.getBlock().setType(Material.COBWEB);
-                webBlocks.add(entityLocation.getBlock());
+            if (entityLocation.getBlock().getType() != Material.AIR) return;
 
-                arrow.remove();
+            entityLocation.getBlock().setType(Material.COBWEB);
+            webBlocks.add(entityLocation.getBlock());
 
-                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-                    entityLocation.getBlock().setType(Material.AIR);
-                    webBlocks.remove(entityLocation.getBlock());
-                }, 5 * 20);
-            } else {
-                arrow.remove();
-                setWebBlocks(hitEntity);
-            }
+            arrow.remove();
+
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                entityLocation.getBlock().setType(Material.AIR);
+                webBlocks.remove(entityLocation.getBlock());
+            }, 5 * 20);
+        } else {
+            arrow.remove();
+            setWebBlocks(hitEntity);
         }
     }
 
     private void setWebBlocks(Entity hitEntity) {
-        for (Block block : getCube(hitEntity.getLocation(), 1)) {
+        for (Block block : getCube(hitEntity.getLocation())) {
 
             block.setType(Material.COBWEB);
             webBlocks.add(block);
@@ -151,11 +151,11 @@ public class BowUtils {
 
     // Sticky Shot End!
 
-    private List<Block> getCube(Location start, int radius) {
+    private List<Block> getCube(Location start) {
         List<Block> newBlocks = new ArrayList<>();
 
-        for (double x = start.getX() - radius; x <= start.getX() + radius; x++) {
-            for (double z = start.getZ() - radius; z <= start.getZ() + radius; z++) {
+        for (double x = start.getX() - 1; x <= start.getX() + 1; x++) {
+            for (double z = start.getZ() - 1; z <= start.getZ() + 1; z++) {
                 Location loc = new Location(start.getWorld(), x, start.getY(), z);
                 if (loc.getBlock().getType() == Material.AIR) newBlocks.add(loc.getBlock());
             }

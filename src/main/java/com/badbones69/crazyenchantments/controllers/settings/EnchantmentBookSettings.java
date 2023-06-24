@@ -1,11 +1,10 @@
 package com.badbones69.crazyenchantments.controllers.settings;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.economy.Currency;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
-import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
@@ -30,8 +29,6 @@ public class EnchantmentBookSettings {
     private ItemBuilder enchantmentBook;
 
     private final List<Category> categories = Lists.newArrayList();
-
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
 
@@ -350,27 +347,6 @@ public class EnchantmentBookSettings {
         ColorUtils.color(colors, string);
 
         return colors;
-    }
-
-    /**
-     * This converts an integer into a roman numeral if its between 1-10 otherwise it will just be the number as a string.
-     * @param i The integer you want to convert.
-     * @return The integer as a roman numeral if between 1-10 otherwise the number as a string.
-     */
-    public String convertLevelString(int i) {
-        return switch (i) {
-            case 0, 1 -> "I";
-            case 2 -> "II";
-            case 3 -> "III";
-            case 4 -> "IV";
-            case 5 -> "V";
-            case 6 -> "VI";
-            case 7 -> "VII";
-            case 8 -> "VIII";
-            case 9 -> "IX";
-            case 10 -> "X";
-            default -> String.valueOf(i);
-        };
     }
 
     /**

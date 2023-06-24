@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -158,7 +159,7 @@ public class ScrollListener implements Listener {
         ArrayList<String> lore = new ArrayList<>();
 
         for (CEnchantment enchantment : newEnchantmentOrder) {
-            lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(enchantmentLevels.get(enchantment)));
+            lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + NumberUtils.convertLevelString(enchantmentLevels.get(enchantment)));
         }
 
         assert itemMeta != null;
@@ -173,7 +174,7 @@ public class ScrollListener implements Listener {
 
             if (itemMeta.hasDisplayName()) {
                 for (int amount = 0; amount <= 100; amount++) {
-                    String msg = suffix.replace("%Amount%", amount + "").replace("%amount%", amount + "");
+                    String msg = suffix.replace("%Amount%", amount + "").replace("%amount%", String.valueOf(amount));
 
                     if (itemMeta.getDisplayName().endsWith(ColorUtils.color(msg))) {
                         newName = itemMeta.getDisplayName().substring(0, itemMeta.getDisplayName().length() - msg.length());

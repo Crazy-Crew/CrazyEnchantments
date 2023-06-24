@@ -231,29 +231,4 @@ public class CEnchantment {
 
         categories.forEach(category -> category.addEnchantment(instance));
     }
-
-    /**
-     * @deprecated use {@link CEnchantment#getLevel(ItemStack)}.
-     */
-    @Deprecated
-    public int getPower(ItemStack item) {
-        return getLevel(item);
-    }
-
-    public int getLevel(ItemStack item) {
-        int level = 0;
-
-        if (ItemUtils.verifyItemLore(item)) {
-            for (String lore : Objects.requireNonNull(item.getItemMeta().getLore())) {
-                if (lore.contains(customName)) {
-                    level = NumberUtils.convertLevelInteger(lore.replace(color + customName + " ", ""));
-                    break;
-                }
-            }
-        }
-
-        if (!crazyManager.useUnsafeEnchantments() && level > maxLevel) level = maxLevel;
-
-        return level;
-    }
 }

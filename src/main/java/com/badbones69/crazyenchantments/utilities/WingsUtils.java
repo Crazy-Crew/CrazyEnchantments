@@ -31,22 +31,21 @@ public class WingsUtils {
     private static final WingsManager wingsManager = starter.getWingsManager();
 
     public static void startWings() {
-        if (wingsManager.isWingsEnabled()) {
-            wingsManager.setWingsTask(new BukkitRunnable() {
-                @Override
-                public void run() {
-                    for (Player player : wingsManager.getFlyingPlayers()) {
-                        if (player.isFlying() && crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && player.getEquipment().getBoots() != null) {
-                            Location location = player.getLocation().subtract(0, .25, 0);
+        if (!wingsManager.isWingsEnabled()) wingsManager.endWingsTask();
 
-                            if (wingsManager.isCloudsEnabled()) player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
-                        }
+        wingsManager.setWingsTask(new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player player : wingsManager.getFlyingPlayers()) {
+                    if (player.isFlying() && crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && player.getEquipment().getBoots() != null) {
+                        Location location = player.getLocation().subtract(0, .25, 0);
+
+                        if (wingsManager.isCloudsEnabled())
+                            player.getWorld().spawnParticle(Particle.CLOUD, location, 100, .25, 0, .25, 0);
                     }
                 }
-            }.runTaskTimerAsynchronously(plugin, 1, 1));
-        } else {
-            wingsManager.endWingsTask();
-        }
+            }
+        }.runTaskTimerAsynchronously(plugin, 1, 1));
     }
 
     public static void checkArmor(ItemStack newArmorPiece, boolean newArmor, ItemStack oldArmorPiece, Player player) {

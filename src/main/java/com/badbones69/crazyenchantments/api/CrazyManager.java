@@ -628,7 +628,7 @@ public class CrazyManager {
 
             if (enchantmentBookSettings.hasEnchantment(item, enchantment)) enchantmentBookSettings.removeEnchantment(item, enchantment);
             
-            String loreString = enchantment.getCustomName() + " " + enchantmentBookSettings.convertLevelString(level);
+            String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
             ItemMeta meta = item.getItemMeta();
             List<Component> lore = meta.lore();
 

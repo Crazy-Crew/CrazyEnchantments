@@ -76,33 +76,27 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration tinker = Files.TINKER.getFile();
 
-        String metricsPath = config.getString("Settings.Toggle-Metrics");
-        boolean metricsEnabled = config.getBoolean("Settings.Toggle-Metrics");
-
-        if (metricsPath == null) {
+        if (!config.contains("Settings.Toggle-Metrics")) {
             config.set("Settings.Toggle-Metrics", false);
 
             Files.CONFIG.saveFile();
         }
 
-        String refreshEffects = config.getString("Settings.Refresh-Potion-Effects-On-World-Change");
-
-        if (refreshEffects == null) {
+        if (!config.contains("Settings.Refresh-Potion-Effects-On-World-Change")) {
             config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
             
             Files.CONFIG.saveFile();
         }
 
-        if (tinker.get("Settings.Tinker-Version") == null) {
+        if (!tinker.contains("Settings.Tinker-Version")) {
             tinker.set("Settings.Tinker-Version", 1.0);
 
             FileManager.Files.TINKER.saveFile();
         }
 
-        if (metricsEnabled) new Metrics(this, 4494);
+        if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
         pluginManager.registerEvents(this, this);
-
         pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
         pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
         pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);

@@ -4,13 +4,22 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
+import com.badbones69.crazyenchantments.api.FileManager;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
+import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
+import com.google.gson.Gson;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public enum CEnchantments {
 
@@ -284,7 +293,24 @@ public enum CEnchantments {
      * @return The level of the enchantment that is on the item.
      */
     public int getLevel(ItemStack item) {
-        return getEnchantment().getLevel(item);
+
+        // PDC Start
+        Gson gson = new Gson();
+
+        if (!item.hasItemMeta() || !item.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) return 0;
+
+        Enchant data = gson.fromJson(item.getItemMeta().getPersistentDataContainer()
+                .get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
+        boolean unsafe = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", false);
+
+        int level = data.getLevel(name);
+        // PDC End
+        
+        assert name != null;
+        CEnchantment enchant = getFromName(name).getEnchantment();
+        if (!unsafe && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
+
+        return level;
     }
 
     /**
