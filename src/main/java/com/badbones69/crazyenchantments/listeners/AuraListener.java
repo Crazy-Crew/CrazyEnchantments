@@ -42,8 +42,7 @@ public class AuraListener implements Listener {
         Location from = event.getFrom();
         Location to = event.getTo();
 
-        if (to == null ||
-        from.getBlockX() == to.getBlockX()
+        if (from.getBlockX() == to.getBlockX()
         && from.getBlockY() == to.getBlockY()
         && from.getBlockZ() == to.getBlockZ()) return;
 

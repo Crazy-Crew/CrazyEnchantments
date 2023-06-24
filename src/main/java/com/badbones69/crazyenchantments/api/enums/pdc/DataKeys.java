@@ -10,7 +10,8 @@ public enum DataKeys {
     PROTECTION_CRYSTAL("is_Protections_Crystal", Boolean.class),
     PROTECTED_ITEM("isProtected", Boolean.class),
     SCRAMBLER("isScrambler", Boolean.class),
-    LOST_BOOK("Lost_Book_Type", String.class);
+    LOST_BOOK("Lost_Book_Type", String.class),
+    NO_FIREWORK_DAMAGE("No_Damage", Boolean.class);
 
     private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     private final String namSpaceKey;

@@ -102,27 +102,25 @@ public class ScrollListener implements Listener {
                 }
             }
             case "WhiteScroll" -> {
-                if (!Scrolls.hasWhiteScrollProtection(item)) {
-                    for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
-                        if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
-                            e.setCancelled(true);
-                            e.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
-                            player.setItemOnCursor(methods.removeItem(scroll));
-                            return;
-                        }
+                if (Scrolls.hasWhiteScrollProtection(item)) return;
+                for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
+                    if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
+                        e.setCancelled(true);
+                        e.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
+                        player.setItemOnCursor(methods.removeItem(scroll));
+                        return;
                     }
                 }
             }
             case "TransmogScroll" -> {
-                if (enchantmentBookSettings.hasEnchantments(item)) {
+                if (!enchantmentBookSettings.hasEnchantments(item)) return;
 
-                    // Checks to see if the item is already ordered.
-                    if (item.isSimilar(orderEnchantments(item.clone()))) return;
+                // Checks to see if the item is already ordered.
+                if (item.isSimilar(orderEnchantments(item.clone()))) return;
 
-                    e.setCancelled(true);
-                    e.setCurrentItem(orderEnchantments(item));
-                    player.setItemOnCursor(methods.removeItem(scroll));
-                }
+                e.setCancelled(true);
+                e.setCurrentItem(orderEnchantments(item));
+                player.setItemOnCursor(methods.removeItem(scroll));
             }
         }
     }

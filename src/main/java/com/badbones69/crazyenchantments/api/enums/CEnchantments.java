@@ -9,17 +9,11 @@ import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
-import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
-import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public enum CEnchantments {
 
@@ -192,18 +186,6 @@ public enum CEnchantments {
         return null;
     }
 
-    public static List<CEnchantments> getFromNames(List<CEnchantment> enchantments) {
-        List<CEnchantments> cEnchantments = new ArrayList<>();
-
-        for (CEnchantment cEnchantment : enchantments) {
-            CEnchantments enchantment = getFromName(cEnchantment.getName());
-
-            if (enchantment != null) cEnchantments.add(enchantment);
-        }
-
-        return cEnchantments;
-    }
-
     /**
      * @return The name of the enchantment.
      */
@@ -243,20 +225,6 @@ public enum CEnchantments {
      */
     public List<String> getDescription() {
         return getEnchantment().getInfoDescription();
-    }
-
-    /**
-     * @return Return the color that goes on the Enchantment Book.
-     */
-    public String getBookColor() {
-        return ColorUtils.color(getEnchantment().getBookColor());
-    }
-
-    /**
-     * @return Returns the color that goes on the Enchanted Item.
-     */
-    public String getEnchantmentColor() {
-        return ColorUtils.color(getEnchantment().getColor());
     }
 
     /**
@@ -305,7 +273,7 @@ public enum CEnchantments {
 
         int level = data.getLevel(name);
         // PDC End
-        
+
         assert name != null;
         CEnchantment enchant = getFromName(name).getEnchantment();
         if (!unsafe && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
