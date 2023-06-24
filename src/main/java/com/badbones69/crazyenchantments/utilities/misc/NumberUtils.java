@@ -13,7 +13,9 @@ public class NumberUtils {
 
         return true;
     }
-    public String toRoman(int number) {
+    public static String toRoman(int number) {
+
+        if (number > 3999) return String.valueOf(number);
 
         int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
         String[] romanLetters = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
@@ -50,24 +52,25 @@ public class NumberUtils {
         };
     }
     /**
-     * This converts an integer into a roman numeral if its between 1-10 otherwise it will just be the number as a string.
-     * @param i The integer you want to convert.
-     * @return The integer as a roman numeral if between 1-10 otherwise the number as a string.
+     * This converts an integer into a roman numeral if its between 1-3999 otherwise it will just be the number as a string.
+     * @param number The integer you want to convert.
+     * @return The integer as a roman numeral if between 1-3999 otherwise the number as a string.
      */
-    public static String convertLevelString(int i) {
-        return switch (i) {
-            case 0, 1 -> "I";
-            case 2 -> "II";
-            case 3 -> "III";
-            case 4 -> "IV";
-            case 5 -> "V";
-            case 6 -> "VI";
-            case 7 -> "VII";
-            case 8 -> "VIII";
-            case 9 -> "IX";
-            case 10 -> "X";
-            default -> String.valueOf(i);
-        };
+    public static String convertLevelString(int number) {
+//        return switch (number) {
+//            case 0, 1 -> "I";
+//            case 2 -> "II";
+//            case 3 -> "III";
+//            case 4 -> "IV";
+//            case 5 -> "V";
+//            case 6 -> "VI";
+//            case 7 -> "VII";
+//            case 8 -> "VIII";
+//            case 9 -> "IX";
+//            case 10 -> "X";
+//            default -> String.valueOf(number);
+//        };
+        return toRoman(number);
     }
     public static String checkLevels(ItemStack item, String customName) {
         String line = "";
