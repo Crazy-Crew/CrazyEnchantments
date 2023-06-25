@@ -47,7 +47,7 @@ public class HelmetEnchantments implements Listener {
             }
 
             if (players.isEmpty()) return;
-            
+
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
             plugin.getServer().getPluginManager().callEvent(useEvent);
 

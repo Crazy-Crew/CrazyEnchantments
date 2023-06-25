@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.api.support.interfaces.claims;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public interface FactionsVersion {
+public interface ClaimSupport {
 
     String wilderness = "Wilderness";
 

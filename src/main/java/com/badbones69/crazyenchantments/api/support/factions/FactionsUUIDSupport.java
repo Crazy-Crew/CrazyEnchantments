@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.api.support.factions;
 
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.ClaimSupport;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
@@ -9,7 +9,7 @@ import com.massivecraft.factions.Faction;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class FactionsUUIDSupport implements FactionsVersion {
+public class FactionsUUIDSupport implements ClaimSupport {
 
     public boolean isFriendly(Player player, Player other) {
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
