@@ -191,7 +191,8 @@ public class PluginSupport {
         private final PluginSupport pluginSupport = starter.getPluginSupport();
 
         public boolean isPluginLoaded() {
-            return plugin.getServer().getPluginManager().getPlugin(pluginName) != null;
+            Plugin plugin1 = plugin.getServer().getPluginManager().getPlugin(pluginName);
+            return plugin1 != null && plugin1.isEnabled();
         }
 
         public Plugin getLoadedPlugin() {
