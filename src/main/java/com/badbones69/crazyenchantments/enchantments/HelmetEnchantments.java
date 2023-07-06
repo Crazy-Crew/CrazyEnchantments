@@ -36,7 +36,8 @@ public class HelmetEnchantments implements Listener {
         if (!CEnchantments.COMMANDER.isActivated()) return;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (armor.getType() == Material.AIR || !crazyManager.hasEnchantment(armor, CEnchantments.COMMANDER)) continue;
+
+            if (armor == null || armor.getType() == Material.AIR || !crazyManager.hasEnchantment(armor, CEnchantments.COMMANDER)) continue;
 
             int radius = 4 + crazyManager.getLevel(armor, CEnchantments.COMMANDER);
 
