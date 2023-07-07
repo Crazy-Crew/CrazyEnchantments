@@ -29,8 +29,6 @@ public class CEnchantment {
     private String name;
     private String customName;
     private boolean activated;
-    private String color;
-    private String bookColor;
     private int maxLevel;
     private String infoName;
     private int chance;
@@ -45,8 +43,6 @@ public class CEnchantment {
         this.name = name;
         this.customName = name;
         this.activated = true;
-        this.color = ColorUtils.color("&7");
-        this.bookColor = ColorUtils.color("&b&l");
         this.maxLevel = 3;
         this.infoName = ColorUtils.color("&7" + name);
         this.chance = 0;
@@ -80,19 +76,6 @@ public class CEnchantment {
 
     public CEnchantment setActivated(boolean activated) {
         this.activated = activated;
-        return this;
-    }
-
-    public String getBookColor() {
-        return bookColor;
-    }
-
-    public CEnchantment setBookColor(String bookColor) {
-
-        if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
-
-        this.bookColor = ColorUtils.color(bookColor);
-
         return this;
     }
 

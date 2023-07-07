@@ -212,7 +212,7 @@ public class CEBook {
      * @return Return the book as an ItemBuilder.
      */
     public ItemBuilder getItemBuilder() {
-        String name = enchantment.getBookColor() + enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
+        String name = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
         List<String> lore = new ArrayList<>();
 
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {

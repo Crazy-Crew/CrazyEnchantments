@@ -159,7 +159,6 @@ public class CrazyManager {
                 CEnchantment enchantment = new CEnchantment(name)
                 .setCustomName(enchants.getString(path + ".Name"))
                 .setActivated(enchants.getBoolean(path + ".Enabled"))
-                .setBookColor(enchants.getString(path + ".BookColor"))
                 .setMaxLevel(enchants.getInt(path + ".MaxPower"))
                 .setEnchantmentType(cEnchantment.getType())
                 .setInfoName(enchants.getString(path + ".Info.Name"))

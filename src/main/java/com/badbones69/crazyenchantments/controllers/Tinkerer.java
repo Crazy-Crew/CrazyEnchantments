@@ -143,7 +143,7 @@ public class Tinkerer implements Listener {
                         String enchant = "";
 
                         for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
-                            if (current.getItemMeta().getDisplayName().contains(ColorUtils.color(en.getBookColor() + en.getCustomName()))) {
+                            if (current.getItemMeta().getDisplayName().contains(ColorUtils.color(en.getCustomName()))) {
                                 enchant = en.getName();
                                 toggle = true;
                             }

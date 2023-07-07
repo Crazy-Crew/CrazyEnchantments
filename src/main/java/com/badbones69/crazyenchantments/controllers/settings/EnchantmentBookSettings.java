@@ -182,7 +182,7 @@ public class EnchantmentBookSettings {
      * @return The level the enchantment has.
      */
     public int getBookLevel(ItemStack book, CEnchantment enchant) {
-        return NumberUtils.convertLevelInteger(book.getItemMeta().getDisplayName().replace(enchant.getBookColor() + enchant.getCustomName() + " ", ""));
+        return NumberUtils.convertLevelInteger(book.getItemMeta().getDisplayName().replace(enchant.getCustomName() + " ", ""));
     }
 
     /**
