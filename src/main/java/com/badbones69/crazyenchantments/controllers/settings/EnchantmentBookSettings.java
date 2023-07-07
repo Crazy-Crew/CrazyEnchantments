@@ -168,21 +168,23 @@ public class EnchantmentBookSettings {
      * @return A new scrambled book.
      */
     public ItemStack getNewScrambledBook(ItemStack book) {
-        if (isEnchantmentBook(book)) {
-            CEnchantment enchantment = getEnchantmentBookEnchantment(book);
-            return new CEBook(enchantment, getBookLevel(book, enchantment), EnchantUtils.getHighestEnchantmentCategory(enchantment)).buildBook();
+
+        // PDC Start
+        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
+        // PDC Enc
+
+        CEnchantment enchantment = null;
+        int bookLevel = 0;
+
+        for (CEnchantment enchantment1 : getRegisteredEnchantments()) {
+            if (!enchantment1.getName().equalsIgnoreCase(data.getName())) continue;
+            enchantment = enchantment1;
+            bookLevel = data.getLevel();
         }
 
-        return new ItemStack(Material.AIR);
-    }
+        if (enchantment == null) return new ItemStack(Material.AIR);
 
-    /**
-     * @param book The book you are getting the level from.
-     * @param enchant The enchantment you want the level from.
-     * @return The level the enchantment has.
-     */
-    public int getBookLevel(ItemStack book, CEnchantment enchant) {
-        return NumberUtils.convertLevelInteger(book.getItemMeta().getDisplayName().replace(enchant.getCustomName() + " ", ""));
+        return new CEBook(enchantment, bookLevel, EnchantUtils.getHighestEnchantmentCategory(enchantment)).buildBook();
     }
 
     /**
