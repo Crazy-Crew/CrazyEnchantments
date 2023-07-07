@@ -159,7 +159,6 @@ public class CrazyManager {
                 CEnchantment enchantment = new CEnchantment(name)
                 .setCustomName(enchants.getString(path + ".Name"))
                 .setActivated(enchants.getBoolean(path + ".Enabled"))
-                .setColor(enchants.getString(path + ".Color"))
                 .setBookColor(enchants.getString(path + ".BookColor"))
                 .setMaxLevel(enchants.getInt(path + ".MaxPower"))
                 .setEnchantmentType(cEnchantment.getType())
@@ -766,7 +765,7 @@ public class CrazyManager {
                             enchantments.put(enchantment, Integer.parseInt(level));
                         }
                     } else if (cEnchantment != null) {
-                        customEnchantments.add(cEnchantment.getColor() + cEnchantment.getCustomName() + " " + level);
+                        customEnchantments.add(cEnchantment.getCustomName() + " " + level);
                     }
                 } catch (Exception ignore) {}
             }

@@ -24,7 +24,6 @@ Enchantments:
     #The in-game name of the enchantment.
     Name: 'Glowing'
     #The color of the enchantment on the item.
-    Color: '&7'
     #The color of the enchantment on the book.
     BookColor: '&b&l'
     #Max lvl the enchantment goes up to.
@@ -54,7 +53,6 @@ Enchantments:
   BurnShield:
     Enabled: true
     Name: 'BurnShield'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Armor'
@@ -77,7 +75,6 @@ Enchantments:
   Piercing:
     Enabled: true
     Name: 'Piercing'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Bow'
@@ -103,7 +100,6 @@ Enchantments:
   OverLoad:
     Enabled: true
     Name: 'OverLoad'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -126,7 +122,6 @@ Enchantments:
   SelfDestruct:
     Enabled: true
     Name: 'SelfDestruct'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -149,7 +144,6 @@ Enchantments:
   Springs:
     Enabled: true
     Name: 'Springs'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Boots'
@@ -172,7 +166,6 @@ Enchantments:
   Gears:
     Enabled: true
     Name: 'Gears'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Boots'
@@ -195,7 +188,6 @@ Enchantments:
   Hulk:
     Enabled: true
     Name: 'Hulk'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Armor'
@@ -218,7 +210,6 @@ Enchantments:
   Mermaid:
     Enabled: true
     Name: 'Mermaid'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Helmet'
@@ -241,7 +232,6 @@ Enchantments:
   Ninja:
     Enabled: true
     Name: 'Ninja'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Armor'
@@ -264,7 +254,6 @@ Enchantments:
   Vampire:
     Enabled: true
     Name: 'Vampire'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Sword'
@@ -290,7 +279,6 @@ Enchantments:
   LifeSteal:
     Enabled: true
     Name: 'LifeSteal'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Sword'
@@ -316,7 +304,6 @@ Enchantments:
   Doctor:
     Enabled: true
     Name: 'Doctor'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Bow'
@@ -339,7 +326,6 @@ Enchantments:
   Boom:
     Enabled: true
     Name: 'Boom'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Bow'
@@ -365,7 +351,6 @@ Enchantments:
   Venom:
     Enabled: true
     Name: 'Venom'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Bow'
@@ -391,7 +376,6 @@ Enchantments:
   DoubleDamage:
     Enabled: true
     Name: 'DoubleDamage'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -417,7 +401,6 @@ Enchantments:
   SlowMo:
     Enabled: true
     Name: 'SlowMo'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -443,7 +426,6 @@ Enchantments:
   Blindness:
     Enabled: true
     Name: 'Blindness'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Sword'
@@ -469,7 +451,6 @@ Enchantments:
   Viper:
     Enabled: true
     Name: 'Viper'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -495,7 +476,6 @@ Enchantments:
   AntiGravity:
     Enabled: true
     Name: 'AntiGravity'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Boots'
@@ -518,7 +498,6 @@ Enchantments:
   FastTurn:
     Enabled: true
     Name: 'FastTurn'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Sword'
@@ -544,7 +523,6 @@ Enchantments:
   LightWeight:
     Enabled: true
     Name: 'LightWeight'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -570,7 +548,6 @@ Enchantments:
   Blessed:
     Enabled: true
     Name: 'Blessed'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Axe'
@@ -596,7 +573,6 @@ Enchantments:
   FeedMe:
     Enabled: true
     Name: 'FeedMe'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Axe'
@@ -622,7 +598,6 @@ Enchantments:
   Dizzy:
     Enabled: true
     Name: 'Dizzy'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Axe'
@@ -648,7 +623,6 @@ Enchantments:
   Berserk:
     Enabled: true
     Name: 'Berserk'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Axe'
@@ -674,7 +648,6 @@ Enchantments:
   Cursed:
     Enabled: true
     Name: 'Cursed'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Axe'
@@ -700,7 +673,6 @@ Enchantments:
   Rekt:
     Enabled: true
     Name: 'Rekt'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Axe'
@@ -726,7 +698,6 @@ Enchantments:
   Enlightened:
     Enabled: true
     Name: 'Enlightened'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -752,7 +723,6 @@ Enchantments:
   Freeze:
     Enabled: true
     Name: 'Freeze'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Armor'
@@ -778,7 +748,6 @@ Enchantments:
   Fortify:
     Enabled: true
     Name: 'Fortify'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -804,7 +773,6 @@ Enchantments:
   Molten:
     Enabled: true
     Name: 'Molten'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -830,7 +798,6 @@ Enchantments:
   PainGiver:
     Enabled: true
     Name: 'PainGiver'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
     Enchantment-Type: 'Armor'
@@ -856,7 +823,6 @@ Enchantments:
   Savior:
     Enabled: true
     Name: 'Savior'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -882,7 +848,6 @@ Enchantments:
   Nursery:
     Enabled: true
     Name: 'Nursery'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -908,7 +873,6 @@ Enchantments:
   AutoSmelt:
     Enabled: true
     Name: 'AutoSmelt'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'PickAxe'
@@ -934,7 +898,6 @@ Enchantments:
   Experience:
     Enabled: true
     Name: 'Experience'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'PickAxe'
@@ -960,7 +923,6 @@ Enchantments:
   Telepathy:
     Enabled: true
     Name: 'Telepathy'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Tool'
@@ -983,7 +945,6 @@ Enchantments:
   Haste:
     Enabled: true
     Name: 'Haste'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Tool'
@@ -1006,7 +967,6 @@ Enchantments:
   Oxygenate:
     Enabled: true
     Name: 'Oxygenate'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Tool'
@@ -1029,7 +989,6 @@ Enchantments:
   IceFreeze:
     Enabled: true
     Name: 'IceFreeze'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Bow'
@@ -1055,7 +1014,6 @@ Enchantments:
   Lightning:
     Enabled: true
     Name: 'Lightning'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Bow'
@@ -1081,7 +1039,6 @@ Enchantments:
   Decapitation:
     Enabled: true
     Name: 'Decapitation'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Axe'
@@ -1107,7 +1064,6 @@ Enchantments:
   Confusion:
     Enabled: true
     Name: 'Confusion'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
     Enchantment-Type: 'Sword'
@@ -1133,7 +1089,6 @@ Enchantments:
   Disarmer:
     Enabled: true
     Name: 'Disarmer'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -1159,7 +1114,6 @@ Enchantments:
   Execute:
     Enabled: true
     Name: 'Execute'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Sword'
@@ -1182,7 +1136,6 @@ Enchantments:
   Headless:
     Enabled: true
     Name: 'Headless'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Sword'
@@ -1208,7 +1161,6 @@ Enchantments:
   Inquisitive:
     Enabled: true
     Name: 'Inquisitive'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Sword'
@@ -1234,7 +1186,6 @@ Enchantments:
   Insomnia:
     Enabled: true
     Name: 'Insomnia'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Armor'
@@ -1260,7 +1211,6 @@ Enchantments:
   Nutrition:
     Enabled: true
     Name: 'Nutrition'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -1286,7 +1236,6 @@ Enchantments:
   Obliterate:
     Enabled: true
     Name: 'Obliterate'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -1312,7 +1261,6 @@ Enchantments:
   Paralyze:
     Enabled: true
     Name: 'Paralyze'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -1338,7 +1286,6 @@ Enchantments:
   SkillSwipe:
     Enabled: true
     Name: 'SkillSwipe'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Sword'
@@ -1364,7 +1311,6 @@ Enchantments:
   Snare:
     Enabled: true
     Name: 'Snare'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -1390,7 +1336,6 @@ Enchantments:
   Trap:
     Enabled: true
     Name: 'Trap'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Sword'
@@ -1416,7 +1361,6 @@ Enchantments:
   Wither:
     Enabled: true
     Name: 'Wither'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -1442,7 +1386,6 @@ Enchantments:
   Rage:
     Enabled: true
     Name: 'Rage'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -1465,7 +1408,6 @@ Enchantments:
   Valor:
     Enabled: true
     Name: 'Valor'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Armor'
@@ -1488,7 +1430,6 @@ Enchantments:
   SmokeBomb:
     Enabled: true
     Name: 'SmokeBomb'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -1514,7 +1455,6 @@ Enchantments:
   Drunk:
     Enabled: true
     Name: 'Drunk'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -1537,7 +1477,6 @@ Enchantments:
   Voodoo:
     Enabled: true
     Name: 'Voodoo'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -1563,7 +1502,6 @@ Enchantments:
   MultiArrow:
     Enabled: true
     Name: 'MultiArrow'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Bow'
@@ -1589,7 +1527,6 @@ Enchantments:
   Recover:
     Enabled: true
     Name: 'Recover'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Armor'
@@ -1612,7 +1549,6 @@ Enchantments:
   Cactus:
     Enabled: true
     Name: 'Cactus'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -1638,7 +1574,6 @@ Enchantments:
   Rocket:
     Enabled: true
     Name: 'Rocket'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Boots'
@@ -1664,7 +1599,6 @@ Enchantments:
   Angel:
     Enabled: true
     Name: 'Angel'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -1687,7 +1621,6 @@ Enchantments:
   HellForged:
     Enabled: true
     Name: 'HellForged'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 4
     Enchantment-Type: 'Damaged-Items'
@@ -1713,7 +1646,6 @@ Enchantments:
   Commander:
     Enabled: true
     Name: 'Commander'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Helmet'
@@ -1736,7 +1668,6 @@ Enchantments:
   StormCaller:
     Enabled: true
     Name: 'StormCaller'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -1762,7 +1693,6 @@ Enchantments:
   Leadership:
     Enabled: true
     Name: 'Leadership'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -1785,7 +1715,6 @@ Enchantments:
   Implants:
     Enabled: true
     Name: 'Implants'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Helmet'
@@ -1811,7 +1740,6 @@ Enchantments:
   Wings:
     Enabled: true
     Name: 'Wings'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Boots'
@@ -1834,7 +1762,6 @@ Enchantments:
   Blast:
     Enabled: true
     Name: 'Blast'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'PickAxe'
@@ -1857,7 +1784,6 @@ Enchantments:
   Furnace:
     Enabled: true
     Name: 'Furnace'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'PickAxe'
@@ -1880,7 +1806,6 @@ Enchantments:
   Blizzard:
     Enabled: true
     Name: 'Blizzard'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Armor'
@@ -1903,7 +1828,6 @@ Enchantments:
   AcidRain:
     Enabled: true
     Name: 'AcidRain'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -1926,7 +1850,6 @@ Enchantments:
   SandStorm:
     Enabled: true
     Name: 'SandStorm'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Armor'
@@ -1949,7 +1872,6 @@ Enchantments:
   Radiant:
     Enabled: true
     Name: 'Radiant'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -1972,7 +1894,6 @@ Enchantments:
   Intimidate:
     Enabled: true
     Name: 'Intimidate'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Armor'
@@ -1995,7 +1916,6 @@ Enchantments:
   Pull:
     Enabled: true
     Name: 'Pull'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Bow'
@@ -2021,7 +1941,6 @@ Enchantments:
   Tamer:
     Enabled: true
     Name: 'Tamer'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Armor'
@@ -2044,7 +1963,6 @@ Enchantments:
   Guards:
     Enabled: true
     Name: 'Guards'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -2067,7 +1985,6 @@ Enchantments:
   Infestation:
     Enabled: true
     Name: 'Infestation'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Armor'
@@ -2090,7 +2007,6 @@ Enchantments:
   Necromancer:
     Enabled: true
     Name: 'Necromancer'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
@@ -2113,7 +2029,6 @@ Enchantments:
   BeeKeeper:
     Enabled: true
     Name: 'BeeKeeper'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Armor'
@@ -2136,7 +2051,6 @@ Enchantments:
   Sticky-Shot:
     Enabled: true
     Name: 'StickyShot'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Bow'
@@ -2162,7 +2076,6 @@ Enchantments:
   Disorder:
     Enabled: true
     Name: 'Disorder'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Sword'
@@ -2184,7 +2097,6 @@ Enchantments:
   Charge:
     Enabled: true
     Name: 'Charge'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Sword'
@@ -2203,7 +2115,6 @@ Enchantments:
   Revenge:
     Enabled: true
     Name: 'Revenge'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Sword'
@@ -2223,7 +2134,6 @@ Enchantments:
   BattleCry:
     Enabled: true
     Name: 'BattleCry'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Axe'
@@ -2246,7 +2156,6 @@ Enchantments:
   Famished:
     Enabled: true
     Name: 'Famished'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Sword'
@@ -2269,7 +2178,6 @@ Enchantments:
   GreenThumb:
     Enabled: true
     Name: 'GreenThumb'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Hoe'
@@ -2293,7 +2201,6 @@ Enchantments:
   Harvester:
     Enabled: true
     Name: 'Harvester'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Hoe'
@@ -2313,7 +2220,6 @@ Enchantments:
   Tiller:
     Enabled: true
     Name: 'Tiller'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Hoe'
@@ -2336,7 +2242,6 @@ Enchantments:
   Planter:
     Enabled: true
     Name: 'Planter'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Hoe'
@@ -2358,7 +2263,6 @@ Enchantments:
   Cyborg:
     Enabled: true
     Name: 'Cyborg'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 1
     Enchantment-Type: 'Armor'
@@ -2377,7 +2281,6 @@ Enchantments:
   Sniper:
     Enabled: true
     Name: 'Sniper'
-    Color: '&7'
     BookColor: '&b&l'
     MaxPower: 2
     Enchantment-Type: 'Bow'

@@ -157,7 +157,7 @@ public class ScrollListener implements Listener {
         ArrayList<String> lore = new ArrayList<>();
 
         for (CEnchantment enchantment : newEnchantmentOrder) {
-            lore.add(enchantment.getColor() + enchantment.getCustomName() + " " + NumberUtils.convertLevelString(enchantmentLevels.get(enchantment)));
+            lore.add(enchantment.getCustomName() + " " + NumberUtils.convertLevelString(enchantmentLevels.get(enchantment)));
         }
 
         assert itemMeta != null;

@@ -56,10 +56,6 @@ public class CEnchantment {
         this.enchantmentType = null;
     }
 
-    public CEnchantment getCEnchantmentFromName(String enchantment) {
-        return crazyManager.getEnchantmentFromName(enchantment);
-    }
-
     public String getName() {
         return name;
     }
@@ -84,15 +80,6 @@ public class CEnchantment {
 
     public CEnchantment setActivated(boolean activated) {
         this.activated = activated;
-        return this;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public CEnchantment setColor(String color) {
-        this.color = ColorUtils.color(color);
         return this;
     }
 
