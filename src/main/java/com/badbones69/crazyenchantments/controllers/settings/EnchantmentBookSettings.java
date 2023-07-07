@@ -40,25 +40,6 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     * Get the enchantment from an enchantment book.
-     * @param book The book you want the enchantment from.
-     * @return The enchantment the book is.
-     */
-    public CEnchantment getEnchantmentBookEnchantment(ItemStack book) {
-
-        if (book.getItemMeta() == null) return null;
-
-    // PDC Start
-        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
-    // PDC Enc
-        for (CEnchantment enchantment : getRegisteredEnchantments()) {
-            if (enchantment.getName().equalsIgnoreCase(data.getName())) return enchantment;
-        }
-
-        return null;
-    }
-
-    /**
      * @param item        Item that you want to check if it has an enchantment.
      * @param enchantment The enchantment you want to check if the item has.
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
