@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSett
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
+import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -53,7 +54,7 @@ public class ScrollListener implements Listener {
 
     public void loadScrollControl() {
         FileConfiguration config = Files.CONFIG.getFile();
-        suffix = ColorUtils.color(config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]"));
+        suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
         countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments");
         useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle");
         blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
@@ -115,11 +116,12 @@ public class ScrollListener implements Listener {
             case "TransmogScroll" -> {
                 if (!enchantmentBookSettings.hasEnchantments(item)) return;
 
-                // Checks to see if the item is already ordered.
-                if (item.isSimilar(orderEnchantments(item.clone()))) return;
+                ItemStack orderedItem = orderNewEnchantments(item.clone());
+
+                if (item.isSimilar(orderedItem)) return;
 
                 e.setCancelled(true);
-                e.setCurrentItem(orderEnchantments(item));
+                e.setCurrentItem(orderedItem);
                 player.setItemOnCursor(methods.removeItem(scroll));
             }
         }
@@ -140,58 +142,50 @@ public class ScrollListener implements Listener {
         }
     }
 
-    private ItemStack orderEnchantments(ItemStack item) {
+    private ItemStack orderNewEnchantments(ItemStack item) {
+
         HashMap<CEnchantment, Integer> enchantmentLevels = new HashMap<>();
         HashMap<CEnchantment, Integer> categories = new HashMap<>();
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
 
-        for (CEnchantment enchantment : enchantmentBookSettings.getEnchantmentsOnItem(item)) {
-            enchantmentLevels.put(enchantment, enchantmentBookSettings.getLevel(item, enchantment));
-            enchantmentBookSettings.removeEnchantment(item, enchantment);
-            categories.put(enchantment, EnchantUtils.getHighestEnchantmentCategory(enchantment).getRarity());
-            newEnchantmentOrder.add(enchantment);
+        for (Map.Entry<CEnchantment, Integer> enchantment : enchantmentBookSettings.getEnchantments(item).entrySet()) {
+            enchantmentLevels.put(enchantment.getKey(), enchantment.getValue());
+            categories.put(enchantment.getKey(), EnchantUtils.getHighestEnchantmentCategory(enchantment.getKey()).getRarity());
+            newEnchantmentOrder.add(enchantment.getKey());
         }
-
         orderInts(newEnchantmentOrder, categories);
-        ItemMeta itemMeta = item.getItemMeta();
-        ArrayList<String> lore = new ArrayList<>();
+        ItemMeta newMeta = item.getItemMeta();
 
-        for (CEnchantment enchantment : newEnchantmentOrder) {
-            lore.add(enchantment.getCustomName() + " " + NumberUtils.convertLevelString(enchantmentLevels.get(enchantment)));
-        }
+        List<Component> newLore = new ArrayList<>();
 
-        assert itemMeta != null;
-        if (itemMeta.hasLore()) lore.addAll(itemMeta.getLore());
+        newEnchantmentOrder.forEach(enchantment ->
+                newLore.add(ColorUtils.legacyTranslateColourCodes(
+                        enchantment.getCustomName() + " " + NumberUtils.convertLevelString(enchantmentLevels.get(enchantment)))));
 
-        itemMeta.setLore(lore);
-        // If adding suffix to the item name then it can run this.
+        newMeta.lore(newLore);
 
         if (useSuffix) {
-            String newName = itemMeta.hasDisplayName() ? itemMeta.getDisplayName() : ColorUtils.color("&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " ").toLowerCase()));
-            // Checks if the item has a custom name and if so checks to see if it already has the suffix.
+            String newName = newMeta.hasDisplayName() ? ColorUtils.toLegacy(newMeta.displayName()) :
+                    "&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
 
-            if (itemMeta.hasDisplayName()) {
-                for (int amount = 0; amount <= 100; amount++) {
-                    String msg = suffix.replace("%Amount%", amount + "").replace("%amount%", String.valueOf(amount));
+            if (newMeta.hasDisplayName()) {
+                for (int i = 0; i <= 100; i++) {
+                    String suffixWithAmount = suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
 
-                    if (itemMeta.getDisplayName().endsWith(ColorUtils.color(msg))) {
-                        newName = itemMeta.getDisplayName().substring(0, itemMeta.getDisplayName().length() - msg.length());
-                        break;
-                    }
+                    if (!newName.endsWith(suffixWithAmount)) continue;
+
+                    newName = newName.substring(0, newName.length() - suffixWithAmount.length());
+                    break;
                 }
             }
 
-            int amount = newEnchantmentOrder.size();
+            String amount = String.valueOf(countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
 
-            if (countVanillaEnchantments) amount += item.getEnchantments().size();
-
-            itemMeta.setDisplayName(newName + suffix.replace("%Amount%", amount + "").replace("%amount%", amount + ""));
+            newMeta.displayName(ColorUtils.legacyTranslateColourCodes(newName + suffix.replace("%Amount%", amount).replace("%amount%", amount)));
         }
-
-        item.setItemMeta(itemMeta);
+        item.setItemMeta(newMeta);
         return item;
     }
-
     private void orderInts(List<CEnchantment> list, final Map<CEnchantment, Integer> map) {
         list.sort((a1, a2) -> {
             Integer string1 = map.get(a1);
