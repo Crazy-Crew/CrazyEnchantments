@@ -344,7 +344,7 @@ public class ItemBuilder {
             item.setAmount(itemAmount);
             ItemMeta itemMeta = item.getItemMeta();
             assert itemMeta != null;
-            itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+            if (!Objects.equals(getUpdatedName(), "")) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
             itemMeta.lore(getUpdatedLore());
             if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
 

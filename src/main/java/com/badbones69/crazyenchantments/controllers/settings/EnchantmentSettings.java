@@ -273,22 +273,22 @@ public class EnchantmentSettings {
     }
 
     private ItemStack getOreDrop(Block block) {
-        ItemBuilder dropItem = new ItemBuilder();
+        Material material;
 
         switch (block.getType()) {
-            case COAL_ORE, DEEPSLATE_COAL_ORE -> dropItem.setMaterial(Material.COAL);
-            case COPPER_ORE, DEEPSLATE_COPPER_ORE -> dropItem.setMaterial(Material.COPPER_INGOT);
-            case IRON_ORE, DEEPSLATE_IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
-            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
-            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
-            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
-            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
-            case NETHER_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_NUGGET);
-            case NETHER_QUARTZ_ORE -> dropItem.setMaterial(Material.QUARTZ);
-            default -> dropItem.setMaterial(Material.AIR);
+            case COAL_ORE, DEEPSLATE_COAL_ORE -> material = Material.COAL;
+            case COPPER_ORE, DEEPSLATE_COPPER_ORE -> material = Material.COPPER_INGOT;
+            case IRON_ORE, DEEPSLATE_IRON_ORE -> material = Material.IRON_INGOT;
+            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> material = Material.GOLD_INGOT;
+            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> material = Material.DIAMOND;
+            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> material = Material.EMERALD;
+            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> material = Material.LAPIS_LAZULI;
+            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> material = Material.REDSTONE;
+            case NETHER_GOLD_ORE -> material = Material.GOLD_NUGGET;
+            case NETHER_QUARTZ_ORE -> material = Material.QUARTZ;
+            default -> material = Material.AIR;
         }
 
-        return dropItem.build();
+        return new ItemStack(material);
     }
 }
