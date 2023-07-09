@@ -11,6 +11,8 @@ import com.badbones69.crazyenchantments.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.api.enums.Dust;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
@@ -23,6 +25,8 @@ import com.badbones69.crazyenchantments.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.listeners.ShopListener;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
+import com.google.gson.Gson;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -33,6 +37,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -82,6 +88,47 @@ public class CECommand implements CommandExecutor {
             return true;
         } else {
             switch (args[0].toLowerCase()) {
+                case "updateenchants" -> {
+
+                    if (!isPlayer) return true;
+                    if (!hasPermission(sender, "updateenchants")) return true;
+
+                    Gson gson = new Gson();
+                    Player player = (Player) sender;
+                    Enchant enchants = new Enchant(null);
+                    ArrayList<Component> lore = new ArrayList<>();
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    if (!item.hasItemMeta() || item.lore() == null) return true;
+                    ItemMeta meta = item.getItemMeta();
+
+                    if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) {
+                        enchants = gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
+                    }
+
+                    for (Component line : meta.lore()) {
+                        String strippedName = ColorUtils.toPlainText(line);
+                        boolean addedLine = false;
+
+                        for (CEnchantment activeEnchant : enchantmentBookSettings.getRegisteredEnchantments()) {
+                            if (!strippedName.toLowerCase().contains(activeEnchant.getCustomName().toLowerCase().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")) &&
+                                !strippedName.toLowerCase().contains(activeEnchant.getName().toLowerCase())) continue;
+
+                            if (enchants.hasEnchantment(activeEnchant.getName())) break;
+
+                            enchants.addEnchantment(activeEnchant.getName(), NumberUtils.convertLevelInteger(strippedName.split(" ")[strippedName.split(" ").length-1]));
+                            lore.add(ColorUtils.legacyTranslateColourCodes(activeEnchant.getCustomName() + " " + NumberUtils.toRoman(enchants.getLevel(activeEnchant.getName()))));
+                            addedLine = true;
+                            break;
+                        }
+                        if (!addedLine) lore.add(line);
+                    }
+
+                    meta.lore(lore);
+                    if (!enchants.isEmpty()) meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchants));
+                    item.setItemMeta(meta);
+                    player.getInventory().setItemInMainHand(item);
+                    return true;
+                }
                 case "convert" -> {
                     if (hasPermission(sender, "convert")) {
                         sender.sendMessage(ColorUtils.color("""

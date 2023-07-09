@@ -62,6 +62,9 @@ permissions:
   crazyenchantments.blast.use:
     default: false
 
+  crazyenchantments.updateenchants:
+    default: false
+
   crazyenchantments.player.*:
     default: false
     children:

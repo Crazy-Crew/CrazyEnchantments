@@ -49,6 +49,7 @@ public class CETab implements TabCompleter {
             if (hasPermission(sender, "dust")) completions.add("dust");
             if (hasPermission(sender, "book")) completions.add("book");
             if (hasPermission(sender, "lostbook")) completions.add("lostbook");
+            if (hasPermission(sender, "updateenchants")) completions.add("updateEnchants");
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) { // /ce arg0
