@@ -15,7 +15,7 @@ public class NumberUtils {
     }
     public static String toRoman(int number) {
 
-        if (number > 3999) return String.valueOf(number);
+        if (number > 3999 || number < 1) return String.valueOf(number);
 
         int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
         String[] romanLetters = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
