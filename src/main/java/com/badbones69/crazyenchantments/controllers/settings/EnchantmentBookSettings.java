@@ -48,7 +48,7 @@ public class EnchantmentBookSettings {
 
     // PDC Start
 
-        if (item == null || item.getItemMeta() == null) return false;
+        if (item == null || !item.hasItemMeta()) return false;
 
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
 
@@ -68,6 +68,8 @@ public class EnchantmentBookSettings {
      * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
      */
     public CEBook getCEBook(ItemStack book) {
+
+        if (!book.hasItemMeta()) return null;
 
         EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
        
@@ -136,6 +138,10 @@ public class EnchantmentBookSettings {
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
     public boolean hasEnchantments(ItemStack item) {
+
+        if (item == null || !item.hasItemMeta()) return false;
+        if (!item.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) return false;
+
         for (CEnchantment enchantment : registeredEnchantments) {
             if (hasEnchantment(item, enchantment)) return true;
         }
@@ -149,6 +155,8 @@ public class EnchantmentBookSettings {
      * @return A new scrambled book.
      */
     public ItemStack getNewScrambledBook(ItemStack book) {
+
+        if (!book.hasItemMeta()) return null;
 
         // PDC Start
         EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
@@ -356,6 +364,8 @@ public class EnchantmentBookSettings {
      */
     public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
 
+        if (!item.hasItemMeta()) return item;
+
         ItemMeta meta = item.getItemMeta();
         List<Component> lore = meta.lore();
 
@@ -366,23 +376,21 @@ public class EnchantmentBookSettings {
             meta.lore(lore);
         }
     // PDC Start
-        String data;
-        Enchant eData;
+        Enchant data;
 
-        data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
-        if (data != null) {
-            eData = gson.fromJson(data, Enchant.class);
+        if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) {
+            data = gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
         } else {
-            eData = new Enchant(new HashMap<>());
+            data = new Enchant(new HashMap<>());
         }
 
+        data.removeEnchantment(enchant.getName());
 
-        eData.removeEnchantment(enchant.getName());
-
-        if (eData.isEmpty()) {
-            meta.getPersistentDataContainer().remove(DataKeys.ENCHANTMENTS.getKey());
+        if (data.isEmpty()) {
+            if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey()))
+                meta.getPersistentDataContainer().remove(DataKeys.ENCHANTMENTS.getKey());
         } else {
-            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(eData));
+            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
         }
     // PDC End
 
