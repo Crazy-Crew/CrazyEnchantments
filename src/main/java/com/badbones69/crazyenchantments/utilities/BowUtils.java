@@ -51,14 +51,17 @@ public class BowUtils {
     }
 
     public boolean isBowEnchantActive(CEnchantments customEnchant, ItemStack itemStack, Arrow arrow) {
-        return customEnchant.isActivated() && customEnchant.chanceSuccessful(itemStack) &&
-                crazyManager.hasEnchantment(itemStack, customEnchant) && arrow != null;
+        return arrow != null &&
+                customEnchant.isActivated() &&
+                crazyManager.hasEnchantment(itemStack, customEnchant) &&
+                customEnchant.chanceSuccessful(itemStack);
     }
 
     public boolean isBowEnchantActive(CEnchantments customEnchant, EnchantedArrow enchantedArrow, Arrow arrow) {
         return customEnchant.isActivated() &&
                 enchantedArrow(arrow).hasEnchantment(customEnchant) &&
-                customEnchant.chanceSuccessful(enchantedArrow.getBow()) && enchantmentBookSettings.hasEnchantments(enchantedArrow.getBow());
+                customEnchant.chanceSuccessful(enchantedArrow.getBow()) &&
+                enchantmentBookSettings.hasEnchantments(enchantedArrow.getBow());
     }
 
     public boolean allowsCombat(Entity entity) {
