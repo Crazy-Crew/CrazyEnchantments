@@ -169,36 +169,38 @@ public class DustControlListener implements Listener {
         Player player = e.getPlayer();
         FileConfiguration config = Files.CONFIG.getFile();
 
-        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            ItemStack item = methods.getItemInHand(player);
+        if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        ItemStack item = methods.getItemInHand(player);
+
+        if (!item.hasItemMeta()) return;
 
         // PDC Start
-            DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(DataKeys.DUST.getKey(), PersistentDataType.STRING), DustData.class);
+        DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(DataKeys.DUST.getKey(), PersistentDataType.STRING), DustData.class);
         // PDC End
-            if (data == null) return;
+        if (data == null) return;
 
-            if (data.getConfigName().equals(Dust.SUCCESS_DUST.getConfigName())) {
-                e.setCancelled(true);
-            } else if (data.getConfigName().equals(Dust.DESTROY_DUST.getConfigName())) {
-                e.setCancelled(true);
-            } else if(data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
-                e.setCancelled(true);
-                methods.setItemInHand(player, methods.removeItem(item));
+        if (data.getConfigName().equals(Dust.SUCCESS_DUST.getConfigName())) {
+            e.setCancelled(true);
+        } else if (data.getConfigName().equals(Dust.DESTROY_DUST.getConfigName())) {
+            e.setCancelled(true);
+        } else if(data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
+            e.setCancelled(true);
+            methods.setItemInHand(player, methods.removeItem(item));
 
-                ItemStack item2 = pickDust().getDust(methods.percentPick(data.getChance() + 1, 1), 1);
+            ItemStack item2 = pickDust().getDust(methods.percentPick(data.getChance() + 1, 1), 1);
 
-                player.getInventory().addItem(item2);
+            player.getInventory().addItem(item2);
 
-                player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
+            player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
 
-                if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")) {
-                    List<Color> colors = new ArrayList<>();
-                    String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");
+            if (config.getBoolean("Settings.Dust.MysteryDust.Firework.Toggle")) {
+                List<Color> colors = new ArrayList<>();
+                String colorString = config.getString("Settings.Dust.MysteryDust.Firework.Colors", "Black, Gray, Lime");
 
-                    ColorUtils.color(colors, colorString);
+                ColorUtils.color(colors, colorString);
 
-                    methods.fireWork(player.getLocation().add(0, 1, 0), colors);
-                }
+                methods.fireWork(player.getLocation().add(0, 1, 0), colors);
             }
         }
     }
