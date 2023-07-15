@@ -50,12 +50,20 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
     public ItemStack getItem() {
         return item;
     }
-    
+
+    /**
+     *
+     * @return if the event is cancelled.
+     */
     @Override
     public boolean isCancelled() {
         return cancel;
     }
-    
+
+    /**
+     *
+     * @param cancel true if you wish to cancel this event
+     */
     @Override
     public void setCancelled(boolean cancel) {
         this.cancel = cancel;

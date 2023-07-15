@@ -1,8 +1,5 @@
 package com.badbones69.crazyenchantments.api.enums.pdc;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import org.bukkit.NamespacedKey;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +31,11 @@ public class Enchant {
      */
     public Set<String> getEnchantments() { return this.enchants.keySet(); }
 
+    /**
+     *
+     * @param enchantment
+     * @return The level or null if the enchantment is not on the item.
+     */
     public Integer getLevel(String enchantment) { return this.enchants.get(enchantment); }
 
     /**

@@ -33,6 +33,10 @@ public class EnchantmentBookSettings {
 
     private final Gson gson = new Gson();
 
+    /**
+     *
+     * @return True if unsafe enchantments are enabled.
+     */
     public boolean useUnsafeEnchantments() {
         FileConfiguration config = FileManager.Files.CONFIG.getFile();
 
@@ -92,38 +96,39 @@ public class EnchantmentBookSettings {
         return null;
     }
 
+
     public int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
         String arg = String.valueOf(defaultValue);
 
         for (String originalLine : originalLore) {
             originalLine = ColorUtils.color(originalLine).toLowerCase();
 
-            if (originalLine.contains(argument.toLowerCase())) {
-                String[] b = originalLine.split(argument.toLowerCase());
+            if (!originalLine.contains(argument.toLowerCase())) continue;
 
-                for (String itemLine : item.getItemMeta().getLore()) {
-                    boolean toggle = false; // Checks to make sure the lore is the same.
+            String[] b = originalLine.split(argument.toLowerCase());
 
-                    if (b.length >= 1) {
-                        if (itemLine.toLowerCase().startsWith(b[0])) {
-                            arg = itemLine.toLowerCase().replace(b[0], "");
-                            toggle = true;
-                        }
+            for (String itemLine : item.getItemMeta().getLore()) {
+                boolean toggle = false; // Checks to make sure the lore is the same.
+
+                if (b.length >= 1) {
+                    if (itemLine.toLowerCase().startsWith(b[0])) {
+                        arg = itemLine.toLowerCase().replace(b[0], "");
+                        toggle = true;
                     }
-
-                    if (b.length >= 2) {
-                        if (itemLine.toLowerCase().endsWith(b[1])) {
-                            arg = arg.toLowerCase().replace(b[1], "");
-                        } else {
-                            toggle = false;
-                        }
-                    }
-
-                    if (toggle) break;
                 }
 
-                if (NumberUtils.isInt(arg)) break;
+                if (b.length >= 2) {
+                    if (itemLine.toLowerCase().endsWith(b[1])) {
+                        arg = arg.toLowerCase().replace(b[1], "");
+                    } else {
+                        toggle = false;
+                    }
+                }
+
+                if (toggle) break;
             }
+
+            if (NumberUtils.isInt(arg)) break;
         }
 
         int percent = defaultValue;
@@ -196,10 +201,18 @@ public class EnchantmentBookSettings {
         return false;
     }
 
+    /**
+     *
+     * @return A list of all active enchantments.
+     */
     public List<CEnchantment> getRegisteredEnchantments() {
         return registeredEnchantments;
     }
 
+    /**
+     *
+     * @return itemBuilder for an enchanted book.
+     */
     public ItemBuilder getNormalBook() {
         return enchantmentBook;
     }
@@ -211,6 +224,10 @@ public class EnchantmentBookSettings {
         return enchantmentBook.build();
     }
 
+    /**
+     *
+     * @param enchantmentBook
+     */
     public void setEnchantmentBook(ItemBuilder enchantmentBook) {
         this.enchantmentBook = enchantmentBook;
     }
@@ -254,10 +271,16 @@ public class EnchantmentBookSettings {
         return new ArrayList<>(getEnchantments(item).keySet());
     }
 
-    public int getEnchantmentAmount(ItemStack item, boolean checkVanillaLimit) {
+    /**
+     *
+     * @param item to check.
+     * @param includeVanillaEnchantments
+     * @return Amount of enchantments on the item.
+     */
+    public int getEnchantmentAmount(ItemStack item, boolean includeVanillaEnchantments) {
         int amount = getEnchantmentsOnItem(item).size();
 
-        if (checkVanillaLimit) {
+        if (includeVanillaEnchantments) {
             if (item.hasItemMeta()) {
                 if (item.getItemMeta().hasEnchants()) amount += item.getItemMeta().getEnchants().size();
             }
@@ -274,6 +297,9 @@ public class EnchantmentBookSettings {
         return categories;
     }
 
+    /**
+     * Loads in all config options.
+     */
     public void populateMaps() {
         FileConfiguration config = FileManager.Files.CONFIG.getFile();
 
