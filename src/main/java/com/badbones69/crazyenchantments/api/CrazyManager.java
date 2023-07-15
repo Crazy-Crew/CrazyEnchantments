@@ -39,7 +39,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public class CrazyManager {
 

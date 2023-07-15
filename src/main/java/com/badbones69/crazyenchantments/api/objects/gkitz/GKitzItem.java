@@ -14,7 +14,7 @@ public class GKitzItem {
 
     private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
-    private ItemBuilder itemBuilder;
+    private final ItemBuilder itemBuilder;
     private final HashMap<CEnchantment, Integer> ceEnchantments;
     
     /**

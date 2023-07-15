@@ -14,7 +14,7 @@ public class Enchant {
 
     /**
      *
-     * @param enchantment
+     * @param enchantment The enchantment you want to check for.
      * @return true if the item has the specified enchantment.
      */
     public boolean hasEnchantment(String enchantment) { return this.enchants.containsKey(enchantment); }
@@ -33,27 +33,27 @@ public class Enchant {
 
     /**
      *
-     * @param enchantment
+     * @param enchantment The enchantment want the level for.
      * @return The level or null if the enchantment is not on the item.
      */
     public Integer getLevel(String enchantment) { return this.enchants.get(enchantment); }
 
     /**
      *
-     * @param enchantment
+     * @param enchantment The enchantment you want to add.
      */
     public void addEnchantments(Map<String, Integer> enchantment) { this.enchants.putAll(enchantment); }
 
     /**
      *
-     * @param enchantment
-     * @param level
+     * @param enchantment The enchantment you want to add.
+     * @param level The level of the enchantment.
      */
     public void addEnchantment(String enchantment, Integer level) { this.enchants.put(enchantment, level); }
 
     /**
      *
-     * @param enchantment
+     * @param enchantment The enchantment you want to remove.
      */
     public void removeEnchantment(String enchantment) { this.enchants.remove(enchantment); }
 

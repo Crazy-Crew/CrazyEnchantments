@@ -51,7 +51,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private Starter starter;
 
     // Plugin Listeners.
-    public PluginManager pluginManager = getServer().getPluginManager();
+    public final PluginManager pluginManager = getServer().getPluginManager();
 
     private FireworkDamageListener fireworkDamageListener;
     private ShopListener shopListener;

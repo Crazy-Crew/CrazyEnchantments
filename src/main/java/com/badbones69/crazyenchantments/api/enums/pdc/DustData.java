@@ -1,7 +1,5 @@
 package com.badbones69.crazyenchantments.api.enums.pdc;
 
-import org.bukkit.NamespacedKey;
-
 public class DustData {
     private final String name;
     private final int min;

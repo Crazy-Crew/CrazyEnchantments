@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.api.objects;
 
 import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ArmorEnchantment {
@@ -32,7 +32,7 @@ public class ArmorEnchantment {
      * @param isLevelAddedToAmplifier If the level of the enchantment on the item is added to the potion amplifier.
      */
     public ArmorEnchantment(CEnchantments enchantment, PotionEffects potionEffect, boolean isLevelAddedToAmplifier) {
-        this(enchantment, Arrays.asList(potionEffect), isLevelAddedToAmplifier);
+        this(enchantment, Collections.singletonList(potionEffect), isLevelAddedToAmplifier);
     }
     
     /**

@@ -184,7 +184,7 @@ public class SwordEnchantments implements Listener {
 
                         if (Messages.RAGE_RAGE_UP.getMessage().length() > 0) {
                             HashMap<String, String> placeholders = new HashMap<>();
-                            placeholders.put("%Level%", rageUp + "");
+                            placeholders.put("%Level%", String.valueOf(rageUp));
                             damager.sendMessage(Messages.RAGE_RAGE_UP.getMessage(placeholders));
                         }
 

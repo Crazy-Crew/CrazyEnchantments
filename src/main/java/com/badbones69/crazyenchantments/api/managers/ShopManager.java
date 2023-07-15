@@ -88,7 +88,7 @@ public class ShopManager {
         HashMap<String, String> placeholders = new HashMap<>();
 
         for (Currency currency : Currency.values()) {
-            placeholders.put("%" + currency.getName() + "%", currencyAPI.getCurrency(player, currency) + "");
+            placeholders.put("%" + currency.getName() + "%", String.valueOf(currencyAPI.getCurrency(player, currency)));
         }
 
         Inventory inventory = plugin.getServer().createInventory(null, inventorySize, inventoryName);

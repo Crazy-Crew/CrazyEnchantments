@@ -17,8 +17,6 @@ public class BlackSmithResult {
 
     private final Starter starter = plugin.getStarter();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-
     private final Methods methods = starter.getMethods();
 
     private int cost = 0;
@@ -30,6 +28,7 @@ public class BlackSmithResult {
         BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
 
         CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
         if (mainItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && subItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial()) {
             CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
             CEBook subBook = enchantmentBookSettings.getCEBook(subItem);

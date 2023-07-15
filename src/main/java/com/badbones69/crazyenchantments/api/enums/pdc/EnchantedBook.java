@@ -1,8 +1,5 @@
 package com.badbones69.crazyenchantments.api.enums.pdc;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import org.bukkit.NamespacedKey;
-
 public class EnchantedBook {
 
     private final String name;

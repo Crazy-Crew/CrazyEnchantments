@@ -45,7 +45,7 @@ public class AllyEnchantments implements Listener {
         if (EventUtils.isIgnoredEvent(e)) return;
 
         if (e.getEntity() instanceof Player player && e.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
-            if (!inCoolDown(player) && player.getEquipment() != null) {
+            if (!inCoolDown(player)) {
                 for (ItemStack item : player.getEquipment().getArmorContents()) {
                     // Spawn allies when getting attacked.
                     if (enchantmentBookSettings.hasEnchantments(item) && enemy instanceof Player) {

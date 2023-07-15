@@ -8,7 +8,6 @@ import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.api.objects.*;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
-import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
@@ -19,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jline.utils.Log;
 
 import java.util.*;
 
@@ -177,7 +175,7 @@ public class EnchantmentBookSettings {
 
     /**
      *
-     * @param enchantmentBook
+     * @param enchantmentBook The book data to use for the itemBuilder.
      */
     public void setEnchantmentBook(ItemBuilder enchantmentBook) {
         this.enchantmentBook = enchantmentBook;
@@ -225,7 +223,6 @@ public class EnchantmentBookSettings {
     /**
      *
      * @param item to check.
-     * @param includeVanillaEnchantments
      * @return Amount of enchantments on the item.
      */
     public int getEnchantmentAmount(ItemStack item, boolean includeVanillaEnchantments) {
