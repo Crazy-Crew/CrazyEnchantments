@@ -1531,6 +1531,28 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
   #Do not change this line.
+  Adrenaline:
+    Enabled: true
+    Name: 'Adrenaline'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Boots'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lAdrenaline &7(&bI-&bIII&7)'
+      Description:
+        - '&7If low on health there is a chance'
+        - '&7you will gain a speed boost.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBoots'
+  #Do not change this line.
   Angel:
     Enabled: true
     Name: 'Angel'
@@ -1963,6 +1985,100 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
   #Do not change this line.
+  Maneuver:
+    Enabled: true
+    Name: 'Maneuver'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lManeuver &7(&bI-&bIII&7)'
+      Description:
+        - '&7Chance to dodge'
+        - '&7an attack.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Crouch:
+    Enabled: true
+    Name: 'Crouch'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&Crouch &7(&bI-III&7)'
+      Description:
+        - '&7During combat you take'
+        - '&610%(+5% per level) &7less'
+        - '&7damage while crouched.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxe'
+    Categories:
+      - 'Legendary'
+  #Do not change this line.
+  Shockwave:
+    Enabled: true
+    Name: 'Shockwave'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lShockwave &7(&bI-&bIII&7)'
+      Description:
+        - '&7Chance to knockback'
+        - '&7enemies when they'
+        - '&7attack you.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  SystemReboot:
+    Enabled: true
+    Name: 'SystemReboot'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lSystemReboot &7(&bI-&bIII&7)'
+      Description:
+        - '&7Chance to become'
+        - '&7full hp when'
+        - '&7attacked at low hp.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
   Sticky-Shot:
     Enabled: true
     Name: 'StickyShot'
@@ -2056,6 +2172,28 @@ Enchantments:
         - '&7During combat it has a'
         - '&610%(+5% per level) &7chance to send'
         - '&7nearby players flying backwards.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxe'
+    Categories:
+      - 'Legendary'
+  DemonForged:
+    Enabled: true
+    Name: 'DemonForged'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&BattleForged &7(&bI-V&7)'
+      Description:
+        - '&7During combat it has a'
+        - '&610%(+5% per level) &7chance to deal'
+        - '&7more durability damage.'
         - ''
         - '&6Found in:'
         - '&7 - &4&l&nLegendary'

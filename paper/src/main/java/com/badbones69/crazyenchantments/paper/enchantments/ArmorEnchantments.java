@@ -137,6 +137,56 @@ public class ArmorEnchantments implements Listener {
                 }
             }
 
+            if (isEventActive(CEnchantments.MANEUVER, player, armor)) {
+                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.MANEUVER.getEnchantment(), armor);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
+
+                if (!useEvent.isCancelled()) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+
+            if (player.isSneaking() && isEventActive(CEnchantments.CROUCH, player, armor)) {
+                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.CROUCH.getEnchantment(), armor);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
+
+                double percentageReduced = (CEnchantments.CROUCH.getChance() + (CEnchantments.CROUCH.getChanceIncrease() * CEnchantments.CROUCH.getLevel(armor))) / 100.0;
+                double newDamage = event.getFinalDamage() * (1 - percentageReduced);
+
+                if (newDamage < 0) newDamage = 0;
+                if (!useEvent.isCancelled()) event.setDamage(newDamage);
+            }
+
+            if (isEventActive(CEnchantments.SHOCKWAVE, player, armor)) {
+                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.SHOCKWAVE.getEnchantment(), armor);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
+
+                if (!useEvent.isCancelled()) damager.setVelocity(player.getLocation().getDirection().multiply(2).setY(1.25));
+
+            }
+
+            if (player.getHealth() <= event.getFinalDamage() && isEventActive(CEnchantments.SYSTEMREBOOT, player, armor)) {
+                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.SYSTEMREBOOT.getEnchantment(), armor);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
+
+                if (!useEvent.isCancelled()) {
+                    player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                    event.setCancelled(true);
+                    return;
+                }
+
+            }
+
+            if (player.getHealth() <= 4 && isEventActive(CEnchantments.ADRENALINE, player, armor)) {
+                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.ADRENALINE.getEnchantment(), armor);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
+
+                if (!useEvent.isCancelled()) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3 + (crazyManager.getLevel(armor, CEnchantments.ADRENALINE)) * 20, 10));
+                }
+            }
+
             if (player.getHealth() <= 8 && isEventActive(CEnchantments.ROCKET, player, armor)) {
                 // Anti cheat support here with AAC or any others.
                 plugin.getServer().getScheduler().runTaskLater(plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
