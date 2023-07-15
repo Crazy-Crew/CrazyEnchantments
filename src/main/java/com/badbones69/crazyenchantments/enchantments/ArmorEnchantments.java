@@ -126,109 +126,61 @@ public class ArmorEnchantments implements Listener {
             for (ArmorEnchantment armorEnchantment : armorEnchantmentManager.getArmorEnchantments()) {
                 CEnchantments enchantment = armorEnchantment.getEnchantment();
 
-                if (crazyManager.hasEnchantment(armor, enchantment) && enchantment.chanceSuccessful(armor)) {
-                    EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, enchantment, armor);
-                    plugin.getServer().getPluginManager().callEvent(useEvent);
+                if (isEventActive(enchantment, player, armor)) {
 
-                    if (!useEvent.isCancelled()) {
-                        if (armorEnchantment.isPotionEnchantment()) {
-                            for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
-                                damager.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (armorEnchantment.isLevelAddedToAmplifier() ? crazyManager.getLevel(armor, enchantment) : 0) + effect.getAmplifier()));
-                            }
-                        } else {
-                            event.setDamage(event.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? crazyManager.getLevel(armor, enchantment) : 0) + armorEnchantment.getDamageAmplifier()));
+                    if (armorEnchantment.isPotionEnchantment()) {
+                        for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
+                            damager.addPotionEffect(new PotionEffect(effect.getPotionEffect(), effect.getDuration(), (armorEnchantment.isLevelAddedToAmplifier() ? crazyManager.getLevel(armor, enchantment) : 0) + effect.getAmplifier()));
                         }
+                    } else {
+                        event.setDamage(event.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? crazyManager.getLevel(armor, enchantment) : 0) + armorEnchantment.getDamageAmplifier()));
                     }
                 }
             }
 
-            if (player.getHealth() <= 8 && enchantmentBookSettings.hasEnchantment(armor, CEnchantments.ROCKET.getEnchantment()) && CEnchantments.ROCKET.chanceSuccessful(armor)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.ROCKET.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
+            if (player.getHealth() <= 8 && isEventActive(CEnchantments.ROCKET, player, armor)) {
                 // Anti cheat support here with AAC or any others.
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
+                enchantmentSettings.addFallenPlayer(player);
+                player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> enchantmentSettings.removeFallenPlayer(player), 8 * 20);
+            }
 
-                if (!useEvent.isCancelled()) {
-                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
+            if (player.getHealth() > 0 && isEventActive(CEnchantments.ENLIGHTENED, player, armor)) {
 
-                    enchantmentSettings.addFallenPlayer(player);
+                double heal = crazyManager.getLevel(armor, CEnchantments.ENLIGHTENED);
+                // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-                    player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
+                if (player.getHealth() + heal < maxHealth) player.setHealth(player.getHealth() + heal);
 
-                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> enchantmentSettings.removeFallenPlayer(player), 8 * 20);
+                if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
+            }
 
+            if (isEventActive(CEnchantments.INSOMNIA, player, armor)) damager.damage(event.getDamage() + crazyManager.getLevel(armor, CEnchantments.INSOMNIA));
+
+            if (isEventActive(CEnchantments.MOLTEN, player, armor)) damager.setFireTicks((crazyManager.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
+
+            if (isEventActive(CEnchantments.SAVIOR, player, armor)) event.setDamage(event.getDamage() / 2);
+
+            if (isEventActive(CEnchantments.CACTUS, player, armor)) damager.damage(crazyManager.getLevel(armor, CEnchantments.CACTUS));
+
+            if (isEventActive(CEnchantments.STORMCALLER, player, armor)) {
+
+                methods.checkEntity(damager);
+                // AntiCheat Support.
+                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(player);
+
+                for (LivingEntity en : methods.getNearbyLivingEntities(2D, player)) {
+                    EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
+                    methods.entityEvent(player, en, damageByEntityEvent);
                 }
-            }
 
-            if (crazyManager.hasEnchantment(armor, CEnchantments.ENLIGHTENED) && CEnchantments.ENLIGHTENED.chanceSuccessful(armor) && player.getHealth() > 0) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.ENLIGHTENED.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
+                if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
-                if (!useEvent.isCancelled()) {
-                    double heal = crazyManager.getLevel(armor, CEnchantments.ENLIGHTENED);
-                    // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                    double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-
-                    if (player.getHealth() + heal < maxHealth) player.setHealth(player.getHealth() + heal);
-
-                    if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
-                }
-            }
-
-            if (crazyManager.hasEnchantment(armor, CEnchantments.INSOMNIA)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.INSOMNIA.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) {
-                    double damage = crazyManager.getLevel(armor, CEnchantments.INSOMNIA);
-
-                    damager.damage(event.getDamage() + damage);
-                }
-            }
-
-            if (crazyManager.hasEnchantment(armor, CEnchantments.MOLTEN) && CEnchantments.MOLTEN.chanceSuccessful(armor)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.MOLTEN.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) damager.setFireTicks((crazyManager.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
-            }
-
-            if (crazyManager.hasEnchantment(armor, CEnchantments.SAVIOR) && CEnchantments.SAVIOR.chanceSuccessful(armor)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.SAVIOR.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) event.setDamage(event.getDamage() / 2);
-            }
-
-            if (crazyManager.hasEnchantment(armor, CEnchantments.CACTUS) && CEnchantments.CACTUS.chanceSuccessful(armor)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.CACTUS.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) damager.damage(crazyManager.getLevel(armor, CEnchantments.CACTUS));
-            }
-
-            if (crazyManager.hasEnchantment(armor, CEnchantments.STORMCALLER) && CEnchantments.STORMCALLER.chanceSuccessful(armor)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.STORMCALLER.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) {
-                    methods.checkEntity(damager);
-
-                    // AntiCheat Support.
-
-                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
-
-                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(player);
-
-                    for (LivingEntity en : methods.getNearbyLivingEntities(2D, player)) {
-                        EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
-                        methods.entityEvent(player, en, damageByEntityEvent);
-                    }
-
-                    if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
-
-                    damager.damage(5D);
-                }
+                damager.damage(5D);
             }
         }
 
@@ -392,4 +344,15 @@ public class ArmorEnchantments implements Listener {
 
         event.setCancelled(true);
     }
+    private boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack armor) {
+
+        if (!(enchantmentBookSettings.hasEnchantment(armor, enchant.getEnchantment()) &&
+                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(armor)))) return false;
+
+        EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), armor);
+        plugin.getServer().getPluginManager().callEvent(useEvent);
+
+        return !useEvent.isCancelled();
+    }
+
 }
