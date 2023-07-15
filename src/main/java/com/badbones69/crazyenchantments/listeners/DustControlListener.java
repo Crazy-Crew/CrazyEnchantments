@@ -141,7 +141,7 @@ public class DustControlListener implements Listener {
                 int per = dustData.getChance();
 
                 if (methods.hasArgument("%destroy_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-                    int total = enchantmentBookSettings.getPercent("%destroy_rate%", book, Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0);
+                    int total = bookData.getDestroyChance();
                     if (total <= 0) return;
 
                     if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {

@@ -73,7 +73,7 @@ public class EnchantmentBookSettings {
      */
     public CEBook getCEBook(ItemStack book) {
 
-        if (!book.hasItemMeta()) return null;
+        if (!book.hasItemMeta() || !book.getItemMeta().getPersistentDataContainer().has(DataKeys.STORED_ENCHANTMENTS.getKey())) return null;
 
         EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
        
@@ -84,58 +84,9 @@ public class EnchantmentBookSettings {
                 break;
             }
         }
-        
-        try {
-            return new CEBook(enchantment, data.getLevel(), book.getAmount())
-                    .setSuccessRate(getPercent("%success_rate%", book, FileManager.Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 100))
-                    .setDestroyRate(getPercent("%destroy_rate%", book, FileManager.Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"), 0));
-        } catch (Exception e) {
-            Log.error(e);
-        }
-
-        return null;
-    }
-
-
-    public int getPercent(String argument, ItemStack item, List<String> originalLore, int defaultValue) {
-        String arg = String.valueOf(defaultValue);
-
-        for (String originalLine : originalLore) {
-            originalLine = ColorUtils.color(originalLine).toLowerCase();
-
-            if (!originalLine.contains(argument.toLowerCase())) continue;
-
-            String[] b = originalLine.split(argument.toLowerCase());
-
-            for (String itemLine : item.getItemMeta().getLore()) {
-                boolean toggle = false; // Checks to make sure the lore is the same.
-
-                if (b.length >= 1) {
-                    if (itemLine.toLowerCase().startsWith(b[0])) {
-                        arg = itemLine.toLowerCase().replace(b[0], "");
-                        toggle = true;
-                    }
-                }
-
-                if (b.length >= 2) {
-                    if (itemLine.toLowerCase().endsWith(b[1])) {
-                        arg = arg.toLowerCase().replace(b[1], "");
-                    } else {
-                        toggle = false;
-                    }
-                }
-
-                if (toggle) break;
-            }
-
-            if (NumberUtils.isInt(arg)) break;
-        }
-
-        int percent = defaultValue;
-
-        if (NumberUtils.isInt(arg)) percent = Integer.parseInt(arg);
-
-        return percent;
+        return new CEBook(enchantment, data.getLevel(), book.getAmount())
+                .setSuccessRate(data.getSuccessChance())
+                .setDestroyRate(data.getDestroyChance());
     }
 
     /**
