@@ -11,7 +11,8 @@ public enum DataKeys {
     PROTECTED_ITEM("isProtected", Boolean.class),
     SCRAMBLER("isScrambler", Boolean.class),
     LOST_BOOK("Lost_Book_Type", String.class),
-    NO_FIREWORK_DAMAGE("No_Damage", Boolean.class);
+    NO_FIREWORK_DAMAGE("No_Damage", Boolean.class),
+    SCROLL("Crazy_Scroll", String.class);
 
     private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     private final String namSpaceKey;

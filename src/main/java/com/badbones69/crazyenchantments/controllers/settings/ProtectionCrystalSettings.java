@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
@@ -115,8 +116,16 @@ public class ProtectionCrystalSettings {
      * @param item - The item to check.
      * @return True if yes otherwise false.
      */
-    public boolean isProtected(ItemStack item) {
-        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.PROTECTED_ITEM.getKey());
+    public static boolean isProtected(ItemStack item) {
+        return item.hasItemMeta() && isProtected(item.getItemMeta());
+    }
+
+    public static boolean isProtected(ItemMeta meta) {
+        return  meta != null && isProtected(meta.getPersistentDataContainer());
+    }
+
+    public static boolean isProtected(PersistentDataContainer data) {
+        return data != null && data.has(DataKeys.PROTECTED_ITEM.getKey());
     }
 
     /**

@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.api.enums;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import net.kyori.adventure.text.Component;
@@ -69,7 +70,7 @@ public enum Scrolls {
         return configName;
     }
 
-    private static final NamespacedKey scroll = new NamespacedKey(CrazyEnchantments.getPlugin(), "Crazy_Scroll");
+    private static final NamespacedKey scroll = DataKeys.SCROLL.getKey();
 
     public static Scrolls getFromPDC(ItemStack item) {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
@@ -104,8 +105,15 @@ public enum Scrolls {
     }
 
     public static boolean hasWhiteScrollProtection(ItemStack item) {
-        if (!item.hasItemMeta()) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(whiteScrollProtectionKey);
+        return item.hasItemMeta() && hasWhiteScrollProtection(item.getItemMeta());
+    }
+
+    public static boolean hasWhiteScrollProtection(ItemMeta meta) {
+        return meta != null && hasWhiteScrollProtection(meta.getPersistentDataContainer());
+    }
+
+    public static boolean hasWhiteScrollProtection(PersistentDataContainer data) {
+        return data != null && data.has(whiteScrollProtectionKey);
     }
 
     public static ItemStack addWhiteScrollProtection(ItemStack item) {
