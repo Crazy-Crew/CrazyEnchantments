@@ -33,6 +33,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
 import java.util.*;
 public class ScrollListener implements Listener {
 
@@ -213,7 +214,7 @@ public class ScrollListener implements Listener {
             newEnchantmentOrder.add(enchantment);
         }
 
-        // Order Enchantments
+        // Order Enchantments by length.
         orderInts(newEnchantmentOrder, enchantments);
 
         // Remove blank lines
@@ -239,12 +240,32 @@ public class ScrollListener implements Listener {
         boolean hasWhiteScrollProtection = Scrolls.hasWhiteScrollProtection(container);
         boolean hasProtectionCrystalProtection = ProtectionCrystalSettings.isProtected(container);
 
-        newLore.addAll(enchantLore);
-        if (!enchantLore.isEmpty() && (hasWhiteScrollProtection || hasProtectionCrystalProtection || !normalLore.isEmpty())) newLore.add(Component.text(""));
-        if (hasWhiteScrollProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Scrolls.getWhiteScrollProtectionName()));
-        if (hasProtectionCrystalProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
-        if ((hasWhiteScrollProtection || hasProtectionCrystalProtection) && !normalLore.isEmpty()) newLore.add(Component.text(""));
-        newLore.addAll(normalLore);
+        List<String> order = Files.CONFIG.getFile().getStringList("Settings.WhiteScroll.Lore-Order");
+
+        if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
+
+        boolean wasEmpty = true;
+        for (String selection : order) {
+
+            switch (selection) {
+                case "CE_Enchantments" -> {
+                    if (!wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
+                    newLore.addAll(enchantLore);
+                    wasEmpty = enchantLore.isEmpty();
+                }
+                case "Protection" -> {
+                    if (!wasEmpty && (hasWhiteScrollProtection || hasProtectionCrystalProtection)) newLore.add(Component.text(""));
+                    if (hasWhiteScrollProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+                    if (hasProtectionCrystalProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+                    wasEmpty = !(hasWhiteScrollProtection || hasProtectionCrystalProtection);
+                }
+                case "Normal_Lore" -> {
+                    if (!wasEmpty && !normalLore.isEmpty()) newLore.add(Component.text(""));
+                    newLore.addAll(normalLore);
+                    wasEmpty = normalLore.isEmpty();
+                }
+            }
+        }
 
         meta.lore(newLore);
         item.setItemMeta(meta);
