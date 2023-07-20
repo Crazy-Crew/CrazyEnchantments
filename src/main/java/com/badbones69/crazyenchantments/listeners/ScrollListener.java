@@ -3,17 +3,22 @@ package com.badbones69.crazyenchantments.listeners;
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
+import com.badbones69.crazyenchantments.api.FileManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
+import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
@@ -26,12 +31,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import java.util.*;
 public class ScrollListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
@@ -115,8 +117,9 @@ public class ScrollListener implements Listener {
             }
             case "TransmogScroll" -> {
                 if (!enchantmentBookSettings.hasEnchantments(item)) return;
+                if (item.lore() == null) return;
 
-                ItemStack orderedItem = orderNewEnchantments(item.clone());
+                ItemStack orderedItem = newOrderNewEnchantments(item.clone());
 
                 if (item.isSimilar(orderedItem)) return;
 
@@ -142,6 +145,7 @@ public class ScrollListener implements Listener {
         }
     }
 
+    @Deprecated
     private ItemStack orderNewEnchantments(ItemStack item) {
 
         HashMap<CEnchantment, Integer> enchantmentLevels = new HashMap<>();
@@ -186,6 +190,67 @@ public class ScrollListener implements Listener {
         item.setItemMeta(newMeta);
         return item;
     }
+
+    private ItemStack newOrderNewEnchantments(ItemStack item) {
+
+        Gson gson = new Gson();
+
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        Enchant data = gson.fromJson(container.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
+        List<Component> normalLore = item.lore();
+        List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
+
+        List<Component> newLore = new ArrayList<>();
+        List<Component> enchantLore = new ArrayList<>();
+
+        Map<CEnchantment, Integer> enchantments = new HashMap<>();
+
+        for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
+            if (!data.hasEnchantment(enchantment.getName())) continue;
+            enchantments.put(enchantment, (enchantment.getCustomName() + " " +
+                    NumberUtils.toRoman(data.getLevel(enchantment.getName()))).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").length());
+            newEnchantmentOrder.add(enchantment);
+        }
+
+        // Order Enchantments
+        orderInts(newEnchantmentOrder, enchantments);
+
+        // Remove blank lines
+        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").equals(""));
+
+        // Remove CE enchantment lore
+        newEnchantmentOrder.forEach(enchant -> normalLore.removeIf(loreComponent ->
+                ColorUtils.toPlainText(loreComponent).contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))
+        ));
+
+        // Remove white-scroll protection lore
+        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(Scrolls.getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+
+        // Remove Protection-crystal protection lore
+        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
+                FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected").replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+        ));
+
+        // Convert CE lore to components.
+        for (CEnchantment i : newEnchantmentOrder) {
+            enchantLore.add(ColorUtils.legacyTranslateColourCodes(i.getCustomName() + " " + NumberUtils.toRoman(data.getLevel(i.getName()))));
+        }
+        boolean hasWhiteScrollProtection = Scrolls.hasWhiteScrollProtection(container);
+        boolean hasProtectionCrystalProtection = ProtectionCrystalSettings.isProtected(container);
+
+        newLore.addAll(enchantLore);
+        if (!enchantLore.isEmpty() && (hasWhiteScrollProtection || hasProtectionCrystalProtection || !normalLore.isEmpty())) newLore.add(Component.text(""));
+        if (hasWhiteScrollProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Scrolls.getWhiteScrollProtectionName()));
+        if (hasProtectionCrystalProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+        if ((hasWhiteScrollProtection || hasProtectionCrystalProtection) && !normalLore.isEmpty()) newLore.add(Component.text(""));
+        newLore.addAll(normalLore);
+
+        meta.lore(newLore);
+        item.setItemMeta(meta);
+        return item;
+    }
+
     private void orderInts(List<CEnchantment> list, final Map<CEnchantment, Integer> map) {
         list.sort((a1, a2) -> {
             Integer string1 = map.get(a1);
