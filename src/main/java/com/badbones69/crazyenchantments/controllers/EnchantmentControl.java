@@ -13,6 +13,8 @@ import com.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -28,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class EnchantmentControl implements Listener {
 
@@ -143,8 +146,11 @@ public class EnchantmentControl implements Listener {
                 }
 
                 e.setCancelled(true);
+                boolean creativeMode = player.getGameMode() == GameMode.CREATIVE;
 
-                if (success || player.getGameMode() == GameMode.CREATIVE) {
+                if (success || creativeMode) {
+                    String creativeMessage = Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage();
+                    if (creativeMode && !Objects.equals(creativeMessage, "")) player.sendMessage(ColorUtils.legacyTranslateColourCodes(creativeMessage));
                     ItemStack newItem = crazyManager.addEnchantment(item, enchantment, ceBook.getLevel());
                     e.setCurrentItem(newItem);
                     player.setItemOnCursor(new ItemStack(Material.AIR));
