@@ -267,6 +267,26 @@ public class ScrollListener implements Listener {
             }
         }
 
+        if (useSuffix) {
+            String newName = meta.hasDisplayName() ? ColorUtils.toLegacy(meta.displayName()) :
+                    "&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
+
+            if (meta.hasDisplayName()) {
+                for (int i = 0; i <= 100; i++) {
+                    String suffixWithAmount = suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
+
+                    if (!newName.endsWith(suffixWithAmount)) continue;
+
+                    newName = newName.substring(0, newName.length() - suffixWithAmount.length());
+                    break;
+                }
+            }
+
+            String amount = String.valueOf(countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
+
+            meta.displayName(ColorUtils.legacyTranslateColourCodes(newName + suffix.replace("%Amount%", amount).replace("%amount%", amount)));
+        }
+
         meta.lore(newLore);
         item.setItemMeta(meta);
         return item;
