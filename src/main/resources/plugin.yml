@@ -60,7 +60,7 @@ permissions:
     default: false
 
   crazyenchantments.blast.use:
-    default: false
+    default: true
 
   crazyenchantments.updateenchants:
     default: false
@@ -85,7 +85,6 @@ permissions:
       crazyenchantments.bypass.wings: true
       crazyenchantments.bypass.gkitz: true
       crazyenchantments.bypass.protectioncrystal: true
-      crazyenchantments.blast.use: true
       crazyenchantments.admin: true
 
   crazyenchantments.admin:
