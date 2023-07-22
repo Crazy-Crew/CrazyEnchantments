@@ -18,6 +18,7 @@ import com.badbones69.crazyenchantments.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.controllers.BossBarController;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
 import org.bukkit.Material;
@@ -38,10 +39,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.*;
 
 public class SwordEnchantments implements Listener {
 
@@ -60,6 +59,8 @@ public class SwordEnchantments implements Listener {
 
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+
+    private final BossBarController bossBarController = plugin.getBossBarController();
 
     // Economy Management.
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
@@ -82,7 +83,7 @@ public class SwordEnchantments implements Listener {
                     cePlayer.setRageLevel(0);
                     cePlayer.setRage(false);
 
-                    if (Messages.RAGE_DAMAGED.getMessage().length() > 0) event.getEntity().sendMessage(Messages.RAGE_DAMAGED.getMessage());
+                    rageInformPlayer(player, Messages.RAGE_DAMAGED, 0f);
                 }
             }
         }
@@ -181,13 +182,7 @@ public class SwordEnchantments implements Listener {
                     int rageUp = cePlayer.getRageLevel() + 1;
 
                     if (cePlayer.getRageMultiplier().intValue() == rageUp) {
-
-                        if (Messages.RAGE_RAGE_UP.getMessage().length() > 0) {
-                            HashMap<String, String> placeholders = new HashMap<>();
-                            placeholders.put("%Level%", String.valueOf(rageUp));
-                            damager.sendMessage(Messages.RAGE_RAGE_UP.getMessage(placeholders));
-                        }
-
+                        rageInformPlayer(damager, Messages.RAGE_RAGE_UP, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (crazyManager.getRageMaxLevel()+1)));
                         cePlayer.setRageLevel(rageUp);
                     }
 
@@ -199,7 +194,7 @@ public class SwordEnchantments implements Listener {
                     cePlayer.setRage(true);
                     cePlayer.setRageLevel(1);
 
-                    if (Messages.RAGE_BUILDING.getMessage().length() > 0) damager.sendMessage(Messages.RAGE_BUILDING.getMessage());
+                    rageInformPlayer(damager, Messages.RAGE_BUILDING, ((float) cePlayer.getRageLevel() / (float) crazyManager.getRageMaxLevel()));
                 }
 
                 cePlayer.setRageTask(new BukkitRunnable() {
@@ -209,7 +204,7 @@ public class SwordEnchantments implements Listener {
                         cePlayer.setRage(false);
                         cePlayer.setRageLevel(0);
 
-                        if (Messages.RAGE_COOLED_DOWN.getMessage().length() > 0) damager.sendMessage(Messages.RAGE_COOLED_DOWN.getMessage());
+                        rageInformPlayer(damager, Messages.RAGE_COOLED_DOWN, 0f);
                     }
                 }.runTaskLater(plugin, 80));
             }
@@ -475,4 +470,22 @@ public class SwordEnchantments implements Listener {
             default -> EquipmentSlot.HEAD;
         };
     }
+
+    private void rageInformPlayer(Player player, Messages message, Map<String, String> placeholders, float progress) {
+        if (message.getMessageNoPrefix().isBlank()) return;
+        if (crazyManager.useRageBossBar()) {
+            bossBarController.updateBossBar(player, message.getMessageNoPrefix(placeholders), progress);
+        } else {
+            player.sendMessage(message.getMessage(placeholders));
+        }
+    }
+    private void rageInformPlayer(Player player, Messages message, float progress) {
+        if (message.getMessageNoPrefix().isBlank()) return;
+        if (crazyManager.useRageBossBar()) {
+            bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
+        } else {
+            player.sendMessage(message.getMessage());
+        }
+    }
+
 }

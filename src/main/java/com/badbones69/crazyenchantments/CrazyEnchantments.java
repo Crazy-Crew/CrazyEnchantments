@@ -10,12 +10,7 @@ import com.badbones69.crazyenchantments.commands.CETab;
 import com.badbones69.crazyenchantments.commands.GkitzCommand;
 import com.badbones69.crazyenchantments.commands.GkitzTab;
 import com.badbones69.crazyenchantments.commands.TinkerCommand;
-import com.badbones69.crazyenchantments.controllers.BlackSmith;
-import com.badbones69.crazyenchantments.controllers.CommandChecker;
-import com.badbones69.crazyenchantments.controllers.GKitzController;
-import com.badbones69.crazyenchantments.controllers.InfoGUIControl;
-import com.badbones69.crazyenchantments.controllers.LostBookController;
-import com.badbones69.crazyenchantments.controllers.Tinkerer;
+import com.badbones69.crazyenchantments.controllers.*;
 import com.badbones69.crazyenchantments.enchantments.AllyEnchantments;
 import com.badbones69.crazyenchantments.enchantments.ArmorEnchantments;
 import com.badbones69.crazyenchantments.enchantments.AxeEnchantments;
@@ -61,6 +56,8 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     private Tinkerer tinkerer;
     private BlackSmith blackSmith;
     private GKitzController gKitzController;
+
+    private final BossBarController bossBarController = new BossBarController(this);
 
     @Override
     public void onEnable() {
@@ -154,6 +151,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     }
 
     private void disable() {
+        bossBarController.removeAllBossBars();
         armorEnchantments.stop();
 
         if (starter.getAllyManager() != null) starter.getAllyManager().forceRemoveAllies();
@@ -210,5 +208,9 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public GKitzController getgKitzController() {
         return this.gKitzController;
+    }
+
+    public BossBarController getBossBarController() {
+        return bossBarController;
     }
 }
