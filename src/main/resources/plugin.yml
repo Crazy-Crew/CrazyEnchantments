@@ -4,7 +4,7 @@ main: '${group}.CrazyEnchantments'
 authors: [BadBones69, RyderBelserion, TDL]
 
 version: '${version}'
-api-version: '1.19'
+api-version: '1.20'
 description: '${description}'
 
 website: '${website}'
