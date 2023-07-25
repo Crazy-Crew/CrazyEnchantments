@@ -1,11 +1,9 @@
-import java.io.ByteArrayOutputStream
 import java.io.File
 import io.papermc.hangarpublishplugin.model.Platforms
 
 plugins {
     id("root-plugin")
 
-    id("featherpatcher")
     id("io.papermc.hangar-publish-plugin")
     id("com.modrinth.minotaur")
 }
@@ -29,11 +27,11 @@ val desc = """
 * Updated default `Hit-Enchantment-Max` message.
 
 ## Commands:
- * `/ce updateenchants` -> Loops through the lore of old enchanted items and migrates it to the new system.
-  * `crazyenchantments.updateenchants`
+* `/ce updateenchants` -> Loops through the lore of old enchanted items and migrates it to the new system.
+ * `crazyenchantments.updateenchants`
 
 ## API:
- * N/A
+* N/A
 
 ## Bugs Fixed:
 * Fixed other enchantments not working when the pickaxe has blast but you do not have permission to use blast.
@@ -42,7 +40,7 @@ val desc = """
 * Reduced the chance of errors that you can get from changing the lore on an item or removing all of the lore while it has an enchantment on it.
 * Fixed right-clicking a scroll in the air to get the usage.
 
-**Submit any bugs via <https://github.com/Crazy-Crew/CrazyEnchantments/issues>** (WOW IT'S EMPTY)
+**Submit any bugs via <https://github.com/Crazy-Crew/${rootProject.name}/issues>** (WOW IT'S EMPTY)
 
 """.trimIndent()
 
