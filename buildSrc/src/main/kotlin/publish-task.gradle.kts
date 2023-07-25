@@ -13,14 +13,6 @@ plugins {
 val isSnapshot = rootProject.version.toString().contains("rc")
 val type = if (isSnapshot) "beta" else "release"
 
-// The commit id for the "main" branch prior to merging a pull request.
-val start = "198951"
-
-// The commit id BEFORE merging the pull request so before "Merge pull request #30"
-val end = "c6222cc"
-
-val commitLog = getGitHistory().joinToString(separator = "") { formatGitLog(it) }
-
 val desc = """    
 ## Changes:
 * Moved every single enchant/item over to using PDC for checks and to dictate if they are in fact one.
@@ -58,26 +50,6 @@ val versions = listOf(
     "1.20",
     "1.20.1"
 )
-
-fun getGitHistory(): List<String> {
-    val output: String = ByteArrayOutputStream().use { outputStream ->
-        project.exec {
-            executable("git")
-            args("log",  "$start..$end", "--format=format:%h %s")
-            standardOutput = outputStream
-        }
-
-        outputStream.toString()
-    }
-
-    return output.split("\n")
-}
-
-fun formatGitLog(commitLog: String): String {
-    val hash = commitLog.take(7)
-    val message = commitLog.substring(8) // Get message after commit hash + space between
-    return "[$hash](https://github.com/Crazy-Crew/${rootProject.name}/commit/$hash) $message<br>"
-}
 
 val javaComponent: SoftwareComponent = components["java"]
 
