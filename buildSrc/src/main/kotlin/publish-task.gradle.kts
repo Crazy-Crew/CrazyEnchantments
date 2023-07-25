@@ -8,7 +8,7 @@ plugins {
     id("com.modrinth.minotaur")
 }
 
-val isSnapshot = rootProject.version.toString().contains("rc")
+val isSnapshot = true
 val type = if (isSnapshot) "beta" else "release"
 
 val desc = """    
