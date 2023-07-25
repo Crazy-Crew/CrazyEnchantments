@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
@@ -20,6 +21,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
@@ -73,7 +76,15 @@ public class ScramblerListener implements Listener {
      * @return The scramblers.
      */
     public ItemStack getScramblers(int amount) {
-        return scramblerItem.setAmount(amount).build();
+        ItemStack item = scramblerItem.setAmount(amount).build();
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(DataKeys.SCRAMBLER.getKey(), PersistentDataType.BOOLEAN, true);
+        item.setItemMeta(meta);
+        return item;
+    }
+    public boolean isScrambler(ItemStack item) {
+        if (!item.hasItemMeta()) return false;
+        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.SCRAMBLER.getKey());
     }
 
     private void setGlass(Inventory inv) {
@@ -193,25 +204,21 @@ public class ScramblerListener implements Listener {
             ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
             ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
 
-            if (book.getType() != Material.AIR && scrambler.getType() != Material.AIR) {
-                if (book.getAmount() == 1 && scrambler.getAmount() == 1) {
-                    if (getScramblers().isSimilar(scrambler) && enchantmentBookSettings.isEnchantmentBook(book)) {
+            if (book.getType() == Material.AIR || scrambler.getType() == Material.AIR) return;
+            if (book.getAmount() != 1 || scrambler.getAmount() != 1) return;
+            if (!isScrambler(scrambler) || !enchantmentBookSettings.isEnchantmentBook(book)) return;
+            if (e.getClickedInventory().getType() != InventoryType.PLAYER) {
+                player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
+                return;
+            }
+            e.setCancelled(true);
+            player.setItemOnCursor(new ItemStack(Material.AIR));
 
-                        if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
-                            e.setCancelled(true);
-                            player.setItemOnCursor(new ItemStack(Material.AIR));
-
-                            if (animationToggle) {
-                                e.setCurrentItem(new ItemStack(Material.AIR));
-                                openScrambler(player, book);
-                            } else {
-                                e.setCurrentItem(enchantmentBookSettings.getNewScrambledBook(book));
-                            }
-                        } else {
-                            player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
-                        }
-                    }
-                }
+            if (animationToggle) {
+                e.setCurrentItem(new ItemStack(Material.AIR));
+                openScrambler(player, book);
+            } else {
+                e.setCurrentItem(enchantmentBookSettings.getNewScrambledBook(book));
             }
         }
     }

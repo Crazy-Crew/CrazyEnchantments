@@ -82,7 +82,7 @@ public class CEItem {
     }
     
     public ItemStack build() {
-        vanillaEnchantmentRemove.forEach(enchantment -> item.removeEnchantment(enchantment));
+        vanillaEnchantmentRemove.forEach(item::removeEnchantment);
         vanillaEnchantments.keySet().forEach(enchantment -> item.addUnsafeEnchantment(enchantment, vanillaEnchantments.get(enchantment)));
         cEnchantmentRemove.forEach(enchantment -> enchantmentBookSettings.removeEnchantment(item, enchantment));
         crazyManager.addEnchantments(item, cEnchantments);

@@ -180,8 +180,8 @@ public class CurrencyAPI {
         for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
 
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
-                switch (supportedPlugin) {
-                    case VAULT -> starter.setVaultSupport(new VaultSupport());
+                if (supportedPlugin == SupportedPlugins.VAULT) {
+                    starter.setVaultSupport(new VaultSupport());
                 }
 
                 return;

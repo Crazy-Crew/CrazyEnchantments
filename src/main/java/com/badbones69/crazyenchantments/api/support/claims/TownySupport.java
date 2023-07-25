@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.api.support.claims;
 
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.FactionsVersion;
+import com.badbones69.crazyenchantments.api.support.interfaces.claims.ClaimSupport;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.jline.utils.Log;
 
-public class TownySupport implements FactionsVersion {
+public class TownySupport implements ClaimSupport {
 
     public boolean isFriendly(Player player, Player other) {
         return CombatUtil.preventDamageCall(player, other, DamageCause.ENTITY_ATTACK);
@@ -40,14 +40,7 @@ public class TownySupport implements FactionsVersion {
         return false;
     }
 
-    public boolean canBreakBlock(Player player, Block block) {
-        TownyAPI api = TownyAPI.getInstance();
-
-        if (api == null) return true;
-
-
-        return true;
-    }
+    public boolean canBreakBlock(Player player, Block block) { return true; }
 
     public static boolean allowsCombat(Location location) {
         TownyAPI api = TownyAPI.getInstance();

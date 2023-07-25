@@ -95,7 +95,7 @@ public class BlackSmith implements Listener {
                             setResultBoarder(resultItem, inventory);
                         }
                     }
-                } else { // Menu click in black smith.
+                } else { // Menu click in blacksmith.
                     if (e.getRawSlot() == mainSlot || e.getRawSlot() == subSlot) { // Clicked either the main slot or sub slot.
                         e.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air.
                         givePlayerItem(player, item);
@@ -115,7 +115,7 @@ public class BlackSmith implements Listener {
                                     if (currencyAPI.canBuy(player, currency, resultItem.getCost())) {
                                         currencyAPI.takeCurrency(player, currency, resultItem.getCost());
                                     } else {
-                                        String needed = (resultItem.getCost() - currencyAPI.getCurrency(player, currency)) + "";
+                                        String needed = String.valueOf(resultItem.getCost() - currencyAPI.getCurrency(player, currency));
 
                                         if (currency != null) methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
                                         return;
@@ -175,7 +175,7 @@ public class BlackSmith implements Listener {
     }
     
     private String getFoundString(BlackSmithResult resultItem) {
-        return Messages.replacePlaceholders("%Cost%", resultItem.getCost() + "", blackSmithManager.getFoundString());
+        return Messages.replacePlaceholders("%Cost%", String.valueOf(resultItem.getCost()), blackSmithManager.getFoundString());
     }
     
     private void playSound(Player player, Sound sound) {

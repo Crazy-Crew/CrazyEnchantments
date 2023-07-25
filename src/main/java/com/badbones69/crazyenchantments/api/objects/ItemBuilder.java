@@ -6,9 +6,12 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.SkullCreator;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -16,11 +19,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -37,7 +37,7 @@ public class ItemBuilder {
     private Material material;
     private int damage;
     private String itemName;
-    private final List<String> itemLore;
+    private final List<Component> itemLore;
     private int itemAmount;
 
     // Player
@@ -87,6 +87,8 @@ public class ItemBuilder {
     // Custom Data
     private int customModelData;
     private boolean useCustomModelData;
+    private NamespacedKey nameSpacedKey;
+    private String nameSpacedData;
 
     /**
      * Create a blank item builder.
@@ -248,7 +250,7 @@ public class ItemBuilder {
     /**
      * Get the lore on the item.
      */
-    public List<String> getLore() {
+    public List<Component> getLore() {
         return itemLore;
     }
 
@@ -342,8 +344,9 @@ public class ItemBuilder {
             item.setAmount(itemAmount);
             ItemMeta itemMeta = item.getItemMeta();
             assert itemMeta != null;
-            itemMeta.setDisplayName(getUpdatedName());
-            itemMeta.setLore(getUpdatedLore());
+            if (!Objects.equals(getUpdatedName(), "")) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+            itemMeta.lore(getUpdatedLore());
+            if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
 
             if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
 
@@ -513,7 +516,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated name.
      */
     public ItemBuilder setName(String itemName) {
-        if (itemName != null) this.itemName = ColorUtils.color(itemName);
+        if (itemName != null) this.itemName = itemName;
 
         return this;
     }
@@ -560,10 +563,20 @@ public class ItemBuilder {
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder setLore(List<String> lore) {
+        return lore(lore.stream().map(ColorUtils::legacyTranslateColourCodes).collect(Collectors.toList()));
+    }
+
+    /**
+     * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
+     *
+     * @param lore The lore of the item in the builder.
+     * @return The ItemBuilder with updated info.
+     */
+    public ItemBuilder lore(List<Component> lore) {
         if (lore != null) {
             this.itemLore.clear();
 
-            lore.forEach(line -> this.itemLore.add(ColorUtils.color(line)));
+            this.itemLore.addAll(lore);
         }
 
         return this;
@@ -576,7 +589,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addLore(String lore) {
-        if (lore != null) this.itemLore.add(ColorUtils.color(lore));
+        if (lore != null) this.itemLore.add(ColorUtils.legacyTranslateColourCodes(lore));
 
         return this;
     }
@@ -611,15 +624,15 @@ public class ItemBuilder {
      *
      * @return The lore with all placeholders in it.
      */
-    public List<String> getUpdatedLore() {
-        List<String> newLore = new ArrayList<>();
+    public List<Component> getUpdatedLore() {
+        List<Component> newLore = new ArrayList<>();
 
-        for (String item : itemLore) {
+        for (Component line : itemLore) {
+            String newLine = ColorUtils.toLegacy(line);
             for (Map.Entry<String, String> placeholder : lorePlaceholders.entrySet()) {
-                item = item.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
+                newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
             }
-
-            newLore.add(item);
+            newLore.add(ColorUtils.legacyTranslateColourCodes(newLine));
         }
 
         return newLore;
@@ -953,7 +966,7 @@ public class ItemBuilder {
             ItemMeta itemMeta = item.getItemMeta();
 
             assert itemMeta != null;
-            itemBuilder.setName(itemMeta.getDisplayName()).setLore(itemMeta.getLore());
+            itemBuilder.setName(itemMeta.getDisplayName()).lore(itemMeta.lore());
 
             NBTItem nbt = new NBTItem(item);
 
@@ -1000,7 +1013,7 @@ public class ItemBuilder {
                             itemBuilder.setAmount(1);
                         }
                     }
-                    case "lore" -> itemBuilder.setLore(Arrays.asList(value.split(",")));
+                    case "lore" -> itemBuilder.setLore(List.of(value.split(",")));
                     case "player" -> itemBuilder.setPlayerName(value);
                     case "unbreakable-item" -> {
                         if (value.isEmpty() || value.equalsIgnoreCase("true")) itemBuilder.setUnbreakable(true);
@@ -1036,7 +1049,9 @@ public class ItemBuilder {
                 }
             }
         } catch (Exception e) {
-            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR").setLore(Arrays.asList("&cThere is an error", "&cFor : &c" + (placeHolder != null ? placeHolder : "")));
+            itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR")
+                    .lore(Arrays.asList(Component.text("There us an error", NamedTextColor.RED),
+                            Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));
             Log.error(e);
         }
 
@@ -1242,5 +1257,17 @@ public class ItemBuilder {
         }
 
         return null;
+    }
+
+    /**
+     * @param key The name spaced key value.
+     * @param data The data that the key holds.
+     * @return The ItemBuilder with an updated item count.
+     */
+    public ItemBuilder setStringPDC(NamespacedKey key, String data) {
+        this.nameSpacedKey = key;
+        this.nameSpacedData = data;
+
+        return this;
     }
 }

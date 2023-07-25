@@ -4,17 +4,19 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.Methods;
 import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.FileManager;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+
+import java.util.*;
 
 public class ProtectionCrystalSettings {
 
@@ -44,7 +46,14 @@ public class ProtectionCrystalSettings {
     }
 
     public ItemStack getCrystals(int amount) {
-        return crystal.setAmount(amount).build();
+
+        ItemStack item = crystal.setAmount(amount).build();
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(DataKeys.PROTECTION_CRYSTAL.getKey(), PersistentDataType.BOOLEAN, true);
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 
     /**
@@ -107,14 +116,25 @@ public class ProtectionCrystalSettings {
      * @param item - The item to check.
      * @return True if yes otherwise false.
      */
-    public boolean isProtected(ItemStack item) {
-        if (item.hasItemMeta() && item.getItemMeta().hasLore()) {
-            for (String lore : item.getItemMeta().getLore()) {
-                if (lore.contains(protectionString)) return true;
-            }
-        }
+    public static boolean isProtected(ItemStack item) {
+        return item.hasItemMeta() && isProtected(item.getItemMeta());
+    }
 
-        return false;
+    public static boolean isProtected(ItemMeta meta) {
+        return  meta != null && isProtected(meta.getPersistentDataContainer());
+    }
+
+    public static boolean isProtected(PersistentDataContainer data) {
+        return data != null && data.has(DataKeys.PROTECTED_ITEM.getKey());
+    }
+
+    /**
+     * Check if the item is a protection crystal.
+     * @param item - The item to check.
+     * @return True if the item is a protection crystal.
+     */
+    public boolean isProtectionCrystal(ItemStack item) {
+        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.PROTECTION_CRYSTAL.getKey());
     }
 
     /**
@@ -123,14 +143,42 @@ public class ProtectionCrystalSettings {
      * @return The new item.
      */
     public ItemStack removeProtection(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
+        ItemMeta meta = item.getItemMeta();
+        if (meta.getPersistentDataContainer().has(DataKeys.PROTECTED_ITEM.getKey())) meta.getPersistentDataContainer().remove(DataKeys.PROTECTED_ITEM.getKey());
 
-        ArrayList<String> lore = new ArrayList<>(itemMeta.getLore());
+        if (!(item.lore() == null)) {
+            List<Component> lore = item.lore();
 
-        lore.remove(protectionString);
-        itemMeta.setLore(lore);
-        item.setItemMeta(itemMeta);
+            assert lore != null;
+            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                    .contains(protectionString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+
+            meta.lore(lore);
+        }
+        item.setItemMeta(meta);
 
         return item;
     }
+
+    /**
+     * Add protection to an item.
+     * @param item - The item to add protection to.
+     * @return The new item.
+     */
+    public ItemStack addProtection(ItemStack item) {
+
+        ItemMeta meta = item.getItemMeta();
+        List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
+
+        meta.getPersistentDataContainer().set(DataKeys.PROTECTED_ITEM.getKey(), PersistentDataType.BOOLEAN, true);
+
+        assert lore != null;
+        lore.add(ColorUtils.legacyTranslateColourCodes(protectionString));
+
+        meta.lore(lore);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
 }

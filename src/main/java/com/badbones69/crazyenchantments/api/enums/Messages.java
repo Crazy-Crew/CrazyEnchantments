@@ -20,7 +20,9 @@ public enum Messages {
     NEED_MORE_XP_LEVELS("Need-More-XP-Lvls", "&cYou need &6%XP% &cmore xp level."),
     NEED_MORE_TOTAL_XP("Need-More-Total-XP", "&cYou need &6%XP% &cmore total xp."),
     NEED_MORE_MONEY("Need-More-Money", "&cYou are in need of &a$%Money_Needed%&c."),
-    HIT_ENCHANTMENT_MAX("Hit-Enchantment-Max", "&cYou have hit the max amount of enchantments an item can have."),
+    HIT_ENCHANTMENT_MAX("Hit-Enchantment-Max", "&#ff0000That item already has the maximum amount of enchantments that you can add to it." +
+                        "&#880808if you believe that this is incorrect, contact the server owner and ask them to add the permission " +
+                        "crazyenchantments.limit.# to you, using their preferred permission plugin. (Replacing the # with the amount)"),
     INVENTORY_FULL("Inventory-Full", "&cYour inventory is too full. Please open up some space to buy that."),
     TINKER_INVENTORY_FULL("Tinker-Inventory-Full", "&cThe inventory is full. Sell all or remove items."),
     NEED_TO_USE_PLAYER_INVENTORY("Need-To-Use-Player-Inventory", "&cYou can only use that in your player inventory."),
@@ -43,7 +45,8 @@ public enum Messages {
     BOOK_WORKS("Book-Works", "&aYour item loved this book and accepted it."),
     BOOK_FAILED("Book-Failed", "&cYour item must not have liked that enchantment."),
     ITEM_DESTROYED("Item-Destroyed", "&cOh no the destroy rate was too much for the item."),
-    ITEM_WAS_PROTECTED("Item-Was-Protected", "&cLuckily your item was blessed with Divine Protection and didn't break."),
+    ITEM_WAS_PROTECTED("Item-Was-Protected", "&cLuckily your item was blessed with Divine Protection and did not break."),
+    PLAYER_IS_IN_CREATIVE_MODE("Player-Is-In-Creative-Mode", "&cYou are in creative mode. This can cause items to duplicate."),
     GIVE_PROTECTION_CRYSTAL("Give-Protection-Crystal", "&7You have given %player% %amount% Protection Crystals."),
     GET_PROTECTION_CRYSTAL("Get-Protection-Crystal", "&7You have gained %amount% Protection Crystals."),
     GIVE_SCRAMBLER_CRYSTAL("Give-Scrambler-Crystal", "&7You have given %player% %amount% &e&lGrand Scramblers&7."),

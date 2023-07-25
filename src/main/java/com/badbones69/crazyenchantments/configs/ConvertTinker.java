@@ -1,8 +1,6 @@
 package com.badbones69.crazyenchantments.configs;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager;

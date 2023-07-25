@@ -248,6 +248,10 @@ Settings:
     Amount-of-Enchantments: ' &7[&6&n%amount%&7]' #The suffix that will be added at the end of the item's name.
     Amount-Toggle: true #If the amount is added to the suffix of the item's name.
     Count-Vanilla-Enchantments: true #If it counts the vanilla enchantments in the amount.
+    Lore-Order: # The order in which you want the lore sections to be applied to the item.
+      - 'CE_Enchantments'
+      - 'Protection'
+      - 'Normal_Lore'
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: true #Turn on and off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also.

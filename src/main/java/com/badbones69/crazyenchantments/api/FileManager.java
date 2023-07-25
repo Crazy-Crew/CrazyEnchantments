@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.api;
 
 import com.badbones69.crazyenchantments.CrazyEnchantments;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jline.utils.Log;
@@ -15,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author BadBones69
@@ -37,7 +34,7 @@ public class FileManager {
     /**
      * Sets up the plugin and loads all necessary files.
      */
-    public FileManager setup() {
+    public void setup() {
         if (!plugin.getDataFolder().exists()) plugin.getDataFolder().mkdirs();
 
         files.clear();
@@ -123,7 +120,6 @@ public class FileManager {
 
             if (isLogging()) plugin.getLogger().info("Finished loading custom files.");
         }
-        return this;
     }
     
     /**

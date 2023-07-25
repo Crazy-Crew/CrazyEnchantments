@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.economy.Currency;
 import org.bukkit.Color;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class LostBook {
     public ItemBuilder getLostBook(Category category) {
         return getLostBook(category, 1);
     }
-    
+    private final NamespacedKey lostBookKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "Lost_Book_Type");
     public ItemBuilder getLostBook(Category category, int amount) {
         FileConfiguration file = Files.CONFIG.getFile();
         HashMap<String, String> placeholders = new HashMap<>();
@@ -92,6 +93,8 @@ public class LostBook {
         .setName(file.getString("Settings.LostBook.Name"))
         .setNamePlaceholders(placeholders)
         .setLore(file.getStringList("Settings.LostBook.Lore"))
-        .setLorePlaceholders(placeholders);
+        .setLorePlaceholders(placeholders)
+        .setStringPDC(lostBookKey, category.getName());
+
     }
 }

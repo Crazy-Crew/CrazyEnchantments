@@ -42,15 +42,12 @@ public class GkitCoolDown {
 
         if (coolDownTime != null) {
             int total = ((int) (coolDownTime.getTimeInMillis() / 1000) - (int) (Calendar.getInstance().getTimeInMillis() / 1000));
-            for (; total > 86400; total -= 86400, day++) ;
-            for (; total > 3600; total -= 3600, hour++) ;
-            for (; total > 60; total -= 60, minute++) ;
             second += total;
         }
 
-        return ColorUtils.color(message.replace("%Day%", day + "").replace("%day%", day + "")
-        .replace("%Hour%", hour + "").replace("%hour%", hour + "")
-        .replace("%Minute%", minute + "").replace("%minute%", minute + "")
-        .replace("%Second%", second + "").replace("%second%", second + ""));
+        return ColorUtils.color(message.replace("%Day%", String.valueOf(day)).replace("%day%", String.valueOf(day))
+        .replace("%Hour%", String.valueOf(hour)).replace("%hour%", String.valueOf(hour))
+        .replace("%Minute%", String.valueOf(minute)).replace("%minute%", String.valueOf(minute))
+        .replace("%Second%", String.valueOf(second)).replace("%second%", String.valueOf(second)));
     }
 }

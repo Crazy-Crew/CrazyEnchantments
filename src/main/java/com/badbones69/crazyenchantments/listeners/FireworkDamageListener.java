@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.listeners;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import org.bukkit.NamespacedKey;
+import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
@@ -12,17 +11,13 @@ import org.bukkit.persistence.PersistentDataType;
 
 public class FireworkDamageListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-
-    private final NamespacedKey noDamage = new NamespacedKey(plugin, "no-damage");
-
     /**
      * @param firework The firework you want to add.
      */
     public void addFirework(Entity firework) {
         PersistentDataContainer container = firework.getPersistentDataContainer();
 
-        container.set(noDamage, PersistentDataType.STRING, "no-damage");
+        container.set(DataKeys.NO_FIREWORK_DAMAGE.getKey(), PersistentDataType.BOOLEAN, true);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -31,7 +26,7 @@ public class FireworkDamageListener implements Listener {
 
             PersistentDataContainer container = firework.getPersistentDataContainer();
 
-            if (container.has(noDamage, PersistentDataType.STRING)) e.setCancelled(true);
+            if (container.has(DataKeys.NO_FIREWORK_DAMAGE.getKey(), PersistentDataType.BOOLEAN)) e.setCancelled(true);
         }
     }
 }

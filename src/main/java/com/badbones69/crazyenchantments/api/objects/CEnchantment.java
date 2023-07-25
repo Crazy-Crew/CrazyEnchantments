@@ -9,13 +9,10 @@ import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
-import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
-import com.badbones69.crazyenchantments.utilities.misc.NumberUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class CEnchantment {
 
@@ -32,8 +29,6 @@ public class CEnchantment {
     private String name;
     private String customName;
     private boolean activated;
-    private String color;
-    private String bookColor;
     private int maxLevel;
     private String infoName;
     private int chance;
@@ -48,8 +43,6 @@ public class CEnchantment {
         this.name = name;
         this.customName = name;
         this.activated = true;
-        this.color = ColorUtils.color("&7");
-        this.bookColor = ColorUtils.color("&b&l");
         this.maxLevel = 3;
         this.infoName = ColorUtils.color("&7" + name);
         this.chance = 0;
@@ -57,10 +50,6 @@ public class CEnchantment {
         this.infoDescription = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.enchantmentType = null;
-    }
-
-    public CEnchantment getCEnchantmentFromName(String enchantment) {
-        return crazyManager.getEnchantmentFromName(enchantment);
     }
 
     public String getName() {
@@ -87,28 +76,6 @@ public class CEnchantment {
 
     public CEnchantment setActivated(boolean activated) {
         this.activated = activated;
-        return this;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public CEnchantment setColor(String color) {
-        this.color = ColorUtils.color(color);
-        return this;
-    }
-
-    public String getBookColor() {
-        return bookColor;
-    }
-
-    public CEnchantment setBookColor(String bookColor) {
-
-        if (bookColor.startsWith("&f")) bookColor = bookColor.substring(2);
-
-        this.bookColor = ColorUtils.color(bookColor);
-
         return this;
     }
 
@@ -230,30 +197,5 @@ public class CEnchantment {
         if (enchantmentType != null) enchantmentType.removeEnchantment(instance);
 
         categories.forEach(category -> category.addEnchantment(instance));
-    }
-
-    /**
-     * @deprecated use {@link CEnchantment#getLevel(ItemStack)}.
-     */
-    @Deprecated
-    public int getPower(ItemStack item) {
-        return getLevel(item);
-    }
-
-    public int getLevel(ItemStack item) {
-        int level = 0;
-
-        if (ItemUtils.verifyItemLore(item)) {
-            for (String lore : Objects.requireNonNull(item.getItemMeta().getLore())) {
-                if (lore.contains(customName)) {
-                    level = NumberUtils.convertLevelInteger(lore.replace(color + customName + " ", ""));
-                    break;
-                }
-            }
-        }
-
-        if (!crazyManager.useUnsafeEnchantments() && level > maxLevel) level = maxLevel;
-
-        return level;
     }
 }

@@ -1,7 +1,9 @@
 package com.badbones69.crazyenchantments.utilities.misc;
 
 import com.badbones69.crazyenchantments.api.FileManager;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
@@ -73,6 +75,15 @@ public class ColorUtils {
     }
 
     public static TextComponent legacyTranslateColourCodes(String input) {
-        return LegacyComponentSerializer.legacy('&').deserialize(input);
+        return (TextComponent) LegacyComponentSerializer.legacyAmpersand().deserialize(input).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
     }
+
+    public static String toLegacy(Component text) {
+        return LegacyComponentSerializer.legacyAmpersand().serialize(text);
+    }
+
+    public static String toPlainText(Component text) {
+        return PlainTextComponentSerializer.plainText().serialize(text);
+    }
+
 }

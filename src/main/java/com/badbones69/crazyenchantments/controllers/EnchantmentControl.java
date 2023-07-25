@@ -6,12 +6,15 @@ import com.badbones69.crazyenchantments.Starter;
 import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
+import com.badbones69.crazyenchantments.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.api.events.BookFailEvent;
 import com.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -27,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class EnchantmentControl implements Listener {
 
@@ -42,139 +46,141 @@ public class EnchantmentControl implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void addEnchantment(InventoryClickEvent e) {
-        if (e.getCursor() != null && e.getCurrentItem() != null) {
-            ItemStack item = e.getCurrentItem();
+        ItemStack item = e.getCurrentItem();
+        ItemStack book = e.getCursor();
 
-            if (enchantmentBookSettings.isEnchantmentBook(e.getCursor())) {
-                CEBook ceBook = enchantmentBookSettings.getCEBook(e.getCursor());
-                CEnchantment enchantment = ceBook.getEnchantment();
+        if (book == null || item == null) return;
+        if (book.getAmount() > 1 || item.getAmount() > 1) return;
+        if (!enchantmentBookSettings.isEnchantmentBook(book) || enchantmentBookSettings.isEnchantmentBook(item)) return;
 
-                if (enchantment != null && enchantment.canEnchantItem(item) && ceBook.getAmount() == 1) {
-                    Player player = (Player) e.getWhoClicked();
+        CEBook ceBook = enchantmentBookSettings.getCEBook(book);
+        CEnchantment enchantment = ceBook.getEnchantment();
 
-                    if (crazyManager.enchantStackedItems() || item.getAmount() == 1) {
-                        boolean success = methods.randomPicker(ceBook.getSuccessRate(), 100);
-                        boolean destroy = methods.randomPicker(ceBook.getDestroyRate(), 100);
-                        int bookLevel = ceBook.getLevel();
-                        boolean hasEnchantment = false;
-                        boolean isLowerLevel = false;
+        if (enchantment != null && enchantment.canEnchantItem(item) && ceBook.getAmount() == 1) {
+            Player player = (Player) e.getWhoClicked();
 
-                        if (enchantmentBookSettings.hasEnchantment(item, enchantment)) {
-                            hasEnchantment = true;
+            if (crazyManager.enchantStackedItems() || item.getAmount() == 1) {
+                boolean success = methods.randomPicker(ceBook.getSuccessRate(), 100);
+                boolean destroy = methods.randomPicker(ceBook.getDestroyRate(), 100);
+                int bookLevel = ceBook.getLevel();
+                boolean hasEnchantment = false;
+                boolean isLowerLevel = false;
 
-                            if (enchantmentBookSettings.getLevel(item, enchantment) < bookLevel) isLowerLevel = true;
-                        }
+                if (enchantmentBookSettings.hasEnchantment(item, enchantment)) {
+                    hasEnchantment = true;
 
-                        if (hasEnchantment) {
-                            if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
-                                e.setCancelled(true);
-                                PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, item, ceBook, player.getGameMode() == GameMode.CREATIVE, success, destroy);
-                                plugin.getServer().getPluginManager().callEvent(preBookApplyEvent);
+                    if (enchantmentBookSettings.getLevel(item, enchantment) < bookLevel) isLowerLevel = true;
+                }
 
-                                if (!preBookApplyEvent.isCancelled()) {
-                                    if (success || player.getGameMode() == GameMode.CREATIVE) {
-                                        BookFailEvent bookApplyEvent = new BookFailEvent(player, item, ceBook);
-                                        plugin.getServer().getPluginManager().callEvent(bookApplyEvent);
-
-                                        if (!bookApplyEvent.isCancelled()) {
-                                            e.setCurrentItem(crazyManager.addEnchantment(item, enchantment, bookLevel));
-                                            player.setItemOnCursor(new ItemStack(Material.AIR));
-                                            HashMap<String, String> placeholders = new HashMap<>();
-                                            placeholders.put("%Enchantment%", enchantment.getCustomName());
-                                            placeholders.put("%Level%", bookLevel + "");
-                                            player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
-                                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-                                        }
-
-                                        return;
-                                    } else if (destroy) {
-                                        BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, item, ceBook);
-                                        plugin.getServer().getPluginManager().callEvent(bookDestroyEvent);
-
-                                        if (!bookDestroyEvent.isCancelled()) {
-                                            if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
-                                                if (methods.hasWhiteScrollProtection(item)) {
-                                                    e.setCurrentItem(methods.removeWhiteScrollProtection(item));
-                                                    player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
-                                                } else {
-                                                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
-                                                }
-                                            } else {
-                                                if (methods.hasWhiteScrollProtection(item)) {
-                                                    e.setCurrentItem(methods.removeWhiteScrollProtection(item));
-                                                    player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
-                                                } else {
-                                                    ItemStack newItem = new ItemStack(Material.AIR);
-                                                    e.setCurrentItem(newItem);
-                                                    player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
-                                                }
-                                            }
-
-                                            player.setItemOnCursor(new ItemStack(Material.AIR));
-                                            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-                                        }
-
-                                        return;
-                                    } else {
-                                        BookFailEvent bookFailEvent = new BookFailEvent(player, item, ceBook);
-                                        plugin.getServer().getPluginManager().callEvent(bookFailEvent);
-
-                                        if (!bookFailEvent.isCancelled()) {
-                                            player.setItemOnCursor(new ItemStack(Material.AIR));
-                                            player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
-                                            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-                                        }
-
-                                        return;
-                                    }
-                                }
-                            }
-
-                            return;
-                        }
-
-                        if (!crazyManager.canAddEnchantment(player, item)) {
-                            player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
-                            return;
-                        }
-
+                if (hasEnchantment) {
+                    if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
                         e.setCancelled(true);
+                        PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, item, ceBook, player.getGameMode() == GameMode.CREATIVE, success, destroy);
+                        plugin.getServer().getPluginManager().callEvent(preBookApplyEvent);
 
-                        if (success || player.getGameMode() == GameMode.CREATIVE) {
-                            ItemStack newItem = crazyManager.addEnchantment(item, enchantment, ceBook.getLevel());
-                            e.setCurrentItem(newItem);
-                            player.setItemOnCursor(new ItemStack(Material.AIR));
-                            player.sendMessage(Messages.BOOK_WORKS.getMessage());
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-                            return;
-                        }
+                        if (!preBookApplyEvent.isCancelled()) {
+                            if (success || player.getGameMode() == GameMode.CREATIVE) {
+                                BookFailEvent bookApplyEvent = new BookFailEvent(player, item, ceBook);
+                                plugin.getServer().getPluginManager().callEvent(bookApplyEvent);
 
-                        if (destroy) {
-                            if (methods.hasWhiteScrollProtection(item)) {
-                                e.setCurrentItem(methods.removeWhiteScrollProtection(item));
-                                player.setItemOnCursor(new ItemStack(Material.AIR));
-                                player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
-                                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                                if (!bookApplyEvent.isCancelled()) {
+                                    e.setCurrentItem(crazyManager.addEnchantment(item, enchantment, bookLevel));
+                                    player.setItemOnCursor(new ItemStack(Material.AIR));
+                                    HashMap<String, String> placeholders = new HashMap<>();
+                                    placeholders.put("%Enchantment%", enchantment.getCustomName());
+                                    placeholders.put("%Level%", String.valueOf(bookLevel));
+                                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
+                                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                                }
+
+                                return;
+                            } else if (destroy) {
+                                BookDestroyEvent bookDestroyEvent = new BookDestroyEvent(player, item, ceBook);
+                                plugin.getServer().getPluginManager().callEvent(bookDestroyEvent);
+
+                                if (!bookDestroyEvent.isCancelled()) {
+                                    if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
+                                        if (Scrolls.hasWhiteScrollProtection(item)) {
+                                            e.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
+                                            player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+                                        } else {
+                                            player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
+                                        }
+                                    } else {
+                                        if (Scrolls.hasWhiteScrollProtection(item)) {
+                                            e.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
+                                            player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+                                        } else {
+                                            ItemStack newItem = new ItemStack(Material.AIR);
+                                            e.setCurrentItem(newItem);
+                                            player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
+                                        }
+                                    }
+
+                                    player.setItemOnCursor(new ItemStack(Material.AIR));
+                                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                                }
+
                                 return;
                             } else {
-                                ItemStack newItem = new ItemStack(Material.AIR);
-                                ItemStack oldItem = new ItemStack(Material.AIR);
-                                player.setItemOnCursor(newItem);
-                                e.setCurrentItem(oldItem);
-                                player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
-                            }
+                                BookFailEvent bookFailEvent = new BookFailEvent(player, item, ceBook);
+                                plugin.getServer().getPluginManager().callEvent(bookFailEvent);
 
-                            player.updateInventory();
-                            return;
+                                if (!bookFailEvent.isCancelled()) {
+                                    player.setItemOnCursor(new ItemStack(Material.AIR));
+                                    player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
+                                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                                }
+
+                                return;
+                            }
                         }
                     }
 
-                    player.sendMessage(Messages.BOOK_FAILED.getMessage());
+                    return;
+                }
+
+                if (!crazyManager.canAddEnchantment(player, item)) {
+                    player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
+                    return;
+                }
+
+                e.setCancelled(true);
+                boolean creativeMode = player.getGameMode() == GameMode.CREATIVE;
+
+                if (success || creativeMode) {
+                    String creativeMessage = Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage();
+                    if (creativeMode && !Objects.equals(creativeMessage, "")) player.sendMessage(ColorUtils.legacyTranslateColourCodes(creativeMessage));
+                    ItemStack newItem = crazyManager.addEnchantment(item, enchantment, ceBook.getLevel());
+                    e.setCurrentItem(newItem);
                     player.setItemOnCursor(new ItemStack(Material.AIR));
-                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-                    player.updateInventory();
+                    player.sendMessage(Messages.BOOK_WORKS.getMessage());
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                    return;
+                }
+
+                if (destroy) {
+                    if (Scrolls.hasWhiteScrollProtection(item)) {
+                        e.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
+                        player.setItemOnCursor(new ItemStack(Material.AIR));
+                        player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+                        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                        return;
+                    } else {
+                        ItemStack newItem = new ItemStack(Material.AIR);
+                        ItemStack oldItem = new ItemStack(Material.AIR);
+                        player.setItemOnCursor(newItem);
+                        e.setCurrentItem(oldItem);
+                        player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
+                    }
+
+                    return;
                 }
             }
+
+            player.sendMessage(Messages.BOOK_FAILED.getMessage());
+            player.setItemOnCursor(new ItemStack(Material.AIR));
+            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
         }
     }
     

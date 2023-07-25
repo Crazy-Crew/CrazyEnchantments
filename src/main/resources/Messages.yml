@@ -7,7 +7,9 @@ Messages:
   Need-More-XP-Lvls: '&cYou need &6%xp% &cmore xp levels.'
   Need-More-Total-XP: '&cYou need &6%xp% &cmore Total XP.'
   Need-More-Money: '&cYou need &a$%money_needed%&c.'
-  Hit-Enchantment-Max: '&cYou have hit the max amount of enchantments an item can have.'
+  Hit-Enchantment-Max: '&#ff0000That item already has the maximum amount of enchantments that you can add to it.
+                        &#880808if you believe that this is incorrect, contact the server owner and ask them to add the permission 
+                        crazyenchantments.limit.# to you, using their preferred permission plugin. (Replacing the # with the amount)'
   Inventory-Full: '&cYour inventory is too full. Please open up some space to buy that.'
   Tinker-Inventory-Full: '&cThe inventory is full. Sell all or remove items.'
   Need-To-Use-Player-Inventory: '&cYou can only use that in your player inventory.'
@@ -30,7 +32,8 @@ Messages:
   Book-Works: '&aYour item loved this book and accepted it.'
   Book-Failed: '&cYour item must not have liked that enchantment.'
   Item-Destroyed: '&cOh no the destroy rate was too much for the item.'
-  Item-Was-Protected: '&cLuckily your item was blessed with Divine Protection and didn''t break.'
+  Item-Was-Protected: '&cLuckily your item was blessed with Divine Protection and did not break.'
+  Player-Is-In-Creative-Mode: '&cYou are in creative mode. This can cause items to duplicate.'
   Give-Protection-Crystal: '&7You have given %player% %amount% Protection Crystals.'
   Get-Protection-Crystal: '&7You have gained %amount% Protection Crystals.'
   Give-Scrambler-Crystal: '&7You have given %player% %amount% &e&lGrand Scramblers&7.'

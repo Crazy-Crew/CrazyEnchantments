@@ -16,11 +16,9 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -85,31 +83,6 @@ public class Methods {
             if (toggle) player.sendMessage(Messages.NO_PERMISSION.getMessage());
 
             return false;
-        }
-    }
-
-    public ItemStack addGlow(ItemStack item) {
-        return addGlow(item, true);
-    }
-
-    public ItemStack addGlow(ItemStack item, boolean toggle) {
-        ItemStack it = item.clone();
-
-        try {
-            if (toggle) {
-                if (item.hasItemMeta()) {
-                    if (item.getItemMeta().hasEnchants()) return item;
-                }
-
-                item.addUnsafeEnchantment(Enchantment.LUCK, 1);
-                ItemMeta meta = item.getItemMeta();
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                item.setItemMeta(meta);
-            }
-
-            return item;
-        } catch (NoClassDefFoundError e) {
-            return it;
         }
     }
 
@@ -195,13 +168,6 @@ public class Methods {
         }
 
         return false;
-    }
-
-    public boolean randomPicker(int max) {
-        if (max <= 0) return true;
-
-        int chance = 1 + random.nextInt(max);
-        return chance == 1;
     }
 
     public boolean randomPicker(int min, int max) {
@@ -378,21 +344,6 @@ public class Methods {
         }
     }
 
-    public boolean isSimilar(ItemStack one, ItemStack two) {
-        if (!one.getType().equals(two.getType())) return false;
-        if (!one.hasItemMeta() || !two.hasItemMeta()) return false;
-        if (!one.getItemMeta().hasDisplayName() || !two.getItemMeta().hasDisplayName()) return false;
-        if (!one.getItemMeta().getDisplayName().equalsIgnoreCase(two.getItemMeta().getDisplayName())) return false;
-        if (!one.getItemMeta().hasLore() || !two.getItemMeta().hasLore()) return false;
-        int i = 0;
-
-        for (String lore : one.getItemMeta().getLore()) {
-            if (!lore.equals(two.getItemMeta().getLore().get(i++))) return false;
-        }
-
-        return true;
-    }
-
     public void explode(Entity player) {
         spawnParticles(player, player.getWorld(), player.getLocation());
 
@@ -532,53 +483,6 @@ public class Methods {
             case XP_LEVEL -> player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
             case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
         }
-    }
-
-    public String getWhiteScrollProtectionName() {
-        String protectNamed;
-
-        FileConfiguration config = Files.CONFIG.getFile();
-
-        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
-
-        return protectNamed;
-    }
-
-    public boolean hasWhiteScrollProtection(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta != null && meta.hasLore()) {
-            List<String> itemLore = meta.getLore();
-
-            if (itemLore != null) {
-                for (String lore : itemLore) {
-                    if (lore.equals(getWhiteScrollProtectionName())) return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public ItemStack addWhiteScrollProtection(ItemStack item) {
-        return ItemBuilder.convertItemStack(item).addLore(getWhiteScrollProtectionName()).build();
-    }
-
-    public ItemStack removeWhiteScrollProtection(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-
-        if (itemMeta != null && itemMeta.hasLore()) {
-            if (itemMeta.getLore() != null) {
-                List<String> newLore = new ArrayList<>(itemMeta.getLore());
-
-                newLore.remove(getWhiteScrollProtectionName());
-                itemMeta.setLore(newLore);
-            }
-
-            item.setItemMeta(itemMeta);
-        }
-
-        return item;
     }
 
     public ItemBuilder getRandomPaneColor() {

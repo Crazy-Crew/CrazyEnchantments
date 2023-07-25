@@ -4,7 +4,7 @@ main: '${group}.CrazyEnchantments'
 authors: [BadBones69, RyderBelserion, TDL]
 
 version: '${version}'
-api-version: '1.20'
+api-version: '1.19'
 description: '${description}'
 
 website: '${website}'
@@ -60,6 +60,9 @@ permissions:
     default: false
 
   crazyenchantments.blast.use:
+    default: true
+
+  crazyenchantments.updateenchants:
     default: false
 
   crazyenchantments.player.*:
@@ -82,7 +85,6 @@ permissions:
       crazyenchantments.bypass.wings: true
       crazyenchantments.bypass.gkitz: true
       crazyenchantments.bypass.protectioncrystal: true
-      crazyenchantments.blast.use: true
       crazyenchantments.admin: true
 
   crazyenchantments.admin:

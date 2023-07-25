@@ -49,6 +49,7 @@ public class CETab implements TabCompleter {
             if (hasPermission(sender, "dust")) completions.add("dust");
             if (hasPermission(sender, "book")) completions.add("book");
             if (hasPermission(sender, "lostbook")) completions.add("lostbook");
+            if (hasPermission(sender, "updateenchants")) completions.add("updateEnchants");
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) { // /ce arg0
@@ -56,7 +57,7 @@ public class CETab implements TabCompleter {
                 case "info", "remove", "add", "book" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
-                            completions.add(enchantment.getCustomName().replace(" ", "_"));
+                            completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").replace(" ", "_"));
                         } catch (NullPointerException ignore) {}
                     }
 
@@ -106,41 +107,35 @@ public class CETab implements TabCompleter {
 
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
         } else if (args.length == 3) {// /ce arg0 arg1
+            CEnchantment ceEnchantment;
             switch (args[0].toLowerCase()) {
-                case "book":
-                    CEnchantment ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
-
-                    if (ceEnchantment != null) for (int amount = 1; amount <= ceEnchantment.getMaxLevel(); amount++) completions.add(amount + "");
-
-                    break;
-                case "add":
+                case "book" -> {
+                    ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
+                    if (ceEnchantment != null) for (int amount = 1; amount <= ceEnchantment.getMaxLevel(); amount++)
+                        completions.add(String.valueOf(amount));
+                }
+                case "add" -> {
                     ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
                     Enchantment vanillaEnchantment = methods.getEnchantment(args[1]);
-
                     if (vanillaEnchantment != null || ceEnchantment != null) {
                         int maxLevel = vanillaEnchantment != null ? vanillaEnchantment.getMaxLevel() : ceEnchantment.getMaxLevel();
-                        for (int amount = 1; amount <= maxLevel; amount++) completions.add(amount + "");
+                        for (int amount = 1; amount <= maxLevel; amount++) completions.add(String.valueOf(amount));
                     }
-
-                    break;
-                case "spawn":
+                }
+                case "spawn" -> {
                     completions.add("Level:");
                     completions.add("World:");
                     completions.add("X:");
                     completions.add("Y:");
                     completions.add("Z:");
-                    break;
-                case "scroll":
-                case "dust":
-                case "lostbook":
+                }
+                case "scroll", "dust", "lostbook" -> {
                     completions.add("1");
                     completions.add("32");
                     completions.add("64");
-                    break;
-                case "crystal":
-                case "scrambler":
-                    plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
-                    break;
+                }
+                case "crystal", "scrambler" ->
+                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
 
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());

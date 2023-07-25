@@ -143,7 +143,7 @@ public class Tinkerer implements Listener {
                         String enchant = "";
 
                         for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
-                            if (current.getItemMeta().getDisplayName().contains(ColorUtils.color(en.getBookColor() + en.getCustomName()))) {
+                            if (current.getItemMeta().getDisplayName().contains(ColorUtils.color(en.getCustomName()))) {
                                 enchant = en.getName();
                                 toggle = true;
                             }
@@ -233,7 +233,7 @@ public class Tinkerer implements Listener {
         List<String> lore = new ArrayList<>();
 
         for (String l : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
-            lore.add(l.replace("%Total%", getTotalXP(item) + "").replace("%total%", getTotalXP(item) + ""));
+            lore.add(l.replace("%Total%", String.valueOf(getTotalXP(item))).replace("%total%", String.valueOf(getTotalXP(item))));
         }
 
         assert id != null;

@@ -1,7 +1,7 @@
 [libraries]
 
 # Minecraft
-papermc = { module = "io.papermc.paper:paper-api", version = "1.20-R0.1-SNAPSHOT" }
+papermc = { module = "io.papermc.paper:paper-api", version = "1.19.4-R0.1-SNAPSHOT" }
 hangar = { module = "io.papermc:hangar-publish-plugin", version = "0.0.5" }
 
 minotaur = { module = "com.modrinth.minotaur:Minotaur", version = "2.8.0" }
@@ -14,38 +14,38 @@ turtle = { module = "com.lordcodes.turtle:turtle", version = "0.8.0" }
 # Misc
 nbt_api = { module = "de.tr7zw:item-nbt-api", version = "2.11.3" }
 bstats_bukkit = { module = "org.bstats:bstats-bukkit", version = "3.0.0" }
-vault_api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7" }
+vault_api = { module = "com.github.MilkBowl:VaultAPI", version = "1.7.1" }
 
 # Claims/Protection
-plotsquared = { module = "com.plotsquared:PlotSquared-Core", version = "6.10.1" }
-plotsquared_annotations = { module = "com.intellectualsites.informative-annotations:informative-annotations", version = "1.2" }
-plotsquared_paster = { module = "com.intellectualsites.paster:Paster", version = "1.1.4"}
+plotsquared = { module = "com.plotsquared:PlotSquared-Core", version = "6.11.1" }
+plotsquared_annotations = { module = "com.intellectualsites.informative-annotations:informative-annotations", version = "1.3" }
+plotsquared_paster = { module = "com.intellectualsites.paster:Paster", version = "1.1.5"}
 
-superiorskyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version = "2022.8.1" }
+superiorskyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version = "2023.1" }
 
-griefprevention = { module = "com.github.TechFortress:GriefPrevention", version = "16.18" }
+griefprevention = { module = "com.github.TechFortress:GriefPrevention", version = "16.18.1" }
 massivecraft = { module = "com.massivecraft:Factions", version = "1.6.9.5-U0.6.26-b316" }
-towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.98.6.0" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version = "0.99.0.0" }
 
 # Stackers
-wildstacker = { module = "com.bgsoftware:WildStackerAPI", version = "2022.5" }
-silkspawners = { module = "de.dustplanet:silkspawners", version = "7.2.0" }
+wildstacker = { module = "com.bgsoftware:WildStackerAPI", version = "2023.1" }
+silkspawners = { module = "de.dustplanet:silkspawners", version = "7.4.0" }
 
 # Holograms
-decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.8.1" }
-fancy_holograms = { module = "de.oliver:FancyHolograms", version = "1.1.0" }
-fancy_npcs = { module = "de.oliver:FancyNpcs", version = "1.2.0" }
+decent_holograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.8.3" }
+fancy_holograms = { module = "de.oliver:FancyHolograms", version = "1.1.1" }
+fancy_npcs = { module = "de.oliver:FancyNpcs", version = "1.2.1" }
 
 # Placeholders
 placeholder_api = { module = "me.clip:placeholderapi", version = "2.11.3" }
 
 # Item Plugins
-itemsadder_api = { module = "com.github.LoneDev6:api-itemsadder", version = "3.0.0" }
+itemsadder_api = { module = "com.github.LoneDev6:api-itemsadder", version = "3.5.0b" }
 oraxen = { module = "io.th0rgal:oraxen", version = "1.156.3" }
 
 # WorldGuard/WorldEdit
 worldguard_api = { module = "com.sk89q.worldguard:worldguard-bukkit", version = "7.1.0-SNAPSHOT" }
-worldedit_api = { module = "com.sk89q.worldedit:worldedit-bukkit", version = "7.2.9" }
+worldedit_api = { module = "com.sk89q.worldedit:worldedit-bukkit", version = "7.2.15" }
 
 # AntiCheats
 spartan = { module = "me.vagdedes:spartanapi", version = "9.1" }
@@ -53,4 +53,4 @@ nocheatplus = { module = "fr.neatmonster:nocheatplus", version = "3.16.1-SNAPSHO
 
 [plugins]
 
-run-paper = { id = "xyz.jpenilla.run-paper", version = "2.1.0" }
+#run-paper = { id = "xyz.jpenilla.run-paper", version = "2.1.0" }
