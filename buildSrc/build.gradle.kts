@@ -13,8 +13,6 @@ dependencies {
 
     implementation("io.papermc.paperweight", "paperweight-userdev", "1.5.5")
 
-    implementation("com.ryderbelserion.feather", "feather-plugin", "0.0.0.4")
-
     implementation("com.modrinth.minotaur", "Minotaur", "2.8.0")
     implementation("io.papermc", "hangar-publish-plugin", "0.0.5")
 }
