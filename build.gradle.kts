@@ -1,5 +1,7 @@
 plugins {
     id("paper-plugin")
+
+    //id("publish-task")
 }
 
 dependencies {

@@ -1,10 +1,12 @@
 import java.io.ByteArrayOutputStream
 import java.io.File
+import io.papermc.hangarpublishplugin.model.Platforms
 
 plugins {
     id("root-plugin")
 
     id("featherpatcher")
+    id("io.papermc.hangar-publish-plugin")
     id("com.modrinth.minotaur")
 }
 
@@ -12,10 +14,10 @@ val isSnapshot = rootProject.version.toString().contains("rc")
 val type = if (isSnapshot) "beta" else "release"
 
 // The commit id for the "main" branch prior to merging a pull request.
-val start = "363a0d"
+val start = "198951"
 
 // The commit id BEFORE merging the pull request so before "Merge pull request #30"
-val end = "52b8d7"
+val end = "c6222cc"
 
 val commitLog = getGitHistory().joinToString(separator = "") { formatGitLog(it) }
 
@@ -35,8 +37,8 @@ val desc = """
 * Updated default `Hit-Enchantment-Max` message.
 
 ## Commands:
- * `/ce updateenchants -> Loops through the lore of old enchanted items and migrates it to the new system.
-  * 'crazyenchantments.updateenchants
+ * `/ce updateenchants` -> Loops through the lore of old enchanted items and migrates it to the new system.
+  * `crazyenchantments.updateenchants`
 
 ## API:
  * N/A
@@ -47,6 +49,8 @@ val desc = """
 * Fixed NPE that only appeared once adding Worldguard and Worldedit to the server.
 * Reduced the chance of errors that you can get from changing the lore on an item or removing all of the lore while it has an enchantment on it.
 * Fixed right-clicking a scroll in the air to get the usage.
+
+**Submit any bugs via <https://github.com/Crazy-Crew/CrazyEnchantments/issues>** (WOW IT'S EMPTY)
 
 """.trimIndent()
 
@@ -125,6 +129,29 @@ tasks {
                 }
 
                 url = uri("https://repo.crazycrew.us/releases/")
+            }
+        }
+    }
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        version.set(rootProject.version.toString())
+
+        namespace("CrazyCrew", "CrazyEnchantments")
+        channel.set("Beta")
+
+        apiKey.set(System.getenv("hangar_key"))
+
+        changelog.set(desc)
+
+        platforms {
+            register(Platforms.PAPER) {
+                val file = File("$rootDir/jars")
+                if (!file.exists()) file.mkdirs()
+
+                jar.set(layout.buildDirectory.file("$file/${rootProject.name}-${rootProject.version}.jar"))
+                platformVersions.set(versions)
             }
         }
     }
