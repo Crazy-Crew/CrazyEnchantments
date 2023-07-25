@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -78,6 +77,7 @@ public enum Scrolls {
 
         return getFromName(data.get(scroll, PersistentDataType.STRING));
     }
+
     public ItemStack getScroll() {
         ItemStack item = itemBuilderScrolls.get(this).build();
         ItemMeta meta = item.getItemMeta();
@@ -85,6 +85,7 @@ public enum Scrolls {
         item.setItemMeta(meta);
         return item;
     }
+
     public ItemStack getScroll(int amount) {
         ItemStack item = itemBuilderScrolls.get(this).setAmount(amount).build();
         ItemMeta meta = item.getItemMeta();
@@ -94,6 +95,7 @@ public enum Scrolls {
     }
 
     private static final NamespacedKey whiteScrollProtectionKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "White_Scroll_Protection");
+
     public static String getWhiteScrollProtectionName() {
         String protectNamed;
 
@@ -152,5 +154,4 @@ public enum Scrolls {
 
         return item;
     }
-
 }

@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.CrazyEnchantments;
 import org.bukkit.NamespacedKey;
 
 public enum DataKeys {
+
     DUST("Crazy_Dust", String.class),
     ENCHANTMENTS("CrazyEnchants", String.class),
     STORED_ENCHANTMENTS("Stored_Enchantments", String.class),
@@ -27,5 +28,4 @@ public enum DataKeys {
     public String getStringKey() {
         return this.namSpaceKey;
     }
-
 }

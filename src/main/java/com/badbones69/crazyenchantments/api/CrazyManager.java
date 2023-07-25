@@ -36,7 +36,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -471,8 +470,8 @@ public class CrazyManager {
         return addEnchantments(item, enchantments);
     }
 
-    public ItemStack addEnchantments(ItemStack item1, Map<CEnchantment, Integer> enchantments) {
-        ItemStack item = item1.clone();
+    public ItemStack addEnchantments(ItemStack itemStack, Map<CEnchantment, Integer> enchantments) {
+        ItemStack item = itemStack.clone();
         for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
@@ -489,22 +488,20 @@ public class CrazyManager {
 
             meta.lore(lore);
 
-        // PDC Start
-            Gson g = new Gson();
+            Gson gson = new Gson();
 
             String data;
-            Enchant eData;
+            Enchant enchantData;
 
-            data = item1.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+            data = itemStack.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
-            eData =  data != null ? g.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
+            enchantData =  data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
             for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
-                eData.addEnchantment(x.getKey().getName(), x.getValue());
+                enchantData.addEnchantment(x.getKey().getName(), x.getValue());
             }
 
-            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, g.toJson(eData));
-        // PDC End
+            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
 
             item.setItemMeta(meta);
         }

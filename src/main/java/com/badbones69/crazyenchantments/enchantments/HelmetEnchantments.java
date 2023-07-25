@@ -54,7 +54,6 @@ public class HelmetEnchantments implements Listener {
 
             if (!useEvent.isCancelled()) return;
             players.forEach(otherPlayer -> otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1)));
-
         }
     }
 }

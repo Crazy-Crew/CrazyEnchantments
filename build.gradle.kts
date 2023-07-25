@@ -1,67 +1,51 @@
 plugins {
     id("paper-plugin")
-
-    id("publish-task")
-
-//    id("xyz.jpenilla.run-paper") version "2.1.0"
 }
 
 dependencies {
-    // Nbt Api / Bstats
-    implementation(libs.nbt.api)
-    implementation(libs.bstats.bukkit)
+    implementation("de.tr7zw", "item-nbt-api", "2.11.3")
 
-    // PaperMC
-    compileOnly(libs.papermc)
+    implementation("org.bstats", "bstats-bukkit", "3.0.2")
 
-    // Custom Items
-    compileOnly(libs.oraxen)
+    compileOnly("com.plotsquared", "PlotSquared-Core", "6.11.1")
 
-    // Anticheats
-    compileOnly(libs.nocheatplus)
-    compileOnly(libs.spartan)
+    compileOnly("com.intellectualsites.informative-annotations", "informative-annotations", "1.3")
 
-    // Claims
-    compileOnly(libs.plotsquared)
-    compileOnly(libs.plotsquared.annotations)
-    compileOnly(libs.plotsquared.paster)
+    compileOnly("com.intellectualsites.paster", "Paster", "1.1.5")
 
-    compileOnly(libs.superiorskyblock)
+    compileOnly("com.bgsoftware", "SuperiorSkyblockAPI", "2023.1")
 
-    compileOnly(libs.massivecraft) {
+    compileOnly("de.dustplanet", "silkspawners", "7.5.0") {
+        exclude("*", "*")
+    }
+
+    compileOnly("com.massivecraft", "Factions", "1.6.9.5-U0.6.31") {
         exclude("org.kitteh")
         exclude("org.spongepowered")
         exclude("com.darkblade12")
     }
 
-    compileOnly(libs.towny)
+    compileOnly("com.palmergames.bukkit.towny", "towny", "0.99.0.0")
 
-    // Stackers/Spawners
-    compileOnly(libs.wildstacker)
+    compileOnly("fr.neatmonster", "nocheatplus", "3.16.1-SNAPSHOT")
 
-    compileOnly(libs.silkspawners) {
+    compileOnly("me.vagdedes", "spartanapi", "9.1")
+
+    compileOnly("com.bgsoftware", "WildStackerAPI", "2023.1")
+
+    compileOnly("io.th0rgal", "oraxen", "1.156.3")
+
+    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.15")
+
+    compileOnly("com.github.TechFortress", "GriefPrevention", "16.18.1")
+
+    compileOnly("com.sk89q.worldguard", "worldguard-bukkit", "7.1.0-SNAPSHOT")
+
+    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7.1") {
         exclude("org.bukkit", "bukkit")
-        exclude("org.spigot", "spigot")
-        exclude("org.spigotmc", "spigot")
-        exclude("com.destroystokyo.paper", "paper")
-        exclude("com.sk89q", "worldguard")
-        exclude("com.sk89q", "worldedit")
-        exclude("com.massivecraft.massivecore", "MassiveCore")
-        exclude("com.massivecraft.factions", "Factions")
-        exclude("net.gravitydevelopment.updater", "updater")
-        exclude("com.intellectualsites", "Pipeline")
     }
 
-    // Protection
-    compileOnly(libs.worldedit.api)
-
-    compileOnly(libs.griefprevention)
-
-    compileOnly(libs.worldguard.api)
-
-    // Misc
-    compileOnly(libs.placeholder.api)
-    compileOnly(libs.vault.api)
+    compileOnly("me.clip", "placeholderapi", "2.11.3")
 }
 
 tasks {
@@ -69,7 +53,9 @@ tasks {
         listOf(
             "de.tr7zw.changeme.nbtapi",
             "org.bstats"
-        ).forEach { pack -> relocate(pack, "${rootProject.group}.$pack") }
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
     }
 
     reobfJar {

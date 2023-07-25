@@ -344,6 +344,7 @@ public class ArmorEnchantments implements Listener {
 
         event.setCancelled(true);
     }
+
     private boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack armor) {
 
         if (!(enchantmentBookSettings.hasEnchantment(armor, enchant.getEnchantment()) &&
@@ -354,5 +355,4 @@ public class ArmorEnchantments implements Listener {
 
         return !useEvent.isCancelled();
     }
-
 }

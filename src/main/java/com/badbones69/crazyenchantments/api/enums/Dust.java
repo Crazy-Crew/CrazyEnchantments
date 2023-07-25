@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import com.google.gson.Gson;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -77,7 +76,6 @@ public enum Dust {
     }
     
     public ItemStack getDust() {
-
         return getDust(1);
     }
     
@@ -92,14 +90,13 @@ public enum Dust {
                 .setAmount(amount).build();
 
         // PDC Start
-                Gson g = new Gson();
+                Gson gson = new Gson();
 
                 ItemMeta meta = item.getItemMeta();
-                meta.getPersistentDataContainer().set(DataKeys.DUST.getKey(), PersistentDataType.STRING, g.toJson(new DustData(getConfigName(), min, max, percent)));
+                meta.getPersistentDataContainer().set(DataKeys.DUST.getKey(), PersistentDataType.STRING, gson.toJson(new DustData(getConfigName(), min, max, percent)));
                 item.setItemMeta(meta);
         // PDC End
 
         return item;
     }
-
 }

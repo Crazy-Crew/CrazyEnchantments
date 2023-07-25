@@ -47,9 +47,6 @@ public class EnchantmentBookSettings {
      * @return True if the item has the enchantment / False if it doesn't have the enchantment.
      */
     public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-
-    // PDC Start
-
         if (item == null || !item.hasItemMeta()) return false;
 
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
@@ -60,8 +57,6 @@ public class EnchantmentBookSettings {
         if (itemData == null) return false;
 
         return gson.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
-
-    // PDC End
     }
 
     /**
@@ -109,12 +104,9 @@ public class EnchantmentBookSettings {
      * @return A new scrambled book.
      */
     public ItemStack getNewScrambledBook(ItemStack book) {
-
         if (!book.hasItemMeta()) return null;
 
-        // PDC Start
         EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
-        // PDC Enc
 
         CEnchantment enchantment = null;
         int bookLevel = 0;
@@ -192,8 +184,6 @@ public class EnchantmentBookSettings {
 
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
-    // PDC Start
-
         String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
         if (data == null) return Collections.emptyMap();
@@ -206,7 +196,6 @@ public class EnchantmentBookSettings {
             if (!enchantment.isActivated()) continue;
             if (enchants.hasEnchantment(enchantment.getName())) enchantments.put(enchantment, enchants.getLevel(enchantment.getName()));
         }
-    // PDC End
 
         return enchantments;
     }
@@ -320,11 +309,9 @@ public class EnchantmentBookSettings {
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
 
-        // PDC Start
         String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
         int level = data == null ? 0 : gson.fromJson(data, Enchant.class).getLevel(enchant.getName());
-        // PDC End
 
         if (!useUnsafeEnchantments() && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
@@ -349,7 +336,7 @@ public class EnchantmentBookSettings {
                     .contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
             meta.lore(lore);
         }
-    // PDC Start
+
         Enchant data;
 
         if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) {
@@ -366,7 +353,6 @@ public class EnchantmentBookSettings {
         } else {
             meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
         }
-    // PDC End
 
         item.setItemMeta(meta);
 

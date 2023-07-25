@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.api.enums.pdc;
 
 public class DustData {
+
     private final String name;
     private final int min;
     private final int max;
@@ -13,12 +14,19 @@ public class DustData {
         this.chance = chance;
     }
 
-    public int getMax(){ return this.max; }
+    public int getMax() {
+        return this.max;
+    }
 
-    public int getMin(){ return this.min; }
+    public int getMin() {
+        return this.min;
+    }
 
-    public String getConfigName() { return this.name; }
+    public String getConfigName() {
+        return this.name;
+    }
 
-    public int getChance() { return this.chance; }
-
+    public int getChance() {
+        return this.chance;
+    }
 }

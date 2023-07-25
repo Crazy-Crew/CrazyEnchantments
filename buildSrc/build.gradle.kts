@@ -6,17 +6,14 @@ repositories {
     gradlePluginPortal()
 
     maven("https://repo.crazycrew.us/first-party/")
-    maven("https://repo.crazycrew.us/third-party/")
 }
 
 dependencies {
-    implementation(libs.shadow)
+    implementation("com.github.johnrengelman", "shadow", "8.1.1")
 
-    implementation(libs.paperweight)
-    implementation(libs.featherweight)
+    implementation("io.papermc.paperweight", "paperweight-userdev", "1.5.5")
 
-    implementation(libs.minotaur)
-    implementation(libs.hangar)
+    implementation("com.ryderbelserion.feather", "feather-plugin", "0.0.0.4")
 
-    implementation(libs.turtle)
+    implementation("com.modrinth.minotaur", "Minotaur", "2.8.0")
 }

@@ -12,7 +12,6 @@ import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
 import com.google.gson.Gson;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-
 import java.util.List;
 
 public enum CEnchantments {

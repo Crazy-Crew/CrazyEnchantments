@@ -155,6 +155,7 @@ public class ProtectionCrystalSettings {
 
             meta.lore(lore);
         }
+
         item.setItemMeta(meta);
 
         return item;
@@ -166,7 +167,6 @@ public class ProtectionCrystalSettings {
      * @return The new item.
      */
     public ItemStack addProtection(ItemStack item) {
-
         ItemMeta meta = item.getItemMeta();
         List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
 
@@ -180,5 +180,4 @@ public class ProtectionCrystalSettings {
 
         return item;
     }
-
 }

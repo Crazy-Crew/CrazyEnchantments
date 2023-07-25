@@ -69,6 +69,7 @@ public class LostBookController implements Listener {
             player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
             return;
         }
+
         player.getInventory().addItem(book.buildBook());
 
         HashMap<String, String> placeholders = new HashMap<>();
@@ -80,5 +81,4 @@ public class LostBookController implements Listener {
 
         if (lostBook.playSound()) player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
     }
-
 }

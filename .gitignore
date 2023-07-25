@@ -1,9 +1,18 @@
 .gradle
 .idea
 
+core/.gradle
+core/build
+
+fabric/.gradle
+fabric/build
+
+paper/.gradle
+paper/build
+
 build
 
-buildSrc/.gradle
 buildSrc/build
-1.20 server
+buildSrc/.gradle
+
 jars

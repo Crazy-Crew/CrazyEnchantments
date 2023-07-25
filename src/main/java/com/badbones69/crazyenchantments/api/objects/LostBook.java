@@ -82,7 +82,9 @@ public class LostBook {
     public ItemBuilder getLostBook(Category category) {
         return getLostBook(category, 1);
     }
+
     private final NamespacedKey lostBookKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "Lost_Book_Type");
+
     public ItemBuilder getLostBook(Category category, int amount) {
         FileConfiguration file = Files.CONFIG.getFile();
         HashMap<String, String> placeholders = new HashMap<>();
@@ -95,6 +97,5 @@ public class LostBook {
         .setLore(file.getStringList("Settings.LostBook.Lore"))
         .setLorePlaceholders(placeholders)
         .setStringPDC(lostBookKey, category.getName());
-
     }
 }
