@@ -400,8 +400,6 @@ public class SwordEnchantments implements Listener {
 
             if (!event.isCancelled()) en.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 10 * 20, 1));
         }
-
-
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -439,7 +437,6 @@ public class SwordEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityDeath(EntityDeathEvent event) {
-
         if (event.getEntity().getKiller() != null) {
             Player damager = event.getEntity().getKiller();
             ItemStack item = methods.getItemInHand(damager);

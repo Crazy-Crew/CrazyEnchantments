@@ -33,7 +33,7 @@ Messages:
   Book-Failed: '&cYour item must not have liked that enchantment.'
   Item-Destroyed: '&cOh no the destroy rate was too much for the item.'
   Item-Was-Protected: '&cLuckily your item was blessed with Divine Protection and did not break.'
-  Player-Is-In-Creative-Mode: '&cYou are in creative mode. This can cause items to duplicate.'
+  Player-Is-In-Creative-Mode: '&cYou are in creative mode. You need to get out of Creative Mode!'
   Give-Protection-Crystal: '&7You have given %player% %amount% Protection Crystals.'
   Get-Protection-Crystal: '&7You have gained %amount% Protection Crystals.'
   Give-Scrambler-Crystal: '&7You have given %player% %amount% &e&lGrand Scramblers&7.'

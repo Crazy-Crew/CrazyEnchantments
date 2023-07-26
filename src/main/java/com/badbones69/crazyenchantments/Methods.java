@@ -25,7 +25,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.*;
 
 public class Methods {
@@ -40,8 +39,6 @@ public class Methods {
     private final OraxenSupport oraxenSupport = starter.getOraxenSupport();
 
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
-
-    private final Random random = new Random();
 
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : starter.getInfoMenuManager().getEnchantmentTypes()) {
@@ -66,7 +63,10 @@ public class Methods {
         return number;
     }
 
-    public int getRandomNumber(int min, int max) { return min + random.nextInt(max - min); }
+    public int getRandomNumber(int min, int max) {
+        Random random = new Random();
+        return min + random.nextInt(max - min);
+    }
 
     public boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
         if (sender instanceof Player) {
@@ -173,6 +173,8 @@ public class Methods {
     public boolean randomPicker(int min, int max) {
         if (max <= min || max <= 0) return true;
 
+        Random random = new Random();
+
         int chance = 1 + random.nextInt(max);
         return chance <= min;
     }
@@ -181,6 +183,8 @@ public class Methods {
         if (max == min) {
             return max;
         } else {
+            Random random = new Random();
+
             return min + random.nextInt(max - min);
         }
     }
@@ -486,6 +490,8 @@ public class Methods {
     }
 
     public ItemBuilder getRandomPaneColor() {
+        Random random = new Random();
+
         List<String> colors = Arrays.asList(
                 "WHITE_STAINED_GLASS_PANE",
                 "ORANGE_STAINED_GLASS_PANE",
@@ -505,5 +511,4 @@ public class Methods {
                 "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
-
 }

@@ -33,7 +33,7 @@ public class CommandChecker implements Listener {
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
                 if (enchantment.isActivated()) {
                     for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                        if (armor != null) crazyManager.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player :: removePotionEffect);
+                        if (armor != null) crazyManager.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player::removePotionEffect);
                     }
                 }
             }

@@ -58,7 +58,6 @@ public class PickaxeEnchantments implements Listener {
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
-    private final Random random = new Random();
     private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -387,6 +386,8 @@ public class PickaxeEnchantments implements Listener {
     }
 
     private int getRandomNumber(int range) {
+        Random random = new Random();
+
         return range > 1 ? random.nextInt(range) : 1;
     }
 }

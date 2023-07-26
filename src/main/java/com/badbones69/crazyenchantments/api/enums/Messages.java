@@ -46,7 +46,7 @@ public enum Messages {
     BOOK_FAILED("Book-Failed", "&cYour item must not have liked that enchantment."),
     ITEM_DESTROYED("Item-Destroyed", "&cOh no the destroy rate was too much for the item."),
     ITEM_WAS_PROTECTED("Item-Was-Protected", "&cLuckily your item was blessed with Divine Protection and did not break."),
-    PLAYER_IS_IN_CREATIVE_MODE("Player-Is-In-Creative-Mode", "&cYou are in creative mode. This can cause items to duplicate."),
+    PLAYER_IS_IN_CREATIVE_MODE("Player-Is-In-Creative-Mode", "&cYou are in creative mode. You need to get out of Creative Mode!"),
     GIVE_PROTECTION_CRYSTAL("Give-Protection-Crystal", "&7You have given %player% %amount% Protection Crystals."),
     GET_PROTECTION_CRYSTAL("Get-Protection-Crystal", "&7You have gained %amount% Protection Crystals."),
     GIVE_SCRAMBLER_CRYSTAL("Give-Scrambler-Crystal", "&7You have given %player% %amount% &e&lGrand Scramblers&7."),

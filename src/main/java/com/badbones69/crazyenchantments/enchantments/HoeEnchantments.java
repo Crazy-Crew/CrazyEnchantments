@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
+import com.badbones69.crazyenchantments.utilities.misc.ItemUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,7 +43,6 @@ public class HoeEnchantments implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    private final Random random = new Random();
     private final Material soilBlock = Material.FARMLAND;
     private final Material grassBlock = Material.GRASS_BLOCK;
     private final HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
@@ -124,7 +124,7 @@ public class HoeEnchantments implements Listener {
 
             for (Block crop : getAreaCrops(player, plant, blockFace)) {
                 if (hasTelepathy) {
-                    giveCropDrops(player, crop);
+                    ItemUtils.giveCropDrops(player, crop);
                     event.setDropItems(false);
                     crop.setType(Material.AIR);
                     continue;
@@ -132,37 +132,6 @@ public class HoeEnchantments implements Listener {
 
                 crop.breakNaturally();
             }
-        }
-    }
-
-    private void giveCropDrops(Player player, Block crop) {
-        switch (crop.getType()) {
-            case COCOA ->
-                    giveDrops(player, new ItemStack(Material.COCOA_BEANS, random.nextInt(2) + 2)); // Coco drops 2-3 beans.
-            case WHEAT -> {
-                giveDrops(player, new ItemStack(Material.WHEAT));
-                int amount = random.nextInt(3);
-                if (amount > 0) giveDrops(player, new ItemStack(Material.WHEAT_SEEDS, amount)); // Wheat drops 0-3 seeds.
-            }
-            case BEETROOTS -> {
-                giveDrops(player, new ItemStack(Material.BEETROOT));
-                int amount = random.nextInt(3);
-                if (amount > 0)
-                    giveDrops(player, new ItemStack(Material.BEETROOT_SEEDS, amount)); // BeetRoots drops 0-3 seeds.
-            }
-            case POTATO ->
-                    giveDrops(player, new ItemStack(Material.POTATO, random.nextInt(4) + 1)); // Potatoes drop 1-4 of them self's.
-            case CARROTS ->
-                    giveDrops(player, new ItemStack(Material.CARROT, random.nextInt(4) + 1)); // Carrots drop 1-4 of them self's.
-            case NETHER_WART ->
-                    giveDrops(player, new ItemStack(Material.NETHER_WART, random.nextInt(3) + 2)); // Nether Warts drop 2-4 of them self's.
-        }
-    }
-    private void giveDrops(Player player, ItemStack item) {
-        if (methods.isInventoryFull(player)) {
-            player.getWorld().dropItemNaturally(player.getLocation(), item);
-        } else {
-            player.getInventory().addItem(item);
         }
     }
 
@@ -227,7 +196,7 @@ public class HoeEnchantments implements Listener {
     private List<Block> getAreaCrops(Player player, Block block, BlockFace blockFace) {
         List<Block> blockList = new ArrayList<>();
 
-        for (Block crop : getAreaBlocks(block, blockFace, 0, 1)) { // Radius of 1 is 3x3
+        for (Block crop : getAreaBlocks(block, blockFace, 1)) { // Radius of 1 is 3x3
             if (enchantmentSettings.getHarvesterCrops().contains(crop.getType()) && crazyManager.getNMSSupport().isFullyGrown(crop)) {
                 BlockBreakEvent useEvent = new BlockBreakEvent(crop, player);
                 EventUtils.addIgnoredEvent(useEvent);
@@ -245,7 +214,7 @@ public class HoeEnchantments implements Listener {
 
     private List<Block> getSoil(Player player, Block block) {
         List<Block> soilBlocks = new ArrayList<>();
-        for (Block soil : getAreaBlocks(block)) {
+        for (Block soil : getAreaBlocks(block, 1)) {
             if (soil.getType() == grassBlock || soil.getType() == Material.DIRT || soil.getType() == Material.SOUL_SAND || soil.getType() == soilBlock) {
                 BlockBreakEvent useEvent = new BlockBreakEvent(soil, player);
                 EventUtils.addIgnoredEvent(useEvent);
@@ -261,46 +230,42 @@ public class HoeEnchantments implements Listener {
         return soilBlocks;
     }
 
-    private List<Block> getAreaBlocks(Block block) {
-        return getAreaBlocks(block, BlockFace.UP, 0, 1); // Radius of 1 is 3x3.
-    }
-
     private List<Block> getAreaBlocks(Block block, int radius) {
-        return getAreaBlocks(block, BlockFace.UP, 0, radius);
+        return getAreaBlocks(block, BlockFace.UP, radius);
     }
 
-    private List<Block> getAreaBlocks(Block block, BlockFace blockFace, int depth, int radius) {
+    private List<Block> getAreaBlocks(Block block, BlockFace blockFace, int radius) {
         Location loc = block.getLocation();
         Location loc2 = block.getLocation();
 
         switch (blockFace) {
             case SOUTH -> {
-                loc.add(-radius, radius, -depth);
+                loc.add(-radius, radius, -0);
                 loc2.add(radius, -radius, 0);
             }
 
             case WEST -> {
-                loc.add(depth, radius, -radius);
+                loc.add(0, radius, -radius);
                 loc2.add(0, -radius, radius);
             }
 
             case EAST -> {
-                loc.add(-depth, radius, radius);
+                loc.add(-0, radius, radius);
                 loc2.add(0, -radius, -radius);
             }
 
             case NORTH -> {
-                loc.add(radius, radius, depth);
+                loc.add(radius, radius, 0);
                 loc2.add(-radius, -radius, 0);
             }
 
             case UP -> {
-                loc.add(-radius, -depth, -radius);
+                loc.add(-radius, -0, -radius);
                 loc2.add(radius, 0, radius);
             }
 
             case DOWN -> {
-                loc.add(radius, depth, radius);
+                loc.add(radius, 0, radius);
                 loc2.add(-radius, 0, -radius);
             }
 

@@ -7,14 +7,13 @@ import com.badbones69.crazyenchantments.api.CrazyManager;
 import com.badbones69.crazyenchantments.api.FileManager.Files;
 import com.badbones69.crazyenchantments.api.enums.Messages;
 import com.badbones69.crazyenchantments.api.enums.Scrolls;
+import com.badbones69.crazyenchantments.api.events.BookApplyEvent;
 import com.badbones69.crazyenchantments.api.events.BookDestroyEvent;
 import com.badbones69.crazyenchantments.api.events.BookFailEvent;
 import com.badbones69.crazyenchantments.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.api.objects.CEBook;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
-import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -28,9 +27,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.HashMap;
-import java.util.Objects;
 
 public class EnchantmentControl implements Listener {
 
@@ -59,6 +56,13 @@ public class EnchantmentControl implements Listener {
         if (enchantment != null && enchantment.canEnchantItem(item) && ceBook.getAmount() == 1) {
             Player player = (Player) e.getWhoClicked();
 
+            boolean creativeMode = player.getGameMode() == GameMode.CREATIVE;
+
+            if (creativeMode) {
+                player.sendMessage(Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage());
+                return;
+            }
+
             if (crazyManager.enchantStackedItems() || item.getAmount() == 1) {
                 boolean success = methods.randomPicker(ceBook.getSuccessRate(), 100);
                 boolean destroy = methods.randomPicker(ceBook.getDestroyRate(), 100);
@@ -79,8 +83,8 @@ public class EnchantmentControl implements Listener {
                         plugin.getServer().getPluginManager().callEvent(preBookApplyEvent);
 
                         if (!preBookApplyEvent.isCancelled()) {
-                            if (success || player.getGameMode() == GameMode.CREATIVE) {
-                                BookFailEvent bookApplyEvent = new BookFailEvent(player, item, ceBook);
+                            if (success) {
+                                BookApplyEvent bookApplyEvent = new BookApplyEvent(player, item, ceBook);
                                 plugin.getServer().getPluginManager().callEvent(bookApplyEvent);
 
                                 if (!bookApplyEvent.isCancelled()) {
@@ -146,11 +150,8 @@ public class EnchantmentControl implements Listener {
                 }
 
                 e.setCancelled(true);
-                boolean creativeMode = player.getGameMode() == GameMode.CREATIVE;
 
-                if (success || creativeMode) {
-                    String creativeMessage = Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage();
-                    if (creativeMode && !Objects.equals(creativeMessage, "")) player.sendMessage(ColorUtils.legacyTranslateColourCodes(creativeMessage));
+                if (success) {
                     ItemStack newItem = crazyManager.addEnchantment(item, enchantment, ceBook.getLevel());
                     e.setCurrentItem(newItem);
                     player.setItemOnCursor(new ItemStack(Material.AIR));
