@@ -78,6 +78,7 @@ public class PickaxeEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlastBreak(BlockBreakEvent e) {
+        if (!e.isDropItems()) return;
         if (EventUtils.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated()) return;
 
         Player player = e.getPlayer();
@@ -226,6 +227,7 @@ public class PickaxeEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent e) {
+        if (!e.isDropItems()) return;
         if (EventUtils.isIgnoredEvent(e)) return;
 
         Block block = e.getBlock();

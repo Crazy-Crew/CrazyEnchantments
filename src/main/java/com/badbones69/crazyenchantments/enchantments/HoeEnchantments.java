@@ -103,6 +103,7 @@ public class HoeEnchantments implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        if (!event.isDropItems()) return;
         if (!event.isCancelled() && !EventUtils.isIgnoredEvent(event)) {
             Player player = event.getPlayer();
             Block plant = event.getBlock();

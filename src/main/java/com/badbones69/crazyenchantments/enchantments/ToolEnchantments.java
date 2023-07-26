@@ -56,6 +56,7 @@ public class ToolEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (!event.isDropItems()) return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
 
         if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(event.getBlock())) return;
@@ -97,6 +98,7 @@ public class ToolEnchantments implements Listener {
         }
 
         methods.removeDurability(tool, player);
+        event.setDropItems(false);
     }
 
     private void updateEffects(Player player) {
