@@ -60,6 +60,7 @@ public class ToolEnchantments implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
 
+        if (!event.isDropItems()) return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
         if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(event.getBlock())) return;
 
@@ -99,6 +100,7 @@ public class ToolEnchantments implements Listener {
             if (drop.hasXp()) event.getBlock().getWorld().spawn(event.getBlock().getLocation().add(.5, .5, .5), ExperienceOrb.class).setExperience(drop.getXp());
         }
         methods.removeDurability(tool, player);
+        event.setDropItems(false);
     }
 
     private void giveDrops(Player player, ItemStack item) {
