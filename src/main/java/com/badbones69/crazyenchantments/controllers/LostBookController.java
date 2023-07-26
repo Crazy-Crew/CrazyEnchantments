@@ -34,11 +34,11 @@ public class LostBookController implements Listener {
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBookClean(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
+    public void onBookClean(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
         Category category = null;
 
-        if ((e.getItem() == null || e.getAction() != Action.RIGHT_CLICK_AIR) && e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if ((event.getItem() == null || event.getAction() != Action.RIGHT_CLICK_AIR) && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         ItemStack item = methods.getItemInHand(player);
 
@@ -53,7 +53,7 @@ public class LostBookController implements Listener {
 
         if (category == null) return;
 
-        e.setCancelled(true);
+        event.setCancelled(true);
 
         if (methods.isInventoryFull(player)) {
             player.sendMessage(Messages.INVENTORY_FULL.getMessage());

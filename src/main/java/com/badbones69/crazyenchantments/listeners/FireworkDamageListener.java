@@ -21,12 +21,12 @@ public class FireworkDamageListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDamage(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Firework firework) {
+    public void onPlayerDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Firework firework) {
 
             PersistentDataContainer container = firework.getPersistentDataContainer();
 
-            if (container.has(DataKeys.NO_FIREWORK_DAMAGE.getKey(), PersistentDataType.BOOLEAN)) e.setCancelled(true);
+            if (container.has(DataKeys.NO_FIREWORK_DAMAGE.getKey(), PersistentDataType.BOOLEAN)) event.setCancelled(true);
         }
     }
 }

@@ -10,7 +10,6 @@ import com.badbones69.crazyenchantments.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
@@ -28,7 +27,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -42,10 +40,6 @@ public class DustControlListener implements Listener {
     private final Methods methods = starter.getMethods();
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
-
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-
-    private final Random random = new Random();
 
     private final Gson gson = new Gson();
 
@@ -207,6 +201,8 @@ public class DustControlListener implements Listener {
 
     private Dust pickDust() {
         List<Dust> dusts = new ArrayList<>();
+
+        Random random = new Random();
 
         if (Files.CONFIG.getFile().getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success")) dusts.add(Dust.SUCCESS_DUST);
 

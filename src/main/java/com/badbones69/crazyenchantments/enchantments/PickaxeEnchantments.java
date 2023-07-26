@@ -226,24 +226,24 @@ public class PickaxeEnchantments implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent e) {
-        if (!e.isDropItems()) return;
-        if (EventUtils.isIgnoredEvent(e)) return;
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (!event.isDropItems()) return;
+        if (EventUtils.isIgnoredEvent(event)) return;
 
-        Block block = e.getBlock();
-        Player player = e.getPlayer();
+        Block block = event.getBlock();
+        Player player = event.getPlayer();
         ItemStack item = methods.getItemInHand(player);
         List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         boolean isOre = isOre(block.getType());
 
         if (player.getGameMode() != GameMode.CREATIVE) {
             if (CEnchantments.AUTOSMELT.isActivated() && isOre &&
-                    (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && e.getPlayer().hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.FURNACE.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
+                    (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && player.hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.FURNACE.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
                     CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
-                plugin.getServer().getPluginManager().callEvent(event);
+                EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
+                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
-                if (!event.isCancelled()) {
+                if (!enchantmentUseEvent.isCancelled()) {
                     int dropAmount = 0;
                     dropAmount += crazyManager.getLevel(item, CEnchantments.AUTOSMELT);
 
@@ -251,17 +251,17 @@ public class PickaxeEnchantments implements Listener {
 
                     tryCheck(block, item, enchantments, dropAmount);
 
-                    e.setDropItems(false);
+                    event.setDropItems(false);
 
                     methods.removeDurability(item, player);
                 }
             }
 
-            if (CEnchantments.FURNACE.isActivated() && isOre && (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && e.getPlayer().hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
-                plugin.getServer().getPluginManager().callEvent(event);
+            if (CEnchantments.FURNACE.isActivated() && isOre && (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && player.hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+                EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
+                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
-                if (!event.isCancelled()) {
+                if (!enchantmentUseEvent.isCancelled()) {
                     int dropAmount = 1;
 
                     if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
@@ -271,19 +271,19 @@ public class PickaxeEnchantments implements Listener {
                     tryCheck(block, item, enchantments, dropAmount);
                 }
 
-                e.setDropItems(false);
+                event.setDropItems(false);
                 methods.removeDurability(item, player);
             }
         }
 
-        if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) && isOre && (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && e.getPlayer().hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+        if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) && isOre && (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && player.hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
             int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
 
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
-                plugin.getServer().getPluginManager().callEvent(event);
+                EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
+                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
-                if (!event.isCancelled()) e.setExpToDrop(e.getExpToDrop() + (power + 2));
+                if (!enchantmentUseEvent.isCancelled()) event.setExpToDrop(event.getExpToDrop() + (power + 2));
             }
         }
     }

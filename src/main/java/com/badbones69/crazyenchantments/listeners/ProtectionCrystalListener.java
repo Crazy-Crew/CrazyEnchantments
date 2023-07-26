@@ -31,11 +31,11 @@ public class ProtectionCrystalListener implements Listener {
     private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
+    public void onInventoryClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
 
-        ItemStack crystalItem = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
-        ItemStack item = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
+        ItemStack crystalItem = event.getCursor() != null ? event.getCursor() : new ItemStack(Material.AIR);
+        ItemStack item = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
         
         if (item.getType() == Material.AIR || crystalItem.getType() == Material.AIR) return;
         if (!protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;
@@ -46,21 +46,20 @@ public class ProtectionCrystalListener implements Listener {
             return;
         }
 
-        e.setCancelled(true);
+        event.setCancelled(true);
         player.setItemOnCursor(methods.removeItem(crystalItem));
-        e.setCurrentItem(protectionCrystalSettings.addProtection(item));
-
+        event.setCurrentItem(protectionCrystalSettings.addProtection(item));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        if (e.getKeepInventory()) return;
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (event.getKeepInventory()) return;
 
-        Player player = e.getEntity();
+        Player player = event.getEntity();
         List<ItemStack> savedItems = new ArrayList<>();
         List<ItemStack> droppedItems = new ArrayList<>();
 
-        for (ItemStack item : e.getDrops()) {
+        for (ItemStack item : event.getDrops()) {
 
             if (item != null) {
 
@@ -73,15 +72,15 @@ public class ProtectionCrystalListener implements Listener {
             }
         }
 
-        e.getDrops().clear();
-        e.getDrops().addAll(droppedItems);
+        event.getDrops().clear();
+        event.getDrops().addAll(droppedItems);
 
         protectionCrystalSettings.addPlayer(player, savedItems);
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerRespawn(PlayerRespawnEvent e) {
-        Player player = e.getPlayer();
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
 
         if (protectionCrystalSettings.containsPlayer(player)) {
 
@@ -101,9 +100,9 @@ public class ProtectionCrystalListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onCrystalClick(PlayerInteractEvent e) {
-        ItemStack item = methods.getItemInHand(e.getPlayer());
+    public void onCrystalClick(PlayerInteractEvent event) {
+        ItemStack item = methods.getItemInHand(event.getPlayer());
         if (!item.hasItemMeta()) return;
-        if (protectionCrystalSettings.isProtectionCrystal(item)) e.setCancelled(true);
+        if (protectionCrystalSettings.isProtectionCrystal(item)) event.setCancelled(true);
     }
 }

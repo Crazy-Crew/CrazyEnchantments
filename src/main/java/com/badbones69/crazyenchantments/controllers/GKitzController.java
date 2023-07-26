@@ -79,32 +79,32 @@ public class GKitzController implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInvClick(InventoryClickEvent e) {
-        Inventory inventory = e.getInventory();
-        ItemStack item = e.getCurrentItem();
+    public void onInvClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        ItemStack item = event.getCurrentItem();
 
         if (item != null && item.getType() != Material.AIR) {
-            Player player = (Player) e.getWhoClicked();
+            Player player = (Player) event.getWhoClicked();
             CEPlayer cePlayer = crazyManager.getCEPlayer(player);
             NBTItem nbtItem = new NBTItem(item);
 
             for (GKitz kit : crazyManager.getGKitz()) {
-                if (e.getView().getTitle().equals(ColorUtils.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
-                    e.setCancelled(true);
+                if (event.getView().getTitle().equals(ColorUtils.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
+                    event.setCancelled(true);
 
-                    if (e.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
+                    if (event.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
 
                     return;
                 }
             }
 
-            if (e.getView().getTitle().equals(ColorUtils.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
-                e.setCancelled(true);
+            if (event.getView().getTitle().equals(ColorUtils.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
+                event.setCancelled(true);
 
-                if (e.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {
+                if (event.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {
                     GKitz kit = crazyManager.getGKitFromName(nbtItem.getString("gkit"));
 
-                    if (e.getAction() == InventoryAction.PICKUP_HALF) {
+                    if (event.getAction() == InventoryAction.PICKUP_HALF) {
                         List<ItemStack> items = kit.getPreviewItems();
                         int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
 

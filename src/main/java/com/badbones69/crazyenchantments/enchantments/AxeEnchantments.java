@@ -46,12 +46,12 @@ public class AxeEnchantments implements Listener {
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerDamage(EntityDamageByEntityEvent e) {
-        if (EventUtils.isIgnoredEvent(e)) return;
-        if (pluginSupport.isFriendly(e.getDamager(), e.getEntity())) return;
+    public void onPlayerDamage(EntityDamageByEntityEvent event) {
+        if (EventUtils.isIgnoredEvent(event)) return;
+        if (pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
-        if (!(e.getEntity() instanceof LivingEntity entity)) return;
-        if (!(e.getDamager() instanceof Player damager)) return;
+        if (!(event.getEntity() instanceof LivingEntity entity)) return;
+        if (!(event.getDamager() instanceof Player damager)) return;
 
         ItemStack item = methods.getItemInHand(damager);
 
@@ -92,13 +92,13 @@ public class AxeEnchantments implements Listener {
         }
 
         if (CEnchantments.REKT.isActivated() && enchantments.contains(CEnchantments.REKT.getEnchantment())) {
-            double damage = e.getDamage() * 2;
+            double damage = event.getDamage() * 2;
 
             if (CEnchantments.REKT.chanceSuccessful(item)) {
                 EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
                 plugin.getServer().getPluginManager().callEvent(useEvent);
 
-                if (!useEvent.isCancelled()) e.setDamage(damage);
+                if (!useEvent.isCancelled()) event.setDamage(damage);
             }
         }
 

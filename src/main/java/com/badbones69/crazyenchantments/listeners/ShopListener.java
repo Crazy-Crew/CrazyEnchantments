@@ -70,17 +70,17 @@ public class ShopListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInvClick(InventoryClickEvent e) {
-        ItemStack item = e.getCurrentItem();
-        Inventory inventory = e.getInventory();
-        Player player = (Player) e.getWhoClicked();
+    public void onInvClick(InventoryClickEvent event) {
+        ItemStack item = event.getCurrentItem();
+        Inventory inventory = event.getInventory();
+        Player player = (Player) event.getWhoClicked();
 
-        if (!e.getView().getTitle().equals(shopManager.getInventoryName())) return;
+        if (!event.getView().getTitle().equals(shopManager.getInventoryName())) return;
         if (item == null) return;
 
-        e.setCancelled(true);
+        event.setCancelled(true);
 
-        if (e.getRawSlot() >= inventory.getSize()) return;
+        if (event.getRawSlot() >= inventory.getSize()) return;
 
         for (Category category : enchantmentBookSettings.getCategories()) {
             if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
@@ -103,8 +103,8 @@ public class ShopListener implements Listener {
                 CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
                 if (book != null) {
-                    BuyBookEvent event = new BuyBookEvent(crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
-                    plugin.getServer().getPluginManager().callEvent(event);
+                    BuyBookEvent buyBookEvent = new BuyBookEvent(crazyManager.getCEPlayer(player), category.getCurrency(), category.getCost(), book);
+                    plugin.getServer().getPluginManager().callEvent(buyBookEvent);
                     player.getInventory().addItem(book.buildBook());
                 } else {
                     player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
@@ -190,13 +190,13 @@ public class ShopListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEnchantmentTableClick(PlayerInteractEvent e) {
+    public void onEnchantmentTableClick(PlayerInteractEvent event) {
         if (shopManager.isEnchantmentTableShop()) {
-            Player player = e.getPlayer();
-            Block block = e.getClickedBlock();
+            Player player = event.getPlayer();
+            Block block = event.getClickedBlock();
 
-            if (block != null && e.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == enchantmentTable) {
-                e.setCancelled(true);
+            if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == enchantmentTable) {
+                event.setCancelled(true);
                 openGUI(player);
             }
         }

@@ -82,6 +82,7 @@ public class ScramblerListener implements Listener {
         item.setItemMeta(meta);
         return item;
     }
+
     public boolean isScrambler(ItemStack item) {
         if (!item.hasItemMeta()) return false;
         return item.getItemMeta().getPersistentDataContainer().has(DataKeys.SCRAMBLER.getKey());
@@ -197,49 +198,50 @@ public class ScramblerListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onReRoll(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
+    public void onReRoll(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
 
-        if (e.getClickedInventory() != null) {
-            ItemStack book = e.getCurrentItem() != null ? e.getCurrentItem() : new ItemStack(Material.AIR);
-            ItemStack scrambler = e.getCursor() != null ? e.getCursor() : new ItemStack(Material.AIR);
+        if (event.getClickedInventory() != null) {
+            ItemStack book = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
+            ItemStack scrambler = event.getCursor() != null ? event.getCursor() : new ItemStack(Material.AIR);
 
             if (book.getType() == Material.AIR || scrambler.getType() == Material.AIR) return;
             if (book.getAmount() != 1 || scrambler.getAmount() != 1) return;
             if (!isScrambler(scrambler) || !enchantmentBookSettings.isEnchantmentBook(book)) return;
-            if (e.getClickedInventory().getType() != InventoryType.PLAYER) {
+            if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
                 player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
                 return;
             }
-            e.setCancelled(true);
+
+            event.setCancelled(true);
             player.setItemOnCursor(new ItemStack(Material.AIR));
 
             if (animationToggle) {
-                e.setCurrentItem(new ItemStack(Material.AIR));
+                event.setCurrentItem(new ItemStack(Material.AIR));
                 openScrambler(player, book);
             } else {
-                e.setCurrentItem(enchantmentBookSettings.getNewScrambledBook(book));
+                event.setCurrentItem(enchantmentBookSettings.getNewScrambledBook(book));
             }
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInvClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().equals(guiName)) e.setCancelled(true);
+    public void onInvClick(InventoryClickEvent event) {
+        if (event.getView().getTitle().equals(guiName)) event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onScramblerClick(PlayerInteractEvent e) {
-        ItemStack item = methods.getItemInHand(e.getPlayer());
+    public void onScramblerClick(PlayerInteractEvent event) {
+        ItemStack item = methods.getItemInHand(event.getPlayer());
 
         if (item != null) {
-            if (getScramblers().isSimilar(item)) e.setCancelled(true);
+            if (getScramblers().isSimilar(item)) event.setCancelled(true);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerLeave(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
 
         try {
             roll.get(player).cancel();

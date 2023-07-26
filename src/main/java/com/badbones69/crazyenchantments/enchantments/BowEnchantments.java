@@ -155,10 +155,10 @@ public class BowEnchantments implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onArrowDamage(EntityDamageByEntityEvent e) {
-        if (EventUtils.isIgnoredEvent(e)) return;
-        if (!(e.getDamager() instanceof Arrow entityArrow)) return;
-        if (!(e.getEntity() instanceof LivingEntity entity)) return;
+    public void onArrowDamage(EntityDamageByEntityEvent event) {
+        if (EventUtils.isIgnoredEvent(event)) return;
+        if (!(event.getDamager() instanceof Arrow entityArrow)) return;
+        if (!(event.getEntity() instanceof LivingEntity entity)) return;
 
         EnchantedArrow arrow = bowUtils.enchantedArrow(entityArrow);
         if (arrow == null) return;
@@ -167,14 +167,14 @@ public class BowEnchantments implements Listener {
         ItemStack bow = arrow.getBow();
         // Damaged player is friendly.
 
-        if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && pluginSupport.isFriendly(arrow.getShooter(), e.getEntity())) {
+        if (CEnchantments.DOCTOR.isActivated() && arrow.hasEnchantment(CEnchantments.DOCTOR) && pluginSupport.isFriendly(arrow.getShooter(), event.getEntity())) {
             int heal = 1 + arrow.getLevel(CEnchantments.DOCTOR);
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
             if (entity.getHealth() < maxHealth) {
                 if (entity instanceof Player) {
-                    EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.DOCTOR, bow);
+                    EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) event.getEntity(), CEnchantments.DOCTOR, bow);
                     plugin.getServer().getPluginManager().callEvent(useEvent);
 
                     if (!useEvent.isCancelled()) {
@@ -193,16 +193,16 @@ public class BowEnchantments implements Listener {
         // Damaged player is an enemy.
         if (!pluginSupport.isFriendly(arrow.getShooter(), entity)) {
 
-            bowUtils.spawnWebs(e.getEntity(), arrow, entityArrow);
+            bowUtils.spawnWebs(event.getEntity(), arrow, entityArrow);
 
             if (CEnchantments.PULL.isActivated() && arrow.hasEnchantment(CEnchantments.PULL) && CEnchantments.PULL.chanceSuccessful(bow)) {
                 Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
 
                 if (entity instanceof Player) {
-                    EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) e.getEntity(), CEnchantments.PULL, bow);
+                    EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) event.getEntity(), CEnchantments.PULL, bow);
                     plugin.getServer().getPluginManager().callEvent(useEvent);
 
-                    Player player = (Player) e.getEntity();
+                    Player player = (Player) event.getEntity();
 
                     if (!useEvent.isCancelled()) {
                         if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
@@ -224,8 +224,8 @@ public class BowEnchantments implements Listener {
                 // No need to check if its active as if it is not then Bow Manager doesn't add it to the list of enchantments.
                 if (arrow.hasEnchantment(enchantment) && enchantment.chanceSuccessful(bow)) {
 
-                    if (entity instanceof Player) {
-                        EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) e.getEntity(), enchantment, bow);
+                    if (entity instanceof Player player) {
+                        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, enchantment, bow);
                         plugin.getServer().getPluginManager().callEvent(useEvent);
 
                         if (useEvent.isCancelled()) continue;
@@ -239,7 +239,7 @@ public class BowEnchantments implements Listener {
                         }
                     } else {
                         // Sets the new damage amplifier. If isLevelAddedToAmplifier() is true it adds the level to the damage amplifier.
-                        e.setDamage(e.getDamage() * ((bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + bowEnchantment.getDamageAmplifier()));
+                        event.setDamage(event.getDamage() * ((bowEnchantment.isLevelAddedToAmplifier() ? arrow.getLevel(enchantment) : 0) + bowEnchantment.getDamageAmplifier()));
                     }
                 }
             }

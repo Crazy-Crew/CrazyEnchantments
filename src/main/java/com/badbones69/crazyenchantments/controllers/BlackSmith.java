@@ -56,21 +56,21 @@ public class BlackSmith implements Listener {
     }
     
     @EventHandler(ignoreCancelled = true)
-    public void onInvClick(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
-        Inventory inventory = e.getInventory();
+    public void onInvClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        Inventory inventory = event.getInventory();
 
-        if (e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
-            e.setCancelled(true);
-            ItemStack item = e.getCurrentItem();
+        if (event.getView().getTitle().equals(blackSmithManager.getMenuName())) {
+            event.setCancelled(true);
+            ItemStack item = event.getCurrentItem();
 
             if (item != null) {
-                if (e.getRawSlot() > 26) { // Click in players inventory.
+                if (event.getRawSlot() > 26) { // Click in players inventory.
                     if (item.getAmount() != 1) return;
 
                     if (enchantmentBookSettings.hasEnchantments(item) || enchantmentBookSettings.isEnchantmentBook(item)) {
                         if (inventory.getItem(mainSlot) == null) { // Main item slot is empty.
-                            e.setCurrentItem(new ItemStack(Material.AIR));
+                            event.setCurrentItem(new ItemStack(Material.AIR));
                             inventory.setItem(mainSlot, item); // Moves clicked item to main slot.
                             playSound(player, click);
 
@@ -80,11 +80,11 @@ public class BlackSmith implements Listener {
                             }
 
                         } else { // Main item slot is not empty.
-                            e.setCurrentItem(new ItemStack(Material.AIR));
+                            event.setCurrentItem(new ItemStack(Material.AIR));
 
                             // Sub item slot is not empty.
                             // Moves sub slot item to clicked items slot.
-                            if (inventory.getItem(subSlot) != null) e.setCurrentItem(inventory.getItem(subSlot));
+                            if (inventory.getItem(subSlot) != null) event.setCurrentItem(inventory.getItem(subSlot));
 
                             inventory.setItem(subSlot, item); // Moves clicked item to sub slot.
                             playSound(player, click);
@@ -93,15 +93,15 @@ public class BlackSmith implements Listener {
                         }
                     }
                 } else { // Menu click in blacksmith.
-                    if (e.getRawSlot() == mainSlot || e.getRawSlot() == subSlot) { // Clicked either the main slot or sub slot.
-                        e.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air.
+                    if (event.getRawSlot() == mainSlot || event.getRawSlot() == subSlot) { // Clicked either the main slot or sub slot.
+                        event.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air.
                         givePlayerItem(player, item);
                         inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
                         resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
                         playSound(player, click);
                     }
 
-                    if (e.getRawSlot() == resultSlot) { // Clicks the result item slot.
+                    if (event.getRawSlot() == resultSlot) { // Clicks the result item slot.
                         if (inventory.getItem(mainSlot) != null && inventory.getItem(subSlot) != null) { // Main and sub items are not empty.
                             BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(mainSlot), inventory.getItem(subSlot));
 
@@ -139,11 +139,11 @@ public class BlackSmith implements Listener {
     }
     
     @EventHandler(ignoreCancelled = true)
-    public void onInvClose(InventoryCloseEvent e) {
-        Inventory inventory = e.getInventory();
+    public void onInvClose(InventoryCloseEvent event) {
+        Inventory inventory = event.getInventory();
 
-        if (e.getView().getTitle().equals(blackSmithManager.getMenuName())) {
-            Player player = (Player) e.getPlayer();
+        if (event.getView().getTitle().equals(blackSmithManager.getMenuName())) {
+            Player player = (Player) event.getPlayer();
 
             for (int slot : Arrays.asList(mainSlot, subSlot)) {
                 if (inventory.getItem(slot) != null && inventory.getItem(slot).getType() != Material.AIR) givePlayerItem(player, inventory.getItem(slot));

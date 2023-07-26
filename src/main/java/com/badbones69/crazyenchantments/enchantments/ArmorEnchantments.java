@@ -289,8 +289,8 @@ public class ArmorEnchantments implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onDeath(PlayerDeathEvent e) {
-        Player player = e.getEntity();
+    public void onDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
 
         if (player.getKiller() == null) return;
 
@@ -309,12 +309,12 @@ public class ArmorEnchantments implements Listener {
                         methods.explode(player);
                         List<ItemStack> items = new ArrayList<>();
 
-                        for (ItemStack drop : e.getDrops()) {
+                        for (ItemStack drop : event.getDrops()) {
                             if (drop != null && protectionCrystalSettings.isProtected(drop) && protectionCrystalSettings.isProtectionSuccessful(player)) items.add(drop);
                         }
 
-                        e.getDrops().clear();
-                        e.getDrops().addAll(items);
+                        event.getDrops().clear();
+                        event.getDrops().addAll(items);
                     }
                 }
             }
@@ -345,7 +345,6 @@ public class ArmorEnchantments implements Listener {
     }
 
     private boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack armor) {
-
         if (!(enchantmentBookSettings.hasEnchantment(armor, enchant.getEnchantment()) &&
                 (!enchant.hasChanceSystem() || enchant.chanceSuccessful(armor)))) return false;
 

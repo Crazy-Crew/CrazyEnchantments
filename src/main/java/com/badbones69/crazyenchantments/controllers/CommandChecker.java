@@ -26,10 +26,10 @@ public class CommandChecker implements Listener {
     private final ItemStack air = new ItemStack(Material.AIR);
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClear(PlayerCommandPreprocessEvent e) {
-        Player player = e.getPlayer();
+    public void onInventoryClear(PlayerCommandPreprocessEvent event) {
+        Player player = event.getPlayer();
 
-        if (clearInventoryCommands.contains(e.getMessage().toLowerCase())) {
+        if (clearInventoryCommands.contains(event.getMessage().toLowerCase())) {
             for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
                 if (enchantment.isActivated()) {
                     for (ItemStack armor : player.getEquipment().getArmorContents()) {
@@ -39,7 +39,7 @@ public class CommandChecker implements Listener {
             }
 
             updateEffects(player);
-        } else if (e.getMessage().equalsIgnoreCase("/heal")) {
+        } else if (event.getMessage().equalsIgnoreCase("/heal")) {
             updateEffects(player);
         }
     }

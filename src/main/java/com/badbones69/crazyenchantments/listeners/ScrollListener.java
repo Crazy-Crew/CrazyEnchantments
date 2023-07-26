@@ -47,8 +47,6 @@ public class ScrollListener implements Listener {
 
     // Plugin Managers.
     private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
-
-    private final Random random = new Random();
     private String suffix;
     private boolean countVanillaEnchantments;
     private boolean useSuffix;
@@ -65,14 +63,14 @@ public class ScrollListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onScrollUse(InventoryClickEvent e) {
-        Player player = (Player) e.getWhoClicked();
-        ItemStack item = e.getCurrentItem();
-        ItemStack scroll = e.getCursor();
+    public void onScrollUse(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        ItemStack item = event.getCurrentItem();
+        ItemStack scroll = event.getCursor();
 
         if (item == null || item.getType() == Material.AIR || scroll == null || scroll.getType() == Material.AIR) return;
 
-        InventoryType.SlotType slotType = e.getSlotType();
+        InventoryType.SlotType slotType = event.getSlotType();
 
         if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) return;
 
@@ -90,9 +88,10 @@ public class ScrollListener implements Listener {
                     player.sendMessage(Messages.INVENTORY_FULL.getMessage());
                     return;
                 }
+
                 List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
                 if (!enchantments.isEmpty()) { // Item has enchantments
-                    e.setCancelled(true);
+                    event.setCancelled(true);
                     player.setItemOnCursor(methods.removeItem(scroll));
 
                     if (blackScrollChanceToggle && !methods.randomPicker(blackScrollChance, 100)) {
@@ -100,22 +99,26 @@ public class ScrollListener implements Listener {
                         return;
                     }
 
+                    Random random = new Random();
+
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
                     player.getInventory().addItem(new CEBook(enchantment, enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
-                    e.setCurrentItem(enchantmentBookSettings.removeEnchantment(item, enchantment));
+                    event.setCurrentItem(enchantmentBookSettings.removeEnchantment(item, enchantment));
                 }
             }
+
             case "WhiteScroll" -> {
                 if (Scrolls.hasWhiteScrollProtection(item)) return;
                 for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
                     if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
-                        e.setCancelled(true);
-                        e.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
+                        event.setCancelled(true);
+                        event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
                         player.setItemOnCursor(methods.removeItem(scroll));
                         return;
                     }
                 }
             }
+
             case "TransmogScroll" -> {
                 if (!enchantmentBookSettings.hasEnchantments(item)) return;
                 if (item.lore() == null) return;
@@ -124,24 +127,24 @@ public class ScrollListener implements Listener {
 
                 if (item.isSimilar(orderedItem)) return;
 
-                e.setCancelled(true);
-                e.setCurrentItem(orderedItem);
+                event.setCancelled(true);
+                event.setCurrentItem(orderedItem);
                 player.setItemOnCursor(methods.removeItem(scroll));
             }
         }
     }
 
     @EventHandler()
-    public void onScrollClick(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
+    public void onScrollClick(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
         ItemStack scroll = methods.getItemInHand(player);
 
         if (scroll != null) {
             if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) {
-                e.setCancelled(true);
+                event.setCancelled(true);
                 player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
             } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll()) || scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
-                e.setCancelled(true);
+                event.setCancelled(true);
             }
         }
     }
@@ -158,6 +161,7 @@ public class ScrollListener implements Listener {
             categories.put(enchantment.getKey(), EnchantUtils.getHighestEnchantmentCategory(enchantment.getKey()).getRarity());
             newEnchantmentOrder.add(enchantment.getKey());
         }
+
         orderInts(newEnchantmentOrder, categories);
         ItemMeta newMeta = item.getItemMeta();
 
@@ -169,31 +173,13 @@ public class ScrollListener implements Listener {
 
         newMeta.lore(newLore);
 
-        if (useSuffix) {
-            String newName = newMeta.hasDisplayName() ? ColorUtils.toLegacy(newMeta.displayName()) :
-                    "&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
+        useSuffix(item, newMeta, newEnchantmentOrder);
 
-            if (newMeta.hasDisplayName()) {
-                for (int i = 0; i <= 100; i++) {
-                    String suffixWithAmount = suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
-
-                    if (!newName.endsWith(suffixWithAmount)) continue;
-
-                    newName = newName.substring(0, newName.length() - suffixWithAmount.length());
-                    break;
-                }
-            }
-
-            String amount = String.valueOf(countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
-
-            newMeta.displayName(ColorUtils.legacyTranslateColourCodes(newName + suffix.replace("%Amount%", amount).replace("%amount%", amount)));
-        }
         item.setItemMeta(newMeta);
         return item;
     }
 
     private ItemStack newOrderNewEnchantments(ItemStack item) {
-
         Gson gson = new Gson();
 
         ItemMeta meta = item.getItemMeta();
@@ -237,6 +223,7 @@ public class ScrollListener implements Listener {
         for (CEnchantment i : newEnchantmentOrder) {
             enchantLore.add(ColorUtils.legacyTranslateColourCodes(i.getCustomName() + " " + NumberUtils.toRoman(data.getLevel(i.getName()))));
         }
+
         boolean hasWhiteScrollProtection = Scrolls.hasWhiteScrollProtection(container);
         boolean hasProtectionCrystalProtection = ProtectionCrystalSettings.isProtected(container);
 
@@ -267,6 +254,14 @@ public class ScrollListener implements Listener {
             }
         }
 
+        useSuffix(item, meta, newEnchantmentOrder);
+
+        meta.lore(newLore);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    private void useSuffix(ItemStack item, ItemMeta meta, List<CEnchantment> newEnchantmentOrder) {
         if (useSuffix) {
             String newName = meta.hasDisplayName() ? ColorUtils.toLegacy(meta.displayName()) :
                     "&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
@@ -286,10 +281,6 @@ public class ScrollListener implements Listener {
 
             meta.displayName(ColorUtils.legacyTranslateColourCodes(newName + suffix.replace("%Amount%", amount).replace("%amount%", amount)));
         }
-
-        meta.lore(newLore);
-        item.setItemMeta(meta);
-        return item;
     }
 
     private void orderInts(List<CEnchantment> list, final Map<CEnchantment, Integer> map) {

@@ -20,15 +20,15 @@ public class InfoGUIControl implements Listener {
     private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
 
     @EventHandler(ignoreCancelled = true)
-    public void infoClick(InventoryClickEvent e) {
-        if (e.getView().getTitle().equals(infoMenuManager.getInventoryName())) {
-            e.setCancelled(true);
+    public void infoClick(InventoryClickEvent event) {
+        if (event.getView().getTitle().equals(infoMenuManager.getInventoryName())) {
+            event.setCancelled(true);
 
-            if (e.getCurrentItem() != null) {
-                ItemStack item = e.getCurrentItem();
+            if (event.getCurrentItem() != null) {
+                ItemStack item = event.getCurrentItem();
 
                 if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
-                    Player player = (Player) e.getWhoClicked();
+                    Player player = (Player) event.getWhoClicked();
 
                     if (item.isSimilar(infoMenuManager.getBackLeftButton()) || item.isSimilar(infoMenuManager.getBackRightButton())) {
                         infoMenuManager.openInfoMenu(player);

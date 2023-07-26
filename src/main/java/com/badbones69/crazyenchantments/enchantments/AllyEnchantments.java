@@ -41,10 +41,10 @@ public class AllyEnchantments implements Listener {
     private final AllyManager allyManager = starter.getAllyManager();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onAllySpawn(EntityDamageByEntityEvent e) {
-        if (EventUtils.isIgnoredEvent(e)) return;
+    public void onAllySpawn(EntityDamageByEntityEvent event) {
+        if (EventUtils.isIgnoredEvent(event)) return;
 
-        if (e.getEntity() instanceof Player player && e.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
+        if (event.getEntity() instanceof Player player && event.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
             if (!inCoolDown(player)) {
                 for (ItemStack item : player.getEquipment().getArmorContents()) {
                     // Spawn allies when getting attacked.
@@ -65,10 +65,10 @@ public class AllyEnchantments implements Listener {
             }
         }
 
-        if (e.getEntity() instanceof LivingEntity enemy && e.getDamager() instanceof Player player) { // Player attacks
+        if (event.getEntity() instanceof LivingEntity enemy && event.getDamager() instanceof Player player) { // Player attacks
             // If the player is trying to hurt their own ally stop the damage.
             if (allyManager.isAlly(player, enemy)) {
-                e.setCancelled(true);
+                event.setCancelled(true);
                 return;
             }
 
@@ -146,8 +146,8 @@ public class AllyEnchantments implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerLeave(PlayerQuitEvent e) {
-        allyManager.forceRemoveAllies(e.getPlayer());
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        allyManager.forceRemoveAllies(event.getPlayer());
     }
 
     private void spawnAllies(Player player, LivingEntity enemy, AllyType allyType, int amount) {

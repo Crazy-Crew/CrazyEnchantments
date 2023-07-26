@@ -48,14 +48,14 @@ public class HoeEnchantments implements Listener {
     private final HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onInteract(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
 
-        if (e.getHand() != EquipmentSlot.HAND) return;
+        if (event.getHand() != EquipmentSlot.HAND) return;
 
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             ItemStack hoe = methods.getItemInHand(player);
-            Block block = e.getClickedBlock();
+            Block block = event.getClickedBlock();
             List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(hoe);
 
             // Crop is not fully grown.
@@ -94,9 +94,9 @@ public class HoeEnchantments implements Listener {
                 // Checking else to make sure the item does have Tiller.
                 if (player.getGameMode() != GameMode.CREATIVE && CEnchantments.PLANTER.isActivated() && enchantments.contains(CEnchantments.PLANTER.getEnchantment()) && !enchantments.contains(CEnchantments.TILLER.getEnchantment()) && plantSeedSuccess(hoe, block, player, hasGreenThumb)) methods.removeDurability(hoe, player);
             }
-        } else if (e.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated() && crazyManager.hasEnchantment(methods.getItemInHand(player), CEnchantments.HARVESTER)) {
+        } else if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated() && crazyManager.hasEnchantment(methods.getItemInHand(player), CEnchantments.HARVESTER)) {
             HashMap<Block, BlockFace> blockFace = new HashMap<>();
-            blockFace.put(e.getClickedBlock(), e.getBlockFace());
+            blockFace.put(event.getClickedBlock(), event.getBlockFace());
             blocks.put(player.getUniqueId(), blockFace);
         }
     }
