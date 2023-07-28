@@ -258,7 +258,7 @@ Settings:
     Enchant-Stacked-Items: false #Turn on if you wish for enchantment books to enchant stacked items.
     MaxRageLevel: 4 #The max amount of rage that scan stack when fighting.
     Break-Rage-On-Damage: true #If the player is damaged while building rage, it will be broken if this is enabled.
-    Rage-Boss-Bar: false; #If true, messages from rage will be displayed on a boss bar.
+    Rage-Boss-Bar: false #If true, messages from rage will be displayed on a boss bar.
     Right-Click-Book-Description: true #Toggles whether when you right-click the enchantment book if it messages the player the description or not.
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
