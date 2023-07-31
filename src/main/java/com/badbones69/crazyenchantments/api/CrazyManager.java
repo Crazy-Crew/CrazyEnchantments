@@ -78,6 +78,7 @@ public class CrazyManager {
     private boolean gkitzToggle;
     private boolean useUnsafeEnchantments;
     private boolean breakRageOnDamage;
+    private boolean useRageBossBar;
     private boolean enchantStackedItems;
     private boolean maxEnchantmentCheck;
     private boolean checkVanillaLimit;
@@ -144,6 +145,7 @@ public class CrazyManager {
         gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled");
         rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
         breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
+        useRageBossBar = config.contains("Settings.EnchantmentOptions.Rage-Boss-Bar") && config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar");
         enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
         setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
 
@@ -719,6 +721,13 @@ public class CrazyManager {
      */
     public boolean isBreakRageOnDamageOn() {
         return breakRageOnDamage;
+    }
+
+    /**
+     * @return True if a boss bar will be used to display rage notifications.
+     */
+    public boolean useRageBossBar() {
+        return useRageBossBar;
     }
 
     /**
