@@ -14,34 +14,22 @@ val paperType = if (isSnapshot) "Beta" else "Release"
 
 val desc = """    
 ## Changes:
-* Moved every single enchant/item over to using PDC for checks and to dictate if they are in fact one.
-* Moved some things over to using adventure api.
-* Removed the use of `Color:` and `BookColor:` as well as remove them from the default config.
-* Added support for using hex colour codes throughout the enchantment's names.
-* Roman numerals now go up to 3999.
-* Bump soft dependencies' versions.
-* Misc file cleanup.
-* Re-worked how transmog scrolls are used.
+* N/A
 
 ## Messages:
-* Added new `Player-Is-In-Creative-Mode` message with an option to disable using ''.
-* Updated default `Hit-Enchantment-Max` message.
+* N/A
 
 ## Commands:
-* `/ce updateenchants` -> Loops through the lore of old enchanted items and migrates it to the new system.
- * `crazyenchantments.updateenchants`
+* N/A
 
 ## API:
 * N/A
 
 ## Bugs Fixed:
-* Fixed other enchantments not working when the pickaxe has blast but you do not have permission to use blast.
-* Fixed error caused by a soft dependency of CrazyEnchantments not loading due to an error on their side which causes CE to also not load.
-* Fixed NPE that only appeared once adding Worldguard and Worldedit to the server.
-* Reduced the chance of errors that you can get from changing the lore on an item or removing all of the lore while it has an enchantment on it.
-* Fixed right-clicking a scroll in the air to get the usage.
+* Fixed telepathy setting an items lore, even when the item has no lore to be shown.
 
 **Submit any bugs via <https://github.com/Crazy-Crew/${rootProject.name}/issues>** (WOW IT'S EMPTY)
+**Submit any suggestions via <https://github.com/Crazy-Crew/${rootProject.name}/discussions>**
 
 """.trimIndent()
 
