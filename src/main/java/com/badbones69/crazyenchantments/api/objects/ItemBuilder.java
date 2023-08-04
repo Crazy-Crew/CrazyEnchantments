@@ -343,9 +343,10 @@ public class ItemBuilder {
 
             item.setAmount(itemAmount);
             ItemMeta itemMeta = item.getItemMeta();
+            List<Component> newLore = getUpdatedLore();
             assert itemMeta != null;
             if (!Objects.equals(getUpdatedName(), "")) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
-            itemMeta.lore(getUpdatedLore());
+            if (!newLore.isEmpty()) itemMeta.lore(newLore);
             if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
 
             if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
