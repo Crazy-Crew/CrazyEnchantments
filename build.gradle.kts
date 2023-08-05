@@ -34,9 +34,9 @@ tasks {
 
 val description = """
 
-## Fix:    
-* Fixed telepathy setting an items lore, even when the item has no lore to be shown.
-    
+## Fix:
+* Fixed tinkerer scaling not working properly for books.
+
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/discussions/categories/features)
  * [Bug Reports](https://github.com/Crazy-Crew/${rootProject.name}/issues)
