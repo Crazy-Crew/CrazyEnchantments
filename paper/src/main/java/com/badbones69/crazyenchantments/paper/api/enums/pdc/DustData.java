@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.enums.pdc;
+package com.badbones69.crazyenchantments.paper.api.enums.pdc;
 
 public class DustData {
 

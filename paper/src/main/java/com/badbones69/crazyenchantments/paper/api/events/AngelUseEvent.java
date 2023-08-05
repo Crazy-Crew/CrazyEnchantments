@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.events;
+package com.badbones69.crazyenchantments.paper.api.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

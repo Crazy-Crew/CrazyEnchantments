@@ -1,14 +1,14 @@
-package com.badbones69.crazyenchantments.controllers.settings;
+package com.badbones69.crazyenchantments.paper.controllers.settings;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.objects.BlockProcessInfo;
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.api.objects.TelepathyDrop;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.objects.BlockProcessInfo;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.objects.TelepathyDrop;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api;
+package com.badbones69.crazyenchantments.paper.api;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

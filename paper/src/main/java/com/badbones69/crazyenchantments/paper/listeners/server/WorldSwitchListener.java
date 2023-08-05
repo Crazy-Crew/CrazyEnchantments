@@ -1,8 +1,8 @@
-package com.badbones69.crazyenchantments.listeners.server;
+package com.badbones69.crazyenchantments.paper.listeners.server;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.FileManager;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

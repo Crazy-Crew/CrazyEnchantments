@@ -1,9 +1,9 @@
-package com.badbones69.crazyenchantments.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.economy.Currency;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.jline.utils.Log;

@@ -1,8 +1,8 @@
-package com.badbones69.crazyenchantments.api.managers;
+package com.badbones69.crazyenchantments.paper.api.managers;
 
-import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.objects.ArmorEnchantment;
-import com.badbones69.crazyenchantments.api.objects.PotionEffects;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.objects.ArmorEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.PotionEffects;
 import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
 import java.util.Arrays;

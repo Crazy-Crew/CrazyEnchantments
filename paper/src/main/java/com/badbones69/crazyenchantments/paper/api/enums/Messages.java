@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;

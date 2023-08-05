@@ -1,9 +1,9 @@
-package com.badbones69.crazyenchantments.api.objects;
+package com.badbones69.crazyenchantments.paper.api.objects;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.api.objects.gkitz.GKitz;
-import com.badbones69.crazyenchantments.api.objects.gkitz.GkitCoolDown;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
+import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;

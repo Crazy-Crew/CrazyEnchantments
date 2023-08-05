@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.support.claims;
+package com.badbones69.crazyenchantments.paper.api.support.claims;
 
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.ClaimSupport;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.ClaimSupport;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.ClaimPermission;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;

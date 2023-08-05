@@ -1,30 +1,30 @@
-package com.badbones69.crazyenchantments;
+package com.badbones69.crazyenchantments.paper;
 
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.FileManager;
-import com.badbones69.crazyenchantments.api.PluginSupport;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.api.SkullCreator;
-import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
-import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
-import com.badbones69.crazyenchantments.api.managers.AllyManager;
-import com.badbones69.crazyenchantments.api.managers.ArmorEnchantmentManager;
-import com.badbones69.crazyenchantments.api.managers.BlackSmithManager;
-import com.badbones69.crazyenchantments.api.managers.BowEnchantmentManager;
-import com.badbones69.crazyenchantments.api.managers.guis.InfoMenuManager;
-import com.badbones69.crazyenchantments.api.managers.ShopManager;
-import com.badbones69.crazyenchantments.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
-import com.badbones69.crazyenchantments.api.support.claims.SuperiorSkyBlockSupport;
-import com.badbones69.crazyenchantments.api.support.misc.OraxenSupport;
-import com.badbones69.crazyenchantments.controllers.EnchantmentControl;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
-import com.badbones69.crazyenchantments.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.listeners.ScramblerListener;
-import com.badbones69.crazyenchantments.listeners.ScrollListener;
-import com.badbones69.crazyenchantments.utilities.BowUtils;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.PluginSupport;
+import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.paper.api.SkullCreator;
+import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
+import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManager;
+import com.badbones69.crazyenchantments.paper.api.managers.BlackSmithManager;
+import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
+import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
+import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
+import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
+import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.paper.api.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.paper.api.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
+import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
+import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
 
 public class Starter {
 

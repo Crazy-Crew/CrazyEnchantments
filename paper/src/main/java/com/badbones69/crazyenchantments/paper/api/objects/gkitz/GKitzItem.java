@@ -1,9 +1,9 @@
-package com.badbones69.crazyenchantments.api.objects.gkitz;
+package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,9 +1,9 @@
-package com.badbones69.crazyenchantments.api.managers;
+package com.badbones69.crazyenchantments.paper.api.managers;
 
-import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.objects.AllyMob;
-import com.badbones69.crazyenchantments.api.objects.AllyMob.AllyType;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
+import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

@@ -1,13 +1,13 @@
-package com.badbones69.crazyenchantments.enchantments;
+package com.badbones69.crazyenchantments.paper.enchantments;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.api.support.anticheats.SpartanSupport;
-import com.badbones69.crazyenchantments.utilities.WingsUtils;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
+import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
+import com.badbones69.crazyenchantments.paper.utilities.WingsUtils;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.support.anticheats;
+package com.badbones69.crazyenchantments.paper.api.support.anticheats;
 
 import me.vagdedes.spartan.api.API;
 import me.vagdedes.spartan.system.Enums.HackType;

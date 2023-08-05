@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.utilities.misc;
+package com.badbones69.crazyenchantments.paper.utilities.misc;
 
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.Category;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.Category;
 
 public class EnchantUtils {
 

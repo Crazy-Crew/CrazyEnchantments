@@ -1,11 +1,11 @@
-package com.badbones69.crazyenchantments.api.support.misc.spawners;
+package com.badbones69.crazyenchantments.paper.api.support.misc.spawners;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.events.EnchantmentUseEvent;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import de.dustplanet.silkspawners.events.SilkSpawnersSpawnerBreakEvent;
 import de.dustplanet.util.SilkUtil;
 import org.bukkit.Material;

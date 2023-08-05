@@ -1,10 +1,10 @@
-package com.badbones69.crazyenchantments.api.objects;
+package com.badbones69.crazyenchantments.paper.api.objects;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.SkullCreator;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.SkullCreator;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

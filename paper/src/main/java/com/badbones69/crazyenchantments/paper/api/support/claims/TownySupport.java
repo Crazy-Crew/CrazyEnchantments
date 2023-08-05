@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.support.claims;
+package com.badbones69.crazyenchantments.paper.api.support.claims;
 
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.ClaimSupport;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.ClaimSupport;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Resident;

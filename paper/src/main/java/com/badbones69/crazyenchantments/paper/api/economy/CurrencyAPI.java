@@ -1,12 +1,12 @@
-package com.badbones69.crazyenchantments.api.economy;
+package com.badbones69.crazyenchantments.paper.api.economy;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.api.economy.vault.VaultSupport;
-import com.badbones69.crazyenchantments.api.enums.ShopOption;
-import com.badbones69.crazyenchantments.api.objects.Category;
-import com.badbones69.crazyenchantments.api.objects.LostBook;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
+import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
+import com.badbones69.crazyenchantments.paper.api.objects.Category;
+import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import org.bukkit.entity.Player;
 
 public class CurrencyAPI {

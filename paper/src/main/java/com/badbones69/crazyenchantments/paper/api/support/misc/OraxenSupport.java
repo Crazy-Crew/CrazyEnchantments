@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.support.misc;
+package com.badbones69.crazyenchantments.paper.api.support.misc;
 
 import io.th0rgal.oraxen.api.OraxenItems;
 import io.th0rgal.oraxen.mechanics.provided.gameplay.durability.DurabilityMechanic;

@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.events;
+package com.badbones69.crazyenchantments.paper.api.events;
 
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

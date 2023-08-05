@@ -1,13 +1,13 @@
-package com.badbones69.crazyenchantments.commands;
+package com.badbones69.crazyenchantments.paper.commands;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.enums.Dust;
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.Category;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.enums.Dust;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.Category;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;

@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.support.claims;
+package com.badbones69.crazyenchantments.paper.api.support.claims;
 
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.PlotSquaredVersion;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.PlotSquaredVersion;
 import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import org.bukkit.entity.Player;

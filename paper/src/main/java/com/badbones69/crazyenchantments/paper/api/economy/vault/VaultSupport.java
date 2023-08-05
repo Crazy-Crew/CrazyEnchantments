@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.economy.vault;
+package com.badbones69.crazyenchantments.paper.api.economy.vault;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 

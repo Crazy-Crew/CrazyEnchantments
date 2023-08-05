@@ -1,13 +1,13 @@
-package com.badbones69.crazyenchantments.controllers.settings;
+package com.badbones69.crazyenchantments.paper.controllers.settings;
 
-import com.badbones69.crazyenchantments.api.FileManager;
-import com.badbones69.crazyenchantments.api.economy.Currency;
-import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.api.enums.pdc.EnchantedBook;
-import com.badbones69.crazyenchantments.api.objects.*;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
-import com.badbones69.crazyenchantments.utilities.misc.EnchantUtils;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
+import com.badbones69.crazyenchantments.paper.api.objects.*;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;

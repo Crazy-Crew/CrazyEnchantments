@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.economy;
+package com.badbones69.crazyenchantments.paper.api.economy;
 
 public enum Currency {
     

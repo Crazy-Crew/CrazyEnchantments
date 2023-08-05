@@ -1,14 +1,14 @@
-package com.badbones69.crazyenchantments.api.objects;
+package com.badbones69.crazyenchantments.paper.api.objects;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.events.RegisteredCEnchantmentEvent;
-import com.badbones69.crazyenchantments.api.events.UnregisterCEnchantmentEvent;
-import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.events.RegisteredCEnchantmentEvent;
+import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentEvent;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;

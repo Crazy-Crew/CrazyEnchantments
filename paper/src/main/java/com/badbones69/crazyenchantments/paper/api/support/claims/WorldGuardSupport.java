@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.support.claims;
+package com.badbones69.crazyenchantments.paper.api.support.claims;
 
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.WorldGuardVersion;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;

@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.utilities;
+package com.badbones69.crazyenchantments.paper.utilities;
 
-import com.badbones69.crazyenchantments.api.support.claims.WorldGuardSupport;
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
+import com.badbones69.crazyenchantments.paper.api.support.claims.WorldGuardSupport;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.WorldGuardVersion;
 
 public class WorldGuardUtils {
 

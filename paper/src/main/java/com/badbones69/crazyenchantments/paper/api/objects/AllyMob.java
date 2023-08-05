@@ -1,8 +1,8 @@
-package com.badbones69.crazyenchantments.api.objects;
+package com.badbones69.crazyenchantments.paper.api.objects;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.api.enums.Messages;
-import com.badbones69.crazyenchantments.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Bee;

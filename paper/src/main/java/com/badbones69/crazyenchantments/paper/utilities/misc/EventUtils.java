@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.utilities.misc;
+package com.badbones69.crazyenchantments.paper.utilities.misc;
 
 import org.bukkit.event.Event;
 import java.util.ArrayList;

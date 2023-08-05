@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.support.factions;
+package com.badbones69.crazyenchantments.paper.api.support.factions;
 
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.ClaimSupport;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.ClaimSupport;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;

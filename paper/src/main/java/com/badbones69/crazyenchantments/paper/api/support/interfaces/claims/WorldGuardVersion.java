@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.support.interfaces.claims;
+package com.badbones69.crazyenchantments.paper.api.support.interfaces.claims;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

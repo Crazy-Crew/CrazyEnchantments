@@ -1,14 +1,14 @@
-package com.badbones69.crazyenchantments.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.FileManager;
-import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.google.gson.Gson;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;

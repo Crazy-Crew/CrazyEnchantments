@@ -1,7 +1,7 @@
-package com.badbones69.crazyenchantments.utilities.misc;
+package com.badbones69.crazyenchantments.paper.utilities.misc;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

@@ -1,14 +1,14 @@
-package com.badbones69.crazyenchantments.controllers;
+package com.badbones69.crazyenchantments.paper.controllers;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Methods;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.economy.Currency;
-import com.badbones69.crazyenchantments.api.economy.CurrencyAPI;
-import com.badbones69.crazyenchantments.api.enums.Messages;
-import com.badbones69.crazyenchantments.api.managers.BlackSmithManager;
-import com.badbones69.crazyenchantments.api.objects.BlackSmithResult;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.managers.BlackSmithManager;
+import com.badbones69.crazyenchantments.paper.api.objects.BlackSmithResult;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;

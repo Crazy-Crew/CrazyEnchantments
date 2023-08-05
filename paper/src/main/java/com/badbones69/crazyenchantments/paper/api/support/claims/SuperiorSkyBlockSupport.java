@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.api.support.claims;
+package com.badbones69.crazyenchantments.paper.api.support.claims;
 
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;

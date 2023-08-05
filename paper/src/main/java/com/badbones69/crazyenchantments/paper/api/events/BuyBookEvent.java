@@ -1,8 +1,8 @@
-package com.badbones69.crazyenchantments.api.events;
+package com.badbones69.crazyenchantments.paper.api.events;
 
-import com.badbones69.crazyenchantments.api.economy.Currency;
-import com.badbones69.crazyenchantments.api.objects.CEBook;
-import com.badbones69.crazyenchantments.api.objects.CEPlayer;
+import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
+import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 

@@ -1,10 +1,10 @@
-package com.badbones69.crazyenchantments.api.enums;
+package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.NamespacedKey;

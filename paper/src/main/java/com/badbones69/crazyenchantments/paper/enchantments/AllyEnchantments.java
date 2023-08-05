@@ -1,15 +1,15 @@
-package com.badbones69.crazyenchantments.enchantments;
+package com.badbones69.crazyenchantments.paper.enchantments;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.managers.AllyManager;
-import com.badbones69.crazyenchantments.api.objects.AllyMob;
-import com.badbones69.crazyenchantments.api.objects.AllyMob.AllyType;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentSettings;
-import com.badbones69.crazyenchantments.utilities.misc.EventUtils;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
+import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

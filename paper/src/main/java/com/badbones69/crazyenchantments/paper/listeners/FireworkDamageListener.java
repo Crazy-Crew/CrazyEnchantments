@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.listeners;
+package com.badbones69.crazyenchantments.paper.listeners;
 
-import com.badbones69.crazyenchantments.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;

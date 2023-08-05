@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.objects;
+package com.badbones69.crazyenchantments.paper.api.objects;
 
-import com.badbones69.crazyenchantments.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import java.util.Collections;
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.api.enums.pdc;
+package com.badbones69.crazyenchantments.paper.api.enums.pdc;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.NamespacedKey;
 
 public enum DataKeys {

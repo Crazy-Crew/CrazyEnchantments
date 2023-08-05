@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.utilities.misc;
+package com.badbones69.crazyenchantments.paper.utilities.misc;
 
-import com.badbones69.crazyenchantments.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextDecoration;

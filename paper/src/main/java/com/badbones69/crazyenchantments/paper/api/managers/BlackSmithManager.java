@@ -1,9 +1,9 @@
-package com.badbones69.crazyenchantments.api.managers;
+package com.badbones69.crazyenchantments.paper.api.managers;
 
-import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.economy.Currency;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;

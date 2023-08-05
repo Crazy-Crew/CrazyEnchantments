@@ -1,12 +1,12 @@
-package com.badbones69.crazyenchantments.api.managers.guis;
+package com.badbones69.crazyenchantments.paper.api.managers.guis;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.api.FileManager.Files;
-import com.badbones69.crazyenchantments.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

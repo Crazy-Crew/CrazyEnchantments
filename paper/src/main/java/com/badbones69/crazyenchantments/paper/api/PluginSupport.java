@@ -1,13 +1,13 @@
-package com.badbones69.crazyenchantments.api;
+package com.badbones69.crazyenchantments.paper.api;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.support.claims.GriefPreventionSupport;
-import com.badbones69.crazyenchantments.api.support.claims.TownySupport;
-import com.badbones69.crazyenchantments.api.support.factions.FactionsUUIDSupport;
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.ClaimSupport;
-import com.badbones69.crazyenchantments.utilities.WorldGuardUtils;
-import com.badbones69.crazyenchantments.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.support.claims.GriefPreventionSupport;
+import com.badbones69.crazyenchantments.paper.api.support.claims.TownySupport;
+import com.badbones69.crazyenchantments.paper.api.support.factions.FactionsUUIDSupport;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.ClaimSupport;
+import com.badbones69.crazyenchantments.paper.utilities.WorldGuardUtils;
+import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.google.common.collect.Maps;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

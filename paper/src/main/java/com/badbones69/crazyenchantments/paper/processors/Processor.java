@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.processors;
+package com.badbones69.crazyenchantments.paper.processors;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

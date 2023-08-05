@@ -1,13 +1,13 @@
-package com.badbones69.crazyenchantments.utilities;
+package com.badbones69.crazyenchantments.paper.utilities;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
-import com.badbones69.crazyenchantments.Starter;
-import com.badbones69.crazyenchantments.api.CrazyManager;
-import com.badbones69.crazyenchantments.api.PluginSupport;
-import com.badbones69.crazyenchantments.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.api.support.interfaces.claims.WorldGuardVersion;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.PluginSupport;
+import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
+import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.WorldGuardVersion;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;

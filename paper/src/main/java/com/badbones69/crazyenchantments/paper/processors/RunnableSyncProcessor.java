@@ -1,6 +1,6 @@
-package com.badbones69.crazyenchantments.processors;
+package com.badbones69.crazyenchantments.paper.processors;
 
-import com.badbones69.crazyenchantments.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 
 public class RunnableSyncProcessor extends Processor<Runnable> {
 
