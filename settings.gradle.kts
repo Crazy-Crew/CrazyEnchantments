@@ -11,9 +11,9 @@ pluginManagement {
 
         maven("https://repo.crazycrew.us/first-party/")
         maven("https://repo.crazycrew.us/third-party/")
-
-        maven("https://maven.fabricmc.net/")
     }
 }
 
 rootProject.name = "CrazyEnchantments"
+
+include("paper")

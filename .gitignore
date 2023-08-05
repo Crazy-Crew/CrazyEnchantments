@@ -1,18 +1,10 @@
 .gradle
 .idea
 
-core/.gradle
-core/build
-
-fabric/.gradle
-fabric/build
-
-paper/.gradle
-paper/build
-
 build
 
 buildSrc/build
 buildSrc/.gradle
 
-jars
+paper/build
+paper/.gradle

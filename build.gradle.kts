@@ -1,82 +1,70 @@
 plugins {
-    id("paper-plugin")
+    id("root-plugin")
 
-    //id("publish-task")
+    id("com.modrinth.minotaur") version "2.8.2"
 }
 
-dependencies {
-    implementation("de.tr7zw", "item-nbt-api", "2.11.3")
+defaultTasks("build")
 
-    implementation("org.bstats", "bstats-bukkit", "3.0.2")
+rootProject.group = "com.badbones69.crazyenchantments"
+rootProject.description = "Adds over 80 unique enchantments to your server and more!"
+rootProject.version = "2.0.1"
 
-    compileOnly("com.plotsquared", "PlotSquared-Core", "6.11.1")
-
-    compileOnly("com.intellectualsites.informative-annotations", "informative-annotations", "1.3")
-
-    compileOnly("com.intellectualsites.paster", "Paster", "1.1.5")
-
-    compileOnly("com.bgsoftware", "SuperiorSkyblockAPI", "2023.1")
-
-    compileOnly("de.dustplanet", "silkspawners", "7.5.0") {
-        exclude("*", "*")
+val combine = tasks.register<Jar>("combine") {
+    mustRunAfter("build")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    val jarFiles = subprojects.flatMap { subproject ->
+        files(subproject.layout.buildDirectory.file("libs/${rootProject.name}-${subproject.name}-${subproject.version}.jar").get())
+    }.filter { it.name != "MANIFEST.MF" }.map { file ->
+        if (file.isDirectory) file else zipTree(file)
     }
 
-    compileOnly("com.massivecraft", "Factions", "1.6.9.5-U0.6.31") {
-        exclude("org.kitteh")
-        exclude("org.spongepowered")
-        exclude("com.darkblade12")
-    }
-
-    compileOnly("com.palmergames.bukkit.towny", "towny", "0.99.0.0")
-
-    compileOnly("fr.neatmonster", "nocheatplus", "3.16.1-SNAPSHOT")
-
-    compileOnly("me.vagdedes", "spartanapi", "9.1")
-
-    compileOnly("com.bgsoftware", "WildStackerAPI", "2023.1")
-
-    compileOnly("io.th0rgal", "oraxen", "1.156.3")
-
-    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.15")
-
-    compileOnly("com.github.TechFortress", "GriefPrevention", "16.18.1")
-
-    compileOnly("com.sk89q.worldguard", "worldguard-bukkit", "7.1.0-SNAPSHOT")
-
-    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7.1") {
-        exclude("org.bukkit", "bukkit")
-    }
-
-    compileOnly("me.clip", "placeholderapi", "2.11.3")
+    from(jarFiles)
 }
 
 tasks {
-    shadowJar {
-        listOf(
-            "de.tr7zw.changeme.nbtapi",
-            "org.bstats"
-        ).forEach {
-            relocate(it, "libs.$it")
+    assemble {
+        subprojects.forEach { project ->
+            dependsOn(":${project.name}:build")
         }
+
+        finalizedBy(combine)
     }
+}
 
-    reobfJar {
-        val file = File("$rootDir/jars")
+val description = """
 
-        if (!file.exists()) file.mkdirs()
+## Fix:    
+* Fixed telepathy setting an items lore, even when the item has no lore to be shown.
+    
+## Other:
+ * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/discussions/categories/features)
+ * [Bug Reports](https://github.com/Crazy-Crew/${rootProject.name}/issues)
+""".trimIndent()
 
-        outputJar.set(layout.buildDirectory.file("$file/${rootProject.name}-${rootProject.version}.jar"))
-    }
+val versions = listOf(
+    "1.20",
+    "1.20.1"
+)
 
-    processResources {
-        filesMatching("plugin.yml") {
-            expand(
-                "name" to rootProject.name,
-                "group" to rootProject.group,
-                "version" to rootProject.version,
-                "description" to rootProject.description,
-                "website" to "https://modrinth.com/plugin/${rootProject.name.lowercase()}"
-            )
-        }
-    }
+val isSnapshot = rootProject.version.toString().contains("snapshot")
+val type = if (isSnapshot) "beta" else "release"
+
+modrinth {
+    autoAddDependsOn.set(false)
+
+    token.set(System.getenv("MODRINTH_TOKEN"))
+
+    projectId.set(rootProject.name.lowercase())
+
+    versionName.set("${rootProject.name} ${rootProject.version}")
+    versionNumber.set("${rootProject.version}")
+
+    uploadFile.set(combine.get())
+
+    gameVersions.addAll(versions)
+
+    changelog.set(description)
+
+    loaders.addAll("paper", "purpur")
 }
