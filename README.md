@@ -68,9 +68,9 @@ A list of things necessary to make sure you can build CrazyEnchantments properly
    git clone https://github.com/Crazy-Crew/CrazyEnchantments.git
    ```
 2. Open the repository using Intellij IDEA & wait until it finishes downloading/indexing.
-3. Run the build task.
+3. Run the assemble task.
    ```gradle
-   ./gradlew build
+   ./gradlew assemble
    ```
 
 ## Roadmap
