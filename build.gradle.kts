@@ -8,7 +8,7 @@ defaultTasks("build")
 
 rootProject.group = "com.badbones69.crazyenchantments"
 rootProject.description = "Adds over 80 unique enchantments to your server and more!"
-rootProject.version = "2.0.1"
+rootProject.version = "2.0.2"
 
 val combine = tasks.register<Jar>("combine") {
     mustRunAfter("build")
@@ -34,9 +34,9 @@ tasks {
 
 val description = """
 
-## Fix:    
-* Fixed telepathy setting an items lore, even when the item has no lore to be shown.
-    
+## Fix:
+* Fixed tinkerer scaling not working properly for books.
+
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/discussions/categories/features)
  * [Bug Reports](https://github.com/Crazy-Crew/${rootProject.name}/issues)
