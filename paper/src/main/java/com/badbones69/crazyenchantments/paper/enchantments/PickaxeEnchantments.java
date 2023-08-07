@@ -207,13 +207,9 @@ public class PickaxeEnchantments implements Listener {
 
                 if (item.getKey().getType().equals(Material.SPAWNER)) continue; // Removes the handling of spawners by this plugin.
 
-                if (methods.isInventoryFull(player)) {
-                    try {
-                        player.getWorld().dropItem(player.getLocation(), item.getKey());
-                    } catch (IllegalArgumentException ignore) {}
-                } else {
-                    player.getInventory().addItem(item.getKey());
-                }
+                HashMap<Integer, ItemStack> rewardsToDrop = player.getInventory().addItem(item.getKey());
+
+                if (!rewardsToDrop.isEmpty()) rewardsToDrop.forEach((index, reward) -> player.getWorld().dropItemNaturally(player.getLocation(), reward));
             }
 
             if (player.getGameMode() != GameMode.CREATIVE && xp > 0) {
@@ -346,13 +342,10 @@ public class PickaxeEnchantments implements Listener {
 
             if (item.getKey().getType().equals(Material.SPAWNER)) continue; // Removes the handling of spawners by this plugin.
 
-            if (methods.isInventoryFull(player)) {
-                try {
-                    player.getWorld().dropItem(player.getLocation(), item.getKey());
-                } catch (IllegalArgumentException ignore) {}
-            } else {
-                player.getInventory().addItem(item.getKey());
-            }
+            HashMap<Integer, ItemStack> rewardsToDrop = player.getInventory().addItem(item.getKey());
+
+            if (!rewardsToDrop.isEmpty()) rewardsToDrop.forEach((index, reward) -> player.getWorld().dropItemNaturally(player.getLocation(), reward));
+
         }
 
         if (player.getGameMode() != GameMode.CREATIVE && xp > 0) {
