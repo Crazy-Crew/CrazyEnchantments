@@ -1709,6 +1709,24 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
   #Do not change this line.
+  VeinMiner:
+    Enabled: true
+    Name: 'VeinMiner'
+    MaxPower: 6
+    Enchantment-Type: 'PickAxe'
+    Info:
+      Name: '&e&lVeinminer &7(&bI-VI&7)'
+      Description:
+        - '&7Breaks connected ore blocks.'
+        - '&7The higher the level, the more'
+        - 'connected blocks it can break.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aPickaxes'
+    Categories:
+      - 'Legendary'
+  #Do not change this line.
   Blast:
     Enabled: true
     Name: 'Blast'

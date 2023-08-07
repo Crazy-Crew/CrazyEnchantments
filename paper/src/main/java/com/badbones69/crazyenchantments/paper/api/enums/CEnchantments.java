@@ -114,6 +114,7 @@ public enum CEnchantments {
     BATTLECRY("BattleCry", "Axe", 10, 5),
     DEMONFORGED("DemonForged", "Axe", 10, 5),
     //	----------------PickAxes----------------  \\
+    VEINMINER("VeinMiner", "Pickaxe"),
     BLAST("Blast", "Pickaxe"),
     AUTOSMELT("AutoSmelt", "Pickaxe", 25, 25),
     EXPERIENCE("Experience", "Pickaxe", 25, 25),
