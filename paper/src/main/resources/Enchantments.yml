@@ -1544,10 +1544,10 @@ Enchantments:
         - '&7you will gain a speed boost.'
         - ''
         - '&6Found in:'
-        - '&7 - &a&l&nCommon'
-        - '&7 - &9&l&nRare'
-        - '&7 - &4&l&nLegendary'
+        - '&7 - &5&l&nMythical'
         - '&6Enchantable Items: &aBoots'
+    Categories:
+      - 'Mythical'
   #Do not change this line.
   Angel:
     Enabled: true
@@ -1715,13 +1715,13 @@ Enchantments:
       Description:
         - '&7Breaks connected ore blocks.'
         - '&7The higher the level, the more'
-        - 'connected blocks it can break.'
+        - '&7connected blocks it can break.'
         - ''
         - '&6Found in:'
-        - '&7 - &4&l&nLegendary'
+        - '&7 - &5&l&nMythical'
         - '&6Enchantable Items: &aPickaxes'
     Categories:
-      - 'Legendary'
+      - 'Mythical'
   #Do not change this line.
   Blast:
     Enabled: true
@@ -2011,14 +2011,10 @@ Enchantments:
         - '&7an attack.'
         - ''
         - '&6Found in:'
-        - '&7 - &a&l&nCommon'
-        - '&7 - &9&l&nRare'
-        - '&7 - &4&l&nLegendary'
+        - '&7 - &5&l&nMythical'
         - '&6Enchantable Items: &aArmor'
     Categories:
-      - 'Common'
-      - 'Rare'
-      - 'Legendary'
+      - 'Mythical'
   #Do not change this line.
   Crouch:
     Enabled: true
@@ -2036,10 +2032,10 @@ Enchantments:
         - '&7damage while crouched.'
         - ''
         - '&6Found in:'
-        - '&7 - &4&l&nLegendary'
-        - '&6Enchantable Items: &aAxe'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aArmor'
     Categories:
-      - 'Legendary'
+      - 'Mythical'
   #Do not change this line.
   Shockwave:
     Enabled: true
@@ -2054,14 +2050,10 @@ Enchantments:
         - '&7attack you.'
         - ''
         - '&6Found in:'
-        - '&7 - &a&l&nCommon'
-        - '&7 - &9&l&nRare'
-        - '&7 - &4&l&nLegendary'
+        - '&7 - &5&l&nMythical'
         - '&6Enchantable Items: &aArmor'
     Categories:
-      - 'Common'
-      - 'Rare'
-      - 'Legendary'
+      - 'Mythical'
   #Do not change this line.
   SystemReboot:
     Enabled: true
@@ -2076,14 +2068,10 @@ Enchantments:
         - '&7attacked at low hp.'
         - ''
         - '&6Found in:'
-        - '&7 - &a&l&nCommon'
-        - '&7 - &9&l&nRare'
-        - '&7 - &4&l&nLegendary'
+        - '&7 - &5&l&nMythical'
         - '&6Enchantable Items: &aArmor'
     Categories:
-      - 'Common'
-      - 'Rare'
-      - 'Legendary'
+      - 'Mythical'
   #Do not change this line.
   Sticky-Shot:
     Enabled: true
@@ -2200,10 +2188,10 @@ Enchantments:
         - '&7more durability damage.'
         - ''
         - '&6Found in:'
-        - '&7 - &4&l&nLegendary'
+        - '&7 - &5&l&nMythical'
         - '&6Enchantable Items: &aAxe'
     Categories:
-      - 'Legendary'
+      - 'Mythical'
   #Do not change this line.
   Famished:
     Enabled: true
