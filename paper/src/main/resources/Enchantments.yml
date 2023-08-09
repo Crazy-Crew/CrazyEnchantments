@@ -23,8 +23,6 @@ Enchantments:
     Enabled: true
     #The in-game name of the enchantment.
     Name: 'Glowing'
-    #The color of the enchantment on the item.
-    #The color of the enchantment on the book.
     #Max lvl the enchantment goes up to.
     MaxPower: 1
     #The type of items that can be enchanted with the enchantment.
@@ -1534,8 +1532,6 @@ Enchantments:
   Adrenaline:
     Enabled: true
     Name: 'Adrenaline'
-    Color: '&7'
-    BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Boots'
     Chance-System:
@@ -2006,8 +2002,6 @@ Enchantments:
   Maneuver:
     Enabled: true
     Name: 'Maneuver'
-    Color: '&7'
-    BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -2029,8 +2023,6 @@ Enchantments:
   Crouch:
     Enabled: true
     Name: 'Crouch'
-    Color: '&7'
-    BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -2052,8 +2044,6 @@ Enchantments:
   Shockwave:
     Enabled: true
     Name: 'Shockwave'
-    Color: '&7'
-    BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -2076,8 +2066,6 @@ Enchantments:
   SystemReboot:
     Enabled: true
     Name: 'SystemReboot'
-    Color: '&7'
-    BookColor: '&b&l'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -2199,8 +2187,6 @@ Enchantments:
   DemonForged:
     Enabled: true
     Name: 'DemonForged'
-    Color: '&7'
-    BookColor: '&b&l'
     MaxPower: 5
     Enchantment-Type: 'Axe'
     Chance-System:
