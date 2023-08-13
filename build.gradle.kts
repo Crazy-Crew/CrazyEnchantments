@@ -33,6 +33,7 @@ tasks {
 }
 
 val description = """
+## You need to regenerate the config files or add new enchantments to Enchantments.yml and Tinker.yml for them to work.
 
 ## New Enchantments:
 |Enchant | Type | Description|
