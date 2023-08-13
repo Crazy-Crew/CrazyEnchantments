@@ -22,6 +22,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -125,6 +126,18 @@ public class AxeEnchantments implements Listener {
                     if (!pluginSupport.isFriendly(damager, nearbyEntity)) nearbyEntity.setVelocity(nearbyEntity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
                 }
             }
+        }
+        if (CEnchantments.DEMONFORGED.isActivated() && enchantments.contains(CEnchantments.DEMONFORGED.getEnchantment()) && CEnchantments.DEMONFORGED.chanceSuccessful(item) && entity instanceof Player player) {
+
+            ItemStack armorItem = switch (methods.percentPick(4, 0)) {
+                case 1 -> player.getEquipment().getHelmet();
+                case 2 -> player.getEquipment().getChestplate();
+                case 3 -> player.getEquipment().getLeggings();
+                default -> player.getEquipment().getBoots();
+            };
+
+            methods.removeDurability(armorItem, player);
+
         }
     }
 

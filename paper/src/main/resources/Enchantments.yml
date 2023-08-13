@@ -23,8 +23,6 @@ Enchantments:
     Enabled: true
     #The in-game name of the enchantment.
     Name: 'Glowing'
-    #The color of the enchantment on the item.
-    #The color of the enchantment on the book.
     #Max lvl the enchantment goes up to.
     MaxPower: 1
     #The type of items that can be enchanted with the enchantment.
@@ -51,7 +49,7 @@ Enchantments:
   #Do not change this line.
   BurnShield:
     Enabled: true
-    Name: 'BurnShield'
+    Name: '&7BurnShield'
     MaxPower: 1
     Enchantment-Type: 'Armor'
     Info:
@@ -72,7 +70,7 @@ Enchantments:
   #Do not change this line.
   Piercing:
     Enabled: true
-    Name: 'Piercing'
+    Name: '&7Piercing'
     MaxPower: 3
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -96,7 +94,7 @@ Enchantments:
   #Do not change this line.
   OverLoad:
     Enabled: true
-    Name: 'OverLoad'
+    Name: '&7OverLoad'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Info:
@@ -117,7 +115,7 @@ Enchantments:
   #Do not change this line.
   SelfDestruct:
     Enabled: true
-    Name: 'SelfDestruct'
+    Name: '&7SelfDestruct'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Info:
@@ -138,7 +136,7 @@ Enchantments:
   #Do not change this line.
   Springs:
     Enabled: true
-    Name: 'Springs'
+    Name: '&7Springs'
     MaxPower: 5
     Enchantment-Type: 'Boots'
     Info:
@@ -159,7 +157,7 @@ Enchantments:
   #Do not change this line.
   Gears:
     Enabled: true
-    Name: 'Gears'
+    Name: '&7Gears'
     MaxPower: 3
     Enchantment-Type: 'Boots'
     Info:
@@ -180,7 +178,7 @@ Enchantments:
   #Do not change this line.
   Hulk:
     Enabled: true
-    Name: 'Hulk'
+    Name: '&7Hulk'
     MaxPower: 2
     Enchantment-Type: 'Armor'
     Info:
@@ -201,7 +199,7 @@ Enchantments:
   #Do not change this line.
   Mermaid:
     Enabled: true
-    Name: 'Mermaid'
+    Name: '&7Mermaid'
     MaxPower: 3
     Enchantment-Type: 'Helmet'
     Info:
@@ -222,7 +220,7 @@ Enchantments:
   #Do not change this line.
   Ninja:
     Enabled: true
-    Name: 'Ninja'
+    Name: '&7Ninja'
     MaxPower: 2
     Enchantment-Type: 'Armor'
     Info:
@@ -243,7 +241,7 @@ Enchantments:
   #Do not change this line.
   Vampire:
     Enabled: true
-    Name: 'Vampire'
+    Name: '&7Vampire'
     MaxPower: 5
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -267,7 +265,7 @@ Enchantments:
   #Do not change this line.
   LifeSteal:
     Enabled: true
-    Name: 'LifeSteal'
+    Name: '&7LifeSteal'
     MaxPower: 5
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -291,7 +289,7 @@ Enchantments:
   #Do not change this line.
   Doctor:
     Enabled: true
-    Name: 'Doctor'
+    Name: '&7Doctor'
     MaxPower: 3
     Enchantment-Type: 'Bow'
     Info:
@@ -312,7 +310,7 @@ Enchantments:
   #Do not change this line.
   Boom:
     Enabled: true
-    Name: 'Boom'
+    Name: '&7Boom'
     MaxPower: 3
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -336,7 +334,7 @@ Enchantments:
   #Do not change this line.
   Venom:
     Enabled: true
-    Name: 'Venom'
+    Name: '&7Venom'
     MaxPower: 5
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -360,7 +358,7 @@ Enchantments:
   #Do not change this line.
   DoubleDamage:
     Enabled: true
-    Name: 'DoubleDamage'
+    Name: '&7DoubleDamage'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -384,7 +382,7 @@ Enchantments:
   #Do not change this line.
   SlowMo:
     Enabled: true
-    Name: 'SlowMo'
+    Name: '&7SlowMo'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -408,7 +406,7 @@ Enchantments:
   #Do not change this line.
   Blindness:
     Enabled: true
-    Name: 'Blindness'
+    Name: '&7Blindness'
     MaxPower: 2
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -432,7 +430,7 @@ Enchantments:
   #Do not change this line.
   Viper:
     Enabled: true
-    Name: 'Viper'
+    Name: '&7Viper'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -456,7 +454,7 @@ Enchantments:
   #Do not change this line.
   AntiGravity:
     Enabled: true
-    Name: 'AntiGravity'
+    Name: '&7AntiGravity'
     MaxPower: 3
     Enchantment-Type: 'Boots'
     Info:
@@ -477,7 +475,7 @@ Enchantments:
   #Do not change this line.
   FastTurn:
     Enabled: true
-    Name: 'FastTurn'
+    Name: '&7FastTurn'
     MaxPower: 2
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -501,7 +499,7 @@ Enchantments:
   #Do not change this line.
   LightWeight:
     Enabled: true
-    Name: 'LightWeight'
+    Name: '&7LightWeight'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -525,7 +523,7 @@ Enchantments:
   #Do not change this line.
   Blessed:
     Enabled: true
-    Name: 'Blessed'
+    Name: '&7Blessed'
     MaxPower: 3
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -549,7 +547,7 @@ Enchantments:
   #Do not change this line.
   FeedMe:
     Enabled: true
-    Name: 'FeedMe'
+    Name: '&7FeedMe'
     MaxPower: 5
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -573,7 +571,7 @@ Enchantments:
   #Do not change this line.
   Dizzy:
     Enabled: true
-    Name: 'Dizzy'
+    Name: '&7Dizzy'
     MaxPower: 3
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -597,7 +595,7 @@ Enchantments:
   #Do not change this line.
   Berserk:
     Enabled: true
-    Name: 'Berserk'
+    Name: '&7Berserk'
     MaxPower: 3
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -621,7 +619,7 @@ Enchantments:
   #Do not change this line.
   Cursed:
     Enabled: true
-    Name: 'Cursed'
+    Name: '&7Cursed'
     MaxPower: 3
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -645,7 +643,7 @@ Enchantments:
   #Do not change this line.
   Rekt:
     Enabled: true
-    Name: 'Rekt'
+    Name: '&7Rekt'
     MaxPower: 3
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -669,7 +667,7 @@ Enchantments:
   #Do not change this line.
   Enlightened:
     Enabled: true
-    Name: 'Enlightened'
+    Name: '&7Enlightened'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -693,7 +691,7 @@ Enchantments:
   #Do not change this line.
   Freeze:
     Enabled: true
-    Name: 'Freeze'
+    Name: '&7Freeze'
     MaxPower: 2
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -717,7 +715,7 @@ Enchantments:
   #Do not change this line.
   Fortify:
     Enabled: true
-    Name: 'Fortify'
+    Name: '&7Fortify'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -741,7 +739,7 @@ Enchantments:
   #Do not change this line.
   Molten:
     Enabled: true
-    Name: 'Molten'
+    Name: '&7Molten'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -765,7 +763,7 @@ Enchantments:
   #Do not change this line.
   PainGiver:
     Enabled: true
-    Name: 'PainGiver'
+    Name: '&7PainGiver'
     MaxPower: 4
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -789,7 +787,7 @@ Enchantments:
   #Do not change this line.
   Savior:
     Enabled: true
-    Name: 'Savior'
+    Name: '&7Savior'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -813,7 +811,7 @@ Enchantments:
   #Do not change this line.
   Nursery:
     Enabled: true
-    Name: 'Nursery'
+    Name: '&7Nursery'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -837,7 +835,7 @@ Enchantments:
   #Do not change this line.
   AutoSmelt:
     Enabled: true
-    Name: 'AutoSmelt'
+    Name: '&7AutoSmelt'
     MaxPower: 5
     Enchantment-Type: 'PickAxe'
     Chance-System:
@@ -861,7 +859,7 @@ Enchantments:
   #Do not change this line.
   Experience:
     Enabled: true
-    Name: 'Experience'
+    Name: '&7Experience'
     MaxPower: 3
     Enchantment-Type: 'PickAxe'
     Chance-System:
@@ -885,7 +883,7 @@ Enchantments:
   #Do not change this line.
   Telepathy:
     Enabled: true
-    Name: 'Telepathy'
+    Name: '&7Telepathy'
     MaxPower: 1
     Enchantment-Type: 'Tool'
     Info:
@@ -906,7 +904,7 @@ Enchantments:
   #Do not change this line.
   Haste:
     Enabled: true
-    Name: 'Haste'
+    Name: '&7Haste'
     MaxPower: 3
     Enchantment-Type: 'Tool'
     Info:
@@ -927,7 +925,7 @@ Enchantments:
   #Do not change this line.
   Oxygenate:
     Enabled: true
-    Name: 'Oxygenate'
+    Name: '&7Oxygenate'
     MaxPower: 1
     Enchantment-Type: 'Tool'
     Info:
@@ -948,7 +946,7 @@ Enchantments:
   #Do not change this line.
   IceFreeze:
     Enabled: true
-    Name: 'IceFreeze'
+    Name: '&7IceFreeze'
     MaxPower: 1
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -972,7 +970,7 @@ Enchantments:
   #Do not change this line.
   Lightning:
     Enabled: true
-    Name: 'Lightning'
+    Name: '&7Lightning'
     MaxPower: 1
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -996,7 +994,7 @@ Enchantments:
   #Do not change this line.
   Decapitation:
     Enabled: true
-    Name: 'Decapitation'
+    Name: '&7Decapitation'
     MaxPower: 5
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -1020,7 +1018,7 @@ Enchantments:
   #Do not change this line.
   Confusion:
     Enabled: true
-    Name: 'Confusion'
+    Name: '&7Confusion'
     MaxPower: 4
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1044,7 +1042,7 @@ Enchantments:
   #Do not change this line.
   Disarmer:
     Enabled: true
-    Name: 'Disarmer'
+    Name: '&7Disarmer'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1068,7 +1066,7 @@ Enchantments:
   #Do not change this line.
   Execute:
     Enabled: true
-    Name: 'Execute'
+    Name: '&7Execute'
     MaxPower: 5
     Enchantment-Type: 'Sword'
     Info:
@@ -1089,7 +1087,7 @@ Enchantments:
   #Do not change this line.
   Headless:
     Enabled: true
-    Name: 'Headless'
+    Name: '&7Headless'
     MaxPower: 5
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1113,7 +1111,7 @@ Enchantments:
   #Do not change this line.
   Inquisitive:
     Enabled: true
-    Name: 'Inquisitive'
+    Name: '&7Inquisitive'
     MaxPower: 5
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1137,7 +1135,7 @@ Enchantments:
   #Do not change this line.
   Insomnia:
     Enabled: true
-    Name: 'Insomnia'
+    Name: '&7Insomnia'
     MaxPower: 1
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -1161,7 +1159,7 @@ Enchantments:
   #Do not change this line.
   Nutrition:
     Enabled: true
-    Name: 'Nutrition'
+    Name: '&7Nutrition'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1185,7 +1183,7 @@ Enchantments:
   #Do not change this line.
   Obliterate:
     Enabled: true
-    Name: 'Obliterate'
+    Name: '&7Obliterate'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1209,7 +1207,7 @@ Enchantments:
   #Do not change this line.
   Paralyze:
     Enabled: true
-    Name: 'Paralyze'
+    Name: '&7Paralyze'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1233,7 +1231,7 @@ Enchantments:
   #Do not change this line.
   SkillSwipe:
     Enabled: true
-    Name: 'SkillSwipe'
+    Name: '&7SkillSwipe'
     MaxPower: 5
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1257,7 +1255,7 @@ Enchantments:
   #Do not change this line.
   Snare:
     Enabled: true
-    Name: 'Snare'
+    Name: '&7Snare'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1281,7 +1279,7 @@ Enchantments:
   #Do not change this line.
   Trap:
     Enabled: true
-    Name: 'Trap'
+    Name: '&7Trap'
     MaxPower: 2
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1305,7 +1303,7 @@ Enchantments:
   #Do not change this line.
   Wither:
     Enabled: true
-    Name: 'Wither'
+    Name: '&7Wither'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -1329,7 +1327,7 @@ Enchantments:
   #Do not change this line.
   Rage:
     Enabled: true
-    Name: 'Rage'
+    Name: '&7Rage'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Info:
@@ -1350,7 +1348,7 @@ Enchantments:
   #Do not change this line.
   Valor:
     Enabled: true
-    Name: 'Valor'
+    Name: '&7Valor'
     MaxPower: 2
     Enchantment-Type: 'Armor'
     Info:
@@ -1371,7 +1369,7 @@ Enchantments:
   #Do not change this line.
   SmokeBomb:
     Enabled: true
-    Name: 'SmokeBomb'
+    Name: '&7SmokeBomb'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -1395,7 +1393,7 @@ Enchantments:
   #Do not change this line.
   Drunk:
     Enabled: true
-    Name: 'Drunk'
+    Name: '&7Drunk'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -1416,7 +1414,7 @@ Enchantments:
   #Do not change this line.
   Voodoo:
     Enabled: true
-    Name: 'Voodoo'
+    Name: '&7Voodoo'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -1440,7 +1438,7 @@ Enchantments:
   #Do not change this line.
   MultiArrow:
     Enabled: true
-    Name: 'MultiArrow'
+    Name: '&7MultiArrow'
     MaxPower: 5
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -1464,7 +1462,7 @@ Enchantments:
   #Do not change this line.
   Recover:
     Enabled: true
-    Name: 'Recover'
+    Name: '&7Recover'
     MaxPower: 1
     Enchantment-Type: 'Armor'
     Info:
@@ -1485,7 +1483,7 @@ Enchantments:
   #Do not change this line.
   Cactus:
     Enabled: true
-    Name: 'Cactus'
+    Name: '&7Cactus'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -1509,7 +1507,7 @@ Enchantments:
   #Do not change this line.
   Rocket:
     Enabled: true
-    Name: 'Rocket'
+    Name: '&7Rocket'
     MaxPower: 3
     Enchantment-Type: 'Boots'
     Chance-System:
@@ -1531,9 +1529,29 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
   #Do not change this line.
+  Adrenaline:
+    Enabled: true
+    Name: '&7Adrenaline'
+    MaxPower: 3
+    Enchantment-Type: 'Boots'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lAdrenaline &7(&bI-&bIII&7)'
+      Description:
+        - '&7If low on health there is a chance'
+        - '&7you will gain a speed boost.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aBoots'
+    Categories:
+      - 'Mythical'
+  #Do not change this line.
   Angel:
     Enabled: true
-    Name: 'Angel'
+    Name: '&7Angel'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Info:
@@ -1554,7 +1572,7 @@ Enchantments:
   #Do not change this line.
   HellForged:
     Enabled: true
-    Name: 'HellForged'
+    Name: '&7HellForged'
     MaxPower: 4
     Enchantment-Type: 'Damaged-Items'
     Chance-System:
@@ -1578,7 +1596,7 @@ Enchantments:
   #Do not change this line.
   Commander:
     Enabled: true
-    Name: 'Commander'
+    Name: '&7Commander'
     MaxPower: 5
     Enchantment-Type: 'Helmet'
     Info:
@@ -1599,7 +1617,7 @@ Enchantments:
   #Do not change this line.
   StormCaller:
     Enabled: true
-    Name: 'StormCaller'
+    Name: '&7StormCaller'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Chance-System:
@@ -1623,7 +1641,7 @@ Enchantments:
   #Do not change this line.
   Leadership:
     Enabled: true
-    Name: 'Leadership'
+    Name: '&7Leadership'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Info:
@@ -1644,7 +1662,7 @@ Enchantments:
   #Do not change this line.
   Implants:
     Enabled: true
-    Name: 'Implants'
+    Name: '&7Implants'
     MaxPower: 5
     Enchantment-Type: 'Helmet'
     Chance-System:
@@ -1668,7 +1686,7 @@ Enchantments:
   #Do not change this line.
   Wings:
     Enabled: true
-    Name: 'Wings'
+    Name: '&7Wings'
     MaxPower: 1
     Enchantment-Type: 'Boots'
     Info:
@@ -1687,9 +1705,27 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
   #Do not change this line.
+  VeinMiner:
+    Enabled: true
+    Name: '&7VeinMiner'
+    MaxPower: 6
+    Enchantment-Type: 'PickAxe'
+    Info:
+      Name: '&e&lVeinminer &7(&bI-VI&7)'
+      Description:
+        - '&7Breaks connected ore blocks.'
+        - '&7The higher the level, the more'
+        - '&7connected blocks it can break.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aPickaxes'
+    Categories:
+      - 'Mythical'
+  #Do not change this line.
   Blast:
     Enabled: true
-    Name: 'Blast'
+    Name: '&7Blast'
     MaxPower: 3
     Enchantment-Type: 'PickAxe'
     Info:
@@ -1710,7 +1746,7 @@ Enchantments:
   #Do not change this line.
   Furnace:
     Enabled: true
-    Name: 'Furnace'
+    Name: '&7Furnace'
     MaxPower: 1
     Enchantment-Type: 'PickAxe'
     Info:
@@ -1731,7 +1767,7 @@ Enchantments:
   #Do not change this line.
   Blizzard:
     Enabled: true
-    Name: 'Blizzard'
+    Name: '&7Blizzard'
     MaxPower: 1
     Enchantment-Type: 'Armor'
     Info:
@@ -1752,7 +1788,7 @@ Enchantments:
   #Do not change this line.
   AcidRain:
     Enabled: true
-    Name: 'AcidRain'
+    Name: '&7AcidRain'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -1773,7 +1809,7 @@ Enchantments:
   #Do not change this line.
   SandStorm:
     Enabled: true
-    Name: 'SandStorm'
+    Name: '&7SandStorm'
     MaxPower: 1
     Enchantment-Type: 'Armor'
     Info:
@@ -1794,7 +1830,7 @@ Enchantments:
   #Do not change this line.
   Radiant:
     Enabled: true
-    Name: 'Radiant'
+    Name: '&7Radiant'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -1815,7 +1851,7 @@ Enchantments:
   #Do not change this line.
   Intimidate:
     Enabled: true
-    Name: 'Intimidate'
+    Name: '&7Intimidate'
     MaxPower: 2
     Enchantment-Type: 'Armor'
     Info:
@@ -1836,7 +1872,7 @@ Enchantments:
   #Do not change this line.
   Pull:
     Enabled: true
-    Name: 'Pull'
+    Name: '&7Pull'
     MaxPower: 3
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -1860,7 +1896,7 @@ Enchantments:
   #Do not change this line.
   Tamer:
     Enabled: true
-    Name: 'Tamer'
+    Name: '&7Tamer'
     MaxPower: 5
     Enchantment-Type: 'Armor'
     Info:
@@ -1881,7 +1917,7 @@ Enchantments:
   #Do not change this line.
   Guards:
     Enabled: true
-    Name: 'Guards'
+    Name: '&7Guards'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -1902,7 +1938,7 @@ Enchantments:
   #Do not change this line.
   Infestation:
     Enabled: true
-    Name: 'Infestation'
+    Name: '&7Infestation'
     MaxPower: 2
     Enchantment-Type: 'Armor'
     Info:
@@ -1923,7 +1959,7 @@ Enchantments:
   #Do not change this line.
   Necromancer:
     Enabled: true
-    Name: 'Necromancer'
+    Name: '&7Necromancer'
     MaxPower: 3
     Enchantment-Type: 'Armor'
     Info:
@@ -1944,7 +1980,7 @@ Enchantments:
   #Do not change this line.
   BeeKeeper:
     Enabled: true
-    Name: 'BeeKeeper'
+    Name: '&7BeeKeeper'
     MaxPower: 2
     Enchantment-Type: 'Armor'
     Info:
@@ -1963,9 +1999,83 @@ Enchantments:
       - 'Rare'
       - 'Legendary'
   #Do not change this line.
+  Maneuver:
+    Enabled: true
+    Name: '&7Maneuver'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lManeuver &7(&bI-&bIII&7)'
+      Description:
+        - '&7Chance to dodge'
+        - '&7an attack.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Mythical'
+  #Do not change this line.
+  Crouch:
+    Enabled: true
+    Name: '&7Crouch'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&Crouch &7(&bI-III&7)'
+      Description:
+        - '&7During combat you take'
+        - '&610%(+5% per level) &7less'
+        - '&7damage while crouched.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Mythical'
+  #Do not change this line.
+  Shockwave:
+    Enabled: true
+    Name: '&7Shockwave'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lShockwave &7(&bI-&bIII&7)'
+      Description:
+        - '&7Chance to knockback'
+        - '&7enemies when they'
+        - '&7attack you.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Mythical'
+  #Do not change this line.
+  SystemReboot:
+    Enabled: true
+    Name: '&7SystemReboot'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lSystemReboot &7(&bI-&bIII&7)'
+      Description:
+        - '&7Chance to become'
+        - '&7full hp when'
+        - '&7attacked at low hp.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Mythical'
+  #Do not change this line.
   Sticky-Shot:
     Enabled: true
-    Name: 'StickyShot'
+    Name: '&7StickyShot'
     MaxPower: 3
     Enchantment-Type: 'Bow'
     Chance-System:
@@ -1989,7 +2099,7 @@ Enchantments:
   #Do not change this line.
   Disorder:
     Enabled: true
-    Name: 'Disorder'
+    Name: '&7Disorder'
     MaxPower: 1
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -2009,7 +2119,7 @@ Enchantments:
   #Do not change this line.
   Charge:
     Enabled: true
-    Name: 'Charge'
+    Name: '&7Charge'
     MaxPower: 5
     Enchantment-Type: 'Sword'
     Info:
@@ -2026,7 +2136,7 @@ Enchantments:
   #Do not change this line.
   Revenge:
     Enabled: true
-    Name: 'Revenge'
+    Name: '&7Revenge'
     MaxPower: 1
     Enchantment-Type: 'Sword'
     Info:
@@ -2044,7 +2154,7 @@ Enchantments:
   #Do not change this line.
   BattleCry:
     Enabled: true
-    Name: 'BattleCry'
+    Name: '&7BattleCry'
     MaxPower: 5
     Enchantment-Type: 'Axe'
     Chance-System:
@@ -2062,10 +2172,30 @@ Enchantments:
         - '&6Enchantable Items: &aAxe'
     Categories:
       - 'Legendary'
+  DemonForged:
+    Enabled: true
+    Name: '&7DemonForged'
+    MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&BattleForged &7(&bI-V&7)'
+      Description:
+        - '&7During combat it has a'
+        - '&610%(+5% per level) &7chance to deal'
+        - '&7more durability damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &5&l&nMythical'
+        - '&6Enchantable Items: &aAxe'
+    Categories:
+      - 'Mythical'
   #Do not change this line.
   Famished:
     Enabled: true
-    Name: 'Famished'
+    Name: '&7Famished'
     MaxPower: 3
     Enchantment-Type: 'Sword'
     Chance-System:
@@ -2086,7 +2216,7 @@ Enchantments:
   #Do not change this line.
   GreenThumb:
     Enabled: true
-    Name: 'GreenThumb'
+    Name: '&7GreenThumb'
     MaxPower: 3
     Enchantment-Type: 'Hoe'
     Chance-System:
@@ -2108,7 +2238,7 @@ Enchantments:
   #Do not change this line.
   Harvester:
     Enabled: true
-    Name: 'Harvester'
+    Name: '&7Harvester'
     MaxPower: 1
     Enchantment-Type: 'Hoe'
     Info:
@@ -2126,7 +2256,7 @@ Enchantments:
   #Do not change this line.
   Tiller:
     Enabled: true
-    Name: 'Tiller'
+    Name: '&7Tiller'
     MaxPower: 1
     Enchantment-Type: 'Hoe'
     Info:
@@ -2147,7 +2277,7 @@ Enchantments:
   #Do not change this line.
   Planter:
     Enabled: true
-    Name: 'Planter'
+    Name: '&7Planter'
     MaxPower: 1
     Enchantment-Type: 'Hoe'
     Info:
@@ -2167,7 +2297,7 @@ Enchantments:
   #Do not change this line.
   Cyborg:
     Enabled: true
-    Name: 'Cyborg'
+    Name: '&7Cyborg'
     MaxPower: 1
     Enchantment-Type: 'Armor'
     Info:
@@ -2184,7 +2314,7 @@ Enchantments:
   #Do not change this line.
   Sniper:
     Enabled: true
-    Name: 'Sniper'
+    Name: '&7Sniper'
     MaxPower: 2
     Enchantment-Type: 'Bow'
     Chance-System:

@@ -262,7 +262,9 @@ Settings:
     Right-Click-Book-Description: true #Toggles whether when you right-click the enchantment book if it messages the player the description or not.
     UnSafe-Enchantments: true #Having this set to true will allow players to use enchantments levels above the max level.
     Blast-Full-Durability: true #Toggle if the item takes damage for every block it breaks or just one. True to take full damage or false to take only 1 damage.
+    VeinMiner-Full-Durability: true
     Drop-Blocks-For-Blast: true #Toggle if the blast enchantment drops blocks when used.
+    Drop-Blocks-For-VeinMiner: true
     Right-Click-Enchantment-Table: false #When set to true if a player right-clicks an enchantment table it will open the /ce GUI.
     EXP-Bug: false #Only needs to be true if the player's XP sometimes glitches to 1Bill after buying an item with all their XP.
     Lightning-Sound-Range: 160 #Range in blocks where the lightning sound should become inaudible.
@@ -540,3 +542,44 @@ Categories: #You can make as many different categories as you want
       LvlRange:
         Max: 5
         Min: 3
+  Mythical:
+    Name: '&5&l&nMythical'
+    Slot: 41
+    InGUI: true
+    Lore:
+      - '&eCost: &6&l120 &6XP Levels'
+    Item: 'AMETHYST_CLUSTER'
+    Glowing: true
+    Cost: 120
+    Currency: XP_Level
+    Rarity: 10
+    LostBook:
+      InGUI: false
+      Slot: 41
+      Item: 'BOOK'
+      Glowing: false
+      Name: '&8&l&nLost&c&l Tier 10 &8&l&nBooks'
+      Lore:
+        - '&7These are lost books that are'
+        - '&7Said to be &c&lTier 10 &7Enchantment books.'
+        - '&7But no one has tried to clean the books yet.'
+        - '&7Will you be the one to clean the books?'
+        - ''
+        - '&c&lCost: &6&l$10000'
+      Cost: 10000
+      Currency: Vault
+      FireworkToggle: true
+      FireworkColors: 'White, Gray'
+      Sound-Toggle: false
+      Sound: 'BLOCK_ANVIL_PLACE'
+    EnchOptions:
+      SuccessPercent:
+        Max: 15
+        Min: 1
+      DestroyPercent:
+        Max: 95
+        Min: 20
+      MaxLvlToggle: true
+      LvlRange:
+        Max: 10
+        Min: 1

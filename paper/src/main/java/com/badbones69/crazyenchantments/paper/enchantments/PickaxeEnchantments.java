@@ -33,12 +33,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Random;
 
 public class PickaxeEnchantments implements Listener {
 
@@ -74,6 +71,7 @@ public class PickaxeEnchantments implements Listener {
                 blocks.put(player, blockFace);
             }
         }
+
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -209,13 +207,9 @@ public class PickaxeEnchantments implements Listener {
 
                 if (item.getKey().getType().equals(Material.SPAWNER)) continue; // Removes the handling of spawners by this plugin.
 
-                if (methods.isInventoryFull(player)) {
-                    try {
-                        player.getWorld().dropItem(player.getLocation(), item.getKey());
-                    } catch (IllegalArgumentException ignore) {}
-                } else {
-                    player.getInventory().addItem(item.getKey());
-                }
+                HashMap<Integer, ItemStack> rewardsToDrop = player.getInventory().addItem(item.getKey());
+
+                if (!rewardsToDrop.isEmpty()) rewardsToDrop.forEach((index, reward) -> player.getWorld().dropItemNaturally(player.getLocation(), reward));
             }
 
             if (player.getGameMode() != GameMode.CREATIVE && xp > 0) {
@@ -223,6 +217,143 @@ public class PickaxeEnchantments implements Listener {
                 orb.setExperience(xp);
             }
         }
+    }
+
+    @EventHandler(priority =  EventPriority.LOW, ignoreCancelled = true)
+    public void onVeinMinerBreak(BlockBreakEvent event) {
+        if (!isOre(event.getBlock().getType())) return;
+        if (!event.isDropItems()) return;
+        if (EventUtils.isIgnoredEvent(event) || !CEnchantments.VEINMINER.isActivated()) return;
+
+        Player player = event.getPlayer();
+        Block currentBlock = event.getBlock();
+        ItemStack currentItem = methods.getItemInHand(player);
+
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
+
+        if (!enchantments.contains(CEnchantments.VEINMINER.getEnchantment())) return;
+
+        List<Block> blockList = new ArrayList<>(getOreBlocks(currentBlock.getLocation(), crazyManager.getLevel(currentItem, CEnchantments.VEINMINER)));
+
+        BlastUseEvent VeinMinerUseEvent = new BlastUseEvent(player, blockList);
+        plugin.getServer().getPluginManager().callEvent(VeinMinerUseEvent);
+
+        if (VeinMinerUseEvent.isCancelled()) return;
+
+        event.setCancelled(true);
+
+        List<BlockProcessInfo> finalBlockList = new ArrayList<>();
+
+        for (Block block : blockList) {
+            if (!block.isEmpty() && !block.getLocation().equals(currentBlock.getLocation())) {
+                BlockBreakEvent event2 = new BlockBreakEvent(block, player);
+                event2.setDropItems(false);
+                EventUtils.addIgnoredEvent(event2);
+                plugin.getServer().getPluginManager().callEvent(event2);
+
+                if (!event2.isCancelled()) finalBlockList.add(new BlockProcessInfo(currentItem, block));
+
+                EventUtils.removeIgnoredEvent(event2);
+            }
+        }
+        finalBlockList.add(new BlockProcessInfo(currentItem, currentBlock));
+
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+
+        if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
+            spartanSupport.cancelFastBreak(player);
+            spartanSupport.cancelNoSwing(player);
+            spartanSupport.cancelBlockReach(player);
+        }
+
+        int xp = 0;
+        HashMap<ItemStack, Integer> drops = new HashMap<>();
+        boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.VeinMiner-Full-Durability", true);
+        boolean hasSilkTouch = currentItem.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
+        boolean hasTelepathy = enchantments.contains(CEnchantments.TELEPATHY.getEnchantment());
+        boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
+        boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
+        boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
+
+        for (BlockProcessInfo processInfo : finalBlockList) {
+            Block block = processInfo.getBlock();
+            if (player.getGameMode() == GameMode.CREATIVE || !crazyManager.isDropBlocksVeinMiner()) { // If the user is in creative mode.
+                block.breakNaturally();
+            } else { // If the user is in survival mode.
+                // This is to check if the original block the player broke was in the block list.
+                // If it is not then it should be broken and dropped on the ground.
+
+                if (hasTelepathy) {
+                    TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(processInfo);
+                    drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
+                    xp += drop.getXp();
+                } else {
+                    if (hasFurnace) {
+                        ItemStack finalDrop = getOreDrop(block.getType());
+
+                        try {
+                            block.getWorld().dropItem(block.getLocation(), finalDrop);
+                        } catch (IllegalArgumentException ignore) {}
+                    } else if (hasAutoSmelt) {
+                        for (ItemStack drop : block.getDrops(currentItem)) {
+                            if (CEnchantments.AUTOSMELT.chanceSuccessful(currentItem)) {
+                                drop = getOreDrop(block.getType());
+                                drop.setAmount(crazyManager.getLevel(currentItem, CEnchantments.AUTOSMELT));
+                            }
+
+                            ItemStack finalDrop = drop;
+
+                            try {
+                                block.getWorld().dropItem(block.getLocation(), finalDrop);
+                            } catch (IllegalArgumentException ignore) {}
+                        }
+                    } else {
+                        for (ItemStack drop : block.getDrops(currentItem)) {
+                            if (drop.getType() != Material.AIR) {
+                                try {
+                                    block.getWorld().dropItem(block.getLocation(), drop);
+                                } catch (IllegalArgumentException ignore) {}
+                            }
+
+                            if (drop.getType() == Material.REDSTONE_ORE || drop.getType() == Material.LAPIS_ORE || drop.getType() == Material.GLOWSTONE) break;
+                        }
+                    }
+
+                    // This is found here as telepathy takes care of this part.
+                    if (!hasSilkTouch) {
+                        xp = methods.percentPick(7, 3);
+
+                        if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(currentItem)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(currentItem, CEnchantments.EXPERIENCE);
+                    }
+                }
+
+                block.setType(Material.AIR);
+
+                if (damage) methods.removeDurability(currentItem, player);
+            }
+        }
+
+        if (!damage) methods.removeDurability(currentItem, player);
+
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+
+        for (Entry<ItemStack, Integer> item : drops.entrySet()) {
+            item.getKey().setAmount(item.getValue());
+
+            if (item.getKey().getType().equals(Material.SPAWNER)) continue; // Removes the handling of spawners by this plugin.
+
+            HashMap<Integer, ItemStack> rewardsToDrop = player.getInventory().addItem(item.getKey());
+
+            if (!rewardsToDrop.isEmpty()) rewardsToDrop.forEach((index, reward) -> player.getWorld().dropItemNaturally(player.getLocation(), reward));
+
+        }
+
+        if (player.getGameMode() != GameMode.CREATIVE && xp > 0) {
+            ExperienceOrb orb = currentBlock.getWorld().spawn(currentBlock.getLocation().add(.5, .5, .5), ExperienceOrb.class);
+            orb.setExperience(xp);
+        }
+
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -306,6 +437,41 @@ public class PickaxeEnchantments implements Listener {
         return item.hasItemMeta() && Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.SILK_TOUCH);
     }
 
+    private HashSet<Block> getOreBlocks(Location loc, int amount) {
+        HashSet<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
+        HashSet<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
+
+        int depth = 0;
+
+        while (depth < amount) {
+            HashSet<Block> tempBlocks = new HashSet<>();
+
+            for (Block block1 : newestBlocks) {
+                for (Block block : getSurroundingBlocks(block1.getLocation())) {
+                    if (!blocks.contains(block) && isOre(block.getType())) tempBlocks.add(block);
+                }
+            }
+            blocks.addAll(tempBlocks);
+            newestBlocks = tempBlocks;
+
+            ++depth;
+        }
+
+        return blocks;
+    } 
+    
+    private HashSet<Block> getSurroundingBlocks(Location loc) {
+        HashSet<Block> locations = new HashSet<>();
+        
+        locations.add(loc.clone().add(0,1,0).getBlock());
+        locations.add(loc.clone().add(0,-1,0).getBlock());
+        locations.add(loc.clone().add(1,0,0).getBlock());
+        locations.add(loc.clone().add(-1,0,0).getBlock());
+        locations.add(loc.clone().add(0,0,1).getBlock());
+        locations.add(loc.clone().add(0,0,-1).getBlock());
+        
+        return locations;
+    }
     private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
 

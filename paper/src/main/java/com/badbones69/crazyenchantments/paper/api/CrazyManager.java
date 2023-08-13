@@ -84,6 +84,7 @@ public class CrazyManager {
     private boolean checkVanillaLimit;
 
     private boolean dropBlocksBlast;
+    private boolean dropBlocksVeinMiner;
 
     /**
      * Loads everything for the Crazy Enchantments plugin.
@@ -148,6 +149,7 @@ public class CrazyManager {
         useRageBossBar = config.contains("Settings.EnchantmentOptions.Rage-Boss-Bar") && config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar");
         enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
         setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
+        setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
 
         enchantmentBookSettings.populateMaps();
 
@@ -702,10 +704,24 @@ public class CrazyManager {
     }
 
     /**
+     * @return If the vein-miner enchantment drops blocks.
+     */
+    public boolean isDropBlocksVeinMiner() {
+        return dropBlocksVeinMiner;
+    }
+
+    /**
      * @param dropBlocksBlast If the blast enchantment drops blocks.
      */
     public void setDropBlocksBlast(boolean dropBlocksBlast) {
         this.dropBlocksBlast = dropBlocksBlast;
+    }
+
+    /**
+     * @param dropBlocksVeinMiner If the vein-miner enchantment drops blocks.
+     */
+    public void setDropBlocksVeinMiner(boolean dropBlocksVeinMiner) {
+        this.dropBlocksVeinMiner = dropBlocksVeinMiner;
     }
 
     /**

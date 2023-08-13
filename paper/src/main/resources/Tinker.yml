@@ -244,6 +244,9 @@ Tinker:
     Rocket:
       Items: '20, 1'
       Book: '5, 1'
+    Adrenaline:
+      Items: '20, 1'
+      Book: '5, 1'
     Angel:
       Items: '20, 1'
       Book: '5, 1'
@@ -263,6 +266,9 @@ Tinker:
       Items: '20, 1'
       Book: '5, 1'
     Wings:
+      Items: '20, 1'
+      Book: '5, 1'
+    VeinMiner:
       Items: '20, 1'
       Book: '5, 1'
     Blast:
@@ -301,6 +307,18 @@ Tinker:
     BeeKeeper:
       Items: '20, 1'
       Book: '5, 1'
+    Maneuver:
+      Items: '20, 1'
+      Book: '5, 1'
+    Crouch:
+      Items: '20, 1'
+      Book: '5, 1'
+    Shockwave:
+      Items: '20, 1'
+      Book: '5, 1'
+    SystemReboot:
+      Items: '20, 1'
+      Book: '5, 1'
     Sticky-Shot:
       Items: '20, 1'
       Book: '5, 1'
@@ -314,6 +332,9 @@ Tinker:
       Items: '20, 1'
       Book: '5, 1'
     BattleCry:
+      Items: '20, 1'
+      Book: '5, 1'
+    DemonForged:
       Items: '20, 1'
       Book: '5, 1'
     Famished:

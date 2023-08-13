@@ -33,6 +33,26 @@ tasks {
 }
 
 val description = """
+## You need to regenerate the config files or add new enchantments to Enchantments.yml and Tinker.yml for them to work.
+
+## New Enchantments:
+|Enchant | Type | Description|
+|---------|-------|-------------|
+DemonForged  | Axe | Deal more durability damage.
+Crouch | Armor | While sneaking, take less damage.
+SystemReboot | Armor | An attack that would normally kill you can instead heal you to full HP.
+Adrenaline | Boots | When on low HP, chance to get a huge speed boost.
+ShockWave | Armor | Chance to Knockback Enemy when they damage you.
+Maneuver | Armor | Chance to dodge an attack.
+VeinMiner | Pickaxe | For each level, will mine 1 more block from ore veins.
+
+## Config Options Added:
+* `VeinMiner-Full-Durability: true`
+* `Drop-Blocks-For-VeinMiner: true`
+
+## Misc:
+* New Default Category added for the new enchants. `Mythical`
+* Updated default CrazyEnchantment colour.
 
 ## Fix:
 * Fixed tinkerer scaling not working properly for books.
