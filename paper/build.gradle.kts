@@ -19,7 +19,7 @@ dependencies {
 
     compileOnly("com.intellectualsites.paster", "Paster", "1.1.5")
 
-    compileOnly("com.bgsoftware", "SuperiorSkyblockAPI", "2023.1")
+    compileOnly("com.bgsoftware", "SuperiorSkyblockAPI", "2023.2")
 
     compileOnly("de.dustplanet", "silkspawners", "7.5.0") {
         exclude("*", "*")
@@ -31,13 +31,13 @@ dependencies {
         exclude("com.darkblade12")
     }
 
-    compileOnly("com.palmergames.bukkit.towny", "towny", "0.99.0.0")
+    compileOnly("com.palmergames.bukkit.towny", "towny", "0.99.5.0")
 
     compileOnly("fr.neatmonster", "nocheatplus", "3.16.1-SNAPSHOT")
 
     compileOnly("me.vagdedes", "spartanapi", "9.1")
 
-    compileOnly("com.bgsoftware", "WildStackerAPI", "2023.1")
+    compileOnly("com.bgsoftware", "WildStackerAPI", "2023.2")
 
     compileOnly("io.th0rgal", "oraxen", "1.156.3")
 

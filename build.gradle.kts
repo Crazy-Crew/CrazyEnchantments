@@ -56,6 +56,7 @@ VeinMiner | Pickaxe | For each level, will mine 1 more block from ore veins.
 
 ## Fix:
 * Fixed tinkerer scaling not working properly for books.
+* Fixed some dependencies not working due to being outdated.
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/discussions/categories/features)
