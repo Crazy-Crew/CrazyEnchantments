@@ -173,6 +173,8 @@ public class Starter {
     }
 
     public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
+        if (superiorSkyBlockSupport == null) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
+
         return this.superiorSkyBlockSupport;
     }
 
