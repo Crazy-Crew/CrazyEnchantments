@@ -36,6 +36,8 @@ body:
         - 1.12.2
         - 1.16.5
         - 1.19.4
+        - 1.20.1
+        # 1.20.2
     validations:
       required: true
   - type: dropdown
@@ -47,6 +49,7 @@ body:
         - Spigot
         - Paper
         - Purpur
+        - Folia
     validations:
       required: true
   - type: textarea
