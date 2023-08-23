@@ -1,11 +1,36 @@
+import io.papermc.hangarpublishplugin.model.Platforms
+
 plugins {
+    alias(libs.plugins.modrinth)
+    alias(libs.plugins.hangar)
+
     id("paper-plugin")
 }
 
-group = "${rootProject.group}.paper"
+project.group = "${rootProject.group}.paper"
 
-base {
-    archivesName.set("${rootProject.name}-${project.name}")
+repositories {
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+
+    maven("https://repo.dustplanet.de/artifactory/libs-release-local/")
+
+    maven("https://repo.md-5.net/content/repositories/snapshots/")
+
+    maven("https://ci.ender.zone/plugin/repository/everything/")
+
+    maven("https://repo.codemc.org/repository/maven-public/")
+
+    maven("https://repo.papermc.io/repository/maven-public/")
+
+    maven("https://repo.glaremasters.me/repository/towny/")
+
+    maven("https://repo.bg-software.com/repository/api/")
+
+    maven("https://repo.crazycrew.us/third-party/")
+
+    maven("https://maven.enginehub.org/repo/")
+
+    flatDir { dirs("libs") }
 }
 
 dependencies {
@@ -13,17 +38,17 @@ dependencies {
 
     implementation("org.bstats", "bstats-bukkit", "3.0.2")
 
-    compileOnly("com.plotsquared", "PlotSquared-Core", "6.11.1")
-
     compileOnly("com.intellectualsites.informative-annotations", "informative-annotations", "1.3")
+
+    compileOnly("com.sk89q.worldguard", "worldguard-bukkit", "7.1.0-SNAPSHOT")
+
+    compileOnly("com.github.TechFortress", "GriefPrevention", "16.18.1")
+
+    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.15")
 
     compileOnly("com.intellectualsites.paster", "Paster", "1.1.5")
 
     compileOnly("com.bgsoftware", "SuperiorSkyblockAPI", "2023.2")
-
-    compileOnly("de.dustplanet", "silkspawners", "7.5.0") {
-        exclude("*", "*")
-    }
 
     compileOnly("com.massivecraft", "Factions", "1.6.9.5-U0.6.31") {
         exclude("org.kitteh")
@@ -35,23 +60,23 @@ dependencies {
 
     compileOnly("fr.neatmonster", "nocheatplus", "3.16.1-SNAPSHOT")
 
-    compileOnly("me.vagdedes", "spartanapi", "9.1")
+    compileOnly("com.plotsquared", "PlotSquared-Core", "6.11.1")
 
     compileOnly("com.bgsoftware", "WildStackerAPI", "2023.2")
-
-    compileOnly("io.th0rgal", "oraxen", "1.156.3")
-
-    compileOnly("com.sk89q.worldedit", "worldedit-bukkit", "7.2.15")
-
-    compileOnly("com.github.TechFortress", "GriefPrevention", "16.18.1")
-
-    compileOnly("com.sk89q.worldguard", "worldguard-bukkit", "7.1.0-SNAPSHOT")
 
     compileOnly("com.github.MilkBowl", "VaultAPI", "1.7.1") {
         exclude("org.bukkit", "bukkit")
     }
 
+    compileOnly("de.dustplanet", "silkspawners", "7.5.0") {
+        exclude("*", "*")
+    }
+
     compileOnly("me.clip", "placeholderapi", "2.11.3")
+
+    compileOnly("io.th0rgal", "oraxen", "1.156.3")
+
+    compileOnly(fileTree("libs").include("*.jar"))
 }
 
 val component: SoftwareComponent = components["java"]
@@ -60,7 +85,7 @@ tasks {
     publishing {
         publications {
             create<MavenPublication>("maven") {
-                groupId = rootProject.group.toString()
+                groupId = project.group.toString()
                 artifactId = "${rootProject.name.lowercase()}-${project.name.lowercase()}-api"
                 version = rootProject.version.toString()
 
@@ -69,15 +94,7 @@ tasks {
         }
     }
 
-    reobfJar {
-        outputJar.set(file("$buildDir/libs/${rootProject.name}-${project.name}-${project.version}.jar"))
-    }
-
     shadowJar {
-        archiveBaseName.set("${rootProject.name}-${project.name}")
-        archiveClassifier.set("")
-        mergeServiceFiles()
-
         listOf(
             "de.tr7zw",
             "org.bstats"
@@ -89,7 +106,7 @@ tasks {
     processResources {
         val props = mapOf(
             "name" to rootProject.name,
-            "group" to project.group,
+            "group" to project.group.toString(),
             "version" to rootProject.version,
             "description" to rootProject.description,
             "authors" to rootProject.properties["authors"],
@@ -99,6 +116,87 @@ tasks {
 
         filesMatching("plugin.yml") {
             expand(props)
+        }
+    }
+}
+
+val description = """
+## You need to regenerate the config files or add new enchantments to Enchantments.yml and Tinker.yml for them to work.
+
+## New Enchantments:
+|Enchant | Type | Description|
+|---------|-------|-------------|
+DemonForged  | Axe | Deal more durability damage.
+Crouch | Armor | While sneaking, take less damage.
+SystemReboot | Armor | An attack that would normally kill you can instead heal you to full HP.
+Adrenaline | Boots | When on low HP, chance to get a huge speed boost.
+ShockWave | Armor | Chance to knock enemies back when they damage you.
+Maneuver | Armor | Chance to dodge an attack.
+VeinMiner | Pickaxe | For each level, It will mine 1 more block from ore veins.
+
+## Config Options Added:
+* `VeinMiner-Full-Durability: true`
+* `Drop-Blocks-For-VeinMiner: true`
+
+## Misc:
+* New Default Category added for the new enchants. `Mythical`
+* Updated default CrazyEnchantment colour.
+
+## Fix:
+* Fixed tinkerer scaling not working properly for books.
+* Fixed some dependencies not working due to being outdated.
+* Temp Fix Superior SkyBlock support not working when using wildstacker.
+
+## Other:
+ * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
+ * [Bug Reports](https://github.com/Crazy-Crew/${rootProject.name}/issues)
+""".trimIndent()
+
+val versions = listOf(
+    "1.20",
+    "1.20.1",
+    //"1.20.2"
+)
+
+val file = file("${rootProject.rootDir}/jars/${rootProject.name}-${project.version}.jar")
+
+val isSnapshot = rootProject.version.toString().contains("snapshot")
+val type = if (isSnapshot) "beta" else "release"
+val other = if (isSnapshot) "Beta" else "Release"
+
+modrinth {
+    autoAddDependsOn.set(false)
+
+    token.set(System.getenv("MODRINTH_TOKEN"))
+
+    projectId.set(rootProject.name.lowercase())
+
+    versionName.set("${rootProject.name} ${rootProject.version}")
+    versionNumber.set("${rootProject.version}")
+
+    uploadFile.set(file)
+
+    gameVersions.addAll(versions)
+
+    changelog.set(description)
+
+    loaders.addAll("paper", "purpur")
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        version.set(rootProject.version as String)
+        namespace("CrazyCrew", rootProject.name)
+        channel.set(other)
+        changelog.set(description)
+
+        apiKey.set(System.getenv("hangar_key"))
+
+        platforms {
+            register(Platforms.PAPER) {
+                jar.set(file)
+                platformVersions.set(versions)
+            }
         }
     }
 }

@@ -3,8 +3,10 @@
 
 build
 
-buildSrc/build
 buildSrc/.gradle
+buildSrc/build
 
-paper/build
+jars
+
 paper/.gradle
+paper/build
