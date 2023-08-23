@@ -23,7 +23,7 @@
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyEnchantments/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/discussions/categories/features">Request Feature</a>
+    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/issues">Request Feature</a>
     ·
     <a href="https://discord.gg/badbones-s-live-chat-182615261403283459">Get Support</a>
   </p>
@@ -47,8 +47,9 @@
   </ol>
 </details>
 
-### Resource Page
-<a href="https://modrinth.com/plugin/crazyenchantments">![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/modrinth_46h.png)</a>
+### Downloads
+[![Hangar](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/hangar_46h.png)](https://hangar.papermc.io/CrazyCrew/CrazyCrates)
+[![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/modrinth_46h.png)](https://modrinth.com/user/plugin/crazycrates)
 
 ## Getting Started
 
@@ -72,6 +73,8 @@ A list of things necessary to make sure you can build CrazyEnchantments properly
    ```gradle
    ./gradlew assemble
    ```
+4. Open the `jars` directory in your root folder.
+5. Profit!
 
 ## Roadmap
 
