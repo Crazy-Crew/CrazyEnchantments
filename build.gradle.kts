@@ -1,6 +1,5 @@
 plugins {
-    `maven-publish`
-    `java-library`
+    id("root-plugin")
 }
 
 defaultTasks("build")

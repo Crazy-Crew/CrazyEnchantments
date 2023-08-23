@@ -120,6 +120,12 @@ tasks {
     }
 }
 
+val isSnapshot = rootProject.version.toString().contains("snapshot")
+val type = if (isSnapshot) "beta" else "release"
+val other = if (isSnapshot) "Beta" else "Release"
+
+val file = file("${rootProject.rootDir}/jars/${rootProject.name}-${rootProject.version}.jar")
+
 val description = """
 ## You need to regenerate the config files or add new enchantments to Enchantments.yml and Tinker.yml for them to work.
 
@@ -158,12 +164,6 @@ val versions = listOf(
     //"1.20.2"
 )
 
-val file = file("${rootProject.rootDir}/jars/${rootProject.name}-${project.version}.jar")
-
-val isSnapshot = rootProject.version.toString().contains("snapshot")
-val type = if (isSnapshot) "beta" else "release"
-val other = if (isSnapshot) "Beta" else "Release"
-
 modrinth {
     autoAddDependsOn.set(false)
 
@@ -173,6 +173,8 @@ modrinth {
 
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set("${rootProject.version}")
+
+    versionType.set(type)
 
     uploadFile.set(file)
 
