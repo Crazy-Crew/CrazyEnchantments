@@ -2025,7 +2025,7 @@ Enchantments:
       Base: 10
       Increase: 5
     Info:
-      Name: '&e&Crouch &7(&bI-III&7)'
+      Name: '&e&lCrouch &7(&bI-III&7)'
       Description:
         - '&7During combat you take'
         - '&610%(+5% per level) &7less'
@@ -2181,7 +2181,7 @@ Enchantments:
       Base: 10
       Increase: 5
     Info:
-      Name: '&e&BattleForged &7(&bI-V&7)'
+      Name: '&e&lBattleForged &7(&bI-V&7)'
       Description:
         - '&7During combat it has a'
         - '&610%(+5% per level) &7chance to deal'
