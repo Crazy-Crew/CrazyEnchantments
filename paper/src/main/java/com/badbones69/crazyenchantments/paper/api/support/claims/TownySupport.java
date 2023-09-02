@@ -47,14 +47,8 @@ public class TownySupport implements ClaimSupport {
 
         if (api == null) return true;
 
-        try {
-            TownBlock block = api.getTownBlock(location);
+        TownBlock block = api.getTownBlock(location);
 
-            if (block != null && block.hasTown() && !block.getTown().isPVP()) return false;
-        } catch (NotRegisteredException e) {
-            Log.error(e);
-        }
-
-        return true;
+        return block == null || CombatUtil.preventPvP(block.getWorld(), block);
     }
 }
