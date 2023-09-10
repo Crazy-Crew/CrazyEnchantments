@@ -61,7 +61,8 @@ public class PickaxeEnchantments implements Listener {
     public void onBlockClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.BLAST.isActivated() && player.hasPermission("crazyenchantments.blast.use")) {
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.BLAST.isActivated() && player.hasPermission("crazyenchantments.blast.use") &&
+                crazyManager.getBlockList().contains(event.getClickedBlock().getType())) {
             ItemStack item = methods.getItemInHand(player);
             Block block = event.getClickedBlock();
 
@@ -77,7 +78,7 @@ public class PickaxeEnchantments implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlastBreak(BlockBreakEvent e) {
         if (!e.isDropItems()) return;
-        if (EventUtils.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated()) return;
+        if (EventUtils.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated() || !crazyManager.getBlockList().contains(e.getBlock().getType())) return;
 
         Player player = e.getPlayer();
         Block currentBlock = e.getBlock();

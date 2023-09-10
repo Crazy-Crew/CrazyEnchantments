@@ -69,7 +69,10 @@ public class ToolEnchantments implements Listener {
 
         List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(tool);
 
-        if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) || (enchantments.contains(CEnchantments.BLAST.getEnchantment()) && event.getPlayer().hasPermission("crazyenchantments.blast.use"))) return;
+        if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) ||
+            (enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
+            event.getPlayer().hasPermission("crazyenchantments.blast.use") &&
+            crazyManager.getBlockList().contains(event.getBlock().getType()))) return;
 
         if ((enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
             (brokenBlock.getType() == Material.SPAWNER)) return;
