@@ -692,7 +692,7 @@ public class CrazyManager {
     /**
      * @return The block list for blast.
      */
-    public List<Material> getBlockList() {
+    public List<Material> getBlastBlockList() {
         return blockList;
     }
 

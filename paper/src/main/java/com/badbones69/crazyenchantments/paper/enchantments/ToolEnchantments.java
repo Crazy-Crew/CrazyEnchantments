@@ -49,9 +49,9 @@ public class ToolEnchantments implements Listener {
     private final List<String> ignoreBlockTypes = Lists.newArrayList("air", "shulker_box", "chest", "head", "skull");
 
     @EventHandler()
-    public void onPlayerClick(PlayerInteractEvent e) {
+    public void onPlayerClick(PlayerInteractEvent event) {
         //Check what hand is being used as the event fires for each hand.
-        if (Objects.equals(e.getHand(), EquipmentSlot.HAND)) updateEffects(e.getPlayer());
+        if (Objects.equals(event.getHand(), EquipmentSlot.HAND)) updateEffects(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -72,7 +72,7 @@ public class ToolEnchantments implements Listener {
         if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) ||
             (enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
             event.getPlayer().hasPermission("crazyenchantments.blast.use") &&
-            crazyManager.getBlockList().contains(event.getBlock().getType()))) return;
+            crazyManager.getBlastBlockList().contains(event.getBlock().getType()))) return;
 
         if ((enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
             (brokenBlock.getType() == Material.SPAWNER)) return;

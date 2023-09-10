@@ -62,7 +62,7 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
 
         if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.BLAST.isActivated() && player.hasPermission("crazyenchantments.blast.use") &&
-                crazyManager.getBlockList().contains(event.getClickedBlock().getType())) {
+                crazyManager.getBlastBlockList().contains(event.getClickedBlock().getType())) {
             ItemStack item = methods.getItemInHand(player);
             Block block = event.getClickedBlock();
 
@@ -76,12 +76,12 @@ public class PickaxeEnchantments implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onBlastBreak(BlockBreakEvent e) {
-        if (!e.isDropItems()) return;
-        if (EventUtils.isIgnoredEvent(e) || !CEnchantments.BLAST.isActivated() || !crazyManager.getBlockList().contains(e.getBlock().getType())) return;
+    public void onBlastBreak(BlockBreakEvent event) {
+        if (!event.isDropItems()) return;
+        if (EventUtils.isIgnoredEvent(event) || !CEnchantments.BLAST.isActivated() || !crazyManager.getBlastBlockList().contains(event.getBlock().getType())) return;
 
-        Player player = e.getPlayer();
-        Block currentBlock = e.getBlock();
+        Player player = event.getPlayer();
+        Block currentBlock = event.getBlock();
         ItemStack currentItem = methods.getItemInHand(player);
 
         if (!blocks.containsKey(player)) return;
@@ -90,9 +90,9 @@ public class PickaxeEnchantments implements Listener {
 
         if (!blocks.get(player).containsKey(currentBlock)) return;
 
-        if (!(enchantments.contains(CEnchantments.BLAST.getEnchantment()) && e.getPlayer().hasPermission("crazyenchantments.blast.use"))) return;
+        if (!(enchantments.contains(CEnchantments.BLAST.getEnchantment()) && event.getPlayer().hasPermission("crazyenchantments.blast.use"))) return;
 
-        e.setCancelled(true);
+        event.setCancelled(true);
 
         BlockFace face = blocks.get(player).get(currentBlock);
         blocks.remove(player);
@@ -106,15 +106,15 @@ public class PickaxeEnchantments implements Listener {
             List<BlockProcessInfo> finalBlockList = new ArrayList<>();
 
             for (Block block : blockList) {
-                if (block.getType() != Material.AIR && (crazyManager.getBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
-                    BlockBreakEvent event = new BlockBreakEvent(block, player);
-                    event.setDropItems(false);
-                    EventUtils.addIgnoredEvent(event);
-                    plugin.getServer().getPluginManager().callEvent(event);
+                if (block.getType() != Material.AIR && (crazyManager.getBlastBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
+                    BlockBreakEvent blastBreakTest = new BlockBreakEvent(block, player);
+                    blastBreakTest.setDropItems(false);
+                    EventUtils.addIgnoredEvent(blastBreakTest);
+                    plugin.getServer().getPluginManager().callEvent(blastBreakTest);
 
-                    if (!event.isCancelled()) finalBlockList.add(new BlockProcessInfo(currentItem, block));
+                    if (!blastBreakTest.isCancelled()) finalBlockList.add(new BlockProcessInfo(currentItem, block));
 
-                    EventUtils.removeIgnoredEvent(event);
+                    EventUtils.removeIgnoredEvent(blastBreakTest);
                 }
             }
 
@@ -144,7 +144,7 @@ public class PickaxeEnchantments implements Listener {
                     // This is to check if the original block the player broke was in the block list.
                     // If it is not then it should be broken and dropped on the ground.
 
-                    if (block.getLocation().equals(originalBlockLocation) && !crazyManager.getBlockList().contains(block.getType())) {
+                    if (block.getLocation().equals(originalBlockLocation) && !crazyManager.getBlastBlockList().contains(block.getType())) {
                         block.breakNaturally();
                         continue;
                     }
