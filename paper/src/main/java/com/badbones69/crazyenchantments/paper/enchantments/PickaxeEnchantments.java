@@ -129,7 +129,6 @@ public class PickaxeEnchantments implements Listener {
             int xp = 0;
             HashMap<ItemStack, Integer> drops = new HashMap<>();
             boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
-            boolean isOre = isOre(currentBlock.getType());
             boolean hasSilkTouch = currentItem.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
             boolean hasTelepathy = enchantments.contains(CEnchantments.TELEPATHY.getEnchantment());
             boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
@@ -138,6 +137,7 @@ public class PickaxeEnchantments implements Listener {
 
             for (BlockProcessInfo processInfo : finalBlockList) {
                 Block block = processInfo.getBlock();
+                boolean isOre = isOre(block.getType());
                 if (player.getGameMode() == GameMode.CREATIVE || !crazyManager.isDropBlocksBlast()) { // If the user is in creative mode.
                     block.breakNaturally();
                 } else { // If the user is in survival mode.
