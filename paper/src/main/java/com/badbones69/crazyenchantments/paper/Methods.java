@@ -19,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -399,6 +400,11 @@ public class Methods {
                 if (!(entity instanceof LivingEntity en)) continue;
                 if (pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
+
+                EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, EntityDamageEvent.DamageCause.CUSTOM, 5D);
+                plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
+                if (damageByEntityEvent.isCancelled()) continue;
+
                 en.damage(5D);
 
                 en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
