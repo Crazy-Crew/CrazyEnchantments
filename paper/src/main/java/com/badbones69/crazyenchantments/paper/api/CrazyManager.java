@@ -433,13 +433,12 @@ public class CrazyManager {
      * @return The enchantment as a CEnchantment but if not found will be null.
      */
     public CEnchantment getEnchantmentFromName(String enchantmentString) {
-        enchantmentString = methods.stripString(enchantmentString);
+        enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "");
 
         for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
-            if (methods.stripString(enchantment.getName()).equalsIgnoreCase(enchantmentString) ||
-            methods.stripString(enchantment.getCustomName()).equalsIgnoreCase(enchantmentString) ||
-            enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "")
-                    .equalsIgnoreCase(enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", ""))) return enchantment;
+            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString) ||
+                enchantment.getName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)
+            ) return enchantment;
         }
 
         return null;
