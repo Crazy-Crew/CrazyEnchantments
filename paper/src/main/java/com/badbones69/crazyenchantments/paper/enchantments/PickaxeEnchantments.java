@@ -395,7 +395,7 @@ public class PickaxeEnchantments implements Listener {
             if (CEnchantments.FURNACE.isActivated() &&
                     isOre &&
                     (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) &&
-                    !((isBlastActive(enchantments, player, null)) ||
+                    !((isBlastActive(enchantments, player, block)) ||
                             enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
 
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
@@ -419,9 +419,9 @@ public class PickaxeEnchantments implements Listener {
         if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) &&
                 isOre &&
                 (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) &&
-                        !((isBlastActive(enchantments, player, null)) ||
+                        !((isBlastActive(enchantments, player, block)) ||
                                 enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
-            
+
             int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
 
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
