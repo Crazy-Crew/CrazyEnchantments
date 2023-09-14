@@ -61,17 +61,16 @@ public class PickaxeEnchantments implements Listener {
     public void onBlockClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.BLAST.isActivated() && player.hasPermission("crazyenchantments.blast.use") &&
-                crazyManager.getBlastBlockList().contains(event.getClickedBlock().getType())) {
-            ItemStack item = methods.getItemInHand(player);
-            Block block = event.getClickedBlock();
+        if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
 
-            if (crazyManager.hasEnchantment(item, CEnchantments.BLAST)) {
-                HashMap<Block, BlockFace> blockFace = new HashMap<>();
-                blockFace.put(block, event.getBlockFace());
-                blocks.put(player, blockFace);
-            }
-        }
+        ItemStack item = methods.getItemInHand(player);
+        Block block = event.getClickedBlock();
+
+        if (!isBlastActive(enchantmentBookSettings.getEnchantmentsOnItem(item), player, block)) return;
+
+        HashMap<Block, BlockFace> blockFace = new HashMap<>();
+        blockFace.put(block, event.getBlockFace());
+        blocks.put(player, blockFace);
 
     }
 
@@ -85,12 +84,11 @@ public class PickaxeEnchantments implements Listener {
         ItemStack currentItem = methods.getItemInHand(player);
 
         if (!blocks.containsKey(player)) return;
+        if (!blocks.get(player).containsKey(currentBlock)) return;
 
         List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
 
-        if (!blocks.get(player).containsKey(currentBlock)) return;
-
-        if (!(enchantments.contains(CEnchantments.BLAST.getEnchantment()) && event.getPlayer().hasPermission("crazyenchantments.blast.use"))) return;
+        if (!isBlastActive(enchantments, player, null)) return;
 
         event.setCancelled(true);
 
@@ -372,12 +370,11 @@ public class PickaxeEnchantments implements Listener {
             if (CEnchantments.AUTOSMELT.isActivated() &&
                 isOre &&
                 (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) &&
-                !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
-                        player.hasPermission("crazyenchantments.blast.use") &&
-                        crazyManager.getBlastBlockList().contains(block.getType())) ||
-                    enchantments.contains(CEnchantments.FURNACE.getEnchantment()) ||
-                    enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
+                    !(isBlastActive(enchantments, player, block) ||
+                        enchantments.contains(CEnchantments.FURNACE.getEnchantment()) ||
+                        enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
                 CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
                 plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
@@ -395,7 +392,12 @@ public class PickaxeEnchantments implements Listener {
                 }
             }
 
-            if (CEnchantments.FURNACE.isActivated() && isOre && (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && player.hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+            if (CEnchantments.FURNACE.isActivated() &&
+                    isOre &&
+                    (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) &&
+                    !((isBlastActive(enchantments, player, null)) ||
+                            enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
                 plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
@@ -414,7 +416,12 @@ public class PickaxeEnchantments implements Listener {
             }
         }
 
-        if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) && isOre && (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && player.hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+        if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) &&
+                isOre &&
+                (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) &&
+                        !((isBlastActive(enchantments, player, null)) ||
+                                enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
+            
             int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
 
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
@@ -565,4 +572,12 @@ public class PickaxeEnchantments implements Listener {
 
         return range > 1 ? random.nextInt(range) : 1;
     }
+
+    private boolean isBlastActive(List<CEnchantment> enchantments, Player player, Block block) {
+        return CEnchantments.BLAST.isActivated() &&
+                enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
+                player.hasPermission("crazyenchantments.blast.use") &&
+                (block == null || crazyManager.getBlastBlockList().contains(block.getType()));
+    }
+
 }
