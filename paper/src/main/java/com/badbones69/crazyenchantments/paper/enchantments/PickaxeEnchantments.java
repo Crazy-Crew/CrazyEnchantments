@@ -233,6 +233,7 @@ public class PickaxeEnchantments implements Listener {
         if (!enchantments.contains(CEnchantments.VEINMINER.getEnchantment())) return;
 
         List<Block> blockList = new ArrayList<>(getOreBlocks(currentBlock.getLocation(), crazyManager.getLevel(currentItem, CEnchantments.VEINMINER)));
+        blockList.add(currentBlock);
 
         BlastUseEvent VeinMinerUseEvent = new BlastUseEvent(player, blockList);
         plugin.getServer().getPluginManager().callEvent(VeinMinerUseEvent);
@@ -255,7 +256,6 @@ public class PickaxeEnchantments implements Listener {
                 EventUtils.removeIgnoredEvent(event2);
             }
         }
-        finalBlockList.add(new BlockProcessInfo(currentItem, currentBlock));
 
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
