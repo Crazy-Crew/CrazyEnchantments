@@ -369,9 +369,15 @@ public class PickaxeEnchantments implements Listener {
         boolean isOre = isOre(block.getType());
 
         if (player.getGameMode() != GameMode.CREATIVE) {
-            if (CEnchantments.AUTOSMELT.isActivated() && isOre &&
-                    (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) && !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) && player.hasPermission("crazyenchantments.blast.use")) || enchantments.contains(CEnchantments.FURNACE.getEnchantment()) || enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
-                    CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+            if (CEnchantments.AUTOSMELT.isActivated() &&
+                isOre &&
+                (enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) &&
+                !((enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
+                        player.hasPermission("crazyenchantments.blast.use") &&
+                        crazyManager.getBlastBlockList().contains(block.getType())) ||
+                    enchantments.contains(CEnchantments.FURNACE.getEnchantment()) ||
+                    enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) &&
+                CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
                 plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
