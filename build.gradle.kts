@@ -6,7 +6,7 @@ defaultTasks("build")
 
 rootProject.group = "com.badbones69.crazyenchantments"
 rootProject.description = "Adds over 80 unique enchantments to your server and more!"
-rootProject.version = "2.1.1"
+rootProject.version = "2.1.2"
 
 tasks {
     assemble {

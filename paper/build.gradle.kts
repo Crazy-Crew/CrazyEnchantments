@@ -128,8 +128,12 @@ val file = file("${rootProject.rootDir}/jars/${rootProject.name}-${rootProject.v
 
 val description = """
 ## Fix:
-* Fixed 2 config options not being bold.
-* Fixed towny pvp being based on the town instead of the plot.
+* Blast + furnace/autoSmelt #isOre check being based on only the first block broken.
+* Boom not taking permissions into account when dealing damage.
+* VeinMiner being able to break block without having permission.
+
+##Misc
+*  Better handling of blast. If blast can not activate due to a permission or the blocklist, will allow other enchants to still work.
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
