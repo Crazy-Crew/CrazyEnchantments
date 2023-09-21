@@ -18,15 +18,11 @@ repositories {
 
     maven("https://ci.ender.zone/plugin/repository/everything/")
 
-    maven("https://repo.codemc.org/repository/maven-public/")
-
     maven("https://repo.papermc.io/repository/maven-public/")
 
     maven("https://repo.glaremasters.me/repository/towny/")
 
     maven("https://repo.bg-software.com/repository/api/")
-
-    maven("https://repo.crazycrew.us/third-party/")
 
     maven("https://maven.enginehub.org/repo/")
 
@@ -127,13 +123,15 @@ val other = if (isSnapshot) "Beta" else "Release"
 val file = file("${rootProject.rootDir}/jars/${rootProject.name}-${rootProject.version}.jar")
 
 val description = """
+## Changes:
+ * Added 1.20.2 support.
 ## Fix:
-* Blast + furnace/autoSmelt #isOre check being based on only the first block broken.
-* Boom not taking permissions into account when dealing damage.
-* VeinMiner being able to break block without having permission.
+ * Blast + furnace/autoSmelt #isOre check being based on only the first block broken.
+ * Boom not taking permissions into account when dealing damage.
+ * VeinMiner being able to break block without having permission.
 
 ##Misc
-*  Better handling of blast. If blast can not activate due to a permission or the blocklist, will allow other enchants to still work.
+ * Better handling of blast. If blast can not activate due to a permission or the blocklist, will allow other enchants to still work.
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
@@ -143,7 +141,7 @@ val description = """
 val versions = listOf(
     "1.20",
     "1.20.1",
-    //"1.20.2"
+    "1.20.2"
 )
 
 modrinth {
@@ -170,8 +168,11 @@ modrinth {
 hangarPublish {
     publications.register("plugin") {
         version.set(rootProject.version as String)
-        namespace("CrazyCrew", rootProject.name)
-        channel.set(other)
+
+        id.set(rootProject.name)
+
+        channel.set(if (isSnapshot) "Beta" else "Release")
+
         changelog.set(description)
 
         apiKey.set(System.getenv("hangar_key"))

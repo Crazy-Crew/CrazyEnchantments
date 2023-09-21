@@ -1,6 +1,6 @@
 [versions]
 modrinth = "2.8.2"
-hangar = "0.0.5"
+hangar = "0.1.0"
 
 [plugins]
 hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
