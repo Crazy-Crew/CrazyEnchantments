@@ -125,12 +125,14 @@ val file = file("${rootProject.rootDir}/jars/${rootProject.name}-${rootProject.v
 val description = """
 ## Changes:
  * Added 1.20.2 support.
+ * Bumped nbt-api.
+ 
 ## Fix:
  * Blast + furnace/autoSmelt #isOre check being based on only the first block broken.
  * Boom not taking permissions into account when dealing damage.
  * VeinMiner being able to break block without having permission.
 
-##Misc
+## Misc
  * Better handling of blast. If blast can not activate due to a permission or the blocklist, will allow other enchants to still work.
 
 ## Other:
