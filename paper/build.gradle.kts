@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    implementation("de.tr7zw", "item-nbt-api", "2.11.3")
+    implementation("de.tr7zw", "item-nbt-api", "2.12.0")
 
     implementation("org.bstats", "bstats-bukkit", "3.0.2")
 
@@ -92,7 +92,7 @@ tasks {
 
     shadowJar {
         listOf(
-            "de.tr7zw",
+            "de.tr7zw.changeme.nbtapi",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
