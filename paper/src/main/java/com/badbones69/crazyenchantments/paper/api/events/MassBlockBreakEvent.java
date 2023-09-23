@@ -7,14 +7,14 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import java.util.List;
 
-public class BlastUseEvent extends Event implements Cancellable {
+public class MassBlockBreakEvent extends Event implements Cancellable {
     
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private boolean cancelled;
     private final List<Block> blockList;
     
-    public BlastUseEvent(Player player, List<Block> blockList) {
+    public MassBlockBreakEvent(Player player, List<Block> blockList) {
         this.player = player;
         this.cancelled = false;
         this.blockList = blockList;
