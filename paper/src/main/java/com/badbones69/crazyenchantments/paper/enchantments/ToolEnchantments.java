@@ -11,7 +11,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.TelepathyDrop;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
-import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ItemUtils;
 import com.google.common.collect.Lists;
 import org.bukkit.GameMode;
