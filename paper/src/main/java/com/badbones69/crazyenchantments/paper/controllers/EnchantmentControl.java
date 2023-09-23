@@ -31,7 +31,7 @@ import java.util.HashMap;
 
 public class EnchantmentControl implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final Starter starter = plugin.getStarter();
 

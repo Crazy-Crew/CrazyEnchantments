@@ -10,7 +10,8 @@ pluginManagement {
 rootProject.name = "CrazyEnchantments"
 
 listOf(
-    "paper"
+    "paper",
+    "common"
 ).forEach {
     include(it)
 }

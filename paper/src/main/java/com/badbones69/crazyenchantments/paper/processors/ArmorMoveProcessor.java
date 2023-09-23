@@ -17,26 +17,28 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     // Plugin Support.
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
+    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+    private final SpartanSupport spartanSupport = this.starter.getSpartanSupport();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final Processor<Runnable> syncProcessor;
 
@@ -45,12 +47,12 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
     }
 
     public void stop() {
-        syncProcessor.stop();
+        this.syncProcessor.stop();
         super.stop();
     }
 
     public void start() {
-        syncProcessor.start();
+        this.syncProcessor.start();
         super.start();
     }
 
@@ -58,7 +60,7 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
         Player player = process.getPlayer();
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-            if (!enchantmentBookSettings.hasEnchantments(armor)) continue;
+            if (!this.enchantmentBookSettings.hasEnchantments(armor)) continue;
 
             if (CEnchantments.NURSERY.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.NURSERY)) {
                 int heal = 1;
@@ -67,9 +69,9 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                     // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                     double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
                     if (maxHealth > player.getHealth() && player.getHealth() > 0) {
-                        syncProcessor.add(() -> {
+                        this.syncProcessor.add(() -> {
                             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
-                            plugin.getServer().getPluginManager().callEvent(event);
+                            this.plugin.getServer().getPluginManager().callEvent(event);
 
                             if (!event.isCancelled() && player.getHealth() > 0) {
                                 if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
@@ -82,9 +84,9 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             }
 
             if (CEnchantments.IMPLANTS.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.IMPLANTS) && CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
-                syncProcessor.add(() -> {
+                this.syncProcessor.add(() -> {
                     EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS.getEnchantment(), armor);
-                    plugin.getServer().getPluginManager().callEvent(event);
+                    this.plugin.getServer().getPluginManager().callEvent(event);
 
                     if (!event.isCancelled()) {
                         int foodIncrease = 1;
@@ -101,13 +103,13 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             if ((CEnchantments.ANGEL.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.ANGEL) && SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
                 final int radius = 4 + crazyManager.getLevel(armor, CEnchantments.ANGEL);
 
-                syncProcessor.add(() -> {
+                this.syncProcessor.add(() -> {
                     for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                         if (!(entity instanceof Player other)) continue;
                         if (!pluginSupport.isFriendly(player, other)) continue;
 
                         AngelUseEvent event = new AngelUseEvent(player, armor);
-                        plugin.getServer().getPluginManager().callEvent(event);
+                        this.plugin.getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
                     }
@@ -123,18 +125,18 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
 
     private void useHellForge(Player player, ItemStack item) {
         if (crazyManager.hasEnchantment(item, CEnchantments.HELLFORGED)) {
-            int armorDurability = methods.getDurability(item);
+            int armorDurability = this.methods.getDurability(item);
 
             if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
-                plugin.getServer().getScheduler().runTask(plugin, () -> {
+                this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
                     int finalArmorDurability = armorDurability;
 
                     HellForgedUseEvent event = new HellForgedUseEvent(player, item);
-                    plugin.getServer().getPluginManager().callEvent(event);
+                    this.plugin.getServer().getPluginManager().callEvent(event);
 
                     if (!event.isCancelled()) {
-                        finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
-                        methods.setDurability(item, finalArmorDurability);
+                        finalArmorDurability -= this.crazyManager.getLevel(item, CEnchantments.HELLFORGED);
+                        this.methods.setDurability(item, finalArmorDurability);
                     }
                 });
             }

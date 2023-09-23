@@ -34,21 +34,21 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
      * @return The player that uses the enchantment.
      */
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     /**
      * @return The enchantment that is used.
      */
     public CEnchantment getEnchantment() {
-        return enchantment;
+        return this.enchantment;
     }
     
     /**
      * @return The item that uses the enchantment.
      */
     public ItemStack getItem() {
-        return item;
+        return this.item;
     }
 
     /**
@@ -57,7 +57,7 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
      */
     @Override
     public boolean isCancelled() {
-        return cancel;
+        return this.cancel;
     }
 
     /**

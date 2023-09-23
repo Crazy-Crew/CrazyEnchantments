@@ -3,10 +3,13 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
+import com.ryderbelserion.cluster.bukkit.utils.LegacyLogger;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,8 +38,7 @@ public class LostBook {
         try { // If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
         } catch (Exception e) {
-            CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-            plugin.getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
+            LegacyLogger.info("The sound " + sound + " is not a sound found in this minecraft version.", e);
             this.sound = null;
         }
 
@@ -44,46 +46,46 @@ public class LostBook {
     }
     
     public int getSlot() {
-        return slot;
+        return this.slot;
     }
     
     public boolean isInGUI() {
-        return inGUI;
+        return this.inGUI;
     }
     
     public ItemBuilder getDisplayItem() {
-        return displayItem;
+        return this.displayItem;
     }
     
     public int getCost() {
-        return cost;
+        return this.cost;
     }
     
     public Currency getCurrency() {
-        return currency;
+        return this.currency;
     }
     
     public boolean useFirework() {
-        return useFirework;
+        return this.useFirework;
     }
     
     public List<Color> getFireworkColors() {
-        return fireworkColors;
+        return this.fireworkColors;
     }
     
     public boolean playSound() {
-        return useSound;
+        return this.useSound;
     }
     
     public Sound getSound() {
-        return sound;
+        return this.sound;
     }
     
     public ItemBuilder getLostBook(Category category) {
         return getLostBook(category, 1);
     }
 
-    private final NamespacedKey lostBookKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "Lost_Book_Type");
+    private final NamespacedKey lostBookKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(CrazyEnchantments.class), "Lost_Book_Type");
 
     public ItemBuilder getLostBook(Category category, int amount) {
         FileConfiguration file = Files.CONFIG.getFile();
@@ -96,6 +98,6 @@ public class LostBook {
         .setNamePlaceholders(placeholders)
         .setLore(file.getStringList("Settings.LostBook.Lore"))
         .setLorePlaceholders(placeholders)
-        .setStringPDC(lostBookKey, category.getName());
+        .setStringPDC(this.lostBookKey, category.getName());
     }
 }

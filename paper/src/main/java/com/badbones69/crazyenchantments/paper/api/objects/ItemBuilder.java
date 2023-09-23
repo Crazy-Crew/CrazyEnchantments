@@ -133,7 +133,7 @@ public class ItemBuilder {
         this.itemFlags = new ArrayList<>();
     }
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final Starter starter = plugin.getStarter();
 

@@ -14,16 +14,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class SilkSpawnerSupport implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final SilkUtil api = SilkUtil.hookIntoSilkSpanwers();
 
@@ -32,24 +34,24 @@ public class SilkSpawnerSupport implements Listener {
         Player player = e.getPlayer();
         Block block = e.getBlock();
 
-        if (player == null && block == null) return;
+        if (player == null) return;
 
-        assert player != null;
+        if (block == null) return;
+
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (enchantmentBookSettings.hasEnchantment(itemStack, CEnchantments.TELEPATHY.getEnchantment())) {
-            String mob = api.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
+        if (this.enchantmentBookSettings.hasEnchantment(itemStack, CEnchantments.TELEPATHY.getEnchantment())) {
+            String mob = this.api.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
 
             if (!player.hasPermission("silkspawners.silkdrop." + mob)) return;
 
             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY.getEnchantment(), itemStack);
-            plugin.getServer().getPluginManager().callEvent(event);
+            this.plugin.getServer().getPluginManager().callEvent(event);
 
-            ItemStack spawnerItem = api.newSpawnerItem(e.getEntityID(), api.getCustomSpawnerName(api.getCreatureName(e.getEntityID())), 1, false);
+            ItemStack spawnerItem = this.api.newSpawnerItem(e.getEntityID(), this.api.getCustomSpawnerName(this.api.getCreatureName(e.getEntityID())), 1, false);
 
-            if (!methods.isInventoryFull(player)) player.getInventory().addItem(spawnerItem); else block.getWorld().dropItemNaturally(block.getLocation(), spawnerItem);
+            if (!this.methods.isInventoryFull(player)) player.getInventory().addItem(spawnerItem); else block.getWorld().dropItemNaturally(block.getLocation(), spawnerItem);
 
-            assert block != null;
             block.setType(Material.AIR);
             e.setCancelled(true);
         }

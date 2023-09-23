@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
-import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.ryderbelserion.cluster.bukkit.utils.LegacyUtils;
 import java.util.Calendar;
 
 public class GkitCoolDown {
@@ -40,12 +40,12 @@ public class GkitCoolDown {
         int minute = 0;
         int second = 0;
 
-        if (coolDownTime != null) {
-            int total = ((int) (coolDownTime.getTimeInMillis() / 1000) - (int) (Calendar.getInstance().getTimeInMillis() / 1000));
+        if (this.coolDownTime != null) {
+            int total = ((int) (this.coolDownTime.getTimeInMillis() / 1000) - (int) (Calendar.getInstance().getTimeInMillis() / 1000));
             second += total;
         }
 
-        return ColorUtils.color(message.replace("%Day%", String.valueOf(day)).replace("%day%", String.valueOf(day))
+        return LegacyUtils.color(message.replace("%Day%", String.valueOf(day)).replace("%day%", String.valueOf(day))
         .replace("%Hour%", String.valueOf(hour)).replace("%hour%", String.valueOf(hour))
         .replace("%Minute%", String.valueOf(minute)).replace("%minute%", String.valueOf(minute))
         .replace("%Second%", String.valueOf(second)).replace("%second%", String.valueOf(second)));
