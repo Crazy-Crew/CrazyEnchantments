@@ -268,6 +268,8 @@ public class PickaxeEnchantments implements Listener {
         List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         boolean isOre = isOre(block.getType());
 
+        if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())) return;
+
         if (player.getGameMode() != GameMode.CREATIVE) {
             if (CEnchantments.AUTOSMELT.isActivated() &&
                 isOre &&
@@ -293,8 +295,7 @@ public class PickaxeEnchantments implements Listener {
 
             if (CEnchantments.FURNACE.isActivated() &&
                     isOre &&
-                    (enchantments.contains(CEnchantments.FURNACE.getEnchantment()) &&
-                            enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) {
+                    (enchantments.contains(CEnchantments.FURNACE.getEnchantment()))) {
 
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
                 plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
@@ -316,8 +317,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) &&
                 isOre &&
-                (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) &&
-                                enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()))) {
+                (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()))) {
 
             int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
 
