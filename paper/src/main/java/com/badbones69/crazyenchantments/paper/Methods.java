@@ -441,8 +441,8 @@ public class Methods {
         return versionInt >= 1194 || versionInt == 120 ? -1 : Integer.MAX_VALUE;
     }
 
-    public List<Block> getEnchantBlocks(Location loc, Location loc2) {
-        List<Block> blockList = new ArrayList<>();
+    public HashSet<Block> getEnchantBlocks(Location loc, Location loc2) {
+        HashSet<Block> blockList = new HashSet<>();
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));
         int bottomBlockX = (Math.min(loc.getBlockX(), loc2.getBlockX()));
         int topBlockY = (Math.max(loc.getBlockY(), loc2.getBlockY()));

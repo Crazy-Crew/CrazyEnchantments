@@ -81,7 +81,7 @@ public class PickaxeEnchantments implements Listener {
         if (!(blocks.containsKey(player) && blocks.get(player).containsKey(initialBlock))) return;
         if (!isBlastActive(enchantments, player, initialBlock)) return;
 
-        List<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
+        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
         blocks.remove(player);
 
         MassBlockBreakEvent blastUseEvent = new MassBlockBreakEvent(player, blockList);
@@ -130,7 +130,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (!enchantments.contains(CEnchantments.VEINMINER.getEnchantment())) return;
 
-        List<Block> blockList = new ArrayList<>(getOreBlocks(currentBlock.getLocation(), crazyManager.getLevel(currentItem, CEnchantments.VEINMINER)));
+        HashSet<Block> blockList = getOreBlocks(currentBlock.getLocation(), crazyManager.getLevel(currentItem, CEnchantments.VEINMINER));
         blockList.add(currentBlock);
 
         MassBlockBreakEvent VeinMinerUseEvent = new MassBlockBreakEvent(player, blockList);
@@ -299,7 +299,7 @@ public class PickaxeEnchantments implements Listener {
         
         return locations;
     }
-    private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
+    private HashSet<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
 
         switch (blockFace) {
@@ -355,11 +355,6 @@ public class PickaxeEnchantments implements Listener {
             default -> false;
         };
     }
-
-    private ItemStack getOreDrop(Material material) {
-        return getOreDrop(material, 1);
-    }
-
     private ItemStack getOreDrop(Material material, int amount) {
         ItemBuilder dropItem = new ItemBuilder().setAmount(amount);
 
