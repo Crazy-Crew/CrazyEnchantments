@@ -474,7 +474,7 @@ public class Methods {
 
     public void checkEntity(LivingEntity en) {
         Location loc = en.getLocation();
-        if (loc.getWorld() != null) loc.getWorld().spigot().strikeLightning(loc, true);
+        if (loc.getWorld() != null) loc.getWorld().strikeLightning(loc);
         int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
         try {
