@@ -76,7 +76,9 @@ dependencies {
 
     compileOnly("me.clip", "placeholderapi", "2.11.4")
 
-    compileOnly("io.th0rgal", "oraxen", "1.156.3")
+    compileOnly("io.th0rgal", "oraxen", "1.156.3") {
+        exclude("org.jetbrains", "annotations")
+    }
 
     compileOnly(fileTree("libs").include("*.jar"))
 }
