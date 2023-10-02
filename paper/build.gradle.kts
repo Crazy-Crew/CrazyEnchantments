@@ -74,7 +74,7 @@ dependencies {
         exclude("*", "*")
     }
 
-    compileOnly("me.clip", "placeholderapi", "2.11.3")
+    compileOnly("me.clip", "placeholderapi", "2.11.4")
 
     compileOnly("io.th0rgal", "oraxen", "1.156.3")
 
