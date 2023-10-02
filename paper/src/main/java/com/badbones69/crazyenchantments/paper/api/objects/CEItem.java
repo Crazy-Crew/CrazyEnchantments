@@ -6,9 +6,6 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,13 +13,13 @@ import java.util.Map;
 
 public class CEItem {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final ItemStack item;
     private final List<Enchantment> vanillaEnchantmentRemove;
@@ -33,27 +30,27 @@ public class CEItem {
     public CEItem(ItemStack item) {
         this.item = item;
         // Has to make a new map as .getEnchantments is a ImmutableMap.
-        this.vanillaEnchantments = new HashMap<>(item.getEnchantments());
-        EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-        this.cEnchantments = enchantmentBookSettings.getEnchantments(item);
-        this.vanillaEnchantmentRemove = new ArrayList<>();
-        this.cEnchantmentRemove = new ArrayList<>();
+        vanillaEnchantments = new HashMap<>(item.getEnchantments());
+        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+        cEnchantments = enchantmentBookSettings.getEnchantments(item);
+        vanillaEnchantmentRemove = new ArrayList<>();
+        cEnchantmentRemove = new ArrayList<>();
     }
     
     public ItemStack getItem() {
-        return this.item;
+        return item;
     }
     
     public boolean hasVanillaEnchantment(Enchantment enchantment) {
-        return this.vanillaEnchantments.containsKey(enchantment);
+        return vanillaEnchantments.containsKey(enchantment);
     }
     
     public int getVanillaEnchantmentLevel(Enchantment enchantment) {
-        return this.vanillaEnchantments.getOrDefault(enchantment, 0);
+        return vanillaEnchantments.getOrDefault(enchantment, 0);
     }
     
     public Map<Enchantment, Integer> getVanillaEnchantments() {
-        return this.vanillaEnchantments;
+        return vanillaEnchantments;
     }
     
     public void setVanillaEnchantment(Enchantment enchantment, int level) {
@@ -61,35 +58,35 @@ public class CEItem {
     }
     
     public void removeVanillaEnchantment(Enchantment enchantment) {
-        this.vanillaEnchantmentRemove.add(enchantment);
+        vanillaEnchantmentRemove.add(enchantment);
     }
     
     public boolean hasCEnchantment(CEnchantment enchantment) {
-        return this.cEnchantments.containsKey(enchantment);
+        return cEnchantments.containsKey(enchantment);
     }
     
     public int getCEnchantmentLevel(CEnchantment enchantment) {
-        return this.cEnchantments.getOrDefault(enchantment, 0);
+        return cEnchantments.getOrDefault(enchantment, 0);
     }
     
     public Map<CEnchantment, Integer> getCEnchantments() {
-        return this.cEnchantments;
+        return cEnchantments;
     }
     
     public void setCEnchantment(CEnchantment enchantment, int level) {
-        this.cEnchantments.put(enchantment, level);
+        cEnchantments.put(enchantment, level);
     }
     
     public void removeCEnchantment(CEnchantment enchantment) {
-        this.cEnchantmentRemove.add(enchantment);
+        cEnchantmentRemove.add(enchantment);
     }
     
     public ItemStack build() {
-        this.vanillaEnchantmentRemove.forEach(this.item::removeEnchantment);
-        this.vanillaEnchantments.keySet().forEach(enchantment -> this.item.addUnsafeEnchantment(enchantment, this.vanillaEnchantments.get(enchantment)));
-        this.cEnchantmentRemove.forEach(enchantment -> this.enchantmentBookSettings.removeEnchantment(this.item, enchantment));
-        this.crazyManager.addEnchantments(this.item, this.cEnchantments);
+        vanillaEnchantmentRemove.forEach(item::removeEnchantment);
+        vanillaEnchantments.keySet().forEach(enchantment -> item.addUnsafeEnchantment(enchantment, vanillaEnchantments.get(enchantment)));
+        cEnchantmentRemove.forEach(enchantment -> enchantmentBookSettings.removeEnchantment(item, enchantment));
+        crazyManager.addEnchantments(item, cEnchantments);
 
-        return this.item;
+        return item;
     }
 }

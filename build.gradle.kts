@@ -6,7 +6,7 @@ defaultTasks("build")
 
 rootProject.group = "com.badbones69.crazyenchantments"
 rootProject.description = "Adds over 80 unique enchantments to your server and more!"
-rootProject.version = "2.2"
+rootProject.version = "2.1.2"
 
 tasks {
     assemble {
@@ -19,7 +19,9 @@ tasks {
             doLast {
                 if (!jarsDir.exists()) jarsDir.mkdirs()
 
-                val file = file("${project.layout.buildDirectory.get()}/libs/${rootProject.name}-${rootProject.version}.jar")
+                if (project.name == "core") return@doLast
+
+                val file = file("${project.buildDir}/libs/${rootProject.name}-${rootProject.version}.jar")
 
                 copy {
                     from(file)

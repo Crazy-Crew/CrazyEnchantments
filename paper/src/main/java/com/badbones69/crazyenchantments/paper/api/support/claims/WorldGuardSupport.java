@@ -21,7 +21,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
         try {
-            RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
+            RegionManager set = instance.getPlatform().getRegionContainer().get(world);
 
             if (set != null) return set.getApplicableRegions(v).queryState(null, Flags.PVP) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
@@ -37,7 +37,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
         try {
-            RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
+            RegionManager set = instance.getPlatform().getRegionContainer().get(world);
 
             if (set != null) return set.getApplicableRegions(v).queryState(null, Flags.BLOCK_BREAK) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
@@ -53,7 +53,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
         try {
-            RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
+            RegionManager set = instance.getPlatform().getRegionContainer().get(world);
 
             if (set != null) return set.getApplicableRegions(v).queryState(null, Flags.OTHER_EXPLOSION) != StateFlag.State.DENY && set.getApplicableRegions(v).queryState(null, Flags.TNT) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
@@ -69,7 +69,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         BlockVector3 v = BlockVector3.at(loc.getX(), loc.getY(), loc.getZ());
 
         try {
-            RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
+            RegionManager set = instance.getPlatform().getRegionContainer().get(world);
 
             if (set != null) {
                 for (ProtectedRegion region : set.getApplicableRegions(v).getRegions()) {
@@ -89,7 +89,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 
         try {
-            RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
+            RegionManager set = instance.getPlatform().getRegionContainer().get(world);
 
             if (set != null) {
                 for (ProtectedRegion region : set.getApplicableRegions(v).getRegions()) {
@@ -109,7 +109,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
         BlockVector3 v = BlockVector3.at(player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ());
 
         try {
-            RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
+            RegionManager set = instance.getPlatform().getRegionContainer().get(world);
 
             if (set != null) {
                 for (ProtectedRegion region : set.getApplicableRegions(v).getRegions()) {

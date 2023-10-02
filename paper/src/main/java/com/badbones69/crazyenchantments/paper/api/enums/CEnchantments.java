@@ -12,9 +12,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentTy
 import com.google.gson.Gson;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 public enum CEnchantments {
@@ -134,7 +131,7 @@ public enum CEnchantments {
     //	----------------All----------------  \\
     HELLFORGED("HellForged", "Damaged-Items", 5, 5);
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
 
@@ -199,7 +196,7 @@ public enum CEnchantments {
      * @return The name of the enchantment.
      */
     public String getName() {
-        return this.name;
+        return name;
     }
 
     /**
@@ -216,7 +213,7 @@ public enum CEnchantments {
      * @return The chance of the enchantment activating.
      */
     public int getChance() {
-        return this.chance;
+        return chance;
     }
 
     /**
@@ -226,7 +223,7 @@ public enum CEnchantments {
      * @return The amount the chance increases by every level.
      */
     public int getChanceIncrease() {
-        return this.chanceIncrease;
+        return chanceIncrease;
     }
 
     /**
@@ -241,7 +238,7 @@ public enum CEnchantments {
      */
     public EnchantmentType getType() {
         if (getEnchantment() == null || getEnchantment().getEnchantmentType() == null) {
-            return this.methods.getFromName(this.typeName);
+            return methods.getFromName(typeName);
         } else {
             return getEnchantment().getEnchantmentType();
         }
@@ -259,9 +256,9 @@ public enum CEnchantments {
      * @return The enchantment this is tied to.
      */
     public CEnchantment getEnchantment() {
-        if (this.cachedEnchantment == null) this.cachedEnchantment = this.crazyManager.getEnchantmentFromName(this.name);
+        if (cachedEnchantment == null) cachedEnchantment = crazyManager.getEnchantmentFromName(name);
 
-        return this.cachedEnchantment;
+        return cachedEnchantment;
     }
 
     /**
@@ -270,6 +267,7 @@ public enum CEnchantments {
      * @return The level of the enchantment that is on the item.
      */
     public int getLevel(ItemStack item) {
+        // PDC Start
         Gson gson = new Gson();
 
         if (!item.hasItemMeta() || !item.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) return 0;
@@ -278,10 +276,11 @@ public enum CEnchantments {
                 .get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
         boolean unsafe = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", false);
 
-        int level = data.getLevel(this.name);
+        int level = data.getLevel(name);
+        // PDC End
 
-        assert this.name != null;
-        CEnchantment enchant = getFromName(this.name).getEnchantment();
+        assert name != null;
+        CEnchantment enchant = getFromName(name).getEnchantment();
         if (!unsafe && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
         return level;
@@ -292,7 +291,7 @@ public enum CEnchantments {
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful() {
-        return this.chance >= 100 || this.chance <= 0 || this.methods.getRandomNumber ("0-100") <= chance;
+        return chance >= 100 || chance <= 0 || methods.getRandomNumber ("0-100") <= chance;
     }
 
     /**
@@ -301,13 +300,13 @@ public enum CEnchantments {
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(ItemStack item) {
-        return this.crazyManager.getEnchantmentFromName(this.name).chanceSuccessful(getLevel(item));
+        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
     }
 
     /**
      * Check if the CEnchantments uses a chance system.
      */
     public boolean hasChanceSystem() {
-        return this.hasChanceSystem;
+        return hasChanceSystem;
     }
 }

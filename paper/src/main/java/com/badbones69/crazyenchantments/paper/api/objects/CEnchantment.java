@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CEnchantment {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
 
@@ -44,7 +44,7 @@ public class CEnchantment {
         this.customName = name;
         this.activated = true;
         this.maxLevel = 3;
-        this.infoName = LegacyUtils.color("&7" + name);
+        this.infoName = ColorUtils.color("&7" + name);
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();
@@ -94,7 +94,7 @@ public class CEnchantment {
     }
 
     public CEnchantment setInfoName(String infoName) {
-        this.infoName = LegacyUtils.color(infoName);
+        this.infoName = ColorUtils.color(infoName);
 
         return this;
     }
@@ -137,7 +137,7 @@ public class CEnchantment {
     public CEnchantment setInfoDescription(List<String> infoDescription) {
         List<String> info = new ArrayList<>();
 
-        infoDescription.forEach(lore -> info.add(LegacyUtils.color(lore)));
+        infoDescription.forEach(lore -> info.add(ColorUtils.color(lore)));
 
         this.infoDescription = info;
 

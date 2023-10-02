@@ -9,7 +9,7 @@ public abstract class Processor<T> {
     private final Thread thread;
     
     public Processor() {
-        this.thread = new Thread(() -> {
+        thread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
                     T process = this.queue.take();
@@ -23,7 +23,7 @@ public abstract class Processor<T> {
     
     public void add(final T process) {
         try {
-            this.queue.put(process);
+            queue.put(process);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -32,10 +32,10 @@ public abstract class Processor<T> {
     abstract void process(final T process);
     
     public void start() {
-        this.thread.start();
+        thread.start();
     }
     
     public void stop() {
-        this.thread.interrupt();
+        thread.interrupt();
     }
 }

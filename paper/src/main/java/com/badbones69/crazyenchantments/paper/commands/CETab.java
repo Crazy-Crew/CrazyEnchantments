@@ -12,7 +12,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
@@ -21,15 +20,15 @@ import java.util.List;
 
 public class CETab implements TabCompleter {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
     
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
@@ -56,7 +55,7 @@ public class CETab implements TabCompleter {
         } else if (args.length == 2) { // /ce arg0
             switch (args[0].toLowerCase()) {
                 case "info", "remove", "add", "book" -> {
-                    for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
+                    for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").replace(" ", "_"));
                         } catch (NullPointerException ignore) {}
@@ -66,13 +65,13 @@ public class CETab implements TabCompleter {
                 }
 
                 case "spawn" -> {
-                    for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
+                    for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replace(" ", "_"));
                         } catch (NullPointerException ignore) {}
                     }
 
-                    for (Category category : this.enchantmentBookSettings.getCategories()) {
+                    for (Category category : enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}
@@ -98,7 +97,7 @@ public class CETab implements TabCompleter {
                 }
 
                 case "lostbook" -> {
-                    for (Category category : this.enchantmentBookSettings.getCategories()) {
+                    for (Category category : enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}
@@ -111,12 +110,12 @@ public class CETab implements TabCompleter {
             CEnchantment ceEnchantment;
             switch (args[0].toLowerCase()) {
                 case "book" -> {
-                    ceEnchantment = this.crazyManager.getEnchantmentFromName(args[1]);
+                    ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
                     if (ceEnchantment != null) for (int amount = 1; amount <= ceEnchantment.getMaxLevel(); amount++)
                         completions.add(String.valueOf(amount));
                 }
                 case "add" -> {
-                    ceEnchantment = this.crazyManager.getEnchantmentFromName(args[1]);
+                    ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
                     Enchantment vanillaEnchantment = methods.getEnchantment(args[1]);
                     if (vanillaEnchantment != null || ceEnchantment != null) {
                         int maxLevel = vanillaEnchantment != null ? vanillaEnchantment.getMaxLevel() : ceEnchantment.getMaxLevel();
@@ -135,7 +134,8 @@ public class CETab implements TabCompleter {
                     completions.add("32");
                     completions.add("64");
                 }
-                case "crystal", "scrambler" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "crystal", "scrambler" ->
+                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
 
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
@@ -149,7 +149,8 @@ public class CETab implements TabCompleter {
                     completions.add("Z:");
                 }
 
-                case "scroll", "dust", "lostbook" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "scroll", "dust", "lostbook" ->
+                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 default -> {
                     return StringUtil.copyPartialMatches(args[3], completions, new ArrayList<>());
                 }

@@ -11,25 +11,21 @@ import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
-import com.ryderbelserion.cluster.bukkit.utils.LegacyUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class ShopManager {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private String inventoryName;
     private int inventorySize;
@@ -38,12 +34,12 @@ public class ShopManager {
     private final HashMap<ItemBuilder, Integer> shopItems = new HashMap<>();
     
     public void load() {
-        this.customizerItems.clear();
-        this.shopItems.clear();
+        customizerItems.clear();
+        shopItems.clear();
         FileConfiguration config = Files.CONFIG.getFile();
-        this.inventoryName = LegacyUtils.color(config.getString("Settings.InvName"));
-        this.inventorySize = config.getInt("Settings.GUISize");
-        this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
+        inventoryName = ColorUtils.color(config.getString("Settings.InvName"));
+        inventorySize = config.getInt("Settings.GUISize");
+        enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
 
         for (String customItemString : config.getStringList("Settings.GUICustomization")) {
             int slot = 0;
@@ -56,34 +52,34 @@ public class ShopManager {
                 }
             }
 
-            if (slot > this.inventorySize || slot <= 0) continue;
+            if (slot > inventorySize || slot <= 0) continue;
 
             slot--;
-            this.customizerItems.put(ItemBuilder.convertString(customItemString), slot);
+            customizerItems.put(ItemBuilder.convertString(customItemString), slot);
         }
 
-        for (Category category : this.enchantmentBookSettings.getCategories()) {
+        for (Category category : enchantmentBookSettings.getCategories()) {
 
             if (category.isInGUI()) {
-                if (category.getSlot() > this.inventorySize) continue;
+                if (category.getSlot() > inventorySize) continue;
 
-                this.shopItems.put(category.getDisplayItem(), category.getSlot());
+                shopItems.put(category.getDisplayItem(), category.getSlot());
             }
 
             LostBook lostBook = category.getLostBook();
 
             if (lostBook.isInGUI()) {
-                if (lostBook.getSlot() > this.inventorySize) continue;
+                if (lostBook.getSlot() > inventorySize) continue;
 
-                this.shopItems.put(lostBook.getDisplayItem(), lostBook.getSlot());
+                shopItems.put(lostBook.getDisplayItem(), lostBook.getSlot());
             }
         }
 
         for (ShopOption option : ShopOption.values()) {
             if (option.isInGUI()) {
-                if (option.getSlot() > this.inventorySize) continue;
+                if (option.getSlot() > inventorySize) continue;
 
-                this.shopItems.put(option.getItemBuilder(), option.getSlot());
+                shopItems.put(option.getItemBuilder(), option.getSlot());
             }
         }
     }
@@ -92,30 +88,30 @@ public class ShopManager {
         HashMap<String, String> placeholders = new HashMap<>();
 
         for (Currency currency : Currency.values()) {
-            placeholders.put("%" + currency.getName() + "%", String.valueOf(this.currencyAPI.getCurrency(player, currency)));
+            placeholders.put("%" + currency.getName() + "%", String.valueOf(currencyAPI.getCurrency(player, currency)));
         }
 
-        Inventory inventory = this.plugin.getServer().createInventory(null, this.inventorySize, this.inventoryName);
+        Inventory inventory = plugin.getServer().createInventory(null, inventorySize, inventoryName);
 
-        for (Entry<ItemBuilder, Integer> itemBuilders : this.customizerItems.entrySet()) {
+        for (Entry<ItemBuilder, Integer> itemBuilders : customizerItems.entrySet()) {
             itemBuilders.getKey().setNamePlaceholders(placeholders)
             .setLorePlaceholders(placeholders);
             inventory.setItem(itemBuilders.getValue(), itemBuilders.getKey().build());
         }
 
-        this.shopItems.keySet().forEach(itemBuilder -> inventory.setItem(this.shopItems.get(itemBuilder), itemBuilder.build()));
+        shopItems.keySet().forEach(itemBuilder -> inventory.setItem(shopItems.get(itemBuilder), itemBuilder.build()));
         return inventory;
     }
     
     public String getInventoryName() {
-        return this.inventoryName;
+        return inventoryName;
     }
     
     public int getInventorySize() {
-        return this.inventorySize;
+        return inventorySize;
     }
     
     public boolean isEnchantmentTableShop() {
-        return this.enchantmentTableShop;
+        return enchantmentTableShop;
     }
 }

@@ -23,19 +23,19 @@ public class AngelUseEvent extends Event implements Cancellable {
      * @return The player that uses the enchantment.
      */
     public Player getPlayer() {
-        return this.player;
+        return player;
     }
     
     /**
      * @return The item the enchantment is on.
      */
     public ItemStack getItem() {
-        return this.item;
+        return item;
     }
     
     @Override
     public boolean isCancelled() {
-        return this.cancel;
+        return cancel;
     }
     
     @Override

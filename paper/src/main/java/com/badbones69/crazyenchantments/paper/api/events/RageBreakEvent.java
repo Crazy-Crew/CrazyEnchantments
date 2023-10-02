@@ -26,21 +26,21 @@ public class RageBreakEvent extends Event implements Cancellable {
      * @return The player that uses the enchantment.
      */
     public Player getPlayer() {
-        return this.player;
+        return player;
     }
     
     /**
      * @return The entity that is attacking the player.
      */
     public Entity getDamager() {
-        return this.damager;
+        return damager;
     }
     
     /**
      * @return The item that uses the enchantment.
      */
     public ItemStack getItem() {
-        return this.weapon;
+        return weapon;
     }
     
     /**
@@ -48,7 +48,7 @@ public class RageBreakEvent extends Event implements Cancellable {
      */
     @Override
     public boolean isCancelled() {
-        return this.cancel;
+        return cancel;
     }
 
     /**

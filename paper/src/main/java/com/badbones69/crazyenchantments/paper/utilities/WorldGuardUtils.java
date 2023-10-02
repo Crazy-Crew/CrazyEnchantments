@@ -8,13 +8,13 @@ public class WorldGuardUtils {
     private WorldGuardVersion worldGuardVersion;
 
     public void init() {
-        this.worldGuardVersion = new WorldGuardSupport();
+        worldGuardVersion = new WorldGuardSupport();
     }
 
     /**
      * @return World Guard support class.
      */
     public WorldGuardVersion getWorldGuardSupport() {
-        return this.worldGuardVersion;
+        return worldGuardVersion;
     }
 }

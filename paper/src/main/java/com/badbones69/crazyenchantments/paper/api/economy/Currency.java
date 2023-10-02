@@ -43,6 +43,6 @@ public enum Currency {
      * @return The name of the currency.
      */
     public String getName() {
-        return this.name;
+        return name;
     }
 }

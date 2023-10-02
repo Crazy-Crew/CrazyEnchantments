@@ -5,16 +5,14 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GKitz {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
     
     private final int slot;
     private final String name;
@@ -86,20 +84,20 @@ public class GKitz {
      */
     public List<ItemStack> getKitItems() {
         List<ItemStack> items = new ArrayList<>();
-        for (String itemString : this.itemStrings) {
+        for (String itemString : itemStrings) {
             //This is used to convert old v1.7- gkit files to use newer way.
-            itemString = this.crazyManager.getNewItemString(itemString);
+            itemString = crazyManager.getNewItemString(itemString);
 
             GKitzItem item = new GKitzItem(ItemBuilder.convertString(itemString));
 
             for (String option : itemString.split(", ")) {
                 try {
-                    CEnchantment enchantment = this.crazyManager.getEnchantmentFromName(option.split(":")[0]);
+                    CEnchantment enchantment = crazyManager.getEnchantmentFromName(option.split(":")[0]);
                     String level = option.split(":")[1];
 
                     if (enchantment != null) {
                         if (level.contains("-")) {
-                            int randomLevel = this.crazyManager.pickLevel(Integer.parseInt(level.split("-")[0]), Integer.parseInt(level.split("-")[1]));
+                            int randomLevel = crazyManager.pickLevel(Integer.parseInt(level.split("-")[0]), Integer.parseInt(level.split("-")[1]));
 
                             if (randomLevel > 0) item.addCEEnchantment(enchantment, randomLevel);
                         } else {

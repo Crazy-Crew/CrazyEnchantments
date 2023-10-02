@@ -12,18 +12,18 @@ public class BowEnchantmentManager {
     private final List<BowEnchantment> bowEnchantments = new ArrayList<>();
 
     public void load() {
-        this.bowEnchantments.clear();
+        bowEnchantments.clear();
 
-        if (CEnchantments.PIERCING.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.PIERCING, 2, false));
+        if (CEnchantments.PIERCING.isActivated()) bowEnchantments.add(new BowEnchantment(CEnchantments.PIERCING, 2, false));
 
-        if (CEnchantments.ICEFREEZE.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.ICEFREEZE, List.of(new PotionEffects(PotionEffectType.SLOW, 5 * 20, 1)), false));
+        if (CEnchantments.ICEFREEZE.isActivated()) bowEnchantments.add(new BowEnchantment(CEnchantments.ICEFREEZE, List.of(new PotionEffects(PotionEffectType.SLOW, 5 * 20, 1)), false));
 
-        if (CEnchantments.VENOM.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.VENOM, List.of(new PotionEffects(PotionEffectType.POISON, 2 * 20, -1)), true));
+        if (CEnchantments.VENOM.isActivated()) bowEnchantments.add(new BowEnchantment(CEnchantments.VENOM, List.of(new PotionEffects(PotionEffectType.POISON, 2 * 20, -1)), true));
 
-        if (CEnchantments.SNIPER.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.SNIPER, List.of(new PotionEffects(PotionEffectType.POISON, 5 * 20, 1)), false));
+        if (CEnchantments.SNIPER.isActivated()) bowEnchantments.add(new BowEnchantment(CEnchantments.SNIPER, List.of(new PotionEffects(PotionEffectType.POISON, 5 * 20, 1)), false));
     }
     
     public List<BowEnchantment> getBowEnchantments() {
-        return this.bowEnchantments;
+        return bowEnchantments;
     }
 }

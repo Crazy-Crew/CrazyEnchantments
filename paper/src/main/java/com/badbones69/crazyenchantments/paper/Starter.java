@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.SkullCreator;
@@ -24,13 +25,12 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public class Starter {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
+    private FileManager fileManager;
     private CrazyManager crazyManager;
     private Methods methods;
     private SkullCreator skullCreator;
@@ -69,6 +69,11 @@ public class Starter {
     private ScrollListener scrollListener;
 
     public void run() {
+        this.fileManager = new FileManager();
+
+        // Set up all our files.
+        this.fileManager.setLog(true).setup();
+
         // Plugin Support.
         this.pluginSupport = new PluginSupport();
 
@@ -117,6 +122,10 @@ public class Starter {
         this.bowUtils = new BowUtils();
 
         this.plugin.pluginManager.registerEvents(new EnchantmentControl(), this.plugin);
+    }
+
+    public FileManager getFileManager() {
+        return this.fileManager;
     }
 
     public Methods getMethods() {

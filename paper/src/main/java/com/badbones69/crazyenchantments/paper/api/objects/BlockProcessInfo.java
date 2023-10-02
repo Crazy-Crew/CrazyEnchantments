@@ -17,22 +17,22 @@ public class BlockProcessInfo {
         this.item = item;
         this.block = block;
         this.drops = new ArrayList<>(block.getDrops(item));
-        this.isSpawner = block.getType() == Material.SPAWNER;
+        isSpawner = block.getType() == Material.SPAWNER;
     }
     
     public ItemStack getItem() {
-        return this.item;
+        return item;
     }
     
     public Block getBlock() {
-        return this.block;
+        return block;
     }
     
     public List<ItemStack> getDrops() {
-        return this.drops;
+        return drops;
     }
     
     public boolean isSpawner() {
-        return this.isSpawner;
+        return isSpawner;
     }
 }

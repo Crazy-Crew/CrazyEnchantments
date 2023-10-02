@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
-import com.ryderbelserion.cluster.bukkit.utils.LegacyUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.NamespacedKey;
@@ -14,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -96,14 +94,14 @@ public enum Scrolls {
         return item;
     }
 
-    private static final NamespacedKey whiteScrollProtectionKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(CrazyEnchantments.class), "White_Scroll_Protection");
+    private static final NamespacedKey whiteScrollProtectionKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "White_Scroll_Protection");
 
     public static String getWhiteScrollProtectionName() {
         String protectNamed;
 
         FileConfiguration config = Files.CONFIG.getFile();
 
-        protectNamed = LegacyUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
+        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
 
         return protectNamed;
     }

@@ -15,9 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +22,11 @@ import java.util.Map;
 
 public class AuraListener implements Listener {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final CEnchantments[] AURA_ENCHANTMENTS = {
             CEnchantments.BLIZZARD,
@@ -58,7 +55,7 @@ public class AuraListener implements Listener {
         if (playerEquipment.getHolder().isEmpty()) return;
 
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
-            Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
+            Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
@@ -66,7 +63,7 @@ public class AuraListener implements Listener {
 
                 for (Player other : players) {
                     AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
-                    this.plugin.getServer().getPluginManager().callEvent(auraEvent);
+                    plugin.getServer().getPluginManager().callEvent(auraEvent);
                 }
             });
         }
@@ -77,14 +74,14 @@ public class AuraListener implements Listener {
             if (otherEquipment.getHolder().isEmpty()) continue;
 
             for (ItemStack item : otherEquipment.getArmorContents()) { // The other players moving.
-                Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
+                Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
                     if (enchantmentEnum == null) return;
 
                     AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
-                    this.plugin.getServer().getPluginManager().callEvent(auraEvent);
+                    plugin.getServer().getPluginManager().callEvent(auraEvent);
                 });
             }
         }

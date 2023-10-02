@@ -14,22 +14,20 @@ import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BowUtils {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
@@ -39,23 +37,23 @@ public class BowUtils {
     public void addArrow(Arrow arrow, Entity entity, ItemStack bow) {
         if (arrow == null) return;
 
-        List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(bow);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(bow);
 
         EnchantedArrow enchantedArrow = new EnchantedArrow(arrow, entity, bow, enchantments);
 
-        this.enchantedArrows.add(enchantedArrow);
+        enchantedArrows.add(enchantedArrow);
     }
 
     public void removeArrow(EnchantedArrow enchantedArrow) {
-        if (!this.enchantedArrows.contains(enchantedArrow) || enchantedArrow == null) return;
+        if (!enchantedArrows.contains(enchantedArrow) || enchantedArrow == null) return;
 
-        this.enchantedArrows.remove(enchantedArrow);
+        enchantedArrows.remove(enchantedArrow);
     }
 
     public boolean isBowEnchantActive(CEnchantments customEnchant, ItemStack itemStack, Arrow arrow) {
         return arrow != null &&
                 customEnchant.isActivated() &&
-                this.crazyManager.hasEnchantment(itemStack, customEnchant) &&
+                crazyManager.hasEnchantment(itemStack, customEnchant) &&
                 customEnchant.chanceSuccessful(itemStack);
     }
 
@@ -63,15 +61,15 @@ public class BowUtils {
         return customEnchant.isActivated() &&
                 enchantedArrow(arrow).hasEnchantment(customEnchant) &&
                 customEnchant.chanceSuccessful(enchantedArrow.getBow()) &&
-                this.enchantmentBookSettings.hasEnchantments(enchantedArrow.getBow());
+                enchantmentBookSettings.hasEnchantments(enchantedArrow.getBow());
     }
 
     public boolean allowsCombat(Entity entity) {
-        return !this.starter.getPluginSupport().allowCombat(entity.getLocation());
+        return !starter.getPluginSupport().allowCombat(entity.getLocation());
     }
 
     public EnchantedArrow enchantedArrow(Arrow arrow) {
-        for (EnchantedArrow enchArrow : this.enchantedArrows) {
+        for (EnchantedArrow enchArrow : enchantedArrows) {
             if (enchArrow != null && enchArrow.getArrow() != null && enchArrow.getArrow().equals(arrow)) return enchArrow;
         }
 
@@ -83,9 +81,9 @@ public class BowUtils {
     public void spawnArrows(Entity entity, Entity projectile, ItemStack bow) {
         Arrow spawnedArrow = entity.getWorld().spawn(projectile.getLocation(), Arrow.class);
 
-        EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, entity, bow, this.enchantmentBookSettings.getEnchantmentsOnItem(bow));
+        EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, entity, bow, enchantmentBookSettings.getEnchantmentsOnItem(bow));
 
-        this.enchantedArrows.add(enchantedMultiArrow);
+        enchantedArrows.add(enchantedMultiArrow);
 
         spawnedArrow.setShooter((ProjectileSource) entity);
 
@@ -99,7 +97,7 @@ public class BowUtils {
 
         spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
 
-        this.enchantedArrows.remove(enchantedMultiArrow);
+        enchantedArrows.remove(enchantedMultiArrow);
     }
 
     private float randomSpread() {
@@ -111,7 +109,7 @@ public class BowUtils {
 
     // Sticky Shot Start!
     public List<Block> getWebBlocks() {
-        return this.webBlocks;
+        return webBlocks;
     }
 
     public void spawnWebs(Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
@@ -125,13 +123,13 @@ public class BowUtils {
             if (entityLocation.getBlock().getType() != Material.AIR) return;
 
             entityLocation.getBlock().setType(Material.COBWEB);
-            this.webBlocks.add(entityLocation.getBlock());
+            webBlocks.add(entityLocation.getBlock());
 
             arrow.remove();
 
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                 entityLocation.getBlock().setType(Material.AIR);
-                this.webBlocks.remove(entityLocation.getBlock());
+                webBlocks.remove(entityLocation.getBlock());
             }, 5 * 20);
         } else {
             arrow.remove();
@@ -143,16 +141,17 @@ public class BowUtils {
         for (Block block : getCube(hitEntity.getLocation())) {
 
             block.setType(Material.COBWEB);
-            this.webBlocks.add(block);
+            webBlocks.add(block);
 
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                 if (block.getType() == Material.COBWEB) {
                     block.setType(Material.AIR);
-                    this.webBlocks.remove(block);
+                    webBlocks.remove(block);
                 }
             }, 5 * 20);
         }
     }
+
     // Sticky Shot End!
 
     private List<Block> getCube(Location start) {

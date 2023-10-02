@@ -28,28 +28,28 @@ public class BookDestroyEvent extends Event implements Cancellable {
     }
     
     public Player getPlayer() {
-        return this.player;
+        return player;
     }
     
     public int getLevel() {
-        return this.level;
+        return level;
     }
     
     public ItemStack getEnchantedItem() {
-        return this.enchantedItem;
+        return enchantedItem;
     }
     
     public CEnchantment getEnchantment() {
-        return this.enchantment;
+        return enchantment;
     }
     
     public CEBook getCEBook() {
-        return this.ceBook;
+        return ceBook;
     }
     
     @Override
     public boolean isCancelled() {
-        return this.cancelled;
+        return cancelled;
     }
     
     @Override

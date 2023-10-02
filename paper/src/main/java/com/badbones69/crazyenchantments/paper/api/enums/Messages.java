@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
-import com.ryderbelserion.cluster.bukkit.utils.LegacyUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,7 +114,7 @@ public enum Messages {
         StringBuilder message = new StringBuilder();
 
         for (String line : list) {
-            message.append(LegacyUtils.color(line)).append("\n");
+            message.append(ColorUtils.color(line)).append("\n");
         }
 
         return message.toString();
@@ -216,15 +215,15 @@ public enum Messages {
 
         if (isList) {
             if (exists) {
-                message = LegacyUtils.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
+                message = ColorUtils.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
             } else {
-                message = LegacyUtils.color(convertList(getDefaultListMessage()));
+                message = ColorUtils.color(convertList(getDefaultListMessage()));
             }
         } else {
             if (exists) {
-                message = LegacyUtils.color(Files.MESSAGES.getFile().getString("Messages." + path));
+                message = ColorUtils.color(Files.MESSAGES.getFile().getString("Messages." + path));
             } else {
-                message = LegacyUtils.color(getDefaultMessage());
+                message = ColorUtils.color(getDefaultMessage());
             }
         }
 
@@ -234,12 +233,12 @@ public enum Messages {
         }
 
         if (isList) { // Don't want to add a prefix to a list of messages.
-            return LegacyUtils.color(message);
+            return ColorUtils.color(message);
         } else { // If the message isn't a list.
             if (prefix) { // If the message needs a prefix.
                 return ColorUtils.getPrefix(message);
             } else { // If the message doesn't need a prefix.
-                return LegacyUtils.color(message);
+                return ColorUtils.color(message);
             }
         }
     }
@@ -250,21 +249,21 @@ public enum Messages {
     
     private boolean isList() {
         if (Files.MESSAGES.getFile().contains("Messages." + path)) {
-            return !Files.MESSAGES.getFile().getStringList("Messages." + this.path).isEmpty();
+            return !Files.MESSAGES.getFile().getStringList("Messages." + path).isEmpty();
         } else {
-            return this.defaultMessage == null;
+            return defaultMessage == null;
         }
     }
     
     private String getPath() {
-        return this.path;
+        return path;
     }
     
     private String getDefaultMessage() {
-        return this.defaultMessage;
+        return defaultMessage;
     }
     
     private List<String> getDefaultListMessage() {
-        return this.defaultListMessage;
+        return defaultListMessage;
     }
 }

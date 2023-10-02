@@ -26,27 +26,25 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
 public class ToolEnchantments implements Listener {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
     // Settings.
-    private final EnchantmentSettings enchantmentSettings = this.starter.getEnchantmentSettings();
+    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     private final List<String> ignoreBlockTypes = Lists.newArrayList("air", "shulker_box", "chest", "head", "skull");
 
@@ -65,35 +63,35 @@ public class ToolEnchantments implements Listener {
 
         Player player = event.getPlayer();
         ItemStack brokenBlock = new ItemStack(event.getBlock().getType());
-        ItemStack tool = this.methods.getItemInHand(player);
+        ItemStack tool = methods.getItemInHand(player);
 
         //updateEffects(player); //Click event should be enough to handle this.
 
-        List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(tool);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(tool);
 
         if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) ||
             (enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
             event.getPlayer().hasPermission("crazyenchantments.blast.use") &&
-                    this.crazyManager.getBlastBlockList().contains(event.getBlock().getType()))) return;
+            crazyManager.getBlastBlockList().contains(event.getBlock().getType()))) return;
 
-        if ((this.enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
+        if ((enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
             (brokenBlock.getType() == Material.SPAWNER)) return;
         // This checks if the block is a spawner and if so the spawner classes will take care of this.
         // If Epic Spawners is enabled then telepathy will give the item from the API.
         // Otherwise, CE will ignore the spawner in this event.
 
         EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, tool);
-        this.plugin.getServer().getPluginManager().callEvent(useEvent);
+        plugin.getServer().getPluginManager().callEvent(useEvent);
 
         if (useEvent.isCancelled()) return;
 
         event.setExpToDrop(0);
         event.setDropItems(false);
 
-        if (this.enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType())) {
+        if (enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType())) {
             ItemUtils.giveCropDrops(player, event.getBlock());
         } else {
-            TelepathyDrop drop = this.enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
+            TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
 
             ItemUtils.giveDrops(player, drop.getItem());
 
@@ -102,23 +100,23 @@ public class ToolEnchantments implements Listener {
             if (drop.hasXp()) event.getBlock().getWorld().spawn(event.getBlock().getLocation().add(.5, .5, .5), ExperienceOrb.class).setExperience(drop.getXp());
         }
 
-        this.methods.removeDurability(tool, player);
+        methods.removeDurability(tool, player);
         event.setDropItems(false);
     }
 
     private void updateEffects(Player player) {
-        ItemStack item = this.methods.getItemInHand(player);
-        if (!this.enchantmentBookSettings.hasEnchantments(item)) return;
+        ItemStack item = methods.getItemInHand(player);
+        if (!enchantmentBookSettings.hasEnchantments(item)) return;
 
-        List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         int potionTime = 5 * 20;
 
         if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-            this.plugin.getServer().getPluginManager().callEvent(event);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
-                int power = this.crazyManager.getLevel(item, CEnchantments.HASTE);
+                int power = crazyManager.getLevel(item, CEnchantments.HASTE);
                 player.removePotionEffect(PotionEffectType.FAST_DIGGING);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
             }
@@ -126,17 +124,18 @@ public class ToolEnchantments implements Listener {
 
         if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
             EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-            this.plugin.getServer().getPluginManager().callEvent(event);
+            plugin.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 player.removePotionEffect(PotionEffectType.WATER_BREATHING);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
             }
         }
+
     }
 
     private boolean ignoreBlockTypes(Block block) {
-        for (String name : this.ignoreBlockTypes) {
+        for (String name : ignoreBlockTypes) {
             if (block.getType().name().toLowerCase().contains(name)) return true;
         }
 

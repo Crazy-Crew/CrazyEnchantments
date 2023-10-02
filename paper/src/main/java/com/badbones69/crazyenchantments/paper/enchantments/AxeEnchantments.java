@@ -24,40 +24,37 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class AxeEnchantments implements Listener {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = this.starter.getMethods();
+    private final Methods methods = starter.getMethods();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
     // Plugin Support.
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final PluginSupport pluginSupport = starter.getPluginSupport();
 
-    private final SpartanSupport spartanSupport = this.starter.getSpartanSupport();
+    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (EventUtils.isIgnoredEvent(event)) return;
-        if (this.pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
+        if (pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
 
         if (!(event.getEntity() instanceof LivingEntity entity)) return;
         if (!(event.getDamager() instanceof Player damager)) return;
 
-        ItemStack item = this.methods.getItemInHand(damager);
+        ItemStack item = methods.getItemInHand(damager);
 
         if (entity.isDead()) return;
 
@@ -65,7 +62,7 @@ public class AxeEnchantments implements Listener {
 
         if (CEnchantments.BERSERK.isActivated() && enchantments.contains(CEnchantments.BERSERK.getEnchantment()) && CEnchantments.BERSERK.chanceSuccessful(item)) {
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
-            this.plugin.getServer().getPluginManager().callEvent(useEvent);
+            plugin.getServer().getPluginManager().callEvent(useEvent);
 
             if (!useEvent.isCancelled()) {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
@@ -75,19 +72,19 @@ public class AxeEnchantments implements Listener {
 
         if (CEnchantments.BLESSED.isActivated() && enchantments.contains(CEnchantments.BLESSED.getEnchantment()) && CEnchantments.BLESSED.chanceSuccessful(item)) {
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
-            this.plugin.getServer().getPluginManager().callEvent(useEvent);
+            plugin.getServer().getPluginManager().callEvent(useEvent);
 
             if (!useEvent.isCancelled()) removeBadPotions(damager);
         }
 
         if (CEnchantments.FEEDME.isActivated() && enchantments.contains(CEnchantments.FEEDME.getEnchantment()) && CEnchantments.FEEDME.chanceSuccessful(item) && damager.getFoodLevel() < 20) {
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.FEEDME.getEnchantment(), item);
-            this.plugin.getServer().getPluginManager().callEvent(useEvent);
+            plugin.getServer().getPluginManager().callEvent(useEvent);
 
             if (!useEvent.isCancelled()) {
-                int food = 2 * this.crazyManager.getLevel(item, CEnchantments.FEEDME);
+                int food = 2 * crazyManager.getLevel(item, CEnchantments.FEEDME);
 
-                if (SupportedPlugins.SPARTAN.isPluginLoaded()) this.spartanSupport.cancelFastEat(damager);
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(damager);
 
                 if (damager.getFoodLevel() + food < 20) damager.setFoodLevel((int) (damager.getSaturation() + food));
 
@@ -100,7 +97,7 @@ public class AxeEnchantments implements Listener {
 
             if (CEnchantments.REKT.chanceSuccessful(item)) {
                 EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
-                this.plugin.getServer().getPluginManager().callEvent(useEvent);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
 
                 if (!useEvent.isCancelled()) event.setDamage(damage);
             }
@@ -108,21 +105,21 @@ public class AxeEnchantments implements Listener {
 
         if (CEnchantments.CURSED.isActivated() && enchantments.contains(CEnchantments.CURSED.getEnchantment()) && CEnchantments.CURSED.chanceSuccessful(item)) {
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
-            this.plugin.getServer().getPluginManager().callEvent(useEvent);
+            plugin.getServer().getPluginManager().callEvent(useEvent);
 
-            if (!useEvent.isCancelled()) entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (this.crazyManager.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
+            if (!useEvent.isCancelled()) entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
         }
 
         if (CEnchantments.DIZZY.isActivated() && enchantments.contains(CEnchantments.DIZZY.getEnchantment()) && CEnchantments.DIZZY.chanceSuccessful(item)) {
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
-            this.plugin.getServer().getPluginManager().callEvent(useEvent);
+            plugin.getServer().getPluginManager().callEvent(useEvent);
 
-            if (!useEvent.isCancelled()) entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (this.crazyManager.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
+            if (!useEvent.isCancelled()) entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (crazyManager.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
         }
 
         if (CEnchantments.BATTLECRY.isActivated() && enchantments.contains(CEnchantments.BATTLECRY.getEnchantment()) && CEnchantments.BATTLECRY.chanceSuccessful(item)) {
             EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.BATTLECRY.getEnchantment(), item);
-            this.plugin.getServer().getPluginManager().callEvent(useEvent);
+            plugin.getServer().getPluginManager().callEvent(useEvent);
 
             if (!useEvent.isCancelled()) {
                 for (Entity nearbyEntity : damager.getNearbyEntities(3, 3, 3)) {
@@ -132,14 +129,15 @@ public class AxeEnchantments implements Listener {
         }
         if (CEnchantments.DEMONFORGED.isActivated() && enchantments.contains(CEnchantments.DEMONFORGED.getEnchantment()) && CEnchantments.DEMONFORGED.chanceSuccessful(item) && entity instanceof Player player) {
 
-            ItemStack armorItem = switch (this.methods.percentPick(4, 0)) {
+            ItemStack armorItem = switch (methods.percentPick(4, 0)) {
                 case 1 -> player.getEquipment().getHelmet();
                 case 2 -> player.getEquipment().getChestplate();
                 case 3 -> player.getEquipment().getLeggings();
                 default -> player.getEquipment().getBoots();
             };
 
-            this.methods.removeDurability(armorItem, player);
+            methods.removeDurability(armorItem, player);
+
         }
     }
 
@@ -147,13 +145,13 @@ public class AxeEnchantments implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (this.pluginSupport.allowCombat(player.getLocation()) && event.getEntity().getKiller() != null) {
+        if (pluginSupport.allowCombat(player.getLocation()) && event.getEntity().getKiller() != null) {
             Player damager = event.getEntity().getKiller();
-            ItemStack item = this.methods.getItemInHand(damager);
+            ItemStack item = methods.getItemInHand(damager);
 
-            if (this.crazyManager.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
+            if (crazyManager.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
                 EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
-                this.plugin.getServer().getPluginManager().callEvent(useEvent);
+                plugin.getServer().getPluginManager().callEvent(useEvent);
 
                 if (!useEvent.isCancelled()) event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
             }

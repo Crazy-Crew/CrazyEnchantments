@@ -28,7 +28,7 @@ import java.util.List;
 
 public class GKitzController implements Listener {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
 
@@ -39,7 +39,7 @@ public class GKitzController implements Listener {
 
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), LegacyUtils.color(gkitz.getString("Settings.Inventory-Name")));
+        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), ColorUtils.color(gkitz.getString("Settings.Inventory-Name")));
 
         for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
@@ -89,7 +89,7 @@ public class GKitzController implements Listener {
             NBTItem nbtItem = new NBTItem(item);
 
             for (GKitz kit : crazyManager.getGKitz()) {
-                if (event.getView().getTitle().equals(LegacyUtils.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
+                if (event.getView().getTitle().equals(ColorUtils.color(kit.getDisplayItem().getItemMeta().getDisplayName()))) {
                     event.setCancelled(true);
 
                     if (event.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
@@ -98,7 +98,7 @@ public class GKitzController implements Listener {
                 }
             }
 
-            if (event.getView().getTitle().equals(LegacyUtils.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
+            if (event.getView().getTitle().equals(ColorUtils.color(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) {
                 event.setCancelled(true);
 
                 if (event.getRawSlot() < inventory.getSize() && nbtItem.hasKey("gkit")) {

@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
-import com.ryderbelserion.cluster.bukkit.utils.LegacyUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,65 +24,65 @@ public class AllyManager {
         String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
 
         for (AllyType type : AllyType.values()) {
-            this.allyTypeNameCache.put(type, LegacyUtils.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
+            allyTypeNameCache.put(type, ColorUtils.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
         }
     }
     
     public List<AllyMob> getAllyMobs() {
-        return this.allyMobs;
+        return allyMobs;
     }
     
     public void addAllyMob(AllyMob allyMob) {
         if (allyMob != null) {
-            this.allyMobs.add(allyMob);
+            allyMobs.add(allyMob);
             UUID owner = allyMob.getOwner().getUniqueId();
 
-            if (this.allyOwners.containsKey(owner)) {
-                this.allyOwners.get(owner).add(allyMob);
+            if (allyOwners.containsKey(owner)) {
+                allyOwners.get(owner).add(allyMob);
             } else {
                 List<AllyMob> allies = new ArrayList<>();
                 allies.add(allyMob);
-                this.allyOwners.put(owner, allies);
+                allyOwners.put(owner, allies);
             }
         }
     }
     
     public void removeAllyMob(AllyMob allyMob) {
         if (allyMob != null) {
-            this.allyMobs.remove(allyMob);
+            allyMobs.remove(allyMob);
             UUID owner = allyMob.getOwner().getUniqueId();
 
-            if (this.allyOwners.containsKey(owner)) {
-                this.allyOwners.get(owner).add(allyMob);
+            if (allyOwners.containsKey(owner)) {
+                allyOwners.get(owner).add(allyMob);
 
-                if (this.allyOwners.get(owner).isEmpty()) this.allyOwners.remove(owner);
+                if (allyOwners.get(owner).isEmpty()) allyOwners.remove(owner);
             }
         }
     }
     
     public void forceRemoveAllies() {
-        if (!this.allyMobs.isEmpty()) {
-            this.allyMobs.forEach(ally -> ally.getAlly().remove());
-            this.allyMobs.clear();
-            this.allyOwners.clear();
+        if (!allyMobs.isEmpty()) {
+            allyMobs.forEach(ally -> ally.getAlly().remove());
+            allyMobs.clear();
+            allyOwners.clear();
         }
     }
     
     public void forceRemoveAllies(Player owner) {
-        for (AllyMob ally : this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
+        for (AllyMob ally : allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
             ally.getAlly().remove();
-            this.allyMobs.remove(ally);
+            allyMobs.remove(ally);
         }
 
-        this.allyOwners.remove(owner.getUniqueId());
+        allyOwners.remove(owner.getUniqueId());
     }
     
     public void setEnemy(Player owner, LivingEntity enemy) {
-        this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> ally.attackEnemy(enemy));
+        allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> ally.attackEnemy(enemy));
     }
     
     public Map<AllyType, String> getAllyTypeNameCache() {
-        return this.allyTypeNameCache;
+        return allyTypeNameCache;
     }
     
     public boolean isAlly(Player player, LivingEntity livingEntity) {
@@ -97,7 +96,7 @@ public class AllyManager {
     }
     
     public boolean isAllyMob(LivingEntity livingEntity) {
-        for (AllyMob ally : this.allyMobs) {
+        for (AllyMob ally : allyMobs) {
             if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return true;
         }
 
@@ -105,7 +104,7 @@ public class AllyManager {
     }
     
     public AllyMob getAllyMob(LivingEntity livingEntity) {
-        for (AllyMob ally : this.allyMobs) {
+        for (AllyMob ally : allyMobs) {
             if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return ally;
         }
 

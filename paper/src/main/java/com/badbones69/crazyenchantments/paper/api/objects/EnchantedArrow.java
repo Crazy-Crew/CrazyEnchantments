@@ -8,19 +8,17 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class EnchantedArrow {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
     
     private final Arrow arrow;
     private final ItemStack bow;
@@ -35,34 +33,34 @@ public class EnchantedArrow {
     }
     
     public Arrow getArrow() {
-        return this.arrow;
+        return arrow;
     }
     
     public ItemStack getBow() {
-        return this.bow;
+        return bow;
     }
     
     public Entity getShooter() {
-        return this.shooter;
+        return shooter;
     }
     
     public int getLevel(CEnchantments enchantment) {
-        return this.crazyManager.getLevel(this.bow, enchantment);
+        return crazyManager.getLevel(bow, enchantment);
     }
     
     public int getLevel(CEnchantment enchantment) {
-        return this.enchantmentBookSettings.getLevel(this.bow, enchantment);
+        return enchantmentBookSettings.getLevel(bow, enchantment);
     }
     
     public List<CEnchantment> getEnchantments() {
-        return this.enchantments;
+        return enchantments;
     }
     
     public boolean hasEnchantment(CEnchantment enchantment) {
-        return this.enchantments.contains(enchantment);
+        return enchantments.contains(enchantment);
     }
     
     public boolean hasEnchantment(CEnchantments enchantment) {
-        return this.enchantments.contains(enchantment.getEnchantment());
+        return enchantments.contains(enchantment.getEnchantment());
     }
 }

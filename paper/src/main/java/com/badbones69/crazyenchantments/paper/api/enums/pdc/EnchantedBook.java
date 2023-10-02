@@ -17,7 +17,6 @@ public class EnchantedBook {
     public int getDestroyChance() {
         return this.destroy;
     }
-
     public void setDestroyChance(int newChance) {
         this.destroy = newChance;
     }
@@ -25,7 +24,6 @@ public class EnchantedBook {
     public int getSuccessChance() {
         return this.success;
     }
-
     public void setSuccessChance(int newChance) {
         this.success = newChance;
     }

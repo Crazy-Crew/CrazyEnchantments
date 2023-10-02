@@ -17,18 +17,18 @@ public class TelepathyDrop {
     }
     
     public ItemStack getItem() {
-        return this.itemStack;
+        return itemStack;
     }
     
     public int getXp() {
-        return this.xp;
+        return xp;
     }
     
     public boolean hasXp() {
-        return this.xp > 0;
+        return xp > 0;
     }
     
     public List<Block> getSugarCaneBlocks() {
-        return this.sugarCaneBlocks;
+        return sugarCaneBlocks;
     }
 }

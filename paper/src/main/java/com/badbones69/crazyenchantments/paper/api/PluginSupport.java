@@ -9,23 +9,19 @@ import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.Clai
 import com.badbones69.crazyenchantments.paper.utilities.WorldGuardUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.google.common.collect.Maps;
-import com.ryderbelserion.cluster.bukkit.utils.LegacyLogger;
-import com.ryderbelserion.cluster.bukkit.utils.LegacyUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class PluginSupport {
 
-    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = this.plugin.getStarter();
+    private final Starter starter = plugin.getStarter();
 
     private ClaimSupport claimPlugin = null;
 
@@ -41,17 +37,17 @@ public class PluginSupport {
     }
 
     public boolean inTerritory(Player player) {
-        if (this.claimPlugin != null) return this.claimPlugin.inTerritory(player);
+        if (claimPlugin != null) return claimPlugin.inTerritory(player);
 
-        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().inTerritory(player);
+        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && starter.getSuperiorSkyBlockSupport().inTerritory(player);
     }
 
     public boolean isFriendly(Entity pEntity, Entity oEntity) {
         if (!(pEntity instanceof Player player) || !(oEntity instanceof Player otherPlayer)) return false;
 
-        if (this.claimPlugin != null) return this.claimPlugin.isFriendly(player, otherPlayer);
+        if (claimPlugin != null) return claimPlugin.isFriendly(player, otherPlayer);
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
         return SupportedPlugins.MCMMO.isPluginLoaded();
 
@@ -79,7 +75,7 @@ public class PluginSupport {
     }
 
     public void updateHooks() {
-        this.cachedPlugins.clear();
+        cachedPlugins.clear();
 
         for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
@@ -101,7 +97,7 @@ public class PluginSupport {
                     case SILK_SPAWNERS_V2 -> {
                         supportedPlugin.addPlugin(name.equals("SilkSpawners_v2"));
 
-                        LegacyLogger.warn("Silk Spawners v2 by CANDC does not have any support yet.");
+                        plugin.getLogger().warning("Silk Spawners v2 by CANDC does not have any support yet.");
                     }
 
                     default -> supportedPlugin.addPlugin(true);
@@ -122,22 +118,22 @@ public class PluginSupport {
 
     public void updateClaimHooks(SupportedPlugins supportedPlugin) {
         switch (supportedPlugin) {
-            case GRIEF_PREVENTION -> this.claimPlugin = new GriefPreventionSupport();
-            case TOWNYADVANCED -> this.claimPlugin = new TownySupport();
-            case FACTIONS_UUID -> this.claimPlugin = new FactionsUUIDSupport();
+            case GRIEF_PREVENTION -> claimPlugin = new GriefPreventionSupport();
+            case TOWNYADVANCED -> claimPlugin = new TownySupport();
+            case FACTIONS_UUID -> claimPlugin = new FactionsUUIDSupport();
         }
     }
 
     public void printHooks() {
-        if (this.cachedPlugins.isEmpty()) updateHooks();
+        if (cachedPlugins.isEmpty()) updateHooks();
 
-        LegacyLogger.info(LegacyUtils.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
+        plugin.getLogger().info(ColorUtils.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
 
-        this.cachedPlugins.keySet().forEach(value -> {
+        cachedPlugins.keySet().forEach(value -> {
             if (value.isPluginLoaded()) {
-                LegacyLogger.info(LegacyUtils.color("&6&l" + value.name() + " &a&lFOUND"));
+                plugin.getLogger().info(ColorUtils.color("&6&l" + value.name() + " &a&lFOUND"));
             } else {
-                LegacyLogger.info(LegacyUtils.color("&6&l" + value.name() + " &c&lNOT FOUND"));
+                plugin.getLogger().info(ColorUtils.color("&6&l" + value.name() + " &c&lNOT FOUND"));
             }
         });
     }
@@ -188,35 +184,35 @@ public class PluginSupport {
             this.pluginName = pluginName;
         }
 
-        private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-        private final Starter starter = this.plugin.getStarter();
+        private final Starter starter = plugin.getStarter();
 
-        private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+        private final PluginSupport pluginSupport = starter.getPluginSupport();
 
         public boolean isPluginLoaded() {
-            Plugin plugin1 = this.plugin.getServer().getPluginManager().getPlugin(this.pluginName);
+            Plugin plugin1 = plugin.getServer().getPluginManager().getPlugin(pluginName);
             return plugin1 != null && plugin1.isEnabled();
         }
 
         public Plugin getLoadedPlugin() {
-            return this.plugin.getServer().getPluginManager().getPlugin(this.pluginName);
+            return plugin.getServer().getPluginManager().getPlugin(pluginName);
         }
 
         public boolean isCachedPluginLoaded() {
-            return this.pluginSupport.cachedPlugins.get(this);
+            return pluginSupport.cachedPlugins.get(this);
         }
 
         public void addPlugin(boolean value) {
-            this.pluginSupport.cachedPlugins.put(this, value);
+            pluginSupport.cachedPlugins.put(this, value);
         }
 
         public void removePlugin() {
-            this.pluginSupport.cachedPlugins.remove(this);
+            pluginSupport.cachedPlugins.remove(this);
         }
 
         public boolean isPluginEnabled() {
-            return this.pluginSupport.cachedPlugins.get(this);
+            return pluginSupport.cachedPlugins.get(this);
         }
     }
 }

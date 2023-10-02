@@ -1,5 +1,7 @@
 package com.badbones69.crazyenchantments.paper.utilities.misc;
 
+import org.bukkit.inventory.ItemStack;
+
 public class NumberUtils {
 
     public static boolean isInt(String s) {
@@ -11,8 +13,8 @@ public class NumberUtils {
 
         return true;
     }
-
     public static String toRoman(int number) {
+
         if (number > 3999 || number < 1) return String.valueOf(number);
 
         int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
@@ -26,7 +28,6 @@ public class NumberUtils {
                 roman.append(romanLetters[i]);
             }
         }
-
         return roman.toString();
     }
 
@@ -70,5 +71,18 @@ public class NumberUtils {
 //            default -> String.valueOf(number);
 //        };
         return toRoman(number);
+    }
+    public static String checkLevels(ItemStack item, String customName) {
+        String line = "";
+
+        if (item == null || item.lore() == null) return "";
+
+        for (String lore : item.getItemMeta().getLore()) {
+            if (lore.contains(customName)) {
+                line = lore;
+                break;
+            }
+        }
+        return line;
     }
 }

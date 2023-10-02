@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
@@ -9,13 +10,7 @@ import com.badbones69.crazyenchantments.paper.commands.CETab;
 import com.badbones69.crazyenchantments.paper.commands.GkitzCommand;
 import com.badbones69.crazyenchantments.paper.commands.GkitzTab;
 import com.badbones69.crazyenchantments.paper.commands.TinkerCommand;
-import com.badbones69.crazyenchantments.paper.controllers.BlackSmith;
-import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
-import com.badbones69.crazyenchantments.paper.controllers.CommandChecker;
-import com.badbones69.crazyenchantments.paper.controllers.GKitzController;
-import com.badbones69.crazyenchantments.paper.controllers.InfoGUIControl;
-import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
-import com.badbones69.crazyenchantments.paper.controllers.Tinkerer;
+import com.badbones69.crazyenchantments.paper.controllers.*;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.ArmorEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.AxeEnchantments;
@@ -32,22 +27,21 @@ import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import us.crazycrew.crazyenchantments.common.config.types.Config;
-import us.crazycrew.crazyenchantments.paper.api.plugin.CrazyHandler;
 
 public class CrazyEnchantments extends JavaPlugin implements Listener {
 
-    private CrazyHandler crazyHandler;
+    private static CrazyEnchantments plugin;
 
     private Starter starter;
 
@@ -67,12 +61,37 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        this.crazyHandler = new CrazyHandler(getDataFolder());
-        this.crazyHandler.install();
+        plugin = this;
 
         starter = new Starter();
+
+        // Create all instances we need.
         starter.run();
+
         starter.getCurrencyAPI().loadCurrency();
+
+        FileConfiguration config = Files.CONFIG.getFile();
+        FileConfiguration tinker = Files.TINKER.getFile();
+
+        if (!config.contains("Settings.Toggle-Metrics")) {
+            config.set("Settings.Toggle-Metrics", false);
+
+            Files.CONFIG.saveFile();
+        }
+
+        if (!config.contains("Settings.Refresh-Potion-Effects-On-World-Change")) {
+            config.set("Settings.Refresh-Potion-Effects-On-World-Change", false);
+            
+            Files.CONFIG.saveFile();
+        }
+
+        if (!tinker.contains("Settings.Tinker-Version")) {
+            tinker.set("Settings.Tinker-Version", 1.0);
+
+            FileManager.Files.TINKER.saveFile();
+        }
+
+        if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
         pluginManager.registerEvents(this, this);
         pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
@@ -86,20 +105,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         disable();
-
-        this.crazyHandler.uninstall();
-    }
-
-    public @NotNull CrazyHandler getCrazyHandler() {
-        return this.crazyHandler;
-    }
-
-    public @NotNull FileManager getFileManager() {
-        return this.crazyHandler.getFileManager();
-    }
-
-    public boolean isLogging() {
-        return this.crazyHandler.getConfigManager().getConfig().getProperty(Config.verbose_logging);
     }
 
     private void enable() {
@@ -170,6 +175,10 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.starter.getCrazyManager().unloadCEPlayer(event.getPlayer());
+    }
+
+    public static CrazyEnchantments getPlugin() {
+        return plugin;
     }
 
     public Starter getStarter() {
