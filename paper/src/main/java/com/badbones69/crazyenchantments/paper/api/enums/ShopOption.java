@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
+import com.ryderbelserion.cluster.bukkit.utils.LegacyLogger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.jline.utils.Log;
@@ -41,8 +41,6 @@ public enum ShopOption {
         this.buyable = buyable;
     }
 
-    private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-    
     public static void loadShopOptions() {
         FileConfiguration config = Files.CONFIG.getFile();
         shopOptions.clear();
@@ -63,8 +61,7 @@ public enum ShopOption {
                 config.getInt(costPath + "Cost", 100),
                 Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
             } catch (Exception e) {
-                plugin.getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
-                Log.error(e);
+                LegacyLogger.info("The option " + shopOption.getOptionPath() + " has failed to load.", e);
             }
         }
     }
@@ -94,23 +91,23 @@ public enum ShopOption {
     }
     
     private String getOptionPath() {
-        return optionPath;
+        return this.optionPath;
     }
     
     private String getPath() {
-        return path;
+        return this.path;
     }
     
     private String getNamePath() {
-        return namePath;
+        return this.namePath;
     }
     
     private String getLorePath() {
-        return lorePath;
+        return this.lorePath;
     }
     
     public boolean isBuyable() {
-        return buyable;
+        return this.buyable;
     }
 
     private record Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {}

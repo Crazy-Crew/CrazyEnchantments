@@ -1,7 +1,23 @@
 [versions]
 modrinth = "2.8.2"
-hangar = "0.0.5"
+hangar = "0.1.0"
+
+cluster = "1.1"
+adventure = "4.14.0"
 
 [plugins]
 hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
 modrinth = { id = "com.modrinth.minotaur", version.ref = "modrinth" }
+
+[libraries]
+cluster-bukkit-api = { module = "com.ryderbelserion.cluster:cluster-bukkit", version.ref = "cluster" }
+
+adventure-mm = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+
+cluster-api = { module = "com.ryderbelserion.cluster:cluster-api", version.ref = "cluster" }
+
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
+annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
+
+config-me = { module = "ch.jalu:configme", version = "1.4.1" }

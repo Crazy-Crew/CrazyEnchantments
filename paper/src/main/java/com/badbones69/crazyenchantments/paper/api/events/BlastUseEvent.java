@@ -21,16 +21,16 @@ public class BlastUseEvent extends Event implements Cancellable {
     }
     
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     public List<Block> getBlockList() {
-        return blockList;
+        return this.blockList;
     }
     
     @Override
     public boolean isCancelled() {
-        return cancelled;
+        return this.cancelled;
     }
     
     @Override

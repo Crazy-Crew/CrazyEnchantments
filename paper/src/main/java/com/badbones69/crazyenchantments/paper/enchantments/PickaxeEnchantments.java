@@ -33,29 +33,38 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 public class PickaxeEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = this.plugin.getStarter().getMethods();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
 
     // Settings.
-    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentSettings enchantmentSettings = this.starter.getEnchantmentSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Support.
-    private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
+    private final SpartanSupport spartanSupport = this.starter.getSpartanSupport();
 
-    private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+    private final HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockClick(PlayerInteractEvent event) {
@@ -63,14 +72,14 @@ public class PickaxeEnchantments implements Listener {
 
         if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
 
-        ItemStack item = methods.getItemInHand(player);
+        ItemStack item = this.methods.getItemInHand(player);
         Block block = event.getClickedBlock();
 
-        if (!isBlastActive(enchantmentBookSettings.getEnchantmentsOnItem(item), player, block)) return;
+        if (!isBlastActive(this.enchantmentBookSettings.getEnchantmentsOnItem(item), player, block)) return;
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
-        blocks.put(player, blockFace);
+        blocks.put(player.getUniqueId(), blockFace);
 
     }
 
@@ -81,34 +90,34 @@ public class PickaxeEnchantments implements Listener {
 
         Player player = event.getPlayer();
         Block currentBlock = event.getBlock();
-        ItemStack currentItem = methods.getItemInHand(player);
+        ItemStack currentItem = this.methods.getItemInHand(player);
 
-        if (!blocks.containsKey(player)) return;
-        if (!blocks.get(player).containsKey(currentBlock)) return;
+        if (!this.blocks.containsKey(player.getUniqueId())) return;
+        if (!this.blocks.get(player.getUniqueId()).containsKey(currentBlock)) return;
 
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
+        List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
 
         if (!isBlastActive(enchantments, player, null)) return;
 
         event.setCancelled(true);
 
-        BlockFace face = blocks.get(player).get(currentBlock);
-        blocks.remove(player);
-        List<Block> blockList = getBlocks(currentBlock.getLocation(), face, (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
+        BlockFace face = this.blocks.get(player.getUniqueId()).get(currentBlock);
+        this.blocks.remove(player.getUniqueId());
+        List<Block> blockList = getBlocks(currentBlock.getLocation(), face, (this.crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
 
         BlastUseEvent blastUseEvent = new BlastUseEvent(player, blockList);
-        plugin.getServer().getPluginManager().callEvent(blastUseEvent);
+        this.plugin.getServer().getPluginManager().callEvent(blastUseEvent);
 
         if (!blastUseEvent.isCancelled()) {
             Location originalBlockLocation = currentBlock.getLocation();
             List<BlockProcessInfo> finalBlockList = new ArrayList<>();
 
             for (Block block : blockList) {
-                if (block.getType() != Material.AIR && (crazyManager.getBlastBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
+                if (block.getType() != Material.AIR && (this.crazyManager.getBlastBlockList().contains(block.getType()) || block.getLocation().equals(originalBlockLocation))) {
                     BlockBreakEvent blastBreakTest = new BlockBreakEvent(block, player);
                     blastBreakTest.setDropItems(false);
                     EventUtils.addIgnoredEvent(blastBreakTest);
-                    plugin.getServer().getPluginManager().callEvent(blastBreakTest);
+                    this.plugin.getServer().getPluginManager().callEvent(blastBreakTest);
 
                     if (!blastBreakTest.isCancelled()) finalBlockList.add(new BlockProcessInfo(currentItem, block));
 
@@ -116,12 +125,12 @@ public class PickaxeEnchantments implements Listener {
                 }
             }
 
-            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
 
             if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                spartanSupport.cancelFastBreak(player);
-                spartanSupport.cancelNoSwing(player);
-                spartanSupport.cancelBlockReach(player);
+                this.spartanSupport.cancelFastBreak(player);
+                this.spartanSupport.cancelNoSwing(player);
+                this.spartanSupport.cancelBlockReach(player);
             }
 
             int xp = 0;
@@ -136,19 +145,19 @@ public class PickaxeEnchantments implements Listener {
             for (BlockProcessInfo processInfo : finalBlockList) {
                 Block block = processInfo.getBlock();
                 boolean isOre = isOre(block.getType());
-                if (player.getGameMode() == GameMode.CREATIVE || !crazyManager.isDropBlocksBlast()) { // If the user is in creative mode.
+                if (player.getGameMode() == GameMode.CREATIVE || !this.crazyManager.isDropBlocksBlast()) { // If the user is in creative mode.
                     block.breakNaturally();
                 } else { // If the user is in survival mode.
                     // This is to check if the original block the player broke was in the block list.
                     // If it is not then it should be broken and dropped on the ground.
 
-                    if (block.getLocation().equals(originalBlockLocation) && !crazyManager.getBlastBlockList().contains(block.getType())) {
+                    if (block.getLocation().equals(originalBlockLocation) && !this.crazyManager.getBlastBlockList().contains(block.getType())) {
                         block.breakNaturally();
                         continue;
                     }
 
                     if (hasTelepathy) {
-                        TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(processInfo);
+                        TelepathyDrop drop = this.enchantmentSettings.getTelepathyDrops(processInfo);
                         drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
                         xp += drop.getXp();
                     } else {
@@ -162,7 +171,7 @@ public class PickaxeEnchantments implements Listener {
                             for (ItemStack drop : block.getDrops(currentItem)) {
                                 if (CEnchantments.AUTOSMELT.chanceSuccessful(currentItem)) {
                                     drop = getOreDrop(block.getType());
-                                    drop.setAmount(crazyManager.getLevel(currentItem, CEnchantments.AUTOSMELT));
+                                    drop.setAmount(this.crazyManager.getLevel(currentItem, CEnchantments.AUTOSMELT));
                                 }
 
                                 ItemStack finalDrop = drop;
@@ -185,21 +194,21 @@ public class PickaxeEnchantments implements Listener {
 
                         // This is found here as telepathy takes care of this part.
                         if (!hasSilkTouch && isOre) {
-                            xp = methods.percentPick(7, 3);
+                            xp = this.methods.percentPick(7, 3);
 
-                            if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(currentItem)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(currentItem, CEnchantments.EXPERIENCE);
+                            if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(currentItem)) xp += this.methods.percentPick(7, 3) * this.crazyManager.getLevel(currentItem, CEnchantments.EXPERIENCE);
                         }
                     }
 
                     block.setType(Material.AIR);
 
-                    if (damage) methods.removeDurability(currentItem, player);
+                    if (damage) this.methods.removeDurability(currentItem, player);
                 }
             }
 
-            if (!damage) methods.removeDurability(currentItem, player);
+            if (!damage) this.methods.removeDurability(currentItem, player);
 
-            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+            if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
 
             for (Entry<ItemStack, Integer> item : drops.entrySet()) {
                 item.getKey().setAmount(item.getValue());
@@ -226,17 +235,17 @@ public class PickaxeEnchantments implements Listener {
 
         Player player = event.getPlayer();
         Block currentBlock = event.getBlock();
-        ItemStack currentItem = methods.getItemInHand(player);
+        ItemStack currentItem = this.methods.getItemInHand(player);
 
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
+        List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
 
         if (!enchantments.contains(CEnchantments.VEINMINER.getEnchantment())) return;
 
-        List<Block> blockList = new ArrayList<>(getOreBlocks(currentBlock.getLocation(), crazyManager.getLevel(currentItem, CEnchantments.VEINMINER)));
+        List<Block> blockList = new ArrayList<>(getOreBlocks(currentBlock.getLocation(), this.crazyManager.getLevel(currentItem, CEnchantments.VEINMINER)));
         blockList.add(currentBlock);
 
         BlastUseEvent VeinMinerUseEvent = new BlastUseEvent(player, blockList);
-        plugin.getServer().getPluginManager().callEvent(VeinMinerUseEvent);
+        this.plugin.getServer().getPluginManager().callEvent(VeinMinerUseEvent);
 
         if (VeinMinerUseEvent.isCancelled()) return;
 
@@ -249,7 +258,7 @@ public class PickaxeEnchantments implements Listener {
                 BlockBreakEvent event2 = new BlockBreakEvent(block, player);
                 event2.setDropItems(false);
                 EventUtils.addIgnoredEvent(event2);
-                plugin.getServer().getPluginManager().callEvent(event2);
+                this.plugin.getServer().getPluginManager().callEvent(event2);
 
                 if (!event2.isCancelled()) finalBlockList.add(new BlockProcessInfo(currentItem, block));
 
@@ -257,12 +266,12 @@ public class PickaxeEnchantments implements Listener {
             }
         }
 
-        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
 
         if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-            spartanSupport.cancelFastBreak(player);
-            spartanSupport.cancelNoSwing(player);
-            spartanSupport.cancelBlockReach(player);
+            this.spartanSupport.cancelFastBreak(player);
+            this.spartanSupport.cancelNoSwing(player);
+            this.spartanSupport.cancelBlockReach(player);
         }
 
         int xp = 0;
@@ -276,14 +285,14 @@ public class PickaxeEnchantments implements Listener {
 
         for (BlockProcessInfo processInfo : finalBlockList) {
             Block block = processInfo.getBlock();
-            if (player.getGameMode() == GameMode.CREATIVE || !crazyManager.isDropBlocksVeinMiner()) { // If the user is in creative mode.
+            if (player.getGameMode() == GameMode.CREATIVE || !this.crazyManager.isDropBlocksVeinMiner()) { // If the user is in creative mode.
                 block.breakNaturally();
             } else { // If the user is in survival mode.
                 // This is to check if the original block the player broke was in the block list.
                 // If it is not then it should be broken and dropped on the ground.
 
                 if (hasTelepathy) {
-                    TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(processInfo);
+                    TelepathyDrop drop = this.enchantmentSettings.getTelepathyDrops(processInfo);
                     drops.put(drop.getItem(), drops.getOrDefault(drop.getItem(), 0) + drop.getItem().getAmount());
                     xp += drop.getXp();
                 } else {
@@ -297,7 +306,7 @@ public class PickaxeEnchantments implements Listener {
                         for (ItemStack drop : block.getDrops(currentItem)) {
                             if (CEnchantments.AUTOSMELT.chanceSuccessful(currentItem)) {
                                 drop = getOreDrop(block.getType());
-                                drop.setAmount(crazyManager.getLevel(currentItem, CEnchantments.AUTOSMELT));
+                                drop.setAmount(this.crazyManager.getLevel(currentItem, CEnchantments.AUTOSMELT));
                             }
 
                             ItemStack finalDrop = drop;
@@ -320,21 +329,21 @@ public class PickaxeEnchantments implements Listener {
 
                     // This is found here as telepathy takes care of this part.
                     if (!hasSilkTouch) {
-                        xp = methods.percentPick(7, 3);
+                        xp = this.methods.percentPick(7, 3);
 
-                        if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(currentItem)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(currentItem, CEnchantments.EXPERIENCE);
+                        if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(currentItem)) xp += this.methods.percentPick(7, 3) * this.crazyManager.getLevel(currentItem, CEnchantments.EXPERIENCE);
                     }
                 }
 
                 block.setType(Material.AIR);
 
-                if (damage) methods.removeDurability(currentItem, player);
+                if (damage) this.methods.removeDurability(currentItem, player);
             }
         }
 
-        if (!damage) methods.removeDurability(currentItem, player);
+        if (!damage) this.methods.removeDurability(currentItem, player);
 
-        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
+        if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
 
         for (Entry<ItemStack, Integer> item : drops.entrySet()) {
             item.getKey().setAmount(item.getValue());
@@ -351,8 +360,6 @@ public class PickaxeEnchantments implements Listener {
             ExperienceOrb orb = currentBlock.getWorld().spawn(currentBlock.getLocation().add(.5, .5, .5), ExperienceOrb.class);
             orb.setExperience(xp);
         }
-
-
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -362,7 +369,7 @@ public class PickaxeEnchantments implements Listener {
 
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        ItemStack item = methods.getItemInHand(player);
+        ItemStack item = this.methods.getItemInHand(player);
         List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         boolean isOre = isOre(block.getType());
 
@@ -376,19 +383,19 @@ public class PickaxeEnchantments implements Listener {
                 CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
 
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
-                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
+                this.plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
                 if (!enchantmentUseEvent.isCancelled()) {
                     int dropAmount = 0;
-                    dropAmount += crazyManager.getLevel(item, CEnchantments.AUTOSMELT);
+                    dropAmount += this.crazyManager.getLevel(item, CEnchantments.AUTOSMELT);
 
-                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && this.methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 
                     tryCheck(block, item, enchantments, dropAmount);
 
                     event.setDropItems(false);
 
-                    methods.removeDurability(item, player);
+                    this.methods.removeDurability(item, player);
                 }
             }
 
@@ -399,20 +406,20 @@ public class PickaxeEnchantments implements Listener {
                             enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
 
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
-                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
+                this.plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
                 if (!enchantmentUseEvent.isCancelled()) {
                     int dropAmount = 1;
 
-                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && this.methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 
-                    if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += methods.percentPick(4, 1);
+                    if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += this.methods.percentPick(4, 1);
 
                     tryCheck(block, item, enchantments, dropAmount);
                 }
 
                 event.setDropItems(false);
-                methods.removeDurability(item, player);
+                this.methods.removeDurability(item, player);
             }
         }
 
@@ -422,11 +429,11 @@ public class PickaxeEnchantments implements Listener {
                         !((isBlastActive(enchantments, player, block)) ||
                                 enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())))) {
 
-            int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
+            int power = this.crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
 
             if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
                 EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
-                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
+                this.plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
 
                 if (!enchantmentUseEvent.isCancelled()) event.setExpToDrop(event.getExpToDrop() + (power + 2));
             }
@@ -435,15 +442,16 @@ public class PickaxeEnchantments implements Listener {
 
     private void tryCheck(Block block, ItemStack item, List<CEnchantment> enchantments, int dropAmount) {
         if (block.getType() == Material.SPAWNER) return; // No more handling Spawners!!!
+
         try {
             block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
         } catch (IllegalArgumentException ignore) {}
 
         if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-            int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
+            int power = this.crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
 
             ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-            orb.setExperience(methods.percentPick(7, 3) * power);
+            orb.setExperience(this.methods.percentPick(7, 3) * power);
         }
     }
 
@@ -465,6 +473,7 @@ public class PickaxeEnchantments implements Listener {
                     if (!blocks.contains(block) && isOre(block.getType())) tempBlocks.add(block);
                 }
             }
+
             blocks.addAll(tempBlocks);
             newestBlocks = tempBlocks;
 
@@ -486,6 +495,7 @@ public class PickaxeEnchantments implements Listener {
         
         return locations;
     }
+
     private List<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
 
@@ -523,7 +533,7 @@ public class PickaxeEnchantments implements Listener {
             default -> {}
         }
 
-        return methods.getEnchantBlocks(loc, loc2);
+        return this.methods.getEnchantBlocks(loc, loc2);
     }
 
     private boolean isOre(Material material) {
@@ -577,7 +587,6 @@ public class PickaxeEnchantments implements Listener {
         return CEnchantments.BLAST.isActivated() &&
                 enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
                 player.hasPermission("crazyenchantments.blast.use") &&
-                (block == null || crazyManager.getBlastBlockList().contains(block.getType()));
+                (block == null || this.crazyManager.getBlastBlockList().contains(block.getType()));
     }
-
 }

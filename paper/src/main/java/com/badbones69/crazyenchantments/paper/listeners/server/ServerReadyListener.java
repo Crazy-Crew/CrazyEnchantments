@@ -6,18 +6,20 @@ import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class ServerReadyListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
     // Plugin Support.
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
+    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     @EventHandler(ignoreCancelled = true)
     public void onServerReady(ServerLoadEvent event) {
-        pluginSupport.updateHooks();
+        this.pluginSupport.updateHooks();
     }
 }

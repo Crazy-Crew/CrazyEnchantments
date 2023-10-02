@@ -16,19 +16,20 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
-
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProtectionCrystalListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
-    private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
+    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -38,17 +39,17 @@ public class ProtectionCrystalListener implements Listener {
         ItemStack item = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
         
         if (item.getType() == Material.AIR || crystalItem.getType() == Material.AIR) return;
-        if (!protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;
-        if (protectionCrystalSettings.isProtectionCrystal(item)) return;
-        if (protectionCrystalSettings.isProtected(item)) return;
+        if (!this.protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;
+        if (this.protectionCrystalSettings.isProtectionCrystal(item)) return;
+        if (this.protectionCrystalSettings.isProtected(item)) return;
         if (item.getAmount() > 1 || crystalItem.getAmount() > 1) {
             player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
             return;
         }
 
         event.setCancelled(true);
-        player.setItemOnCursor(methods.removeItem(crystalItem));
-        event.setCurrentItem(protectionCrystalSettings.addProtection(item));
+        player.setItemOnCursor(this.methods.removeItem(crystalItem));
+        event.setCurrentItem(this.protectionCrystalSettings.addProtection(item));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -63,7 +64,7 @@ public class ProtectionCrystalListener implements Listener {
 
             if (item != null) {
 
-                if (protectionCrystalSettings.isProtected(item) && protectionCrystalSettings.isProtectionSuccessful(player)) {
+                if (this.protectionCrystalSettings.isProtected(item) && this.protectionCrystalSettings.isProtectionSuccessful(player)) {
                     savedItems.add(item);
                     continue;
                 }
@@ -75,34 +76,34 @@ public class ProtectionCrystalListener implements Listener {
         event.getDrops().clear();
         event.getDrops().addAll(droppedItems);
 
-        protectionCrystalSettings.addPlayer(player, savedItems);
+        this.protectionCrystalSettings.addPlayer(player, savedItems);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
 
-        if (protectionCrystalSettings.containsPlayer(player)) {
+        if (this.protectionCrystalSettings.containsPlayer(player)) {
 
             // If the config does not have the option then it will lose the protection by default.
             if (Files.CONFIG.getFile().getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death", true)) {
-                for (ItemStack item : protectionCrystalSettings.getCrystalItems().get(player.getUniqueId())) {
-                    player.getInventory().addItem(protectionCrystalSettings.removeProtection(item));
+                for (ItemStack item : this.protectionCrystalSettings.getCrystalItems().get(player.getUniqueId())) {
+                    player.getInventory().addItem(this.protectionCrystalSettings.removeProtection(item));
                 }
             } else {
-                for (ItemStack item : protectionCrystalSettings.getPlayer(player)) {
+                for (ItemStack item : this.protectionCrystalSettings.getPlayer(player)) {
                     player.getInventory().addItem(item);
                 }
             }
 
-            protectionCrystalSettings.removePlayer(player);
+            this.protectionCrystalSettings.removePlayer(player);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onCrystalClick(PlayerInteractEvent event) {
-        ItemStack item = methods.getItemInHand(event.getPlayer());
+        ItemStack item = this.methods.getItemInHand(event.getPlayer());
         if (!item.hasItemMeta()) return;
-        if (protectionCrystalSettings.isProtectionCrystal(item)) event.setCancelled(true);
+        if (this.protectionCrystalSettings.isProtectionCrystal(item)) event.setCancelled(true);
     }
 }

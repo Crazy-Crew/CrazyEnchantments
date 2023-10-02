@@ -18,15 +18,11 @@ repositories {
 
     maven("https://ci.ender.zone/plugin/repository/everything/")
 
-    maven("https://repo.codemc.org/repository/maven-public/")
-
     maven("https://repo.papermc.io/repository/maven-public/")
 
     maven("https://repo.glaremasters.me/repository/towny/")
 
     maven("https://repo.bg-software.com/repository/api/")
-
-    maven("https://repo.crazycrew.us/third-party/")
 
     maven("https://maven.enginehub.org/repo/")
 
@@ -34,9 +30,15 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     implementation("de.tr7zw", "item-nbt-api", "2.12.0")
 
     implementation("org.bstats", "bstats-bukkit", "3.0.2")
+
+    implementation(libs.cluster.bukkit.api) {
+        exclude("com.ryderbelserion.cluster", "cluster-api")
+    }
 
     compileOnly("com.intellectualsites.informative-annotations", "informative-annotations", "1.3")
 
@@ -72,9 +74,11 @@ dependencies {
         exclude("*", "*")
     }
 
-    compileOnly("me.clip", "placeholderapi", "2.11.3")
+    compileOnly("me.clip", "placeholderapi", "2.11.4")
 
-    compileOnly("io.th0rgal", "oraxen", "1.156.3")
+    compileOnly("com.github.oraxen", "oraxen", "1.160.0") {
+        exclude("*", "*")
+    }
 
     compileOnly(fileTree("libs").include("*.jar"))
 }
@@ -127,14 +131,18 @@ val other = if (isSnapshot) "Beta" else "Release"
 val file = file("${rootProject.rootDir}/jars/${rootProject.name}-${rootProject.version}.jar")
 
 val description = """
+## Changes:
+ * Added 1.20.2 support.
+ * Bumped nbt-api.
+ 
 ## Fix:
-* Blast + furnace/autoSmelt #isOre check being based on only the first block broken.
-* Boom not taking permissions into account when dealing damage.
-* VeinMiner being able to break block without having permission.
+ * Blast + furnace/autoSmelt #isOre check being based on only the first block broken.
+ * Boom not taking permissions into account when dealing damage.
+ * VeinMiner being able to break block without having permission.
 
-##Misc
-*  Better handling of blast. If blast can not activate due to a permission or the blocklist, will allow other enchants to still work.
-* Update NBT-API/ paperweight.
+## Misc
+ * Better handling of blast. If blast can not activate due to a permission or the blocklist, will allow other enchants to still work.
+ * Update NBT-API/ paperweight.
 
 ## Other:
  * [Feature Requests](https://github.com/Crazy-Crew/${rootProject.name}/issues)
@@ -144,7 +152,7 @@ val description = """
 val versions = listOf(
     "1.20",
     "1.20.1",
-    //"1.20.2"
+    "1.20.2"
 )
 
 modrinth {
@@ -171,8 +179,11 @@ modrinth {
 hangarPublish {
     publications.register("plugin") {
         version.set(rootProject.version as String)
-        namespace("CrazyCrew", rootProject.name)
-        channel.set(other)
+
+        id.set(rootProject.name)
+
+        channel.set(if (isSnapshot) "Beta" else "Release")
+
         changelog.set(description)
 
         apiKey.set(System.getenv("hangar_key"))

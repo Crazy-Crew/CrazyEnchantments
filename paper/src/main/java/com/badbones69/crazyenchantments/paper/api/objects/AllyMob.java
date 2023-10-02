@@ -14,15 +14,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 public class AllyMob {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final AllyManager allyManager = plugin.getStarter().getAllyManager();
+    private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
 
     private final AllyType type;
     private final Player owner;
@@ -35,95 +38,95 @@ public class AllyMob {
     public AllyMob(Player owner, AllyType type) {
         this.type = type;
         this.owner = owner;
-        instance = this;
+        this.instance = this;
     }
 
     public AllyType getType() {
-        return type;
+        return this.type;
     }
 
     public Player getOwner() {
-        return owner;
+        return this.owner;
     }
 
     public LivingEntity getAlly() {
-        return ally;
+        return this.ally;
     }
 
     public void spawnAlly(long spawnTime) {
-        spawnAlly(owner.getLocation(), spawnTime);
+        spawnAlly(this.owner.getLocation(), spawnTime);
     }
 
     public void spawnAlly(Location location, long spawnTime) {
         this.spawnTime = spawnTime;
 
-        ally = (LivingEntity) location.getWorld().spawnEntity(location, type.entityType);
+        this.ally = (LivingEntity) location.getWorld().spawnEntity(location, type.entityType);
 
-        ally.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(type.maxHealth);
+        this.ally.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(type.maxHealth);
 
-        ally.setHealth(type.maxHealth);
+        this.ally.setHealth(type.maxHealth);
 
         HashMap<String, String> placeholders = new HashMap<>();
-        placeholders.put("%Player%", owner.getName());
-        placeholders.put("%Mob%", type.entityType.getName());
+        placeholders.put("%Player%", this.owner.getName());
+        placeholders.put("%Mob%", this.type.entityType.getName());
 
-        ally.setCustomName(Messages.replacePlaceholders(placeholders, type.getName()));
-        ally.setCustomNameVisible(true);
+        this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName()));
+        this.ally.setCustomNameVisible(true);
 
         startSpawnTimer();
 
-        allyManager.addAllyMob(instance);
+        this.allyManager.addAllyMob(this.instance);
     }
 
     public void forceRemoveAlly() {
-        runnable.cancel();
-        allyManager.removeAllyMob(instance);
-        ally.remove();
+        this.runnable.cancel();
+        this.allyManager.removeAllyMob(this.instance);
+        this.ally.remove();
     }
 
     public void attackEnemy(LivingEntity enemy) {
-        switch (ally.getType()) {
+        switch (this.ally.getType()) {
             case WOLF -> {
-                Wolf wolf = (Wolf) ally;
+                Wolf wolf = (Wolf) this.ally;
                 wolf.setTarget(enemy);
             }
 
             case IRON_GOLEM -> {
-                IronGolem iron = (IronGolem) ally;
+                IronGolem iron = (IronGolem) this.ally;
                 iron.setTarget(enemy);
             }
 
             case ZOMBIE -> {
-                Zombie zom = (Zombie) ally;
+                Zombie zom = (Zombie) this.ally;
                 zom.setTarget(enemy);
             }
 
             case ENDERMITE -> {
-                Endermite mite = (Endermite) ally;
+                Endermite mite = (Endermite) this.ally;
                 mite.setTarget(enemy);
             }
 
             case SILVERFISH -> {
-                Silverfish sfish = (Silverfish) ally;
+                Silverfish sfish = (Silverfish) this.ally;
                 sfish.setTarget(enemy);
             }
 
             case BEE -> {
-                Bee bee = (Bee) ally;
+                Bee bee = (Bee) this.ally;
                 bee.setTarget(enemy);
             }
         }
     }
     
     private void startSpawnTimer() {
-        if (ally != null) {
-            runnable = new BukkitRunnable() {
+        if (this.ally != null) {
+            this.runnable = new BukkitRunnable() {
                 @Override
                 public void run() {
                     allyManager.removeAllyMob(instance);
                     ally.remove();
                 }
-            }.runTaskLater(plugin, spawnTime * 20);
+            }.runTaskLater(this.plugin, this.spawnTime * 20);
         }
     }
     
@@ -141,9 +144,9 @@ public class AllyMob {
         private final EntityType entityType;
         private final int maxHealth;
 
-        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+        private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-        private final AllyManager allyManager = plugin.getStarter().getAllyManager();
+        private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
         
         AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
             this.configName = configName;
@@ -153,23 +156,23 @@ public class AllyMob {
         }
         
         public String getConfigName() {
-            return configName;
+            return this.configName;
         }
         
         public String getDefaultName() {
-            return defaultName;
+            return this.defaultName;
         }
         
         public String getName() {
-            return allyManager.getAllyTypeNameCache().get(this);
+            return this.allyManager.getAllyTypeNameCache().get(this);
         }
         
         public EntityType getEntityType() {
-            return entityType;
+            return this.entityType;
         }
         
         public int getMaxHealth() {
-            return maxHealth;
+            return this.maxHealth;
         }
     }
 }

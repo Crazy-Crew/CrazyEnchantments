@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.configs;
 
 import java.io.File;
-
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.ryderbelserion.cluster.bukkit.utils.LegacyLogger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -18,22 +18,22 @@ public class ConvertTinker {
 
         File secondFile = new File(plugin.getDataFolder() + "/Tinker-v1.yml");
 
-        FileConfiguration TINKER = FileManager.Files.TINKER.getFile();
+        FileConfiguration TINKER = Files.TINKER.getFile();
 
         if (TINKER.getDouble("Settings.Tinker-Version") >= tinkerVersion) {
-            plugin.getLogger().info("Tinker.yml is up to date.");
+            LegacyLogger.info("Tinker.yml is up to date.");
             return;
         } else {
-            plugin.getLogger().warning("Updating Tinker.yml version.");
+            LegacyLogger.warn("Updating Tinker.yml version.");
 
             TINKER.set("Settings.Tinker-Version", tinkerVersion);
-            FileManager.Files.TINKER.saveFile();
+            Files.TINKER.saveFile();
         }
 
         if (firstFile.renameTo(secondFile)) {
-            plugin.getLogger().warning("Renamed " + firstFile.getName() + " to Tinker-v1.yml");
+            LegacyLogger.warn("Renamed " + firstFile.getName() + " to Tinker-v1.yml");
 
-            FileManager.Files.TINKER.saveFile();
+            Files.TINKER.saveFile();
         }
 
         YamlConfiguration secondConfiguration = YamlConfiguration.loadConfiguration(secondFile);
@@ -59,8 +59,8 @@ public class ConvertTinker {
             }
         }
 
-        FileManager.Files.TINKER.saveFile();
+        Files.TINKER.saveFile();
 
-        plugin.getLogger().warning("Tinker.yml file has been updated.");
+        LegacyLogger.warn("Tinker.yml file has been updated.");
     }
 }

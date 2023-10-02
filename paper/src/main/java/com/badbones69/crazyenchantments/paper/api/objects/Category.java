@@ -46,81 +46,81 @@ public class Category {
     }
     
     public String getName() {
-        return name;
+        return this.name;
     }
     
     public int getSlot() {
-        return slot;
+        return this.slot;
     }
     
     public boolean isInGUI() {
-        return inGUI;
+        return this.inGUI;
     }
     
     public ItemBuilder getDisplayItem() {
-        return displayItem;
+        return this.displayItem;
     }
     
     public int getCost() {
-        return cost;
+        return this.cost;
     }
     
     public Currency getCurrency() {
-        return currency;
+        return this.currency;
     }
     
     public int getRarity() {
-        return rarity;
+        return this.rarity;
     }
     
     public LostBook getLostBook() {
-        return lostBook;
+        return this.lostBook;
     }
     
     public int getMaxSuccessRate() {
-        return maxSuccessRate;
+        return this.maxSuccessRate;
     }
     
     public int getMinSuccessRate() {
-        return minSuccessRate;
+        return this.minSuccessRate;
     }
     
     public int getMaxDestroyRate() {
-        return maxDestroyRate;
+        return this.maxDestroyRate;
     }
     
     public int getMinDestroyRate() {
-        return minDestroyRate;
+        return this.minDestroyRate;
     }
     
     public boolean useMaxLevel() {
-        return useMaxLevel;
+        return this.useMaxLevel;
     }
     
     public int getMaxLevel() {
-        return maxLevel;
+        return this.maxLevel;
     }
     
     public int getMinLevel() {
-        return minLevel;
+        return this.minLevel;
     }
     
     public List<CEnchantment> getEnabledEnchantments() {
-        return enabledEnchantments;
+        return this.enabledEnchantments;
     }
     
     public List<CEnchantment> getEnchantmentList() {
-        return enchantmentList;
+        return this.enchantmentList;
     }
     
     public void addEnchantment(CEnchantment enchantment) {
-        enchantmentList.add(enchantment);
+        this.enchantmentList.add(enchantment);
 
-        if (enchantment.isActivated()) enabledEnchantments.add(enchantment);
+        if (enchantment.isActivated()) this.enabledEnchantments.add(enchantment);
     }
     
     public void removeEnchantment(CEnchantment enchantment) {
-        enchantmentList.remove(enchantment);
-        enabledEnchantments.remove(enchantment);
+        this.enchantmentList.remove(enchantment);
+        this.enabledEnchantments.remove(enchantment);
     }
 }

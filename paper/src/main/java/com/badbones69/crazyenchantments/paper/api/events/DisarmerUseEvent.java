@@ -25,26 +25,26 @@ public class DisarmerUseEvent extends Event implements Cancellable {
      * @return The player that uses the enchantment.
      */
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     /**
      * @return The player that is attacking the player.
      */
     public Player getDamager() {
-        return damager;
+        return this.damager;
     }
     
     /**
      * @return The item that uses the enchantment.
      */
     public ItemStack getItem() {
-        return item;
+        return this.item;
     }
     
     @Override
     public boolean isCancelled() {
-        return cancel;
+        return this.cancel;
     }
     
     @Override

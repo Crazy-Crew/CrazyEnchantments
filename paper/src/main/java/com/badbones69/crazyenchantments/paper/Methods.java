@@ -12,6 +12,7 @@ import com.badbones69.crazyenchantments.paper.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
+import com.ryderbelserion.cluster.bukkit.utils.LegacyUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -24,25 +25,28 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class Methods {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
     // Plugin Support.
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
+    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    private final OraxenSupport oraxenSupport = starter.getOraxenSupport();
+    private final OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
 
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
+    private final SpartanSupport spartanSupport = this.starter.getSpartanSupport();
 
     public EnchantmentType getFromName(String name) {
-        for (EnchantmentType enchantmentType : starter.getInfoMenuManager().getEnchantmentTypes()) {
+        for (EnchantmentType enchantmentType : this.starter.getInfoMenuManager().getEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 
@@ -96,11 +100,11 @@ public class Methods {
     }
 
     public Player getPlayer(String name) {
-        return plugin.getServer().getPlayer(name);
+        return this.plugin.getServer().getPlayer(name);
     }
 
     public boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(playerName)) return true;
         }
 
@@ -163,7 +167,7 @@ public class Methods {
 
     public boolean hasArgument(String arg, List<String> message) {
         for (String line : message) {
-            line = ColorUtils.color(line).toLowerCase();
+            line = LegacyUtils.color(line).toLowerCase();
 
             if (line.contains(arg.toLowerCase())) return true;
         }
@@ -180,7 +184,7 @@ public class Methods {
         return chance <= min;
     }
 
-    public Integer percentPick(int max, int min) {
+    public int percentPick(int max, int min) {
         if (max == min) {
             return max;
         } else {
@@ -225,9 +229,8 @@ public class Methods {
         fireworkMeta.setPower(0);
         firework.setFireworkMeta(fireworkMeta);
 
-        plugin.getFireworkDamageListener().addFirework(firework);
-
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
+        this.plugin.getFireworkDamageListener().addFirework(firework);
+        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, firework::detonate, 2);
     }
 
     public String stripString(String string) {
@@ -285,7 +288,7 @@ public class Methods {
     public int getMaxDurability(ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) return item.getType().getMaxDurability();
 
-        return oraxenSupport.getMaxDurability(item);
+        return this.oraxenSupport.getMaxDurability(item);
     }
 
     public int getDurability(ItemStack item) {
@@ -295,7 +298,7 @@ public class Methods {
             return 0;
         }
 
-        return oraxenSupport.getDamage(item);
+        return this.oraxenSupport.getDamage(item);
     }
 
     public void setDurability(ItemStack item, int newDamage) {
@@ -312,7 +315,7 @@ public class Methods {
             return;
         }
 
-        oraxenSupport.setDamage(item, newDamage);
+        this.oraxenSupport.setDamage(item, newDamage);
     }
 
     public void removeDurability(ItemStack item, Player player) {
@@ -353,22 +356,22 @@ public class Methods {
         spawnParticles(player, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, player)) {
-            if (pluginSupport.allowCombat(entity.getLocation())) {
+            if (this.pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (pluginSupport.isFriendly(player, en)) continue;
+                if (this.pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
                 en.damage(5D);
 
                 if (en instanceof Player) {
                     if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        spartanSupport.cancelSpeed((Player) player);
-                        spartanSupport.cancelNormalMovements((Player) player);
-                        spartanSupport.cancelNoFall((Player) player);
+                        this.spartanSupport.cancelSpeed((Player) player);
+                        this.spartanSupport.cancelNormalMovements((Player) player);
+                        this.spartanSupport.cancelNoFall((Player) player);
                     }
                 }
 
@@ -384,25 +387,25 @@ public class Methods {
             player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
         }
 
-        world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
+        world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 1f, 1f);
     }
 
     public void explode(Entity player, Entity arrow) {
         spawnParticles(arrow, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, arrow)) {
-            if (pluginSupport.allowCombat(entity.getLocation())) {
+            if (this.pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (pluginSupport.isFriendly(player, en)) continue;
+                if (this.pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
 
                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, EntityDamageEvent.DamageCause.CUSTOM, 5D);
-                plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
+                this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
                 if (damageByEntityEvent.isCancelled()) continue;
 
                 en.damage(5D);
@@ -411,9 +414,9 @@ public class Methods {
                 if (!(en instanceof Player)) continue;
 
                 if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    spartanSupport.cancelSpeed((Player) player);
-                    spartanSupport.cancelNormalMovements((Player) player);
-                    spartanSupport.cancelNoFall((Player) player);
+                    this.spartanSupport.cancelSpeed((Player) player);
+                    this.spartanSupport.cancelNormalMovements((Player) player);
+                    this.spartanSupport.cancelNoFall((Player) player);
                 }
             }
         }
@@ -432,8 +435,7 @@ public class Methods {
     }
 
     public int getInfinity() {
-
-        int versionInt = Integer.parseInt(plugin.getServer().getVersion().split("MC:")[1]
+        int versionInt = Integer.parseInt(this.plugin.getServer().getVersion().split("MC:")[1]
                 .replace(")", "")
                 .replace(".", "")
                 .replace(" ", ""));
@@ -464,9 +466,9 @@ public class Methods {
     public void entityEvent(Player damager, LivingEntity entity, EntityDamageByEntityEvent damageByEntityEvent) {
         EventUtils.addIgnoredEvent(damageByEntityEvent);
         EventUtils.addIgnoredUUID(damager.getUniqueId());
-        plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
+        this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && pluginSupport.allowCombat(entity.getLocation()) && !pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
 
         EventUtils.removeIgnoredEvent(damageByEntityEvent);
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
@@ -474,12 +476,12 @@ public class Methods {
 
     public void checkEntity(LivingEntity en) {
         Location loc = en.getLocation();
-        if (loc.getWorld() != null) loc.getWorld().spigot().strikeLightning(loc, true);
+
+        if (loc.getWorld() != null) loc.getWorld().spigot().strikeLightningEffect(loc, false);
+
         int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
-        try {
-            loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
-        } catch (Exception ignore) {}
+        loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.AMBIENT, (float) lightningSoundRange / 16f, 1f);
     }
 
     public void switchCurrency(Player player, Currency option, String one, String two, String cost) {
@@ -515,6 +517,7 @@ public class Methods {
                 "GREEN_STAINED_GLASS_PANE",
                 "RED_STAINED_GLASS_PANE",
                 "BLACK_STAINED_GLASS_PANE");
+
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
 }

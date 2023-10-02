@@ -7,6 +7,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
@@ -21,7 +23,7 @@ import java.util.UUID;
  */
 public class SkullCreator {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     /**
      * Creates a player skull based on a player's name.
@@ -80,7 +82,7 @@ public class SkullCreator {
 
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         assert meta != null;
-        meta.setOwningPlayer(plugin.getServer().getOfflinePlayer(id));
+        meta.setOwningPlayer(this.plugin.getServer().getOfflinePlayer(id));
         item.setItemMeta(meta);
 
         return item;
@@ -201,7 +203,7 @@ public class SkullCreator {
                 "{Owner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}"
         );
 
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "data merge block " + args);
+        this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), "data merge block " + args);
     }
 
     private boolean newerApi() {

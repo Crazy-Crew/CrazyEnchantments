@@ -15,6 +15,9 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -25,15 +28,15 @@ import java.util.UUID;
 
 public class EnchantmentSettings {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Cool-downs
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
@@ -44,7 +47,7 @@ public class EnchantmentSettings {
      * @param calendar - The calendar instance.
      */
     public void addAllyCoolDown(Player player, Calendar calendar) {
-        allyCoolDown.put(player.getUniqueId(), calendar);
+        this.allyCoolDown.put(player.getUniqueId(), calendar);
     }
 
     /**
@@ -52,7 +55,7 @@ public class EnchantmentSettings {
      * @param player - The player to remove.
      */
     public void removeAllyCoolDown(Player player) {
-        allyCoolDown.remove(player.getUniqueId());
+        this.allyCoolDown.remove(player.getUniqueId());
     }
 
     /**
@@ -61,7 +64,7 @@ public class EnchantmentSettings {
      * @return True if the player exists otherwise false.
      */
     public boolean containsAllyPlayer(Player player) {
-        return allyCoolDown.containsKey(player.getUniqueId());
+        return this.allyCoolDown.containsKey(player.getUniqueId());
     }
 
     /**
@@ -69,14 +72,14 @@ public class EnchantmentSettings {
      * @return Get the player from the map.
      */
     public Calendar getAllyPlayer(Player player) {
-        return allyCoolDown.get(player.getUniqueId());
+        return this.allyCoolDown.get(player.getUniqueId());
     }
 
     /**
      * Get the entire ally map.
      */
     public HashMap<UUID, Calendar> getAllyCoolDown() {
-        return allyCoolDown;
+        return this.allyCoolDown;
     }
 
     // Timers
@@ -87,7 +90,7 @@ public class EnchantmentSettings {
      * @param player - The player to add.
      */
     public void addTimerPlayer(Player player, HashMap<CEnchantments, Calendar> enchantMap) {
-        enchantTimer.put(player.getUniqueId(), enchantMap);
+        this.enchantTimer.put(player.getUniqueId(), enchantMap);
     }
 
     /**
@@ -95,7 +98,7 @@ public class EnchantmentSettings {
      * @param player - The player to remove.
      */
     public void removeTimerPlayer(Player player) {
-        enchantTimer.remove(player.getUniqueId());
+        this.enchantTimer.remove(player.getUniqueId());
     }
 
     /**
@@ -104,17 +107,17 @@ public class EnchantmentSettings {
      * @return True if the player exists otherwise false.
      */
     public boolean containsTimerPlayer(Player player) {
-        return enchantTimer.containsKey(player.getUniqueId());
+        return this.enchantTimer.containsKey(player.getUniqueId());
     }
 
     public HashMap<CEnchantments, Calendar> getTimerPlayer(Player player) {
-        if (containsTimerPlayer(player)) return enchantTimer.get(player.getUniqueId());
+        if (containsTimerPlayer(player)) return this.enchantTimer.get(player.getUniqueId());
 
         return null;
     }
 
     public HashMap<UUID, HashMap<CEnchantments, Calendar>> getEnchantTimer() {
-        return enchantTimer;
+        return this.enchantTimer;
     }
 
     // Fallen Players
@@ -122,19 +125,19 @@ public class EnchantmentSettings {
     private final List<UUID> fallenPlayers = new ArrayList<>();
 
     public boolean containsFallenPlayer(Player player) {
-        return fallenPlayers.contains(player.getUniqueId());
+        return this.fallenPlayers.contains(player.getUniqueId());
     }
 
     public void addFallenPlayer(Player player) {
-        fallenPlayers.add(player.getUniqueId());
+        this.fallenPlayers.add(player.getUniqueId());
     }
 
     public void removeFallenPlayer(Player player) {
-        fallenPlayers.remove(player.getUniqueId());
+        this.fallenPlayers.remove(player.getUniqueId());
     }
 
     public List<UUID> getFallenPlayers() {
-        return fallenPlayers;
+        return this.fallenPlayers;
     }
 
     // Hoes
@@ -147,37 +150,34 @@ public class EnchantmentSettings {
     private final HashMap<Material, Material> planterSeeds = new HashMap<>();
 
     public List<Material> getHarvesterCrops() {
-        return harvesterCrops;
+        return this.harvesterCrops;
     }
 
     public List<Material> getSeedlings() {
-        return seedlings;
+        return this.seedlings;
     }
 
     public HashMap<Material, Material> getPlanterSeeds() {
-        return planterSeeds;
+        return this.planterSeeds;
     }
 
     public Material getPlanterSeed(Material material) {
-        planterSeeds.put(Material.WHEAT_SEEDS, Material.WHEAT);
-        planterSeeds.put(Material.BEETROOT_SEEDS, Material.BEETROOTS);
-        planterSeeds.put(Material.POTATO, Material.POTATOES);
-        planterSeeds.put(Material.CARROT, Material.CARROTS);
-        planterSeeds.put(Material.NETHER_WART, Material.NETHER_WART);
-        planterSeeds.put(Material.MELON_SEEDS, Material.MELON_STEM);
-        planterSeeds.put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
+        this.planterSeeds.put(Material.WHEAT_SEEDS, Material.WHEAT);
+        this.planterSeeds.put(Material.BEETROOT_SEEDS, Material.BEETROOTS);
+        this.planterSeeds.put(Material.POTATO, Material.POTATOES);
+        this.planterSeeds.put(Material.CARROT, Material.CARROTS);
+        this.planterSeeds.put(Material.NETHER_WART, Material.NETHER_WART);
+        this.planterSeeds.put(Material.MELON_SEEDS, Material.MELON_STEM);
+        this.planterSeeds.put(Material.PUMPKIN_SEEDS, Material.PUMPKIN_STEM);
 
-        return material != null ? planterSeeds.get(material) : null;
+        return material != null ? this.planterSeeds.get(material) : null;
     }
 
     // Telepathy
-
-    private final Random random = new Random();
-
     public TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
         ItemStack item = processInfo.getItem();
         Block block = processInfo.getBlock();
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
+        List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
         List<Block> sugarCaneBlocks = new ArrayList<>();
         boolean isOre = isOre(block);
         boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
@@ -201,8 +201,8 @@ public class EnchantmentSettings {
                 }
 
                 if (hasOreXP(block)) {
-                    xp = methods.percentPick(7, 3);
-                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
+                    xp = this.methods.percentPick(7, 3);
+                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) xp += this.methods.percentPick(7, 3) * this.crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
                 }
             }
 
@@ -220,12 +220,12 @@ public class EnchantmentSettings {
         }
 
         // Coco drops 2-3 beans.
-        if (block.getType() == Material.COCOA) itemDrop.setMaterial(Material.COCOA_BEANS).setAmount(crazyManager.getNMSSupport().isFullyGrown(block) ? random.nextInt(2) + 2 : 1);
+        if (block.getType() == Material.COCOA) itemDrop.setMaterial(Material.COCOA_BEANS).setAmount(this.crazyManager.getNMSSupport().isFullyGrown(block) ? new Random().nextInt(2) + 2 : 1);
 
         if (itemDrop.getMaterial() == Material.WHEAT || itemDrop.getMaterial() == Material.BEETROOT_SEEDS) {
-            itemDrop.setAmount(random.nextInt(3)); // Wheat and BeetRoots drops 0-3 seeds.
+            itemDrop.setAmount(new Random().nextInt(3)); // Wheat and BeetRoots drops 0-3 seeds.
         } else if (itemDrop.getMaterial() == Material.POTATO || itemDrop.getMaterial() == Material.CARROT) {
-            itemDrop.setAmount(random.nextInt(4) + 1); // Carrots and Potatoes drop 1-4 of them self's.
+            itemDrop.setAmount(new Random().nextInt(4) + 1); // Carrots and Potatoes drop 1-4 of them self's.
         }
 
         return new TelepathyDrop(itemDrop.build(), xp, sugarCaneBlocks);

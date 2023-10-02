@@ -11,6 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import com.google.gson.Gson;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +32,9 @@ public enum Dust {
     private final int max;
     private final int min;
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    private final Methods methods = this.plugin.getStarter().getMethods();
     
     Dust(String name, String configName, List<String> knowNames) {
         this.name = name;
@@ -64,15 +67,15 @@ public enum Dust {
     }
     
     public String getName() {
-        return name;
+        return this.name;
     }
     
     public List<String> getKnownNames() {
-        return knownNames;
+        return this.knownNames;
     }
     
     public String getConfigName() {
-        return configName;
+        return this.configName;
     }
     
     public ItemStack getDust() {
@@ -80,8 +83,7 @@ public enum Dust {
     }
     
     public ItemStack getDust(int amount) {
-
-        return getDust(methods.percentPick(max, min), amount);
+        return getDust(this.methods.percentPick(this.max, this.min), amount);
     }
     
     public ItemStack getDust(int percent, int amount) {
@@ -93,7 +95,7 @@ public enum Dust {
                 Gson gson = new Gson();
 
                 ItemMeta meta = item.getItemMeta();
-                meta.getPersistentDataContainer().set(DataKeys.DUST.getKey(), PersistentDataType.STRING, gson.toJson(new DustData(getConfigName(), min, max, percent)));
+                meta.getPersistentDataContainer().set(DataKeys.DUST.getKey(), PersistentDataType.STRING, gson.toJson(new DustData(getConfigName(), this.min, this.max, percent)));
                 item.setItemMeta(meta);
         // PDC End
 

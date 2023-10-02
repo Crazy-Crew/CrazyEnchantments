@@ -22,7 +22,7 @@ public class ArmorEnchantment {
         this.enchantment = enchantment;
         this.damageAmplifier = damageAmplifier;
         this.isLevelAddedToAmplifier = isLevelAddedToAmplifier;
-        isPotionEnchantment = false;
+        this.isPotionEnchantment = false;
     }
     
     /**
@@ -45,7 +45,7 @@ public class ArmorEnchantment {
         this.enchantment = enchantment;
         this.potionEffects = potionEffects;
         this.isLevelAddedToAmplifier = isLevelAddedToAmplifier;
-        isPotionEnchantment = true;
+        this.isPotionEnchantment = true;
     }
     
     /**
@@ -53,7 +53,7 @@ public class ArmorEnchantment {
      * @return The CEnchantments object.
      */
     public CEnchantments getEnchantment() {
-        return enchantment;
+        return this.enchantment;
     }
     
     /**
@@ -61,7 +61,7 @@ public class ArmorEnchantment {
      * @return The {@link CEnchantment} attached to the {@link CEnchantments}
      */
     public CEnchantment getCEnchantment() {
-        return enchantment.getEnchantment();
+        return this.enchantment.getEnchantment();
     }
     
     /**
@@ -69,7 +69,7 @@ public class ArmorEnchantment {
      * @return The list of {@link PotionEffects} that will be on the player.
      */
     public List<PotionEffects> getPotionEffects() {
-        return potionEffects;
+        return this.potionEffects;
     }
     
     /**
@@ -77,7 +77,7 @@ public class ArmorEnchantment {
      * @return The damage added to the existing damage that the entity will receive.
      */
     public double getDamageAmplifier() {
-        return damageAmplifier;
+        return this.damageAmplifier;
     }
     
     /**
@@ -85,7 +85,7 @@ public class ArmorEnchantment {
      * @return True if it does add to the amplifier and false if not.
      */
     public boolean isLevelAddedToAmplifier() {
-        return isLevelAddedToAmplifier;
+        return this.isLevelAddedToAmplifier;
     }
     
     /**
@@ -93,6 +93,6 @@ public class ArmorEnchantment {
      * @return True if it adds potion effects and false if it adds damage.
      */
     public boolean isPotionEnchantment() {
-        return isPotionEnchantment;
+        return this.isPotionEnchantment;
     }
 }
