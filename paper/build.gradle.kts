@@ -72,9 +72,11 @@ dependencies {
         exclude("*", "*")
     }
 
-    compileOnly("me.clip", "placeholderapi", "2.11.3")
+    compileOnly("me.clip", "placeholderapi", "2.11.4")
 
-    compileOnly("io.th0rgal", "oraxen", "1.156.3")
+    compileOnly("com.github.oraxen", "oraxen", "1.160.0") {
+        exclude("*", "*")
+    }
 
     compileOnly(fileTree("libs").include("*.jar"))
 }
