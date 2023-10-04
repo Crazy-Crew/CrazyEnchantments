@@ -98,7 +98,7 @@ tasks {
 
     shadowJar {
         listOf(
-            "de.tr7zw",
+            "de.tr7zw.changeme.nbtapi",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
