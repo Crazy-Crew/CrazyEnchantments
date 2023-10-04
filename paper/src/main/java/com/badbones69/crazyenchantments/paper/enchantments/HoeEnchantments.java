@@ -231,11 +231,11 @@ public class HoeEnchantments implements Listener {
         return soilBlocks;
     }
 
-    private List<Block> getAreaBlocks(Block block, int radius) {
+    private Set<Block> getAreaBlocks(Block block, int radius) {
         return getAreaBlocks(block, BlockFace.UP, radius);
     }
 
-    private List<Block> getAreaBlocks(Block block, BlockFace blockFace, int radius) {
+    private Set<Block> getAreaBlocks(Block block, BlockFace blockFace, int radius) {
         Location loc = block.getLocation();
         Location loc2 = block.getLocation();
 

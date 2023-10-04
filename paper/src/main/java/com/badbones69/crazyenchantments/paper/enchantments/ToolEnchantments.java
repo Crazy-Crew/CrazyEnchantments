@@ -11,7 +11,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.TelepathyDrop;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
-import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ItemUtils;
 import com.google.common.collect.Lists;
 import org.bukkit.GameMode;
@@ -59,23 +58,18 @@ public class ToolEnchantments implements Listener {
         if (!event.isDropItems()) return;
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
 
-        if (EventUtils.isIgnoredEvent(event) || ignoreBlockTypes(event.getBlock())) return;
+        if (ignoreBlockTypes(event.getBlock())) return;
 
         Player player = event.getPlayer();
-        ItemStack brokenBlock = new ItemStack(event.getBlock().getType());
+        Material brokenBlock = event.getBlock().getType();
         ItemStack tool = methods.getItemInHand(player);
-
-        //updateEffects(player); //Click event should be enough to handle this.
 
         List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(tool);
 
-        if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment()) ||
-            (enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
-            event.getPlayer().hasPermission("crazyenchantments.blast.use") &&
-            crazyManager.getBlastBlockList().contains(event.getBlock().getType()))) return;
+        if (!enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())) return;
 
-        if ((enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType()) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
-            (brokenBlock.getType() == Material.SPAWNER)) return;
+        if ((enchantmentSettings.getHarvesterCrops().contains(brokenBlock) && enchantments.contains(CEnchantments.HARVESTER.getEnchantment())) ||
+            (brokenBlock == Material.SPAWNER)) return;
         // This checks if the block is a spawner and if so the spawner classes will take care of this.
         // If Epic Spawners is enabled then telepathy will give the item from the API.
         // Otherwise, CE will ignore the spawner in this event.
@@ -88,7 +82,7 @@ public class ToolEnchantments implements Listener {
         event.setExpToDrop(0);
         event.setDropItems(false);
 
-        if (enchantmentSettings.getHarvesterCrops().contains(brokenBlock.getType())) {
+        if (enchantmentSettings.getHarvesterCrops().contains(brokenBlock)) {
             ItemUtils.giveCropDrops(player, event.getBlock());
         } else {
             TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
