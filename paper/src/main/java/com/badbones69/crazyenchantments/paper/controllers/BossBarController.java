@@ -45,7 +45,7 @@ public class BossBarController {
         bossBars.put(player.getUniqueId(), bossBar);
         player.showBossBar(bossBar);
 
-        Bukkit.getScheduler().runTaskLater(plugin, () -> { removeBossBar(player); }, 600L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> removeBossBar(player), 600L);
 
     }
 

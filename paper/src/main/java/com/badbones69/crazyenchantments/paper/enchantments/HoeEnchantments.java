@@ -59,7 +59,10 @@ public class HoeEnchantments implements Listener {
             List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(hoe);
 
             // Crop is not fully grown.
-            if (CEnchantments.GREENTHUMB.isActivated() && enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment()) && enchantmentSettings.getSeedlings().contains(block.getType()) && !crazyManager.getNMSSupport().isFullyGrown(block)) {
+            if (CEnchantments.GREENTHUMB.isActivated()
+                    && enchantments.contains(CEnchantments.GREENTHUMB.getEnchantment())
+                    && enchantmentSettings.getSeedlings().contains(block.getType())
+                    && !crazyManager.getNMSSupport().isFullyGrown(block)) {
                 fullyGrowPlant(hoe, block, player);
 
                 if (player.getGameMode() != GameMode.CREATIVE) methods.removeDurability(hoe, player);

@@ -120,7 +120,7 @@ public class BowEnchantments implements Listener {
                 Location location = arrow.getArrow().getLocation();
 
                 Player shooter = (Player) arrow.getShooter();
-                location.getWorld().spigot().strikeLightningEffect(location, true);
+                location.getWorld().strikeLightningEffect(location);
 
                 int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 

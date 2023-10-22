@@ -819,7 +819,7 @@ public class CrazyManager {
             newItemString.append(option).append(", ");
         }
 
-        if (newItemString.length() > 0) itemString = newItemString.substring(0, newItemString.length() - 2);
+        if (!newItemString.isEmpty()) itemString = newItemString.substring(0, newItemString.length() - 2);
         return itemString;
     }
 

@@ -21,7 +21,6 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,7 +67,7 @@ public class ScrollListener implements Listener {
         ItemStack item = event.getCurrentItem();
         ItemStack scroll = event.getCursor();
 
-        if (item == null || item.getType() == Material.AIR || scroll == null || scroll.getType() == Material.AIR) return;
+        if (item == null || item.getType().isAir() || scroll.getType().isAir()) return;
 
         InventoryType.SlotType slotType = event.getSlotType();
 
@@ -204,7 +203,7 @@ public class ScrollListener implements Listener {
         orderInts(newEnchantmentOrder, enchantments);
 
         // Remove blank lines
-        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").equals(""));
+        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").isEmpty());
 
         // Remove CE enchantment lore
         newEnchantmentOrder.forEach(enchant -> normalLore.removeIf(loreComponent ->

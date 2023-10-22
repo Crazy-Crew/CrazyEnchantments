@@ -264,7 +264,7 @@ public enum CEnchantments {
     /**
      * Get the level of the enchantment on an item.
      * @param item The item that is being checked.
-     * @return The level of the enchantment that is on the item.
+     * @return The level of the enchantment that is stored on the item.
      */
     public int getLevel(ItemStack item) {
         // PDC Start

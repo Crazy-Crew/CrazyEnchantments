@@ -6,6 +6,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class RageBreakEvent extends Event implements Cancellable {
     
@@ -66,7 +67,7 @@ public class RageBreakEvent extends Event implements Cancellable {
      * @return A list of handlers handling this event.
      */
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 

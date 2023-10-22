@@ -34,13 +34,13 @@ public class ProtectionCrystalListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
 
-        ItemStack crystalItem = event.getCursor() != null ? event.getCursor() : new ItemStack(Material.AIR);
+        ItemStack crystalItem = event.getCursor();
         ItemStack item = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
         
         if (item.getType() == Material.AIR || crystalItem.getType() == Material.AIR) return;
         if (!protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;
         if (protectionCrystalSettings.isProtectionCrystal(item)) return;
-        if (protectionCrystalSettings.isProtected(item)) return;
+        if (ProtectionCrystalSettings.isProtected(item)) return;
         if (item.getAmount() > 1 || crystalItem.getAmount() > 1) {
             player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
             return;
@@ -63,7 +63,7 @@ public class ProtectionCrystalListener implements Listener {
 
             if (item != null) {
 
-                if (protectionCrystalSettings.isProtected(item) && protectionCrystalSettings.isProtectionSuccessful(player)) {
+                if (ProtectionCrystalSettings.isProtected(item) && protectionCrystalSettings.isProtectionSuccessful(player)) {
                     savedItems.add(item);
                     continue;
                 }

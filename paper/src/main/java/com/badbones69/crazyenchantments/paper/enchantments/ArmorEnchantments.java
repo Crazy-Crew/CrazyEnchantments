@@ -360,7 +360,7 @@ public class ArmorEnchantments implements Listener {
                         List<ItemStack> items = new ArrayList<>();
 
                         for (ItemStack drop : event.getDrops()) {
-                            if (drop != null && protectionCrystalSettings.isProtected(drop) && protectionCrystalSettings.isProtectionSuccessful(player)) items.add(drop);
+                            if (drop != null && ProtectionCrystalSettings.isProtected(drop) && protectionCrystalSettings.isProtectionSuccessful(player)) items.add(drop);
                         }
 
                         event.getDrops().clear();

@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.events;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class UnregisterCEnchantmentEvent extends Event {
     
@@ -26,7 +27,7 @@ public class UnregisterCEnchantmentEvent extends Event {
      * @return A list of handlers handling this event.
      */
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 

@@ -21,7 +21,7 @@ public class InfoGUIControl implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void infoClick(InventoryClickEvent event) {
-        if (event.getView().getTitle().equals(infoMenuManager.getInventoryName())) {
+        if (event.getView().title().equals(infoMenuManager.getInventoryName())) {
             event.setCancelled(true);
 
             if (event.getCurrentItem() != null) {

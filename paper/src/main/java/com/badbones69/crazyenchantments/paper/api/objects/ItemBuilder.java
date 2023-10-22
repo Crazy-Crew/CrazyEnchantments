@@ -1,8 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.Methods;
-import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.SkullCreator;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -36,7 +34,7 @@ public class ItemBuilder {
     // Item Data
     private Material material;
     private int damage;
-    private String itemName;
+    private Component itemName;
     private final List<Component> itemLore;
     private int itemAmount;
 
@@ -97,7 +95,7 @@ public class ItemBuilder {
         this.nbtItem = null;
         this.material = Material.STONE;
         this.damage = 0;
-        this.itemName = "";
+        this.itemName = null;
         this.itemLore = new ArrayList<>();
         this.itemAmount = 1;
         this.player = "";
@@ -132,14 +130,7 @@ public class ItemBuilder {
 
         this.itemFlags = new ArrayList<>();
     }
-
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-
-    private final Starter starter = plugin.getStarter();
-
-    private final Methods methods = starter.getMethods();
-
-    private final SkullCreator skullCreator = starter.getSkullCreator();
+    private final SkullCreator skullCreator = CrazyEnchantments.getPlugin().getStarter().getSkullCreator();
 
     /**
      * Deduplicate an item builder.
@@ -187,6 +178,8 @@ public class ItemBuilder {
         this.namePlaceholders = new HashMap<>(itemBuilder.namePlaceholders);
         this.lorePlaceholders = new HashMap<>(itemBuilder.lorePlaceholders);
         this.itemFlags = new ArrayList<>(itemBuilder.itemFlags);
+        this.nameSpacedKey = itemBuilder.nameSpacedKey;
+        this.nameSpacedData = itemBuilder.nameSpacedData;
     }
 
     /**
@@ -244,7 +237,7 @@ public class ItemBuilder {
      * Get the name of the item.
      */
     public String getName() {
-        return itemName;
+        return itemName == null ? "" : ColorUtils.toLegacy(itemName);
     }
 
     /**
@@ -309,7 +302,8 @@ public class ItemBuilder {
      * @return The name with all the placeholders in it.
      */
     public String getUpdatedName() {
-        String newName = itemName;
+        if (itemName == null) return "";
+        String newName = ColorUtils.toLegacy(itemName);
 
         for (Map.Entry<String, String> placeholder : namePlaceholders.entrySet()) {
             newName = newName.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
@@ -329,78 +323,75 @@ public class ItemBuilder {
 
         ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material);
 
-        if (item.getType() != Material.AIR) {
+        if (item.getType().isAir()) return item;
 
-            if (isHead) { // Has to go 1st due to it removing all data when finished.
-                if (isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
-                    if (isURL) {
-                        skullCreator.itemWithUrl(item, player);
-                    } else {
-                        skullCreator.itemWithBase64(item, player);
-                    }
+        if (isHead) { // Has to go 1st due to it removing all data when finished.
+            if (isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
+                if (isURL) {
+                    skullCreator.itemWithUrl(item, player);
+                } else {
+                    skullCreator.itemWithBase64(item, player);
                 }
             }
-
-            item.setAmount(itemAmount);
-            ItemMeta itemMeta = item.getItemMeta();
-            List<Component> newLore = getUpdatedLore();
-            assert itemMeta != null;
-            if (!Objects.equals(getUpdatedName(), "")) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
-            if (!newLore.isEmpty()) itemMeta.lore(newLore);
-            if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
-
-            if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
-
-            if (isPotion && (potionType != null || potionColor != null)) {
-                PotionMeta potionMeta = (PotionMeta) itemMeta;
-
-                if (potionType != null) potionMeta.setBasePotionData(new PotionData(potionType));
-
-                if (potionColor != null) potionMeta.setColor(potionColor);
-            }
-
-            if (material == Material.TIPPED_ARROW && potionType != null) {
-                PotionMeta potionMeta = (PotionMeta) itemMeta;
-                potionMeta.setBasePotionData(new PotionData(potionType));
-            }
-
-            if (isLeatherArmor && armorColor != null) {
-                LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
-                leatherMeta.setColor(armorColor);
-            }
-
-            if (isBanner && !patterns.isEmpty()) {
-                BannerMeta bannerMeta = (BannerMeta) itemMeta;
-                bannerMeta.setPatterns(patterns);
-            }
-
-            if (isShield && !patterns.isEmpty()) {
-                BlockStateMeta shieldMeta = (BlockStateMeta) itemMeta;
-                Banner banner = (Banner) shieldMeta.getBlockState();
-                banner.setPatterns(patterns);
-                banner.update();
-                shieldMeta.setBlockState(banner);
-            }
-
-            if (useCustomModelData) itemMeta.setCustomModelData(customModelData);
-
-            itemFlags.forEach(itemMeta :: addItemFlags);
-            item.setItemMeta(itemMeta);
-            hideItemFlags(item);
-            item.addUnsafeEnchantments(enchantments);
-            addGlow(item);
-            NBTItem nbt = new NBTItem(item);
-
-            if (isHead && !isHash) nbt.setString("SkullOwner", player);
-
-            if (isMobEgg) {
-                if (entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
-            }
-
-            return nbt.getItem();
-        } else {
-            return item;
         }
+
+        item.setAmount(itemAmount);
+        ItemMeta itemMeta = item.getItemMeta();
+        List<Component> newLore = getUpdatedLore();
+        assert itemMeta != null;
+        if (getUpdatedName() != null) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+        if (!newLore.isEmpty()) itemMeta.lore(newLore);
+        if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
+
+        if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(damage);
+
+        if (isPotion && (potionType != null || potionColor != null)) {
+            PotionMeta potionMeta = (PotionMeta) itemMeta;
+
+            if (potionType != null) potionMeta.setBasePotionData(new PotionData(potionType));
+
+            if (potionColor != null) potionMeta.setColor(potionColor);
+        }
+
+        if (material == Material.TIPPED_ARROW && potionType != null) {
+            PotionMeta potionMeta = (PotionMeta) itemMeta;
+            potionMeta.setBasePotionData(new PotionData(potionType));
+        }
+
+        if (isLeatherArmor && armorColor != null) {
+            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
+            leatherMeta.setColor(armorColor);
+        }
+
+        if (isBanner && !patterns.isEmpty()) {
+            BannerMeta bannerMeta = (BannerMeta) itemMeta;
+            bannerMeta.setPatterns(patterns);
+        }
+
+        if (isShield && !patterns.isEmpty()) {
+            BlockStateMeta shieldMeta = (BlockStateMeta) itemMeta;
+            Banner banner = (Banner) shieldMeta.getBlockState();
+            banner.setPatterns(patterns);
+            banner.update();
+            shieldMeta.setBlockState(banner);
+        }
+
+        if (useCustomModelData) itemMeta.setCustomModelData(customModelData);
+
+        itemFlags.forEach(itemMeta :: addItemFlags);
+        item.setItemMeta(itemMeta);
+        hideItemFlags(item);
+        item.addUnsafeEnchantments(enchantments);
+        addGlow(item);
+        NBTItem nbt = new NBTItem(item);
+
+        if (isHead && !isHash) nbt.setString("SkullOwner", player);
+
+        if (isMobEgg) {
+            if (entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
+        }
+
+        return nbt.getItem();
     }
 
     /*
@@ -517,6 +508,11 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated name.
      */
     public ItemBuilder setName(String itemName) {
+        if (itemName != null) this.itemName = ColorUtils.legacyTranslateColourCodes(itemName);
+
+        return this;
+    }
+    public ItemBuilder setName(Component itemName) {
         if (itemName != null) this.itemName = itemName;
 
         return this;
@@ -820,7 +816,7 @@ public class ItemBuilder {
             try {
                 ItemFlag itemFlag = ItemFlag.valueOf(flagString.toUpperCase());
 
-                if (itemFlag != null) addItemFlag(itemFlag);
+                addItemFlag(itemFlag);
             } catch (Exception ignored) {}
         }
 
@@ -1021,7 +1017,7 @@ public class ItemBuilder {
                     }
                     default -> {
                         Enchantment enchantment = getEnchantment(option);
-                        if (enchantment != null && enchantment.getName() != null) {
+                        if (enchantment != null) {
                             try {
                                 itemBuilder.addEnchantments(enchantment, Integer.parseInt(value));
                             } catch (NumberFormatException e) {

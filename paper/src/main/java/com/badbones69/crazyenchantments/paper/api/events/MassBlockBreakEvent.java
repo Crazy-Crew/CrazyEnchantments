@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Set;
 
 public class MassBlockBreakEvent extends Event implements Cancellable {
@@ -44,7 +46,7 @@ public class MassBlockBreakEvent extends Event implements Cancellable {
      * @return A list of handlers handling this event.
      */
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 

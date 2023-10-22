@@ -46,7 +46,7 @@ public class EnchantmentControl implements Listener {
         ItemStack item = event.getCurrentItem();
         ItemStack book = event.getCursor();
 
-        if (book == null || item == null) return;
+        if (item == null) return;
         if (book.getAmount() > 1 || item.getAmount() > 1) return;
         if (!enchantmentBookSettings.isEnchantmentBook(book) || enchantmentBookSettings.isEnchantmentBook(item)) return;
 
@@ -197,7 +197,7 @@ public class EnchantmentControl implements Listener {
                 CEnchantment enchantment = enchantmentBookSettings.getCEBook(item).getEnchantment();
                 Player player = event.getPlayer();
 
-                if (enchantment.getInfoName().length() > 0) player.sendMessage(enchantment.getInfoName());
+                if (!enchantment.getInfoName().isEmpty()) player.sendMessage(enchantment.getInfoName());
 
                 for (String descriptionLine : enchantment.getInfoDescription()) {
                     player.sendMessage(descriptionLine);

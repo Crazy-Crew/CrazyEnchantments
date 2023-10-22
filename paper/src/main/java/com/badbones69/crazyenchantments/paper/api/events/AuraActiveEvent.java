@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class AuraActiveEvent extends Event {
     
@@ -65,7 +66,7 @@ public class AuraActiveEvent extends Event {
      * @return A list of handlers handling this event.
      */
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 

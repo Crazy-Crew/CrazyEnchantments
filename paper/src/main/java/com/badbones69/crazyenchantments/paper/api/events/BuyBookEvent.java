@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class BuyBookEvent extends Event {
     
@@ -66,7 +67,7 @@ public class BuyBookEvent extends Event {
      * @return A list of handlers handling this event.
      */
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return handlers;
     }
 
