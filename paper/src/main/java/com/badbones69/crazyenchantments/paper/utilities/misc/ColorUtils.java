@@ -79,7 +79,7 @@ public class ColorUtils {
     }
 
     public static String toLegacy(Component text) {
-        return LegacyComponentSerializer.legacyAmpersand().serialize(text);
+        return LegacyComponentSerializer.legacyAmpersand().serialize(text).replaceAll("§", "&").replaceAll("&&", "&");
     }
 
     public static String toPlainText(Component text) {
