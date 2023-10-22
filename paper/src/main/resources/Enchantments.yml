@@ -22,7 +22,7 @@ Enchantments:
     #Whether an enchantment is active
     Enabled: true
     #The in-game name of the enchantment.
-    Name: 'Glowing'
+    Name: '&7Glowing'
     #Max lvl the enchantment goes up to.
     MaxPower: 1
     #The type of items that can be enchanted with the enchantment.
