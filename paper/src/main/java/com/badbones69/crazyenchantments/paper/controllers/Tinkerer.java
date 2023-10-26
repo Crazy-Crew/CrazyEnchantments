@@ -9,11 +9,13 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.google.gson.Gson;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -22,11 +24,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+
+import javax.json.Json;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,20 +84,22 @@ public class Tinkerer implements Listener {
     public void onXPUse(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK && methods.getItemInHand(player) != null) {
-            ItemStack item = methods.getItemInHand(player);
+        if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
 
-            if (item.getType() == new ItemBuilder().setMaterial(Files.TINKER.getFile().getString("Settings.BottleOptions.Item")).getMaterial() &&
-            item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().hasDisplayName() &&
-            item.getItemMeta().getDisplayName().equals(ColorUtils.color(Files.TINKER.getFile().getString("Settings.BottleOptions.Name")))) {
-                event.setCancelled(true);
-                methods.setItemInHand(player, methods.removeItem(item));
+        ItemStack item = methods.getItemInHand(player);
+        ItemMeta meta = item.getItemMeta();
 
-                if (Currency.isCurrency(Files.TINKER.getFile().getString("Settings.Currency"))) currencyAPI.giveCurrency(player, Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")), getXP(item));
+        if (meta == null || !item.getItemMeta().getPersistentDataContainer().has(DataKeys.EXPERIENCE.getKey())) return;
+        int amount = Integer.parseInt(item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.EXPERIENCE.getKey(), PersistentDataType.STRING, "0"));
 
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-            }
-        }
+        event.setCancelled(true);
+        methods.setItemInHand(player, methods.removeItem(item));
+
+        if (Currency.isCurrency(Files.TINKER.getFile().getString("Settings.Currency")))
+            currencyAPI.giveCurrency(player, Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")), amount);
+
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -98,15 +107,15 @@ public class Tinkerer implements Listener {
         Inventory inv = event.getInventory();
         Player player = (Player) event.getWhoClicked();
 
-        if (!event.getView().getTitle().equals(ColorUtils.color(Files.TINKER.getFile().getString("Settings.GUIName")))) return;
+        if (!event.getView().title().equals(ColorUtils.legacyTranslateColourCodes(Files.TINKER.getFile().getString("Settings.GUIName")))) return;
 
         event.setCancelled(true);
         ItemStack current = event.getCurrentItem();
 
-        if (current == null || current.getType().isAir() || !current.hasItemMeta()) return;
+        if (current == null || current.isEmpty() || !current.hasItemMeta()) return;
 
         // Recycling things.
-        if (current.getItemMeta().hasDisplayName() && current.getItemMeta().getDisplayName().equals(ColorUtils.color(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
+        if (current.getItemMeta().hasDisplayName() && Objects.equals(current.displayName(), ColorUtils.legacyTranslateColourCodes(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
             int total = 0;
             boolean toggle = false;
 
@@ -116,11 +125,7 @@ public class Tinkerer implements Listener {
                         ItemStack item = inv.getItem(slot);
                         total = total + getTotalXP(item);
                     } else {
-                        if (methods.isInventoryFull(player)) {
-                            player.getWorld().dropItem(player.getLocation(), inv.getItem(getSlot().get(slot)));
-                        } else {
-                            player.getInventory().addItem(inv.getItem(getSlot().get(slot)));
-                        }
+                        player.getInventory().addItem(inv.getItem(getSlot().get(slot))).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                     }
 
                     toggle = true;
@@ -239,7 +244,7 @@ public class Tinkerer implements Listener {
         }
 
         assert id != null;
-        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).build();
+        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.EXPERIENCE.getKey(), totalXP).build();
     }
 
     private HashMap<Integer, Integer> getSlot() {

@@ -26,6 +26,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class Methods {
@@ -87,6 +89,7 @@ public class Methods {
         }
     }
 
+    @NotNull
     public ItemStack getItemInHand(Player player) {
         return player.getInventory().getItemInMainHand();
     }
