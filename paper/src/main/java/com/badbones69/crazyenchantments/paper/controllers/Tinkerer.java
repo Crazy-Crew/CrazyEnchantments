@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.controllers;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
@@ -15,7 +14,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
-import com.google.gson.Gson;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
@@ -24,7 +22,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.ExpBottleEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -33,7 +30,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import javax.json.Json;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,15 +43,13 @@ public class Tinkerer implements Listener {
 
     private final Methods methods = starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     // Economy Management.
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
     public void openTinker(Player player) {
-        Inventory inv = plugin.getServer().createInventory(null, 54, ColorUtils.color(Files.TINKER.getFile().getString("Settings.GUIName")));
+        Inventory inv = plugin.getServer().createInventory(null, 54, ColorUtils.legacyTranslateColourCodes(Files.TINKER.getFile().getString("Settings.GUIName")));
 
         inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
         .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
@@ -120,12 +114,12 @@ public class Tinkerer implements Listener {
             boolean toggle = false;
 
             for (int slot : getSlot().keySet()) {
-                if (inv.getItem(getSlot().get(slot)) != null) {
+                ItemStack reward = inv.getItem(getSlot().get(slot));
+                if (reward != null) {
                     if (Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")) == Currency.VAULT) {
-                        ItemStack item = inv.getItem(slot);
-                        total = total + getTotalXP(item);
+                        total = total + getTotalXP(inv.getItem(slot));
                     } else {
-                        player.getInventory().addItem(inv.getItem(getSlot().get(slot))).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
+                        player.getInventory().addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                     }
 
                     toggle = true;
@@ -214,18 +208,15 @@ public class Tinkerer implements Listener {
         Player player = (Player) event.getPlayer();
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            if (event.getView().getTitle().equals(ColorUtils.color(Files.TINKER.getFile().getString("Settings.GUIName")))) {
+            if (event.getView().title().equals(ColorUtils.legacyTranslateColourCodes(Files.TINKER.getFile().getString("Settings.GUIName")))) {
                 for (int slot : getSlot().keySet()) {
-                    if (inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR) {
-                        if (player.isDead()) {
-                            player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
-                        } else {
-                            if (methods.isInventoryFull(player)) {
-                                player.getWorld().dropItem(player.getLocation(), inv.getItem(slot));
-                            } else {
-                                player.getInventory().addItem(inv.getItem(slot));
-                            }
-                        }
+                    ItemStack item = inv.getItem(slot);
+                    if (item == null || item.isEmpty()) continue;
+
+                    if (player.isDead()) {
+                        player.getWorld().dropItem(player.getLocation(), item);
+                    } else {
+                        player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
                     }
                 }
 
@@ -285,9 +276,9 @@ public class Tinkerer implements Listener {
     private int getTotalXP(ItemStack item) {
         int total = 0;
 
-        if (enchantmentBookSettings.hasEnchantments(item)) {
+        if (enchantmentBookSettings.hasEnchantments(item)) { // CrazyEnchantments
             for (CEnchantment enchantment : enchantmentBookSettings.getEnchantments(item).keySet()) {
-                String[] values = Files.TINKER.getFile().getString("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items").replaceAll(" ", "").split(",");
+                String[] values = Files.TINKER.getFile().getString("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items", "0").replaceAll(" ", "").split(",");
                 int baseAmount = Integer.parseInt(values[0]);
                 int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
                 int enchantmentLevel = enchantmentBookSettings.getEnchantments(item).get(enchantment);
@@ -296,9 +287,9 @@ public class Tinkerer implements Listener {
             }
         }
 
-        if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
+        if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) { // Vanilla Enchantments
             for (Enchantment enchantment : item.getEnchantments().keySet()) {
-                String[] values = Files.TINKER.getFile().getString("Tinker.Vanilla-Enchantments." + enchantment.getName()).replaceAll(" ", "").split(",");
+                String[] values = Files.TINKER.getFile().getString("Tinker.Vanilla-Enchantments." + enchantment.getKey(), "0").replaceAll(" ", "").split(",");
                 int baseAmount = Integer.parseInt(values[0]);
                 int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
                 int enchantmentLevel = item.getEnchantments().get(enchantment);
@@ -314,36 +305,11 @@ public class Tinkerer implements Listener {
         String path = "Tinker.Crazy-Enchantments." + book.getEnchantment().getName() + ".Book";
         if (!Files.TINKER.getFile().contains(path)) return 1;
 
-        String[] values = Files.TINKER.getFile().getString(path).replaceAll(" ", "").split(",");
+        String[] values = Files.TINKER.getFile().getString(path, "0").replaceAll(" ", "").split(",");
         int baseAmount = Integer.parseInt(values[0]);
         int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
 
         return baseAmount + book.getLevel() * multiplier;
     }
 
-    private Integer getXP(ItemStack item) {
-        String arg = "";
-        int amount = 0;
-
-        for (String lore : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
-            lore = ColorUtils.color(lore);
-            String itemLore = Objects.requireNonNull(item.getItemMeta().getLore()).get(amount);
-
-            if (lore.contains("%Total%")) {
-                String[] b = lore.split("%Total%");
-                if (b.length >= 1) arg = itemLore.replace(b[0], "");
-                if (b.length >= 2) arg = arg.replace(b[1], "");
-            }
-
-            if (lore.contains("%total%")) {
-                String[] b = lore.split("%total%");
-                if (b.length >= 1) arg = itemLore.replace(b[0], "");
-                if (b.length >= 2) arg = arg.replace(b[1], "");
-            }
-
-            amount++;
-        }
-
-        return Integer.parseInt(arg);
-    }
 }
