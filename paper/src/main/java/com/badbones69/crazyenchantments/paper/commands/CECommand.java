@@ -17,8 +17,10 @@ import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
+import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.configs.ConvertTinker;
+import com.badbones69.crazyenchantments.paper.controllers.Tinkerer;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
@@ -350,6 +352,31 @@ public class CECommand implements CommandExecutor {
 
                         sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Spawn <Enchantment/Category> [(Level:#/Min-Max)/World:<World>/X:#/Y:#/Z:#]"));
                     }
+
+                    return true;
+                }
+
+                case "give" -> { // /ce give <Player> <itemString>
+                    if (hasPermission(sender, "give") || args.length < 3) return true;
+                    Player player = methods.getPlayer(args[1]);
+                    ItemStack item = ItemBuilder.convertString(args[2]).build();
+
+                    if (item == null || player == null) return true;
+
+                    player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
+
+                    return true;
+                }
+
+                case "bottle" -> { // /ce bottle <Player> <Amount>
+                    if (hasPermission(sender, "give") || args.length < 3) return true;
+                    Player player = methods.getPlayer(args[1]);
+                    if (!NumberUtils.isInt(args[2])) return true;
+                    ItemStack item = plugin.getTinkerer().getXPBottle(args[2]);
+
+                    if (item == null || player == null) return true;
+
+                    player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
 
                     return true;
                 }

@@ -117,7 +117,7 @@ public class Tinkerer implements Listener {
                 ItemStack reward = inv.getItem(getSlot().get(slot));
                 if (reward != null) {
                     if (Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")) == Currency.VAULT) {
-                        total = total + getTotalXP(inv.getItem(slot));
+                        total = getTotalXP(inv.getItem(slot));
                     } else {
                         player.getInventory().addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                     }
@@ -194,7 +194,7 @@ public class Tinkerer implements Listener {
                 }
 
                 event.setCurrentItem(new ItemStack(Material.AIR));
-                inv.setItem(getSlot().get(inv.firstEmpty()), getBottle(String.valueOf(totalXP)));
+                inv.setItem(getSlot().get(inv.firstEmpty()), getXPBottle(String.valueOf(totalXP)));
                 inv.setItem(inv.firstEmpty(), current);
 
             }
@@ -225,17 +225,22 @@ public class Tinkerer implements Listener {
         }, 0);
     }
 
-    private ItemStack getBottle(String totalXP) {
+    /**
+     *
+     * @param amount Amount of XP to store.
+     * @return XP Bottle with custom amount of xp stored in it.
+     */
+    public ItemStack getXPBottle(String amount) {
         String id = Files.TINKER.getFile().getString("Settings.BottleOptions.Item");
         String name = Files.TINKER.getFile().getString("Settings.BottleOptions.Name");
         List<String> lore = new ArrayList<>();
 
         for (String l : Files.TINKER.getFile().getStringList("Settings.BottleOptions.Lore")) {
-            lore.add(l.replace("%Total%", totalXP).replace("%total%", totalXP));
+            lore.add(l.replace("%Total%", amount).replace("%total%", amount));
         }
 
         assert id != null;
-        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.EXPERIENCE.getKey(), totalXP).build();
+        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.EXPERIENCE.getKey(), amount).build();
     }
 
     private HashMap<Integer, Integer> getSlot() {

@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.SkullCreator;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -67,6 +68,8 @@ public class ItemBuilder {
     // Enchantments
     private HashMap<Enchantment, Integer> enchantments;
 
+    private HashMap<CEnchantment, Integer> crazyEnchantments;
+
     // Shields
     private boolean isShield;
 
@@ -120,6 +123,8 @@ public class ItemBuilder {
 
         this.enchantments = new HashMap<>();
 
+        this.crazyEnchantments = new HashMap<>();
+
         this.isShield = false;
 
         this.isBanner = false;
@@ -151,6 +156,8 @@ public class ItemBuilder {
         this.useCustomModelData = itemBuilder.useCustomModelData;
 
         this.enchantments = new HashMap<>(itemBuilder.enchantments);
+
+        this.crazyEnchantments = new HashMap<>(itemBuilder.crazyEnchantments);
 
         this.isHash = itemBuilder.isHash;
         this.isURL = itemBuilder.isURL;
@@ -255,6 +262,13 @@ public class ItemBuilder {
     }
 
     /**
+     * Returns the crazyEnchantments on the item.
+     */
+    public HashMap<CEnchantment, Integer> getCrazyEnchantments() {
+        return crazyEnchantments;
+    }
+
+    /**
      * Return a list of Item Flags.
      */
     public List<ItemFlag> getItemFlags() {
@@ -342,6 +356,7 @@ public class ItemBuilder {
         if (getUpdatedName() != null) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
         if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
+        if (crazyEnchantments != null) itemMeta = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().addEnchantments(itemMeta, crazyEnchantments);
 
         if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(damage);
 
@@ -781,6 +796,19 @@ public class ItemBuilder {
     }
 
     /**
+     * Adds an enchantment to the item.
+     *
+     * @param enchantment The enchantment you wish to add.
+     * @param level The level of the enchantment ( Unsafe levels included )
+     * @return The ItemBuilder with updated enchantments.
+     */
+    public ItemBuilder addCEEnchantments(CEnchantment enchantment, Integer level) {
+        this.crazyEnchantments.put(enchantment, level);
+
+        return this;
+    }
+
+    /**
      * Remove an enchantment from the item.
      *
      * @param enchantment The enchantment you wish to remove.
@@ -1026,6 +1054,14 @@ public class ItemBuilder {
 
                             break;
                         }
+                        CEnchantment ceEnchant = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getEnchantmentFromName(option);
+                        if (ceEnchant != null) {
+                            try {
+                                itemBuilder.addCEEnchantments(ceEnchant, Integer.parseInt(value));
+                            } catch (NumberFormatException e) {
+                                itemBuilder.addCEEnchantments(ceEnchant, 1);
+                            }
+                        }
                         for (ItemFlag itemFlag : ItemFlag.values()) {
                             if (itemFlag.name().equalsIgnoreCase(option)) {
                                 itemBuilder.addItemFlag(itemFlag);
@@ -1047,7 +1083,7 @@ public class ItemBuilder {
             }
         } catch (Exception e) {
             itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR")
-                    .lore(Arrays.asList(Component.text("There us an error", NamedTextColor.RED),
+                    .lore(Arrays.asList(Component.text("There was an error", NamedTextColor.RED),
                             Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));
             Log.error(e);
         }

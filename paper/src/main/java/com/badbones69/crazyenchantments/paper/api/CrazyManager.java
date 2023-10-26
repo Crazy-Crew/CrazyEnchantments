@@ -473,16 +473,21 @@ public class CrazyManager {
         return addEnchantments(item, enchantments);
     }
 
-    public ItemStack addEnchantments(ItemStack itemStack, Map<CEnchantment, Integer> enchantments) {
-        ItemStack item = itemStack.clone();
+    public ItemStack addEnchantments(ItemStack item, Map<CEnchantment, Integer> enchantments) {
+        item.setItemMeta(addEnchantments(item.getItemMeta(), enchantments));
+
+        return item;
+    }
+
+    public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) {
+
         for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
 
-            if (enchantmentBookSettings.hasEnchantment(item, enchantment)) enchantmentBookSettings.removeEnchantment(item, enchantment);
-            
+            if (enchantmentBookSettings.hasEnchantment(meta, enchantment)) meta = enchantmentBookSettings.removeEnchantment(meta, enchantment);
+
             String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
-            ItemMeta meta = item.getItemMeta();
             List<Component> lore = meta.lore();
 
             if (lore == null) lore = new ArrayList<>();
@@ -496,7 +501,7 @@ public class CrazyManager {
             String data;
             Enchant enchantData;
 
-            data = itemStack.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+            data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
             enchantData =  data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
@@ -506,10 +511,9 @@ public class CrazyManager {
 
             meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
 
-            item.setItemMeta(meta);
         }
 
-        return item;
+        return meta;
     }
 
     /**

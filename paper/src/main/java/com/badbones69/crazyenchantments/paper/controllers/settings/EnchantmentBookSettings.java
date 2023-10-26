@@ -58,6 +58,17 @@ public class EnchantmentBookSettings {
         return gson.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
     }
 
+    public boolean hasEnchantment(ItemMeta meta, CEnchantment enchantment) {
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+
+        if (!data.has(DataKeys.ENCHANTMENTS.getKey())) return false;
+
+        String itemData = data.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        if (itemData == null) return false;
+
+        return gson.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
+    }
+
     /**
      * This method converts an ItemStack into a CEBook.
      * @param book The ItemStack you are converting.
@@ -325,7 +336,12 @@ public class EnchantmentBookSettings {
     public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
         if (!item.hasItemMeta()) return item;
 
-        ItemMeta meta = item.getItemMeta();
+        item.setItemMeta(removeEnchantment(item.getItemMeta(), enchant));
+
+        return item;
+    }
+    public ItemMeta removeEnchantment(ItemMeta meta, CEnchantment enchant) {
+
         List<Component> lore = meta.lore();
 
         if (lore != null) {
@@ -352,8 +368,6 @@ public class EnchantmentBookSettings {
             meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
         }
 
-        item.setItemMeta(meta);
-
-        return item;
+        return meta;
     }
 }
