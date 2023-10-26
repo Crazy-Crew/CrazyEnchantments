@@ -1,9 +1,13 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.SkullCreator;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
+import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -356,7 +360,8 @@ public class ItemBuilder {
         if (getUpdatedName() != null) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
         if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
-        if (crazyEnchantments != null) itemMeta = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().addEnchantments(itemMeta, crazyEnchantments);
+        if (crazyEnchantments != null) itemMeta = addEnchantments(itemMeta, crazyEnchantments);
+        //CrazyEnchantments.getPlugin().getStarter().getCrazyManager().addEnchantments(itemMeta, crazyEnchantments);
 
         if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(damage);
 
@@ -407,6 +412,45 @@ public class ItemBuilder {
         }
 
         return nbt.getItem();
+    }
+
+    //TODO Remove function below after fixing the mess that the plugin currently is.
+    public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) {
+        EnchantmentBookSettings enchantmentBookSettings = CrazyEnchantments.getPlugin().getStarter().getEnchantmentBookSettings();
+
+        for (Map.Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
+            CEnchantment enchantment = entry.getKey();
+            int level = entry.getValue();
+
+            if (enchantmentBookSettings.hasEnchantment(meta, enchantment)) meta = enchantmentBookSettings.removeEnchantment(meta, enchantment);
+
+            String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
+            List<Component> lore = meta.lore();
+
+            if (lore == null) lore = new ArrayList<>();
+
+            lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+
+            meta.lore(lore);
+
+            Gson gson = new Gson();
+
+            String data;
+            Enchant enchantData;
+
+            data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+
+            enchantData =  data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
+
+            for (Map.Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
+                enchantData.addEnchantment(x.getKey().getName(), x.getValue());
+            }
+
+            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
+
+        }
+
+        return meta;
     }
 
     /*
