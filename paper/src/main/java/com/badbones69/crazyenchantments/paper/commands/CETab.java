@@ -105,6 +105,8 @@ public class CETab implements TabCompleter {
                         } catch (NullPointerException ignore) {}
                     }
                 }
+                case "give", "bottle" ->
+                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
 
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
@@ -131,13 +133,15 @@ public class CETab implements TabCompleter {
                     completions.add("Y:");
                     completions.add("Z:");
                 }
-                case "scroll", "dust", "lostbook" -> {
+                case "scroll", "dust", "lostbook", "bottle" -> {
                     completions.add("1");
                     completions.add("32");
                     completions.add("64");
                 }
                 case "crystal", "scrambler" ->
                         plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "give" ->
+                    completions.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
             }
 
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
