@@ -44,6 +44,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -360,10 +361,15 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
-            case "give" -> { // /ce give <Player> <itemString>
+            case "give" -> { // /ce give <Player> <itemString> /ce arg0 arg1 arg2
                 if (!hasPermission(sender, "give") || args.length < 3) return true;
+                StringBuilder sb = new StringBuilder();
+                for (int i = 2; i < args.length - 1; i++) {
+                    sb.append(args[i]).append(" ");
+                }
+
                 Player target = methods.getPlayer(args[1]);
-                ItemStack item = ItemBuilder.convertString(args[2]).build();
+                ItemStack item = ItemBuilder.convertString(sb.toString()).build();
 
                 if (item == null || target == null) return true;
 
