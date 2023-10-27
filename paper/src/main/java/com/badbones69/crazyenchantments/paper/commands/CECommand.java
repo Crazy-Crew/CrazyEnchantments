@@ -362,7 +362,6 @@ public class CECommand implements CommandExecutor {
 
             case "give" -> { // /ce give <Player> <itemString>
                 if (!hasPermission(sender, "give") || args.length < 3) return true;
-                sender.sendMessage("GIVE");
                 Player target = methods.getPlayer(args[1]);
                 ItemStack item = ItemBuilder.convertString(args[2]).build();
 

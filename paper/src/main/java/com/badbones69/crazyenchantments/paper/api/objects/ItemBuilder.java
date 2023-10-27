@@ -357,7 +357,7 @@ public class ItemBuilder {
         ItemMeta itemMeta = item.getItemMeta();
         List<Component> newLore = getUpdatedLore();
         assert itemMeta != null;
-        if (getUpdatedName() != null) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+        if (getUpdatedName().isBlank()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
         if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
         if (crazyEnchantments != null) itemMeta = addEnchantments(itemMeta, crazyEnchantments);
