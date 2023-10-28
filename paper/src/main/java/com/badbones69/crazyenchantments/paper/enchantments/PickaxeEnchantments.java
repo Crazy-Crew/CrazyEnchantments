@@ -95,6 +95,7 @@ public class PickaxeEnchantments implements Listener {
 
             BlockBreakEvent blastBreak = new BlockBreakEvent(block, player);
 
+            if (!crazyManager.isDropBlocksBlast()) blastBreak.setDropItems(false);
             EventUtils.addIgnoredEvent(blastBreak);
             plugin.getServer().getPluginManager().callEvent(blastBreak);
             EventUtils.removeIgnoredEvent(blastBreak);
@@ -145,6 +146,7 @@ public class PickaxeEnchantments implements Listener {
 
             BlockBreakEvent veinMinerBreak = new BlockBreakEvent(block, player);
 
+            if (!crazyManager.isDropBlocksVeinMiner()) veinMinerBreak.setDropItems(false);
             EventUtils.addIgnoredEvent(veinMinerBreak);
             plugin.getServer().getPluginManager().callEvent(veinMinerBreak);
             EventUtils.removeIgnoredEvent(veinMinerBreak);
