@@ -165,14 +165,14 @@ public class EnchantmentBookSettings {
      * @return itemBuilder for an enchanted book.
      */
     public ItemBuilder getNormalBook() {
-        return enchantmentBook;
+        return new ItemBuilder(enchantmentBook);
     }
 
     /**
      * @return the itemstack of the enchantment book.
      */
     public ItemStack getEnchantmentBookItem() {
-        return enchantmentBook.build();
+        return new ItemBuilder(enchantmentBook).build();
     }
 
     /**

@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,13 +92,13 @@ public class InfoMenuManager {
 
         Inventory inventory = plugin.getServer().createInventory(null, slots, inventoryName);
 
+        ItemBuilder normalBook = enchantmentBookSettings.getNormalBook().setGlow(true);
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
                 inventory.addItem(
-                enchantmentBookSettings.getNormalBook()
+                normalBook
                 .setName(enchantment.getInfoName())
                 .setLore(enchantment.getInfoDescription())
-                .setGlow(true)
                 .build());
             }
         }
