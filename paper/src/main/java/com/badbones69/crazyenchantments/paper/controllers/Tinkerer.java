@@ -17,6 +17,7 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -45,6 +46,8 @@ public class Tinkerer implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
+    private final HashMap<Integer, Integer> slots = getSlots();
+
     // Economy Management.
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
@@ -59,7 +62,8 @@ public class Tinkerer implements Listener {
         inv.setItem(8, tradeButton);
 
         // Set Divider
-        List.of(4, 13, 22, 31, 40, 49).forEach(x -> inv.setItem(x, new ItemBuilder().setMaterial("WHITE_STAINED_GLASS_PANE").setName(" ").build()));
+        ItemStack divider = new ItemBuilder().setMaterial("WHITE_STAINED_GLASS_PANE").setName(" ").build();
+        List.of(4, 13, 22, 31, 40, 49).forEach(x -> inv.setItem(x, divider));
 
         player.openInventory(inv);
     }
@@ -103,8 +107,8 @@ public class Tinkerer implements Listener {
             int total = 0;
             boolean toggle = false;
 
-            for (int slot : getSlot().keySet()) {
-                ItemStack reward = inv.getItem(getSlot().get(slot));
+             for (int slot : slots.keySet()) {
+                ItemStack reward = inv.getItem(slots.get(slot));
                 if (reward != null) {
                     if (Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")) == Currency.VAULT) {
                         total = getTotalXP(inv.getItem(slot));
@@ -116,7 +120,7 @@ public class Tinkerer implements Listener {
                 }
 
                 event.getInventory().setItem(slot, new ItemStack(Material.AIR));
-                event.getInventory().setItem(getSlot().get(slot), new ItemStack(Material.AIR));
+                event.getInventory().setItem(slots.get(slot), new ItemStack(Material.AIR));
             }
 
             player.closeInventory();
@@ -140,7 +144,7 @@ public class Tinkerer implements Listener {
             if (inTinker(event.getRawSlot())) { // Clicking in the tinkers.
                 event.setCurrentItem(new ItemStack(Material.AIR));
                 player.getInventory().addItem(current);
-                inv.setItem(getSlot().get(event.getRawSlot()), new ItemStack(Material.AIR));
+                inv.setItem(slots.get(event.getRawSlot()), new ItemStack(Material.AIR));
             } else { // Clicking in their inventory.
 
                 if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
@@ -154,7 +158,7 @@ public class Tinkerer implements Listener {
 
 
                 event.setCurrentItem(new ItemStack(Material.AIR));
-                inv.setItem(getSlot().get(inv.firstEmpty()), Dust.MYSTERY_DUST.getDust(getMaxDustLevelFromBook(book), 1));
+                inv.setItem(slots.get(inv.firstEmpty()), Dust.MYSTERY_DUST.getDust(getMaxDustLevelFromBook(book), 1));
                 inv.setItem(inv.firstEmpty(), current);
             }
 
@@ -166,10 +170,10 @@ public class Tinkerer implements Listener {
         if (totalXP > 0) {
             // Adding an item.
             if (inTinker(event.getRawSlot())) { // Clicking in the tinkers.
-                if (getSlot().containsKey(event.getRawSlot())) {
+                if (slots.containsKey(event.getRawSlot())) {
                     event.setCurrentItem(new ItemStack(Material.AIR));
                     player.getInventory().addItem(current);
-                    inv.setItem(getSlot().get(event.getRawSlot()), new ItemStack(Material.AIR));
+                    inv.setItem(slots.get(event.getRawSlot()), new ItemStack(Material.AIR));
                 }
             } else {
                 // Clicking in their inventory.
@@ -184,7 +188,7 @@ public class Tinkerer implements Listener {
                 }
 
                 event.setCurrentItem(new ItemStack(Material.AIR));
-                inv.setItem(getSlot().get(inv.firstEmpty()), getXPBottle(String.valueOf(totalXP)));
+                inv.setItem(slots.get(inv.firstEmpty()), getXPBottle(String.valueOf(totalXP)));
                 inv.setItem(inv.firstEmpty(), current);
 
             }
@@ -199,7 +203,7 @@ public class Tinkerer implements Listener {
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             if (event.getView().title().equals(ColorUtils.legacyTranslateColourCodes(Files.TINKER.getFile().getString("Settings.GUIName")))) {
-                for (int slot : getSlot().keySet()) {
+                for (int slot : slots.keySet()) {
                     ItemStack item = inv.getItem(slot);
                     if (item == null || item.isEmpty()) continue;
 
@@ -233,34 +237,33 @@ public class Tinkerer implements Listener {
         return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.EXPERIENCE.getKey(), amount).build();
     }
 
-    private HashMap<Integer, Integer> getSlot() {
-        HashMap<Integer, Integer> slots = new HashMap<>();
+    private HashMap<Integer, Integer> getSlots() {
 
-        slots.put(1, 5);
-        slots.put(2, 6);
-        slots.put(3, 7);
-        slots.put(9, 14);
-        slots.put(10, 15);
-        slots.put(11, 16);
-        slots.put(12, 17);
-        slots.put(18, 23);
-        slots.put(19, 24);
-        slots.put(20, 25);
-        slots.put(21, 26);
-        slots.put(27, 32);
-        slots.put(28, 33);
-        slots.put(29, 34);
-        slots.put(30, 35);
-        slots.put(36, 41);
-        slots.put(37, 42);
-        slots.put(38, 43);
-        slots.put(39, 44);
-        slots.put(45, 50);
-        slots.put(46, 51);
-        slots.put(47, 52);
-        slots.put(48, 53);
-
-        return slots;
+        return new HashMap<>(23) {{
+            put(1, 5);
+            put(2, 6);
+            put(3, 7);
+            put(9, 14);
+            put(10, 15);
+            put(11, 16);
+            put(12, 17);
+            put(18, 23);
+            put(19, 24);
+            put(20, 25);
+            put(21, 26);
+            put(27, 32);
+            put(28, 33);
+            put(29, 34);
+            put(30, 35);
+            put(36, 41);
+            put(37, 42);
+            put(38, 43);
+            put(39, 44);
+            put(45, 50);
+            put(46, 51);
+            put(47, 52);
+            put(48, 53);
+        }};
     }
 
     private boolean inTinker(int slot) {
