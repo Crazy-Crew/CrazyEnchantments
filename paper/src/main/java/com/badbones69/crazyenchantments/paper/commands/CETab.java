@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class CETab implements TabCompleter {
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) { // /ce arg0
             switch (args[0].toLowerCase()) {
-                case "info", "remove", "add", "book" -> {
+                case "info", "add", "book" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").replace(" ", "_"));
@@ -65,6 +66,9 @@ public class CETab implements TabCompleter {
 
                     Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
                 }
+                case "remove" ->
+                    enchantmentBookSettings.getEnchantments(((Player) sender).getInventory().getItemInMainHand())
+                            .forEach((a,b) -> completions.add(a.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
 
                 case "spawn" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
