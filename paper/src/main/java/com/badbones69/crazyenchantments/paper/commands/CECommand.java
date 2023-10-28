@@ -378,10 +378,12 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
-            case "bottle" -> { // /ce bottle <Player> <Amount>
+            case "bottle" -> { // /ce bottle <Player> <XPAmount> <Amount>
                 if (!hasPermission(sender, "give") || args.length < 3 || !NumberUtils.isInt(args[2])) return true;
                 Player target = methods.getPlayer(args[1]);
                 ItemStack item = plugin.getTinkerer().getXPBottle(args[2]);
+                int amount = args.length == 4 ? NumberUtils.isInt(args[3]) ? Integer.parseInt(args[3]) : 1 : 1;
+                item.setAmount(amount);
 
                 if (item.isEmpty() || target == null) return true;
 

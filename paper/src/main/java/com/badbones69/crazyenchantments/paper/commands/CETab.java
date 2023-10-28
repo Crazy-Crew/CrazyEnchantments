@@ -157,6 +157,12 @@ public class CETab implements TabCompleter {
 
                 case "scroll", "dust", "lostbook" ->
                         plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+
+                case "bottle" -> {
+                    completions.add("1");
+                    completions.add("32");
+                    completions.add("64");
+                }
                 default -> {
                     return StringUtil.copyPartialMatches(args[3], completions, new ArrayList<>());
                 }
