@@ -361,7 +361,7 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
-            case "give" -> { // /ce give <Player> <itemString> /ce arg0 arg1 arg2
+            case "give" -> { // /ce give <Player> <itemString> /ce arg0 arg1 arg2 //TODO Command Add Feedback
                 if (!hasPermission(sender, "give") || args.length < 3) return true;
                 StringBuilder sb = new StringBuilder();
                 for (int i = 2; i < args.length - 1; i++) {
@@ -378,7 +378,7 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
-            case "bottle" -> { // /ce bottle <Player> <XPAmount> <Amount>
+            case "bottle" -> { // /ce bottle <Player> <XPAmount> <Amount> //TODO Add Command Feedback
                 if (!hasPermission(sender, "give") || args.length < 3 || !NumberUtils.isInt(args[2])) return true;
                 Player target = methods.getPlayer(args[1]);
                 ItemStack item = plugin.getTinkerer().getXPBottle(args[2]);
