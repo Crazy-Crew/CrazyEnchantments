@@ -48,29 +48,19 @@ public class Tinkerer implements Listener {
     // Economy Management.
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
+    private final ItemStack tradeButton = new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
+            .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
+            .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build();
+
     public void openTinker(Player player) {
         Inventory inv = plugin.getServer().createInventory(null, 54, ColorUtils.legacyTranslateColourCodes(Files.TINKER.getFile().getString("Settings.GUIName")));
 
-        inv.setItem(0, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
-        .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
-        .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
+        inv.setItem(0, tradeButton);
+        inv.setItem(8, tradeButton);
 
-        List<Integer> slots = new ArrayList<>();
+        // Set Divider
+        List.of(4, 13, 22, 31, 40, 49).forEach(x -> inv.setItem(x, new ItemBuilder().setMaterial("WHITE_STAINED_GLASS_PANE").setName(" ").build()));
 
-        slots.add(4);
-        slots.add(13);
-        slots.add(22);
-        slots.add(31);
-        slots.add(40);
-        slots.add(49);
-
-        for (int i : slots) {
-            inv.setItem(i, new ItemBuilder().setMaterial("WHITE_STAINED_GLASS_PANE").setName(" ").build());
-        }
-
-        inv.setItem(8, new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE")
-        .setName(Files.TINKER.getFile().getString("Settings.TradeButton"))
-        .setLore(Files.TINKER.getFile().getStringList("Settings.TradeButton-Lore")).build());
         player.openInventory(inv);
     }
 
@@ -109,7 +99,7 @@ public class Tinkerer implements Listener {
         if (current == null || current.isEmpty() || !current.hasItemMeta()) return;
 
         // Recycling things.
-        if (current.getItemMeta().hasDisplayName() && Objects.equals(current.displayName(), ColorUtils.legacyTranslateColourCodes(Files.TINKER.getFile().getString("Settings.TradeButton")))) {
+        if (Objects.equals(current, tradeButton)) {
             int total = 0;
             boolean toggle = false;
 
