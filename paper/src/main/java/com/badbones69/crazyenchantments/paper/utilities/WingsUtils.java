@@ -61,7 +61,7 @@ public class WingsUtils {
     }
 
     public static boolean checkGameMode(Player player) {
-        return player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.ADVENTURE;
+        return player.getGameMode() == GameMode.SURVIVAL;
     }
 
     private static boolean inWingsRegion(Player player) {
