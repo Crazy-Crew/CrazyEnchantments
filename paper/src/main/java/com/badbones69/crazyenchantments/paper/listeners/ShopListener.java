@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
-import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.events.BuyBookEvent;
@@ -85,10 +84,7 @@ public class ShopListener implements Listener {
         for (Category category : enchantmentBookSettings.getCategories()) {
             if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
 
-                if (methods.isInventoryFull(player)) {
-                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                    return;
-                }
+                if (methods.isInventoryFull(player)) return;
 
                 if (category.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                     if (currencyAPI.canBuy(player, category)) {
@@ -116,10 +112,7 @@ public class ShopListener implements Listener {
 
             if (lostBook.isInGUI() && item.isSimilar(lostBook.getDisplayItem().build())) {
 
-                if (methods.isInventoryFull(player)) {
-                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                    return;
-                }
+                if (methods.isInventoryFull(player)) return;
 
                 if (lostBook.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                     if (currencyAPI.canBuy(player, lostBook)) {
@@ -141,10 +134,7 @@ public class ShopListener implements Listener {
                 // If the option is buy-able then it check to see if they player can buy it and take the money.
 
                 if (option.isBuyable()) {
-                    if (methods.isInventoryFull(player)) {
-                        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                        return;
-                    }
+                    if (methods.isInventoryFull(player)) return;
 
                     if (option.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
                         if (currencyAPI.canBuy(player, option)) {

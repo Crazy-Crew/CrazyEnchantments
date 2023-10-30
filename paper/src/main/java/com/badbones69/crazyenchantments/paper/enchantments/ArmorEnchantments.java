@@ -216,7 +216,7 @@ public class ArmorEnchantments implements Listener {
 
             if (isEventActive(CEnchantments.STORMCALLER, player, armor)) {
 
-                methods.checkEntity(damager);
+                methods.lightning(damager);
                 // AntiCheat Support.
                 if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 

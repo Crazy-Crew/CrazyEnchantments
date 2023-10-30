@@ -149,11 +149,7 @@ public class CEPlayer {
 
             }
 
-            if (methods.isInventoryFull(player)) {
-                player.getWorld().dropItemNaturally(player.getLocation(), item);
-            } else {
-                player.getInventory().addItem(item);
-            }
+            methods.addItemToInventory(player, item);
 
         }
 

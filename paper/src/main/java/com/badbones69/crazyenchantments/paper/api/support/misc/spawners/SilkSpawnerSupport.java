@@ -47,7 +47,7 @@ public class SilkSpawnerSupport implements Listener {
 
             ItemStack spawnerItem = api.newSpawnerItem(e.getEntityID(), api.getCustomSpawnerName(api.getCreatureName(e.getEntityID())), 1, false);
 
-            if (!methods.isInventoryFull(player)) player.getInventory().addItem(spawnerItem); else block.getWorld().dropItemNaturally(block.getLocation(), spawnerItem);
+            methods.addItemToInventory(player, spawnerItem);
 
             assert block != null;
             block.setType(Material.AIR);

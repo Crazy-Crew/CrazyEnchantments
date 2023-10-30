@@ -193,8 +193,24 @@ public class Methods {
         }
     }
 
+    /**
+     *
+     * @param player The {@link Player} who's inventory should be checked.
+     * @return Returns if the player's inventory is full while letting them know.
+     */
     public boolean isInventoryFull(Player player) {
-        return player.getInventory().firstEmpty() == -1;
+        if (player.getInventory().firstEmpty() != -1) return false;
+        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+        return true;
+    }
+
+    /**
+     *
+     * @param player The {@link Player} to give items to.
+     * @param item The {@link ItemStack} to give to the player.
+     */
+    public void addItemToInventory(Player player, ItemStack item) {
+        player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
 
     public List<LivingEntity> getNearbyLivingEntities(double radius, Entity entity) {
@@ -233,56 +249,18 @@ public class Methods {
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
     }
 
-    public String stripString(String string) {
-        return string != null ? string.replace("-", "").replace("_", "").replace(" ", "") : "";
-    }
-
     public Enchantment getEnchantment(String enchantmentName) {
         try {
             // HashMap<String, String> enchantments = getEnchantments();
-            enchantmentName = stripString(enchantmentName);
+            enchantmentName = enchantmentName.replaceAll("-|_| ", "");
 
             for (Enchantment enchantment : Enchantment.values()) {
                 // MC 1.13+ has the correct names.
-                if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) return enchantment;
+                if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName)) return enchantment;
             }
         } catch (Exception ignore) {}
 
         return null;
-    }
-
-    public HashMap<String, String> getEnchantments() {
-        HashMap<String, String> enchantments = new HashMap<>();
-        enchantments.put("ARROW_DAMAGE", "Power");
-        enchantments.put("ARROW_FIRE", "Flame");
-        enchantments.put("ARROW_INFINITE", "Infinity");
-        enchantments.put("ARROW_KNOCKBACK", "Punch");
-        enchantments.put("DAMAGE_ALL", "Sharpness");
-        enchantments.put("DAMAGE_ARTHROPODS", "Bane_Of_Arthropods");
-        enchantments.put("DAMAGE_UNDEAD", "Smite");
-        enchantments.put("DEPTH_STRIDER", "Depth_Strider");
-        enchantments.put("DIG_SPEED", "Efficiency");
-        enchantments.put("DURABILITY", "Unbreaking");
-        enchantments.put("FIRE_ASPECT", "Fire_Aspect");
-        enchantments.put("KNOCKBACK", "KnockBack");
-        enchantments.put("LOOT_BONUS_BLOCKS", "Fortune");
-        enchantments.put("LOOT_BONUS_MOBS", "Looting");
-        enchantments.put("LUCK", "Luck_Of_The_Sea");
-        enchantments.put("LURE", "Lure");
-        enchantments.put("OXYGEN", "Respiration");
-        enchantments.put("PROTECTION_ENVIRONMENTAL", "Protection");
-        enchantments.put("PROTECTION_EXPLOSIONS", "Blast_Protection");
-        enchantments.put("PROTECTION_FALL", "Feather_Falling");
-        enchantments.put("PROTECTION_FIRE", "Fire_Protection");
-        enchantments.put("PROTECTION_PROJECTILE", "Projectile_Protection");
-        enchantments.put("SILK_TOUCH", "Silk_Touch");
-        enchantments.put("THORNS", "Thorns");
-        enchantments.put("WATER_WORKER", "Aqua_Affinity");
-        enchantments.put("BINDING_CURSE", "Curse_Of_Binding");
-        enchantments.put("MENDING", "Mending");
-        enchantments.put("FROST_WALKER", "Frost_Walker");
-        enchantments.put("VANISHING_CURSE", "Curse_Of_Vanishing");
-        return enchantments;
     }
 
     public int getMaxDurability(ItemStack item) {
@@ -353,7 +331,7 @@ public class Methods {
     }
 
     public void explode(Entity player) {
-        spawnParticles(player, player.getWorld(), player.getLocation());
+        spawnExplodeParticles(player, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, player)) {
             if (pluginSupport.allowCombat(entity.getLocation())) {
@@ -380,7 +358,7 @@ public class Methods {
         }
     }
 
-    private void spawnParticles(Entity player, World world, Location location) {
+    private void spawnExplodeParticles(Entity player, World world, Location location) {
         if (player.getLocation().getWorld() != null) {
             player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
             player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
@@ -391,7 +369,7 @@ public class Methods {
     }
 
     public void explode(Entity player, Entity arrow) {
-        spawnParticles(arrow, player.getWorld(), player.getLocation());
+        spawnExplodeParticles(arrow, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, arrow)) {
             if (pluginSupport.allowCombat(entity.getLocation())) {
@@ -475,7 +453,7 @@ public class Methods {
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public void checkEntity(LivingEntity en) {
+    public void lightning(LivingEntity en) {
         Location loc = en.getLocation();
         if (loc.getWorld() != null) loc.getWorld().strikeLightning(loc);
         int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);

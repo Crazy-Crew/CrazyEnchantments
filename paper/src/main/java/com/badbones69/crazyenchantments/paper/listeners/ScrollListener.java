@@ -83,10 +83,7 @@ public class ScrollListener implements Listener {
 
         switch (type.getConfigName()) {
             case "BlackScroll" -> {
-                if (methods.isInventoryFull(player)) {
-                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                    return;
-                }
+                if (methods.isInventoryFull(player)) return;
 
                 List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
                 if (!enchantments.isEmpty()) { // Item has enchantments

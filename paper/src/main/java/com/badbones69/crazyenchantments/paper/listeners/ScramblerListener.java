@@ -151,11 +151,7 @@ public class ScramblerListener implements Listener {
                         item.setType(enchantmentBookSettings.getEnchantmentBookItem().getType());
                         methods.setDurability(item, methods.getDurability(enchantmentBookSettings.getEnchantmentBookItem()));
 
-                        if (methods.isInventoryFull(player)) {
-                            player.getWorld().dropItem(player.getLocation(), item);
-                        } else {
-                            player.getInventory().addItem(item);
-                        }
+                        methods.addItemToInventory(player, item);
 
                     } else if (time > 60) { // Just in case the cancel fails.
                         cancel();

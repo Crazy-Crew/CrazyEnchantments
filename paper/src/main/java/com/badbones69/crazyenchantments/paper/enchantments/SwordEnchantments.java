@@ -126,11 +126,7 @@ public class SwordEnchantments implements Listener {
                             case FEET -> player.getEquipment().setBoots(null);
                         }
 
-                        if (methods.isInventoryFull(player)) {
-                            player.getWorld().dropItemNaturally(player.getLocation(), armor);
-                        } else {
-                            player.getInventory().addItem(armor);
-                        }
+                        methods.addItemToInventory(player, armor);
                     }
                 }
             }

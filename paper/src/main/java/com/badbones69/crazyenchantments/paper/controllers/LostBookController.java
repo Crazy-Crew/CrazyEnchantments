@@ -55,10 +55,7 @@ public class LostBookController implements Listener {
 
         event.setCancelled(true);
 
-        if (methods.isInventoryFull(player)) {
-            player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-            return;
-        }
+        if (methods.isInventoryFull(player)) return;
 
         LostBook lostBook = category.getLostBook();
         methods.removeItem(item, player);

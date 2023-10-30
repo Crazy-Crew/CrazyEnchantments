@@ -418,11 +418,8 @@ public class CECommand implements CommandExecutor {
                         }
 
                         if (category != null) {
-                            if (methods.isInventoryFull(player)) {
-                                player.getWorld().dropItemNaturally(player.getLocation(), category.getLostBook().getLostBook(category, amount).build());
-                            } else {
-                                player.getInventory().addItem(category.getLostBook().getLostBook(category, amount).build());
-                            }
+
+                            methods.addItemToInventory(player, category.getLostBook().getLostBook(category, amount).build());
 
                             return true;
                         }
@@ -462,10 +459,7 @@ public class CECommand implements CommandExecutor {
                         player = (Player) sender;
                     }
 
-                    if (methods.isInventoryFull(player)) {
-                        sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                        return true;
-                    }
+                    if (methods.isInventoryFull(player)) return true;
 
                     player.getInventory().addItem(scramblerListener.getScramblers(amount));
                     HashMap<String, String> placeholders = new HashMap<>();
@@ -501,10 +495,8 @@ public class CECommand implements CommandExecutor {
                         player = (Player) sender;
                     }
 
-                    if (methods.isInventoryFull(player)) {
-                        sender.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                        return true;
-                    }
+                    if (methods.isInventoryFull(player)) return true;
+
 
                     player.getInventory().addItem(protectionCrystalSettings.getCrystals(amount));
                     HashMap<String, String> placeholders = new HashMap<>();

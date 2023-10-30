@@ -39,10 +39,6 @@ public class ItemUtils {
     }
 
     public static void giveDrops(Player player, ItemStack item) {
-        if (methods.isInventoryFull(player)) {
-            player.getWorld().dropItemNaturally(player.getLocation(), item);
-        } else {
-            player.getInventory().addItem(item);
-        }
+        player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
 }
