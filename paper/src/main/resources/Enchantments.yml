@@ -2181,7 +2181,7 @@ Enchantments:
       Base: 10
       Increase: 5
     Info:
-      Name: '&e&lBattleForged &7(&bI-V&7)'
+      Name: '&e&lDemonForged &7(&bI-V&7)'
       Description:
         - '&7During combat it has a'
         - '&610%(+5% per level) &7chance to deal'
