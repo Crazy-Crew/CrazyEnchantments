@@ -87,7 +87,7 @@ public class ToolEnchantments implements Listener {
         } else {
             TelepathyDrop drop = enchantmentSettings.getTelepathyDrops(new BlockProcessInfo(tool, event.getBlock()));
 
-            ItemUtils.giveDrops(player, drop.getItem());
+            methods.addItemToInventory(player, drop.getItem());
 
             if (!(drop.getSugarCaneBlocks().isEmpty())) drop.getSugarCaneBlocks().forEach(cane -> cane.setType(Material.AIR));
 
