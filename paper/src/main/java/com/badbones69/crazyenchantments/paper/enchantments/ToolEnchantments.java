@@ -45,8 +45,6 @@ public class ToolEnchantments implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    private final List<String> ignoreBlockTypes = Lists.newArrayList("air", "shulker_box", "chest", "head", "skull");
-
     @EventHandler()
     public void onPlayerClick(PlayerInteractEvent event) {
         //Check what hand is being used as the event fires for each hand.
@@ -129,7 +127,9 @@ public class ToolEnchantments implements Listener {
     }
 
     private boolean ignoreBlockTypes(Block block) {
-        for (String name : ignoreBlockTypes) {
+        if (block.isEmpty()) return true;
+
+        for (String name : Lists.newArrayList("shulker_box", "chest", "head", "skull")) {
             if (block.getType().name().toLowerCase().contains(name)) return true;
         }
 
