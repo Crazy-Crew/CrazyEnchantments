@@ -64,17 +64,13 @@ public class EnchantmentControl implements Listener {
             }
 
             if (crazyManager.enchantStackedItems() || item.getAmount() == 1) {
+                boolean hasWhiteScrollProtection = Scrolls.hasWhiteScrollProtection(item);
                 boolean success = methods.randomPicker(ceBook.getSuccessRate(), 100);
                 boolean destroy = methods.randomPicker(ceBook.getDestroyRate(), 100);
                 int bookLevel = ceBook.getLevel();
-                boolean hasEnchantment = false;
-                boolean isLowerLevel = false;
 
-                if (enchantmentBookSettings.hasEnchantment(item, enchantment)) {
-                    hasEnchantment = true;
-
-                    if (enchantmentBookSettings.getLevel(item, enchantment) < bookLevel) isLowerLevel = true;
-                }
+                boolean hasEnchantment = enchantmentBookSettings.hasEnchantment(item, enchantment);
+                boolean isLowerLevel = hasEnchantment && enchantmentBookSettings.getLevel(item, enchantment) < bookLevel;
 
                 if (hasEnchantment) {
                     if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
@@ -103,15 +99,17 @@ public class EnchantmentControl implements Listener {
                                 plugin.getServer().getPluginManager().callEvent(bookDestroyEvent);
 
                                 if (!bookDestroyEvent.isCancelled()) {
+
                                     if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
-                                        if (Scrolls.hasWhiteScrollProtection(item)) {
+                                        if (hasWhiteScrollProtection) {
                                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                                             player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                         } else {
+                                            event.setCurrentItem(enchantmentBookSettings.removeEnchantment(item, enchantment));
                                             player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
                                         }
                                     } else {
-                                        if (Scrolls.hasWhiteScrollProtection(item)) {
+                                        if (hasWhiteScrollProtection) {
                                             event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                                             player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                         } else {
