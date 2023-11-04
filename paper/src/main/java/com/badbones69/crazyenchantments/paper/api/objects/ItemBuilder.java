@@ -397,6 +397,7 @@ public class ItemBuilder {
         }
 
         if (useCustomModelData) itemMeta.setCustomModelData(customModelData);
+        if (unbreakable) itemMeta.setUnbreakable(true);
 
         itemFlags.forEach(itemMeta :: addItemFlags);
         item.setItemMeta(itemMeta);
@@ -1066,7 +1067,7 @@ public class ItemBuilder {
      */
     public static ItemBuilder convertString(String itemString, String placeHolder) {
         ItemBuilder itemBuilder = new ItemBuilder();
-
+            itemString = itemString.strip();
         try {
             for (String optionString : itemString.split(", ")) {
                 String option = optionString.split(":")[0];
@@ -1090,27 +1091,19 @@ public class ItemBuilder {
                     default -> {
                         if (value.contains("-")) {
                             String[] val = value.split("-");
-                            if (val.length >= 2 && NumberUtils.isInt(val[0]) && NumberUtils.isInt(val[1])) {
+                            if (val.length == 2 && NumberUtils.isInt(val[0]) && NumberUtils.isInt(val[1])) {
                                 value = String.valueOf(getRandom(Integer.parseInt(val[0]), Integer.parseInt(val[1])));
                             }
                         }
                         Enchantment enchantment = getEnchantment(option);
                         if (enchantment != null) {
-                            try {
-                                itemBuilder.addEnchantments(enchantment, Integer.parseInt(value));
-                            } catch (NumberFormatException e) {
-                                itemBuilder.addEnchantments(enchantment, 1);
-                            }
-
-                            break;
+                            itemBuilder.addEnchantments(enchantment, NumberUtils.isInt(value) ? Integer.parseInt(value) : 1);
+                            continue;
                         }
                         CEnchantment ceEnchant = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getEnchantmentFromName(option);
                         if (ceEnchant != null) {
-                            try {
-                                itemBuilder.addCEEnchantments(ceEnchant, Integer.parseInt(value));
-                            } catch (NumberFormatException e) {
-                                itemBuilder.addCEEnchantments(ceEnchant, 1);
-                            }
+                            itemBuilder.addCEEnchantments(ceEnchant, NumberUtils.isInt(value) ? Integer.parseInt(value) : 1);
+                            continue;
                         }
                         for (ItemFlag itemFlag : ItemFlag.values()) {
                             if (itemFlag.name().equalsIgnoreCase(option)) {
@@ -1126,8 +1119,7 @@ public class ItemBuilder {
                                     break;
                                 }
                             }
-                        } catch (Exception ignored) {
-                        }
+                        } catch (Exception ignored) {}
                     }
                 }
             }
