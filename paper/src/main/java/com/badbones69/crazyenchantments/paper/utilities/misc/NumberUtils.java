@@ -76,17 +76,4 @@ public class NumberUtils {
 //        };
         return toRoman(number);
     }
-    public static String checkLevels(ItemStack item, String customName) {
-        String line = "";
-
-        if (item == null || item.lore() == null) return "";
-
-        for (String lore : item.getItemMeta().getLore()) {
-            if (lore.contains(customName)) {
-                line = lore;
-                break;
-            }
-        }
-        return line;
-    }
 }
