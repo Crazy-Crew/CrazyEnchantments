@@ -3,12 +3,16 @@ package com.badbones69.crazyenchantments.paper.utilities.misc;
 import org.bukkit.inventory.ItemStack;
 
 public class NumberUtils {
-
     public static boolean isInt(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {
-            return false;
+
+        if (s.isEmpty()) return false;
+
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0 && s.charAt(i) == '-') {
+                if (s.length() == 1) return false;
+                continue;
+            }
+            if (Character.digit(s.charAt(i), 10) == -1) return false;
         }
 
         return true;
