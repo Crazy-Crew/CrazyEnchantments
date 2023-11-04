@@ -362,7 +362,7 @@ public class CECommand implements CommandExecutor {
             case "give" -> { // /ce give <Player> <itemString> /ce arg0 arg1 arg2 //TODO Command Add Feedback
                 if (!hasPermission(sender, "give") || args.length < 3) return true;
                 StringBuilder sb = new StringBuilder();
-                for (int i = 2; i < args.length - 1; i++) {
+                for (int i = 2; i < args.length; i++) {
                     sb.append(args[i]).append(" ");
                 }
 
