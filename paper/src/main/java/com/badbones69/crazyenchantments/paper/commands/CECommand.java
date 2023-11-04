@@ -371,7 +371,7 @@ public class CECommand implements CommandExecutor {
 
                 if (item == null || target == null) return true;
 
-                target.getInventory().addItem(item).values().forEach(item2 -> target.getWorld().dropItem(target.getLocation(), item2));
+                methods.addItemToInventory(target, item);
 
                 return true;
             }
@@ -385,7 +385,7 @@ public class CECommand implements CommandExecutor {
 
                 if (item.isEmpty() || target == null) return true;
 
-                target.getInventory().addItem(item).values().forEach(item2 -> target.getWorld().dropItem(target.getLocation(), item2));
+                methods.addItemToInventory(target, item);
 
                 return true;
             }
@@ -461,7 +461,8 @@ public class CECommand implements CommandExecutor {
 
                     if (methods.isInventoryFull(player)) return true;
 
-                    player.getInventory().addItem(scramblerListener.getScramblers(amount));
+                    methods.addItemToInventory(player, scramblerListener.getScramblers(amount));
+
                     HashMap<String, String> placeholders = new HashMap<>();
                     placeholders.put("%Amount%", String.valueOf(amount));
                     placeholders.put("%Player%", player.getName());
@@ -498,7 +499,7 @@ public class CECommand implements CommandExecutor {
                     if (methods.isInventoryFull(player)) return true;
 
 
-                    player.getInventory().addItem(protectionCrystalSettings.getCrystals(amount));
+                    methods.addItemToInventory(player, protectionCrystalSettings.getCrystals(amount));
                     HashMap<String, String> placeholders = new HashMap<>();
                     placeholders.put("%Amount%", String.valueOf(amount));
                     placeholders.put("%Player%", player.getName());
@@ -550,7 +551,7 @@ public class CECommand implements CommandExecutor {
 
                         if (dust != null) {
 
-                            player.getInventory().addItem(args.length >= 5 ? dust.getDust(percent, amount) : dust.getDust(amount));
+                           methods.addItemToInventory(player, args.length >= 5 ? dust.getDust(percent, amount) : dust.getDust(amount));
 
                             HashMap<String, String> placeholders = new HashMap<>();
                             placeholders.put("%Amount%", String.valueOf(amount));
@@ -609,7 +610,7 @@ public class CECommand implements CommandExecutor {
                         Scrolls scroll = Scrolls.getFromName(args[1]);
 
                         if (scroll != null) {
-                            methods.getPlayer(name).getInventory().addItem(scroll.getScroll(amount));
+                            methods.addItemToInventory(methods.getPlayer(name), scroll.getScroll(amount));
                             return true;
                         }
                     }
@@ -768,7 +769,7 @@ public class CECommand implements CommandExecutor {
                         HashMap<String, String> placeholders = new HashMap<>();
                         placeholders.put("%Player%", player.getName());
                         sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
-                        player.getInventory().addItem(new CEBook(enchantment, level, amount).buildBook());
+                        methods.addItemToInventory(player, new CEBook(enchantment, level, amount).buildBook());
                         return true;
                     }
 
