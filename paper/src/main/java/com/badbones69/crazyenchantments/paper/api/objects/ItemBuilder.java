@@ -1088,6 +1088,12 @@ public class ItemBuilder {
                         if (value.isEmpty() || value.equalsIgnoreCase("true")) itemBuilder.setUnbreakable(true);
                     }
                     default -> {
+                        if (value.contains("-")) {
+                            String[] val = value.split("-");
+                            if (val.length >= 2 && NumberUtils.isInt(val[0]) && NumberUtils.isInt(val[1])) {
+                                value = String.valueOf(getRandom(Integer.parseInt(val[0]), Integer.parseInt(val[1])));
+                            }
+                        }
                         Enchantment enchantment = getEnchantment(option);
                         if (enchantment != null) {
                             try {
@@ -1133,6 +1139,11 @@ public class ItemBuilder {
         }
 
         return itemBuilder;
+    }
+
+    private static int getRandom(int min, int max) {
+        Random random = new Random();
+        return min + random.nextInt(max - min);
     }
 
     /**
