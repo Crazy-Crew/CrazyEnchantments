@@ -189,12 +189,20 @@ public class EnchantmentBookSettings {
      * @return A Map of all enchantments and their levels on the item.
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
-
         if (item == null || item.getItemMeta() == null) return Collections.emptyMap();
+        return getEnchantments(item.getItemMeta());
+    }
+
+    public Map<CEnchantment, Integer> getEnchantments(ItemMeta meta) {
+        if (meta == null) return Collections.emptyMap();
+        return getEnchantments(meta.getPersistentDataContainer());
+    }
+
+    public Map<CEnchantment, Integer> getEnchantments(PersistentDataContainer container) {
 
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
-        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        String data = container.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
         if (data == null) return Collections.emptyMap();
 
@@ -215,7 +223,7 @@ public class EnchantmentBookSettings {
      * @param item Item you want to get the enchantments from.
      * @return A list of enchantments the item has.
      */
-    public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
+    public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) { // TODO Change to Set.
         return new ArrayList<>(getEnchantments(item).keySet());
     }
 
