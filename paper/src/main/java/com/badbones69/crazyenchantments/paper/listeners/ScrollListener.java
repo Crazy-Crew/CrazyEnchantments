@@ -223,7 +223,8 @@ public class ScrollListener implements Listener {
         boolean hasWhiteScrollProtection = Scrolls.hasWhiteScrollProtection(container);
         boolean hasProtectionCrystalProtection = ProtectionCrystalSettings.isProtected(container);
 
-        List<String> order = Files.CONFIG.getFile().getStringList("Settings.WhiteScroll.Lore-Order");
+        List<String> order = Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Lore-Order");
+        boolean addSpaces = Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Add-Blank-Lines", true);
 
         if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
 
@@ -232,18 +233,18 @@ public class ScrollListener implements Listener {
 
             switch (selection) {
                 case "CE_Enchantments" -> {
-                    if (!wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
+                    if (addSpaces && !wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
                     newLore.addAll(enchantLore);
                     wasEmpty = enchantLore.isEmpty();
                 }
                 case "Protection" -> {
-                    if (!wasEmpty && (hasWhiteScrollProtection || hasProtectionCrystalProtection)) newLore.add(Component.text(""));
+                    if (addSpaces && !wasEmpty && (hasWhiteScrollProtection || hasProtectionCrystalProtection)) newLore.add(Component.text(""));
                     if (hasWhiteScrollProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
                     if (hasProtectionCrystalProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
                     wasEmpty = !(hasWhiteScrollProtection || hasProtectionCrystalProtection);
                 }
                 case "Normal_Lore" -> {
-                    if (!wasEmpty && !normalLore.isEmpty()) newLore.add(Component.text(""));
+                    if (addSpaces && !wasEmpty && !normalLore.isEmpty()) newLore.add(Component.text(""));
                     newLore.addAll(normalLore);
                     wasEmpty = normalLore.isEmpty();
                 }

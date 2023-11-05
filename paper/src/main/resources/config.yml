@@ -252,6 +252,7 @@ Settings:
       - 'CE_Enchantments'
       - 'Protection'
       - 'Normal_Lore'
+    Add-Blank-Lines: true
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: true #Turn on and off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also.
