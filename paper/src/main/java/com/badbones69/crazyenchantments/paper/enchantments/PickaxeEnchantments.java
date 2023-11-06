@@ -60,7 +60,7 @@ public class PickaxeEnchantments implements Listener {
         ItemStack item = methods.getItemInHand(player);
         Block block = event.getClickedBlock();
 
-        if (!isBlastActive(enchantmentBookSettings.getEnchantmentsOnItem(item), player, block)) return;
+        if (!isBlastActive(enchantmentBookSettings.getEnchantments(item), player, block)) return;
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
@@ -75,7 +75,7 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
         Block initialBlock = event.getBlock();
         ItemStack currentItem = methods.getItemInHand(player);
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
+        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 
         if (!(blocks.containsKey(player) && blocks.get(player).containsKey(initialBlock))) return;
@@ -126,12 +126,12 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
         Block currentBlock = event.getBlock();
         ItemStack currentItem = methods.getItemInHand(player);
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(currentItem);
+        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.VeinMiner-Full-Durability", true);
 
-        if (!enchantments.contains(CEnchantments.VEINMINER.getEnchantment())) return;
+        if (!enchantments.containsKey(CEnchantments.VEINMINER.getEnchantment())) return;
 
-        HashSet<Block> blockList = getOreBlocks(currentBlock.getLocation(), crazyManager.getLevel(currentItem, CEnchantments.VEINMINER));
+        HashSet<Block> blockList = getOreBlocks(currentBlock.getLocation(), enchantments.get(CEnchantments.VEINMINER.getEnchantment()));
         blockList.add(currentBlock);
 
         MassBlockBreakEvent VeinMinerUseEvent = new MassBlockBreakEvent(player, blockList);
@@ -183,78 +183,68 @@ public class PickaxeEnchantments implements Listener {
         Block block = event.getBlock();
         Player player = event.getPlayer();
         ItemStack item = methods.getItemInHand(player);
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
+        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
         boolean isOre = isOre(block.getType());
 
-        if (enchantments.contains(CEnchantments.TELEPATHY.getEnchantment())) return;
+        if (enchantments.containsKey(CEnchantments.TELEPATHY.getEnchantment())) return;
 
         if (player.getGameMode() != GameMode.CREATIVE) {
-            if (CEnchantments.AUTOSMELT.isActivated() &&
-                isOre &&
-                enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment()) &&
-                CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
+            if (isEventActive(CEnchantments.AUTOSMELT, player, item, enchantments) && isOre) {
 
-                EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.AUTOSMELT, item);
-                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
+                int dropAmount = 0;
+                dropAmount += crazyManager.getLevel(item, CEnchantments.AUTOSMELT);
 
-                if (!enchantmentUseEvent.isCancelled()) {
-                    int dropAmount = 0;
-                    dropAmount += crazyManager.getLevel(item, CEnchantments.AUTOSMELT);
+                if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 
-                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                tryCheck(block, item, enchantments, dropAmount);
 
-                    tryCheck(block, item, enchantments, dropAmount);
+                event.setDropItems(false);
 
-                    event.setDropItems(false);
-
-                    methods.removeDurability(item, player);
-                }
+                methods.removeDurability(item, player);
             }
 
-            if (CEnchantments.FURNACE.isActivated() &&
-                    isOre &&
-                    (enchantments.contains(CEnchantments.FURNACE.getEnchantment()))) {
+            if (isEventActive(CEnchantments.FURNACE, player, item, enchantments) && isOre) {
 
-                EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.FURNACE, item);
-                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
+                int dropAmount = 1;
 
-                if (!enchantmentUseEvent.isCancelled()) {
-                    int dropAmount = 1;
+                if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
 
-                    if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += methods.percentPick(4, 1);
 
-                    if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += methods.percentPick(4, 1);
-
-                    tryCheck(block, item, enchantments, dropAmount);
-                }
+                tryCheck(block, item, enchantments, dropAmount);
 
                 event.setDropItems(false);
                 methods.removeDurability(item, player);
             }
         }
 
-        if (CEnchantments.EXPERIENCE.isActivated() && !hasSilkTouch(item) &&
-                isOre &&
-                (enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()))) {
-
-            int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
-
-            if (CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-                EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, CEnchantments.EXPERIENCE, item);
-                plugin.getServer().getPluginManager().callEvent(enchantmentUseEvent);
-
-                if (!enchantmentUseEvent.isCancelled()) event.setExpToDrop(event.getExpToDrop() + (power + 2));
-            }
-        }
+        if (isEventActive(CEnchantments.EXPERIENCE, player, item, enchantments) && !hasSilkTouch(item) && isOre)
+            event.setExpToDrop(event.getExpToDrop() + (enchantments.get(CEnchantments.EXPERIENCE.getEnchantment()) + 2));
     }
 
-    private void tryCheck(Block block, ItemStack item, List<CEnchantment> enchantments, int dropAmount) {
+    private boolean isEventActive(CEnchantments enchant, Player damager, ItemStack armor, Map<CEnchantment, Integer> enchants) {
+        if (!(enchants.containsKey(enchant.getEnchantment()) &&
+                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(armor)))) return false;
+
+        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, enchant.getEnchantment(), armor);
+        plugin.getServer().getPluginManager().callEvent(useEvent);
+
+        return !useEvent.isCancelled();
+    }
+    private boolean isBlastActive(Map<CEnchantment, Integer> enchantments, Player player, Block block) {
+        return CEnchantments.BLAST.isActivated() &&
+                enchantments.containsKey(CEnchantments.BLAST.getEnchantment()) &&
+                player.hasPermission("crazyenchantments.blast.use") &&
+                (block == null || crazyManager.getBlastBlockList().contains(block.getType()));
+    }
+
+    private void tryCheck(Block block, ItemStack item, Map<CEnchantment, Integer> enchantments, int dropAmount) {
         if (block.getType() == Material.SPAWNER) return; // No more handling Spawners!!!
         try {
             block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
         } catch (IllegalArgumentException ignore) {}
 
-        if (CEnchantments.EXPERIENCE.isActivated() && enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+        if (CEnchantments.EXPERIENCE.isActivated() && enchantments.containsKey(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
             int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
 
             ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
@@ -381,13 +371,6 @@ public class PickaxeEnchantments implements Listener {
         Random random = new Random();
 
         return range > 1 ? random.nextInt(range) : 1;
-    }
-
-    private boolean isBlastActive(List<CEnchantment> enchantments, Player player, Block block) {
-        return CEnchantments.BLAST.isActivated() &&
-                enchantments.contains(CEnchantments.BLAST.getEnchantment()) &&
-                player.hasPermission("crazyenchantments.blast.use") &&
-                (block == null || crazyManager.getBlastBlockList().contains(block.getType()));
     }
 
 }

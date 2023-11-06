@@ -15,13 +15,8 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+
+import java.util.*;
 
 public class EnchantmentSettings {
 
@@ -177,13 +172,13 @@ public class EnchantmentSettings {
     public TelepathyDrop getTelepathyDrops(BlockProcessInfo processInfo) {
         ItemStack item = processInfo.getItem();
         Block block = processInfo.getBlock();
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
+        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
         List<Block> sugarCaneBlocks = new ArrayList<>();
         boolean isOre = isOre(block);
         boolean hasSilkTouch = item.getItemMeta().hasEnchant(Enchantment.SILK_TOUCH);
-        boolean hasFurnace = enchantments.contains(CEnchantments.FURNACE.getEnchantment());
-        boolean hasAutoSmelt = enchantments.contains(CEnchantments.AUTOSMELT.getEnchantment());
-        boolean hasExperience = enchantments.contains(CEnchantments.EXPERIENCE.getEnchantment());
+        boolean hasFurnace = enchantments.containsKey(CEnchantments.FURNACE.getEnchantment());
+        boolean hasAutoSmelt = enchantments.containsKey(CEnchantments.AUTOSMELT.getEnchantment());
+        boolean hasExperience = enchantments.containsKey(CEnchantments.EXPERIENCE.getEnchantment());
         ItemBuilder itemDrop = null;
         int xp = 0;
 
@@ -197,12 +192,12 @@ public class EnchantmentSettings {
                 if (hasFurnace && isOre) {
                     itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(0);
                 } else if (hasAutoSmelt && isOre && CEnchantments.AUTOSMELT.chanceSuccessful(item)) {
-                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(crazyManager.getLevel(item, CEnchantments.AUTOSMELT));
+                    itemDrop = ItemBuilder.convertItemStack(getOreDrop(block)).setAmount(enchantments.get(CEnchantments.AUTOSMELT.getEnchantment()));
                 }
 
                 if (hasOreXP(block)) {
                     xp = methods.percentPick(7, 3);
-                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) xp += methods.percentPick(7, 3) * crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
+                    if (hasExperience && CEnchantments.EXPERIENCE.chanceSuccessful(item)) xp += methods.percentPick(7, 3) * enchantments.get(CEnchantments.EXPERIENCE.getEnchantment());
                 }
             }
 
