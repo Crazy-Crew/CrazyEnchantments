@@ -91,8 +91,8 @@ public class EnchantmentControl implements Listener {
                                 placeholders.put("%Enchantment%", enchantment.getCustomName());
                                 placeholders.put("%Level%", String.valueOf(bookLevel));
                                 player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
-                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-                                // TODO add sound and particle setting.
+                                player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
+                                // ToDo potentially add pitch and volume options.
                             }
 
                             return;

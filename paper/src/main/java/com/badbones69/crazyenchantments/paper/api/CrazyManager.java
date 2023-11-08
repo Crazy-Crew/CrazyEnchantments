@@ -167,7 +167,8 @@ public class CrazyManager {
                 .setInfoDescription(enchants.getStringList(path + ".Info.Description"))
                 .setCategories(enchants.getStringList(path + ".Categories"))
                 .setChance(cEnchantment.getChance())
-                .setChanceIncrease(cEnchantment.getChanceIncrease());
+                .setChanceIncrease(cEnchantment.getChanceIncrease())
+                .setSound(enchants.getString(path + ".Sound"));
 
                 if (enchants.contains(path + ".Enchantment-Type")) enchantment.setEnchantmentType(methods.getFromName(enchants.getString(path + ".Enchantment-Type")));
 
