@@ -156,7 +156,7 @@ public class EnchantmentControl implements Listener {
                 event.setCurrentItem(newItem);
                 player.setItemOnCursor(new ItemStack(Material.AIR));
                 player.sendMessage(Messages.BOOK_WORKS.getMessage());
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
                 return;
             }
 
