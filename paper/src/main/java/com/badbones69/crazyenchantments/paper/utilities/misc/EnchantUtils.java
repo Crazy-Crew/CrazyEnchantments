@@ -33,11 +33,20 @@ public class EnchantUtils {
     }
 
     public static boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack item, Map<CEnchantment, Integer> enchants) {
-        return isActive((Player) damager, enchant, enchants) && normalEnchantEvent(enchant, damager, item);
+        return isEventActive(enchant, damager, item, enchants, 1.0);
+    }
+
+    public static boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack item, Map<CEnchantment, Integer> enchants, double multiplier) {
+        return isActive((Player) damager, enchant, enchants, multiplier) && normalEnchantEvent(enchant, damager, item);
     }
 
     public static boolean isMassBlockBreakActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        return isActive(player, enchant, enchants);
+        return isActive(player, enchant, enchants, 1.0);
+    }
+
+
+    private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+        return isActive(player, enchant, enchants, 1.0);
     }
 
     /**
@@ -46,14 +55,16 @@ public class EnchantUtils {
      * @param player
      * @param enchant
      * @param enchants
+     * @param multiplier
      * @return True if the enchant is active and can be used if the event is passed.
      */
-    private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+    private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants, double multiplier) {
         //if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
         return enchants.containsKey(enchant.getEnchantment()) &&
-                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment())) &&
+                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment()), multiplier) &&
                         !(player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))));
     }
+
     private static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {
         EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), item);
         CrazyEnchantments.getPlugin().getServer().getPluginManager().callEvent(useEvent);

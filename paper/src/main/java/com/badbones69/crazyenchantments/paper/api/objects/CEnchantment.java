@@ -147,10 +147,16 @@ public class CEnchantment {
     }
 
     public boolean chanceSuccessful(int enchantmentLevel) {
+        return this.chanceSuccessful(enchantmentLevel, 1.0);
+    }
+
+    public boolean chanceSuccessful(int enchantmentLevel, double multiplier) {
         int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
         int pickedChance = methods.getRandomNumber (0, 100);
 
-        return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
+        newChance = (int) (newChance * multiplier);
+
+        return newChance >= 100 || newChance <= 0 || pickedChance <= newChance;
     }
 
     public List<String> getInfoDescription() {

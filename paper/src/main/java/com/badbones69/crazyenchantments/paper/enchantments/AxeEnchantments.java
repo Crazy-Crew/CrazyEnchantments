@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EntityUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -21,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -114,6 +116,24 @@ public class AxeEnchantments implements Listener {
             if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, enchantmentBookSettings.getEnchantments(item))) {
                 event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+        if (event.getEntity().getKiller() != null) {
+            Player damager = event.getEntity().getKiller();
+            ItemStack item = methods.getItemInHand(damager);
+            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
+            Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
+
+            if (headMat != null && (crazyManager.getDropPiglinHeads() || headMat != Material.PIGLIN_HEAD) && !EventUtils.dropsContains(event, headMat)) {
+                double multiplier = crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
+                if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, enchantments, multiplier)) {
+                    ItemStack head = new ItemBuilder().setMaterial(headMat).build();
+                    event.getDrops().add(head);
+                }
+			}
         }
     }
 
