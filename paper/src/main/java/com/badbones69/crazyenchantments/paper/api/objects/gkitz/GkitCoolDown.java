@@ -35,19 +35,26 @@ public class GkitCoolDown {
     }
     
     public String getCoolDownLeft(String message) {
-        int day = 0;
-        int hour = 0;
-        int minute = 0;
-        int second = 0;
+        long days = 0, hours = 0, minutes = 0, seconds = 0, total;
+
+        int second = 1000, minute = second*60, hour = minute*60, day = hour*24;
 
         if (coolDownTime != null) {
-            int total = ((int) (coolDownTime.getTimeInMillis() / 1000) - (int) (Calendar.getInstance().getTimeInMillis() / 1000));
-            second += total;
+
+            total = coolDownTime.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+
+            days = total / day;
+            total %= day;
+            hours = total / hour;
+            total %= hour;
+            minutes = total / minute;
+            total %= minute;
+            seconds = total / second;
         }
 
-        return ColorUtils.color(message.replace("%Day%", String.valueOf(day)).replace("%day%", String.valueOf(day))
-        .replace("%Hour%", String.valueOf(hour)).replace("%hour%", String.valueOf(hour))
-        .replace("%Minute%", String.valueOf(minute)).replace("%minute%", String.valueOf(minute))
-        .replace("%Second%", String.valueOf(second)).replace("%second%", String.valueOf(second)));
+        return ColorUtils.color(message.replace("%Day%", String.valueOf(days)).replace("%day%", String.valueOf(days))
+                .replace("%Hour%", String.valueOf(hours)).replace("%hour%", String.valueOf(hours))
+                .replace("%Minute%", String.valueOf(minutes)).replace("%minute%", String.valueOf(minutes))
+                .replace("%Second%", String.valueOf(seconds)).replace("%second%", String.valueOf(seconds)));
     }
 }
