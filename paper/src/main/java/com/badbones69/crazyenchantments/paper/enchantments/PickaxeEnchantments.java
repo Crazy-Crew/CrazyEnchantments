@@ -218,11 +218,19 @@ public class PickaxeEnchantments implements Listener {
                 methods.removeDurability(item, player);
             }
         }
-
-        if (isEventActive(CEnchantments.EXPERIENCE, player, item, enchantments) && !hasSilkTouch(item) && isOre)
-            event.setExpToDrop(event.getExpToDrop() + (enchantments.get(CEnchantments.EXPERIENCE.getEnchantment()) + 2));
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onExperience(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = methods.getItemInHand(player);
+        Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(item);
+
+        if (!isEventActive(CEnchantments.EXPERIENCE, player, item, enchants)) return;
+        event.setExpToDrop(event.getExpToDrop() + (enchants.get(CEnchantments.EXPERIENCE.getEnchantment()) + 2));
+    }
+
+    // TODO Check logic. Use a single method for all classes.
     private boolean isEventActive(CEnchantments enchant, Player damager, ItemStack armor, Map<CEnchantment, Integer> enchants) {
         if (!(enchants.containsKey(enchant.getEnchantment()) &&
                 (!enchant.hasChanceSystem() || enchant.chanceSuccessful(armor)))) return false;
@@ -245,12 +253,12 @@ public class PickaxeEnchantments implements Listener {
             block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
         } catch (IllegalArgumentException ignore) {}
 
-        if (CEnchantments.EXPERIENCE.isActivated() && enchantments.containsKey(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-            int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
-
-            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-            orb.setExperience(methods.percentPick(7, 3) * power);
-        }
+//        if (CEnchantments.EXPERIENCE.isActivated() && enchantments.containsKey(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
+//            int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
+//
+//            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+//            orb.setExperience(methods.percentPick(7, 3) * power);
+//        }
     }
 
     private boolean hasSilkTouch(ItemStack item) {
