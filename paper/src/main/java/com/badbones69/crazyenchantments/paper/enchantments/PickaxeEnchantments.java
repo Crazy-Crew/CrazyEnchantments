@@ -177,6 +177,7 @@ public class PickaxeEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onDropAlter(BlockDropItemEvent event) {
+        if (!isOreBlock(event.getBlock().getType())) return;
         Player player = event.getPlayer();
         ItemStack item = methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(item);
@@ -331,6 +332,18 @@ public class PickaxeEnchantments implements Listener {
                  LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
                  REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
                  NETHER_GOLD_ORE,
+                 NETHER_QUARTZ_ORE -> true;
+            default -> false;
+        };
+    }
+
+    private boolean isOreBlock(Material material) {
+        return switch (material) {
+            case COAL_ORE, DEEPSLATE_COAL_ORE,
+                 DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
+                 EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
+                 LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
+                 REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
                  NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
