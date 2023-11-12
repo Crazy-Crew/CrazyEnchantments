@@ -177,7 +177,7 @@ public class PickaxeEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onDropAlter(BlockDropItemEvent event) {
-        if (!isOreBlock(event.getBlock().getType())) return;
+        if (!isOreBlock(event.getBlockState().getType())) return;
         Player player = event.getPlayer();
         ItemStack item = methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(item);
