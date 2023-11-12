@@ -212,6 +212,9 @@ public class Methods {
     public void addItemToInventory(Player player, ItemStack item) {
         player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
+    public void addItemToInventory(Player player, List<Item> itemList) {
+        itemList.forEach(x -> addItemToInventory(player, x.getItemStack()));
+    }
 
     public List<LivingEntity> getNearbyLivingEntities(double radius, Entity entity) {
         List<Entity> out = entity.getNearbyEntities(radius, radius, radius);

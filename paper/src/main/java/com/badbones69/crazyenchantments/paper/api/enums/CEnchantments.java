@@ -302,6 +302,9 @@ public enum CEnchantments {
     public boolean chanceSuccessful(ItemStack item) {
         return crazyManager.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
     }
+    public boolean chanceSuccessful(int level) {
+        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(level);
+    }
 
     /**
      * Check if the CEnchantments uses a chance system.

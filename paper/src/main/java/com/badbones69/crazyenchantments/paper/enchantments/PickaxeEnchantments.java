@@ -28,6 +28,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExpEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -166,7 +167,7 @@ public class PickaxeEnchantments implements Listener {
 
     }
 
-    private void antiCheat( Player player) {
+    private void antiCheat(Player player) {
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
         if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
