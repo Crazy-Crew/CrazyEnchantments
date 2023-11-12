@@ -15,15 +15,10 @@ import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
-import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
-import net.minecraft.world.entity.item.ItemEntity;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -249,25 +244,6 @@ public class PickaxeEnchantments implements Listener {
                 player.hasPermission("crazyenchantments.blast.use") &&
                 (block == null || crazyManager.getBlastBlockList().contains(block.getType()));
     }
-
-    private void tryToGiveOreDrops(Block block, ItemStack item, Map<CEnchantment, Integer> enchantments, int dropAmount) {
-        if (block.getType() == Material.SPAWNER) return; // No more handling Spawners!!!
-        try {
-            block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
-        } catch (IllegalArgumentException ignore) {}
-
-//        if (CEnchantments.EXPERIENCE.isActivated() && enchantments.containsKey(CEnchantments.EXPERIENCE.getEnchantment()) && CEnchantments.EXPERIENCE.chanceSuccessful(item)) {
-//            int power = crazyManager.getLevel(item, CEnchantments.EXPERIENCE);
-//
-//            ExperienceOrb orb = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-//            orb.setExperience(methods.percentPick(7, 3) * power);
-//        }
-    }
-
-    private boolean hasSilkTouch(ItemStack item) {
-        return item.hasItemMeta() && Objects.requireNonNull(item.getItemMeta()).hasEnchant(Enchantment.SILK_TOUCH);
-    }
-
     private HashSet<Block> getOreBlocks(Location loc, int amount) {
         HashSet<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
         HashSet<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
@@ -377,12 +353,6 @@ public class PickaxeEnchantments implements Listener {
         }
 
         return dropItem.build();
-    }
-
-    private int getRandomNumber(int range) {
-        Random random = new Random();
-
-        return range > 1 ? random.nextInt(range) : 1;
     }
 
 }
