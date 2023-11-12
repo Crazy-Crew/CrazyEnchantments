@@ -181,42 +181,37 @@ public class PickaxeEnchantments implements Listener {
         Player player = event.getPlayer();
         ItemStack item = methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(item);
-        boolean isOre = isOre(event.getBlock().getType());
         List<Item> oldDrops = event.getItems();
-        List<Item> newDrops = new ArrayList<>();
 
-        if (isEventActive(CEnchantments.AUTOSMELT, player, item, enchants) && isOre) {
+        if (isEventActive(CEnchantments.AUTOSMELT, player, item, enchants)) {
 
             int level = enchants.get(CEnchantments.AUTOSMELT.getEnchantment());
 
-            for (Item i : oldDrops) {
-                ItemStack drop = i.getItemStack();
+            for (int j = 0; j < oldDrops.size(); j++) {
+                Item entityItem  = oldDrops.get(j);
+                ItemStack drop = entityItem.getItemStack();
 
                 if (!isOre(drop.getType())) continue;
                 drop = getOreDrop(drop.getType(), drop.getAmount() + level);
 
-                i.setItemStack(drop);
-                newDrops.add(i);
+                entityItem.setItemStack(drop);
+                event.getItems().set(j, entityItem);
             }
-            event.getItems().clear();
-            event.getItems().addAll(newDrops);
             return;
         }
 
-        if (isEventActive(CEnchantments.FURNACE, player, item, enchants) && isOre) {
+        if (isEventActive(CEnchantments.FURNACE, player, item, enchants)) {
 
-            for (Item i : oldDrops) {
-                ItemStack drop = i.getItemStack();
+            for (int j = 0; j < oldDrops.size(); j++) {
+                Item entityItem  = oldDrops.get(j);
+                ItemStack drop = entityItem.getItemStack();
 
                 if (!isOre(drop.getType())) continue;
                 drop = getOreDrop(drop.getType(), drop.getAmount());
 
-                i.setItemStack(drop);
-                newDrops.add(i);
+                entityItem.setItemStack(drop);
+                event.getItems().set(j, entityItem);
             }
-
-            event.getItems().clear();
-            event.getItems().addAll(newDrops);
         }
 
     }
@@ -325,6 +320,22 @@ public class PickaxeEnchantments implements Listener {
     private boolean isOre(Material material) {
 
         return switch (material) {
+            case COAL,
+                 RAW_COPPER,
+                 DIAMOND,
+                 EMERALD,
+                 RAW_GOLD,
+                 RAW_IRON,
+                 LAPIS_LAZULI,
+                 REDSTONE,
+                 GOLD_NUGGET,
+                 QUARTZ -> true;
+            default -> false;
+        };
+    }
+
+    private boolean isOreBlock(Material material) {
+        return switch (material) {
             case COAL_ORE, DEEPSLATE_COAL_ORE,
                  COPPER_ORE, DEEPSLATE_COPPER_ORE,
                  DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
@@ -338,32 +349,20 @@ public class PickaxeEnchantments implements Listener {
             default -> false;
         };
     }
-
-    private boolean isOreBlock(Material material) {
-        return switch (material) {
-            case COAL_ORE, DEEPSLATE_COAL_ORE,
-                 DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
-                 EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
-                 LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
-                 REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
-                 NETHER_QUARTZ_ORE -> true;
-            default -> false;
-        };
-    }
     private ItemStack getOreDrop(Material material, int amount) {
         ItemBuilder dropItem = new ItemBuilder().setAmount(amount);
 
         switch (material) {
-            case COAL_ORE, DEEPSLATE_COAL_ORE -> dropItem.setMaterial(Material.COAL);
-            case COPPER_ORE, DEEPSLATE_COPPER_ORE -> dropItem.setMaterial(Material.COPPER_INGOT);
-            case DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE -> dropItem.setMaterial(Material.DIAMOND);
-            case EMERALD_ORE, DEEPSLATE_EMERALD_ORE -> dropItem.setMaterial(Material.EMERALD);
-            case GOLD_ORE, DEEPSLATE_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_INGOT);
-            case IRON_ORE, DEEPSLATE_IRON_ORE -> dropItem.setMaterial(Material.IRON_INGOT);
-            case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> dropItem.setMaterial(Material.LAPIS_LAZULI);
-            case REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE -> dropItem.setMaterial(Material.REDSTONE);
-            case NETHER_GOLD_ORE -> dropItem.setMaterial(Material.GOLD_NUGGET);
-            case NETHER_QUARTZ_ORE -> dropItem.setMaterial(Material.QUARTZ);
+            case COAL -> dropItem.setMaterial(Material.COAL);
+            case RAW_COPPER -> dropItem.setMaterial(Material.COPPER_INGOT);
+            case DIAMOND -> dropItem.setMaterial(Material.DIAMOND);
+            case EMERALD -> dropItem.setMaterial(Material.EMERALD);
+            case RAW_GOLD -> dropItem.setMaterial(Material.GOLD_INGOT);
+            case RAW_IRON -> dropItem.setMaterial(Material.IRON_INGOT);
+            case LAPIS_LAZULI -> dropItem.setMaterial(Material.LAPIS_LAZULI);
+            case REDSTONE -> dropItem.setMaterial(Material.REDSTONE);
+            case GOLD_NUGGET -> dropItem.setMaterial(Material.GOLD_NUGGET);
+            case QUARTZ -> dropItem.setMaterial(Material.QUARTZ);
             default -> dropItem.setMaterial(Material.AIR);
         }
 
