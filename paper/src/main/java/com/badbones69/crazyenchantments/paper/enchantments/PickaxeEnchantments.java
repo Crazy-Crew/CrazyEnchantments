@@ -192,7 +192,8 @@ public class PickaxeEnchantments implements Listener {
             for (Item i : oldDrops) {
                 ItemStack drop = i.getItemStack();
 
-                if (isOre(drop.getType())) drop = getOreDrop(drop.getType(), drop.getAmount() + level);
+                if (!isOre(drop.getType())) continue;
+                drop = getOreDrop(drop.getType(), drop.getAmount() + level);
 
                 i.setItemStack(drop);
                 newDrops.add(i);
@@ -207,7 +208,8 @@ public class PickaxeEnchantments implements Listener {
             for (Item i : oldDrops) {
                 ItemStack drop = i.getItemStack();
 
-                if (isOre(drop.getType())) drop = getOreDrop(drop.getType(), drop.getAmount());
+                if (!isOre(drop.getType())) continue;
+                drop = getOreDrop(drop.getType(), drop.getAmount());
 
                 i.setItemStack(drop);
                 newDrops.add(i);
