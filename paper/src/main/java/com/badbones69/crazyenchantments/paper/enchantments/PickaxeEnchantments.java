@@ -15,20 +15,23 @@ import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
+import com.palmergames.bukkit.towny.utils.EntityTypeUtil;
+import net.minecraft.world.entity.item.ItemEntity;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExpEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -177,47 +180,46 @@ public class PickaxeEnchantments implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (!event.isDropItems()) return;
-
-        Block block = event.getBlock();
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onDropAlter(BlockDropItemEvent event) {
         Player player = event.getPlayer();
         ItemStack item = methods.getItemInHand(player);
-        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
-        boolean isOre = isOre(block.getType());
+        Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(item);
+        boolean isOre = isOre(event.getBlock().getType());
+        List<Item> oldDrops = event.getItems();
+        List<Item> newDrops = new ArrayList<>();
 
-        if (enchantments.containsKey(CEnchantments.TELEPATHY.getEnchantment())) return;
+        if (isEventActive(CEnchantments.AUTOSMELT, player, item, enchants) && isOre) {
 
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            if (isEventActive(CEnchantments.AUTOSMELT, player, item, enchantments) && isOre) {
+            int level = enchants.get(CEnchantments.AUTOSMELT.getEnchantment());
 
-                int dropAmount = 0;
-                dropAmount += crazyManager.getLevel(item, CEnchantments.AUTOSMELT);
+            for (Item i : oldDrops) {
+                ItemStack drop = i.getItemStack();
 
-                if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                drop = getOreDrop(drop.getType(), drop.getAmount() + level);
 
-                tryCheck(block, item, enchantments, dropAmount);
-
-                event.setDropItems(false);
-
-                methods.removeDurability(item, player);
+                i.setItemStack(drop);
+                newDrops.add(i);
             }
-
-            if (isEventActive(CEnchantments.FURNACE, player, item, enchantments) && isOre) {
-
-                int dropAmount = 1;
-
-                if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
-
-                if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += methods.percentPick(4, 1);
-
-                tryCheck(block, item, enchantments, dropAmount);
-
-                event.setDropItems(false);
-                methods.removeDurability(item, player);
-            }
+            event.getItems().clear();
+            event.getItems().addAll(newDrops);
+            return;
         }
+
+        if (isEventActive(CEnchantments.FURNACE, player, item, enchants) && isOre) {
+
+            int dropAmount = 1;
+
+            //if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+
+            if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += methods.percentPick(4, 1);
+
+            //tryToGiveOreDrops(block, item, enchants, dropAmount);
+
+            //event.setDropItems(false);
+            methods.removeDurability(item, player);
+        }
+
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -247,7 +249,7 @@ public class PickaxeEnchantments implements Listener {
                 (block == null || crazyManager.getBlastBlockList().contains(block.getType()));
     }
 
-    private void tryCheck(Block block, ItemStack item, Map<CEnchantment, Integer> enchantments, int dropAmount) {
+    private void tryToGiveOreDrops(Block block, ItemStack item, Map<CEnchantment, Integer> enchantments, int dropAmount) {
         if (block.getType() == Material.SPAWNER) return; // No more handling Spawners!!!
         try {
             block.getWorld().dropItem(block.getLocation().add(.5, 0, .5), getOreDrop(block.getType(), dropAmount));
