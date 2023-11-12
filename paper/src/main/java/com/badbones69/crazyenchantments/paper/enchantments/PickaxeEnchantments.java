@@ -208,16 +208,17 @@ public class PickaxeEnchantments implements Listener {
 
         if (isEventActive(CEnchantments.FURNACE, player, item, enchants) && isOre) {
 
-            int dropAmount = 1;
+            for (Item i : oldDrops) {
+                ItemStack drop = i.getItemStack();
 
-            //if (item.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS) && methods.randomPicker(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS), 3)) dropAmount += getRandomNumber(item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS));
+                drop = getOreDrop(drop.getType(), drop.getAmount());
 
-            if (block.getType() == Material.REDSTONE_ORE || block.getType() == Material.COAL_ORE || block.getType() == Material.LAPIS_ORE) dropAmount += methods.percentPick(4, 1);
+                i.setItemStack(drop);
+                newDrops.add(i);
+            }
 
-            //tryToGiveOreDrops(block, item, enchants, dropAmount);
-
-            //event.setDropItems(false);
-            methods.removeDurability(item, player);
+            event.getItems().clear();
+            event.getItems().addAll(newDrops);
         }
 
     }
