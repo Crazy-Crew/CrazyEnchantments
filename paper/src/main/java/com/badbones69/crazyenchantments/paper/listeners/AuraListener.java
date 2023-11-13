@@ -59,11 +59,11 @@ public class AuraListener implements Listener {
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                if (enchantmentEnum == null) return;
-
-                for (Player other : players) {
-                    AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
-                    plugin.getServer().getPluginManager().callEvent(auraEvent);
+                if (enchantmentEnum != null) {
+                    for (Player other : players) {
+                        AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
+                        plugin.getServer().getPluginManager().callEvent(auraEvent);
+                    }
                 }
             });
         }
@@ -78,10 +78,10 @@ public class AuraListener implements Listener {
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                    if (enchantmentEnum == null) return;
-
-                    AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
-                    plugin.getServer().getPluginManager().callEvent(auraEvent);
+                    if (enchantmentEnum != null) {
+                        AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
+                        plugin.getServer().getPluginManager().callEvent(auraEvent);
+                    }
                 });
             }
         }
