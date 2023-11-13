@@ -309,7 +309,8 @@ Enchantments:
       Name: '&e&lDoctor &7(&bI-&bIII&7)'
       Description:
         - '&7Has a chance to'
-        - '&7heal a player you hit'
+        - '&7heal a friendly'
+        - '&7player that you hit.'
         - ''
         - '&6Found in:'
         - '&7 - &a&l&nCommon'
