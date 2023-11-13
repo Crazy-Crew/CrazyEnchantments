@@ -52,8 +52,6 @@ public class AuraListener implements Listener {
 
         EntityEquipment playerEquipment = player.getEquipment();
 
-        if (playerEquipment.getHolder().isEmpty()) return;
-
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
             Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
@@ -70,8 +68,6 @@ public class AuraListener implements Listener {
 
         for (Player other : players) {
             EntityEquipment otherEquipment = other.getEquipment();
-
-            if (otherEquipment.getHolder().isEmpty()) continue;
 
             for (ItemStack item : otherEquipment.getArmorContents()) { // The other players moving.
                 Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
