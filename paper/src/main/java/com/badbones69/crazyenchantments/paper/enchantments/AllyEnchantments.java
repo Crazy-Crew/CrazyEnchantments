@@ -10,9 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -101,18 +99,19 @@ public class AllyEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyTarget(EntityTargetEvent event) {
-        AllyMob allyMob = allyManager.getAllyMob((LivingEntity) event.getEntity());
-        AllyMob target = allyManager.getAllyMob((LivingEntity) event.getTarget());
+        if (event.getTarget() == null) return; // For when the entity forgets.
+        AllyMob allyMob = allyManager.getAllyMob(event.getEntity());
+        AllyMob target = allyManager.getAllyMob(event.getTarget());
 
         // Stop ally mob from attacking other mobs owned by the player.
-        if (allyMob != null && target != null && allyMob.getOwner() == target.getOwner()) {
+        if (allyMob != null && target != null && allyMob.getOwner().getUniqueId() == target.getOwner().getUniqueId()) {
             event.setCancelled(true);
             return;
         }
 
         // Stop your pets from targeting you.
         if (event.getTarget() instanceof Player player && allyMob != null) {
-            if (player == allyMob.getOwner()) event.setCancelled(true);
+            if (player.getUniqueId() == allyMob.getOwner().getUniqueId()) event.setCancelled(true);
         }
     }
 
