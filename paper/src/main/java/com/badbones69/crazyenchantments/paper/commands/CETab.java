@@ -73,7 +73,7 @@ public class CETab implements TabCompleter {
                 case "spawn" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
-                            completions.add(enchantment.getCustomName().replace(" ", "_"));
+                            completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""));
                         } catch (NullPointerException ignore) {}
                     }
 
