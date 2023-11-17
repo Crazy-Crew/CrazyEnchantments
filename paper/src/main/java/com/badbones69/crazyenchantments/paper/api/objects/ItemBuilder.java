@@ -1095,14 +1095,17 @@ public class ItemBuilder {
                                 value = String.valueOf(getRandom(Integer.parseInt(val[0]), Integer.parseInt(val[1])));
                             }
                         }
+                        
+                        int number = NumberUtils.isInt(value) ? Integer.parseInt(value) : 1;
+
                         Enchantment enchantment = getEnchantment(option);
                         if (enchantment != null) {
-                            itemBuilder.addEnchantments(enchantment, NumberUtils.isInt(value) ? Integer.parseInt(value) : 1);
+                            if (number != 0) itemBuilder.addEnchantments(enchantment, number);
                             continue;
                         }
                         CEnchantment ceEnchant = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getEnchantmentFromName(option);
                         if (ceEnchant != null) {
-                            itemBuilder.addCEEnchantments(ceEnchant, NumberUtils.isInt(value) ? Integer.parseInt(value) : 1);
+                            if (number != 0) itemBuilder.addCEEnchantments(ceEnchant, number);
                             continue;
                         }
                         for (ItemFlag itemFlag : ItemFlag.values()) {
@@ -1135,7 +1138,7 @@ public class ItemBuilder {
 
     private static int getRandom(int min, int max) {
         Random random = new Random();
-        return min + random.nextInt(max - min);
+        return min + random.nextInt(++max - min);
     }
 
     /**
