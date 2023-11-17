@@ -1135,7 +1135,7 @@ public class ItemBuilder {
 
     private static int getRandom(int min, int max) {
         Random random = new Random();
-        return min + random.nextInt(max - min);
+        return min + random.nextInt(++max - min);
     }
 
     /**
