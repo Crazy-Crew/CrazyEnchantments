@@ -30,10 +30,12 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
@@ -517,6 +519,25 @@ public class CrazyManager {
         return meta;
     }
 
+    public ItemStack changeEnchantmentLimiter(ItemStack item, int amount) {
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        int newAmount = container.getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
+        newAmount += amount;
+
+        if (newAmount == 0) {
+            container.remove(DataKeys.LIMIT_REDUCER.getKey());
+        } else {
+            container.set(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, newAmount);
+        }
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public int getEnchantmentLimiter(ItemStack item) {
+        return item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
+    }
+
     /**
      * Force an update of a players armor potion effects.
      * @param player The player you are updating the effects of.
@@ -664,7 +685,9 @@ public class CrazyManager {
     }
 
     public boolean canAddEnchantment(Player player, ItemStack item) {
-        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) return enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) < getPlayerMaxEnchantments(player);
+        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) {
+            return enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) < (getPlayerMaxEnchantments(player) - getEnchantmentLimiter(item));
+        }
 
         return true;
     }

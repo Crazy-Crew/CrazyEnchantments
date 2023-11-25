@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.api.enums.pdc;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.NamespacedKey;
-import org.bukkit.persistence.PersistentDataType;
 
 public enum DataKeys {
 
@@ -15,7 +14,8 @@ public enum DataKeys {
     LOST_BOOK("Lost_Book_Type", String.class),
     NO_FIREWORK_DAMAGE("No_Damage", Boolean.class),
     SCROLL("Crazy_Scroll", String.class),
-    EXPERIENCE("Experience", String.class);
+    EXPERIENCE("Experience", String.class),
+    LIMIT_REDUCER("Limit_Reducer", Integer.class);
 
     private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     private final String namSpaceKey;

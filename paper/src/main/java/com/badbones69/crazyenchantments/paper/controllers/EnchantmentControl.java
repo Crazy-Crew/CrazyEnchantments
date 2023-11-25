@@ -168,10 +168,8 @@ public class EnchantmentControl implements Listener {
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                     return;
                 } else {
-                    ItemStack newItem = new ItemStack(Material.AIR);
-                    ItemStack oldItem = new ItemStack(Material.AIR);
-                    player.setItemOnCursor(newItem);
-                    event.setCurrentItem(oldItem);
+                    player.setItemOnCursor(new ItemStack(Material.AIR));
+                    event.setCurrentItem(new ItemStack(Material.AIR));
                     player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                 }
 
@@ -180,6 +178,7 @@ public class EnchantmentControl implements Listener {
         }
 
         player.sendMessage(Messages.BOOK_FAILED.getMessage());
+        event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, 1));
         player.setItemOnCursor(new ItemStack(Material.AIR));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
     }
