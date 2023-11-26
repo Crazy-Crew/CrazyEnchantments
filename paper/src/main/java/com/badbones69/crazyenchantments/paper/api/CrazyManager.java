@@ -692,7 +692,7 @@ public class CrazyManager {
             if (perm.startsWith("crazyenchantments.base-limit.")) {
                 perm = perm.replace("crazyenchantments.base-limit.", "");
 
-                if (NumberUtils.isInt(perm)) limit = Integer.parseInt(perm);
+                if (NumberUtils.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
             }
         }
 
