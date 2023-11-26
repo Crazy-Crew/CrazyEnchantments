@@ -30,7 +30,6 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -684,12 +683,27 @@ public class CrazyManager {
         return limit;
     }
 
-    public boolean canAddEnchantment(Player player, ItemStack item) {
-        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) {
-            return enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) < (getPlayerMaxEnchantments(player) - getEnchantmentLimiter(item));
+    public int getPlayerBaseEnchantments(Player player) {
+        int limit = 0;
+
+        for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
+            String perm = Permission.getPermission().toLowerCase();
+
+            if (perm.startsWith("crazyenchantments.base-limit.")) {
+                perm = perm.replace("crazyenchantments.base-limit.", "");
+
+                if (NumberUtils.isInt(perm)) limit = Integer.parseInt(perm);
+            }
         }
 
-        return true;
+        return limit;
+    }
+
+    public boolean canAddEnchantment(Player player, ItemStack item) {
+        if (!maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
+
+        return  enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) <
+                Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
     /**
