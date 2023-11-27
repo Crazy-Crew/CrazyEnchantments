@@ -24,6 +24,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSe
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
+import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
 
 public class Starter {
@@ -67,6 +68,8 @@ public class Starter {
     // Listeners.
     private ScramblerListener scramblerListener;
     private ScrollListener scrollListener;
+    private SlotCrystalListener slotCrystalListener;
+
 
     public void run() {
         this.fileManager = new FileManager();
@@ -111,6 +114,7 @@ public class Starter {
         // Listeners.
         this.plugin.pluginManager.registerEvents(this.scramblerListener = new ScramblerListener(), this.plugin);
         this.plugin.pluginManager.registerEvents(this.scrollListener = new ScrollListener(), this.plugin);
+        this.plugin.pluginManager.registerEvents(this.slotCrystalListener = new SlotCrystalListener(), this.plugin);
 
         this.skullCreator = new SkullCreator();
 
@@ -227,6 +231,10 @@ public class Starter {
 
     public ScrollListener getScrollListener() {
         return this.scrollListener;
+    }
+
+    public SlotCrystalListener getSlotCrystalListener() {
+        return this.slotCrystalListener;
     }
 
     // Plugin Utils.

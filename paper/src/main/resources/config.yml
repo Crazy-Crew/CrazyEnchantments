@@ -57,6 +57,25 @@ Settings:
       - '&7to get a new destroy and success rate.'
       - ''
       - '&eCost: &e&l$800'
+  Slot_Crystal:
+    InGUI: false #If it's in the GUI.
+    Slot: 1 #Slot it is in
+    Item: 'EMERALD' #Item it is
+    Glowing: true #If it has a glowing effect.
+    Name: '&5&lSlot &b&lCrystal' #Name of the item
+    Lore: #Lore of the item
+      - '&7A rare crystal that is said to'
+      - '&7increase the amount of enchants'
+      - '&7that can be added onto an item.'
+      - ''
+      - '&7&l(&6&l!&7&l) &7Drag and drop on an item.'
+    GUIName: '&5&lSlot &b&lCrystal'
+    GUILore:
+      - '&7A rare crystal that is said to'
+      - '&7increase the amount of enchants'
+      - '&7that can be added onto an item.'
+      - ''
+      - '&eCost: &e&l$500'
   GKitz: #GKitz GUI option.
     InGUI: false #If you can open the GKitz GUI from the main /ce gui.
     Enabled: true #If the GKitz option is enabled on the server.

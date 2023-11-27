@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
+import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.utilities.WingsUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
@@ -53,6 +54,8 @@ public class CrazyManager {
     // Listeners.
     private final ScramblerListener scramblerListener = plugin.getStarter().getScramblerListener();
     private final ScrollListener scrollListener = plugin.getStarter().getScrollListener();
+
+    private final SlotCrystalListener slotCrystalListener = plugin.getStarter().getSlotCrystalListener();
 
     private CropManagerVersion cropManagerVersion;
 
@@ -220,6 +223,8 @@ public class CrazyManager {
         protectionCrystalSettings.loadProtectionCrystal();
         // Loads the scrambler.
         scramblerListener.loadScrambler();
+        // Loads Slot Crystal.
+        slotCrystalListener.load();
         // Loads the Scroll Control settings.
         scrollListener.loadScrollControl();
 
