@@ -42,7 +42,7 @@ public class AuraListener implements Listener {
         Location from = event.getFrom();
         Location to = event.getTo();
 
-        if (cooldownCheck(event.getPlayer().getUniqueId())) return;
+        if (coolDownCheck(event.getPlayer().getUniqueId())) return;
 
         if (from.getBlockX() == to.getBlockX()
         && from.getBlockY() == to.getBlockY()
@@ -85,10 +85,12 @@ public class AuraListener implements Listener {
         }
     }
 
-    private boolean cooldownCheck(UUID uuid) {
+    private boolean coolDownCheck(UUID uuid) {
         if (coolDown.contains(uuid)) return true;
         coolDown.add(uuid);
 
+        /* Adds a 1 second delay between checks per player.
+        Due to it being checked for every player, time between checks would be (1/amountOfPlayers) seconds. */
         Bukkit.getScheduler().runTaskLater(plugin, () -> coolDown.remove(uuid), 20);
         return false;
     }
