@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
-import com.badbones69.crazyenchantments.paper.utilities.misc.ItemUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -124,18 +123,8 @@ public class HoeEnchantments implements Listener {
             blocks.remove(player.getUniqueId());
 
             if (!crazyManager.getNMSSupport().isFullyGrown(plant)) return;
-            boolean hasTelepathy = enchantments.contains(CEnchantments.TELEPATHY.getEnchantment());
 
-            for (Block crop : getAreaCrops(player, plant, blockFace)) {
-                if (hasTelepathy) {
-                    ItemUtils.giveCropDrops(player, crop);
-                    event.setDropItems(false);
-                    crop.setType(Material.AIR);
-                    continue;
-                }
-
-                crop.breakNaturally();
-            }
+            getAreaCrops(player, plant, blockFace).forEach(Block::breakNaturally);
         }
     }
 
