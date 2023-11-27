@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
@@ -14,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Objects;
 
@@ -24,9 +25,7 @@ public class SlotCrystalListener implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
-    private static ItemBuilder slot_crystal;
+    private static ItemStack slot_crystal;
 
 
     public void load() {
@@ -35,37 +34,40 @@ public class SlotCrystalListener implements Listener {
                 .setMaterial(Objects.requireNonNull(config.getString("Settings.Slot_Crystal.Item")))
                 .setName(config.getString("Settings.Slot_Crystal.Name"))
                 .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
-                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing"));
+                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing")).build();
+        ItemMeta meta = slot_crystal.getItemMeta();
+        meta.getPersistentDataContainer().set(DataKeys.SLOT_CRYSTAL.getKey(), PersistentDataType.BOOLEAN, true);
+        slot_crystal.setItemMeta(meta);
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
         ItemStack crystalItem = event.getCursor();
         ItemStack item = event.getCurrentItem();
 
-        if (item == null) return;
-        if (!isSlotCrystal(crystalItem)) return;
+        if (item == null || !item.hasItemMeta() || !isSlotCrystal(crystalItem)) return;
 
-        int maxEnchants = crazyManager.getPlayerMaxEnchantments(player);
-        int enchAmount = enchantmentBookSettings.getEnchantmentAmount(item, crazyManager.checkVanillaLimit());
-        int baseEnchants = crazyManager.getPlayerBaseEnchantments(player);
-        int limiter = crazyManager.getEnchantmentLimiter(item);
+        int maxEnchants = starter.getCrazyManager().getPlayerMaxEnchantments(player);
+        int enchAmount = enchantmentBookSettings.getEnchantmentAmount(item, starter.getCrazyManager().checkVanillaLimit());
+        int baseEnchants = starter.getCrazyManager().getPlayerBaseEnchantments(player);
+        int limiter = starter.getCrazyManager().getEnchantmentLimiter(item);
 
         if (enchAmount >= maxEnchants || (baseEnchants - limiter) >= maxEnchants) return;
 
-        event.setCurrentItem(crazyManager.changeEnchantmentLimiter(item, - 1));
-        event.getCursor().setType(Material.AIR);
+        crystalItem.setAmount(crystalItem.getAmount() - 1);
+        event.setCurrentItem(crystalItem);
+        event.getCursor().setItemMeta(starter.getCrazyManager().changeEnchantmentLimiter(item.getItemMeta(), -1));
 
     }
 
     private boolean isSlotCrystal(ItemStack crystalItem) {
+        if (crystalItem == null || !crystalItem.hasItemMeta() || crystalItem.isEmpty()) return false;
         return crystalItem.getItemMeta().getPersistentDataContainer().has(DataKeys.SLOT_CRYSTAL.getKey());
     }
 
     public ItemStack getSlotCrystal() {
-        return slot_crystal.build();
+        return slot_crystal.clone();
     }
 
 }

@@ -58,6 +58,7 @@ public class ShopListener implements Listener {
 
     // Plugin Listeners.
     private final ScramblerListener scramblerListener = starter.getScramblerListener();
+    private final SlotCrystalListener slotCrystalListener = starter.getSlotCrystalListener();
 
     // Economy Management.
     private final CurrencyAPI currencyAPI = plugin.getStarter().getCurrencyAPI();
@@ -172,6 +173,7 @@ public class ShopListener implements Listener {
                     case BLACK_SCROLL -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());
                     case WHITE_SCROLL -> player.getInventory().addItem(Scrolls.WHITE_SCROLL.getScroll());
                     case TRANSMOG_SCROLL -> player.getInventory().addItem(Scrolls.TRANSMOG_SCROLL.getScroll());
+                    case SLOT_CRYSTAL -> player.getInventory().addItem(slotCrystalListener.getSlotCrystal());
                 }
 
                 return;

@@ -59,7 +59,7 @@ Settings:
       - '&eCost: &e&l$800'
   Slot_Crystal:
     InGUI: false #If it's in the GUI.
-    Slot: 1 #Slot it is in
+    Slot: 14 #Slot it is in
     Item: 'EMERALD' #Item it is
     Glowing: true #If it has a glowing effect.
     Name: '&5&lSlot &b&lCrystal' #Name of the item
@@ -334,6 +334,9 @@ Settings:
       Cost: 500
       Currency: Vault
     DestroyDust:
+      Cost: 500
+      Currency: Vault
+    Slot_Crystal:
       Cost: 500
       Currency: Vault
   SignOptions: #Options for the Signs.

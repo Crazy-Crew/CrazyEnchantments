@@ -524,7 +524,11 @@ public class CrazyManager {
     }
 
     public ItemStack changeEnchantmentLimiter(ItemStack item, int amount) {
-        ItemMeta meta = item.getItemMeta();
+        item.setItemMeta(changeEnchantmentLimiter(item.getItemMeta(), amount));
+        return item;
+    }
+
+    public ItemMeta changeEnchantmentLimiter(ItemMeta meta, int amount) {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         int newAmount = container.getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
         newAmount += amount;
@@ -534,8 +538,8 @@ public class CrazyManager {
         } else {
             container.set(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, newAmount);
         }
-        item.setItemMeta(meta);
-        return item;
+
+        return meta;
     }
 
     public int getEnchantmentLimiter(ItemStack item) {
