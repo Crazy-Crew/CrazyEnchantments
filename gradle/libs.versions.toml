@@ -5,3 +5,5 @@ hangar = "0.1.0"
 [plugins]
 hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
 modrinth = { id = "com.modrinth.minotaur", version.ref = "modrinth" }
+
+runpaper = { id = "xyz.jpenilla.run-paper", version = "2.2.2" }

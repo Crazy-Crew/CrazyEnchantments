@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.modrinth)
     alias(libs.plugins.hangar)
 
+    alias(libs.plugins.runpaper)
+
     id("paper-plugin")
 }
 
@@ -94,6 +96,12 @@ tasks {
                 from(component)
             }
         }
+    }
+
+    runServer {
+        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+
+        minecraftVersion("1.20.2")
     }
 
     shadowJar {

@@ -1,0 +1,2398 @@
+# Enchantment Types:
+# - Armor ~ All armor
+# - Helmet
+# - Boots
+# - Bow
+# - Axe
+# - Sword
+# - PickAxe
+# - Hoe
+# - Tool ~ Pickaxes, Axes, Shovels, Hoes, and Shears
+# - All ~ All items listed here
+##########
+# Chance System
+#
+# Chance-System:
+#   Base: # Starting chance.
+#   Increase: # The amount it goes up each level.
+##########
+Enchantments:
+  #Do not change this line.
+  Glowing: #Do not change these lines. If so you will get errors in the console.
+    #Whether an enchantment is active
+    Enabled: true
+    #The in-game name of the enchantment.
+    Name: 'Glowing'
+    #The color of the enchantment on the item.
+    Color: '&7'
+    #The color of the enchantment on the book.
+    BookColor: '&b&l'
+    #Max lvl the enchantment goes up to.
+    MaxPower: 1
+    #The type of items that can be enchanted with the enchantment.
+    Enchantment-Type: 'Helmet'
+    #Info for the enchantment
+    Info:
+      #Name of the item in the info GUI.
+      Name: '&e&lGlowing &7(&bI&7)'
+      #The description of what it does.
+      Description:
+        - '&7Give you night vision'
+        - '&7when you put it on you.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aHelmets'
+    #All the categories the Enchantment can be found in
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  BurnShield:
+    Enabled: true
+    Name: 'BurnShield'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lBurn Shield &7(&bI&7)'
+      Description:
+        - '&7Gives fire resistance'
+        - '&7when you put it on.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Piercing:
+    Enabled: true
+    Name: 'Piercing'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lPiercing &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to deal'
+        - '&7double damage to your enemy.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  OverLoad:
+    Enabled: true
+    Name: 'OverLoad'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lOverload &7(&bI-&bV&7)'
+      Description:
+        - '&7Gives a health boost'
+        - '&7when you put it on.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  SelfDestruct:
+    Enabled: true
+    Name: 'SelfDestruct'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lSelf Destruct &7(&bI-&bV&7)'
+      Description:
+        - '&7When you die there will'
+        - '&7be an explosion where you died.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Springs:
+    Enabled: true
+    Name: 'Springs'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Boots'
+    Info:
+      Name: '&e&lSprings &7(&bI-&bV&7)'
+      Description:
+        - '&7Gives you a small'
+        - '&7jump boost while wearing it.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBoots'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Gears:
+    Enabled: true
+    Name: 'Gears'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Boots'
+    Info:
+      Name: '&e&lGears &7(&bI-&bIII&7)'
+      Description:
+        - '&7Gives a speed boost'
+        - '&7when you put it on.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBoots'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Hulk:
+    Enabled: true
+    Name: 'Hulk'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lHulk &7(&bI-&bII&7)'
+      Description:
+        - '&7Gives strength, damage resistance,'
+        - '&7and slowness while wearing it.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Mermaid:
+    Enabled: true
+    Name: 'Mermaid'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Helmet'
+    Info:
+      Name: '&e&lMermaid &7(&bI-&bIII&7)'
+      Description:
+        - '&7Gives you water breathing'
+        - '&7when you put it on.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aHelmets'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Ninja:
+    Enabled: true
+    Name: 'Ninja'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lNinja &7(&bI-&bII&7)'
+      Description:
+        - '&7Gives speed and health boost'
+        - '&7when you put it on.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Vampire:
+    Enabled: true
+    Name: 'Vampire'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lVampire &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to heal'
+        - '&7you when fighting.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  LifeSteal:
+    Enabled: true
+    Name: 'LifeSteal'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lLife Steal &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to steal'
+        - '&7health from your enemy.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Doctor:
+    Enabled: true
+    Name: 'Doctor'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Info:
+      Name: '&e&lDoctor &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7heal a player you hit'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Boom:
+    Enabled: true
+    Name: 'Boom'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 20
+      Increase: 10
+    Info:
+      Name: '&e&lBoom &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to spawn'
+        - '&7TnT where the arrow lands.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Venom:
+    Enabled: true
+    Name: 'Venom'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lVenom &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy poison.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  DoubleDamage:
+    Enabled: true
+    Name: 'DoubleDamage'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 1
+    Info:
+      Name: '&e&lDouble Damage &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7deal double damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  SlowMo:
+    Enabled: true
+    Name: 'SlowMo'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lSlowMo &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy slowness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Blindness:
+    Enabled: true
+    Name: 'Blindness'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 1
+    Info:
+      Name: '&e&lBlindness &7(&bI-&bII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy blindness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Viper:
+    Enabled: true
+    Name: 'Viper'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lViper &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy poison.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  AntiGravity:
+    Enabled: true
+    Name: 'AntiGravity'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Boots'
+    Info:
+      Name: '&e&lAnti-Gravity &7(&bI-&bIII&7)'
+      Description:
+        - '&7Gives a high jump boost'
+        - '&7when you put it on.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBoots'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  FastTurn:
+    Enabled: true
+    Name: 'FastTurn'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lFast Turn &7(&bI-&bII&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7deal more damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  LightWeight:
+    Enabled: true
+    Name: 'LightWeight'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lLight Weight &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7you haste when fighting.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Blessed:
+    Enabled: true
+    Name: 'Blessed'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lBlessed &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7remove all negative effects.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  FeedMe:
+    Enabled: true
+    Name: 'FeedMe'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lFeedMe &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7feed you while fighting.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Dizzy:
+    Enabled: true
+    Name: 'Dizzy'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lDizzy &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy confusion.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Berserk:
+    Enabled: true
+    Name: 'Berserk'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 1
+    Info:
+      Name: '&e&lBerserk &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give you'
+        - '&7strength and mining fatigue.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Cursed:
+    Enabled: true
+    Name: 'Cursed'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lCursed &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy mining fatigue.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Rekt:
+    Enabled: true
+    Name: 'Rekt'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 5
+      Increase: 1
+    Info:
+      Name: '&e&lRekt &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7deal double the damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Enlightened:
+    Enabled: true
+    Name: 'Enlightened'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lEnlightened &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7heal you while being attacked.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Freeze:
+    Enabled: true
+    Name: 'Freeze'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lFreeze &7(&bI-&bII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy slowness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Fortify:
+    Enabled: true
+    Name: 'Fortify'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lFortify &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy weakness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Molten:
+    Enabled: true
+    Name: 'Molten'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 1
+    Info:
+      Name: '&e&lMolten &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to set'
+        - '&7set your enemy on fire.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  PainGiver:
+    Enabled: true
+    Name: 'PainGiver'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 4
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lPain Giver &7(&bI-&bIV&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy poison.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Savior:
+    Enabled: true
+    Name: 'Savior'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lSavior &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to cut'
+        - '&7your incoming damage by half.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Nursery:
+    Enabled: true
+    Name: 'Nursery'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lNursery &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7heal you while walking.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  AutoSmelt:
+    Enabled: true
+    Name: 'AutoSmelt'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'PickAxe'
+    Chance-System:
+      Base: 25
+      Increase: 25
+    Info:
+      Name: '&e&lAuto Smelt &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to auto smelt'
+        - '&7ores and give more ingots.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aPickaxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Experience:
+    Enabled: true
+    Name: 'Experience'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'PickAxe'
+    Chance-System:
+      Base: 25
+      Increase: 25
+    Info:
+      Name: '&e&lExperience &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&72x or more xp from ores.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aPickaxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Telepathy:
+    Enabled: true
+    Name: 'Telepathy'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Tool'
+    Info:
+      Name: '&e&lTelepathy &7(&bI&7)'
+      Description:
+        - '&7Will automatically send'
+        - '&7mined blocks to your inventory.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aTools'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Haste:
+    Enabled: true
+    Name: 'Haste'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Tool'
+    Info:
+      Name: '&e&lHaste &7(&bI-&bIII&7)'
+      Description:
+        - '&7Gives you haste when'
+        - '&7holding the item in your hand.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aTools'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Oxygenate:
+    Enabled: true
+    Name: 'Oxygenate'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Tool'
+    Info:
+      Name: '&e&lOxygenate &7(&bI&7)'
+      Description:
+        - '&7Gives you water breathing'
+        - '&7when holding item in your hand.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aTools'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  IceFreeze:
+    Enabled: true
+    Name: 'IceFreeze'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
+    Info:
+      Name: '&e&lIce Freeze &7(&bI&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy slowness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Lightning:
+    Enabled: true
+    Name: 'Lightning'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
+    Info:
+      Name: '&e&lLightning &7(&bI&7)'
+      Description:
+        - '&7Has a chance to strike'
+        - '&7lightning where the arrow lands.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Decapitation:
+    Enabled: true
+    Name: 'Decapitation'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 10
+    Info:
+      Name: '&e&lDecapitation &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to drop'
+        - '&7the player''s head on death.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Confusion:
+    Enabled: true
+    Name: 'Confusion'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 4
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lConfusion &7(&bI-&bIV&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy confusion.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Disarmer:
+    Enabled: true
+    Name: 'Disarmer'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 1
+    Info:
+      Name: '&e&lDisarmer &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to take a'
+        - '&7random armor piece off your enemy.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Execute:
+    Enabled: true
+    Name: 'Execute'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Info:
+      Name: '&e&lExecute &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to get strength'
+        - '&7when your enemy is low on health.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Headless:
+    Enabled: true
+    Name: 'Headless'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 10
+    Info:
+      Name: '&e&lHeadless &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to drop'
+        - '&7your enemy''s head on death.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Inquisitive:
+    Enabled: true
+    Name: 'Inquisitive'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 50
+      Increase: 25
+    Info:
+      Name: '&e&lInquisitive &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to double or more XP'
+        - '&7based on the enchantment level.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Insomnia:
+    Enabled: true
+    Name: 'Insomnia'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lInsomnia &7(&bI&7)'
+      Description:
+        - '&7Gives confusion, mining fatigue, and slowness'
+        - '&7but has a high chance of doing double the damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Nutrition:
+    Enabled: true
+    Name: 'Nutrition'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lNutrition &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to'
+        - '&7feed you while fighting.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Obliterate:
+    Enabled: true
+    Name: 'Obliterate'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lObliterate &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to send'
+        - '&7your enemy flying backwards.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Paralyze:
+    Enabled: true
+    Name: 'Paralyze'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lParalyze &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give your'
+        - '&7enemy high mining fatigue and slowness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  SkillSwipe:
+    Enabled: true
+    Name: 'SkillSwipe'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lSkill Swipe &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to steal xp'
+        - '&7from your enemy while fighting.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Snare:
+    Enabled: true
+    Name: 'Snare'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 3
+    Info:
+      Name: '&e&lSnare &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give your'
+        - '&7enemy slowness and mining fatigue.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Trap:
+    Enabled: true
+    Name: 'Trap'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lTrap &7(&bI-&bII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy high slowness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Wither:
+    Enabled: true
+    Name: 'Wither'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 3
+    Info:
+      Name: '&e&lWither &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy high wither.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Rage:
+    Enabled: true
+    Name: 'Rage'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Info:
+      Name: '&e&lRage &7(&bI-&bIII&7)'
+      Description:
+        - '&7Attacks will get stronger'
+        - '&7as long as you keep fighting.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSwords'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Valor:
+    Enabled: true
+    Name: 'Valor'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lValor &7(&bI-&bII&7)'
+      Description:
+        - '&7Gives damage resistance'
+        - '&7based on your enchantment level.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  SmokeBomb:
+    Enabled: true
+    Name: 'SmokeBomb'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lSmoke Bomb &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to blind and'
+        - '&7slow your enemy so you can escape.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Drunk:
+    Enabled: true
+    Name: 'Drunk'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lDrunk &7(&bI-&bIII&7)'
+      Description:
+        - '&7Gives strength, mining fatigue,'
+        - '&7and slowness when put on.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Voodoo:
+    Enabled: true
+    Name: 'Voodoo'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lVoodoo &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to give'
+        - '&7your enemy weakness.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  MultiArrow:
+    Enabled: true
+    Name: 'MultiArrow'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
+    Info:
+      Name: '&e&lMultiArrow &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to shoot'
+        - '&7multiple arrows at once.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Recover:
+    Enabled: true
+    Name: 'Recover'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lRecover &7(&bI&7)'
+      Description:
+        - '&7When you kill a player'
+        - '&7you get absorption and regen.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Cactus:
+    Enabled: true
+    Name: 'Cactus'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 25
+      Increase: 25
+    Info:
+      Name: '&e&lCactus &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to damage'
+        - '&7the player that hits you.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Rocket:
+    Enabled: true
+    Name: 'Rocket'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Boots'
+    Chance-System:
+      Base: 15
+      Increase: 5
+    Info:
+      Name: '&e&lRocket &7(&bI-&bIII&7)'
+      Description:
+        - '&7If low on health there is a chance'
+        - '&7you will blast off backwards to escape.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBoots'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Angel:
+    Enabled: false
+    Name: 'Angel'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lAngel &7(&bI-&bV&7)'
+      Description:
+        - '&7Heals nearby faction members'
+        - '&7when you are wearing item.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  HellForged:
+    Enabled: true
+    Name: 'HellForged'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 4
+    Enchantment-Type: 'Damaged-Items'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lHellForged &7(&bI-&bIV&7)'
+      Description:
+        - '&7Has a chance to fix up'
+        - '&7your items as you walk.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor, Weapons, Tools, Fishing Rods, and Shears'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Commander:
+    Enabled: false
+    Name: 'Commander'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Helmet'
+    Info:
+      Name: '&e&lCommander &7(&bI-&bV&7)'
+      Description:
+        - '&7Gives nearby faction members'
+        - '&7haste when wearing it.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aHelmets'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  StormCaller:
+    Enabled: true
+    Name: 'StormCaller'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lStormCaller &7(&bI-&bV&7)'
+      Description:
+        - '&7Has a chance to strike your enemy'
+        - '&7down with a lightning strike.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Leadership:
+    Enabled: false
+    Name: 'Leadership'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lLeadership &7(&bI-&bV&7)'
+      Description:
+        - '&7Your attacks are stronger when'
+        - '&7you have allies around you.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Implants:
+    Enabled: true
+    Name: 'Implants'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Helmet'
+    Chance-System:
+      Base: 5
+      Increase: 5
+    Info:
+      Name: '&e&lImplants &7(&bI-&bV&7)'
+      Description:
+        - '&7While moving your hunger will'
+        - '&7start to go up while equipped.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aHelmets'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Wings:
+    Enabled: true
+    Name: 'Wings'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Boots'
+    Info:
+      Name: '&e&lWings &7(&bI&7)'
+      Description:
+        - '&7Allows you to fly in your'
+        - '&7own territory.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBoots'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Blast:
+    Enabled: true
+    Name: 'Blast'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'PickAxe'
+    Info:
+      Name: '&e&lBlast &7(&bI-&bIII&7)'
+      Description:
+        - '&7Breaks blocks in a 3 x level x 3 radius' #Level increases depth not size. Size remains 3x3 (9 blocks)
+        - '&7depending on the power of the enchantment.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aPickaxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Furnace:
+    Enabled: true
+    Name: 'Furnace'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'PickAxe'
+    Info:
+      Name: '&e&lFurnace &7(&bI&7)'
+      Description:
+        - '&7Always smelts ores into'
+        - '&7items instead of blocks.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aPickaxes'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Blizzard:
+    Enabled: true
+    Name: 'Blizzard'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lBlizzard &7(&bI&7)'
+      Description:
+        - '&7Gives enemies within 3'
+        - '&7blocks slowness for a short time.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  AcidRain:
+    Enabled: true
+    Name: 'AcidRain'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lAcidRain &7(&bI-&bIII&7)'
+      Description:
+        - '&7Gives enemies within 3'
+        - '&7blocks poison for a short time.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  SandStorm:
+    Enabled: true
+    Name: 'SandStorm'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lSandStorm &7(&bI&7)'
+      Description:
+        - '&7Gives enemies within 3'
+        - '&7blocks blindness for a short time.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Radiant:
+    Enabled: true
+    Name: 'Radiant'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lRadiant &7(&bI-&bIII&7)'
+      Description:
+        - '&7Sets enemies within 3'
+        - '&7blocks on fire for a short time.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Intimidate:
+    Enabled: true
+    Name: 'Intimidate'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lIntimidate &7(&bI-&bII&7)'
+      Description:
+        - '&7Gives enemies within 3'
+        - '&7blocks weakness for a short time.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Pull:
+    Enabled: true
+    Name: 'Pull'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 10
+    Info:
+      Name: '&e&lPull &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to send'
+        - '&7the enemy you hit flying at you.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBows'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Tamer:
+    Enabled: true
+    Name: 'Tamer'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lTamer &7(&bI-&bV&7)'
+      Description:
+        - '&7Spawns wolves to help'
+        - '&7when you are in trouble.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Guards:
+    Enabled: true
+    Name: 'Guards'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lGuards &7(&bI-&bIII&7)'
+      Description:
+        - '&7Spawns in iron golems'
+        - '&7when you are in trouble.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Infestation:
+    Enabled: true
+    Name: 'Infestation'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lInfestation &7(&bI-&bII&7)'
+      Description:
+        - '&7Spawns in endermites and silverfish'
+        - '&7when you are in trouble.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Necromancer:
+    Enabled: true
+    Name: 'Necromancer'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lNecromancer &7(&bI-&bIII&7)'
+      Description:
+        - '&7Spawns in zombies'
+        - '&7when you are in trouble.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  BeeKeeper:
+    Enabled: true
+    Name: 'BeeKeeper'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lBeeKeeper &7(&bI-&bII&7)'
+      Description:
+        - '&7Spawns in bees'
+        - '&7when you are in trouble.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Sticky-Shot:
+    Enabled: true
+    Name: 'StickyShot'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 10
+      Increase: 10
+    Info:
+      Name: '&e&lStickyShot &7(&bI-&bIII&7)'
+      Description:
+        - '&7Has a chance to spawn'
+        - '&7a web where the arrow lands.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&7 - &9&l&nRare'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBow'
+    Categories:
+      - 'Common'
+      - 'Rare'
+      - 'Legendary'
+  #Do not change this line.
+  Disorder:
+    Enabled: true
+    Name: 'Disorder'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 1
+      Increase: 1
+    Info:
+      Name: '&e&lDisorder &7(&bI&7)'
+      Description:
+        - '&7Has a chance to reorder'
+        - '&7your enemies hot-bar.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Legendary'
+  #Do not change this line.
+  Charge:
+    Enabled: false
+    Name: 'Charge'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Sword'
+    Info:
+      Name: '&e&lCharge &7(&bI-V&7)'
+      Description:
+        - '&7When you kill an enemy player'
+        - '&7nearby allies and you gain a speed boost.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &9&l&nRare'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Rare'
+  #Do not change this line.
+  Revenge:
+    Enabled: true
+    Name: 'Revenge'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Sword'
+    Info:
+      Name: '&e&lRevenge &7(&bI&7)'
+      Description:
+        - '&7When a nearby ally is'
+        - '&7killed you receive speed,'
+        - '&7regeneration, and haste.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &9&l&nRare'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Rare'
+  #Do not change this line.
+  BattleCry:
+    Enabled: true
+    Name: 'BattleCry'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 5
+    Enchantment-Type: 'Axe'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lBattleCry &7(&bI-V&7)'
+      Description:
+        - '&7During combat it has a'
+        - '&610%(+5% per level) &7chance to send'
+        - '&7nearby players flying backwards.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aAxe'
+    Categories:
+      - 'Legendary'
+  #Do not change this line.
+  Famished:
+    Enabled: true
+    Name: 'Famished'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Sword'
+    Chance-System:
+      Base: 10
+      Increase: 5
+    Info:
+      Name: '&e&lFamished &7(&bI-III&7)'
+      Description:
+        - '&7During combat it has a'
+        - '&610%(+5% per level) &7chance'
+        - '&7to give the enemy hunger.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &9&l&nRare'
+        - '&6Enchantable Items: &aSword'
+    Categories:
+      - 'Rare'
+  #Do not change this line.
+  GreenThumb:
+    Enabled: true
+    Name: 'GreenThumb'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 3
+    Enchantment-Type: 'Hoe'
+    Chance-System:
+      Base: 10
+      Increase: 10
+    Info:
+      Name: '&e&lGreenThumb &7(&bI-III&7)'
+      Description:
+        - '&7When right clicking a seedling you'
+        - '&7have a &610%(+10% per level)&7 chance'
+        - '&7to fully grow the plant but at the cost'
+        - '&7of the hoe''s durability.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &9&l&nRare'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Rare'
+  #Do not change this line.
+  Harvester:
+    Enabled: true
+    Name: 'Harvester'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Hoe'
+    Info:
+      Name: '&e&lHarvester &7(&bI&7)'
+      Description:
+        - '&7When breaking fully grown crops'
+        - '&7it will break all fully grown crops'
+        - '&7in a 3x3 area of the broken crop.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Common'
+  #Do not change this line.
+  Tiller:
+    Enabled: true
+    Name: 'Tiller'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Hoe'
+    Info:
+      Name: '&e&lTiller &7(&bI&7)'
+      Description:
+        - '&7When tilling up soil'
+        - '&7it will automatically till soil'
+        - '&7in a 3x3 area of the tilled soil.'
+        - '&7It will also automatically hydrate'
+        - '&7the soil if it is 4 blocks away from'
+        - '&7a water source block.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Common'
+  #Do not change this line.
+  Planter:
+    Enabled: true
+    Name: 'Planter'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Hoe'
+    Info:
+      Name: '&e&lPlanter &7(&bI&7)'
+      Description:
+        - '&7When tilling up soil'
+        - '&7it will automatically plant'
+        - '&7a seed in your off-hand or'
+        - '&7in your hot-bar going from the'
+        - '&7right side to the left side.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &a&l&nCommon'
+        - '&6Enchantable Items: &aHoe'
+    Categories:
+      - 'Common'
+  #Do not change this line.
+  Cyborg:
+    Enabled: true
+    Name: 'Cyborg'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 1
+    Enchantment-Type: 'Armor'
+    Info:
+      Name: '&e&lCyborg &7(&bI&7)'
+      Description:
+        - '&7Gives you speed, strength and'
+        - '&7jump boost to take down your enemies.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aArmor'
+    Categories:
+      - 'Legendary'
+  #Do not change this line.
+  Sniper:
+    Enabled: true
+    Name: 'Sniper'
+    Color: '&7'
+    BookColor: '&b&l'
+    MaxPower: 2
+    Enchantment-Type: 'Bow'
+    Chance-System:
+      Base: 25
+      Increase: 5
+    Info:
+      Name: '&e&lSniper &7(&bI-&bII&7)'
+      Description:
+        - '&7Shoot an enemy with this and'
+        - '&7it will have a high chance of'
+        - '&7doing high poison damage.'
+        - ''
+        - '&6Found in:'
+        - '&7 - &4&l&nLegendary'
+        - '&6Enchantable Items: &aBow'
+    Categories:
+      - 'Legendary'

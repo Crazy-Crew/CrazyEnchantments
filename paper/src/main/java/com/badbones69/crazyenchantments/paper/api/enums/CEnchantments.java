@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.google.gson.Gson;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
@@ -185,9 +186,24 @@ public enum CEnchantments {
      * @return Returns the CEnchantments but if not found it will be null.
      */
     public static CEnchantments getFromName(String enchant) {
-        for (CEnchantments ench : values()) {
-            if (ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) return ench;
+        for (CEnchantments ench : CEnchantments.values()) {
+            try {
+                Bukkit.getLogger().warning("Ench #1: " + ench.getName() + " is not null.");
+
+                Bukkit.getLogger().warning("Matches #2: " + ench.getName().equalsIgnoreCase(enchant));
+                Bukkit.getLogger().warning("Matches #3: " + ench.getCustomName().equalsIgnoreCase(enchant));
+
+                if (ench.getName().equalsIgnoreCase(enchant)) {
+                    Bukkit.getLogger().warning("#4 We have a match.");
+
+                    return ench;
+                }
+            } catch (Exception exception) {
+                Bukkit.getLogger().warning("#5 Failed Enchant: " + ench.getName());
+            }
         }
+
+        Bukkit.getLogger().warning("#6 Why should we be here? " + enchant);
 
         return null;
     }
@@ -281,6 +297,7 @@ public enum CEnchantments {
 
         assert name != null;
         CEnchantment enchant = getFromName(name).getEnchantment();
+
         if (!unsafe && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
         return level;
