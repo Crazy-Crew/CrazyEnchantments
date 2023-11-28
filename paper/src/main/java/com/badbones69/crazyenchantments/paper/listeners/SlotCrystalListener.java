@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class SlotCrystalListener implements Listener {
@@ -32,10 +33,10 @@ public class SlotCrystalListener implements Listener {
     public void load() {
         FileConfiguration config = FileManager.Files.CONFIG.getFile();
         slot_crystal = new ItemBuilder()
-                .setMaterial(Objects.requireNonNull(config.getString("Settings.Slot_Crystal.Item")))
-                .setName(config.getString("Settings.Slot_Crystal.Name"))
+                .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
+                .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
                 .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
-                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing")).build();
+                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).build();
         ItemMeta meta = slot_crystal.getItemMeta();
         meta.getPersistentDataContainer().set(DataKeys.SLOT_CRYSTAL.getKey(), PersistentDataType.BOOLEAN, true);
         slot_crystal.setItemMeta(meta);
@@ -68,7 +69,13 @@ public class SlotCrystalListener implements Listener {
         crystalItem.setAmount(crystalItem.getAmount() - 1);
         event.getCursor().setAmount(crystalItem.getAmount());
         event.setCurrentItem(starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
-        player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage().replace("%slot%", String.valueOf(-(limiter - 1))));
+
+        player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(new HashMap<>(4) {{
+            put("%slot%", String.valueOf(-(limiter - 1)));
+            put("%maxEnchants%", String.valueOf(maxEnchants));
+            put("%enchantAmount%", String.valueOf(enchAmount));
+            put("baseEnchants", String.valueOf(baseEnchants));
+        }}));
     }
 
     private boolean isSlotCrystal(ItemStack crystalItem) {
