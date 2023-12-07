@@ -9,8 +9,4 @@ pluginManagement {
 
 rootProject.name = "CrazyEnchantments"
 
-listOf(
-    "paper"
-).forEach {
-    include(it)
-}
+include("paper")
