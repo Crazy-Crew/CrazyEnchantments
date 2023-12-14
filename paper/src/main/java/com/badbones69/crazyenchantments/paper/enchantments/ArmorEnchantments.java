@@ -21,6 +21,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSe
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.paper.processors.Processor;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.Material;
@@ -127,7 +128,7 @@ public class ArmorEnchantments implements Listener {
             for (ArmorEnchantment armorEnchantment : armorEnchantmentManager.getArmorEnchantments()) {
                 CEnchantments enchantment = armorEnchantment.getEnchantment();
 
-                if (isEventActive(enchantment, player, armor, enchants)) {
+                if (EnchantUtils.isEventActive(enchantment, player, armor, enchants)) {
 
                     if (armorEnchantment.isPotionEnchantment()) {
                         for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
@@ -139,12 +140,12 @@ public class ArmorEnchantments implements Listener {
                 }
             }
 
-            if (isEventActive(CEnchantments.MANEUVER, player, armor, enchants)) {
+            if (EnchantUtils.isEventActive(CEnchantments.MANEUVER, player, armor, enchants)) {
                 event.setCancelled(true);
                 return;
             }
 
-            if (player.isSneaking() && isEventActive(CEnchantments.CROUCH, player, armor, enchants)) {
+            if (player.isSneaking() && EnchantUtils.isEventActive(CEnchantments.CROUCH, player, armor, enchants)) {
                 double percentageReduced = (CEnchantments.CROUCH.getChance() + (CEnchantments.CROUCH.getChanceIncrease() * CEnchantments.CROUCH.getLevel(armor))) / 100.0;
                 double newDamage = event.getFinalDamage() * (1 - percentageReduced);
 
@@ -152,22 +153,22 @@ public class ArmorEnchantments implements Listener {
                 event.setDamage(newDamage);
             }
 
-            if (isEventActive(CEnchantments.SHOCKWAVE, player, armor, enchants)) {
+            if (EnchantUtils.isEventActive(CEnchantments.SHOCKWAVE, player, armor, enchants)) {
                 damager.setVelocity(player.getLocation().getDirection().multiply(2).setY(1.25));
 
             }
 
-            if (player.getHealth() <= event.getFinalDamage() && isEventActive(CEnchantments.SYSTEMREBOOT, player, armor, enchants)) {
+            if (player.getHealth() <= event.getFinalDamage() && EnchantUtils.isEventActive(CEnchantments.SYSTEMREBOOT, player, armor, enchants)) {
                 player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
                 event.setCancelled(true);
                 return;
             }
 
-            if (player.getHealth() <= 4 && isEventActive(CEnchantments.ADRENALINE, player, armor, enchants)) {
+            if (player.getHealth() <= 4 && EnchantUtils.isEventActive(CEnchantments.ADRENALINE, player, armor, enchants)) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 3 + (crazyManager.getLevel(armor, CEnchantments.ADRENALINE)) * 20, 10));
             }
 
-            if (player.getHealth() <= 8 && isEventActive(CEnchantments.ROCKET, player, armor, enchants)) {
+            if (player.getHealth() <= 8 && EnchantUtils.isEventActive(CEnchantments.ROCKET, player, armor, enchants)) {
                 // Anti cheat support here with AAC or any others.
                 plugin.getServer().getScheduler().runTaskLater(plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
                 enchantmentSettings.addFallenPlayer(player);
@@ -175,7 +176,7 @@ public class ArmorEnchantments implements Listener {
                 plugin.getServer().getScheduler().runTaskLater(plugin, () -> enchantmentSettings.removeFallenPlayer(player), 8 * 20);
             }
 
-            if (player.getHealth() > 0 && isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
+            if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
 
                 double heal = crazyManager.getLevel(armor, CEnchantments.ENLIGHTENED);
                 // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
@@ -186,15 +187,15 @@ public class ArmorEnchantments implements Listener {
                 if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
             }
 
-            if (isEventActive(CEnchantments.INSOMNIA, player, armor, enchants)) damager.damage(event.getDamage() + crazyManager.getLevel(armor, CEnchantments.INSOMNIA));
+            if (EnchantUtils.isEventActive(CEnchantments.INSOMNIA, player, armor, enchants)) damager.damage(event.getDamage() + crazyManager.getLevel(armor, CEnchantments.INSOMNIA));
 
-            if (isEventActive(CEnchantments.MOLTEN, player, armor, enchants)) damager.setFireTicks((crazyManager.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
+            if (EnchantUtils.isEventActive(CEnchantments.MOLTEN, player, armor, enchants)) damager.setFireTicks((crazyManager.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
 
-            if (isEventActive(CEnchantments.SAVIOR, player, armor, enchants)) event.setDamage(event.getDamage() / 2);
+            if (EnchantUtils.isEventActive(CEnchantments.SAVIOR, player, armor, enchants)) event.setDamage(event.getDamage() / 2);
 
-            if (isEventActive(CEnchantments.CACTUS, player, armor, enchants)) damager.damage(crazyManager.getLevel(armor, CEnchantments.CACTUS));
+            if (EnchantUtils.isEventActive(CEnchantments.CACTUS, player, armor, enchants)) damager.damage(crazyManager.getLevel(armor, CEnchantments.CACTUS));
 
-            if (isEventActive(CEnchantments.STORMCALLER, player, armor, enchants)) {
+            if (EnchantUtils.isEventActive(CEnchantments.STORMCALLER, player, armor, enchants)) {
 
                 methods.lightning(damager);
                 // AntiCheat Support.
@@ -374,13 +375,4 @@ public class ArmorEnchantments implements Listener {
         event.setCancelled(true);
     }
 
-    private boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack armor, Map<CEnchantment, Integer> enchants) {
-        if (!(enchants.containsKey(enchant.getEnchantment()) &&
-                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(armor)))) return false;
-
-        EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), armor);
-        plugin.getServer().getPluginManager().callEvent(useEvent);
-
-        return !useEvent.isCancelled();
-    }
 }

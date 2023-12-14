@@ -12,9 +12,9 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +26,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class AxeEnchantments implements Listener {
@@ -60,14 +59,14 @@ public class AxeEnchantments implements Listener {
 
         Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
 
-        if (isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
+        if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
         }
 
-        if (isEventActive(CEnchantments.BLESSED, damager, item, enchantments)) removeBadPotions(damager);
+        if (EnchantUtils.isEventActive(CEnchantments.BLESSED, damager, item, enchantments)) removeBadPotions(damager);
 
-        if (isEventActive(CEnchantments.FEEDME, damager, item, enchantments)&& damager.getFoodLevel() < 20) {
+        if (EnchantUtils.isEventActive(CEnchantments.FEEDME, damager, item, enchantments)&& damager.getFoodLevel() < 20) {
 
             int food = 2 * crazyManager.getLevel(item, CEnchantments.FEEDME);
 
@@ -78,19 +77,19 @@ public class AxeEnchantments implements Listener {
             if (damager.getFoodLevel() + food > 20) damager.setFoodLevel(20);
         }
 
-        if (isEventActive(CEnchantments.REKT, damager, item, enchantments)) event.setDamage(event.getDamage() * 2);
+        if (EnchantUtils.isEventActive(CEnchantments.REKT, damager, item, enchantments)) event.setDamage(event.getDamage() * 2);
 
-        if (isEventActive(CEnchantments.CURSED, damager, item, enchantments))
+        if (EnchantUtils.isEventActive(CEnchantments.CURSED, damager, item, enchantments))
             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
 
-        if (isEventActive(CEnchantments.DIZZY, damager, item, enchantments))
+        if (EnchantUtils.isEventActive(CEnchantments.DIZZY, damager, item, enchantments))
             entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (crazyManager.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
 
-        if (isEventActive(CEnchantments.BATTLECRY, damager, item, enchantments)) {
+        if (EnchantUtils.isEventActive(CEnchantments.BATTLECRY, damager, item, enchantments)) {
             damager.getNearbyEntities(3, 3, 3).stream().filter(nearbyEntity -> !pluginSupport.isFriendly(damager, nearbyEntity)).forEach(nearbyEntity ->
                     nearbyEntity.setVelocity(nearbyEntity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5)));
         }
-        if (isEventActive(CEnchantments.DEMONFORGED, damager, item, enchantments) && entity instanceof Player player) {
+        if (EnchantUtils.isEventActive(CEnchantments.DEMONFORGED, damager, item, enchantments) && entity instanceof Player player) {
 
             ItemStack armorItem = switch (methods.percentPick(4, 0)) {
                 case 1 -> player.getEquipment().getHelmet();
@@ -102,16 +101,6 @@ public class AxeEnchantments implements Listener {
             methods.removeDurability(armorItem, player);
 
         }
-    }
-
-    private boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack tool, Map<CEnchantment, Integer> enchants) {
-        if (!(enchants.containsKey(enchant.getEnchantment()) &&
-                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(tool)))) return false;
-
-        EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), tool);
-        plugin.getServer().getPluginManager().callEvent(useEvent);
-
-        return !useEvent.isCancelled();
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
