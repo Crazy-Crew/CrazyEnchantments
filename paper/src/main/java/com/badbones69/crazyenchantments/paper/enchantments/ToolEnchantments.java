@@ -9,8 +9,6 @@ import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
-import com.google.common.collect.Lists;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,8 +33,6 @@ public class ToolEnchantments implements Listener {
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
     // Settings.
-    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
-
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     @EventHandler()
@@ -87,15 +83,5 @@ public class ToolEnchantments implements Listener {
             }
         }
 
-    }
-
-    private boolean ignoreBlockTypes(Block block) {
-        if (block.isEmpty()) return true;
-
-        for (String name : Lists.newArrayList("shulker_box", "chest", "head", "skull")) {
-            if (block.getType().name().toLowerCase().contains(name)) return true;
-        }
-
-        return false;
     }
 }
