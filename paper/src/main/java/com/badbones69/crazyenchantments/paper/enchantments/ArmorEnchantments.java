@@ -251,11 +251,8 @@ public class ArmorEnchantments implements Listener {
 
         if (pluginSupport.allowCombat(other.getLocation()) && !pluginSupport.isFriendly(player, other) && !methods.hasPermission(other, "bypass.aura", false)) {
             Calendar cal = Calendar.getInstance();
-            HashMap<CEnchantments, Calendar> effect = new HashMap<>();
 
-            if (enchantmentSettings.containsTimerPlayer(other)) effect = enchantmentSettings.getTimerPlayer(other);
-
-            HashMap<CEnchantments, Calendar> finalEffect = effect;
+            HashMap<CEnchantments, Calendar> finalEffect = enchantmentSettings.containsTimerPlayer(other) ? enchantmentSettings.getTimerPlayer(other) : new HashMap<>();
 
             switch (enchant) {
                 case BLIZZARD -> {
@@ -308,7 +305,7 @@ public class ArmorEnchantments implements Listener {
                 default -> {}
             }
 
-            enchantmentSettings.addTimerPlayer(player, finalEffect);
+            enchantmentSettings.addTimerPlayer(player, finalEffect); // TODO Recheck usage and fix it.
         }
     }
 
