@@ -85,7 +85,7 @@ public class ArmorEnchantments implements Listener {
         ItemStack newItem = event.getNewItem();
         ItemStack oldItem = event.getOldItem();
 
-        if (newItem.hasItemMeta()
+        if (newItem.hasItemMeta() // Added to prevent armor change event being called on damage.
             && oldItem.hasItemMeta()
             && newItem.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())
             && oldItem.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())

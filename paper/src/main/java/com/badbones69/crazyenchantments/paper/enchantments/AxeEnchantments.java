@@ -121,19 +121,17 @@ public class AxeEnchantments implements Listener {
     }
 
     private void removeBadPotions(Player player) {
-        ArrayList<PotionEffectType> bad = new ArrayList<>();
+        ArrayList<PotionEffectType> bad = new ArrayList<>() {{
+            add(PotionEffectType.BLINDNESS);
+            add(PotionEffectType.CONFUSION);
+            add(PotionEffectType.HUNGER);
+            add(PotionEffectType.POISON);
+            add(PotionEffectType.SLOW);
+            add(PotionEffectType.SLOW_DIGGING);
+            add(PotionEffectType.WEAKNESS);
+            add(PotionEffectType.WITHER);
+        }};
 
-        bad.add(PotionEffectType.BLINDNESS);
-        bad.add(PotionEffectType.CONFUSION);
-        bad.add(PotionEffectType.HUNGER);
-        bad.add(PotionEffectType.POISON);
-        bad.add(PotionEffectType.SLOW);
-        bad.add(PotionEffectType.SLOW_DIGGING);
-        bad.add(PotionEffectType.WEAKNESS);
-        bad.add(PotionEffectType.WITHER);
-
-        for (PotionEffectType potionEffectType : bad) {
-            if (player.hasPotionEffect(potionEffectType)) player.removePotionEffect(potionEffectType);
-        }
+        bad.forEach(player::removePotionEffect);
     }
 }

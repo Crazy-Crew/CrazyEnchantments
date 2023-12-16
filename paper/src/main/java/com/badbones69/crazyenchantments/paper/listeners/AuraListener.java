@@ -18,6 +18,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AuraListener implements Listener {
 
@@ -59,12 +60,8 @@ public class AuraListener implements Listener {
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                if (enchantmentEnum != null) {
-                    for (Player other : players) {
-                        AuraActiveEvent auraEvent = new AuraActiveEvent(player, other, enchantmentEnum, level);
-                        plugin.getServer().getPluginManager().callEvent(auraEvent);
-                    }
-                }
+                if (enchantmentEnum != null) players.forEach((other) -> plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(player, other, enchantmentEnum, level)));
+
             });
         }
 
@@ -76,16 +73,14 @@ public class AuraListener implements Listener {
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                    if (enchantmentEnum != null) {
-                        AuraActiveEvent auraEvent = new AuraActiveEvent(other, player, enchantmentEnum, level);
-                        plugin.getServer().getPluginManager().callEvent(auraEvent);
-                    }
+                    if (enchantmentEnum != null) plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(other, player, enchantmentEnum, level));
+
                 });
             }
         }
     }
 
-    private boolean coolDownCheck(UUID uuid) {
+    private boolean coolDownCheck(UUID uuid) { // TODO Move over to global enchant check instead of having it on a single one.
         if (coolDown.contains(uuid)) return true;
         coolDown.add(uuid);
 
@@ -100,14 +95,9 @@ public class AuraListener implements Listener {
     }
 
     private List<Player> getNearbyPlayers(Player player) {
-        List<Player> players = new ArrayList<>();
 
-        for (Entity entity : player.getNearbyEntities(3, 3, 3)) {
-            if (!(entity instanceof Player) || entity.getUniqueId().toString().equals(player.getUniqueId().toString())) continue;
+        return player.getNearbyEntities(3, 3, 3).stream().filter((entity) ->
+                entity instanceof Player && !entity.getUniqueId().equals(player.getUniqueId())).map(entity -> (Player) entity).collect(Collectors.toList());
 
-            players.add((Player) entity);
-        }
-
-        return players;
     }
 }
