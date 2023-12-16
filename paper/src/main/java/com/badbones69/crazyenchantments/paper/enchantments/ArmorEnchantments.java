@@ -218,22 +218,14 @@ public class ArmorEnchantments implements Listener {
 
         for (ItemStack armor : Objects.requireNonNull(damager.getEquipment()).getArmorContents()) {
 
-            if (!crazyManager.hasEnchantment(armor, CEnchantments.LEADERSHIP) || !CEnchantments.LEADERSHIP.chanceSuccessful(armor) || (!SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) continue;
+            Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(armor);
+            if (!enchants.containsKey(CEnchantments.LEADERSHIP.getEnchantment())) continue;
 
-            int radius = 4 + crazyManager.getLevel(armor, CEnchantments.LEADERSHIP);
-            int players = 0;
+            int radius = 4 + enchants.get(CEnchantments.LEADERSHIP.getEnchantment());
+            int players = (int) damager.getNearbyEntities(radius, radius, radius).stream().filter(entity -> entity instanceof Player && pluginSupport.isFriendly(damager, entity)).count();
 
-            for (Entity entity : damager.getNearbyEntities(radius, radius, radius)) {
-                if (!(entity instanceof Player other)) continue;
-
-                if (pluginSupport.isFriendly(damager, other)) players++;
-            }
-
-            if (players > 0) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, CEnchantments.LEADERSHIP.getEnchantment(), armor);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) event.setDamage(event.getDamage() + (players / 2d));
+            if (players > 0 && EnchantUtils.isEventActive(CEnchantments.LEADERSHIP, player, armor, enchants)) {
+                event.setDamage(event.getDamage() + (players / 2d));
             }
         }
     }

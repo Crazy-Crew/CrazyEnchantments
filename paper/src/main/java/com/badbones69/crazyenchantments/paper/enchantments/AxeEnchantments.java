@@ -111,11 +111,8 @@ public class AxeEnchantments implements Listener {
             Player damager = event.getEntity().getKiller();
             ItemStack item = methods.getItemInHand(damager);
 
-            if (crazyManager.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
+            if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, enchantmentBookSettings.getEnchantments(item))) {
+                event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
             }
         }
     }

@@ -61,4 +61,9 @@ public class EnchantUtils {
         return !useEvent.isCancelled();
     }
 
+    public static boolean isArrowEventActive(CEnchantments enchant, Entity damager, ItemStack item, Map<CEnchantment, Integer> enchants) {
+        return enchants.containsKey(enchant.getEnchantment()) &&
+                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment())));
+    }
+
 }
