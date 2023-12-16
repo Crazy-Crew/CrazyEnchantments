@@ -49,7 +49,7 @@ public class BootEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onFly(PlayerToggleFlightEvent event) {
-        if (!wingsManager.isWingsEnabled()) return;
+        if (!wingsManager.isWingsEnabled()) return; // TODO implement single method for all enchantment checks. #EnchantUtils
 
         Player player = event.getPlayer();
 
@@ -76,7 +76,7 @@ public class BootEnchantments implements Listener {
         if (event.getFrom() == event.getTo()) return;
 
         Player player = event.getPlayer();
-        boolean isFlying = player.isFlying();
+        boolean isFlying = player.isFlying(); // TODO implement single method for all enchantment checks. #EnchantUtils
 
         if (wingsManager.isWingsEnabled() && crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS)) {
             if (WingsUtils.checkRegion(player)) {
