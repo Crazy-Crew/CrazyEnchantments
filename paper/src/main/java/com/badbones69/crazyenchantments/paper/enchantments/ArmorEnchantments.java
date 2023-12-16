@@ -308,7 +308,7 @@ public class ArmorEnchantments implements Listener {
                 default -> {}
             }
 
-            enchantmentSettings.addTimerPlayer(player, effect);
+            enchantmentSettings.addTimerPlayer(player, finalEffect);
         }
     }
 
