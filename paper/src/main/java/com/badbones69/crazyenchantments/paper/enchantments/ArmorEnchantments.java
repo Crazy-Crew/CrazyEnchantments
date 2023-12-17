@@ -42,6 +42,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArmorEnchantments implements Listener {
 
@@ -111,8 +112,8 @@ public class ArmorEnchantments implements Listener {
         if (!(event.getDamager() instanceof LivingEntity damager) || !(event.getEntity() instanceof Player player)) return;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (!enchantmentBookSettings.hasEnchantments(armor)) continue;
             Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(armor);
+            if (enchants.isEmpty()) continue;
 
             for (ArmorEnchantment armorEnchantment : armorEnchantmentManager.getArmorEnchantments()) {
                 CEnchantments enchantment = armorEnchantment.getEnchantment();
@@ -303,42 +304,26 @@ public class ArmorEnchantments implements Listener {
         Player killer = player.getKiller();
 
         if (!pluginSupport.allowCombat(player.getLocation())) return;
+        
+        for (ItemStack item : player.getEquipment().getArmorContents()) {
+            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
 
-        if (CEnchantments.SELFDESTRUCT.isActivated()) {
-            for (ItemStack item : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-                if (enchantmentBookSettings.hasEnchantments(item) && enchantmentBookSettings.hasEnchantment(item, CEnchantments.SELFDESTRUCT.getEnchantment())) {
+            if (EnchantUtils.isEventActive(CEnchantments.SELFDESTRUCT, player, item, enchantments)) {
+                methods.explode(player);
+                List<ItemStack> items = event.getDrops().stream().filter(drop ->
+                        ProtectionCrystalSettings.isProtected(drop) && protectionCrystalSettings.isProtectionSuccessful(player)).toList();
 
-                    EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.SELFDESTRUCT.getEnchantment(), item);
-                    plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                    if (!useEvent.isCancelled()) {
-                        methods.explode(player);
-                        List<ItemStack> items = new ArrayList<>();
-
-                        for (ItemStack drop : event.getDrops()) {
-                            if (drop != null && ProtectionCrystalSettings.isProtected(drop) && protectionCrystalSettings.isProtectionSuccessful(player)) items.add(drop);
-                        }
-
-                        event.getDrops().clear();
-                        event.getDrops().addAll(items);
-                    }
-                }
+                event.getDrops().clear();
+                event.getDrops().addAll(items);
             }
+
+            if (EnchantUtils.isEventActive(CEnchantments.RECOVER, player, item, enchantments)) {
+                killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8 * 20, 2));
+                killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
+            }
+
         }
 
-        if (CEnchantments.RECOVER.isActivated()) {
-            for (ItemStack item : Objects.requireNonNull(killer.getEquipment()).getArmorContents()) {
-                if (enchantmentBookSettings.hasEnchantments(item) && crazyManager.hasEnchantment(item, CEnchantments.RECOVER)) {
-                    EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.RECOVER.getEnchantment(), item);
-                    plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                    if (!useEvent.isCancelled()) {
-                        killer.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 8 * 20, 2));
-                        killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 1));
-                    }
-                }
-            }
-        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
