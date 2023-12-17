@@ -51,17 +51,11 @@ public class EnchantUtils {
      * @return True if the enchant is active and can be used if the event is passed.
      */
     private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        if (checkTimer(player.getUniqueId(), enchant)) return false;
+        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
         return enchants.containsKey(enchant.getEnchantment()) &&
                 (!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment())) &&
                         !(player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))));
     }
-
-    private static boolean checkTimer(UUID uuid, CEnchantments enchant) {
-        CEPlayer cePlayer = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(uuid);
-        return cePlayer.onEnchantCooldown(enchant);
-    }
-
     private static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {
         EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), item);
         CrazyEnchantments.getPlugin().getServer().getPluginManager().callEvent(useEvent);

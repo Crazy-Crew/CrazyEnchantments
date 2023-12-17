@@ -40,7 +40,7 @@ public class HelmetEnchantments implements Listener {
         if (!CEnchantments.COMMANDER.isActivated()) return;
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (armor.isEmpty()) continue;
+            if (armor== null || armor.isEmpty()) continue;
             Map<CEnchantment, Integer> enchantments = starter.getEnchantmentBookSettings().getEnchantments(armor);
 
             if (!enchantments.containsKey(CEnchantments.COMMANDER.getEnchantment())) continue;
