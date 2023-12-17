@@ -296,7 +296,6 @@ public enum CEnchantments {
 
     /**
      * Check to see if the enchantment's chance is successful.
-     * @param item The item being checked.
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(int level) {

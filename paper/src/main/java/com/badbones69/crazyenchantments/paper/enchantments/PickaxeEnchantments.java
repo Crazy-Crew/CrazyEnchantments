@@ -59,7 +59,8 @@ public class PickaxeEnchantments implements Listener {
         ItemStack item = methods.getItemInHand(player);
         Block block = event.getClickedBlock();
 
-        if (!EnchantUtils.isBlastActive(enchantmentBookSettings.getEnchantments(item), player, block)) return;
+        if (block == null || block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) return;
+        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantmentBookSettings.getEnchantments(item))) return;
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
@@ -78,15 +79,12 @@ public class PickaxeEnchantments implements Listener {
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 
         if (!(blocks.containsKey(player) && blocks.get(player).containsKey(initialBlock))) return;
-        if (!EnchantUtils.isBlastActive(enchantments, player, initialBlock)) return;
+        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return;
 
         Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
         blocks.remove(player);
 
-        MassBlockBreakEvent blastUseEvent = new MassBlockBreakEvent(player, blockList);
-        plugin.getServer().getPluginManager().callEvent(blastUseEvent);
-
-        if (blastUseEvent.isCancelled()) return;
+        if (massBlockBreakCheck(player, blockList)) return;
         event.setCancelled(true);
 
         for (Block block : blockList) {
@@ -118,8 +116,7 @@ public class PickaxeEnchantments implements Listener {
     public void onVeinMinerBreak(BlockBreakEvent event) {
         if (!isOre(event.getBlock().getType())
                 || !event.isDropItems()
-                || EventUtils.isIgnoredEvent(event)
-                || !CEnchantments.VEINMINER.isActivated())
+                || EventUtils.isIgnoredEvent(event))
             return;
 
         Player player = event.getPlayer();
@@ -128,15 +125,12 @@ public class PickaxeEnchantments implements Listener {
         Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.VeinMiner-Full-Durability", true);
 
-        if (!enchantments.containsKey(CEnchantments.VEINMINER.getEnchantment())) return;
+        if (EnchantUtils.isMassBlockBreakActive(player, CEnchantments.VEINMINER, enchantments)) return;
 
         HashSet<Block> blockList = getOreBlocks(currentBlock.getLocation(), enchantments.get(CEnchantments.VEINMINER.getEnchantment()));
         blockList.add(currentBlock);
 
-        MassBlockBreakEvent VeinMinerUseEvent = new MassBlockBreakEvent(player, blockList);
-        plugin.getServer().getPluginManager().callEvent(VeinMinerUseEvent);
-
-        if (VeinMinerUseEvent.isCancelled()) return;
+        if (massBlockBreakCheck(player, blockList)) return;
 
         event.setCancelled(true);
 
@@ -163,6 +157,12 @@ public class PickaxeEnchantments implements Listener {
 
         antiCheat(player);
 
+    }
+
+    private boolean massBlockBreakCheck(Player player, Set<Block> blockList) {
+        MassBlockBreakEvent event = new MassBlockBreakEvent(player, blockList);
+        plugin.getServer().getPluginManager().callEvent(event);
+        return event.isCancelled();
     }
 
     private void antiCheat(Player player) {

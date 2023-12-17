@@ -99,12 +99,12 @@ public class BowEnchantments implements Listener {
         // Spawn webs related to STICKY_SHOT.
         bowUtils.spawnWebs(event.getHitEntity(), arrow, entityArrow);
 
-        if (EnchantUtils.isArrowEventActive(CEnchantments.BOOM, shooter, arrow.bow(), arrow.enchantments())) {
+        if (EnchantUtils.isEventActive(CEnchantments.BOOM, shooter, arrow.bow(), arrow.enchantments())) {
             methods.explode(arrow.getShooter(), arrow.arrow());
             arrow.arrow().remove();
         }
 
-        if (EnchantUtils.isArrowEventActive(CEnchantments.LIGHTNING, shooter, arrow.bow(), arrow.enchantments())) {
+        if (EnchantUtils.isEventActive(CEnchantments.LIGHTNING, shooter, arrow.bow(), arrow.enchantments())) {
             Location location = arrow.arrow().getLocation();
 
             location.getWorld().strikeLightningEffect(location);
