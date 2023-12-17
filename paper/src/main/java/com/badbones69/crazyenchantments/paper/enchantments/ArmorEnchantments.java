@@ -304,7 +304,7 @@ public class ArmorEnchantments implements Listener {
         Player killer = player.getKiller();
 
         if (!pluginSupport.allowCombat(player.getLocation())) return;
-        
+
         for (ItemStack item : player.getEquipment().getArmorContents()) {
             Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
 

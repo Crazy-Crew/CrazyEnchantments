@@ -28,7 +28,7 @@ public class SilkSpawnerSupport implements Listener {
     private final SilkUtil api = SilkUtil.hookIntoSilkSpanwers();
 
     @EventHandler(ignoreCancelled = true)
-    public void onSpawnerBreak(SilkSpawnersSpawnerBreakEvent e) {
+    public void onSpawnerBreak(SilkSpawnersSpawnerBreakEvent e) { //TODO remove silkSpawner support. (If they were to handle drops properly, then there would never be a need)
         Player player = e.getPlayer();
         Block block = e.getBlock();
 
@@ -37,7 +37,7 @@ public class SilkSpawnerSupport implements Listener {
         assert player != null;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (enchantmentBookSettings.hasEnchantment(itemStack, CEnchantments.TELEPATHY.getEnchantment())) {
+        if (enchantmentBookSettings.getEnchantments(itemStack).containsKey(CEnchantments.TELEPATHY.getEnchantment())) {
             String mob = api.getCreatureName(e.getEntityID()).toLowerCase().replace(" ", "");
 
             if (!player.hasPermission("silkspawners.silkdrop." + mob)) return;

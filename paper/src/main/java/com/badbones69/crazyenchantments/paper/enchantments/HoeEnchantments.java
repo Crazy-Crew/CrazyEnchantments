@@ -98,7 +98,8 @@ public class HoeEnchantments implements Listener {
                         && !enchantments.containsKey(CEnchantments.TILLER.getEnchantment())
                         && plantSeedSuccess(block, player, hasGreenThumb)) methods.removeDurability(hoe, player);
             }
-        } else if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated() && crazyManager.hasEnchantment(methods.getItemInHand(player), CEnchantments.HARVESTER)) {
+        } else if (event.getAction() == Action.LEFT_CLICK_BLOCK && CEnchantments.HARVESTER.isActivated()
+                && enchantmentBookSettings.getEnchantments(methods.getItemInHand(player)).containsKey(CEnchantments.HARVESTER.getEnchantment())) {
             HashMap<Block, BlockFace> blockFace = new HashMap<>();
             blockFace.put(event.getClickedBlock(), event.getBlockFace());
             blocks.put(player.getUniqueId(), blockFace);

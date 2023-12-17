@@ -411,16 +411,6 @@ public class CrazyManager {
     public List<CEPlayer> getCEPlayers() {
         return players;
     }
-
-    /**
-     * @param item Item that you want to check if it has an enchantment.
-     * @param enchantment The enchantment you want to check if the item has.
-     * @return True if the item has the enchantment / False if it doesn't have the enchantment.
-     */
-    public boolean hasEnchantment(ItemStack item, CEnchantments enchantment) {
-        return enchantmentBookSettings.hasEnchantment(item, enchantment.getEnchantment());
-    }
-
     public CEBook getRandomEnchantmentBook(Category category) {
         try {
             List<CEnchantment> enchantments = category.getEnabledEnchantments();
@@ -496,37 +486,32 @@ public class CrazyManager {
 
     public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) {
 
+        Gson gson = new Gson();
+        Map<CEnchantment, Integer> currentEnchantments = enchantmentBookSettings.getEnchantments(meta);
+
+        meta = enchantmentBookSettings.removeEnchantments(meta, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
+
+        String data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        Enchant enchantData = data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
+
+        List<Component> lore = meta.lore();
+        if (lore == null) lore = new ArrayList<>();
+
         for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
 
-            if (enchantmentBookSettings.hasEnchantment(meta, enchantment)) meta = enchantmentBookSettings.removeEnchantment(meta, enchantment);
-
             String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
-            List<Component> lore = meta.lore();
-
-            if (lore == null) lore = new ArrayList<>();
 
             lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
-
-            meta.lore(lore);
-
-            Gson gson = new Gson();
-
-            String data;
-            Enchant enchantData;
-
-            data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
-
-            enchantData =  data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
             for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
                 enchantData.addEnchantment(x.getKey().getName(), x.getValue());
             }
-
-            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
-
         }
+
+        meta.lore(lore);
+        meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
 
         return meta;
     }

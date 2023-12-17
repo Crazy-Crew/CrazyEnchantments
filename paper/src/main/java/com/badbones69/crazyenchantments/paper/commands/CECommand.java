@@ -701,7 +701,7 @@ public class CECommand implements CommandExecutor {
                             methods.setItemInHand(player, clone);
                             return true;
                         } else {
-                            if (enchantmentBookSettings.hasEnchantment(item, ceEnchantment)) {
+                            if (enchantmentBookSettings.getEnchantments(item).containsKey(ceEnchantment)) {
                                 methods.setItemInHand(player, enchantmentBookSettings.removeEnchantment(item, ceEnchantment));
                                 HashMap<String, String> placeholders = new HashMap<>();
                                 placeholders.put("%Enchantment%", ceEnchantment.getCustomName());

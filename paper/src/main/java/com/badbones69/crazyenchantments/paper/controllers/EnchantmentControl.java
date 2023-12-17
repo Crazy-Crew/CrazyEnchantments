@@ -28,6 +28,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
+import java.util.Map;
 
 public class EnchantmentControl implements Listener {
 
@@ -70,8 +71,9 @@ public class EnchantmentControl implements Listener {
             boolean destroy = methods.randomPicker(ceBook.getDestroyRate(), 100);
             int bookLevel = ceBook.getLevel();
 
-            boolean hasEnchantment = enchantmentBookSettings.hasEnchantment(item, enchantment);
-            boolean isLowerLevel = hasEnchantment && enchantmentBookSettings.getLevel(item, enchantment) < bookLevel;
+            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
+            boolean hasEnchantment = enchantments.containsKey(enchantment);
+            boolean isLowerLevel = hasEnchantment && enchantments.get(enchantment) < bookLevel;
 
             if (hasEnchantment) {
                 if (Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
