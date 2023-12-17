@@ -396,6 +396,14 @@ public class CrazyManager {
         return null;
     }
 
+    public CEPlayer getCEPlayer(UUID uuid) {
+        for (CEPlayer cePlayer : getCEPlayers()) {
+            if (cePlayer.getPlayer().getUniqueId().equals(uuid)) return cePlayer;
+        }
+
+        return null;
+    }
+
     /**
      * This gets all the CEPlayer's that are loaded.
      * @return All CEPlayer's that are loading and in a list.

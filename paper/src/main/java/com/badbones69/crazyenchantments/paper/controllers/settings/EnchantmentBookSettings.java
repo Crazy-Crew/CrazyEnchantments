@@ -96,6 +96,7 @@ public class EnchantmentBookSettings {
      * @param item Item you want to check to see if it has enchantments.
      * @return True if it has enchantments / False if it doesn't have enchantments.
      */
+    @Deprecated
     public boolean hasEnchantments(ItemStack item) {
 
         if (item == null || !item.hasItemMeta()) return false;

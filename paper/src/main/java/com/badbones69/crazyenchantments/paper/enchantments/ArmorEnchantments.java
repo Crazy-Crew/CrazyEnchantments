@@ -92,26 +92,16 @@ public class ArmorEnchantments implements Listener {
                               oldItem.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING))
         ) return;
 
-        if (enchantmentBookSettings.hasEnchantments(oldItem)) { // Removing the potion effects.
-            for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
-                if (enchantment.isActivated() && enchantmentBookSettings.hasEnchantment(oldItem, enchantment.getEnchantment())) {
-                    Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment);
-                    methods.checkPotions(effects, player);
-                }
-            }
-        }
+        Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = crazyManager.getEnchantmentPotions();
+        Map<CEnchantment, Integer> oldEnchants = enchantmentBookSettings.getEnchantments(oldItem);
+        Map<CEnchantment, Integer> newEnchants = enchantmentBookSettings.getEnchantments(newItem);
 
-        if (enchantmentBookSettings.hasEnchantments(newItem)) { // Adding the potion effects.
-            for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
-                if (enchantment.isActivated() && enchantmentBookSettings.hasEnchantment(newItem, enchantment.getEnchantment())) {
-                    Map<PotionEffectType, Integer> effects = crazyManager.getUpdatedEffects(player, newItem, oldItem, enchantment);
+        enchantmentPotions.keySet().stream().filter(enchantment -> oldEnchants.containsKey(enchantment.getEnchantment())).forEach(enchantment ->
+                methods.checkPotions(crazyManager.getUpdatedEffects(player, new ItemStack(Material.AIR), oldItem, enchantment), player)); //Remove old enchants.
 
-                    EnchantmentUseEvent enchantmentUseEvent = new EnchantmentUseEvent(player, enchantment.getEnchantment(), newItem);
-                    plugin.getPluginManager().callEvent(enchantmentUseEvent);
-                    if (!enchantmentUseEvent.isCancelled()) methods.checkPotions(effects, player);
-                }
-            }
-        }
+        enchantmentPotions.keySet().stream().filter(enchantment -> EnchantUtils.isEventActive(enchantment, player, newItem, newEnchants)).forEach(enchantment ->
+                methods.checkPotions(crazyManager.getUpdatedEffects(player, newItem, oldItem, enchantment), player)); // Add new enchants.
+
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {

@@ -68,7 +68,7 @@ public class BlackSmith implements Listener {
                 if (event.getRawSlot() > 26) { // Click in players inventory.
                     if (item.getAmount() != 1) return;
 
-                    if (enchantmentBookSettings.hasEnchantments(item) || enchantmentBookSettings.isEnchantmentBook(item)) {
+                    if (!enchantmentBookSettings.getEnchantments(item).isEmpty() || enchantmentBookSettings.isEnchantmentBook(item)) {
                         if (inventory.getItem(mainSlot) == null) { // Main item slot is empty.
                             event.setCurrentItem(new ItemStack(Material.AIR));
                             inventory.setItem(mainSlot, item); // Moves clicked item to main slot.

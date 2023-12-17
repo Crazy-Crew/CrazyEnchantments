@@ -3,20 +3,17 @@ package com.badbones69.crazyenchantments.paper.utilities.misc;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class EnchantUtils {
-
-    private static Set<UUID> inCooldown = new HashSet<>();
 
     /**
      * Get the highest category rarity the enchantment is in.
@@ -54,19 +51,15 @@ public class EnchantUtils {
      * @return True if the enchant is active and can be used if the event is passed.
      */
     private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        if (checkTimer(player.getUniqueId())) return false;
+        if (checkTimer(player.getUniqueId(), enchant)) return false;
         return enchants.containsKey(enchant.getEnchantment()) &&
                 (!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment())) &&
                         !(player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))));
     }
 
-    private static boolean checkTimer(UUID uuid) {
-        if (inCooldown.contains(uuid)) return true;
-
-        inCooldown.add(uuid);
-        // Limit players to using 2 enchants per second.
-        CrazyEnchantments.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(CrazyEnchantments.getPlugin(), () -> inCooldown.remove(uuid), 10);
-        return false;
+    private static boolean checkTimer(UUID uuid, CEnchantments enchant) {
+        CEPlayer cePlayer = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(uuid);
+        return cePlayer.onEnchantCooldown(enchant);
     }
 
     private static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {

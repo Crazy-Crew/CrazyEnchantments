@@ -2,15 +2,15 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
+import it.unimi.dsi.fastutil.Hash;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class CEPlayer {
 
@@ -26,6 +26,7 @@ public class CEPlayer {
     private boolean hasRage;
     private int rageLevel;
     private BukkitTask rageTask;
+    private Set<CEnchantments> onCooldown = new HashSet<>();
     
     /**
      * Used to make a new CEPlayer.
@@ -326,5 +327,14 @@ public class CEPlayer {
      */
     public void setRageTask(BukkitTask rageTask) {
         this.rageTask = rageTask;
+    }
+
+    public boolean onEnchantCooldown(CEnchantments enchant) {
+        if (onCooldown.contains(enchant)) return true;
+
+        onCooldown.add(enchant);
+        // Limit players to using each enchant only once per second.
+        CrazyEnchantments.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(CrazyEnchantments.getPlugin(), () -> onCooldown.remove(enchant), 20);
+        return false;
     }
 }
