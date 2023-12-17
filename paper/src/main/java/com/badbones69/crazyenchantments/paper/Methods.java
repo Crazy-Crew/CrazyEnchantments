@@ -409,7 +409,7 @@ public class Methods {
             PotionEffectType key = type.getKey();
 
             player.removePotionEffect(key);
-            if (value < 0) continue;
+            if (value == 0) continue; //TODO check usage with new addition of infinity.
             PotionEffect potionEffect = new PotionEffect(key, getInfinity(), value);
             player.addPotionEffect(potionEffect);
         }

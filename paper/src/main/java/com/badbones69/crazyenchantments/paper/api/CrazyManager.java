@@ -551,14 +551,15 @@ public class CrazyManager {
      * @param player The player you are updating the effects of.
      */
     public void updatePlayerEffects(Player player) {
-        if (player != null) {
-            for (CEnchantments ench : getEnchantmentPotions().keySet()) {
-                for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                    if (ench.isActivated() && enchantmentBookSettings.hasEnchantment(armor, ench.getEnchantment())) {
-                        Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
-                        methods.checkPotions(effects, player);
-                    }
-                }
+        if (player == null) return;
+        Set<CEnchantments> allEnchantPotionEffects = getEnchantmentPotions().keySet();
+
+        for (ItemStack armor : player.getEquipment().getArmorContents()) {
+            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(armor);
+            for (CEnchantments ench : allEnchantPotionEffects) {
+                if (!enchantments.containsKey(ench.getEnchantment())) continue;
+                Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
+                methods.checkPotions(effects, player);
             }
         }
     }
@@ -583,32 +584,28 @@ public class CrazyManager {
         items.add(includedItem);
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> armorEffects = getEnchantmentPotions();
 
-        for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
-            if (enchantments.getKey().isActivated()) {
-                for (ItemStack armor : items) {
-                    if (armor != null && !armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantments.getKey().getEnchantment())) {
-                        int level = enchantmentBookSettings.getLevel(armor, enchantments.getKey().getEnchantment());
+        for (ItemStack armor : items) {
+            if (armor == null || armor.isSimilar(excludedItem)) continue;
+            Map<CEnchantment, Integer> ench = enchantmentBookSettings.getEnchantments(armor);
+            for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
+                if (!ench.containsKey(enchantments.getKey().getEnchantment())) continue;
+                int level = ench.get(enchantments.getKey().getEnchantment());
+                if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
 
-                        if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
+                for (PotionEffectType type : enchantments.getValue().keySet()) {
+                    if (effects.containsKey(type)) {
+                        int updated = effects.get(type);
 
-                        for (PotionEffectType type : enchantments.getValue().keySet()) {
-                            if (enchantments.getValue().containsKey(type)) {
-                                if (effects.containsKey(type)) {
-                                    int updated = effects.get(type);
-
-                                    if (updated < (level + enchantments.getValue().get(type))) effects.put(type, level + enchantments.getValue().get(type));
-                                } else {
-                                    effects.put(type, level + enchantments.getValue().get(type));
-                                }
-                            }
-                        }
+                        if (updated < (level + enchantments.getValue().get(type))) effects.put(type, level + enchantments.getValue().get(type));
+                    } else {
+                        effects.put(type, level + enchantments.getValue().get(type));
                     }
                 }
             }
         }
 
         for (PotionEffectType type : armorEffects.get(enchantment).keySet()) {
-            if (!effects.containsKey(type)) effects.put(type, -1);
+            if (!effects.containsKey(type)) effects.put(type, 0); // -1 is now Infinity.
         }
 
         return effects;

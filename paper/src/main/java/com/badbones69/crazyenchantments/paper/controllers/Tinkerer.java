@@ -31,10 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Tinkerer implements Listener {
 
@@ -274,23 +271,24 @@ public class Tinkerer implements Listener {
     private int getTotalXP(ItemStack item) {
         int total = 0;
 
-        if (enchantmentBookSettings.hasEnchantments(item)) { // CrazyEnchantments
-            for (CEnchantment enchantment : enchantmentBookSettings.getEnchantments(item).keySet()) {
-                String[] values = Files.TINKER.getFile().getString("Tinker.Crazy-Enchantments." + enchantment.getName() + ".Items", "0").replaceAll(" ", "").split(",");
+        Map<CEnchantment, Integer> ceEnchants = enchantmentBookSettings.getEnchantments(item);
+        if (!ceEnchants.isEmpty()) { // CrazyEnchantments
+            for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {
+                String[] values = Files.TINKER.getFile().getString("Tinker.Crazy-Enchantments." + enchantment.getKey().getName() + ".Items", "0").replaceAll(" ", "").split(",");
                 int baseAmount = Integer.parseInt(values[0]);
                 int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
-                int enchantmentLevel = enchantmentBookSettings.getEnchantments(item).get(enchantment);
+                int enchantmentLevel = enchantment.getValue();
 
                 total += baseAmount + enchantmentLevel * multiplier;
             }
         }
 
         if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) { // Vanilla Enchantments
-            for (Enchantment enchantment : item.getEnchantments().keySet()) {
+            for (Map.Entry<Enchantment, Integer> enchantment : item.getEnchantments().entrySet()) {
                 String[] values = Files.TINKER.getFile().getString("Tinker.Vanilla-Enchantments." + enchantment.getKey(), "0").replaceAll(" ", "").split(",");
                 int baseAmount = Integer.parseInt(values[0]);
                 int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
-                int enchantmentLevel = item.getEnchantments().get(enchantment);
+                int enchantmentLevel = enchantment.getValue();
 
                 total += baseAmount + enchantmentLevel * multiplier;
             }
