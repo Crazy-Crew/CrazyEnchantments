@@ -299,9 +299,6 @@ public enum CEnchantments {
      * @param item The item being checked.
      * @return True if the chance was successful and false if not.
      */
-    public boolean chanceSuccessful(ItemStack item) {
-        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
-    }
     public boolean chanceSuccessful(int level) {
         return crazyManager.getEnchantmentFromName(name).chanceSuccessful(level);
     }
