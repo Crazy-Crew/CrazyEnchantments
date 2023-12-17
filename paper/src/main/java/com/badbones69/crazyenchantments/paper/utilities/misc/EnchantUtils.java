@@ -75,4 +75,8 @@ public class EnchantUtils {
         return !useEvent.isCancelled();
     }
 
+    public static boolean isAuraActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+        return isActive(player, enchant, enchants);
+    }
+
 }

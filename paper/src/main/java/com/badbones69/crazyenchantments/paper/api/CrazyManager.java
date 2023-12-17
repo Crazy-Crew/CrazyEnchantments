@@ -440,12 +440,12 @@ public class CrazyManager {
      * @return The enchantment as a CEnchantment but if not found will be null.
      */
     public CEnchantment getEnchantmentFromName(String enchantmentString) {
-        enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "");
-
+        //Regex is potentially needed for gkitItems.
+        // TODO Check that it didn't break with less regex;
         for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
-            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString) ||
-                enchantment.getName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)
-            ) return enchantment;
+            if (enchantment.getName().equalsIgnoreCase(enchantmentString)) return enchantment;
+            enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "");
+            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)) return enchantment;
         }
 
         return null;

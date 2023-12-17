@@ -146,7 +146,7 @@ public class ArmorEnchantments implements Listener {
             }
 
             if (player.isSneaking() && EnchantUtils.isEventActive(CEnchantments.CROUCH, player, armor, enchants)) {
-                double percentageReduced = (CEnchantments.CROUCH.getChance() + (CEnchantments.CROUCH.getChanceIncrease() * CEnchantments.CROUCH.getLevel(armor))) / 100.0;
+                double percentageReduced = (CEnchantments.CROUCH.getChance() + (CEnchantments.CROUCH.getChanceIncrease() * enchants.get(CEnchantments.CROUCH.getEnchantment()))) / 100.0;
                 double newDamage = event.getFinalDamage() * (1 - percentageReduced);
 
                 if (newDamage < 0) newDamage = 0;
@@ -241,64 +241,61 @@ public class ArmorEnchantments implements Listener {
         CEnchantments enchant = event.getEnchantment();
         int level = event.getLevel();
 
-        if (pluginSupport.allowCombat(other.getLocation()) && !pluginSupport.isFriendly(player, other) && !methods.hasPermission(other, "bypass.aura", false)) {
-            Calendar cal = Calendar.getInstance();
+        if (!pluginSupport.allowCombat(other.getLocation()) || pluginSupport.isFriendly(player, other) || methods.hasPermission(other, "bypass.aura", false)) return;
 
-            HashMap<CEnchantments, Calendar> finalEffect = enchantmentSettings.containsTimerPlayer(other) ? enchantmentSettings.getTimerPlayer(other) : new HashMap<>();
+        Calendar cal = Calendar.getInstance();
 
-            switch (enchant) {
-                case BLIZZARD -> {
-                    if (CEnchantments.BLIZZARD.isActivated()) other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, level - 1));
-                }
+        HashMap<CEnchantments, Calendar> finalEffect = enchantmentSettings.containsTimerPlayer(other) ? enchantmentSettings.getTimerPlayer(other) : new HashMap<>();
 
-                case INTIMIDATE -> {
-                    if (CEnchantments.INTIMIDATE.isActivated()) other.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3 * 20, level - 1));
-                }
+        Map<CEnchantment, Integer> enchantments = Map.of(enchant.getEnchantment(), level);
 
-                case ACIDRAIN -> {
-                    if (CEnchantments.ACIDRAIN.isActivated() && (!enchantmentSettings.containsTimerPlayer(other) ||
-                            (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
-                            (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
-                                    cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))
-                                    && CEnchantments.ACIDRAIN.chanceSuccessful()))) {
-                        other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
-                        int time = 35 - (level * 5);
-                        cal.add(Calendar.SECOND, time > 0 ? time : 5);
-                        finalEffect.put(enchant, cal);
-                    }
-                }
-
-                case SANDSTORM -> {
-                    if (CEnchantments.SANDSTORM.isActivated() && (!enchantmentSettings.containsTimerPlayer(other) ||
-                            (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
-                            (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
-                                    cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))
-                                    && CEnchantments.SANDSTORM.chanceSuccessful()))) {
-                        other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
-                        int time = 35 - (level * 5);
-                        cal.add(Calendar.SECOND, time > 0 ? time : 5);
-                        finalEffect.put(enchant, cal);
-                    }
-                }
-
-                case RADIANT -> {
-                    if (CEnchantments.RADIANT.isActivated() && (!enchantmentSettings.containsTimerPlayer(other) ||
-                            (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
-                            (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
-                                    cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))
-                                    && CEnchantments.RADIANT.chanceSuccessful()))) {
-                        other.setFireTicks(5 * 20);
-                        int time = 20 - (level * 5);
-                        cal.add(Calendar.SECOND, Math.max(time, 0));
-                        finalEffect.put(enchant, cal);
-                    }
-                }
-
-                default -> {}
+        switch (enchant) {
+            case BLIZZARD -> {
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments)) other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, level - 1));'
             }
 
-            enchantmentSettings.addTimerPlayer(player, finalEffect); // TODO Recheck usage and fix it.
+            case INTIMIDATE -> {
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments)) other.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3 * 20, level - 1));
+            }
+
+            case ACIDRAIN -> {
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments) && timerStuff(cal, other, enchant)) {
+                    other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
+                    int time = 35 - (level * 5);
+                    cal.add(Calendar.SECOND, time > 0 ? time : 5);
+                    finalEffect.put(enchant, cal);
+                }
+            }
+
+            case SANDSTORM -> {
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments) && timerStuff(cal, other, enchant)) {
+                    other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
+                    int time = 35 - (level * 5);
+                    cal.add(Calendar.SECOND, time > 0 ? time : 5);
+                    finalEffect.put(enchant, cal);
+                }
+            }
+
+            case RADIANT -> {
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments) && timerStuff(cal, other, enchant)) {
+                    other.setFireTicks(5 * 20);
+                    int time = 20 - (level * 5);
+                    cal.add(Calendar.SECOND, Math.max(time, 0));
+                    finalEffect.put(enchant, cal);
+                }
+            }
+
+            default -> {}
         }
+
+        enchantmentSettings.addTimerPlayer(player, finalEffect); // TODO Recheck usage and fix it.
+    }
+
+    private boolean timerStuff(Calendar cal, Player other, CEnchantments enchant) { // No clue what this did, so just moved it as it was a large mess. -TDL
+        return (!enchantmentSettings.containsTimerPlayer(other) ||
+                (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
+                (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
+                        cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
