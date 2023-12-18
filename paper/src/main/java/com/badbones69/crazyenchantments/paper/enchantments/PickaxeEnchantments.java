@@ -114,7 +114,7 @@ public class PickaxeEnchantments implements Listener {
 
     @EventHandler(priority =  EventPriority.LOW, ignoreCancelled = true)
     public void onVeinMinerBreak(BlockBreakEvent event) {
-        if (!isOre(event.getBlock().getType())
+        if (!isOreBlock(event.getBlock().getType())
                 || !event.isDropItems()
                 || EventUtils.isIgnoredEvent(event))
             return;
@@ -236,7 +236,7 @@ public class PickaxeEnchantments implements Listener {
 
             for (Block block1 : newestBlocks) {
                 for (Block block : getSurroundingBlocks(block1.getLocation())) {
-                    if (!blocks.contains(block) && isOre(block.getType())) tempBlocks.add(block);
+                    if (!blocks.contains(block) && isOreBlock(block.getType())) tempBlocks.add(block);
                 }
             }
             blocks.addAll(tempBlocks);

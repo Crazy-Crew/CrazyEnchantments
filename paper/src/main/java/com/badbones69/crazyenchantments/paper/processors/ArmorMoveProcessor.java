@@ -63,40 +63,46 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(armor);
             if (enchantments.isEmpty()) continue;
 
-            if (EnchantUtils.isEventActive(CEnchantments.NURSERY, player, armor, enchantments)) {
-                int heal = 1;
-
-                // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
-                if (maxHealth > player.getHealth() && player.getHealth() > 0) {
-                    syncProcessor.add(() -> {
+            int heal = 1;
+            // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+            double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+            if (maxHealth > player.getHealth() && player.getHealth() > 0) {
+                syncProcessor.add(() -> {
+                    if (EnchantUtils.isEventActive(CEnchantments.NURSERY, player, armor, enchantments)) {
                         if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
                         if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
-                    });
-                }
-            }
-
-            if (player.getFoodLevel() < 20 && EnchantUtils.isEventActive(CEnchantments.IMPLANTS, player, armor, enchantments)) {
-                syncProcessor.add(() -> {
-                    int foodIncrease = 1;
-
-                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
-
-                    if (player.getFoodLevel() + foodIncrease <= 20) player.setFoodLevel(player.getFoodLevel() + foodIncrease);
-
-                    if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
+                    }
                 });
             }
 
-            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && EnchantUtils.isEventActive(CEnchantments.ANGEL, player, armor, enchantments)) {
+            if (player.getFoodLevel() < 20) {
+                syncProcessor.add(() -> {
+
+                    if (EnchantUtils.isEventActive(CEnchantments.IMPLANTS, player, armor, enchantments)) {
+
+                        int foodIncrease = 1;
+
+                        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
+
+                        if (player.getFoodLevel() + foodIncrease <= 20)
+                            player.setFoodLevel(player.getFoodLevel() + foodIncrease);
+
+                        if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
+                    }
+                });
+            }
+
+            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                 final int radius = 4 + crazyManager.getLevel(armor, CEnchantments.ANGEL);
 
                 syncProcessor.add(() -> {
-                    for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-                        if (!(entity instanceof Player other)) continue;
-                        if (!pluginSupport.isFriendly(player, other)) continue;
+                    if (EnchantUtils.isEventActive(CEnchantments.ANGEL, player, armor, enchantments)) {
+                        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+                            if (!(entity instanceof Player other)) continue;
+                            if (!pluginSupport.isFriendly(player, other)) continue;
 
-                        other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
+                            other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
+                        }
                     }
                 });
             }
