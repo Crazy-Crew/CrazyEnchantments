@@ -27,6 +27,8 @@ import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
@@ -61,6 +63,11 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            this.getServer().broadcast(Component.text("Please do note that this is a test build of CrazyEnchantments. Don't use this on your main server!", TextColor.color(0xff0000)));
+        }, 20 * 60, 20 * 60 * 20);
+
         plugin = this;
 
         starter = new Starter();
