@@ -53,7 +53,7 @@ public class BowUtils {
     }
 
     public boolean allowsCombat(Entity entity) {
-        return !starter.getPluginSupport().allowCombat(entity.getLocation());
+        return starter.getPluginSupport().allowCombat(entity.getLocation());
     }
 
     public EnchantedArrow getEnchantedArrow(Arrow arrow) {

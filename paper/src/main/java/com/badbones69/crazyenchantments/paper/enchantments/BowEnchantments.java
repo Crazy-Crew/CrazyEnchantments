@@ -68,7 +68,7 @@ public class BowEnchantments implements Listener {
 
         ItemStack bow = event.getBow();
 
-        if (bowUtils.allowsCombat(entity)) return;
+        if (!bowUtils.allowsCombat(entity)) return;
         if (!(arrow.getShooter() instanceof Player)) return;
 
         Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(bow);
@@ -92,7 +92,7 @@ public class BowEnchantments implements Listener {
     public void onLand(ProjectileHitEvent event) {
         if (!(event.getEntity().getShooter() instanceof Player shooter)) return;
         if (!(event.getEntity() instanceof Arrow entityArrow)) return;
-        if (bowUtils.allowsCombat(event.getEntity())) return;
+        if (!bowUtils.allowsCombat(event.getEntity())) return;
         EnchantedArrow arrow = bowUtils.getEnchantedArrow(entityArrow);
         if (arrow == null) return;
 
