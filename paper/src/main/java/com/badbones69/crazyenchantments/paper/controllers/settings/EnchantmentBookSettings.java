@@ -102,7 +102,7 @@ public class EnchantmentBookSettings {
         if (!item.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) return false;
 
         for (CEnchantment enchantment : registeredEnchantments) {
-            if (hasEnchantment(item, enchantment)) return true;
+            if (hasEnchantment(item, enchantment)) return true; // TODO Optimize.
         }
 
         return false;

@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 public class EnchantmentSettings {
-
     // Cool-downs
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
 
@@ -82,9 +81,7 @@ public class EnchantmentSettings {
     }
 
     public HashMap<CEnchantments, Calendar> getTimerPlayer(Player player) {
-        if (containsTimerPlayer(player)) return enchantTimer.get(player.getUniqueId());
-
-        return null;
+        return enchantTimer.get(player.getUniqueId());
     }
 
     public HashMap<UUID, HashMap<CEnchantments, Calendar>> getEnchantTimer() {
@@ -143,5 +140,7 @@ public class EnchantmentSettings {
 
         return material != null ? planterSeeds.get(material) : null;
     }
+
+    // Telepathy
 
 }

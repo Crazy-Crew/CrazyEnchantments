@@ -7,11 +7,11 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.events.AngelUseEvent;
-import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.events.HellForgedUseEvent;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,6 +19,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Map;
 import java.util.Objects;
 
 public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
@@ -58,47 +60,35 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
         Player player = process.getPlayer();
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-            if (!enchantmentBookSettings.hasEnchantments(armor)) continue;
+            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(armor);
+            if (enchantments.isEmpty()) continue;
 
-            if (CEnchantments.NURSERY.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.NURSERY)) {
+            if (EnchantUtils.isEventActive(CEnchantments.NURSERY, player, armor, enchantments)) {
                 int heal = 1;
 
-                if (CEnchantments.NURSERY.chanceSuccessful(armor)) {
-                    // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                    double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
-                    if (maxHealth > player.getHealth() && player.getHealth() > 0) {
-                        syncProcessor.add(() -> {
-                            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.NURSERY.getEnchantment(), armor);
-                            plugin.getServer().getPluginManager().callEvent(event);
-
-                            if (!event.isCancelled() && player.getHealth() > 0) {
-                                if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
-
-                                if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
-                            }
-                        });
-                    }
+                // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+                double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+                if (maxHealth > player.getHealth() && player.getHealth() > 0) {
+                    syncProcessor.add(() -> {
+                        if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
+                        if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
+                    });
                 }
             }
 
-            if (CEnchantments.IMPLANTS.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.IMPLANTS) && CEnchantments.IMPLANTS.chanceSuccessful(armor) && player.getFoodLevel() < 20) {
+            if (player.getFoodLevel() < 20 && EnchantUtils.isEventActive(CEnchantments.IMPLANTS, player, armor, enchantments)) {
                 syncProcessor.add(() -> {
-                    EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.IMPLANTS.getEnchantment(), armor);
-                    plugin.getServer().getPluginManager().callEvent(event);
+                    int foodIncrease = 1;
 
-                    if (!event.isCancelled()) {
-                        int foodIncrease = 1;
+                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
 
-                        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
+                    if (player.getFoodLevel() + foodIncrease <= 20) player.setFoodLevel(player.getFoodLevel() + foodIncrease);
 
-                        if (player.getFoodLevel() + foodIncrease <= 20) player.setFoodLevel(player.getFoodLevel() + foodIncrease);
-
-                        if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
-                    }
+                    if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
                 });
             }
 
-            if ((CEnchantments.ANGEL.isActivated() && crazyManager.hasEnchantment(armor, CEnchantments.ANGEL) && SupportedPlugins.FACTIONS_UUID.isPluginLoaded())) {
+            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded() && EnchantUtils.isEventActive(CEnchantments.ANGEL, player, armor, enchantments)) {
                 final int radius = 4 + crazyManager.getLevel(armor, CEnchantments.ANGEL);
 
                 syncProcessor.add(() -> {
@@ -106,38 +96,27 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
                         if (!(entity instanceof Player other)) continue;
                         if (!pluginSupport.isFriendly(player, other)) continue;
 
-                        AngelUseEvent event = new AngelUseEvent(player, armor);
-                        plugin.getServer().getPluginManager().callEvent(event);
-
-                        if (!event.isCancelled()) other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
+                        other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
                     }
                 });
             }
-            useHellForge(player, armor);
+            useHellForge(player, armor, enchantments);
         }
 
         for (final ItemStack item : player.getInventory().getContents()) {
-            useHellForge(player, item);
+            useHellForge(player, item, enchantmentBookSettings.getEnchantments(item));
         }
     }
 
-    private void useHellForge(Player player, ItemStack item) {
-        if (crazyManager.hasEnchantment(item, CEnchantments.HELLFORGED)) {
-            int armorDurability = methods.getDurability(item);
+    private void useHellForge(Player player, ItemStack item, Map<CEnchantment, Integer> enchantments) {
+        if (!EnchantUtils.isEventActive(CEnchantments.HELLFORGED, player, item, enchantments)) return;
+        int armorDurability = methods.getDurability(item);
+        if (armorDurability <= 0) return;
 
-            if (armorDurability > 0 && CEnchantments.HELLFORGED.chanceSuccessful(item)) {
-                plugin.getServer().getScheduler().runTask(plugin, () -> {
-                    int finalArmorDurability = armorDurability;
-
-                    HellForgedUseEvent event = new HellForgedUseEvent(player, item);
-                    plugin.getServer().getPluginManager().callEvent(event);
-
-                    if (!event.isCancelled()) {
-                        finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
-                        methods.setDurability(item, finalArmorDurability);
-                    }
-                });
-            }
-        }
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            int finalArmorDurability = armorDurability;
+            finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
+            methods.setDurability(item, finalArmorDurability);
+        });
     }
 }

@@ -8,12 +8,12 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
-import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -59,7 +59,7 @@ public class PickaxeEnchantments implements Listener {
         ItemStack item = methods.getItemInHand(player);
         Block block = event.getClickedBlock();
 
-        if (!isBlastActive(enchantmentBookSettings.getEnchantments(item), player, block)) return;
+        if (!EnchantUtils.isBlastActive(enchantmentBookSettings.getEnchantments(item), player, block)) return;
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
@@ -78,7 +78,7 @@ public class PickaxeEnchantments implements Listener {
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 
         if (!(blocks.containsKey(player) && blocks.get(player).containsKey(initialBlock))) return;
-        if (!isBlastActive(enchantments, player, initialBlock)) return;
+        if (!EnchantUtils.isBlastActive(enchantments, player, initialBlock)) return;
 
         Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
         blocks.remove(player);
@@ -183,7 +183,7 @@ public class PickaxeEnchantments implements Listener {
         Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(item);
         List<Item> oldDrops = event.getItems();
 
-        if (isEventActive(CEnchantments.AUTOSMELT, player, item, enchants)) {
+        if (EnchantUtils.isEventActive(CEnchantments.AUTOSMELT, player, item, enchants)) {
 
             int level = enchants.get(CEnchantments.AUTOSMELT.getEnchantment());
 
@@ -200,7 +200,7 @@ public class PickaxeEnchantments implements Listener {
             return;
         }
 
-        if (isEventActive(CEnchantments.FURNACE, player, item, enchants)) {
+        if (EnchantUtils.isEventActive(CEnchantments.FURNACE, player, item, enchants)) {
 
             for (int j = 0; j < oldDrops.size(); j++) {
                 Item entityItem  = oldDrops.get(j);
@@ -222,25 +222,8 @@ public class PickaxeEnchantments implements Listener {
         ItemStack item = methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(item);
 
-        if (!isEventActive(CEnchantments.EXPERIENCE, player, item, enchants)) return;
+        if (!EnchantUtils.isEventActive(CEnchantments.EXPERIENCE, player, item, enchants)) return;
         event.setExpToDrop(event.getExpToDrop() + (enchants.get(CEnchantments.EXPERIENCE.getEnchantment()) + 2));
-    }
-
-    // TODO Check logic. Use a single method for all classes.
-    private boolean isEventActive(CEnchantments enchant, Player damager, ItemStack armor, Map<CEnchantment, Integer> enchants) {
-        if (!(enchants.containsKey(enchant.getEnchantment()) &&
-                (!enchant.hasChanceSystem() || enchant.chanceSuccessful(armor)))) return false;
-
-        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, enchant.getEnchantment(), armor);
-        plugin.getServer().getPluginManager().callEvent(useEvent);
-
-        return !useEvent.isCancelled();
-    }
-    private boolean isBlastActive(Map<CEnchantment, Integer> enchantments, Player player, Block block) {
-        return CEnchantments.BLAST.isActivated() &&
-                enchantments.containsKey(CEnchantments.BLAST.getEnchantment()) &&
-                player.hasPermission("crazyenchantments.blast.use") &&
-                (block == null || crazyManager.getBlastBlockList().contains(block.getType()));
     }
     private HashSet<Block> getOreBlocks(Location loc, int amount) {
         HashSet<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));

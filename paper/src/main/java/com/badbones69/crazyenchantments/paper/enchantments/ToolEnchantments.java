@@ -8,9 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
-import com.google.common.collect.Lists;
-import org.bukkit.block.Block;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class ToolEnchantments implements Listener {
@@ -35,8 +34,6 @@ public class ToolEnchantments implements Listener {
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
     // Settings.
-    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
-
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     @EventHandler()
@@ -49,11 +46,8 @@ public class ToolEnchantments implements Listener {
     public void onTelepathy(BlockDropItemEvent event) {
         Player player = event.getPlayer();
         ItemStack tool = methods.getItemInHand(player);
-        if (!enchantmentBookSettings.hasEnchantment(tool, CEnchantments.TELEPATHY.getEnchantment())) return;
 
-        EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.TELEPATHY, tool);
-        plugin.getServer().getPluginManager().callEvent(useEvent);
-        if (useEvent.isCancelled()) return;
+        if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, enchantmentBookSettings.getEnchantments(tool))) return;
 
         event.setCancelled(true);
         methods.addItemToInventory(player, event.getItems());
@@ -61,41 +55,20 @@ public class ToolEnchantments implements Listener {
 
     private void updateEffects(Player player) {
         ItemStack item = methods.getItemInHand(player);
-        if (!enchantmentBookSettings.hasEnchantments(item)) return;
+        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
 
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
         int potionTime = 5 * 20;
 
-        if (enchantments.contains(CEnchantments.HASTE.getEnchantment())) {
-            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.HASTE, item);
-            plugin.getServer().getPluginManager().callEvent(event);
-
-            if (!event.isCancelled()) {
-                int power = crazyManager.getLevel(item, CEnchantments.HASTE);
-                player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
-            }
+        if (EnchantUtils.isEventActive(CEnchantments.HASTE, player, item, enchantments)) {
+            int power = enchantments.get(CEnchantments.HASTE.getEnchantment());
+            player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
         }
 
-        if (enchantments.contains(CEnchantments.OXYGENATE.getEnchantment())) {
-            EnchantmentUseEvent event = new EnchantmentUseEvent(player, CEnchantments.OXYGENATE, item);
-            plugin.getServer().getPluginManager().callEvent(event);
-
-            if (!event.isCancelled()) {
-                player.removePotionEffect(PotionEffectType.WATER_BREATHING);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
-            }
+        if (EnchantUtils.isEventActive(CEnchantments.OXYGENATE, player, item, enchantments)) {
+            player.removePotionEffect(PotionEffectType.WATER_BREATHING);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
         }
 
-    }
-
-    private boolean ignoreBlockTypes(Block block) {
-        if (block.isEmpty()) return true;
-
-        for (String name : Lists.newArrayList("shulker_box", "chest", "head", "skull")) {
-            if (block.getType().name().toLowerCase().contains(name)) return true;
-        }
-
-        return false;
     }
 }
