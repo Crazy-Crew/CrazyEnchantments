@@ -23,7 +23,8 @@ public enum ShopOption {
     
     BLACK_SCROLL("BlackScroll", "BlackScroll", "GUIName", "Lore", true),
     WHITE_SCROLL("WhiteScroll", "WhiteScroll", "GUIName", "Lore", true),
-    TRANSMOG_SCROLL("TransmogScroll", "TransmogScroll", "GUIName", "Lore", true);
+    TRANSMOG_SCROLL("TransmogScroll", "TransmogScroll", "GUIName", "Lore", true),
+    SLOT_CRYSTAL("Slot_Crystal", "Slot_Crystal", "GUIName", "GUILore", true);
     
     private static final HashMap<ShopOption, Option> shopOptions = new HashMap<>();
     private final String optionPath;

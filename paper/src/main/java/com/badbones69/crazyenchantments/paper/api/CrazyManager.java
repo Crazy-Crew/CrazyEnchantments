@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
+import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.utilities.WingsUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
@@ -34,6 +35,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
@@ -52,6 +54,8 @@ public class CrazyManager {
     // Listeners.
     private final ScramblerListener scramblerListener = plugin.getStarter().getScramblerListener();
     private final ScrollListener scrollListener = plugin.getStarter().getScrollListener();
+
+    private final SlotCrystalListener slotCrystalListener = plugin.getStarter().getSlotCrystalListener();
 
     private CropManagerVersion cropManagerVersion;
 
@@ -219,6 +223,8 @@ public class CrazyManager {
         protectionCrystalSettings.loadProtectionCrystal();
         // Loads the scrambler.
         scramblerListener.loadScrambler();
+        // Loads Slot Crystal.
+        slotCrystalListener.load();
         // Loads the Scroll Control settings.
         scrollListener.loadScrollControl();
 
@@ -517,6 +523,29 @@ public class CrazyManager {
         return meta;
     }
 
+    public ItemStack changeEnchantmentLimiter(ItemStack item, int amount) {
+        item.setItemMeta(changeEnchantmentLimiter(item.getItemMeta(), amount));
+        return item;
+    }
+
+    public ItemMeta changeEnchantmentLimiter(ItemMeta meta, int amount) {
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        int newAmount = container.getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
+        newAmount += amount;
+
+        if (newAmount == 0) {
+            container.remove(DataKeys.LIMIT_REDUCER.getKey());
+        } else {
+            container.set(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, newAmount);
+        }
+
+        return meta;
+    }
+
+    public int getEnchantmentLimiter(ItemStack item) {
+        return item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
+    }
+
     /**
      * Force an update of a players armor potion effects.
      * @param player The player you are updating the effects of.
@@ -663,10 +692,27 @@ public class CrazyManager {
         return limit;
     }
 
-    public boolean canAddEnchantment(Player player, ItemStack item) {
-        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) return enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) < getPlayerMaxEnchantments(player);
+    public int getPlayerBaseEnchantments(Player player) {
+        int limit = 0;
 
-        return true;
+        for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
+            String perm = Permission.getPermission().toLowerCase();
+
+            if (perm.startsWith("crazyenchantments.base-limit.")) {
+                perm = perm.replace("crazyenchantments.base-limit.", "");
+
+                if (NumberUtils.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
+            }
+        }
+
+        return limit;
+    }
+
+    public boolean canAddEnchantment(Player player, ItemStack item) {
+        if (!maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
+
+        return  enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) <
+                Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
     /**
