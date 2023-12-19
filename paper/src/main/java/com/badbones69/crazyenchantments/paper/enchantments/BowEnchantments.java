@@ -69,7 +69,6 @@ public class BowEnchantments implements Listener {
         ItemStack bow = event.getBow();
 
         if (!bowUtils.allowsCombat(entity)) return;
-        if (!(arrow.getShooter() instanceof Player)) return;
 
         Map<CEnchantment, Integer> enchants = enchantmentBookSettings.getEnchantments(bow);
         if (enchants.isEmpty()) return;
