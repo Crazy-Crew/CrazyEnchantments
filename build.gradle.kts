@@ -4,18 +4,21 @@ plugins {
 
 tasks {
     assemble {
-        subprojects.forEach { project -> dependsOn(":${project.name}:build") }
+        val jarsDir = File("$rootDir/jars")
+        if (jarsDir.exists()) jarsDir.delete()
 
-        doLast {
-            val directory = File(rootDir, "jars");
+        jarsDir.mkdirs()
 
-            if (directory.exists()) directory.delete()
+        subprojects.forEach { project ->
+            dependsOn(":${project.name}:build")
 
-            directory.mkdirs()
+            doLast {
+                if (project.name == "common" || project.name == "api") return@doLast
 
-            copy {
-                from(project("paper").layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar").get())
-                into(directory)
+                copy {
+                    from(project.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar"))
+                    into(jarsDir)
+                }
             }
         }
     }
