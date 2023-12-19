@@ -8,10 +8,7 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -20,14 +17,19 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jline.utils.Log;
-
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
+
+import static com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils.getColor;
 
 public class ItemBuilder {
 
@@ -35,6 +37,8 @@ public class ItemBuilder {
 
     // Item Data
     private Material material;
+    private TrimMaterial trimMaterial;
+    private TrimPattern trimPattern;
     private int damage;
     private String itemName;
     private final List<Component> itemLore;
@@ -76,6 +80,10 @@ public class ItemBuilder {
     private boolean isBanner;
     private List<Pattern> patterns;
 
+    // Maps
+    private boolean isMap;
+    private Color mapColor;
+
     // Placeholders
     private HashMap<String, String> namePlaceholders;
     private HashMap<String, String> lorePlaceholders;
@@ -96,6 +104,8 @@ public class ItemBuilder {
     public ItemBuilder() {
         this.nbtItem = null;
         this.material = Material.STONE;
+        this.trimMaterial = null;
+        this.trimPattern = null;
         this.damage = 0;
         this.itemName = "";
         this.itemLore = new ArrayList<>();
@@ -127,13 +137,16 @@ public class ItemBuilder {
         this.isBanner = false;
         this.patterns = new ArrayList<>();
 
+        this.isMap = false;
+        this.mapColor = Color.RED;
+
         this.namePlaceholders = new HashMap<>();
         this.lorePlaceholders = new HashMap<>();
 
         this.itemFlags = new ArrayList<>();
     }
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
 
@@ -149,6 +162,8 @@ public class ItemBuilder {
     public ItemBuilder(ItemBuilder itemBuilder) {
         this.nbtItem = itemBuilder.nbtItem;
         this.material = itemBuilder.material;
+        this.trimMaterial = itemBuilder.trimMaterial;
+        this.trimPattern = itemBuilder.trimPattern;
         this.damage = itemBuilder.damage;
         this.itemName = itemBuilder.itemName;
         this.itemLore = new ArrayList<>(itemBuilder.itemLore);
@@ -183,6 +198,9 @@ public class ItemBuilder {
 
         this.isBanner = itemBuilder.isBanner;
         this.patterns = new ArrayList<>(itemBuilder.patterns);
+
+        this.isMap = itemBuilder.isMap;
+        this.mapColor = itemBuilder.mapColor;
 
         this.namePlaceholders = new HashMap<>(itemBuilder.namePlaceholders);
         this.lorePlaceholders = new HashMap<>(itemBuilder.lorePlaceholders);
@@ -324,7 +342,6 @@ public class ItemBuilder {
      * @return The result of all the info that was given to the builder as an ItemStack.
      */
     public ItemStack build() {
-
         if (nbtItem != null) referenceItem = nbtItem.getItem();
 
         ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material);
@@ -351,56 +368,84 @@ public class ItemBuilder {
 
             if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
 
-            if (isPotion && (potionType != null || potionColor != null)) {
+            if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
                 PotionMeta potionMeta = (PotionMeta) itemMeta;
 
-                if (potionType != null) potionMeta.setBasePotionData(new PotionData(potionType));
+                if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
 
-                if (potionColor != null) potionMeta.setColor(potionColor);
+                if (this.potionColor != null) potionMeta.setColor(this.potionColor);
             }
 
-            if (material == Material.TIPPED_ARROW && potionType != null) {
+            if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
                 PotionMeta potionMeta = (PotionMeta) itemMeta;
-                potionMeta.setBasePotionData(new PotionData(potionType));
+                potionMeta.setBasePotionData(new PotionData(this.potionType));
             }
 
-            if (isLeatherArmor && armorColor != null) {
+            if (isArmor()) {
+                if (this.trimPattern != null && this.trimMaterial != null) {
+                    ((ArmorMeta) itemMeta).setTrim(new ArmorTrim(this.trimMaterial, this.trimPattern));
+                }
+            }
+
+            if (this.isMap) {
+                MapMeta mapMeta = (MapMeta) itemMeta;
+
+                if (this.mapColor != null) mapMeta.setColor(this.mapColor);
+            }
+
+            if (itemMeta instanceof Damageable) {
+                if (this.damage >= 1) {
+                    if (this.damage >= item.getType().getMaxDurability()) {
+                        ((Damageable) itemMeta).setDamage(item.getType().getMaxDurability());
+                    } else {
+                        ((Damageable) itemMeta).setDamage(this.damage);
+                    }
+                }
+            }
+
+            if (this.isLeatherArmor && this.armorColor != null) {
                 LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
-                leatherMeta.setColor(armorColor);
+                leatherMeta.setColor(this.armorColor);
             }
 
-            if (isBanner && !patterns.isEmpty()) {
+            if (this.isBanner && !this.patterns.isEmpty()) {
                 BannerMeta bannerMeta = (BannerMeta) itemMeta;
-                bannerMeta.setPatterns(patterns);
+                bannerMeta.setPatterns(this.patterns);
             }
 
-            if (isShield && !patterns.isEmpty()) {
+            if (this.isShield && !this.patterns.isEmpty()) {
                 BlockStateMeta shieldMeta = (BlockStateMeta) itemMeta;
                 Banner banner = (Banner) shieldMeta.getBlockState();
-                banner.setPatterns(patterns);
+                banner.setPatterns(this.patterns);
                 banner.update();
                 shieldMeta.setBlockState(banner);
             }
 
-            if (useCustomModelData) itemMeta.setCustomModelData(customModelData);
+            if (this.useCustomModelData) itemMeta.setCustomModelData(this.customModelData);
 
-            itemFlags.forEach(itemMeta :: addItemFlags);
+            this.itemFlags.forEach(itemMeta :: addItemFlags);
             item.setItemMeta(itemMeta);
             hideItemFlags(item);
-            item.addUnsafeEnchantments(enchantments);
+            item.addUnsafeEnchantments(this.enchantments);
             addGlow(item);
             NBTItem nbt = new NBTItem(item);
 
-            if (isHead && !isHash) nbt.setString("SkullOwner", player);
+            if (this.isHead && !this.isHash) nbt.setString("SkullOwner", this.player);
 
-            if (isMobEgg) {
-                if (entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
+            if (this.isMobEgg) {
+                if (this.entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
             }
 
             return nbt.getItem();
         } else {
             return item;
         }
+    }
+
+    private boolean isArmor() {
+        String name = this.material.name();
+
+        return name.endsWith("_HELMET") || name.endsWith("_CHESTPLATE") || name.endsWith("_LEGGINGS") || name.endsWith("_BOOTS") || name.equals(Material.TURTLE_HELMET.name());
     }
 
     /*
@@ -434,6 +479,18 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setTrimMaterial(TrimMaterial trimMaterial) {
+        this.trimMaterial = trimMaterial;
+
+        return this;
+    }
+
+    public ItemBuilder setTrimPattern(TrimPattern trimPattern) {
+        this.trimPattern = trimPattern;
+
+        return this;
+    }
+
     /**
      * Set the type of item and its metadata in the builder.
      *
@@ -461,11 +518,14 @@ public class ItemBuilder {
             if (isInt(metaData)) { // Value is durability.
                 this.damage = Integer.parseInt(metaData);
             } else { // Value is something else.
-                this.potionType = getPotionType(PotionEffectType.getByName(metaData));
-                this.potionColor = ColorUtils.getColor(metaData);
-                this.armorColor = ColorUtils.getColor(metaData);
-            }
+                try {
+                    this.potionType = getPotionType(PotionEffectType.getByName(metaData));
+                } catch (Exception ignored) {}
 
+                this.potionColor = getColor(metaData);
+                this.armorColor = getColor(metaData);
+                this.mapColor = getColor(metaData);
+            }
         } else if (material.contains("#")) {
             String[] materialSplit = material.split("#");
             material = materialSplit[0];
@@ -486,6 +546,7 @@ public class ItemBuilder {
             case "LEATHER_HELMET", "LEATHER_CHESTPLATE", "LEATHER_LEGGINGS", "LEATHER_BOOTS", "LEATHER_HORSE_ARMOR" -> this.isLeatherArmor = true;
             case "BANNER" -> this.isBanner = true;
             case "SHIELD" -> this.isShield = true;
+            case "FILLED_MAP" -> this.isMap = true;
         }
 
         if (this.material.name().contains("BANNER")) this.isBanner = true;
@@ -509,7 +570,7 @@ public class ItemBuilder {
      * @return The damage to the item as an int.
      */
     public int getDamage() {
-        return damage;
+        return this.damage;
     }
 
     /**
@@ -628,9 +689,9 @@ public class ItemBuilder {
     public List<Component> getUpdatedLore() {
         List<Component> newLore = new ArrayList<>();
 
-        for (Component line : itemLore) {
+        for (Component line : this.itemLore) {
             String newLine = ColorUtils.toLegacy(line);
-            for (Map.Entry<String, String> placeholder : lorePlaceholders.entrySet()) {
+            for (Map.Entry<String, String> placeholder : this.lorePlaceholders.entrySet()) {
                 newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
             }
             newLore.add(ColorUtils.legacyTranslateColourCodes(newLine));
@@ -698,7 +759,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated pattern.
      */
     public ItemBuilder addPattern(Pattern pattern) {
-        patterns.add(pattern);
+        this.patterns.add(pattern);
 
         return this;
     }
@@ -718,7 +779,7 @@ public class ItemBuilder {
      * @return The amount that is set in the builder.
      */
     public int getAmount() {
-        return itemAmount;
+        return this.itemAmount;
     }
 
     /**
@@ -751,9 +812,9 @@ public class ItemBuilder {
     public ItemBuilder setPlayerName(String playerName) {
         this.player = playerName;
 
-        if (player != null && player.length() > 16) {
+        if (this.player != null && this.player.length() > 16) {
             this.isHash = true;
-            this.isURL = player.startsWith("http");
+            this.isURL = this.player.startsWith("http");
         }
 
         return this;
@@ -803,12 +864,12 @@ public class ItemBuilder {
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder setFlagsFromStrings(List<String> flagStrings) {
-        itemFlags.clear();
+        this.itemFlags.clear();
 
         for (String flagString : flagStrings) {
             ItemFlag flag = getFlag(flagString);
 
-            if (flag != null) itemFlags.add(flag);
+            if (flag != null) this.itemFlags.add(flag);
         }
 
         return this;
@@ -836,7 +897,7 @@ public class ItemBuilder {
     public ItemBuilder addFlags(String flagString) {
         ItemFlag flag = getFlag(flagString);
 
-        if (flag != null) itemFlags.add(flag);
+        if (flag != null) this.itemFlags.add(flag);
 
         return this;
     }
@@ -848,7 +909,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated ItemFlag.
      */
     public ItemBuilder addItemFlag(ItemFlag itemFlag) {
-        if (itemFlag != null) itemFlags.add(itemFlag);
+        if (itemFlag != null) this.itemFlags.add(itemFlag);
 
         return this;
     }
@@ -880,7 +941,7 @@ public class ItemBuilder {
      * @return The ItemBuilder with an updated Item.
      */
     public ItemStack hideItemFlags(ItemStack item) {
-        if (hideItemFlags) {
+        if (this.hideItemFlags) {
             if (item != null && item.hasItemMeta()) {
                 ItemMeta itemMeta = item.getItemMeta();
                 assert itemMeta != null;
@@ -922,33 +983,6 @@ public class ItemBuilder {
     public ItemBuilder setGlow(boolean glow) {
         this.glowing = glow;
 
-        return this;
-    }
-
-    /**
-     * The text that will be displayed on the item.
-     *
-     * @param texture The skull texture.
-     * @param profileUUID The uuid of the profile.
-     * @return The ItemBuilder.
-     */
-    public ItemBuilder texture(String texture, UUID profileUUID) {
-        return this;
-    }
-
-    /**
-     * @param texture The skull texture.
-     * @return The ItemBuilder.
-     */
-    public ItemBuilder texture(String texture) {
-        return this;
-    }
-
-    /**
-     * @param texture The owner of the skull.
-     * @return The ItemBuilder.
-     */
-    public ItemBuilder owner(String texture) {
         return this;
     }
 
@@ -1014,13 +1048,27 @@ public class ItemBuilder {
                             itemBuilder.setAmount(1);
                         }
                     }
+                    case "damage" -> {
+                        try {
+                            itemBuilder.setDamage(Integer.parseInt(value));
+                        } catch (NumberFormatException e) {
+                            itemBuilder.setDamage(0);
+                        }
+                    }
                     case "lore" -> itemBuilder.setLore(List.of(value.split(",")));
                     case "player" -> itemBuilder.setPlayerName(value);
                     case "unbreakable-item" -> {
                         if (value.isEmpty() || value.equalsIgnoreCase("true")) itemBuilder.setUnbreakable(true);
                     }
+                    case "trim-pattern" -> {
+                        if (!value.isEmpty()) itemBuilder.setTrimPattern(Registry.TRIM_PATTERN.get(NamespacedKey.minecraft(value.toLowerCase())));
+                    }
+                    case "trim-material" -> {
+                        if (!value.isEmpty()) itemBuilder.setTrimMaterial(Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(value.toLowerCase())));
+                    }
                     default -> {
                         Enchantment enchantment = getEnchantment(option);
+
                         if (enchantment != null && enchantment.getName() != null) {
                             try {
                                 itemBuilder.addEnchantments(enchantment, Integer.parseInt(value));
@@ -1030,12 +1078,14 @@ public class ItemBuilder {
 
                             break;
                         }
+
                         for (ItemFlag itemFlag : ItemFlag.values()) {
                             if (itemFlag.name().equalsIgnoreCase(option)) {
                                 itemBuilder.addItemFlag(itemFlag);
                                 break;
                             }
                         }
+
                         try {
                             for (PatternType pattern : PatternType.values()) {
                                 if (option.equalsIgnoreCase(pattern.name()) || value.equalsIgnoreCase(pattern.getIdentifier())) {
@@ -1044,8 +1094,7 @@ public class ItemBuilder {
                                     break;
                                 }
                             }
-                        } catch (Exception ignored) {
-                        }
+                        } catch (Exception ignored) {}
                     }
                 }
             }
@@ -1053,7 +1102,7 @@ public class ItemBuilder {
             itemBuilder.setMaterial(Material.RED_TERRACOTTA).setName("&c&lERROR")
                     .lore(Arrays.asList(Component.text("There us an error", NamedTextColor.RED),
                             Component.text("For : " + (placeHolder != null ? placeHolder : ""), NamedTextColor.RED)));
-            Log.error(e);
+            plugin.getLogger().log(Level.WARNING, "There is an error with " + placeHolder, e);
         }
 
         return itemBuilder;
@@ -1086,7 +1135,7 @@ public class ItemBuilder {
      * @param item The item to add glow to.
      */
     private void addGlow(ItemStack item) {
-        if (glowing) {
+        if (this.glowing) {
             try {
                 if (item != null) {
                     if (item.getItemMeta() != null) {
