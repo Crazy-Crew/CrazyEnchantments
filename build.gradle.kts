@@ -5,19 +5,28 @@ plugins {
 tasks {
     assemble {
         val jarsDir = File("$rootDir/jars")
-        if (jarsDir.exists()) jarsDir.delete()
 
-        jarsDir.mkdirs()
+        doFirst {
+            delete(jarsDir)
+
+            jarsDir.mkdirs()
+        }
 
         subprojects.forEach { project ->
             dependsOn(":${project.name}:build")
 
             doLast {
-                if (project.name == "common" || project.name == "api") return@doLast
-
-                copy {
-                    from(project.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar"))
-                    into(jarsDir)
+                runCatching {
+                    copy {
+                        from(project.layout.buildDirectory.file("libs/${rootProject.name}-${project.version}.jar"))
+                        into(jarsDir)
+                    }
+                }.onSuccess {
+                    // Delete to save space on jenkins.
+                    delete(project.layout.buildDirectory.get())
+                    delete(rootProject.layout.buildDirectory.get())
+                }.onFailure {
+                    println("Failed to copy file out of build folder into jars directory: Likely does not exist.")
                 }
             }
         }
@@ -36,6 +45,8 @@ subprojects {
     }
 
     if (name == "paper") {
+        project.version = if (System.getenv("BUILD_NUMBER") != null) "${rootProject.version}-${System.getenv("BUILD_NUMBER")}" else rootProject.version
+
         repositories {
             maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 
