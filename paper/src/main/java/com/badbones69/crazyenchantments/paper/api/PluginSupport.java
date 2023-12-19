@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.paper.api.support.claims.TownySupport;
@@ -8,13 +9,19 @@ import com.badbones69.crazyenchantments.paper.api.support.factions.FactionsUUIDS
 import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.ClaimSupport;
 import com.badbones69.crazyenchantments.paper.utilities.WorldGuardUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
+import com.gmail.nossr50.datatypes.player.McMMOPlayer;
+import com.gmail.nossr50.party.PartyManager;
 import com.google.common.collect.Maps;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PluginSupport {
@@ -49,7 +56,9 @@ public class PluginSupport {
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
-        return SupportedPlugins.MCMMO.isPluginLoaded();
+        if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyManager.inSameParty((Player) pEntity, (Player) oEntity);
+
+        return false;
 
     }
 
@@ -64,6 +73,15 @@ public class PluginSupport {
     public boolean allowCombat(Location location) {
         if (SupportedPlugins.TOWNYADVANCED.isPluginLoaded()) return TownySupport.allowsCombat(location);
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsPVP(location);
+    }
+
+    private boolean damageCheck(Player one, Player two) { // Would cause la if used on player move event, but might be the only way to actually check.
+        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(one, two, EntityDamageEvent.DamageCause.ENTITY_ATTACK, new HashMap<>(), new HashMap<>(), false);
+        event.setDamage(0);
+        EventUtils.addIgnoredEvent(event);
+        plugin.getServer().getPluginManager().callEvent(event);
+        EventUtils.removeIgnoredEvent(event);
+        return event.isCancelled();
     }
 
     public boolean allowDestruction(Location location) {

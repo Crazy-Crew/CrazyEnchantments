@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.AuraActiveEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,10 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 public class AuraListener implements Listener {
 
@@ -28,6 +27,7 @@ public class AuraListener implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
+    private final Set<UUID> coolDown = new HashSet<>();
     private final CEnchantments[] AURA_ENCHANTMENTS = {
             CEnchantments.BLIZZARD,
             CEnchantments.ACIDRAIN,
@@ -41,6 +41,8 @@ public class AuraListener implements Listener {
         Player player = event.getPlayer();
         Location from = event.getFrom();
         Location to = event.getTo();
+
+        if (coolDownCheck(event.getPlayer().getUniqueId())) return;
 
         if (from.getBlockX() == to.getBlockX()
         && from.getBlockY() == to.getBlockY()
@@ -81,6 +83,16 @@ public class AuraListener implements Listener {
                 });
             }
         }
+    }
+
+    private boolean coolDownCheck(UUID uuid) {
+        if (coolDown.contains(uuid)) return true;
+        coolDown.add(uuid);
+
+        /* Adds a 1 second delay between checks per player.
+        Due to it being checked for every player, time between checks would be (1/amountOfPlayers) seconds. */
+        Bukkit.getScheduler().runTaskLater(plugin, () -> coolDown.remove(uuid), 20);
+        return false;
     }
 
     private CEnchantments getAuraEnchantmentEnum(CEnchantment enchantment) {

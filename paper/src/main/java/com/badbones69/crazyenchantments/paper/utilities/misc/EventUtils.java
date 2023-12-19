@@ -1,16 +1,15 @@
 package com.badbones69.crazyenchantments.paper.utilities.misc;
 
 import org.bukkit.event.Event;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 
 public class EventUtils {
     
-    private static final List<Event> ignoredEvents = new ArrayList<>();
-    private static final List<UUID> ignoredUUIDs = new ArrayList<>();
+    private static final Set<Event> ignoredEvents = new HashSet<>();
+    private static final Set<UUID> ignoredUUIDs = new HashSet<>();
     
-    public static List<Event> getIgnoredEvents() {
+    public static Set<Event> getIgnoredEvents() {
         return ignoredEvents;
     }
 
@@ -19,14 +18,14 @@ public class EventUtils {
     }
 
     public static void addIgnoredEvent(Event event) {
-        if (!ignoredEvents.contains(event)) ignoredEvents.add(event);
+        ignoredEvents.add(event);
     }
 
     public static void removeIgnoredUUID(UUID uuid) {
         ignoredUUIDs.remove(uuid);
     }
 
-    public static List<UUID> getIgnoredUUIDs() {
+    public static Set<UUID> getIgnoredUUIDs() {
         return ignoredUUIDs;
     }
 
@@ -35,7 +34,7 @@ public class EventUtils {
     }
 
     public static void addIgnoredUUID(UUID uuid) {
-        if (!ignoredUUIDs.contains(uuid)) ignoredUUIDs.add(uuid);
+        ignoredUUIDs.add(uuid);
     }
 
     public static void removeIgnoredEvent(Event event) {

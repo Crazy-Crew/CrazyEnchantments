@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
@@ -10,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
+import com.gmail.nossr50.party.PartyManager;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -107,6 +109,11 @@ public class AllyEnchantments implements Listener {
         if (allyMob != null && target != null && allyMob.getOwner().getUniqueId() == target.getOwner().getUniqueId()) {
             event.setCancelled(true);
             return;
+        }
+
+        // Stop ally from targeting party members.
+        if (allyMob != null && target instanceof Player && PluginSupport.SupportedPlugins.MCMMO.isPluginLoaded()) {
+            PartyManager.inSameParty(allyMob.getOwner(), (Player) target);
         }
 
         // Stop your pets from targeting you.

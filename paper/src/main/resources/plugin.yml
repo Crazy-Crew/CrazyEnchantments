@@ -56,6 +56,9 @@ permissions:
   crazyenchantments.limit.3:
     default: true
 
+  crazyenchantments.base-limit.1:
+    default: true
+
   crazyenchantments.sign:
     default: false
 
