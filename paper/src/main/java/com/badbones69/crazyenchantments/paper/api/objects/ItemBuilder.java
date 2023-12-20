@@ -1,6 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.SkullCreator;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
@@ -375,6 +377,86 @@ public class ItemBuilder {
                     skullCreator.itemWithBase64(item, player);
                 }
             }
+
+            item.setAmount(itemAmount);
+            ItemMeta itemMeta = item.getItemMeta();
+            List<Component> newLore = getUpdatedLore();
+            assert itemMeta != null;
+            if (!Objects.equals(getUpdatedName(), "")) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+            if (!newLore.isEmpty()) itemMeta.lore(newLore);
+            if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
+
+            if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
+
+            if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
+                PotionMeta potionMeta = (PotionMeta) itemMeta;
+
+                if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
+
+                if (this.potionColor != null) potionMeta.setColor(this.potionColor);
+            }
+
+            if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
+                PotionMeta potionMeta = (PotionMeta) itemMeta;
+                potionMeta.setBasePotionData(new PotionData(this.potionType));
+            }
+
+            if (isArmor()) {
+                if (this.trimPattern != null && this.trimMaterial != null) {
+                    ((ArmorMeta) itemMeta).setTrim(new ArmorTrim(this.trimMaterial, this.trimPattern));
+                }
+            }
+
+            if (this.isMap) {
+                MapMeta mapMeta = (MapMeta) itemMeta;
+
+                if (this.mapColor != null) mapMeta.setColor(this.mapColor);
+            }
+
+            if (itemMeta instanceof Damageable) {
+                if (this.damage >= 1) {
+                    if (this.damage >= item.getType().getMaxDurability()) {
+                        ((Damageable) itemMeta).setDamage(item.getType().getMaxDurability());
+                    } else {
+                        ((Damageable) itemMeta).setDamage(this.damage);
+                    }
+                }
+            }
+
+            if (this.isLeatherArmor && this.armorColor != null) {
+                LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
+                leatherMeta.setColor(this.armorColor);
+            }
+
+            if (this.isBanner && !this.patterns.isEmpty()) {
+                BannerMeta bannerMeta = (BannerMeta) itemMeta;
+                bannerMeta.setPatterns(this.patterns);
+            }
+
+            if (this.isShield && !this.patterns.isEmpty()) {
+                BlockStateMeta shieldMeta = (BlockStateMeta) itemMeta;
+                Banner banner = (Banner) shieldMeta.getBlockState();
+                banner.setPatterns(this.patterns);
+                banner.update();
+                shieldMeta.setBlockState(banner);
+            }
+
+            if (this.useCustomModelData) itemMeta.setCustomModelData(this.customModelData);
+
+            this.itemFlags.forEach(itemMeta :: addItemFlags);
+            item.setItemMeta(itemMeta);
+            hideItemFlags(item);
+            item.addUnsafeEnchantments(this.enchantments);
+            addGlow(item);
+            NBTItem nbt = new NBTItem(item);
+
+            if (this.isHead && !this.isHash) nbt.setString("SkullOwner", this.player);
+
+            if (this.isMobEgg) {
+                if (this.entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
+            }
+
+            return nbt.getItem();
         }
 
         item.setAmount(itemAmount);
@@ -469,74 +551,6 @@ public class ItemBuilder {
 
             for (Map.Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
                 enchantData.addEnchantment(x.getKey().getName(), x.getValue());
-
-            if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
-                PotionMeta potionMeta = (PotionMeta) itemMeta;
-
-                if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
-
-                if (this.potionColor != null) potionMeta.setColor(this.potionColor);
-            }
-
-            if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
-                PotionMeta potionMeta = (PotionMeta) itemMeta;
-                potionMeta.setBasePotionData(new PotionData(this.potionType));
-            }
-
-            if (isArmor()) {
-                if (this.trimPattern != null && this.trimMaterial != null) {
-                    ((ArmorMeta) itemMeta).setTrim(new ArmorTrim(this.trimMaterial, this.trimPattern));
-                }
-            }
-
-            if (this.isMap) {
-                MapMeta mapMeta = (MapMeta) itemMeta;
-
-                if (this.mapColor != null) mapMeta.setColor(this.mapColor);
-            }
-
-            if (itemMeta instanceof Damageable) {
-                if (this.damage >= 1) {
-                    if (this.damage >= item.getType().getMaxDurability()) {
-                        ((Damageable) itemMeta).setDamage(item.getType().getMaxDurability());
-                    } else {
-                        ((Damageable) itemMeta).setDamage(this.damage);
-                    }
-                }
-            }
-
-            if (this.isLeatherArmor && this.armorColor != null) {
-                LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
-                leatherMeta.setColor(this.armorColor);
-            }
-
-            if (this.isBanner && !this.patterns.isEmpty()) {
-                BannerMeta bannerMeta = (BannerMeta) itemMeta;
-                bannerMeta.setPatterns(this.patterns);
-            }
-
-            if (this.isShield && !this.patterns.isEmpty()) {
-                BlockStateMeta shieldMeta = (BlockStateMeta) itemMeta;
-                Banner banner = (Banner) shieldMeta.getBlockState();
-                banner.setPatterns(this.patterns);
-                banner.update();
-                shieldMeta.setBlockState(banner);
-            }
-
-            if (this.useCustomModelData) itemMeta.setCustomModelData(this.customModelData);
-
-            this.itemFlags.forEach(itemMeta :: addItemFlags);
-            item.setItemMeta(itemMeta);
-            hideItemFlags(item);
-            item.addUnsafeEnchantments(this.enchantments);
-            addGlow(item);
-            NBTItem nbt = new NBTItem(item);
-
-            if (this.isHead && !this.isHash) nbt.setString("SkullOwner", this.player);
-
-            if (this.isMobEgg) {
-                if (this.entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
-
             }
 
             meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
@@ -1154,7 +1168,7 @@ public class ItemBuilder {
      */
     public static ItemBuilder convertString(String itemString, String placeHolder) {
         ItemBuilder itemBuilder = new ItemBuilder();
-            itemString = itemString.strip();
+        itemString = itemString.strip();
         try {
             for (String optionString : itemString.split(", ")) {
                 String option = optionString.split(":")[0];
@@ -1189,14 +1203,13 @@ public class ItemBuilder {
                         if (!value.isEmpty()) itemBuilder.setTrimMaterial(Registry.TRIM_MATERIAL.get(NamespacedKey.minecraft(value.toLowerCase())));
                     }
                     default -> {
-                      
                         if (value.contains("-")) {
                             String[] val = value.split("-");
                             if (val.length == 2 && NumberUtils.isInt(val[0]) && NumberUtils.isInt(val[1])) {
                                 value = String.valueOf(getRandom(Integer.parseInt(val[0]), Integer.parseInt(val[1])));
                             }
                         }
-                        
+
                         int number = NumberUtils.isInt(value) ? Integer.parseInt(value) : 1;
 
                         Enchantment enchantment = getEnchantment(option);
