@@ -466,10 +466,7 @@ public class CrazyManager {
     }
 
     /**
-     * @param item Item you want to add the enchantment to.
-     * @param enchantment Enchantment you want added.
-     * @param level Tier of the enchantment.
-     * @return The item with the enchantment on it.
+     * @see #addEnchantments(ItemMeta, Map) 
      */
     public ItemStack addEnchantment(ItemStack item, CEnchantment enchantment, int level) {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
@@ -478,12 +475,20 @@ public class CrazyManager {
         return addEnchantments(item, enchantments);
     }
 
+    /**
+     * @see #addEnchantments(ItemMeta, Map) 
+     */
     public ItemStack addEnchantments(ItemStack item, Map<CEnchantment, Integer> enchantments) {
         item.setItemMeta(addEnchantments(item.getItemMeta(), enchantments));
 
         return item;
     }
 
+    /**
+     * @param meta The meta you want to add the enchantment to.
+     * @param enchantments The enchantments to be added.
+     * @return The item with the enchantment on it.
+     */
     public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) {
 
         Gson gson = new Gson();

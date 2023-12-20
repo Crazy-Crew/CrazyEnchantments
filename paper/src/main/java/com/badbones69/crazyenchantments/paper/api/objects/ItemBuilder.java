@@ -466,8 +466,7 @@ public class ItemBuilder {
         if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
         if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
-        if (crazyEnchantments != null) itemMeta = addEnchantments(itemMeta, crazyEnchantments);
-        //CrazyEnchantments.getPlugin().getStarter().getCrazyManager().addEnchantments(itemMeta, crazyEnchantments);
+        if (crazyEnchantments != null) itemMeta = starter.getCrazyManager().addEnchantments(itemMeta, crazyEnchantments);
 
         if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(damage);
 
@@ -520,50 +519,11 @@ public class ItemBuilder {
 
         return nbt.getItem();
     }
-
-    //TODO Remove function below after fixing the mess that the plugin currently is.
-    public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) {
-        EnchantmentBookSettings enchantmentBookSettings = CrazyEnchantments.getPlugin().getStarter().getEnchantmentBookSettings();
-
-        for (Map.Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
-            CEnchantment enchantment = entry.getKey();
-            int level = entry.getValue();
-
-            if (enchantmentBookSettings.hasEnchantment(meta, enchantment)) meta = enchantmentBookSettings.removeEnchantment(meta, enchantment);
-
-            String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
-            List<Component> lore = meta.lore();
-
-            if (lore == null) lore = new ArrayList<>();
-
-            lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
-
-            meta.lore(lore);
-
-            Gson gson = new Gson();
-
-            String data;
-            Enchant enchantData;
-
-            data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
-
-            enchantData =  data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
-
-            for (Map.Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
-                enchantData.addEnchantment(x.getKey().getName(), x.getValue());
-            }
-
-            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
-
-        }
-
-        return meta;
-    }
-
     private boolean isArmor() {
         String name = this.material.name();
 
         return name.endsWith("_HELMET") || name.endsWith("_CHESTPLATE") || name.endsWith("_LEGGINGS") || name.endsWith("_BOOTS") || name.equals(Material.TURTLE_HELMET.name());
+
     }
 
     /*
