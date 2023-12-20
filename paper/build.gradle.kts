@@ -92,7 +92,7 @@ dependencies {
 
     compileOnly(fileTree("libs").include("*.jar"))
 
-    compileOnly("com.gmail.nossr50.mcMMO", "mcMMO", "2.1.225")
+    compileOnly("com.gmail.nossr50.mcMMO", "mcMMO", "2.1.226")
 
     paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:$mcVersion-R0.1-SNAPSHOT")
 
