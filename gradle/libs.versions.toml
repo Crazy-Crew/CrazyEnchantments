@@ -1,7 +1,35 @@
 [versions]
-modrinth = "2.8.4"
-hangar = "0.1.0"
+kyori_version = "4.14.0"
+
+cluster_version = "4.1.2"
 
 [plugins]
-hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
-modrinth = { id = "com.modrinth.minotaur", version.ref = "modrinth" }
+hangar = { id = "io.papermc.hangar-publish-plugin", version = "0.1.0" }
+modrinth = { id = "com.modrinth.minotaur", version = "2.8.4" }
+
+paperweight = { id = "io.papermc.paperweight.userdev", version = "1.5.9" }
+runpaper = { id = "xyz.jpenilla.run-paper", version = "2.2.2" }
+shadowjar = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+
+[libraries]
+adventure = { module = "net.kyori:adventure-api", version.ref = "kyori_version" }
+minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "kyori_version" }
+
+cluster_paper = { module = "com.ryderbelserion.cluster.paper:cluster-paper", version.ref = "cluster_version" }
+cluster_api = { module = "com.ryderbelserion.cluster.api:cluster-api", version.ref = "cluster_version" }
+
+nbtapi = { module = "de.tr7zw:item-nbt-api", version = "2.12.1" }
+
+triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-SNAPSHOT" }
+
+config_me = { module = "ch.jalu:configme", version = "1.4.1" }
+
+metrics = { module = "org.bstats:bstats-bukkit", version = "3.0.2" }
+
+itemsadder = { module = "com.github.LoneDev6:api-itemsadder", version = "3.6.1" }
+oraxen = { module = "io.th0rgal:oraxen", version = "1.164.0" }
+
+holographicdisplays = { module = "me.filoghost.holographicdisplays:holographicdisplays-api", version = "3.0.0" }
+decentholograms = { module = "com.github.decentsoftware-eu:decentholograms", version = "2.8.4" }
+
+placeholderapi = { module = "me.clip:placeholderapi", version = "2.11.4" }

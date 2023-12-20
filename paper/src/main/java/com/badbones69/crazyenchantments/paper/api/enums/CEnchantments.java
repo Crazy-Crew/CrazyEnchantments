@@ -174,6 +174,7 @@ public enum CEnchantments {
         this.hasChanceSystem = true;
     }
 
+    
     /**
      * @return The name of the enchantment.
      */

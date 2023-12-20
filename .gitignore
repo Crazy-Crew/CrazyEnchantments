@@ -10,3 +10,12 @@ jars
 
 paper/.gradle
 paper/build
+
+paper/run
+!paper/run/config
+!paper/run/spigot.yml
+!paper/run/bukkit.yml
+!paper/run/eula.txt
+!paper/run/server.properties
+!paper/run/plugins
+!paper/run/ops.json
