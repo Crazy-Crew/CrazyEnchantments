@@ -71,6 +71,7 @@ public enum Messages {
     RAGE_COOLED_DOWN("Rage.Cooled-Down", "&7[&c&lRage&7]: &cYour Rage has just cooled down."),
     RAGE_RAGE_UP("Rage.Rage-Up", "&7[&c&lRage&7]: &7You are now doing &a%Level%x &7Damage."),
     RAGE_DAMAGED("Rage.Damaged", "&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"),
+    INVALID_ITEM_STRING("Invalid-Item-String", "&cInvalid item string supplied."),
     LIMIT_COMMAND("Limit-Command", Arrays.asList(
     "&8[&aCrazyEnchants&8]: &bPersonal Enchantment Limit:",
     "&7Bypass Limit: &6%bypass%",

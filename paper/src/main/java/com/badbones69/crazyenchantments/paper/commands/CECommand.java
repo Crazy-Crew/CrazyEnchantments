@@ -359,31 +359,59 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
-            case "give" -> { // /ce give <Player> <itemString> /ce arg0 arg1 arg2 //TODO Command Add Feedback
-                if (!hasPermission(sender, "give") || args.length < 3) return true;
+            case "give" -> { // /ce give <Player> <itemString> /ce arg0 arg1 arg2
+                if (!hasPermission(sender, "give")) return true;
+
+                if (args.length < 3) {
+                    sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Give <Player> <itemString>"));
+                    return true;
+                }
+
                 StringBuilder sb = new StringBuilder();
                 for (int i = 2; i < args.length; i++) {
                     sb.append(args[i]).append(" ");
                 }
 
                 Player target = methods.getPlayer(args[1]);
+
+                if (target == null) {
+                    sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+                    return true;
+                }
+
                 ItemStack item = ItemBuilder.convertString(sb.toString()).build();
 
-                if (item == null || target == null) return true;
+                if (item == null) {
+                    sender.sendMessage(Messages.INVALID_ITEM_STRING.getMessage());
+                    return true;
+                }
 
                 methods.addItemToInventory(target, item);
 
                 return true;
             }
 
-            case "bottle" -> { // /ce bottle <Player> <XPAmount> <Amount> //TODO Add Command Feedback
-                if (!hasPermission(sender, "give") || args.length < 3 || !checkInt(sender, args[2])) return true;
+            case "bottle" -> { // /ce bottle <Player> <XPAmount> <Amount>
+                if (!hasPermission(sender, "give")) return true;
+
+                if (args.length < 3) {
+                    sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Give <Player> <itemString>"));
+                    return true;
+                }
+
+                if (!checkInt(sender, args[2])) return true;
+
                 Player target = methods.getPlayer(args[1]);
                 ItemStack item = plugin.getTinkerer().getXPBottle(args[2]);
-                int amount = args.length == 4 ? NumberUtils.isInt(args[3]) ? Integer.parseInt(args[3]) : 1 : 1;
+                int amount = args.length == 4 && NumberUtils.isInt(args[3]) ? Integer.parseInt(args[3]) : 1;
                 item.setAmount(amount);
 
-                if (item.isEmpty() || target == null) return true;
+                if (target == null) {
+                    sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+                    return true;
+                }
+
+                if (item.isEmpty()) return true;
 
                 methods.addItemToInventory(target, item);
 
