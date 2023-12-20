@@ -313,7 +313,7 @@ public class EnchantmentBookSettings {
 
         return item;
     }
-    public ItemMeta removeEnchantment(ItemMeta meta, CEnchantment enchant) { //TODO Add a removeEnchantments option.
+    public ItemMeta removeEnchantment(ItemMeta meta, CEnchantment enchant) {
 
         List<Component> lore = meta.lore();
 
@@ -344,7 +344,7 @@ public class EnchantmentBookSettings {
         return meta;
     }
 
-    public ItemMeta removeEnchantments(ItemMeta meta, List<CEnchantment> enchants) { //TODO Add a removeEnchantments option.
+    public ItemMeta removeEnchantments(ItemMeta meta, List<CEnchantment> enchants) {
 
         List<Component> lore = meta.lore();
 
