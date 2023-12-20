@@ -188,7 +188,7 @@ public class EnchantmentBookSettings {
      * @param item Item you want to get the enchantments from.
      * @return A list of enchantments the item has.
      */
-    public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) { // TODO Change to Set.
+    public List<CEnchantment> getEnchantmentsOnItem(ItemStack item) {
         return new ArrayList<>(getEnchantments(item).keySet());
     }
 

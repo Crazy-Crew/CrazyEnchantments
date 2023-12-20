@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.utilities.misc;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
-import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import org.bukkit.entity.Entity;
@@ -11,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
-import java.util.UUID;
 
 public class EnchantUtils {
 
@@ -63,6 +61,10 @@ public class EnchantUtils {
     }
 
     public static boolean isAuraActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+        return isActive(player, enchant, enchants);
+    }
+
+    public static boolean isMovementEnchantActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
         return isActive(player, enchant, enchants);
     }
 

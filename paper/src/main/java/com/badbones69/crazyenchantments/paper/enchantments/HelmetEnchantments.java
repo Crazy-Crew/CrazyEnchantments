@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -28,8 +29,6 @@ public class HelmetEnchantments implements Listener {
 
     private final Starter starter = plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-
     // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
@@ -37,13 +36,11 @@ public class HelmetEnchantments implements Listener {
     public void onMovement(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (!CEnchantments.COMMANDER.isActivated()) return;
-
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            if (armor== null || armor.isEmpty()) continue;
+            if (armor == null || armor.isEmpty()) continue;
             Map<CEnchantment, Integer> enchantments = starter.getEnchantmentBookSettings().getEnchantments(armor);
 
-            if (!enchantments.containsKey(CEnchantments.COMMANDER.getEnchantment())) continue;
+            if (!EnchantUtils.isMovementEnchantActive(player, CEnchantments.COMMANDER, enchantments)) return;
 
             int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
 
@@ -52,7 +49,7 @@ public class HelmetEnchantments implements Listener {
 
             if (players.isEmpty()) return;
 
-            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor); // TODO add to isActive check.
+            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(player, CEnchantments.COMMANDER, armor);
             plugin.getServer().getPluginManager().callEvent(useEvent);
 
             if (!useEvent.isCancelled()) return;
