@@ -403,28 +403,6 @@ public class Methods {
         }
     }
 
-    public void checkPotions(Map<PotionEffectType, Integer> effects, Player player) {
-        for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-            Integer value = type.getValue();
-            PotionEffectType key = type.getKey();
-
-            player.removePotionEffect(key);
-            if (value == 0) continue; //TODO check usage with new addition of infinity.
-            PotionEffect potionEffect = new PotionEffect(key, getInfinity(), value);
-            player.addPotionEffect(potionEffect);
-        }
-    }
-
-    public int getInfinity() {
-
-        int versionInt = Integer.parseInt(plugin.getServer().getVersion().split("MC:")[1]
-                .replace(")", "")
-                .replace(".", "")
-                .replace(" ", ""));
-
-        return versionInt >= 1194 || versionInt == 120 ? -1 : Integer.MAX_VALUE;
-    }
-
     public HashSet<Block> getEnchantBlocks(Location loc, Location loc2) {
         HashSet<Block> blockList = new HashSet<>();
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));

@@ -9,7 +9,6 @@ import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.events.AuraActiveEvent;
-import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -24,7 +23,6 @@ import com.badbones69.crazyenchantments.paper.processors.Processor;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
@@ -41,6 +39,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -133,6 +132,63 @@ public class ArmorEnchantments implements Listener {
                 methods.checkPotions(crazyManager.getUpdatedEffects(player, newItem, oldItem, enchantment), player)); // Add new enchants.
 
     }
+
+    private void newUpdateEffects(Player player, ItemStack newItem, ItemStack oldItem) {
+        Map<CEnchantment, Integer> topEnchants = currentEnchantsOnPlayerAdded(player, newItem);
+        Map<PotionEffectType, Integer> shouldHaveEffects = getTopPotionEffects(topEnchants);
+
+        // Remove all effects that they no longer should have from the armor.
+        getTopPotionEffects(enchantmentBookSettings.getEnchantments(oldItem)
+                .entrySet().stream()
+                .filter(enchant -> !topEnchants.containsKey(enchant.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b)))
+                .keySet()
+                .forEach(player::removePotionEffect);
+
+        // Add all new effects that said player should now have.
+        for (Map.Entry<PotionEffectType, Integer> effect : shouldHaveEffects.entrySet()) {
+            for (PotionEffect currentEffect : player.getActivePotionEffects()) {
+                if (!currentEffect.getType().equals(effect.getKey())) break;
+                if (currentEffect.getAmplifier() > effect.getValue()) break;
+                player.removePotionEffect(effect.getKey());
+            }
+            player.addPotionEffect(new PotionEffect(effect.getKey(), effect.getValue(), -1));
+        }
+    }
+    private Map<PotionEffectType, Integer> getTopPotionEffects(Map<CEnchantment, Integer> topEnchants) {
+        Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = crazyManager.getEnchantmentPotions();
+        HashMap<PotionEffectType, Integer> topPotions = new HashMap<>();
+
+        topEnchants.keySet()
+                .forEach((enchant) -> enchantmentPotions.entrySet()
+                        .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(enchant))
+                        .forEach(enchantedPotion -> enchantedPotion.getValue().entrySet().stream()
+                        .filter(pot -> !topPotions.containsKey(pot.getKey()) || (topPotions.get(pot.getKey()) != -1 && topPotions.get(pot.getKey()) <= pot.getValue()))
+                        .forEach(pot -> topPotions.put(pot.getKey(), pot.getValue()))));
+        return topPotions;
+    }
+
+    private HashMap<CEnchantment, Integer> currentEnchantsOnPlayerAdded(Player player, ItemStack newItem) {
+        HashMap<CEnchantment, Integer> toAdd = getTopEnchantsOnPlayer(player);
+
+        enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
+                .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
+                .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
+
+        return toAdd;
+    }
+    private HashMap<CEnchantment, Integer> getTopEnchantsOnPlayer(Player player) {
+        HashMap<CEnchantment, Integer> topEnchants = new HashMap<>();
+
+        Arrays.stream(player.getEquipment().getArmorContents())
+                .map(enchantmentBookSettings::getEnchantments)
+                .forEach(enchantments -> enchantments.entrySet().stream()
+                        .filter(ench -> !topEnchants.containsKey(ench.getKey()) || topEnchants.get(ench.getKey()) <= ench.getValue())
+                        .forEach(ench -> topEnchants.put(ench.getKey(), ench.getValue())));
+        return topEnchants;
+    }
+
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getDamager().getUniqueId())) return;

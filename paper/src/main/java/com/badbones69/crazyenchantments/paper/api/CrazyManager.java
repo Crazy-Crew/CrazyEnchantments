@@ -37,6 +37,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 import java.util.Map.Entry;
@@ -545,7 +546,7 @@ public class CrazyManager {
      * Force an update of a players armor potion effects.
      * @param player The player you are updating the effects of.
      */
-    public void updatePlayerEffects(Player player) {
+    public void updatePlayerEffects(Player player) { // TODO Remove this method.
         if (player == null) return;
         Set<CEnchantments> allEnchantPotionEffects = getEnchantmentPotions().keySet();
 
@@ -554,8 +555,20 @@ public class CrazyManager {
             for (CEnchantments ench : allEnchantPotionEffects) {
                 if (!enchantments.containsKey(ench.getEnchantment())) continue;
                 Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
-                methods.checkPotions(effects, player);
+                checkPotions(effects, player);
             }
+        }
+    }
+
+    public void checkPotions(Map<PotionEffectType, Integer> effects, Player player) { //TODO Remove this Method
+        for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
+            Integer value = type.getValue();
+            PotionEffectType key = type.getKey();
+
+            player.removePotionEffect(key);
+            if (value == 0) continue; //TODO check usage with new addition of infinity.
+            PotionEffect potionEffect = new PotionEffect(key, PotionEffect.INFINITE_DURATION, value);
+            player.addPotionEffect(potionEffect);
         }
     }
 
@@ -566,7 +579,7 @@ public class CrazyManager {
      * @param enchantment The enchantment you want the max level effects from.
      * @return The list of all the max potion effects based on all the armor on the player.
      */
-    public Map<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) {
+    public Map<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) { //TODO Remove this method.
         HashMap<PotionEffectType, Integer> effects = new HashMap<>();
         List<ItemStack> items = new ArrayList<>(Arrays.asList(player.getEquipment().getArmorContents()));
 
@@ -607,6 +620,7 @@ public class CrazyManager {
     }
 
     /**
+     *
      * @return All the effects for each enchantment that needs it.
      */
     public Map<CEnchantments, HashMap<PotionEffectType, Integer>> getEnchantmentPotions() {
