@@ -624,18 +624,18 @@ public class CrazyManager {
         enchants.put(CEnchantments.DRUNK, new HashMap<>());
         enchants.get(CEnchantments.DRUNK).put(PotionEffectType.INCREASE_DAMAGE, -1);
         enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW_DIGGING, -1);
-        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW, 0);
+        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW, -1);
 
         enchants.put(CEnchantments.HULK, new HashMap<>());
         enchants.get(CEnchantments.HULK).put(PotionEffectType.INCREASE_DAMAGE, -1);
         enchants.get(CEnchantments.HULK).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
-        enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOW, 0);
+        enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOW, -1);
 
         enchants.put(CEnchantments.VALOR, new HashMap<>());
         enchants.get(CEnchantments.VALOR).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
 
         enchants.put(CEnchantments.OVERLOAD, new HashMap<>());
-        enchants.get(CEnchantments.OVERLOAD).put(PotionEffectType.HEALTH_BOOST, 0);
+        enchants.get(CEnchantments.OVERLOAD).put(PotionEffectType.HEALTH_BOOST, -1);
 
         enchants.put(CEnchantments.NINJA, new HashMap<>());
         enchants.get(CEnchantments.NINJA).put(PotionEffectType.HEALTH_BOOST, -1);
@@ -644,7 +644,7 @@ public class CrazyManager {
         enchants.put(CEnchantments.INSOMNIA, new HashMap<>());
         enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.CONFUSION, -1);
         enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW_DIGGING, -1);
-        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW, 0);
+        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW, -1);
 
         enchants.put(CEnchantments.ANTIGRAVITY, new HashMap<>());
         enchants.get(CEnchantments.ANTIGRAVITY).put(PotionEffectType.JUMP, 1);
@@ -658,7 +658,7 @@ public class CrazyManager {
         enchants.put(CEnchantments.CYBORG, new HashMap<>());
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.SPEED, -1);
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.INCREASE_DAMAGE, 0);
-        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP, 0);
+        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP, -1);
 
         return enchants;
     }

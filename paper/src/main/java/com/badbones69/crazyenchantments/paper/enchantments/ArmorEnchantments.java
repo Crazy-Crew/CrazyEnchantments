@@ -93,6 +93,35 @@ public class ArmorEnchantments implements Listener {
                               oldItem.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING))
         ) return;
 
+        // TODO Add Enchant use event spammer.
+        newUpdateEffects(player, newItem, oldItem);
+
+    }
+
+    private void newUpdateEffects(Player player, ItemStack newItem, ItemStack oldItem) {
+        Map<CEnchantment, Integer> topEnchants = currentEnchantsOnPlayerAdded(player, newItem);
+
+        // Remove all effects that they no longer should have from the armor.
+        if (!oldItem.isEmpty()) {
+            getTopPotionEffects(enchantmentBookSettings.getEnchantments(oldItem)
+                    .entrySet().stream()
+                    .filter(enchant -> !topEnchants.containsKey(enchant.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> b)))
+                    .keySet()
+                    .forEach(player::removePotionEffect);
+        }
+
+        // Add all new effects that said player should now have.
+        for (Map.Entry<PotionEffectType, Integer> effect : getTopPotionEffects(topEnchants).entrySet()) {
+            for (PotionEffect currentEffect : player.getActivePotionEffects()) {
+                if (!currentEffect.getType().equals(effect.getKey())) break;
+                if (currentEffect.getAmplifier() > effect.getValue()) break;
+                player.removePotionEffect(effect.getKey());
+            }
+            player.addPotionEffect(new PotionEffect(effect.getKey(), effect.getValue(), -1));
+        }
+    }
+    private Map<PotionEffectType, Integer> getTopPotionEffects(Map<CEnchantment, Integer> topEnchants) {
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = crazyManager.getEnchantmentPotions();
         Map<CEnchantment, Integer> oldEnchants = enchantmentBookSettings.getEnchantments(oldItem);
         Map<CEnchantment, Integer> newEnchants = enchantmentBookSettings.getEnchantments(newItem);
