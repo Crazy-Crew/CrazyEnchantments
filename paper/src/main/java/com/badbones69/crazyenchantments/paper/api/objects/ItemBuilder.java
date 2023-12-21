@@ -466,7 +466,7 @@ public class ItemBuilder {
         if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
         if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
-        if (crazyEnchantments != null) itemMeta = starter.getCrazyManager().addEnchantments(itemMeta, crazyEnchantments);
+        if (crazyEnchantments != null) itemMeta = addEnchantments(itemMeta, crazyEnchantments);
 
         if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(damage);
 
@@ -518,6 +518,38 @@ public class ItemBuilder {
         }
 
         return nbt.getItem();
+    }
+
+    public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) { //TODO Stop CrazyManager from being null to replace this method.
+        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+        Gson gson = new Gson();
+        Map<CEnchantment, Integer> currentEnchantments = enchantmentBookSettings.getEnchantments(meta);
+
+        meta = enchantmentBookSettings.removeEnchantments(meta, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
+
+        String data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        Enchant enchantData = data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
+
+        List<Component> lore = meta.lore();
+        if (lore == null) lore = new ArrayList<>();
+
+        for (Map.Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
+            CEnchantment enchantment = entry.getKey();
+            int level = entry.getValue();
+
+            String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
+
+            lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+
+            for (Map.Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
+                enchantData.addEnchantment(x.getKey().getName(), x.getValue());
+            }
+        }
+
+        meta.lore(lore);
+        meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
+
+        return meta;
     }
     private boolean isArmor() {
         String name = this.material.name();
