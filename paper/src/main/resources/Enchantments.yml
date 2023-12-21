@@ -2272,7 +2272,6 @@ Enchantments:
   DemonForged:
     Enabled: true
     Sound: "ENTITY_PLAYER_LEVELUP"
-    Sound: "ENTITY_PLAYER_LEVELUP"
     Name: '&7DemonForged'
     MaxPower: 5
     Enchantment-Type: 'Axe'
