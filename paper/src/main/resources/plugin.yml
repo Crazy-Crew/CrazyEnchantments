@@ -62,9 +62,6 @@ permissions:
   crazyenchantments.sign:
     default: false
 
-  crazyenchantments.blast.use:
-    default: true
-
   crazyenchantments.updateenchants:
     default: false
 
