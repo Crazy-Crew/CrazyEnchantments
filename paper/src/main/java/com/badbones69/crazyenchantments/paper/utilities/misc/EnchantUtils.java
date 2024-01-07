@@ -68,4 +68,10 @@ public class EnchantUtils {
         return isActive(player, enchant, enchants);
     }
 
+    public static boolean isArmorEventActive(Player player, CEnchantments enchant, ItemStack item) {
+        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
+        if (player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))) return false;
+        return normalEnchantEvent(enchant, player, item);
+    }
+
 }

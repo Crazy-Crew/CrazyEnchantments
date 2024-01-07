@@ -96,10 +96,6 @@ public class ArmorEnchantments implements Listener {
         newUpdateEffects(player, newItem, oldItem);
 
     }
-
-    private void equipEffectCheck() {
-
-    }
     private void newUpdateEffects(Player player, ItemStack newItem, ItemStack oldItem) {
         Map<CEnchantment, Integer> topEnchants = currentEnchantsOnPlayerAdded(player, newItem);
 
@@ -141,6 +137,7 @@ public class ArmorEnchantments implements Listener {
 
         enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
                 .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
+                .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName()), newItem))
                 .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
 
         return toAdd;
