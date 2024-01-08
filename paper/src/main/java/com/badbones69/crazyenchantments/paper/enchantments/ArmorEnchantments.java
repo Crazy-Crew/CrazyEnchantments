@@ -91,8 +91,7 @@ public class ArmorEnchantments implements Listener {
             && Objects.equals(newItem.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING),
                               oldItem.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING))
         ) return;
-
-        // TODO Add Enchant use event spammer.
+        
         newUpdateEffects(player, newItem, oldItem);
 
     }
