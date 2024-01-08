@@ -282,10 +282,6 @@ public class ArmorEnchantments implements Listener {
 
         if (!pluginSupport.allowCombat(other.getLocation()) || pluginSupport.isFriendly(player, other) || methods.hasPermission(other, "bypass.aura", false)) return;
 
-        Calendar cal = Calendar.getInstance();
-
-        HashMap<CEnchantments, Calendar> finalEffect = enchantmentSettings.containsTimerPlayer(other) ? enchantmentSettings.getTimerPlayer(other) : new HashMap<>();
-
         Map<CEnchantment, Integer> enchantments = Map.of(enchant.getEnchantment(), level);
 
         switch (enchant) {
@@ -298,43 +294,17 @@ public class ArmorEnchantments implements Listener {
             }
 
             case ACIDRAIN -> {
-                if (EnchantUtils.isAuraActive(player, enchant, enchantments) && timerStuff(cal, other, enchant)) {
-                    other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
-                    int time = 35 - (level * 5);
-                    cal.add(Calendar.SECOND, time > 0 ? time : 5);
-                    finalEffect.put(enchant, cal);
-                }
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments)) other.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 4 * 20, 1));
             }
 
             case SANDSTORM -> {
-                if (EnchantUtils.isAuraActive(player, enchant, enchantments) && timerStuff(cal, other, enchant)) {
-                    other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
-                    int time = 35 - (level * 5);
-                    cal.add(Calendar.SECOND, time > 0 ? time : 5);
-                    finalEffect.put(enchant, cal);
-                }
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments)) other.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10 * 20, 0));
             }
 
             case RADIANT -> {
-                if (EnchantUtils.isAuraActive(player, enchant, enchantments) && timerStuff(cal, other, enchant)) {
-                    other.setFireTicks(5 * 20);
-                    int time = 20 - (level * 5);
-                    cal.add(Calendar.SECOND, Math.max(time, 0));
-                    finalEffect.put(enchant, cal);
-                }
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments)) other.setFireTicks(5 * 20);
             }
-
-            default -> {}
         }
-
-        enchantmentSettings.addTimerPlayer(player, finalEffect); // TODO Recheck usage and fix it.
-    }
-
-    private boolean timerStuff(Calendar cal, Player other, CEnchantments enchant) { // No clue what this did, so just moved it as it was a large mess. -TDL
-        return (!enchantmentSettings.containsTimerPlayer(other) ||
-                (enchantmentSettings.containsTimerPlayer(other) && !enchantmentSettings.getTimerPlayer(other).containsKey(enchant)) ||
-                (enchantmentSettings.containsTimerPlayer(other) && enchantmentSettings.getTimerPlayer(other).containsKey(enchant) &&
-                        cal.after(enchantmentSettings.getTimerPlayer(other).get(enchant))));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

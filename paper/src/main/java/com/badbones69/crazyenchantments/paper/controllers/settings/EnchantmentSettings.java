@@ -52,42 +52,6 @@ public class EnchantmentSettings {
         return allyCoolDown;
     }
 
-    // Timers
-    private final HashMap<UUID, HashMap<CEnchantments, Calendar>> enchantTimer = new HashMap<>();
-
-    /**
-     * Add a player to the map.
-     * @param player - The player to add.
-     */
-    public void addTimerPlayer(Player player, HashMap<CEnchantments, Calendar> enchantMap) {
-        enchantTimer.put(player.getUniqueId(), enchantMap);
-    }
-
-    /**
-     * Remove a player from the map.
-     * @param player - The player to remove.
-     */
-    public void removeTimerPlayer(Player player) {
-        enchantTimer.remove(player.getUniqueId());
-    }
-
-    /**
-     * Check if the map contains a player.
-     * @param player - The player to check.
-     * @return True if the player exists otherwise false.
-     */
-    public boolean containsTimerPlayer(Player player) {
-        return enchantTimer.containsKey(player.getUniqueId());
-    }
-
-    public HashMap<CEnchantments, Calendar> getTimerPlayer(Player player) {
-        return enchantTimer.get(player.getUniqueId());
-    }
-
-    public HashMap<UUID, HashMap<CEnchantments, Calendar>> getEnchantTimer() {
-        return enchantTimer;
-    }
-
     // Fallen Players
 
     private final List<UUID> fallenPlayers = new ArrayList<>();
