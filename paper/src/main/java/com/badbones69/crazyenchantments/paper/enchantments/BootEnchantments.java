@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
@@ -24,8 +23,6 @@ public class BootEnchantments implements Listener {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
-
-    private final CrazyManager crazyManager = starter.getCrazyManager();
 
     // Plugin Support.
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();

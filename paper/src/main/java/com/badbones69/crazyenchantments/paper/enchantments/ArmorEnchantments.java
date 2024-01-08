@@ -16,7 +16,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.PotionEffects;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.processors.ArmorMoveProcessor;
 import com.badbones69.crazyenchantments.paper.processors.Processor;
@@ -57,7 +56,6 @@ public class ArmorEnchantments implements Listener {
     private final ProtectionCrystalSettings protectionCrystalSettings = starter.getProtectionCrystalSettings();
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-    private final EnchantmentSettings enchantmentSettings = starter.getEnchantmentSettings();
 
     // Plugin Support.
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
@@ -69,6 +67,8 @@ public class ArmorEnchantments implements Listener {
     private final ArmorEnchantmentManager armorEnchantmentManager = starter.getArmorEnchantmentManager();
 
     private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
+
+    private final List<UUID> fallenPlayers = new ArrayList<>();
 
     public ArmorEnchantments() {
         armorMoveProcessor.start();
@@ -210,9 +210,9 @@ public class ArmorEnchantments implements Listener {
             if (player.getHealth() <= 8 && EnchantUtils.isEventActive(CEnchantments.ROCKET, player, armor, enchants)) {
                 // Anti cheat support here with AAC or any others.
                 plugin.getServer().getScheduler().runTaskLater(plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
-                enchantmentSettings.addFallenPlayer(player);
+                fallenPlayers.add(player.getUniqueId());
                 player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
-                plugin.getServer().getScheduler().runTaskLater(plugin, () -> enchantmentSettings.removeFallenPlayer(player), 8 * 20);
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> fallenPlayers.remove(player.getUniqueId()), 8 * 20);
             }
 
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
@@ -348,7 +348,7 @@ public class ArmorEnchantments implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerFallDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        if (!enchantmentSettings.containsFallenPlayer(player)) return;
+        if (!fallenPlayers.contains(player.getUniqueId())) return;
         if (!DamageCause.FALL.equals(event.getCause())) return;
 
         event.setCancelled(true);

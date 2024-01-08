@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.utilities;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
@@ -23,8 +22,6 @@ public class WingsUtils {
     private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private static final Starter starter = plugin.getStarter();
-
-    private static final CrazyManager crazyManager = starter.getCrazyManager();
 
     private static final PluginSupport pluginSupport = starter.getPluginSupport();
 
