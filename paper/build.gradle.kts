@@ -80,10 +80,6 @@ dependencies {
         exclude("org.bukkit", "bukkit")
     }
 
-    compileOnly("de.dustplanet", "silkspawners", "7.5.0") {
-        exclude("*", "*")
-    }
-
     compileOnly("me.clip", "placeholderapi", "2.11.4")
 
     compileOnly("com.github.oraxen", "oraxen", "1.160.0") {

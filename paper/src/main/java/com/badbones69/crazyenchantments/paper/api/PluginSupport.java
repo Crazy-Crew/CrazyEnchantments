@@ -108,14 +108,6 @@ public class PluginSupport {
                         if (website != null) supportedPlugin.addPlugin(website.equals("https://www.mcmmo.org"));
                     }
 
-                    case SILK_SPAWNERS -> supportedPlugin.addPlugin(name.equals("SilkSpawners"));
-
-                    case SILK_SPAWNERS_V2 -> {
-                        supportedPlugin.addPlugin(name.equals("SilkSpawners_v2"));
-
-                        plugin.getLogger().warning("Silk Spawners v2 by CANDC does not have any support yet.");
-                    }
-
                     default -> supportedPlugin.addPlugin(true);
                 }
 
@@ -157,10 +149,6 @@ public class PluginSupport {
     public enum SupportedPlugins {
         // Economy Plugins
         VAULT("Vault"),
-
-        // Spawner Plugins
-        SILK_SPAWNERS("SilkSpawners"),
-        SILK_SPAWNERS_V2("SilkSpawners_V2"),
 
         // Random Plugins
         MCMMO("McMMO"),

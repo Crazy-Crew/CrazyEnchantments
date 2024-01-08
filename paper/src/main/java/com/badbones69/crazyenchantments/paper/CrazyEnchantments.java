@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.paper.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
 import com.badbones69.crazyenchantments.paper.commands.CECommand;
 import com.badbones69.crazyenchantments.paper.commands.CETab;
@@ -146,8 +145,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             pluginManager.registerEvents(gKitzController = new GKitzController(), this);
         }
-
-        if (SupportedPlugins.SILK_SPAWNERS.isCachedPluginLoaded()) pluginManager.registerEvents(new SilkSpawnerSupport(), this);
 
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
 
