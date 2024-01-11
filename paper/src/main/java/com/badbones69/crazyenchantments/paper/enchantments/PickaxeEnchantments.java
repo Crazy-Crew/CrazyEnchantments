@@ -60,7 +60,7 @@ public class PickaxeEnchantments implements Listener {
         Block block = event.getClickedBlock();
 
         if (block == null || block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) return;
-        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantmentBookSettings.getEnchantments(item))) return;
+        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantmentBookSettings.getEnchantments(item))) return; // TODO Move over to block break.
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
@@ -79,7 +79,7 @@ public class PickaxeEnchantments implements Listener {
         boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
 
         if (!(blocks.containsKey(player) && blocks.get(player).containsKey(initialBlock))) return;
-        //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return;
+        //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; //Duplicate event as it is called on click.
 
         Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
         blocks.remove(player);
@@ -89,22 +89,8 @@ public class PickaxeEnchantments implements Listener {
 
         for (Block block : blockList) {
             if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
-
-            BlockBreakEvent blastBreak = new BlockBreakEvent(block, player);
-
-            if (!crazyManager.isDropBlocksBlast()) blastBreak.setDropItems(false);
-            EventUtils.addIgnoredEvent(blastBreak);
-            plugin.getServer().getPluginManager().callEvent(blastBreak);
-            EventUtils.removeIgnoredEvent(blastBreak);
-
-            if (blastBreak.isCancelled()) continue;
+            if (methods.playerBreakBlock(player, block, currentItem, crazyManager.isDropBlocksBlast())) continue;
             if (damage) methods.removeDurability(currentItem, player);
-            if (blastBreak.isDropItems()) {
-                block.breakNaturally(currentItem, true, true);
-            } else {
-                block.setType(Material.AIR);
-            }
-
         }
         if (!damage) methods.removeDurability(currentItem, player);
 
@@ -136,22 +122,8 @@ public class PickaxeEnchantments implements Listener {
 
         for (Block block : blockList) {
             if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
-
-            BlockBreakEvent veinMinerBreak = new BlockBreakEvent(block, player);
-
-            if (!crazyManager.isDropBlocksVeinMiner()) veinMinerBreak.setDropItems(false);
-            EventUtils.addIgnoredEvent(veinMinerBreak);
-            plugin.getServer().getPluginManager().callEvent(veinMinerBreak);
-            EventUtils.removeIgnoredEvent(veinMinerBreak);
-
-            if (veinMinerBreak.isCancelled()) continue;
+            if (methods.playerBreakBlock(player, block, currentItem, crazyManager.isDropBlocksVeinMiner())) continue;
             if (damage) methods.removeDurability(currentItem, player);
-            if (veinMinerBreak.isDropItems()) {
-                block.breakNaturally(currentItem, true, true);
-            } else {
-                block.setType(Material.AIR);
-            }
-
         }
         if (!damage) methods.removeDurability(currentItem, player);
 

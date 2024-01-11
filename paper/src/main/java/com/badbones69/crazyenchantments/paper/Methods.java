@@ -13,11 +13,19 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.world.entity.item.ItemEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftItem;
+import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -477,4 +485,54 @@ public class Methods {
                 "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
+
+    /**
+     * @see #playerBreakBlock(Player, Block, ItemStack, boolean)
+     */
+    public boolean playerBreakBlock(Player player, Block block, ItemStack tool) {
+        return playerBreakBlock(player, block, tool, true);
+    }
+
+    /**
+     * Imitates all the events called when a player breaks a block.
+     * Only calls #BlockDropItemEvent if the event isn't cancelled,
+     * and there are drops.
+     * @param player The player that will "break" the block.
+     * @param block The block that was broken.
+     * @param tool ItemStack used to break the block.
+     * @return If the event was cancelled.
+     */
+    public boolean playerBreakBlock(Player player, Block block, ItemStack tool, boolean hasDrops) {
+        BlockBreakEvent blockBreak = new BlockBreakEvent(block, player);
+        Collection<ItemStack> dropItems = block.getDrops(tool, player);
+        if (dropItems.isEmpty()) blockBreak.setDropItems(false);
+
+        EventUtils.addIgnoredEvent(blockBreak);
+        plugin.getServer().getPluginManager().callEvent(blockBreak);
+        EventUtils.removeIgnoredEvent(blockBreak);
+
+        if (blockBreak.isCancelled()) return true;
+
+        if (blockBreak.isDropItems() && hasDrops) blockDropItems(player, block, dropItems);
+
+        block.setType(Material.AIR);
+        return false;
+    }
+
+    /**
+     * Imitates the blockDropItemEvent usage.
+     * @param player The player that broke the block.
+     * @param block The block that was broken.
+     * @param items The items that will be dropped from the broken block.
+     */
+    public void blockDropItems(Player player, Block block, Collection<ItemStack> items) {
+        List<Item> dropItems = new ArrayList<>();
+        items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
+
+        BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) dropItems.forEach(Entity::remove);
+    }
+
 }
