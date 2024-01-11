@@ -125,7 +125,7 @@ public class HoeEnchantments implements Listener {
 
             if (!crazyManager.getNMSSupport().isFullyGrown(plant)) return;
 
-            getAreaCrops(player, plant, blockFace).forEach(Block::breakNaturally);
+            getAreaCrops(plant, blockFace).forEach(block -> methods.playerBreakBlock(player, block, hoe));
         }
     }
 
@@ -194,19 +194,12 @@ public class HoeEnchantments implements Listener {
         return planterSeeds.get(item.getType());
     }
 
-    private List<Block> getAreaCrops(Player player, Block block, BlockFace blockFace) {
+    private List<Block> getAreaCrops(Block block, BlockFace blockFace) {
         List<Block> blockList = new ArrayList<>();
 
         for (Block crop : getAreaBlocks(block, blockFace, 1)) { // Radius of 1 is 3x3
             if (harvesterCrops.contains(crop.getType()) && crazyManager.getNMSSupport().isFullyGrown(crop)) {
-                BlockBreakEvent useEvent = new BlockBreakEvent(crop, player);
-                EventUtils.addIgnoredEvent(useEvent);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) { // This stops players from breaking blocks that might be in protected areas.
-                    blockList.add(crop);
-                    EventUtils.removeIgnoredEvent(useEvent);
-                }
+                blockList.add(crop);
             }
         }
 

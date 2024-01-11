@@ -504,7 +504,7 @@ public class Methods {
      */
     public boolean playerBreakBlock(Player player, Block block, ItemStack tool, boolean hasDrops) {
         BlockBreakEvent blockBreak = new BlockBreakEvent(block, player);
-        Collection<ItemStack> dropItems = block.getDrops(tool, player);
+        Collection<ItemStack> dropItems = tool != null ? block.getDrops(tool, player) : block.getDrops();
         if (dropItems.isEmpty()) blockBreak.setDropItems(false);
 
         EventUtils.addIgnoredEvent(blockBreak);
