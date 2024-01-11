@@ -46,7 +46,7 @@ repositories {
 val mcVersion = rootProject.properties["minecraftVersion"] as String
 
 dependencies {
-    implementation("de.tr7zw", "item-nbt-api", "2.12.0")
+    implementation("de.tr7zw", "item-nbt-api", "2.12.2")
 
     implementation("org.bstats", "bstats-bukkit", "3.0.2")
 
