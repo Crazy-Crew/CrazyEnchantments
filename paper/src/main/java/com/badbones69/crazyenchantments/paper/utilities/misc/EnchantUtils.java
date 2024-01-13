@@ -49,7 +49,7 @@ public class EnchantUtils {
      * @return True if the enchant is active and can be used if the event is passed.
      */
     private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
+        //if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
         return enchants.containsKey(enchant.getEnchantment()) &&
                 (!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment())) &&
                         !(player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))));
@@ -61,6 +61,7 @@ public class EnchantUtils {
     }
 
     public static boolean isAuraActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
+        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
         return isActive(player, enchant, enchants);
     }
 
@@ -69,7 +70,7 @@ public class EnchantUtils {
     }
 
     public static boolean isArmorEventActive(Player player, CEnchantments enchant, ItemStack item) {
-        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
+        //if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
         if (player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))) return false;
         return normalEnchantEvent(enchant, player, item);
     }

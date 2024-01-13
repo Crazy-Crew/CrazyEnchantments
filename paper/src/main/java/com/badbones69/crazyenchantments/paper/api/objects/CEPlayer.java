@@ -329,12 +329,19 @@ public class CEPlayer {
         this.rageTask = rageTask;
     }
 
-    public boolean onEnchantCooldown(CEnchantments enchant) {
+    /**
+     * Checks if the player currently has the specified enchant on cooldown.
+     * If not on cooldown, adds one to the player for the specified enchant.
+     * @param enchant {@link CEnchantments} to check for.
+     * @param delay Delay in ticks to add a cooldown for.
+     * @return True if they already had a cooldown.
+     */
+    public boolean onEnchantCooldown(CEnchantments enchant, int delay) {
         if (onCooldown.contains(enchant)) return true;
 
         onCooldown.add(enchant);
         // Limit players to using each enchant only once per second.
-        CrazyEnchantments.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(CrazyEnchantments.getPlugin(), () -> onCooldown.remove(enchant), 20);
+        CrazyEnchantments.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(CrazyEnchantments.getPlugin(), () -> onCooldown.remove(enchant), delay);
         return false;
     }
 }
