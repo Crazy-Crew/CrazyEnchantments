@@ -233,15 +233,15 @@ public class CEPlayer {
     public void addCoolDown(GKitz kit) {
         Calendar coolDown = Calendar.getInstance();
 
-        for (String i : kit.getCooldown().split(" ")) {
+        for (String i : kit.getCooldown().toLowerCase().split(" ")) {
 
-            if (i.contains("D") || i.contains("d")) coolDown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
+            if (i.contains("d")) coolDown.add(Calendar.DATE, Integer.parseInt(i.replace("d", "")));
 
-            if (i.contains("H") || i.contains("h")) coolDown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
+            if (i.contains("h")) coolDown.add(Calendar.HOUR, Integer.parseInt(i.replace("h", "")));
 
-            if (i.contains("M") || i.contains("m")) coolDown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
+            if (i.contains("m")) coolDown.add(Calendar.MINUTE, Integer.parseInt(i.replace("m", "")));
 
-            if (i.contains("S") || i.contains("s")) coolDown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
+            if (i.contains("s")) coolDown.add(Calendar.SECOND, Integer.parseInt(i.replace("s", "")));
         }
 
         addCoolDown(new GkitCoolDown(kit, coolDown));
