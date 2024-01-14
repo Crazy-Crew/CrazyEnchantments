@@ -284,7 +284,7 @@ public class CrazyManager {
             }
         }
 
-        addCEPlayer(new CEPlayer(player, souls, isActive, gkitCoolDowns));
+        addCEPlayer(new CEPlayer(player, gkitCoolDowns));
     }
 
     /**
@@ -298,13 +298,6 @@ public class CrazyManager {
         CEPlayer cePlayer = getCEPlayer(player);
 
         if (cePlayer != null) {
-
-            if (cePlayer.getSouls() > 0) {
-                data.set("Players." + uuid + ".Name", player.getName());
-                data.set("Players." + uuid + ".Souls-Information.Souls", cePlayer.getSouls());
-                data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
-            }
-
             for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
                 data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
             }
@@ -330,12 +323,6 @@ public class CrazyManager {
     private void backupCEPlayer(CEPlayer cePlayer) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = cePlayer.getPlayer().getUniqueId().toString();
-
-        if (cePlayer.getSouls() > 0) {
-            data.set("Players." + uuid + ".Name", cePlayer.getPlayer().getName());
-            data.set("Players." + uuid + ".Souls-Information.Souls", cePlayer.getSouls());
-            data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
-        }
 
         for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
             data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());

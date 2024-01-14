@@ -5,7 +5,6 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
-import it.unimi.dsi.fastutil.Hash;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -17,29 +16,22 @@ public class CEPlayer {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Methods methods = plugin.getStarter().getMethods();
-    
-    private int souls;
     private final Player player;
-    private boolean soulsActive;
     private final List<GkitCoolDown> gkitCoolDowns;
     private Double rageMultiplier;
     private boolean hasRage;
     private int rageLevel;
     private BukkitTask rageTask;
-    private Set<CEnchantments> onCooldown = new HashSet<>();
+    private final Set<CEnchantments> onCooldown = new HashSet<>();
     
     /**
      * Used to make a new CEPlayer.
      * @param player The player.
-     * @param souls How many souls they have.
-     * @param soulsActive If the soul uses is active.
      * @param gkitCoolDowns The cool-downs the player has.
      */
-    public CEPlayer(Player player, int souls, boolean soulsActive, List<GkitCoolDown> gkitCoolDowns) {
-        this.souls = souls;
+    public CEPlayer(Player player, List<GkitCoolDown> gkitCoolDowns) {
         this.player = player;
         this.gkitCoolDowns = gkitCoolDowns;
-        this.soulsActive = soulsActive;
         this.hasRage = false;
         this.rageLevel = 0;
         this.rageMultiplier = 0.0;
@@ -52,70 +44,6 @@ public class CEPlayer {
      */
     public Player getPlayer() {
         return this.player;
-    }
-    
-    /**
-     * Get how many souls the player has.
-     * @return The amount of souls the player has.
-     */
-    public int getSouls() {
-        return this.souls;
-    }
-    
-    /**
-     * Set the amount of souls the player has.
-     * @param souls The new amount of souls the player has.
-     */
-    public void setSouls(int souls) {
-        this.souls = souls;
-    }
-    
-    /**
-     * Add 1 soul to the player.
-     */
-    public void addSoul() {
-        this.souls++;
-    }
-    
-    /**
-     * Add extra souls to the player.
-     * @param souls Amount of souls you want to add.
-     */
-    public void addSouls(int souls) {
-        this.souls += souls;
-    }
-    
-    /**
-     * Take 1 soul from the player.
-     */
-    public void useSoul() {
-        this.souls--;
-    }
-    
-    /**
-     * Take souls from the player.
-     * @param souls Amount of souls you are taking.
-     */
-    public void useSouls(int souls) {
-        this.souls -= souls;
-
-        if (this.souls < 0) this.souls = 0;
-    }
-    
-    /**
-     * Find out if the players souls are active.
-     * @return True if active and false if not.
-     */
-    public boolean isSoulsActive() {
-        return soulsActive;
-    }
-    
-    /**
-     * Set if the players souls are active.
-     * @param soulsActive True if you want to activate them and false if not.
-     */
-    public void setSoulsActive(boolean soulsActive) {
-        this.soulsActive = soulsActive;
     }
     
     /**
