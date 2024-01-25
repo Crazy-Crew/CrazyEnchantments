@@ -127,7 +127,7 @@ public class AxeEnchantments implements Listener {
             Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
             Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
 
-            if (headMat != null && (crazyManager.getDropPiglinHeads() || headMat != Material.PIGLIN_HEAD) && !EventUtils.dropsContains(event, headMat)) {
+            if (headMat != null && !EventUtils.dropsContains(event, headMat)) {
                 double multiplier = crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
                 if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, enchantments, multiplier)) {
                     ItemStack head = new ItemBuilder().setMaterial(headMat).build();

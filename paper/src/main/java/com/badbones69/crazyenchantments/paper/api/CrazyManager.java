@@ -93,8 +93,6 @@ public class CrazyManager {
     private boolean dropBlocksBlast;
     private boolean dropBlocksVeinMiner;
 
-    private boolean dropPiglinHeads;
-
     /**
      * Loads everything for the Crazy Enchantments plugin.
      * Do not use unless needed.
@@ -145,7 +143,6 @@ public class CrazyManager {
             } catch (Exception ignored) {}
         });
 
-        dropPiglinHeads = heads.getBoolean("DropPiglinHeads", false);
         ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
         headSec.getKeys(false).forEach(id -> {
             try {
@@ -745,13 +742,6 @@ public class CrazyManager {
         }
 
         return randomLevel;
-    }
-
-    /**
-     * @return The whether or not to drop piglin heads when using headless and decapitation.
-     */
-    public boolean getDropPiglinHeads() {
-        return dropPiglinHeads;
     }
 
     /**
