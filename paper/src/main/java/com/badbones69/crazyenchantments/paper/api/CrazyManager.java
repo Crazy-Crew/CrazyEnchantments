@@ -30,6 +30,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -75,6 +76,7 @@ public class CrazyManager {
     private final List<GKitz> gkitz = new ArrayList<>();
     private final List<CEPlayer> players = new ArrayList<>();
     private final List<Material> blockList = new ArrayList<>();
+    private final Map<Material, Double> headMap = new HashMap<>();
 
     // Random
     private final Random random = new Random();
@@ -101,8 +103,10 @@ public class CrazyManager {
         FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
 
         FileConfiguration blocks = Files.BLOCKLIST.getFile();
+        FileConfiguration heads = Files.HEADMAP.getFile();
 
         blockList.clear();
+        headMap.clear();
         gkitz.clear();
         enchantmentBookSettings.getRegisteredEnchantments().clear();
         enchantmentBookSettings.getCategories().clear();
@@ -136,6 +140,14 @@ public class CrazyManager {
         blocks.getStringList("Block-List").forEach(id -> {
             try {
                 blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
+            } catch (Exception ignored) {}
+        });
+
+        ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
+        headSec.getKeys(false).forEach(id -> {
+            try {
+                Material mat = new ItemBuilder().setMaterial(id).getMaterial();
+                headMap.put(mat, headSec.getDouble(id));
             } catch (Exception ignored) {}
         });
 
@@ -730,6 +742,13 @@ public class CrazyManager {
         }
 
         return randomLevel;
+    }
+
+    /**
+     * @return The head multiplier map for decapitation and headless.
+     */
+    public Map<Material, Double> getDecapitationHeadMap() {
+        return headMap;
     }
 
     /**

@@ -21,6 +21,7 @@ import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupp
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EntityUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -349,6 +350,15 @@ public class SwordEnchantments implements Listener {
             if (EnchantUtils.isEventActive(CEnchantments.INQUISITIVE, damager, item, enchantments)) {
                 event.setDroppedExp(event.getDroppedExp() * (crazyManager.getLevel(item, CEnchantments.INQUISITIVE) + 1));
             }
+
+            Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
+            if (headMat != null && !EventUtils.dropsContains(event, headMat)) {
+                double multiplier = crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
+                if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.HEADLESS, damager, item, enchantments, multiplier)) {
+                    ItemStack head = new ItemBuilder().setMaterial(headMat).build();
+                    event.getDrops().add(head);
+                }
+			}
 
             // The entity that is killed is a player.
             if (event.getEntity() instanceof Player && EnchantUtils.isEventActive(CEnchantments.CHARGE, damager, item, enchantments)) {

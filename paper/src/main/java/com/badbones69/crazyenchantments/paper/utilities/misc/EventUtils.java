@@ -1,6 +1,9 @@
 package com.badbones69.crazyenchantments.paper.utilities.misc;
 
+import org.bukkit.Material;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -39,5 +42,19 @@ public class EventUtils {
 
     public static void removeIgnoredEvent(Event event) {
         ignoredEvents.remove(event);
+    }
+
+    public static boolean dropsContains(EntityDeathEvent event, Material material) {
+        boolean hasDroppedMat = true;
+        if (material != null && !material.isAir()) {
+            hasDroppedMat = false;
+            for (ItemStack drop : event.getDrops()) {
+                if (drop.getType() == material) {
+                    hasDroppedMat = true;
+                    break;
+                }
+            }
+        }
+        return hasDroppedMat;
     }
 }

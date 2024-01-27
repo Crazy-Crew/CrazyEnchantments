@@ -249,7 +249,15 @@ public enum CEnchantments {
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(int level) {
-        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(level);
+        return this.chanceSuccessful(level, 1.0);
+    }
+
+    /**
+     * Check to see if the enchantment's chance is successful.
+     * @return True if the chance was successful and false if not.
+     */
+    public boolean chanceSuccessful(int level, double multiplier) {
+        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(level, multiplier);
     }
 
     /**

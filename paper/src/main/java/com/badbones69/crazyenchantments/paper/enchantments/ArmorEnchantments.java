@@ -136,7 +136,7 @@ public class ArmorEnchantments implements Listener {
 
         enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
                 .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
-                .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName()), newItem))
+                .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName().toUpperCase()), newItem))
                 .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
 
         return toAdd;
