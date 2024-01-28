@@ -46,7 +46,7 @@ repositories {
 val mcVersion = rootProject.properties["minecraftVersion"] as String
 
 dependencies {
-    implementation("de.tr7zw", "item-nbt-api", "2.12.0")
+    implementation("de.tr7zw", "item-nbt-api", "2.12.2")
 
     implementation("org.bstats", "bstats-bukkit", "3.0.2")
 
@@ -80,10 +80,6 @@ dependencies {
         exclude("org.bukkit", "bukkit")
     }
 
-    compileOnly("de.dustplanet", "silkspawners", "7.5.0") {
-        exclude("*", "*")
-    }
-
     compileOnly("me.clip", "placeholderapi", "2.11.4")
 
     compileOnly("com.github.oraxen", "oraxen", "1.160.0") {
@@ -92,7 +88,10 @@ dependencies {
 
     compileOnly(fileTree("libs").include("*.jar"))
 
+    compileOnly("com.gmail.nossr50.mcMMO", "mcMMO", "2.1.226")
+
     paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:$mcVersion-R0.1-SNAPSHOT")
+
 }
 
 val isBeta: Boolean get() = rootProject.extra["isBeta"]?.toString()?.toBoolean() ?: false

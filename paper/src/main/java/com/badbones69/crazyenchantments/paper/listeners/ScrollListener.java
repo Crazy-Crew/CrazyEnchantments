@@ -21,7 +21,6 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,6 +34,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 public class ScrollListener implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
@@ -68,7 +69,7 @@ public class ScrollListener implements Listener {
         ItemStack item = event.getCurrentItem();
         ItemStack scroll = event.getCursor();
 
-        if (item == null || item.getType() == Material.AIR || scroll == null || scroll.getType() == Material.AIR) return;
+        if (item == null || item.getType().isAir() || scroll.getType().isAir()) return;
 
         InventoryType.SlotType slotType = event.getSlotType();
 
@@ -84,10 +85,7 @@ public class ScrollListener implements Listener {
 
         switch (type.getConfigName()) {
             case "BlackScroll" -> {
-                if (methods.isInventoryFull(player)) {
-                    player.sendMessage(Messages.INVENTORY_FULL.getMessage());
-                    return;
-                }
+                if (methods.isInventoryFull(player)) return;
 
                 List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
                 if (!enchantments.isEmpty()) { // Item has enchantments
@@ -120,7 +118,7 @@ public class ScrollListener implements Listener {
             }
 
             case "TransmogScroll" -> {
-                if (!enchantmentBookSettings.hasEnchantments(item)) return;
+                if (!enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
                 if (item.lore() == null) return;
 
                 ItemStack orderedItem = newOrderNewEnchantments(item.clone());
@@ -139,13 +137,13 @@ public class ScrollListener implements Listener {
         Player player = event.getPlayer();
         ItemStack scroll = methods.getItemInHand(player);
 
-        if (scroll != null) {
-            if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) {
-                event.setCancelled(true);
-                player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
-            } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll()) || scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
-                event.setCancelled(true);
-            }
+        if (scroll.isEmpty()) return;
+
+        if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) {
+            event.setCancelled(true);
+            player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
+        } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll()) || scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
+            event.setCancelled(true);
         }
     }
 
@@ -183,15 +181,16 @@ public class ScrollListener implements Listener {
         Gson gson = new Gson();
 
         ItemMeta meta = item.getItemMeta();
+        List<Component> lore = item.lore();
+        assert meta != null && lore != null;
+
         PersistentDataContainer container = meta.getPersistentDataContainer();
         Enchant data = gson.fromJson(container.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
-        List<Component> normalLore = item.lore();
+        boolean addSpaces = Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Add-Blank-Lines", true);
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
-
-        List<Component> newLore = new ArrayList<>();
-        List<Component> enchantLore = new ArrayList<>();
-
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
+        List<String> order = Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Lore-Order");
+        if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
 
         for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
@@ -200,54 +199,30 @@ public class ScrollListener implements Listener {
             newEnchantmentOrder.add(enchantment);
         }
 
-        // Order Enchantments by length.
-        orderInts(newEnchantmentOrder, enchantments);
+        orderInts(newEnchantmentOrder, enchantments); // Order Enchantments by length.
 
-        // Remove blank lines
-        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").equals(""));
+        List<Component> enchantLore = newEnchantmentOrder.stream().map(i ->
+                ColorUtils.legacyTranslateColourCodes("%s %s".formatted(i.getCustomName(), NumberUtils.toRoman(data.getLevel(i.getName()))))).collect(Collectors.toList());
+        List<Component> normalLore = stripNonNormalLore(lore, newEnchantmentOrder);
+        List<Component> protectionLore = getAllProtectionLore(container);
 
-        // Remove CE enchantment lore
-        newEnchantmentOrder.forEach(enchant -> normalLore.removeIf(loreComponent ->
-                ColorUtils.toPlainText(loreComponent).contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))
-        ));
-
-        // Remove white-scroll protection lore
-        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(Scrolls.getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
-
-        // Remove Protection-crystal protection lore
-        normalLore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected").replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-        ));
-
-        // Convert CE lore to components.
-        for (CEnchantment i : newEnchantmentOrder) {
-            enchantLore.add(ColorUtils.legacyTranslateColourCodes(i.getCustomName() + " " + NumberUtils.toRoman(data.getLevel(i.getName()))));
-        }
-
-        boolean hasWhiteScrollProtection = Scrolls.hasWhiteScrollProtection(container);
-        boolean hasProtectionCrystalProtection = ProtectionCrystalSettings.isProtected(container);
-
-        List<String> order = Files.CONFIG.getFile().getStringList("Settings.WhiteScroll.Lore-Order");
-
-        if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
-
+        List<Component> newLore = new ArrayList<>();
         boolean wasEmpty = true;
-        for (String selection : order) {
 
+        for (String selection : order) {
             switch (selection) {
                 case "CE_Enchantments" -> {
-                    if (!wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
+                    if (addSpaces && !wasEmpty && !enchantLore.isEmpty()) newLore.add(Component.text(""));
                     newLore.addAll(enchantLore);
                     wasEmpty = enchantLore.isEmpty();
                 }
                 case "Protection" -> {
-                    if (!wasEmpty && (hasWhiteScrollProtection || hasProtectionCrystalProtection)) newLore.add(Component.text(""));
-                    if (hasWhiteScrollProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-                    if (hasProtectionCrystalProtection) newLore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
-                    wasEmpty = !(hasWhiteScrollProtection || hasProtectionCrystalProtection);
+                    if (addSpaces && !wasEmpty && !protectionLore.isEmpty()) newLore.add(Component.text(""));
+                    newLore.addAll(protectionLore);
+                    wasEmpty = protectionLore.isEmpty();
                 }
                 case "Normal_Lore" -> {
-                    if (!wasEmpty && !normalLore.isEmpty()) newLore.add(Component.text(""));
+                    if (addSpaces && !wasEmpty && !normalLore.isEmpty()) newLore.add(Component.text(""));
                     newLore.addAll(normalLore);
                     wasEmpty = normalLore.isEmpty();
                 }
@@ -259,6 +234,36 @@ public class ScrollListener implements Listener {
         meta.lore(newLore);
         item.setItemMeta(meta);
         return item;
+    }
+
+    private List<Component> getAllProtectionLore(PersistentDataContainer container) {
+        List<Component> lore = new ArrayList<>();
+
+        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
+        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+
+        return lore;
+    }
+
+    private List<Component> stripNonNormalLore(List<Component> lore, List<CEnchantment> enchantments) {
+
+        // Remove blank lines
+        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll(" ", "").isEmpty());
+
+        // Remove CE enchantment lore
+        enchantments.forEach(enchant -> lore.removeIf(loreComponent ->
+                ColorUtils.toPlainText(loreComponent).contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))
+        ));
+
+        // Remove white-scroll protection lore
+        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(Scrolls.getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+
+        // Remove Protection-crystal protection lore
+        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
+                FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected").replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+        ));
+
+        return lore;
     }
 
     private void useSuffix(ItemStack item, ItemMeta meta, List<CEnchantment> newEnchantmentOrder) {

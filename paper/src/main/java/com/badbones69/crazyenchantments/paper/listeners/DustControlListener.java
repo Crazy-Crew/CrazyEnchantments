@@ -75,7 +75,7 @@ public class DustControlListener implements Listener {
     public void onInventoryClick(InventoryClickEvent e) { //Dust Use
         Player player = (Player) e.getWhoClicked();
 
-        if (e.getCurrentItem() != null && e.getCursor() != null) {
+        if (e.getCurrentItem() != null) {
             ItemStack book = e.getCurrentItem();
             ItemStack dust = e.getCursor();
 

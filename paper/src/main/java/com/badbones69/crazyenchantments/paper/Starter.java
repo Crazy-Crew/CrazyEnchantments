@@ -20,10 +20,10 @@ import com.badbones69.crazyenchantments.paper.api.support.claims.SuperiorSkyBloc
 import com.badbones69.crazyenchantments.paper.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
+import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
 
 public class Starter {
@@ -37,7 +37,6 @@ public class Starter {
 
     // Settings.
     private ProtectionCrystalSettings protectionCrystalSettings;
-    private EnchantmentSettings enchantmentSettings;
     private EnchantmentBookSettings enchantmentBookSettings;
 
     // Plugin Utils.
@@ -67,6 +66,8 @@ public class Starter {
     // Listeners.
     private ScramblerListener scramblerListener;
     private ScrollListener scrollListener;
+    private SlotCrystalListener slotCrystalListener;
+
 
     public void run() {
         this.fileManager = new FileManager();
@@ -111,12 +112,11 @@ public class Starter {
         // Listeners.
         this.plugin.pluginManager.registerEvents(this.scramblerListener = new ScramblerListener(), this.plugin);
         this.plugin.pluginManager.registerEvents(this.scrollListener = new ScrollListener(), this.plugin);
+        this.plugin.pluginManager.registerEvents(this.slotCrystalListener = new SlotCrystalListener(), this.plugin);
 
         this.skullCreator = new SkullCreator();
 
         this.crazyManager = new CrazyManager();
-
-        this.enchantmentSettings = new EnchantmentSettings();
 
         // Plugin Utils.
         this.bowUtils = new BowUtils();
@@ -147,10 +147,6 @@ public class Starter {
     // Settings.
     public ProtectionCrystalSettings getProtectionCrystalSettings() {
         return this.protectionCrystalSettings;
-    }
-
-    public EnchantmentSettings getEnchantmentSettings() {
-        return this.enchantmentSettings;
     }
 
     public EnchantmentBookSettings getEnchantmentBookSettings() {
@@ -227,6 +223,10 @@ public class Starter {
 
     public ScrollListener getScrollListener() {
         return this.scrollListener;
+    }
+
+    public SlotCrystalListener getSlotCrystalListener() {
+        return this.slotCrystalListener;
     }
 
     // Plugin Utils.

@@ -21,7 +21,12 @@ public class FactionsUUIDSupport implements ClaimSupport {
 
         if (isWilderness(fPlayer) || isWilderness(oPlayer)) return false;
 
-        return fPlayer.getFaction() == oPlayer.getFaction() || fPlayer.getRelationTo(oPlayer).isAlly() || fPlayer.getRelationTo(oPlayer).isTruce();
+        // TODO Find a way for factions forks to work with each other.
+        try {
+            return fPlayer.getFaction() == oPlayer.getFaction() || fPlayer.getRelationTo(oPlayer).isAlly() || fPlayer.getRelationTo(oPlayer).isTruce();
+        } catch (NoSuchMethodError e) {
+            return false;
+        }
     }
 
     public boolean inTerritory(Player player) {

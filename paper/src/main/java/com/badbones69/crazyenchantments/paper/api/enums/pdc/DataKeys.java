@@ -13,7 +13,10 @@ public enum DataKeys {
     SCRAMBLER("isScrambler", Boolean.class),
     LOST_BOOK("Lost_Book_Type", String.class),
     NO_FIREWORK_DAMAGE("No_Damage", Boolean.class),
-    SCROLL("Crazy_Scroll", String.class);
+    SCROLL("Crazy_Scroll", String.class),
+    EXPERIENCE("Experience", String.class),
+    LIMIT_REDUCER("Limit_Reducer", Integer.class),
+    SLOT_CRYSTAL("Slot_Crystal", Boolean.class);
 
     private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
     private final String namSpaceKey;

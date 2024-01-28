@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
+import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.utilities.WingsUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
@@ -29,12 +30,15 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.*;
 import java.util.Map.Entry;
@@ -53,6 +57,8 @@ public class CrazyManager {
     private final ScramblerListener scramblerListener = plugin.getStarter().getScramblerListener();
     private final ScrollListener scrollListener = plugin.getStarter().getScrollListener();
 
+    private final SlotCrystalListener slotCrystalListener = plugin.getStarter().getSlotCrystalListener();
+
     private CropManagerVersion cropManagerVersion;
 
     private final AllyManager allyManager = plugin.getStarter().getAllyManager();
@@ -70,6 +76,7 @@ public class CrazyManager {
     private final List<GKitz> gkitz = new ArrayList<>();
     private final List<CEPlayer> players = new ArrayList<>();
     private final List<Material> blockList = new ArrayList<>();
+    private final Map<Material, Double> headMap = new HashMap<>();
 
     // Random
     private final Random random = new Random();
@@ -96,8 +103,10 @@ public class CrazyManager {
         FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
 
         FileConfiguration blocks = Files.BLOCKLIST.getFile();
+        FileConfiguration heads = Files.HEADMAP.getFile();
 
         blockList.clear();
+        headMap.clear();
         gkitz.clear();
         enchantmentBookSettings.getRegisteredEnchantments().clear();
         enchantmentBookSettings.getCategories().clear();
@@ -134,6 +143,14 @@ public class CrazyManager {
             } catch (Exception ignored) {}
         });
 
+        ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
+        headSec.getKeys(false).forEach(id -> {
+            try {
+                Material mat = new ItemBuilder().setMaterial(id).getMaterial();
+                headMap.put(mat, headSec.getDouble(id));
+            } catch (Exception ignored) {}
+        });
+
         // Loads the info menu manager and the enchantment types.
         infoMenuManager.load();
 
@@ -167,7 +184,8 @@ public class CrazyManager {
                 .setInfoDescription(enchants.getStringList(path + ".Info.Description"))
                 .setCategories(enchants.getStringList(path + ".Categories"))
                 .setChance(cEnchantment.getChance())
-                .setChanceIncrease(cEnchantment.getChanceIncrease());
+                .setChanceIncrease(cEnchantment.getChanceIncrease())
+                .setSound(enchants.getString(path + ".Sound"));
 
                 if (enchants.contains(path + ".Enchantment-Type")) enchantment.setEnchantmentType(methods.getFromName(enchants.getString(path + ".Enchantment-Type")));
 
@@ -218,6 +236,8 @@ public class CrazyManager {
         protectionCrystalSettings.loadProtectionCrystal();
         // Loads the scrambler.
         scramblerListener.loadScrambler();
+        // Loads Slot Crystal.
+        slotCrystalListener.load();
         // Loads the Scroll Control settings.
         scrollListener.loadScrollControl();
 
@@ -276,7 +296,7 @@ public class CrazyManager {
             }
         }
 
-        addCEPlayer(new CEPlayer(player, souls, isActive, gkitCoolDowns));
+        addCEPlayer(new CEPlayer(player, gkitCoolDowns));
     }
 
     /**
@@ -290,13 +310,6 @@ public class CrazyManager {
         CEPlayer cePlayer = getCEPlayer(player);
 
         if (cePlayer != null) {
-
-            if (cePlayer.getSouls() > 0) {
-                data.set("Players." + uuid + ".Name", player.getName());
-                data.set("Players." + uuid + ".Souls-Information.Souls", cePlayer.getSouls());
-                data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
-            }
-
             for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
                 data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
             }
@@ -322,12 +335,6 @@ public class CrazyManager {
     private void backupCEPlayer(CEPlayer cePlayer) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = cePlayer.getPlayer().getUniqueId().toString();
-
-        if (cePlayer.getSouls() > 0) {
-            data.set("Players." + uuid + ".Name", cePlayer.getPlayer().getName());
-            data.set("Players." + uuid + ".Souls-Information.Souls", cePlayer.getSouls());
-            data.set("Players." + uuid + ".Souls-Information.Is-Active", cePlayer.isSoulsActive());
-        }
 
         for (GkitCoolDown gkitCooldown : cePlayer.getCoolDowns()) {
             data.set("Players." + uuid + ".GKitz." + gkitCooldown.getGKitz().getName(), gkitCooldown.getCoolDown().getTimeInMillis());
@@ -389,6 +396,14 @@ public class CrazyManager {
         return null;
     }
 
+    public CEPlayer getCEPlayer(UUID uuid) {
+        for (CEPlayer cePlayer : getCEPlayers()) {
+            if (cePlayer.getPlayer().getUniqueId().equals(uuid)) return cePlayer;
+        }
+
+        return null;
+    }
+
     /**
      * This gets all the CEPlayer's that are loaded.
      * @return All CEPlayer's that are loading and in a list.
@@ -396,16 +411,6 @@ public class CrazyManager {
     public List<CEPlayer> getCEPlayers() {
         return players;
     }
-
-    /**
-     * @param item Item that you want to check if it has an enchantment.
-     * @param enchantment The enchantment you want to check if the item has.
-     * @return True if the item has the enchantment / False if it doesn't have the enchantment.
-     */
-    public boolean hasEnchantment(ItemStack item, CEnchantments enchantment) {
-        return enchantmentBookSettings.hasEnchantment(item, enchantment.getEnchantment());
-    }
-
     public CEBook getRandomEnchantmentBook(Category category) {
         try {
             List<CEnchantment> enchantments = category.getEnabledEnchantments();
@@ -433,14 +438,11 @@ public class CrazyManager {
      * @return The enchantment as a CEnchantment but if not found will be null.
      */
     public CEnchantment getEnchantmentFromName(String enchantmentString) {
-        enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "");
-
         for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
-            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString) ||
-                enchantment.getName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)
-            ) return enchantment;
+            if (enchantment.getName().equalsIgnoreCase(enchantmentString)) return enchantment;
+            enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "");
+            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)) return enchantment;
         }
-
         return null;
     }
 
@@ -461,10 +463,7 @@ public class CrazyManager {
     }
 
     /**
-     * @param item Item you want to add the enchantment to.
-     * @param enchantment Enchantment you want added.
-     * @param level Tier of the enchantment.
-     * @return The item with the enchantment on it.
+     * @see #addEnchantments(ItemMeta, Map) 
      */
     public ItemStack addEnchantment(ItemStack item, CEnchantment enchantment, int level) {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
@@ -473,59 +472,102 @@ public class CrazyManager {
         return addEnchantments(item, enchantments);
     }
 
-    public ItemStack addEnchantments(ItemStack itemStack, Map<CEnchantment, Integer> enchantments) {
-        ItemStack item = itemStack.clone();
+    /**
+     * @see #addEnchantments(ItemMeta, Map) 
+     */
+    public ItemStack addEnchantments(ItemStack item, Map<CEnchantment, Integer> enchantments) {
+        item.setItemMeta(addEnchantments(item.getItemMeta(), enchantments));
+
+        return item;
+    }
+
+    /**
+     * @param meta The meta you want to add the enchantment to.
+     * @param enchantments The enchantments to be added.
+     * @return The item with the enchantment on it.
+     */
+    public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) {
+
+        Gson gson = new Gson();
+        Map<CEnchantment, Integer> currentEnchantments = enchantmentBookSettings.getEnchantments(meta);
+
+        meta = enchantmentBookSettings.removeEnchantments(meta, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
+
+        String data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        Enchant enchantData = data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
+
+        List<Component> lore = meta.lore();
+        if (lore == null) lore = new ArrayList<>();
+
         for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
             CEnchantment enchantment = entry.getKey();
             int level = entry.getValue();
 
-            if (enchantmentBookSettings.hasEnchantment(item, enchantment)) enchantmentBookSettings.removeEnchantment(item, enchantment);
-            
             String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
-            ItemMeta meta = item.getItemMeta();
-            List<Component> lore = meta.lore();
-
-            if (lore == null) lore = new ArrayList<>();
 
             lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
-
-            meta.lore(lore);
-
-            Gson gson = new Gson();
-
-            String data;
-            Enchant enchantData;
-
-            data = itemStack.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
-
-            enchantData =  data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
             for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
                 enchantData.addEnchantment(x.getKey().getName(), x.getValue());
             }
-
-            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
-
-            item.setItemMeta(meta);
         }
 
+        meta.lore(lore);
+        meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
+
+        return meta;
+    }
+
+    public ItemStack changeEnchantmentLimiter(ItemStack item, int amount) {
+        item.setItemMeta(changeEnchantmentLimiter(item.getItemMeta(), amount));
         return item;
+    }
+
+    public ItemMeta changeEnchantmentLimiter(ItemMeta meta, int amount) {
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        int newAmount = container.getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
+        newAmount += amount;
+
+        if (newAmount == 0) {
+            container.remove(DataKeys.LIMIT_REDUCER.getKey());
+        } else {
+            container.set(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, newAmount);
+        }
+
+        return meta;
+    }
+
+    public int getEnchantmentLimiter(ItemStack item) {
+        return item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
     }
 
     /**
      * Force an update of a players armor potion effects.
      * @param player The player you are updating the effects of.
      */
-    public void updatePlayerEffects(Player player) {
-        if (player != null) {
-            for (CEnchantments ench : getEnchantmentPotions().keySet()) {
-                for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                    if (ench.isActivated() && enchantmentBookSettings.hasEnchantment(armor, ench.getEnchantment())) {
-                        Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
-                        methods.checkPotions(effects, player);
-                    }
-                }
+    public void updatePlayerEffects(Player player) { // TODO Remove this method.
+        if (player == null) return;
+        Set<CEnchantments> allEnchantPotionEffects = getEnchantmentPotions().keySet();
+
+        for (ItemStack armor : player.getEquipment().getArmorContents()) {
+            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(armor);
+            for (CEnchantments ench : allEnchantPotionEffects) {
+                if (!enchantments.containsKey(ench.getEnchantment())) continue;
+                Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
+                checkPotions(effects, player);
             }
+        }
+    }
+
+    public void checkPotions(Map<PotionEffectType, Integer> effects, Player player) { //TODO Remove this Method
+        for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
+            Integer value = type.getValue();
+            PotionEffectType key = type.getKey();
+
+            player.removePotionEffect(key);
+            if (value == 0) continue; //TODO check usage with new addition of infinity.
+            PotionEffect potionEffect = new PotionEffect(key, PotionEffect.INFINITE_DURATION, value);
+            player.addPotionEffect(potionEffect);
         }
     }
 
@@ -536,7 +578,7 @@ public class CrazyManager {
      * @param enchantment The enchantment you want the max level effects from.
      * @return The list of all the max potion effects based on all the armor on the player.
      */
-    public Map<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) {
+    public Map<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) { //TODO Remove this method.
         HashMap<PotionEffectType, Integer> effects = new HashMap<>();
         List<ItemStack> items = new ArrayList<>(Arrays.asList(player.getEquipment().getArmorContents()));
 
@@ -549,38 +591,35 @@ public class CrazyManager {
         items.add(includedItem);
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> armorEffects = getEnchantmentPotions();
 
-        for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
-            if (enchantments.getKey().isActivated()) {
-                for (ItemStack armor : items) {
-                    if (armor != null && !armor.isSimilar(excludedItem) && enchantmentBookSettings.hasEnchantment(armor, enchantments.getKey().getEnchantment())) {
-                        int level = enchantmentBookSettings.getLevel(armor, enchantments.getKey().getEnchantment());
+        for (ItemStack armor : items) {
+            if (armor == null || armor.isSimilar(excludedItem)) continue;
+            Map<CEnchantment, Integer> ench = enchantmentBookSettings.getEnchantments(armor);
+            for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
+                if (!ench.containsKey(enchantments.getKey().getEnchantment())) continue;
+                int level = ench.get(enchantments.getKey().getEnchantment());
+                if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
 
-                        if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
+                for (PotionEffectType type : enchantments.getValue().keySet()) {
+                    if (effects.containsKey(type)) {
+                        int updated = effects.get(type);
 
-                        for (PotionEffectType type : enchantments.getValue().keySet()) {
-                            if (enchantments.getValue().containsKey(type)) {
-                                if (effects.containsKey(type)) {
-                                    int updated = effects.get(type);
-
-                                    if (updated < (level + enchantments.getValue().get(type))) effects.put(type, level + enchantments.getValue().get(type));
-                                } else {
-                                    effects.put(type, level + enchantments.getValue().get(type));
-                                }
-                            }
-                        }
+                        if (updated < (level + enchantments.getValue().get(type))) effects.put(type, level + enchantments.getValue().get(type));
+                    } else {
+                        effects.put(type, level + enchantments.getValue().get(type));
                     }
                 }
             }
         }
 
         for (PotionEffectType type : armorEffects.get(enchantment).keySet()) {
-            if (!effects.containsKey(type)) effects.put(type, -1);
+            if (!effects.containsKey(type)) effects.put(type, 0); // -1 is now Infinity.
         }
 
         return effects;
     }
 
     /**
+     *
      * @return All the effects for each enchantment that needs it.
      */
     public Map<CEnchantments, HashMap<PotionEffectType, Integer>> getEnchantmentPotions() {
@@ -598,18 +637,18 @@ public class CrazyManager {
         enchants.put(CEnchantments.DRUNK, new HashMap<>());
         enchants.get(CEnchantments.DRUNK).put(PotionEffectType.INCREASE_DAMAGE, -1);
         enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW_DIGGING, -1);
-        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW, 0);
+        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW, -1);
 
         enchants.put(CEnchantments.HULK, new HashMap<>());
         enchants.get(CEnchantments.HULK).put(PotionEffectType.INCREASE_DAMAGE, -1);
         enchants.get(CEnchantments.HULK).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
-        enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOW, 0);
+        enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOW, -1);
 
         enchants.put(CEnchantments.VALOR, new HashMap<>());
         enchants.get(CEnchantments.VALOR).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
 
         enchants.put(CEnchantments.OVERLOAD, new HashMap<>());
-        enchants.get(CEnchantments.OVERLOAD).put(PotionEffectType.HEALTH_BOOST, 0);
+        enchants.get(CEnchantments.OVERLOAD).put(PotionEffectType.HEALTH_BOOST, -1);
 
         enchants.put(CEnchantments.NINJA, new HashMap<>());
         enchants.get(CEnchantments.NINJA).put(PotionEffectType.HEALTH_BOOST, -1);
@@ -618,7 +657,7 @@ public class CrazyManager {
         enchants.put(CEnchantments.INSOMNIA, new HashMap<>());
         enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.CONFUSION, -1);
         enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW_DIGGING, -1);
-        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW, 0);
+        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW, -1);
 
         enchants.put(CEnchantments.ANTIGRAVITY, new HashMap<>());
         enchants.get(CEnchantments.ANTIGRAVITY).put(PotionEffectType.JUMP, 1);
@@ -632,7 +671,7 @@ public class CrazyManager {
         enchants.put(CEnchantments.CYBORG, new HashMap<>());
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.SPEED, -1);
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.INCREASE_DAMAGE, 0);
-        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP, 0);
+        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP, -1);
 
         return enchants;
     }
@@ -658,10 +697,27 @@ public class CrazyManager {
         return limit;
     }
 
-    public boolean canAddEnchantment(Player player, ItemStack item) {
-        if (maxEnchantmentCheck && !player.hasPermission("crazyenchantments.bypass.limit")) return enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) < getPlayerMaxEnchantments(player);
+    public int getPlayerBaseEnchantments(Player player) {
+        int limit = 0;
 
-        return true;
+        for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
+            String perm = Permission.getPermission().toLowerCase();
+
+            if (perm.startsWith("crazyenchantments.base-limit.")) {
+                perm = perm.replace("crazyenchantments.base-limit.", "");
+
+                if (NumberUtils.isInt(perm) && limit < Integer.parseInt(perm)) limit = Integer.parseInt(perm);
+            }
+        }
+
+        return limit;
+    }
+
+    public boolean canAddEnchantment(Player player, ItemStack item) {
+        if (!maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
+
+        return  enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) <
+                Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
     /**
@@ -686,6 +742,13 @@ public class CrazyManager {
         }
 
         return randomLevel;
+    }
+
+    /**
+     * @return The head multiplier map for decapitation and headless.
+     */
+    public Map<Material, Double> getDecapitationHeadMap() {
+        return headMap;
     }
 
     /**
@@ -819,7 +882,7 @@ public class CrazyManager {
             newItemString.append(option).append(", ");
         }
 
-        if (newItemString.length() > 0) itemString = newItemString.substring(0, newItemString.length() - 2);
+        if (!newItemString.isEmpty()) itemString = newItemString.substring(0, newItemString.length() - 2);
         return itemString;
     }
 

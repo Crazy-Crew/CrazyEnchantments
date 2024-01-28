@@ -39,16 +39,8 @@ public class EnchantmentBookSettings {
 
         return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
     }
-
-    /**
-     * @param item        Item that you want to check if it has an enchantment.
-     * @param enchantment The enchantment you want to check if the item has.
-     * @return True if the item has the enchantment / False if it doesn't have the enchantment.
-     */
-    public boolean hasEnchantment(ItemStack item, CEnchantment enchantment) {
-        if (item == null || !item.hasItemMeta()) return false;
-
-        PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+    public boolean hasEnchantment(ItemMeta meta, CEnchantment enchantment) {
+        PersistentDataContainer data = meta.getPersistentDataContainer();
 
         if (!data.has(DataKeys.ENCHANTMENTS.getKey())) return false;
 
@@ -79,22 +71,6 @@ public class EnchantmentBookSettings {
         return new CEBook(enchantment, data.getLevel(), book.getAmount())
                 .setSuccessRate(data.getSuccessChance())
                 .setDestroyRate(data.getDestroyChance());
-    }
-
-    /**
-     * @param item Item you want to check to see if it has enchantments.
-     * @return True if it has enchantments / False if it doesn't have enchantments.
-     */
-    public boolean hasEnchantments(ItemStack item) {
-
-        if (item == null || !item.hasItemMeta()) return false;
-        if (!item.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) return false;
-
-        for (CEnchantment enchantment : registeredEnchantments) {
-            if (hasEnchantment(item, enchantment)) return true;
-        }
-
-        return false;
     }
 
     /**
@@ -154,14 +130,14 @@ public class EnchantmentBookSettings {
      * @return itemBuilder for an enchanted book.
      */
     public ItemBuilder getNormalBook() {
-        return enchantmentBook;
+        return new ItemBuilder(enchantmentBook);
     }
 
     /**
      * @return the itemstack of the enchantment book.
      */
     public ItemStack getEnchantmentBookItem() {
-        return enchantmentBook.build();
+        return new ItemBuilder(enchantmentBook).build();
     }
 
     /**
@@ -178,12 +154,20 @@ public class EnchantmentBookSettings {
      * @return A Map of all enchantments and their levels on the item.
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
-
         if (item == null || item.getItemMeta() == null) return Collections.emptyMap();
+        return getEnchantments(item.getItemMeta());
+    }
+
+    public Map<CEnchantment, Integer> getEnchantments(ItemMeta meta) {
+        if (meta == null) return Collections.emptyMap();
+        return getEnchantments(meta.getPersistentDataContainer());
+    }
+
+    public Map<CEnchantment, Integer> getEnchantments(PersistentDataContainer container) {
 
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
-        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        String data = container.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
 
         if (data == null) return Collections.emptyMap();
 
@@ -325,7 +309,12 @@ public class EnchantmentBookSettings {
     public ItemStack removeEnchantment(ItemStack item, CEnchantment enchant) {
         if (!item.hasItemMeta()) return item;
 
-        ItemMeta meta = item.getItemMeta();
+        item.setItemMeta(removeEnchantment(item.getItemMeta(), enchant));
+
+        return item;
+    }
+    public ItemMeta removeEnchantment(ItemMeta meta, CEnchantment enchant) {
+
         List<Component> lore = meta.lore();
 
         if (lore != null) {
@@ -352,8 +341,39 @@ public class EnchantmentBookSettings {
             meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
         }
 
-        item.setItemMeta(meta);
-
-        return item;
+        return meta;
     }
+
+    public ItemMeta removeEnchantments(ItemMeta meta, List<CEnchantment> enchants) {
+
+        List<Component> lore = meta.lore();
+
+        if (lore != null) {
+            for (CEnchantment enchant : enchants) {
+                lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                        .contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+                meta.lore(lore);
+            }
+        }
+
+        Enchant data;
+
+        if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) {
+            data = gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
+        } else {
+            data = new Enchant(new HashMap<>());
+        }
+
+        enchants.forEach(enchant -> data.removeEnchantment(enchant.getName()));
+
+        if (data.isEmpty()) {
+            if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey()))
+                meta.getPersistentDataContainer().remove(DataKeys.ENCHANTMENTS.getKey());
+        } else {
+            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
+        }
+
+        return meta;
+    }
+
 }

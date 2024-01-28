@@ -4,14 +4,9 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.google.gson.Gson;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
+
 import java.util.List;
 
 public enum CEnchantments {
@@ -179,21 +174,7 @@ public enum CEnchantments {
         this.hasChanceSystem = true;
     }
 
-    /**
-     * Get a CEnchantments from the enchantment name.
-     * @param enchant The name of the enchantment.
-     * @return Returns the CEnchantments but if not found it will be null.
-     */
-    public static CEnchantments getFromName(String enchant) {
-        for (CEnchantments ench : values()) {
-            if (ench.getName().equalsIgnoreCase(enchant) || ench.getCustomName().equalsIgnoreCase(enchant)) {
-                return ench;
-            }
-        }
-
-        return null;
-    }
-
+    
     /**
      * @return The name of the enchantment.
      */
@@ -264,46 +245,19 @@ public enum CEnchantments {
     }
 
     /**
-     * Get the level of the enchantment on an item.
-     * @param item The item that is being checked.
-     * @return The level of the enchantment that is on the item.
+     * Check to see if the enchantment's chance is successful.
+     * @return True if the chance was successful and false if not.
      */
-    public int getLevel(ItemStack item) {
-        // PDC Start
-        Gson gson = new Gson();
-
-        if (!item.hasItemMeta() || !item.getItemMeta().getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) return 0;
-
-        Enchant data = gson.fromJson(item.getItemMeta().getPersistentDataContainer()
-                .get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
-        boolean unsafe = FileManager.Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", false);
-
-        int level = data.getLevel(name);
-        // PDC End
-
-        assert name != null;
-        CEnchantment enchant = getFromName(name).getEnchantment();
-
-        if (!unsafe && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
-
-        return level;
+    public boolean chanceSuccessful(int level) {
+        return this.chanceSuccessful(level, 1.0);
     }
 
     /**
      * Check to see if the enchantment's chance is successful.
      * @return True if the chance was successful and false if not.
      */
-    public boolean chanceSuccessful() {
-        return chance >= 100 || chance <= 0 || methods.getRandomNumber ("0-100") <= chance;
-    }
-
-    /**
-     * Check to see if the enchantment's chance is successful.
-     * @param item The item being checked.
-     * @return True if the chance was successful and false if not.
-     */
-    public boolean chanceSuccessful(ItemStack item) {
-        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(getLevel(item));
+    public boolean chanceSuccessful(int level, double multiplier) {
+        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(level, multiplier);
     }
 
     /**

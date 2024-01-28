@@ -19,9 +19,9 @@ softdepend:
   - Towny
   - Factions
   - StackMob
-  - SilkSpawners
   - Vault
   - Oraxen
+  - MCMMO
 
 commands:
   crazyenchantments:
@@ -56,11 +56,11 @@ permissions:
   crazyenchantments.limit.3:
     default: true
 
+  crazyenchantments.base-limit.1:
+    default: true
+
   crazyenchantments.sign:
     default: false
-
-  crazyenchantments.blast.use:
-    default: true
 
   crazyenchantments.updateenchants:
     default: false

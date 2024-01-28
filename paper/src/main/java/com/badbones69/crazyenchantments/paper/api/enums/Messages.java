@@ -23,6 +23,8 @@ public enum Messages {
     HIT_ENCHANTMENT_MAX("Hit-Enchantment-Max", "&#ff0000That item already has the maximum amount of enchantments that you can add to it." +
                         "&#880808if you believe that this is incorrect, contact the server owner and ask them to add the permission " +
                         "crazyenchantments.limit.# to you, using their preferred permission plugin. (Replacing the # with the amount)"),
+    MAX_SLOTS_UNLOCKED("Hit-Slot-Max", "&cYou have already added the maximum amount of slots to this item."),
+    APPLIED_SLOT_CRYSTAL("Applied-Slot-Crystal", "&cYou have successfully added another slot to the item. The item now has %slot% extra slots."),
     INVENTORY_FULL("Inventory-Full", "&cYour inventory is too full. Please open up some space to buy that."),
     TINKER_INVENTORY_FULL("Tinker-Inventory-Full", "&cThe inventory is full. Sell all or remove items."),
     NEED_TO_USE_PLAYER_INVENTORY("Need-To-Use-Player-Inventory", "&cYou can only use that in your player inventory."),
@@ -69,6 +71,7 @@ public enum Messages {
     RAGE_COOLED_DOWN("Rage.Cooled-Down", "&7[&c&lRage&7]: &cYour Rage has just cooled down."),
     RAGE_RAGE_UP("Rage.Rage-Up", "&7[&c&lRage&7]: &7You are now doing &a%Level%x &7Damage."),
     RAGE_DAMAGED("Rage.Damaged", "&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"),
+    INVALID_ITEM_STRING("Invalid-Item-String", "&cInvalid item string supplied."),
     LIMIT_COMMAND("Limit-Command", Arrays.asList(
     "&8[&aCrazyEnchants&8]: &bPersonal Enchantment Limit:",
     "&7Bypass Limit: &6%bypass%",

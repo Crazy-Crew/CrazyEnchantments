@@ -4,15 +4,15 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import org.bukkit.Material;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.potion.PotionEffectType;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommandChecker implements Listener {
 
@@ -22,34 +22,26 @@ public class CommandChecker implements Listener {
 
     private final CrazyManager crazyManager = starter.getCrazyManager();
 
-    private final List<String> clearInventoryCommands = Arrays.asList("/ci", "/clear", "/clearinventory");
-    private final ItemStack air = new ItemStack(Material.AIR);
+    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClear(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
+        Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = crazyManager.getEnchantmentPotions();
 
-        if (clearInventoryCommands.contains(event.getMessage().toLowerCase())) {
-            for (CEnchantments enchantment : crazyManager.getEnchantmentPotions().keySet()) {
-                if (enchantment.isActivated()) {
-                    for (ItemStack armor : player.getEquipment().getArmorContents()) {
-                        if (armor != null) crazyManager.getUpdatedEffects(player, air, air, enchantment).keySet().forEach(player::removePotionEffect);
-                    }
-                }
-            }
+        if (Arrays.asList("/ci", "/clear", "/clearinventory").contains(event.getMessage().toLowerCase())) {
 
-            updateEffects(player);
+            Arrays.stream(player.getEquipment().getArmorContents())
+                    .map(enchantmentBookSettings::getEnchantments).forEach((enchant) -> enchantmentPotions.entrySet()
+                            .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(enchant))
+                            .forEach(enchantedPotion -> enchantedPotion.getValue().keySet().forEach(player::removePotionEffect)));
+
         } else if (event.getMessage().equalsIgnoreCase("/heal")) {
             updateEffects(player);
         }
     }
 
     private void updateEffects(Player player) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                crazyManager.updatePlayerEffects(player);
-            }
-        }.runTaskLater(plugin, 5);
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> crazyManager.updatePlayerEffects(player), 5);
     }
 }

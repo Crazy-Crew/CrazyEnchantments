@@ -6,6 +6,8 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,14 +19,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HelmetEnchantments implements Listener {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
-
-    private final CrazyManager crazyManager = starter.getCrazyManager();
 
     // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
@@ -33,19 +36,16 @@ public class HelmetEnchantments implements Listener {
     public void onMovement(PlayerMoveEvent event) {
         Player player = event.getPlayer();
 
-        if (!CEnchantments.COMMANDER.isActivated()) return;
-
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
+            if (armor == null || armor.isEmpty()) continue;
+            Map<CEnchantment, Integer> enchantments = starter.getEnchantmentBookSettings().getEnchantments(armor);
 
-            if (armor == null || armor.getType() == Material.AIR || !crazyManager.hasEnchantment(armor, CEnchantments.COMMANDER)) continue;
+            if (!EnchantUtils.isMovementEnchantActive(player, CEnchantments.COMMANDER, enchantments)) return;
 
-            int radius = 4 + crazyManager.getLevel(armor, CEnchantments.COMMANDER);
+            int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
 
-            ArrayList<Player> players = new ArrayList<>();
-
-            for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-                if (entity instanceof Player other && pluginSupport.isFriendly(player, other)) players.add(other);
-            }
+            List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(e ->
+                    e instanceof Player && pluginSupport.isFriendly(player, e)).map(e -> (Player) e).toList();
 
             if (players.isEmpty()) return;
 

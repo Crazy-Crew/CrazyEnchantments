@@ -2,8 +2,6 @@ package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
-import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.paper.api.support.misc.spawners.SilkSpawnerSupport;
 import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
 import com.badbones69.crazyenchantments.paper.commands.CECommand;
 import com.badbones69.crazyenchantments.paper.commands.CETab;
@@ -61,6 +59,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+
         plugin = this;
 
         starter = new Starter();
@@ -140,8 +139,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
             pluginManager.registerEvents(gKitzController = new GKitzController(), this);
         }
 
-        if (SupportedPlugins.SILK_SPAWNERS.isCachedPluginLoaded()) pluginManager.registerEvents(new SilkSpawnerSupport(), this);
-
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
 
         registerCommand(getCommand("tinkerer"), null, new TinkerCommand());
@@ -152,7 +149,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private void disable() {
         bossBarController.removeAllBossBars();
-        armorEnchantments.stop();
+        if (armorEnchantments != null) armorEnchantments.stop();
 
         if (starter.getAllyManager() != null) starter.getAllyManager().forceRemoveAllies();
 

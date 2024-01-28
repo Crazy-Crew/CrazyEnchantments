@@ -7,10 +7,12 @@ import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class InfoMenuManager {
     private final EnchantmentBookSettings enchantmentBookSettings = plugin.getStarter().getEnchantmentBookSettings();
 
     private Inventory inventoryMenu;
-    private String inventoryName;
+    private Component inventoryName;
     private int inventorySize;
     private ItemStack backRight;
     private ItemStack backLeft;
@@ -31,7 +33,7 @@ public class InfoMenuManager {
         enchantmentTypes.clear();
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Info-GUI-Settings";
-        inventoryName = ColorUtils.color(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
+        inventoryName = ColorUtils.legacyTranslateColourCodes(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
         inventorySize = file.getInt(path + ".Inventory.Size", 18);
         inventoryMenu = plugin.getServer().createInventory(null, inventorySize, inventoryName);
         backRight = new ItemBuilder()
@@ -58,7 +60,7 @@ public class InfoMenuManager {
         return inventoryMenu;
     }
 
-    public String getInventoryName() {
+    public Component getInventoryName() {
         return inventoryName;
     }
 
@@ -90,13 +92,13 @@ public class InfoMenuManager {
 
         Inventory inventory = plugin.getServer().createInventory(null, slots, inventoryName);
 
+        ItemBuilder normalBook = enchantmentBookSettings.getNormalBook().setGlow(true);
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
                 inventory.addItem(
-                enchantmentBookSettings.getNormalBook()
+                normalBook
                 .setName(enchantment.getInfoName())
                 .setLore(enchantment.getInfoDescription())
-                .setGlow(true)
                 .build());
             }
         }

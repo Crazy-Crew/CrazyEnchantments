@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.utilities;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
@@ -24,8 +23,6 @@ public class WingsUtils {
 
     private static final Starter starter = plugin.getStarter();
 
-    private static final CrazyManager crazyManager = starter.getCrazyManager();
-
     private static final PluginSupport pluginSupport = starter.getPluginSupport();
 
     private static final WingsManager wingsManager = starter.getWingsManager();
@@ -37,7 +34,7 @@ public class WingsUtils {
             @Override
             public void run() {
                 for (Player player : wingsManager.getFlyingPlayers()) {
-                    if (player.isFlying() && crazyManager.hasEnchantment(player.getEquipment().getBoots(), CEnchantments.WINGS) && player.getEquipment().getBoots() != null) {
+                    if (player.isFlying() && player.getEquipment().getBoots() != null && starter.getEnchantmentBookSettings().getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
                         Location location = player.getLocation().subtract(0, .25, 0);
 
                         if (wingsManager.isCloudsEnabled())
@@ -52,16 +49,16 @@ public class WingsUtils {
         CEnchantments wings = CEnchantments.WINGS;
 
         if (newArmor) {
-            if (crazyManager.hasEnchantment(newArmorPiece, wings) && checkRegion(player) && checkGameMode(player)) player.setAllowFlight(true);
+            if (starter.getEnchantmentBookSettings().getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && checkRegion(player) && checkGameMode(player)) player.setAllowFlight(true);
 
             return;
         }
 
-        if (crazyManager.hasEnchantment(oldArmorPiece, wings) && checkGameMode(player)) player.setAllowFlight(false);
+        if (starter.getEnchantmentBookSettings().getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player)) player.setAllowFlight(false);
     }
 
     public static boolean checkGameMode(Player player) {
-        return player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.ADVENTURE;
+        return player.getGameMode() == GameMode.SURVIVAL;
     }
 
     private static boolean inWingsRegion(Player player) {

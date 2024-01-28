@@ -9,7 +9,9 @@ import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentE
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class CEnchantment {
     private final List<Category> categories;
     private EnchantmentType enchantmentType;
     private final CEnchantment instance;
+    private Sound sound;
 
     public CEnchantment(String name) {
         this.instance = this;
@@ -50,6 +53,26 @@ public class CEnchantment {
         this.infoDescription = new ArrayList<>();
         this.categories = new ArrayList<>();
         this.enchantmentType = null;
+        this.sound = Sound.ENTITY_PLAYER_LEVELUP;
+    }
+
+    @NotNull
+    public Sound getSound() {
+        return this.sound;
+    }
+    public CEnchantment setSound(String soundString) {
+        if (soundString == null || soundString.isBlank()) {
+            this.sound = Sound.ENTITY_PLAYER_LEVELUP;
+            return this;
+        }
+
+        try {
+            this.sound = Sound.valueOf(soundString);
+        } catch (IllegalArgumentException e) {
+            //plugin.getLogger().warning(name + " has an invalid sound set.");
+            this.sound = Sound.ENTITY_PLAYER_LEVELUP;
+        }
+        return this;
     }
 
     public String getName() {
@@ -124,10 +147,16 @@ public class CEnchantment {
     }
 
     public boolean chanceSuccessful(int enchantmentLevel) {
+        return this.chanceSuccessful(enchantmentLevel, 1.0);
+    }
+
+    public boolean chanceSuccessful(int enchantmentLevel, double multiplier) {
         int newChance = chance + (chanceIncrease * (enchantmentLevel - 1));
         int pickedChance = methods.getRandomNumber (0, 100);
 
-        return newChance >= 100 || newChance <= 0 || pickedChance <= chance;
+        newChance = (int) (newChance * multiplier);
+
+        return newChance >= 100 || newChance <= 0 || pickedChance <= newChance;
     }
 
     public List<String> getInfoDescription() {

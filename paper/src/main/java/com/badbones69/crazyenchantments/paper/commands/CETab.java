@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
@@ -50,11 +51,13 @@ public class CETab implements TabCompleter {
             if (hasPermission(sender, "book")) completions.add("book");
             if (hasPermission(sender, "lostbook")) completions.add("lostbook");
             if (hasPermission(sender, "updateenchants")) completions.add("updateEnchants");
+            if (hasPermission(sender, "give")) completions.add("give");
+            if (hasPermission(sender, "bottle")) completions.add("bottle");
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) { // /ce arg0
             switch (args[0].toLowerCase()) {
-                case "info", "remove", "add", "book" -> {
+                case "info", "add", "book" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").replace(" ", "_"));
@@ -63,11 +66,14 @@ public class CETab implements TabCompleter {
 
                     Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
                 }
+                case "remove" ->
+                    enchantmentBookSettings.getEnchantments(((Player) sender).getInventory().getItemInMainHand())
+                            .forEach((a,b) -> completions.add(a.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
 
                 case "spawn" -> {
                     for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
                         try {
-                            completions.add(enchantment.getCustomName().replace(" ", "_"));
+                            completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""));
                         } catch (NullPointerException ignore) {}
                     }
 
@@ -103,6 +109,8 @@ public class CETab implements TabCompleter {
                         } catch (NullPointerException ignore) {}
                     }
                 }
+                case "give", "bottle" ->
+                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
 
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
@@ -129,13 +137,15 @@ public class CETab implements TabCompleter {
                     completions.add("Y:");
                     completions.add("Z:");
                 }
-                case "scroll", "dust", "lostbook" -> {
+                case "scroll", "dust", "lostbook", "bottle" -> {
                     completions.add("1");
                     completions.add("32");
                     completions.add("64");
                 }
                 case "crystal", "scrambler" ->
                         plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "give" ->
+                    completions.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
             }
 
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
@@ -151,6 +161,12 @@ public class CETab implements TabCompleter {
 
                 case "scroll", "dust", "lostbook" ->
                         plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+
+                case "bottle" -> {
+                    completions.add("1");
+                    completions.add("32");
+                    completions.add("64");
+                }
                 default -> {
                     return StringUtil.copyPartialMatches(args[3], completions, new ArrayList<>());
                 }

@@ -8,7 +8,7 @@ Settings:
   Toggle-Metrics: true #Turn on and off if your server stats are sent to https://bstats.org/ - Requires a restart!
   Player-Info-Backup-Message: true #Toggle this on and off if you wish to see when the player's data gets backed up.
   Reset-Players-Max-Health: true #This is for some servers that get a health duplication glitch from plugins like CombatTagPlus(v1.2.3 down)
-  Refresh-Potion-Effects-On-World-Change: false # In the odd chance potion effects disappear on world change.
+  Refresh-Potion-Effects-On-World-Change: false #In the odd chance potion effects disappear on world change.
   InvName: '&4&l&nCrazy Enchanter' #The name of the /CE inventory
   Enchantment-Book-Item: 'BOOK' #The item that the enchantment book is.
   Enchantment-Book-Glowing: true #Toggle on or off if the book will have an enchanted look.
@@ -57,6 +57,25 @@ Settings:
       - '&7to get a new destroy and success rate.'
       - ''
       - '&eCost: &e&l$800'
+  Slot_Crystal:
+    InGUI: false #If it's in the GUI.
+    Slot: 14 #Slot it is in
+    Item: 'EMERALD' #Item it is
+    Glowing: true #If it has a glowing effect.
+    Name: '&5&lSlot &b&lCrystal' #Name of the item
+    Lore: #Lore of the item
+      - '&7A rare crystal that is said to'
+      - '&7increase the amount of enchants'
+      - '&7that can be added onto an item.'
+      - ''
+      - '&7&l(&6&l!&7&l) &7Drag and drop on an item.'
+    GUIName: '&5&lSlot &b&lCrystal'
+    GUILore:
+      - '&7A rare crystal that is said to'
+      - '&7increase the amount of enchants'
+      - '&7that can be added onto an item.'
+      - ''
+      - '&eCost: &e&l$500'
   GKitz: #GKitz GUI option.
     InGUI: false #If you can open the GKitz GUI from the main /ce gui.
     Enabled: true #If the GKitz option is enabled on the server.
@@ -248,10 +267,11 @@ Settings:
     Amount-of-Enchantments: ' &7[&6&n%amount%&7]' #The suffix that will be added at the end of the item's name.
     Amount-Toggle: true #If the amount is added to the suffix of the item's name.
     Count-Vanilla-Enchantments: true #If it counts the vanilla enchantments in the amount.
-    Lore-Order: # The order in which you want the lore sections to be applied to the item.
+    Lore-Order: #The order in which you want the lore sections to be applied to the item when using the transmog scroll.
       - 'CE_Enchantments'
       - 'Protection'
       - 'Normal_Lore'
+    Add-Blank-Lines: true #Dictates if each lore section listed above should have a blank line between them.
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: true #Turn on and off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also.
@@ -314,6 +334,9 @@ Settings:
       Cost: 500
       Currency: Vault
     DestroyDust:
+      Cost: 500
+      Currency: Vault
+    Slot_Crystal:
       Cost: 500
       Currency: Vault
   SignOptions: #Options for the Signs.

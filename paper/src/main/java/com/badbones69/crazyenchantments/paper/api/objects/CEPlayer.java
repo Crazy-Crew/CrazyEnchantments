@@ -2,43 +2,36 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class CEPlayer {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Methods methods = plugin.getStarter().getMethods();
-    
-    private int souls;
     private final Player player;
-    private boolean soulsActive;
     private final List<GkitCoolDown> gkitCoolDowns;
     private Double rageMultiplier;
     private boolean hasRage;
     private int rageLevel;
     private BukkitTask rageTask;
+    private final Set<CEnchantments> onCooldown = new HashSet<>();
     
     /**
      * Used to make a new CEPlayer.
      * @param player The player.
-     * @param souls How many souls they have.
-     * @param soulsActive If the soul uses is active.
      * @param gkitCoolDowns The cool-downs the player has.
      */
-    public CEPlayer(Player player, int souls, boolean soulsActive, List<GkitCoolDown> gkitCoolDowns) {
-        this.souls = souls;
+    public CEPlayer(Player player, List<GkitCoolDown> gkitCoolDowns) {
         this.player = player;
         this.gkitCoolDowns = gkitCoolDowns;
-        this.soulsActive = soulsActive;
         this.hasRage = false;
         this.rageLevel = 0;
         this.rageMultiplier = 0.0;
@@ -51,70 +44,6 @@ public class CEPlayer {
      */
     public Player getPlayer() {
         return this.player;
-    }
-    
-    /**
-     * Get how many souls the player has.
-     * @return The amount of souls the player has.
-     */
-    public int getSouls() {
-        return this.souls;
-    }
-    
-    /**
-     * Set the amount of souls the player has.
-     * @param souls The new amount of souls the player has.
-     */
-    public void setSouls(int souls) {
-        this.souls = souls;
-    }
-    
-    /**
-     * Add 1 soul to the player.
-     */
-    public void addSoul() {
-        this.souls++;
-    }
-    
-    /**
-     * Add extra souls to the player.
-     * @param souls Amount of souls you want to add.
-     */
-    public void addSouls(int souls) {
-        this.souls += souls;
-    }
-    
-    /**
-     * Take 1 soul from the player.
-     */
-    public void useSoul() {
-        this.souls--;
-    }
-    
-    /**
-     * Take souls from the player.
-     * @param souls Amount of souls you are taking.
-     */
-    public void useSouls(int souls) {
-        this.souls -= souls;
-
-        if (this.souls < 0) this.souls = 0;
-    }
-    
-    /**
-     * Find out if the players souls are active.
-     * @return True if active and false if not.
-     */
-    public boolean isSoulsActive() {
-        return soulsActive;
-    }
-    
-    /**
-     * Set if the players souls are active.
-     * @param soulsActive True if you want to activate them and false if not.
-     */
-    public void setSoulsActive(boolean soulsActive) {
-        this.soulsActive = soulsActive;
     }
     
     /**
@@ -149,11 +78,7 @@ public class CEPlayer {
 
             }
 
-            if (methods.isInventoryFull(player)) {
-                player.getWorld().dropItemNaturally(player.getLocation(), item);
-            } else {
-                player.getInventory().addItem(item);
-            }
+            methods.addItemToInventory(player, item);
 
         }
 
@@ -236,15 +161,15 @@ public class CEPlayer {
     public void addCoolDown(GKitz kit) {
         Calendar coolDown = Calendar.getInstance();
 
-        for (String i : kit.getCooldown().split(" ")) {
+        for (String i : kit.getCooldown().toLowerCase().split(" ")) {
 
-            if (i.contains("D") || i.contains("d")) coolDown.add(Calendar.DATE, Integer.parseInt(i.replace("D", "").replace("d", "")));
+            if (i.contains("d")) coolDown.add(Calendar.DATE, Integer.parseInt(i.replace("d", "")));
 
-            if (i.contains("H") || i.contains("h")) coolDown.add(Calendar.HOUR, Integer.parseInt(i.replace("H", "").replace("h", "")));
+            if (i.contains("h")) coolDown.add(Calendar.HOUR, Integer.parseInt(i.replace("h", "")));
 
-            if (i.contains("M") || i.contains("m")) coolDown.add(Calendar.MINUTE, Integer.parseInt(i.replace("M", "").replace("m", "")));
+            if (i.contains("m")) coolDown.add(Calendar.MINUTE, Integer.parseInt(i.replace("m", "")));
 
-            if (i.contains("S") || i.contains("s")) coolDown.add(Calendar.SECOND, Integer.parseInt(i.replace("S", "").replace("s", "")));
+            if (i.contains("s")) coolDown.add(Calendar.SECOND, Integer.parseInt(i.replace("s", "")));
         }
 
         addCoolDown(new GkitCoolDown(kit, coolDown));
@@ -330,5 +255,21 @@ public class CEPlayer {
      */
     public void setRageTask(BukkitTask rageTask) {
         this.rageTask = rageTask;
+    }
+
+    /**
+     * Checks if the player currently has the specified enchant on cooldown.
+     * If not on cooldown, adds one to the player for the specified enchant.
+     * @param enchant {@link CEnchantments} to check for.
+     * @param delay Delay in ticks to add a cooldown for.
+     * @return True if they already had a cooldown.
+     */
+    public boolean onEnchantCooldown(CEnchantments enchant, int delay) {
+        if (onCooldown.contains(enchant)) return true;
+
+        onCooldown.add(enchant);
+        // Limit players to using each enchant only once per second.
+        CrazyEnchantments.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(CrazyEnchantments.getPlugin(), () -> onCooldown.remove(enchant), delay);
+        return false;
     }
 }

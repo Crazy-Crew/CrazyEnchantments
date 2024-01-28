@@ -13,19 +13,27 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.world.entity.item.ItemEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftItem;
+import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class Methods {
@@ -87,6 +95,7 @@ public class Methods {
         }
     }
 
+    @NotNull
     public ItemStack getItemInHand(Player player) {
         return player.getInventory().getItemInMainHand();
     }
@@ -190,8 +199,27 @@ public class Methods {
         }
     }
 
+    /**
+     *
+     * @param player The {@link Player} who's inventory should be checked.
+     * @return Returns if the player's inventory is full while letting them know.
+     */
     public boolean isInventoryFull(Player player) {
-        return player.getInventory().firstEmpty() == -1;
+        if (player.getInventory().firstEmpty() != -1) return false;
+        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+        return true;
+    }
+
+    /**
+     *
+     * @param player The {@link Player} to give items to.
+     * @param item The {@link ItemStack} to give to the player.
+     */
+    public void addItemToInventory(Player player, ItemStack item) {
+        player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
+    }
+    public void addItemToInventory(Player player, List<Item> itemList) {
+        itemList.forEach(x -> addItemToInventory(player, x.getItemStack()));
     }
 
     public List<LivingEntity> getNearbyLivingEntities(double radius, Entity entity) {
@@ -230,56 +258,18 @@ public class Methods {
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
     }
 
-    public String stripString(String string) {
-        return string != null ? string.replace("-", "").replace("_", "").replace(" ", "") : "";
-    }
-
     public Enchantment getEnchantment(String enchantmentName) {
         try {
             // HashMap<String, String> enchantments = getEnchantments();
-            enchantmentName = stripString(enchantmentName);
+            enchantmentName = enchantmentName.replaceAll("-|_| ", "");
 
             for (Enchantment enchantment : Enchantment.values()) {
                 // MC 1.13+ has the correct names.
-                if (stripString(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) return enchantment;
+                if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName)) return enchantment;
             }
         } catch (Exception ignore) {}
 
         return null;
-    }
-
-    public HashMap<String, String> getEnchantments() {
-        HashMap<String, String> enchantments = new HashMap<>();
-        enchantments.put("ARROW_DAMAGE", "Power");
-        enchantments.put("ARROW_FIRE", "Flame");
-        enchantments.put("ARROW_INFINITE", "Infinity");
-        enchantments.put("ARROW_KNOCKBACK", "Punch");
-        enchantments.put("DAMAGE_ALL", "Sharpness");
-        enchantments.put("DAMAGE_ARTHROPODS", "Bane_Of_Arthropods");
-        enchantments.put("DAMAGE_UNDEAD", "Smite");
-        enchantments.put("DEPTH_STRIDER", "Depth_Strider");
-        enchantments.put("DIG_SPEED", "Efficiency");
-        enchantments.put("DURABILITY", "Unbreaking");
-        enchantments.put("FIRE_ASPECT", "Fire_Aspect");
-        enchantments.put("KNOCKBACK", "KnockBack");
-        enchantments.put("LOOT_BONUS_BLOCKS", "Fortune");
-        enchantments.put("LOOT_BONUS_MOBS", "Looting");
-        enchantments.put("LUCK", "Luck_Of_The_Sea");
-        enchantments.put("LURE", "Lure");
-        enchantments.put("OXYGEN", "Respiration");
-        enchantments.put("PROTECTION_ENVIRONMENTAL", "Protection");
-        enchantments.put("PROTECTION_EXPLOSIONS", "Blast_Protection");
-        enchantments.put("PROTECTION_FALL", "Feather_Falling");
-        enchantments.put("PROTECTION_FIRE", "Fire_Protection");
-        enchantments.put("PROTECTION_PROJECTILE", "Projectile_Protection");
-        enchantments.put("SILK_TOUCH", "Silk_Touch");
-        enchantments.put("THORNS", "Thorns");
-        enchantments.put("WATER_WORKER", "Aqua_Affinity");
-        enchantments.put("BINDING_CURSE", "Curse_Of_Binding");
-        enchantments.put("MENDING", "Mending");
-        enchantments.put("FROST_WALKER", "Frost_Walker");
-        enchantments.put("VANISHING_CURSE", "Curse_Of_Vanishing");
-        return enchantments;
     }
 
     public int getMaxDurability(ItemStack item) {
@@ -350,7 +340,7 @@ public class Methods {
     }
 
     public void explode(Entity player) {
-        spawnParticles(player, player.getWorld(), player.getLocation());
+        spawnExplodeParticles(player, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, player)) {
             if (pluginSupport.allowCombat(entity.getLocation())) {
@@ -377,7 +367,7 @@ public class Methods {
         }
     }
 
-    private void spawnParticles(Entity player, World world, Location location) {
+    private void spawnExplodeParticles(Entity player, World world, Location location) {
         if (player.getLocation().getWorld() != null) {
             player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
             player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
@@ -388,7 +378,7 @@ public class Methods {
     }
 
     public void explode(Entity player, Entity arrow) {
-        spawnParticles(arrow, player.getWorld(), player.getLocation());
+        spawnExplodeParticles(arrow, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, arrow)) {
             if (pluginSupport.allowCombat(entity.getLocation())) {
@@ -417,28 +407,6 @@ public class Methods {
                 }
             }
         }
-    }
-
-    public void checkPotions(Map<PotionEffectType, Integer> effects, Player player) {
-        for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-            Integer value = type.getValue();
-            PotionEffectType key = type.getKey();
-
-            player.removePotionEffect(key);
-            if (value < 0) continue;
-            PotionEffect potionEffect = new PotionEffect(key, getInfinity(), value);
-            player.addPotionEffect(potionEffect);
-        }
-    }
-
-    public int getInfinity() {
-
-        int versionInt = Integer.parseInt(plugin.getServer().getVersion().split("MC:")[1]
-                .replace(")", "")
-                .replace(".", "")
-                .replace(" ", ""));
-
-        return versionInt >= 1194 || versionInt == 120 ? -1 : Integer.MAX_VALUE;
     }
 
     public HashSet<Block> getEnchantBlocks(Location loc, Location loc2) {
@@ -472,7 +440,7 @@ public class Methods {
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public void checkEntity(LivingEntity en) {
+    public void lightning(LivingEntity en) {
         Location loc = en.getLocation();
         if (loc.getWorld() != null) loc.getWorld().strikeLightning(loc);
         int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
@@ -517,4 +485,54 @@ public class Methods {
                 "BLACK_STAINED_GLASS_PANE");
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
     }
+
+    /**
+     * @see #playerBreakBlock(Player, Block, ItemStack, boolean)
+     */
+    public boolean playerBreakBlock(Player player, Block block, ItemStack tool) {
+        return playerBreakBlock(player, block, tool, true);
+    }
+
+    /**
+     * Imitates all the events called when a player breaks a block.
+     * Only calls #BlockDropItemEvent if the event isn't cancelled,
+     * and there are drops.
+     * @param player The player that will "break" the block.
+     * @param block The block that was broken.
+     * @param tool ItemStack used to break the block.
+     * @return If the event was cancelled.
+     */
+    public boolean playerBreakBlock(Player player, Block block, ItemStack tool, boolean hasDrops) {
+        BlockBreakEvent blockBreak = new BlockBreakEvent(block, player);
+        Collection<ItemStack> dropItems = tool != null ? block.getDrops(tool, player) : block.getDrops();
+        if (dropItems.isEmpty()) blockBreak.setDropItems(false);
+
+        EventUtils.addIgnoredEvent(blockBreak);
+        plugin.getServer().getPluginManager().callEvent(blockBreak);
+        EventUtils.removeIgnoredEvent(blockBreak);
+
+        if (blockBreak.isCancelled()) return true;
+
+        if (blockBreak.isDropItems() && hasDrops) blockDropItems(player, block, dropItems);
+
+        block.setType(Material.AIR);
+        return false;
+    }
+
+    /**
+     * Imitates the blockDropItemEvent usage.
+     * @param player The player that broke the block.
+     * @param block The block that was broken.
+     * @param items The items that will be dropped from the broken block.
+     */
+    public void blockDropItems(Player player, Block block, Collection<ItemStack> items) {
+        List<Item> dropItems = new ArrayList<>();
+        items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
+
+        BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
+        plugin.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) dropItems.forEach(Entity::remove);
+    }
+
 }

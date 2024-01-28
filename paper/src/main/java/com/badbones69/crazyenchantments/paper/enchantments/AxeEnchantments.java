@@ -12,22 +12,23 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
+import com.badbones69.crazyenchantments.paper.utilities.misc.EntityUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class AxeEnchantments implements Listener {
 
@@ -58,76 +59,39 @@ public class AxeEnchantments implements Listener {
 
         if (entity.isDead()) return;
 
-        List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
+        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
 
-        if (CEnchantments.BERSERK.isActivated() && enchantments.contains(CEnchantments.BERSERK.getEnchantment()) && CEnchantments.BERSERK.chanceSuccessful(item)) {
-            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.BERSERK.getEnchantment(), item);
-            plugin.getServer().getPluginManager().callEvent(useEvent);
-
-            if (!useEvent.isCancelled()) {
+        if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
                 damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
-            }
         }
 
-        if (CEnchantments.BLESSED.isActivated() && enchantments.contains(CEnchantments.BLESSED.getEnchantment()) && CEnchantments.BLESSED.chanceSuccessful(item)) {
-            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.BLESSED.getEnchantment(), item);
-            plugin.getServer().getPluginManager().callEvent(useEvent);
+        if (EnchantUtils.isEventActive(CEnchantments.BLESSED, damager, item, enchantments)) removeBadPotions(damager);
 
-            if (!useEvent.isCancelled()) removeBadPotions(damager);
+        if (EnchantUtils.isEventActive(CEnchantments.FEEDME, damager, item, enchantments)&& damager.getFoodLevel() < 20) {
+
+            int food = 2 * crazyManager.getLevel(item, CEnchantments.FEEDME);
+
+            if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(damager);
+
+            if (damager.getFoodLevel() + food < 20) damager.setFoodLevel((int) (damager.getSaturation() + food));
+
+            if (damager.getFoodLevel() + food > 20) damager.setFoodLevel(20);
         }
 
-        if (CEnchantments.FEEDME.isActivated() && enchantments.contains(CEnchantments.FEEDME.getEnchantment()) && CEnchantments.FEEDME.chanceSuccessful(item) && damager.getFoodLevel() < 20) {
-            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.FEEDME.getEnchantment(), item);
-            plugin.getServer().getPluginManager().callEvent(useEvent);
+        if (EnchantUtils.isEventActive(CEnchantments.REKT, damager, item, enchantments)) event.setDamage(event.getDamage() * 2);
 
-            if (!useEvent.isCancelled()) {
-                int food = 2 * crazyManager.getLevel(item, CEnchantments.FEEDME);
+        if (EnchantUtils.isEventActive(CEnchantments.CURSED, damager, item, enchantments))
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
 
-                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(damager);
+        if (EnchantUtils.isEventActive(CEnchantments.DIZZY, damager, item, enchantments))
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (crazyManager.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
 
-                if (damager.getFoodLevel() + food < 20) damager.setFoodLevel((int) (damager.getSaturation() + food));
-
-                if (damager.getFoodLevel() + food > 20) damager.setFoodLevel(20);
-            }
+        if (EnchantUtils.isEventActive(CEnchantments.BATTLECRY, damager, item, enchantments)) {
+            damager.getNearbyEntities(3, 3, 3).stream().filter(nearbyEntity -> !pluginSupport.isFriendly(damager, nearbyEntity)).forEach(nearbyEntity ->
+                    nearbyEntity.setVelocity(nearbyEntity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5)));
         }
-
-        if (CEnchantments.REKT.isActivated() && enchantments.contains(CEnchantments.REKT.getEnchantment())) {
-            double damage = event.getDamage() * 2;
-
-            if (CEnchantments.REKT.chanceSuccessful(item)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.REKT.getEnchantment(), item);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) event.setDamage(damage);
-            }
-        }
-
-        if (CEnchantments.CURSED.isActivated() && enchantments.contains(CEnchantments.CURSED.getEnchantment()) && CEnchantments.CURSED.chanceSuccessful(item)) {
-            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.CURSED.getEnchantment(), item);
-            plugin.getServer().getPluginManager().callEvent(useEvent);
-
-            if (!useEvent.isCancelled()) entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
-        }
-
-        if (CEnchantments.DIZZY.isActivated() && enchantments.contains(CEnchantments.DIZZY.getEnchantment()) && CEnchantments.DIZZY.chanceSuccessful(item)) {
-            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.DIZZY.getEnchantment(), item);
-            plugin.getServer().getPluginManager().callEvent(useEvent);
-
-            if (!useEvent.isCancelled()) entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (crazyManager.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
-        }
-
-        if (CEnchantments.BATTLECRY.isActivated() && enchantments.contains(CEnchantments.BATTLECRY.getEnchantment()) && CEnchantments.BATTLECRY.chanceSuccessful(item)) {
-            EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.BATTLECRY.getEnchantment(), item);
-            plugin.getServer().getPluginManager().callEvent(useEvent);
-
-            if (!useEvent.isCancelled()) {
-                for (Entity nearbyEntity : damager.getNearbyEntities(3, 3, 3)) {
-                    if (!pluginSupport.isFriendly(damager, nearbyEntity)) nearbyEntity.setVelocity(nearbyEntity.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(.5));
-                }
-            }
-        }
-        if (CEnchantments.DEMONFORGED.isActivated() && enchantments.contains(CEnchantments.DEMONFORGED.getEnchantment()) && CEnchantments.DEMONFORGED.chanceSuccessful(item) && entity instanceof Player player) {
+        if (EnchantUtils.isEventActive(CEnchantments.DEMONFORGED, damager, item, enchantments) && entity instanceof Player player) {
 
             ItemStack armorItem = switch (methods.percentPick(4, 0)) {
                 case 1 -> player.getEquipment().getHelmet();
@@ -149,29 +113,42 @@ public class AxeEnchantments implements Listener {
             Player damager = event.getEntity().getKiller();
             ItemStack item = methods.getItemInHand(damager);
 
-            if (crazyManager.hasEnchantment(item, CEnchantments.DECAPITATION) && CEnchantments.DECAPITATION.chanceSuccessful(item)) {
-                EnchantmentUseEvent useEvent = new EnchantmentUseEvent(damager, CEnchantments.DECAPITATION.getEnchantment(), item);
-                plugin.getServer().getPluginManager().callEvent(useEvent);
-
-                if (!useEvent.isCancelled()) event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
+            if (EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, enchantmentBookSettings.getEnchantments(item))) {
+                event.getDrops().add(new ItemBuilder().setMaterial(Material.PLAYER_HEAD).setPlayerName(player.getName()).build());
             }
         }
     }
 
-    private void removeBadPotions(Player player) {
-        ArrayList<PotionEffectType> bad = new ArrayList<>();
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+        if (event.getEntity().getKiller() != null) {
+            Player damager = event.getEntity().getKiller();
+            ItemStack item = methods.getItemInHand(damager);
+            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
+            Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
 
-        bad.add(PotionEffectType.BLINDNESS);
-        bad.add(PotionEffectType.CONFUSION);
-        bad.add(PotionEffectType.HUNGER);
-        bad.add(PotionEffectType.POISON);
-        bad.add(PotionEffectType.SLOW);
-        bad.add(PotionEffectType.SLOW_DIGGING);
-        bad.add(PotionEffectType.WEAKNESS);
-        bad.add(PotionEffectType.WITHER);
-
-        for (PotionEffectType potionEffectType : bad) {
-            if (player.hasPotionEffect(potionEffectType)) player.removePotionEffect(potionEffectType);
+            if (headMat != null && !EventUtils.dropsContains(event, headMat)) {
+                double multiplier = crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
+                if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.DECAPITATION, damager, item, enchantments, multiplier)) {
+                    ItemStack head = new ItemBuilder().setMaterial(headMat).build();
+                    event.getDrops().add(head);
+                }
+			}
         }
+    }
+
+    private void removeBadPotions(Player player) {
+        ArrayList<PotionEffectType> bad = new ArrayList<>() {{
+            add(PotionEffectType.BLINDNESS);
+            add(PotionEffectType.CONFUSION);
+            add(PotionEffectType.HUNGER);
+            add(PotionEffectType.POISON);
+            add(PotionEffectType.SLOW);
+            add(PotionEffectType.SLOW_DIGGING);
+            add(PotionEffectType.WEAKNESS);
+            add(PotionEffectType.WITHER);
+        }};
+
+        bad.forEach(player::removePotionEffect);
     }
 }

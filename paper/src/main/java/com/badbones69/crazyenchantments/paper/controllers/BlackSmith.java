@@ -68,7 +68,7 @@ public class BlackSmith implements Listener {
                 if (event.getRawSlot() > 26) { // Click in players inventory.
                     if (item.getAmount() != 1) return;
 
-                    if (enchantmentBookSettings.hasEnchantments(item) || enchantmentBookSettings.isEnchantmentBook(item)) {
+                    if (!enchantmentBookSettings.getEnchantments(item).isEmpty() || enchantmentBookSettings.isEnchantmentBook(item)) {
                         if (inventory.getItem(mainSlot) == null) { // Main item slot is empty.
                             event.setCurrentItem(new ItemStack(Material.AIR));
                             inventory.setItem(mainSlot, item); // Moves clicked item to main slot.
@@ -95,7 +95,7 @@ public class BlackSmith implements Listener {
                 } else { // Menu click in blacksmith.
                     if (event.getRawSlot() == mainSlot || event.getRawSlot() == subSlot) { // Clicked either the main slot or sub slot.
                         event.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air.
-                        givePlayerItem(player, item);
+                        methods.addItemToInventory(player, item);
                         inventory.setItem(resultSlot, blackSmithManager.getDenyBarrier());
                         resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
                         playSound(player, click);
@@ -119,7 +119,7 @@ public class BlackSmith implements Listener {
                                     }
                                 }
 
-                                givePlayerItem(player, resultItem.getResultItem());
+                                methods.addItemToInventory(player, resultItem.getResultItem());
 
                                 inventory.setItem(mainSlot, new ItemStack(Material.AIR));
                                 inventory.setItem(subSlot, new ItemStack(Material.AIR));
@@ -146,7 +146,7 @@ public class BlackSmith implements Listener {
             Player player = (Player) event.getPlayer();
 
             for (int slot : Arrays.asList(mainSlot, subSlot)) {
-                if (inventory.getItem(slot) != null && inventory.getItem(slot).getType() != Material.AIR) givePlayerItem(player, inventory.getItem(slot));
+                if (inventory.getItem(slot) != null && inventory.getItem(slot).getType() != Material.AIR) methods.addItemToInventory(player, inventory.getItem(slot));
             }
 
             inventory.clear();
@@ -162,15 +162,6 @@ public class BlackSmith implements Listener {
             resultBoarder.forEach(slot -> inventory.setItem(slot - 1, blackSmithManager.getRedGlass()));
         }
     }
-    
-    private void givePlayerItem(Player player, ItemStack item) {
-        if (methods.isInventoryFull(player) || player.isDead()) {
-            player.getWorld().dropItem(player.getLocation(), item);
-        } else {
-            player.getInventory().addItem(item);
-        }
-    }
-    
     private String getFoundString(BlackSmithResult resultItem) {
         return Messages.replacePlaceholders("%Cost%", String.valueOf(resultItem.getCost()), blackSmithManager.getFoundString());
     }

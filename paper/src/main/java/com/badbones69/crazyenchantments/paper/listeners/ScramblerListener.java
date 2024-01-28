@@ -151,11 +151,7 @@ public class ScramblerListener implements Listener {
                         item.setType(enchantmentBookSettings.getEnchantmentBookItem().getType());
                         methods.setDurability(item, methods.getDurability(enchantmentBookSettings.getEnchantmentBookItem()));
 
-                        if (methods.isInventoryFull(player)) {
-                            player.getWorld().dropItem(player.getLocation(), item);
-                        } else {
-                            player.getInventory().addItem(item);
-                        }
+                        methods.addItemToInventory(player, item);
 
                     } else if (time > 60) { // Just in case the cancel fails.
                         cancel();
@@ -203,7 +199,7 @@ public class ScramblerListener implements Listener {
 
         if (event.getClickedInventory() != null) {
             ItemStack book = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
-            ItemStack scrambler = event.getCursor() != null ? event.getCursor() : new ItemStack(Material.AIR);
+            ItemStack scrambler = event.getCursor();
 
             if (book.getType() == Material.AIR || scrambler.getType() == Material.AIR) return;
             if (book.getAmount() != 1 || scrambler.getAmount() != 1) return;
