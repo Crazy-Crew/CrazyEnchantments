@@ -22,6 +22,7 @@ import com.badbones69.crazyenchantments.paper.processors.Processor;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
@@ -32,6 +33,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -76,6 +78,13 @@ public class ArmorEnchantments implements Listener {
 
     public void stop() {
         armorMoveProcessor.stop();
+    }
+
+    @EventHandler
+    public void onDeath(EntityResurrectEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        ItemStack air = new ItemStack(Material.AIR);
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> newUpdateEffects(player, air, air), 10);
     }
 
     @EventHandler
@@ -134,10 +143,12 @@ public class ArmorEnchantments implements Listener {
     private HashMap<CEnchantment, Integer> currentEnchantsOnPlayerAdded(Player player, ItemStack newItem) {
         HashMap<CEnchantment, Integer> toAdd = getTopEnchantsOnPlayer(player);
 
-        enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
-                .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
-                .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName().toUpperCase()), newItem))
-                .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
+        if (!newItem.isEmpty()) {
+            enchantmentBookSettings.getEnchantments(newItem).entrySet().stream()
+                    .filter(ench -> !toAdd.containsKey(ench.getKey()) || toAdd.get(ench.getKey()) <= ench.getValue())
+                    .filter(ench -> EnchantUtils.isArmorEventActive(player, CEnchantments.valueOf(ench.getKey().getName().toUpperCase()), newItem))
+                    .forEach(ench -> toAdd.put(ench.getKey(), ench.getValue()));
+        }
 
         return toAdd;
     }
