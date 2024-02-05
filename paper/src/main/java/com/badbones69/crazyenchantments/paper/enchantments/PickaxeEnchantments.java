@@ -121,7 +121,7 @@ public class PickaxeEnchantments implements Listener {
         event.setCancelled(true);
 
         for (Block block : blockList) {
-            if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
+            if (block.isEmpty()) continue;
             if (methods.playerBreakBlock(player, block, currentItem, crazyManager.isDropBlocksVeinMiner())) continue;
             if (damage) methods.removeDurability(currentItem, player);
         }
