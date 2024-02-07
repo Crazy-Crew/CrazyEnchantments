@@ -47,7 +47,7 @@ public class AxeEnchantments implements Listener {
 
     private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (EventUtils.isIgnoredEvent(event)) return;
         if (pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;

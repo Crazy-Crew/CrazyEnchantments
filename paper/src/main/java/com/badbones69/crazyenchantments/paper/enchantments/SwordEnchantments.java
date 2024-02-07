@@ -67,7 +67,7 @@ public class SwordEnchantments implements Listener {
     // Economy Management.
     private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         if (EventUtils.isIgnoredEvent(event) || EventUtils.isIgnoredUUID(event.getDamager().getUniqueId())) return;
         if (pluginSupport.isFriendly(event.getDamager(), event.getEntity())) return;
@@ -276,7 +276,7 @@ public class SwordEnchantments implements Listener {
 
             if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(damager);
 
-            for (LivingEntity entity :methods.getNearbyLivingEntities(2D, damager)) {
+            for (LivingEntity entity : methods.getNearbyLivingEntities(2D, damager)) {
                 EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.CUSTOM, 5D);
                 methods.entityEvent(damager, entity, damageByEntityEvent);
             }
