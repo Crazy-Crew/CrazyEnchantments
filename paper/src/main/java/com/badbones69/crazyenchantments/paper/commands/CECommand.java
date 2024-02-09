@@ -363,7 +363,7 @@ public class CECommand implements CommandExecutor {
                 if (!hasPermission(sender, "give")) return true;
 
                 if (args.length < 3) {
-                    sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Give <Player> <itemString>"));
+                    sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce give <Player> <itemString>"));
                     return true;
                 }
 
@@ -395,7 +395,7 @@ public class CECommand implements CommandExecutor {
                 if (!hasPermission(sender, "give")) return true;
 
                 if (args.length < 3) {
-                    sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce Give <Player> <itemString>"));
+                    sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce bottle <Player> <storedAmount> <Amount>"));
                     return true;
                 }
 
