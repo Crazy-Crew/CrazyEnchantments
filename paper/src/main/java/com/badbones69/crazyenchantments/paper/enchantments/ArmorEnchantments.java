@@ -69,7 +69,7 @@ public class ArmorEnchantments implements Listener {
     // Plugin Managers.
     private final ArmorEnchantmentManager armorEnchantmentManager = starter.getArmorEnchantmentManager();
 
-    private final Processor<PlayerMoveEvent> armorMoveProcessor = new ArmorMoveProcessor();
+    private final Processor<UUID> armorMoveProcessor = new ArmorMoveProcessor();
 
     private final List<UUID> fallenPlayers = new ArrayList<>();
 
@@ -322,7 +322,10 @@ public class ArmorEnchantments implements Listener {
     public void onMovement(PlayerMoveEvent event) {
         if (event.getFrom() == event.getTo()) return;
 
-        armorMoveProcessor.add(event);
+        Player player = event.getPlayer();
+        UUID playerId = player.getUniqueId();
+
+        armorMoveProcessor.add(playerId);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

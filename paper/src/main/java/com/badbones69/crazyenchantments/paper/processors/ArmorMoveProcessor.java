@@ -12,6 +12,8 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,7 +25,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Map;
 import java.util.Objects;
 
-public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
+public class ArmorMoveProcessor extends Processor<UUID> {
 
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
@@ -56,8 +58,10 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
         super.start();
     }
 
-    public void process(PlayerMoveEvent process) {
-        Player player = process.getPlayer();
+    public void process(UUID playerId) {
+        Player player = Bukkit.getPlayer(playerId);
+
+        if (player == null) return;
 
         for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
             Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(armor);
