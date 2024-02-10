@@ -10,6 +10,7 @@ public abstract class Processor<T> {
     
     public Processor() {
         thread = new Thread(() -> {
+            // It might be crucial to make an executor service here.
             while (!Thread.interrupted()) {
                 try {
                     T process = this.queue.take();
