@@ -73,11 +73,17 @@ public enum Messages {
     RAGE_DAMAGED("Rage.Damaged", "&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"),
     INVALID_ITEM_STRING("Invalid-Item-String", "&cInvalid item string supplied."),
     LIMIT_COMMAND("Limit-Command", Arrays.asList(
+    "&0======================================",
     "&8[&aCrazyEnchants&8]: &bPersonal Enchantment Limit:",
+    " ",
     "&7Bypass Limit: &6%bypass%",
     "&7Vanilla Enchantment Check: &6%vanilla%",
     "&7Max Enchantment Limit: &6%limit%",
-    "&7Current Enchantment amount on item: &6%item%")),
+    "&7Base Enchantment Limit: &6%baseLimit%",
+    "&7Current Items Slot Crystal Limit Adjustment: &6%slotCrystal%",
+    "&7Current Enchantment amount on item: &6%item%",
+    "&7You can add &6%space% &7more enchantments to this item.",
+    "&0======================================")),
     HELP("Help", Arrays.asList(
     "&2&l&nCrazy Enchantments",
     "&b/ce - &9Opens up the menu.",
