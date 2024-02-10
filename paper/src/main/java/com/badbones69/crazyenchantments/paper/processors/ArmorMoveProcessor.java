@@ -66,45 +66,18 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
             int heal = 1;
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+
             if (maxHealth > player.getHealth() && player.getHealth() > 0) {
-                syncProcessor.add(() -> {
-                    if (EnchantUtils.isEventActive(CEnchantments.NURSERY, player, armor, enchantments)) {
-                        if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
-                        if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
-                    }
-                });
+                checkNursery(armor, player, enchantments, heal, maxHealth);
             }
 
             if (player.getFoodLevel() < 20) {
-                syncProcessor.add(() -> {
-
-                    if (EnchantUtils.isEventActive(CEnchantments.IMPLANTS, player, armor, enchantments)) {
-
-                        int foodIncrease = 1;
-
-                        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
-
-                        if (player.getFoodLevel() + foodIncrease <= 20)
-                            player.setFoodLevel(player.getFoodLevel() + foodIncrease);
-
-                        if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
-                    }
-                });
+                checkImplants(armor, player, enchantments);
             }
 
             if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                 final int radius = 4 + crazyManager.getLevel(armor, CEnchantments.ANGEL);
-
-                syncProcessor.add(() -> {
-                    if (EnchantUtils.isEventActive(CEnchantments.ANGEL, player, armor, enchantments)) {
-                        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-                            if (!(entity instanceof Player other)) continue;
-                            if (!pluginSupport.isFriendly(player, other)) continue;
-
-                            other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
-                        }
-                    }
-                });
+                checkAngel(armor, player, enchantments, radius);
             }
             useHellForge(player, armor, enchantments);
         }
@@ -112,6 +85,44 @@ public class ArmorMoveProcessor extends Processor<PlayerMoveEvent> {
         for (final ItemStack item : player.getInventory().getContents()) {
             useHellForge(player, item, enchantmentBookSettings.getEnchantments(item));
         }
+    }
+
+    private void checkAngel(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int radius) {
+        syncProcessor.add(() -> {
+            if (EnchantUtils.isEventActive(CEnchantments.ANGEL, player, armor, enchantments)) {
+                for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+                    if (!(entity instanceof Player other)) continue;
+                    if (!pluginSupport.isFriendly(player, other)) continue;
+
+                    other.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0));
+                }
+            }
+        });
+    }
+
+    private void checkImplants(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
+        syncProcessor.add(() -> {
+            if (EnchantUtils.isEventActive(CEnchantments.IMPLANTS, player, armor, enchantments)) {
+
+                int foodIncrease = 1;
+
+                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
+
+                if (player.getFoodLevel() + foodIncrease <= 20)
+                    player.setFoodLevel(player.getFoodLevel() + foodIncrease);
+
+                if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
+            }
+        });
+    }
+
+    private void checkNursery(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int heal, double maxHealth) {
+        syncProcessor.add(() -> {
+            if (EnchantUtils.isEventActive(CEnchantments.NURSERY, player, armor, enchantments)) {
+                if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
+                if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
+            }
+        });
     }
 
     private void useHellForge(Player player, ItemStack item, Map<CEnchantment, Integer> enchantments) {
