@@ -124,19 +124,18 @@ public class ArmorEnchantments implements Listener {
                 if (currentEffect.getAmplifier() > effect.getValue()) break;
                 player.removePotionEffect(effect.getKey());
             }
-            player.addPotionEffect(new PotionEffect(effect.getKey(), effect.getValue(), -1));
+            player.addPotionEffect(new PotionEffect(effect.getKey(), -1, effect.getValue()));
         }
     }
     private Map<PotionEffectType, Integer> getTopPotionEffects(Map<CEnchantment, Integer> topEnchants) {
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = crazyManager.getEnchantmentPotions();
         HashMap<PotionEffectType, Integer> topPotions = new HashMap<>();
 
-        topEnchants.keySet()
-                .forEach((enchant) -> enchantmentPotions.entrySet()
-                        .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(enchant))
-                        .forEach(enchantedPotion -> enchantedPotion.getValue().entrySet().stream()
+        topEnchants.forEach((key, value) -> enchantmentPotions.entrySet()
+                .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(key))
+                .forEach(enchantedPotion -> enchantedPotion.getValue().entrySet().stream()
                         .filter(pot -> !topPotions.containsKey(pot.getKey()) || (topPotions.get(pot.getKey()) != -1 && topPotions.get(pot.getKey()) <= pot.getValue()))
-                        .forEach(pot -> topPotions.put(pot.getKey(), pot.getValue()))));
+                        .forEach(pot -> topPotions.put(pot.getKey(), value))));
         return topPotions;
     }
 
