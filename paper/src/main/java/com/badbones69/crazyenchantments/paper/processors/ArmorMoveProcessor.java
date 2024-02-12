@@ -93,7 +93,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
     private void checkAngel(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int radius) {
         syncProcessor.add(() -> {
-            if (EnchantUtils.isEventActive(CEnchantments.ANGEL, player, armor, enchantments)) {
+            if (EnchantUtils.isMoveEventActive(CEnchantments.ANGEL, player, armor, enchantments)) {
                 for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
                     if (!(entity instanceof Player other)) continue;
                     if (!pluginSupport.isFriendly(player, other)) continue;
@@ -106,7 +106,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
     private void checkImplants(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
         syncProcessor.add(() -> {
-            if (EnchantUtils.isEventActive(CEnchantments.IMPLANTS, player, armor, enchantments)) {
+            if (EnchantUtils.isMoveEventActive(CEnchantments.IMPLANTS, player, armor, enchantments)) {
 
                 int foodIncrease = 1;
 
@@ -122,7 +122,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
     private void checkNursery(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int heal, double maxHealth) {
         syncProcessor.add(() -> {
-            if (EnchantUtils.isEventActive(CEnchantments.NURSERY, player, armor, enchantments)) {
+            if (EnchantUtils.isMoveEventActive(CEnchantments.NURSERY, player, armor, enchantments)) {
                 if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
                 if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
             }
@@ -130,7 +130,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
     }
 
     private void useHellForge(Player player, ItemStack item, Map<CEnchantment, Integer> enchantments) {
-        if (!EnchantUtils.isEventActive(CEnchantments.HELLFORGED, player, item, enchantments)) return;
+        if (!EnchantUtils.isMoveEventActive(CEnchantments.HELLFORGED, player, item, enchantments)) return;
         int armorDurability = methods.getDurability(item);
         if (armorDurability <= 0) return;
 
