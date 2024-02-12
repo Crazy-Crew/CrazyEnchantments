@@ -22,6 +22,7 @@ import com.badbones69.crazyenchantments.paper.processors.Processor;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -320,12 +321,11 @@ public class ArmorEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onMovement(PlayerMoveEvent event) {
-        if (event.getFrom() == event.getTo()) return;
+        Location from = event.getFrom();
+        Location to = event.getTo();
+        if (from.getBlockX() == to.getBlockX() && from.getBlockZ() == to.getBlockZ()) return;
 
-        Player player = event.getPlayer();
-        UUID playerId = player.getUniqueId();
-
-        armorMoveProcessor.add(playerId);
+        armorMoveProcessor.add(event.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
