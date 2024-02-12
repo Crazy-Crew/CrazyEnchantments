@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class Processor<T> {
     
-    private final BlockingQueue<T> queue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<T> queue = new LinkedBlockingQueue<>(5000);
     private final Thread thread;
     
     public Processor() {
