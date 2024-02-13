@@ -13,15 +13,11 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.ServerPlayerGameMode;
-import net.minecraft.world.entity.item.ItemEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftItem;
-import org.bukkit.craftbukkit.v1_20_R3.event.CraftEventFactory;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -33,7 +29,6 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 public class Methods {
@@ -377,33 +372,42 @@ public class Methods {
         world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
     }
 
-    public void explode(Entity player, Entity arrow) {
-        spawnExplodeParticles(arrow, player.getWorld(), player.getLocation());
+    public void explode(Entity entity, Entity arrow) {
+        spawnExplodeParticles(arrow, entity.getWorld(), entity.getLocation());
 
-        for (Entity entity : getNearbyEntities(3D, arrow)) {
-            if (pluginSupport.allowCombat(entity.getLocation())) {
-                if (entity.getType() == EntityType.DROPPED_ITEM) {
-                    entity.remove();
+        for (Entity value : getNearbyEntities(3D, arrow)) {
+            if (pluginSupport.allowCombat(value.getLocation())) {
+                if (value.getType() == EntityType.DROPPED_ITEM) {
+                    value.remove();
                     continue;
                 }
 
-                if (!(entity instanceof LivingEntity en)) continue;
-                if (pluginSupport.isFriendly(player, en)) continue;
-                if (player.getName().equalsIgnoreCase(entity.getName())) continue;
+                if (!(value instanceof LivingEntity livingEntity)) continue;
+                if (pluginSupport.isFriendly(entity, livingEntity)) continue;
+                if (entity.getName().equalsIgnoreCase(value.getName())) continue;
 
-                EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, EntityDamageEvent.DamageCause.CUSTOM, 5D);
-                plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
-                if (damageByEntityEvent.isCancelled()) continue;
+                EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(
+                        entity,
+                        livingEntity,
+                        EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
+                        DamageSource.builder(DamageType.EXPLOSION).build(),
+                        new HashMap<>(),
+                        new HashMap<>(),
+                        false
+                );
 
-                en.damage(5D);
+                plugin.getServer().getPluginManager().callEvent(event);
+                if (event.isCancelled()) continue;
 
-                en.setVelocity(en.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
-                if (!(en instanceof Player)) continue;
+                livingEntity.damage(5D);
+
+                livingEntity.setVelocity(livingEntity.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
+                if (!(livingEntity instanceof Player player)) continue;
 
                 if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    spartanSupport.cancelSpeed((Player) player);
-                    spartanSupport.cancelNormalMovements((Player) player);
-                    spartanSupport.cancelNoFall((Player) player);
+                    spartanSupport.cancelSpeed(player);
+                    spartanSupport.cancelNormalMovements(player);
+                    spartanSupport.cancelNoFall(player);
                 }
             }
         }
@@ -534,5 +538,4 @@ public class Methods {
 
         if (event.isCancelled()) dropItems.forEach(Entity::remove);
     }
-
 }
