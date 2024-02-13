@@ -25,6 +25,7 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -253,7 +254,7 @@ public class ArmorEnchantments implements Listener {
                 if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(player);
 
                 for (LivingEntity en : methods.getNearbyLivingEntities(2D, player)) {
-                    EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(player, en, DamageCause.CUSTOM, 5D);
+                    EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(player, en, DamageCause.CUSTOM, DamageType.INDIRECT_MAGIC);
                     methods.entityEvent(player, en, damageByEntityEvent);
                 }
 

@@ -413,6 +413,18 @@ public class Methods {
         }
     }
 
+    public static EntityDamageByEntityEvent entityDamageByEntityEvent(Entity damager, Entity damagee, EntityDamageEvent.DamageCause cause, DamageType damageType) {
+        return new EntityDamageByEntityEvent(
+                damager,
+                damagee,
+                cause,
+                DamageSource.builder(damageType).build(),
+                new HashMap<>(),
+                new HashMap<>(),
+                false
+        );
+    }
+
     public HashSet<Block> getEnchantBlocks(Location loc, Location loc2) {
         HashSet<Block> blockList = new HashSet<>();
         int topBlockX = (Math.max(loc.getBlockX(), loc2.getBlockX()));

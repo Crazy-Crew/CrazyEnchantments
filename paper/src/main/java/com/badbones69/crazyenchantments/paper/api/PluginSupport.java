@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.support.claims.GriefPreventionSupport;
 import com.badbones69.crazyenchantments.paper.api.support.claims.TownySupport;
@@ -12,6 +13,7 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import com.gmail.nossr50.party.PartyManager;
 import com.google.common.collect.Maps;
 import org.bukkit.Location;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -73,8 +75,8 @@ public class PluginSupport {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsPVP(location);
     }
 
-    private boolean damageCheck(Player one, Player two) { // Would cause la if used on player move event, but might be the only way to actually check.
-        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(one, two, EntityDamageEvent.DamageCause.ENTITY_ATTACK, new HashMap<>(), new HashMap<>(), false);
+    private boolean damageCheck(Player one, Player two) { // Would cause lag if used on player move event, but might be the only way to actually check.
+        EntityDamageByEntityEvent event = Methods.entityDamageByEntityEvent(one, two, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageType.PLAYER_ATTACK);
         event.setDamage(0);
         EventUtils.addIgnoredEvent(event);
         plugin.getServer().getPluginManager().callEvent(event);

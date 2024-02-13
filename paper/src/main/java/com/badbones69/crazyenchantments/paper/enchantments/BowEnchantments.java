@@ -21,6 +21,7 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -120,7 +121,7 @@ public class BowEnchantments implements Listener {
             if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(shooter);
 
             for (LivingEntity entity : methods.getNearbyLivingEntities(2D, arrow.arrow())) {
-                EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(shooter, entity, DamageCause.CUSTOM, 5D);
+                EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(shooter, entity, DamageCause.LIGHTNING, DamageType.LIGHTNING_BOLT);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);
                 EventUtils.addIgnoredUUID(shooter.getUniqueId());

@@ -25,6 +25,7 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.EntityUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -277,7 +278,7 @@ public class SwordEnchantments implements Listener {
             if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(damager);
 
             for (LivingEntity entity : methods.getNearbyLivingEntities(2D, damager)) {
-                EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.CUSTOM, 5D);
+                EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.MAGIC, DamageType.INDIRECT_MAGIC);
                 methods.entityEvent(damager, entity, damageByEntityEvent);
             }
 
