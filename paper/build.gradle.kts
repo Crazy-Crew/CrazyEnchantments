@@ -93,7 +93,7 @@ tasks {
         val properties = hashMapOf(
                 "name" to rootProject.name,
                 "version" to rootProject.version,
-                "group" to project.group,
+                "group" to "${project.group}.paper",
                 "description" to rootProject.description,
                 "apiVersion" to rootProject.properties["apiVersion"],
                 "authors" to rootProject.properties["authors"],
