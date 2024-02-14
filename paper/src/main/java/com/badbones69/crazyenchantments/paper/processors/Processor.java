@@ -5,11 +5,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class Processor<T> {
     
-    private final BlockingQueue<T> queue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<T> queue = new LinkedBlockingQueue<>(5000);
     private final Thread thread;
     
     public Processor() {
         thread = new Thread(() -> {
+            // It might be crucial to make an executor service here.
             while (!Thread.interrupted()) {
                 try {
                     T process = this.queue.take();

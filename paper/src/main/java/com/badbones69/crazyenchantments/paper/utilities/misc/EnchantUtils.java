@@ -86,4 +86,9 @@ public class EnchantUtils {
         return normalEnchantEvent(enchant, player, item);
     }
 
+    public static boolean isMoveEventActive(CEnchantments enchant, Player player, ItemStack item, Map<CEnchantment, Integer> enchants) {
+        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20)) return false;
+        return isActive(player, enchant, enchants);
+    }
+
 }
