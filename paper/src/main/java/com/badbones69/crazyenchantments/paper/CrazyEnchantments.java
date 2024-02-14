@@ -14,7 +14,6 @@ import com.badbones69.crazyenchantments.paper.enchantments.ArmorEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.AxeEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.BootEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.BowEnchantments;
-import com.badbones69.crazyenchantments.paper.enchantments.HelmetEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.HoeEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.PickaxeEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.SwordEnchantments;
@@ -113,7 +112,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         pluginManager.registerEvents(new DustControlListener(), this);
 
         pluginManager.registerEvents(new PickaxeEnchantments(), this);
-        pluginManager.registerEvents(new HelmetEnchantments(), this);
         pluginManager.registerEvents(new SwordEnchantments(), this);
         pluginManager.registerEvents(armorEnchantments = new ArmorEnchantments(), this);
         pluginManager.registerEvents(new AllyEnchantments(), this);

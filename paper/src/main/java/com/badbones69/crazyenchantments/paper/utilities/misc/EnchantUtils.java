@@ -65,7 +65,7 @@ public class EnchantUtils {
                         !(player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))));
     }
 
-    private static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {
+    public static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {
         EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), item);
         CrazyEnchantments.getPlugin().getServer().getPluginManager().callEvent(useEvent);
         return !useEvent.isCancelled();
@@ -76,19 +76,14 @@ public class EnchantUtils {
         return isActive(player, enchant, enchants);
     }
 
-    public static boolean isMovementEnchantActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        return isActive(player, enchant, enchants);
-    }
-
     public static boolean isArmorEventActive(Player player, CEnchantments enchant, ItemStack item) {
-        //if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant)) return false;
         if (player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))) return false;
         return normalEnchantEvent(enchant, player, item);
     }
 
-    public static boolean isMoveEventActive(CEnchantments enchant, Player player, ItemStack item, Map<CEnchantment, Integer> enchants) {
-        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20)) return false;
-        return isActive(player, enchant, enchants);
+    public static boolean isMoveEventActive(CEnchantments enchant, Player player, Map<CEnchantment, Integer> enchants) {
+        if (!isActive(player, enchant, enchants)) return false;
+        return !CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20);
     }
 
 }
