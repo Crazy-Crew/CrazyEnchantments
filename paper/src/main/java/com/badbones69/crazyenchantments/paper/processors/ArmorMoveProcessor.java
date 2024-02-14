@@ -8,7 +8,6 @@ import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import org.bukkit.Bukkit;
@@ -35,8 +34,6 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
     // Plugin Support.
     private final PluginSupport pluginSupport = starter.getPluginSupport();
-
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
@@ -106,7 +103,10 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
     private void checkAngel(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int radius) {
         if (!EnchantUtils.isMoveEventActive(CEnchantments.ANGEL, player, enchantments)) return;
-        List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(entity -> entity instanceof Player && pluginSupport.isFriendly(player, entity)).map(entity -> (Player) entity).toList();
+
+        List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(entity ->
+                pluginSupport.isFriendly(player, entity)).map(entity -> (Player) entity).toList();
+        
         if (players.isEmpty()) return;
 
         plugin.getServer().getScheduler().runTask(plugin, () -> {
@@ -121,15 +121,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
         plugin.getServer().getScheduler().runTask(plugin, () -> {
             if (EnchantUtils.normalEnchantEvent(CEnchantments.IMPLANTS, player, armor)) {
-
-                int foodIncrease = 1;
-
-                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(player);
-
-                if (player.getFoodLevel() + foodIncrease <= 20)
-                    player.setFoodLevel(player.getFoodLevel() + foodIncrease);
-
-                if (player.getFoodLevel() + foodIncrease >= 20) player.setFoodLevel(20);
+                player.setFoodLevel(Math.min(20, player.getFoodLevel() + enchantments.get(CEnchantments.IMPLANTS.getEnchantment())));
             }
         });
     }
@@ -153,7 +145,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
         plugin.getServer().getScheduler().runTask(plugin, () -> {
             if (EnchantUtils.normalEnchantEvent(CEnchantments.HELLFORGED, player, item)) {
                 int finalArmorDurability = armorDurability;
-                finalArmorDurability -= crazyManager.getLevel(item, CEnchantments.HELLFORGED);
+                finalArmorDurability -= enchantments.get(CEnchantments.HELLFORGED.getEnchantment());
                 methods.setDurability(item, finalArmorDurability);
             }
         });
