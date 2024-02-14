@@ -413,6 +413,16 @@ public class Methods {
         }
     }
 
+    public static EntityDamageEvent getDamageEvent(Entity entity, Entity directEntity, EntityDamageEvent.DamageCause damageCause, DamageType damageType) {
+        return new EntityDamageEvent(
+                entity,
+                damageCause,
+                DamageSource.builder(damageType).withDirectEntity(directEntity).build(),
+                new HashMap<>(),
+                new HashMap<>()
+        );
+    }
+
     public static EntityDamageByEntityEvent entityDamageByEntityEvent(Entity damager, Entity damagee, EntityDamageEvent.DamageCause cause, DamageType damageType) {
         return new EntityDamageByEntityEvent(
                 damager,
