@@ -37,6 +37,8 @@ repositories {
 
     maven("https://maven.enginehub.org/repo/")
 
+    maven("https://repo.oraxen.com/releases/")
+
     flatDir { dirs("libs") }
 }
 
