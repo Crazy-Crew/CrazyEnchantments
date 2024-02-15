@@ -14,8 +14,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -82,6 +84,11 @@ public class ArmorMoveProcessor extends Processor<UUID> {
             }
             useHellForge(player, armor, enchantments);
         }
+
+        PlayerInventory inv = player.getInventory();
+
+        useHellForge(player, inv.getItemInMainHand(), enchantmentBookSettings.getEnchantments(inv.getItemInMainHand()));
+        useHellForge(player, inv.getItemInOffHand(), enchantmentBookSettings.getEnchantments(inv.getItemInOffHand()));
     }
 
     private void checkCommander(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
