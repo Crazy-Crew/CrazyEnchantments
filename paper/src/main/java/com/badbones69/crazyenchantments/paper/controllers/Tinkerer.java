@@ -17,6 +17,7 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -66,24 +67,36 @@ public class Tinkerer implements Listener {
 
     @EventHandler
     public void onXPUse(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-
         if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
 
-        ItemStack item = methods.getItemInHand(player);
-        ItemMeta meta = item.getItemMeta();
+        Player player = event.getPlayer();
 
-        if (meta == null || !item.getItemMeta().getPersistentDataContainer().has(DataKeys.EXPERIENCE.getKey())) return;
+        if (useXP(player, event, true)) return;
+        useXP(player, event, false);
+    }
+
+    private boolean useXP(Player player, PlayerInteractEvent event, boolean mainHand) {
+        ItemStack item = mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+
+        if (item.isEmpty() || !item.hasItemMeta()) return false;
+
+        if (!item.getItemMeta().getPersistentDataContainer().has(DataKeys.EXPERIENCE.getKey())) return false;
+
         int amount = Integer.parseInt(item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.EXPERIENCE.getKey(), PersistentDataType.STRING, "0"));
 
         event.setCancelled(true);
-        methods.setItemInHand(player, methods.removeItem(item));
+        if (mainHand) {
+            player.getInventory().setItemInMainHand(methods.removeItem(item));
+        } else {
+            player.getInventory().setItemInOffHand(methods.removeItem(item));
+        }
 
         if (Currency.isCurrency(Files.TINKER.getFile().getString("Settings.Currency")))
             currencyAPI.giveCurrency(player, Currency.getCurrency(Files.TINKER.getFile().getString("Settings.Currency")), amount);
 
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 
+        return true;
     }
 
     @EventHandler(ignoreCancelled = true)
