@@ -1,7 +1,5 @@
 package com.badbones69.crazyenchantments.paper.utilities.misc;
 
-import org.bukkit.inventory.ItemStack;
-
 public class NumberUtils {
     public static boolean isInt(String s) {
 

@@ -13,7 +13,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.BowEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
@@ -53,7 +52,6 @@ public class BowEnchantments implements Listener {
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     // Plugin Managers.
     private final BowEnchantmentManager bowEnchantmentManager = starter.getBowEnchantmentManager();
@@ -118,8 +116,6 @@ public class BowEnchantments implements Listener {
             // AntiCheat Support.
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(shooter);
 
-            if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(shooter);
-
             for (LivingEntity entity : methods.getNearbyLivingEntities(2D, arrow.arrow())) {
                 EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(shooter, entity, DamageCause.LIGHTNING, DamageType.LIGHTNING_BOLT);
 
@@ -172,12 +168,6 @@ public class BowEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.PULL, arrow.getShooter(), arrow.bow(), arrow.enchantments())) {
             Vector v = arrow.getShooter().getLocation().toVector().subtract(entity.getLocation().toVector()).normalize().multiply(3);
-
-            if (entity instanceof Player player && SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                spartanSupport.cancelSpeed(player);
-                spartanSupport.cancelNormalMovements(player);
-                spartanSupport.cancelNoFall(player);
-            }
             entity.setVelocity(v);
         }
 

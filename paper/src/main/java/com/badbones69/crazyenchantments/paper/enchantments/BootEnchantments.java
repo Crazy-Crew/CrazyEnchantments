@@ -2,10 +2,8 @@ package com.badbones69.crazyenchantments.paper.enchantments;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.WingsUtils;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
@@ -23,9 +21,6 @@ public class BootEnchantments implements Listener {
     private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
     private final Starter starter = plugin.getStarter();
-
-    // Plugin Support.
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     // Plugin Managers.
     private final WingsManager wingsManager = starter.getWingsManager();
@@ -57,8 +52,6 @@ public class BootEnchantments implements Listener {
         if (!enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
-
-        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNormalMovements(player);
 
         if (event.isFlying()) {
             if (player.getAllowFlight()) {
@@ -110,8 +103,6 @@ public class BootEnchantments implements Listener {
         if (!enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
-
-        if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNormalMovements(player);
 
         player.setAllowFlight(true);
         wingsManager.addFlyingPlayer(player);

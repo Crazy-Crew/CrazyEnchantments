@@ -11,7 +11,6 @@ import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
@@ -46,7 +45,6 @@ public class PickaxeEnchantments implements Listener {
 
     // Plugin Support.
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
@@ -139,12 +137,6 @@ public class PickaxeEnchantments implements Listener {
 
     private void antiCheat(Player player) {
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
-
-        if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-            spartanSupport.cancelFastBreak(player);
-            spartanSupport.cancelNoSwing(player);
-            spartanSupport.cancelBlockReach(player);
-        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

@@ -14,7 +14,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.PotionEffects;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.processors.ArmorMoveProcessor;
@@ -63,7 +62,6 @@ public class ArmorEnchantments implements Listener {
 
     // Plugin Support.
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
@@ -251,8 +249,6 @@ public class ArmorEnchantments implements Listener {
                 methods.lightning(damager);
                 // AntiCheat Support.
                 if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
-
-                if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(player);
 
                 for (LivingEntity en : methods.getNearbyLivingEntities(2D, player)) {
                     EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(player, en, DamageCause.CUSTOM, DamageType.INDIRECT_MAGIC);

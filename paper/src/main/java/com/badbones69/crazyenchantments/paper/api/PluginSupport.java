@@ -21,7 +21,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class PluginSupport {
@@ -161,7 +160,6 @@ public class PluginSupport {
         // WILD_STACKER("WildStacker"),
 
         // Anti Cheats
-        SPARTAN("Spartan"),
         NO_CHEAT_PLUS("NoCheatPlus"),
         //VULCAN("Vulcan"),
 

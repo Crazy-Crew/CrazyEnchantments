@@ -2,12 +2,10 @@ package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport;
-import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
@@ -41,8 +39,6 @@ public class Methods {
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
     private final OraxenSupport oraxenSupport = starter.getOraxenSupport();
-
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : starter.getInfoMenuManager().getEnchantmentTypes()) {
@@ -349,14 +345,6 @@ public class Methods {
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
                 en.damage(5D);
 
-                if (en instanceof Player) {
-                    if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                        spartanSupport.cancelSpeed((Player) player);
-                        spartanSupport.cancelNormalMovements((Player) player);
-                        spartanSupport.cancelNoFall((Player) player);
-                    }
-                }
-
                 en.setVelocity(en.getLocation().toVector().subtract(player.getLocation().toVector()).normalize().multiply(1).setY(.5));
             }
         }
@@ -402,13 +390,7 @@ public class Methods {
                 livingEntity.damage(5D);
 
                 livingEntity.setVelocity(livingEntity.getLocation().toVector().subtract(arrow.getLocation().toVector()).normalize().multiply(1).setY(.5));
-                if (!(livingEntity instanceof Player player)) continue;
 
-                if (SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                    spartanSupport.cancelSpeed(player);
-                    spartanSupport.cancelNormalMovements(player);
-                    spartanSupport.cancelNoFall(player);
-                }
             }
         }
     }

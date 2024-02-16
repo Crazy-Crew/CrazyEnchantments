@@ -15,7 +15,6 @@ import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.api.support.claims.SuperiorSkyBlockSupport;
 import com.badbones69.crazyenchantments.paper.api.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
@@ -48,7 +47,6 @@ public class Starter {
     private VaultSupport vaultSupport;
     private OraxenSupport oraxenSupport;
     private NoCheatPlusSupport noCheatPlusSupport;
-    private SpartanSupport spartanSupport;
 
     // Plugin Managers.
     private ArmorEnchantmentManager armorEnchantmentManager;
@@ -85,7 +83,6 @@ public class Starter {
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport = new NoCheatPlusSupport();
 
         if (SupportedPlugins.ORAXEN.isPluginLoaded()) this.oraxenSupport = new OraxenSupport();
-        if (SupportedPlugins.SPARTAN.isPluginLoaded()) this.spartanSupport = new SpartanSupport();
 
         // Methods
         this.methods = new Methods();
@@ -180,10 +177,6 @@ public class Starter {
 
     public NoCheatPlusSupport getNoCheatPlusSupport() {
         return this.noCheatPlusSupport;
-    }
-
-    public SpartanSupport getSpartanSupport() {
-        return this.spartanSupport;
     }
 
     // Economy Management.

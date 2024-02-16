@@ -10,14 +10,11 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.events.DisarmerUseEvent;
-import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.SpartanSupport;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.utilities.misc.EnchantUtils;
@@ -61,7 +58,6 @@ public class SwordEnchantments implements Listener {
     private final PluginSupport pluginSupport = starter.getPluginSupport();
 
     private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
-    private final SpartanSupport spartanSupport = starter.getSpartanSupport();
 
     private final BossBarController bossBarController = plugin.getBossBarController();
 
@@ -219,7 +215,6 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.NUTRITION, damager, item, enchantments)) {
-            if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelFastEat(damager);
 
             if (damager.getSaturation() + (2 * crazyManager.getLevel(item, CEnchantments.NUTRITION)) <= 20) damager.setSaturation(damager.getSaturation() + (2 * crazyManager.getLevel(item, CEnchantments.NUTRITION)));
 
@@ -261,21 +256,12 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.OBLITERATE, damager, item, enchantments)) {
-
-            if (event.getEntity() instanceof Player && SupportedPlugins.SPARTAN.isPluginLoaded()) {
-                spartanSupport.cancelSpeed((Player) event.getEntity());
-                spartanSupport.cancelNormalMovements((Player) event.getEntity());
-                spartanSupport.cancelNoFall((Player) event.getEntity());
-            }
-
             event.getEntity().setVelocity(damager.getLocation().getDirection().multiply(2).setY(1.25));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.PARALYZE, damager, item, enchantments)) {
 
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(damager);
-
-            if (SupportedPlugins.SPARTAN.isPluginLoaded()) spartanSupport.cancelNoSwing(damager);
 
             for (LivingEntity entity : methods.getNearbyLivingEntities(2D, damager)) {
                 EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.MAGIC, DamageType.INDIRECT_MAGIC);

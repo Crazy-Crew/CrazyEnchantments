@@ -63,6 +63,7 @@ public class EnchantUtils {
         return enchants.containsKey(enchant.getEnchantment()) &&
                 (!enchant.hasChanceSystem() || enchant.chanceSuccessful(enchants.get(enchant.getEnchantment()), multiplier) &&
                         !(player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))));
+        // TODO Potentially add in entity support.
     }
 
     public static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {
