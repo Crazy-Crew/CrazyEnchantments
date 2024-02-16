@@ -159,28 +159,39 @@ public class DustControlListener implements Listener {
     }
 
     @EventHandler
-    public void openDust(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
+    public void openDust(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
         FileConfiguration config = Files.CONFIG.getFile();
 
-        if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
-        ItemStack item = methods.getItemInHand(player);
+        if (openAnyHandDust(player, event, true, config)) return;
+        openAnyHandDust(player, event, false, config);
 
-        if (!item.hasItemMeta()) return;
+    }
+    
+    private boolean openAnyHandDust(Player player, PlayerInteractEvent event, boolean mainHand, FileConfiguration config) {
+        ItemStack item = mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+
+        if (item.isEmpty() || !item.hasItemMeta()) return false;
 
         // PDC Start
         DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(DataKeys.DUST.getKey(), PersistentDataType.STRING), DustData.class);
         // PDC End
-        if (data == null) return;
+        if (data == null) return false;
 
         if (data.getConfigName().equals(Dust.SUCCESS_DUST.getConfigName())) {
-            e.setCancelled(true);
+            event.setCancelled(true);
         } else if (data.getConfigName().equals(Dust.DESTROY_DUST.getConfigName())) {
-            e.setCancelled(true);
+            event.setCancelled(true);
         } else if(data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
-            e.setCancelled(true);
-            methods.setItemInHand(player, methods.removeItem(item));
+            event.setCancelled(true);
+
+            if (mainHand) {
+                player.getInventory().setItemInMainHand(methods.removeItem(item));
+            } else {
+                player.getInventory().setItemInOffHand(methods.removeItem(item));
+            }
 
             ItemStack item2 = pickDust().getDust(methods.percentPick(data.getChance() + 1, 1), 1);
 
@@ -197,6 +208,7 @@ public class DustControlListener implements Listener {
                 methods.fireWork(player.getLocation().add(0, 1, 0), colors);
             }
         }
+        return true;
     }
 
     private Dust pickDust() {
