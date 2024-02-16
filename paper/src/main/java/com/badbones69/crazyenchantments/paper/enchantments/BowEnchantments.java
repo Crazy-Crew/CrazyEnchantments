@@ -184,7 +184,7 @@ public class BowEnchantments implements Listener {
         for (BowEnchantment bowEnchantment : bowEnchantmentManager.getBowEnchantments()) {
             CEnchantments enchantment = bowEnchantment.getEnchantment();
 
-            if (!EnchantUtils.isEventActive(enchantment, entity, arrow.bow(), arrow.enchantments())) continue;
+            if (!EnchantUtils.isEventActive(enchantment, arrow.getShooter(), arrow.bow(), arrow.enchantments())) continue;
 
             if (bowEnchantment.isPotionEnchantment()) {
                 bowEnchantment.getPotionEffects().forEach(effect -> entity.addPotionEffect(new PotionEffect(effect.potionEffect(), effect.duration(),
