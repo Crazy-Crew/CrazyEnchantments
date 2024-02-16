@@ -244,4 +244,10 @@ public class ScramblerListener implements Listener {
             roll.remove(player);
         } catch (Exception ignored) {}
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onScrollClick(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (isScrambler(player.getInventory().getItemInOffHand()) || isScrambler(player.getInventory().getItemInOffHand())) event.setCancelled(true);
+    }
 }
