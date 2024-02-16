@@ -135,16 +135,25 @@ public class ScrollListener implements Listener {
     @EventHandler()
     public void onScrollClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        ItemStack scroll = methods.getItemInHand(player);
 
-        if (scroll.isEmpty()) return;
+        if (checkScroll(player.getInventory().getItemInMainHand(), player, event)) return;
+
+        checkScroll(player.getInventory().getItemInOffHand(), player, event);
+
+    }
+
+    private boolean checkScroll(ItemStack scroll, Player player, PlayerInteractEvent event) {
+        if (scroll.isEmpty()) return false;
 
         if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) {
             event.setCancelled(true);
             player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
+            return true;
         } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll()) || scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
             event.setCancelled(true);
+            return true;
         }
+        return false;
     }
 
     @Deprecated
