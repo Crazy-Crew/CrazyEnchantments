@@ -33,7 +33,11 @@ public class WingsUtils {
         wingsManager.setWingsTask(new BukkitRunnable() {
             @Override
             public void run() {
-                for (Player player : wingsManager.getFlyingPlayers()) {
+                for (UUID uuid : wingsManager.getFlyingPlayers()) {
+                    Player player = plugin.getServer().getPlayer(uuid);
+
+                    if (player == null) return;
+
                     if (player.isFlying() && player.getEquipment().getBoots() != null && starter.getEnchantmentBookSettings().getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
                         Location location = player.getLocation().subtract(0, .25, 0);
 

@@ -14,7 +14,7 @@ public class WingsManager {
     private boolean isCloudsEnabled;
     private boolean isEnemyCheckEnabled;
     private int enemyRadius;
-    private final List<Player> flyingPlayers = new ArrayList<>();
+    private final List<UUID> flyingPlayers = new ArrayList<>();
     private final List<String> whitelistWorlds = new ArrayList<>();
     private final List<String> blacklistWorlds = new ArrayList<>();
     private List<String> regions;
@@ -61,20 +61,20 @@ public class WingsManager {
         return "crazyenchantments.bypass.wings";
     }
     
-    public List<Player> getFlyingPlayers() {
-        return flyingPlayers;
+    public List<UUID> getFlyingPlayers() {
+        return this.flyingPlayers;
     }
     
     public boolean isFlyingPlayer(Player player) {
-        return flyingPlayers.contains(player);
+        return this.flyingPlayers.contains(player.getUniqueId());
     }
     
     public void addFlyingPlayer(Player player) {
-        if (!flyingPlayers.contains(player)) flyingPlayers.add(player);
+        if (!this.flyingPlayers.contains(player.getUniqueId())) this.flyingPlayers.add(player.getUniqueId());
     }
     
     public void removeFlyingPlayer(Player player) {
-        flyingPlayers.remove(player);
+        this.flyingPlayers.remove(player.getUniqueId());
     }
     
     /**
