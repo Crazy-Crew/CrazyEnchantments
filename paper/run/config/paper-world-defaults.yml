@@ -72,6 +72,9 @@ collisions:
   fix-climbing-bypassing-cramming-rule: false
   max-entity-collisions: 8
   only-players-collide: false
+command-blocks:
+  force-follow-perm-level: true
+  permissions-level: 2
 entities:
   armor-stands:
     do-collision-entity-lookups: true
@@ -291,10 +294,12 @@ tick-rates:
     villager:
       validatenearbypoi: -1
   container-update: 1
+  dry-farmland: 1
   grass-spread: 1
   mob-spawner: 1
   sensor:
     villager:
       secondarypoisensor: 40
+  wet-farmland: 1
 unsupported-settings:
   fix-invulnerable-end-crystal-exploit: true
