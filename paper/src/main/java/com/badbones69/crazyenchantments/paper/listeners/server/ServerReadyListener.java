@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class ServerReadyListener implements Listener {
 

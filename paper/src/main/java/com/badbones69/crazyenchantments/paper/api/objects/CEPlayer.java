@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-
+import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class CEPlayer {

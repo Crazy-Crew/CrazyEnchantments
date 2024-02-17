@@ -9,7 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.gmail.nossr50.party.PartyManager;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 

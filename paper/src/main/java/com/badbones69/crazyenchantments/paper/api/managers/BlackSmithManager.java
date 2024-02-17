@@ -3,11 +3,12 @@ package com.badbones69.crazyenchantments.paper.api.managers;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+//todo() redo this.
 public class BlackSmithManager {
 
     private ItemStack denyBarrier;

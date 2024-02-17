@@ -19,7 +19,7 @@ import com.badbones69.crazyenchantments.paper.controllers.BlackSmith;
 import com.badbones69.crazyenchantments.paper.controllers.Tinkerer;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

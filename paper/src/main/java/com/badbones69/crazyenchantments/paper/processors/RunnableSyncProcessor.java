@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper.processors;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import org.jetbrains.annotations.NotNull;
 
 public class RunnableSyncProcessor extends Processor<Runnable> {
 

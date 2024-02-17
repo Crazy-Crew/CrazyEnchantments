@@ -24,6 +24,7 @@ import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class Starter {
 

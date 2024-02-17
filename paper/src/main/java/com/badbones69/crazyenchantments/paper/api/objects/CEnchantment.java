@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.events.RegisteredCEnchantmentE
 import com.badbones69.crazyenchantments.paper.api.events.UnregisterCEnchantmentEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;

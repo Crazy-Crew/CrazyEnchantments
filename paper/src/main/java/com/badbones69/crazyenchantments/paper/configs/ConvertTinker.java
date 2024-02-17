@@ -1,11 +1,11 @@
 package com.badbones69.crazyenchantments.paper.configs;
 
 import java.io.File;
-
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 public class ConvertTinker {
 

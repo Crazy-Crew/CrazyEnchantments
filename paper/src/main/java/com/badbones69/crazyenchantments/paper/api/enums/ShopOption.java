@@ -6,8 +6,9 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.jline.utils.Log;
+import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public enum ShopOption {
     

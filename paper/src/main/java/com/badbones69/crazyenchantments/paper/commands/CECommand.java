@@ -24,8 +24,8 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
-import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
-import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;

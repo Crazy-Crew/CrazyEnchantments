@@ -2,6 +2,8 @@ package com.badbones69.crazyenchantments.paper.api.enums.pdc;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 public enum DataKeys {
 
