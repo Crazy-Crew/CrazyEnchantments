@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.paper.utilities.misc.EventUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
@@ -29,6 +30,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -117,7 +119,7 @@ public class BowEnchantments implements Listener {
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(shooter);
 
             for (LivingEntity entity : methods.getNearbyLivingEntities(2D, arrow.arrow())) {
-                EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(shooter, entity, DamageCause.LIGHTNING, DamageType.LIGHTNING_BOLT);
+                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);
                 EventUtils.addIgnoredUUID(shooter.getUniqueId());

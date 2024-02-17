@@ -74,15 +74,6 @@ public class PluginSupport {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsPVP(location);
     }
 
-    private boolean damageCheck(Player one, Player two) { // Would cause lag if used on player move event, but might be the only way to actually check.
-        EntityDamageByEntityEvent event = Methods.entityDamageByEntityEvent(one, two, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageType.PLAYER_ATTACK);
-        event.setDamage(0);
-        EventUtils.addIgnoredEvent(event);
-        plugin.getServer().getPluginManager().callEvent(event);
-        EventUtils.removeIgnoredEvent(event);
-        return event.isCancelled();
-    }
-
     public boolean allowDestruction(Location location) {
         return !SupportedPlugins.WORLDEDIT.isPluginLoaded() || !SupportedPlugins.WORLDGUARD.isPluginLoaded() || this.worldGuardUtils.getWorldGuardSupport().allowsBreak(location);
     }

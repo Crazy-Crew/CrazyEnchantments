@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -251,7 +252,7 @@ public class ArmorEnchantments implements Listener {
                 if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) noCheatPlusSupport.allowPlayer(player);
 
                 for (LivingEntity en : methods.getNearbyLivingEntities(2D, player)) {
-                    EntityDamageByEntityEvent damageByEntityEvent = Methods.entityDamageByEntityEvent(player, en, DamageCause.CUSTOM, DamageType.INDIRECT_MAGIC);
+                    EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(en, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(player).build(), 5D);
                     methods.entityEvent(player, en, damageByEntityEvent);
                 }
 

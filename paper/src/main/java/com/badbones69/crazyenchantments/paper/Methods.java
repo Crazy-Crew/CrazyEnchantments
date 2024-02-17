@@ -20,7 +20,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -374,15 +373,7 @@ public class Methods {
                 if (pluginSupport.isFriendly(entity, livingEntity)) continue;
                 if (entity.getName().equalsIgnoreCase(value.getName())) continue;
 
-                EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(
-                        entity,
-                        livingEntity,
-                        EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
-                        DamageSource.builder(DamageType.EXPLOSION).build(),
-                        new HashMap<>(),
-                        new HashMap<>(),
-                        false
-                );
+                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(entity).build(), 5D);
 
                 plugin.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) continue;
@@ -393,28 +384,6 @@ public class Methods {
 
             }
         }
-    }
-
-    public static EntityDamageEvent getDamageEvent(Entity entity, Entity directEntity, EntityDamageEvent.DamageCause damageCause, DamageType damageType) {
-        return new EntityDamageEvent(
-                entity,
-                damageCause,
-                DamageSource.builder(damageType).withDirectEntity(directEntity).build(),
-                new HashMap<>(),
-                new HashMap<>()
-        );
-    }
-
-    public static EntityDamageByEntityEvent entityDamageByEntityEvent(Entity damager, Entity damagee, EntityDamageEvent.DamageCause cause, DamageType damageType) {
-        return new EntityDamageByEntityEvent(
-                damager,
-                damagee,
-                cause,
-                DamageSource.builder(damageType).build(),
-                new HashMap<>(),
-                new HashMap<>(),
-                false
-        );
     }
 
     public HashSet<Block> getEnchantBlocks(Location loc, Location loc2) {
@@ -437,7 +406,7 @@ public class Methods {
         return blockList;
     }
 
-    public void entityEvent(Player damager, LivingEntity entity, EntityDamageByEntityEvent damageByEntityEvent) {
+    public void entityEvent(Player damager, LivingEntity entity, EntityDamageEvent damageByEntityEvent) {
         EventUtils.addIgnoredEvent(damageByEntityEvent);
         EventUtils.addIgnoredUUID(damager.getUniqueId());
         plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
