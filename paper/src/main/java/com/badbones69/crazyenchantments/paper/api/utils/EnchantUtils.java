@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.utilities.misc;
+package com.badbones69.crazyenchantments.paper.api.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
@@ -8,10 +8,14 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class EnchantUtils {
+
+    @NotNull
+    private final static CrazyEnchantments plugin = CrazyEnchantments.get();
 
     /**
      * Get the highest category rarity the enchantment is in.
@@ -52,10 +56,11 @@ public class EnchantUtils {
     /**
      * Main Event used to validate that all enchants can work.
      * Global method that should be used before every enchantment is activated.
-     * @param player
-     * @param enchant
-     * @param enchants
-     * @param multiplier
+     *
+     * @param player the player
+     * @param enchant the enchant to use
+     * @param enchants the map of enchants
+     * @param multiplier the multipler of the enchant.
      * @return True if the enchant is active and can be used if the event is passed.
      */
     private static boolean isActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants, double multiplier) {
@@ -68,24 +73,29 @@ public class EnchantUtils {
 
     public static boolean normalEnchantEvent(CEnchantments enchant, Entity damager, ItemStack item) {
         EnchantmentUseEvent useEvent = new EnchantmentUseEvent((Player) damager, enchant.getEnchantment(), item);
-        CrazyEnchantments.getPlugin().getServer().getPluginManager().callEvent(useEvent);
+
+        plugin.getServer().getPluginManager().callEvent(useEvent);
+
         return !useEvent.isCancelled();
     }
 
     public static boolean isAuraActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        if (CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
+        if (plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
+
         return isActive(player, enchant, enchants);
     }
 
     public static boolean isArmorEventActive(Player player, CEnchantments enchant, ItemStack item) {
         if (player.isOp()) return true;
+
         if (player.hasPermission("crazyenchantments.%s.deny".formatted(enchant.getName()))) return false;
+
         return normalEnchantEvent(enchant, player, item);
     }
 
     public static boolean isMoveEventActive(CEnchantments enchant, Player player, Map<CEnchantment, Integer> enchants) {
         if (!isActive(player, enchant, enchants)) return false;
-        return !CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20);
-    }
 
+        return !plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20);
+    }
 }

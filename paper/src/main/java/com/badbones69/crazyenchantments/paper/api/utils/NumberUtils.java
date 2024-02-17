@@ -1,8 +1,8 @@
-package com.badbones69.crazyenchantments.paper.utilities.misc;
+package com.badbones69.crazyenchantments.paper.api.utils;
 
 public class NumberUtils {
-    public static boolean isInt(String s) {
 
+    public static boolean isInt(String s) {
         if (s.isEmpty()) return false;
 
         for (int i = 0; i < s.length(); i++) {
@@ -10,11 +10,13 @@ public class NumberUtils {
                 if (s.length() == 1) return false;
                 continue;
             }
+
             if (Character.digit(s.charAt(i), 10) == -1) return false;
         }
 
         return true;
     }
+
     public static String toRoman(int number) {
 
         if (number > 3999 || number < 1) return String.valueOf(number);
@@ -30,6 +32,7 @@ public class NumberUtils {
                 roman.append(romanLetters[i]);
             }
         }
+
         return roman.toString();
     }
 
@@ -53,25 +56,13 @@ public class NumberUtils {
             default -> isInt(i) ? Integer.parseInt(i) : 0;
         };
     }
+
     /**
      * This converts an integer into a roman numeral if its between 1-3999 otherwise it will just be the number as a string.
      * @param number The integer you want to convert.
      * @return The integer as a roman numeral if between 1-3999 otherwise the number as a string.
      */
     public static String convertLevelString(int number) {
-//        return switch (number) {
-//            case 0, 1 -> "I";
-//            case 2 -> "II";
-//            case 3 -> "III";
-//            case 4 -> "IV";
-//            case 5 -> "V";
-//            case 6 -> "VI";
-//            case 7 -> "VII";
-//            case 8 -> "VIII";
-//            case 9 -> "IX";
-//            case 10 -> "X";
-//            default -> String.valueOf(number);
-//        };
         return toRoman(number);
     }
 }
