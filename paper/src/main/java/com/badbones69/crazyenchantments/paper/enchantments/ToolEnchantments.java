@@ -23,37 +23,40 @@ import java.util.Objects;
 
 public class ToolEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
-
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    @NotNull
+    private final Methods methods = this.starter.getMethods();
 
     // Settings.
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler()
     public void onPlayerClick(PlayerInteractEvent event) {
-        //Check what hand is being used as the event fires for each hand.
+        // Check what hand is being used as the event fires for each hand.
         if (Objects.equals(event.getHand(), EquipmentSlot.HAND)) updateEffects(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTelepathy(BlockDropItemEvent event) {
         Player player = event.getPlayer();
-        ItemStack tool = methods.getItemInHand(player);
+        ItemStack tool = this.methods.getItemInHand(player);
 
-        if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, enchantmentBookSettings.getEnchantments(tool))) return;
+        if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, this.enchantmentBookSettings.getEnchantments(tool))) return;
 
         event.setCancelled(true);
-        methods.addItemToInventory(player, event.getItems());
+
+        this.methods.addItemToInventory(player, event.getItems());
     }
 
     private void updateEffects(Player player) {
-        ItemStack item = methods.getItemInHand(player);
-        Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(item);
+        ItemStack item = this.methods.getItemInHand(player);
+        Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
 
         int potionTime = 5 * 20;
 
@@ -67,6 +70,5 @@ public class ToolEnchantments implements Listener {
             player.removePotionEffect(PotionEffectType.WATER_BREATHING);
             player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, potionTime, 5));
         }
-
     }
 }

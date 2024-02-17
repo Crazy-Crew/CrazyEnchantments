@@ -21,12 +21,16 @@ import java.util.UUID;
 
 public class WingsUtils {
 
-    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private static final CrazyEnchantments plugin = CrazyEnchantments.get();
 
+    @NotNull
     private static final Starter starter = plugin.getStarter();
 
+    @NotNull
     private static final PluginSupport pluginSupport = starter.getPluginSupport();
 
+    @NotNull
     private static final WingsManager wingsManager = starter.getWingsManager();
 
     public static void startWings() {
@@ -92,6 +96,7 @@ public class WingsUtils {
     public static boolean isEnemiesNearby(Player player) {
         if (wingsManager.isEnemyCheckEnabled() && !wingsManager.inLimitlessFlightWorld(player)) {
             for (Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
+                //todo() update this
                 if (!(player.hasPermission("crazyenchantments.bypass.wings") && pluginSupport.isFriendly(player, otherPlayer))) return true;
             }
         }

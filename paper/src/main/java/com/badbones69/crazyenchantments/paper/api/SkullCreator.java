@@ -23,7 +23,8 @@ import java.util.UUID;
  */
 public class SkullCreator {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     /**
      * Creates a player skull based on a player's name.
@@ -54,7 +55,7 @@ public class SkullCreator {
         notNull(item, "item");
         notNull(name, "name");
 
-        return plugin.getServer().getUnsafe().modifyItemStack(item, "{SkullOwner:\"" + name + "\"}");
+        return this.plugin.getServer().getUnsafe().modifyItemStack(item, "{SkullOwner:\"" + name + "\"}");
     }
 
     /**
@@ -82,7 +83,7 @@ public class SkullCreator {
 
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         assert meta != null;
-        meta.setOwningPlayer(plugin.getServer().getOfflinePlayer(id));
+        meta.setOwningPlayer(this.plugin.getServer().getOfflinePlayer(id));
         item.setItemMeta(meta);
 
         return item;
@@ -138,7 +139,7 @@ public class SkullCreator {
         notNull(base64, "base64");
 
         UUID hashAsId = new UUID(base64.hashCode(), base64.hashCode());
-        return plugin.getServer().getUnsafe().modifyItemStack(item, "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}");
+        return this.plugin.getServer().getUnsafe().modifyItemStack(item, "{SkullOwner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}");
     }
 
     /**
@@ -154,7 +155,8 @@ public class SkullCreator {
         notNull(block, "block");
         notNull(name, "name");
 
-        setBlockType(block);((Skull) block.getState()).setOwningPlayer(Bukkit.getOfflinePlayer(name));
+        setBlockType(block);
+        ((Skull) block.getState()).setOwningPlayer(Bukkit.getOfflinePlayer(name));
     }
 
     /**
@@ -167,7 +169,8 @@ public class SkullCreator {
         notNull(block, "block");
         notNull(id, "id");
 
-        setBlockType(block);((Skull) block.getState()).setOwningPlayer(Bukkit.getOfflinePlayer(id));
+        setBlockType(block);
+        ((Skull) block.getState()).setOwningPlayer(Bukkit.getOfflinePlayer(id));
     }
 
     /**
@@ -203,7 +206,7 @@ public class SkullCreator {
                 "{Owner:{Id:\"" + hashAsId + "\",Properties:{textures:[{Value:\"" + base64 + "\"}]}}}"
         );
 
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "data merge block " + args);
+        this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), "data merge block " + args);
     }
 
     private boolean newerApi() {

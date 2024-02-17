@@ -20,11 +20,14 @@ import java.util.stream.Collectors;
 
 public class AuraListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final CEnchantments[] AURA_ENCHANTMENTS = {
             CEnchantments.BLIZZARD,
@@ -51,11 +54,11 @@ public class AuraListener implements Listener {
         EntityEquipment playerEquipment = player.getEquipment();
 
         for (ItemStack item : playerEquipment.getArmorContents()) { // The player that moves.
-            Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
+            Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                if (enchantmentEnum != null) players.forEach((other) -> plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(player, other, enchantmentEnum, level)));
+                if (enchantmentEnum != null) players.forEach((other) -> this.plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(player, other, enchantmentEnum, level)));
 
             });
         }
@@ -64,11 +67,11 @@ public class AuraListener implements Listener {
             EntityEquipment otherEquipment = other.getEquipment();
 
             for (ItemStack item : otherEquipment.getArmorContents()) { // The other players moving.
-                Map<CEnchantment, Integer> itemEnchantments = enchantmentBookSettings.getEnchantments(item);
+                Map<CEnchantment, Integer> itemEnchantments = this.enchantmentBookSettings.getEnchantments(item);
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                    if (enchantmentEnum != null) plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(other, player, enchantmentEnum, level));
+                    if (enchantmentEnum != null) this.plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(other, player, enchantmentEnum, level));
 
                 });
             }
@@ -80,9 +83,7 @@ public class AuraListener implements Listener {
     }
 
     private List<Player> getNearbyPlayers(Player player) {
-
         return player.getNearbyEntities(3, 3, 3).stream().filter((entity) ->
                 entity instanceof Player && !entity.getUniqueId().equals(player.getUniqueId())).map(entity -> (Player) entity).collect(Collectors.toList());
-
     }
 }

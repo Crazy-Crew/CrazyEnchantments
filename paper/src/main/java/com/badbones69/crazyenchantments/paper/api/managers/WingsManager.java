@@ -25,39 +25,40 @@ public class WingsManager {
     private BukkitTask wingsTask;
     
     public void load() {
-        isWingsEnabled = CEnchantments.WINGS.isActivated();
+        this.isWingsEnabled = CEnchantments.WINGS.isActivated();
         FileConfiguration config = Files.CONFIG.getFile();
         String path = "Settings.EnchantmentOptions.Wings.";
-        isCloudsEnabled = config.getBoolean(path + "Clouds");
-        isEnemyCheckEnabled = config.getBoolean(path + "Enemy-Toggle");
-        enemyRadius = config.getInt(path + "Distance", 10);
-        whitelistWorlds.clear();
-        config.getStringList(path + "Worlds.Whitelisted").forEach(world -> whitelistWorlds.add(world.toLowerCase()));
-        blacklistWorlds.clear();
-        config.getStringList(path + "Worlds.Blacklisted").forEach(world -> blacklistWorlds.add(world.toLowerCase()));
-        limitlessFlightWorlds.clear();
-        config.getStringList(path + "Worlds.Limitless-Flight-Worlds").forEach(world -> limitlessFlightWorlds.add(world.toLowerCase()));
-        regions = config.getStringList(path + "Regions");
-        ownersCanFly = config.getBoolean(path + "Owners-Can-Fly", true);
-        membersCanFly = config.getBoolean(path + "Members-Can-Fly", true);
+        this.isCloudsEnabled = config.getBoolean(path + "Clouds");
+        this.isEnemyCheckEnabled = config.getBoolean(path + "Enemy-Toggle");
+        this.enemyRadius = config.getInt(path + "Distance", 10);
+        this.whitelistWorlds.clear();
+        config.getStringList(path + "Worlds.Whitelisted").forEach(world -> this.whitelistWorlds.add(world.toLowerCase()));
+        this.blacklistWorlds.clear();
+        config.getStringList(path + "Worlds.Blacklisted").forEach(world -> this.blacklistWorlds.add(world.toLowerCase()));
+        this.limitlessFlightWorlds.clear();
+        config.getStringList(path + "Worlds.Limitless-Flight-Worlds").forEach(world -> this.limitlessFlightWorlds.add(world.toLowerCase()));
+        this.regions = config.getStringList(path + "Regions");
+        this.ownersCanFly = config.getBoolean(path + "Owners-Can-Fly", true);
+        this.membersCanFly = config.getBoolean(path + "Members-Can-Fly", true);
     }
     
     public boolean isWingsEnabled() {
-        return isWingsEnabled;
+        return this.isWingsEnabled;
     }
     
     public boolean isCloudsEnabled() {
-        return isCloudsEnabled;
+        return this.isCloudsEnabled;
     }
     
     public boolean isEnemyCheckEnabled() {
-        return isEnemyCheckEnabled;
+        return this.isEnemyCheckEnabled;
     }
     
     public int getEnemyRadius() {
-        return enemyRadius;
+        return this.enemyRadius;
     }
-    
+
+    //todo() update this.
     public String getBypassPermission() {
         return "crazyenchantments.bypass.wings";
     }
@@ -82,7 +83,7 @@ public class WingsManager {
      * Get the list of all worlds players with wings can fly limitless in.
      */
     public List<String> getLimitlessFlightWorlds() {
-        return limitlessFlightWorlds;
+        return this.limitlessFlightWorlds;
     }
     
     /**
@@ -90,14 +91,14 @@ public class WingsManager {
      * @param player The player you wish to check.
      */
     public boolean inLimitlessFlightWorld(Player player) {
-        return player != null && limitlessFlightWorlds.contains(player.getWorld().getName().toLowerCase());
+        return player != null && this.limitlessFlightWorlds.contains(player.getWorld().getName().toLowerCase());
     }
     
     /**
      * Get the list of all the whitelisted worlds for the Wings enchantment.
      */
     public List<String> getWhitelistedWorlds() {
-        return whitelistWorlds;
+        return this.whitelistWorlds;
     }
     
     /**
@@ -105,14 +106,14 @@ public class WingsManager {
      * @param player The player you wish to check.
      */
     public boolean inWhitelistedWorld(Player player) {
-        return player != null && whitelistWorlds.contains(player.getWorld().getName().toLowerCase());
+        return player != null && this.whitelistWorlds.contains(player.getWorld().getName().toLowerCase());
     }
     
     /**
      * Get the list of all the blacklisted worlds for the Wings enchantment.
      */
     public List<String> getBlacklistedWorlds() {
-        return blacklistWorlds;
+        return this.blacklistWorlds;
     }
     
     /**
@@ -120,27 +121,27 @@ public class WingsManager {
      * @param player The player you wish to check.
      */
     public boolean inBlacklistedWorld(Player player) {
-        return player != null && blacklistWorlds.contains(player.getWorld().getName().toLowerCase());
+        return player != null && this.blacklistWorlds.contains(player.getWorld().getName().toLowerCase());
     }
     
     public List<String> getRegions() {
-        return regions;
+        return this.regions;
     }
     
     public boolean canOwnersFly() {
-        return ownersCanFly;
+        return this.ownersCanFly;
     }
     
     public boolean canMembersFly() {
-        return membersCanFly;
+        return this.membersCanFly;
     }
     
     public void setWingsTask(BukkitTask task) {
         endWingsTask();
-        wingsTask = task;
+        this.wingsTask = task;
     }
     
     public void endWingsTask() {
-        if (wingsTask != null) wingsTask.cancel();
+        if (this.wingsTask != null) this.wingsTask.cancel();
     }
 }

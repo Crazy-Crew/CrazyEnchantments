@@ -10,15 +10,15 @@ import java.util.Map;
 public record EnchantedArrow(Arrow arrow, ItemStack bow, Map<CEnchantment, Integer> enchantments) {
 
     public Entity getShooter() {
-        return (Entity) arrow.getShooter();
+        return (Entity) this.arrow.getShooter();
     }
 
     public int getLevel(CEnchantments enchantment) {
-        return enchantments.get(enchantment.getEnchantment());
+        return this.enchantments.get(enchantment.getEnchantment());
     }
 
     public boolean hasEnchantment(CEnchantment enchantment) {
-        return enchantments.containsKey(enchantment);
+        return this.enchantments.containsKey(enchantment);
     }
 
     public boolean hasEnchantment(CEnchantments enchantment) {

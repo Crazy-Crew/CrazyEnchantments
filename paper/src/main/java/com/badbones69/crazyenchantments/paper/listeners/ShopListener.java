@@ -34,7 +34,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShopListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     private final Starter starter = plugin.getStarter();
 

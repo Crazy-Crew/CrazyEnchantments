@@ -36,7 +36,7 @@ public class LostBook {
         try { // If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
         } catch (Exception e) {
-            CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+            CrazyEnchantments plugin = CrazyEnchantments.get();
             plugin.getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
             this.sound = null;
         }
@@ -45,58 +45,56 @@ public class LostBook {
     }
     
     public int getSlot() {
-        return slot;
+        return this.slot;
     }
     
     public boolean isInGUI() {
-        return inGUI;
+        return this.inGUI;
     }
     
     public ItemBuilder getDisplayItem() {
-        return displayItem;
+        return this.displayItem;
     }
     
     public int getCost() {
-        return cost;
+        return this.cost;
     }
     
     public Currency getCurrency() {
-        return currency;
+        return this.currency;
     }
-    
+
     public boolean useFirework() {
-        return useFirework;
+        return this.useFirework;
     }
     
     public List<Color> getFireworkColors() {
-        return fireworkColors;
+        return this.fireworkColors;
     }
     
     public boolean playSound() {
-        return useSound;
+        return this.useSound;
     }
     
     public Sound getSound() {
-        return sound;
+        return this.sound;
     }
     
     public ItemBuilder getLostBook(Category category) {
         return getLostBook(category, 1);
     }
 
-    private final NamespacedKey lostBookKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "Lost_Book_Type");
-
     public ItemBuilder getLostBook(Category category, int amount) {
         FileConfiguration file = Files.CONFIG.getFile();
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("%Category%", category.getDisplayItem().getName());
         return new ItemBuilder()
-        .setMaterial(file.getString("Settings.LostBook.Item"))
+        .setMaterial(file.getString("Settings.LostBook.Item", "BOOK"))
         .setAmount(amount)
-        .setName(file.getString("Settings.LostBook.Name"))
+        .setName(file.getString("Settings.LostBook.Name", "Error getting name."))
         .setNamePlaceholders(placeholders)
         .setLore(file.getStringList("Settings.LostBook.Lore"))
         .setLorePlaceholders(placeholders)
-        .setStringPDC(lostBookKey, category.getName());
+        .setStringPDC(DataKeys.lost_book.getNamespacedKey(), category.getName());
     }
 }

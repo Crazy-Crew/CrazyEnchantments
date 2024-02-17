@@ -40,46 +40,62 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.Map.Entry;
 
 public class CrazyManager {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    @NotNull
+    private final Methods methods = this.starter.getMethods();
 
     // Settings.
-    private final ProtectionCrystalSettings protectionCrystalSettings = plugin.getStarter().getProtectionCrystalSettings();
-    private final EnchantmentBookSettings enchantmentBookSettings = plugin.getStarter().getEnchantmentBookSettings();
+    @NotNull
+    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Listeners.
-    private final ScramblerListener scramblerListener = plugin.getStarter().getScramblerListener();
-    private final ScrollListener scrollListener = plugin.getStarter().getScrollListener();
+    @NotNull
+    private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
+    @NotNull
+    private final ScrollListener scrollListener = this.starter.getScrollListener();
 
-    private final SlotCrystalListener slotCrystalListener = plugin.getStarter().getSlotCrystalListener();
+    @NotNull
+    private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
 
     private CropManagerVersion cropManagerVersion;
 
-    private final AllyManager allyManager = plugin.getStarter().getAllyManager();
+    @NotNull
+    private final AllyManager allyManager = this.starter.getAllyManager();
 
     // Wings.
-    private final WingsManager wingsManager = plugin.getStarter().getWingsManager();
+    @NotNull
+    private final WingsManager wingsManager = this.starter.getWingsManager();
 
-    private final ShopManager shopManager = plugin.getStarter().getShopManager();
-    private final BowEnchantmentManager bowEnchantmentManager = plugin.getStarter().getBowEnchantmentManager();
-    private final ArmorEnchantmentManager armorEnchantmentManager = plugin.getStarter().getArmorEnchantmentManager();
+    @NotNull
+    private final ShopManager shopManager = this.starter.getShopManager();
+    
+    @NotNull
+    private final BowEnchantmentManager bowEnchantmentManager = this.starter.getBowEnchantmentManager();
+    
+    @NotNull
+    private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
 
-    private final InfoMenuManager infoMenuManager = plugin.getStarter().getInfoMenuManager();
+    @NotNull
+    private final InfoMenuManager infoMenuManager = this.starter.getInfoMenuManager();
 
     // Arrays.
     private final List<GKitz> gkitz = new ArrayList<>();
     private final List<CEPlayer> players = new ArrayList<>();
     private final List<Material> blockList = new ArrayList<>();
     private final Map<Material, Double> headMap = new HashMap<>();
-
-    // Random
-    private final Random random = new Random();
 
     private int rageMaxLevel;
     private boolean gkitzToggle;

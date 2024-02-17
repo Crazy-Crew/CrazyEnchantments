@@ -14,13 +14,17 @@ import java.util.Map;
 
 public class CEItem {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final ItemStack item;
     private final List<Enchantment> vanillaEnchantmentRemove;
@@ -31,63 +35,63 @@ public class CEItem {
     public CEItem(ItemStack item) {
         this.item = item;
         // Has to make a new map as .getEnchantments is a ImmutableMap.
-        vanillaEnchantments = new HashMap<>(item.getEnchantments());
-        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-        cEnchantments = enchantmentBookSettings.getEnchantments(item);
-        vanillaEnchantmentRemove = new ArrayList<>();
-        cEnchantmentRemove = new ArrayList<>();
+        this.vanillaEnchantments = new HashMap<>(item.getEnchantments());
+        EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+        this.cEnchantments = enchantmentBookSettings.getEnchantments(item);
+        this.vanillaEnchantmentRemove = new ArrayList<>();
+        this.cEnchantmentRemove = new ArrayList<>();
     }
     
     public ItemStack getItem() {
-        return item;
+        return this.item;
     }
     
     public boolean hasVanillaEnchantment(Enchantment enchantment) {
-        return vanillaEnchantments.containsKey(enchantment);
+        return this.vanillaEnchantments.containsKey(enchantment);
     }
     
     public int getVanillaEnchantmentLevel(Enchantment enchantment) {
-        return vanillaEnchantments.getOrDefault(enchantment, 0);
+        return this.vanillaEnchantments.getOrDefault(enchantment, 0);
     }
     
     public Map<Enchantment, Integer> getVanillaEnchantments() {
-        return vanillaEnchantments;
+        return this.vanillaEnchantments;
     }
     
     public void setVanillaEnchantment(Enchantment enchantment, int level) {
-        vanillaEnchantments.put(enchantment, level);
+        this.vanillaEnchantments.put(enchantment, level);
     }
     
     public void removeVanillaEnchantment(Enchantment enchantment) {
-        vanillaEnchantmentRemove.add(enchantment);
+        this.vanillaEnchantmentRemove.add(enchantment);
     }
     
     public boolean hasCEnchantment(CEnchantment enchantment) {
-        return cEnchantments.containsKey(enchantment);
+        return this.cEnchantments.containsKey(enchantment);
     }
     
     public int getCEnchantmentLevel(CEnchantment enchantment) {
-        return cEnchantments.getOrDefault(enchantment, 0);
+        return this.cEnchantments.getOrDefault(enchantment, 0);
     }
     
     public Map<CEnchantment, Integer> getCEnchantments() {
-        return cEnchantments;
+        return this.cEnchantments;
     }
     
     public void setCEnchantment(CEnchantment enchantment, int level) {
-        cEnchantments.put(enchantment, level);
+        this.cEnchantments.put(enchantment, level);
     }
     
     public void removeCEnchantment(CEnchantment enchantment) {
-        cEnchantmentRemove.add(enchantment);
+        this.cEnchantmentRemove.add(enchantment);
     }
     
     public ItemStack build() {
-        vanillaEnchantmentRemove.forEach(item::removeEnchantment);
-        vanillaEnchantments.keySet().forEach(enchantment -> item.addUnsafeEnchantment(enchantment, vanillaEnchantments.get(enchantment)));
-        cEnchantmentRemove.forEach(enchantment -> enchantmentBookSettings.removeEnchantment(item, enchantment));
-        crazyManager.addEnchantments(item, cEnchantments);
+        this.vanillaEnchantmentRemove.forEach(this.item::removeEnchantment);
+        this.vanillaEnchantments.keySet().forEach(enchantment -> this.item.addUnsafeEnchantment(enchantment, this.vanillaEnchantments.get(enchantment)));
+        this.cEnchantmentRemove.forEach(enchantment -> this.enchantmentBookSettings.removeEnchantment(this.item, enchantment));
+        this.crazyManager.addEnchantments(this.item, this.cEnchantments);
 
-        return item;
+        return this.item;
     }
 }

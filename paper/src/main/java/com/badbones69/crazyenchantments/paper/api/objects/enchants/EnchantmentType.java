@@ -16,9 +16,11 @@ import java.util.Objects;
 
 public class EnchantmentType {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    @NotNull
+    private final Methods methods = this.plugin.getStarter().getMethods();
 
     private final String displayName;
     private final int slot;
@@ -29,53 +31,53 @@ public class EnchantmentType {
     public EnchantmentType(String name) {
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Types." + name;
-        displayName = name;
-        slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
-        displayItem = new ItemBuilder()
-        .setMaterial(Objects.requireNonNull(file.getString(path + ".Display-Item.Item")))
-        .setName(file.getString(path + ".Display-Item.Name"))
+        this.displayName = name;
+        this.slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
+        this.displayItem = new ItemBuilder()
+        .setMaterial(file.getString(path + ".Display-Item.Item", "STONE"))
+        .setName(file.getString(path + ".Display-Item.Name", "Error getting name."))
         .setLore(file.getStringList(path + ".Display-Item.Lore")).build();
 
         for (String type : file.getStringList(path + ".Enchantable-Items")) {
             Material material = new ItemBuilder().setMaterial(type).getMaterial();
 
-            if (material != null) enchantableMaterials.add(material);
+            if (material != null) this.enchantableMaterials.add(material);
         }
     }
 
     public EnchantmentType getFromName(String name) {
-        return methods.getFromName(name);
+        return this.methods.getFromName(name);
     }
 
     public String getName() {
-        return displayName;
+        return this.displayName;
     }
 
     public int getSlot() {
-        return slot;
+        return this.slot;
     }
 
     public ItemStack getDisplayItem() {
-        return displayItem;
+        return this.displayItem;
     }
 
     public List<Material> getEnchantableMaterials() {
-        return enchantableMaterials;
+        return this.enchantableMaterials;
     }
 
     public boolean canEnchantItem(ItemStack item) {
-        return enchantableMaterials.contains(item.getType());
+        return this.enchantableMaterials.contains(item.getType());
     }
 
     public List<CEnchantment> getEnchantments() {
-        return enchantments;
+        return this.enchantments;
     }
 
     public void addEnchantment(CEnchantment enchantment) {
-        enchantments.add(enchantment);
+        this.enchantments.add(enchantment);
     }
 
     public void removeEnchantment(CEnchantment enchantment) {
-        enchantments.remove(enchantment);
+        this.enchantments.remove(enchantment);
     }
 }

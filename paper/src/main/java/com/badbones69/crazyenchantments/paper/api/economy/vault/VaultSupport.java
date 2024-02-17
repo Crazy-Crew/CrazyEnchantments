@@ -6,7 +6,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultSupport {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     private Economy vault = null;
 

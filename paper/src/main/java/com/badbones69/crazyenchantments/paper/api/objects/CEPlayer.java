@@ -11,11 +11,15 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
+//todo() register gkit permissions
 public class CEPlayer {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    @NotNull
+    private final Methods methods = this.plugin.getStarter().getMethods();
+
     private final Player player;
     private final List<GkitCoolDown> gkitCoolDowns;
     private Double rageMultiplier;
@@ -55,36 +59,35 @@ public class CEPlayer {
             if (kit.canAutoEquip()) {
                 switch (item.getType().toString().contains("_") ? item.getType().toString().toLowerCase().split("_")[1] : "No") {
                     case "helmet" -> {
-                        if (player.getEquipment().getHelmet() != null) break;
-                        player.getEquipment().setHelmet(item);
+                        if (this.player.getEquipment().getHelmet() != null) break;
+                        this.player.getEquipment().setHelmet(item);
                         continue;
                     }
                     case "chestplate" -> {
-                        if (player.getEquipment().getChestplate() != null) break;
-                        player.getEquipment().setChestplate(item);
+                        if (this.player.getEquipment().getChestplate() != null) break;
+                        this.player.getEquipment().setChestplate(item);
                         continue;
                     }
                     case "leggings" -> {
-                        if (player.getEquipment().getLeggings() != null) break;
-                        player.getEquipment().setLeggings(item);
+                        if (this.player.getEquipment().getLeggings() != null) break;
+                        this.player.getEquipment().setLeggings(item);
                         continue;
                     }
                     case "boots" -> {
-                        if (player.getEquipment().getBoots() != null) break;
-                        player.getEquipment().setBoots(item);
+                        if (this.player.getEquipment().getBoots() != null) break;
+                        this.player.getEquipment().setBoots(item);
                         continue;
                     }
                 }
 
             }
 
-            methods.addItemToInventory(player, item);
-
+            this.methods.addItemToInventory(this.player, item);
         }
 
         for (String cmd : kit.getCommands()) {
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd
-            .replace("%Player%", player.getName()).replace("%player%", player.getName()));
+            this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), cmd
+            .replace("%Player%", this.player.getName()).replace("%player%", this.player.getName()));
         }
     }
     
@@ -94,7 +97,7 @@ public class CEPlayer {
      * @return True if they can use it and false if they can't.
      */
     public boolean hasGkitPermission(GKitz kit) {
-        return player.hasPermission("crazyenchantments.bypass.gkitz") || player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase());
+        return this.player.hasPermission("crazyenchantments.bypass.gkitz") || this.player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase());
     }
     
     /**
@@ -103,10 +106,10 @@ public class CEPlayer {
      * @return True if they don't have a cool-down, and they have permission.
      */
     public boolean canUseGKit(GKitz kit) {
-        if (player.hasPermission("crazyenchantments.bypass.gkitz")) {
+        if (this.player.hasPermission("crazyenchantments.bypass.gkitz")) {
             return true;
         } else {
-            if (player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase())) {
+            if (this.player.hasPermission("crazyenchantments.gkitz." + kit.getName().toLowerCase())) {
                 for (GkitCoolDown gkitCooldown : getCoolDowns()) {
                     if (gkitCooldown.getGKitz() == kit) return gkitCooldown.isCoolDownOver();
                 }
@@ -132,7 +135,7 @@ public class CEPlayer {
      * @return The cool-down object the player has.
      */
     public GkitCoolDown getCoolDown(GKitz kit) {
-        for (GkitCoolDown gkitCoolDown : gkitCoolDowns) {
+        for (GkitCoolDown gkitCoolDown : this.gkitCoolDowns) {
             if (gkitCoolDown.getGKitz() == kit) return gkitCoolDown;
         }
 
@@ -162,7 +165,6 @@ public class CEPlayer {
         Calendar coolDown = Calendar.getInstance();
 
         for (String i : kit.getCooldown().toLowerCase().split(" ")) {
-
             if (i.contains("d")) coolDown.add(Calendar.DATE, Integer.parseInt(i.replace("d", "")));
 
             if (i.contains("h")) coolDown.add(Calendar.HOUR, Integer.parseInt(i.replace("h", "")));
@@ -201,7 +203,7 @@ public class CEPlayer {
      * Get the player's rage damage multiplier.
      */
     public Double getRageMultiplier() {
-        return rageMultiplier;
+        return this.rageMultiplier;
     }
     
     /**
@@ -216,7 +218,7 @@ public class CEPlayer {
      * Check if the player is in rage.
      */
     public boolean hasRage() {
-        return hasRage;
+        return this.hasRage;
     }
     
     /**
@@ -231,7 +233,7 @@ public class CEPlayer {
      * Get the level of rage the player is in.
      */
     public int getRageLevel() {
-        return rageLevel;
+        return this.rageLevel;
     }
     
     /**
@@ -246,7 +248,7 @@ public class CEPlayer {
      * Get the cooldown task the player's rage has till they calm down.
      */
     public BukkitTask getRageTask() {
-        return rageTask;
+        return this.rageTask;
     }
     
     /**
@@ -265,11 +267,12 @@ public class CEPlayer {
      * @return True if they already had a cooldown.
      */
     public boolean onEnchantCooldown(CEnchantments enchant, int delay) {
-        if (onCooldown.contains(enchant)) return true;
+        if (this.onCooldown.contains(enchant)) return true;
 
-        onCooldown.add(enchant);
+        this.onCooldown.add(enchant);
         // Limit players to using each enchant only once per second.
-        CrazyEnchantments.getPlugin().getServer().getScheduler().runTaskLaterAsynchronously(CrazyEnchantments.getPlugin(), () -> onCooldown.remove(enchant), delay);
+        this.plugin.getServer().getScheduler().runTaskLaterAsynchronously(this.plugin, () -> this.onCooldown.remove(enchant), delay);
+
         return false;
     }
 }

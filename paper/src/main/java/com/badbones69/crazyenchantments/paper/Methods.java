@@ -30,17 +30,21 @@ import java.util.*;
 
 public class Methods {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
     // Plugin Support.
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
+    @NotNull
+    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    private final OraxenSupport oraxenSupport = starter.getOraxenSupport();
+    @NotNull
+    private final OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
 
     public EnchantmentType getFromName(String name) {
-        for (EnchantmentType enchantmentType : starter.getInfoMenuManager().getEnchantmentTypes()) {
+        for (EnchantmentType enchantmentType : this.starter.getInfoMenuManager().getEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 
@@ -68,8 +72,8 @@ public class Methods {
     }
 
     public boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
-        if (sender instanceof Player) {
-            return hasPermission((Player) sender, perm, toggle);
+        if (sender instanceof Player player) {
+            return hasPermission(player, perm, toggle);
         } else {
             return true;
         }
@@ -95,11 +99,11 @@ public class Methods {
     }
 
     public Player getPlayer(String name) {
-        return plugin.getServer().getPlayer(name);
+        return this.plugin.getServer().getPlayer(name);
     }
 
     public boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(playerName)) return true;
         }
 
@@ -243,9 +247,9 @@ public class Methods {
         fireworkMeta.setPower(0);
         firework.setFireworkMeta(fireworkMeta);
 
-        plugin.getFireworkDamageListener().addFirework(firework);
+        this.plugin.getFireworkDamageListener().addFirework(firework);
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, firework::detonate, 2);
+        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, firework::detonate, 2);
     }
 
     public Enchantment getEnchantment(String enchantmentName) {
@@ -265,7 +269,7 @@ public class Methods {
     public int getMaxDurability(ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) return item.getType().getMaxDurability();
 
-        return oraxenSupport.getMaxDurability(item);
+        return this.oraxenSupport.getMaxDurability(item);
     }
 
     public int getDurability(ItemStack item) {
@@ -275,7 +279,7 @@ public class Methods {
             return 0;
         }
 
-        return oraxenSupport.getDamage(item);
+        return this.oraxenSupport.getDamage(item);
     }
 
     public void setDurability(ItemStack item, int newDamage) {
@@ -292,7 +296,7 @@ public class Methods {
             return;
         }
 
-        oraxenSupport.setDamage(item, newDamage);
+        this.oraxenSupport.setDamage(item, newDamage);
     }
 
     public void removeDurability(ItemStack item, Player player) {
@@ -333,14 +337,14 @@ public class Methods {
         spawnExplodeParticles(player, player.getWorld(), player.getLocation());
 
         for (Entity entity : getNearbyEntities(3D, player)) {
-            if (pluginSupport.allowCombat(entity.getLocation())) {
+            if (this.pluginSupport.allowCombat(entity.getLocation())) {
                 if (entity.getType() == EntityType.DROPPED_ITEM) {
                     entity.remove();
                     continue;
                 }
 
                 if (!(entity instanceof LivingEntity en)) continue;
-                if (pluginSupport.isFriendly(player, en)) continue;
+                if (this.pluginSupport.isFriendly(player, en)) continue;
                 if (player.getName().equalsIgnoreCase(entity.getName())) continue;
                 en.damage(5D);
 
@@ -363,19 +367,19 @@ public class Methods {
         spawnExplodeParticles(arrow, entity.getWorld(), entity.getLocation());
 
         for (Entity value : getNearbyEntities(3D, arrow)) {
-            if (pluginSupport.allowCombat(value.getLocation())) {
+            if (this.pluginSupport.allowCombat(value.getLocation())) {
                 if (value.getType() == EntityType.DROPPED_ITEM) {
                     value.remove();
                     continue;
                 }
 
                 if (!(value instanceof LivingEntity livingEntity)) continue;
-                if (pluginSupport.isFriendly(entity, livingEntity)) continue;
+                if (this.pluginSupport.isFriendly(entity, livingEntity)) continue;
                 if (entity.getName().equalsIgnoreCase(value.getName())) continue;
 
                 EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(entity).build(), 5D);
 
-                plugin.getServer().getPluginManager().callEvent(event);
+                this.plugin.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) continue;
 
                 livingEntity.damage(5D);
@@ -409,9 +413,9 @@ public class Methods {
     public void entityEvent(Player damager, LivingEntity entity, EntityDamageEvent damageByEntityEvent) {
         EventUtils.addIgnoredEvent(damageByEntityEvent);
         EventUtils.addIgnoredUUID(damager.getUniqueId());
-        plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
+        this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && pluginSupport.allowCombat(entity.getLocation()) && !pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
 
         EventUtils.removeIgnoredEvent(damageByEntityEvent);
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
@@ -485,7 +489,7 @@ public class Methods {
         if (dropItems.isEmpty()) blockBreak.setDropItems(false);
 
         EventUtils.addIgnoredEvent(blockBreak);
-        plugin.getServer().getPluginManager().callEvent(blockBreak);
+        this.plugin.getServer().getPluginManager().callEvent(blockBreak);
         EventUtils.removeIgnoredEvent(blockBreak);
 
         if (blockBreak.isCancelled()) return true;
@@ -507,7 +511,7 @@ public class Methods {
         items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
 
         BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
-        plugin.getServer().getPluginManager().callEvent(event);
+        this.plugin.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) dropItems.forEach(Entity::remove);
     }

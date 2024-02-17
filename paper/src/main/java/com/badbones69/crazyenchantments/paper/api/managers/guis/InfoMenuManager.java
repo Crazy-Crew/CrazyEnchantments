@@ -33,19 +33,19 @@ public class InfoMenuManager {
     private final List<EnchantmentType> enchantmentTypes = new ArrayList<>();
 
     public void load() {
-        enchantmentTypes.clear();
+        this.enchantmentTypes.clear();
         FileConfiguration file = Files.ENCHANTMENT_TYPES.getFile();
         String path = "Info-GUI-Settings";
-        inventoryName = ColorUtils.legacyTranslateColourCodes(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
-        inventorySize = file.getInt(path + ".Inventory.Size", 18);
-        inventoryMenu = plugin.getServer().createInventory(null, inventorySize, inventoryName);
-        backRight = new ItemBuilder()
+        this.inventoryName = ColorUtils.legacyTranslateColourCodes(file.getString(path + ".Inventory.Name", "&c&lEnchantment Info"));
+        this.inventorySize = file.getInt(path + ".Inventory.Size", 18);
+        this.inventoryMenu = plugin.getServer().createInventory(null, this.inventorySize, this.inventoryName);
+        this.backRight = new ItemBuilder()
         .setMaterial(file.getString(path + ".Back-Item.Right.Item", "NETHER_STAR"))
         .setPlayerName(file.getString(path + ".Back-Item.Right.Player"))
         .setName(file.getString(path + ".Back-Item.Right.Name", "&7&l<<&b&lBack"))
         .setLore(file.getStringList(path + ".Back-Item.Right.Lore"))
         .build();
-        backLeft = new ItemBuilder()
+        this.backLeft = new ItemBuilder()
         .setMaterial(file.getString(path + ".Back-Item.Left.Item", "NETHER_STAR"))
         .setPlayerName(file.getString(path + ".Back-Item.Left.Player"))
         .setName(file.getString(path + ".Back-Item.Left.Name", "&b&lBack&7&l>>"))
@@ -54,37 +54,37 @@ public class InfoMenuManager {
 
         for (String type : file.getConfigurationSection("Types").getKeys(false)) {
             EnchantmentType enchantmentType = new EnchantmentType(type);
-            enchantmentTypes.add(enchantmentType);
-            inventoryMenu.setItem(enchantmentType.getSlot(), enchantmentType.getDisplayItem());
+            this.enchantmentTypes.add(enchantmentType);
+            this.inventoryMenu.setItem(enchantmentType.getSlot(), enchantmentType.getDisplayItem());
         }
     }
 
     public Inventory getInventoryMenu() {
-        return inventoryMenu;
+        return this.inventoryMenu;
     }
 
     public Component getInventoryName() {
-        return inventoryName;
+        return this.inventoryName;
     }
 
     public int getInventorySize() {
-        return inventorySize;
+        return this.inventorySize;
     }
 
     public List<EnchantmentType> getEnchantmentTypes() {
-        return enchantmentTypes;
+        return this.enchantmentTypes;
     }
 
     public ItemStack getBackRightButton() {
-        return backRight;
+        return this.backRight;
     }
 
     public ItemStack getBackLeftButton() {
-        return backLeft;
+        return this.backLeft;
     }
 
     public void openInfoMenu(Player player) {
-        player.openInventory(inventoryMenu);
+        player.openInventory(this.inventoryMenu);
     }
 
     public void openInfoMenu(Player player, EnchantmentType enchantmentType) {
@@ -93,9 +93,9 @@ public class InfoMenuManager {
 
         for (int size = enchantments.size() + 1; size > 9; size -= 9) slots += 9;
 
-        Inventory inventory = plugin.getServer().createInventory(null, slots, inventoryName);
+        Inventory inventory = this.plugin.getServer().createInventory(null, slots, this.inventoryName);
 
-        ItemBuilder normalBook = enchantmentBookSettings.getNormalBook().setGlow(true);
+        ItemBuilder normalBook = this.enchantmentBookSettings.getNormalBook().setGlow(true);
         for (CEnchantment enchantment : enchantments) {
             if (enchantment.isActivated()) {
                 inventory.addItem(
@@ -106,7 +106,7 @@ public class InfoMenuManager {
             }
         }
 
-        inventory.setItem(slots - 1, backRight);
+        inventory.setItem(slots - 1, this.backRight);
         player.openInventory(inventory);
     }
 }

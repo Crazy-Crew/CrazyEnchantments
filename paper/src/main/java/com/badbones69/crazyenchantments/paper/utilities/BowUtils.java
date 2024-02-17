@@ -22,28 +22,32 @@ import java.util.Map;
 
 public class BowUtils {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
 
     private final List<EnchantedArrow> enchantedArrows = new ArrayList<>();
+
     public void addArrow(Arrow arrow, ItemStack bow, Map<CEnchantment, Integer> enchantments) {
         if (arrow == null) return;
 
         EnchantedArrow enchantedArrow = new EnchantedArrow(arrow, bow, enchantments);
 
-        enchantedArrows.add(enchantedArrow);
+        this.enchantedArrows.add(enchantedArrow);
     }
 
     public void removeArrow(EnchantedArrow enchantedArrow) {
-        if (!enchantedArrows.contains(enchantedArrow) || enchantedArrow == null) return;
+        if (!this.enchantedArrows.contains(enchantedArrow) || enchantedArrow == null) return;
 
-        enchantedArrows.remove(enchantedArrow);
+        this.enchantedArrows.remove(enchantedArrow);
     }
 
     public boolean isBowEnchantActive(CEnchantments customEnchant, EnchantedArrow enchantedArrow) {
@@ -53,11 +57,11 @@ public class BowUtils {
     }
 
     public boolean allowsCombat(Entity entity) {
-        return starter.getPluginSupport().allowCombat(entity.getLocation());
+        return this.starter.getPluginSupport().allowCombat(entity.getLocation());
     }
 
     public EnchantedArrow getEnchantedArrow(Arrow arrow) {
-        return enchantedArrows.stream().filter((enchArrow) -> enchArrow != null && enchArrow.arrow() != null && enchArrow.arrow().equals(arrow)).findFirst().orElse(null);
+        return this.enchantedArrows.stream().filter((enchArrow) -> enchArrow != null && enchArrow.arrow() != null && enchArrow.arrow().equals(arrow)).findFirst().orElse(null);
     }
 
     // Multi Arrow Start!
@@ -67,7 +71,7 @@ public class BowUtils {
 
         EnchantedArrow enchantedMultiArrow = new EnchantedArrow(spawnedArrow, bow, enchantmentBookSettings.getEnchantments(bow));
 
-        enchantedArrows.add(enchantedMultiArrow);
+        this.enchantedArrows.add(enchantedMultiArrow);
 
         spawnedArrow.setShooter((ProjectileSource) entity);
 
@@ -81,19 +85,18 @@ public class BowUtils {
 
         spawnedArrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
 
-        enchantedArrows.remove(enchantedMultiArrow);
+        this.enchantedArrows.remove(enchantedMultiArrow);
     }
 
     private float randomSpread() {
         float spread = (float) .2;
         return -spread + (float) (Math.random() * (spread * 2));
     }
-
     // Multi Arrow End!
 
     // Sticky Shot Start!
     public List<Block> getWebBlocks() {
-        return webBlocks;
+        return this.webBlocks;
     }
 
     public void spawnWebs(Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
@@ -107,11 +110,11 @@ public class BowUtils {
             if (entityLocation.getBlock().getType() != Material.AIR) return;
 
             entityLocation.getBlock().setType(Material.COBWEB);
-            webBlocks.add(entityLocation.getBlock());
+            this.webBlocks.add(entityLocation.getBlock());
 
             arrow.remove();
 
-            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
                 entityLocation.getBlock().setType(Material.AIR);
                 webBlocks.remove(entityLocation.getBlock());
             }, 5 * 20);
@@ -125,9 +128,9 @@ public class BowUtils {
         for (Block block : getCube(hitEntity.getLocation())) {
 
             block.setType(Material.COBWEB);
-            webBlocks.add(block);
+            this.webBlocks.add(block);
 
-            plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
                 if (block.getType() == Material.COBWEB) {
                     block.setType(Material.AIR);
                     webBlocks.remove(block);

@@ -26,15 +26,19 @@ import java.util.*;
 
 public class AllyEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
     // Settings.
-    private final EnchantmentBookSettings bookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Managers.
-    private final AllyManager allyManager = starter.getAllyManager();
+    @NotNull
+    private final AllyManager allyManager = this.starter.getAllyManager();
 
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
 
@@ -45,25 +49,26 @@ public class AllyEnchantments implements Listener {
         if (event.getEntity() instanceof Player player && event.getDamager() instanceof LivingEntity enemy) { // Player gets attacked
             if (!inCoolDown(player)) {
                 if (enemy instanceof Player) { // Checks armor and spawn allies when getting attacked.
-                    Arrays.stream(player.getEquipment().getArmorContents()).map(bookSettings::getEnchantments).filter(enchants -> !enchants.isEmpty()).forEach(enchants -> checkAllyType(enemy, player, enchants));
+                    Arrays.stream(player.getEquipment().getArmorContents()).map(this.bookSettings::getEnchantments).filter(enchants -> !enchants.isEmpty()).forEach(enchants -> checkAllyType(enemy, player, enchants));
                 }
             } else {
-                allyManager.setEnemy(player, enemy);
+                this.allyManager.setEnemy(player, enemy);
             }
         }
 
         if (event.getEntity() instanceof LivingEntity enemy && event.getDamager() instanceof Player player) { // Player attacks
             // If the player is trying to hurt their own ally stop the damage.
-            if (allyManager.isAlly(player, enemy)) {
+            if (this.allyManager.isAlly(player, enemy)) {
                 event.setCancelled(true);
                 return;
             }
             if (inCoolDown(player)) {
-                allyManager.setEnemy(player, enemy);
+                this.allyManager.setEnemy(player, enemy);
                 return;
             }
+
             // Checks armor and spawns allies when attacking
-            Arrays.stream(player.getEquipment().getArmorContents()).map(bookSettings::getEnchantments).filter(enchants -> !enchants.isEmpty()).forEach(enchants -> checkAllyType(enemy, player, enchants));
+            Arrays.stream(player.getEquipment().getArmorContents()).map(this.bookSettings::getEnchantments).filter(enchants -> !enchants.isEmpty()).forEach(enchants -> checkAllyType(enemy, player, enchants));
         }
     }
 
@@ -100,8 +105,8 @@ public class AllyEnchantments implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyTarget(EntityTargetEvent event) {
         if (event.getTarget() == null) return; // For when the entity forgets.
-        AllyMob allyMob = allyManager.getAllyMob(event.getEntity());
-        AllyMob target = allyManager.getAllyMob(event.getTarget());
+        AllyMob allyMob = this.allyManager.getAllyMob(event.getEntity());
+        AllyMob target = this.allyManager.getAllyMob(event.getTarget());
 
         // Stop ally mob from attacking other mobs owned by the player.
         if (allyMob != null && target != null && allyMob.getOwner().getUniqueId() == target.getOwner().getUniqueId()) {
@@ -122,7 +127,7 @@ public class AllyEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onAllyDeath(EntityDeathEvent event) {
-        if (!allyManager.isAllyMob(event.getEntity())) return;
+        if (!this.allyManager.isAllyMob(event.getEntity())) return;
 
         event.setDroppedExp(0);
         event.getDrops().clear();
@@ -135,20 +140,20 @@ public class AllyEnchantments implements Listener {
         for (Entity entity : event.getChunk().getEntities()) {
             if (!(entity instanceof LivingEntity livingEntity)) continue;
 
-            if (allyManager.isAllyMob(livingEntity)) allyManager.getAllyMob(livingEntity).forceRemoveAlly();
+            if (this.allyManager.isAllyMob(livingEntity)) this.allyManager.getAllyMob(livingEntity).forceRemoveAlly();
         }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        allyManager.forceRemoveAllies(event.getPlayer());
+        this.allyManager.forceRemoveAllies(event.getPlayer());
     }
 
     private void spawnAllies(Player player, LivingEntity enemy, AllyType allyType, int amount) {
         Calendar coolDown = Calendar.getInstance();
         coolDown.add(Calendar.MINUTE, 2);
 
-        allyCoolDown.put(player.getUniqueId(), coolDown);
+        this.allyCoolDown.put(player.getUniqueId(), coolDown);
 
         for (int i = 0; i < amount; i++) {
             AllyMob ally = new AllyMob(player, allyType);
@@ -158,12 +163,12 @@ public class AllyEnchantments implements Listener {
     }
 
     private boolean inCoolDown(Player player) {
-        if (allyCoolDown.containsKey(player.getUniqueId())) {
+        if (this.allyCoolDown.containsKey(player.getUniqueId())) {
             // Right now is before the player's cool-down ends.
-            if (Calendar.getInstance().before(allyCoolDown.get(player.getUniqueId()))) return true;
+            if (Calendar.getInstance().before(this.allyCoolDown.get(player.getUniqueId()))) return true;
 
             // Remove the player because their cool-down is over.
-            allyCoolDown.remove(player.getUniqueId());
+            this.allyCoolDown.remove(player.getUniqueId());
         }
 
         return false;

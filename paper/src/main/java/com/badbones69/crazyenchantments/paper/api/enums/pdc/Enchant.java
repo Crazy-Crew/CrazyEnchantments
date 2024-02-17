@@ -76,6 +76,6 @@ public class Enchant {
      * @return true if there are no enchantments on the item.
      */
     public boolean isEmpty() {
-        return enchants.isEmpty();
+        return this.enchants.isEmpty();
     }
 }

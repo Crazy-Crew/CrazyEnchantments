@@ -9,7 +9,7 @@ public abstract class Processor<T> {
     private final Thread thread;
     
     public Processor() {
-        thread = new Thread(() -> {
+        this.thread = new Thread(() -> {
             // It might be crucial to make an executor service here.
             while (!Thread.interrupted()) {
                 try {
@@ -24,7 +24,7 @@ public abstract class Processor<T> {
     
     public void add(final T process) {
         try {
-            queue.put(process);
+            this.queue.put(process);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -33,10 +33,10 @@ public abstract class Processor<T> {
     abstract void process(final T process);
     
     public void start() {
-        thread.start();
+        this.thread.start();
     }
     
     public void stop() {
-        thread.interrupt();
+        this.thread.interrupt();
     }
 }

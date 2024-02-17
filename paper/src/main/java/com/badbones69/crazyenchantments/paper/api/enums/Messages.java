@@ -222,15 +222,17 @@ public enum Messages {
         boolean isList = isList();
         boolean exists = exists();
 
+        FileConfiguration config = Files.MESSAGES.getFile();
+
         if (isList) {
             if (exists) {
-                message = ColorUtils.color(convertList(Files.MESSAGES.getFile().getStringList("Messages." + path)));
+                message = ColorUtils.color(convertList(config.getStringList("Messages." + path)));
             } else {
                 message = ColorUtils.color(convertList(getDefaultListMessage()));
             }
         } else {
             if (exists) {
-                message = ColorUtils.color(Files.MESSAGES.getFile().getString("Messages." + path));
+                message = ColorUtils.color(config.getString("Messages." + path));
             } else {
                 message = ColorUtils.color(getDefaultMessage());
             }
@@ -257,22 +259,24 @@ public enum Messages {
     }
     
     private boolean isList() {
-        if (Files.MESSAGES.getFile().contains("Messages." + path)) {
-            return !Files.MESSAGES.getFile().getStringList("Messages." + path).isEmpty();
+        FileConfiguration config = Files.MESSAGES.getFile();
+
+        if (config.contains("Messages." + this.path)) {
+            return !config.getStringList("Messages." + this.path).isEmpty();
         } else {
-            return defaultMessage == null;
+            return this.defaultMessage == null;
         }
     }
     
     private String getPath() {
-        return path;
+        return this.path;
     }
     
     private String getDefaultMessage() {
-        return defaultMessage;
+        return this.defaultMessage;
     }
     
     private List<String> getDefaultListMessage() {
-        return defaultListMessage;
+        return this.defaultListMessage;
     }
 }

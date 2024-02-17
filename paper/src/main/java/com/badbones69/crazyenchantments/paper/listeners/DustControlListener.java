@@ -33,13 +33,13 @@ import java.util.Random;
 
 public class DustControlListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     private final Gson gson = new Gson();
 
@@ -54,11 +54,11 @@ public class DustControlListener implements Listener {
         }
 
         for (String line : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
-
             if (line.toLowerCase().contains("%description%")) {
                 enchantment.getInfoDescription().forEach(lines -> lore.add(ColorUtils.legacyTranslateColourCodes(lines)));
                 continue;
             }
+
             TextComponent lineToAdd = ColorUtils.legacyTranslateColourCodes(line
                     .replaceAll("(%Success_Rate%|%success_rate%)", String.valueOf(data.getSuccessChance()))
                     .replaceAll("(%Destroy_Rate%|%destroy_rate%)", String.valueOf(data.getDestroyChance())));
@@ -72,88 +72,91 @@ public class DustControlListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onInventoryClick(InventoryClickEvent e) { //Dust Use
-        Player player = (Player) e.getWhoClicked();
+    public void onInventoryClick(InventoryClickEvent event) { // dust use
+        if (event.getCurrentItem() == null) return;
 
-        if (e.getCurrentItem() != null) {
-            ItemStack book = e.getCurrentItem();
-            ItemStack dust = e.getCursor();
+        Player player = (Player) event.getWhoClicked();
 
-            if (!(book.hasItemMeta() && dust.hasItemMeta())) return;
-            if (book.getAmount() > 1) return;
+        FileConfiguration config = Files.CONFIG.getFile();
+
+        ItemStack book = event.getCurrentItem();
+        ItemStack dust = event.getCursor();
+
+        if (!(book.hasItemMeta() && dust.hasItemMeta())) return;
+
+        if (book.getAmount() > 1) return;
 
         // PDC Start
             DustData dustData = gson.fromJson(dust.getItemMeta().getPersistentDataContainer().get(DataKeys.DUST.getKey(), PersistentDataType.STRING), DustData.class);
             EnchantedBook bookData = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
         // PDC End
-            if (bookData == null || dustData == null) return;
 
-            boolean toggle = false;
+        if (bookData == null || dustData == null) return;
 
+        boolean toggle = false;
 
-            CEnchantment enchantment = null;
-            for (CEnchantment en : crazyManager.getRegisteredEnchantments()) {
-                if (en.getName().equalsIgnoreCase(bookData.getName())) {
-                    enchantment = en;
-                    toggle = true;
-                    break;
+        CEnchantment enchantment = null;
+
+        for (CEnchantment en : this.crazyManager.getRegisteredEnchantments()) {
+            if (en.getName().equalsIgnoreCase(bookData.getName())) {
+                enchantment = en;
+                toggle = true;
+                break;
+            }
+        }
+
+        if (!toggle) return;
+
+        if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
+            int per = dustData.getChance();
+
+            if (this.methods.hasArgument("%success_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
+                int total = bookData.getSuccessChance();
+
+                if (total >= 100) return;
+
+                if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
+                    player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                    return;
                 }
+
+                per += total;
+
+                if (per < 0) per = 0;
+                if (per > 100) per = 100;
+
+                event.setCancelled(true);
+
+                setBookLore(book, per, "Success", enchantment, bookData);
+
+                player.setItemOnCursor(this.methods.removeItem(dust));
             }
 
-            if (!toggle) return;
+            return;
+        }
 
+        if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
+            int per = dustData.getChance();
 
-            if (dustData.getConfigName().equalsIgnoreCase(Dust.SUCCESS_DUST.getConfigName())) {
-                int per = dustData.getChance();
+            if (this.methods.hasArgument("%destroy_rate%", config.getStringList("Settings.EnchantmentBookLore"))) {
+                int total = bookData.getDestroyChance();
+                if (total <= 0) return;
 
-                if (methods.hasArgument("%success_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-                    int total = bookData.getSuccessChance();
-
-                    if (total >= 100) return;
-
-                    if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                        player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
-                        return;
-                    }
-
-                    per += total;
-
-                    if (per < 0) per = 0;
-                    if (per > 100) per = 100;
-
-                    e.setCancelled(true);
-
-                    setBookLore(book, per, "Success", enchantment, bookData);
-
-                    player.setItemOnCursor(methods.removeItem(dust));
+                if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
+                    player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                    return;
                 }
 
-                return;
-            }
+                per = total - per;
 
-            if (dustData.getConfigName().equalsIgnoreCase(Dust.DESTROY_DUST.getConfigName())) {
-                int per = dustData.getChance();
+                if (per < 0) per = 0;
+                if (per > 100) per = 100;
 
-                if (methods.hasArgument("%destroy_rate%", Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore"))) {
-                    int total = bookData.getDestroyChance();
-                    if (total <= 0) return;
+                event.setCancelled(true);
 
-                    if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                        player.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
-                        return;
-                    }
+                setBookLore(book, per, "Destroy", enchantment, bookData);
 
-                    per = total - per;
-
-                    if (per < 0) per = 0;
-                    if (per > 100) per = 100;
-
-                    e.setCancelled(true);
-
-                    setBookLore(book, per, "Destroy", enchantment, bookData);
-
-                    player.setItemOnCursor(methods.removeItem(dust));
-                }
+                player.setItemOnCursor(this.methods.removeItem(dust));
             }
         }
     }
@@ -166,8 +169,8 @@ public class DustControlListener implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         if (openAnyHandDust(player, event, true, config)) return;
-        openAnyHandDust(player, event, false, config);
 
+        openAnyHandDust(player, event, false, config);
     }
     
     private boolean openAnyHandDust(Player player, PlayerInteractEvent event, boolean mainHand, FileConfiguration config) {
@@ -188,12 +191,12 @@ public class DustControlListener implements Listener {
             event.setCancelled(true);
 
             if (mainHand) {
-                player.getInventory().setItemInMainHand(methods.removeItem(item));
+                player.getInventory().setItemInMainHand(this.methods.removeItem(item));
             } else {
-                player.getInventory().setItemInOffHand(methods.removeItem(item));
+                player.getInventory().setItemInOffHand(this.methods.removeItem(item));
             }
 
-            ItemStack item2 = pickDust().getDust(methods.percentPick(data.getChance() + 1, 1), 1);
+            ItemStack item2 = pickDust().getDust(this.methods.percentPick(data.getChance() + 1, 1), 1);
 
             player.getInventory().addItem(item2);
 
@@ -205,23 +208,24 @@ public class DustControlListener implements Listener {
 
                 ColorUtils.color(colors, colorString);
 
-                methods.fireWork(player.getLocation().add(0, 1, 0), colors);
+                this.methods.fireWork(player.getLocation().add(0, 1, 0), colors);
             }
         }
+
         return true;
     }
 
     private Dust pickDust() {
         List<Dust> dusts = new ArrayList<>();
 
-        Random random = new Random();
+        FileConfiguration config = Files.CONFIG.getFile();
 
-        if (Files.CONFIG.getFile().getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success")) dusts.add(Dust.SUCCESS_DUST);
+        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Success")) dusts.add(Dust.SUCCESS_DUST);
 
-        if (Files.CONFIG.getFile().getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Destroy")) dusts.add(Dust.DESTROY_DUST);
+        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Destroy")) dusts.add(Dust.DESTROY_DUST);
 
-        if (Files.CONFIG.getFile().getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Failed")) dusts.add(Dust.FAILED_DUST);
+        if (config.getBoolean("Settings.Dust.MysteryDust.Dust-Toggle.Failed")) dusts.add(Dust.FAILED_DUST);
 
-        return dusts.get(random.nextInt(dusts.size()));
+        return dusts.get(new Random().nextInt(dusts.size()));
     }
 }

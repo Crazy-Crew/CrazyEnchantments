@@ -12,21 +12,19 @@ import java.util.Map.Entry;
 
 public class BlackSmithResult {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-
-    private final Starter starter = plugin.getStarter();
-
-    private final Methods methods = starter.getMethods();
-
     private int cost = 0;
     private ItemStack resultItem;
     
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
         resultItem = mainItem.clone();
 
+        CrazyEnchantments plugin = CrazyEnchantments.get();
         BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
 
         CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+
+        Starter starter = plugin.getStarter();
+
         EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
         if (mainItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && subItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial()) {
             CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
@@ -37,12 +35,12 @@ public class BlackSmithResult {
             mainBook.getLevel() == subBook.getLevel() &&
             // Makes sure level doesn't go passed max.
             mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
-                resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
-                cost += blackSmithManager.getBookUpgrade();
+                this.resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
+                this.cost += blackSmithManager.getBookUpgrade();
             }
         } else {
             if (mainItem.getType() == subItem.getType()) {
-                CEItem mainCE = new CEItem(resultItem);
+                CEItem mainCE = new CEItem(this.resultItem);
                 CEItem subCE = new CEItem(subItem);
                 BlackSmithCompare compare = new BlackSmithCompare(mainCE, subCE);
 
@@ -56,10 +54,10 @@ public class BlackSmithResult {
                     if (enchantment.canEnchantItem(subItem) && subCE.hasVanillaEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setVanillaEnchantment(enchantment, level + 1);
-                            cost += blackSmithManager.getLevelUp();
+                            this.cost += blackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
                             mainCE.setVanillaEnchantment(enchantment, subLevel);
-                            cost += blackSmithManager.getLevelUp();
+                            this.cost += blackSmithManager.getLevelUp();
                         }
                     }
                 }
@@ -73,10 +71,10 @@ public class BlackSmithResult {
                     if (enchantment.canEnchantItem(subItem) && subCE.hasCEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setCEnchantment(enchantment, level + 1);
-                            cost += blackSmithManager.getLevelUp();
+                            this.cost += blackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
                             mainCE.setCEnchantment(enchantment, subLevel);
-                            cost += blackSmithManager.getLevelUp();
+                            this.cost += blackSmithManager.getLevelUp();
                         }
                     }
                 }
@@ -87,7 +85,7 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem)) {
                         mainCE.setVanillaEnchantment(enchantment, entry.getValue());
-                        cost += blackSmithManager.getAddEnchantment();
+                        this.cost += blackSmithManager.getAddEnchantment();
                     }
                 }
 
@@ -96,7 +94,7 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem) && crazyManager.canAddEnchantment(player, subItem)) {
                         mainCE.setCEnchantment(enchantment, entry.getValue());
-                        cost += blackSmithManager.getAddEnchantment();
+                        this.cost += blackSmithManager.getAddEnchantment();
                     }
                 }
 
@@ -106,10 +104,10 @@ public class BlackSmithResult {
     }
     
     public int getCost() {
-        return cost;
+        return this.cost;
     }
     
     public ItemStack getResultItem() {
-        return resultItem;
+        return this.resultItem;
     }
 }

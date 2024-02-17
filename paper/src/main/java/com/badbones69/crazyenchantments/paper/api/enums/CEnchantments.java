@@ -126,13 +126,17 @@ public enum CEnchantments {
     //	----------------All----------------  \\
     HELLFORGED("HellForged", "Damaged-Items", 5, 5);
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    private final Methods methods = starter.getMethods();
+    @NotNull
+    private final Methods methods = this.starter.getMethods();
 
     private final String name;
     private final String typeName;
@@ -179,7 +183,7 @@ public enum CEnchantments {
      * @return The name of the enchantment.
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -196,7 +200,7 @@ public enum CEnchantments {
      * @return The chance of the enchantment activating.
      */
     public int getChance() {
-        return chance;
+        return this.chance;
     }
 
     /**
@@ -206,7 +210,7 @@ public enum CEnchantments {
      * @return The amount the chance increases by every level.
      */
     public int getChanceIncrease() {
-        return chanceIncrease;
+        return this.chanceIncrease;
     }
 
     /**
@@ -221,7 +225,7 @@ public enum CEnchantments {
      */
     public EnchantmentType getType() {
         if (getEnchantment() == null || getEnchantment().getEnchantmentType() == null) {
-            return methods.getFromName(typeName);
+            return this.methods.getFromName(this.typeName);
         } else {
             return getEnchantment().getEnchantmentType();
         }
@@ -239,9 +243,9 @@ public enum CEnchantments {
      * @return The enchantment this is tied to.
      */
     public CEnchantment getEnchantment() {
-        if (cachedEnchantment == null) cachedEnchantment = crazyManager.getEnchantmentFromName(name);
+        if (this.cachedEnchantment == null) this.cachedEnchantment = this.crazyManager.getEnchantmentFromName(this.name);
 
-        return cachedEnchantment;
+        return this.cachedEnchantment;
     }
 
     /**
@@ -257,13 +261,13 @@ public enum CEnchantments {
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(int level, double multiplier) {
-        return crazyManager.getEnchantmentFromName(name).chanceSuccessful(level, multiplier);
+        return this.crazyManager.getEnchantmentFromName(this.name).chanceSuccessful(level, multiplier);
     }
 
     /**
      * Check if the CEnchantments uses a chance system.
      */
     public boolean hasChanceSystem() {
-        return hasChanceSystem;
+        return this.hasChanceSystem;
     }
 }

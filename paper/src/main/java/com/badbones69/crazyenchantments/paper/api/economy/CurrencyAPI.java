@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class CurrencyAPI {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     private final Starter starter = plugin.getStarter();
 

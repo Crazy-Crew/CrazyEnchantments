@@ -19,20 +19,22 @@ import org.jetbrains.annotations.NotNull;
 
 public class BootEnchantments implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
     // Plugin Managers.
-    private final WingsManager wingsManager = starter.getWingsManager();
+    @NotNull
+    private final WingsManager wingsManager = this.starter.getWingsManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-
-    // Utils
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onEquip(PlayerArmorChangeEvent event) {
-        if (!wingsManager.isWingsEnabled()) return;
+    public void onPlayerEquip(PlayerArmorChangeEvent event) {
+        if (!this.wingsManager.isWingsEnabled()) return;
 
         Player player = event.getPlayer();
 
@@ -44,13 +46,13 @@ public class BootEnchantments implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onFly(PlayerToggleFlightEvent event) {
-        if (!wingsManager.isWingsEnabled()) return;
+    public void onPlayerFly(PlayerToggleFlightEvent event) {
+        if (!this.wingsManager.isWingsEnabled()) return;
 
         Player player = event.getPlayer();
 
         if (player.getEquipment().getBoots() == null) return;
-        if (!enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 
@@ -58,21 +60,21 @@ public class BootEnchantments implements Listener {
             if (player.getAllowFlight()) {
                 event.setCancelled(true);
                 player.setFlying(true);
-                wingsManager.addFlyingPlayer(player);
+                this.wingsManager.addFlyingPlayer(player);
             }
         } else {
-            wingsManager.removeFlyingPlayer(player);
+            this.wingsManager.removeFlyingPlayer(player);
         }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onMove(PlayerMoveEvent event) {
+    public void onPlayerMove(PlayerMoveEvent event) {
         if (event.getFrom() == event.getTo()) return;
 
         Player player = event.getPlayer();
         boolean isFlying = player.isFlying(); // TODO implement single method for all enchantment checks. #EnchantUtils
 
-        if (wingsManager.isWingsEnabled() && enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
+        if (this.wingsManager.isWingsEnabled() && this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) {
             if (WingsUtils.checkRegion(player)) {
                 if (!WingsUtils.isEnemiesNearby(player)) {
                     player.setAllowFlight(true);
@@ -80,43 +82,43 @@ public class BootEnchantments implements Listener {
                     if (isFlying && WingsUtils.checkGameMode(player)) {
                         player.setFlying(false);
                         player.setAllowFlight(false);
-                        wingsManager.removeFlyingPlayer(player);
+                        this.wingsManager.removeFlyingPlayer(player);
                     }
                 }
             } else {
                 if (isFlying && WingsUtils.checkGameMode(player)) {
                     player.setFlying(false);
                     player.setAllowFlight(false);
-                    wingsManager.removeFlyingPlayer(player);
+                    this.wingsManager.removeFlyingPlayer(player);
                 }
             }
 
-            if (isFlying) wingsManager.addFlyingPlayer(player);
+            if (isFlying) this.wingsManager.addFlyingPlayer(player);
         }
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (!wingsManager.isWingsEnabled()) return;
+        if (!this.wingsManager.isWingsEnabled()) return;
 
-        if (!enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 
         player.setAllowFlight(true);
-        wingsManager.addFlyingPlayer(player);
+        this.wingsManager.addFlyingPlayer(player);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onLeave(PlayerQuitEvent event) {
+    public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (!wingsManager.isWingsEnabled() || !wingsManager.isFlyingPlayer(player)) return;
+        if (!this.wingsManager.isWingsEnabled() || !this.wingsManager.isFlyingPlayer(player)) return;
 
         player.setFlying(false);
         player.setAllowFlight(false);
-        wingsManager.removeFlyingPlayer(player);
+        this.wingsManager.removeFlyingPlayer(player);
     }
 }

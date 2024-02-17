@@ -12,26 +12,29 @@ import org.jetbrains.annotations.NotNull;
 
 public class TinkerCommand implements CommandExecutor {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    @NotNull
+    private final Methods methods = this. starter.getMethods();
     
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
             return true;
         }
 
-        if (hasPermission(sender)) plugin.getTinkerer().openTinker((Player) sender);
+        if (hasPermission(sender)) this.plugin.getTinkerer().openTinker(player);
 
         return true;
     }
     
     private boolean hasPermission(CommandSender sender) {
-        return methods.hasPermission(sender, "tinker", true);
+        return this.methods.hasPermission(sender, "tinker", true);
     }
 }

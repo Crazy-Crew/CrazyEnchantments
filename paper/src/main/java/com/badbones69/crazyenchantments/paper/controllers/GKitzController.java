@@ -28,20 +28,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO() redo gkitz gui. Replace instances of nbt items as they just aren't needed.
 public class GKitzController implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     // Plugin Managers.
-    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
+    @NotNull
+    private final InfoMenuManager infoMenuManager = this.starter.getInfoMenuManager();
 
     public void openGUI(Player player) {
         FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), ColorUtils.legacyTranslateColourCodes(gkitz.getString("Settings.Inventory-Name")));
+        Inventory inventory = this.plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), ColorUtils.legacyTranslateColourCodes(gkitz.getString("Settings.Inventory-Name")));
 
         for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
@@ -58,9 +63,9 @@ public class GKitzController implements Listener {
             inventory.setItem(slot, ItemBuilder.convertString(customItemString).build());
         }
 
-        CEPlayer cePlayer = crazyManager.getCEPlayer(player);
+        CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
 
-        for (GKitz kit : crazyManager.getGKitz()) {
+        for (GKitz kit : this.crazyManager.getGKitz()) {
             ItemStack displayItem = kit.getDisplayItem().clone();
             ItemMeta itemMeta = displayItem.getItemMeta();
             List<Component> lore = new ArrayList<>();
@@ -91,10 +96,10 @@ public class GKitzController implements Listener {
         if (item == null || item.isEmpty()) return;
 
         Player player = (Player) event.getWhoClicked();
-        CEPlayer cePlayer = crazyManager.getCEPlayer(player);
+        CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
         NBTItem nbtItem = new NBTItem(item);
 
-        for (GKitz kit : crazyManager.getGKitz()) {
+        for (GKitz kit : this.crazyManager.getGKitz()) {
             if (!event.getView().title().equals(kit.getDisplayItem().displayName())) continue;
 
             event.setCancelled(true);
@@ -110,19 +115,19 @@ public class GKitzController implements Listener {
 
         if (event.getRawSlot() >= inventory.getSize() || !nbtItem.hasTag("gkit")) return;
 
-        GKitz kit = crazyManager.getGKitFromName(nbtItem.getString("gkit"));
+        GKitz kit = this.crazyManager.getGKitFromName(nbtItem.getString("gkit"));
 
         if (event.getAction() == InventoryAction.PICKUP_HALF) {
             List<ItemStack> items = kit.getPreviewItems();
             int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
 
-            Inventory previewInventory = plugin.getServer().createInventory(null, slots, kit.getDisplayItem().displayName());
+            Inventory previewInventory = this.plugin.getServer().createInventory(null, slots, kit.getDisplayItem().displayName());
 
             for (ItemStack itemStack : items) {
                 previewInventory.addItem(itemStack);
             }
 
-            previewInventory.setItem(slots - 1, infoMenuManager.getBackRightButton());
+            previewInventory.setItem(slots - 1, this.infoMenuManager.getBackRightButton());
             player.openInventory(previewInventory);
         } else {
             Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};

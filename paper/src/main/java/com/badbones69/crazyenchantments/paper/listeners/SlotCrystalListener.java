@@ -19,24 +19,29 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
 public class SlotCrystalListener implements Listener {
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
+
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private static ItemStack slot_crystal;
 
-
     public void load() {
-        FileConfiguration config = FileManager.Files.CONFIG.getFile();
+        FileConfiguration config = Files.CONFIG.getFile();
+
         slot_crystal = new ItemBuilder()
                 .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
                 .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
                 .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
                 .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).build();
         ItemMeta meta = slot_crystal.getItemMeta();
-        meta.getPersistentDataContainer().set(DataKeys.SLOT_CRYSTAL.getKey(), PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(DataKeys.slot_crystal.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
+
         slot_crystal.setItemMeta(meta);
     }
 
@@ -48,10 +53,10 @@ public class SlotCrystalListener implements Listener {
 
         if (item == null || item.isEmpty() || !isSlotCrystal(crystalItem) || isSlotCrystal(item)) return;
 
-        int maxEnchants = starter.getCrazyManager().getPlayerMaxEnchantments(player);
-        int enchAmount = enchantmentBookSettings.getEnchantmentAmount(item, starter.getCrazyManager().checkVanillaLimit());
-        int baseEnchants = starter.getCrazyManager().getPlayerBaseEnchantments(player);
-        int limiter = starter.getCrazyManager().getEnchantmentLimiter(item);
+        int maxEnchants = this.starter.getCrazyManager().getPlayerMaxEnchantments(player);
+        int enchAmount = this.enchantmentBookSettings.getEnchantmentAmount(item, this.starter.getCrazyManager().checkVanillaLimit());
+        int baseEnchants = this.starter.getCrazyManager().getPlayerBaseEnchantments(player);
+        int limiter = this.starter.getCrazyManager().getEnchantmentLimiter(item);
 
         event.setCancelled(true);
 
@@ -66,7 +71,7 @@ public class SlotCrystalListener implements Listener {
 
         crystalItem.setAmount(crystalItem.getAmount() - 1);
         event.getCursor().setAmount(crystalItem.getAmount());
-        event.setCurrentItem(starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
+        event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
 
         player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(new HashMap<>(4) {{
             put("%slot%", String.valueOf(-(limiter - 1)));

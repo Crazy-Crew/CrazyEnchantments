@@ -11,9 +11,11 @@ import java.util.Map;
 
 public class GKitzItem {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
     
     private final ItemBuilder itemBuilder;
     private final HashMap<CEnchantment, Integer> ceEnchantments;
@@ -39,17 +41,17 @@ public class GKitzItem {
      * @param level Level of the enchantment
      */
     public void addCEEnchantment(CEnchantment enchant, int level) {
-        ceEnchantments.put(enchant, level);
+        this.ceEnchantments.put(enchant, level);
     }
     
     /**
      * @return Returns a fully finished item.
      */
     public ItemStack build() {
-        ItemStack item = itemBuilder.build();
+        ItemStack item = this.itemBuilder.build();
 
-        for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchantments.entrySet()) {
-            item = crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());
+        for (Map.Entry<CEnchantment, Integer> enchantment : this.ceEnchantments.entrySet()) {
+            item = this.crazyManager.addEnchantment(item, enchantment.getKey(), enchantment.getValue());
         }
 
         return item;

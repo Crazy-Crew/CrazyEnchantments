@@ -21,15 +21,15 @@ import java.util.List;
 
 public class CETab implements TabCompleter {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
     
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
@@ -58,7 +58,7 @@ public class CETab implements TabCompleter {
         } else if (args.length == 2) { // /ce arg0
             switch (args[0].toLowerCase()) {
                 case "info", "add", "book" -> {
-                    for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+                    for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").replace(" ", "_"));
                         } catch (NullPointerException ignore) {}
@@ -67,17 +67,17 @@ public class CETab implements TabCompleter {
                     Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
                 }
                 case "remove" ->
-                    enchantmentBookSettings.getEnchantments(((Player) sender).getInventory().getItemInMainHand())
+                        this.enchantmentBookSettings.getEnchantments(((Player) sender).getInventory().getItemInMainHand())
                             .forEach((a,b) -> completions.add(a.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
 
                 case "spawn" -> {
-                    for (CEnchantment enchantment : crazyManager.getRegisteredEnchantments()) {
+                    for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""));
                         } catch (NullPointerException ignore) {}
                     }
 
-                    for (Category category : enchantmentBookSettings.getCategories()) {
+                    for (Category category : this.enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}
@@ -103,14 +103,13 @@ public class CETab implements TabCompleter {
                 }
 
                 case "lostbook" -> {
-                    for (Category category : enchantmentBookSettings.getCategories()) {
+                    for (Category category : this.enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
                         } catch (NullPointerException ignore) {}
                     }
                 }
-                case "give", "bottle" ->
-                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "give", "bottle" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
 
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
@@ -118,13 +117,15 @@ public class CETab implements TabCompleter {
             CEnchantment ceEnchantment;
             switch (args[0].toLowerCase()) {
                 case "book" -> {
-                    ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
+                    ceEnchantment = this.crazyManager.getEnchantmentFromName(args[1]);
+
                     if (ceEnchantment != null) for (int amount = 1; amount <= ceEnchantment.getMaxLevel(); amount++)
                         completions.add(String.valueOf(amount));
                 }
                 case "add" -> {
-                    ceEnchantment = crazyManager.getEnchantmentFromName(args[1]);
-                    Enchantment vanillaEnchantment = methods.getEnchantment(args[1]);
+                    ceEnchantment = this.crazyManager.getEnchantmentFromName(args[1]);
+                    Enchantment vanillaEnchantment = this.methods.getEnchantment(args[1]);
+
                     if (vanillaEnchantment != null || ceEnchantment != null) {
                         int maxLevel = vanillaEnchantment != null ? vanillaEnchantment.getMaxLevel() : ceEnchantment.getMaxLevel();
                         for (int amount = 1; amount <= maxLevel; amount++) completions.add(String.valueOf(amount));
@@ -142,8 +143,7 @@ public class CETab implements TabCompleter {
                     completions.add("32");
                     completions.add("64");
                 }
-                case "crystal", "scrambler" ->
-                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "crystal", "scrambler" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 case "give" ->
                     completions.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
             }
@@ -159,9 +159,7 @@ public class CETab implements TabCompleter {
                     completions.add("Z:");
                 }
 
-                case "scroll", "dust", "lostbook" ->
-                        plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
-
+                case "scroll", "dust", "lostbook" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 case "bottle" -> {
                     completions.add("1");
                     completions.add("32");

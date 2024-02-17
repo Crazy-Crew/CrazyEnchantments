@@ -11,18 +11,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+//TODO() redo info gui.
 public class InfoGUIControl implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
     // Plugin Managers.
-    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
+    @NotNull
+    private final InfoMenuManager infoMenuManager = this.starter.getInfoMenuManager();
 
     @EventHandler(ignoreCancelled = true)
     public void infoClick(InventoryClickEvent event) {
-        if (event.getView().title().equals(infoMenuManager.getInventoryName())) {
+        if (event.getView().title().equals(this.infoMenuManager.getInventoryName())) {
             event.setCancelled(true);
 
             if (event.getCurrentItem() != null) {
@@ -31,14 +35,14 @@ public class InfoGUIControl implements Listener {
                 if (item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                     Player player = (Player) event.getWhoClicked();
 
-                    if (item.isSimilar(infoMenuManager.getBackLeftButton()) || item.isSimilar(infoMenuManager.getBackRightButton())) {
-                        infoMenuManager.openInfoMenu(player);
+                    if (item.isSimilar(this.infoMenuManager.getBackLeftButton()) || item.isSimilar(this.infoMenuManager.getBackRightButton())) {
+                        this.infoMenuManager.openInfoMenu(player);
                         return;
                     }
 
-                    for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
+                    for (EnchantmentType enchantmentType : this.infoMenuManager.getEnchantmentTypes()) {
                         if (item.isSimilar(enchantmentType.getDisplayItem())) {
-                            infoMenuManager.openInfoMenu(player, enchantmentType);
+                            this.infoMenuManager.openInfoMenu(player, enchantmentType);
                             return;
                         }
                     }

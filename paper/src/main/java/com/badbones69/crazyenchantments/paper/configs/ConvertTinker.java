@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ConvertTinker {
 
-    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private static final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     public static void convert() {
         double tinkerVersion = 1.1;
@@ -18,7 +19,7 @@ public class ConvertTinker {
 
         File secondFile = new File(plugin.getDataFolder() + "/Tinker-v1.yml");
 
-        FileConfiguration TINKER = FileManager.Files.TINKER.getFile();
+        FileConfiguration TINKER = Files.TINKER.getFile();
 
         if (TINKER.getDouble("Settings.Tinker-Version") >= tinkerVersion) {
             plugin.getLogger().info("Tinker.yml is up to date.");
@@ -27,13 +28,13 @@ public class ConvertTinker {
             plugin.getLogger().warning("Updating Tinker.yml version.");
 
             TINKER.set("Settings.Tinker-Version", tinkerVersion);
-            FileManager.Files.TINKER.saveFile();
+            Files.TINKER.saveFile();
         }
 
         if (firstFile.renameTo(secondFile)) {
             plugin.getLogger().warning("Renamed " + firstFile.getName() + " to Tinker-v1.yml");
 
-            FileManager.Files.TINKER.saveFile();
+            Files.TINKER.saveFile();
         }
 
         YamlConfiguration secondConfiguration = YamlConfiguration.loadConfiguration(secondFile);
@@ -59,7 +60,7 @@ public class ConvertTinker {
             }
         }
 
-        FileManager.Files.TINKER.saveFile();
+        Files.TINKER.saveFile();
 
         plugin.getLogger().warning("Tinker.yml file has been updated.");
     }

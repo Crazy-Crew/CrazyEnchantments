@@ -17,23 +17,26 @@ import java.util.Map;
 
 public class CommandChecker implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClear(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
-        Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = crazyManager.getEnchantmentPotions();
+        Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = this.crazyManager.getEnchantmentPotions();
 
         if (Arrays.asList("/ci", "/clear", "/clearinventory").contains(event.getMessage().toLowerCase())) {
-
             Arrays.stream(player.getEquipment().getArmorContents())
-                    .map(enchantmentBookSettings::getEnchantments).forEach((enchant) -> enchantmentPotions.entrySet()
+                    .map(this.enchantmentBookSettings::getEnchantments).forEach((enchant) -> enchantmentPotions.entrySet()
                             .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(enchant))
                             .forEach(enchantedPotion -> enchantedPotion.getValue().keySet().forEach(player::removePotionEffect)));
 
@@ -43,6 +46,6 @@ public class CommandChecker implements Listener {
     }
 
     private void updateEffects(Player player) {
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> crazyManager.updatePlayerEffects(player), 5);
+        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.crazyManager.updatePlayerEffects(player), 5);
     }
 }

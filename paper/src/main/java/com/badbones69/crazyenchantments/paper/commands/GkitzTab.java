@@ -13,10 +13,13 @@ import java.util.List;
 
 public class GkitzTab implements TabCompleter {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
+    @NotNull
     private final Starter starter = plugin.getStarter();
 
+    @NotNull
     private final CrazyManager crazyManager = starter.getCrazyManager();
     
     @Override
@@ -25,19 +28,19 @@ public class GkitzTab implements TabCompleter {
         if (sender.hasPermission("crazyenchantments.reset")) {
             if (args.length == 1) { // /gkit
                 completions.add("reset");
-                crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
+                this.crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
 
                 return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
             } else if (args.length == 2) { // /gkit reset
 
-                if (args[0].equalsIgnoreCase("reset")) crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
+                if (args[0].equalsIgnoreCase("reset")) this.crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
 
-                if (crazyManager.getGKitFromName(args[0]) != null) plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                if (this.crazyManager.getGKitFromName(args[0]) != null) this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
 
                 return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
             } else { // /gkit reset <kit>
 
-                if (args[0].equalsIgnoreCase("reset")) plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                if (args[0].equalsIgnoreCase("reset")) this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
 
                 return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
             }

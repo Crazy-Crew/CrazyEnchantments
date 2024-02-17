@@ -25,64 +25,64 @@ public class BlackSmithManager {
     
     public void load() {
         FileConfiguration config = Files.CONFIG.getFile();
-        denyBarrier = new ItemBuilder()
+        this.denyBarrier = new ItemBuilder()
         .setMaterial(Material.BARRIER)
         .setName(config.getString("Settings.BlackSmith.Results.None", "&c&lNo Results"))
         .setLore(config.getStringList("Settings.BlackSmith.Results.Not-Found-Lore"))
         .build();
-        redGlass = new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE").setName(" ").build();
-        grayGlass = new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE").setName(" ").build();
-        blueGlass = new ItemBuilder().setMaterial("LIGHT_BLUE_STAINED_GLASS_PANE").build();
-        menuName = ColorUtils.color(config.getString("Settings.BlackSmith.GUIName", "&7&lThe &b&lBlack &9&lSmith"));
-        foundString = config.getString("Settings.BlackSmith.Results.Found", "&c&lCost: &6&l%cost%XP");
-        currency = Currency.getCurrency(config.getString("Settings.BlackSmith.Transaction.Currency", "XP_Level"));
-        bookUpgrade = config.getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade", 5);
-        levelUp = config.getInt("Settings.BlackSmith.Transaction.Costs.Power-Up", 5);
-        addEnchantment = config.getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment", 3);
-        maxEnchantments = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle");
+        this.redGlass = new ItemBuilder().setMaterial("RED_STAINED_GLASS_PANE").setName(" ").build();
+        this.grayGlass = new ItemBuilder().setMaterial("GRAY_STAINED_GLASS_PANE").setName(" ").build();
+        this.blueGlass = new ItemBuilder().setMaterial("LIGHT_BLUE_STAINED_GLASS_PANE").build();
+        this.menuName = ColorUtils.color(config.getString("Settings.BlackSmith.GUIName", "&7&lThe &b&lBlack &9&lSmith"));
+        this.foundString = config.getString("Settings.BlackSmith.Results.Found", "&c&lCost: &6&l%cost%XP");
+        this.currency = Currency.getCurrency(config.getString("Settings.BlackSmith.Transaction.Currency", "XP_Level"));
+        this.bookUpgrade = config.getInt("Settings.BlackSmith.Transaction.Costs.Book-Upgrade", 5);
+        this.levelUp = config.getInt("Settings.BlackSmith.Transaction.Costs.Power-Up", 5);
+        this.addEnchantment = config.getInt("Settings.BlackSmith.Transaction.Costs.Add-Enchantment", 3);
+        this.maxEnchantments = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
     }
     
     public ItemStack getDenyBarrier() {
-        return denyBarrier;
+        return this.denyBarrier;
     }
     
     public ItemStack getRedGlass() {
-        return redGlass;
+        return this.redGlass;
     }
     
     public ItemStack getGrayGlass() {
-        return grayGlass;
+        return this.grayGlass;
     }
     
     public ItemStack getBlueGlass() {
-        return blueGlass;
+        return this.blueGlass;
     }
     
     public String getMenuName() {
-        return menuName;
+        return this.menuName;
     }
     
     public String getFoundString() {
-        return foundString;
+        return this.foundString;
     }
     
     public Currency getCurrency() {
-        return currency;
+        return this.currency;
     }
     
     public int getBookUpgrade() {
-        return bookUpgrade;
+        return this.bookUpgrade;
     }
     
     public int getLevelUp() {
-        return levelUp;
+        return this.levelUp;
     }
     
     public int getAddEnchantment() {
-        return addEnchantment;
+        return this.addEnchantment;
     }
     
     public boolean useMaxEnchantments() {
-        return maxEnchantments;
+        return this.maxEnchantments;
     }
 }

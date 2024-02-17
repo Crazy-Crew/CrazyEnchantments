@@ -10,15 +10,18 @@ import org.jetbrains.annotations.NotNull;
 
 public class ServerReadyListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
     // Plugin Support.
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
+    @NotNull
+    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     @EventHandler(ignoreCancelled = true)
     public void onServerReady(ServerLoadEvent event) {
-        pluginSupport.updateHooks();
+        this.pluginSupport.updateHooks();
     }
 }

@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 public class ScrollListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     private final Starter starter = plugin.getStarter();
 

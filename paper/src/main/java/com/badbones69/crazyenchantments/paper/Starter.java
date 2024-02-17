@@ -28,7 +28,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Starter {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     private FileManager fileManager;
     private CrazyManager crazyManager;
@@ -70,9 +71,7 @@ public class Starter {
 
     public void run() {
         this.fileManager = new FileManager();
-
-        // Set up all our files.
-        this.fileManager.setLog(true).setup();
+        this.fileManager.setup();
 
         // Plugin Support.
         this.pluginSupport = new PluginSupport();
@@ -167,7 +166,7 @@ public class Starter {
     }
 
     public SuperiorSkyBlockSupport getSuperiorSkyBlockSupport() {
-        if (superiorSkyBlockSupport == null) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
+        if (this.superiorSkyBlockSupport == null) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
         return this.superiorSkyBlockSupport;
     }

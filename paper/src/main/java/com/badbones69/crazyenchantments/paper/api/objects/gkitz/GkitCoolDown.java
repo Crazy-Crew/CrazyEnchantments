@@ -39,9 +39,8 @@ public class GkitCoolDown {
 
         int second = 1000, minute = second*60, hour = minute*60, day = hour*24;
 
-        if (coolDownTime != null) {
-
-            total = coolDownTime.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+        if (this.coolDownTime != null) {
+            total = this.coolDownTime.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
 
             days = total / day;
             total %= day;

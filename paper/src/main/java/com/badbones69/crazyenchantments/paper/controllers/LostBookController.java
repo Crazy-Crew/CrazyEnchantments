@@ -24,15 +24,20 @@ import java.util.HashMap;
 
 public class LostBookController implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    @NotNull
+    private final Methods methods = this.starter.getMethods();
 
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    @NotNull
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent event) {
@@ -41,7 +46,7 @@ public class LostBookController implements Listener {
 
         if ((event.getItem() == null || event.getAction() != Action.RIGHT_CLICK_AIR) && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
-        ItemStack item = methods.getItemInHand(player);
+        ItemStack item = this.methods.getItemInHand(player);
 
         if (!item.hasItemMeta()) return;
         String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.LOST_BOOK.getKey(), PersistentDataType.STRING);
@@ -56,10 +61,10 @@ public class LostBookController implements Listener {
 
         event.setCancelled(true);
 
-        if (methods.isInventoryFull(player)) return;
+        if (this.methods.isInventoryFull(player)) return;
 
         LostBook lostBook = category.getLostBook();
-        methods.removeItem(item, player);
+        this.methods.removeItem(item, player);
         CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
         if (book == null) {
@@ -74,7 +79,7 @@ public class LostBookController implements Listener {
 
         player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
 
-        if (lostBook.useFirework()) methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
+        if (lostBook.useFirework()) this.methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
 
         if (lostBook.playSound()) player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
     }

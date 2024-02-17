@@ -34,7 +34,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-import static com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils.getColor;
+import static com.badbones69.crazyenchantments.paper.api.utils.ColorUtils.getColor;
 
 public class ItemBuilder {
 
@@ -78,7 +78,7 @@ public class ItemBuilder {
     // Enchantments
     private HashMap<Enchantment, Integer> enchantments;
 
-    private HashMap<CEnchantment, Integer> crazyEnchantments;
+    private final HashMap<CEnchantment, Integer> crazyEnchantments;
 
     // Shields
     private boolean isShield;
@@ -155,13 +155,11 @@ public class ItemBuilder {
         this.itemFlags = new ArrayList<>();
     }
 
-    private static final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    private static final CrazyEnchantments plugin = CrazyEnchantments.get();
 
     private final Starter starter = plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
-
-    private final SkullCreator skullCreator = starter.getSkullCreator();
+    private final SkullCreator skullCreator = this.starter.getSkullCreator();
 
     /**
      * Deduplicate an item builder.
@@ -224,23 +222,23 @@ public class ItemBuilder {
      * Gets the nbt item.
      */
     public NBTItem getNBTItem() {
-        nbtItem = new NBTItem(build());
+        this.nbtItem = new NBTItem(build());
 
-        return nbtItem;
+        return this.nbtItem;
     }
 
     /**
      * Gets the material.
      */
     public Material getMaterial() {
-        return material;
+        return this.material;
     }
 
     /**
      * Checks if the item is a banner.
      */
     public boolean isBanner() {
-        return isBanner;
+        return this.isBanner;
     }
 
     /**
@@ -254,91 +252,91 @@ public class ItemBuilder {
      * Checks if the item is a spawn mob egg.
      */
     public boolean isMobEgg() {
-        return isMobEgg;
+        return this.isMobEgg;
     }
 
     /**
      * Returns the player name.
      */
     public String getPlayerName() {
-        return player;
+        return this.player;
     }
 
     /**
      * Get the entity type of the spawn mob egg.
      */
     public EntityType getEntityType() {
-        return entityType;
+        return this.entityType;
     }
 
     /**
      * Get the name of the item.
      */
     public String getName() {
-        return itemName == null ? "" : ColorUtils.toLegacy(itemName);
+        return this.itemName == null ? "" : ColorUtils.toLegacy(this.itemName);
     }
 
     /**
      * Get the lore on the item.
      */
     public List<Component> getLore() {
-        return itemLore;
+        return this.itemLore;
     }
 
     /**
      * Returns the enchantments on the Item.
      */
     public HashMap<Enchantment, Integer> getEnchantments() {
-        return enchantments;
+        return this.enchantments;
     }
 
     /**
      * Returns the crazyEnchantments on the item.
      */
     public HashMap<CEnchantment, Integer> getCrazyEnchantments() {
-        return crazyEnchantments;
+        return this.crazyEnchantments;
     }
 
     /**
      * Return a list of Item Flags.
      */
     public List<ItemFlag> getItemFlags() {
-        return itemFlags;
+        return this.itemFlags;
     }
 
     /**
      * Checks if flags are hidden.
      */
     public boolean isItemFlagsHidden() {
-        return hideItemFlags;
+        return this.hideItemFlags;
     }
 
     /**
      * Check if item is Leather Armor
      */
     public boolean isLeatherArmor() {
-        return isLeatherArmor;
+        return this.isLeatherArmor;
     }
 
     /**
      * Checks if item is glowing.
      */
     public boolean isGlowing() {
-        return glowing;
+        return this.glowing;
     }
 
     /**
      * Checks if the item is unbreakable.
      */
     public boolean isUnbreakable() {
-        return unbreakable;
+        return this.unbreakable;
     }
 
     /**
      * Get the patterns on the banners.
      */
     public List<Pattern> getPatterns() {
-        return patterns;
+        return this.patterns;
     }
 
     /**
@@ -347,10 +345,10 @@ public class ItemBuilder {
      * @return The name with all the placeholders in it.
      */
     public String getUpdatedName() {
-        if (itemName == null) return "";
-        String newName = ColorUtils.toLegacy(itemName);
+        if (this.itemName == null) return "";
+        String newName = ColorUtils.toLegacy(this.itemName);
 
-        for (Map.Entry<String, String> placeholder : namePlaceholders.entrySet()) {
+        for (Map.Entry<String, String> placeholder : this.namePlaceholders.entrySet()) {
             newName = newName.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
         }
 
@@ -363,30 +361,30 @@ public class ItemBuilder {
      * @return The result of all the info that was given to the builder as an ItemStack.
      */
     public ItemStack build() {
-        if (nbtItem != null) referenceItem = nbtItem.getItem();
+        if (this.nbtItem != null) this.referenceItem = this.nbtItem.getItem();
 
-        ItemStack item = referenceItem != null ? referenceItem : new ItemStack(material);
+        ItemStack item = this.referenceItem != null ? this.referenceItem : new ItemStack(this.material);
 
         if (item.getType().isAir()) return item;
 
-        if (isHead) { // Has to go 1st due to it removing all data when finished.
-            if (isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
-                if (isURL) {
-                    skullCreator.itemWithUrl(item, player);
+        if (this.isHead) { // Has to go 1st due to it removing all data when finished.
+            if (this.isHash) { // Sauce: https://github.com/deanveloper/SkullCreator
+                if (this.isURL) {
+                    this.skullCreator.itemWithUrl(item, this.player);
                 } else {
-                    skullCreator.itemWithBase64(item, player);
+                    this.skullCreator.itemWithBase64(item, this.player);
                 }
             }
 
-            item.setAmount(itemAmount);
+            item.setAmount(this.itemAmount);
             ItemMeta itemMeta = item.getItemMeta();
             List<Component> newLore = getUpdatedLore();
             assert itemMeta != null;
             if (!Objects.equals(getUpdatedName(), "")) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
             if (!newLore.isEmpty()) itemMeta.lore(newLore);
-            if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
+            if (this.nameSpacedData != null && this.nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(this.nameSpacedKey, PersistentDataType.STRING, this.nameSpacedData);
 
-            if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(damage);
+            if (itemMeta instanceof org.bukkit.inventory.meta.Damageable) ((org.bukkit.inventory.meta.Damageable) itemMeta).setDamage(this.damage);
 
             if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
                 PotionMeta potionMeta = (PotionMeta) itemMeta;
@@ -459,75 +457,75 @@ public class ItemBuilder {
             return nbt.getItem();
         }
 
-        item.setAmount(itemAmount);
+        item.setAmount(this.itemAmount);
         ItemMeta itemMeta = item.getItemMeta();
         List<Component> newLore = getUpdatedLore();
         assert itemMeta != null;
         if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
-        if (nameSpacedData != null && nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(nameSpacedKey, PersistentDataType.STRING, nameSpacedData);
-        if (crazyEnchantments != null) itemMeta = addEnchantments(itemMeta, crazyEnchantments);
+        if (this.nameSpacedData != null && this.nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(this.nameSpacedKey, PersistentDataType.STRING, this.nameSpacedData);
+        if (this.crazyEnchantments != null) itemMeta = addEnchantments(itemMeta, this.crazyEnchantments);
 
-        if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(damage);
+        if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(this.damage);
 
-        if (isPotion && (potionType != null || potionColor != null)) {
+        if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
             PotionMeta potionMeta = (PotionMeta) itemMeta;
 
-            if (potionType != null) potionMeta.setBasePotionData(new PotionData(potionType));
+            if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
 
-            if (potionColor != null) potionMeta.setColor(potionColor);
+            if (this.potionColor != null) potionMeta.setColor(this.potionColor);
         }
 
-        if (material == Material.TIPPED_ARROW && potionType != null) {
+        if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
             PotionMeta potionMeta = (PotionMeta) itemMeta;
-            potionMeta.setBasePotionData(new PotionData(potionType));
+            potionMeta.setBasePotionData(new PotionData(this.potionType));
         }
 
-        if (isLeatherArmor && armorColor != null) {
+        if (this.isLeatherArmor && this.armorColor != null) {
             LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemMeta;
-            leatherMeta.setColor(armorColor);
+            leatherMeta.setColor(this.armorColor);
         }
 
-        if (isBanner && !patterns.isEmpty()) {
+        if (this.isBanner && !this.patterns.isEmpty()) {
             BannerMeta bannerMeta = (BannerMeta) itemMeta;
-            bannerMeta.setPatterns(patterns);
+            bannerMeta.setPatterns(this.patterns);
         }
 
-        if (isShield && !patterns.isEmpty()) {
+        if (this.isShield && !this.patterns.isEmpty()) {
             BlockStateMeta shieldMeta = (BlockStateMeta) itemMeta;
             Banner banner = (Banner) shieldMeta.getBlockState();
-            banner.setPatterns(patterns);
+            banner.setPatterns(this.patterns);
             banner.update();
             shieldMeta.setBlockState(banner);
         }
 
-        if (useCustomModelData) itemMeta.setCustomModelData(customModelData);
-        if (unbreakable) itemMeta.setUnbreakable(true);
+        if (this.useCustomModelData) itemMeta.setCustomModelData(this.customModelData);
+        if (this.unbreakable) itemMeta.setUnbreakable(true);
 
-        itemFlags.forEach(itemMeta :: addItemFlags);
+        this.itemFlags.forEach(itemMeta :: addItemFlags);
         item.setItemMeta(itemMeta);
         hideItemFlags(item);
-        item.addUnsafeEnchantments(enchantments);
+        item.addUnsafeEnchantments(this.enchantments);
         addGlow(item);
         NBTItem nbt = new NBTItem(item);
 
-        if (isHead && !isHash) nbt.setString("SkullOwner", player);
+        if (this.isHead && !this.isHash) nbt.setString("SkullOwner", this.player);
 
-        if (isMobEgg) {
-            if (entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + entityType.name());
+        if (this.isMobEgg) {
+            if (this.entityType != null) nbt.addCompound("EntityTag").setString("id", "minecraft:" + this.entityType.name());
         }
 
         return nbt.getItem();
     }
 
     public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) { //TODO Stop CrazyManager from being null to replace this method.
-        EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+        EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
         Gson gson = new Gson();
         Map<CEnchantment, Integer> currentEnchantments = enchantmentBookSettings.getEnchantments(meta);
 
         meta = enchantmentBookSettings.removeEnchantments(meta, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
 
-        String data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        String data = meta.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
         Enchant enchantData = data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
         List<Component> lore = meta.lore();
@@ -547,10 +545,11 @@ public class ItemBuilder {
         }
 
         meta.lore(lore);
-        meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
+        meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(enchantData));
 
         return meta;
     }
+
     private boolean isArmor() {
         String name = this.material.name();
 
@@ -806,9 +805,11 @@ public class ItemBuilder {
 
         for (Component line : this.itemLore) {
             String newLine = ColorUtils.toLegacy(line);
+
             for (Map.Entry<String, String> placeholder : this.lorePlaceholders.entrySet()) {
                 newLine = newLine.replace(placeholder.getKey(), placeholder.getValue()).replace(placeholder.getKey().toLowerCase(), placeholder.getValue());
             }
+
             newLore.add(ColorUtils.legacyTranslateColourCodes(newLine));
         }
 
@@ -1205,11 +1206,14 @@ public class ItemBuilder {
                         int number = NumberUtils.isInt(value) ? Integer.parseInt(value) : 1;
 
                         Enchantment enchantment = getEnchantment(option);
+
                         if (enchantment != null) {
                             if (number != 0) itemBuilder.addEnchantments(enchantment, number);
                             continue;
                         }
-                        CEnchantment ceEnchant = CrazyEnchantments.getPlugin().getStarter().getCrazyManager().getEnchantmentFromName(option);
+
+                        CEnchantment ceEnchant = plugin.getStarter().getCrazyManager().getEnchantmentFromName(option);
+
                         if (ceEnchant != null) {
                             if (number != 0) itemBuilder.addCEEnchantments(ceEnchant, number);
                             continue;

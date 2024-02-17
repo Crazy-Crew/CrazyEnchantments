@@ -43,7 +43,8 @@ public enum ShopOption {
         this.buyable = buyable;
     }
 
-    private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final static CrazyEnchantments plugin = CrazyEnchantments.get();
     
     public static void loadShopOptions() {
         FileConfiguration config = Files.CONFIG.getFile();
@@ -96,23 +97,23 @@ public enum ShopOption {
     }
     
     private String getOptionPath() {
-        return optionPath;
+        return this.optionPath;
     }
     
     private String getPath() {
-        return path;
+        return this.path;
     }
     
     private String getNamePath() {
-        return namePath;
+        return this.namePath;
     }
     
     private String getLorePath() {
-        return lorePath;
+        return this.lorePath;
     }
     
     public boolean isBuyable() {
-        return buyable;
+        return this.buyable;
     }
 
     private record Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {}

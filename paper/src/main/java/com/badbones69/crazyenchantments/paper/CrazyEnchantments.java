@@ -37,7 +37,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CrazyEnchantments extends JavaPlugin implements Listener {
 
-    private static CrazyEnchantments plugin;
+    public static CrazyEnchantments get() {
+        return JavaPlugin.getPlugin(CrazyEnchantments.class);
+    }
 
     private Starter starter;
 
@@ -57,15 +59,10 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        this.starter = new Starter();
+        this.starter.run();
 
-        plugin = this;
-
-        starter = new Starter();
-
-        // Create all instances we need.
-        starter.run();
-
-        starter.getCurrencyAPI().loadCurrency();
+        this.starter.getCurrencyAPI().loadCurrency();
 
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration tinker = Files.TINKER.getFile();
@@ -85,16 +82,16 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         if (!tinker.contains("Settings.Tinker-Version")) {
             tinker.set("Settings.Tinker-Version", 1.0);
 
-            FileManager.Files.TINKER.saveFile();
+            Files.TINKER.saveFile();
         }
 
         if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
-        pluginManager.registerEvents(this, this);
-        pluginManager.registerEvents(blackSmith = new BlackSmith(), this);
-        pluginManager.registerEvents(tinkerer = new Tinkerer(), this);
-        pluginManager.registerEvents(fireworkDamageListener = new FireworkDamageListener(), this);
-        pluginManager.registerEvents(shopListener = new ShopListener(), this);
+        this.pluginManager.registerEvents(this, this);
+        this.pluginManager.registerEvents(this.blackSmith = new BlackSmith(), this);
+        this.pluginManager.registerEvents(this.tinkerer = new Tinkerer(), this);
+        this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
+        this.pluginManager.registerEvents(this.shopListener = new ShopListener(), this);
 
         enable();
     }
@@ -106,34 +103,34 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     private void enable() {
         // Load what we need to properly enable the plugin.
-        starter.getCrazyManager().load();
+        this.starter.getCrazyManager().load();
 
-        pluginManager.registerEvents(new DustControlListener(), this);
+        this.pluginManager.registerEvents(new DustControlListener(), this);
 
-        pluginManager.registerEvents(new PickaxeEnchantments(), this);
-        pluginManager.registerEvents(new SwordEnchantments(), this);
-        pluginManager.registerEvents(armorEnchantments = new ArmorEnchantments(), this);
-        pluginManager.registerEvents(new AllyEnchantments(), this);
-        pluginManager.registerEvents(new ToolEnchantments(), this);
-        pluginManager.registerEvents(new BootEnchantments(), this);
-        pluginManager.registerEvents(new AxeEnchantments(), this);
-        pluginManager.registerEvents(new BowEnchantments(), this);
-        pluginManager.registerEvents(new HoeEnchantments(), this);
+        this.pluginManager.registerEvents(new PickaxeEnchantments(), this);
+        this.pluginManager.registerEvents(new SwordEnchantments(), this);
+        this.pluginManager.registerEvents(this.armorEnchantments = new ArmorEnchantments(), this);
+        this.pluginManager.registerEvents(new AllyEnchantments(), this);
+        this.pluginManager.registerEvents(new ToolEnchantments(), this);
+        this.pluginManager.registerEvents(new BootEnchantments(), this);
+        this.pluginManager.registerEvents(new AxeEnchantments(), this);
+        this.pluginManager.registerEvents(new BowEnchantments(), this);
+        this.pluginManager.registerEvents(new HoeEnchantments(), this);
 
-        pluginManager.registerEvents(new ProtectionCrystalListener(), this);
-        pluginManager.registerEvents(new FireworkDamageListener(), this);
-        pluginManager.registerEvents(new AuraListener(), this);
+        this.pluginManager.registerEvents(new ProtectionCrystalListener(), this);
+        this.pluginManager.registerEvents(new FireworkDamageListener(), this);
+        this.pluginManager.registerEvents(new AuraListener(), this);
 
-        pluginManager.registerEvents(new InfoGUIControl(), this);
-        pluginManager.registerEvents(new LostBookController(), this);
-        pluginManager.registerEvents(new CommandChecker(), this);
+        this.pluginManager.registerEvents(new InfoGUIControl(), this);
+        this.pluginManager.registerEvents(new LostBookController(), this);
+        this.pluginManager.registerEvents(new CommandChecker(), this);
 
-        pluginManager.registerEvents(new WorldSwitchListener(), this);
+        this.pluginManager.registerEvents(new WorldSwitchListener(), this);
 
-        if (starter.getCrazyManager().isGkitzEnabled()) {
+        if (this.starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("G-Kitz support is now enabled.");
 
-            pluginManager.registerEvents(gKitzController = new GKitzController(), this);
+            this.pluginManager.registerEvents(this.gKitzController = new GKitzController(), this);
         }
 
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
@@ -145,12 +142,12 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
     }
 
     private void disable() {
-        bossBarController.removeAllBossBars();
-        if (armorEnchantments != null) armorEnchantments.stop();
+        this.bossBarController.removeAllBossBars();
+        if (this.armorEnchantments != null) this.armorEnchantments.stop();
 
-        if (starter.getAllyManager() != null) starter.getAllyManager().forceRemoveAllies();
+        if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
 
-        getServer().getOnlinePlayers().forEach(starter.getCrazyManager()::unloadCEPlayer);
+        getServer().getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
     }
 
     private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
@@ -161,18 +158,16 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         }
     }
 
+    //todo() move this
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {
         this.starter.getCrazyManager().loadCEPlayer(event.getPlayer());
     }
 
+    //todo() move this
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
         this.starter.getCrazyManager().unloadCEPlayer(event.getPlayer());
-    }
-
-    public static CrazyEnchantments getPlugin() {
-        return plugin;
     }
 
     public Starter getStarter() {
@@ -206,5 +201,9 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
     public BossBarController getBossBarController() {
         return bossBarController;
+    }
+
+    public boolean isLogging() {
+        return true;
     }
 }

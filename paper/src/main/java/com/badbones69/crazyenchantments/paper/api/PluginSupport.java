@@ -20,9 +20,11 @@ import java.util.Map;
 
 public class PluginSupport {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Starter starter = plugin.getStarter();
+    @NotNull
+    private final Starter starter = this.plugin.getStarter();
 
     private ClaimSupport claimPlugin = null;
 
@@ -38,17 +40,17 @@ public class PluginSupport {
     }
 
     public boolean inTerritory(Player player) {
-        if (claimPlugin != null) return claimPlugin.inTerritory(player);
+        if (this.claimPlugin != null) return this.claimPlugin.inTerritory(player);
 
-        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && starter.getSuperiorSkyBlockSupport().inTerritory(player);
+        return SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().inTerritory(player);
     }
 
     public boolean isFriendly(Entity pEntity, Entity oEntity) {
         if (!(pEntity instanceof Player player) || !(oEntity instanceof Player otherPlayer)) return false;
 
-        if (claimPlugin != null) return claimPlugin.isFriendly(player, otherPlayer);
+        if (this.claimPlugin != null) return this.claimPlugin.isFriendly(player, otherPlayer);
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
         if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyManager.inSameParty((Player) pEntity, (Player) oEntity);
 
@@ -78,7 +80,7 @@ public class PluginSupport {
     }
 
     public void updateHooks() {
-        cachedPlugins.clear();
+        this.cachedPlugins.clear();
 
         for (SupportedPlugins supportedPlugin : SupportedPlugins.values()) {
             if (supportedPlugin.isPluginLoaded() && supportedPlugin.getLoadedPlugin().isEnabled()) {
@@ -113,22 +115,22 @@ public class PluginSupport {
 
     public void updateClaimHooks(SupportedPlugins supportedPlugin) {
         switch (supportedPlugin) {
-            case GRIEF_PREVENTION -> claimPlugin = new GriefPreventionSupport();
-            case TOWNYADVANCED -> claimPlugin = new TownySupport();
-            case FACTIONS_UUID -> claimPlugin = new FactionsUUIDSupport();
+            case GRIEF_PREVENTION -> this.claimPlugin = new GriefPreventionSupport();
+            case TOWNYADVANCED -> this.claimPlugin = new TownySupport();
+            case FACTIONS_UUID -> this.claimPlugin = new FactionsUUIDSupport();
         }
     }
 
     public void printHooks() {
-        if (cachedPlugins.isEmpty()) updateHooks();
+        if (this.cachedPlugins.isEmpty()) updateHooks();
 
-        plugin.getLogger().info(ColorUtils.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
+        this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.color("&8&l=== &e&lCrazyEnchantment Hook Status &8&l==="));
 
-        cachedPlugins.keySet().forEach(value -> {
+        this.cachedPlugins.keySet().forEach(value -> {
             if (value.isPluginLoaded()) {
-                plugin.getLogger().info(ColorUtils.color("&6&l" + value.name() + " &a&lFOUND"));
+                this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.color("&6&l" + value.name() + " &a&lFOUND"));
             } else {
-                plugin.getLogger().info(ColorUtils.color("&6&l" + value.name() + " &c&lNOT FOUND"));
+                this.plugin.getServer().getConsoleSender().sendMessage(ColorUtils.color("&6&l" + value.name() + " &c&lNOT FOUND"));
             }
         });
     }
@@ -174,35 +176,38 @@ public class PluginSupport {
             this.pluginName = pluginName;
         }
 
-        private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+        @NotNull
+        private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-        private final Starter starter = plugin.getStarter();
+        @NotNull
+        private final Starter starter = this.plugin.getStarter();
 
-        private final PluginSupport pluginSupport = starter.getPluginSupport();
+        @NotNull
+        private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
         public boolean isPluginLoaded() {
-            Plugin plugin1 = plugin.getServer().getPluginManager().getPlugin(pluginName);
+            Plugin plugin1 = this.plugin.getServer().getPluginManager().getPlugin(this.pluginName);
             return plugin1 != null && plugin1.isEnabled();
         }
 
         public Plugin getLoadedPlugin() {
-            return plugin.getServer().getPluginManager().getPlugin(pluginName);
+            return this.plugin.getServer().getPluginManager().getPlugin(this.pluginName);
         }
 
         public boolean isCachedPluginLoaded() {
-            return pluginSupport.cachedPlugins.get(this);
+            return this.pluginSupport.cachedPlugins.get(this);
         }
 
         public void addPlugin(boolean value) {
-            pluginSupport.cachedPlugins.put(this, value);
+            this.pluginSupport.cachedPlugins.put(this, value);
         }
 
         public void removePlugin() {
-            pluginSupport.cachedPlugins.remove(this);
+            this.pluginSupport.cachedPlugins.remove(this);
         }
 
         public boolean isPluginEnabled() {
-            return pluginSupport.cachedPlugins.get(this);
+            return this.pluginSupport.cachedPlugins.get(this);
         }
     }
 }

@@ -16,7 +16,7 @@ public class OraxenSupport {
         DurabilityMechanicFactory durabilityFactory = DurabilityMechanicFactory.get();
 
         if (!durabilityFactory.isNotImplementedIn(itemId)) {
-            DurabilityMechanic durabilityMechanic = (DurabilityMechanic) durabilityFactory.getMechanic(itemId);
+            DurabilityMechanic durabilityMechanic = durabilityFactory.getMechanic(itemId);
             return durabilityMechanic.getItemMaxDurability();
         }
 
@@ -32,7 +32,7 @@ public class OraxenSupport {
         DurabilityMechanicFactory durabilityFactory = DurabilityMechanicFactory.get();
 
         if (!durabilityFactory.isNotImplementedIn(itemId)) {
-            DurabilityMechanic durabilityMechanic = (DurabilityMechanic) durabilityFactory.getMechanic(itemId);
+            DurabilityMechanic durabilityMechanic = durabilityFactory.getMechanic(itemId);
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
             Integer currentDurability = persistentDataContainer.get(DurabilityMechanic.DURABILITY_KEY, PersistentDataType.INTEGER);
 
@@ -55,7 +55,7 @@ public class OraxenSupport {
         if (durabilityFactory.isNotImplementedIn(itemId)) {
             damageable.setDamage(newDamage);
         } else {
-            DurabilityMechanic durabilityMechanic = (DurabilityMechanic) durabilityFactory.getMechanic(itemId);
+            DurabilityMechanic durabilityMechanic = durabilityFactory.getMechanic(itemId);
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
             int realMaxDurability = durabilityMechanic.getItemMaxDurability();
             int newDurability = realMaxDurability - newDamage;

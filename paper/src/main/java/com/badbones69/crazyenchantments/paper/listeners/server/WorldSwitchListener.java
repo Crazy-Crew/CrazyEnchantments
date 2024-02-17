@@ -12,18 +12,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class WorldSwitchListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
 
     @EventHandler(ignoreCancelled = true)
     public void onWorldSwitch(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
 
-        FileConfiguration config = FileManager.Files.CONFIG.getFile();
+        FileConfiguration config = Files.CONFIG.getFile();
 
         boolean refreshEnabled = config.getBoolean("Settings.Refresh-Potion-Effects-On-World-Change");
 
-        if (refreshEnabled) crazyManager.updatePlayerEffects(player);
+        if (refreshEnabled) this.crazyManager.updatePlayerEffects(player);
     }
 }
