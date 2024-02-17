@@ -194,7 +194,7 @@ public class ScrollListener implements Listener {
         assert meta != null && lore != null;
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        Enchant data = gson.fromJson(container.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
+        Enchant data = gson.fromJson(container.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
         boolean addSpaces = Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Add-Blank-Lines", true);
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
         Map<CEnchantment, Integer> enchantments = new HashMap<>();

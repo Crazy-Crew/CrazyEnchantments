@@ -81,16 +81,18 @@ public class ScramblerListener implements Listener {
      * @return The scramblers.
      */
     public ItemStack getScramblers(int amount) {
-        ItemStack item = scramblerItem.setAmount(amount).build();
+        ItemStack item = this.scramblerItem.setAmount(amount).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(DataKeys.SCRAMBLER.getKey(), PersistentDataType.BOOLEAN, true);
+
+        meta.getPersistentDataContainer().set(DataKeys.scrambler.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
         item.setItemMeta(meta);
+
         return item;
     }
 
     public boolean isScrambler(ItemStack item) {
         if (!item.hasItemMeta()) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.SCRAMBLER.getKey());
+        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey());
     }
 
     private void setGlass(Inventory inv) {

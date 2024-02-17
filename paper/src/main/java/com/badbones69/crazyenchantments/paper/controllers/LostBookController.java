@@ -49,7 +49,7 @@ public class LostBookController implements Listener {
         ItemStack item = this.methods.getItemInHand(player);
 
         if (!item.hasItemMeta()) return;
-        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.LOST_BOOK.getKey(), PersistentDataType.STRING);
+        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.lost_book.getNamespacedKey(), PersistentDataType.STRING);
         if (data == null) return;
 
         for (Category eachCategory : enchantmentBookSettings.getCategories()) {

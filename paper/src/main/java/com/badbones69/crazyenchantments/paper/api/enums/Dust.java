@@ -94,9 +94,9 @@ public enum Dust {
         // PDC Start
                 Gson gson = new Gson();
 
-                ItemMeta meta = item.getItemMeta();
-                meta.getPersistentDataContainer().set(DataKeys.DUST.getKey(), PersistentDataType.STRING, gson.toJson(new DustData(getConfigName(), min, max, percent)));
-                item.setItemMeta(meta);
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(new DustData(getConfigName(), this.min, this.max, percent)));
+        item.setItemMeta(meta);
         // PDC End
 
         return item;

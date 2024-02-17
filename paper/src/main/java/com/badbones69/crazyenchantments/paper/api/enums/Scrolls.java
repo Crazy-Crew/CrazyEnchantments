@@ -69,7 +69,7 @@ public enum Scrolls {
         return configName;
     }
 
-    private static final NamespacedKey scroll = DataKeys.SCROLL.getKey();
+    private static final NamespacedKey scroll = DataKeys.scroll.getNamespacedKey();
 
     public static Scrolls getFromPDC(ItemStack item) {
         PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
@@ -81,7 +81,7 @@ public enum Scrolls {
     public ItemStack getScroll() {
         ItemStack item = itemBuilderScrolls.get(this).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, configName);
+        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, this.configName);
         item.setItemMeta(meta);
         return item;
     }
@@ -89,12 +89,12 @@ public enum Scrolls {
     public ItemStack getScroll(int amount) {
         ItemStack item = itemBuilderScrolls.get(this).setAmount(amount).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, configName);
+        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, this.configName);
         item.setItemMeta(meta);
         return item;
     }
 
-    private static final NamespacedKey whiteScrollProtectionKey = new NamespacedKey(CrazyEnchantments.getPlugin(), "White_Scroll_Protection");
+    private static final NamespacedKey whiteScrollProtectionKey = DataKeys.white_scroll_protection.getNamespacedKey();
 
     public static String getWhiteScrollProtectionName() {
         String protectNamed;

@@ -7,30 +7,36 @@ import org.jetbrains.annotations.NotNull;
 
 public enum DataKeys {
 
-    DUST("Crazy_Dust", String.class),
-    ENCHANTMENTS("CrazyEnchants", String.class),
-    STORED_ENCHANTMENTS("Stored_Enchantments", String.class),
-    PROTECTION_CRYSTAL("is_Protections_Crystal", Boolean.class),
-    PROTECTED_ITEM("isProtected", Boolean.class),
-    SCRAMBLER("isScrambler", Boolean.class),
-    LOST_BOOK("Lost_Book_Type", String.class),
-    NO_FIREWORK_DAMAGE("No_Damage", Boolean.class),
-    SCROLL("Crazy_Scroll", String.class),
-    EXPERIENCE("Experience", String.class),
-    LIMIT_REDUCER("Limit_Reducer", Integer.class),
-    SLOT_CRYSTAL("Slot_Crystal", Boolean.class);
+    dust("crazy_dust", PersistentDataType.STRING),
+    white_scroll_protection("white_scroll_protection", PersistentDataType.STRING),
+    enchantments("crazy_enchants", PersistentDataType.STRING),
+    stored_enchantments("stored_enchantments", PersistentDataType.STRING),
+    protection_crystal("is_protections_crystal", PersistentDataType.BOOLEAN),
+    protected_item("is_protected", PersistentDataType.BOOLEAN),
+    scrambler("is_scrambler", PersistentDataType.BOOLEAN),
+    lost_book("lost_book_type", PersistentDataType.STRING),
+    no_firework_damage("no_firework_damage", PersistentDataType.BOOLEAN),
+    scroll("crazy_scroll", PersistentDataType.STRING),
+    experience("experience", PersistentDataType.STRING),
+    limit_reducer("limit_reducer", PersistentDataType.INTEGER),
+    slot_crystal("slot_crystal", PersistentDataType.BOOLEAN);
 
-    private final static CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
-    private final String namSpaceKey;
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    DataKeys(String nameSpaceKey, Object dataType) {
-        this.namSpaceKey = nameSpaceKey;
+    private final String NamespacedKey;
+    private final PersistentDataType type;
+
+    DataKeys(String NamespacedKey, PersistentDataType type) {
+        this.NamespacedKey = NamespacedKey;
+        this.type = type;
     }
 
-    public NamespacedKey getKey() {
-        return new NamespacedKey(plugin, namSpaceKey);
+    public NamespacedKey getNamespacedKey() {
+        return new NamespacedKey(this.plugin, this.plugin.getName().toLowerCase() + "_" + this.NamespacedKey);
     }
-    public String getStringKey() {
-        return this.namSpaceKey;
+
+    public PersistentDataType getType() {
+        return this.type;
     }
 }

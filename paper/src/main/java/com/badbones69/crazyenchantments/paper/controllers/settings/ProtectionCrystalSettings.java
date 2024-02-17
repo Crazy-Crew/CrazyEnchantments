@@ -51,10 +51,9 @@ public class ProtectionCrystalSettings {
     }
 
     public ItemStack getCrystals(int amount) {
-
-        ItemStack item = crystal.setAmount(amount).build();
+        ItemStack item = this.crystal.setAmount(amount).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(DataKeys.PROTECTION_CRYSTAL.getKey(), PersistentDataType.BOOLEAN, true);
+        meta.getPersistentDataContainer().set(DataKeys.protection_crystal.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
 
         item.setItemMeta(meta);
 
@@ -130,7 +129,7 @@ public class ProtectionCrystalSettings {
     }
 
     public static boolean isProtected(PersistentDataContainer data) {
-        return data != null && data.has(DataKeys.PROTECTED_ITEM.getKey());
+        return data != null && data.has(DataKeys.protected_item.getNamespacedKey());
     }
 
     /**
@@ -139,7 +138,7 @@ public class ProtectionCrystalSettings {
      * @return True if the item is a protection crystal.
      */
     public boolean isProtectionCrystal(ItemStack item) {
-        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.PROTECTION_CRYSTAL.getKey());
+        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.protection_crystal.getNamespacedKey());
     }
 
     /**
@@ -149,7 +148,7 @@ public class ProtectionCrystalSettings {
      */
     public ItemStack removeProtection(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta.getPersistentDataContainer().has(DataKeys.PROTECTED_ITEM.getKey())) meta.getPersistentDataContainer().remove(DataKeys.PROTECTED_ITEM.getKey());
+        if (meta.getPersistentDataContainer().has(DataKeys.protected_item.getNamespacedKey())) meta.getPersistentDataContainer().remove(DataKeys.protected_item.getNamespacedKey());
 
         if (!(item.lore() == null)) {
             List<Component> lore = item.lore();

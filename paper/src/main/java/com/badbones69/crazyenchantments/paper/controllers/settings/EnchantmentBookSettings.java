@@ -42,12 +42,12 @@ public class EnchantmentBookSettings {
     public boolean hasEnchantment(ItemMeta meta, CEnchantment enchantment) {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        if (!data.has(DataKeys.ENCHANTMENTS.getKey())) return false;
+        if (!data.has(DataKeys.enchantments.getNamespacedKey())) return false;
 
-        String itemData = data.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        String itemData = data.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
         if (itemData == null) return false;
 
-        return gson.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
+        return this.gson.fromJson(itemData, Enchant.class).hasEnchantment(enchantment.getName());
     }
 
     /**
@@ -56,10 +56,9 @@ public class EnchantmentBookSettings {
      * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
      */
     public CEBook getCEBook(ItemStack book) {
+        if (!book.hasItemMeta() || !book.getItemMeta().getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey())) return null;
 
-        if (!book.hasItemMeta() || !book.getItemMeta().getPersistentDataContainer().has(DataKeys.STORED_ENCHANTMENTS.getKey())) return null;
-
-        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
+        EnchantedBook data = this.gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class);
        
         CEnchantment enchantment = null;
         for (CEnchantment enchant : getRegisteredEnchantments()) {
@@ -81,7 +80,7 @@ public class EnchantmentBookSettings {
     public ItemStack getNewScrambledBook(ItemStack book) {
         if (!book.hasItemMeta()) return null;
 
-        EnchantedBook data = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class);
+        EnchantedBook data = this.gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class);
 
         CEnchantment enchantment = null;
         int bookLevel = 0;
@@ -105,10 +104,10 @@ public class EnchantmentBookSettings {
     public boolean isEnchantmentBook(ItemStack book) {
 
         if (book == null || book.getItemMeta() == null) return false;
-        if (!book.getItemMeta().getPersistentDataContainer().has(DataKeys.STORED_ENCHANTMENTS.getKey())) return false;
+        if (!book.getItemMeta().getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey())) return false;
 
-        String dataString = book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING);
-        EnchantedBook data = gson.fromJson(dataString, EnchantedBook.class);
+        String dataString = book.getItemMeta().getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING);
+        EnchantedBook data = this.gson.fromJson(dataString, EnchantedBook.class);
 
         for (CEnchantment enchantment : getRegisteredEnchantments()) {
             if (enchantment.getName().equalsIgnoreCase(data.getName())) return true;
@@ -155,28 +154,30 @@ public class EnchantmentBookSettings {
      */
     public Map<CEnchantment, Integer> getEnchantments(ItemStack item) {
         if (item == null || item.getItemMeta() == null) return Collections.emptyMap();
+
         return getEnchantments(item.getItemMeta());
     }
 
     public Map<CEnchantment, Integer> getEnchantments(ItemMeta meta) {
         if (meta == null) return Collections.emptyMap();
+
         return getEnchantments(meta.getPersistentDataContainer());
     }
 
     public Map<CEnchantment, Integer> getEnchantments(PersistentDataContainer container) {
-
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
-        String data = container.get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        String data = container.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
 
         if (data == null) return Collections.emptyMap();
 
-        Enchant enchants = gson.fromJson(data, Enchant.class);
+        Enchant enchants = this.gson.fromJson(data, Enchant.class);
 
         if (enchants.isEmpty()) return Collections.emptyMap();
 
         for (CEnchantment enchantment : getRegisteredEnchantments()) {
             if (!enchantment.isActivated()) continue;
+
             if (enchants.hasEnchantment(enchantment.getName())) enchantments.put(enchantment, enchants.getLevel(enchantment.getName()));
         }
 
@@ -291,10 +292,9 @@ public class EnchantmentBookSettings {
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantment enchant) {
+        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
 
-        String data = item.getItemMeta().getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
-
-        int level = data == null ? 0 : gson.fromJson(data, Enchant.class).getLevel(enchant.getName());
+        int level = data == null ? 0 : this.gson.fromJson(data, Enchant.class).getLevel(enchant.getName());
 
         if (!useUnsafeEnchantments() && level > enchant.getMaxLevel()) level = enchant.getMaxLevel();
 
@@ -326,8 +326,8 @@ public class EnchantmentBookSettings {
 
         Enchant data;
 
-        if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) {
-            data = gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
+        if (meta.getPersistentDataContainer().has(DataKeys.enchantments.getNamespacedKey())) {
+            data = this.gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
         } else {
             data = new Enchant(new HashMap<>());
         }
@@ -335,10 +335,10 @@ public class EnchantmentBookSettings {
         data.removeEnchantment(enchant.getName());
 
         if (data.isEmpty()) {
-            if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey()))
-                meta.getPersistentDataContainer().remove(DataKeys.ENCHANTMENTS.getKey());
+            if (meta.getPersistentDataContainer().has(DataKeys.enchantments.getNamespacedKey()))
+                meta.getPersistentDataContainer().remove(DataKeys.enchantments.getNamespacedKey());
         } else {
-            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
+            meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, this.gson.toJson(data));
         }
 
         return meta;
@@ -358,8 +358,8 @@ public class EnchantmentBookSettings {
 
         Enchant data;
 
-        if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey())) {
-            data = gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING), Enchant.class);
+        if (meta.getPersistentDataContainer().has(DataKeys.enchantments.getNamespacedKey())) {
+            data = this.gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
         } else {
             data = new Enchant(new HashMap<>());
         }
@@ -367,13 +367,12 @@ public class EnchantmentBookSettings {
         enchants.forEach(enchant -> data.removeEnchantment(enchant.getName()));
 
         if (data.isEmpty()) {
-            if (meta.getPersistentDataContainer().has(DataKeys.ENCHANTMENTS.getKey()))
-                meta.getPersistentDataContainer().remove(DataKeys.ENCHANTMENTS.getKey());
+            if (meta.getPersistentDataContainer().has(DataKeys.enchantments.getNamespacedKey()))
+                meta.getPersistentDataContainer().remove(DataKeys.enchantments.getNamespacedKey());
         } else {
-            meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
+            meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, this.gson.toJson(data));
         }
 
         return meta;
     }
-
 }

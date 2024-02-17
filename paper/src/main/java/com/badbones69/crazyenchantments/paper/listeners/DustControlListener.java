@@ -65,7 +65,7 @@ public class DustControlListener implements Listener {
             lore.add(lineToAdd);
         }
 
-        meta.getPersistentDataContainer().set(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(data));
+        meta.getPersistentDataContainer().set(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING, this.gson.toJson(data));
         meta.lore(lore);
 
         item.setItemMeta(meta);
@@ -87,8 +87,8 @@ public class DustControlListener implements Listener {
         if (book.getAmount() > 1) return;
 
         // PDC Start
-            DustData dustData = gson.fromJson(dust.getItemMeta().getPersistentDataContainer().get(DataKeys.DUST.getKey(), PersistentDataType.STRING), DustData.class);
-            EnchantedBook bookData = gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
+        DustData dustData = this.gson.fromJson(dust.getItemMeta().getPersistentDataContainer().get(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING), DustData.class);
+        EnchantedBook bookData = this.gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class); //Once Books have PDC
         // PDC End
 
         if (bookData == null || dustData == null) return;
@@ -179,7 +179,7 @@ public class DustControlListener implements Listener {
         if (item.isEmpty() || !item.hasItemMeta()) return false;
 
         // PDC Start
-        DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(DataKeys.DUST.getKey(), PersistentDataType.STRING), DustData.class);
+        DustData data = gson.fromJson(item.getItemMeta().getPersistentDataContainer().get(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING), DustData.class);
         // PDC End
         if (data == null) return false;
 

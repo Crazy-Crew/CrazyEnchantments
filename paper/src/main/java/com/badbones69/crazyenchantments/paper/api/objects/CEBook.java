@@ -244,13 +244,13 @@ public class CEBook {
         ItemStack item = getItemBuilder().build();
         ItemMeta meta = item.getItemMeta();
 
-    // PDC Start
+        // PDC Start
         Gson gson = new Gson();
 
-        String data = gson.toJson(new EnchantedBook(enchantment.getName(), successRate, destroyRate, level), EnchantedBook.class);
+        String data = gson.toJson(new EnchantedBook(this.enchantment.getName(), this.successRate, this.destroyRate, this.level), EnchantedBook.class);
 
-        meta.getPersistentDataContainer().set(DataKeys.STORED_ENCHANTMENTS.getKey(), PersistentDataType.STRING, data);
-    // PDC End
+        meta.getPersistentDataContainer().set(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING, data);
+        // PDC End
         item.setItemMeta(meta);
 
         return item;
