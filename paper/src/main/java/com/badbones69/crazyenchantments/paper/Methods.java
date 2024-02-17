@@ -444,29 +444,6 @@ public class Methods {
         }
     }
 
-    public ItemBuilder getRandomPaneColor() {
-        Random random = new Random();
-
-        List<String> colors = Arrays.asList(
-                "WHITE_STAINED_GLASS_PANE",
-                "ORANGE_STAINED_GLASS_PANE",
-                "MAGENTA_STAINED_GLASS_PANE",
-                "LIGHT_BLUE_STAINED_GLASS_PANE",
-                "YELLOW_STAINED_GLASS_PANE",
-                "LIME_STAINED_GLASS_PANE",
-                "PINK_STAINED_GLASS_PANE",
-                "GRAY_STAINED_GLASS_PANE",
-                // Skipped 8 due to it being basically invisible in a GUI.
-                "CYAN_STAINED_GLASS_PANE",
-                "PURPLE_STAINED_GLASS_PANE",
-                "BLUE_STAINED_GLASS_PANE",
-                "BROWN_STAINED_GLASS_PANE",
-                "GREEN_STAINED_GLASS_PANE",
-                "RED_STAINED_GLASS_PANE",
-                "BLACK_STAINED_GLASS_PANE");
-        return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
-    }
-
     /**
      * @see #playerBreakBlock(Player, Block, ItemStack, boolean)
      */
