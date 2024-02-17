@@ -23,16 +23,16 @@ public class MassBlockBreakEvent extends Event implements Cancellable {
     }
     
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     public Set<Block> getBlockList() {
-        return blockList;
+        return this.blockList;
     }
     
     @Override
     public boolean isCancelled() {
-        return cancelled;
+        return this.cancelled;
     }
     
     @Override

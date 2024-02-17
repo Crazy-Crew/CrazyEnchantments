@@ -39,48 +39,48 @@ public class PreBookApplyEvent extends Event implements Cancellable {
     }
     
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     public int getLevel() {
-        return level;
+        return this.level;
     }
     
     public ItemStack getEnchantedItem() {
-        return enchantedItem;
+        return this.enchantedItem;
     }
     
     public CEnchantment getEnchantment() {
-        return enchantment;
+        return this.enchantment;
     }
     
     public CEBook getCEBook() {
-        return ceBook;
+        return this.ceBook;
     }
     
     public boolean getDestroyed() {
-        return destroyed;
+        return this.destroyed;
     }
     
     public boolean getSuccessful() {
-        return successful;
+        return this.successful;
     }
     
     public int getSuccessChance() {
-        return successChance;
+        return this.successChance;
     }
     
     public int getDestroyChance() {
-        return destroyChance;
+        return this.destroyChance;
     }
     
     public boolean getCreativeSuccess() {
-        return creativeSuccess;
+        return this.creativeSuccess;
     }
     
     @Override
     public boolean isCancelled() {
-        return cancelled;
+        return this.cancelled;
     }
     
     @Override

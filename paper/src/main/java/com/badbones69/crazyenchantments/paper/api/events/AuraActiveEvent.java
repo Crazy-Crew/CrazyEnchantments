@@ -33,7 +33,7 @@ public class AuraActiveEvent extends Event {
      * @return The player with the enchantment.
      */
     public Player getPlayer() {
-        return player;
+        return this.player;
     }
     
     /**
@@ -41,7 +41,7 @@ public class AuraActiveEvent extends Event {
      * @return The player that is being targeted.
      */
     public Player getOther() {
-        return other;
+        return this.other;
     }
     
     /**
@@ -49,7 +49,7 @@ public class AuraActiveEvent extends Event {
      * @return The aura enchantment being used.
      */
     public CEnchantments getEnchantment() {
-        return enchantment;
+        return this.enchantment;
     }
     
     /**
@@ -57,7 +57,7 @@ public class AuraActiveEvent extends Event {
      * @return The power of the aura enchantment that is being used.
      */
     public int getLevel() {
-        return level;
+        return this.level;
     }
 
     /**

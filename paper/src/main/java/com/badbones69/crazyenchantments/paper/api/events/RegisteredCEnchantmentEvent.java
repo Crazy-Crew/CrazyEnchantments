@@ -18,7 +18,7 @@ public class RegisteredCEnchantmentEvent extends Event {
      * @return The enchantment being registered.
      */
     public CEnchantment getEnchantment() {
-        return enchantment;
+        return this.enchantment;
     }
 
     /**
