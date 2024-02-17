@@ -56,18 +56,17 @@ public enum ShopOption {
 
             try {
                 shopOptions.put(shopOption, new Option(new ItemBuilder()
-                .setName(config.getString(itemPath + shopOption.getNamePath()))
+                .setName(config.getString(itemPath + shopOption.getNamePath(), "Error getting name."))
                 .setLore(config.getStringList(itemPath + shopOption.getLorePath()))
-                .setMaterial(config.getString(itemPath + "Item"))
+                .setMaterial(config.getString(itemPath + "Item", "CHEST"))
                 .setPlayerName(config.getString(itemPath + "Player"))
-                .setGlow(config.getBoolean(itemPath + "Glowing")),
+                .setGlow(config.getBoolean(itemPath + "Glowing", false)),
                 config.getInt(itemPath + "Slot", 1) - 1,
-                config.getBoolean(itemPath + "InGUI"),
+                config.getBoolean(itemPath + "InGUI", true),
                 config.getInt(costPath + "Cost", 100),
                 Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
-            } catch (Exception e) {
-                plugin.getLogger().info("The option " + shopOption.getOptionPath() + " has failed to load.");
-                Log.error(e);
+            } catch (Exception exception) {
+                plugin.getLogger().log(Level.SEVERE, "The option " + shopOption.getOptionPath() + " has failed to load.", exception);
             }
         }
     }

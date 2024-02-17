@@ -63,13 +63,16 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
-        int successMax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Max");
-        int successMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.SuccessChance.Min");
-        int destroyMax = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Max");
-        int destroyMin = Files.CONFIG.getFile().getInt("Settings.BlackScroll.DestroyChance.Min");
-        this.destroyRate = methods.percentPick(destroyMax, destroyMin);
-        this.successRate = methods.percentPick(successMax, successMin);
+
+        FileConfiguration config = Files.CONFIG.getFile();
+
+        this.glowing = config.getBoolean("Settings.Enchantment-Book-Glowing", true);
+        int successMax = config.getInt("Settings.BlackScroll.SuccessChance.Max", 100);
+        int successMin = config.getInt("Settings.BlackScroll.SuccessChance.Min", 15);
+        int destroyMax = config.getInt("Settings.BlackScroll.DestroyChance.Max", 100);
+        int destroyMin = config.getInt("Settings.BlackScroll.DestroyChance.Min", 15);
+        this.destroyRate = this.methods.percentPick(destroyMax, destroyMin);
+        this.successRate = this.methods.percentPick(successMax, successMin);
     }
     
     /**
@@ -91,9 +94,9 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
-        this.destroyRate = methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
-        this.successRate = methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
+        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing", true);
+        this.destroyRate = this.methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
+        this.successRate = this.methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
     
     /**
@@ -107,7 +110,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing");
+        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing", true);
         this.destroyRate = destroyRate;
         this.successRate = successRate;
     }
@@ -218,29 +221,28 @@ public class CEBook {
      * @return Return the book as an ItemBuilder.
      */
     public ItemBuilder getItemBuilder() {
-        String name = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
+        String name = this.enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
         List<String> lore = new ArrayList<>();
 
         for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
-                for (String enchantmentLine : enchantment.getInfoDescription()) {
+                for (String enchantmentLine : this.enchantment.getInfoDescription()) {
                     lore.add(ColorUtils.color(enchantmentLine));
                 }
             } else {
                 lore.add(ColorUtils.color(bookLine)
-                .replace("%Destroy_Rate%", String.valueOf(destroyRate)).replace("%destroy_rate%", String.valueOf(destroyRate))
-                .replace("%Success_Rate%", String.valueOf(successRate)).replace("%success_rate%", String.valueOf(successRate)));
+                .replace("%Destroy_Rate%", String.valueOf(this.destroyRate)).replace("%destroy_rate%", String.valueOf(this.destroyRate))
+                .replace("%Success_Rate%", String.valueOf(this.successRate)).replace("%success_rate%", String.valueOf(this.successRate)));
             }
         }
 
-        return enchantmentBookSettings.getNormalBook().setAmount(amount).setName(name).setLore(lore).setGlow(glowing);
+        return this.enchantmentBookSettings.getNormalBook().setAmount(this.amount).setName(name).setLore(lore).setGlow(this.glowing);
     }
     
     /**
      * @return Return the book as an ItemStack.
      */
     public ItemStack buildBook() {
-
         ItemStack item = getItemBuilder().build();
         ItemMeta meta = item.getItemMeta();
 

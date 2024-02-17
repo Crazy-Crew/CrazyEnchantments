@@ -35,10 +35,11 @@ public class EnchantmentBookSettings {
      * @return True if unsafe enchantments are enabled.
      */
     public boolean useUnsafeEnchantments() {
-        FileConfiguration config = FileManager.Files.CONFIG.getFile();
+        FileConfiguration config = Files.CONFIG.getFile();
 
         return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
     }
+
     public boolean hasEnchantment(ItemMeta meta, CEnchantment enchantment) {
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
@@ -67,6 +68,7 @@ public class EnchantmentBookSettings {
                 break;
             }
         }
+
         return new CEBook(enchantment, data.getLevel(), book.getAmount())
                 .setSuccessRate(data.getSuccessChance())
                 .setDestroyRate(data.getDestroyChance());
@@ -121,7 +123,7 @@ public class EnchantmentBookSettings {
      * @return A list of all active enchantments.
      */
     public List<CEnchantment> getRegisteredEnchantments() {
-        return registeredEnchantments;
+        return this.registeredEnchantments;
     }
 
     /**
@@ -129,14 +131,14 @@ public class EnchantmentBookSettings {
      * @return itemBuilder for an enchanted book.
      */
     public ItemBuilder getNormalBook() {
-        return new ItemBuilder(enchantmentBook);
+        return new ItemBuilder(this.enchantmentBook);
     }
 
     /**
      * @return the itemstack of the enchantment book.
      */
     public ItemStack getEnchantmentBookItem() {
-        return new ItemBuilder(enchantmentBook).build();
+        return new ItemBuilder(this.enchantmentBook).build();
     }
 
     /**
@@ -215,14 +217,14 @@ public class EnchantmentBookSettings {
      * @return List of all the categories.
      */
     public List<Category> getCategories() {
-        return categories;
+        return this.categories;
     }
 
     /**
      * Loads in all config options.
      */
     public void populateMaps() {
-        FileConfiguration config = FileManager.Files.CONFIG.getFile();
+        FileConfiguration config = Files.CONFIG.getFile();
 
         for (String category : config.getConfigurationSection("Categories").getKeys(false)) {
             String path = "Categories." + category;
@@ -230,27 +232,28 @@ public class EnchantmentBookSettings {
                     config.getInt(path + ".LostBook.Slot"),
                     config.getBoolean(path + ".LostBook.InGUI"),
                     new ItemBuilder()
-                            .setMaterial(config.getString(path + ".LostBook.Item"))
+                            .setMaterial(config.getString(path + ".LostBook.Item", "BOOK"))
                             .setPlayerName(config.getString(path + ".LostBook.Player"))
-                            .setName(config.getString(path + ".LostBook.Name"))
+                            .setName(config.getString(path + ".LostBook.Name", "Error getting name."))
                             .setLore(config.getStringList(path + ".LostBook.Lore"))
-                            .setGlow(config.getBoolean(path + ".LostBook.Glowing")),
+                            .setGlow(config.getBoolean(path + ".LostBook.Glowing", true)),
                     config.getInt(path + ".LostBook.Cost"),
                     Currency.getCurrency(config.getString(path + ".LostBook.Currency")),
-                    config.getBoolean(path + ".LostBook.FireworkToggle"),
-                    getColors(config.getString(path + ".LostBook.FireworkColors")),
-                    config.getBoolean(path + ".LostBook.Sound-Toggle"),
-                    config.getString(path + ".LostBook.Sound"));
-            categories.add(new Category(
+                    config.getBoolean(path + ".LostBook.FireworkToggle", false),
+                    getColors(config.getString(path + ".LostBook.FireworkColors", "Red, White, Blue")),
+                    config.getBoolean(path + ".LostBook.Sound-Toggle", false),
+                    config.getString(path + ".LostBook.Sound", "BLOCK_ANVIL_PLACE"));
+
+            this.categories.add(new Category(
                     category,
                     config.getInt(path + ".Slot"),
-                    config.getBoolean(path + ".InGUI"),
+                    config.getBoolean(path + ".InGUI", true),
                     new ItemBuilder()
-                            .setMaterial(config.getString(path + ".Item"))
+                            .setMaterial(config.getString(path + ".Item", ColorUtils.getRandomPaneColor().getName()))
                             .setPlayerName(config.getString(path + ".Player"))
-                            .setName(config.getString(path + ".Name"))
+                            .setName(config.getString(path + ".Name", "Error getting name."))
                             .setLore(config.getStringList(path + ".Lore"))
-                            .setGlow(config.getBoolean(path + ".Glowing")),
+                            .setGlow(config.getBoolean(path + ".Glowing", false)),
                     config.getInt(path + ".Cost"),
                     Currency.getCurrency(config.getString(path + ".Currency")),
                     config.getInt(path + ".Rarity"),
@@ -270,14 +273,12 @@ public class EnchantmentBookSettings {
      * @return The category object.
      */
     public Category getCategory(String name) {
-        for (Category category : categories) {
+        for (Category category : this.categories) {
             if (category.getName().equalsIgnoreCase(name)) return category;
         }
 
         return null;
     }
-    
-
 
     private List<Color> getColors(String string) {
         List<Color> colors = new ArrayList<>();
@@ -313,8 +314,8 @@ public class EnchantmentBookSettings {
 
         return item;
     }
-    public ItemMeta removeEnchantment(ItemMeta meta, CEnchantment enchant) {
 
+    public ItemMeta removeEnchantment(ItemMeta meta, CEnchantment enchant) {
         List<Component> lore = meta.lore();
 
         if (lore != null) {

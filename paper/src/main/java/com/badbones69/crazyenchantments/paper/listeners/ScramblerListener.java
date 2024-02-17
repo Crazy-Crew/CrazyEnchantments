@@ -54,17 +54,17 @@ public class ScramblerListener implements Listener {
 
     public void loadScrambler() {
         FileConfiguration config = Files.CONFIG.getFile();
-        scramblerItem = new ItemBuilder()
-        .setMaterial(Objects.requireNonNull(config.getString("Settings.Scrambler.Item")))
-        .setName(config.getString("Settings.Scrambler.Name"))
+        this.scramblerItem = new ItemBuilder()
+        .setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
+        .setName(config.getString("Settings.Scrambler.Name", "Error getting name."))
         .setLore(config.getStringList("Settings.Scrambler.Lore"))
-        .setGlow(config.getBoolean("Settings.Scrambler.Glowing"));
-        pointer = new ItemBuilder()
-        .setMaterial(Objects.requireNonNull(config.getString("Settings.Scrambler.GUI.Pointer.Item")))
-        .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name"))
+        .setGlow(config.getBoolean("Settings.Scrambler.Glowing", false));
+        this.pointer = new ItemBuilder()
+        .setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item", "REDSTONE_TORCH"))
+        .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name", "Error getting name."))
         .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
-        animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle");
-        guiName = ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name"));
+        this.animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle", true);
+        this.guiName = ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name", "Error getting name."));
     }
 
     /**

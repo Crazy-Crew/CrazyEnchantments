@@ -42,10 +42,10 @@ public enum Scrolls {
         for (Scrolls scroll : values()) {
             String path = "Settings." + scroll.getConfigName() + ".";
             itemBuilderScrolls.put(scroll, new ItemBuilder()
-            .setName(config.getString(path + "Name"))
+            .setName(config.getString(path + "Name", "Error getting name."))
             .setLore(config.getStringList(path + "Item-Lore"))
-            .setMaterial(config.getString(path + "Item"))
-            .setGlow(config.getBoolean(path + "Glowing")));
+            .setMaterial(config.getString(path + "Item", "BOOK"))
+            .setGlow(config.getBoolean(path + "Glowing", false)));
         }
     }
     
@@ -58,15 +58,15 @@ public enum Scrolls {
     }
     
     public String getName() {
-        return name;
+        return this.name;
     }
     
     public List<String> getKnownNames() {
-        return knownNames;
+        return this.knownNames;
     }
     
     public String getConfigName() {
-        return configName;
+        return this.configName;
     }
 
     private static final NamespacedKey scroll = DataKeys.scroll.getNamespacedKey();

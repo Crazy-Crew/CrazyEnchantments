@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
+import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
@@ -22,8 +23,8 @@ import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.utilities.WingsUtils;
-import com.badbones69.crazyenchantments.paper.utilities.misc.ColorUtils;
-import com.badbones69.crazyenchantments.paper.utilities.misc.NumberUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
@@ -121,18 +122,18 @@ public class CrazyManager {
         FileConfiguration blocks = Files.BLOCKLIST.getFile();
         FileConfiguration heads = Files.HEADMAP.getFile();
 
-        blockList.clear();
-        headMap.clear();
-        gkitz.clear();
-        enchantmentBookSettings.getRegisteredEnchantments().clear();
-        enchantmentBookSettings.getCategories().clear();
+        this.blockList.clear();
+        this.headMap.clear();
+        this.gkitz.clear();
+        this.enchantmentBookSettings.getRegisteredEnchantments().clear();
+        this.enchantmentBookSettings.getCategories().clear();
 
-        plugin.getStarter().getPluginSupport().updateHooks();
+        this.starter.getPluginSupport().updateHooks();
 
         // Check if we should patch player health.
-        boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health");
+        boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health", true);
 
-        plugin.getServer().getOnlinePlayers().forEach(player -> {
+        this.plugin.getServer().getOnlinePlayers().forEach(player -> {
             // Load our players.
             loadCEPlayer(player);
 
@@ -144,7 +145,7 @@ public class CrazyManager {
             if (playerHealthPatch) player.getAttribute(genericAttribute).setBaseValue(baseValue);
 
             // Loop through all players & back them up.
-            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, task ->
+            this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, task ->
                     getCEPlayers().forEach(name ->
                             backupCEPlayer(name.getPlayer())), 5 * 20 * 60, 5 * 20 * 60);
         });
@@ -155,36 +156,39 @@ public class CrazyManager {
         // Loop through block list.
         blocks.getStringList("Block-List").forEach(id -> {
             try {
-                blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
+                this.blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
             } catch (Exception ignored) {}
         });
 
         ConfigurationSection headSec = heads.getConfigurationSection("HeadOdds");
-        headSec.getKeys(false).forEach(id -> {
-            try {
-                Material mat = new ItemBuilder().setMaterial(id).getMaterial();
-                headMap.put(mat, headSec.getDouble(id));
-            } catch (Exception ignored) {}
-        });
+
+        if (headSec != null) {
+            headSec.getKeys(false).forEach(id -> {
+                try {
+                    Material mat = new ItemBuilder().setMaterial(id).getMaterial();
+                    this.headMap.put(mat, headSec.getDouble(id));
+                } catch (Exception ignored) {}
+            });
+        }
 
         // Loads the info menu manager and the enchantment types.
-        infoMenuManager.load();
+        this.infoMenuManager.load();
 
         Scrolls.getWhiteScrollProtectionName();
 
-        enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(Objects.requireNonNull(config.getString("Settings.Enchantment-Book-Item"))));
-        useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
-        maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle");
-        checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments");
-        gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled");
-        rageMaxLevel = config.contains("Settings.EnchantmentOptions.MaxRageLevel") ? config.getInt("Settings.EnchantmentOptions.MaxRageLevel") : 4;
-        breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
-        useRageBossBar = config.contains("Settings.EnchantmentOptions.Rage-Boss-Bar") && config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar");
-        enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
+        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item", "BOOK")));
+        this.useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
+        this.maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
+        this.checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
+        this.gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled", true);
+        this.rageMaxLevel = config.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
+        this.breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
+        this.useRageBossBar = config.contains("Settings.EnchantmentOptions.Rage-Boss-Bar") && config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar");
+        this.enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
         setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
         setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
 
-        enchantmentBookSettings.populateMaps();
+        this.enchantmentBookSettings.populateMaps();
 
         for (CEnchantments cEnchantment : CEnchantments.values()) {
             String name = cEnchantment.getName();
@@ -203,7 +207,7 @@ public class CrazyManager {
                 .setChanceIncrease(cEnchantment.getChanceIncrease())
                 .setSound(enchants.getString(path + ".Sound"));
 
-                if (enchants.contains(path + ".Enchantment-Type")) enchantment.setEnchantmentType(methods.getFromName(enchants.getString(path + ".Enchantment-Type")));
+                if (enchants.contains(path + ".Enchantment-Type")) enchantment.setEnchantmentType(this.methods.getFromName(enchants.getString(path + ".Enchantment-Type")));
 
                 if (cEnchantment.hasChanceSystem()) {
                     if (enchants.contains(path + ".Chance-System.Base")) {
@@ -223,15 +227,15 @@ public class CrazyManager {
             }
         }
 
-        if (gkitzToggle) {
+        if (this.gkitzToggle) {
             for (String kit : gkit.getConfigurationSection("GKitz").getKeys(false)) {
                 String path = "GKitz." + kit + ".";
                 int slot = gkit.getInt(path + "Display.Slot");
                 String time = gkit.getString(path + "Cooldown");
                 boolean autoEquip = gkit.getBoolean(path + "Auto-Equip");
                 NBTItem displayItem = new NBTItem(new ItemBuilder()
-                .setMaterial(gkit.getString(path + "Display.Item"))
-                .setName(gkit.getString(path + "Display.Name"))
+                .setMaterial(gkit.getString(path + "Display.Item", ColorUtils.getRandomPaneColor().getName()))
+                .setName(gkit.getString(path + "Display.Name", "Error getting name."))
                 .setLore(gkit.getStringList(path + "Display.Lore"))
                 .setGlow(gkit.getBoolean(path + "Display.Glowing")).build());
                 displayItem.setString("gkit", kit);
@@ -239,7 +243,7 @@ public class CrazyManager {
                 List<String> itemStrings = gkit.getStringList(path + "Items");
                 List<ItemStack> previewItems = getInfoGKit(itemStrings);
                 previewItems.addAll(getInfoGKit(gkit.getStringList(path + "Fake-Items")));
-                gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, itemStrings, autoEquip));
+                this.gkitz.add(new GKitz(kit, slot, time, displayItem.getItem(), previewItems, commands, itemStrings, autoEquip));
             }
         }
 
@@ -249,15 +253,15 @@ public class CrazyManager {
         Dust.loadDust();
 
         // Loads the protection crystals.
-        protectionCrystalSettings.loadProtectionCrystal();
+        this.protectionCrystalSettings.loadProtectionCrystal();
         // Loads the scrambler.
-        scramblerListener.loadScrambler();
+        this.scramblerListener.loadScrambler();
         // Loads Slot Crystal.
-        slotCrystalListener.load();
+        this.slotCrystalListener.load();
         // Loads the Scroll Control settings.
-        scrollListener.loadScrollControl();
+        this.scrollListener.loadScrollControl();
 
-        cropManagerVersion = new CropManager();
+        this.cropManagerVersion = new CropManager();
 
         // Loads the scrolls.
         Scrolls.loadScrolls();
@@ -268,19 +272,19 @@ public class CrazyManager {
         ShopOption.loadShopOptions();
 
         // Loads the shop manager.
-        shopManager.load();
+        this.shopManager.load();
 
         // Loads the settings for wings enchantment.
-        wingsManager.load();
+        this.wingsManager.load();
 
         // Loads the settings for the bow enchantments.
-        bowEnchantmentManager.load();
+        this.bowEnchantmentManager.load();
 
         // Loads the settings for the armor enchantments.
-        armorEnchantmentManager.load();
+        this.armorEnchantmentManager.load();
 
         // Loads the settings for the ally enchantments.
-        allyManager.load();
+        this.allyManager.load();
 
         // Starts the wings task.
         WingsUtils.startWings();
@@ -363,11 +367,11 @@ public class CrazyManager {
      * @return NMS support class.
      */
     public CropManagerVersion getNMSSupport() {
-        return cropManagerVersion;
+        return this.cropManagerVersion;
     }
 
     public boolean checkVanillaLimit() {
-        return checkVanillaLimit;
+        return this.checkVanillaLimit;
     }
 
     /**
@@ -375,7 +379,7 @@ public class CrazyManager {
      * @return True if it is on and false if it is off.
      */
     public boolean isGkitzEnabled() {
-        return gkitzToggle;
+        return this.gkitzToggle;
     }
 
     /**
@@ -396,7 +400,7 @@ public class CrazyManager {
      * @return All the loaded gkitz.
      */
     public List<GKitz> getGKitz() {
-        return gkitz;
+        return this.gkitz;
     }
 
     /**
@@ -425,16 +429,17 @@ public class CrazyManager {
      * @return All CEPlayer's that are loading and in a list.
      */
     public List<CEPlayer> getCEPlayers() {
-        return players;
+        return this.players;
     }
+    
     public CEBook getRandomEnchantmentBook(Category category) {
         try {
             List<CEnchantment> enchantments = category.getEnabledEnchantments();
-            CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
+            CEnchantment enchantment = enchantments.get(new Random().nextInt(enchantments.size()));
 
             return new CEBook(enchantment, randomLevel(enchantment, category), 1, category);
         } catch (Exception e) {
-            plugin.getLogger().info("The category " + category.getName() + " has no enchantments."
+            this.plugin.getLogger().info("The category " + category.getName() + " has no enchantments."
             + " Please add enchantments to the category in the Enchantments.yml. If you do not wish to have the category feel free to delete it from the Config.yml.");
             return null;
         }
@@ -445,7 +450,7 @@ public class CrazyManager {
      * @return A list of all the registered enchantments in the plugin.
      */
     public List<CEnchantment> getRegisteredEnchantments() {
-        return new ArrayList<>(enchantmentBookSettings.getRegisteredEnchantments());
+        return new ArrayList<>(this.enchantmentBookSettings.getRegisteredEnchantments());
     }
 
     /**
@@ -454,7 +459,7 @@ public class CrazyManager {
      * @return The enchantment as a CEnchantment but if not found will be null.
      */
     public CEnchantment getEnchantmentFromName(String enchantmentString) {
-        for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
+        for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
             if (enchantment.getName().equalsIgnoreCase(enchantmentString)) return enchantment;
             enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "");
             if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)) return enchantment;
@@ -467,7 +472,7 @@ public class CrazyManager {
      * @param enchantment The enchantment you wish to register.
      */
     public void registerEnchantment(CEnchantment enchantment) {
-        enchantmentBookSettings.getRegisteredEnchantments().add(enchantment);
+        this.enchantmentBookSettings.getRegisteredEnchantments().add(enchantment);
     }
 
     /**
@@ -475,7 +480,7 @@ public class CrazyManager {
      * @param enchantment The enchantment you wish to unregister.
      */
     public void unregisterEnchantment(CEnchantment enchantment) {
-        enchantmentBookSettings.getRegisteredEnchantments().remove(enchantment);
+        this.enchantmentBookSettings.getRegisteredEnchantments().remove(enchantment);
     }
 
     /**
@@ -503,13 +508,12 @@ public class CrazyManager {
      * @return The item with the enchantment on it.
      */
     public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) {
-
         Gson gson = new Gson();
-        Map<CEnchantment, Integer> currentEnchantments = enchantmentBookSettings.getEnchantments(meta);
+        Map<CEnchantment, Integer> currentEnchantments = this.enchantmentBookSettings.getEnchantments(meta);
 
-        meta = enchantmentBookSettings.removeEnchantments(meta, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
+        meta = this.enchantmentBookSettings.removeEnchantments(meta, enchantments.keySet().stream().filter(currentEnchantments::containsKey).toList());
 
-        String data = meta.getPersistentDataContainer().get(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING);
+        String data = meta.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
         Enchant enchantData = data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
         List<Component> lore = meta.lore();
@@ -529,7 +533,7 @@ public class CrazyManager {
         }
 
         meta.lore(lore);
-        meta.getPersistentDataContainer().set(DataKeys.ENCHANTMENTS.getKey(), PersistentDataType.STRING, gson.toJson(enchantData));
+        meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(enchantData));
 
         return meta;
     }
@@ -541,20 +545,20 @@ public class CrazyManager {
 
     public ItemMeta changeEnchantmentLimiter(ItemMeta meta, int amount) {
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        int newAmount = container.getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
+        int newAmount = container.getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
         newAmount += amount;
 
         if (newAmount == 0) {
-            container.remove(DataKeys.LIMIT_REDUCER.getKey());
+            container.remove(DataKeys.limit_reducer.getNamespacedKey());
         } else {
-            container.set(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, newAmount);
+            container.set(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, newAmount);
         }
 
         return meta;
     }
 
     public int getEnchantmentLimiter(ItemStack item) {
-        return item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.LIMIT_REDUCER.getKey(), PersistentDataType.INTEGER, 0);
+        return item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
     }
 
     /**
@@ -566,7 +570,7 @@ public class CrazyManager {
         Set<CEnchantments> allEnchantPotionEffects = getEnchantmentPotions().keySet();
 
         for (ItemStack armor : player.getEquipment().getArmorContents()) {
-            Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
             for (CEnchantments ench : allEnchantPotionEffects) {
                 if (!enchantments.containsKey(ench.getEnchantment())) continue;
                 Map<PotionEffectType, Integer> effects = getUpdatedEffects(player, armor, new ItemStack(Material.AIR), ench);
@@ -609,11 +613,11 @@ public class CrazyManager {
 
         for (ItemStack armor : items) {
             if (armor == null || armor.isSimilar(excludedItem)) continue;
-            Map<CEnchantment, Integer> ench = enchantmentBookSettings.getEnchantments(armor);
+            Map<CEnchantment, Integer> ench = this.enchantmentBookSettings.getEnchantments(armor);
             for (Entry<CEnchantments, HashMap<PotionEffectType, Integer>> enchantments : armorEffects.entrySet()) {
                 if (!ench.containsKey(enchantments.getKey().getEnchantment())) continue;
                 int level = ench.get(enchantments.getKey().getEnchantment());
-                if (!useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
+                if (!this.useUnsafeEnchantments && level > enchantments.getKey().getEnchantment().getMaxLevel()) level = enchantments.getKey().getEnchantment().getMaxLevel();
 
                 for (PotionEffectType type : enchantments.getValue().keySet()) {
                     if (effects.containsKey(type)) {
@@ -730,9 +734,10 @@ public class CrazyManager {
     }
 
     public boolean canAddEnchantment(Player player, ItemStack item) {
-        if (!maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
+        //todo() update permissions
+        if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
 
-        return  enchantmentBookSettings.getEnchantmentAmount(item, checkVanillaLimit) <
+        return this.enchantmentBookSettings.getEnchantmentAmount(item, this.checkVanillaLimit) <
                 Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
@@ -742,15 +747,15 @@ public class CrazyManager {
      * @return The level the enchantment has.
      */
     public int getLevel(ItemStack item, CEnchantments enchant) {
-        return enchantmentBookSettings.getLevel(item, enchant.getEnchantment());
+        return this.enchantmentBookSettings.getLevel(item, enchant.getEnchantment());
     }
 
     public int randomLevel(CEnchantment enchantment, Category category) {
         int enchantmentMax = enchantment.getMaxLevel(); // Max set by the enchantment.
-        int randomLevel = 1 + random.nextInt(enchantmentMax);
+        int randomLevel = 1 + new Random().nextInt(enchantmentMax);
 
         if (category.useMaxLevel()) {
-            if (randomLevel > category.getMaxLevel()) randomLevel = 1 + random.nextInt(category.getMaxLevel());
+            if (randomLevel > category.getMaxLevel()) randomLevel = 1 + new Random().nextInt(category.getMaxLevel());
 
             if (randomLevel < category.getMinLevel()) randomLevel = category.getMinLevel();
 
@@ -764,28 +769,28 @@ public class CrazyManager {
      * @return The head multiplier map for decapitation and headless.
      */
     public Map<Material, Double> getDecapitationHeadMap() {
-        return headMap;
+        return this.headMap;
     }
 
     /**
      * @return The block list for blast.
      */
     public List<Material> getBlastBlockList() {
-        return blockList;
+        return this.blockList;
     }
 
     /**
      * @return If the blast enchantment drops blocks.
      */
     public boolean isDropBlocksBlast() {
-        return dropBlocksBlast;
+        return this.dropBlocksBlast;
     }
 
     /**
      * @return If the vein-miner enchantment drops blocks.
      */
     public boolean isDropBlocksVeinMiner() {
-        return dropBlocksVeinMiner;
+        return this.dropBlocksVeinMiner;
     }
 
     /**
@@ -806,7 +811,7 @@ public class CrazyManager {
      * @return The max rage stack level.
      */
     public int getRageMaxLevel() {
-        return rageMaxLevel;
+        return this.rageMaxLevel;
     }
 
     /**
@@ -814,29 +819,29 @@ public class CrazyManager {
      * @return True if they do and false if not.
      */
     public boolean isBreakRageOnDamageOn() {
-        return breakRageOnDamage;
+        return this.breakRageOnDamage;
     }
 
     /**
      * @return True if a boss bar will be used to display rage notifications.
      */
     public boolean useRageBossBar() {
-        return useRageBossBar;
+        return this.useRageBossBar;
     }
 
     /**
      * Check if players can enchant a stack of items with an enchantment book.
      */
     public boolean enchantStackedItems() {
-        return enchantStackedItems;
+        return this.enchantStackedItems;
     }
 
     private void addCEPlayer(CEPlayer player) {
-        players.add(player);
+        this.players.add(player);
     }
 
     private void removeCEPlayer(CEPlayer player) {
-        players.remove(player);
+        this.players.remove(player);
     }
 
     private List<ItemStack> getInfoGKit(List<String> itemStrings) {
@@ -852,7 +857,7 @@ public class CrazyManager {
 
             for (String option : itemString.split(", ")) {
                 try {
-                    Enchantment enchantment = methods.getEnchantment(option.split(":")[0]);
+                    Enchantment enchantment = this.methods.getEnchantment(option.split(":")[0]);
                     CEnchantment cEnchantment = getEnchantmentFromName(option.split(":")[0]);
                     String level = option.split(":")[1];
 
@@ -874,7 +879,7 @@ public class CrazyManager {
             NBTItem nbtItem = new NBTItem(itemBuilder.build());
             // This is done so items do not stack if there are multiple of the same.
 
-            nbtItem.setInteger("random-number", random.nextInt(Integer.MAX_VALUE));
+            nbtItem.setInteger("random-number", new Random().nextInt(Integer.MAX_VALUE));
             items.add(nbtItem.getItem());
         }
 
@@ -903,6 +908,6 @@ public class CrazyManager {
     }
 
     public int pickLevel(int min, int max) {
-        return min + random.nextInt((max + 1) - min);
+        return min + new Random().nextInt((max + 1) - min);
     }
 }

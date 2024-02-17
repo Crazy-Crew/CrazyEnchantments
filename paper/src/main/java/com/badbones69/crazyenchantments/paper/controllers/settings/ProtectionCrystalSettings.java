@@ -38,12 +38,13 @@ public class ProtectionCrystalSettings {
     private ItemBuilder crystal;
 
     public void loadProtectionCrystal() {
-        FileConfiguration config = FileManager.Files.CONFIG.getFile();
-        crystal = new ItemBuilder()
-                .setMaterial(Objects.requireNonNull(config.getString("Settings.ProtectionCrystal.Item")))
-                .setName(config.getString("Settings.ProtectionCrystal.Name"))
+        FileConfiguration config = Files.CONFIG.getFile();
+
+        this.crystal = new ItemBuilder()
+                .setMaterial(config.getString("Settings.ProtectionCrystal.Item", "EMERALD"))
+                .setName(config.getString("Settings.ProtectionCrystal.Name", "Error getting name."))
                 .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
-                .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing"));
+                .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false));
     }
 
     public ItemStack getCrystals() {
@@ -108,9 +109,9 @@ public class ProtectionCrystalSettings {
     public boolean isProtectionSuccessful(Player player) {
         if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) return true;
 
-        FileConfiguration config = FileManager.Files.CONFIG.getFile();
+        FileConfiguration config = Files.CONFIG.getFile();
 
-        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle")) return methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
+        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle", false)) return this.methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
 
         return true;
     }

@@ -31,16 +31,21 @@ public enum Dust {
     private final int max;
     private final int min;
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.getPlugin();
+    @NotNull
+    private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-    private final Methods methods = plugin.getStarter().getMethods();
+    @NotNull
+    private final Methods methods = this.plugin.getStarter().getMethods();
     
     Dust(String name, String configName, List<String> knowNames) {
         this.name = name;
         this.knownNames = knowNames;
         this.configName = configName;
-        this.max = Files.CONFIG.getFile().getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
-        this.min = Files.CONFIG.getFile().getInt("Settings.Dust." + configName + ".PercentRange.Min", max);
+        
+        FileConfiguration config = Files.CONFIG.getFile();
+        
+        this.max = config.getInt("Settings.Dust." + configName + ".PercentRange.Max", 100);
+        this.min = config.getInt("Settings.Dust." + configName + ".PercentRange.Min", max);
     }
     
     public static void loadDust() {
@@ -50,9 +55,9 @@ public enum Dust {
         for (Dust dust : values()) {
             String path = "Settings.Dust." + dust.getConfigName() + ".";
             Dust.itemBuilderDust.put(dust, new ItemBuilder()
-            .setName(config.getString(path + "Name"))
+            .setName(config.getString(path + "Name", "Error getting name."))
             .setLore(config.getStringList(path + "Lore"))
-            .setMaterial(config.getString(path + "Item")));
+            .setMaterial(config.getString(path + "Item", "GLOWSTONE_DUST")));
         }
     }
     
@@ -66,15 +71,15 @@ public enum Dust {
     }
     
     public String getName() {
-        return name;
+        return this.name;
     }
     
     public List<String> getKnownNames() {
-        return knownNames;
+        return this.knownNames;
     }
     
     public String getConfigName() {
-        return configName;
+        return this.configName;
     }
     
     public ItemStack getDust() {
@@ -82,17 +87,14 @@ public enum Dust {
     }
     
     public ItemStack getDust(int amount) {
-
-        return getDust(methods.percentPick(max, min), amount);
+        return getDust(this.methods.percentPick(this.max, this.min), amount);
     }
     
     public ItemStack getDust(int percent, int amount) {
-        ItemStack item = itemBuilderDust.get(this)
-                .addLorePlaceholder("%Percent%", String.valueOf(percent))
-                .setAmount(amount).build();
+        ItemStack item = itemBuilderDust.get(this).addLorePlaceholder("%Percent%", String.valueOf(percent)).setAmount(amount).build();
 
         // PDC Start
-                Gson gson = new Gson();
+        Gson gson = new Gson();
 
         ItemMeta meta = item.getItemMeta();
         meta.getPersistentDataContainer().set(DataKeys.dust.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(new DustData(getConfigName(), this.min, this.max, percent)));
