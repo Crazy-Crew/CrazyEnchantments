@@ -20,6 +20,7 @@ import com.badbones69.crazyenchantments.paper.enchantments.ToolEnchantments;
 import com.badbones69.crazyenchantments.paper.listeners.AuraListener;
 import com.badbones69.crazyenchantments.paper.listeners.DustControlListener;
 import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
+import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
@@ -28,14 +29,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class CrazyEnchantments extends JavaPlugin implements Listener {
+public class CrazyEnchantments extends JavaPlugin {
 
     public static CrazyEnchantments get() {
         return JavaPlugin.getPlugin(CrazyEnchantments.class);
@@ -87,7 +84,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
         if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
-        this.pluginManager.registerEvents(this, this);
         this.pluginManager.registerEvents(this.blackSmith = new BlackSmith(), this);
         this.pluginManager.registerEvents(this.tinkerer = new Tinkerer(), this);
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
@@ -105,6 +101,7 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
         // Load what we need to properly enable the plugin.
         this.starter.getCrazyManager().load();
 
+        this.pluginManager.registerEvents(new MiscListener(), this);
         this.pluginManager.registerEvents(new DustControlListener(), this);
 
         this.pluginManager.registerEvents(new PickaxeEnchantments(), this);
@@ -156,18 +153,6 @@ public class CrazyEnchantments extends JavaPlugin implements Listener {
 
             if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
         }
-    }
-
-    //todo() move this
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        this.starter.getCrazyManager().loadCEPlayer(event.getPlayer());
-    }
-
-    //todo() move this
-    @EventHandler(ignoreCancelled = true)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        this.starter.getCrazyManager().unloadCEPlayer(event.getPlayer());
     }
 
     public Starter getStarter() {
