@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api;
+package com.badbones69.crazyenchantments.paper.support;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
