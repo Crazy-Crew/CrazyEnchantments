@@ -19,3 +19,14 @@ paper/run
 !paper/run/server.properties
 !paper/run/plugins
 !paper/run/ops.json
+
+dev/.gradle
+dev/build
+
+dev/run
+!dev/run/config
+!dev/run/spigot.yml
+!dev/run/bukkit.yml
+!dev/run/eula.txt
+!dev/run/server.properties
+!dev/run/ops.json

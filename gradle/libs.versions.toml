@@ -27,7 +27,7 @@ cluster_api = { module = "com.ryderbelserion.cluster:api", version.ref = "cluste
 
 nbtapi = { module = "de.tr7zw:item-nbt-api", version = "2.12.2" }
 
-triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-SNAPSHOT" }
+triumph_cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version = "2.0.0-ALPHA-9" }
 
 config_me = { module = "ch.jalu:configme", version = "1.4.1" }
 
