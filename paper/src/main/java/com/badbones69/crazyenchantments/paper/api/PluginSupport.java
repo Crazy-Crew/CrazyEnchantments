@@ -2,11 +2,11 @@ package com.badbones69.crazyenchantments.paper.api;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.support.claims.GriefPreventionSupport;
-import com.badbones69.crazyenchantments.paper.api.support.claims.TownySupport;
-import com.badbones69.crazyenchantments.paper.api.support.factions.FactionsUUIDSupport;
-import com.badbones69.crazyenchantments.paper.api.support.interfaces.claims.ClaimSupport;
-import com.badbones69.crazyenchantments.paper.utilities.WorldGuardUtils;
+import com.badbones69.crazyenchantments.paper.support.claims.GriefPreventionSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.TownySupport;
+import com.badbones69.crazyenchantments.paper.support.factions.FactionsUUIDSupport;
+import com.badbones69.crazyenchantments.paper.support.interfaces.claims.ClaimSupport;
+import com.badbones69.crazyenchantments.paper.api.utils.WorldGuardUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.gmail.nossr50.party.PartyManager;
 import com.google.common.collect.Maps;

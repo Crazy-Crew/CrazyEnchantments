@@ -12,9 +12,9 @@ import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager
 import com.badbones69.crazyenchantments.paper.api.objects.BowEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import org.bukkit.Location;

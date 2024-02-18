@@ -13,11 +13,11 @@ import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManag
 import com.badbones69.crazyenchantments.paper.api.objects.ArmorEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.PotionEffects;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
-import com.badbones69.crazyenchantments.paper.processors.ArmorMoveProcessor;
-import com.badbones69.crazyenchantments.paper.processors.Processor;
+import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorMoveProcessor;
+import com.badbones69.crazyenchantments.paper.tasks.processors.Processor;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;

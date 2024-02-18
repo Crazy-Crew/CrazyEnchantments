@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.paper.api.SkullCreator;
+import com.badbones69.crazyenchantments.paper.support.SkullCreator;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
@@ -14,16 +14,16 @@ import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager
 import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.paper.api.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.paper.api.support.claims.SuperiorSkyBlockSupport;
-import com.badbones69.crazyenchantments.paper.api.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
 import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
-import com.badbones69.crazyenchantments.paper.utilities.BowUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class Starter {
