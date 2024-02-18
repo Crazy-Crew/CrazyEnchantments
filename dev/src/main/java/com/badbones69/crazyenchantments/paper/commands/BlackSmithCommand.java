@@ -12,7 +12,7 @@ public class BlackSmithCommand {
 
     @Command
     public void run(Player player) {
-        BlackSmithMenu inventory = new BlackSmithMenu(player, 54, "&b&lThe Black Smith");
+        BlackSmithMenu inventory = new BlackSmithMenu(player, 27, "&b&lThe Black Smith");
 
         player.openInventory(inventory.build().getInventory());
     }
