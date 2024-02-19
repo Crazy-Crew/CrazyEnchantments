@@ -130,6 +130,9 @@ permissions:
 
   crazyenchantments.crystal:
     default: op
+  
+  crazyenchantments.slotcrystal:
+    default: op
 
   crazyenchantments.scrambler:
     default: op

@@ -53,6 +53,8 @@ public class CETab implements TabCompleter {
             if (hasPermission(sender, "updateenchants")) completions.add("updateEnchants");
             if (hasPermission(sender, "give")) completions.add("give");
             if (hasPermission(sender, "bottle")) completions.add("bottle");
+            if (hasPermission(sender, "slotcrystal")) completions.add("slotcrystal");
+
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         } else if (args.length == 2) { // /ce arg0
@@ -90,7 +92,7 @@ public class CETab implements TabCompleter {
                     completions.add("transmog");
                 }
 
-                case "crystal", "scrambler" -> {
+                case "crystal", "scrambler", "slotcrystal" -> {
                     completions.add("1");
                     completions.add("32");
                     completions.add("64");
@@ -143,7 +145,7 @@ public class CETab implements TabCompleter {
                     completions.add("32");
                     completions.add("64");
                 }
-                case "crystal", "scrambler" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "crystal", "scrambler", "slotcrystal" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 case "give" ->
                     completions.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
             }
