@@ -139,7 +139,7 @@ public class ArmorEnchantments implements Listener {
                 player.removePotionEffect(effect.getKey());
             }
 
-            player.addPotionEffect(new PotionEffect(effect.getKey(), -1, effect.getValue()));
+            player.addPotionEffect(new PotionEffect(effect.getKey(), -1, effect.getValue() - 1));
         }
     }
 
