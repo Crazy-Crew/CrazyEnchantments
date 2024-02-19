@@ -558,6 +558,45 @@ public class CECommand implements CommandExecutor {
                 return true;
             }
 
+            case "slotcrystal", "sc" -> { // /ce slotcrystal [amount] [player]
+                if (hasPermission(sender, "slotcrystal")) {
+                    int amount = 1;
+                    Player player;
+
+                    if (args.length <= 2 && !isPlayer) {
+                        sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
+                        return true;
+                    }
+
+                    if (args.length >= 2) {
+                        if (!checkInt(sender, args[1])) return true;
+
+                        amount = Integer.parseInt(args[1]);
+                    }
+
+                    if (args.length >= 3) {
+                        if (!this.methods.isPlayerOnline(args[2], sender)) return true;
+                        player = this.methods.getPlayer(args[2]);
+                    } else {
+                        player = (Player) sender;
+                    }
+
+                    if (this.methods.isInventoryFull(player)) return true;
+
+                    ItemStack item = starter.getSlotCrystalListener().getSlotCrystal();
+                    item.setAmount(amount);
+
+                    this.methods.addItemToInventory(player, item);
+                    HashMap<String, String> placeholders = new HashMap<>();
+                    placeholders.put("%Amount%", String.valueOf(amount));
+                    placeholders.put("%Player%", player.getName());
+                    sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
+                    player.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
+                }
+
+                return true;
+            }
+
             case "dust" -> { // /ce dust <Success/Destroy/Mystery> [Amount] [Player] [Percent]
                 if (hasPermission(sender, "dust")) {
                     if (args.length >= 2) {
