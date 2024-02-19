@@ -231,7 +231,7 @@ public class SwordEnchantments implements Listener {
             if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) >= 20) damager.setSaturation(20);
         }
 
-        if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VIPER, damager, item, enchantments)) {
+        if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VAMPIRE, damager, item, enchantments)) {
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
