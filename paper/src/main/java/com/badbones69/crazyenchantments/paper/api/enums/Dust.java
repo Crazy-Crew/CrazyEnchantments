@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public enum Dust {
     
@@ -92,6 +93,8 @@ public enum Dust {
     
     public ItemStack getDust(int percent, int amount) {
         ItemStack item = itemBuilderDust.get(this).addLorePlaceholder("%Percent%", String.valueOf(percent)).setAmount(amount).build();
+
+        if (Objects.equals(getName(), FAILED_DUST.getName())) return item;
 
         // PDC Start
         Gson gson = new Gson();
