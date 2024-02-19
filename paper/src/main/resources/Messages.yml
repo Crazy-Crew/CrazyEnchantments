@@ -39,6 +39,8 @@ Messages:
   Give-Protection-Crystal: '&7You have given %player% %amount% Protection Crystals.'
   Get-Protection-Crystal: '&7You have gained %amount% Protection Crystals.'
   Give-Scrambler-Crystal: '&7You have given %player% %amount% &e&lGrand Scramblers&7.'
+  Get-Slot-Crystal: '&7You have gained %amount% Slot Crystals.'
+  Give-Slot-Crystal: '&7You have given %player% %amount% &e&lSlot Crystals&7.'
   Get-Scrambler-Crystal: '&7You have gained %amount% &e&lGrand Scramblers&7.'
   Break-Enchantment-Shop-Sign: '&cYou have removed a Crazy Enchantment Shop Sign.'
   Send-Enchantment-Book: '&7You have sent &6%player% &7a Crazy Enchantment Book.'

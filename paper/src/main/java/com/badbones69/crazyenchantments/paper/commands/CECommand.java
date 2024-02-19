@@ -590,8 +590,8 @@ public class CECommand implements CommandExecutor {
                     HashMap<String, String> placeholders = new HashMap<>();
                     placeholders.put("%Amount%", String.valueOf(amount));
                     placeholders.put("%Player%", player.getName());
-                    sender.sendMessage(Messages.GIVE_PROTECTION_CRYSTAL.getMessage(placeholders));
-                    player.sendMessage(Messages.GET_PROTECTION_CRYSTAL.getMessage(placeholders));
+                    sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
+                    player.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
                 }
 
                 return true;

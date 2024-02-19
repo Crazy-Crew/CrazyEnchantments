@@ -53,6 +53,8 @@ public enum Messages {
     GET_PROTECTION_CRYSTAL("Get-Protection-Crystal", "&7You have gained %amount% Protection Crystals."),
     GIVE_SCRAMBLER_CRYSTAL("Give-Scrambler-Crystal", "&7You have given %player% %amount% &e&lGrand Scramblers&7."),
     GET_SCRAMBLER("Get-Scrambler-Crystal", "&7You have gained %amount% &e&lGrand Scramblers&7."),
+    GIVE_SLOT_CRYSTAL("Give-Slot-Crystal", "&7You have given %player% %amount% Slot Crystals."),
+    GET_SLOT_CRYSTAL("Get-Slot-Crystal", "&7You have gained %amount% Slot Crystals."),
     BREAK_ENCHANTMENT_SHOP_SIGN("Break-Enchantment-Shop-Sign", "&cYou have removed a Crazy Enchantment Shop Sign."),
     SEND_ENCHANTMENT_BOOK("Send-Enchantment-Book", "&7You have sent &6%player% &7a Crazy Enchantment Book."),
     NOT_A_GKIT("Not-A-GKit", "&c%kit% is not a GKit."),
