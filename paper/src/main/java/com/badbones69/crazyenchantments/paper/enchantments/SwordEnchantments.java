@@ -170,7 +170,7 @@ public class SwordEnchantments implements Listener {
                 cePlayer.getRageTask().cancel();
 
                 if (cePlayer.getRageMultiplier() <= this.crazyManager.getRageMaxLevel())
-                    cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (this.crazyManager.getLevel(item, CEnchantments.RAGE) * 0.1));
+                    cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (enchantments.get(CEnchantments.RAGE.getEnchantment()) * 0.1));
 
                 int rageUp = cePlayer.getRageLevel() + 1;
 
@@ -216,7 +216,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.LIFESTEAL, damager, item, enchantments)) {
-            int steal = this.crazyManager.getLevel(item, CEnchantments.LIFESTEAL);
+            int steal = enchantments.get(CEnchantments.LIFESTEAL.getEnchantment());
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
@@ -226,9 +226,9 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.NUTRITION, damager, item, enchantments)) {
-            if (damager.getSaturation() + (2 * this.crazyManager.getLevel(item, CEnchantments.NUTRITION)) <= 20) damager.setSaturation(damager.getSaturation() + (2 * this.crazyManager.getLevel(item, CEnchantments.NUTRITION)));
+            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) <= 20) damager.setSaturation(damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())));
 
-            if (damager.getSaturation() + (2 * this.crazyManager.getLevel(item, CEnchantments.NUTRITION)) >= 20) damager.setSaturation(20);
+            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) >= 20) damager.setSaturation(20);
         }
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VIPER, damager, item, enchantments)) {
@@ -241,11 +241,11 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.BLINDNESS, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3 * 20, this.crazyManager.getLevel(item, CEnchantments.BLINDNESS) - 1));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3 * 20, enchantments.get(CEnchantments.BLINDNESS.getEnchantment()) - 1));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.CONFUSION, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 5 + (this.crazyManager.getLevel(item, CEnchantments.CONFUSION)) * 20, 0));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 5 + (enchantments.get(CEnchantments.CONFUSION.getEnchantment())) * 20, 0));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.DOUBLEDAMAGE, damager, item, enchantments)) {
@@ -253,7 +253,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.EXECUTE, damager, item, enchantments)) {
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3 + (this.crazyManager.getLevel(item, CEnchantments.EXECUTE)) * 20, 3));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3 + (enchantments.get(CEnchantments.EXECUTE.getEnchantment())) * 20, 3));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.FASTTURN, damager, item, enchantments)) {
@@ -261,7 +261,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.LIGHTWEIGHT, damager, item, enchantments)) {
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5 * 20, this.crazyManager.getLevel(item, CEnchantments.LIGHTWEIGHT) - 1));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5 * 20, enchantments.get(CEnchantments.LIGHTWEIGHT.getEnchantment()) - 1));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.OBLITERATE, damager, item, enchantments)) {
@@ -284,7 +284,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.SLOWMO, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, this.crazyManager.getLevel(item, CEnchantments.SLOWMO)));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, enchantments.get(CEnchantments.SLOWMO.getEnchantment())));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.SNARE, damager, item, enchantments)) {
@@ -297,7 +297,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.VIPER, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5 * 20, this.crazyManager.getLevel(item, CEnchantments.VIPER)));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5 * 20, enchantments.get(CEnchantments.VIPER.getEnchantment())));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.WITHER, damager, item, enchantments)) {
@@ -343,7 +343,7 @@ public class SwordEnchantments implements Listener {
             Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
 
             if (EnchantUtils.isEventActive(CEnchantments.INQUISITIVE, damager, item, enchantments)) {
-                event.setDroppedExp(event.getDroppedExp() * (this.crazyManager.getLevel(item, CEnchantments.INQUISITIVE) + 1));
+                event.setDroppedExp(event.getDroppedExp() * (enchantments.get(CEnchantments.INQUISITIVE.getEnchantment()) + 1));
             }
 
             Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
