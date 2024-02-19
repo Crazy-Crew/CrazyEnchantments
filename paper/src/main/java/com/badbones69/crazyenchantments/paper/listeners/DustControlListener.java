@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
+import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -189,6 +190,11 @@ public class DustControlListener implements Listener {
             event.setCancelled(true);
         } else if(data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
             event.setCancelled(true);
+
+            if (methods.isInventoryFull(player)) {
+                player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+                return true;
+            }
 
             if (mainHand) {
                 player.getInventory().setItemInMainHand(this.methods.removeItem(item));
