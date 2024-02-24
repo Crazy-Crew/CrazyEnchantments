@@ -170,11 +170,11 @@ public class SwordEnchantments implements Listener {
                 cePlayer.getRageTask().cancel();
 
                 if (cePlayer.getRageMultiplier() <= this.crazyManager.getRageMaxLevel())
-                    cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (enchantments.get(CEnchantments.RAGE.getEnchantment()) * 0.1));
+                    cePlayer.setRageMultiplier(cePlayer.getRageMultiplier() + (enchantments.get(CEnchantments.RAGE.getEnchantment()) * crazyManager.getRageIncrement()));
 
                 int rageUp = cePlayer.getRageLevel() + 1;
 
-                if (cePlayer.getRageMultiplier().intValue() == rageUp) {
+                if (cePlayer.getRageMultiplier().intValue() >= rageUp) {
                     rageInformPlayer(damager, Messages.RAGE_RAGE_UP, Map.of("%Level%", String.valueOf(rageUp)), ((float) rageUp / (float) (this.crazyManager.getRageMaxLevel() + 1)));
                     cePlayer.setRageLevel(rageUp);
                 }

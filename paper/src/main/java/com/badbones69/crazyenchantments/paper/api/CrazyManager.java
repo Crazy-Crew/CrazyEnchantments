@@ -104,6 +104,8 @@ public class CrazyManager {
     private boolean useUnsafeEnchantments;
     private boolean breakRageOnDamage;
     private boolean useRageBossBar;
+
+    private double rageIncrement;
     private boolean enchantStackedItems;
     private boolean maxEnchantmentCheck;
     private boolean checkVanillaLimit;
@@ -183,8 +185,9 @@ public class CrazyManager {
         this.checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
         this.gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled", true);
         this.rageMaxLevel = config.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
-        this.breakRageOnDamage = !config.contains("Settings.EnchantmentOptions.Break-Rage-On-Damage") || config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage");
-        this.useRageBossBar = config.contains("Settings.EnchantmentOptions.Rage-Boss-Bar") && config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar");
+        this.breakRageOnDamage = config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
+        this.useRageBossBar = config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
+        this.rageIncrement = config.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
         this.enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
         setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
         setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
@@ -828,6 +831,10 @@ public class CrazyManager {
      */
     public boolean useRageBossBar() {
         return this.useRageBossBar;
+    }
+
+    public double getRageIncrement() {
+        return this.rageIncrement;
     }
 
     /**
