@@ -239,7 +239,9 @@ public class ScramblerListener implements Listener {
     public void onScramblerClick(PlayerInteractEvent event) {
         ItemStack item = this.methods.getItemInHand(event.getPlayer());
 
-        if (getScramblers().isSimilar(item)) event.setCancelled(true);
+        if (item.isEmpty() || !item.hasItemMeta()) return;
+
+        if (item.getItemMeta().getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey())) event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
