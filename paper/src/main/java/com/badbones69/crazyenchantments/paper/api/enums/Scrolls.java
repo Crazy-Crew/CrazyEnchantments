@@ -63,7 +63,11 @@ public enum Scrolls {
     public List<String> getKnownNames() {
         return this.knownNames;
     }
-    
+
+    /**
+     *
+     * @return The name that is stored on the item, and defines that the item is in fact a Scroll.
+     */
     public String getConfigName() {
         return this.configName;
     }

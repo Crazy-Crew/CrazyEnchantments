@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -143,13 +144,19 @@ public class ScrollListener implements Listener {
     }
 
     private boolean checkScroll(ItemStack scroll, Player player, PlayerInteractEvent event) {
-        if (scroll.isEmpty()) return false;
+        if (scroll.isEmpty() || !scroll.hasItemMeta()) return false;
+        PersistentDataContainer container = scroll.getItemMeta().getPersistentDataContainer();
+        if (!container.has(DataKeys.scroll.getNamespacedKey())) return false;
 
-        if (scroll.isSimilar(Scrolls.BLACK_SCROLL.getScroll())) {
+        String data = container.get(DataKeys.scroll.getNamespacedKey(), PersistentDataType.STRING);
+
+        assert data != null;
+
+        if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
             player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
             return true;
-        } else if (scroll.isSimilar(Scrolls.WHITE_SCROLL.getScroll()) || scroll.isSimilar(Scrolls.TRANSMOG_SCROLL.getScroll())) {
+        } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {
             event.setCancelled(true);
             return true;
         }
