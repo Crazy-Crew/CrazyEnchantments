@@ -10,4 +10,3 @@ pluginManagement {
 rootProject.name = "CrazyEnchantments"
 
 include("paper")
-include("dev")
