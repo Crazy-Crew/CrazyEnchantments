@@ -1,17 +1,18 @@
+build
 .gradle
 .idea
-
-build
-
-buildSrc/.gradle
-buildSrc/build
-
 jars
 
-paper/.gradle
+common/build
 paper/build
+api/build
+
+common/.gradle
+api/.gradle
+paper/.gradle
 
 paper/run
+
 !paper/run/config
 !paper/run/spigot.yml
 !paper/run/bukkit.yml
@@ -19,14 +20,3 @@ paper/run
 !paper/run/server.properties
 !paper/run/plugins
 !paper/run/ops.json
-
-dev/.gradle
-dev/build
-
-dev/run
-!dev/run/config
-!dev/run/spigot.yml
-!dev/run/bukkit.yml
-!dev/run/eula.txt
-!dev/run/server.properties
-!dev/run/ops.json

@@ -1,6 +1,9 @@
-import org.gradle.kotlin.dsl.support.uppercaseFirstChar
+import gradle.kotlin.dsl.accessors._8291d1211fdf2e346e0abe66afb65704.idea
+import io.papermc.hangarpublishplugin.model.Platforms
 
 plugins {
+    id("io.papermc.hangar-publish-plugin")
+
     id("com.github.johnrengelman.shadow")
 
     id("com.modrinth.minotaur")
@@ -8,6 +11,19 @@ plugins {
     `java-library`
 
     `maven-publish`
+
+    idea
+}
+
+base {
+    archivesName.set(rootProject.name)
+}
+
+idea {
+    module {
+        isDownloadJavadoc = true
+        isDownloadSources = true
+    }
 }
 
 repositories {
@@ -40,25 +56,53 @@ tasks {
         exclude("META-INF/**")
     }
 
-    val directory = File("$rootDir/jars")
-    val mcVersion = rootProject.properties["minecraftVersion"] as String
+    val directory = File("$rootDir/jars/${project.name.lowercase()}")
+    val mcVersion = providers.gradleProperty("mcVersion").get()
+
+    val isBeta: Boolean = providers.gradleProperty("isBeta").get().toBoolean()
+    val type = if (isBeta) "Beta" else "Release"
+
+    // Publish to hangar.papermc.io.
+    hangarPublish {
+        publications.register("plugin") {
+            version.set("${project.version}")
+
+            id.set(rootProject.name)
+
+            channel.set(type)
+
+            changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
+
+            apiKey.set(System.getenv("hangar_key"))
+
+            platforms {
+                register(Platforms.PAPER) {
+                    jar.set(file("$directory/${rootProject.name}-${project.version}.jar"))
+
+                    platformVersions.set(listOf(mcVersion))
+                }
+            }
+        }
+    }
 
     modrinth {
+        versionType.set(type.lowercase())
+
         autoAddDependsOn.set(false)
 
         token.set(System.getenv("modrinth_token"))
 
         projectId.set(rootProject.name.lowercase())
 
+        changelog.set(rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8))
+
         versionName.set("${rootProject.name} ${project.version}")
 
         versionNumber.set("${project.version}")
 
-        uploadFile.set("$directory/${rootProject.name}-${project.name.uppercaseFirstChar()}-${project.version}.jar")
+        uploadFile.set("$directory/${rootProject.name}-${project.version}.jar")
 
         gameVersions.add(mcVersion)
-
-        changelog.set(rootProject.file("CHANGELOG.md").readText())
     }
 }
 

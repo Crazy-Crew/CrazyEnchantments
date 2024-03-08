@@ -5,7 +5,7 @@ plugins {
 dependencies {
     implementation(libs.paperweight)
 
-    implementation(libs.shadowjar)
+    implementation(libs.shadow)
 
     implementation(libs.runpaper)
 

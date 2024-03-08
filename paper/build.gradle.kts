@@ -2,8 +2,6 @@ plugins {
     id("paper-plugin")
 }
 
-val mcVersion = rootProject.properties["minecraftVersion"] as String
-
 dependencies {
     implementation(libs.metrics)
 
@@ -46,8 +44,6 @@ dependencies {
 
     compileOnly(fileTree("libs").include("*.jar"))
 
-    paperweightDevelopmentBundle("io.papermc.paper:dev-bundle:$mcVersion-R0.1-SNAPSHOT")
-
 }
 
 val component: SoftwareComponent = components["java"]
@@ -77,10 +73,6 @@ tasks {
     }
 
     shadowJar {
-        archiveClassifier.set("")
-
-        exclude("META-INF/**")
-
         listOf(
             "de.tr7zw.changeme.nbtapi",
             "org.bstats"

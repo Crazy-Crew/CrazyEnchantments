@@ -14,16 +14,18 @@ tasks {
             jarsDir.mkdirs()
         }
 
-        subprojects.forEach { project ->
+        subprojects.filter { it.name == "paper" || it.name == "fabric" }.forEach { project ->
             dependsOn(":${project.name}:build")
 
             doLast {
                 runCatching {
-                    if (project.name != "api") {
-                        copy {
-                            from(project.layout.buildDirectory.file("libs/${rootProject.name}-${project.name.uppercaseFirstChar()}-${project.version}.jar"))
-                            into(jarsDir)
-                        }
+                    val file = File("$jarsDir/${project.name.uppercaseFirstChar().lowercase()}")
+
+                    file.mkdirs()
+
+                    copy {
+                        from(project.layout.buildDirectory.file("libs/${rootProject.name}-${project.version}.jar"))
+                        into(file)
                     }
                 }.onSuccess {
                     // Delete to save space on jenkins.
