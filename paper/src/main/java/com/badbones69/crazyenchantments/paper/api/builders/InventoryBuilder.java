@@ -1,6 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.builders;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
+import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
+import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -20,16 +22,47 @@ public abstract class InventoryBuilder implements InventoryHolder {
     private int size;
     private int page;
 
+    private EnchantmentType enchantmentType;
+
+    private GKitz kit;
+
     public InventoryBuilder(Player player, int size, String title) {
         this.title = title;
         this.size = size;
 
         this.player = player;
 
-        this.inventory = this.plugin.getServer().createInventory(this, this.size, ColorUtils.color(this.title));
+        this.kit = null;
+
+        this.inventory = this.plugin.getServer().createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
+    }
+
+    public InventoryBuilder(Player player, int size, String title, GKitz kit) {
+        this.title = title;
+        this.size = size;
+
+        this.player = player;
+
+        this.kit = kit;
+
+        this.inventory = this.plugin.getServer().createInventory(this, this.size, ColorUtils.legacyTranslateColourCodes(title));
     }
 
     public abstract InventoryBuilder build();
+
+    public InventoryBuilder setEnchantmentType(EnchantmentType enchantmentType) {
+        this.enchantmentType = enchantmentType;
+
+        return this;
+    }
+
+    public EnchantmentType getEnchantmentType() {
+        return this.enchantmentType;
+    }
+
+    public GKitz getKit() {
+        return this.kit;
+    }
 
     public void size(int size) {
         this.size = size;

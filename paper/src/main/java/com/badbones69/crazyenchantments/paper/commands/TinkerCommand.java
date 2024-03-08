@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import org.bukkit.command.Command;
@@ -30,7 +31,7 @@ public class TinkerCommand implements CommandExecutor {
             return true;
         }
 
-        if (hasPermission(sender)) player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.Tinker.Name")).build().getInventory());
+        if (hasPermission(player)) MenuManager.openTinkererMenu(player);
 
         return true;
     }

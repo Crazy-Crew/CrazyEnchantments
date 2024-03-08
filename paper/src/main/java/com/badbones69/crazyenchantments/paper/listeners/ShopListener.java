@@ -1,17 +1,15 @@
-package com.badbones69.crazyenchantments.paper.gui;
+package com.badbones69.crazyenchantments.paper.listeners;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
-import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.events.BuyBookEvent;
-import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -20,8 +18,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
-import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -51,10 +47,6 @@ public class ShopListener implements Listener {
 
     // Plugin Managers.
     private final ShopManager shopManager = starter.getShopManager();
-
-    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
-
-    private final BlackSmith blackSmith = plugin.getBlackSmith();
 
     // Plugin Listeners.
     private final ScramblerListener scramblerListener = starter.getScramblerListener();
@@ -151,22 +143,25 @@ public class ShopListener implements Listener {
                 switch (option) {
                     case GKITZ -> {
                         if (!methods.hasPermission(player, "gkitz", true)) return;
+
                         if (!crazyManager.isGkitzEnabled()) return;
-                        plugin.getgKitzController().openGUI(player);
+
+                        MenuManager.openKitsMenu(player);
                     }
 
                     case BLACKSMITH -> {
                         if (!methods.hasPermission(player, "blacksmith", true)) return;
-                        blackSmith.openBlackSmith(player);
+
+                        MenuManager.openBlackSmithMenu(player);
                     }
 
                     case TINKER -> {
                         if (!methods.hasPermission(player, "tinker", true)) return;
 
-                        player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.Tinker.Name")).build().getInventory());
+                        MenuManager.openTinkererMenu(player);
                     }
 
-                    case INFO -> infoMenuManager.openInfoMenu(player);
+                    case INFO -> MenuManager.openInfoMenu(player);
                     case PROTECTION_CRYSTAL -> player.getInventory().addItem(protectionCrystalSettings.getCrystals());
                     case SCRAMBLER -> player.getInventory().addItem(scramblerListener.getScramblers());
                     case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());

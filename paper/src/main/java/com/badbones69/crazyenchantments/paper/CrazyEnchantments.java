@@ -1,6 +1,9 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
+import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
+import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
 import com.badbones69.crazyenchantments.paper.commands.CECommand;
@@ -18,15 +21,12 @@ import com.badbones69.crazyenchantments.paper.enchantments.HoeEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.PickaxeEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.SwordEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.ToolEnchantments;
-import com.badbones69.crazyenchantments.paper.gui.BlackSmith;
-import com.badbones69.crazyenchantments.paper.gui.GKitzController;
-import com.badbones69.crazyenchantments.paper.gui.InfoGUIControl;
 import com.badbones69.crazyenchantments.paper.listeners.AuraListener;
 import com.badbones69.crazyenchantments.paper.listeners.DustControlListener;
 import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
 import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
-import com.badbones69.crazyenchantments.paper.gui.ShopListener;
+import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandExecutor;
@@ -50,10 +50,6 @@ public class CrazyEnchantments extends JavaPlugin {
     private FireworkDamageListener fireworkDamageListener;
     private ShopListener shopListener;
     private ArmorEnchantments armorEnchantments;
-
-    // Menus.
-    private BlackSmith blackSmith;
-    private GKitzController gKitzController;
 
     private final BossBarController bossBarController = new BossBarController(this);
 
@@ -87,26 +83,19 @@ public class CrazyEnchantments extends JavaPlugin {
 
         if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
-        this.pluginManager.registerEvents(this.blackSmith = new BlackSmith(), this);
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(this.shopListener = new ShopListener(), this);
 
-        enable();
-    }
-
-    @Override
-    public void onDisable() {
-        disable();
-    }
-
-    private void enable() {
         // Load what we need to properly enable the plugin.
         this.starter.getCrazyManager().load();
 
         this.pluginManager.registerEvents(new MiscListener(), this);
         this.pluginManager.registerEvents(new DustControlListener(), this);
 
+        this.pluginManager.registerEvents(new BlackSmithMenu.BlackSmithListener(), this);
+        this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         this.pluginManager.registerEvents(new TinkererMenu.TinkererListener(), this);
+        this.pluginManager.registerEvents(new BaseMenu.InfoMenuListener(), this);
 
         this.pluginManager.registerEvents(new PickaxeEnchantments(), this);
         this.pluginManager.registerEvents(new SwordEnchantments(), this);
@@ -122,7 +111,6 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(new AuraListener(), this);
 
-        this.pluginManager.registerEvents(new InfoGUIControl(), this);
         this.pluginManager.registerEvents(new LostBookController(), this);
         this.pluginManager.registerEvents(new CommandChecker(), this);
 
@@ -131,7 +119,7 @@ public class CrazyEnchantments extends JavaPlugin {
         if (this.starter.getCrazyManager().isGkitzEnabled()) {
             getLogger().info("G-Kitz support is now enabled.");
 
-            this.pluginManager.registerEvents(this.gKitzController = new GKitzController(), this);
+            this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
 
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
@@ -142,8 +130,10 @@ public class CrazyEnchantments extends JavaPlugin {
         registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
     }
 
-    private void disable() {
+    @Override
+    public void onDisable() {
         this.bossBarController.removeAllBossBars();
+
         if (this.armorEnchantments != null) this.armorEnchantments.stop();
 
         if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
@@ -174,14 +164,6 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public PluginManager getPluginManager() {
         return this.pluginManager;
-    }
-
-    public BlackSmith getBlackSmith() {
-        return this.blackSmith;
-    }
-
-    public GKitzController getgKitzController() {
-        return this.gKitzController;
     }
 
     public BossBarController getBossBarController() {

@@ -11,7 +11,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.managers.*;
-import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.objects.*;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
@@ -89,9 +88,6 @@ public class CrazyManager {
     
     @NotNull
     private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
-
-    @NotNull
-    private final InfoMenuManager infoMenuManager = this.starter.getInfoMenuManager();
 
     // Arrays.
     private final List<GKitz> gkitz = new ArrayList<>();
@@ -173,9 +169,6 @@ public class CrazyManager {
                 } catch (Exception ignored) {}
             });
         }
-
-        // Loads the info menu manager and the enchantment types.
-        this.infoMenuManager.load();
 
         Scrolls.getWhiteScrollProtectionName();
 

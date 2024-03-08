@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -43,7 +44,7 @@ public class Methods {
     private final OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
 
     public EnchantmentType getFromName(String name) {
-        for (EnchantmentType enchantmentType : this.starter.getInfoMenuManager().getEnchantmentTypes()) {
+        for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
             if (enchantmentType.getName().equalsIgnoreCase(name)) return enchantmentType;
         }
 

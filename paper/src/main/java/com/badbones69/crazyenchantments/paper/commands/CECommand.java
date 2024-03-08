@@ -6,6 +6,9 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
@@ -14,7 +17,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
@@ -24,7 +26,7 @@ import com.badbones69.crazyenchantments.paper.api.MigrateManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
-import com.badbones69.crazyenchantments.paper.gui.ShopListener;
+import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.google.gson.Gson;
@@ -65,9 +67,6 @@ public class CECommand implements CommandExecutor {
 
     // Plugin Support.
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
-
-    // Plugin Managers.
-    private final InfoMenuManager infoMenuManager = this.starter.getInfoMenuManager();
 
     // Listeners
     private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
@@ -158,6 +157,11 @@ public class CECommand implements CommandExecutor {
                     this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
                     this.fileManager.setup();
                     this.crazyManager.load();
+
+                    BlackSmithManager.load();
+                    KitsManager.load();
+                    MenuManager.load();
+
                     sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
 
                     this.pluginSupport.updateHooks();
@@ -239,7 +243,7 @@ public class CECommand implements CommandExecutor {
 
                     sender.sendMessage(ColorUtils.getPrefix("&cEnchantment Types and amount of items in each:"));
 
-                    this.infoMenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
+                    MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
                 }
 
                 return true;
@@ -286,13 +290,13 @@ public class CECommand implements CommandExecutor {
                             return true;
                         }
 
-                        this.infoMenuManager.openInfoMenu((Player) sender);
+                        MenuManager.openInfoMenu((Player) sender);
                     } else {
                         EnchantmentType enchantmentType = methods.getFromName(args[1]);
 
                         if (enchantmentType != null) {
                             assert sender instanceof Player;
-                            this.infoMenuManager.openInfoMenu((Player) sender, enchantmentType);
+                            MenuManager.openInfoMenu((Player) sender, enchantmentType);
                             return true;
                         }
 

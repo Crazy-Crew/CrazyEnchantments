@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.managers.BlackSmithManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -19,7 +19,6 @@ public class BlackSmithResult {
         resultItem = mainItem.clone();
 
         CrazyEnchantments plugin = CrazyEnchantments.get();
-        BlackSmithManager blackSmithManager = plugin.getStarter().getBlackSmithManager();
 
         CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 
@@ -36,7 +35,7 @@ public class BlackSmithResult {
             // Makes sure level doesn't go passed max.
             mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
                 this.resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
-                this.cost += blackSmithManager.getBookUpgrade();
+                this.cost += BlackSmithManager.getBookUpgrade();
             }
         } else {
             if (mainItem.getType() == subItem.getType()) {
@@ -54,10 +53,10 @@ public class BlackSmithResult {
                     if (enchantment.canEnchantItem(subItem) && subCE.hasVanillaEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setVanillaEnchantment(enchantment, level + 1);
-                            this.cost += blackSmithManager.getLevelUp();
+                            this.cost += BlackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
                             mainCE.setVanillaEnchantment(enchantment, subLevel);
-                            this.cost += blackSmithManager.getLevelUp();
+                            this.cost += BlackSmithManager.getLevelUp();
                         }
                     }
                 }
@@ -71,10 +70,10 @@ public class BlackSmithResult {
                     if (enchantment.canEnchantItem(subItem) && subCE.hasCEnchantment(enchantment)) {
                         if (level == subLevel && level < enchantment.getMaxLevel()) {
                             mainCE.setCEnchantment(enchantment, level + 1);
-                            this.cost += blackSmithManager.getLevelUp();
+                            this.cost += BlackSmithManager.getLevelUp();
                         } else if (level < subLevel) {
                             mainCE.setCEnchantment(enchantment, subLevel);
-                            this.cost += blackSmithManager.getLevelUp();
+                            this.cost += BlackSmithManager.getLevelUp();
                         }
                     }
                 }
@@ -85,7 +84,7 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem)) {
                         mainCE.setVanillaEnchantment(enchantment, entry.getValue());
-                        this.cost += blackSmithManager.getAddEnchantment();
+                        this.cost += BlackSmithManager.getAddEnchantment();
                     }
                 }
 
@@ -94,7 +93,7 @@ public class BlackSmithResult {
 
                     if (enchantment.canEnchantItem(subItem) && crazyManager.canAddEnchantment(player, mainItem) && crazyManager.canAddEnchantment(player, subItem)) {
                         mainCE.setCEnchantment(enchantment, entry.getValue());
-                        this.cost += blackSmithManager.getAddEnchantment();
+                        this.cost += BlackSmithManager.getAddEnchantment();
                     }
                 }
 

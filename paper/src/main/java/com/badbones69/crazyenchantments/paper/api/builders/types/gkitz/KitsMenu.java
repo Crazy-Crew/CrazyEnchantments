@@ -1,14 +1,15 @@
-package com.badbones69.crazyenchantments.paper.gui;
+package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
-import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
+import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -19,51 +20,45 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO() redo gkitz gui. Replace instances of nbt items as they just aren't needed.
-public class GKitzController implements Listener {
+public class KitsMenu extends InventoryBuilder {
 
-    @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    public KitsMenu(Player player, int size, String title) {
+        super(player, size, title);
+    }
 
-    @NotNull
     private final Starter starter = this.plugin.getStarter();
 
-    @NotNull
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    // Plugin Managers.
-    @NotNull
-    private final InfoMenuManager infoMenuManager = this.starter.getInfoMenuManager();
+    @Override
+    public InventoryBuilder build() {
+        FileConfiguration configuration = Files.GKITZ.getFile();
 
-    public void openGUI(Player player) {
-        FileConfiguration gkitz = Files.GKITZ.getFile();
-        Inventory inventory = this.plugin.getServer().createInventory(null, gkitz.getInt("Settings.GUI-Size"), ColorUtils.legacyTranslateColourCodes(gkitz.getString("Settings.Inventory-Name")));
-
-        for (String customItemString : gkitz.getStringList("Settings.GUI-Customization")) {
+        for (String value : configuration.getStringList("Settings.GUI-Customization")) {
             int slot = 0;
 
-            for (String option : customItemString.split(", ")) {
+            for (String option : value.split(", ")) {
                 if (option.contains("Slot:")) {
-                    option = option.replace("Slot:", "");
-                    slot = Integer.parseInt(option);
+                    slot = Integer.parseInt(option.replace("Slot:", ""));
+
                     break;
                 }
             }
 
             slot--;
-            inventory.setItem(slot, ItemBuilder.convertString(customItemString).build());
+
+            getInventory().setItem(slot, ItemBuilder.convertString(value).build());
         }
 
-        CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
+        CEPlayer cePlayer = this.crazyManager.getCEPlayer(getPlayer().getUniqueId());
 
         for (GKitz kit : this.crazyManager.getGKitz()) {
             ItemStack displayItem = kit.getDisplayItem().clone();
@@ -82,60 +77,78 @@ public class GKitzController implements Listener {
 
             itemMeta.lore(lore);
             displayItem.setItemMeta(itemMeta);
-            inventory.setItem(kit.getSlot() - 1, displayItem);
+
+            getInventory().setItem(kit.getSlot() - 1, displayItem);
         }
 
-        player.openInventory(inventory);
+        return this;
     }
 
-    @EventHandler(ignoreCancelled = true)
-    public void onInvClick(InventoryClickEvent event) {
-        Inventory inventory = event.getInventory();
-        ItemStack item = event.getCurrentItem();
+    public static class KitsListener implements Listener {
 
-        if (item == null || item.isEmpty()) return;
+        private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
-        Player player = (Player) event.getWhoClicked();
-        CEPlayer cePlayer = this.crazyManager.getCEPlayer(player);
-        NBTItem nbtItem = new NBTItem(item);
+        private final Starter starter = this.plugin.getStarter();
 
-        for (GKitz kit : this.crazyManager.getGKitz()) {
-            if (!event.getView().title().equals(kit.getDisplayItem().displayName())) continue;
+        private final CrazyManager crazyManager = this.starter.getCrazyManager();
+
+        @EventHandler(ignoreCancelled = true)
+        public void onPreviewClick(InventoryClickEvent event) {
+            if (!(event.getInventory().getHolder(false) instanceof KitsPreviewMenu holder)) return;
 
             event.setCancelled(true);
 
-            if (event.getRawSlot() < inventory.getSize() && item.isSimilar(infoMenuManager.getBackRightButton())) openGUI(player);
+            if (event.getClickedInventory() != holder.getInventoryView().getTopInventory()) return;
 
-            return;
+            ItemStack currentItem = event.getCurrentItem();
+
+            if (currentItem == null) return;
+
+            if (!currentItem.isSimilar(KitsManager.getBackRight())) return;
+
+            MenuManager.openKitsMenu(holder.getPlayer());
         }
 
-        if (!event.getView().title().equals(ColorUtils.legacyTranslateColourCodes(Files.GKITZ.getFile().getString("Settings.Inventory-Name")))) return;
+        @EventHandler(ignoreCancelled = true)
+        public void onInventoryClick(InventoryClickEvent event) {
+            if (!(event.getInventory().getHolder(false) instanceof KitsMenu holder)) return;
 
-        event.setCancelled(true);
+            event.setCancelled(true);
 
-        if (event.getRawSlot() >= inventory.getSize() || !nbtItem.hasTag("gkit")) return;
+            Player player = holder.getPlayer();
 
-        GKitz kit = this.crazyManager.getGKitFromName(nbtItem.getString("gkit"));
+            ItemStack itemStack = event.getCurrentItem();
 
-        if (event.getAction() == InventoryAction.PICKUP_HALF) {
-            List<ItemStack> items = kit.getPreviewItems();
-            int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
+            if (itemStack == null || itemStack.isEmpty()) return;
 
-            Inventory previewInventory = this.plugin.getServer().createInventory(null, slots, kit.getDisplayItem().displayName());
+            CEPlayer cePlayer = this.crazyManager.getCEPlayer(player.getUniqueId());
 
-            for (ItemStack itemStack : items) {
-                previewInventory.addItem(itemStack);
+            NBTItem nbtItem = new NBTItem(itemStack);
+
+            if (event.getClickedInventory() != holder.getInventoryView().getTopInventory()) return;
+
+            if (!nbtItem.hasTag("gkit")) return;
+
+            GKitz kit = this.crazyManager.getGKitFromName(nbtItem.getString("gkit"));
+
+            if (event.getAction() == InventoryAction.PICKUP_HALF) {
+                List<ItemStack> items = kit.getPreviewItems();
+                int slots = Math.min(((items.size() / 9) + (items.size() % 9 > 0 ? 1 : 0)) * 9, 54);
+
+                MenuManager.openKitsPreviewMenu(player, slots, kit);
+
+                return;
             }
 
-            previewInventory.setItem(slots - 1, this.infoMenuManager.getBackRightButton());
-            player.openInventory(previewInventory);
-        } else {
             Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};
 
             if (cePlayer.hasGkitPermission(kit)) {
                 if (cePlayer.canUseGKit(kit)) {
                     cePlayer.giveGKit(kit);
                     cePlayer.addCoolDown(kit);
+
+                    player.updateInventory();
+
                     player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
                 } else {
                     player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));

@@ -2,6 +2,9 @@ package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.SkullCreator;
@@ -9,9 +12,7 @@ import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManager;
-import com.badbones69.crazyenchantments.paper.api.managers.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
-import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
 import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
@@ -53,9 +54,6 @@ public class Starter {
     // Plugin Managers.
     private ArmorEnchantmentManager armorEnchantmentManager;
     private BowEnchantmentManager bowEnchantmentManager;
-    private BlackSmithManager blackSmithManager;
-
-    private InfoMenuManager infoMenuManager;
     private WingsManager wingsManager;
     private AllyManager allyManager;
     private ShopManager shopManager;
@@ -75,7 +73,6 @@ public class Starter {
 
         // Plugin Support.
         this.pluginSupport = new PluginSupport();
-
         this.pluginSupport.initializeWorldGuard();
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
@@ -91,7 +88,10 @@ public class Starter {
         this.protectionCrystalSettings = new ProtectionCrystalSettings();
         this.enchantmentBookSettings = new EnchantmentBookSettings();
 
-        this.infoMenuManager = new InfoMenuManager();
+        BlackSmithManager.load();
+        KitsManager.load();
+
+        MenuManager.load();
 
         // Economy Management.
         this.currencyAPI = new CurrencyAPI();
@@ -101,8 +101,6 @@ public class Starter {
         // Plugin Managers.
         this.armorEnchantmentManager = new ArmorEnchantmentManager();
         this.bowEnchantmentManager = new BowEnchantmentManager();
-        this.blackSmithManager = new BlackSmithManager();
-        this.blackSmithManager.load();
         this.wingsManager = new WingsManager();
         this.allyManager = new AllyManager();
 
@@ -135,10 +133,6 @@ public class Starter {
 
     public SkullCreator getSkullCreator() {
         return this.skullCreator;
-    }
-
-    public InfoMenuManager getInfoMenuManager() {
-        return this.infoMenuManager;
     }
 
     // Settings.
@@ -191,10 +185,6 @@ public class Starter {
 
     public BowEnchantmentManager getBowEnchantmentManager() {
         return this.bowEnchantmentManager;
-    }
-
-    public BlackSmithManager getBlackSmithManager() {
-        return this.blackSmithManager;
     }
 
     public WingsManager getWingsManager() {

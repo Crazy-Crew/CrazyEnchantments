@@ -4,6 +4,8 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
@@ -11,6 +13,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
@@ -46,7 +49,11 @@ public class GkitzCommand implements CommandExecutor {
                 // Load it because if they are ever null.
                 if (this.crazyManager.getCEPlayer(player) == null) this.crazyManager.loadCEPlayer(player);
 
-                if (hasPermission(sender, "gkitz")) this.plugin.getgKitzController().openGUI((Player) sender);
+                if (hasPermission(sender, "gkitz")) {
+                    FileConfiguration gkitz = FileManager.Files.GKITZ.getFile();
+
+                    player.openInventory(new KitsMenu(player, gkitz.getInt("Settings.GUI-Size"), gkitz.getString("Settings.Inventory-Name")).build().getInventory());
+                }
 
             } else {
                 if (args[0].equalsIgnoreCase("reset")) { // /gkitz reset <kit> [player]

@@ -5,11 +5,11 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
-import com.badbones69.crazyenchantments.paper.api.managers.guis.InfoMenuManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
@@ -32,7 +32,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,8 +46,6 @@ public class ScrollListener implements Listener {
 
     private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
 
-    // Plugin Managers.
-    private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
     private String suffix;
     private boolean countVanillaEnchantments;
     private boolean useSuffix;
@@ -108,7 +105,7 @@ public class ScrollListener implements Listener {
 
             case "WhiteScroll" -> {
                 if (Scrolls.hasWhiteScrollProtection(item)) return;
-                for (EnchantmentType enchantmentType : infoMenuManager.getEnchantmentTypes()) {
+                for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
                     if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                         event.setCancelled(true);
                         event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));

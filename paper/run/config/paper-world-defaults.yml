@@ -199,6 +199,14 @@ entities:
       underground_water_creature: -1
       water_ambient: -1
       water_creature: -1
+    ticks-per-spawn:
+      ambient: -1
+      axolotls: -1
+      creature: -1
+      monster: -1
+      underground_water_creature: -1
+      water_ambient: -1
+      water_creature: -1
     wandering-trader:
       spawn-chance-failure-increment: 25
       spawn-chance-max: 75
@@ -228,6 +236,8 @@ environment:
       min: 20
     enabled: true
   generate-flat-bedrock: false
+  max-block-ticks: 65536
+  max-fluid-ticks: 65536
   nether-ceiling-void-damage-height: disabled
   optimize-explosions: false
   portal-create-radius: 16
@@ -302,4 +312,5 @@ tick-rates:
       secondarypoisensor: 40
   wet-farmland: 1
 unsupported-settings:
+  disable-world-ticking-when-empty: false
   fix-invulnerable-end-crystal-exploit: true

@@ -17,11 +17,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import java.util.Arrays;
+import java.util.List;
 
 public class BlackSmithMenu extends InventoryBuilder {
 
@@ -48,9 +49,15 @@ public class BlackSmithMenu extends InventoryBuilder {
 
     public static class BlackSmithListener implements Listener {
 
-        private final int mainSlot = 10;
-        private final int subSlot = 13;
-        private final int outputSlot = 16;
+        private final Sound click = Sound.UI_BUTTON_CLICK;
+        private final Sound levelUp = Sound.ENTITY_PLAYER_LEVELUP;
+        private final Sound villagerNo = Sound.ENTITY_VILLAGER_NO;
+
+        private final List<Integer> resultBorder = Arrays.asList(0, 7, 8, 9, 16, 18, 25, 26);
+
+        private final int mainSlot = 11;
+        private final int subSlot = 14;
+        private final int outputSlot = 17;
 
         @NotNull
         private final CrazyEnchantments plugin = CrazyEnchantments.get();
@@ -64,13 +71,11 @@ public class BlackSmithMenu extends InventoryBuilder {
         @NotNull
         private final EnchantmentBookSettings settings = this.starter.getEnchantmentBookSettings();
 
-        private static int[] resultBorder = new int[]{0, 7, 8, 9, 16, 18, 25, 26};
-
         @EventHandler(ignoreCancelled = true)
         public void onInventoryClick(InventoryClickEvent event) {
-            Inventory inventory = event.getInventory();
+            if (!(event.getInventory().getHolder(false) instanceof BlackSmithMenu holder)) return;
 
-            if (!(inventory.getHolder(false) instanceof BlackSmithMenu holder)) return;
+            Inventory inventory = holder.getInventory();
 
             InventoryView view = holder.getInventoryView();
 
@@ -81,130 +86,99 @@ public class BlackSmithMenu extends InventoryBuilder {
             // If item is null, we return.
             if (item == null) return;
 
-            // If item is not 1, return.
-            if (item.getAmount() != 1) return;
-
             Player player = holder.getPlayer();
-
-            if (this.settings.getEnchantments(item).isEmpty() || !this.settings.isEnchantmentBook(item)) return;
-
-            // 10 is the main slot.
-            ItemStack root = inventory.getItem(this.mainSlot);
 
             // If the click is in the player inventory.
             if (event.getClickedInventory() != view.getTopInventory()) {
-                if (root == null) {
-                    event.setCurrentItem(new ItemStack(Material.AIR));
-                    inventory.setItem(this.mainSlot, item);
-                    //todo() play sound.
+                // If item is not 1, return.
+                if (item.getAmount() != 1) return;
 
-                    ItemStack subItem = inventory.getItem(this.subSlot);
+                if (!this.settings.getEnchantments(item).isEmpty() || this.settings.isEnchantmentBook(item)) {
+                    if (inventory.getItem(this.mainSlot) == null) {
+                        event.setCurrentItem(new ItemStack(Material.AIR));
+                        inventory.setItem(this.mainSlot, item); // Moves clicked item to main slot.
+                        playSound(player, this.click);
 
-                    if (subItem != null) {
-                        BlackSmithResult result = new BlackSmithResult(player, inventory.getItem(this.mainSlot), subItem);
-                        setBorder(result, inventory);
+                        if (inventory.getItem(this.subSlot) != null) { // Sub item slot is not empty.
+                            BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(this.mainSlot), inventory.getItem(this.subSlot));
+                            setBorder(resultItem, inventory);
+                        }
+                    } else {
+                        event.setCurrentItem(new ItemStack(Material.AIR));
+
+                        // Sub item slot is not empty.
+                        // Moves sub slot item to clicked items slot.
+                        if (inventory.getItem(subSlot) != null) event.setCurrentItem(inventory.getItem(this.subSlot));
+
+                        inventory.setItem(this.subSlot, item); // Moves clicked item to sub slot.
+                        playSound(player, this.click);
+                        BlackSmithResult resultItem = new BlackSmithResult(player, inventory.getItem(this.mainSlot), inventory.getItem(this.subSlot));
+                        setBorder(resultItem, inventory);
                     }
-
-                    return;
+                }
+            } else {
+                if (event.getRawSlot() == this.mainSlot || event.getRawSlot() == this.subSlot) { // Clicked either the main slot or sub slot.
+                    event.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air.
+                    this.methods.addItemToInventory(player, item);
+                    inventory.setItem(outputSlot, BlackSmithManager.getExitButton());
+                    resultBorder.forEach(slot -> inventory.setItem(slot, BlackSmithManager.getRedGlass()));
+                    playSound(player, this.click);
                 }
 
-                event.setCurrentItem(new ItemStack(Material.AIR));
+                if (event.getRawSlot() == this.outputSlot) {
+                    if (inventory.getItem(this.mainSlot) != null && inventory.getItem(this.subSlot) != null) {
+                        BlackSmithResult result = new BlackSmithResult(player, inventory.getItem(this.mainSlot), inventory.getItem(this.subSlot));
 
-                ItemStack subItem = inventory.getItem(this.subSlot);
+                        if (result.getCost() > 0) {
+                            Currency currency = BlackSmithManager.getCurrency();
 
-                if (subItem != null) {
-                    event.setCurrentItem(subItem);
-                }
+                            if (currency != null && player.getGameMode() != GameMode.CREATIVE) {
+                                CurrencyAPI currencyAPI = this.plugin.getStarter().getCurrencyAPI();
 
-                inventory.setItem(this.subSlot, item);
-                //todo() play sound.
+                                if (currencyAPI.canBuy(player, currency, result.getCost())) {
+                                    currencyAPI.takeCurrency(player, currency, result.getCost());
+                                } else {
+                                    String needed = String.valueOf(result.getCost() - currencyAPI.getCurrency(player, currency));
 
-                BlackSmithResult result = new BlackSmithResult(player, inventory.getItem(this.mainSlot), subItem);
-                setBorder(result, inventory);
-
-                return;
-            }
-
-            //todo() add menu clicks.
-            if (event.getRawSlot() == this.mainSlot || event.getRawSlot() == this.subSlot) {
-                event.setCurrentItem(new ItemStack(Material.AIR));
-                this.methods.addItemToInventory(player, item);
-
-                inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
-
-                for (int slot : resultBorder) {
-                    inventory.setItem(slot, BlackSmithManager.getBlueGlass());
-                }
-
-                //todo() play sound.
-            }
-
-            if (event.getRawSlot() == this.outputSlot) {
-                if (inventory.getItem(this.mainSlot) != null && inventory.getItem(this.subSlot) != null) {
-                    BlackSmithResult result = new BlackSmithResult(player, inventory.getItem(this.mainSlot), inventory.getItem(this.subSlot));
-
-                    if (result.getCost() > 0) {
-                        Currency currency = BlackSmithManager.getCurrency();
-
-                        if (currency != null && player.getGameMode() != GameMode.CREATIVE) {
-                            CurrencyAPI currencyAPI = this.plugin.getStarter().getCurrencyAPI();
-
-                            if (currencyAPI.canBuy(player, currency, result.getCost())) {
-                                currencyAPI.takeCurrency(player, currency, result.getCost());
-                            } else {
-                                String needed = String.valueOf(result.getCost() - currencyAPI.getCurrency(player, currency));
-
-                                this.methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
-                                return;
+                                    this.methods.switchCurrency(player, currency, "%Money_Needed%", "%XP%", needed);
+                                    return;
+                                }
                             }
+
+                            this.methods.addItemToInventory(player, result.getResultItem());
+
+                            inventory.setItem(this.mainSlot, new ItemStack(Material.AIR));
+                            inventory.setItem(this.subSlot, new ItemStack(Material.AIR));
+
+                            playSound(player, this.levelUp);
+
+                            inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
+
+                            for (int slot : resultBorder) {
+                                inventory.setItem(slot, BlackSmithManager.getRedGlass());
+                            }
+
+                            return;
                         }
 
-                        this.methods.addItemToInventory(player, result.getResultItem());
+                        playSound(player, this.villagerNo);
 
-                        inventory.setItem(this.mainSlot, new ItemStack(Material.AIR));
-                        inventory.setItem(this.subSlot, new ItemStack(Material.AIR));
-
-                        //todo() play sound
-
-                        inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
-
-                        for (int slot : resultBorder) {
-                            inventory.setItem(slot, BlackSmithManager.getRedGlass());
-                        }
-                        
                         return;
                     }
 
-                    //todo() play sound
-                    player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
-
-                    return;
+                    playSound(player, this.villagerNo);
                 }
-
-                //todo() play sound
-                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
             }
-        }
-
-        @EventHandler(ignoreCancelled = true)
-        public void onInventoryDrag(InventoryDragEvent event) {
-            Inventory inventory = event.getInventory();
-
-            if (!(inventory.getHolder(false) instanceof BlackSmithMenu)) return;
-
-            event.setCancelled(true);
         }
 
         @EventHandler(ignoreCancelled = true)
         public void onInventoryClose(InventoryCloseEvent event) {
-            Inventory inventory = event.getInventory();
-
-            if (!(inventory.getHolder(false) instanceof BlackSmithMenu holder)) return;
+            if (!(event.getInventory().getHolder(false) instanceof BlackSmithMenu holder)) return;
 
             Player player = holder.getPlayer();
 
-            for (int slot : new int[]{10, 13}) {
-                ItemStack itemStack = inventory.getItem(slot);
+            for (int slot : new int[]{this.mainSlot, this.subSlot}) {
+                ItemStack itemStack = holder.getInventory().getItem(slot);
 
                 if (itemStack != null) {
                     if (itemStack.getType() != Material.AIR) {
@@ -213,7 +187,7 @@ public class BlackSmithMenu extends InventoryBuilder {
                 }
             }
 
-            inventory.clear();
+            holder.getInventory().clear();
         }
 
         private void setBorder(BlackSmithResult item, Inventory inventory) {
@@ -228,14 +202,17 @@ public class BlackSmithMenu extends InventoryBuilder {
                 }
 
                 inventory.setItem(this.outputSlot, this.methods.addLore(result, message));
-                return;
-            }
+            } else {
+                inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
 
-            inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
-
-            for (int slot : resultBorder) {
-                inventory.setItem(slot, BlackSmithManager.getRedGlass());
+                for (int slot : resultBorder) {
+                    inventory.setItem(slot, BlackSmithManager.getRedGlass());
+                }
             }
+        }
+
+        private void playSound(Player player, Sound sound) {
+            player.playSound(player.getLocation(), sound, 1, 1);
         }
     }
 }

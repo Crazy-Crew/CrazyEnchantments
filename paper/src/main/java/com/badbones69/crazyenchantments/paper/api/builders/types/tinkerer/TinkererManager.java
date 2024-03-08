@@ -19,7 +19,6 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -83,12 +82,8 @@ public class TinkererManager {
         }
 
         assert id != null;
-        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.experience.getNamespacedKey(), amount).build();
-    }
 
-    public static boolean inTinker(int slot) {
-        // The last slot in the tinker is 54.
-        return slot < 54;
+        return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.experience.getNamespacedKey(), amount).build();
     }
 
     public static int getTotalXP(ItemStack item, FileConfiguration config) {
