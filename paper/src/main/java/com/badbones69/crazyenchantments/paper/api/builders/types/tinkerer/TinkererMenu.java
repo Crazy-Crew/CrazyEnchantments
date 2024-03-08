@@ -24,6 +24,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class TinkererMenu extends InventoryBuilder {
@@ -58,6 +59,8 @@ public class TinkererMenu extends InventoryBuilder {
         @NotNull
         private final CrazyEnchantments plugin = CrazyEnchantments.get();
 
+        private final Map<Integer, Integer> slots = TinkererManager.getSlots();
+
         @EventHandler
         public void onExperienceUse(PlayerInteractEvent event) {
             if (!(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
@@ -74,9 +77,7 @@ public class TinkererMenu extends InventoryBuilder {
 
         @EventHandler(ignoreCancelled = true)
         public void onInventoryClick(InventoryClickEvent event) {
-            Inventory inventory = event.getInventory();
-
-            if (!(inventory.getHolder() instanceof TinkererMenu holder)) return;
+            if (!(event.getInventory().getHolder() instanceof TinkererMenu holder)) return;
 
             Player player = holder.getPlayer();
 
@@ -91,25 +92,30 @@ public class TinkererMenu extends InventoryBuilder {
                     .setName(this.configuration.getString("Settings.TradeButton"))
                     .setLore(this.configuration.getStringList("Settings.TradeButton-Lore")).build();
 
+            Inventory inventory = holder.getInventory();
+            Inventory topInventory = player.getOpenInventory().getTopInventory();
+            Inventory bottomInventory = player.getOpenInventory().getBottomInventory();
+
             // Recycling things.
             if (Objects.equals(current, button)) {
                 int total = 0;
                 boolean toggle = false;
 
-                for (int slot : TinkererManager.getSlots().keySet()) {
-                    ItemStack reward = holder.getInventory().getItem(TinkererManager.getSlots().get(slot));
+                for (int slot : this.slots.keySet()) {
+                    ItemStack reward = inventory.getItem(this.slots.get(slot));
+
                     if (reward != null) {
                         if (Currency.getCurrency(this.configuration.getString("Settings.Currency")) == Currency.VAULT) {
-                            total = TinkererManager.getTotalXP(holder.getInventory().getItem(slot), this.configuration);
+                            total = TinkererManager.getTotalXP(inventory.getItem(slot), this.configuration);
                         } else {
-                            player.getInventory().addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
+                            bottomInventory.addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                         }
 
                         toggle = true;
                     }
 
-                    event.getInventory().setItem(slot, new ItemStack(Material.AIR));
-                    event.getInventory().setItem(TinkererManager.getSlots().get(slot), new ItemStack(Material.AIR));
+                    inventory.setItem(slot, new ItemStack(Material.AIR));
+                    inventory.setItem(this.slots.get(slot), new ItemStack(Material.AIR));
                 }
 
                 player.closeInventory();
@@ -127,32 +133,23 @@ public class TinkererMenu extends InventoryBuilder {
 
             // Adding/taking items.
             if (this.enchantmentBookSettings.isEnchantmentBook(current)) { // Adding a book.
-
                 CEBook book = this.enchantmentBookSettings.getCEBook(current);
+
                 if (book == null) return;
 
-                if (TinkererManager.inTinker(event.getRawSlot())) { // Clicking in the tinkers.
+                if (event.getClickedInventory() == topInventory) { // Clicking in the tinkers.
                     event.setCurrentItem(new ItemStack(Material.AIR));
-                    player.getInventory().addItem(current);
-                    holder.getInventory().setItem(TinkererManager.getSlots().get(event.getRawSlot()), new ItemStack(Material.AIR));
+                    bottomInventory.addItem(current);
+                    inventory.setItem(this.slots.get(event.getRawSlot()), new ItemStack(Material.AIR));
                 } else { // Clicking in their inventory.
+                    if (isFirstEmpty(event, player, current, topInventory)) return;
 
-                    if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
-                        player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
-                        return;
-                    }
-
-                    if (current.getAmount() > 1) {
-                        player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
-                        return;
-                    }
-
-                    event.setCurrentItem(new ItemStack(Material.AIR));
-                    holder.getInventory().setItem(TinkererManager.getSlots().get(holder.getInventory().firstEmpty()), Dust.MYSTERY_DUST.getDust(TinkererManager.getMaxDustLevelFromBook(book, this.configuration), 1));
-                    holder.getInventory().setItem(holder.getInventory().firstEmpty(), current);
+                    inventory.setItem(this.slots.get(inventory.firstEmpty()), Dust.MYSTERY_DUST.getDust(TinkererManager.getMaxDustLevelFromBook(book, this.configuration), 1));
+                    inventory.setItem(inventory.firstEmpty(), current);
                 }
 
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
+
                 return;
             }
 
@@ -160,54 +157,65 @@ public class TinkererMenu extends InventoryBuilder {
 
             if (totalXP > 0) {
                 // Adding an item.
-                if (TinkererManager.inTinker(event.getRawSlot())) { // Clicking in the tinkers.
-                    if (TinkererManager.getSlots().containsKey(event.getRawSlot())) {
+                if (event.getClickedInventory() == topInventory) { // Clicking in the tinkers.
+                    if (this.slots.containsKey(event.getRawSlot())) {
                         event.setCurrentItem(new ItemStack(Material.AIR));
                         player.getInventory().addItem(current);
-                        holder.getInventory().setItem(TinkererManager.getSlots().get(event.getRawSlot()), new ItemStack(Material.AIR));
+                        inventory.setItem(this.slots.get(event.getRawSlot()), new ItemStack(Material.AIR));
                     }
                 } else {
                     // Clicking in their inventory.
-                    if (player.getOpenInventory().getTopInventory().firstEmpty() == -1) {
-                        player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
-                        return;
-                    }
+                    if (isFirstEmpty(event, player, current, topInventory)) return;
 
-                    if (current.getAmount() > 1) {
-                        player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
-                        return;
-                    }
-
-                    event.setCurrentItem(new ItemStack(Material.AIR));
-                    holder.getInventory().setItem(TinkererManager.getSlots().get(holder.getInventory().firstEmpty()), TinkererManager.getXPBottle(String.valueOf(totalXP), this.configuration));
-                    holder.getInventory().setItem(holder.getInventory().firstEmpty(), current);
-
+                    inventory.setItem(this.slots.get(inventory.firstEmpty()), TinkererManager.getXPBottle(String.valueOf(totalXP), this.configuration));
+                    inventory.setItem(inventory.firstEmpty(), current);
                 }
+
                 player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
             }
         }
 
+        private boolean isFirstEmpty(InventoryClickEvent event, Player player, ItemStack current, Inventory topInventory) {
+            if (topInventory.firstEmpty() == -1) {
+                player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
+
+                return true;
+            }
+
+            if (current.getAmount() > 1) {
+                player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+
+                return true;
+            }
+
+            event.setCurrentItem(new ItemStack(Material.AIR));
+
+            return false;
+        }
+
         @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
         public void onInvClose(final InventoryCloseEvent event) {
-            if (event.getInventory().getHolder() instanceof TinkererMenu holder) {
-                this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
-                    Player player = holder.getPlayer();
+            if (!(event.getInventory().getHolder() instanceof TinkererMenu holder)) return;
 
-                    for (int slot : TinkererManager.getSlots().keySet()) {
-                        ItemStack item = holder.getInventory().getItem(slot);
+            this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+                Player player = holder.getPlayer();
 
-                        if (item == null || item.isEmpty()) continue;
+                Inventory inventory = holder.getInventory();
 
-                        if (player.isDead()) {
-                            player.getWorld().dropItem(player.getLocation(), item);
-                        } else {
-                            player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
-                        }
+                for (int slot : this.slots.keySet()) {
+                    ItemStack item = inventory.getItem(slot);
 
-                        holder.getInventory().clear();
+                    if (item == null || item.isEmpty()) continue;
+
+                    if (player.isDead()) {
+                        player.getWorld().dropItem(player.getLocation(), item);
+                    } else {
+                        player.getInventory().addItem(item).values().forEach(item2 -> player.getWorld().dropItem(player.getLocation(), item2));
                     }
-                }, 0);
-            }
+
+                    holder.getInventory().clear();
+                }
+            }, 0);
         }
     }
 }
