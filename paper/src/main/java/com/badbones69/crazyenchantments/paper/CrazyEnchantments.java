@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
 import com.badbones69.crazyenchantments.paper.commands.CECommand;
 import com.badbones69.crazyenchantments.paper.commands.CETab;
@@ -104,6 +105,8 @@ public class CrazyEnchantments extends JavaPlugin {
 
         this.pluginManager.registerEvents(new MiscListener(), this);
         this.pluginManager.registerEvents(new DustControlListener(), this);
+
+        this.pluginManager.registerEvents(new TinkererMenu.TinkererListener(), this);
 
         this.pluginManager.registerEvents(new PickaxeEnchantments(), this);
         this.pluginManager.registerEvents(new SwordEnchantments(), this);
