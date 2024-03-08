@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.listeners;
+package com.badbones69.crazyenchantments.paper.gui;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
@@ -15,11 +15,13 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.badbones69.crazyenchantments.paper.controllers.BlackSmith;
-import com.badbones69.crazyenchantments.paper.controllers.Tinkerer;
+import com.badbones69.crazyenchantments.paper.gui.BlackSmith;
+import com.badbones69.crazyenchantments.paper.gui.Tinkerer;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
+import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

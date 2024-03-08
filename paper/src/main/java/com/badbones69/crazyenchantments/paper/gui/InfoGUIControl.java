@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.controllers;
+package com.badbones69.crazyenchantments.paper.gui;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
