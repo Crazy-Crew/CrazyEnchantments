@@ -20,7 +20,6 @@ import com.badbones69.crazyenchantments.paper.enchantments.ToolEnchantments;
 import com.badbones69.crazyenchantments.paper.gui.BlackSmith;
 import com.badbones69.crazyenchantments.paper.gui.GKitzController;
 import com.badbones69.crazyenchantments.paper.gui.InfoGUIControl;
-import com.badbones69.crazyenchantments.paper.gui.Tinkerer;
 import com.badbones69.crazyenchantments.paper.listeners.AuraListener;
 import com.badbones69.crazyenchantments.paper.listeners.DustControlListener;
 import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
@@ -52,7 +51,6 @@ public class CrazyEnchantments extends JavaPlugin {
     private ArmorEnchantments armorEnchantments;
 
     // Menus.
-    private Tinkerer tinkerer;
     private BlackSmith blackSmith;
     private GKitzController gKitzController;
 
@@ -89,7 +87,6 @@ public class CrazyEnchantments extends JavaPlugin {
         if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
         this.pluginManager.registerEvents(this.blackSmith = new BlackSmith(), this);
-        this.pluginManager.registerEvents(this.tinkerer = new Tinkerer(), this);
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(this.shopListener = new ShopListener(), this);
 
@@ -174,10 +171,6 @@ public class CrazyEnchantments extends JavaPlugin {
 
     public PluginManager getPluginManager() {
         return this.pluginManager;
-    }
-
-    public Tinkerer getTinkerer() {
-        return this.tinkerer;
     }
 
     public BlackSmith getBlackSmith() {

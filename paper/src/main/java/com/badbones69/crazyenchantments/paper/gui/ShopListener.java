@@ -4,6 +4,8 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -15,8 +17,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.badbones69.crazyenchantments.paper.gui.BlackSmith;
-import com.badbones69.crazyenchantments.paper.gui.Tinkerer;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
@@ -53,8 +53,6 @@ public class ShopListener implements Listener {
     private final ShopManager shopManager = starter.getShopManager();
 
     private final InfoMenuManager infoMenuManager = starter.getInfoMenuManager();
-
-    private final Tinkerer tinkerer = plugin.getTinkerer();
 
     private final BlackSmith blackSmith = plugin.getBlackSmith();
 
@@ -164,7 +162,8 @@ public class ShopListener implements Listener {
 
                     case TINKER -> {
                         if (!methods.hasPermission(player, "tinker", true)) return;
-                        tinkerer.openTinker(player);
+
+                        player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.Tinker.Name")).build().getInventory());
                     }
 
                     case INFO -> infoMenuManager.openInfoMenu(player);

@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
@@ -41,7 +42,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -422,7 +422,7 @@ public class CECommand implements CommandExecutor {
                 if (!checkInt(sender, args[2])) return true;
 
                 Player target = this.methods.getPlayer(args[1]);
-                ItemStack item = this.plugin.getTinkerer().getXPBottle(args[2], Files.TINKER.getFile());
+                ItemStack item = TinkererManager.getXPBottle(args[2], Files.TINKER.getFile());
                 int amount = args.length == 4 && NumberUtils.isInt(args[3]) ? Integer.parseInt(args[3]) : 1;
                 item.setAmount(amount);
 

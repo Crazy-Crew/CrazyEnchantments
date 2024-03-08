@@ -3,6 +3,8 @@ package com.badbones69.crazyenchantments.paper.commands;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,13 +25,12 @@ public class TinkerCommand implements CommandExecutor {
     
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
-
         if (!(sender instanceof Player player)) {
             sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
             return true;
         }
 
-        if (hasPermission(sender)) this.plugin.getTinkerer().openTinker(player);
+        if (hasPermission(sender)) player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.Tinker.Name")).build().getInventory());
 
         return true;
     }
