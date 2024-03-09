@@ -4,12 +4,9 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.MigrateManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
-import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
-import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
@@ -28,7 +25,6 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -45,7 +41,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,8 +52,6 @@ public class CECommand implements CommandExecutor {
 
     private final Starter starter = this.plugin.getStarter();
 
-    private final FileManager fileManager = this.starter.getFileManager();
-
     private final Methods methods = this.starter.getMethods();
 
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
@@ -66,9 +59,6 @@ public class CECommand implements CommandExecutor {
     // Settings.
     private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
-    // Plugin Support.
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     // Listeners
     private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
@@ -90,233 +80,8 @@ public class CECommand implements CommandExecutor {
 
             return true;
         }
+
         switch (args[0].toLowerCase()) {
-            case "updateenchants" -> {
-
-                if (!isPlayer) return true;
-                if (!hasPermission(sender, "updateenchants")) return true;
-
-                Gson gson = new Gson();
-                Player player = (Player) sender;
-                Enchant enchants = new Enchant(null);
-                ArrayList<Component> lore = new ArrayList<>();
-                ItemStack item = player.getInventory().getItemInMainHand();
-                if (!item.hasItemMeta() || item.lore() == null) return true;
-                ItemMeta meta = item.getItemMeta();
-
-                if (meta.getPersistentDataContainer().has(DataKeys.enchantments.getNamespacedKey())) {
-                    enchants = gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
-                }
-
-                for (Component line : meta.lore()) {
-                    String strippedName = ColorUtils.toPlainText(line);
-                    boolean addedLine = false;
-
-                    for (CEnchantment activeEnchant : this.enchantmentBookSettings.getRegisteredEnchantments()) {
-                        if (!strippedName.toLowerCase().contains(activeEnchant.getCustomName().toLowerCase().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")) &&
-                                !strippedName.toLowerCase().contains(activeEnchant.getName().toLowerCase())) continue;
-
-                        if (enchants.hasEnchantment(activeEnchant.getName())) break;
-
-                        enchants.addEnchantment(activeEnchant.getName(), NumberUtils.convertLevelInteger(strippedName.split(" ")[strippedName.split(" ").length - 1]));
-                        lore.add(ColorUtils.legacyTranslateColourCodes(activeEnchant.getCustomName() + " " + NumberUtils.toRoman(enchants.getLevel(activeEnchant.getName()))));
-                        addedLine = true;
-                        break;
-                    }
-                    if (!addedLine) lore.add(line);
-                }
-
-                meta.lore(lore);
-                if (!enchants.isEmpty())
-                    meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(enchants));
-                item.setItemMeta(meta);
-                player.getInventory().setItemInMainHand(item);
-                return true;
-            }
-            case "convert" -> {
-                if (hasPermission(sender, "convert")) {
-                    sender.sendMessage(ColorUtils.color("""
-                            \n&8&m=======================================================
-                            &eTrying to update config files.
-                            &eIf you have any issues, Please contact Discord Support.
-                            &f&nhttps://discord.gg/crazycrew&r
-                            &eMake sure to check console for more information.
-                            &8&m=======================================================
-                            """));
-                    MigrateManager.convert();
-                }
-
-                return true;
-            }
-
-            case "help" -> { // /ce help
-                if (hasPermission(sender, "access")) sender.sendMessage(Messages.HELP.getMessage());
-
-                return true;
-            }
-            case "reload" -> { // /ce reload
-                if (hasPermission(sender, "reload")) {
-                    this.crazyManager.getCEPlayers().forEach(name -> this.crazyManager.backupCEPlayer(name.getPlayer()));
-                    this.fileManager.setup();
-                    this.crazyManager.load();
-
-                    BlackSmithManager.load();
-                    KitsManager.load();
-                    MenuManager.load();
-
-                    sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
-
-                    this.pluginSupport.updateHooks();
-                }
-
-                return true;
-            }
-            case "limit" -> {
-                if (hasPermission(sender, "limit")) {
-                    HashMap<String, String> placeholders = new HashMap<>();
-
-                    placeholders.put("%bypass%", String.valueOf(sender.hasPermission("crazyenchantments.bypass.limit")));
-
-                    assert sender instanceof Player;
-                    Player player = (Player) sender;
-                    ItemStack item = player.getInventory().getItemInMainHand();
-
-                    int limit = this.crazyManager.getPlayerMaxEnchantments(player);
-                    int baseLimit = this.crazyManager.getPlayerBaseEnchantments(player);
-                    int slotModifier = item.isEmpty() ? 0 : this.crazyManager.getEnchantmentLimiter(item);
-
-                    int canAdd = Math.min(baseLimit - slotModifier, limit);
-
-                    placeholders.put("%limit%", String.valueOf(limit));
-                    placeholders.put("%baseLimit%", String.valueOf(baseLimit));
-                    placeholders.put("%vanilla%", String.valueOf(this.crazyManager.checkVanillaLimit()));
-                    placeholders.put("%item%", String.valueOf(item.isEmpty() ? 0 : this.enchantmentBookSettings.getEnchantmentAmount(item, this.crazyManager.checkVanillaLimit())));
-                    placeholders.put("%slotCrystal%", String.valueOf(-slotModifier));
-                    placeholders.put("%space%", String.valueOf(canAdd));
-
-                    sender.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
-                }
-
-                return true;
-            }
-
-            case "debug" -> { // /ce debug
-                if (hasPermission(sender, "debug")) {
-                    List<String> brokenEnchantments = new ArrayList<>();
-                    List<String> brokenEnchantmentTypes = new ArrayList<>();
-
-                    for (CEnchantments enchantment : CEnchantments.values()) {
-                        if (!Files.ENCHANTMENTS.getFile().contains("Enchantments." + enchantment.getName()))
-                            brokenEnchantments.add(enchantment.getName());
-
-                        if (enchantment.getType() == null) brokenEnchantmentTypes.add(enchantment.getName());
-                    }
-
-                    if (brokenEnchantments.isEmpty() && brokenEnchantmentTypes.isEmpty()) {
-                        sender.sendMessage(ColorUtils.getPrefix("&aAll enchantments are loaded."));
-                    } else {
-
-                        if (!brokenEnchantments.isEmpty()) {
-                            int amount = 1;
-                            sender.sendMessage(ColorUtils.getPrefix("&cMissing Enchantments:"));
-                            sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to one of the following reasons:"));
-
-                            for (String broke : brokenEnchantments) {
-                                sender.sendMessage(ColorUtils.color("&c#" + amount + ": &6" + broke));
-                                amount++;
-                            }
-
-                            sender.sendMessage(ColorUtils.color("&7- &cMissing from the Enchantments.yml"));
-                            sender.sendMessage(ColorUtils.color("&7- &c<Enchantment Name>: option was changed"));
-                            sender.sendMessage(ColorUtils.color("&7- &cYaml format has been broken."));
-                        }
-
-                        if (!brokenEnchantmentTypes.isEmpty()) {
-                            int i = 1;
-                            sender.sendMessage(ColorUtils.getPrefix("&cEnchantments with null types:"));
-                            sender.sendMessage(ColorUtils.getPrefix("&7These enchantments are broken due to the enchantment type being null."));
-
-                            for (String broke : brokenEnchantmentTypes) {
-                                sender.sendMessage(ColorUtils.color("&c#" + i + ": &6" + broke));
-                                i++;
-                            }
-                        }
-                    }
-
-                    sender.sendMessage(ColorUtils.getPrefix("&cEnchantment Types and amount of items in each:"));
-
-                    MenuManager.getEnchantmentTypes().forEach(type -> sender.sendMessage(ColorUtils.color("&c" + type.getName() + ": &6" + type.getEnchantableMaterials().size())));
-                }
-
-                return true;
-            }
-
-            case "fix" -> { // /ce fix
-                if (hasPermission(sender, "fix")) {
-                    List<CEnchantments> brokenEnchantments = new ArrayList<>();
-                    FileConfiguration file = Files.ENCHANTMENTS.getFile();
-
-                    for (CEnchantments enchantment : CEnchantments.values()) {
-                        if (!file.contains("Enchantments." + enchantment.getName()))
-                            brokenEnchantments.add(enchantment);
-                    }
-
-                    sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
-
-                    for (CEnchantments enchantment : brokenEnchantments) {
-                        String path = "Enchantments." + enchantment.getName();
-                        file.set(path + ".Enabled", true);
-                        file.set(path + ".Name", enchantment.getName());
-                        file.set(path + ".Color", "&7");
-                        file.set(path + ".BookColor", "&b&l");
-                        file.set(path + ".MaxPower", 1);
-                        file.set(path + ".Enchantment-Type", enchantment.getType().getName());
-                        file.set(path + ".Info.Name", "&e&l" + enchantment.getName() + " &7(&bI&7)");
-                        file.set(path + ".Info.Description", enchantment.getDescription());
-                        List<String> categories = new ArrayList<>();
-                        this.enchantmentBookSettings.getCategories().forEach(category -> categories.add(category.getName()));
-                        file.set(path + ".Categories", categories);
-                        Files.ENCHANTMENTS.saveFile();
-                    }
-                }
-
-                return true;
-            }
-
-            case "info" -> { // /ce info [enchantment]
-                if (hasPermission(sender, "info")) {
-                    if (args.length == 1) {
-
-                        if (!isPlayer) {
-                            sender.sendMessage(Messages.PLAYERS_ONLY.getMessage());
-                            return true;
-                        }
-
-                        MenuManager.openInfoMenu((Player) sender);
-                    } else {
-                        EnchantmentType enchantmentType = methods.getFromName(args[1]);
-
-                        if (enchantmentType != null) {
-                            assert sender instanceof Player;
-                            MenuManager.openInfoMenu((Player) sender, enchantmentType);
-                            return true;
-                        }
-
-                        CEnchantment enchantment = this.crazyManager.getEnchantmentFromName(args[1]);
-
-                        if (enchantment != null) {
-                            sender.sendMessage(enchantment.getInfoName());
-                            enchantment.getInfoDescription().forEach(sender::sendMessage);
-                            return true;
-                        }
-
-                        sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
-                    }
-                }
-
-                return true;
-            }
-
             case "spawn" -> { // /ce spawn <enchantment> [level:#/world:<world>/x:#/y:#/z:#]
                 if (hasPermission(sender, "spawn")) {
                     if (args.length >= 2) {
@@ -411,33 +176,6 @@ public class CECommand implements CommandExecutor {
                     sender.sendMessage(Messages.INVALID_ITEM_STRING.getMessage());
                     return true;
                 }
-
-                this.methods.addItemToInventory(target, item);
-
-                return true;
-            }
-
-            case "bottle" -> { // /ce bottle <Player> <XPAmount> <Amount>
-                if (!hasPermission(sender, "give")) return true;
-
-                if (args.length < 3) {
-                    sender.sendMessage(ColorUtils.getPrefix() + ColorUtils.color("&c/ce bottle <Player> <storedAmount> <Amount>"));
-                    return true;
-                }
-
-                if (!checkInt(sender, args[2])) return true;
-
-                Player target = this.methods.getPlayer(args[1]);
-                ItemStack item = TinkererManager.getXPBottle(args[2], Files.TINKER.getFile());
-                int amount = args.length == 4 && NumberUtils.isInt(args[3]) ? Integer.parseInt(args[3]) : 1;
-                item.setAmount(amount);
-
-                if (target == null) {
-                    sender.sendMessage(Messages.NOT_ONLINE.getMessage());
-                    return true;
-                }
-
-                if (item.isEmpty()) return true;
 
                 this.methods.addItemToInventory(target, item);
 

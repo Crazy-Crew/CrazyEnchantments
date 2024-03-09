@@ -5,12 +5,11 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
-import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
 import com.badbones69.crazyenchantments.paper.commands.CECommand;
 import com.badbones69.crazyenchantments.paper.commands.CETab;
 import com.badbones69.crazyenchantments.paper.commands.GkitzCommand;
 import com.badbones69.crazyenchantments.paper.commands.GkitzTab;
-import com.badbones69.crazyenchantments.paper.commands.TinkerCommand;
+import com.badbones69.crazyenchantments.paper.commands.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.CommandChecker;
 import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
@@ -81,6 +80,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
         if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
+        // Load the new commands.
+        CommandManager.load();
+
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
         this.pluginManager.registerEvents(this.shopListener = new ShopListener(), this);
 
@@ -121,9 +123,6 @@ public class CrazyEnchantments extends JavaPlugin {
         }
 
         registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
-
-        registerCommand(getCommand("tinkerer"), null, new TinkerCommand());
-        registerCommand(getCommand("blacksmith"), null, new BlackSmithCommand());
 
         registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
     }
