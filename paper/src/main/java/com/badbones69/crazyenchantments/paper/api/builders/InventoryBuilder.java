@@ -8,13 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("ALL")
 public abstract class InventoryBuilder implements InventoryHolder {
 
     @NotNull
-    protected final CrazyEnchantments plugin = CrazyEnchantments.get();
+    protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final Inventory inventory;
     private final Player player;

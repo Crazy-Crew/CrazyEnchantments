@@ -7,13 +7,14 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
-import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -22,7 +23,7 @@ import java.util.Map.Entry;
 public class ShopManager {
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();

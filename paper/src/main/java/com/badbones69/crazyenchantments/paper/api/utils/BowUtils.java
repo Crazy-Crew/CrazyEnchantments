@@ -13,9 +13,11 @@ import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +25,7 @@ import java.util.Map;
 public class BowUtils {
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();

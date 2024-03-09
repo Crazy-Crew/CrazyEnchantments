@@ -2,17 +2,21 @@ package com.badbones69.crazyenchantments.paper.api.economy;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class CurrencyAPI {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    @NotNull
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    @NotNull
     private final Starter starter = plugin.getStarter();
 
     /**

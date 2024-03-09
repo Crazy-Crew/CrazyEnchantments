@@ -10,9 +10,11 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class WorldGuardSupport implements WorldGuardVersion {
 
+    @NotNull
     private final WorldGuard instance = WorldGuard.getInstance();
     
     @Override

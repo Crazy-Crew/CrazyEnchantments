@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +61,7 @@ public class BlackSmithMenu extends InventoryBuilder {
         private final int outputSlot = 17;
 
         @NotNull
-        private final CrazyEnchantments plugin = CrazyEnchantments.get();
+        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
         @NotNull
         private final Starter starter = this.plugin.getStarter();

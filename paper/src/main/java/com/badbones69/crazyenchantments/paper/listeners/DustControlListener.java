@@ -7,9 +7,9 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.google.gson.Gson;
@@ -28,18 +28,24 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class DustControlListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    @NotNull
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+    @NotNull
     private final Starter starter = this.plugin.getStarter();
 
+    @NotNull
     private final Methods methods = this.starter.getMethods();
 
+    @NotNull
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     private final Gson gson = new Gson();

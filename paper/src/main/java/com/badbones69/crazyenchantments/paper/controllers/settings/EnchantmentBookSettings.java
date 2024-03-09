@@ -5,7 +5,10 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
-import com.badbones69.crazyenchantments.paper.api.objects.*;
+import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
+import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import com.badbones69.crazyenchantments.paper.api.objects.Category;
+import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
@@ -19,7 +22,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EnchantmentBookSettings {
 

@@ -4,14 +4,14 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,16 +22,18 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Map;
 
 public class AxeEnchantments implements Listener {
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();

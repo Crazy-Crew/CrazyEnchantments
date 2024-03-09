@@ -6,11 +6,11 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.MigrateManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -20,15 +20,15 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
-import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.MigrateManager;
+import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -43,7 +43,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,7 @@ import java.util.List;
 //TODO() Update commands
 public class CECommand implements CommandExecutor {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final Starter starter = this.plugin.getStarter();
 

@@ -1,16 +1,17 @@
 package com.badbones69.crazyenchantments.paper.api;
 
-import java.io.File;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.io.File;
 
 public class MigrateManager {
 
     @NotNull
-    private static final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     public static void convert() {
         double tinkerVersion = 1.1;

@@ -4,19 +4,19 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.objects.BowEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.EnchantedArrow;
-import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -35,6 +35,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ import java.util.Map;
 public class BowEnchantments implements Listener {
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
     private final Starter starter = this.plugin.getStarter();

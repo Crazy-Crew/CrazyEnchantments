@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 public class EnchantmentType {
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
     private final Methods methods = this.plugin.getStarter().getMethods();

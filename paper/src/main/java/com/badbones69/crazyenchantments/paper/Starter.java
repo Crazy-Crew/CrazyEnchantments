@@ -5,9 +5,6 @@ import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
-import com.badbones69.crazyenchantments.paper.support.SkullCreator;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.economy.vault.VaultSupport;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
@@ -15,22 +12,26 @@ import com.badbones69.crazyenchantments.paper.api.managers.ArmorEnchantmentManag
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
 import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.managers.WingsManager;
-import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.paper.support.claims.SuperiorSkyBlockSupport;
-import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
 import com.badbones69.crazyenchantments.paper.controllers.EnchantmentControl;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.listeners.ScramblerListener;
 import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
-import com.badbones69.crazyenchantments.paper.api.utils.BowUtils;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.paper.support.SkullCreator;
+import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.paper.support.claims.SuperiorSkyBlockSupport;
+import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public class Starter {
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private FileManager fileManager;
     private CrazyManager crazyManager;

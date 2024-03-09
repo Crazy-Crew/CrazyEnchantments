@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Map.Entry;
 
 public class BlackSmithResult {
@@ -18,7 +19,7 @@ public class BlackSmithResult {
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
         resultItem = mainItem.clone();
 
-        CrazyEnchantments plugin = CrazyEnchantments.get();
+        CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
         CrazyManager crazyManager = plugin.getStarter().getCrazyManager();
 

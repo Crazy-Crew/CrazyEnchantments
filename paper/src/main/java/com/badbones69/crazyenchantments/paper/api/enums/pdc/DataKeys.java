@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments.paper.api.enums.pdc;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public enum DataKeys {
@@ -22,7 +23,7 @@ public enum DataKeys {
     slot_crystal("Slot_Crystal", PersistentDataType.BOOLEAN);
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final String NamespacedKey;
     private final PersistentDataType type;

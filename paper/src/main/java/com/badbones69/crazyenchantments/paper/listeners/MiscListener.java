@@ -6,10 +6,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class MiscListener implements Listener {
 
-    private final CrazyManager crazyManager = CrazyEnchantments.get().getStarter().getCrazyManager();
+    @NotNull
+    private final CrazyManager crazyManager = JavaPlugin.getPlugin(CrazyEnchantments.class).getStarter().getCrazyManager();
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {

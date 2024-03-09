@@ -4,22 +4,22 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
-import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
-import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
+import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport;
+import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
+import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.damage.DamageSource;
@@ -37,43 +37,47 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class SwordEnchantments implements Listener {
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
     @NotNull
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @NotNull
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
     // Plugin Support.
     @NotNull
-    private final PluginSupport pluginSupport = starter.getPluginSupport();
+    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = starter.getNoCheatPlusSupport();
+    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
 
     @NotNull
-    private final BossBarController bossBarController = plugin.getBossBarController();
+    private final BossBarController bossBarController = this.plugin.getBossBarController();
 
     // Economy Management.
     @NotNull
-    private final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
+    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {

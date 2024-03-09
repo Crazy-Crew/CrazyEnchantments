@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,7 @@ public class KitsMenu extends InventoryBuilder {
 
     public static class KitsListener implements Listener {
 
-        private final CrazyEnchantments plugin = CrazyEnchantments.get();
+        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
         private final Starter starter = this.plugin.getStarter();
 

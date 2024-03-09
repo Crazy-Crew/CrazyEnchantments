@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
-import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
 import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
 import com.badbones69.crazyenchantments.paper.commands.CECommand;
@@ -11,7 +11,9 @@ import com.badbones69.crazyenchantments.paper.commands.CETab;
 import com.badbones69.crazyenchantments.paper.commands.GkitzCommand;
 import com.badbones69.crazyenchantments.paper.commands.GkitzTab;
 import com.badbones69.crazyenchantments.paper.commands.TinkerCommand;
-import com.badbones69.crazyenchantments.paper.controllers.*;
+import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
+import com.badbones69.crazyenchantments.paper.controllers.CommandChecker;
+import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
 import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.ArmorEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.AxeEnchantments;
@@ -37,10 +39,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CrazyEnchantments extends JavaPlugin {
-
-    public static CrazyEnchantments get() {
-        return JavaPlugin.getPlugin(CrazyEnchantments.class);
-    }
 
     private Starter starter;
 

@@ -6,6 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -44,7 +45,7 @@ public enum ShopOption {
     }
 
     @NotNull
-    private final static CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     
     public static void loadShopOptions() {
         FileConfiguration config = Files.CONFIG.getFile();

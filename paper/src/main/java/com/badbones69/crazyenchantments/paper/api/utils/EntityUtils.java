@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
 
 public class EntityUtils {
 

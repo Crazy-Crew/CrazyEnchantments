@@ -13,11 +13,11 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
+import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.WordUtils;
@@ -32,19 +32,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.*;
+import org.bukkit.plugin.java.JavaPlugin;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class ScrollListener implements Listener {
 
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = plugin.getStarter();
+    private final Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = starter.getMethods();
+    private final Methods methods = this.starter.getMethods();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
+    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private String suffix;
     private boolean countVanillaEnchantments;
@@ -54,11 +59,11 @@ public class ScrollListener implements Listener {
 
     public void loadScrollControl() {
         FileConfiguration config = Files.CONFIG.getFile();
-        suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
-        countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments");
-        useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle");
-        blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
-        blackScrollChanceToggle = config.getBoolean("Settings.BlackScroll.Chance-Toggle");
+        this.suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
+        this.countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments");
+        this.useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle");
+        this.blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
+        this.blackScrollChanceToggle = config.getBoolean("Settings.BlackScroll.Chance-Toggle");
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -83,14 +88,14 @@ public class ScrollListener implements Listener {
 
         switch (type.getConfigName()) {
             case "BlackScroll" -> {
-                if (methods.isInventoryFull(player)) return;
+                if (this.methods.isInventoryFull(player)) return;
 
-                List<CEnchantment> enchantments = enchantmentBookSettings.getEnchantmentsOnItem(item);
+                List<CEnchantment> enchantments = this.enchantmentBookSettings.getEnchantmentsOnItem(item);
                 if (!enchantments.isEmpty()) { // Item has enchantments
                     event.setCancelled(true);
-                    player.setItemOnCursor(methods.removeItem(scroll));
+                    player.setItemOnCursor(this.methods.removeItem(scroll));
 
-                    if (blackScrollChanceToggle && !methods.randomPicker(blackScrollChance, 100)) {
+                    if (this.blackScrollChanceToggle && !this.methods.randomPicker(this.blackScrollChance, 100)) {
                         player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
                         return;
                     }
@@ -98,8 +103,8 @@ public class ScrollListener implements Listener {
                     Random random = new Random();
 
                     CEnchantment enchantment = enchantments.get(random.nextInt(enchantments.size()));
-                    player.getInventory().addItem(new CEBook(enchantment, enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
-                    event.setCurrentItem(enchantmentBookSettings.removeEnchantment(item, enchantment));
+                    player.getInventory().addItem(new CEBook(enchantment, this.enchantmentBookSettings.getLevel(item, enchantment), 1).buildBook());
+                    event.setCurrentItem(this.enchantmentBookSettings.removeEnchantment(item, enchantment));
                 }
             }
 
@@ -109,14 +114,14 @@ public class ScrollListener implements Listener {
                     if (enchantmentType.getEnchantableMaterials().contains(item.getType())) {
                         event.setCancelled(true);
                         event.setCurrentItem(Scrolls.addWhiteScrollProtection(item));
-                        player.setItemOnCursor(methods.removeItem(scroll));
+                        player.setItemOnCursor(this.methods.removeItem(scroll));
                         return;
                     }
                 }
             }
 
             case "TransmogScroll" -> {
-                if (!enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
+                if (!this.enchantmentBookSettings.getEnchantments(item).isEmpty()) return;
                 if (item.lore() == null) return;
 
                 ItemStack orderedItem = newOrderNewEnchantments(item.clone());
@@ -125,7 +130,7 @@ public class ScrollListener implements Listener {
 
                 event.setCancelled(true);
                 event.setCurrentItem(orderedItem);
-                player.setItemOnCursor(methods.removeItem(scroll));
+                player.setItemOnCursor(this.methods.removeItem(scroll));
             }
         }
     }
@@ -162,12 +167,11 @@ public class ScrollListener implements Listener {
 
     @Deprecated
     private ItemStack orderNewEnchantments(ItemStack item) {
-
         HashMap<CEnchantment, Integer> enchantmentLevels = new HashMap<>();
         HashMap<CEnchantment, Integer> categories = new HashMap<>();
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
 
-        for (Map.Entry<CEnchantment, Integer> enchantment : enchantmentBookSettings.getEnchantments(item).entrySet()) {
+        for (Map.Entry<CEnchantment, Integer> enchantment : this.enchantmentBookSettings.getEnchantments(item).entrySet()) {
             enchantmentLevels.put(enchantment.getKey(), enchantment.getValue());
             categories.put(enchantment.getKey(), EnchantUtils.getHighestEnchantmentCategory(enchantment.getKey()).getRarity());
             newEnchantmentOrder.add(enchantment.getKey());
@@ -205,7 +209,7 @@ public class ScrollListener implements Listener {
         List<String> order = Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Lore-Order");
         if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
 
-        for (CEnchantment enchantment : enchantmentBookSettings.getRegisteredEnchantments()) {
+        for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
             enchantments.put(enchantment, (enchantment.getCustomName() + " " +
                     NumberUtils.toRoman(data.getLevel(enchantment.getName()))).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").length());
@@ -273,20 +277,20 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                FileManager.Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected").replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected").replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
         ));
 
         return lore;
     }
 
     private void useSuffix(ItemStack item, ItemMeta meta, List<CEnchantment> newEnchantmentOrder) {
-        if (useSuffix) {
+        if (this.useSuffix) {
             String newName = meta.hasDisplayName() ? ColorUtils.toLegacy(meta.displayName()) :
                     "&b" + WordUtils.capitalizeFully(item.getType().toString().replace("_", " "));
 
             if (meta.hasDisplayName()) {
                 for (int i = 0; i <= 100; i++) {
-                    String suffixWithAmount = suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
+                    String suffixWithAmount = this.suffix.replace("%Amount%", String.valueOf(i)).replace("%amount%", String.valueOf(i));
 
                     if (!newName.endsWith(suffixWithAmount)) continue;
 
@@ -295,9 +299,9 @@ public class ScrollListener implements Listener {
                 }
             }
 
-            String amount = String.valueOf(countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
+            String amount = String.valueOf(this.countVanillaEnchantments ? newEnchantmentOrder.size() + item.getEnchantments().size() : newEnchantmentOrder.size());
 
-            meta.displayName(ColorUtils.legacyTranslateColourCodes(newName + suffix.replace("%Amount%", amount).replace("%amount%", amount)));
+            meta.displayName(ColorUtils.legacyTranslateColourCodes(newName + this.suffix.replace("%Amount%", amount).replace("%amount%", amount)));
         }
     }
 

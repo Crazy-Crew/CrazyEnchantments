@@ -3,14 +3,15 @@ package com.badbones69.crazyenchantments.paper.api.enums;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
-import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
+import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.google.gson.Gson;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import com.google.gson.Gson;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public enum Dust {
     private final int min;
 
     @NotNull
-    private final CrazyEnchantments plugin = CrazyEnchantments.get();
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     @NotNull
     private final Methods methods = this.plugin.getStarter().getMethods();

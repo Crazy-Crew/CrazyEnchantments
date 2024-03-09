@@ -8,6 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class LostBook {
         try { // If the sound doesn't exist it will not error.
             this.sound = Sound.valueOf(sound);
         } catch (Exception e) {
-            CrazyEnchantments plugin = CrazyEnchantments.get();
+            CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
             plugin.getServer().getLogger().info(("The sound " + sound + " is not a sound found in this minecraft version."));
             this.sound = null;
         }
