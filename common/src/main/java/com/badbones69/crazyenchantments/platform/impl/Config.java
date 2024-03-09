@@ -18,11 +18,13 @@ public class Config implements SettingsHolder {
     @Comment("Do you want to be notified if player data is backed up?")
     public static final Property<Boolean> notify_backup_complete = newProperty("Settings.Player-Info-Backup-Message", true);
 
+    public static final Property<Boolean> reset_players_max_health = newProperty("Settings.Reset-Players-Max-Health", true);
+
     @Comment("In the odd chance potion effects disappear on world change. You can enable this!")
-    public static final Property<Boolean> refresh_effects_world_change = newProperty("Settings.Refresh-Potion-Effects-On-world-Change", false);
+    public static final Property<Boolean> refresh_effects_world_change = newProperty("Settings.Refresh-Potion-Effects-On-World-Change", false);
 
     @Comment("The name of /ce inventory")
-    public static final Property<String> inventory_name = newProperty("Settings.InvName", "");
+    public static final Property<String> inventory_name = newProperty("Settings.InvName", "&4&l&nCrazy Enchanter");
 
     @Comment("The item that the enchantment book is.")
     public static final Property<String> enchantment_book_item = newProperty("Settings.Enchantment-Book-Item", "BOOK");
@@ -131,6 +133,8 @@ public class Config implements SettingsHolder {
     ));
 
     public static final Property<Boolean> gkitz_in_gui = newProperty("Settings.GKitz.InGUI", false);
+
+    public static final Property<Boolean> gkitz_toggle = newProperty("Settings.Gkitz.Enabled", true);
 
     public static final Property<Integer> gkitz_slot = newProperty("Settings.GKitz.Slot", 1);
 
@@ -434,7 +438,7 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> break_rage_on_damage = newProperty("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
 
-    public static final Property<Boolean> rage_boss_Bar = newProperty("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
+    public static final Property<Boolean> rage_boss_bar = newProperty("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
 
     public static final Property<Double> rage_increase = newProperty("Settings.EnchantmentOptions.Rage-Increase", 0.1);
 
@@ -449,6 +453,8 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> drop_blocks_for_blast = newProperty("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true);
 
     public static final Property<Boolean> drop_blocks_for_veinminer = newProperty("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true);
+
+    public static final Property<Boolean> right_click_enchantment_table = newProperty("Settings.EnchantmentOptions.Right-Click-Enchantment-Table", false);
 
     public static final Property<Boolean> experience_bug = newProperty("Settings.EnchantmentOptions.EXP-Bug", false);
 

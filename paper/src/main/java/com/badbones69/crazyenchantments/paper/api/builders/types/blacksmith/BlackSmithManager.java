@@ -1,12 +1,12 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class BlackSmithManager {
@@ -30,14 +30,14 @@ public class BlackSmithManager {
         grayGlass = new ItemBuilder().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName(" ").build();
         blueGlass = new ItemBuilder().setMaterial(Material.LIGHT_BLUE_STAINED_GLASS_PANE).setName(" ").build();
 
-        get(Files.CONFIG.getFile());
+        get();
     }
 
     /**
      * Refreshes the values that require config options.
      */
     public static void refresh() {
-        get(Files.CONFIG.getFile());
+        get();
     }
 
     /**
@@ -121,30 +121,23 @@ public class BlackSmithManager {
         return maxEnchantments;
     }
 
-    private static ConfigurationSection getSection(FileConfiguration config) {
-        return config.getConfigurationSection("Settings.BlackSmith");
-    }
-
-    private static void get(FileConfiguration config) {
-        ConfigurationSection section = getSection(config);
-
-        // If section is null, do nothing.
-        if (section == null) return;
+    private static void get() {
+        SettingsManager config = ConfigManager.getConfig();
 
         exitButton = new ItemBuilder()
                 .setMaterial(Material.BARRIER)
-                .setName(section.getString("Results.None", "&c&lNo Results."))
-                .setLore(section.getStringList("Results.Not-Found-Lore"))
+                .setName(config.getProperty(Config.blacksmith_results_none))
+                .setLore(config.getProperty(Config.blacksmith_results_lore))
                 .build();
 
-        inventoryName = ColorUtils.color(section.getString("GUIName"));
-        itemCost = section.getString("Results.Found", "&c&lCost: &6&l%cost% XP");
-        currency = Currency.getCurrency(section.getString("Transaction.Currency", "XP_LEVEL"));
+        inventoryName = ColorUtils.color(config.getProperty(Config.blacksmith_gui_name));
+        itemCost = config.getProperty(Config.blacksmith_results_found);
+        currency = Currency.getCurrency(config.getProperty(Config.blacksmith_transaction_currency));
 
-        bookUpgrade = section.getInt("Transaction.Costs.Book-Upgrade", 5);
-        levelUp = section.getInt("Transaction.Costs.Power-Up", 5);
-        addEnchantment = section.getInt("Transaction.Costs.Add-Enchantment", 3);
+        bookUpgrade = config.getProperty(Config.blacksmith_transaction_book_upgrade);
+        levelUp = config.getProperty(Config.blacksmith_transaction_power_up);
+        addEnchantment = config.getProperty(Config.blacksmith_transaction_add_enchantment);
 
-        maxEnchantments = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
+        maxEnchantments = config.getProperty(Config.max_amount_of_enchantments);
     }
 }

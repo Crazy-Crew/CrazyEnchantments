@@ -1,8 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
@@ -11,7 +12,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,10 +44,10 @@ public class ShopManager {
     public void load() {
         this.customizerItems.clear();
         this.shopItems.clear();
-        FileConfiguration config = Files.CONFIG.getFile();
-        this.inventoryName = ColorUtils.color(config.getString("Settings.InvName"));
-        this.inventorySize = config.getInt("Settings.GUISize");
-        this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
+        SettingsManager config = ConfigManager.getConfig();
+        this.inventoryName = ColorUtils.color(config.getProperty(Config.inventory_name));
+        this.inventorySize = config.getProperty(Config.inventory_size);
+        this.enchantmentTableShop = config.getProperty(Config.right_click_enchantment_table);
 
         for (String customItemString : config.getStringList("Settings.GUICustomization")) {
             int slot = 0;

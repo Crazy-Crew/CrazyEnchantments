@@ -1,5 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
@@ -32,6 +34,7 @@ import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
@@ -50,7 +53,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -131,7 +133,7 @@ public class CrazyManager {
      * Do not use unless needed.
      */
     public void load() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
         FileConfiguration gkit = Files.GKITZ.getFile();
         FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
 
@@ -145,7 +147,7 @@ public class CrazyManager {
         this.enchantmentBookSettings.getCategories().clear();
 
         // Check if we should patch player health.
-        boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health", true);
+        boolean playerHealthPatch = config.getProperty(Config.reset_players_max_health);
 
         this.plugin.getServer().getOnlinePlayers().forEach(player -> {
             // Load our players.
@@ -187,18 +189,19 @@ public class CrazyManager {
 
         Scrolls.getWhiteScrollProtectionName();
 
-        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item", "BOOK")));
-        this.useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
-        this.maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
-        this.checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
-        this.gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled", true);
-        this.rageMaxLevel = config.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
-        this.breakRageOnDamage = config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
-        this.useRageBossBar = config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
-        this.rageIncrement = config.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
-        this.enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
-        setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
-        setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
+        this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(config.getProperty(Config.enchantment_book_item)));
+        this.useUnsafeEnchantments = config.getProperty(Config.unsafe_enchantments);
+        this.maxEnchantmentCheck = config.getProperty(Config.max_amount_of_enchantments);
+        this.checkVanillaLimit = config.getProperty(Config.include_vanilla_enchantments);
+        this.gkitzToggle = config.getProperty(Config.gkitz_toggle);
+        this.rageMaxLevel = config.getProperty(Config.max_rage_level);
+        this.breakRageOnDamage = config.getProperty(Config.break_rage_on_damage);
+        this.useRageBossBar = config.getProperty(Config.rage_boss_bar);
+        this.rageIncrement = config.getProperty(Config.rage_increase);
+        this.enchantStackedItems = config.getProperty(Config.enchant_stacked_items);
+
+        setDropBlocksBlast(config.getProperty(Config.drop_blocks_for_blast));
+        setDropBlocksVeinMiner(config.getProperty(Config.drop_blocks_for_veinminer));
 
         this.enchantmentBookSettings.populateMaps();
 

@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.listeners.server;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,10 +23,6 @@ public class WorldSwitchListener implements Listener {
     public void onWorldSwitch(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
 
-        FileConfiguration config = Files.CONFIG.getFile();
-
-        boolean refreshEnabled = config.getBoolean("Settings.Refresh-Potion-Effects-On-World-Change");
-
-        if (refreshEnabled) this.crazyManager.updatePlayerEffects(player);
+        if (ConfigManager.getConfig().getProperty(Config.refresh_effects_world_change)) this.crazyManager.updatePlayerEffects(player);
     }
 }

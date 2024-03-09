@@ -1,17 +1,18 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.google.gson.Gson;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -66,13 +67,13 @@ public class CEBook {
         this.amount = amount;
         this.level = level;
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
 
-        this.glowing = config.getBoolean("Settings.Enchantment-Book-Glowing", true);
-        int successMax = config.getInt("Settings.BlackScroll.SuccessChance.Max", 100);
-        int successMin = config.getInt("Settings.BlackScroll.SuccessChance.Min", 15);
-        int destroyMax = config.getInt("Settings.BlackScroll.DestroyChance.Max", 100);
-        int destroyMin = config.getInt("Settings.BlackScroll.DestroyChance.Min", 15);
+        this.glowing = config.getProperty(Config.enchantment_book_glowing);
+        int successMax = config.getProperty(Config.black_scroll_success_chance_max);
+        int successMin = config.getProperty(Config.black_scroll_success_chance_min);
+        int destroyMax = config.getProperty(Config.black_scroll_destroy_chance_max);
+        int destroyMin = config.getProperty(Config.black_scroll_destroy_chance_min);
         this.destroyRate = this.methods.percentPick(destroyMax, destroyMin);
         this.successRate = this.methods.percentPick(successMax, successMin);
     }
@@ -96,7 +97,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing", true);
+        this.glowing = ConfigManager.getConfig().getProperty(Config.enchantment_book_glowing);
         this.destroyRate = this.methods.percentPick(category.getMaxDestroyRate(), category.getMinDestroyRate());
         this.successRate = this.methods.percentPick(category.getMaxSuccessRate(), category.getMinSuccessRate());
     }
@@ -112,7 +113,7 @@ public class CEBook {
         this.enchantment = enchantment;
         this.amount = amount;
         this.level = level;
-        this.glowing = Files.CONFIG.getFile().getBoolean("Settings.Enchantment-Book-Glowing", true);
+        this.glowing = ConfigManager.getConfig().getProperty(Config.enchantment_book_glowing);
         this.destroyRate = destroyRate;
         this.successRate = successRate;
     }
@@ -226,7 +227,7 @@ public class CEBook {
         String name = this.enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
         List<String> lore = new ArrayList<>();
 
-        for (String bookLine : Files.CONFIG.getFile().getStringList("Settings.EnchantmentBookLore")) {
+        for (String bookLine : ConfigManager.getConfig().getProperty(Config.enchantment_book_lore)) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : this.enchantment.getInfoDescription()) {
                     lore.add(ColorUtils.color(enchantmentLine));
