@@ -1,12 +1,12 @@
-package com.badbones69.crazyenchantments.paper.commands.v2.types.admin;
+package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.api.MigrateManager;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
-
 import java.util.List;
 
 public class CommandConvert extends BaseCommand {

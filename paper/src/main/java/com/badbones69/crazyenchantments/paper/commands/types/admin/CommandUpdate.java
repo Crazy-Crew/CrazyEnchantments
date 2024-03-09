@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.commands.v2.types.admin;
+package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
