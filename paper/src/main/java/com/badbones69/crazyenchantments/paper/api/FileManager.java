@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -95,20 +96,20 @@ public class FileManager {
 
                     if (this.plugin.isLogging()) this.plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
 
-                    for (String fileName : this.autoGenerateFiles.keySet()) {
-                        if (this.autoGenerateFiles.get(fileName).equalsIgnoreCase(homeFolder)) {
-                            homeFolder = this.autoGenerateFiles.get(fileName);
+                    for (Map.Entry<String, String> fileName : this.autoGenerateFiles.entrySet()) {
+                        if (this.autoGenerateFiles.get(fileName.getKey()).equalsIgnoreCase(homeFolder)) {
+                            homeFolder = fileName.getValue();
 
-                            try (InputStream jarFile = getClass().getResourceAsStream((this.jarHomeFolders.getOrDefault(fileName, homeFolder)) + "/" + fileName)) {
-                                File serverFile = new File(this.plugin.getDataFolder(), homeFolder + "/" + fileName);
+                            try (InputStream jarFile = getClass().getResourceAsStream((this.jarHomeFolders.getOrDefault(fileName.getKey(), homeFolder)) + "/" + fileName.getKey())) {
+                                File serverFile = new File(this.plugin.getDataFolder(), homeFolder + "/" + fileName.getKey());
 
                                 copyFile(jarFile, serverFile);
 
-                                if (fileName.toLowerCase().endsWith(".yml")) this.customFiles.add(new CustomFile(fileName, homeFolder));
+                                if (fileName.getKey().toLowerCase().endsWith(".yml")) this.customFiles.add(new CustomFile(fileName.getKey(), homeFolder));
 
-                                if (this.plugin.isLogging()) this.plugin.getLogger().info("Created new default file: " + homeFolder + "/" + fileName + ".");
+                                if (this.plugin.isLogging()) this.plugin.getLogger().info("Created new default file: " + homeFolder + "/" + fileName.getKey() + ".");
                             } catch (Exception exception) {
-                                this.plugin.getLogger().log(Level.SEVERE, "Failed to create new default file: " + homeFolder + "/" + fileName + "!", exception);
+                                this.plugin.getLogger().log(Level.SEVERE, "Failed to create new default file: " + homeFolder + "/" + fileName.getKey() + "!", exception);
                             }
                         }
                     }
