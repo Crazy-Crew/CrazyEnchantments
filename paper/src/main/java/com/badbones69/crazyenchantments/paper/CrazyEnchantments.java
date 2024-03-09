@@ -1,6 +1,7 @@
 package com.badbones69.crazyenchantments.paper;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
@@ -26,8 +27,8 @@ import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListene
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.ServerReadyListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,6 +47,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Load the configurations
+        ConfigManager.load(getDataFolder());
+
         this.starter = new Starter();
         this.starter.run();
 
