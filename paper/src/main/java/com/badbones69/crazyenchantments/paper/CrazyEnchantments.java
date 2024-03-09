@@ -47,6 +47,8 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        MigrationManager.migrate();
+
         // Load the configurations
         ConfigManager.load(getDataFolder());
 
