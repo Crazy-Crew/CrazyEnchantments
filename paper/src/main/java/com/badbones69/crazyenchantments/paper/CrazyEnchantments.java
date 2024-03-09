@@ -1,10 +1,31 @@
 package com.badbones69.crazyenchantments.paper;
 
 import com.badbones69.crazyenchantments.ConfigManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
+import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
+import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
+import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
+import com.badbones69.crazyenchantments.paper.commands.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
+import com.badbones69.crazyenchantments.paper.controllers.CommandChecker;
+import com.badbones69.crazyenchantments.paper.controllers.LostBookController;
+import com.badbones69.crazyenchantments.paper.enchantments.AllyEnchantments;
 import com.badbones69.crazyenchantments.paper.enchantments.ArmorEnchantments;
+import com.badbones69.crazyenchantments.paper.enchantments.AxeEnchantments;
+import com.badbones69.crazyenchantments.paper.enchantments.BootEnchantments;
+import com.badbones69.crazyenchantments.paper.enchantments.BowEnchantments;
+import com.badbones69.crazyenchantments.paper.enchantments.HoeEnchantments;
+import com.badbones69.crazyenchantments.paper.enchantments.PickaxeEnchantments;
+import com.badbones69.crazyenchantments.paper.enchantments.SwordEnchantments;
+import com.badbones69.crazyenchantments.paper.enchantments.ToolEnchantments;
+import com.badbones69.crazyenchantments.paper.listeners.AuraListener;
+import com.badbones69.crazyenchantments.paper.listeners.DustControlListener;
 import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
+import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
+import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
+import com.badbones69.crazyenchantments.paper.listeners.server.ServerReadyListener;
+import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import com.badbones69.crazyenchantments.paper.tasks.MigrationManager;
 import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bstats.bukkit.Metrics;
@@ -34,7 +55,7 @@ public class CrazyEnchantments extends JavaPlugin {
         // Enable metrics.
         if (ConfigManager.getConfig().getProperty(Config.toggle_metrics)) new Metrics(this, 4494);
 
-        /*this.starter = new Starter();
+        this.starter = new Starter();
         this.starter.run();
 
         this.starter.getCurrencyAPI().loadCurrency();
@@ -82,18 +103,18 @@ public class CrazyEnchantments extends JavaPlugin {
             getLogger().info("G-Kitz support is now enabled.");
 
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
-        }*/
+        }
     }
 
     @Override
     public void onDisable() {
-        /*this.bossBarController.removeAllBossBars();
+        this.bossBarController.removeAllBossBars();
 
         if (this.armorEnchantments != null) this.armorEnchantments.stop();
 
         if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
 
-        getServer().getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);*/
+        getServer().getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
     }
 
     public Starter getStarter() {
