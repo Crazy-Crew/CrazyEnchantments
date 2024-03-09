@@ -34,6 +34,7 @@ import com.badbones69.crazyenchantments.paper.listeners.ScrollListener;
 import com.badbones69.crazyenchantments.paper.listeners.SlotCrystalListener;
 import com.badbones69.crazyenchantments.paper.support.CropManager;
 import com.badbones69.crazyenchantments.paper.support.interfaces.CropManagerVersion;
+import com.badbones69.crazyenchantments.platform.BlockConfig;
 import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -137,7 +138,6 @@ public class CrazyManager {
         FileConfiguration gkit = Files.GKITZ.getFile();
         FileConfiguration enchants = Files.ENCHANTMENTS.getFile();
 
-        FileConfiguration blocks = Files.BLOCKLIST.getFile();
         FileConfiguration heads = Files.HEADMAP.getFile();
 
         this.blockList.clear();
@@ -170,7 +170,7 @@ public class CrazyManager {
         CEnchantments.invalidateCachedEnchants();
 
         // Loop through block list.
-        blocks.getStringList("Block-List").forEach(id -> {
+        ConfigManager.getBlocks().getProperty(BlockConfig.block_list).forEach(id -> {
             try {
                 this.blockList.add(new ItemBuilder().setMaterial(id).getMaterial());
             } catch (Exception ignored) {}
