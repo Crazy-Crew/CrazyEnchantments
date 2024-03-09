@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.commands.v2;
+package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -7,13 +7,13 @@ import dev.triumphteam.cmd.core.annotations.Description;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
-@Command("blacksmith")
-@Description("Opens the black smith gui.")
-@Permission(value = "crazyenchantments.blacksmith", def = PermissionDefault.TRUE)
-public class SmithCommand {
+@Command(value = "tinkerer", alias = "tinker")
+@Description("Opens the tinkerer gui.")
+@Permission(value = "crazyenchantments.tinker", def = PermissionDefault.TRUE)
+public class TinkerCommand {
 
     @Command
-    public void blacksmith(Player player) {
-        MenuManager.openBlackSmithMenu(player);
+    public void tinkerer(Player player) {
+        MenuManager.openTinkererMenu(player);
     }
 }

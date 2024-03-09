@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.commands.v2.BaseCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import dev.triumphteam.cmd.core.annotations.Suggestion;

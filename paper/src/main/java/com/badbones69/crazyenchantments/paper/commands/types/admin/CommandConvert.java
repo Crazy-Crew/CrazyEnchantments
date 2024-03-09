@@ -1,7 +1,7 @@
 package com.badbones69.crazyenchantments.paper.commands.v2.types.admin;
 
 import com.badbones69.crazyenchantments.paper.api.MigrateManager;
-import com.badbones69.crazyenchantments.paper.commands.v2.BaseCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.command.CommandSender;

@@ -2,8 +2,6 @@ package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.commands.v2.SmithCommand;
-import com.badbones69.crazyenchantments.paper.commands.v2.TinkerCommand;
 import com.badbones69.crazyenchantments.paper.commands.v2.types.CommandHelp;
 import com.badbones69.crazyenchantments.paper.commands.v2.types.CommandInfo;
 import com.badbones69.crazyenchantments.paper.commands.v2.types.CommandLimit;

@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
-import com.badbones69.crazyenchantments.paper.commands.v2.BaseCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.google.gson.Gson;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;

@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.commands.v2;
+package com.badbones69.crazyenchantments.paper.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;

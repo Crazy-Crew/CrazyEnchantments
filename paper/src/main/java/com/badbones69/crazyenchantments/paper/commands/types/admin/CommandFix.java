@@ -3,7 +3,7 @@ package com.badbones69.crazyenchantments.paper.commands.v2.types.admin;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.commands.v2.BaseCommand;
+import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
