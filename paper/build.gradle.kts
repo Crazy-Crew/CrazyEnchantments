@@ -2,7 +2,13 @@ plugins {
     id("paper-plugin")
 }
 
+repositories {
+    maven("https://repo.triumphteam.dev/snapshots/")
+}
+
 dependencies {
+    implementation(libs.triumphcmds)
+
     implementation(libs.metrics)
 
     implementation(libs.nbtapi)
@@ -75,6 +81,7 @@ tasks {
     shadowJar {
         listOf(
             "de.tr7zw.changeme.nbtapi",
+            "dev.triumphteam.cmd",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
