@@ -9,6 +9,10 @@ dependencies {
 
     compileOnly(libs.placeholderapi)
 
+    compileOnly(libs.vault) {
+        exclude("org.bukkit", "bukkit")
+    }
+
     compileOnly(libs.worldguard)
     compileOnly(libs.worldedit)
 
@@ -37,10 +41,6 @@ dependencies {
     compileOnly("com.gmail.nossr50.mcMMO", "mcMMO", "2.1.226")
 
     compileOnly("com.bgsoftware", "WildStackerAPI", "2023.2")
-
-    compileOnly("com.github.MilkBowl", "VaultAPI", "1.7.1") {
-        exclude("org.bukkit", "bukkit")
-    }
 
     compileOnly(fileTree("libs").include("*.jar"))
 
