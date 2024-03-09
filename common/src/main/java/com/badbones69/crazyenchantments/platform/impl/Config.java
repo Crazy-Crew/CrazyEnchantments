@@ -79,7 +79,7 @@ public class Config implements SettingsHolder {
     ));
 
     @Comment("Name of the GUI.")
-    public static final Property<String> scrambler_gui = newProperty("Settings.Scrambler.GUI", "&8Rolling the &eScrambler");
+    public static final Property<String> scrambler_gui = newProperty("Settings.Scrambler.GUI.Name", "&8Rolling the &eScrambler");
 
     @Comment("If the GUI will show. Warning>> This may cause lag if a lot of players are using it all the time.")
     public static final Property<Boolean> scrambler_toggle = newProperty("Settings.Scrambler.GUI.Toggle", true);
