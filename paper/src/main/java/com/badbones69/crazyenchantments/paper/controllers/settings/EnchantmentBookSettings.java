@@ -232,7 +232,7 @@ public class EnchantmentBookSettings {
      * Loads in all config options.
      */
     public void populateMaps() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        FileConfiguration config = Files.CATEGORIES.getFile();
 
         for (String category : config.getConfigurationSection("Categories").getKeys(false)) {
             String path = "Categories." + category;
