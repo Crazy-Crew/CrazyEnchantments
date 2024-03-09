@@ -310,13 +310,14 @@ public class CrazyManager {
     public void loadCEPlayer(Player player) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = player.getUniqueId().toString();
-        int souls = 0;
+
+        /*int souls = 0;
         boolean isActive = false;
 
         if (data.contains("Players." + uuid + ".Souls-Information")) {
             souls = data.getInt("Players." + uuid + ".Souls-Information.Souls");
             isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
-        }
+        }*/
 
         List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
 
