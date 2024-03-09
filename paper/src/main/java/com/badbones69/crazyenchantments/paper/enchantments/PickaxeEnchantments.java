@@ -69,7 +69,7 @@ public class PickaxeEnchantments implements Listener {
         ItemStack item = this.methods.getItemInHand(player);
         Block block = event.getClickedBlock();
 
-        if (block == null || block.isEmpty() || !this.crazyManager.getBlastBlockList().contains(block.getType())) return;
+        if (block == null || block.isEmpty() || this.crazyManager.getBlastBlockList().contains(block.getType())) return;
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, this.enchantmentBookSettings.getEnchantments(item))) return; // TODO Move over to block break.
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
@@ -97,7 +97,7 @@ public class PickaxeEnchantments implements Listener {
         event.setCancelled(true);
 
         for (Block block : blockList) {
-            if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
+            if (block.isEmpty() || crazyManager.getBlastBlockList().contains(block.getType())) continue;
             if (this.methods.playerBreakBlock(player, block, currentItem, crazyManager.isDropBlocksBlast())) continue;
             if (damage) this.methods.removeDurability(currentItem, player);
         }
