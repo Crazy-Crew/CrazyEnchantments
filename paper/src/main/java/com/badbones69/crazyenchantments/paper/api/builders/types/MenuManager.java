@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
@@ -11,6 +12,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public class MenuManager {
     }
 
     public static void openTinkererMenu(Player player) {
-        player.openInventory(new TinkererMenu(player, 54, Files.TINKER.getFile().getString("Settings.GUIName")).build().getInventory());
+        player.openInventory(new TinkererMenu(player, 54, ConfigManager.getTinker().getProperty(TinkerConfig.menu_name)).build().getInventory());
     }
 
     public static int getInventorySize(FileConfiguration configuration) {

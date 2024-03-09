@@ -1,5 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
@@ -9,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -39,7 +42,10 @@ public class TinkererManager {
     @NotNull
     private static final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
-    public static boolean useExperience(Player player, PlayerInteractEvent event, boolean mainHand, FileConfiguration configuration) {
+    @NotNull
+    private static final SettingsManager tinker = ConfigManager.getTinker();
+
+    public static boolean useExperience(Player player, PlayerInteractEvent event, boolean mainHand) {
         PlayerInventory inventory = player.getInventory();
 
         ItemStack item = mainHand ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
@@ -60,8 +66,8 @@ public class TinkererManager {
             inventory.setItemInOffHand(methods.removeItem(item));
         }
 
-        if (Currency.isCurrency(configuration.getString("Settings.Currency"))) {
-            currencyAPI.giveCurrency(player, Currency.getCurrency(configuration.getString("Settings.Currency")), amount);
+        if (Currency.isCurrency(tinker.getProperty(TinkerConfig.currency))) {
+            currencyAPI.giveCurrency(player, Currency.getCurrency(tinker.getProperty(TinkerConfig.currency)), amount);
         }
 
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -73,59 +79,67 @@ public class TinkererManager {
      * @param amount Amount of XP to store.
      * @return XP Bottle with custom amount of xp stored in it.
      */
-    public static ItemStack getXPBottle(String amount, FileConfiguration config) {
-        String id = config.getString("Settings.BottleOptions.Item");
-        String name = config.getString("Settings.BottleOptions.Name");
+    public static ItemStack getXPBottle(String amount) {
+        String id = tinker.getProperty(TinkerConfig.bottle_item);
+        String name = tinker.getProperty(TinkerConfig.bottle_name);
         List<String> lore = new ArrayList<>();
 
-        for (String l : config.getStringList("Settings.BottleOptions.Lore")) {
-            lore.add(l.replace("%Total%", amount).replace("%total%", amount));
+        for (String line : tinker.getProperty(TinkerConfig.bottle_lore)) {
+            lore.add(line.replace("%Total%", amount).replace("%total%", amount));
         }
-
-        assert id != null;
 
         return new ItemBuilder().setMaterial(id).setName(name).setLore(lore).setStringPDC(DataKeys.experience.getNamespacedKey(), amount).build();
     }
 
-    public static int getTotalXP(ItemStack item, FileConfiguration config) {
+    public static int getTotalXP(ItemStack item) {
         int total = 0;
 
         Map<CEnchantment, Integer> ceEnchants = starter.getEnchantmentBookSettings().getEnchantments(item);
 
+        List<String> values = new ArrayList<>(tinker.getProperty(TinkerConfig.crazyEnchantments));
+
         if (!ceEnchants.isEmpty()) { // CrazyEnchantments
             for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {
-                String[] values = config.getString("Tinker.Crazy-Enchantments." + enchantment.getKey().getName() + ".Items", "0").replaceAll(" ", "").split(",");
-                int baseAmount = Integer.parseInt(values[0]);
-                int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
-                int enchantmentLevel = enchantment.getValue();
+                boolean hasMatch = tinker.getProperty(TinkerConfig.crazyEnchantments).iterator().next().equalsIgnoreCase(enchantment.getKey().getName());
 
-                total += baseAmount + enchantmentLevel * multiplier;
+                if (hasMatch) {
+
+                }
+
+                //String[] values = config.getString("Tinker.Crazy-Enchantments." + enchantment.getKey().getName() + ".Items", "0").replaceAll(" ", "").split(",");
+                //int baseAmount = Integer.parseInt(values[0]);
+                //int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+                //int enchantmentLevel = enchantment.getValue();
+
+                //total += baseAmount + enchantmentLevel * multiplier;
             }
         }
 
         if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) { // Vanilla Enchantments
             for (Map.Entry<Enchantment, Integer> enchantment : item.getEnchantments().entrySet()) {
-                String[] values = config.getString("Tinker.Vanilla-Enchantments." + enchantment.getKey(), "0").replaceAll(" ", "").split(",");
-                int baseAmount = Integer.parseInt(values[0]);
-                int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
-                int enchantmentLevel = enchantment.getValue();
+                //String[] values = config.getString("Tinker.Vanilla-Enchantments." + enchantment.getKey(), "0").replaceAll(" ", "").split(",");
+                //int baseAmount = Integer.parseInt(values[0]);
+                //int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+                //int enchantmentLevel = enchantment.getValue();
 
-                total += baseAmount + enchantmentLevel * multiplier;
+                //total += baseAmount + enchantmentLevel * multiplier;
             }
         }
 
         return total;
     }
 
-    public static int getMaxDustLevelFromBook(CEBook book, FileConfiguration config) {
-        String path = "Tinker.Crazy-Enchantments." + book.getEnchantment().getName() + ".Book";
-        if (!config.contains(path)) return 1;
+    public static int getMaxDustLevelFromBook(CEBook book) {
+        //String path = "Tinker.Crazy-Enchantments." + book.getEnchantment().getName() + ".Book";
 
-        String[] values = config.getString(path, "0").replaceAll(" ", "").split(",");
-        int baseAmount = Integer.parseInt(values[0]);
-        int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+        //if (!config.contains(path)) return 1;
 
-        return baseAmount + book.getLevel() * multiplier;
+        //String[] values = config.getString(path, "0").replaceAll(" ", "").split(",");
+        //int baseAmount = Integer.parseInt(values[0]);
+        //int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+
+        //return baseAmount + book.getLevel() * multiplier;
+        return 1;
     }
 
     public static Map<Integer, Integer> getSlots() {

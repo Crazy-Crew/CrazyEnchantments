@@ -1,6 +1,5 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
-import com.badbones69.crazyenchantments.paper.api.MigrateManager;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
@@ -23,6 +22,6 @@ public class CommandConvert extends BaseCommand {
                 "&8&m====================================================="
         ).forEach(line -> ColorUtils.sendMessage(sender, line, true));
 
-        MigrateManager.convert();
+        //MigrateManager.convert();
     }
 }

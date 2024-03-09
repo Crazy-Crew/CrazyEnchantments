@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
@@ -9,9 +10,9 @@ import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,14 +35,14 @@ public class TinkererMenu extends InventoryBuilder {
         super(player, size, title);
     }
 
-    private final FileConfiguration configuration = Files.TINKER.getFile();
+    @NotNull
+    private final SettingsManager tinker = ConfigManager.getTinker();
 
     @Override
     public InventoryBuilder build() {
-        ItemStack button = new ItemBuilder()
-                .setMaterial(Material.RED_STAINED_GLASS_PANE)
-                        .setName(this.configuration.getString("Settings.TradeButton"))
-                .setLore(this.configuration.getStringList("Settings.TradeButton-Lore")).build();
+        ItemStack button = new ItemBuilder().setMaterial(Material.RED_STAINED_GLASS_PANE)
+                .setName(this.tinker.getProperty(TinkerConfig.menu_trade_button))
+                .setLore(this.tinker.getProperty(TinkerConfig.menu_trade_lore)).build();
 
         getInventory().setItem(0, button);
         getInventory().setItem(8, button);
@@ -55,7 +56,7 @@ public class TinkererMenu extends InventoryBuilder {
 
     public static class TinkererListener implements Listener {
 
-        private final FileConfiguration configuration = Files.TINKER.getFile();
+        private final SettingsManager tinker = ConfigManager.getTinker();
 
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
@@ -68,9 +69,9 @@ public class TinkererMenu extends InventoryBuilder {
 
             Player player = event.getPlayer();
 
-            if (TinkererManager.useExperience(player, event, true, this.configuration)) return;
+            if (TinkererManager.useExperience(player, event, true)) return;
 
-            TinkererManager.useExperience(player, event, false, this.configuration);
+            TinkererManager.useExperience(player, event, false);
         }
 
         @NotNull
@@ -90,8 +91,8 @@ public class TinkererMenu extends InventoryBuilder {
 
             ItemStack button = new ItemBuilder()
                     .setMaterial(Material.RED_STAINED_GLASS_PANE)
-                    .setName(this.configuration.getString("Settings.TradeButton"))
-                    .setLore(this.configuration.getStringList("Settings.TradeButton-Lore")).build();
+                    .setName(this.tinker.getProperty(TinkerConfig.menu_trade_button))
+                    .setLore(this.tinker.getProperty(TinkerConfig.menu_trade_lore)).build();
 
             Inventory inventory = holder.getInventory();
             Inventory topInventory = player.getOpenInventory().getTopInventory();
@@ -106,8 +107,8 @@ public class TinkererMenu extends InventoryBuilder {
                     ItemStack reward = inventory.getItem(this.slots.get(slot));
 
                     if (reward != null) {
-                        if (Currency.getCurrency(this.configuration.getString("Settings.Currency")) == Currency.VAULT) {
-                            total = TinkererManager.getTotalXP(inventory.getItem(slot), this.configuration);
+                        if (Currency.getCurrency(this.tinker.getProperty(TinkerConfig.currency)) == Currency.VAULT) {
+                            total = TinkererManager.getTotalXP(inventory.getItem(slot));
                         } else {
                             bottomInventory.addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                         }
@@ -145,7 +146,7 @@ public class TinkererMenu extends InventoryBuilder {
                 } else { // Clicking in their inventory.
                     if (isFirstEmpty(event, player, current, topInventory)) return;
 
-                    inventory.setItem(this.slots.get(inventory.firstEmpty()), Dust.MYSTERY_DUST.getDust(TinkererManager.getMaxDustLevelFromBook(book, this.configuration), 1));
+                    inventory.setItem(this.slots.get(inventory.firstEmpty()), Dust.MYSTERY_DUST.getDust(TinkererManager.getMaxDustLevelFromBook(book), 1));
                     inventory.setItem(inventory.firstEmpty(), current);
                 }
 
@@ -154,7 +155,7 @@ public class TinkererMenu extends InventoryBuilder {
                 return;
             }
 
-            int totalXP = TinkererManager.getTotalXP(current, this.configuration);
+            int totalXP = TinkererManager.getTotalXP(current);
 
             if (totalXP > 0) {
                 // Adding an item.
@@ -168,7 +169,7 @@ public class TinkererMenu extends InventoryBuilder {
                     // Clicking in their inventory.
                     if (isFirstEmpty(event, player, current, topInventory)) return;
 
-                    inventory.setItem(this.slots.get(inventory.firstEmpty()), TinkererManager.getXPBottle(String.valueOf(totalXP), this.configuration));
+                    inventory.setItem(this.slots.get(inventory.firstEmpty()), TinkererManager.getXPBottle(String.valueOf(totalXP)));
                     inventory.setItem(inventory.firstEmpty(), current);
                 }
 

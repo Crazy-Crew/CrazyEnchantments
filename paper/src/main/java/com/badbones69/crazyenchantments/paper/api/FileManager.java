@@ -351,8 +351,7 @@ public class FileManager {
         ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
         GKITZ("GKitz.yml", "GKitz.yml"),
         MESSAGES("Messages.yml", "Messages.yml"),
-        ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml"),
-        TINKER("Tinker.yml", "Tinker.yml");
+        ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml");
         
         private final String fileName;
         private final String fileJar;

@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
@@ -22,7 +21,7 @@ public class CommandBottle extends BaseCommand {
     @Command("bottle")
     @Permission(value = "crazyenchantments.bottle", def = PermissionDefault.OP)
     public void bottle(CommandSender sender, @Suggestion("players") Player target, @Suggestion("numbers") int total, @Suggestion("numbers") int amount) {
-        ItemStack item = TinkererManager.getXPBottle(String.valueOf(total), Files.TINKER.getFile());
+        ItemStack item = TinkererManager.getXPBottle(String.valueOf(total));
         item.setAmount(amount);
 
         if (target == null) {
