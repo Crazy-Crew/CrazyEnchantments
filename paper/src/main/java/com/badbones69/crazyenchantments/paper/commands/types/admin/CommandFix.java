@@ -29,7 +29,7 @@ public class CommandFix extends BaseCommand {
             if (!configuration.contains("Enchantments." + enchantment.getName())) brokenEnchantments.add(enchantment);
         }
 
-        sender.sendMessage(ColorUtils.color("&7Fixed a total of " + brokenEnchantments.size() + " enchantments."));
+        ColorUtils.sendMessage(sender, "%prefix%&7Fixed a total of &c" + brokenEnchantments.size() + " &7enchantments.", true);
 
         for (CEnchantments enchantment : brokenEnchantments) {
             String path = "Enchantments." + enchantment.getName();

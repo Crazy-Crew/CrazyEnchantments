@@ -15,13 +15,13 @@ public class CommandConvert extends BaseCommand {
     @Permission(value = "crazyenchantments.convert", def = PermissionDefault.OP)
     public void convert(CommandSender sender) {
         List.of(
-                "&8&m=======================================================",
+                "&8&m=====================================================",
                 "&eTrying to update config files.",
                 "&eIf you have any issues, Please contact Discord Support.",
                 "&f&nhttps://discord.gg/crazycrew&r",
                 "&eMake sure to check console for more information.",
-                "&8&m======================================================="
-        ).forEach(sender::sendMessage);
+                "&8&m====================================================="
+        ).forEach(line -> ColorUtils.sendMessage(sender, line, true));
 
         MigrateManager.convert();
     }
