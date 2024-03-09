@@ -19,7 +19,7 @@ dependencyResolutionManagement {
         create("libs") {
             library("triumphcmds", "dev.triumphteam", "triumph-cmd-bukkit").version("2.0.0-SNAPSHOT")
 
-            library("worldedit", "com.sk89.worldedit", "worldedit-bukkit").version("7.2.15")
+            library("worldedit", "com.sk89q.worldedit", "worldedit-bukkit").version("7.2.15")
             library("worldguard", "com.sk89q.worldguard", "worldguard-bukkit").version("7.1.0-SNAPSHOT")
 
             library("placeholderapi", "me.clip", "placeholderapi").version("2.11.5")
