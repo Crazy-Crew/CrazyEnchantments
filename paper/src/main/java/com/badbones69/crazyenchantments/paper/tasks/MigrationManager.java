@@ -100,16 +100,6 @@ public class MigrationManager {
                 // Set new property.
                 tinker.setProperty(TinkerConfig.enchantments, enchantments);
 
-                // Remove it after we are done.
-                tinkerSection.set("Vanilla-Enchantments", null);
-
-                // Save the old file.
-                try {
-                    configuration.save(file);
-                } catch (IOException exception) {
-                    plugin.getLogger().warning("Failed to save file: " + exception.getMessage());
-                }
-
                 // Save the file.
                 tinker.save();
             }
