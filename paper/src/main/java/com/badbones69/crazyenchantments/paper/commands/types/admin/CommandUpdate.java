@@ -96,5 +96,7 @@ public class CommandUpdate extends BaseCommand {
 
             player.getInventory().setItem(value, itemStack);
         }
+        
+        ColorUtils.sendMessage(player, "%prefix%&aAll items in your inventory have been migrated.", true);
     }
 }
