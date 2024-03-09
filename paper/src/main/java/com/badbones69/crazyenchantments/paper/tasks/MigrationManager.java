@@ -24,7 +24,13 @@ public class MigrationManager {
         File directory = new File(plugin.getDataFolder(), "backups");
         directory.mkdirs();
 
-        // Update tinkerer.yml
+        // Move the file to the backup folder
+        File blockFile = new File(plugin.getDataFolder(), "BlockList.yml");
+        if (blockFile.exists()) {
+            blockFile.renameTo(new File(directory, "BlockList-v1.yml"));
+        }
+
+        // Update Tinker.yml
         copyTinkerer(directory);
     }
 
