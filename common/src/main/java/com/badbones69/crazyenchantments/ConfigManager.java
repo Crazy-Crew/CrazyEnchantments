@@ -3,6 +3,7 @@ package com.badbones69.crazyenchantments;
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.configme.SettingsManagerBuilder;
 import ch.jalu.configme.resource.YamlFileResourceOptions;
+import com.badbones69.crazyenchantments.platform.BlockConfig;
 import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.badbones69.crazyenchantments.platform.impl.Messages;
@@ -15,6 +16,8 @@ public class ConfigManager {
     private static SettingsManager messages;
 
     private static SettingsManager tinker;
+
+    private static SettingsManager blocks;
 
     public static void load(File dataFolder) {
         // Create config files
@@ -37,6 +40,12 @@ public class ConfigManager {
                 .useDefaultMigrationService()
                 .configurationData(TinkerConfig.class)
                 .create();
+
+        blocks = SettingsManagerBuilder
+                .withYamlFile(new File(dataFolder, "blocks.yml"), builder)
+                .useDefaultMigrationService()
+                .configurationData(BlockConfig.class)
+                .create();
     }
 
     public static void reload() {
@@ -45,6 +54,8 @@ public class ConfigManager {
         messages.reload();
 
         tinker.reload();
+
+        blocks.reload();
     }
 
     public static void disable() {
@@ -53,6 +64,8 @@ public class ConfigManager {
         messages.save();
 
         tinker.save();
+
+        blocks.save();
     }
 
     public static SettingsManager getConfig() {
@@ -65,5 +78,9 @@ public class ConfigManager {
 
     public static SettingsManager getTinker() {
         return tinker;
+    }
+
+    public static SettingsManager getBlocks() {
+        return blocks;
     }
 }
