@@ -24,6 +24,7 @@ import com.badbones69.crazyenchantments.paper.listeners.FireworkDamageListener;
 import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
+import com.badbones69.crazyenchantments.paper.listeners.server.ServerReadyListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -61,6 +62,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
         // Load what we need to properly enable the plugin.
         this.starter.getCrazyManager().load();
+
+        // Register the server ready listener
+        this.pluginManager.registerEvents(new ServerReadyListener(), this);
 
         this.pluginManager.registerEvents(new MiscListener(), this);
         this.pluginManager.registerEvents(new DustControlListener(), this);

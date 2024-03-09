@@ -144,8 +144,6 @@ public class CrazyManager {
         this.enchantmentBookSettings.getRegisteredEnchantments().clear();
         this.enchantmentBookSettings.getCategories().clear();
 
-        this.starter.getPluginSupport().updateHooks();
-
         // Check if we should patch player health.
         boolean playerHealthPatch = config.getBoolean("Settings.Reset-Players-Max-Health", true);
 

@@ -42,9 +42,6 @@ public class CommandReload extends BaseCommand {
         KitsManager.load();
         MenuManager.load();
 
-        // Update hooks.
-        this.starter.getPluginSupport().updateHooks();
-
         // Send message
         sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
     }
