@@ -17,7 +17,6 @@ public class ServerReadyListener implements Listener {
     @NotNull
     private final Starter starter = this.plugin.getStarter();
 
-    // Plugin Support.
     @NotNull
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
