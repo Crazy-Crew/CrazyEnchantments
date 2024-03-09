@@ -50,13 +50,13 @@ public class CrazyEnchantments extends JavaPlugin {
         // Load the configurations
         ConfigManager.load(getDataFolder());
 
+        // Enable metrics.
+        if (ConfigManager.getConfig().getProperty(Config.toggle_metrics)) new Metrics(this, 4494);
+
         this.starter = new Starter();
         this.starter.run();
 
         this.starter.getCurrencyAPI().loadCurrency();
-
-        FileConfiguration config = Files.CONFIG.getFile();
-        if (config.getBoolean("Settings.Toggle-Metrics")) new Metrics(this, 4494);
 
         // Load the new commands.
         CommandManager.load();
