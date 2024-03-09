@@ -23,9 +23,9 @@ softdepend:
   - MCMMO
 
 commands:
-  gkit:
-    description: Opens the GKitz GUI.
-    aliases: [ gkitz, gkits ]
+  #gkit:
+  #  description: Opens the GKitz GUI.
+  #  aliases: [ gkitz, gkits ]
 
 permissions:
   crazyenchantments.gkitz:

@@ -5,10 +5,6 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
-import com.badbones69.crazyenchantments.paper.commands.CECommand;
-import com.badbones69.crazyenchantments.paper.commands.CETab;
-import com.badbones69.crazyenchantments.paper.commands.GkitzCommand;
-import com.badbones69.crazyenchantments.paper.commands.GkitzTab;
 import com.badbones69.crazyenchantments.paper.commands.CommandManager;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.CommandChecker;
@@ -30,9 +26,6 @@ import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListene
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -121,10 +114,6 @@ public class CrazyEnchantments extends JavaPlugin {
 
             this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         }
-
-        registerCommand(getCommand("crazyenchantments"), new CETab(), new CECommand());
-
-        registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
     }
 
     @Override
@@ -136,14 +125,6 @@ public class CrazyEnchantments extends JavaPlugin {
         if (this.starter.getAllyManager() != null) this.starter.getAllyManager().forceRemoveAllies();
 
         getServer().getOnlinePlayers().forEach(this.starter.getCrazyManager()::unloadCEPlayer);
-    }
-
-    private void registerCommand(PluginCommand pluginCommand, TabCompleter tabCompleter, CommandExecutor commandExecutor) {
-        if (pluginCommand != null) {
-            pluginCommand.setExecutor(commandExecutor);
-
-            if (tabCompleter != null) pluginCommand.setTabCompleter(tabCompleter);
-        }
     }
 
     public Starter getStarter() {
