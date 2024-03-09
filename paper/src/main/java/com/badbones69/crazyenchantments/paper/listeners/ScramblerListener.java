@@ -259,6 +259,6 @@ public class ScramblerListener implements Listener {
     public void onScrollClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (isScrambler(player.getInventory().getItemInOffHand()) || isScrambler(player.getInventory().getItemInOffHand())) event.setCancelled(true);
+        if (isScrambler(player.getInventory().getItemInMainHand()) || isScrambler(player.getInventory().getItemInOffHand())) event.setCancelled(true);
     }
 }
