@@ -7,6 +7,8 @@ repositories {
 }
 
 dependencies {
+    implementation(project(":common"))
+    
     implementation(libs.triumphcmds)
 
     implementation(libs.metrics)
