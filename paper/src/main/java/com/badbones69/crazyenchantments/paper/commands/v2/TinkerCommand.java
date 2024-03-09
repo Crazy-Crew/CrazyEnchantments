@@ -3,10 +3,13 @@ package com.badbones69.crazyenchantments.paper.commands.v2;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
+import dev.triumphteam.cmd.core.annotations.Description;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionDefault;
 
-@Command("tinkerer")
-@Permission("crazyenchantments.tinker")
+@Command(value = "tinkerer", alias = "tinker")
+@Description("Opens the tinkerer gui.")
+@Permission(value = "crazyenchantments.tinker", def = PermissionDefault.TRUE)
 public class TinkerCommand {
 
     @Command
