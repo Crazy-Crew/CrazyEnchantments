@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -12,9 +12,9 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +23,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,9 +42,7 @@ public class KitsMenu extends InventoryBuilder {
 
     @Override
     public InventoryBuilder build() {
-        FileConfiguration configuration = Files.GKITZ.getFile();
-
-        for (String value : configuration.getStringList("Settings.GUI-Customization")) {
+        for (String value : ConfigManager.getConfig().getProperty(Config.gui_customization)) {
             int slot = 0;
 
             for (String option : value.split(", ")) {
@@ -86,10 +86,13 @@ public class KitsMenu extends InventoryBuilder {
 
     public static class KitsListener implements Listener {
 
+        @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
+        @NotNull
         private final Starter starter = this.plugin.getStarter();
 
+        @NotNull
         private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
         @EventHandler(ignoreCancelled = true)

@@ -1,50 +1,69 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
+import ch.jalu.configme.SettingsManager;
+import ch.jalu.configme.properties.Property;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public enum Scrolls {
-    
-    BLACK_SCROLL("Black-Scroll", "BlackScroll", Arrays.asList("b", "black", "blackscroll")),
-    WHITE_SCROLL("White-Scroll", "WhiteScroll", Arrays.asList("w", "white", "whitescroll")),
-    TRANSMOG_SCROLL("Transmog-Scroll", "TransmogScroll", Arrays.asList("t", "transmog", "transmogscroll"));
+
+    BLACK_SCROLL(List.of("b", "black", "blackscroll"), "Black-Scroll", Config.black_scroll_item, Config.black_scroll_name, Config.black_scroll_lore, Config.black_scroll_glowing),
+    WHITE_SCROLL(List.of("w", "white", "whitescroll"), "White-Scroll", Config.white_scroll_item, Config.white_scroll_name, Config.white_scroll_lore, Config.white_scroll_glowing),
+    TRANSMOG_SCROLL(List.of("t", "transmog", "transmogscroll"), "Transmog-Scroll", Config.transmog_scroll_item, Config.transmog_scroll_name, Config.transmog_scroll_lore, Config.transmog_scroll_glowing);
     
     private static final HashMap<Scrolls, ItemBuilder> itemBuilderScrolls = new HashMap<>();
+
     private final String name;
-    private final String configName;
     private final List<String> knownNames;
+    private final List<String> itemLore;
+    private final Material material;
+    private final String itemName;
+    private final boolean isGlowing;
+
+    @NotNull
+    private final SettingsManager config = ConfigManager.getConfig();
     
-    Scrolls(String name, String configName, List<String> knowNames) {
+    Scrolls(List<String> knownNames, String name, Property<String> material, Property<String> displayName, Property<List<String>> lore, Property<Boolean> isGlowing) {
+        this.knownNames = knownNames;
         this.name = name;
-        this.knownNames = knowNames;
-        this.configName = configName;
+
+        this.material = Material.matchMaterial(this.config.getProperty(material));
+
+        this.itemName = this.config.getProperty(displayName);
+
+        this.itemLore = this.config.getProperty(lore);
+
+        this.isGlowing = this.config.getProperty(isGlowing);
     }
     
     public static void loadScrolls() {
-        FileConfiguration config = Files.CONFIG.getFile();
         itemBuilderScrolls.clear();
 
         for (Scrolls scroll : values()) {
-            String path = "Settings." + scroll.getConfigName() + ".";
-            itemBuilderScrolls.put(scroll, new ItemBuilder()
-            .setName(config.getString(path + "Name", "Error getting name."))
-            .setLore(config.getStringList(path + "Item-Lore"))
-            .setMaterial(config.getString(path + "Item", "BOOK"))
-            .setGlow(config.getBoolean(path + "Glowing", false)));
+            ItemBuilder itemStack = new ItemBuilder()
+                    .setMaterial(scroll.material)
+                    .setName(scroll.itemName)
+                    .setLore(scroll.itemLore)
+                    .setGlow(scroll.isGlowing);
+
+            itemBuilderScrolls.put(scroll, itemStack);
         }
     }
     
@@ -65,11 +84,10 @@ public enum Scrolls {
     }
 
     /**
-     *
      * @return The name that is stored on the item, and defines that the item is in fact a Scroll.
      */
     public String getConfigName() {
-        return this.configName;
+        return getName().replaceAll("-", "");
     }
 
     private static final NamespacedKey scroll = DataKeys.scroll.getNamespacedKey();
@@ -84,7 +102,7 @@ public enum Scrolls {
     public ItemStack getScroll() {
         ItemStack item = itemBuilderScrolls.get(this).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, this.configName);
+        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, getConfigName());
         item.setItemMeta(meta);
         return item;
     }
@@ -92,7 +110,7 @@ public enum Scrolls {
     public ItemStack getScroll(int amount) {
         ItemStack item = itemBuilderScrolls.get(this).setAmount(amount).build();
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, this.configName);
+        meta.getPersistentDataContainer().set(scroll, PersistentDataType.STRING, getConfigName());
         item.setItemMeta(meta);
         return item;
     }
@@ -100,13 +118,7 @@ public enum Scrolls {
     private static final NamespacedKey whiteScrollProtectionKey = DataKeys.white_scroll_protection.getNamespacedKey();
 
     public static String getWhiteScrollProtectionName() {
-        String protectNamed;
-
-        FileConfiguration config = Files.CONFIG.getFile();
-
-        protectNamed = ColorUtils.color(config.getString("Settings.WhiteScroll.ProtectedName"));
-
-        return protectNamed;
+        return ColorUtils.color(ConfigManager.getConfig().getProperty(Config.white_scroll_protected));
     }
 
     public static boolean hasWhiteScrollProtection(ItemStack item) {
@@ -132,6 +144,7 @@ public enum Scrolls {
 
         meta.lore(lore);
         item.setItemMeta(meta);
+
         return item;
     }
 
@@ -139,18 +152,20 @@ public enum Scrolls {
         if (!item.hasItemMeta()) return item;
 
         ItemMeta meta = item.getItemMeta();
+
         if (meta.getPersistentDataContainer().has(whiteScrollProtectionKey, PersistentDataType.BOOLEAN)) meta.getPersistentDataContainer().remove(whiteScrollProtectionKey);
 
         if (item.lore() == null) {
             item.setItemMeta(meta);
+
             return item;
         }
 
         List<Component> lore = item.lore();
 
-        lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                .contains(getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
-        meta.lore(lore);
+        if (lore != null) {
+            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").contains(getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+        }
 
         meta.lore(lore);
         item.setItemMeta(meta);

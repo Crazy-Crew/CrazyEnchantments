@@ -1,13 +1,14 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.List;
@@ -86,15 +87,15 @@ public class LostBook {
     }
 
     public ItemBuilder getLostBook(Category category, int amount) {
-        FileConfiguration file = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("%Category%", category.getDisplayItem().getName());
         return new ItemBuilder()
-        .setMaterial(file.getString("Settings.LostBook.Item", "BOOK"))
+        .setMaterial(config.getProperty(Config.lost_book_item))
         .setAmount(amount)
-        .setName(file.getString("Settings.LostBook.Name", "Error getting name."))
+        .setName(config.getProperty(Config.lost_book_name))
         .setNamePlaceholders(placeholders)
-        .setLore(file.getStringList("Settings.LostBook.Lore"))
+        .setLore(config.getProperty(Config.lost_book_lore))
         .setLorePlaceholders(placeholders)
         .setStringPDC(DataKeys.lost_book.getNamespacedKey(), category.getName());
     }

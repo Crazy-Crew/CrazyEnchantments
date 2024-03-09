@@ -135,7 +135,7 @@ public class ShopListener implements Listener {
         }
 
         for (ShopOption option : ShopOption.values()) {
-            if (option.isInGUI() && item.isSimilar(option.getItem())) {
+            if (option.isInGui() && item.isSimilar(option.getItem())) {
                 // If the option is buy-able then it check to see if they player can buy it and take the money.
 
                 if (option.isBuyable()) {

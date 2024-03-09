@@ -91,7 +91,9 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> scrambler_in_gui = newProperty("Settings.Scrambler.InGUI", false);
 
-    public static final Property<Integer> scrambler_slot = newProperty("Settings.Scrambler.Slot", 1);
+    public static final Property<String> scrambler_gui_player = newProperty("Settings.Scrambler.Player", "");
+
+    public static final Property<Integer> scrambler_gui_slot = newProperty("Settings.Scrambler.Slot", 1);
 
     public static final Property<String> scrambler_gui_name = newProperty("Settings.Scrambler.GUIName", "");
 
@@ -104,9 +106,12 @@ public class Config implements SettingsHolder {
             "&eCost: &e&l$800"
     ));
 
+
     public static final Property<Boolean> slot_crystal_in_gui = newProperty("Settings.Slot_Crystal.InGUI", false);
 
-    public static final Property<Integer> slot_crystal_slot = newProperty("Settings.Slot_Crystal.Slot", 14);
+    public static final Property<String> slot_crystal_gui_player = newProperty("Settings.Slot_Crystal.Player", "");
+
+    public static final Property<Integer> slot_crystal_gui_slot = newProperty("Settings.Slot_Crystal.Slot", 14);
 
     public static final Property<String> slot_crystal_item = newProperty("Settings.Slot_Crystal.Item", "EMERALD");
 
@@ -136,6 +141,8 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> gkitz_toggle = newProperty("Settings.Gkitz.Enabled", true);
 
+    public static final Property<String> gkitz_player = newProperty("Settings.GKitz.Player", "");
+
     public static final Property<Integer> gkitz_slot = newProperty("Settings.GKitz.Slot", 1);
 
     public static final Property<String> gkitz_item = newProperty("Settings.GKitz.Item", "DIAMOND_CHESTPLATE");
@@ -149,6 +156,8 @@ public class Config implements SettingsHolder {
     ));
 
     public static final Property<Boolean> protection_crystal_in_gui = newProperty("Settings.ProtectionCrystal.InGUI", false);
+
+    public static final Property<String> protection_crystal_gui_player = newProperty("Settings.ProtectionCrystal.Player", "");
 
     public static final Property<Integer> protection_crystal_slot = newProperty("Settings.ProtectionCrystal.Slot", 1);
 
@@ -186,6 +195,8 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> blacksmith_in_gui = newProperty("Settings.BlackSmith.InGUI", true);
 
+    public static final Property<String> blacksmith_player = newProperty("Settings.BlackSmith.Player", "");
+
     public static final Property<Integer> blacksmith_slot = newProperty("Settings.BlackSmith.Slot", 24);
 
     public static final Property<String> blacksmith_item = newProperty("Settings.BlackSmith.Item", "ANVIL");
@@ -222,6 +233,8 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> tinker_in_gui = newProperty("Settings.Tinker.InGUI", true);
 
+    public static final Property<String> tinker_player = newProperty("Settings.Tinker.Player", "");
+
     public static final Property<Integer> tinker_slot = newProperty("Settings.Tinker.Slot", 22);
 
     public static final Property<String> tinker_item = newProperty("Settings.Tinker.Item", "NETHER_STAR");
@@ -235,6 +248,8 @@ public class Config implements SettingsHolder {
     ));
 
     public static final Property<Boolean> info_in_gui = newProperty("Settings.Info.InGUI", true);
+
+    public static final Property<String> info_player = newProperty("Settings.Info.Player", "");
 
     public static final Property<Integer> info_slot = newProperty("Settings.Info.Slot", 23);
 
@@ -268,9 +283,13 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> mystery_dust_toggle_failed = newProperty("Settings.Dust.MysteryDust.Dust-Toggle.Failed", true);
 
-    public static final Property<Integer> mystery_dust_percent_range = newProperty("Settings.Dust.MysteryDust.PercentRange.Max", 30);
+    public static final Property<Integer> mystery_dust_min_percent_range = newProperty("Settings.Dust.MysteryDust.PercentRange.Min", 1);
+
+    public static final Property<Integer> mystery_dust_max_percent_range = newProperty("Settings.Dust.MysteryDust.PercentRange.Max", 30);
 
     public static final Property<Boolean> success_dust_in_gui = newProperty("Settings.Dust.SuccessDust.InGUI", true);
+
+    public static final Property<Integer> success_dust_slot = newProperty("Settings.Dust.SuccessDust.Slot", 25);
 
     public static final Property<String> success_dust_gui_name = newProperty("Settings.Dust.SuccessDust.GUIName", "&aMagical Angel Dust");
 
@@ -294,6 +313,8 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> success_dust_min_percent_range = newProperty("Settings.Dust.SuccessDust.PercentRange.Min", 2);
 
     public static final Property<Boolean> destroy_dust_in_gui = newProperty("Settings.Dust.DestroyDust.InGUI", true);
+
+    public static final Property<Integer> destroy_dust_slot = newProperty("Settings.Dust.DestroyDust.Slot", 34);
 
     public static final Property<String> destroy_dust_gui_name = newProperty("Settings.Dust.DestroyDust.GUIName", "&eMagical Fixing Dust");
 
@@ -345,9 +366,11 @@ public class Config implements SettingsHolder {
 
     public static final Property<String> black_scroll_gui_name = newProperty("Settings.BlackScroll.GUIName", "&7Black Scroll");
 
+    public static final Property<String> black_scroll_gui_player = newProperty("Settings.BlackScroll.Player", "");
+
     public static final Property<Boolean> black_scroll_glowing = newProperty("Settings.BlackScroll.Glowing", false);
 
-    public static final Property<Integer> black_scroll_slot = newProperty("Settings.BlackScroll.Slot", 21);
+    public static final Property<Integer> black_scroll_gui_slot = newProperty("Settings.BlackScroll.Slot", 21);
 
     public static final Property<List<String>> black_scroll_gui_lore = newListProperty("Settings.BlackScroll.Lore", List.of(
             "&eCost: &a&l$1000",
@@ -379,7 +402,9 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> white_scroll_glowing = newProperty("Settings.WhiteScroll.Glowing", false);
 
-    public static final Property<Integer> white_scroll_slot = newProperty("Settings.WhiteScroll.Slot", 30);
+    public static final Property<String> white_scroll_gui_player = newProperty("Settings.WhiteScroll.Player", "");
+
+    public static final Property<Integer> white_scroll_gui_slot = newProperty("Settings.WhiteScroll.Slot", 30);
 
     public static final Property<List<String>> white_scroll_gui_lore = newListProperty("Settings.WhiteScroll.Lore", List.of(
             "&eCost: &a&l$2000",
@@ -405,7 +430,9 @@ public class Config implements SettingsHolder {
 
     public static final Property<Boolean> transmog_scroll_glowing = newProperty("Settings.TransmogScroll.Glowing", false);
 
-    public static final Property<Integer> transmog_scroll_slot = newProperty("Settings.TransmogScroll.Slot", 30);
+    public static final Property<String> transmog_scroll_gui_player = newProperty("Settings.TransmogScroll.Player", "");
+
+    public static final Property<Integer> transmog_scroll_gui_slot = newProperty("Settings.TransmogScroll.Slot", 30);
 
     public static final Property<List<String>> transmog_scroll_gui_lore = newListProperty("Settings.TransmogScroll.Lore", List.of(
             "&eCost: &a&l$200",
@@ -471,4 +498,124 @@ public class Config implements SettingsHolder {
     public static final Property<String> ally_mobs_silverfish = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Silverfish", "&7%player%''s Silverfish");
 
     public static final Property<String> ally_mobs_bee = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Bee", "&e%player%''s Bee");
+
+    public static final Property<Boolean> armor_upgrade_toggle = newProperty("Settings.EnchantmentOptions.Armor-Upgrade.Toggle", true);
+
+    public static final Property<Boolean> armor_upgrade_break = newProperty("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break", true);
+
+    public static final Property<Boolean> wings_clouds = newProperty("Settings.EnchantmentOptions.Wings.Clouds", true);
+
+    public static final Property<Boolean> wings_enemy_toggle = newProperty("Settings.EnchantmentOptions.Wings.Enemy-Toggle", true);
+
+    public static final Property<Integer> wings_distance = newProperty("Settings.EnchantmentOptions.Wings.Distance", 25);
+
+    public static final Property<Boolean> wings_members_can_fly = newProperty("Settings.EnchantmentOptions.Wings.Members-Can-Fly", true);
+
+    public static final Property<Boolean> wings_owners_can_fly = newProperty("Settings.EnchantmentOptions.Wings.Owners-Can-Fly", true);
+
+    public static final Property<List<String>> wings_regions = newListProperty("Settings.EnchantmentOptions.Wings.Regions", List.of(
+            "Free_Fly",
+            "SafeZone"
+    ));
+
+    public static final Property<List<String>> wings_worlds_limitless = newListProperty("Settings.EnchantmentOptions.Wings.Worlds.Limitless-Flight-Worlds", List.of(
+            "Hub_Example"
+    ));
+
+    public static final Property<List<String>> wings_worlds_whitelisted = newListProperty("Settings.EnchantmentOptions.Wings.Worlds.Whitelisted", List.of(
+            "Hub_Example"
+    ));
+
+    public static final Property<List<String>> wings_worlds_blacklisted = newListProperty("Settings.EnchantmentOptions.Wings.Worlds.Blacklisted", List.of(
+            "SkyBlock_Example"
+    ));
+
+    public static final Property<Integer> scrambler_cost = newProperty("Settings.Costs.Scrambler.Cost", 800);
+
+    public static final Property<String> scrambler_currency = newProperty("Settings.Costs.Scrambler.Currency", "Vault");
+
+    public static final Property<Integer> protection_crystal_cost = newProperty("Settings.Costs.ProtectionCrystal.Cost", 500);
+
+    public static final Property<String> protection_crystal_currency = newProperty("Settings.Costs.ProtectionCrystal.Currency", "Vault");
+
+    public static final Property<Integer> transmog_cost = newProperty("Settings.Costs.TransmogScroll.Cost", 200);
+
+    public static final Property<String> transmog_currency = newProperty("Settings.Costs.TransmogScroll.Currency", "Vault");
+
+    public static final Property<Integer> black_scroll_cost = newProperty("Settings.Costs.BlackScroll.Cost", 1000);
+
+    public static final Property<String> black_scroll_currency = newProperty("Settings.Costs.BlackScroll.Currency", "Vault");
+
+    public static final Property<Integer> white_scroll_cost = newProperty("Settings.Costs.WhiteScroll.Cost", 2000);
+
+    public static final Property<String> white_scroll_currency = newProperty("Settings.Costs.WhiteScroll.Currency", "Vault");
+
+    public static final Property<Integer> success_dust_cost = newProperty("Settings.Costs.SuccessDust.Cost", 500);
+
+    public static final Property<String> success_dust_currency = newProperty("Settings.Costs.SuccessDust.Currency", "Vault");
+
+    public static final Property<Integer> destroy_dust_cost = newProperty("Settings.Costs.DestroyDust.Cost", 500);
+
+    public static final Property<String> destroy_dust_currency = newProperty("Settings.Costs.DestroyDust.Currency", "Vault");
+
+    public static final Property<Integer> slot_crystal_cost = newProperty("Settings.Costs.Slot_Crystal.Cost", 500);
+
+    public static final Property<String> slot_crystal_currency = newProperty("Settings.Costs.Slot_Crystal.Currency", "Vault");
+
+    @Comment({
+            "#####################",
+            " Slot:<Slot> - The slot the item will go in.",
+            " Item:<Item Name> - The item that it will be. You can use meta data for the items. List of names: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html",
+            " Name:<Name> - The name that will go on the item.",
+            " Lore:<Line1>,<Line2>,<Line3>,<Line4> - The lore can use multiple lines by adding a , in-between letters. Example: \"Lore:&7I am line1,&aI am line 2,&eI am line3\"",
+            "Placeholders can be used in the name and lore, and they must be lowercase.",
+            "Placeholders: %vault% %xp_level% %xp_total%",
+            "#####################"
+    })
+    public static final Property<List<String>> gui_customization = newListProperty("Settings.GUICustomization", List.of(
+            "Slot:1, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:2, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:3, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:4, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:5, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:6, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:7, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:8, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:9, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:10, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:18, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:19, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:27, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:28, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:36, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:37, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:45, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:46, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:47, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:48, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:49, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:50, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:51, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:52, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:53, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:54, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+
+            "Slot:11, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:12, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:13, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:14, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:15, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:16, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:17, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:20, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:26, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:29, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:35, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:38, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:39, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:41, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:42, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:43, Item:WHITE_STAINED_GLASS_PANE, Name: ",
+            "Slot:44, Item:WHITE_STAINED_GLASS_PANE, Name: "
+    ));
 }

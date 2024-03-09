@@ -49,7 +49,7 @@ public class ShopManager {
         this.inventorySize = config.getProperty(Config.inventory_size);
         this.enchantmentTableShop = config.getProperty(Config.right_click_enchantment_table);
 
-        for (String customItemString : config.getStringList("Settings.GUICustomization")) {
+        for (String customItemString : config.getProperty(Config.gui_customization)) {
             int slot = 0;
 
             for (String option : customItemString.split(", ")) {
@@ -83,7 +83,7 @@ public class ShopManager {
         }
 
         for (ShopOption option : ShopOption.values()) {
-            if (option.isInGUI()) {
+            if (option.isInGui()) {
                 if (option.getSlot() > this.inventorySize) continue;
 
                 this.shopItems.put(option.getItemBuilder(), option.getSlot());
