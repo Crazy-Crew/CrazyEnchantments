@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -442,7 +443,7 @@ public class Methods {
     public void lightning(LivingEntity en) {
         Location loc = en.getLocation();
         if (loc.getWorld() != null) loc.getWorld().strikeLightning(loc);
-        int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+        int lightningSoundRange = ConfigManager.getConfig().getProperty(Config.lightning_sound_range);
 
         try {
             loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);

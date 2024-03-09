@@ -1,10 +1,11 @@
 package com.badbones69.crazyenchantments.paper.controllers;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
 import com.badbones69.crazyenchantments.paper.api.events.BookApplyEvent;
@@ -14,10 +15,10 @@ import com.badbones69.crazyenchantments.paper.api.events.PreBookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +75,7 @@ public class EnchantmentControl implements Listener {
             return;
         }
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
 
         if (this.crazyManager.enchantStackedItems() || item.getAmount() == 1) {
             boolean hasWhiteScrollProtection = Scrolls.hasWhiteScrollProtection(item);
@@ -88,7 +88,7 @@ public class EnchantmentControl implements Listener {
             boolean isLowerLevel = hasEnchantment && enchantments.get(enchantment) < bookLevel;
 
             if (hasEnchantment) {
-                if (config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Toggle") && isLowerLevel) {
+                if (config.getProperty(Config.armor_upgrade_toggle) && isLowerLevel) {
                     event.setCancelled(true);
                     PreBookApplyEvent preBookApplyEvent = new PreBookApplyEvent(player, item, ceBook, player.getGameMode() == GameMode.CREATIVE, success, destroy);
                     this.plugin.getServer().getPluginManager().callEvent(preBookApplyEvent);
@@ -115,7 +115,7 @@ public class EnchantmentControl implements Listener {
                             this.plugin.getServer().getPluginManager().callEvent(bookDestroyEvent);
 
                             if (!bookDestroyEvent.isCancelled()) {
-                                if (config.getBoolean("Settings.EnchantmentOptions.Armor-Upgrade.Enchantment-Break")) {
+                                if (config.getProperty(Config.armor_upgrade_break)) {
                                     if (hasWhiteScrollProtection) {
                                         event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                                         player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
@@ -201,7 +201,7 @@ public class EnchantmentControl implements Listener {
     public void onDescriptionSend(PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) return;
 
-        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Right-Click-Book-Description")) {
+        if ((event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) && ConfigManager.getConfig().getProperty(Config.right_click_book)) {
             ItemStack item = this.methods.getItemInHand(event.getPlayer());
 
             if (this.enchantmentBookSettings.isEnchantmentBook(item)) {

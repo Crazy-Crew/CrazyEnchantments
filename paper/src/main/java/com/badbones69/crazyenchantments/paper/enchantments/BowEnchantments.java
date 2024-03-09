@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.EnchantmentUseEvent;
 import com.badbones69.crazyenchantments.paper.api.managers.BowEnchantmentManager;
@@ -17,6 +17,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBo
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
@@ -39,7 +40,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 
 public class BowEnchantments implements Listener {
@@ -120,7 +120,7 @@ public class BowEnchantments implements Listener {
 
             location.getWorld().strikeLightningEffect(location);
 
-            int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+            int lightningSoundRange = ConfigManager.getConfig().getProperty(Config.lightning_sound_range);
 
             try {
                 location.getWorld().playSound(location, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);

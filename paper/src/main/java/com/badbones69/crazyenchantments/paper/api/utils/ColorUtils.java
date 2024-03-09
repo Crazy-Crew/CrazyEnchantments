@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -11,10 +12,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,7 +83,7 @@ public class ColorUtils {
     }
 
     public static String getPrefix() {
-        return color(Files.CONFIG.getFile().getString("Settings.Prefix"));
+        return color(ConfigManager.getConfig().getProperty(Config.prefix));
     }
 
     public static String getPrefix(String msg) {

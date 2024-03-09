@@ -1,13 +1,14 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,13 +34,14 @@ public class SlotCrystalListener implements Listener {
     private static ItemStack slot_crystal;
 
     public void load() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
 
         slot_crystal = new ItemBuilder()
-                .setMaterial(config.getString("Settings.Slot_Crystal.Item", "RED_WOOL"))
-                .setName(config.getString("Settings.Slot_Crystal.Name", "Error getting name."))
-                .setLore(config.getStringList("Settings.Slot_Crystal.Lore"))
-                .setGlow(config.getBoolean("Settings.Slot_Crystal.Glowing", false)).build();
+                .setMaterial(config.getProperty(Config.slot_crystal_item))
+                .setName(config.getProperty(Config.slot_crystal_name))
+                .setLore(config.getProperty(Config.slot_crystal_lore))
+                .setGlow(config.getProperty(Config.slot_crystal_glowing)).build();
+
         ItemMeta meta = slot_crystal.getItemMeta();
         meta.getPersistentDataContainer().set(DataKeys.slot_crystal.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
 

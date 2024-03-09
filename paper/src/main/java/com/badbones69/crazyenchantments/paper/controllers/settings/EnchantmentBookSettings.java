@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.controllers.settings;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
@@ -12,6 +13,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
@@ -22,7 +24,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,9 +45,7 @@ public class EnchantmentBookSettings {
      * @return True if unsafe enchantments are enabled.
      */
     public boolean useUnsafeEnchantments() {
-        FileConfiguration config = Files.CONFIG.getFile();
-
-        return config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments");
+        return ConfigManager.getConfig().getProperty(Config.unsafe_enchantments);
     }
 
     public boolean hasEnchantment(ItemMeta meta, CEnchantment enchantment) {

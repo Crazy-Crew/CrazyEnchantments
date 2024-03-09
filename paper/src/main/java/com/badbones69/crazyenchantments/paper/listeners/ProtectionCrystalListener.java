@@ -1,11 +1,13 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -96,7 +98,7 @@ public class ProtectionCrystalListener implements Listener {
 
         if (this.protectionCrystalSettings.containsPlayer(player)) {
             // If the config does not have the option then it will lose the protection by default.
-            if (Files.CONFIG.getFile().getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death", true)) {
+            if (ConfigManager.getConfig().getProperty(Config.protection_crystal_lose_protection_on_death)) {
                 for (ItemStack item : this.protectionCrystalSettings.getCrystalItems().get(player.getUniqueId())) {
                     player.getInventory().addItem(this.protectionCrystalSettings.removeProtection(item));
                 }

@@ -1,5 +1,7 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
@@ -21,11 +23,10 @@ public class AllyManager {
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
     
     public void load() {
-        FileConfiguration config = Files.CONFIG.getFile();
-        String allyTypePath = "Settings.EnchantmentOptions.Ally-Mobs.";
+        SettingsManager config = ConfigManager.getConfig();
 
         for (AllyType type : AllyType.values()) {
-            this.allyTypeNameCache.put(type, ColorUtils.color(config.getString(allyTypePath + type.getConfigName(), type.getDefaultName())));
+            this.allyTypeNameCache.put(type, ColorUtils.color(config.getProperty(type.getConfigName())));
         }
     }
     

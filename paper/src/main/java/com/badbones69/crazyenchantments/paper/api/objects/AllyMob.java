@@ -1,8 +1,10 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
+import ch.jalu.configme.properties.Property;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Bee;
@@ -132,15 +134,15 @@ public class AllyMob {
     }
     
     public enum AllyType {
-        WOLF("Wolf", "&b%player%'s Saberwolf", EntityType.WOLF, 16),
-        IRON_GOLEM("Iron-Golem", "&6%player%'s Golem", EntityType.IRON_GOLEM, 200),
-        ZOMBIE("Zombie", "&2%player%'s Undead", EntityType.ZOMBIE, 45),
-        ENDERMITE("Endermite", "&5%player%'s Endermite", EntityType.ENDERMITE, 10),
-        SILVERFISH("Silverfish", "&7%player%'s Silverfish", EntityType.SILVERFISH, 10),
-        BEE("Bee", "&e%player%'s Bee", EntityType.BEE, 10);
+
+        WOLF(Config.ally_mobs_wolf, EntityType.WOLF, 16),
+        IRON_GOLEM(Config.ally_mobs_golem, EntityType.IRON_GOLEM, 200),
+        ZOMBIE(Config.ally_mobs_zombie, EntityType.ZOMBIE, 45),
+        ENDERMITE(Config.ally_mobs_endermite, EntityType.ENDERMITE, 10),
+        SILVERFISH(Config.ally_mobs_silverfish, EntityType.SILVERFISH, 10),
+        BEE(Config.ally_mobs_bee, EntityType.BEE, 10);
         
-        private final String configName;
-        private final String defaultName;
+        private final Property<String> configName;
         private final EntityType entityType;
         private final int maxHealth;
 
@@ -150,19 +152,14 @@ public class AllyMob {
         @NotNull
         private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
         
-        AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
+        AllyType(Property<String> configName, EntityType entityType, int maxHealth) {
             this.configName = configName;
-            this.defaultName = defaultName;
             this.entityType = entityType;
             this.maxHealth = maxHealth;
         }
         
-        public String getConfigName() {
+        public Property<String> getConfigName() {
             return this.configName;
-        }
-        
-        public String getDefaultName() {
-            return this.defaultName;
         }
         
         public String getName() {

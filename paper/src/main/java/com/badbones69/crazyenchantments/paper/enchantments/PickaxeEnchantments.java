@@ -1,10 +1,10 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -84,7 +85,7 @@ public class PickaxeEnchantments implements Listener {
         Block initialBlock = event.getBlock();
         ItemStack currentItem = this.methods.getItemInHand(player);
         //Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
-        boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
+        boolean damage = ConfigManager.getConfig().getProperty(Config.blast_full_durability);
 
         if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
         //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; // Duplicate event as it is called on click.
@@ -117,7 +118,7 @@ public class PickaxeEnchantments implements Listener {
         Block currentBlock = event.getBlock();
         ItemStack currentItem = methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
-        boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.VeinMiner-Full-Durability", true);
+        boolean damage = ConfigManager.getConfig().getProperty(Config.vein_miner_full_durability);
 
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.VEINMINER, enchantments)) return;
 
