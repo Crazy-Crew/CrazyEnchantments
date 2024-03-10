@@ -71,7 +71,7 @@ public class TinkererManager {
             currencyAPI.giveCurrency(player, Currency.getCurrency(tinker.getProperty(TinkerConfig.currency)), amount);
         }
 
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 
         return true;
     }
