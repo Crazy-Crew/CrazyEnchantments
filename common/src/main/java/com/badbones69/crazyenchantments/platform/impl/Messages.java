@@ -4,4 +4,6 @@ import ch.jalu.configme.SettingsHolder;
 
 public class Messages implements SettingsHolder {
 
+
+
 }

@@ -10,7 +10,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -24,17 +23,29 @@ public class MigrationManager {
         File directory = new File(plugin.getDataFolder(), "backups");
         directory.mkdirs();
 
-        // Move the file to the backup folder
+        // Move BlockList.yml to the backup folder
         File blockFile = new File(plugin.getDataFolder(), "BlockList.yml");
         if (blockFile.exists()) {
             blockFile.renameTo(new File(directory, "BlockList-v1.yml"));
         }
 
+        // Rename Data.yml to users.yml
+        copyData();
+
         // Update Tinker.yml
-        copyTinkerer(directory);
+        copyTinker(directory);
     }
 
-    private static void copyTinkerer(File directory) {
+    private static void copyData() {
+        // Move users.yml to the backup folder
+        File dataFile = new File(plugin.getDataFolder(), "users.yml");
+
+        if (dataFile.exists()) {
+            dataFile.renameTo(new File(plugin.getDataFolder(), "users.yml"));
+        }
+    }
+
+    private static void copyTinker(File directory) {
         File input = new File(plugin.getDataFolder(), "Tinker.yml");
 
         // Load the configuration.

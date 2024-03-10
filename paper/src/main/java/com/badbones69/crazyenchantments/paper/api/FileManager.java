@@ -346,7 +346,7 @@ public class FileManager {
         // ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
         CATEGORIES("Categories.yml", "Categories.yml"),
         HEADMAP("HeadMap.yml", "HeadMap.yml"),
-        DATA("Data.yml", "Data.yml"),
+        DATA("users.yml", "users.yml"),
         ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
         GKITZ("GKitz.yml", "GKitz.yml"),
         MESSAGES("Messages.yml", "Messages.yml"),
