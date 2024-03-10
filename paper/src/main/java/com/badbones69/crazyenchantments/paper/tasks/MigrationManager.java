@@ -124,34 +124,6 @@ public class MigrationManager {
                 // Save the file.
                 tinker.save();
             }
-
-            /*tinker.getProperty(TinkerConfig.crazyEnchantments).forEach(line -> {
-                String[] split = line.split(":");
-
-                String enchant = split[0];
-
-                plugin.getLogger().warning("Enchant: " + enchant);
-
-                String[] values = split[1].split("\\|");
-
-                String items = values[0];
-                String book = values[1];
-
-                String[] itemsNumbers = items.split(";");
-                String[] bookNumbers = book.split(";");
-
-                String firstItemKey = itemsNumbers[0];
-                String secondItemKey = itemsNumbers[1];
-
-                String firstBookKey = bookNumbers[0];
-                String secondBookKey = bookNumbers[1];
-
-                plugin.getLogger().warning("Items First: " + firstItemKey);
-                plugin.getLogger().warning("Items Second: " + secondItemKey);
-
-                plugin.getLogger().warning("Books First: " + firstBookKey);
-                plugin.getLogger().warning("Books Second: " + secondBookKey);
-            });*/
         }
     }
 }
