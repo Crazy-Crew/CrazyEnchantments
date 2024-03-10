@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager;
@@ -28,6 +29,9 @@ public class CommandReload extends BaseCommand {
     @Command("reload")
     @Permission(value = "crazyenchantments.reload", def = PermissionDefault.OP)
     public void reload(CommandSender sender) {
+        // Reload the new configuration
+        ConfigManager.reload();
+
         // Back up players
         this.crazyManager.getCEPlayers().forEach(player -> this.crazyManager.backupCEPlayer(player.getPlayer()));
 
