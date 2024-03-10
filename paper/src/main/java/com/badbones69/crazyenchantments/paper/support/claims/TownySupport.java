@@ -15,7 +15,7 @@ import org.jline.utils.Log;
 public class TownySupport implements ClaimSupport {
 
     public boolean isFriendly(Player player, Player other) {
-        return CombatUtil.preventDamageCall(player, other, DamageCause.ENTITY_ATTACK);
+        return CombatUtil.isAlly(player.getName(), other.getName());
     }
 
     public boolean inTerritory(Player player) {
