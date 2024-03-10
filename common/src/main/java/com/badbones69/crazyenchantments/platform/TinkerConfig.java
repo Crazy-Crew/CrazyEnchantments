@@ -28,7 +28,11 @@ public class TinkerConfig implements SettingsHolder {
             ""
     ));
 
-    @Comment("<Base amount of Xp(Lvl/Total)/Money>, <Amount per level>.")
+    @Comment({
+            "Do not remove anything from this list.",
+            "",
+            "<Base amount of Xp(Lvl/Total)/Money>, <Amount per level>."
+    })
     public static final Property<List<String>> enchantments = newListProperty("tinker.vanilla-enchantments", List.of(
             "PROTECTION_ENVIRONMENTAL: 24,1",
             "PROTECTION_FIRE: 20,1",
@@ -62,7 +66,11 @@ public class TinkerConfig implements SettingsHolder {
             "LURE: 15,1"
     ));
 
-    @Comment("<Base amount of Xp(Lvl/Total)/Money>, <Amount per level>.")
+    @Comment({
+            "Do not remove anything from this list.",
+            "",
+            "<Base amount of Xp(Lvl/Total)/Money>, <Amount per level>."
+    })
     public static final Property<List<String>> crazyEnchantments = newListProperty("tinker.crazy-enchantments", List.of(
             "Glowing: Items;20,1|Book;5,1",
             "BurnShield: Items;20,1|Book;5,1",
