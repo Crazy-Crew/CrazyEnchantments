@@ -8,8 +8,12 @@ import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.badbones69.crazyenchantments.platform.impl.Messages;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConfigManager {
+
+    private static Map<String, String> vanilla = new HashMap<>();
 
     private static SettingsManager config;
 
@@ -41,6 +45,9 @@ public class ConfigManager {
                 .configurationData(TinkerConfig.class)
                 .create();
 
+        // Update enchantment values.
+        update();
+
         blocks = SettingsManagerBuilder
                 .withYamlFile(new File(dataFolder, "blocks.yml"), builder)
                 .useDefaultMigrationService()
@@ -56,6 +63,9 @@ public class ConfigManager {
         tinker.reload();
 
         blocks.reload();
+
+        // Update enchantment values.
+        update();
     }
 
     public static void disable() {
@@ -82,5 +92,21 @@ public class ConfigManager {
 
     public static SettingsManager getBlocks() {
         return blocks;
+    }
+
+    public static Map<String, String> getVanillaEnchantments() {
+        return vanilla;
+    }
+
+    private static void update() {
+        // Clear it in case.
+        vanilla.clear();
+
+        // Repopulate it
+        tinker.getProperty(TinkerConfig.enchantments).forEach(line -> {
+            String[] split = line.split(":");
+
+            vanilla.put(split[0], split[1]);
+        });
     }
 }
