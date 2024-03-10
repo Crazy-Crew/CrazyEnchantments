@@ -8,12 +8,13 @@ import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.badbones69.crazyenchantments.platform.impl.Messages;
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigManager {
 
-    private static Map<String, String> vanilla = new HashMap<>();
+    private static final Map<String, String> vanilla = new HashMap<>();
 
     private static SettingsManager config;
 
@@ -95,7 +96,7 @@ public class ConfigManager {
     }
 
     public static Map<String, String> getVanillaEnchantments() {
-        return vanilla;
+        return Collections.unmodifiableMap(vanilla);
     }
 
     private static void update() {
