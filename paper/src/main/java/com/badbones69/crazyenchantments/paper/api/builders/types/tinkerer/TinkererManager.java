@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -96,33 +97,51 @@ public class TinkererManager {
 
         Map<CEnchantment, Integer> ceEnchants = starter.getEnchantmentBookSettings().getEnchantments(item);
 
-        List<String> values = new ArrayList<>(tinker.getProperty(TinkerConfig.crazyEnchantments));
+        Map<String, String> vanillaEnchantments = ConfigManager.getVanillaEnchantments();
 
         if (!ceEnchants.isEmpty()) { // CrazyEnchantments
             for (Map.Entry<CEnchantment, Integer> enchantment : ceEnchants.entrySet()) {
-                boolean hasMatch = tinker.getProperty(TinkerConfig.crazyEnchantments).iterator().next().equalsIgnoreCase(enchantment.getKey().getName());
+                String enchant = null;
 
-                if (hasMatch) {
+                for (String value : tinker.getProperty(TinkerConfig.crazyEnchantments)) {
+                    String[] split = value.split(":");
 
+                    if (split[0].equalsIgnoreCase(enchantment.getKey().getName())) {
+                        enchant = value;
+                        break;
+                    }
                 }
 
-                //String[] values = config.getString("Tinker.Crazy-Enchantments." + enchantment.getKey().getName() + ".Items", "0").replaceAll(" ", "").split(",");
-                //int baseAmount = Integer.parseInt(values[0]);
-                //int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
-                //int enchantmentLevel = enchantment.getValue();
+                if (enchant != null) {
+                    String[] split = enchant.split(":");
 
-                //total += baseAmount + enchantmentLevel * multiplier;
+                    String[] values = split[1].split("\\|");
+
+                    String books = values[0];
+
+                    String[] numbers = books.split(";");
+
+                    String[] splitAgain = numbers[1].split(",");
+
+                    int baseAmount = Integer.parseInt(splitAgain[0]);
+                    int multiplier = splitAgain.length < 2 ? 0 : Integer.parseInt(splitAgain[1]);
+
+                    total += baseAmount + enchantment.getValue() * multiplier;
+                }
             }
         }
 
         if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) { // Vanilla Enchantments
             for (Map.Entry<Enchantment, Integer> enchantment : item.getEnchantments().entrySet()) {
-                //String[] values = config.getString("Tinker.Vanilla-Enchantments." + enchantment.getKey(), "0").replaceAll(" ", "").split(",");
-                //int baseAmount = Integer.parseInt(values[0]);
-                //int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
-                //int enchantmentLevel = enchantment.getValue();
+                if (vanillaEnchantments.containsKey(enchantment.getKey().getName())) {
+                    String[] values = vanillaEnchantments.get(enchantment.getKey().getName()).split(",");
 
-                //total += baseAmount + enchantmentLevel * multiplier;
+                    int baseAmount = Integer.parseInt(values[0].replaceAll(" ", ""));
+                    int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+                    int enchantmentLevel = enchantment.getValue();
+
+                    total += baseAmount + enchantmentLevel + multiplier;
+                }
             }
         }
 
@@ -130,16 +149,33 @@ public class TinkererManager {
     }
 
     public static int getMaxDustLevelFromBook(CEBook book) {
-        //String path = "Tinker.Crazy-Enchantments." + book.getEnchantment().getName() + ".Book";
+        String enchant = null;
 
-        //if (!config.contains(path)) return 1;
+        for (String enchantment : tinker.getProperty(TinkerConfig.crazyEnchantments)) {
+            String[] split = enchantment.split(":");
 
-        //String[] values = config.getString(path, "0").replaceAll(" ", "").split(",");
-        //int baseAmount = Integer.parseInt(values[0]);
-        //int multiplier = values.length < 2 ? 0 : Integer.parseInt(values[1]);
+            if (split[0].equalsIgnoreCase(book.getEnchantment().getName())) {
+                enchant = enchantment;
+                break;
+            }
+        }
 
-        //return baseAmount + book.getLevel() * multiplier;
-        return 1;
+        if (enchant == null) return 1;
+
+        String[] split = enchant.split(":");
+
+        String[] values = split[1].split("\\|");
+
+        String books = values[1];
+
+        String[] numbers = books.split(";");
+
+        String[] splitAgain = numbers[1].split(",");
+
+        int baseAmount = Integer.parseInt(splitAgain[0]);
+        int multiplier = splitAgain.length < 2 ? 0 : Integer.parseInt(splitAgain[1]);
+
+        return baseAmount + book.getLevel() * multiplier;
     }
 
     public static Map<Integer, Integer> getSlots() {
