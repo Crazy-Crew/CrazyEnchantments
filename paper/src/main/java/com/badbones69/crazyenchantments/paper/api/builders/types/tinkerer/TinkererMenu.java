@@ -103,8 +103,8 @@ public class TinkererMenu extends InventoryBuilder {
                 int total = 0;
                 boolean toggle = false;
 
-                for (int slot : this.slots.keySet()) {
-                    ItemStack reward = inventory.getItem(this.slots.get(slot));
+                for (Map.Entry<Integer, Integer> slot : this.slots.entrySet()) {
+                    ItemStack reward = inventory.getItem(slot.getValue());
 
                     if (reward != null) {
                         if (Currency.getCurrency(this.tinker.getProperty(TinkerConfig.currency)) == Currency.VAULT) {
@@ -116,8 +116,8 @@ public class TinkererMenu extends InventoryBuilder {
                         toggle = true;
                     }
 
-                    inventory.setItem(slot, new ItemStack(Material.AIR));
-                    inventory.setItem(this.slots.get(slot), new ItemStack(Material.AIR));
+                    inventory.setItem(slot.getKey(), new ItemStack(Material.AIR));
+                    inventory.setItem(slot.getValue(), new ItemStack(Material.AIR));
                 }
 
                 player.closeInventory();

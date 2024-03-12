@@ -40,7 +40,6 @@ public class CrazyEnchantments extends JavaPlugin {
     public final PluginManager pluginManager = getServer().getPluginManager();
 
     private FireworkDamageListener fireworkDamageListener;
-    private ShopListener shopListener;
     private ArmorEnchantments armorEnchantments;
 
     private final BossBarController bossBarController = new BossBarController(this);
@@ -64,7 +63,7 @@ public class CrazyEnchantments extends JavaPlugin {
         CommandManager.load();
 
         this.pluginManager.registerEvents(this.fireworkDamageListener = new FireworkDamageListener(), this);
-        this.pluginManager.registerEvents(this.shopListener = new ShopListener(), this);
+        this.pluginManager.registerEvents(new ShopListener(), this);
 
         // Load what we need to properly enable the plugin.
         this.starter.getCrazyManager().load();
@@ -124,10 +123,6 @@ public class CrazyEnchantments extends JavaPlugin {
     // Plugin Listeners.
     public FireworkDamageListener getFireworkDamageListener() {
         return this.fireworkDamageListener;
-    }
-
-    public ShopListener getShopListener() {
-        return this.shopListener;
     }
 
     public PluginManager getPluginManager() {
