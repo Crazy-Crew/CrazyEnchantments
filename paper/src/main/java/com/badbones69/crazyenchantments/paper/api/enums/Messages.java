@@ -21,8 +21,8 @@ public enum Messages {
     NEED_MORE_TOTAL_XP("Need-More-Total-XP", "&cYou need &6%XP% &cmore total xp."),
     NEED_MORE_MONEY("Need-More-Money", "&cYou are in need of &a$%Money_Needed%&c."),
     HIT_ENCHANTMENT_MAX("Hit-Enchantment-Max", "&#ff0000That item already has the maximum amount of enchantments that you can add to it." +
-                        "&#880808if you believe that this is incorrect, contact the server owner and ask them to add the permission " +
-                        "crazyenchantments.limit.# to you, using their preferred permission plugin. (Replacing the # with the amount)"),
+                        "&#880808if you believe that this is incorrect, contact the server owner and ask them to add the permissions " +
+                        "crazyenchantments.limit.# and crazyenchantments.base-limit.# to you, using their preferred permission plugin. (Replacing the # with the amount)"),
     MAX_SLOTS_UNLOCKED("Hit-Slot-Max", "&cYou have already added the maximum amount of slots to this item."),
     APPLIED_SLOT_CRYSTAL("Applied-Slot-Crystal", "&cYou have successfully added another slot to the item. The item now has %slot% extra slots."),
     INVENTORY_FULL("Inventory-Full", "&cYour inventory is too full. Please open up some space to buy that."),
