@@ -3,8 +3,6 @@ package com.badbones69.crazyenchantments.paper.api.managers;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
-import com.badbones69.crazyenchantments.paper.api.economy.Currency;
-import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
@@ -12,12 +10,11 @@ import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Map;
 
 //todo() redo this
 public class ShopManager {
@@ -29,16 +26,13 @@ public class ShopManager {
     private final Starter starter = this.plugin.getStarter();
 
     @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
-
-    @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private String inventoryName;
     private int inventorySize;
     private boolean enchantmentTableShop;
-    private final HashMap<ItemBuilder, Integer> customizerItems = new HashMap<>();
-    private final HashMap<ItemBuilder, Integer> shopItems = new HashMap<>();
+    private final Map<ItemBuilder, Integer> customizerItems = new HashMap<>();
+    private final Map<ItemBuilder, Integer> shopItems = new HashMap<>();
     
     public void load() {
         this.customizerItems.clear();
@@ -89,27 +83,15 @@ public class ShopManager {
             }
         }
     }
-    
-    public Inventory getShopInventory(Player player) {
-        HashMap<String, String> placeholders = new HashMap<>();
 
-        for (Currency currency : Currency.values()) {
-            placeholders.put("%" + currency.getName() + "%", String.valueOf(this.currencyAPI.getCurrency(player, currency)));
-        }
-
-        Inventory inventory = this.plugin.getServer().createInventory(null, this.inventorySize, this.inventoryName);
-
-        for (Entry<ItemBuilder, Integer> itemBuilders : this.customizerItems.entrySet()) {
-            itemBuilders.getKey().setNamePlaceholders(placeholders)
-            .setLorePlaceholders(placeholders);
-            inventory.setItem(itemBuilders.getValue(), itemBuilders.getKey().build());
-        }
-
-        this.shopItems.keySet().forEach(itemBuilder -> inventory.setItem(this.shopItems.get(itemBuilder), itemBuilder.build()));
-
-        return inventory;
+    public Map<ItemBuilder, Integer> getShopItems() {
+        return Collections.unmodifiableMap(this.shopItems);
     }
-    
+
+    public Map<ItemBuilder, Integer> getCustomizerItems() {
+        return Collections.unmodifiableMap(this.customizerItems);
+    }
+
     public String getInventoryName() {
         return this.inventoryName;
     }

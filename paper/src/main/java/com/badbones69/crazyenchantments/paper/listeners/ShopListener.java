@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
+import com.badbones69.crazyenchantments.paper.api.builders.types.ShopMenu;
 import com.badbones69.crazyenchantments.paper.api.economy.CurrencyAPI;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -67,24 +68,20 @@ public class ShopListener implements Listener {
     @NotNull
     private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
 
-    private final Material enchantmentTable = new ItemBuilder().setMaterial("ENCHANTING_TABLE").getMaterial();
-
-    public void openGUI(Player player) {
-        player.openInventory(this.shopManager.getShopInventory(player));
-    }
-
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
         Inventory inventory = event.getInventory();
-        Player player = (Player) event.getWhoClicked();
 
-        if (!event.getView().getTitle().equals(this.shopManager.getInventoryName())) return;
+        if (!(inventory.getHolder(false) instanceof ShopMenu holder)) return;
+
         if (item == null) return;
+
+        Player player = holder.getPlayer();
 
         event.setCancelled(true);
 
-        if (event.getRawSlot() >= inventory.getSize()) return;
+        if (event.getClickedInventory() != player.getOpenInventory().getTopInventory()) return;
 
         for (Category category : this.enchantmentBookSettings.getCategories()) {
             if (category.isInGUI() && item.isSimilar(category.getDisplayItem().build())) {
@@ -116,7 +113,6 @@ public class ShopListener implements Listener {
             LostBook lostBook = category.getLostBook();
 
             if (lostBook.isInGUI() && item.isSimilar(lostBook.getDisplayItem().build())) {
-
                 if (this.methods.isInventoryFull(player)) return;
 
                 if (lostBook.getCurrency() != null && player.getGameMode() != GameMode.CREATIVE) {
@@ -195,9 +191,10 @@ public class ShopListener implements Listener {
             Player player = event.getPlayer();
             Block block = event.getClickedBlock();
 
-            if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == enchantmentTable) {
+            if (block != null && event.getAction() == Action.RIGHT_CLICK_BLOCK && block.getType() == Material.ENCHANTING_TABLE) {
                 event.setCancelled(true);
-                openGUI(player);
+
+                player.openInventory(new ShopMenu(player, this.shopManager.getInventorySize(), this.shopManager.getInventoryName()).build().getInventory());
             }
         }
     }
