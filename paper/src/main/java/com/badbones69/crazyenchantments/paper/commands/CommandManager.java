@@ -84,4 +84,23 @@ public class CommandManager {
     public static BukkitCommandManager<CommandSender> getCommandManager() {
         return commandManager;
     }
+
+    private static String getContext(String subCommand, String commandOrder) {
+        String correctUsage = null;
+
+        switch (subCommand) {
+            case "transfer" -> correctUsage = commandOrder + "<crate-name> <player-name> <amount>";
+            case "debug", "open", "set" -> correctUsage = commandOrder + "<crate-name>";
+            case "tp" -> correctUsage = commandOrder + "<id>";
+            case "additem" -> correctUsage = commandOrder + "<crate-name> <prize-number> <chance> [tier]";
+            case "preview", "forceopen" -> correctUsage = commandOrder + "<crate-name> <player-name>";
+            case "open-others" -> correctUsage = commandOrder + "<crate-name> <player-name> [key-type]";
+            case "mass-open" -> correctUsage = commandOrder + "<crate-name> <key-type> <amount>";
+            case "give-random" -> correctUsage = commandOrder + "<key-type> <amount> <player-name>";
+            case "give", "take" -> correctUsage = commandOrder + "<key-type> <crate-name> <amount> <player-name>";
+            case "giveall" -> correctUsage = commandOrder + "<key-type> <crate-name> <amount>";
+        }
+
+        return correctUsage;
+    }
 }
