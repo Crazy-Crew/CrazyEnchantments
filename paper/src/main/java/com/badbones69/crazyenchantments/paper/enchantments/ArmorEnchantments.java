@@ -28,6 +28,7 @@ import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -273,13 +274,13 @@ public class ArmorEnchantments implements Listener {
             if (EnchantUtils.isEventActive(CEnchantments.CACTUS, player, armor, enchants)) damager.damage(this.crazyManager.getLevel(armor, CEnchantments.CACTUS));
 
             if (EnchantUtils.isEventActive(CEnchantments.STORMCALLER, player, armor, enchants)) {
-                this.methods.lightning(damager);
+                Entity lightning = this.methods.lightning(damager);
 
                 // AntiCheat Support.
                 if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(player);
 
                 for (LivingEntity en : this.methods.getNearbyLivingEntities(2D, player)) {
-                    EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(en, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(player).build(), 5D);
+                    EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(en, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(player).withDirectEntity(lightning).build(), 5D);
                     this.methods.entityEvent(player, en, damageByEntityEvent);
                 }
 

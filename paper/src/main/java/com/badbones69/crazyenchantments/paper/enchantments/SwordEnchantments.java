@@ -276,7 +276,7 @@ public class SwordEnchantments implements Listener {
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(damager);
 
             for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, damager)) {
-                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, DamageSource.builder(DamageType.INDIRECT_MAGIC).withCausingEntity(damager).build(), 5D);
+                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, DamageSource.builder(DamageType.INDIRECT_MAGIC).withDirectEntity(damager).build(), 5D);
                 this.methods.entityEvent(damager, entity, damageByEntityEvent);
             }
 

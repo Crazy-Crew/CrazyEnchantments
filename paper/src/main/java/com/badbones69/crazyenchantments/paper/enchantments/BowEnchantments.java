@@ -23,6 +23,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -118,7 +119,7 @@ public class BowEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.LIGHTNING, shooter, arrow.bow(), arrow.enchantments())) {
             Location location = arrow.arrow().getLocation();
 
-            location.getWorld().strikeLightningEffect(location);
+            Entity lightning = location.getWorld().strikeLightningEffect(location);
 
             int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
@@ -131,7 +132,7 @@ public class BowEnchantments implements Listener {
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(shooter);
 
             for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, arrow.arrow())) {
-                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).build(), 5D);
+                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);
                 EventUtils.addIgnoredUUID(shooter.getUniqueId());

@@ -23,12 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -395,7 +390,7 @@ public class Methods {
                 if (this.pluginSupport.isFriendly(entity, livingEntity)) continue;
                 if (entity.getName().equalsIgnoreCase(value.getName())) continue;
 
-                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(entity).build(), 5D);
+                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(entity).withDirectEntity(arrow).build(), 5D);
 
                 this.plugin.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) continue;
@@ -439,14 +434,17 @@ public class Methods {
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public void lightning(LivingEntity en) {
+    public Entity lightning(LivingEntity en) {
         Location loc = en.getLocation();
-        if (loc.getWorld() != null) loc.getWorld().strikeLightning(loc);
+        Entity lightning = null;
+        if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
         int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
 
         try {
             loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
         } catch (Exception ignore) {}
+
+        return lightning;
     }
 
     public void switchCurrency(Player player, Currency option, String one, String two, String cost) {
