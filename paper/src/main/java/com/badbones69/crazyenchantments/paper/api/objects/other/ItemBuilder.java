@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.objects.other;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
+import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.Enchant;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -42,7 +43,6 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jline.utils.Log;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -538,6 +538,10 @@ public class ItemBuilder {
     }
 
     public ItemMeta addEnchantments(ItemMeta meta, Map<CEnchantment, Integer> enchantments) { //TODO Stop CrazyManager from being null to replace this method.
+
+        CrazyManager crazyManager = this.starter.getCrazyManager(); // Temp fix for this method being outdated.
+        if (crazyManager != null) return crazyManager.addEnchantments(meta, enchantments); //TODO Replace whole method.
+
         EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
         Gson gson = new Gson();
         Map<CEnchantment, Integer> currentEnchantments = enchantmentBookSettings.getEnchantments(meta);
