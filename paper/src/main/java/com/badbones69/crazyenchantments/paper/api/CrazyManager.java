@@ -530,8 +530,8 @@ public class CrazyManager {
         String data = meta.getPersistentDataContainer().get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING);
         Enchant enchantData = data != null ? gson.fromJson(data, Enchant.class) : new Enchant(new HashMap<>());
 
-        List<Component> lore = meta.lore();
-        if (lore == null) lore = new ArrayList<>();
+        List<Component> oldLore = meta.lore() != null ? meta.lore() : new ArrayList<>();
+        List<Component> newLore = new ArrayList<>();
 
         for (Entry<CEnchantment, Integer> entry : enchantments.entrySet()) {
             CEnchantment enchantment = entry.getKey();
@@ -539,14 +539,14 @@ public class CrazyManager {
 
             String loreString = enchantment.getCustomName() + " " + NumberUtils.convertLevelString(level);
 
-            lore.add(ColorUtils.legacyTranslateColourCodes(loreString));
+            newLore.add(ColorUtils.legacyTranslateColourCodes(loreString));
 
             for (Entry<CEnchantment, Integer> x : enchantments.entrySet()) {
                 enchantData.addEnchantment(x.getKey().getName(), x.getValue());
             }
         }
-
-        meta.lore(lore);
+        newLore.addAll(oldLore);
+        meta.lore(newLore);
         meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(enchantData));
 
         return meta;
