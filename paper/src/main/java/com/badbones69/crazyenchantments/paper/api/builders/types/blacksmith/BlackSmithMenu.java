@@ -148,8 +148,8 @@ public class BlackSmithMenu extends InventoryBuilder {
 
                             this.methods.addItemToInventory(player, result.getResultItem());
 
-                            inventory.setItem(this.mainSlot, new ItemStack(Material.AIR));
-                            inventory.setItem(this.subSlot, new ItemStack(Material.AIR));
+                            inventory.setItem(this.mainSlot, null);
+                            inventory.setItem(this.subSlot, null);
 
                             playSound(player, this.levelUp);
 
