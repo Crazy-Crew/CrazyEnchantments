@@ -2,14 +2,13 @@ plugins {
     `kotlin-dsl`
 }
 
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
+
 dependencies {
-    implementation(libs.paperweight)
-
-    implementation(libs.shadow)
-
-    implementation(libs.runpaper)
-
-    implementation(libs.modrinth)
-
-    implementation(libs.hangar)
+    implementation(libs.paperweight.userdev)
+    implementation(libs.publishing.modrinth)
+    implementation(libs.publishing.hangar)
 }

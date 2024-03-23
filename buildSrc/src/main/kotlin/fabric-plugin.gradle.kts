@@ -2,8 +2,8 @@ plugins {
     id("root-plugin")
 }
 
-val mcVersion = providers.gradleProperty("mcVersion").get()
-val fabricVersion = providers.gradleProperty("version").get()
+val mcVersion: String = providers.gradleProperty("mcVersion").get()
+val fabricVersion: String = providers.gradleProperty("version").get()
 
 project.version = if (System.getenv("BUILD_NUMBER") != null) "$fabricVersion-${System.getenv("BUILD_NUMBER")}" else fabricVersion
 

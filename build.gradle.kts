@@ -1,7 +1,7 @@
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 
 plugins {
-    id("root-plugin")
+    `root-plugin`
 }
 
 tasks {
