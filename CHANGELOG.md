@@ -7,8 +7,9 @@
 ### Git History: [v2.1.2 -> 2.2.8](https://github.com/Crazy-Crew/CrazyEnchantments/compare/v2.1.2...v2.2.8)
 
 ## Additions
-* Added a new command, `/ce slotcrystal [amount] [player]` with tab completion and default permissions. [b7a3a8d](https://github.com/Crazy-Crew/CrazyEnchantments/commit/b7a3a8df6f2550f6612f5266520d3ea531bde621)
+* Added a new command, `/ce slotcrystal [amount] [player]` with tab completion and default permissions. [b7a3a8d](https://github.com/Crazy-Crew/CrazyEnchantments/pull/756)
   * The permission is `crazyenchantments.slotcrystal`
+* Per item max enchants. [4e36966](https://github.com/Crazy-Crew/CrazyEnchantments/pull/774)
 
 ## Enhancements
 ### Performance
@@ -68,7 +69,7 @@
 * Fixed command feedback for /ce give, so it sends the proper format. [79b8bf0](https://github.com/Crazy-Crew/CrazyEnchantments/commit/79b8bf072bffa013b7182474debc4e62b81cf75b)
 * Fixed event priorities to allow us to get the last say. [352f9ca](https://github.com/Crazy-Crew/CrazyEnchantments/commit/352f9ca9a63431ad7ec4569732cdc7d79528ec30)
 * Makes it so that all armor effects are re-applied after the totem takes them away. [163e296](https://github.com/Crazy-Crew/CrazyEnchantments/commit/163e2963c31cf4fa4a2ab823b137803ce6c6799a)
-* A large amount of issues fixed [d4ae91f](https://github.com/Crazy-Crew/CrazyEnchantments/commit/d4ae91fd08d0caf13a6cd0f4416a1a60edf4d5b1)
+* A large amount of issues fixed [d4ae91f](https://github.com/Crazy-Crew/CrazyEnchantments/pull/756)
   * Fix mistakes in the default config.
   * Fix item names being set to "" when there is no name set.
   * Fix players in spectator mode with wings not being able to fly.
