@@ -151,7 +151,7 @@ public class SwordEnchantments implements Listener {
 
                 if (inventoryItem != null) {
                     items.add(inventoryItem);
-                    inventory.setItem(i, new ItemStack(Material.AIR));
+                    inventory.setItem(i, null);
                 }
 
                 slots.add(i);

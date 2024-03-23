@@ -26,9 +26,11 @@ public class BlackSmithResult {
         Starter starter = plugin.getStarter();
 
         EnchantmentBookSettings enchantmentBookSettings = starter.getEnchantmentBookSettings();
-        if (mainItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial() && subItem.getType() == enchantmentBookSettings.getNormalBook().getMaterial()) {
-            CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
-            CEBook subBook = enchantmentBookSettings.getCEBook(subItem);
+
+        CEBook mainBook = enchantmentBookSettings.getCEBook(mainItem);
+        CEBook subBook = enchantmentBookSettings.getCEBook(subItem);
+
+        if (mainBook != null && subBook != null) {
             // Books are the same enchantment.
             if (mainBook.getEnchantment() == subBook.getEnchantment() &&
             // Books have to be the same level.

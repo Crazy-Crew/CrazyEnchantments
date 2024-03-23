@@ -115,8 +115,8 @@ public class TinkererMenu extends InventoryBuilder {
                         toggle = true;
                     }
 
-                    inventory.setItem(slot.getKey(), new ItemStack(Material.AIR));
-                    inventory.setItem(slot.getValue(), new ItemStack(Material.AIR));
+                    inventory.setItem(slot.getKey(), null);
+                    inventory.setItem(slot.getValue(), null);
                 }
 
                 player.closeInventory();
@@ -139,9 +139,9 @@ public class TinkererMenu extends InventoryBuilder {
                 if (book == null) return;
 
                 if (event.getClickedInventory() == topInventory) { // Clicking in the tinkers.
-                    event.setCurrentItem(new ItemStack(Material.AIR));
+                    event.setCurrentItem(null);
                     bottomInventory.addItem(current);
-                    inventory.setItem(this.slots.get(event.getRawSlot()), new ItemStack(Material.AIR));
+                    inventory.setItem(this.slots.get(event.getRawSlot()), null);
                 } else { // Clicking in their inventory.
                     if (isFirstEmpty(event, player, current, topInventory)) return;
 
@@ -160,9 +160,9 @@ public class TinkererMenu extends InventoryBuilder {
                 // Adding an item.
                 if (event.getClickedInventory() == topInventory) { // Clicking in the tinkers.
                     if (this.slots.containsKey(event.getRawSlot())) {
-                        event.setCurrentItem(new ItemStack(Material.AIR));
+                        event.setCurrentItem(null);
                         player.getInventory().addItem(current);
-                        inventory.setItem(this.slots.get(event.getRawSlot()), new ItemStack(Material.AIR));
+                        inventory.setItem(this.slots.get(event.getRawSlot()), null);
                     }
                 } else {
                     // Clicking in their inventory.
@@ -189,7 +189,7 @@ public class TinkererMenu extends InventoryBuilder {
                 return true;
             }
 
-            event.setCurrentItem(new ItemStack(Material.AIR));
+            event.setCurrentItem(null);
 
             return false;
         }
