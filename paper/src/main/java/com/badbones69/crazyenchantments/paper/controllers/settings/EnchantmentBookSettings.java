@@ -66,9 +66,11 @@ public class EnchantmentBookSettings {
      * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
      */
     public CEBook getCEBook(ItemStack book) {
-        if (!book.hasItemMeta() || !book.getItemMeta().getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey())) return null;
+        if (!book.hasItemMeta()) return null;
+        ItemMeta meta = book.getItemMeta();
+        if (!meta.getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey())) return null;
 
-        EnchantedBook data = this.gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class);
+        EnchantedBook data = this.gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class);
        
         CEnchantment enchantment = null;
         for (CEnchantment enchant : getRegisteredEnchantments()) {
