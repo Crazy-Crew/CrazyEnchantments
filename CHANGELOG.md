@@ -1,7 +1,10 @@
+
 ## Changes
 * The order in which enchantments are added at the start of the list instead of the end. [d45e11c](https://github.com/Crazy-Crew/CrazyEnchantments/commit/d45e11c9deabbcfeaa9e96b1066a1ef802281fd5)
 * Added a config option to be able to change the amount that damage is scaled by for Rage. [61d3817](https://github.com/Crazy-Crew/CrazyEnchantments/commit/61d3817045272a836fc1a91f63912869013bdb46)
 * Added new messages for give/getting slot crystals as they just used the ones for protection crystals. [21b9c23](https://github.com/Crazy-Crew/CrazyEnchantments/commit/21b9c23e9507752bfdf90fd3b2ead4cfba2944b5)
+
+### Git History: [v2.1.2 -> 2.2.8](https://github.com/Crazy-Crew/CrazyEnchantments/compare/v2.1.2...v2.2.8)
 
 ## Additions
 * Added a new command, `/ce slotcrystal [amount] [player]` with tab completion and default permissions. [b7a3a8d](https://github.com/Crazy-Crew/CrazyEnchantments/commit/b7a3a8df6f2550f6612f5266520d3ea531bde621)
@@ -38,7 +41,7 @@
 * Updated firework damage prevention by using the new API from Spigot Upstream. [3d59ab9](https://github.com/Crazy-Crew/CrazyEnchantments/commit/3d59ab92e75a0f3f534757bb548484485dcb00cd)
 * A player opped should always be able to use the enchants. [654c2fb](https://github.com/Crazy-Crew/CrazyEnchantments/commit/654c2fb78d069314fedeb861ab59bf3a98b31c11)
 * Properly remove dust/scrolls or scramblers from inventory with reduced item meta checks as well. [bde17b1](https://github.com/Crazy-Crew/CrazyEnchantments/commit/bde17b111facedf38fb743bd2b400c17411fc30e)
-* Add ore information to /ce limit to help users understand what all of the current limits are. [dffb151](https://github.com/Crazy-Crew/CrazyEnchantments/commit/dffb151946df581e613e4f8dac1d5198bbbcd82f)
+* Add ore information to /ce limit to help users understand what all the current limits are. [dffb151](https://github.com/Crazy-Crew/CrazyEnchantments/commit/dffb151946df581e613e4f8dac1d5198bbbcd82f)
 * Remove the copy and paste of blast block list being checked for vein miner blocks to see if they are a valid block that can be broken. [6f4f444](https://github.com/Crazy-Crew/CrazyEnchantments/commit/6f4f444e0632fc8ffa8a07d3f5ba37ca62491e79)
 * A general list of changes. [d4ae91f](https://github.com/Crazy-Crew/CrazyEnchantments/commit/d4ae91fd08d0caf13a6cd0f4416a1a60edf4d5b1)
 
@@ -47,7 +50,8 @@
 
 ## Plugin Support
 * Switch towny check to check if players are in the same town or are allied instead of checking for player damage. [edd385](https://github.com/Crazy-Crew/CrazyEnchantments/commit/edd38508418ef340b3b06ba05cbc1ea6945620ea)
-* `Spartan` is no longer supported in CrazyEnchantments and will not be added back. [1716ebf](https://github.com/Crazy-Crew/CrazyEnchantments/commit/1716ebf53a8e4547b960d6ba4f83d3a2c17746d1)
+* `Spartan` is no longer supported in CrazyEnchantments and will not be added back. 
+  * [1716ebf](https://github.com/Crazy-Crew/CrazyEnchantments/commit/1716ebf53a8e4547b960d6ba4f83d3a2c17746d1)
   * [34a64c9](https://github.com/Crazy-Crew/CrazyEnchantments/commit/34a64c9fa0f8d187b28823e66cf94e62145b1a7f)
 
 ## Fixes:
