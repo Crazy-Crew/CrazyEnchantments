@@ -90,6 +90,10 @@ tasks {
         minecraftVersion(mcVersion)
     }
 
+    reobfJar {
+        dependsOn(assemble)
+    }
+
     shadowJar {
         archiveClassifier.set("")
 
