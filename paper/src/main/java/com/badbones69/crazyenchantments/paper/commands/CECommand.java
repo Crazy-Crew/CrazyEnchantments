@@ -25,6 +25,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
@@ -170,6 +171,8 @@ public class CECommand implements CommandExecutor {
                     sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
 
                     this.pluginSupport.updateHooks();
+
+                    FileUtils.loadFiles();
                 }
 
                 return true;

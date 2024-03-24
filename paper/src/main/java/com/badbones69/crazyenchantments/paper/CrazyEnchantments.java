@@ -5,6 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.types.BaseMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.blacksmith.BlackSmithMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsMenu;
 import com.badbones69.crazyenchantments.paper.api.builders.types.tinkerer.TinkererMenu;
+import com.badbones69.crazyenchantments.paper.api.utils.FileUtils;
 import com.badbones69.crazyenchantments.paper.commands.BlackSmithCommand;
 import com.badbones69.crazyenchantments.paper.commands.CECommand;
 import com.badbones69.crazyenchantments.paper.commands.CETab;
@@ -125,6 +126,8 @@ public class CrazyEnchantments extends JavaPlugin {
         registerCommand(getCommand("blacksmith"), null, new BlackSmithCommand());
 
         registerCommand(getCommand("gkit"), new GkitzTab(), new GkitzCommand());
+
+        FileUtils.loadFiles();
     }
 
     @Override
