@@ -19,7 +19,7 @@ tasks {
 
             doLast {
                 runCatching {
-                    val file = File("$jarsDir/${project.name.uppercaseFirstChar().lowercase()}")
+                    val file = File("$jarsDir/${project.name.lowercase()}")
 
                     file.mkdirs()
 
