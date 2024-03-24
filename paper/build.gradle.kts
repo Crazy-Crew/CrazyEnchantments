@@ -90,8 +90,8 @@ tasks {
         minecraftVersion(mcVersion)
     }
 
-    reobfJar {
-        dependsOn(assemble)
+    assemble {
+        dependsOn(reobfJar)
     }
 
     shadowJar {

@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.support.uppercaseFirstChar
-
 plugins {
     `root-plugin`
 }
@@ -28,8 +26,6 @@ tasks {
                         into(file)
                     }
                 }.onSuccess {
-                    File("$jarsDir/${project.name.lowercase()}").list()?.let { it1 -> println(it1.size) }
-
                     // Delete to save space on jenkins.
                     delete(project.layout.buildDirectory.get())
                     delete(rootProject.layout.buildDirectory.get())
