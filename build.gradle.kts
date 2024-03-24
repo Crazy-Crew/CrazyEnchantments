@@ -24,10 +24,12 @@ tasks {
                     file.mkdirs()
 
                     copy {
-                        from(project.layout.buildDirectory.file("libs/${rootProject.name}-${project.version}.jar"))
+                        from(project.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.version}.jar"))
                         into(file)
                     }
                 }.onSuccess {
+                    File("$jarsDir/${project.name.lowercase()}").list()?.let { it1 -> println(it1.size) }
+
                     // Delete to save space on jenkins.
                     delete(project.layout.buildDirectory.get())
                     delete(rootProject.layout.buildDirectory.get())
