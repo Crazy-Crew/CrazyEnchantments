@@ -11,6 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.platform.utils.EntityUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -76,8 +77,7 @@ public class LostBookController implements Listener {
 
         player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
 
-        if (lostBook.useFirework())
-            this.methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
+        if (lostBook.useFirework()) EntityUtils.firework(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
 
         if (lostBook.playSound()) player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
     }

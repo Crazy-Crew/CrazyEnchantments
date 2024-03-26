@@ -35,7 +35,6 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -244,27 +243,6 @@ public class Methods {
 
     public List<Entity> getNearbyEntities(double radius, Entity entity) {
         return entity.getNearbyEntities(radius, radius, radius);
-    }
-
-    public void fireWork(Location loc, List<Color> colors) {
-        fireWork(loc, new ArrayList<>(colors));
-    }
-
-    public void fireWork(Location loc, ArrayList<Color> colors) {
-        Firework firework = loc.getWorld().spawn(loc, Firework.class);
-        FireworkMeta fireworkMeta = firework.getFireworkMeta();
-        fireworkMeta.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
-                .withColor(colors)
-                .trail(false)
-                .flicker(false)
-                .build());
-
-        fireworkMeta.setPower(0);
-        firework.setFireworkMeta(fireworkMeta);
-
-        this.plugin.getFireworkDamageListener().addFirework(firework);
-
-        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, firework::detonate, 2);
     }
 
     public Enchantment getEnchantment(String enchantmentName) {

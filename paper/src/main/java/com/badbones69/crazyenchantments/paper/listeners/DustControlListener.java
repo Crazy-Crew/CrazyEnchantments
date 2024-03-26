@@ -13,6 +13,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DustData;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.EnchantedBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.paper.platform.utils.EntityUtils;
 import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
@@ -216,7 +217,7 @@ public class DustControlListener implements Listener {
 
                 ColorUtils.color(colors, colorString);
 
-                this.methods.fireWork(player.getLocation().add(0, 1, 0), colors);
+                EntityUtils.firework(player.getLocation().add(0, 1, 0), colors);
             }
         }
 
