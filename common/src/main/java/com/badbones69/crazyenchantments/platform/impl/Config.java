@@ -72,7 +72,7 @@ public class Config implements SettingsHolder {
 
     @Comment("The lore of the item.")
     public static final Property<List<String>> scrambler_lore = newListProperty("Settings.Scrambler.Lore", List.of(
-            "<gray>The <bold><yellow>The Grand Scrambler</bold> <gray>will allow",
+            "<gray>The <bold><yellow>Grand Scrambler</bold> <gray>will allow",
             "<gray>you to re-roll the destroy and success rates.",
             "<gray>Drag and drop it on an enchantment book",
             "<gray>to get a new destroy and success rate."
