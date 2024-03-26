@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.commands;
+package com.badbones69.crazyenchantments.paper.platform.commands;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import dev.triumphteam.cmd.core.annotations.Command;
