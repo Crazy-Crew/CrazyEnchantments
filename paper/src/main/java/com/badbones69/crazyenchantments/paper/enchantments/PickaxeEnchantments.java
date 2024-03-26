@@ -53,7 +53,7 @@ public class PickaxeEnchantments implements Listener {
     // Plugin Support.
     private final @NotNull NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
 
-    private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+    private final Map<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockClick(PlayerInteractEvent event) {
@@ -70,7 +70,7 @@ public class PickaxeEnchantments implements Listener {
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
-        this.blocks.put(player, blockFace);
+        this.blocks.put(player.getUniqueId(), blockFace);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -86,8 +86,8 @@ public class PickaxeEnchantments implements Listener {
         if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
         //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; // Duplicate event as it is called on click.
 
-        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
-        this.blocks.remove(player);
+        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player.getUniqueId()).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
+        this.blocks.remove(player.getUniqueId());
 
         if (massBlockBreakCheck(player, blockList)) return;
         event.setCancelled(true);

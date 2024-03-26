@@ -28,10 +28,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class ScramblerListener implements Listener {
 
@@ -43,7 +44,7 @@ public class ScramblerListener implements Listener {
 
     private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    private final HashMap<Player, BukkitTask> roll = new HashMap<>();
+    private final Map<UUID, BukkitTask> roll = new HashMap<>();
 
     private ItemBuilder scramblerItem;
     private ItemBuilder pointer;
@@ -124,7 +125,7 @@ public class ScramblerListener implements Listener {
     }
 
     private void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
-        this.roll.put(player, new BukkitRunnable() {
+        this.roll.put(player.getUniqueId(), new BukkitRunnable() {
             int time = 1;
             int full = 0;
             int open = 0;
@@ -158,7 +159,7 @@ public class ScramblerListener implements Listener {
                     if (this.time == 60) { // When done
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                         cancel();
-                        roll.remove(player);
+                        roll.remove(player.getUniqueId());
 
                         ItemStack item = inventory.getItem(13).clone();
 
@@ -255,8 +256,8 @@ public class ScramblerListener implements Listener {
         Player player = event.getPlayer();
 
         try {
-            this.roll.get(player).cancel();
-            this.roll.remove(player);
+            this.roll.get(player.getUniqueId()).cancel();
+            this.roll.remove(player.getUniqueId());
         } catch (Exception ignored) {
         }
     }
