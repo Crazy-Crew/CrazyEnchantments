@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper.commands.relations;
 
-import com.badbones69.crazyenchantments.paper.commands.MessageManager;
+import com.badbones69.crazyenchantments.paper.platform.MessageManager;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 

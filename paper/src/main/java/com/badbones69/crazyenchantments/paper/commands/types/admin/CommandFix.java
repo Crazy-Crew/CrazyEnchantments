@@ -2,8 +2,7 @@ package com.badbones69.crazyenchantments.paper.commands.types.admin;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
+import com.badbones69.crazyenchantments.paper.platform.commands.BaseCommand;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
@@ -28,7 +27,7 @@ public class CommandFix extends BaseCommand {
             if (!configuration.contains("Enchantments." + enchantment.getName())) brokenEnchantments.add(enchantment);
         }
 
-        ColorUtils.sendMessage(sender, "%prefix%&7Fixed a total of &c" + brokenEnchantments.size() + " &7enchantments.", true);
+        //ColorUtils.sendMessage(sender, "%prefix%&7Fixed a total of &c" + brokenEnchantments.size() + " &7enchantments.", true);
 
         for (CEnchantments enchantment : brokenEnchantments) {
             String path = "Enchantments." + enchantment.getName();
