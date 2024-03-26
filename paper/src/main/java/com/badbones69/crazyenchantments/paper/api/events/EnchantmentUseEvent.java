@@ -10,41 +10,45 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class EnchantmentUseEvent extends Event implements Cancellable {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final CEnchantment enchantment;
-    private boolean cancel;
     private final ItemStack item;
-    
+    private boolean cancel;
+
     public EnchantmentUseEvent(Player player, CEnchantment enchantment, ItemStack item) {
         this.player = player;
         this.enchantment = enchantment;
         cancel = false;
         this.item = item;
     }
-    
+
     public EnchantmentUseEvent(Player player, CEnchantments enchantments, ItemStack item) {
         this.player = player;
         enchantment = enchantments.getEnchantment();
         cancel = false;
         this.item = item;
     }
-    
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * @return The player that uses the enchantment.
      */
     public Player getPlayer() {
         return this.player;
     }
-    
+
     /**
      * @return The enchantment that is used.
      */
     public CEnchantment getEnchantment() {
         return this.enchantment;
     }
-    
+
     /**
      * @return The item that uses the enchantment.
      */
@@ -53,7 +57,6 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
     }
 
     /**
-     *
      * @return if the event is cancelled.
      */
     @Override
@@ -62,7 +65,6 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
     }
 
     /**
-     *
      * @param cancel true if you wish to cancel this event
      */
     @Override
@@ -77,10 +79,6 @@ public class EnchantmentUseEvent extends Event implements Cancellable {
      */
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

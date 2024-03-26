@@ -12,15 +12,13 @@ import java.util.Map;
 
 public class GKitzItem {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
-    
+    private final @NotNull CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+
     private final ItemBuilder itemBuilder;
     private final HashMap<CEnchantment, Integer> ceEnchantments;
-    
+
     /**
      * Make an empty gkit item.
      */
@@ -28,7 +26,7 @@ public class GKitzItem {
         this.itemBuilder = new ItemBuilder();
         this.ceEnchantments = new HashMap<>();
     }
-    
+
     /**
      * Make an empty gkit item.
      */
@@ -36,15 +34,15 @@ public class GKitzItem {
         this.itemBuilder = itemBuilder;
         this.ceEnchantments = new HashMap<>();
     }
-    
+
     /**
      * @param enchant Crazy Enchantment
-     * @param level Level of the enchantment
+     * @param level   Level of the enchantment
      */
     public void addCEEnchantment(CEnchantment enchant, int level) {
         this.ceEnchantments.put(enchant, level);
     }
-    
+
     /**
      * @return Returns a fully finished item.
      */

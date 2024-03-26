@@ -127,17 +127,13 @@ public enum CEnchantments {
     //	----------------All----------------  \\
     HELLFORGED("HellForged", "Damaged-Items", 5, 5);
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
     private final String name;
     private final String typeName;
@@ -147,14 +143,8 @@ public enum CEnchantments {
 
     private CEnchantment cachedEnchantment = null;
 
-    public static void invalidateCachedEnchants() {
-        for (CEnchantments value : values()) {
-            value.cachedEnchantment = null;
-        }
-    }
-
     /**
-     * @param name Name of the enchantment.
+     * @param name     Name of the enchantment.
      * @param typeName Type of items it goes on.
      */
     CEnchantments(String name, String typeName) {
@@ -166,9 +156,9 @@ public enum CEnchantments {
     }
 
     /**
-     * @param name Name of the enchantment.
-     * @param typeName Type of items it goes on.
-     * @param chance The chance the enchantment has to active.
+     * @param name           Name of the enchantment.
+     * @param typeName       Type of items it goes on.
+     * @param chance         The chance the enchantment has to active.
      * @param chanceIncrease The amount the chance increases by every level.
      */
     CEnchantments(String name, String typeName, int chance, int chanceIncrease) {
@@ -179,7 +169,12 @@ public enum CEnchantments {
         this.hasChanceSystem = true;
     }
 
-    
+    public static void invalidateCachedEnchants() {
+        for (CEnchantments value : values()) {
+            value.cachedEnchantment = null;
+        }
+    }
+
     /**
      * @return The name of the enchantment.
      */
@@ -241,16 +236,19 @@ public enum CEnchantments {
 
     /**
      * Get the enchantment that this is tied to.
+     *
      * @return The enchantment this is tied to.
      */
     public CEnchantment getEnchantment() {
-        if (this.cachedEnchantment == null) this.cachedEnchantment = this.crazyManager.getEnchantmentFromName(this.name);
+        if (this.cachedEnchantment == null)
+            this.cachedEnchantment = this.crazyManager.getEnchantmentFromName(this.name);
 
         return this.cachedEnchantment;
     }
 
     /**
      * Check to see if the enchantment's chance is successful.
+     *
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(int level) {
@@ -259,6 +257,7 @@ public enum CEnchantments {
 
     /**
      * Check to see if the enchantment's chance is successful.
+     *
      * @return True if the chance was successful and false if not.
      */
     public boolean chanceSuccessful(int level, double multiplier) {

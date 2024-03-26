@@ -1,7 +1,8 @@
 package com.badbones69.crazyenchantments.paper.api.utils;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -11,10 +12,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static java.util.regex.Matcher.quoteReplacement;
@@ -74,16 +74,20 @@ public class ColorUtils {
         String prefix = getPrefix();
 
         if (commandSender instanceof Player player) {
-            if (!prefix.isEmpty() && prefixToggle) player.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix))); else player.sendMessage(color(message));
+            if (!prefix.isEmpty() && prefixToggle)
+                player.sendRichMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix)));
+            else player.sendRichMessage(color(message));
 
             return;
         }
 
-        if (!prefix.isEmpty() && prefixToggle) commandSender.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix))); else commandSender.sendMessage(color(message));
+        if (!prefix.isEmpty() && prefixToggle)
+            commandSender.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix)));
+        else commandSender.sendMessage(color(message));
     }
 
     public static String getPrefix() {
-        return color(Files.CONFIG.getFile().getString("Settings.Prefix"));
+        return color(ConfigManager.getConfig().getProperty(Config.prefix));
     }
 
     public static String getPrefix(String msg) {
@@ -115,8 +119,6 @@ public class ColorUtils {
     }
 
     public static ItemBuilder getRandomPaneColor() {
-        Random random = new Random();
-
         List<String> colors = Arrays.asList(
                 "WHITE_STAINED_GLASS_PANE",
                 "ORANGE_STAINED_GLASS_PANE",
@@ -135,6 +137,6 @@ public class ColorUtils {
                 "RED_STAINED_GLASS_PANE",
                 "BLACK_STAINED_GLASS_PANE");
 
-        return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
+        return new ItemBuilder().setMaterial(colors.get(ThreadLocalRandom.current().nextInt(colors.size())));
     }
 }

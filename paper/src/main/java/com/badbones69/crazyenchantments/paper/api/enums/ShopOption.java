@@ -1,120 +1,169 @@
 package com.badbones69.crazyenchantments.paper.api.enums;
 
-import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import ch.jalu.configme.SettingsManager;
+import ch.jalu.configme.properties.Property;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyenchantments.platform.impl.Config;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
-import java.util.logging.Level;
+import java.util.List;
 
 public enum ShopOption {
-    
-    GKITZ("GKitz", "GKitz", "Name", "Lore", false),
-    BLACKSMITH("BlackSmith", "BlackSmith", "Name", "Lore", false),
-    TINKER("Tinker", "Tinker", "Name", "Lore", false),
-    INFO("Info", "Info", "Name", "Lore", false),
-    
-    PROTECTION_CRYSTAL("ProtectionCrystal", "ProtectionCrystal", "GUIName", "GUILore", true),
-    SUCCESS_DUST("SuccessDust", "Dust.SuccessDust", "GUIName", "GUILore", true),
-    DESTROY_DUST("DestroyDust", "Dust.DestroyDust", "GUIName", "GUILore", true),
-    SCRAMBLER("Scrambler", "Scrambler", "GUIName", "GUILore", true),
-    
-    BLACK_SCROLL("BlackScroll", "BlackScroll", "GUIName", "Lore", true),
-    WHITE_SCROLL("WhiteScroll", "WhiteScroll", "GUIName", "Lore", true),
-    TRANSMOG_SCROLL("TransmogScroll", "TransmogScroll", "GUIName", "Lore", true),
-    SLOT_CRYSTAL("Slot_Crystal", "Slot_Crystal", "GUIName", "GUILore", true);
-    
+
+    GKITZ(Config.gkitz_item, Config.gkitz_name, Config.gkitz_lore, Config.gkitz_in_gui, false, Config.gkitz_glowing, Config.scrambler_currency, Config.scrambler_cost, Config.gkitz_slot),
+    BLACKSMITH(Config.blacksmith_item, Config.blacksmith_name, Config.blacksmith_lore, Config.blacksmith_in_gui, false, Config.blacksmith_glowing, Config.scrambler_currency, Config.scrambler_cost, Config.blacksmith_slot),
+    TINKER(Config.tinker_item, Config.tinker_name, Config.tinker_lore, Config.tinker_in_gui, false, Config.tinker_glowing, Config.scrambler_currency, Config.scrambler_cost, Config.tinker_slot),
+    INFO(Config.info_item, Config.info_name, Config.info_lore, Config.info_glowing, false, Config.info_in_gui, Config.scrambler_currency, Config.scrambler_cost, Config.info_slot),
+
+    PROTECTION_CRYSTAL(Config.protection_crystal_item, Config.protection_crystal_gui_name, Config.protection_crystal_gui_lore, Config.protection_crystal_in_gui, true, Config.protection_crystal_glowing, Config.protection_crystal_currency, Config.protection_crystal_cost, Config.protection_crystal_slot),
+
+    DESTROY_DUST(Config.destroy_dust_item, Config.destroy_dust_gui_name, Config.destroy_dust_gui_lore, Config.destroy_dust_in_gui, true, Config.destroy_dust_currency, Config.destroy_dust_cost, Config.destroy_dust_slot),
+    SUCCESS_DUST(Config.success_dust_item, Config.success_dust_gui_name, Config.success_dust_gui_lore, Config.success_dust_in_gui, true, Config.success_dust_currency, Config.success_dust_cost, Config.success_dust_slot),
+
+    SCRAMBLER(Config.scrambler_item, Config.scrambler_gui_name, Config.scrambler_gui_lore, Config.scrambler_in_gui, true, Config.scrambler_glowing, Config.scrambler_currency, Config.scrambler_cost, Config.scrambler_gui_slot),
+
+    SLOT_CRYSTAL(Config.slot_crystal_item, Config.slot_crystal_gui_name, Config.slot_crystal_gui_lore, Config.slot_crystal_in_gui, true, Config.slot_crystal_glowing, Config.slot_crystal_currency, Config.slot_crystal_cost, Config.slot_crystal_gui_slot),
+
+    BLACK_SCROLL(Config.black_scroll_item, Config.black_scroll_gui_name, Config.black_scroll_gui_lore, Config.black_scroll_in_gui, true, Config.black_scroll_glowing, Config.black_scroll_currency, Config.black_scroll_cost, Config.black_scroll_gui_slot),
+    WHITE_SCROLL(Config.white_scroll_item, Config.white_scroll_gui_name, Config.white_scroll_gui_lore, Config.white_scroll_in_gui, true, Config.white_scroll_glowing, Config.white_scroll_currency, Config.white_scroll_cost, Config.white_scroll_gui_slot),
+    TRANSMOG_SCROLL(Config.transmog_scroll_item, Config.transmog_scroll_gui_name, Config.transmog_scroll_gui_lore, Config.transmog_scroll_in_gui, true, Config.transmog_scroll_in_gui, Config.transmog_currency, Config.transmog_cost, Config.transmog_scroll_gui_slot);
+
     private static final HashMap<ShopOption, Option> shopOptions = new HashMap<>();
-    private final String optionPath;
-    private final String path;
-    private final String namePath;
-    private final String lorePath;
-    private Option option;
-    private final boolean buyable;
-    
-    ShopOption(String optionPath, String path, String namePath, String lorePath, boolean buyable) {
-        this.optionPath = optionPath;
-        this.path = path;
-        this.namePath = namePath;
-        this.lorePath = lorePath;
-        this.buyable = buyable;
+
+    private final Material material;
+    private final String name;
+    private final List<String> lore;
+    private final boolean isBuyable;
+
+    private final boolean isGlowing;
+    private final int slot;
+    private final boolean inGui;
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
+    private String currency;
+    private int cost;
+
+    ShopOption(Property<String> item, Property<String> name, Property<List<String>> lore, Property<Boolean> inGui, boolean isBuyable, Property<Boolean> isGlowing, Property<String> currency, Property<Integer> cost, Property<Integer> slot) {
+        this.material = Material.matchMaterial(this.config.getProperty(item));
+
+        this.name = this.config.getProperty(name);
+
+        this.lore = this.config.getProperty(lore);
+
+        this.isBuyable = isBuyable;
+
+        this.inGui = this.config.getProperty(inGui);
+
+        this.isGlowing = this.config.getProperty(isGlowing);
+
+        this.currency = this.config.getProperty(currency);
+
+        this.cost = this.config.getProperty(cost);
+
+        this.slot = this.config.getProperty(slot);
     }
 
-    @NotNull
-    private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-    
+    ShopOption(Property<String> item, Property<String> name, Property<List<String>> lore, Property<Boolean> inGui, boolean isBuyable, Property<String> currency, Property<Integer> cost, Property<Integer> slot) {
+        this.material = Material.matchMaterial(this.config.getProperty(item));
+
+        this.name = this.config.getProperty(name);
+
+        this.lore = this.config.getProperty(lore);
+
+        this.isBuyable = isBuyable;
+
+        this.inGui = this.config.getProperty(inGui);
+
+        this.isGlowing = false;
+
+        this.slot = this.config.getProperty(slot);
+
+        this.currency = this.config.getProperty(currency);
+
+        this.cost = this.config.getProperty(cost);
+    }
+
+    ShopOption(Property<String> item, Property<String> name, Property<List<String>> lore, Property<Boolean> inGui, Property<Boolean> isGlowing, Property<Integer> slot) {
+        this.material = Material.matchMaterial(this.config.getProperty(item));
+
+        this.name = this.config.getProperty(name);
+
+        this.lore = this.config.getProperty(lore);
+
+        this.isBuyable = false;
+
+        this.inGui = this.config.getProperty(inGui);
+
+        this.isGlowing = this.config.getProperty(isGlowing);
+
+        this.slot = this.config.getProperty(slot);
+    }
+
     public static void loadShopOptions() {
-        FileConfiguration config = Files.CONFIG.getFile();
         shopOptions.clear();
 
-        for (ShopOption shopOption : values()) {
-            String itemPath = "Settings." + shopOption.getPath() + ".";
-            String costPath = "Settings.Costs." + shopOption.getOptionPath() + ".";
+        for (ShopOption option : values()) {
+            ItemBuilder builder = new ItemBuilder()
+                    .setName(option.getName())
+                    .setLore(option.getLore())
+                    .setMaterial(option.getMaterial())
+                    .setGlow(option.isGlowing());
 
-            try {
-                shopOptions.put(shopOption, new Option(new ItemBuilder()
-                .setName(config.getString(itemPath + shopOption.getNamePath(), "Error getting name."))
-                .setLore(config.getStringList(itemPath + shopOption.getLorePath()))
-                .setMaterial(config.getString(itemPath + "Item", "CHEST"))
-                .setPlayerName(config.getString(itemPath + "Player"))
-                .setGlow(config.getBoolean(itemPath + "Glowing", false)),
-                config.getInt(itemPath + "Slot", 1) - 1,
-                config.getBoolean(itemPath + "InGUI", true),
-                config.getInt(costPath + "Cost", 100),
-                Currency.getCurrency(config.getString(costPath + "Currency", "Vault"))));
-            } catch (Exception exception) {
-                plugin.getLogger().log(Level.SEVERE, "The option " + shopOption.getOptionPath() + " has failed to load.", exception);
-            }
+            Option shop = new Option(builder, option.getSlot(), option.isInGui(), option.getCost(), option.getCurrency());
+
+            shopOptions.put(option, shop);
         }
     }
-    
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Material getMaterial() {
+        return this.material;
+    }
+
+    public boolean isGlowing() {
+        return this.isGlowing;
+    }
+
+    public boolean isInGui() {
+        return this.inGui;
+    }
+
+    public List<String> getLore() {
+        return this.lore;
+    }
+
     public ItemStack getItem() {
         return getItemBuilder().build();
     }
-    
+
     public ItemBuilder getItemBuilder() {
         return shopOptions.get(this).itemBuilder();
     }
-    
+
     public int getSlot() {
-        return shopOptions.get(this).slot();
-    }
-    
-    public boolean isInGUI() {
-        return shopOptions.get(this).inGUI();
-    }
-    
-    public int getCost() {
-        return shopOptions.get(this).cost();
-    }
-    
-    public Currency getCurrency() {
-        return shopOptions.get(this).currency();
-    }
-    
-    private String getOptionPath() {
-        return this.optionPath;
-    }
-    
-    private String getPath() {
-        return this.path;
-    }
-    
-    private String getNamePath() {
-        return this.namePath;
-    }
-    
-    private String getLorePath() {
-        return this.lorePath;
-    }
-    
-    public boolean isBuyable() {
-        return this.buyable;
+        return this.slot;
     }
 
-    private record Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {}
+    public int getCost() {
+        return this.cost;
+    }
+
+    public Currency getCurrency() {
+        return Currency.getCurrency(this.currency);
+    }
+
+    public boolean isBuyable() {
+        return this.isBuyable;
+    }
+
+    private record Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {
+    }
 }

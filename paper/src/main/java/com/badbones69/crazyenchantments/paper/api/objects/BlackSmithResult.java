@@ -15,7 +15,7 @@ public class BlackSmithResult {
 
     private int cost = 0;
     private ItemStack resultItem;
-    
+
     public BlackSmithResult(Player player, ItemStack mainItem, ItemStack subItem) {
         resultItem = mainItem.clone();
 
@@ -33,10 +33,10 @@ public class BlackSmithResult {
         if (mainBook != null && subBook != null) {
             // Books are the same enchantment.
             if (mainBook.getEnchantment() == subBook.getEnchantment() &&
-            // Books have to be the same level.
-            mainBook.getLevel() == subBook.getLevel() &&
-            // Makes sure level doesn't go passed max.
-            mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
+                    // Books have to be the same level.
+                    mainBook.getLevel() == subBook.getLevel() &&
+                    // Makes sure level doesn't go passed max.
+                    mainBook.getLevel() + 1 <= mainBook.getEnchantment().getMaxLevel()) {
                 this.resultItem = mainBook.setLevel(mainBook.getLevel() + 1).buildBook();
                 this.cost += BlackSmithManager.getBookUpgrade();
             }
@@ -104,11 +104,11 @@ public class BlackSmithResult {
             }
         }
     }
-    
+
     public int getCost() {
         return this.cost;
     }
-    
+
     public ItemStack getResultItem() {
         return this.resultItem;
     }

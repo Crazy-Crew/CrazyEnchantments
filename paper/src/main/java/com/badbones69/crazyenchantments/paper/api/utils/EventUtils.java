@@ -4,16 +4,15 @@ import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 public class EventUtils {
-    
+
     private static final Set<Event> ignoredEvents = new HashSet<>();
     private static final Set<UUID> ignoredUUIDs = new HashSet<>();
-    
+
     public static Set<Event> getIgnoredEvents() {
         return ignoredEvents;
     }

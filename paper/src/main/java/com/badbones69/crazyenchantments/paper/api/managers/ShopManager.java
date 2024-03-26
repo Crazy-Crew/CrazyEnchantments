@@ -1,15 +1,16 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.ShopOption;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
-import org.bukkit.configuration.file.FileConfiguration;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
@@ -19,30 +20,26 @@ import java.util.Map;
 //todo() redo this
 public class ShopManager {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final Map<ItemBuilder, Integer> customizerItems = new HashMap<>();
+    private final Map<ItemBuilder, Integer> shopItems = new HashMap<>();
     private String inventoryName;
     private int inventorySize;
     private boolean enchantmentTableShop;
-    private final Map<ItemBuilder, Integer> customizerItems = new HashMap<>();
-    private final Map<ItemBuilder, Integer> shopItems = new HashMap<>();
-    
+
     public void load() {
         this.customizerItems.clear();
         this.shopItems.clear();
-        FileConfiguration config = Files.CONFIG.getFile();
-        this.inventoryName = ColorUtils.color(config.getString("Settings.InvName"));
-        this.inventorySize = config.getInt("Settings.GUISize");
-        this.enchantmentTableShop = config.getBoolean("Settings.EnchantmentOptions.Right-Click-Enchantment-Table");
+        SettingsManager config = ConfigManager.getConfig();
+        this.inventoryName = ColorUtils.color(config.getProperty(Config.inventory_name));
+        this.inventorySize = config.getProperty(Config.inventory_size);
+        this.enchantmentTableShop = config.getProperty(Config.right_click_enchantment_table);
 
-        for (String customItemString : config.getStringList("Settings.GUICustomization")) {
+        for (String customItemString : config.getProperty(Config.gui_customization)) {
             int slot = 0;
 
             for (String option : customItemString.split(", ")) {
@@ -76,7 +73,7 @@ public class ShopManager {
         }
 
         for (ShopOption option : ShopOption.values()) {
-            if (option.isInGUI()) {
+            if (option.isInGui()) {
                 if (option.getSlot() > this.inventorySize) continue;
 
                 this.shopItems.put(option.getItemBuilder(), option.getSlot());
@@ -95,11 +92,11 @@ public class ShopManager {
     public String getInventoryName() {
         return this.inventoryName;
     }
-    
+
     public int getInventorySize() {
         return this.inventorySize;
     }
-    
+
     public boolean isEnchantmentTableShop() {
         return this.enchantmentTableShop;
     }

@@ -24,7 +24,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -33,21 +32,17 @@ import java.util.UUID;
 
 public class AllyEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
     // Settings.
-    @NotNull
-    private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Managers.
-    @NotNull
-    private final AllyManager allyManager = this.starter.getAllyManager();
+    private final @NotNull AllyManager allyManager = this.starter.getAllyManager();
 
-    private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
+    private final Map<UUID, Calendar> allyCoolDown = new HashMap<>();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onAllySpawn(EntityDamageByEntityEvent event) {

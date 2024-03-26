@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.utils;
+package com.badbones69.crazyenchantments.paper.platform.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,8 +13,7 @@ import java.util.logging.Level;
 
 public class FileUtils {
 
-    @NotNull
-    private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     public static void copyFiles(Path directory, String folder, List<String> names) {
         names.forEach(name -> copyFile(directory, folder, name));
@@ -59,7 +58,8 @@ public class FileUtils {
 
         if (!dir.exists()) {
             if (dir.mkdirs()) {
-                if (plugin.isLogging()) plugin.getLogger().warning("Created " + dir.getName() + " because we couldn't find it.");
+                if (plugin.isLogging())
+                    plugin.getLogger().warning("Created " + dir.getName() + " because we couldn't find it.");
             }
         }
 
@@ -93,7 +93,8 @@ public class FileUtils {
 
         if (!dir.exists()) {
             if (dir.mkdirs()) {
-                if (plugin.isLogging()) plugin.getLogger().warning("Created " + dir.getName() + " because we couldn't find it.");
+                if (plugin.isLogging())
+                    plugin.getLogger().warning("Created " + dir.getName() + " because we couldn't find it.");
             }
         }
 

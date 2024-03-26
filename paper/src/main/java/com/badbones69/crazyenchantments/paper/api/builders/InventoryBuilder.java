@@ -14,8 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("ALL")
 public abstract class InventoryBuilder implements InventoryHolder {
 
-    @NotNull
-    protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    protected final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final Inventory inventory;
     private final Player player;
@@ -51,14 +50,14 @@ public abstract class InventoryBuilder implements InventoryHolder {
 
     public abstract InventoryBuilder build();
 
+    public EnchantmentType getEnchantmentType() {
+        return this.enchantmentType;
+    }
+
     public InventoryBuilder setEnchantmentType(EnchantmentType enchantmentType) {
         this.enchantmentType = enchantmentType;
 
         return this;
-    }
-
-    public EnchantmentType getEnchantmentType() {
-        return this.enchantmentType;
     }
 
     public GKitz getKit() {
@@ -73,12 +72,12 @@ public abstract class InventoryBuilder implements InventoryHolder {
         return this.size;
     }
 
-    public void setPage(int page) {
-        this.page = page;
-    }
-
     public int getPage() {
         return this.page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
     public void title(String title) {

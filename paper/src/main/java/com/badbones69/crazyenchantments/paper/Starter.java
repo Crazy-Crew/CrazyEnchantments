@@ -30,8 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Starter {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private FileManager fileManager;
     private CrazyManager crazyManager;
@@ -76,7 +75,8 @@ public class Starter {
         this.pluginSupport = new PluginSupport();
         this.pluginSupport.initializeWorldGuard();
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded()) this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded())
+            this.superiorSkyBlockSupport = new SuperiorSkyBlockSupport();
 
         if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport = new NoCheatPlusSupport();
 

@@ -1,10 +1,10 @@
 package com.badbones69.crazyenchantments.paper.enchantments;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.events.MassBlockBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
@@ -14,6 +14,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -35,29 +36,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class PickaxeEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Support.
-    @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
+    private final @NotNull NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
 
-    private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+    private final Map<UUID, Map<Block, BlockFace>> blocks = new HashMap<>();
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockClick(PlayerInteractEvent event) {
@@ -68,12 +64,13 @@ public class PickaxeEnchantments implements Listener {
         ItemStack item = this.methods.getItemInHand(player);
         Block block = event.getClickedBlock();
 
-        if (block == null || block.isEmpty() || !this.crazyManager.getBlastBlockList().contains(block.getType())) return;
-        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, this.enchantmentBookSettings.getEnchantments(item))) return; // TODO Move over to block break.
+        if (block == null || block.isEmpty() || this.crazyManager.getBlastBlockList().contains(block.getType())) return;
+        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, this.enchantmentBookSettings.getEnchantments(item)))
+            return; // TODO Move over to block break.
 
-        HashMap<Block, BlockFace> blockFace = new HashMap<>();
+        Map<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
-        this.blocks.put(player, blockFace);
+        this.blocks.put(player.getUniqueId(), blockFace);
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -84,19 +81,19 @@ public class PickaxeEnchantments implements Listener {
         Block initialBlock = event.getBlock();
         ItemStack currentItem = this.methods.getItemInHand(player);
         //Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
-        boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.Blast-Full-Durability");
+        boolean damage = ConfigManager.getConfig().getProperty(Config.blast_full_durability);
 
-        if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
+        if (!(this.blocks.containsKey(player.getUniqueId()) && this.blocks.get(player.getUniqueId()).containsKey(initialBlock))) return;
         //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; // Duplicate event as it is called on click.
 
-        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
-        this.blocks.remove(player);
+        Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player.getUniqueId()).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
+        this.blocks.remove(player.getUniqueId());
 
         if (massBlockBreakCheck(player, blockList)) return;
         event.setCancelled(true);
 
         for (Block block : blockList) {
-            if (block.isEmpty() || !crazyManager.getBlastBlockList().contains(block.getType())) continue;
+            if (block.isEmpty() || crazyManager.getBlastBlockList().contains(block.getType())) continue;
             if (this.methods.playerBreakBlock(player, block, currentItem, crazyManager.isDropBlocksBlast())) continue;
             if (damage) this.methods.removeDurability(currentItem, player);
         }
@@ -106,7 +103,7 @@ public class PickaxeEnchantments implements Listener {
     }
 
 
-    @EventHandler(priority =  EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onVeinMinerBreak(BlockBreakEvent event) {
         if (!isOreBlock(event.getBlock().getType())
                 || !event.isDropItems()
@@ -117,11 +114,11 @@ public class PickaxeEnchantments implements Listener {
         Block currentBlock = event.getBlock();
         ItemStack currentItem = methods.getItemInHand(player);
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(currentItem);
-        boolean damage = Files.CONFIG.getFile().getBoolean("Settings.EnchantmentOptions.VeinMiner-Full-Durability", true);
+        boolean damage = ConfigManager.getConfig().getProperty(Config.vein_miner_full_durability);
 
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.VEINMINER, enchantments)) return;
 
-        HashSet<Block> blockList = getOreBlocks(currentBlock.getLocation(), enchantments.get(CEnchantments.VEINMINER.getEnchantment()));
+        Set<Block> blockList = getOreBlocks(currentBlock.getLocation(), enchantments.get(CEnchantments.VEINMINER.getEnchantment()));
         blockList.add(currentBlock);
 
         if (massBlockBreakCheck(player, blockList)) return;
@@ -130,7 +127,8 @@ public class PickaxeEnchantments implements Listener {
 
         for (Block block : blockList) {
             if (block.isEmpty()) continue;
-            if (this.methods.playerBreakBlock(player, block, currentItem, this.crazyManager.isDropBlocksVeinMiner())) continue;
+            if (this.methods.playerBreakBlock(player, block, currentItem, this.crazyManager.isDropBlocksVeinMiner()))
+                continue;
             if (damage) this.methods.removeDurability(currentItem, player);
         }
 
@@ -165,7 +163,7 @@ public class PickaxeEnchantments implements Listener {
             int level = enchants.get(CEnchantments.AUTOSMELT.getEnchantment());
 
             for (int j = 0; j < oldDrops.size(); j++) {
-                Item entityItem  = oldDrops.get(j);
+                Item entityItem = oldDrops.get(j);
                 ItemStack drop = entityItem.getItemStack();
 
                 if (!isOre(drop.getType())) continue;
@@ -181,7 +179,7 @@ public class PickaxeEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.FURNACE, player, item, enchants)) {
 
             for (int j = 0; j < oldDrops.size(); j++) {
-                Item entityItem  = oldDrops.get(j);
+                Item entityItem = oldDrops.get(j);
                 ItemStack drop = entityItem.getItemStack();
 
                 if (!isOre(drop.getType())) continue;
@@ -205,14 +203,14 @@ public class PickaxeEnchantments implements Listener {
         event.setExpToDrop(event.getExpToDrop() + (enchants.get(CEnchantments.EXPERIENCE.getEnchantment()) + 2));
     }
 
-    private HashSet<Block> getOreBlocks(Location loc, int amount) {
-        HashSet<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
-        HashSet<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
+    private Set<Block> getOreBlocks(Location loc, int amount) {
+        Set<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
+        Set<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
 
         int depth = 0;
 
         while (depth < amount) {
-            HashSet<Block> tempBlocks = new HashSet<>();
+            Set<Block> tempBlocks = new HashSet<>();
 
             for (Block block1 : newestBlocks) {
                 for (Block block : getSurroundingBlocks(block1.getLocation())) {
@@ -227,22 +225,22 @@ public class PickaxeEnchantments implements Listener {
         }
 
         return blocks;
-    } 
-    
-    private HashSet<Block> getSurroundingBlocks(Location loc) {
-        HashSet<Block> locations = new HashSet<>();
-        
-        locations.add(loc.clone().add(0,1,0).getBlock());
-        locations.add(loc.clone().add(0,-1,0).getBlock());
-        locations.add(loc.clone().add(1,0,0).getBlock());
-        locations.add(loc.clone().add(-1,0,0).getBlock());
-        locations.add(loc.clone().add(0,0,1).getBlock());
-        locations.add(loc.clone().add(0,0,-1).getBlock());
-        
+    }
+
+    private Set<Block> getSurroundingBlocks(Location loc) {
+        Set<Block> locations = new HashSet<>();
+
+        locations.add(loc.clone().add(0, 1, 0).getBlock());
+        locations.add(loc.clone().add(0, -1, 0).getBlock());
+        locations.add(loc.clone().add(1, 0, 0).getBlock());
+        locations.add(loc.clone().add(-1, 0, 0).getBlock());
+        locations.add(loc.clone().add(0, 0, 1).getBlock());
+        locations.add(loc.clone().add(0, 0, -1).getBlock());
+
         return locations;
     }
 
-    private HashSet<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
+    private Set<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
 
         switch (blockFace) {
@@ -285,15 +283,15 @@ public class PickaxeEnchantments implements Listener {
     private boolean isOre(Material material) {
         return switch (material) {
             case COAL,
-                 RAW_COPPER,
-                 DIAMOND,
-                 EMERALD,
-                 RAW_GOLD,
-                 RAW_IRON,
-                 LAPIS_LAZULI,
-                 REDSTONE,
-                 GOLD_NUGGET,
-                 QUARTZ -> true;
+                    RAW_COPPER,
+                    DIAMOND,
+                    EMERALD,
+                    RAW_GOLD,
+                    RAW_IRON,
+                    LAPIS_LAZULI,
+                    REDSTONE,
+                    GOLD_NUGGET,
+                    QUARTZ -> true;
             default -> false;
         };
     }
@@ -301,15 +299,15 @@ public class PickaxeEnchantments implements Listener {
     private boolean isOreBlock(Material material) {
         return switch (material) {
             case COAL_ORE, DEEPSLATE_COAL_ORE,
-                 COPPER_ORE, DEEPSLATE_COPPER_ORE,
-                 DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
-                 EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
-                 GOLD_ORE, DEEPSLATE_GOLD_ORE,
-                 IRON_ORE, DEEPSLATE_IRON_ORE,
-                 LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
-                 REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
-                 NETHER_GOLD_ORE,
-                 NETHER_QUARTZ_ORE -> true;
+                    COPPER_ORE, DEEPSLATE_COPPER_ORE,
+                    DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
+                    EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
+                    GOLD_ORE, DEEPSLATE_GOLD_ORE,
+                    IRON_ORE, DEEPSLATE_IRON_ORE,
+                    LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
+                    REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
+                    NETHER_GOLD_ORE,
+                    NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
     }

@@ -1,8 +1,10 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
+import ch.jalu.configme.properties.Property;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Bee;
@@ -22,11 +24,9 @@ import java.util.HashMap;
 
 public class AllyMob {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+    private final @NotNull AllyManager allyManager = this.plugin.getStarter().getAllyManager();
 
     private final AllyType type;
     private final Player owner;
@@ -67,11 +67,13 @@ public class AllyMob {
 
         this.ally.setHealth(this.type.maxHealth);
 
-        HashMap<String, String> placeholders = new HashMap<>();
-        placeholders.put("%Player%", this.owner.getName());
-        placeholders.put("%Mob%", this.type.entityType.getName());
+        //HashMap<String, String> placeholders = new HashMap<>();
+        //placeholders.put("%Player%", this.owner.getName());
+        //placeholders.put("%Mob%", this.type.entityType.getName());
 
-        this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName()));
+        //this.ally.setCustomName(Messages.);
+
+        //this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName()));
         this.ally.setCustomNameVisible(true);
 
         startSpawnTimer();
@@ -118,7 +120,7 @@ public class AllyMob {
             }
         }
     }
-    
+
     private void startSpawnTimer() {
         if (this.ally != null) {
             this.runnable = new BukkitRunnable() {
@@ -130,17 +132,17 @@ public class AllyMob {
             }.runTaskLater(this.plugin, this.spawnTime * 20);
         }
     }
-    
+
     public enum AllyType {
-        WOLF("Wolf", "&b%player%'s Saberwolf", EntityType.WOLF, 16),
-        IRON_GOLEM("Iron-Golem", "&6%player%'s Golem", EntityType.IRON_GOLEM, 200),
-        ZOMBIE("Zombie", "&2%player%'s Undead", EntityType.ZOMBIE, 45),
-        ENDERMITE("Endermite", "&5%player%'s Endermite", EntityType.ENDERMITE, 10),
-        SILVERFISH("Silverfish", "&7%player%'s Silverfish", EntityType.SILVERFISH, 10),
-        BEE("Bee", "&e%player%'s Bee", EntityType.BEE, 10);
-        
-        private final String configName;
-        private final String defaultName;
+
+        WOLF(Config.ally_mobs_wolf, EntityType.WOLF, 16),
+        IRON_GOLEM(Config.ally_mobs_golem, EntityType.IRON_GOLEM, 200),
+        ZOMBIE(Config.ally_mobs_zombie, EntityType.ZOMBIE, 45),
+        ENDERMITE(Config.ally_mobs_endermite, EntityType.ENDERMITE, 10),
+        SILVERFISH(Config.ally_mobs_silverfish, EntityType.SILVERFISH, 10),
+        BEE(Config.ally_mobs_bee, EntityType.BEE, 10);
+
+        private final Property<String> configName;
         private final EntityType entityType;
         private final int maxHealth;
 
@@ -149,30 +151,25 @@ public class AllyMob {
 
         @NotNull
         private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
-        
-        AllyType(String configName, String defaultName, EntityType entityType, int maxHealth) {
+
+        AllyType(Property<String> configName, EntityType entityType, int maxHealth) {
             this.configName = configName;
-            this.defaultName = defaultName;
             this.entityType = entityType;
             this.maxHealth = maxHealth;
         }
-        
-        public String getConfigName() {
+
+        public Property<String> getConfigName() {
             return this.configName;
         }
-        
-        public String getDefaultName() {
-            return this.defaultName;
-        }
-        
+
         public String getName() {
             return this.allyManager.getAllyTypeNameCache().get(this);
         }
-        
+
         public EntityType getEntityType() {
             return this.entityType;
         }
-        
+
         public int getMaxHealth() {
             return this.maxHealth;
         }

@@ -1,15 +1,16 @@
 package com.badbones69.crazyenchantments.paper.controllers.settings;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,38 +18,52 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ProtectionCrystalSettings {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final String protectionString = ColorUtils.color(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"));
+    private final @NotNull String protectionString = ColorUtils.color(ConfigManager.getConfig().getProperty(Config.protection_crystal_protected));
 
-    private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
+    private final Map<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
     private ItemBuilder crystal;
 
+    /**
+     * Check if the item is protected or not.
+     *
+     * @param item - The item to check.
+     * @return True if yes otherwise false.
+     */
+    public static boolean isProtected(ItemStack item) {
+        return item.hasItemMeta() && isProtected(item.getItemMeta());
+    }
+
+    public static boolean isProtected(ItemMeta meta) {
+        return meta != null && isProtected(meta.getPersistentDataContainer());
+    }
+
+    public static boolean isProtected(PersistentDataContainer data) {
+        return data != null && data.has(DataKeys.protected_item.getNamespacedKey());
+    }
+
     public void loadProtectionCrystal() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
 
         this.crystal = new ItemBuilder()
-                .setMaterial(config.getString("Settings.ProtectionCrystal.Item", "EMERALD"))
-                .setName(config.getString("Settings.ProtectionCrystal.Name", "Error getting name."))
-                .setLore(config.getStringList("Settings.ProtectionCrystal.Lore"))
-                .setGlow(config.getBoolean("Settings.ProtectionCrystal.Glowing", false));
+                .setMaterial(config.getProperty(Config.protection_crystal_item))
+                .setName(config.getProperty(Config.protection_crystal_name))
+                .setLore(config.getProperty(Config.protection_crystal_lore))
+                .setGlow(config.getProperty(Config.protection_crystal_glowing));
     }
 
     public ItemStack getCrystals() {
@@ -67,8 +82,9 @@ public class ProtectionCrystalSettings {
 
     /**
      * Add a player to the map to protect items.
+     *
      * @param player - The player object.
-     * @param items - The items in the player's inventory.
+     * @param items  - The items in the player's inventory.
      */
     public void addPlayer(Player player, List<ItemStack> items) {
         this.crystalItems.put(player.getUniqueId(), items);
@@ -76,6 +92,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Remove the player from the map.
+     *
      * @param player - The player object.
      */
     public void removePlayer(Player player) {
@@ -84,6 +101,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Check if the map contains the player.
+     *
      * @param player - The player object.
      */
     public boolean containsPlayer(Player player) {
@@ -92,6 +110,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Get the player from the map.
+     *
      * @param player - The player object.
      * @return Get the player's items stored.
      */
@@ -102,43 +121,28 @@ public class ProtectionCrystalSettings {
     /**
      * @return The hash map.
      */
-    public HashMap<UUID, List<ItemStack>> getCrystalItems() {
+    public Map<UUID, List<ItemStack>> getCrystalItems() {
         return this.crystalItems;
     }
 
     /**
      * Check if the player has permissions & if the option is enabled.
+     *
      * @param player - The player to check.
      */
     public boolean isProtectionSuccessful(Player player) {
         if (player.hasPermission("crazyenchantments.bypass.protectioncrystal")) return true;
 
-        FileConfiguration config = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
 
-        if (config.getBoolean("Settings.ProtectionCrystal.Chance.Toggle", false)) return this.methods.randomPicker(config.getInt("Settings.ProtectionCrystal.Chance.Success-Chance", 100), 100);
+        if (config.getProperty(Config.protection_crystal_chance_toggle)) return this.methods.randomPicker(config.getProperty(Config.protection_crystal_chance), 100);
 
         return true;
     }
 
     /**
-     * Check if the item is protected or not.
-     * @param item - The item to check.
-     * @return True if yes otherwise false.
-     */
-    public static boolean isProtected(ItemStack item) {
-        return item.hasItemMeta() && isProtected(item.getItemMeta());
-    }
-
-    public static boolean isProtected(ItemMeta meta) {
-        return  meta != null && isProtected(meta.getPersistentDataContainer());
-    }
-
-    public static boolean isProtected(PersistentDataContainer data) {
-        return data != null && data.has(DataKeys.protected_item.getNamespacedKey());
-    }
-
-    /**
      * Check if the item is a protection crystal.
+     *
      * @param item - The item to check.
      * @return True if the item is a protection crystal.
      */
@@ -148,19 +152,20 @@ public class ProtectionCrystalSettings {
 
     /**
      * Remove protection from the item.
+     *
      * @param item - The item to remove protection from.
      * @return The new item.
      */
     public ItemStack removeProtection(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta.getPersistentDataContainer().has(DataKeys.protected_item.getNamespacedKey())) meta.getPersistentDataContainer().remove(DataKeys.protected_item.getNamespacedKey());
+        if (meta.getPersistentDataContainer().has(DataKeys.protected_item.getNamespacedKey()))
+            meta.getPersistentDataContainer().remove(DataKeys.protected_item.getNamespacedKey());
 
         if (!(item.lore() == null)) {
             List<Component> lore = item.lore();
 
             assert lore != null;
-            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                    .contains(this.protectionString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").contains(this.protectionString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
 
             meta.lore(lore);
         }
@@ -172,6 +177,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Add protection to an item.
+     *
      * @param item - The item to add protection to.
      * @return The new item.
      */

@@ -39,7 +39,7 @@ public class BlackSmithMenu extends InventoryBuilder {
             inventory.setItem(slot, BlackSmithManager.getGrayGlass());
         }
 
-        for (int slot : new int[]{1,2,3,4,5,6,10,12,13,15,19,20,21,22,23,24}) {
+        for (int slot : new int[]{1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24}) {
             inventory.setItem(slot, BlackSmithManager.getRedGlass());
         }
 
@@ -196,13 +196,13 @@ public class BlackSmithMenu extends InventoryBuilder {
                 ItemStack result = item.getResultItem();
 
                 String value = String.valueOf(item.getCost());
-                String message = Messages.replacePlaceholders("%Cost%", value, BlackSmithManager.getItemCost());
+                //String message = Messages.replacePlaceholders("%Cost%", value, BlackSmithManager.getItemCost());
 
                 for (int slot : resultBorder) {
                     inventory.setItem(slot, BlackSmithManager.getBlueGlass());
                 }
 
-                inventory.setItem(this.outputSlot, this.methods.addLore(result, message));
+                //inventory.setItem(this.outputSlot, this.methods.addLore(result, message));
             } else {
                 inventory.setItem(this.outputSlot, BlackSmithManager.getExitButton());
 

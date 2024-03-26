@@ -1,3 +1,5 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         maven("https://repo.papermc.io/repository/maven-public/")
@@ -9,4 +11,4 @@ pluginManagement {
 
 rootProject.name = "CrazyEnchantments"
 
-include("paper")
+include("paper", "common")

@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Map;
 
 public record EnchantedArrow(Arrow arrow, ItemStack bow, Map<CEnchantment, Integer> enchantments) {

@@ -1,10 +1,10 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.Scrolls;
@@ -18,10 +18,10 @@ import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import com.google.gson.Gson;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,6 +33,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,13 +44,15 @@ import java.util.stream.Collectors;
 
 public class ScrollListener implements Listener {
 
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
 
     private String suffix;
     private boolean countVanillaEnchantments;
@@ -58,12 +61,11 @@ public class ScrollListener implements Listener {
     private int blackScrollChance;
 
     public void loadScrollControl() {
-        FileConfiguration config = Files.CONFIG.getFile();
-        this.suffix = config.getString("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
-        this.countVanillaEnchantments = config.getBoolean("Settings.TransmogScroll.Count-Vanilla-Enchantments");
-        this.useSuffix = config.getBoolean("Settings.TransmogScroll.Amount-Toggle");
-        this.blackScrollChance = config.getInt("Settings.BlackScroll.Chance", 75);
-        this.blackScrollChanceToggle = config.getBoolean("Settings.BlackScroll.Chance-Toggle");
+        this.suffix = this.config.getProperty(Config.amount_of_enchantments);
+        this.countVanillaEnchantments = this.config.getProperty(Config.count_vanilla_enchantments);
+        this.useSuffix = this.config.getProperty(Config.amount_toggle);
+        this.blackScrollChance = this.config.getProperty(Config.black_scroll_chance);
+        this.blackScrollChanceToggle = this.config.getProperty(Config.black_scroll_chance_toggle);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -82,7 +84,7 @@ public class ScrollListener implements Listener {
         if (type == null) return;
 
         if (scroll.getAmount() > 1) {
-            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            player.sendRichMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
             return;
         }
 
@@ -96,7 +98,7 @@ public class ScrollListener implements Listener {
                     player.setItemOnCursor(this.methods.removeItem(scroll));
 
                     if (this.blackScrollChanceToggle && !this.methods.randomPicker(this.blackScrollChance, 100)) {
-                        player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
+                        player.sendRichMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
                         return;
                     }
 
@@ -156,12 +158,13 @@ public class ScrollListener implements Listener {
 
         if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
-            player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
+            player.sendRichMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
             return true;
         } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {
             event.setCancelled(true);
             return true;
         }
+
         return false;
     }
 
@@ -191,6 +194,7 @@ public class ScrollListener implements Listener {
         useSuffix(item, newMeta, newEnchantmentOrder);
 
         item.setItemMeta(newMeta);
+
         return item;
     }
 
@@ -203,10 +207,10 @@ public class ScrollListener implements Listener {
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
         Enchant data = gson.fromJson(container.get(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING), Enchant.class);
-        boolean addSpaces = Files.CONFIG.getFile().getBoolean("Settings.TransmogScroll.Add-Blank-Lines", true);
+        boolean addSpaces = this.config.getProperty(Config.add_blank_lines);
         List<CEnchantment> newEnchantmentOrder = new ArrayList<>();
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
-        List<String> order = Files.CONFIG.getFile().getStringList("Settings.TransmogScroll.Lore-Order");
+        List<String> order = this.config.getProperty(Config.lore_order);
         if (order.isEmpty()) order = Arrays.asList("CE_Enchantments", "Protection", "Normal_Lore");
 
         for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
@@ -250,14 +254,17 @@ public class ScrollListener implements Listener {
 
         meta.lore(newLore);
         item.setItemMeta(meta);
+
         return item;
     }
 
     private List<Component> getAllProtectionLore(PersistentDataContainer container) {
         List<Component> lore = new ArrayList<>();
 
-        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.WhiteScroll.ProtectedName")));
-        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected")));
+        if (Scrolls.hasWhiteScrollProtection(container))
+            lore.add(ColorUtils.legacyTranslateColourCodes(this.config.getProperty(Config.white_scroll_protected)));
+        if (ProtectionCrystalSettings.isProtected(container))
+            lore.add(ColorUtils.legacyTranslateColourCodes(this.config.getProperty(Config.protection_crystal_protected)));
 
         return lore;
     }
@@ -277,7 +284,7 @@ public class ScrollListener implements Listener {
 
         // Remove Protection-crystal protection lore
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected").replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                ConfigManager.getConfig().getProperty(Config.protection_crystal_protected).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
         ));
 
         return lore;

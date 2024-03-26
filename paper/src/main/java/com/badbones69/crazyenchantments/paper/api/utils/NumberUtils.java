@@ -38,6 +38,7 @@ public class NumberUtils {
 
     /**
      * This converts a String into a number if using a roman numeral from I-X.
+     *
      * @param i The string you want to convert.
      * @return The roman numeral as a number.
      */
@@ -59,6 +60,7 @@ public class NumberUtils {
 
     /**
      * This converts an integer into a roman numeral if its between 1-3999 otherwise it will just be the number as a string.
+     *
      * @param number The integer you want to convert.
      * @return The integer as a roman numeral if between 1-3999 otherwise the number as a string.
      */

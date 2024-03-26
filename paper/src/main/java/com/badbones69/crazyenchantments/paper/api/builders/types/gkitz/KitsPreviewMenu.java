@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.List;
 
 public class KitsPreviewMenu extends InventoryBuilder {

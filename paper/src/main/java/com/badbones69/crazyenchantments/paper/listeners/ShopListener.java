@@ -15,7 +15,6 @@ import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.LostBook;
-import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
@@ -35,38 +34,28 @@ import org.jetbrains.annotations.NotNull;
 
 public class ShopListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = starter.getCrazyManager();
 
-    @NotNull
-    private final Methods methods = starter.getMethods();
+    private final @NotNull Methods methods = starter.getMethods();
 
     // Settings.
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
+    private final @NotNull ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Managers.
-    @NotNull
-    private final ShopManager shopManager = this.starter.getShopManager();
+    private final @NotNull ShopManager shopManager = this.starter.getShopManager();
 
     // Plugin Listeners.
-    @NotNull
-    private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
-    @NotNull
-    private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
+    private final @NotNull ScramblerListener scramblerListener = this.starter.getScramblerListener();
+    private final @NotNull SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
 
     // Economy Management.
-    @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final @NotNull CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
 
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent event) {
@@ -105,7 +94,7 @@ public class ShopListener implements Listener {
                     this.plugin.getServer().getPluginManager().callEvent(buyBookEvent);
                     player.getInventory().addItem(book.buildBook());
                 } else {
-                    player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                    player.sendRichMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                 }
 
                 return;
@@ -131,7 +120,7 @@ public class ShopListener implements Listener {
         }
 
         for (ShopOption option : ShopOption.values()) {
-            if (option.isInGUI() && item.isSimilar(option.getItem())) {
+            if (option.isInGui() && item.isSimilar(option.getItem())) {
                 // If the option is buy-able then it check to see if they player can buy it and take the money.
 
                 if (option.isBuyable()) {

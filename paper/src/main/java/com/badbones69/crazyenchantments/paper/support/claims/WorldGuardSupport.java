@@ -14,9 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class WorldGuardSupport implements WorldGuardVersion {
 
-    @NotNull
-    private final WorldGuard instance = WorldGuard.getInstance();
-    
+    private final @NotNull WorldGuard instance = WorldGuard.getInstance();
+
     @Override
     public boolean allowsPVP(Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
@@ -32,7 +31,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
 
         return false;
     }
-    
+
     @Override
     public boolean allowsBreak(Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
@@ -41,14 +40,15 @@ public class WorldGuardSupport implements WorldGuardVersion {
         try {
             RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
 
-            if (set != null) return set.getApplicableRegions(v).queryState(null, Flags.BLOCK_BREAK) != StateFlag.State.DENY;
+            if (set != null)
+                return set.getApplicableRegions(v).queryState(null, Flags.BLOCK_BREAK) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;
         }
 
         return false;
     }
-    
+
     @Override
     public boolean allowsExplosions(Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
@@ -57,14 +57,15 @@ public class WorldGuardSupport implements WorldGuardVersion {
         try {
             RegionManager set = this.instance.getPlatform().getRegionContainer().get(world);
 
-            if (set != null) return set.getApplicableRegions(v).queryState(null, Flags.OTHER_EXPLOSION) != StateFlag.State.DENY && set.getApplicableRegions(v).queryState(null, Flags.TNT) != StateFlag.State.DENY;
+            if (set != null)
+                return set.getApplicableRegions(v).queryState(null, Flags.OTHER_EXPLOSION) != StateFlag.State.DENY && set.getApplicableRegions(v).queryState(null, Flags.TNT) != StateFlag.State.DENY;
         } catch (NullPointerException e) {
             return true;
         }
 
         return false;
     }
-    
+
     @Override
     public boolean inRegion(String regionName, Location loc) {
         BukkitWorld world = new BukkitWorld(loc.getWorld());
@@ -84,7 +85,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
 
         return false;
     }
-    
+
     @Override
     public boolean isMember(Player player) {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());
@@ -104,7 +105,7 @@ public class WorldGuardSupport implements WorldGuardVersion {
 
         return false;
     }
-    
+
     @Override
     public boolean isOwner(Player player) {
         BukkitWorld world = new BukkitWorld(player.getLocation().getWorld());

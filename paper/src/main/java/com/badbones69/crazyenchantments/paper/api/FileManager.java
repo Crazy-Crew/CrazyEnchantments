@@ -21,9 +21,8 @@ import java.util.logging.Level;
  */
 public class FileManager {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-    
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
     /**
      * Sets up the plugin and loads all necessary files.
      */
@@ -63,7 +62,8 @@ public class FileManager {
 
             this.files.put(file, newFile);
 
-            if (file.getFileName().endsWith(".yml")) this.configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
+            if (file.getFileName().endsWith(".yml"))
+                this.configurations.put(file, YamlConfiguration.loadConfiguration(newFile));
 
             if (this.plugin.isLogging()) this.plugin.getLogger().info("Successfully loaded " + file.getFileName());
         }
@@ -86,7 +86,8 @@ public class FileManager {
                                 if (file.exists()) {
                                     this.customFiles.add(file);
 
-                                    if (this.plugin.isLogging()) this.plugin.getLogger().info("Loaded new custom file: " + homeFolder + "/" + name + ".");
+                                    if (this.plugin.isLogging())
+                                        this.plugin.getLogger().info("Loaded new custom file: " + homeFolder + "/" + name + ".");
                                 }
                             }
                         }
@@ -94,7 +95,8 @@ public class FileManager {
                 } else {
                     homeFile.mkdir();
 
-                    if (this.plugin.isLogging()) this.plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
+                    if (this.plugin.isLogging())
+                        this.plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
 
                     for (Map.Entry<String, String> fileName : this.autoGenerateFiles.entrySet()) {
                         if (this.autoGenerateFiles.get(fileName.getKey()).equalsIgnoreCase(homeFolder)) {
@@ -105,9 +107,11 @@ public class FileManager {
 
                                 copyFile(jarFile, serverFile);
 
-                                if (fileName.getKey().toLowerCase().endsWith(".yml")) this.customFiles.add(new CustomFile(fileName.getKey(), homeFolder));
+                                if (fileName.getKey().toLowerCase().endsWith(".yml"))
+                                    this.customFiles.add(new CustomFile(fileName.getKey(), homeFolder));
 
-                                if (this.plugin.isLogging()) this.plugin.getLogger().info("Created new default file: " + homeFolder + "/" + fileName.getKey() + ".");
+                                if (this.plugin.isLogging())
+                                    this.plugin.getLogger().info("Created new default file: " + homeFolder + "/" + fileName.getKey() + ".");
                             } catch (Exception exception) {
                                 this.plugin.getLogger().log(Level.SEVERE, "Failed to create new default file: " + homeFolder + "/" + fileName.getKey() + "!", exception);
                             }
@@ -146,7 +150,7 @@ public class FileManager {
     /**
      * Register a file that needs to be generated when it's home folder doesn't exist. Make sure to have a "/" in front of the home folder's name.
      *
-     * @param fileName the name of the file you want to auto-generate when the folder doesn't exist.
+     * @param fileName   the name of the file you want to auto-generate when the folder doesn't exist.
      * @param homeFolder the folder that has custom files in it.
      */
     public FileManager registerDefaultGenerateFiles(String fileName, String homeFolder) {
@@ -158,8 +162,8 @@ public class FileManager {
     /**
      * Register a file that needs to be generated when it's home folder doesn't exist. Make sure to have a "/" in front of the home folder's name.
      *
-     * @param fileName the name of the file you want to auto-generate when the folder doesn't exist.
-     * @param homeFolder the folder that has custom files in it.
+     * @param fileName      the name of the file you want to auto-generate when the folder doesn't exist.
+     * @param homeFolder    the folder that has custom files in it.
      * @param jarHomeFolder the folder that the file is found in the jar.
      */
     public FileManager registerDefaultGenerateFiles(String fileName, String homeFolder, String jarHomeFolder) {
@@ -219,7 +223,7 @@ public class FileManager {
     /**
      * Add a file by name.
      *
-     * @param name name to use.
+     * @param name   name to use.
      * @param folder folder to add to.
      */
     public void addFile(String name, String folder) {
@@ -246,14 +250,16 @@ public class FileManager {
         CustomFile file = getFile(name);
 
         if (file == null) {
-            if (this.plugin.isLogging()) this.plugin.getLogger().warning("The file " + name + ".yml could not be found!");
+            if (this.plugin.isLogging())
+                this.plugin.getLogger().warning("The file " + name + ".yml could not be found!");
             return;
         }
 
         try {
             file.getFile().save(new File(this.plugin.getDataFolder(), file.getHomeFolder() + "/" + file.getFileName()));
 
-            if (this.plugin.isLogging()) this.plugin.getLogger().info("Successfully saved the " + file.getFileName() + ".");
+            if (this.plugin.isLogging())
+                this.plugin.getLogger().info("Successfully saved the " + file.getFileName() + ".");
         } catch (Exception exception) {
             this.plugin.getLogger().log(Level.SEVERE, "Could not save " + file.getFileName() + "!", exception);
         }
@@ -272,7 +278,8 @@ public class FileManager {
      * Overrides the loaded state file and loads the file systems file.
      */
     public void reloadFile(Files file) {
-        if (file.getFileName().endsWith(".yml")) this.configurations.put(file, YamlConfiguration.loadConfiguration(this.files.get(file)));
+        if (file.getFileName().endsWith(".yml"))
+            this.configurations.put(file, YamlConfiguration.loadConfiguration(this.files.get(file)));
     }
 
     /**
@@ -285,12 +292,14 @@ public class FileManager {
             try {
                 file.file = YamlConfiguration.loadConfiguration(new File(this.plugin.getDataFolder(), "/" + file.getHomeFolder() + "/" + file.getFileName()));
 
-                if (this.plugin.isLogging()) this.plugin.getLogger().info("Successfully reloaded the " + file.getFileName() + ".");
+                if (this.plugin.isLogging())
+                    this.plugin.getLogger().info("Successfully reloaded the " + file.getFileName() + ".");
             } catch (Exception exception) {
                 this.plugin.getLogger().log(Level.SEVERE, "Could not reload the " + file.getFileName() + "!", exception);
             }
         } else {
-            if (this.plugin.isLogging()) this.plugin.getLogger().warning("The file " + name + ".yml could not be found!");
+            if (this.plugin.isLogging())
+                this.plugin.getLogger().warning("The file " + name + ".yml could not be found!");
         }
     }
 
@@ -340,21 +349,19 @@ public class FileManager {
             }
         }
     }
-    
+
     public enum Files {
-        
+
         // ENUM_NAME("fileName.yml", "fileLocation.yml"),
         // ENUM_NAME("fileName.yml", "newFileLocation.yml", "oldFileLocation.yml"),
-        CONFIG("config.yml", "config.yml"),
-        BLOCKLIST("BlockList.yml", "BlockList.yml"),
+        CATEGORIES("Categories.yml", "Categories.yml"),
         HEADMAP("HeadMap.yml", "HeadMap.yml"),
-        DATA("Data.yml", "Data.yml"),
+        DATA("users.yml", "users.yml"),
         ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
         GKITZ("GKitz.yml", "GKitz.yml"),
         MESSAGES("Messages.yml", "Messages.yml"),
-        ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml"),
-        TINKER("Tinker.yml", "Tinker.yml");
-        
+        ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml");
+
         private final String fileName;
         private final String fileJar;
         private final String fileLocation;
@@ -368,7 +375,7 @@ public class FileManager {
         /**
          * The files that the server will try and load.
          *
-         * @param fileName the file name that will be in the plugin's folder.
+         * @param fileName     the file name that will be in the plugin's folder.
          * @param fileLocation the location the file in the plugin's folder.
          */
         Files(String fileName, String fileLocation) {
@@ -378,9 +385,9 @@ public class FileManager {
         /**
          * The files that the server will try and load.
          *
-         * @param fileName the file name that will be in the plugin's folder.
+         * @param fileName     the file name that will be in the plugin's folder.
          * @param fileLocation the location of the file will be in the plugin's folder.
-         * @param fileJar the location of the file in the jar.
+         * @param fileJar      the location of the file in the jar.
          */
         Files(String fileName, String fileLocation, String fileJar) {
             this.fileName = fileName;
@@ -444,15 +451,14 @@ public class FileManager {
         private final String name;
         private final String fileName;
         private final String homeFolder;
-        private FileConfiguration file;
-
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private FileConfiguration file;
 
         /**
          * A custom file that is being made.
          *
-         * @param name name of the file.
+         * @param name       name of the file.
          * @param homeFolder the home folder of the file.
          */
         public CustomFile(String name, String homeFolder) {
@@ -469,7 +475,8 @@ public class FileManager {
             } else {
                 new File(this.plugin.getDataFolder(), "/" + homeFolder).mkdir();
 
-                if (this.plugin.isLogging()) this.plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
+                if (this.plugin.isLogging())
+                    this.plugin.getLogger().info("The folder " + homeFolder + "/ was not found so it was created.");
 
                 this.file = null;
             }
@@ -513,6 +520,7 @@ public class FileManager {
 
         /**
          * Check if the file actually exists in the file system.
+         *
          * @return true if it does and false if it doesn't.
          */
         public boolean exists() {
@@ -527,12 +535,14 @@ public class FileManager {
                 try {
                     this.file.save(new File(this.plugin.getDataFolder(), this.homeFolder + "/" + this.fileName));
 
-                    if (this.plugin.isLogging()) plugin.getLogger().info("Successfully saved the " + this.fileName + ".");
+                    if (this.plugin.isLogging())
+                        plugin.getLogger().info("Successfully saved the " + this.fileName + ".");
                 } catch (Exception exception) {
                     this.plugin.getLogger().log(Level.WARNING, "Could not save " + this.fileName + "!", exception);
                 }
             } else {
-                if (this.plugin.isLogging()) this.plugin.getLogger().warning("There was a null custom file that could not be found!");
+                if (this.plugin.isLogging())
+                    this.plugin.getLogger().warning("There was a null custom file that could not be found!");
             }
         }
 
@@ -544,12 +554,14 @@ public class FileManager {
                 try {
                     this.file = YamlConfiguration.loadConfiguration(new File(this.plugin.getDataFolder(), "/" + this.homeFolder + "/" + this.fileName));
 
-                    if (this.plugin.isLogging()) this.plugin.getLogger().info("Successfully reloaded the " + this.fileName + ".");
+                    if (this.plugin.isLogging())
+                        this.plugin.getLogger().info("Successfully reloaded the " + this.fileName + ".");
                 } catch (Exception exception) {
                     this.plugin.getLogger().log(Level.SEVERE, "Could not reload the " + this.fileName + "!", exception);
                 }
             } else {
-                if (this.plugin.isLogging()) this.plugin.getLogger().warning("There was a null custom file that was not found!");
+                if (this.plugin.isLogging())
+                    this.plugin.getLogger().warning("There was a null custom file that was not found!");
             }
         }
     }

@@ -7,10 +7,20 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
+repositories {
+    maven("https://repo.triumphteam.dev/snapshots")
+}
+
 val mcVersion: String = providers.gradleProperty("mcVersion").get()
 
 dependencies {
     paperweight.paperDevBundle(libs.versions.bundle)
+
+    implementation((projects.common))
+
+    implementation(libs.cluster.paper)
+
+    implementation(libs.triumph.cmds)
 
     implementation(libs.metrics)
 
@@ -71,7 +81,7 @@ tasks {
             }
         }
 
-        publications{
+        publications {
             create<MavenPublication>("maven") {
                 groupId = rootProject.group.toString()
                 artifactId = "${rootProject.name.lowercase()}-${project.name.lowercase()}-api"
@@ -99,6 +109,7 @@ tasks {
 
         listOf(
             "de.tr7zw.changeme.nbtapi",
+            "dev.triumphteam",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
@@ -107,13 +118,13 @@ tasks {
 
     processResources {
         val properties = hashMapOf(
-                "name" to rootProject.name,
-                "version" to rootProject.version,
-                "group" to "${project.group}.paper",
-                "description" to rootProject.description,
-                "apiVersion" to rootProject.properties["apiVersion"],
-                "authors" to rootProject.properties["authors"],
-                "website" to rootProject.properties["website"]
+            "name" to rootProject.name,
+            "version" to rootProject.version,
+            "group" to "${project.group}.paper",
+            "description" to rootProject.description,
+            "apiVersion" to rootProject.properties["apiVersion"],
+            "authors" to rootProject.properties["authors"],
+            "website" to rootProject.properties["website"]
         )
 
         inputs.properties(properties)

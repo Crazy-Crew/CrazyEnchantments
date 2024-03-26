@@ -1,17 +1,18 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
+import ch.jalu.configme.SettingsManager;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,22 +31,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class ScramblerListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    private final HashMap<Player, BukkitTask> roll = new HashMap<>();
+    private final Map<UUID, BukkitTask> roll = new HashMap<>();
 
     private ItemBuilder scramblerItem;
     private ItemBuilder pointer;
@@ -53,22 +52,27 @@ public class ScramblerListener implements Listener {
     private String guiName;
 
     public void loadScrambler() {
-        FileConfiguration config = Files.CONFIG.getFile();
+        SettingsManager config = ConfigManager.getConfig();
+
         this.scramblerItem = new ItemBuilder()
-        .setMaterial(config.getString("Settings.Scrambler.Item", "SUNFLOWER"))
-        .setName(config.getString("Settings.Scrambler.Name", "Error getting name."))
-        .setLore(config.getStringList("Settings.Scrambler.Lore"))
-        .setGlow(config.getBoolean("Settings.Scrambler.Glowing", false));
+                .setMaterial(config.getProperty(Config.scrambler_item))
+                .setName(config.getProperty(Config.scrambler_name))
+                .setLore(config.getProperty(Config.scrambler_lore))
+                .setGlow(config.getProperty(Config.scrambler_glowing));
+
         this.pointer = new ItemBuilder()
-        .setMaterial(config.getString("Settings.Scrambler.GUI.Pointer.Item", "REDSTONE_TORCH"))
-        .setName(config.getString("Settings.Scrambler.GUI.Pointer.Name", "Error getting name."))
-        .setLore(config.getStringList("Settings.Scrambler.GUI.Pointer.Lore"));
-        this.animationToggle = Files.CONFIG.getFile().getBoolean("Settings.Scrambler.GUI.Toggle", true);
-        this.guiName = ColorUtils.color(Files.CONFIG.getFile().getString("Settings.Scrambler.GUI.Name", "Error getting name."));
+                .setMaterial(config.getProperty(Config.scrambler_pointer_item))
+                .setName(config.getProperty(Config.scrambler_pointer_name))
+                .setLore(config.getProperty(Config.scrambler_pointer_lore))
+                .setLore(config.getProperty(Config.scrambler_lore));
+
+        this.animationToggle = config.getProperty(Config.scrambler_toggle);
+        this.guiName = ColorUtils.color(config.getProperty(Config.scrambler_gui));
     }
 
     /**
      * Get the scrambler item stack.
+     *
      * @return The scramblers.
      */
     public ItemStack getScramblers() {
@@ -77,6 +81,7 @@ public class ScramblerListener implements Listener {
 
     /**
      * Get the scrambler item stack.
+     *
      * @param amount The amount you want.
      * @return The scramblers.
      */
@@ -120,7 +125,7 @@ public class ScramblerListener implements Listener {
     }
 
     private void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
-        this.roll.put(player, new BukkitRunnable() {
+        this.roll.put(player.getUniqueId(), new BukkitRunnable() {
             int time = 1;
             int full = 0;
             int open = 0;
@@ -154,7 +159,7 @@ public class ScramblerListener implements Listener {
                     if (this.time == 60) { // When done
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                         cancel();
-                        roll.remove(player);
+                        roll.remove(player.getUniqueId());
 
                         ItemStack item = inventory.getItem(13).clone();
 
@@ -216,7 +221,7 @@ public class ScramblerListener implements Listener {
         if (book.getAmount() != 1 || scrambler.getAmount() != 1) return;
         if (!isScrambler(scrambler) || !this.enchantmentBookSettings.isEnchantmentBook(book)) return;
         if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
-            player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
+            player.sendRichMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
             return;
         }
 
@@ -242,7 +247,8 @@ public class ScramblerListener implements Listener {
 
         if (item.isEmpty() || !item.hasItemMeta()) return;
 
-        if (item.getItemMeta().getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey())) event.setCancelled(true);
+        if (item.getItemMeta().getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey()))
+            event.setCancelled(true);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -250,15 +256,17 @@ public class ScramblerListener implements Listener {
         Player player = event.getPlayer();
 
         try {
-            this.roll.get(player).cancel();
-            this.roll.remove(player);
-        } catch (Exception ignored) {}
+            this.roll.get(player.getUniqueId()).cancel();
+            this.roll.remove(player.getUniqueId());
+        } catch (Exception ignored) {
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onScrollClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (isScrambler(player.getInventory().getItemInMainHand()) || isScrambler(player.getInventory().getItemInOffHand())) event.setCancelled(true);
+        if (isScrambler(player.getInventory().getItemInMainHand()) || isScrambler(player.getInventory().getItemInOffHand()))
+            event.setCancelled(true);
     }
 }

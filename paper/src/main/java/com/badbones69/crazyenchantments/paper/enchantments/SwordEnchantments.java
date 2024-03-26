@@ -13,7 +13,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
-import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
+import com.badbones69.crazyenchantments.paper.platform.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
@@ -42,7 +42,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,34 +49,23 @@ import java.util.Map;
 
 public class SwordEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final @NotNull PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
-
-    @NotNull
-    private final BossBarController bossBarController = this.plugin.getBossBarController();
-
+    private final @NotNull NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
     // Economy Management.
-    @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final @NotNull CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final @NotNull BossBarController bossBarController = this.plugin.getBossBarController();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
@@ -140,7 +128,6 @@ public class SwordEnchantments implements Listener {
         }
 
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISORDER, damager, item, enchantments)) {
-
             Player player = (Player) event.getEntity();
             Inventory inventory = player.getInventory();
             List<ItemStack> items = new ArrayList<>();
@@ -164,7 +151,7 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+            damager.sendRichMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
         }
 
         // Check if CEPlayer is null as plugins like citizen use Player objects.
@@ -230,16 +217,19 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.NUTRITION, damager, item, enchantments)) {
-            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) <= 20) damager.setSaturation(damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())));
+            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) <= 20)
+                damager.setSaturation(damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())));
 
-            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) >= 20) damager.setSaturation(20);
+            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) >= 20)
+                damager.setSaturation(20);
         }
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VAMPIRE, damager, item, enchantments)) {
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-            if (damager.getHealth() + event.getDamage() / 2 < maxHealth) damager.setHealth(damager.getHealth() + event.getDamage() / 2);
+            if (damager.getHealth() + event.getDamage() / 2 < maxHealth)
+                damager.setHealth(damager.getHealth() + event.getDamage() / 2);
 
             if (damager.getHealth() + event.getDamage() / 2 >= maxHealth) damager.setHealth(maxHealth);
         }
@@ -350,14 +340,14 @@ public class SwordEnchantments implements Listener {
                 event.setDroppedExp(event.getDroppedExp() * (enchantments.get(CEnchantments.INQUISITIVE.getEnchantment()) + 1));
             }
 
-            Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
+            Material headMat = EntityUtils.getHead(event.getEntity());
             if (headMat != null && !EventUtils.containsDrop(event, headMat)) {
                 double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
                 if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.HEADLESS, damager, item, enchantments, multiplier)) {
                     ItemStack head = new ItemBuilder().setMaterial(headMat).build();
                     event.getDrops().add(head);
                 }
-			}
+            }
 
             // The entity that is killed is a player.
             if (event.getEntity() instanceof Player && EnchantUtils.isEventActive(CEnchantments.CHARGE, damager, item, enchantments)) {
@@ -381,21 +371,22 @@ public class SwordEnchantments implements Listener {
     }
 
     private void rageInformPlayer(Player player, Messages message, Map<String, String> placeholders, float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
+        //if (message.getMessageNoPrefix().isBlank()) return;
 
         if (this.crazyManager.useRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(placeholders), progress);
+            //this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(placeholders), progress);
         } else {
-            player.sendMessage(message.getMessage(placeholders));
+            player.sendRichMessage(message.getMessage(placeholders));
         }
     }
+
     private void rageInformPlayer(Player player, Messages message, float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
+        //if (message.getMessageNoPrefix().isBlank()) return;
 
         if (this.crazyManager.useRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
+            //this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
         } else {
-            player.sendMessage(message.getMessage());
+            player.sendRichMessage(message.getMessage());
         }
     }
 }

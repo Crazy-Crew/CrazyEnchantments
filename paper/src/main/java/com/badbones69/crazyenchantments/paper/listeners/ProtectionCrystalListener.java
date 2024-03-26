@@ -1,11 +1,12 @@
 package com.badbones69.crazyenchantments.paper.listeners;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCrystalSettings;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,17 +24,13 @@ import java.util.List;
 
 public class ProtectionCrystalListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
+    private final @NotNull ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -42,7 +39,7 @@ public class ProtectionCrystalListener implements Listener {
         ItemStack crystalItem = event.getCursor();
 
         ItemStack item = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
-        
+
         if (item.getType() == Material.AIR || crystalItem.getType() == Material.AIR) return;
 
         if (!this.protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;
@@ -52,7 +49,7 @@ public class ProtectionCrystalListener implements Listener {
         if (ProtectionCrystalSettings.isProtected(item)) return;
 
         if (item.getAmount() > 1 || crystalItem.getAmount() > 1) {
-            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            player.sendRichMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
             return;
         }
 
@@ -96,7 +93,7 @@ public class ProtectionCrystalListener implements Listener {
 
         if (this.protectionCrystalSettings.containsPlayer(player)) {
             // If the config does not have the option then it will lose the protection by default.
-            if (Files.CONFIG.getFile().getBoolean("Settings.ProtectionCrystal.Lose-Protection-On-Death", true)) {
+            if (ConfigManager.getConfig().getProperty(Config.protection_crystal_lose_protection_on_death)) {
                 for (ItemStack item : this.protectionCrystalSettings.getCrystalItems().get(player.getUniqueId())) {
                     player.getInventory().addItem(this.protectionCrystalSettings.removeProtection(item));
                 }

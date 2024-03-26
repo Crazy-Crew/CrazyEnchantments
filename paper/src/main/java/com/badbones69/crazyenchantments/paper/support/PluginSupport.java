@@ -17,22 +17,17 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 
 public class PluginSupport {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    private ClaimSupport claimPlugin = null;
-
-    private WorldGuardUtils worldGuardUtils;
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
     private final Map<SupportedPlugins, Boolean> cachedPlugins = Maps.newHashMap();
+    private ClaimSupport claimPlugin = null;
+    private WorldGuardUtils worldGuardUtils;
 
     public void initializeWorldGuard() {
         if (SupportedPlugins.WORLDGUARD.isPluginLoaded() && SupportedPlugins.WORLDEDIT.isPluginLoaded()) {
@@ -92,7 +87,8 @@ public class PluginSupport {
 
                 switch (supportedPlugin) {
                     case FACTIONS_UUID -> {
-                        if (website != null) supportedPlugin.addPlugin(website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
+                        if (website != null)
+                            supportedPlugin.addPlugin(website.equals("https://www.spigotmc.org/resources/factionsuuid.1035/"));
                     }
 
                     case MCMMO -> {
@@ -173,19 +169,16 @@ public class PluginSupport {
         ORAXEN("Oraxen");
 
         private final String pluginName;
+        @NotNull
+        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        @NotNull
+        private final Starter starter = this.plugin.getStarter();
+        @NotNull
+        private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
         SupportedPlugins(String pluginName) {
             this.pluginName = pluginName;
         }
-
-        @NotNull
-        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-        @NotNull
-        private final Starter starter = this.plugin.getStarter();
-
-        @NotNull
-        private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
         public boolean isPluginLoaded() {
             Plugin plugin1 = this.plugin.getServer().getPluginManager().getPlugin(this.pluginName);

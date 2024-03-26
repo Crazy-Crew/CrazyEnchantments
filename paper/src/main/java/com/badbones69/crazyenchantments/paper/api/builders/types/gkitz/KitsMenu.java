@@ -1,9 +1,9 @@
 package com.badbones69.crazyenchantments.paper.api.builders.types.gkitz;
 
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -12,9 +12,9 @@ import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,19 +31,16 @@ import java.util.Map;
 
 public class KitsMenu extends InventoryBuilder {
 
+    private final @NotNull Starter starter = this.plugin.getStarter();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
+
     public KitsMenu(Player player, int size, String title) {
         super(player, size, title);
     }
 
-    private final Starter starter = this.plugin.getStarter();
-
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
     @Override
     public InventoryBuilder build() {
-        FileConfiguration configuration = Files.GKITZ.getFile();
-
-        for (String value : configuration.getStringList("Settings.GUI-Customization")) {
+        for (String value : ConfigManager.getConfig().getProperty(Config.gui_customization)) {
             int slot = 0;
 
             for (String option : value.split(", ")) {
@@ -86,11 +84,11 @@ public class KitsMenu extends InventoryBuilder {
 
     public static class KitsListener implements Listener {
 
-        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-        private final Starter starter = this.plugin.getStarter();
+        private final @NotNull Starter starter = this.plugin.getStarter();
 
-        private final CrazyManager crazyManager = this.starter.getCrazyManager();
+        private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
         @EventHandler(ignoreCancelled = true)
         public void onPreviewClick(InventoryClickEvent event) {
@@ -140,7 +138,9 @@ public class KitsMenu extends InventoryBuilder {
                 return;
             }
 
-            Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};
+            Map<String, String> placeholders = new HashMap<>(1) {{
+                put("%Kit%", kit.getName());
+            }};
 
             if (cePlayer.hasGkitPermission(kit)) {
                 if (cePlayer.canUseGKit(kit)) {
@@ -149,12 +149,12 @@ public class KitsMenu extends InventoryBuilder {
 
                     player.updateInventory();
 
-                    player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+                    player.sendRichMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
                 } else {
-                    player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                    player.sendRichMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
                 }
             } else {
-                player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                player.sendRichMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
             }
         }
     }

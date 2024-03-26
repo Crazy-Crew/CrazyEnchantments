@@ -1,6 +1,6 @@
 package com.badbones69.crazyenchantments.paper;
 
-import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
+import com.badbones69.crazyenchantments.ConfigManager;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
+import com.badbones69.crazyenchantments.platform.impl.Config;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -23,13 +24,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -43,18 +48,14 @@ import java.util.Random;
 
 public class Methods {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final @NotNull PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    @NotNull
-    private final OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
+    private final @NotNull OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
 
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
@@ -66,6 +67,7 @@ public class Methods {
 
     public int getRandomNumber(String range) {
         int number = 1;
+
         String[] split = range.split("-");
 
         if (NumberUtils.isInt(split[0]) && NumberUtils.isInt(split[1])) {
@@ -81,22 +83,15 @@ public class Methods {
 
     public int getRandomNumber(int min, int max) {
         Random random = new Random();
-        return min + random.nextInt(max - min);
-    }
 
-    public boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
-        if (sender instanceof Player player) {
-            return hasPermission(player, perm, toggle);
-        } else {
-            return true;
-        }
+        return min + random.nextInt(max - min);
     }
 
     public boolean hasPermission(Player player, String perm, boolean toggle) {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
-            if (toggle) player.sendMessage(Messages.NO_PERMISSION.getMessage());
+            if (toggle) player.sendRichMessage(Messages.NO_PERMISSION.getMessage());
 
             return false;
         }
@@ -113,15 +108,6 @@ public class Methods {
 
     public Player getPlayer(String name) {
         return this.plugin.getServer().getPlayer(name);
-    }
-
-    public boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(playerName)) return true;
-        }
-
-        sender.sendMessage(Messages.NOT_ONLINE.getMessage());
-        return false;
     }
 
     public void removeItem(ItemStack item, Player player) {
@@ -196,7 +182,7 @@ public class Methods {
         return chance <= min;
     }
 
-    public Integer percentPick(int max, int min) {
+    public int percentPick(int max, int min) {
         if (max == min) {
             return max;
         } else {
@@ -207,24 +193,25 @@ public class Methods {
     }
 
     /**
-     *
      * @param player The {@link Player} who's inventory should be checked.
      * @return Returns if the player's inventory is full while letting them know.
      */
     public boolean isInventoryFull(Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
-        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+
+        player.sendRichMessage(Messages.INVENTORY_FULL.getMessage());
+
         return true;
     }
 
     /**
-     *
      * @param player The {@link Player} to give items to.
-     * @param item The {@link ItemStack} to give to the player.
+     * @param item   The {@link ItemStack} to give to the player.
      */
     public void addItemToInventory(Player player, ItemStack item) {
         player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
+
     public void addItemToInventory(Player player, List<Item> itemList) {
         itemList.forEach(x -> addItemToInventory(player, x.getItemStack()));
     }
@@ -244,27 +231,6 @@ public class Methods {
         return entity.getNearbyEntities(radius, radius, radius);
     }
 
-    public void fireWork(Location loc, List<Color> colors) {
-        fireWork(loc, new ArrayList<>(colors));
-    }
-
-    public void fireWork(Location loc, ArrayList<Color> colors) {
-        Firework firework = loc.getWorld().spawn(loc, Firework.class);
-        FireworkMeta fireworkMeta = firework.getFireworkMeta();
-        fireworkMeta.addEffects(FireworkEffect.builder().with(FireworkEffect.Type.BALL_LARGE)
-                .withColor(colors)
-                .trail(false)
-                .flicker(false)
-                .build());
-
-        fireworkMeta.setPower(0);
-        firework.setFireworkMeta(fireworkMeta);
-
-        this.plugin.getFireworkDamageListener().addFirework(firework);
-
-        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, firework::detonate, 2);
-    }
-
     public Enchantment getEnchantment(String enchantmentName) {
         try {
             // HashMap<String, String> enchantments = getEnchantments();
@@ -272,7 +238,8 @@ public class Methods {
 
             for (Enchantment enchantment : Enchantment.values()) {
                 // MC 1.13+ has the correct names.
-                if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName)) return enchantment;
+                if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName))
+                    return enchantment;
             }
         } catch (Exception ignore) {}
 
@@ -288,7 +255,9 @@ public class Methods {
     public int getDurability(ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
             ItemMeta meta = item.getItemMeta();
+
             if (meta instanceof Damageable) return ((Damageable) item.getItemMeta()).getDamage();
+
             return 0;
         }
 
@@ -390,7 +359,7 @@ public class Methods {
                 if (this.pluginSupport.isFriendly(entity, livingEntity)) continue;
                 if (entity.getName().equalsIgnoreCase(value.getName())) continue;
 
-                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(entity).withDirectEntity(arrow).build(), 5D);
+                EntityDamageEvent event = new EntityDamageEvent(livingEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).withCausingEntity(entity).build(), 5D);
 
                 this.plugin.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) continue;
@@ -428,7 +397,8 @@ public class Methods {
         EventUtils.addIgnoredUUID(damager.getUniqueId());
         this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity))
+            entity.damage(5D);
 
         EventUtils.removeIgnoredEvent(damageByEntityEvent);
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
@@ -438,7 +408,7 @@ public class Methods {
         Location loc = en.getLocation();
         Entity lightning = null;
         if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
-        int lightningSoundRange = Files.CONFIG.getFile().getInt("Settings.EnchantmentOptions.Lightning-Sound-Range", 160);
+        int lightningSoundRange = ConfigManager.getConfig().getProperty(Config.lightning_sound_range);
 
         try {
             loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
@@ -454,9 +424,9 @@ public class Methods {
         placeholders.put(two, cost);
 
         switch (option) {
-            case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-            case XP_LEVEL -> player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-            case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
+            case VAULT -> player.sendRichMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+            case XP_LEVEL -> player.sendRichMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+            case XP_TOTAL -> player.sendRichMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
         }
     }
 
@@ -471,9 +441,10 @@ public class Methods {
      * Imitates all the events called when a player breaks a block.
      * Only calls #BlockDropItemEvent if the event isn't cancelled,
      * and there are drops.
+     *
      * @param player The player that will "break" the block.
-     * @param block The block that was broken.
-     * @param tool ItemStack used to break the block.
+     * @param block  The block that was broken.
+     * @param tool   ItemStack used to break the block.
      * @return If the event was cancelled.
      */
     public boolean playerBreakBlock(Player player, Block block, ItemStack tool, boolean hasDrops) {
@@ -495,9 +466,10 @@ public class Methods {
 
     /**
      * Imitates the blockDropItemEvent usage.
+     *
      * @param player The player that broke the block.
-     * @param block The block that was broken.
-     * @param items The items that will be dropped from the broken block.
+     * @param block  The block that was broken.
+     * @param items  The items that will be dropped from the broken block.
      */
     public void blockDropItems(Player player, Block block, Collection<ItemStack> items) {
         List<Item> dropItems = new ArrayList<>();
