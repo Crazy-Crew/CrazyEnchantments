@@ -13,15 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class CurrencyAPI {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = plugin.getStarter();
+    private final @NotNull Starter starter = plugin.getStarter();
 
     /**
      * Get the amount that a player has from a specific currency.
-     * @param player The player you wish to get the amount from.
+     *
+     * @param player   The player you wish to get the amount from.
      * @param currency The currency you wish to get from.
      * @return The amount that the player has of that currency.
      */
@@ -32,42 +31,47 @@ public class CurrencyAPI {
                 case XP_LEVEL -> player.getLevel();
                 case XP_TOTAL -> getTotalExperience(player);
             };
-        } catch (Exception | NoClassDefFoundError ignored) {}
+        } catch (Exception | NoClassDefFoundError ignored) {
+        }
         return 0;
     }
-    
+
     /**
      * Take an amount from a player's currency.
-     * @param player The player you wish to take from.
+     *
+     * @param player   The player you wish to take from.
      * @param category The category you wish to use.
      */
     public void takeCurrency(Player player, Category category) {
         takeCurrency(player, category.getCurrency(), category.getCost());
     }
-    
+
     /**
      * Take an amount from a player's currency.
-     * @param player The player you wish to take from.
+     *
+     * @param player   The player you wish to take from.
      * @param lostBook The lostbook you wish to use.
      */
     public void takeCurrency(Player player, LostBook lostBook) {
         takeCurrency(player, lostBook.getCurrency(), lostBook.getCost());
     }
-    
+
     /**
      * Take an amount from a player's currency.
+     *
      * @param player The player you wish to take from.
      * @param option The ShopOption you wish to use.
      */
     public void takeCurrency(Player player, ShopOption option) {
         takeCurrency(player, option.getCurrency(), option.getCost());
     }
-    
+
     /**
      * Take an amount from a player's currency.
-     * @param player The player you wish to take from.
+     *
+     * @param player   The player you wish to take from.
      * @param currency The currency you wish to use.
-     * @param amount The amount you want to take.
+     * @param amount   The amount you want to take.
      */
     public void takeCurrency(Player player, Currency currency, int amount) {
         try {
@@ -76,14 +80,16 @@ public class CurrencyAPI {
                 case XP_LEVEL -> player.setLevel(player.getLevel() - amount);
                 case XP_TOTAL -> takeTotalExperience(player, amount);
             }
-        } catch (Exception | NoClassDefFoundError ignored) {}
+        } catch (Exception | NoClassDefFoundError ignored) {
+        }
     }
-    
+
     /**
      * Give an amount to a player's currency.
-     * @param player The player you are giving to.
+     *
+     * @param player   The player you are giving to.
      * @param currency The currency you want to use.
-     * @param amount The amount you are giving to the player.
+     * @param amount   The amount you are giving to the player.
      */
     public void giveCurrency(Player player, Currency currency, int amount) {
         try {
@@ -92,31 +98,35 @@ public class CurrencyAPI {
                 case XP_LEVEL -> player.setLevel(player.getLevel() + amount);
                 case XP_TOTAL -> takeTotalExperience(player, -amount);
             }
-        } catch (Exception | NoClassDefFoundError ignored) {}
+        } catch (Exception | NoClassDefFoundError ignored) {
+        }
     }
-    
+
     /**
      * Checks if the player has enough of a currency.
-     * @param player The player you are checking.
+     *
+     * @param player   The player you are checking.
      * @param category The category you wish to check.
      * @return True if they have enough to buy it or false if they don't.
      */
     public boolean canBuy(Player player, Category category) {
         return canBuy(player, category.getCurrency(), category.getCost());
     }
-    
+
     /**
      * Checks if the player has enough of a currency.
-     * @param player The player you are checking.
+     *
+     * @param player   The player you are checking.
      * @param lostBook The lostBook you wish to check.
      * @return True if they have enough to buy it or false if they don't.
      */
     public boolean canBuy(Player player, LostBook lostBook) {
         return canBuy(player, lostBook.getCurrency(), lostBook.getCost());
     }
-    
+
     /**
      * Checks if the player has enough of a currency.
+     *
      * @param player The player you are checking.
      * @param option The ShopOption you wish to check.
      * @return True if they have enough to buy it or false if they don't.
@@ -124,18 +134,19 @@ public class CurrencyAPI {
     public boolean canBuy(Player player, ShopOption option) {
         return canBuy(player, option.getCurrency(), option.getCost());
     }
-    
+
     /**
      * Checks if the player has enough of a currency.
-     * @param player The player you are checking.
+     *
+     * @param player   The player you are checking.
      * @param currency The currency you wish to check.
-     * @param cost The cost of the item you are checking.
+     * @param cost     The cost of the item you are checking.
      * @return True if they have enough to buy it or false if they don't.
      */
     public boolean canBuy(Player player, Currency currency, int cost) {
         return getCurrency(player, currency) >= cost;
     }
-    
+
     private void takeTotalExperience(Player player, int amount) {
         int total = getTotalExperience(player) - amount;
         player.setTotalExperience(0);
@@ -151,7 +162,7 @@ public class CurrencyAPI {
         float xp = (float) total / (float) player.getExpToLevel();
         player.setExp(xp);
     }
-    
+
     private int getTotalExperience(Player player) { // https://www.spigotmc.org/threads/72804
         int experience;
         int level = player.getLevel();

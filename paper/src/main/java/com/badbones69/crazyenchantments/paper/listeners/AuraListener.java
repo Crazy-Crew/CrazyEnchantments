@@ -16,6 +16,7 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -23,14 +24,11 @@ import java.util.stream.Collectors;
 
 public class AuraListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final CEnchantments[] AURA_ENCHANTMENTS = {
             CEnchantments.BLIZZARD,
@@ -47,8 +45,8 @@ public class AuraListener implements Listener {
         Location to = event.getTo();
 
         if (from.getBlockX() == to.getBlockX()
-        && from.getBlockY() == to.getBlockY()
-        && from.getBlockZ() == to.getBlockZ()) return;
+                && from.getBlockY() == to.getBlockY()
+                && from.getBlockZ() == to.getBlockZ()) return;
 
         List<Player> players = getNearbyPlayers(player);
 
@@ -61,7 +59,8 @@ public class AuraListener implements Listener {
             itemEnchantments.forEach((enchantment, level) -> {
                 CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                if (enchantmentEnum != null) players.forEach((other) -> this.plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(player, other, enchantmentEnum, level)));
+                if (enchantmentEnum != null)
+                    players.forEach((other) -> this.plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(player, other, enchantmentEnum, level)));
 
             });
         }
@@ -74,7 +73,8 @@ public class AuraListener implements Listener {
                 itemEnchantments.forEach((enchantment, level) -> {
                     CEnchantments enchantmentEnum = getAuraEnchantmentEnum(enchantment);
 
-                    if (enchantmentEnum != null) this.plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(other, player, enchantmentEnum, level));
+                    if (enchantmentEnum != null)
+                        this.plugin.getServer().getPluginManager().callEvent(new AuraActiveEvent(other, player, enchantmentEnum, level));
 
                 });
             }

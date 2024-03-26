@@ -17,14 +17,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommandReload extends BaseCommand {
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final FileManager fileManager = this.starter.getFileManager();
+    private final @NotNull FileManager fileManager = this.starter.getFileManager();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
     @Command("reload")
     @Permission(value = "crazyenchantments.reload", def = PermissionDefault.OP)

@@ -19,6 +19,7 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,13 +27,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class CommandUpdate extends BaseCommand {
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
-    @NotNull
     private final Gson gson = new Gson();
 
     @Command("update-enchants")
@@ -70,7 +68,8 @@ public class CommandUpdate extends BaseCommand {
                             String lowerCaseCustom = active.getCustomName().toLowerCase().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "");
                             String lowerCaseName = active.getName().toLowerCase();
 
-                            if (!lowerCaseStrippedName.contains(lowerCaseCustom) && !lowerCaseStrippedName.contains(lowerCaseName)) continue;
+                            if (!lowerCaseStrippedName.contains(lowerCaseCustom) && !lowerCaseStrippedName.contains(lowerCaseName))
+                                continue;
 
                             Enchant object = enchant.get();
 
@@ -96,7 +95,7 @@ public class CommandUpdate extends BaseCommand {
 
             player.getInventory().setItem(value, itemStack);
         }
-        
+
         ColorUtils.sendMessage(player, "%prefix%&aAll items in your inventory have been migrated.", true);
     }
 }

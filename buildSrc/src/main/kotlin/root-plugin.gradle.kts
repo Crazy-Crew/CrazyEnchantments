@@ -3,26 +3,15 @@ import io.papermc.hangarpublishplugin.model.Platforms
 plugins {
     id("io.papermc.hangar-publish-plugin")
 
-    id("com.github.johnrengelman.shadow")
-
     id("com.modrinth.minotaur")
 
     `java-library`
 
     `maven-publish`
-
-    idea
 }
 
 base {
     archivesName.set(rootProject.name)
-}
-
-idea {
-    module {
-        isDownloadJavadoc = true
-        isDownloadSources = true
-    }
 }
 
 repositories {
@@ -33,6 +22,10 @@ repositories {
     maven("https://jitpack.io/")
 
     mavenCentral()
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of("17"))
 }
 
 tasks {
@@ -47,12 +40,6 @@ tasks {
 
     processResources {
         filteringCharset = Charsets.UTF_8.name()
-    }
-
-    shadowJar {
-        archiveClassifier.set("")
-
-        exclude("META-INF/**")
     }
 
     val directory = File("$rootDir/jars/${project.name.lowercase()}")
@@ -103,8 +90,4 @@ tasks {
 
         gameVersions.add(mcVersion)
     }
-}
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of("17"))
 }

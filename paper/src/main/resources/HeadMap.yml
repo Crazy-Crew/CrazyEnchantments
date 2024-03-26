@@ -1,4 +1,4 @@
-HeadOdds:  # All the heads that decapitation and headless enchantments may affect, and a multiplier to the chance defined by the enchantment.
+HeadOdds: # All the heads that decapitation and headless enchantments may affect, and a multiplier to the chance defined by the enchantment.
   ZOMBIE_HEAD: 1.0
   SKELETON_SKULL: 1.0
   CREEPER_HEAD: 1.0

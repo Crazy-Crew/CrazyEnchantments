@@ -12,13 +12,13 @@ import org.bukkit.inventory.ItemStack;
 public class BlackSmithManager {
 
     private static ItemStack exitButton;
-    private static ItemStack redGlass,blueGlass,grayGlass;
+    private static ItemStack redGlass, blueGlass, grayGlass;
 
-    private static String inventoryName,itemCost;
+    private static String inventoryName, itemCost;
 
     private static Currency currency;
 
-    private static int bookUpgrade,levelUp,addEnchantment;
+    private static int bookUpgrade, levelUp, addEnchantment;
 
     private static boolean maxEnchantments;
 

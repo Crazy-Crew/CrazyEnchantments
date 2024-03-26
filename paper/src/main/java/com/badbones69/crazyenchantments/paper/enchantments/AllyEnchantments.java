@@ -33,19 +33,15 @@ import java.util.UUID;
 
 public class AllyEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
     // Settings.
-    @NotNull
-    private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Managers.
-    @NotNull
-    private final AllyManager allyManager = this.starter.getAllyManager();
+    private final @NotNull AllyManager allyManager = this.starter.getAllyManager();
 
     private final HashMap<UUID, Calendar> allyCoolDown = new HashMap<>();
 

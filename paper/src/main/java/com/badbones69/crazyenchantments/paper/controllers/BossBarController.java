@@ -22,7 +22,6 @@ public class BossBarController {
     }
 
     /**
-     *
      * @param player {@link Player}
      * @return true if the player currently has a boss bar.
      */
@@ -31,7 +30,6 @@ public class BossBarController {
     }
 
     /**
-     *
      * @param player the {@link Player} whose boss bar you want to get
      * @return the current boss bar or null.
      */
@@ -52,8 +50,9 @@ public class BossBarController {
     /**
      * Updates the current boss bar or creates a
      * new one if the player does not have one yet
-     * @param player {@link Player} whose boss bar you want to update
-     * @param text the message that you want to be displayed by the boss bar
+     *
+     * @param player   {@link Player} whose boss bar you want to update
+     * @param text     the message that you want to be displayed by the boss bar
      * @param progress value between 0f and 1f of how much the progress bar should be filled
      */
     public void updateBossBar(Player player, Component text, float progress) {
@@ -74,8 +73,9 @@ public class BossBarController {
 
     /**
      * Updates the boss bar repeatedly in order to make it appear smooth.
+     *
      * @param intervals amount of times that the
-     * boss bar is updated to get to the final value
+     *                  boss bar is updated to get to the final value
      * @see #updateBossBar
      */
     public void updateBossBarGradually(Player player, String text, float progress, int intervals) {
@@ -85,7 +85,7 @@ public class BossBarController {
         } else {
             BossBar bossBar = getBossBar(player).name(newText);
             float from = bossBar.progress();
-            float difference = (progress - from)/intervals;
+            float difference = (progress - from) / intervals;
 
             if ((from != progress)) {
                 for (int i = 0; i < intervals; ++i) {
@@ -108,6 +108,7 @@ public class BossBarController {
 
     /**
      * Removes the players boss bar
+     *
      * @param player the {@link Player} whose boss bar you wish to remove
      */
     public void removeBossBar(Player player) {

@@ -18,20 +18,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 public class SlotCrystalListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
-
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
     private static ItemStack slot_crystal;
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull Starter starter = this.plugin.getStarter();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     public void load() {
         SettingsManager config = ConfigManager.getConfig();

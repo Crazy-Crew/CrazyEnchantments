@@ -20,22 +20,19 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProtectionCrystalListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
+    private final @NotNull ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
@@ -44,7 +41,7 @@ public class ProtectionCrystalListener implements Listener {
         ItemStack crystalItem = event.getCursor();
 
         ItemStack item = event.getCurrentItem() != null ? event.getCurrentItem() : new ItemStack(Material.AIR);
-        
+
         if (item.getType() == Material.AIR || crystalItem.getType() == Material.AIR) return;
 
         if (!this.protectionCrystalSettings.isProtectionCrystal(crystalItem)) return;

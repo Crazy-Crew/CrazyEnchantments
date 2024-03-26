@@ -15,15 +15,12 @@ import java.util.List;
 
 public class GkitzTab implements TabCompleter {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = plugin.getStarter();
+    private final @NotNull Starter starter = plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = starter.getCrazyManager();
-    
+    private final @NotNull CrazyManager crazyManager = starter.getCrazyManager();
+
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
@@ -35,14 +32,17 @@ public class GkitzTab implements TabCompleter {
                 return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
             } else if (args.length == 2) { // /gkit reset
 
-                if (args[0].equalsIgnoreCase("reset")) this.crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
+                if (args[0].equalsIgnoreCase("reset"))
+                    this.crazyManager.getGKitz().forEach(kit -> completions.add(kit.getName()));
 
-                if (this.crazyManager.getGKitFromName(args[0]) != null) this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                if (this.crazyManager.getGKitFromName(args[0]) != null)
+                    this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
 
                 return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
             } else { // /gkit reset <kit>
 
-                if (args[0].equalsIgnoreCase("reset")) this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                if (args[0].equalsIgnoreCase("reset"))
+                    this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
 
                 return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
             }

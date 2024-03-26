@@ -32,13 +32,12 @@ import java.util.Map;
 
 public class KitsMenu extends InventoryBuilder {
 
+    private final Starter starter = this.plugin.getStarter();
+    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+
     public KitsMenu(Player player, int size, String title) {
         super(player, size, title);
     }
-
-    private final Starter starter = this.plugin.getStarter();
-
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     @Override
     public InventoryBuilder build() {
@@ -143,7 +142,9 @@ public class KitsMenu extends InventoryBuilder {
                 return;
             }
 
-            Map<String, String> placeholders = new HashMap<>(1) {{ put("%Kit%", kit.getName()); }};
+            Map<String, String> placeholders = new HashMap<>(1) {{
+                put("%Kit%", kit.getName());
+            }};
 
             if (cePlayer.hasGkitPermission(kit)) {
                 if (cePlayer.canUseGKit(kit)) {

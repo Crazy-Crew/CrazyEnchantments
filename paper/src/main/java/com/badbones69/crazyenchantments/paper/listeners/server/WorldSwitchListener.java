@@ -13,16 +13,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class WorldSwitchListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.plugin.getStarter().getCrazyManager();
 
     @EventHandler(ignoreCancelled = true)
     public void onWorldSwitch(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
 
-        if (ConfigManager.getConfig().getProperty(Config.refresh_effects_world_change)) this.crazyManager.updatePlayerEffects(player);
+        if (ConfigManager.getConfig().getProperty(Config.refresh_effects_world_change))
+            this.crazyManager.updatePlayerEffects(player);
     }
 }

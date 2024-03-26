@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public enum ShopOption {
     BLACK_SCROLL(Config.black_scroll_item, Config.black_scroll_gui_name, Config.black_scroll_gui_lore, Config.black_scroll_in_gui, true, Config.black_scroll_glowing, Config.black_scroll_currency, Config.black_scroll_cost, Config.black_scroll_gui_slot),
     WHITE_SCROLL(Config.white_scroll_item, Config.white_scroll_gui_name, Config.white_scroll_gui_lore, Config.white_scroll_in_gui, true, Config.white_scroll_glowing, Config.white_scroll_currency, Config.white_scroll_cost, Config.white_scroll_gui_slot),
     TRANSMOG_SCROLL(Config.transmog_scroll_item, Config.transmog_scroll_gui_name, Config.transmog_scroll_gui_lore, Config.transmog_scroll_in_gui, true, Config.transmog_scroll_in_gui, Config.transmog_currency, Config.transmog_cost, Config.transmog_scroll_gui_slot);
-    
+
     private static final HashMap<ShopOption, Option> shopOptions = new HashMap<>();
 
     private final Material material;
@@ -41,16 +42,13 @@ public enum ShopOption {
     private final boolean isBuyable;
 
     private final boolean isGlowing;
+    private final int slot;
+    private final boolean inGui;
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
     private String currency;
     private int cost;
-    private final int slot;
 
-    private final boolean inGui;
-
-    @NotNull
-    private final SettingsManager config = ConfigManager.getConfig();
-
-    ShopOption(Property<String> item, Property<String> name, Property<List<String>> lore, Property<Boolean> inGui, boolean isBuyable, Property<Boolean> isGlowing,Property<String> currency, Property<Integer> cost, Property<Integer> slot) {
+    ShopOption(Property<String> item, Property<String> name, Property<List<String>> lore, Property<Boolean> inGui, boolean isBuyable, Property<Boolean> isGlowing, Property<String> currency, Property<Integer> cost, Property<Integer> slot) {
         this.material = Material.matchMaterial(this.config.getProperty(item));
 
         this.name = this.config.getProperty(name);
@@ -106,6 +104,22 @@ public enum ShopOption {
         this.slot = this.config.getProperty(slot);
     }
 
+    public static void loadShopOptions() {
+        shopOptions.clear();
+
+        for (ShopOption option : values()) {
+            ItemBuilder builder = new ItemBuilder()
+                    .setName(option.getName())
+                    .setLore(option.getLore())
+                    .setMaterial(option.getMaterial())
+                    .setGlow(option.isGlowing());
+
+            Option shop = new Option(builder, option.getSlot(), option.isInGui(), option.getCost(), option.getCurrency());
+
+            shopOptions.put(option, shop);
+        }
+    }
+
     public String getName() {
         return this.name;
     }
@@ -126,45 +140,30 @@ public enum ShopOption {
         return this.lore;
     }
 
-    public static void loadShopOptions() {
-        shopOptions.clear();
-
-        for (ShopOption option : values()) {
-            ItemBuilder builder = new ItemBuilder()
-                    .setName(option.getName())
-                    .setLore(option.getLore())
-                    .setMaterial(option.getMaterial())
-                    .setGlow(option.isGlowing());
-
-            Option shop = new Option(builder, option.getSlot(), option.isInGui(), option.getCost(), option.getCurrency());
-
-            shopOptions.put(option, shop);
-        }
-    }
-    
     public ItemStack getItem() {
         return getItemBuilder().build();
     }
-    
+
     public ItemBuilder getItemBuilder() {
         return shopOptions.get(this).itemBuilder();
     }
-    
+
     public int getSlot() {
         return this.slot;
     }
-    
+
     public int getCost() {
         return this.cost;
     }
-    
+
     public Currency getCurrency() {
         return Currency.getCurrency(this.currency);
     }
-    
+
     public boolean isBuyable() {
         return this.isBuyable;
     }
 
-    private record Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {}
+    private record Option(ItemBuilder itemBuilder, int slot, boolean inGUI, int cost, Currency currency) {
+    }
 }

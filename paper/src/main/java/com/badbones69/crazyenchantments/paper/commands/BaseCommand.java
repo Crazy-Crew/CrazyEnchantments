@@ -13,15 +13,8 @@ import org.jetbrains.annotations.NotNull;
 @Description("The base command for CrazyEnchantments")
 public abstract class BaseCommand {
 
-    @NotNull
-    protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    protected final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final ShopListener listener = this.plugin.getShopListener();
-
-    @Command
-    @Permission("crazyenchantments.gui")
-    public void gui(Player player) {
-        this.listener.openGUI(player);
-    }
+    //@NotNull
+    //private final ShopListener listener = this.plugin.getShopListener();
 }

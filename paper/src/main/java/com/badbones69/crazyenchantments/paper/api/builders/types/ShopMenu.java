@@ -8,16 +8,15 @@ import com.badbones69.crazyenchantments.paper.api.managers.ShopManager;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ShopMenu extends InventoryBuilder {
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final @NotNull CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
 
     private final ShopManager shopManager = this.starter.getShopManager();
 

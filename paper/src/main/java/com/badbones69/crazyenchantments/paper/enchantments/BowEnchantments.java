@@ -24,6 +24,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,35 +41,28 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 public class BowEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final @NotNull PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
+    private final @NotNull NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
 
     // Plugin Managers.
-    @NotNull
-    private final BowEnchantmentManager bowEnchantmentManager = this.starter.getBowEnchantmentManager();
+    private final @NotNull BowEnchantmentManager bowEnchantmentManager = this.starter.getBowEnchantmentManager();
 
-    @NotNull
-    private final BowUtils bowUtils = this.starter.getBowUtils();
+    private final @NotNull BowUtils bowUtils = this.starter.getBowUtils();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBowShoot(final EntityShootBowEvent event) {
@@ -118,7 +112,7 @@ public class BowEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.LIGHTNING, shooter, arrow.bow(), arrow.enchantments())) {
             Location location = arrow.arrow().getLocation();
 
-            location.getWorld().strikeLightningEffect(location);
+            Entity lightning = location.getWorld().strikeLightningEffect(location);
 
             int lightningSoundRange = ConfigManager.getConfig().getProperty(Config.lightning_sound_range);
 
@@ -131,7 +125,7 @@ public class BowEnchantments implements Listener {
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(shooter);
 
             for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, arrow.arrow())) {
-                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).build(), 5D);
+                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, DamageCause.LIGHTNING, DamageSource.builder(DamageType.LIGHTNING_BOLT).withCausingEntity(shooter).withDirectEntity(lightning).build(), 5D);
 
                 EventUtils.addIgnoredEvent(damageByEntityEvent);
                 EventUtils.addIgnoredUUID(shooter.getUniqueId());
@@ -188,7 +182,8 @@ public class BowEnchantments implements Listener {
         for (BowEnchantment bowEnchantment : this.bowEnchantmentManager.getBowEnchantments()) {
             CEnchantments enchantment = bowEnchantment.getEnchantment();
 
-            if (!EnchantUtils.isEventActive(enchantment, arrow.getShooter(), arrow.bow(), arrow.enchantments())) continue;
+            if (!EnchantUtils.isEventActive(enchantment, arrow.getShooter(), arrow.bow(), arrow.enchantments()))
+                continue;
 
             if (bowEnchantment.isPotionEnchantment()) {
                 bowEnchantment.getPotionEffects().forEach(effect -> entity.addPotionEffect(new PotionEffect(effect.potionEffect(), effect.duration(),
@@ -201,6 +196,7 @@ public class BowEnchantments implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onWebBreak(BlockBreakEvent event) {
-        if (!EventUtils.isIgnoredEvent(event) && this.bowUtils.getWebBlocks().contains(event.getBlock())) event.setCancelled(true);
+        if (!EventUtils.isIgnoredEvent(event) && this.bowUtils.getWebBlocks().contains(event.getBlock()))
+            event.setCancelled(true);
     }
 }

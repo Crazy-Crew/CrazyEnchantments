@@ -15,11 +15,12 @@ import java.util.Map;
 
 public class EnchantUtils {
 
-    @NotNull
-    private final static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull
+    static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     /**
      * Get the highest category rarity the enchantment is in.
+     *
      * @param enchantment The enchantment you are checking.
      * @return The highest category based on the rarities.
      */
@@ -58,9 +59,9 @@ public class EnchantUtils {
      * Main Event used to validate that all enchants can work.
      * Global method that should be used before every enchantment is activated.
      *
-     * @param player the player
-     * @param enchant the enchant to use
-     * @param enchants the map of enchants
+     * @param player     the player
+     * @param enchant    the enchant to use
+     * @param enchants   the map of enchants
      * @param multiplier the multipler of the enchant.
      * @return True if the enchant is active and can be used if the event is passed.
      */
@@ -81,7 +82,8 @@ public class EnchantUtils {
     }
 
     public static boolean isAuraActive(Player player, CEnchantments enchant, Map<CEnchantment, Integer> enchants) {
-        if (plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20*3)) return false;
+        if (plugin.getStarter().getCrazyManager().getCEPlayer(player.getUniqueId()).onEnchantCooldown(enchant, 20 * 3))
+            return false;
 
         return isActive(player, enchant, enchants);
     }

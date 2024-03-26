@@ -16,11 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommandInfo extends BaseCommand {
 
-    @NotNull
     private final Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
     @Command("info")
     @Permission(value = "crazyenchantments.info", def = PermissionDefault.TRUE)

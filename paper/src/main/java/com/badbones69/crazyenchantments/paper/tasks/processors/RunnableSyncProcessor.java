@@ -6,9 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class RunnableSyncProcessor extends Processor<Runnable> {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
-    
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+
     void process(final Runnable process) {
         this.plugin.getServer().getScheduler().runTask(this.plugin, process);
     }

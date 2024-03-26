@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ public class AllyManager {
     private final List<AllyMob> allyMobs = new ArrayList<>();
     private final Map<UUID, List<AllyMob>> allyOwners = new HashMap<>();
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
-    
+
     public void load() {
         SettingsManager config = ConfigManager.getConfig();
 
@@ -29,11 +30,11 @@ public class AllyManager {
             this.allyTypeNameCache.put(type, ColorUtils.color(config.getProperty(type.getConfigName())));
         }
     }
-    
+
     public List<AllyMob> getAllyMobs() {
         return this.allyMobs;
     }
-    
+
     public void addAllyMob(AllyMob allyMob) {
         if (allyMob != null) {
             this.allyMobs.add(allyMob);
@@ -48,7 +49,7 @@ public class AllyManager {
             }
         }
     }
-    
+
     public void removeAllyMob(AllyMob allyMob) {
         if (allyMob != null) {
             this.allyMobs.remove(allyMob);
@@ -61,7 +62,7 @@ public class AllyManager {
             }
         }
     }
-    
+
     public void forceRemoveAllies() {
         if (!this.allyMobs.isEmpty()) {
             this.allyMobs.forEach(ally -> ally.getAlly().remove());
@@ -69,7 +70,7 @@ public class AllyManager {
             this.allyOwners.clear();
         }
     }
-    
+
     public void forceRemoveAllies(Player owner) {
         for (AllyMob ally : this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
             ally.getAlly().remove();
@@ -78,25 +79,25 @@ public class AllyManager {
 
         this.allyOwners.remove(owner.getUniqueId());
     }
-    
+
     public void setEnemy(Player owner, Entity enemy) {
         this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> ally.attackEnemy((LivingEntity) enemy));
     }
-    
+
     public Map<AllyType, String> getAllyTypeNameCache() {
         return this.allyTypeNameCache;
     }
-    
+
     public boolean isAlly(Player player, Entity livingEntity) {
         if (isAllyMob(livingEntity)) return isAlly(player, getAllyMob(livingEntity));
 
         return false;
     }
-    
+
     public boolean isAlly(Player player, AllyMob ally) {
         return ally.getOwner().getUniqueId() == player.getUniqueId();
     }
-    
+
     public boolean isAllyMob(Entity livingEntity) {
         for (AllyMob ally : this.allyMobs) {
             if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return true;
@@ -104,7 +105,7 @@ public class AllyManager {
 
         return false;
     }
-    
+
     public AllyMob getAllyMob(Entity livingEntity) {
         for (AllyMob ally : this.allyMobs) {
             if (ally.getAlly().getUniqueId() == livingEntity.getUniqueId()) return ally;

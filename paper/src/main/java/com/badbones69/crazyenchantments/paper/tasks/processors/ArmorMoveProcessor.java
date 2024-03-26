@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,24 +27,18 @@ import java.util.UUID;
 
 public class ArmorMoveProcessor extends Processor<UUID> {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final @NotNull PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     private final Processor<Runnable> syncProcessor;
 
@@ -102,14 +97,11 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
         int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
 
-        List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(e ->
-                e instanceof Player && this.pluginSupport.isFriendly(player, e)).map(e -> (Player) e).toList();
-
-        if (players.isEmpty()) return;
-
         this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
             if (EnchantUtils.normalEnchantEvent(CEnchantments.COMMANDER, player, armor)) {
-                players.forEach(otherPlayer -> otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1)));
+                player.getNearbyEntities(radius, radius, radius).stream().filter(e ->
+                                e instanceof Player && this.pluginSupport.isFriendly(player, e)).map(e -> (Player) e)
+                        .forEach(otherPlayer -> otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1)));
             }
         });
     }
@@ -119,7 +111,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
         List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(entity ->
                 this.pluginSupport.isFriendly(player, entity)).map(entity -> (Player) entity).toList();
-        
+
         if (players.isEmpty()) return;
 
         this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {

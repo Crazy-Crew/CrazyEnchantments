@@ -16,11 +16,9 @@ import java.util.List;
 
 public class EnchantmentType {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Methods methods = this.plugin.getStarter().getMethods();
+    private final @NotNull Methods methods = this.plugin.getStarter().getMethods();
 
     private final String displayName;
     private final int slot;
@@ -34,9 +32,9 @@ public class EnchantmentType {
         this.displayName = name;
         this.slot = file.getInt(path + ".Display-Item.Slot", 1) - 1;
         this.displayItem = new ItemBuilder()
-        .setMaterial(file.getString(path + ".Display-Item.Item", "STONE"))
-        .setName(file.getString(path + ".Display-Item.Name", "Error getting name."))
-        .setLore(file.getStringList(path + ".Display-Item.Lore")).build();
+                .setMaterial(file.getString(path + ".Display-Item.Item", "STONE"))
+                .setName(file.getString(path + ".Display-Item.Name", "Error getting name."))
+                .setLore(file.getStringList(path + ".Display-Item.Lore")).build();
 
         for (String type : file.getStringList(path + ".Enchantable-Items")) {
             Material material = new ItemBuilder().setMaterial(type).getMaterial();

@@ -20,18 +20,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class BootEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
     // Plugin Managers.
-    @NotNull
-    private final WingsManager wingsManager = this.starter.getWingsManager();
+    private final @NotNull WingsManager wingsManager = this.starter.getWingsManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerEquip(PlayerArmorChangeEvent event) {
@@ -53,7 +49,8 @@ public class BootEnchantments implements Listener {
         Player player = event.getPlayer();
 
         if (player.getEquipment().getBoots() == null) return;
-        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment()))
+            return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 
@@ -104,7 +101,8 @@ public class BootEnchantments implements Listener {
 
         if (!this.wingsManager.isWingsEnabled()) return;
 
-        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment())) return;
+        if (!this.enchantmentBookSettings.getEnchantments(player.getEquipment().getBoots()).containsKey(CEnchantments.WINGS.getEnchantment()))
+            return;
 
         if (WingsUtils.checkRegion(player) || WingsUtils.isEnemiesNearby(player)) return;
 

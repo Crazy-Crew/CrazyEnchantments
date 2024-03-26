@@ -35,38 +35,28 @@ import org.jetbrains.annotations.NotNull;
 
 public class ShopListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = starter.getCrazyManager();
 
-    @NotNull
-    private final Methods methods = starter.getMethods();
+    private final @NotNull Methods methods = starter.getMethods();
 
     // Settings.
-    @NotNull
-    private final ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
+    private final @NotNull ProtectionCrystalSettings protectionCrystalSettings = this.starter.getProtectionCrystalSettings();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Managers.
-    @NotNull
-    private final ShopManager shopManager = this.starter.getShopManager();
+    private final @NotNull ShopManager shopManager = this.starter.getShopManager();
 
     // Plugin Listeners.
-    @NotNull
-    private final ScramblerListener scramblerListener = this.starter.getScramblerListener();
-    @NotNull
-    private final SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
+    private final @NotNull ScramblerListener scramblerListener = this.starter.getScramblerListener();
+    private final @NotNull SlotCrystalListener slotCrystalListener = this.starter.getSlotCrystalListener();
 
     // Economy Management.
-    @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final @NotNull CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
 
     @EventHandler(ignoreCancelled = true)
     public void onInvClick(InventoryClickEvent event) {
@@ -170,7 +160,8 @@ public class ShopListener implements Listener {
                     }
 
                     case INFO -> MenuManager.openInfoMenu(player);
-                    case PROTECTION_CRYSTAL -> player.getInventory().addItem(this.protectionCrystalSettings.getCrystals());
+                    case PROTECTION_CRYSTAL ->
+                            player.getInventory().addItem(this.protectionCrystalSettings.getCrystals());
                     case SCRAMBLER -> player.getInventory().addItem(this.scramblerListener.getScramblers());
                     case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                     case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());

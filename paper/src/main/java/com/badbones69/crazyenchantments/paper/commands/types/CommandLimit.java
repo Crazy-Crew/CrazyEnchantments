@@ -11,19 +11,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandLimit extends BaseCommand {
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
     @Command("limit")
     @Permission(value = "crazyenchantments.limit", def = PermissionDefault.OP)

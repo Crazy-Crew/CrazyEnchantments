@@ -6,14 +6,18 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public class UnregisterCEnchantmentEvent extends Event {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private final CEnchantment enchantment;
-    
+
     public UnregisterCEnchantmentEvent(CEnchantment enchantment) {
         this.enchantment = enchantment;
     }
-    
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     /**
      * @return The enchantment being unregistered.
      */
@@ -28,10 +32,6 @@ public class UnregisterCEnchantmentEvent extends Event {
      */
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

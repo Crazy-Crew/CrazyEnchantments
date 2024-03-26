@@ -1,7 +1,5 @@
-import org.gradle.kotlin.dsl.support.uppercaseFirstChar
-
 plugins {
-    id("root-plugin")
+    `root-plugin`
 }
 
 tasks {
@@ -14,12 +12,12 @@ tasks {
             jarsDir.mkdirs()
         }
 
-        subprojects.filter { it.name == "paper" || it.name == "fabric" }.forEach { project ->
+        subprojects.filter { it.name == "paper" }.forEach { project ->
             dependsOn(":${project.name}:build")
 
             doLast {
                 runCatching {
-                    val file = File("$jarsDir/${project.name.uppercaseFirstChar().lowercase()}")
+                    val file = File("$jarsDir/${project.name.lowercase()}")
 
                     file.mkdirs()
 

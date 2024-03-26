@@ -22,18 +22,14 @@ import java.util.HashMap;
 
 public class GkitzCommand implements CommandExecutor {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-    
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         boolean isPlayer = sender instanceof Player;
@@ -78,7 +74,7 @@ public class GkitzCommand implements CommandExecutor {
 
                         if (args.length >= 3) {
                             if (!this.methods.isPlayerOnline(args[2], sender)) {
-                                    return true;
+                                return true;
                             } else {
                                 player = this.methods.getPlayer(args[2]);
                             }
@@ -166,7 +162,7 @@ public class GkitzCommand implements CommandExecutor {
 
         return false;
     }
-    
+
     private boolean hasPermission(CommandSender sender, String permission) {
         return this.methods.hasPermission(sender, permission, true);
     }

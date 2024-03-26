@@ -34,6 +34,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,20 +45,15 @@ import java.util.stream.Collectors;
 
 public class ScrollListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    @NotNull
-    private final SettingsManager config = ConfigManager.getConfig();
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
 
     private String suffix;
     private boolean countVanillaEnchantments;
@@ -83,7 +79,8 @@ public class ScrollListener implements Listener {
 
         InventoryType.SlotType slotType = event.getSlotType();
 
-        if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) return;
+        if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR)
+            return;
 
         Scrolls type = Scrolls.getFromPDC(scroll);
         if (type == null) return;
@@ -263,8 +260,10 @@ public class ScrollListener implements Listener {
     private List<Component> getAllProtectionLore(PersistentDataContainer container) {
         List<Component> lore = new ArrayList<>();
 
-        if (Scrolls.hasWhiteScrollProtection(container)) lore.add(ColorUtils.legacyTranslateColourCodes(this.config.getProperty(Config.white_scroll_protected)));
-        if (ProtectionCrystalSettings.isProtected(container)) lore.add(ColorUtils.legacyTranslateColourCodes(this.config.getProperty(Config.protection_crystal_protected)));
+        if (Scrolls.hasWhiteScrollProtection(container))
+            lore.add(ColorUtils.legacyTranslateColourCodes(this.config.getProperty(Config.white_scroll_protected)));
+        if (ProtectionCrystalSettings.isProtected(container))
+            lore.add(ColorUtils.legacyTranslateColourCodes(this.config.getProperty(Config.protection_crystal_protected)));
 
         return lore;
     }

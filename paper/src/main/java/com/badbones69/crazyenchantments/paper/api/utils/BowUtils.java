@@ -17,20 +17,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class BowUtils {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Sticky Shot
     private final List<Block> webBlocks = new ArrayList<>();
@@ -100,6 +98,21 @@ public class BowUtils {
         return this.webBlocks;
     }
 
+    private void setWebBlocks(Entity hitEntity) {
+        for (Block block : getCube(hitEntity.getLocation())) {
+
+            block.setType(Material.COBWEB);
+            this.webBlocks.add(block);
+
+            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+                if (block.getType() == Material.COBWEB) {
+                    block.setType(Material.AIR);
+                    webBlocks.remove(block);
+                }
+            }, 5 * 20);
+        }
+    }
+
     public void spawnWebs(Entity hitEntity, EnchantedArrow enchantedArrow, Arrow arrow) {
         if (enchantedArrow == null) return;
 
@@ -122,21 +135,6 @@ public class BowUtils {
         } else {
             arrow.remove();
             setWebBlocks(hitEntity);
-        }
-    }
-
-    private void setWebBlocks(Entity hitEntity) {
-        for (Block block : getCube(hitEntity.getLocation())) {
-
-            block.setType(Material.COBWEB);
-            this.webBlocks.add(block);
-
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-                if (block.getType() == Material.COBWEB) {
-                    block.setType(Material.AIR);
-                    webBlocks.remove(block);
-                }
-            }, 5 * 20);
         }
     }
 

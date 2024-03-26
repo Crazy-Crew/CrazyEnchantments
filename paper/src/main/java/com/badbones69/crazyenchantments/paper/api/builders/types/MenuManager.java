@@ -15,6 +15,7 @@ import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -11,8 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MiscListener implements Listener {
 
-    @NotNull
-    private final CrazyManager crazyManager = JavaPlugin.getPlugin(CrazyEnchantments.class).getStarter().getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = JavaPlugin.getPlugin(CrazyEnchantments.class).getStarter().getCrazyManager();
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event) {

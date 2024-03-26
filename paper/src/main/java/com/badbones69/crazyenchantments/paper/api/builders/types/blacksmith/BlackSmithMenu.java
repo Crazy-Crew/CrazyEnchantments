@@ -22,6 +22,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class BlackSmithMenu extends InventoryBuilder {
             inventory.setItem(slot, BlackSmithManager.getGrayGlass());
         }
 
-        for (int slot : new int[]{1,2,3,4,5,6,10,12,13,15,19,20,21,22,23,24}) {
+        for (int slot : new int[]{1, 2, 3, 4, 5, 6, 10, 12, 13, 15, 19, 20, 21, 22, 23, 24}) {
             inventory.setItem(slot, BlackSmithManager.getRedGlass());
         }
 
@@ -96,7 +97,7 @@ public class BlackSmithMenu extends InventoryBuilder {
 
                 if (!this.settings.getEnchantments(item).isEmpty() || this.settings.isEnchantmentBook(item)) {
                     if (inventory.getItem(this.mainSlot) == null) {
-                        event.setCurrentItem(new ItemStack(Material.AIR));
+                        event.setCurrentItem(null);
                         inventory.setItem(this.mainSlot, item); // Moves clicked item to main slot.
                         playSound(player, this.click);
 
@@ -105,7 +106,7 @@ public class BlackSmithMenu extends InventoryBuilder {
                             setBorder(resultItem, inventory);
                         }
                     } else {
-                        event.setCurrentItem(new ItemStack(Material.AIR));
+                        event.setCurrentItem(null);
 
                         // Sub item slot is not empty.
                         // Moves sub slot item to clicked items slot.
@@ -119,7 +120,7 @@ public class BlackSmithMenu extends InventoryBuilder {
                 }
             } else {
                 if (event.getRawSlot() == this.mainSlot || event.getRawSlot() == this.subSlot) { // Clicked either the main slot or sub slot.
-                    event.setCurrentItem(new ItemStack(Material.AIR)); // Sets the clicked slot to air.
+                    event.setCurrentItem(null); // Sets the clicked slot to air.
                     this.methods.addItemToInventory(player, item);
                     inventory.setItem(outputSlot, BlackSmithManager.getExitButton());
                     resultBorder.forEach(slot -> inventory.setItem(slot, BlackSmithManager.getRedGlass()));
@@ -148,8 +149,8 @@ public class BlackSmithMenu extends InventoryBuilder {
 
                             this.methods.addItemToInventory(player, result.getResultItem());
 
-                            inventory.setItem(this.mainSlot, new ItemStack(Material.AIR));
-                            inventory.setItem(this.subSlot, new ItemStack(Material.AIR));
+                            inventory.setItem(this.mainSlot, null);
+                            inventory.setItem(this.subSlot, null);
 
                             playSound(player, this.levelUp);
 

@@ -14,15 +14,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class BaseMenu extends InventoryBuilder {
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings bookSettings = this.starter.getEnchantmentBookSettings();
 
     public BaseMenu(Player player, int size, String title) {
         super(player, size, title);

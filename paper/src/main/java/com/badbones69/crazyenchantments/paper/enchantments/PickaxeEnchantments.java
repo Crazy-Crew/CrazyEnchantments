@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,24 +40,18 @@ import java.util.Set;
 
 public class PickaxeEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     // Plugin Support.
-    @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
+    private final @NotNull NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
 
     private final HashMap<Player, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
@@ -70,7 +65,8 @@ public class PickaxeEnchantments implements Listener {
         Block block = event.getClickedBlock();
 
         if (block == null || block.isEmpty() || this.crazyManager.getBlastBlockList().contains(block.getType())) return;
-        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, this.enchantmentBookSettings.getEnchantments(item))) return; // TODO Move over to block break.
+        if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, this.enchantmentBookSettings.getEnchantments(item)))
+            return; // TODO Move over to block break.
 
         HashMap<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
@@ -107,7 +103,7 @@ public class PickaxeEnchantments implements Listener {
     }
 
 
-    @EventHandler(priority =  EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onVeinMinerBreak(BlockBreakEvent event) {
         if (!isOreBlock(event.getBlock().getType())
                 || !event.isDropItems()
@@ -131,7 +127,8 @@ public class PickaxeEnchantments implements Listener {
 
         for (Block block : blockList) {
             if (block.isEmpty()) continue;
-            if (this.methods.playerBreakBlock(player, block, currentItem, this.crazyManager.isDropBlocksVeinMiner())) continue;
+            if (this.methods.playerBreakBlock(player, block, currentItem, this.crazyManager.isDropBlocksVeinMiner()))
+                continue;
             if (damage) this.methods.removeDurability(currentItem, player);
         }
 
@@ -166,7 +163,7 @@ public class PickaxeEnchantments implements Listener {
             int level = enchants.get(CEnchantments.AUTOSMELT.getEnchantment());
 
             for (int j = 0; j < oldDrops.size(); j++) {
-                Item entityItem  = oldDrops.get(j);
+                Item entityItem = oldDrops.get(j);
                 ItemStack drop = entityItem.getItemStack();
 
                 if (!isOre(drop.getType())) continue;
@@ -182,7 +179,7 @@ public class PickaxeEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.FURNACE, player, item, enchants)) {
 
             for (int j = 0; j < oldDrops.size(); j++) {
-                Item entityItem  = oldDrops.get(j);
+                Item entityItem = oldDrops.get(j);
                 ItemStack drop = entityItem.getItemStack();
 
                 if (!isOre(drop.getType())) continue;
@@ -228,18 +225,18 @@ public class PickaxeEnchantments implements Listener {
         }
 
         return blocks;
-    } 
-    
+    }
+
     private HashSet<Block> getSurroundingBlocks(Location loc) {
         HashSet<Block> locations = new HashSet<>();
-        
-        locations.add(loc.clone().add(0,1,0).getBlock());
-        locations.add(loc.clone().add(0,-1,0).getBlock());
-        locations.add(loc.clone().add(1,0,0).getBlock());
-        locations.add(loc.clone().add(-1,0,0).getBlock());
-        locations.add(loc.clone().add(0,0,1).getBlock());
-        locations.add(loc.clone().add(0,0,-1).getBlock());
-        
+
+        locations.add(loc.clone().add(0, 1, 0).getBlock());
+        locations.add(loc.clone().add(0, -1, 0).getBlock());
+        locations.add(loc.clone().add(1, 0, 0).getBlock());
+        locations.add(loc.clone().add(-1, 0, 0).getBlock());
+        locations.add(loc.clone().add(0, 0, 1).getBlock());
+        locations.add(loc.clone().add(0, 0, -1).getBlock());
+
         return locations;
     }
 
@@ -277,7 +274,8 @@ public class PickaxeEnchantments implements Listener {
                 loc2.add(-1, 0, -1);
             }
 
-            default -> {}
+            default -> {
+            }
         }
 
         return this.methods.getEnchantBlocks(loc, loc2);
@@ -286,15 +284,15 @@ public class PickaxeEnchantments implements Listener {
     private boolean isOre(Material material) {
         return switch (material) {
             case COAL,
-                 RAW_COPPER,
-                 DIAMOND,
-                 EMERALD,
-                 RAW_GOLD,
-                 RAW_IRON,
-                 LAPIS_LAZULI,
-                 REDSTONE,
-                 GOLD_NUGGET,
-                 QUARTZ -> true;
+                    RAW_COPPER,
+                    DIAMOND,
+                    EMERALD,
+                    RAW_GOLD,
+                    RAW_IRON,
+                    LAPIS_LAZULI,
+                    REDSTONE,
+                    GOLD_NUGGET,
+                    QUARTZ -> true;
             default -> false;
         };
     }
@@ -302,15 +300,15 @@ public class PickaxeEnchantments implements Listener {
     private boolean isOreBlock(Material material) {
         return switch (material) {
             case COAL_ORE, DEEPSLATE_COAL_ORE,
-                 COPPER_ORE, DEEPSLATE_COPPER_ORE,
-                 DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
-                 EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
-                 GOLD_ORE, DEEPSLATE_GOLD_ORE,
-                 IRON_ORE, DEEPSLATE_IRON_ORE,
-                 LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
-                 REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
-                 NETHER_GOLD_ORE,
-                 NETHER_QUARTZ_ORE -> true;
+                    COPPER_ORE, DEEPSLATE_COPPER_ORE,
+                    DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE,
+                    EMERALD_ORE, DEEPSLATE_EMERALD_ORE,
+                    GOLD_ORE, DEEPSLATE_GOLD_ORE,
+                    IRON_ORE, DEEPSLATE_IRON_ORE,
+                    LAPIS_ORE, DEEPSLATE_LAPIS_ORE,
+                    REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE,
+                    NETHER_GOLD_ORE,
+                    NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
     }

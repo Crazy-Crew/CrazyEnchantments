@@ -22,8 +22,7 @@ public enum DataKeys {
     limit_reducer("Limit_Reducer", PersistentDataType.INTEGER),
     slot_crystal("Slot_Crystal", PersistentDataType.BOOLEAN);
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final String NamespacedKey;
     private final PersistentDataType type;

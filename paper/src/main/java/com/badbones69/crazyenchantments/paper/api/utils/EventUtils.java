@@ -10,10 +10,10 @@ import java.util.Set;
 import java.util.UUID;
 
 public class EventUtils {
-    
+
     private static final Set<Event> ignoredEvents = new HashSet<>();
     private static final Set<UUID> ignoredUUIDs = new HashSet<>();
-    
+
     public static Set<Event> getIgnoredEvents() {
         return ignoredEvents;
     }

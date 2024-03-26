@@ -31,28 +31,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class DustControlListener implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
     private final Gson gson = new Gson();
 
-    @NotNull
-    private final SettingsManager config = ConfigManager.getConfig();
+    private final @NotNull SettingsManager config = ConfigManager.getConfig();
 
     private void setBookLore(ItemStack item, int percent, String rate, CEnchantment enchantment, EnchantedBook data) {
         ItemMeta meta = item.getItemMeta();
@@ -180,7 +176,7 @@ public class DustControlListener implements Listener {
 
         openAnyHandDust(player, event, false);
     }
-    
+
     private boolean openAnyHandDust(Player player, PlayerInteractEvent event, boolean mainHand) {
         ItemStack item = mainHand ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
 
@@ -195,7 +191,7 @@ public class DustControlListener implements Listener {
             event.setCancelled(true);
         } else if (data.getConfigName().equals(Dust.DESTROY_DUST.getConfigName())) {
             event.setCancelled(true);
-        } else if(data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
+        } else if (data.getConfigName().equals(Dust.MYSTERY_DUST.getConfigName())) {
             event.setCancelled(true);
 
             if (methods.isInventoryFull(player)) {

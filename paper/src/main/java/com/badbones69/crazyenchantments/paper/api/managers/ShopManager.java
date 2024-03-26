@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,21 +25,17 @@ import java.util.Map;
 //todo() redo this
 public class ShopManager {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final Map<ItemBuilder, Integer> customizerItems = new HashMap<>();
+    private final Map<ItemBuilder, Integer> shopItems = new HashMap<>();
     private String inventoryName;
     private int inventorySize;
     private boolean enchantmentTableShop;
-    private final Map<ItemBuilder, Integer> customizerItems = new HashMap<>();
-    private final Map<ItemBuilder, Integer> shopItems = new HashMap<>();
-    
+
     public void load() {
         this.customizerItems.clear();
         this.shopItems.clear();
@@ -100,11 +97,11 @@ public class ShopManager {
     public String getInventoryName() {
         return this.inventoryName;
     }
-    
+
     public int getInventorySize() {
         return this.inventorySize;
     }
-    
+
     public boolean isEnchantmentTableShop() {
         return this.enchantmentTableShop;
     }

@@ -19,21 +19,17 @@ import java.util.List;
 
 public class CEnchantment {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final List<Category> categories;
+    private final CEnchantment instance;
     private String name;
     private String customName;
     private boolean activated;
@@ -42,9 +38,7 @@ public class CEnchantment {
     private int chance;
     private int chanceIncrease;
     private List<String> infoDescription;
-    private final List<Category> categories;
     private EnchantmentType enchantmentType;
-    private final CEnchantment instance;
     private Sound sound;
 
     public CEnchantment(String name) {
@@ -66,6 +60,7 @@ public class CEnchantment {
     public Sound getSound() {
         return this.sound;
     }
+
     public CEnchantment setSound(String soundString) {
         if (soundString == null || soundString.isBlank()) {
             this.sound = Sound.ENTITY_PLAYER_LEVELUP;
@@ -162,7 +157,7 @@ public class CEnchantment {
 
     public boolean chanceSuccessful(int enchantmentLevel, double multiplier) {
         int newChance = this.chance + (this.chanceIncrease * (enchantmentLevel - 1));
-        int pickedChance = this.methods.getRandomNumber (0, 100);
+        int pickedChance = this.methods.getRandomNumber(0, 100);
 
         newChance = (int) (newChance * multiplier);
 
@@ -208,14 +203,14 @@ public class CEnchantment {
         return this.enchantmentType;
     }
 
-    public boolean canEnchantItem(ItemStack item) {
-        return this.enchantmentType != null && this.enchantmentType.canEnchantItem(item);
-    }
-
     public CEnchantment setEnchantmentType(EnchantmentType enchantmentType) {
         this.enchantmentType = enchantmentType;
 
         return this;
+    }
+
+    public boolean canEnchantItem(ItemStack item) {
+        return this.enchantmentType != null && this.enchantmentType.canEnchantItem(item);
     }
 
     public void registerEnchantment() {

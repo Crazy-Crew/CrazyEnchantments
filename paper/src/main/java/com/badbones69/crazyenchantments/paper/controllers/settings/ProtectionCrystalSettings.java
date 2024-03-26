@@ -18,6 +18,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,21 +26,35 @@ import java.util.UUID;
 
 public class ProtectionCrystalSettings {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final String protectionString = ColorUtils.color(ConfigManager.getConfig().getProperty(Config.protection_crystal_protected));
+    private final @NotNull String protectionString = ColorUtils.color(ConfigManager.getConfig().getProperty(Config.protection_crystal_protected));
 
     private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
     private ItemBuilder crystal;
+
+    /**
+     * Check if the item is protected or not.
+     *
+     * @param item - The item to check.
+     * @return True if yes otherwise false.
+     */
+    public static boolean isProtected(ItemStack item) {
+        return item.hasItemMeta() && isProtected(item.getItemMeta());
+    }
+
+    public static boolean isProtected(ItemMeta meta) {
+        return meta != null && isProtected(meta.getPersistentDataContainer());
+    }
+
+    public static boolean isProtected(PersistentDataContainer data) {
+        return data != null && data.has(DataKeys.protected_item.getNamespacedKey());
+    }
 
     public void loadProtectionCrystal() {
         SettingsManager config = ConfigManager.getConfig();
@@ -67,8 +82,9 @@ public class ProtectionCrystalSettings {
 
     /**
      * Add a player to the map to protect items.
+     *
      * @param player - The player object.
-     * @param items - The items in the player's inventory.
+     * @param items  - The items in the player's inventory.
      */
     public void addPlayer(Player player, List<ItemStack> items) {
         this.crystalItems.put(player.getUniqueId(), items);
@@ -76,6 +92,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Remove the player from the map.
+     *
      * @param player - The player object.
      */
     public void removePlayer(Player player) {
@@ -84,6 +101,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Check if the map contains the player.
+     *
      * @param player - The player object.
      */
     public boolean containsPlayer(Player player) {
@@ -92,6 +110,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Get the player from the map.
+     *
      * @param player - The player object.
      * @return Get the player's items stored.
      */
@@ -108,6 +127,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Check if the player has permissions & if the option is enabled.
+     *
      * @param player - The player to check.
      */
     public boolean isProtectionSuccessful(Player player) {
@@ -115,30 +135,15 @@ public class ProtectionCrystalSettings {
 
         SettingsManager config = ConfigManager.getConfig();
 
-        if (config.getProperty(Config.protection_crystal_chance_toggle)) return this.methods.randomPicker(config.getProperty(Config.protection_crystal_chance), 100);
+        if (config.getProperty(Config.protection_crystal_chance_toggle))
+            return this.methods.randomPicker(config.getProperty(Config.protection_crystal_chance), 100);
 
         return true;
     }
 
     /**
-     * Check if the item is protected or not.
-     * @param item - The item to check.
-     * @return True if yes otherwise false.
-     */
-    public static boolean isProtected(ItemStack item) {
-        return item.hasItemMeta() && isProtected(item.getItemMeta());
-    }
-
-    public static boolean isProtected(ItemMeta meta) {
-        return  meta != null && isProtected(meta.getPersistentDataContainer());
-    }
-
-    public static boolean isProtected(PersistentDataContainer data) {
-        return data != null && data.has(DataKeys.protected_item.getNamespacedKey());
-    }
-
-    /**
      * Check if the item is a protection crystal.
+     *
      * @param item - The item to check.
      * @return True if the item is a protection crystal.
      */
@@ -148,12 +153,14 @@ public class ProtectionCrystalSettings {
 
     /**
      * Remove protection from the item.
+     *
      * @param item - The item to remove protection from.
      * @return The new item.
      */
     public ItemStack removeProtection(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta.getPersistentDataContainer().has(DataKeys.protected_item.getNamespacedKey())) meta.getPersistentDataContainer().remove(DataKeys.protected_item.getNamespacedKey());
+        if (meta.getPersistentDataContainer().has(DataKeys.protected_item.getNamespacedKey()))
+            meta.getPersistentDataContainer().remove(DataKeys.protected_item.getNamespacedKey());
 
         if (!(item.lore() == null)) {
             List<Component> lore = item.lore();
@@ -171,6 +178,7 @@ public class ProtectionCrystalSettings {
 
     /**
      * Add protection to an item.
+     *
      * @param item - The item to add protection to.
      * @return The new item.
      */

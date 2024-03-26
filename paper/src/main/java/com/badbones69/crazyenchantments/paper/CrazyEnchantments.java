@@ -34,15 +34,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class CrazyEnchantments extends JavaPlugin {
 
-    private Starter starter;
-
     // Plugin Listeners.
     public final PluginManager pluginManager = getServer().getPluginManager();
-
+    private final BossBarController bossBarController = new BossBarController(this);
+    private Starter starter;
     private FireworkDamageListener fireworkDamageListener;
     private ArmorEnchantments armorEnchantments;
-
-    private final BossBarController bossBarController = new BossBarController(this);
 
     @Override
     public void onEnable() {

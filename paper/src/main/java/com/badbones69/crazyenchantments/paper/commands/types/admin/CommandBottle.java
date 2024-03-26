@@ -15,8 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommandBottle extends BaseCommand {
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
     @Command("bottle")
     @Permission(value = "crazyenchantments.bottle", def = PermissionDefault.OP)
@@ -29,7 +28,9 @@ public class CommandBottle extends BaseCommand {
             return;
         }
 
-        if (item.isEmpty()) return;
+        if (item.isEmpty()) {
+            return;
+        }
 
         this.starter.getMethods().addItemToInventory(target, item);
     }

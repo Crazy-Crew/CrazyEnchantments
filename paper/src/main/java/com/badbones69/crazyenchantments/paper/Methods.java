@@ -39,6 +39,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -49,18 +50,14 @@ import java.util.Random;
 
 public class Methods {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final @NotNull PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    @NotNull
-    private final OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
+    private final @NotNull OraxenSupport oraxenSupport = this.starter.getOraxenSupport();
 
     public EnchantmentType getFromName(String name) {
         for (EnchantmentType enchantmentType : MenuManager.getEnchantmentTypes()) {
@@ -159,7 +156,8 @@ public class Methods {
                     }
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     public ItemStack removeItem(ItemStack item) {
@@ -213,7 +211,6 @@ public class Methods {
     }
 
     /**
-     *
      * @param player The {@link Player} who's inventory should be checked.
      * @return Returns if the player's inventory is full while letting them know.
      */
@@ -224,13 +221,13 @@ public class Methods {
     }
 
     /**
-     *
      * @param player The {@link Player} to give items to.
-     * @param item The {@link ItemStack} to give to the player.
+     * @param item   The {@link ItemStack} to give to the player.
      */
     public void addItemToInventory(Player player, ItemStack item) {
         player.getInventory().addItem(item).values().forEach(x -> player.getWorld().dropItem(player.getLocation(), x));
     }
+
     public void addItemToInventory(Player player, List<Item> itemList) {
         itemList.forEach(x -> addItemToInventory(player, x.getItemStack()));
     }
@@ -278,9 +275,11 @@ public class Methods {
 
             for (Enchantment enchantment : Enchantment.values()) {
                 // MC 1.13+ has the correct names.
-                if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName)) return enchantment;
+                if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName))
+                    return enchantment;
             }
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         return null;
     }
@@ -324,7 +323,8 @@ public class Methods {
         if (item.hasItemMeta()) {
             try {
                 if (item.getItemMeta().isUnbreakable()) return;
-            } catch (NoSuchMethodError ignored) {}
+            } catch (NoSuchMethodError ignored) {
+            }
 
             NBTItem nbtItem = new NBTItem(item);
 
@@ -434,20 +434,24 @@ public class Methods {
         EventUtils.addIgnoredUUID(damager.getUniqueId());
         this.plugin.getServer().getPluginManager().callEvent(damageByEntityEvent);
 
-        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity)) entity.damage(5D);
+        if (!damageByEntityEvent.isCancelled() && this.pluginSupport.allowCombat(entity.getLocation()) && !this.pluginSupport.isFriendly(damager, entity))
+            entity.damage(5D);
 
         EventUtils.removeIgnoredEvent(damageByEntityEvent);
         EventUtils.removeIgnoredUUID(damager.getUniqueId());
     }
 
-    public void lightning(LivingEntity en) {
+    public Entity lightning(LivingEntity en) {
         Location loc = en.getLocation();
-        if (loc.getWorld() != null) loc.getWorld().strikeLightning(loc);
+        Entity lightning = null;
+        if (loc.getWorld() != null) lightning = loc.getWorld().strikeLightning(loc);
         int lightningSoundRange = ConfigManager.getConfig().getProperty(Config.lightning_sound_range);
 
         try {
             loc.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, (float) lightningSoundRange / 16f, 1);
         } catch (Exception ignore) {}
+
+        return lightning;
     }
 
     public void switchCurrency(Player player, Currency option, String one, String two, String cost) {
@@ -474,9 +478,10 @@ public class Methods {
      * Imitates all the events called when a player breaks a block.
      * Only calls #BlockDropItemEvent if the event isn't cancelled,
      * and there are drops.
+     *
      * @param player The player that will "break" the block.
-     * @param block The block that was broken.
-     * @param tool ItemStack used to break the block.
+     * @param block  The block that was broken.
+     * @param tool   ItemStack used to break the block.
      * @return If the event was cancelled.
      */
     public boolean playerBreakBlock(Player player, Block block, ItemStack tool, boolean hasDrops) {
@@ -498,9 +503,10 @@ public class Methods {
 
     /**
      * Imitates the blockDropItemEvent usage.
+     *
      * @param player The player that broke the block.
-     * @param block The block that was broken.
-     * @param items The items that will be dropped from the broken block.
+     * @param block  The block that was broken.
+     * @param items  The items that will be dropped from the broken block.
      */
     public void blockDropItems(Player player, Block block, Collection<ItemStack> items) {
         List<Item> dropItems = new ArrayList<>();

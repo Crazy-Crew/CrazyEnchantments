@@ -32,24 +32,18 @@ import java.util.Map;
 
 public class AxeEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final @NotNull PluginSupport pluginSupport = this.starter.getPluginSupport();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
@@ -66,13 +60,13 @@ public class AxeEnchantments implements Listener {
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
-                damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
-                damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.BLESSED, damager, item, enchantments)) removeBadPotions(damager);
 
-        if (EnchantUtils.isEventActive(CEnchantments.FEEDME, damager, item, enchantments)&& damager.getFoodLevel() < 20) {
+        if (EnchantUtils.isEventActive(CEnchantments.FEEDME, damager, item, enchantments) && damager.getFoodLevel() < 20) {
             int food = 2 * this.crazyManager.getLevel(item, CEnchantments.FEEDME);
 
             if (damager.getFoodLevel() + food < 20) damager.setFoodLevel((int) (damager.getSaturation() + food));
@@ -80,7 +74,8 @@ public class AxeEnchantments implements Listener {
             if (damager.getFoodLevel() + food > 20) damager.setFoodLevel(20);
         }
 
-        if (EnchantUtils.isEventActive(CEnchantments.REKT, damager, item, enchantments)) event.setDamage(event.getDamage() * 2);
+        if (EnchantUtils.isEventActive(CEnchantments.REKT, damager, item, enchantments))
+            event.setDamage(event.getDamage() * 2);
 
         if (EnchantUtils.isEventActive(CEnchantments.CURSED, damager, item, enchantments))
             entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (this.crazyManager.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));

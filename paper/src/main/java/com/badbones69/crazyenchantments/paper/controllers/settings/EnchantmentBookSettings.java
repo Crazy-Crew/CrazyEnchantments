@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,16 +33,12 @@ import java.util.Map;
 
 public class EnchantmentBookSettings {
 
+    private final List<Category> categories = Lists.newArrayList();
+    private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
+    private final Gson gson = new Gson();
     private ItemBuilder enchantmentBook;
 
-    private final List<Category> categories = Lists.newArrayList();
-
-    private final List<CEnchantment> registeredEnchantments = Lists.newArrayList();
-
-    private final Gson gson = new Gson();
-
     /**
-     *
      * @return True if unsafe enchantments are enabled.
      */
     public boolean useUnsafeEnchantments() {
@@ -61,14 +58,17 @@ public class EnchantmentBookSettings {
 
     /**
      * This method converts an ItemStack into a CEBook.
+     *
      * @param book The ItemStack you are converting.
      * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
      */
     public CEBook getCEBook(ItemStack book) {
-        if (!book.hasItemMeta() || !book.getItemMeta().getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey())) return null;
+        if (!book.hasItemMeta()) return null;
+        ItemMeta meta = book.getItemMeta();
+        if (!meta.getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey())) return null;
 
-        EnchantedBook data = this.gson.fromJson(book.getItemMeta().getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class);
-       
+        EnchantedBook data = this.gson.fromJson(meta.getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING), EnchantedBook.class);
+
         CEnchantment enchantment = null;
         for (CEnchantment enchant : getRegisteredEnchantments()) {
             if (enchant.getName().equalsIgnoreCase(data.getName())) {
@@ -84,6 +84,7 @@ public class EnchantmentBookSettings {
 
     /**
      * Get a new book that has been scrambled.
+     *
      * @param book The old book.
      * @return A new scrambled book.
      */
@@ -108,13 +109,15 @@ public class EnchantmentBookSettings {
 
     /**
      * Check if an itemstack is an enchantment book.
+     *
      * @param book The item you are checking.
      * @return True if it is and false if not.
      */
     public boolean isEnchantmentBook(ItemStack book) {
 
         if (book == null || book.getItemMeta() == null) return false;
-        if (!book.getItemMeta().getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey())) return false;
+        if (!book.getItemMeta().getPersistentDataContainer().has(DataKeys.stored_enchantments.getNamespacedKey()))
+            return false;
 
         String dataString = book.getItemMeta().getPersistentDataContainer().get(DataKeys.stored_enchantments.getNamespacedKey(), PersistentDataType.STRING);
         EnchantedBook data = this.gson.fromJson(dataString, EnchantedBook.class);
@@ -127,7 +130,6 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     *
      * @return A list of all active enchantments.
      */
     public List<CEnchantment> getRegisteredEnchantments() {
@@ -135,7 +137,6 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     *
      * @return itemBuilder for an enchanted book.
      */
     public ItemBuilder getNormalBook() {
@@ -150,7 +151,6 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     *
      * @param enchantmentBook The book data to use for the itemBuilder.
      */
     public void setEnchantmentBook(ItemBuilder enchantmentBook) {
@@ -159,6 +159,7 @@ public class EnchantmentBookSettings {
 
     /**
      * Note: If the enchantment is not active it will not be added to the Map.
+     *
      * @param item Item you want to get the enchantments from.
      * @return A Map of all enchantments and their levels on the item.
      */
@@ -188,7 +189,8 @@ public class EnchantmentBookSettings {
         for (CEnchantment enchantment : getRegisteredEnchantments()) {
             if (!enchantment.isActivated()) continue;
 
-            if (enchants.hasEnchantment(enchantment.getName())) enchantments.put(enchantment, enchants.getLevel(enchantment.getName()));
+            if (enchants.hasEnchantment(enchantment.getName()))
+                enchantments.put(enchantment, enchants.getLevel(enchantment.getName()));
         }
 
         return enchantments;
@@ -196,6 +198,7 @@ public class EnchantmentBookSettings {
 
     /**
      * Note: If the enchantment is not active it will not be added to the list.
+     *
      * @param item Item you want to get the enchantments from.
      * @return A list of enchantments the item has.
      */
@@ -204,7 +207,6 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     *
      * @param item to check.
      * @return Amount of enchantments on the item.
      */
@@ -222,6 +224,7 @@ public class EnchantmentBookSettings {
 
     /**
      * Get all the categories that can be used.
+     *
      * @return List of all the categories.
      */
     public List<Category> getCategories() {
@@ -296,7 +299,7 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     * @param item Item you are getting the level from.
+     * @param item    Item you are getting the level from.
      * @param enchant The enchantment you want the level from.
      * @return The level the enchantment has.
      */
@@ -311,7 +314,7 @@ public class EnchantmentBookSettings {
     }
 
     /**
-     * @param item Item you want to remove the enchantment from.
+     * @param item    Item you want to remove the enchantment from.
      * @param enchant Enchantment you want removed.
      * @return Item without the enchantment.
      */

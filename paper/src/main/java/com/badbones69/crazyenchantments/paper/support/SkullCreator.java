@@ -24,15 +24,13 @@ import java.util.UUID;
  */
 public class SkullCreator {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     /**
      * Creates a player skull based on a player's name.
      *
      * @param name The Player's name
      * @return The head of the Player
-     *
      * @deprecated names don't make for good identifiers
      */
     @Deprecated
@@ -48,7 +46,6 @@ public class SkullCreator {
      * @param item The item to apply the name to
      * @param name The Player's name
      * @return The head of the Player
-     *
      * @deprecated names don't make for good identifiers
      */
     @Deprecated
@@ -75,7 +72,7 @@ public class SkullCreator {
      * Creates a player skull based on a UUID. 1.13 only.
      *
      * @param item The item to apply the name to
-     * @param id The Player's UUID
+     * @param id   The Player's UUID
      * @return The head of the Player
      */
     public ItemStack itemWithUuid(ItemStack item, UUID id) {
@@ -106,7 +103,7 @@ public class SkullCreator {
      * Creates a player skull based on a Mojang server URL.
      *
      * @param item The item to apply the skin to
-     * @param url The URL of the Mojang skin
+     * @param url  The URL of the Mojang skin
      * @return The head associated with the URL
      */
     public ItemStack itemWithUrl(ItemStack item, String url) {
@@ -131,7 +128,7 @@ public class SkullCreator {
     /**
      * Applies the base64 string to the ItemStack.
      *
-     * @param item The ItemStack to put the base64 onto
+     * @param item   The ItemStack to put the base64 onto
      * @param base64 The base64 string containing the texture
      * @return The head with a custom texture
      */
@@ -147,8 +144,7 @@ public class SkullCreator {
      * Sets the block to a skull with the given name.
      *
      * @param block The block to set
-     * @param name The player to set it to
-     *
+     * @param name  The player to set it to
      * @deprecated names don't make for good identifiers
      */
     @Deprecated
@@ -164,7 +160,7 @@ public class SkullCreator {
      * Sets the block to a skull with the given UUID.
      *
      * @param block The block to set
-     * @param id The player to set it to
+     * @param id    The player to set it to
      */
     public void blockWithUuid(Block block, UUID id) {
         notNull(block, "block");
@@ -178,7 +174,7 @@ public class SkullCreator {
      * Sets the block to a skull with the given UUID.
      *
      * @param block The block to set
-     * @param url The mojang URL to set it to use
+     * @param url   The mojang URL to set it to use
      */
     public void blockWithUrl(Block block, String url) {
         notNull(block, "block");
@@ -190,7 +186,7 @@ public class SkullCreator {
     /**
      * Sets the block to a skull with the given UUID.
      *
-     * @param block The block to set
+     * @param block  The block to set
      * @param base64 The base64 to set it to use
      */
     public void blockWithBase64(Block block, String base64) {

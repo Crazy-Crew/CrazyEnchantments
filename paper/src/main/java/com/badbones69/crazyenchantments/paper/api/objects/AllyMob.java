@@ -20,15 +20,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 
 public class AllyMob {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
+    private final @NotNull AllyManager allyManager = this.plugin.getStarter().getAllyManager();
 
     private final AllyType type;
     private final Player owner;
@@ -120,7 +119,7 @@ public class AllyMob {
             }
         }
     }
-    
+
     private void startSpawnTimer() {
         if (this.ally != null) {
             this.runnable = new BukkitRunnable() {
@@ -132,7 +131,7 @@ public class AllyMob {
             }.runTaskLater(this.plugin, this.spawnTime * 20);
         }
     }
-    
+
     public enum AllyType {
 
         WOLF(Config.ally_mobs_wolf, EntityType.WOLF, 16),
@@ -141,7 +140,7 @@ public class AllyMob {
         ENDERMITE(Config.ally_mobs_endermite, EntityType.ENDERMITE, 10),
         SILVERFISH(Config.ally_mobs_silverfish, EntityType.SILVERFISH, 10),
         BEE(Config.ally_mobs_bee, EntityType.BEE, 10);
-        
+
         private final Property<String> configName;
         private final EntityType entityType;
         private final int maxHealth;
@@ -151,25 +150,25 @@ public class AllyMob {
 
         @NotNull
         private final AllyManager allyManager = this.plugin.getStarter().getAllyManager();
-        
+
         AllyType(Property<String> configName, EntityType entityType, int maxHealth) {
             this.configName = configName;
             this.entityType = entityType;
             this.maxHealth = maxHealth;
         }
-        
+
         public Property<String> getConfigName() {
             return this.configName;
         }
-        
+
         public String getName() {
             return this.allyManager.getAllyTypeNameCache().get(this);
         }
-        
+
         public EntityType getEntityType() {
             return this.entityType;
         }
-        
+
         public int getMaxHealth() {
             return this.maxHealth;
         }

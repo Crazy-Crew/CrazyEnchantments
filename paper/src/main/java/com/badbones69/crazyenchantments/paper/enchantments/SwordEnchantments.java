@@ -50,34 +50,23 @@ import java.util.Map;
 
 public class SwordEnchantments implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
     // Plugin Support.
-    @NotNull
-    private final PluginSupport pluginSupport = this.starter.getPluginSupport();
+    private final @NotNull PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    @NotNull
-    private final NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
-
-    @NotNull
-    private final BossBarController bossBarController = this.plugin.getBossBarController();
-
+    private final @NotNull NoCheatPlusSupport noCheatPlusSupport = this.starter.getNoCheatPlusSupport();
     // Economy Management.
-    @NotNull
-    private final CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final @NotNull CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
+    private final @NotNull BossBarController bossBarController = this.plugin.getBossBarController();
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
@@ -151,7 +140,7 @@ public class SwordEnchantments implements Listener {
 
                 if (inventoryItem != null) {
                     items.add(inventoryItem);
-                    inventory.setItem(i, new ItemStack(Material.AIR));
+                    inventory.setItem(i, null);
                 }
 
                 slots.add(i);
@@ -164,7 +153,8 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty())
+                damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
         }
 
         // Check if CEPlayer is null as plugins like citizen use Player objects.
@@ -230,16 +220,19 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.NUTRITION, damager, item, enchantments)) {
-            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) <= 20) damager.setSaturation(damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())));
+            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) <= 20)
+                damager.setSaturation(damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())));
 
-            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) >= 20) damager.setSaturation(20);
+            if (damager.getSaturation() + (2 * enchantments.get(CEnchantments.NUTRITION.getEnchantment())) >= 20)
+                damager.setSaturation(20);
         }
 
         if (damager.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.VAMPIRE, damager, item, enchantments)) {
             // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
             double maxHealth = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-            if (damager.getHealth() + event.getDamage() / 2 < maxHealth) damager.setHealth(damager.getHealth() + event.getDamage() / 2);
+            if (damager.getHealth() + event.getDamage() / 2 < maxHealth)
+                damager.setHealth(damager.getHealth() + event.getDamage() / 2);
 
             if (damager.getHealth() + event.getDamage() / 2 >= maxHealth) damager.setHealth(maxHealth);
         }
@@ -276,7 +269,7 @@ public class SwordEnchantments implements Listener {
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.allowPlayer(damager);
 
             for (LivingEntity entity : this.methods.getNearbyLivingEntities(2D, damager)) {
-                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, DamageSource.builder(DamageType.INDIRECT_MAGIC).withCausingEntity(damager).build(), 5D);
+                EntityDamageEvent damageByEntityEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.MAGIC, DamageSource.builder(DamageType.INDIRECT_MAGIC).withDirectEntity(damager).build(), 5D);
                 this.methods.entityEvent(damager, entity, damageByEntityEvent);
             }
 
@@ -357,7 +350,7 @@ public class SwordEnchantments implements Listener {
                     ItemStack head = new ItemBuilder().setMaterial(headMat).build();
                     event.getDrops().add(head);
                 }
-			}
+            }
 
             // The entity that is killed is a player.
             if (event.getEntity() instanceof Player && EnchantUtils.isEventActive(CEnchantments.CHARGE, damager, item, enchantments)) {
@@ -389,6 +382,7 @@ public class SwordEnchantments implements Listener {
             player.sendMessage(message.getMessage(placeholders));
         }
     }
+
     private void rageInformPlayer(Player player, Messages message, float progress) {
         if (message.getMessageNoPrefix().isBlank()) return;
 

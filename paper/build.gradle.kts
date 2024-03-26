@@ -1,21 +1,30 @@
 plugins {
-    id("paper-plugin")
+    `paper-plugin`
+
+    id("io.papermc.paperweight.userdev")
+
+    alias(libs.plugins.run.paper)
+    alias(libs.plugins.shadow)
 }
 
 repositories {
-    maven("https://repo.triumphteam.dev/snapshots/")
+    maven("https://repo.triumphteam.dev/snapshots")
 }
 
+val mcVersion: String = providers.gradleProperty("mcVersion").get()
+
 dependencies {
-    implementation(project(":common"))
-    
-    implementation(libs.triumphcmds)
+    paperweight.paperDevBundle(libs.versions.bundle)
+
+    implementation((projects.common))
+
+    implementation(libs.triumph.cmds)
 
     implementation(libs.metrics)
 
     implementation(libs.nbtapi)
 
-    compileOnly(libs.placeholderapi)
+    compileOnly(libs.placeholder.api)
 
     compileOnly(libs.vault) {
         exclude("org.bukkit", "bukkit")
@@ -24,34 +33,35 @@ dependencies {
     compileOnly(libs.worldguard)
     compileOnly(libs.worldedit)
 
-    compileOnly(libs.oraxen)
+    compileOnly(libs.oraxen.api)
 
-    compileOnly("com.intellectualsites.informative-annotations", "informative-annotations", "1.3")
+    compileOnly(libs.informative.annotations)
 
-    compileOnly("com.github.TechFortress", "GriefPrevention", "16.18.1")
+    compileOnly(libs.griefprevention)
 
-    compileOnly("com.palmergames.bukkit.towny", "towny", "0.99.5.0")
+    compileOnly(libs.towny)
 
-    compileOnly("fr.neatmonster", "nocheatplus", "3.16.1-SNAPSHOT")
+    compileOnly(libs.nocheatplus)
 
-    compileOnly("com.massivecraft", "Factions", "1.6.9.5-U0.6.31") {
+    compileOnly(libs.kingdoms)
+
+    compileOnly(libs.factions) {
         exclude("org.kitteh")
         exclude("org.spongepowered")
         exclude("com.darkblade12")
     }
 
-    compileOnly("com.intellectualsites.paster", "Paster", "1.1.5")
+    compileOnly(libs.paster)
 
-    compileOnly("com.bgsoftware", "SuperiorSkyblockAPI", "2023.2")
+    compileOnly(libs.skyblock)
 
-    compileOnly("com.plotsquared", "PlotSquared-Core", "6.11.1")
+    compileOnly(libs.plotsquared)
 
-    compileOnly("com.gmail.nossr50.mcMMO", "mcMMO", "2.1.226")
+    compileOnly(libs.mcmmo)
 
-    compileOnly("com.bgsoftware", "WildStackerAPI", "2023.2")
+    compileOnly(libs.wildstacker)
 
     compileOnly(fileTree("libs").include("*.jar"))
-
 }
 
 val component: SoftwareComponent = components["java"]
@@ -69,7 +79,7 @@ tasks {
             }
         }
 
-        publications{
+        publications {
             create<MavenPublication>("maven") {
                 groupId = rootProject.group.toString()
                 artifactId = "${rootProject.name.lowercase()}-${project.name.lowercase()}-api"
@@ -80,10 +90,24 @@ tasks {
         }
     }
 
+    runServer {
+        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+
+        defaultCharacterEncoding = Charsets.UTF_8.name()
+
+        minecraftVersion(mcVersion)
+    }
+
+    assemble {
+        dependsOn(reobfJar)
+    }
+
     shadowJar {
+        archiveClassifier.set("")
+
         listOf(
             "de.tr7zw.changeme.nbtapi",
-            "dev.triumphteam.cmd",
+            "dev.triumphteam",
             "org.bstats"
         ).forEach {
             relocate(it, "libs.$it")
@@ -92,13 +116,13 @@ tasks {
 
     processResources {
         val properties = hashMapOf(
-                "name" to rootProject.name,
-                "version" to rootProject.version,
-                "group" to "${project.group}.paper",
-                "description" to rootProject.description,
-                "apiVersion" to rootProject.properties["apiVersion"],
-                "authors" to rootProject.properties["authors"],
-                "website" to rootProject.properties["website"]
+            "name" to rootProject.name,
+            "version" to rootProject.version,
+            "group" to "${project.group}.paper",
+            "description" to rootProject.description,
+            "apiVersion" to rootProject.properties["apiVersion"],
+            "authors" to rootProject.properties["authors"],
+            "website" to rootProject.properties["website"]
         )
 
         inputs.properties(properties)

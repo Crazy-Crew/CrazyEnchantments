@@ -45,7 +45,7 @@ public class CommandDebug extends BaseCommand {
             ColorUtils.sendMessage(sender, "&7These enchantments are broken due to one of the following reasons:", false);
 
             for (String broke : brokenEnchantments) {
-                ColorUtils.sendMessage(sender,  " &c#" + amount + ": &6" + broke, false);
+                ColorUtils.sendMessage(sender, " &c#" + amount + ": &6" + broke, false);
 
                 amount++;
             }
@@ -62,7 +62,7 @@ public class CommandDebug extends BaseCommand {
             ColorUtils.sendMessage(sender, "&7These enchantments are broken due to the enchantment type being null.", false);
 
             for (String broke : brokenEnchantmentTypes) {
-                ColorUtils.sendMessage(sender,  " &c#" + amount + ": &6" + broke, false);
+                ColorUtils.sendMessage(sender, " &c#" + amount + ": &6" + broke, false);
 
                 amount++;
             }

@@ -14,8 +14,18 @@ import org.jline.utils.Log;
 
 public class TownySupport implements ClaimSupport {
 
+    public static boolean allowsCombat(Location location) {
+        TownyAPI api = TownyAPI.getInstance();
+
+        if (api == null) return true;
+
+        TownBlock block = api.getTownBlock(location);
+
+        return block == null || !CombatUtil.preventPvP(block.getWorld(), block);
+    }
+
     public boolean isFriendly(Player player, Player other) {
-        return CombatUtil.preventDamageCall(player, other, DamageCause.ENTITY_ATTACK);
+        return CombatUtil.isAlly(player.getName(), other.getName());
     }
 
     public boolean inTerritory(Player player) {
@@ -40,15 +50,7 @@ public class TownySupport implements ClaimSupport {
         return false;
     }
 
-    public boolean canBreakBlock(Player player, Block block) { return true; }
-
-    public static boolean allowsCombat(Location location) {
-        TownyAPI api = TownyAPI.getInstance();
-
-        if (api == null) return true;
-
-        TownBlock block = api.getTownBlock(location);
-
-        return block == null || !CombatUtil.preventPvP(block.getWorld(), block);
+    public boolean canBreakBlock(Player player, Block block) {
+        return true;
     }
 }

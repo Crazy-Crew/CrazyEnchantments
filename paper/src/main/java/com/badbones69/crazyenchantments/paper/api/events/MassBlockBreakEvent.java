@@ -10,31 +10,35 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 public class MassBlockBreakEvent extends Event implements Cancellable {
-    
+
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
-    private boolean cancelled;
     private final Set<Block> blockList;
-    
+    private boolean cancelled;
+
     public MassBlockBreakEvent(Player player, Set<Block> blockList) {
         this.player = player;
         this.cancelled = false;
         this.blockList = blockList;
     }
-    
+
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public Player getPlayer() {
         return this.player;
     }
-    
+
     public Set<Block> getBlockList() {
         return this.blockList;
     }
-    
+
     @Override
     public boolean isCancelled() {
         return this.cancelled;
     }
-    
+
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
@@ -47,10 +51,6 @@ public class MassBlockBreakEvent extends Event implements Cancellable {
      */
     @Override
     public @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

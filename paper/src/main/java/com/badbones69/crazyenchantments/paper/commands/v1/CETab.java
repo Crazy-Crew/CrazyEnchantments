@@ -32,7 +32,7 @@ public class CETab implements TabCompleter {
     private final CrazyManager crazyManager = this.starter.getCrazyManager();
 
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
-    
+
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String commandLabel, String[] args) {
         List<String> completions = new ArrayList<>();
@@ -65,26 +65,29 @@ public class CETab implements TabCompleter {
                     for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").replace(" ", "_"));
-                        } catch (NullPointerException ignore) {}
+                        } catch (NullPointerException ignore) {
+                        }
                     }
 
                     Arrays.asList(Enchantment.values()).forEach(enchantment -> completions.add(enchantment.getKey().getKey()));
                 }
                 case "remove" ->
                         this.enchantmentBookSettings.getEnchantments(((Player) sender).getInventory().getItemInMainHand())
-                            .forEach((a,b) -> completions.add(a.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+                                .forEach((a, b) -> completions.add(a.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
 
                 case "spawn" -> {
                     for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
                         try {
                             completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""));
-                        } catch (NullPointerException ignore) {}
+                        } catch (NullPointerException ignore) {
+                        }
                     }
 
                     for (Category category : this.enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
-                        } catch (NullPointerException ignore) {}
+                        } catch (NullPointerException ignore) {
+                        }
                     }
                 }
 
@@ -110,10 +113,12 @@ public class CETab implements TabCompleter {
                     for (Category category : this.enchantmentBookSettings.getCategories()) {
                         try {
                             completions.add(category.getName());
-                        } catch (NullPointerException ignore) {}
+                        } catch (NullPointerException ignore) {
+                        }
                     }
                 }
-                case "give", "bottle" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "give", "bottle" ->
+                        this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
 
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
@@ -147,9 +152,10 @@ public class CETab implements TabCompleter {
                     completions.add("32");
                     completions.add("64");
                 }
-                case "crystal", "scrambler", "slotcrystal" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "crystal", "scrambler", "slotcrystal" ->
+                        this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 case "give" ->
-                    completions.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
+                        completions.add("Item:DIAMOND_HELMET, Amount:1, Name:&6&lHat, Protection:4, Overload:1-5, Hulk:2-5, Lore:&aLine 1.,&aLine 2.");
             }
 
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());
@@ -163,7 +169,8 @@ public class CETab implements TabCompleter {
                     completions.add("Z:");
                 }
 
-                case "scroll", "dust", "lostbook" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "scroll", "dust", "lostbook" ->
+                        this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
                 case "bottle" -> {
                     completions.add("1");
                     completions.add("32");
@@ -206,7 +213,7 @@ public class CETab implements TabCompleter {
 
         return completions;
     }
-    
+
     private boolean hasPermission(CommandSender sender, String node) {
         return sender.hasPermission("crazyenchantments." + node) || sender.hasPermission("crazyenchantments.admin");
     }

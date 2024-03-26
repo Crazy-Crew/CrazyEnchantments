@@ -31,25 +31,21 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class EnchantmentControl implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler(ignoreCancelled = true)
     public void addEnchantment(InventoryClickEvent event) {
@@ -59,7 +55,8 @@ public class EnchantmentControl implements Listener {
         if (item == null) return;
         if (book.getAmount() > 1 || item.getAmount() > 1) return;
 
-        if (!this.enchantmentBookSettings.isEnchantmentBook(book) || this.enchantmentBookSettings.isEnchantmentBook(item)) return;
+        if (!this.enchantmentBookSettings.isEnchantmentBook(book) || this.enchantmentBookSettings.isEnchantmentBook(item))
+            return;
 
         CEBook ceBook = this.enchantmentBookSettings.getCEBook(book);
         CEnchantment enchantment = ceBook.getEnchantment();

@@ -26,27 +26,23 @@ import java.util.HashMap;
 
 public class LostBookController implements Listener {
 
-    @NotNull
-    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private final Starter starter = this.plugin.getStarter();
+    private final @NotNull Starter starter = this.plugin.getStarter();
 
-    @NotNull
-    private final Methods methods = this.starter.getMethods();
+    private final @NotNull Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
-    @NotNull
-    private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBookClean(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Category category = null;
 
-        if ((event.getItem() == null || event.getAction() != Action.RIGHT_CLICK_AIR) && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if ((event.getItem() == null || event.getAction() != Action.RIGHT_CLICK_AIR) && event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
 
         ItemStack item = this.methods.getItemInHand(player);
 
@@ -81,7 +77,8 @@ public class LostBookController implements Listener {
 
         player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
 
-        if (lostBook.useFirework()) this.methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
+        if (lostBook.useFirework())
+            this.methods.fireWork(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
 
         if (lostBook.playSound()) player.playSound(player.getLocation(), lostBook.getSound(), 1, 1);
     }

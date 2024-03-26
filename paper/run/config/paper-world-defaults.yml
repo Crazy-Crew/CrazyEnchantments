@@ -18,33 +18,33 @@ anticheat:
     enabled: false
     engine-mode: 1
     hidden-blocks:
-    - copper_ore
-    - deepslate_copper_ore
-    - gold_ore
-    - deepslate_gold_ore
-    - iron_ore
-    - deepslate_iron_ore
-    - coal_ore
-    - deepslate_coal_ore
-    - lapis_ore
-    - deepslate_lapis_ore
-    - mossy_cobblestone
-    - obsidian
-    - chest
-    - diamond_ore
-    - deepslate_diamond_ore
-    - redstone_ore
-    - deepslate_redstone_ore
-    - clay
-    - emerald_ore
-    - deepslate_emerald_ore
-    - ender_chest
+      - copper_ore
+      - deepslate_copper_ore
+      - gold_ore
+      - deepslate_gold_ore
+      - iron_ore
+      - deepslate_iron_ore
+      - coal_ore
+      - deepslate_coal_ore
+      - lapis_ore
+      - deepslate_lapis_ore
+      - mossy_cobblestone
+      - obsidian
+      - chest
+      - diamond_ore
+      - deepslate_diamond_ore
+      - redstone_ore
+      - deepslate_redstone_ore
+      - clay
+      - emerald_ore
+      - deepslate_emerald_ore
+      - ender_chest
     lava-obscures: false
     max-block-height: 64
     replacement-blocks:
-    - stone
-    - oak_planks
-    - deepslate
+      - stone
+      - oak_planks
+      - deepslate
     update-radius: 2
     use-permission: false
   obfuscation:
@@ -87,16 +87,16 @@ entities:
     disable-player-crits: false
     door-breaking-difficulty:
       husk:
-      - HARD
+        - HARD
       vindicator:
-      - NORMAL
-      - HARD
+        - NORMAL
+        - HARD
       zombie:
-      - HARD
+        - HARD
       zombie_villager:
-      - HARD
+        - HARD
       zombified_piglin:
-      - HARD
+        - HARD
     ender-dragons-death-always-places-dragon-egg: false
     experience-merge-max-value: -1
     mobs-can-always-pick-up-loot:
@@ -174,11 +174,11 @@ entities:
       safe-regen-delete-range: 32
     filter-bad-tile-entity-nbt-from-falling-blocks: true
     filtered-entity-tag-nbt-paths:
-    - Pos
-    - Motion
-    - SleepingX
-    - SleepingY
-    - SleepingZ
+      - Pos
+      - Motion
+      - SleepingX
+      - SleepingY
+      - SleepingZ
     iron-golems-can-spawn-in-air: false
     monster-spawn-max-light-level: default
     non-player-arrow-despawn-rate: default

@@ -11,13 +11,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.permissions.PermissionDefault;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandFix extends BaseCommand {
 
-    @NotNull
-    private final EnchantmentBookSettings bookSettings = this.plugin.getStarter().getEnchantmentBookSettings();
+    private final @NotNull EnchantmentBookSettings bookSettings = this.plugin.getStarter().getEnchantmentBookSettings();
 
     @Command("fix")
     @Permission(value = "crazyenchantments.fix", def = PermissionDefault.OP)

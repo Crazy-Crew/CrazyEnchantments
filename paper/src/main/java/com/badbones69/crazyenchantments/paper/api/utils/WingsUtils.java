@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -60,12 +61,14 @@ public class WingsUtils {
         CEnchantments wings = CEnchantments.WINGS;
 
         if (newArmor) {
-            if (starter.getEnchantmentBookSettings().getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && checkRegion(player) && checkGameMode(player)) player.setAllowFlight(true);
+            if (starter.getEnchantmentBookSettings().getEnchantments(newArmorPiece).containsKey(wings.getEnchantment()) && checkRegion(player) && checkGameMode(player))
+                player.setAllowFlight(true);
 
             return;
         }
 
-        if (starter.getEnchantmentBookSettings().getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player)) player.setAllowFlight(false);
+        if (starter.getEnchantmentBookSettings().getEnchantments(oldArmorPiece).containsKey(wings.getEnchantment()) && checkGameMode(player))
+            player.setAllowFlight(false);
     }
 
     public static boolean checkGameMode(Player player) {
@@ -98,7 +101,8 @@ public class WingsUtils {
         if (wingsManager.isEnemyCheckEnabled() && !wingsManager.inLimitlessFlightWorld(player)) {
             for (Player otherPlayer : getNearbyPlayers(player, wingsManager.getEnemyRadius())) {
                 //todo() update this
-                if (!(player.hasPermission("crazyenchantments.bypass.wings") && pluginSupport.isFriendly(player, otherPlayer))) return true;
+                if (!(player.hasPermission("crazyenchantments.bypass.wings") && pluginSupport.isFriendly(player, otherPlayer)))
+                    return true;
             }
         }
 
