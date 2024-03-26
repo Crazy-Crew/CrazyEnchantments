@@ -104,11 +104,11 @@ public class WingsUtils {
         return false;
     }
 
-    private static List<Player> getNearbyPlayers(Player player, int radius) {
+    private static List<Player> getNearbyPlayers(Player target, int radius) {
         List<Player> players = new ArrayList<>();
 
-        for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
-            if (entity instanceof Player) players.add((Player) entity);
+        for (Entity entity : target.getNearbyEntities(radius, radius, radius)) {
+            if (entity instanceof Player player) players.add(player);
         }
 
         return players;
