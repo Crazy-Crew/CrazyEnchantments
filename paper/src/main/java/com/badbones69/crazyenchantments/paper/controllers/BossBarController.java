@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class BossBarController {
 
-    private final HashMap<UUID, BossBar> bossBars;
+    private final Map<UUID, BossBar> bossBars;
     private final CrazyEnchantments plugin;
 
     public BossBarController(CrazyEnchantments plugin) {

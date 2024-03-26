@@ -68,7 +68,7 @@ public class PickaxeEnchantments implements Listener {
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, this.enchantmentBookSettings.getEnchantments(item)))
             return; // TODO Move over to block break.
 
-        HashMap<Block, BlockFace> blockFace = new HashMap<>();
+        Map<Block, BlockFace> blockFace = new HashMap<>();
         blockFace.put(block, event.getBlockFace());
         this.blocks.put(player.getUniqueId(), blockFace);
     }
@@ -83,7 +83,7 @@ public class PickaxeEnchantments implements Listener {
         //Map<CEnchantment, Integer> enchantments = enchantmentBookSettings.getEnchantments(currentItem);
         boolean damage = ConfigManager.getConfig().getProperty(Config.blast_full_durability);
 
-        if (!(this.blocks.containsKey(player) && this.blocks.get(player).containsKey(initialBlock))) return;
+        if (!(this.blocks.containsKey(player.getUniqueId()) && this.blocks.get(player.getUniqueId()).containsKey(initialBlock))) return;
         //if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.BLAST, enchantments)) return; // Duplicate event as it is called on click.
 
         Set<Block> blockList = getBlocks(initialBlock.getLocation(), blocks.get(player.getUniqueId()).get(initialBlock), (crazyManager.getLevel(currentItem, CEnchantments.BLAST) - 1));
@@ -118,7 +118,7 @@ public class PickaxeEnchantments implements Listener {
 
         if (!EnchantUtils.isMassBlockBreakActive(player, CEnchantments.VEINMINER, enchantments)) return;
 
-        HashSet<Block> blockList = getOreBlocks(currentBlock.getLocation(), enchantments.get(CEnchantments.VEINMINER.getEnchantment()));
+        Set<Block> blockList = getOreBlocks(currentBlock.getLocation(), enchantments.get(CEnchantments.VEINMINER.getEnchantment()));
         blockList.add(currentBlock);
 
         if (massBlockBreakCheck(player, blockList)) return;
@@ -203,14 +203,14 @@ public class PickaxeEnchantments implements Listener {
         event.setExpToDrop(event.getExpToDrop() + (enchants.get(CEnchantments.EXPERIENCE.getEnchantment()) + 2));
     }
 
-    private HashSet<Block> getOreBlocks(Location loc, int amount) {
-        HashSet<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
-        HashSet<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
+    private Set<Block> getOreBlocks(Location loc, int amount) {
+        Set<Block> blocks = new HashSet<>(Set.of(loc.getBlock()));
+        Set<Block> newestBlocks = new HashSet<>(Set.of(loc.getBlock()));
 
         int depth = 0;
 
         while (depth < amount) {
-            HashSet<Block> tempBlocks = new HashSet<>();
+            Set<Block> tempBlocks = new HashSet<>();
 
             for (Block block1 : newestBlocks) {
                 for (Block block : getSurroundingBlocks(block1.getLocation())) {
@@ -227,8 +227,8 @@ public class PickaxeEnchantments implements Listener {
         return blocks;
     }
 
-    private HashSet<Block> getSurroundingBlocks(Location loc) {
-        HashSet<Block> locations = new HashSet<>();
+    private Set<Block> getSurroundingBlocks(Location loc) {
+        Set<Block> locations = new HashSet<>();
 
         locations.add(loc.clone().add(0, 1, 0).getBlock());
         locations.add(loc.clone().add(0, -1, 0).getBlock());
@@ -240,7 +240,7 @@ public class PickaxeEnchantments implements Listener {
         return locations;
     }
 
-    private HashSet<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
+    private Set<Block> getBlocks(Location loc, BlockFace blockFace, Integer depth) {
         Location loc2 = loc.clone();
 
         switch (blockFace) {
@@ -274,8 +274,7 @@ public class PickaxeEnchantments implements Listener {
                 loc2.add(-1, 0, -1);
             }
 
-            default -> {
-            }
+            default -> {}
         }
 
         return this.methods.getEnchantBlocks(loc, loc2);

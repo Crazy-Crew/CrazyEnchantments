@@ -46,13 +46,13 @@ public class HoeEnchantments implements Listener {
     // Settings.
     private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    private final HashMap<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
+    private final Map<UUID, HashMap<Block, BlockFace>> blocks = new HashMap<>();
 
     private final Set<Material> harvesterCrops = Set.of(Material.WHEAT, Material.CARROTS, Material.BEETROOTS, Material.POTATOES, Material.NETHER_WART, Material.COCOA);
 
     private final Set<Material> seedlings = Set.of(Material.WHEAT, Material.CARROTS, Material.BEETROOTS, Material.POTATOES, Material.NETHER_WART, Material.COCOA,
             Material.MELON_STEM, Material.CRIMSON_STEM, Material.PUMPKIN_STEM, Material.WARPED_STEM);
-    private final HashMap<Material, Material> planterSeeds = new HashMap<>() {{
+    private final Map<Material, Material> planterSeeds = new HashMap<>() {{
         put(Material.WHEAT_SEEDS, Material.WHEAT);
         put(Material.BEETROOT_SEEDS, Material.BEETROOTS);
         put(Material.POTATO, Material.POTATOES);

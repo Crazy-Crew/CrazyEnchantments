@@ -34,7 +34,7 @@ public class ProtectionCrystalSettings {
 
     private final @NotNull String protectionString = ColorUtils.color(ConfigManager.getConfig().getProperty(Config.protection_crystal_protected));
 
-    private final HashMap<UUID, List<ItemStack>> crystalItems = new HashMap<>();
+    private final Map<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
     private ItemBuilder crystal;
 
@@ -121,7 +121,7 @@ public class ProtectionCrystalSettings {
     /**
      * @return The hash map.
      */
-    public HashMap<UUID, List<ItemStack>> getCrystalItems() {
+    public Map<UUID, List<ItemStack>> getCrystalItems() {
         return this.crystalItems;
     }
 
@@ -135,8 +135,7 @@ public class ProtectionCrystalSettings {
 
         SettingsManager config = ConfigManager.getConfig();
 
-        if (config.getProperty(Config.protection_crystal_chance_toggle))
-            return this.methods.randomPicker(config.getProperty(Config.protection_crystal_chance), 100);
+        if (config.getProperty(Config.protection_crystal_chance_toggle)) return this.methods.randomPicker(config.getProperty(Config.protection_crystal_chance), 100);
 
         return true;
     }
