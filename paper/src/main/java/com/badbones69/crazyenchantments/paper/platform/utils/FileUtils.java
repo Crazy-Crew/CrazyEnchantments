@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.utils;
+package com.badbones69.crazyenchantments.paper.platform.utils;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.plugin.java.JavaPlugin;
