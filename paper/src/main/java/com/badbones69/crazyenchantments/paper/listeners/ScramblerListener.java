@@ -22,8 +22,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -46,19 +44,12 @@ public class ScramblerListener implements Listener {
 
     private final Map<UUID, BukkitTask> roll = new HashMap<>();
 
-    private ItemBuilder scramblerItem;
     private ItemBuilder pointer;
     private boolean animationToggle;
     private String guiName;
 
     public void loadScrambler() {
         SettingsManager config = ConfigManager.getConfig();
-
-        this.scramblerItem = new ItemBuilder()
-                .setMaterial(config.getProperty(Config.scrambler_item))
-                .setName(config.getProperty(Config.scrambler_name))
-                .setLore(config.getProperty(Config.scrambler_lore))
-                .setGlow(config.getProperty(Config.scrambler_glowing));
 
         this.pointer = new ItemBuilder()
                 .setMaterial(config.getProperty(Config.scrambler_pointer_item))
@@ -67,37 +58,7 @@ public class ScramblerListener implements Listener {
                 .setLore(config.getProperty(Config.scrambler_lore));
 
         this.animationToggle = config.getProperty(Config.scrambler_toggle);
-        this.guiName = ColorUtils.color(config.getProperty(Config.scrambler_gui));
-    }
-
-    /**
-     * Get the scrambler item stack.
-     *
-     * @return The scramblers.
-     */
-    public ItemStack getScramblers() {
-        return getScramblers(1);
-    }
-
-    /**
-     * Get the scrambler item stack.
-     *
-     * @param amount The amount you want.
-     * @return The scramblers.
-     */
-    public ItemStack getScramblers(int amount) {
-        ItemStack item = this.scramblerItem.setAmount(amount).build();
-        ItemMeta meta = item.getItemMeta();
-
-        meta.getPersistentDataContainer().set(DataKeys.scrambler.getNamespacedKey(), PersistentDataType.BOOLEAN, true);
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
-    public boolean isScrambler(ItemStack item) {
-        if (!item.hasItemMeta()) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(DataKeys.scrambler.getNamespacedKey());
+        //this.guiName = ColorUtils.color(config.getProperty(Config.scrambler_gui));
     }
 
     private void setGlass(Inventory inv) {
@@ -219,7 +180,9 @@ public class ScramblerListener implements Listener {
 
         if (book.getType() == Material.AIR || scrambler.getType() == Material.AIR) return;
         if (book.getAmount() != 1 || scrambler.getAmount() != 1) return;
-        if (!isScrambler(scrambler) || !this.enchantmentBookSettings.isEnchantmentBook(book)) return;
+
+        //if (!isScrambler(scrambler) || !this.enchantmentBookSettings.isEnchantmentBook(book)) return;
+
         if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
             player.sendRichMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
             return;
@@ -266,7 +229,7 @@ public class ScramblerListener implements Listener {
     public void onScrollClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
 
-        if (isScrambler(player.getInventory().getItemInMainHand()) || isScrambler(player.getInventory().getItemInOffHand()))
-            event.setCancelled(true);
+        //if (isScrambler(player.getInventory().getItemInMainHand()) || isScrambler(player.getInventory().getItemInOffHand()))
+       //     event.setCancelled(true);
     }
 }
