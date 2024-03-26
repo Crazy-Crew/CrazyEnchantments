@@ -13,16 +13,16 @@ public class TinkerConfig implements SettingsHolder {
 
     public static final Property<String> bottle_item = newProperty("root.bottle.item", "experience_bottle");
 
-    public static final Property<String> bottle_name = newProperty("root.bottle.name", "&aRecycled XP");
+    public static final Property<String> bottle_name = newProperty("root.bottle.name", "<green>Recycled XP");
 
     public static final Property<List<String>> bottle_lore = newListProperty("root.bottle.lore", List.of(
-            "&a&lRecycled &6%total%XP",
-            "&7&l(&6&l!&7&l) &7Throw to get XP."
+            "<bold><green>Recycled</bold> <gold>%total% XP",
+            "<bold><gray>(<gold>!<gray>)</bold> <gray>Throw to get XP."
     ));
 
-    public static final Property<String> menu_name = newProperty("menu.name", "&7&lThe &4&lCrazy &c&lTinkerer");
+    public static final Property<String> menu_name = newProperty("menu.name", "<bold><gray>The <dark_red>Crazy <red>Tinkerer</bold>");
 
-    public static final Property<String> menu_trade_button = newProperty("menu.trade-button.name", "&eClick to accept the trade");
+    public static final Property<String> menu_trade_button = newProperty("menu.trade-button.name", "<yellow>Click to accept the trade");
 
     public static final Property<List<String>> menu_trade_lore = newListProperty("menu.trade-button.lore", List.of(
             ""

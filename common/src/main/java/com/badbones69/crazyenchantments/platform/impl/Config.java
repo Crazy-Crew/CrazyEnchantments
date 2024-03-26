@@ -10,7 +10,7 @@ import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 public class Config implements SettingsHolder {
 
     @Comment("The prefix used in messages.")
-    public static final Property<String> prefix = newProperty("Settings.Prefix", "&8[&aCrazyEnchants&8]: ");
+    public static final Property<String> prefix = newProperty("Settings.Prefix", "<dark_gray>[<green>CrazyEnchants<dark_gray>]: ");
 
     @Comment("Turn on and off whether your server stats are sent to https://bstats.org/ - Requires a restart!")
     public static final Property<Boolean> toggle_metrics = newProperty("Settings.Toggle-Metrics", true);
@@ -25,7 +25,7 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> refresh_effects_world_change = newProperty("Settings.Refresh-Potion-Effects-On-World-Change", false);
 
     @Comment("The name of /ce inventory")
-    public static final Property<String> inventory_name = newProperty("Settings.InvName", "&4&l&nCrazy Enchanter");
+    public static final Property<String> inventory_name = newProperty("Settings.InvName", "<bold><dark_red>Crazy Enchanter</bold>");
 
     @Comment("The item that the enchantment book is.")
     public static final Property<String> enchantment_book_item = newProperty("Settings.Enchantment-Book-Item", "book");
@@ -38,27 +38,27 @@ public class Config implements SettingsHolder {
 
     @Comment("The lore on enchantment books.")
     public static final Property<List<String>> enchantment_book_lore = newListProperty("Settings.EnchantmentBookLore", List.of(
-            "&7Drag book and drop on Item.",
-            "&7Right click for more Info.",
+            "<gray>Drag book and drop on Item.",
+            "<gray>Right click for more Info.",
             "",
             "%description%",
             "",
-            "&4%destroy_rate%% Destroy Chance",
-            "&a%success_rate%% Success Chance"
+            "<dark_red>%destroy_rate%% Destroy Chance",
+            "<green>%success_rate%% Success Chance"
     ));
 
     @Comment("The item the lost books are.")
     public static final Property<String> lost_book_item = newProperty("Settings.LostBook.Item", "book");
 
     @Comment("The name of the lost books.")
-    public static final Property<String> lost_book_name = newProperty("Settings.LostBook.Name", "&8&l&nA Lost %category%&8&l&n Book");
+    public static final Property<String> lost_book_name = newProperty("Settings.LostBook.Name", "<bold><dark_gray>A Lost %category%<dark_gray> Book</bold>");
 
     @Comment("The lore of the lost books.")
     public static final Property<List<String>> lost_book_lore = newListProperty("Settings.LostBook.Lore", List.of(
-            "&7This book has been lost for centuries",
-            "&7It is said to be an enchantment book from %category%",
-            "&7But you must clean it off to find out what kind it is.",
-            "&7&l(&6&l!&7&l) &7Right Click to clean off."
+            "<gray>This book has been lost for centuries",
+            "<gray>It is said to be an enchantment book from %category%",
+            "<gray>But you must clean it off to find out what kind it is.",
+            "<bold><gray>(<gold>!<gray>)</bold> <gray>Right Click to clean off."
     ));
 
     @Comment("The item it will be.")
@@ -68,18 +68,18 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> scrambler_glowing = newProperty("Settings.Scrambler.Glowing", true);
 
     @Comment("The name of the item.")
-    public static final Property<String> scrambler_name = newProperty("Settings.Scrambler.Name", "&e&lThe Grand Scrambler");
+    public static final Property<String> scrambler_name = newProperty("Settings.Scrambler.Name", "<bold><yellow>The Grand Scrambler</bold>");
 
     @Comment("The lore of the item.")
     public static final Property<List<String>> scrambler_lore = newListProperty("Settings.Scrambler.Lore", List.of(
-            "&7The &e&lThe Grand Scrambler &7will allow",
-            "&7you to re-roll the destroy and success rates.",
-            "&7Drag and drop it on an enchantment book",
-            "&7to get a new destroy and success rate."
+            "<gray>The <bold><yellow>The Grand Scrambler</bold> <gray>will allow",
+            "<gray>you to re-roll the destroy and success rates.",
+            "<gray>Drag and drop it on an enchantment book",
+            "<gray>to get a new destroy and success rate."
     ));
 
     @Comment("Name of the GUI.")
-    public static final Property<String> scrambler_gui = newProperty("Settings.Scrambler.GUI.Name", "&8Rolling the &eScrambler");
+    public static final Property<String> scrambler_gui = newProperty("Settings.Scrambler.GUI.Name", "<dark_gray>Rolling the <yellow>Scrambler");
 
     @Comment("If the GUI will show. Warning>> This may cause lag if a lot of players are using it all the time.")
     public static final Property<Boolean> scrambler_toggle = newProperty("Settings.Scrambler.GUI.Toggle", true);
@@ -88,12 +88,12 @@ public class Config implements SettingsHolder {
     public static final Property<String> scrambler_pointer_item = newProperty("Settings.Scrambler.GUI.Pointer.Item", "redstone_torch");
 
     @Comment("The name of the pointer.")
-    public static final Property<String> scrambler_pointer_name = newProperty("Settings.Scrambler.GUI.Pointer.Name", "&c&lPointer");
+    public static final Property<String> scrambler_pointer_name = newProperty("Settings.Scrambler.GUI.Pointer.Name", "<bold><red>Pointer</bold>");
 
     @Comment("The lore on the pointer.")
     public static final Property<List<String>> scrambler_pointer_lore = newListProperty("Settings.Scrambler.GUI.Pointer.Lore", List.of(
-            "&7Whatever percents the item lands on",
-            "&7will be the new percents on your book."
+            "<gray>Whatever percents the item lands on",
+            "<gray>will be the new percents on your book."
     ));
 
     @Comment("If you can buy it in the GUI.")
@@ -110,12 +110,12 @@ public class Config implements SettingsHolder {
 
     @Comment("The lore of the item in the gui.")
     public static final Property<List<String>> scrambler_gui_lore = newListProperty("Settings.Scrambler.GUILore", List.of(
-            "&7The &e&lThe Grand Scrambler &7will allow",
-            "&7you to re-roll the destroy and success rates.",
-            "&7Drag and drop it on an enchantment book",
-            "&7to get a new destroy and success rate.",
+            "<gray>The <bold><yellow>The Grand Scrambler</bold> <gray>will allow",
+            "<gray>you to re-roll the destroy and success rates.",
+            "<gray>Drag and drop it on an enchantment book",
+            "<gray>to get a new destroy and success rate.",
             "",
-            "&eCost: &e&l$800"
+            "<yellow>Cost: <bold>$800</bold>"
     ));
 
     @Comment("If it's in the GUI.")
@@ -134,27 +134,27 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> slot_crystal_glowing = newProperty("Settings.Slot_Crystal.Glowing", true);
 
     @Comment("Name of the item")
-    public static final Property<String> slot_crystal_name = newProperty("Settings.Slot_Crystal.Name", "&5&lSlot &b&lCrystal");
+    public static final Property<String> slot_crystal_name = newProperty("Settings.Slot_Crystal.Name", "<bold><dark_purple>Slot <blue>Crystal</bold>");
 
     @Comment("Lore of the item")
     public static final Property<List<String>> slot_crystal_lore = newListProperty("Settings.Slot_Crystal.Lore", List.of(
-            "&7A rare crystal that is said to",
-            "&7increase the amount of enchants",
-            "&7that can be added onto an item.",
+            "<gray>A rare crystal that is said to",
+            "<gray>increase the amount of enchants",
+            "<gray>that can be added onto an item.",
             "",
-            "&7&l(&6&l!&7&l) &7Drag and drop on an item."
+            "<bold><gray>(<gold>!<gray>)</bold> <gray>Drag and drop on an item."
     ));
 
     @Comment("The name of the item in the gui.")
-    public static final Property<String> slot_crystal_gui_name = newProperty("Settings.Slot_Crystal.GUIName", "&5&lSlot &b&lCrystal");
+    public static final Property<String> slot_crystal_gui_name = newProperty("Settings.Slot_Crystal.GUIName", "<bold><dark_purple>Slot <blue>Crystal</bold>");
 
     @Comment("The lore of the item in the gui.")
     public static final Property<List<String>> slot_crystal_gui_lore = newListProperty("Settings.Slot_Crystal.GUILore", List.of(
-            "&7A rare crystal that is said to",
-            "&7increase the amount of enchants",
-            "&7that can be added onto an item.",
+            "<gray>A rare crystal that is said to",
+            "<gray>increase the amount of enchants",
+            "<gray>that can be added onto an item.",
             "",
-            "&eCost: &e&l$500"
+            "<yellow>Cost: <bold>$500</bold>"
     ));
 
     @Comment("If you can open the GKitz GUI from the main /ce gui.")
@@ -176,11 +176,11 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> gkitz_glowing = newProperty("Settings.GKitz.Glowing", true);
 
     @Comment("The name of the item.")
-    public static final Property<String> gkitz_name = newProperty("Settings.GKitz.Name", "&c&lGKitz");
+    public static final Property<String> gkitz_name = newProperty("Settings.GKitz.Name", "<bold><red>GKitz</bold>");
 
     @Comment("The lore of the item.")
     public static final Property<List<String>> gkitz_lore = newListProperty("Settings.GKitz.Lore", List.of(
-            "&b>>&7&nClick to open&b<<"
+            "<blue>>> <gray>Click to open <blue><<"
     ));
 
     @Comment("If it should be in the gui.")
@@ -199,7 +199,7 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> protection_crystal_glowing = newProperty("Settings.ProtectionCrystal.Glowing", true);
 
     @Comment("The message telling the player if it is protected.")
-    public static final Property<String> protection_crystal_protected = newProperty("Settings.ProtectionCrystal.Protected", "&6Ancient Protection");
+    public static final Property<String> protection_crystal_protected = newProperty("Settings.ProtectionCrystal.Protected", "<gold>Ancient Protection");
 
     @Comment("If the crystal loses protection on death.")
     public static final Property<Boolean> protection_crystal_lose_protection_on_death = newProperty("Settings.ProtectionCrystal.Lose-Protection-On-Death", true);
@@ -211,27 +211,27 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> protection_crystal_chance = newProperty("Settings.ProtectionCrystal.Chance.Success-Chance", 75);
 
     @Comment("The name of the item when given.")
-    public static final Property<String> protection_crystal_name = newProperty("Settings.ProtectionCrystal.Name", "&5&lProtection &b&lCrystal");
+    public static final Property<String> protection_crystal_name = newProperty("Settings.ProtectionCrystal.Name", "<bold><dark_purple>Protection <blue>Crystal</bold>");
 
     @Comment("The lore of the item when given.")
     public static final Property<List<String>> protection_crystal_lore = newListProperty("Settings.ProtectionCrystal.Lore", List.of(
-            "&7A rare crystal that is said to",
-            "&7protect items from getting lost",
-            "&7while the owners away in the after life.",
+            "<gray>A rare crystal that is said to",
+            "<gray>protect items from getting lost",
+            "<gray>while the owners away in the after life.",
             "",
-            "&7&l(&6&l!&7&l) &7Drag and drop on an item."
+            "<bold><gray>(<gold>!<gray>)</bold> <gray>Drag and drop on an item."
     ));
 
     @Comment("The name of the item in the gui.")
-    public static final Property<String> protection_crystal_gui_name = newProperty("Settings.ProtectionCrystal.GUIName", "&5&lProtection &b&lCrystal");
+    public static final Property<String> protection_crystal_gui_name = newProperty("Settings.ProtectionCrystal.GUIName", "<bold><dark_purple>Protection <blue>Crystal</bold>");
 
     @Comment("The lore of the item in the gui.")
     public static final Property<List<String>> protection_crystal_gui_lore = newListProperty("Settings.ProtectionCrystal.GUILore", List.of(
-            "&7A rare crystal that is said to",
-            "&7protect items from getting lost",
-            "&7while the owners away in the after life.",
+            "<gray>A rare crystal that is said to",
+            "<gray>protect items from getting lost",
+            "<gray>while the owners away in the after life.",
             "",
-            "&eCost: &e&l$500"
+            "<yellow>Cost: <bold>$500</bold>"
     ));
 
     @Comment("If the item should be in the gui.")
@@ -250,30 +250,30 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> blacksmith_glowing = newProperty("Settings.BlackSmith.Glowing", false);
 
     @Comment("Name of the item in the gui")
-    public static final Property<String> blacksmith_name = newProperty("Settings.BlackSmith.Name", "&7&lThe &b&lBlack &9&lSmith");
+    public static final Property<String> blacksmith_name = newProperty("Settings.BlackSmith.Name", "<bold><gray>The <blue>Black <dark_blue>Smith</bold>");
 
     @Comment("Lore on the item")
     public static final Property<List<String>> blacksmith_lore = newListProperty("Settings.BlackSmith.Lore", List.of(
-            "&b>>&7&nClick to open&b<<"
+            "<blue>>> <gray>Click to open <blue><<"
     ));
 
     @Comment("Name of the black smith gui")
-    public static final Property<String> blacksmith_gui_name = newProperty("Settings.BlackSmith.GUIName", "&8&lThe Black Smith");
+    public static final Property<String> blacksmith_gui_name = newProperty("Settings.BlackSmith.GUIName", "<bold><dark_gray>The Black Smith</black>");
 
     @Comment("Name of the item when there are no results")
-    public static final Property<String> blacksmith_results_none = newProperty("Settings.BlackSmith.Results.None", "&c&lNo Results");
+    public static final Property<String> blacksmith_results_none = newProperty("Settings.BlackSmith.Results.None", "<bold><red>No Results</bold>");
 
     @Comment("The not found lore")
     public static final Property<List<String>> blacksmith_results_lore = newListProperty("Settings.BlackSmith.Results.Not-Found-Lore", List.of(
-            "&7No results could be found.",
-            "&7Please put in two books of",
-            "&7the same enchantment and level.",
-            "&7Or put in two items to combined",
-            "&7the enchantments on them."
+            "<gray>No results could be found.",
+            "<gray>Please put in two books of",
+            "<gray>the same enchantment and level.",
+            "<gray>Or put in two items to combined",
+            "<gray>the enchantments on them."
     ));
 
     @Comment("The lore at the bottom of the item")
-    public static final Property<String> blacksmith_results_found = newProperty("Settings.BlackSmith.Results.Found", "&c&lCost: &6&l%cost%XP");
+    public static final Property<String> blacksmith_results_found = newProperty("Settings.BlackSmith.Results.Found", "<bold><red>Cost: <gold>%cost% XP</bold>");
 
     @Comment("Available currencies: XP_LEVEL, XP_TOTAL, VAULT")
     public static final Property<String> blacksmith_transaction_currency = newProperty("Settings.BlackSmith.Transaction.Currency", "XP_LEVEL");
@@ -303,11 +303,11 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> tinker_glowing = newProperty("Settings.Tinker.Glowing", false);
 
     @Comment("Name of the Item")
-    public static final Property<String> tinker_name = newProperty("Settings.Tinker.Name", "&7&lThe &b&lCrazy &9&lTinkerer");
+    public static final Property<String> tinker_name = newProperty("Settings.Tinker.Name", "<bold><gray>The <blue>Crazy <dark_blue>Tinkerer</bold>");
 
     @Comment("Lore of the item")
     public static final Property<List<String>> tinker_lore = newListProperty("Settings.Tinker.Lore", List.of(
-            "&b>>&7&nClick to open&b<<"
+            "<blue>>> <gray>Click to open <blue><<"
     ));
 
     @Comment("Toggle whether it is in the /CE GUI or not")
@@ -326,24 +326,24 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> info_glowing = newProperty("Settings.Info.Glowing", true);
 
     @Comment("Name of the Item")
-    public static final Property<String> info_name = newProperty("Settings.Info.Name", "&eInfo on the Enchantments");
+    public static final Property<String> info_name = newProperty("Settings.Info.Name", "<yellow>Info on the Enchantments");
 
     @Comment("Lore of the item")
     public static final Property<List<String>> info_lore = newListProperty("Settings.Info.Lore", List.of(
-            "&b>>&7&nClick to view&b<<"
+            "<blue>>> <gray>Click to view <blue><<"
     ));
 
     @Comment("Item mystery dust is")
     public static final Property<String> mystery_dust_item = newProperty("Settings.Dust.MysteryDust.Item", "gunpowder");
 
     @Comment("Name of the dust")
-    public static final Property<String> mystery_dust_name = newProperty("Settings.Dust.MysteryDust.Name", "&7Mystery Dust");
+    public static final Property<String> mystery_dust_name = newProperty("Settings.Dust.MysteryDust.Name", "<gray>Mystery Dust");
 
     @Comment("Use %percent% to set the percent")
     public static final Property<List<String>> mystery_dust_lore = newListProperty("Settings.Dust.MysteryDust.Lore", List.of(
-            "&a1-%percent%% &7will be on a",
-            "&aMagical AngelDust &7or &eMagical Fixing &7Dust",
-            "&7&l(&6&l!&7&l) &7Right click"
+            "<green>1-%percent%% <gray>will be on a",
+            "<green>Magical AngelDust <gray>or <yellow>Magical Fixing Dust",
+            "<bold><gray>(<gold>!<gray>)</bold> <gray>Right click"
     ));
 
     @Comment("Toggle if the firework happens on open.")
@@ -374,26 +374,26 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> success_dust_slot = newProperty("Settings.Dust.SuccessDust.Slot", 25);
 
     @Comment("Name of the item in the GUI")
-    public static final Property<String> success_dust_gui_name = newProperty("Settings.Dust.SuccessDust.GUIName", "&aMagical Angel Dust");
+    public static final Property<String> success_dust_gui_name = newProperty("Settings.Dust.SuccessDust.GUIName", "<green>Magical Angel Dust");
 
     @Comment("Lore in the GUI.")
     public static final Property<List<String>> success_dust_gui_lore = newListProperty("Settings.Dust.SuccessDust.GUILore", List.of(
-            "&eCost: &a&l$500",
-            "&7Dust allows you to bring",
-            "&7up your &aSuccess Rate&7."
+            "<yellow>Cost: <green><bold>$500</bold>",
+            "<gray>Dust allows you to bring",
+            "<gray>up your <green>Success Rate."
     ));
 
     @Comment("Item the dust is")
     public static final Property<String> success_dust_item = newProperty("Settings.Dust.SuccessDust.Item", "sugar");
 
     @Comment("Name of the dust")
-    public static final Property<String> success_dust_name = newProperty("Settings.Dust.SuccessDust.Name", "&aMagical Angel Dust");
+    public static final Property<String> success_dust_name = newProperty("Settings.Dust.SuccessDust.Name", "<green>Magical Angel Dust");
 
     @Comment("Lore for the dust")
     public static final Property<List<String>> success_dust_lore = newListProperty("Settings.Dust.SuccessDust.Lore", List.of(
-            "&a+%percent%% Success Rate",
-            "&7Apply to an Enchantment Book to",
-            "&7Increase the Success Rate by &e%percent%%"
+            "<green>+%percent%% Success Rate",
+            "<gray>Apply to an Enchantment Book to",
+            "<gray>Increase the Success Rate by <yellow>%percent%%"
     ));
 
     @Comment("Max percent")
@@ -409,26 +409,26 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> destroy_dust_slot = newProperty("Settings.Dust.DestroyDust.Slot", 34);
 
     @Comment("Name of the item in the GUI")
-    public static final Property<String> destroy_dust_gui_name = newProperty("Settings.Dust.DestroyDust.GUIName", "&eMagical Fixing Dust");
+    public static final Property<String> destroy_dust_gui_name = newProperty("Settings.Dust.DestroyDust.GUIName", "<yellow>Magical Fixing Dust");
 
     @Comment("Lore in the GUI.")
     public static final Property<List<String>> destroy_dust_gui_lore = newListProperty("Settings.Dust.DestroyDust.GUILore", List.of(
-            "&eCost: &a&l$500",
-            "&7Dust allows you to bring",
-            "&7down your &4Destroy Rate&7."
+            "<yellow>Cost: <green><bold>$500</bold>",
+            "<gray>Dust allows you to bring",
+            "<gray>down your <dark_red>Destroy Rate."
     ));
 
     @Comment("Item the dust is")
     public static final Property<String> destroy_dust_item = newProperty("Settings.Dust.DestroyDust.Item", "redstone");
 
     @Comment("Name of the dust")
-    public static final Property<String> destroy_dust_name = newProperty("Settings.Dust.DestroyDust.Name", "&eMagical Fixing Dust");
+    public static final Property<String> destroy_dust_name = newProperty("Settings.Dust.DestroyDust.Name", "<yellow>Magical Fixing Dust");
 
     @Comment("Lore for the dust")
     public static final Property<List<String>> destroy_dust_lore = newListProperty("Settings.Dust.DestroyDust.Lore", List.of(
-            "&a+%percent%% Success Rate",
-            "&7Apply to an Enchantment Book to",
-            "&7Increase the Success Rate by &e%percent%%"
+            "<green>+%percent%% Success Rate",
+            "<gray>Apply to an Enchantment Book to",
+            "<gray>Increase the Success Rate by <yellow>%percent%%"
     ));
 
     @Comment("Max percent")
@@ -441,27 +441,27 @@ public class Config implements SettingsHolder {
     public static final Property<String> failed_dust_item = newProperty("Settings.Dust.FailedDust.Item", "gunpowder");
 
     @Comment("Name of the dust")
-    public static final Property<String> failed_dust_name = newProperty("Settings.Dust.FailedDust.Name", "&7Failed Dust");
+    public static final Property<String> failed_dust_name = newProperty("Settings.Dust.FailedDust.Name", "<gray>Failed Dust");
 
     @Comment("Lore for the dust")
     public static final Property<List<String>> failed_dust_lore = newListProperty("Settings.Dust.FailedDust.Lore", List.of(
-            "&7This dust has failed.",
-            "&7It is now useless unless you",
-            "&7needed to make TNT or a throwable potion."
+            "<gray>This dust has failed.",
+            "<gray>It is now useless unless you",
+            "<gray>needed to make TNT or a throwable potion."
     ));
 
     @Comment("The item the black scroll can be")
     public static final Property<String> black_scroll_item = newProperty("Settings.BlackScroll.Item", "ink_sac");
 
     @Comment("The name of the black scroll")
-    public static final Property<String> black_scroll_name = newProperty("Settings.BlackScroll.Name", "&8&l&nBlack Scroll");
+    public static final Property<String> black_scroll_name = newProperty("Settings.BlackScroll.Name", "<dark_gray><bold><underlined>Black Scroll</bold>");
 
     @Comment("The lore that will be on the black scroll.")
     public static final Property<List<String>> black_scroll_lore = newListProperty("Settings.BlackScroll.Item-Lore", List.of(
-            "&7Have a custom enchantment you don''t want?",
-            "&7Drag and drop this on an item with a custom enchantment",
-            "&7and it will remove a random enchantment for you.",
-            "&7&l(&6&l!&7&l) &7Only works on Custom Enchantments."
+            "<gray>Have a custom enchantment you don''t want?",
+            "<gray>Drag and drop this on an item with a custom enchantment",
+            "<gray>and it will remove a random enchantment for you.",
+            "<bold><gray>(<gold>!<gray>)</bold> <gray>Only works on Custom Enchantments."
     ));
 
     @Comment("Toggle on and off if the black scrolls have a chance of failing.")
@@ -474,7 +474,7 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> black_scroll_in_gui = newProperty("Settings.BlackScroll.InGUI", true);
 
     @Comment("The name of the gui.")
-    public static final Property<String> black_scroll_gui_name = newProperty("Settings.BlackScroll.GUIName", "&7Black Scroll");
+    public static final Property<String> black_scroll_gui_name = newProperty("Settings.BlackScroll.GUIName", "<gray>Black Scroll");
 
     @Comment("")
     public static final Property<String> black_scroll_gui_player = newProperty("Settings.BlackScroll.Player", "");
@@ -487,9 +487,9 @@ public class Config implements SettingsHolder {
 
     @Comment("Lore of the item in the GUI")
     public static final Property<List<String>> black_scroll_gui_lore = newListProperty("Settings.BlackScroll.Lore", List.of(
-            "&eCost: &a&l$1000",
-            "&7Black Scrolls allow you to",
-            "&7take off random enchantments."
+            "<yellow>Cost: <green><bold>$1000</bold>",
+            "<gray>Black Scrolls allow you to",
+            "<gray>take off random enchantments."
     ));
 
     @Comment("The Max percent")
@@ -508,20 +508,20 @@ public class Config implements SettingsHolder {
     public static final Property<String> white_scroll_item = newProperty("Settings.WhiteScroll.Item", "paper");
 
     @Comment("The name of the white scrolls.")
-    public static final Property<String> white_scroll_name = newProperty("Settings.WhiteScroll.Name", "&e&lWhite Scroll");
+    public static final Property<String> white_scroll_name = newProperty("Settings.WhiteScroll.Name", "<yellow><bold>White Scroll</bold>");
 
     @Comment("The lore that will be on the white scroll.")
     public static final Property<List<String>> white_scroll_lore = newListProperty("Settings.WhiteScroll.Item-Lore", List.of(
-            "&7Want to protect an item from a book''s destroy rate?",
-            "&7Drag and drop this on an enchant-able item",
-            "&7and it will protect the item from the destroy rate."
+            "<gray>Want to protect an item from a book''s destroy rate?",
+            "<gray>Drag and drop this on an enchant-able item",
+            "<gray>and it will protect the item from the destroy rate."
     ));
 
     @Comment("Toggle being able to buy in the /CE GUI.")
     public static final Property<Boolean> white_scroll_in_gui = newProperty("Settings.WhiteScroll.InGUI", true);
 
     @Comment("The name of the gui.")
-    public static final Property<String> white_scroll_gui_name = newProperty("Settings.WhiteScroll.GUIName", "&7White Scroll");
+    public static final Property<String> white_scroll_gui_name = newProperty("Settings.WhiteScroll.GUIName", "<gray>White Scroll");
 
     @Comment("If it has a glowing effect.")
     public static final Property<Boolean> white_scroll_glowing = newProperty("Settings.WhiteScroll.Glowing", false);
@@ -534,32 +534,32 @@ public class Config implements SettingsHolder {
 
     @Comment("Lore of the scroll in the GUI")
     public static final Property<List<String>> white_scroll_gui_lore = newListProperty("Settings.WhiteScroll.Lore", List.of(
-            "&eCost: &a&l$2000",
-            "&7White Scrolls allow you to",
-            "&7protect items from breaking."
+            "<yellow>Cost: <green><bold>$2000</bold>",
+            "<gray>White Scrolls allow you to",
+            "<gray>protect items from breaking."
     ));
 
     @Comment("The lore that is added to protect an item.")
-    public static final Property<String> white_scroll_protected = newProperty("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED");
+    public static final Property<String> white_scroll_protected = newProperty("Settings.WhiteScroll.ProtectedName", "<blue><bold>PROTECTED</bold>");
 
     @Comment("The item the scroll is.")
     public static final Property<String> transmog_scroll_item = newProperty("Settings.TransmogScroll.Item", "quartz");
 
     @Comment("The name of the scroll.")
-    public static final Property<String> transmog_scroll_name = newProperty("Settings.TransmogScroll.Name", "&d&lTransmog Scroll");
+    public static final Property<String> transmog_scroll_name = newProperty("Settings.TransmogScroll.Name", "<light_purple><bold>Transmog Scroll</bold>");
 
     @Comment("The lore that will be on the scroll.")
     public static final Property<List<String>> transmog_scroll_lore = newListProperty("Settings.TransmogScroll.Item-Lore", List.of(
-            "&7This scroll allows you to organize",
-            "&7your enchantments and tell you how many",
-            "&7enchantments you currently have on the item."
+            "<gray>This scroll allows you to organize",
+            "<gray>your enchantments and tell you how many",
+            "<gray>enchantments you currently have on the item."
     ));
 
     @Comment("Toggle being able to buy in the /CE GUI.")
     public static final Property<Boolean> transmog_scroll_in_gui = newProperty("Settings.TransmogScroll.InGUI", true);
 
     @Comment("The name of the gui.")
-    public static final Property<String> transmog_scroll_gui_name = newProperty("Settings.TransmogScroll.GUIName", "&dTransmog Scroll");
+    public static final Property<String> transmog_scroll_gui_name = newProperty("Settings.TransmogScroll.GUIName", "<light_purple>Transmog Scroll");
 
     @Comment("If it has a glowing effect.")
     public static final Property<Boolean> transmog_scroll_glowing = newProperty("Settings.TransmogScroll.Glowing", false);
@@ -572,14 +572,14 @@ public class Config implements SettingsHolder {
 
     @Comment("Lore of the scroll in the GUI")
     public static final Property<List<String>> transmog_scroll_gui_lore = newListProperty("Settings.TransmogScroll.Lore", List.of(
-            "&eCost: &a&l$200",
-            "&7This scroll allows you to organize",
-            "&7your enchantments and tell you how many",
-            "&7enchantments you currently have on the item."
+            "<yellow>Cost: <green><bold>$200</bold>",
+            "<gray>This scroll allows you to organize",
+            "<gray>your enchantments and tell you how many",
+            "<gray>enchantments you currently have on the item."
     ));
 
     @Comment("The suffix that will be added at the end of the item's name.")
-    public static final Property<String> amount_of_enchantments = newProperty("Settings.TransmogScroll.Amount-of-Enchantments", " &7[&6&n%amount%&7]");
+    public static final Property<String> amount_of_enchantments = newProperty("Settings.TransmogScroll.Amount-of-Enchantments", " <gray>[<gold>%amount%<gray>]");
 
     @Comment("If the amount is added to the suffix of the item's name.")
     public static final Property<Boolean> amount_toggle = newProperty("Settings.TransmogScroll.Amount-Toggle", true);
@@ -646,22 +646,22 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> lightning_sound_range = newProperty("Settings.EnchantmentOptions.Lightning-Sound-Range", 100);
 
     @Comment("The name of ally mobs that show above their heads.")
-    public static final Property<String> ally_mobs_wolf = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Wolf", "&b%player%''s Saberwolf");
+    public static final Property<String> ally_mobs_wolf = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Wolf", "<blue>%player%''s Saberwolf");
 
     @Comment("The name of ally mobs that show above their heads.")
-    public static final Property<String> ally_mobs_golem = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Iron-Golem", "&6%player%''s Golem");
+    public static final Property<String> ally_mobs_golem = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Iron-Golem", "<gold>%player%''s Golem");
 
     @Comment("The name of ally mobs that show above their heads.")
-    public static final Property<String> ally_mobs_zombie = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Zombie", "&2%player%''s Undead");
+    public static final Property<String> ally_mobs_zombie = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Zombie", "<dark_green>%player%''s Undead");
 
     @Comment("The name of ally mobs that show above their heads.")
-    public static final Property<String> ally_mobs_endermite = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Endermite", "&5%player%''s Endermite");
+    public static final Property<String> ally_mobs_endermite = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Endermite", "<dark_purple>%player%''s Endermite");
 
     @Comment("The name of ally mobs that show above their heads.")
-    public static final Property<String> ally_mobs_silverfish = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Silverfish", "&7%player%''s Silverfish");
+    public static final Property<String> ally_mobs_silverfish = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Silverfish", "<gray>%player%''s Silverfish");
 
     @Comment("The name of ally mobs that show above their heads.")
-    public static final Property<String> ally_mobs_bee = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Bee", "&e%player%''s Bee");
+    public static final Property<String> ally_mobs_bee = newProperty("Settings.EnchantmentOptions.Ally-Mobs.Bee", "<yellow>%player%''s Bee");
 
     @Comment("Toggle on or off the ability to upgrade the enchantments.")
     public static final Property<Boolean> armor_upgrade_toggle = newProperty("Settings.EnchantmentOptions.Armor-Upgrade.Toggle", true);
