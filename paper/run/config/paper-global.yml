@@ -109,8 +109,8 @@ spam-limiter:
 timings:
   enabled: false
   hidden-config-entries:
-    - database
-    - proxies.velocity.secret
+  - database
+  - proxies.velocity.secret
   history-interval: 300
   history-length: 3600
   server-name: Unknown Server
