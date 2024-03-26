@@ -107,7 +107,7 @@ public class TinkererMenu extends InventoryBuilder {
 
                     if (reward != null) {
                         if (Currency.getCurrency(this.tinker.getProperty(TinkerConfig.currency)) == Currency.VAULT) {
-                            total = TinkererManager.getTotalXP(inventory.getItem(slot));
+                            total = TinkererManager.getTotalXP(inventory.getItem(slot.getKey()));
                         } else {
                             bottomInventory.addItem(reward).values().forEach(item -> player.getWorld().dropItem(player.getLocation(), item));
                         }
