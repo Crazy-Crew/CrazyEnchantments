@@ -18,6 +18,8 @@ dependencies {
 
     implementation((projects.common))
 
+    implementation(libs.cluster.paper)
+
     implementation(libs.triumph.cmds)
 
     implementation(libs.metrics)
