@@ -23,6 +23,6 @@ public class CommandHelp extends BaseCommand {
     @Command("help")
     @Permission(value = "crazyenchantments.help", def = PermissionDefault.TRUE)
     public void help(CommandSender sender) {
-        sender.sendMessage(Messages.HELP.getMessage());
+        sender.sendRichMessage(Messages.HELP.getMessage());
     }
 }

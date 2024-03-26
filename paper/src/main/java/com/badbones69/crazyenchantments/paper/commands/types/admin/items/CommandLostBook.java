@@ -36,6 +36,6 @@ public class CommandLostBook extends BaseCommand {
 
         placeholders.put("%Category%", name);
 
-        sender.sendMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
+        sender.sendRichMessage(Messages.NOT_A_CATEGORY.getMessage(placeholders));
     }
 }

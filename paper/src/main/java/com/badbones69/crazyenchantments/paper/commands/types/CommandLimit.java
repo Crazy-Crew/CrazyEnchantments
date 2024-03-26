@@ -45,6 +45,6 @@ public class CommandLimit extends BaseCommand {
         placeholders.put("%slotCrystal%", String.valueOf(-modifier));
         placeholders.put("%space%", String.valueOf(math));
 
-        player.sendMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
+        player.sendRichMessage(Messages.LIMIT_COMMAND.getMessage(placeholders));
     }
 }

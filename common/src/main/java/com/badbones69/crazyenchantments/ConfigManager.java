@@ -6,7 +6,8 @@ import ch.jalu.configme.resource.YamlFileResourceOptions;
 import com.badbones69.crazyenchantments.platform.BlockConfig;
 import com.badbones69.crazyenchantments.platform.TinkerConfig;
 import com.badbones69.crazyenchantments.platform.impl.Config;
-import com.badbones69.crazyenchantments.platform.impl.messages.MiscKeys;
+import com.badbones69.crazyenchantments.platform.impl.Locale;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class ConfigManager {
         messages = SettingsManagerBuilder
                 .withYamlFile(new File(dataFolder, "messages.yml"), builder)
                 .useDefaultMigrationService()
-                .configurationData(MiscKeys.class)
+                .configurationData(Locale.class)
                 .create();
 
         tinker = SettingsManagerBuilder

@@ -39,8 +39,8 @@ public class CommandScrambler extends BaseCommand {
         placeholders.put("%Amount%", String.valueOf(amount));
         placeholders.put("%Player%", target.getName());
 
-        sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
+        //sender.sendMessage(Messages.GIVE_SCRAMBLER_CRYSTAL.getMessage(placeholders));
 
-        target.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
+        //target.sendMessage(Messages.GET_SCRAMBLER.getMessage(placeholders));
     }
 }

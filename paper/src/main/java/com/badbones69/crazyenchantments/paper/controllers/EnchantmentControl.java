@@ -67,7 +67,7 @@ public class EnchantmentControl implements Listener {
         boolean creativeMode = player.getGameMode() == GameMode.CREATIVE;
 
         if (creativeMode) {
-            player.sendMessage(Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage());
+            player.sendRichMessage(Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage());
             return;
         }
 
@@ -100,7 +100,7 @@ public class EnchantmentControl implements Listener {
                                 HashMap<String, String> placeholders = new HashMap<>();
                                 placeholders.put("%Enchantment%", enchantment.getCustomName());
                                 placeholders.put("%Level%", String.valueOf(bookLevel));
-                                player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
+                                player.sendRichMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
                                 player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
                                 // ToDo potentially add pitch and volume options.
                             }
@@ -114,19 +114,19 @@ public class EnchantmentControl implements Listener {
                                 if (config.getProperty(Config.armor_upgrade_break)) {
                                     if (hasWhiteScrollProtection) {
                                         event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
-                                        player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+                                        player.sendRichMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                     } else {
                                         event.setCurrentItem(enchantmentBookSettings.removeEnchantment(item, enchantment));
-                                        player.sendMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
+                                        player.sendRichMessage(Messages.ENCHANTMENT_UPGRADE_DESTROYED.getMessage());
                                     }
                                 } else {
                                     if (hasWhiteScrollProtection) {
                                         event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
-                                        player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+                                        player.sendRichMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                     } else {
                                         ItemStack newItem = new ItemStack(Material.AIR);
                                         event.setCurrentItem(newItem);
-                                        player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
+                                        player.sendRichMessage(Messages.ITEM_DESTROYED.getMessage());
                                     }
                                 }
 
@@ -141,7 +141,7 @@ public class EnchantmentControl implements Listener {
 
                             if (!bookFailEvent.isCancelled()) {
                                 player.setItemOnCursor(new ItemStack(Material.AIR));
-                                player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
+                                player.sendRichMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
                                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                             }
 
@@ -154,7 +154,7 @@ public class EnchantmentControl implements Listener {
             }
 
             if (!this.crazyManager.canAddEnchantment(player, item)) {
-                player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
+                player.sendRichMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
                 return;
             }
 
@@ -164,7 +164,7 @@ public class EnchantmentControl implements Listener {
                 ItemStack newItem = this.crazyManager.addEnchantment(item, enchantment, ceBook.getLevel());
                 event.setCurrentItem(newItem);
                 player.setItemOnCursor(new ItemStack(Material.AIR));
-                player.sendMessage(Messages.BOOK_WORKS.getMessage());
+                player.sendRichMessage(Messages.BOOK_WORKS.getMessage());
                 player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
 
                 return;
@@ -174,20 +174,20 @@ public class EnchantmentControl implements Listener {
                 if (Scrolls.hasWhiteScrollProtection(item)) {
                     event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                     player.setItemOnCursor(new ItemStack(Material.AIR));
-                    player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
+                    player.sendRichMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                     return;
                 } else {
                     player.setItemOnCursor(new ItemStack(Material.AIR));
                     event.setCurrentItem(new ItemStack(Material.AIR));
-                    player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
+                    player.sendRichMessage(Messages.ITEM_DESTROYED.getMessage());
                 }
 
                 return;
             }
         }
 
-        player.sendMessage(Messages.BOOK_FAILED.getMessage());
+        player.sendRichMessage(Messages.BOOK_FAILED.getMessage());
         event.setCurrentItem(this.crazyManager.changeEnchantmentLimiter(item, 1));
         player.setItemOnCursor(new ItemStack(Material.AIR));
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
@@ -205,10 +205,10 @@ public class EnchantmentControl implements Listener {
                 CEnchantment enchantment = this.enchantmentBookSettings.getCEBook(item).getEnchantment();
                 Player player = event.getPlayer();
 
-                if (!enchantment.getInfoName().isEmpty()) player.sendMessage(enchantment.getInfoName());
+                if (!enchantment.getInfoName().isEmpty()) player.sendRichMessage(enchantment.getInfoName());
 
                 for (String descriptionLine : enchantment.getInfoDescription()) {
-                    player.sendMessage(descriptionLine);
+                    player.sendRichMessage(descriptionLine);
                 }
             }
         }

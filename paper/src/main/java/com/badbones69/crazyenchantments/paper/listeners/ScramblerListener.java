@@ -221,7 +221,7 @@ public class ScramblerListener implements Listener {
         if (book.getAmount() != 1 || scrambler.getAmount() != 1) return;
         if (!isScrambler(scrambler) || !this.enchantmentBookSettings.isEnchantmentBook(book)) return;
         if (event.getClickedInventory().getType() != InventoryType.PLAYER) {
-            player.sendMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
+            player.sendRichMessage(Messages.NEED_TO_USE_PLAYER_INVENTORY.getMessage());
             return;
         }
 

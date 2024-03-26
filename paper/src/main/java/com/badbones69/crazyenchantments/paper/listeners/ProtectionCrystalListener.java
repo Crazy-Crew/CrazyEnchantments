@@ -49,7 +49,7 @@ public class ProtectionCrystalListener implements Listener {
         if (ProtectionCrystalSettings.isProtected(item)) return;
 
         if (item.getAmount() > 1 || crystalItem.getAmount() > 1) {
-            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            player.sendRichMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
             return;
         }
 

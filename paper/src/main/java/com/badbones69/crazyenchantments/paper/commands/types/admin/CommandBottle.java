@@ -24,7 +24,7 @@ public class CommandBottle extends BaseCommand {
         item.setAmount(amount);
 
         if (target == null) {
-            sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+            sender.sendRichMessage(Messages.NOT_ONLINE.getMessage());
             return;
         }
 

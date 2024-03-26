@@ -59,12 +59,12 @@ public class SlotCrystalListener implements Listener {
         event.setCancelled(true);
 
         if (enchAmount >= maxEnchants) {
-            player.sendMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
+            player.sendRichMessage(Messages.HIT_ENCHANTMENT_MAX.getMessage());
             return;
         }
 
         if ((baseEnchants - limiter) >= maxEnchants) {
-            player.sendMessage(Messages.MAX_SLOTS_UNLOCKED.getMessage());
+            player.sendRichMessage(Messages.MAX_SLOTS_UNLOCKED.getMessage());
             return;
         }
 
@@ -72,7 +72,7 @@ public class SlotCrystalListener implements Listener {
         event.getCursor().setAmount(crystalItem.getAmount());
         event.setCurrentItem(this.starter.getCrazyManager().changeEnchantmentLimiter(item, -1));
 
-        player.sendMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(new HashMap<>(4) {{
+        player.sendRichMessage(Messages.APPLIED_SLOT_CRYSTAL.getMessage(new HashMap<>(4) {{
             put("%slot%", String.valueOf(-(limiter - 1)));
             put("%maxEnchants%", String.valueOf(maxEnchants));
             put("%enchantAmount%", String.valueOf(enchAmount));

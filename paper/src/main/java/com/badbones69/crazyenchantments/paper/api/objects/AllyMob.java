@@ -67,11 +67,13 @@ public class AllyMob {
 
         this.ally.setHealth(this.type.maxHealth);
 
-        HashMap<String, String> placeholders = new HashMap<>();
-        placeholders.put("%Player%", this.owner.getName());
-        placeholders.put("%Mob%", this.type.entityType.getName());
+        //HashMap<String, String> placeholders = new HashMap<>();
+        //placeholders.put("%Player%", this.owner.getName());
+        //placeholders.put("%Mob%", this.type.entityType.getName());
 
-        this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName()));
+        //this.ally.setCustomName(Messages.);
+
+        //this.ally.setCustomName(Messages.replacePlaceholders(placeholders, this.type.getName()));
         this.ally.setCustomNameVisible(true);
 
         startSpawnTimer();

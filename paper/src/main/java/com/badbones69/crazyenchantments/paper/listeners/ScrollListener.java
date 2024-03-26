@@ -84,7 +84,7 @@ public class ScrollListener implements Listener {
         if (type == null) return;
 
         if (scroll.getAmount() > 1) {
-            player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+            player.sendRichMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
             return;
         }
 
@@ -98,7 +98,7 @@ public class ScrollListener implements Listener {
                     player.setItemOnCursor(this.methods.removeItem(scroll));
 
                     if (this.blackScrollChanceToggle && !this.methods.randomPicker(this.blackScrollChance, 100)) {
-                        player.sendMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
+                        player.sendRichMessage(Messages.BLACK_SCROLL_UNSUCCESSFUL.getMessage());
                         return;
                     }
 
@@ -158,7 +158,7 @@ public class ScrollListener implements Listener {
 
         if (data.equalsIgnoreCase(Scrolls.BLACK_SCROLL.getConfigName())) {
             event.setCancelled(true);
-            player.sendMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
+            player.sendRichMessage(Messages.RIGHT_CLICK_BLACK_SCROLL.getMessage());
             return true;
         } else if (data.equalsIgnoreCase(Scrolls.WHITE_SCROLL.getConfigName()) || data.equalsIgnoreCase(Scrolls.TRANSMOG_SCROLL.getConfigName())) {
             event.setCancelled(true);

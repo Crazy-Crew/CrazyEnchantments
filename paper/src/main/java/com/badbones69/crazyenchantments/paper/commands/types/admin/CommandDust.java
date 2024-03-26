@@ -35,18 +35,18 @@ public class CommandDust extends BaseCommand {
 
         switch (dust) {
             case SUCCESS_DUST -> {
-                target.sendMessage(Messages.GET_SUCCESS_DUST.getMessage(placeholders));
-                sender.sendMessage(Messages.GIVE_SUCCESS_DUST.getMessage(placeholders));
+                //target.sendMessage(Messages.GET_SUCCESS_DUST.getMessage(placeholders));
+                //sender.sendMessage(Messages.GIVE_SUCCESS_DUST.getMessage(placeholders));
             }
 
             case DESTROY_DUST -> {
-                target.sendMessage(Messages.GET_DESTROY_DUST.getMessage(placeholders));
-                sender.sendMessage(Messages.GIVE_DESTROY_DUST.getMessage(placeholders));
+                //target.sendMessage(Messages.GET_DESTROY_DUST.getMessage(placeholders));
+                //sender.sendMessage(Messages.GIVE_DESTROY_DUST.getMessage(placeholders));
             }
 
             case MYSTERY_DUST -> {
-                target.sendMessage(Messages.GET_MYSTERY_DUST.getMessage(placeholders));
-                sender.sendMessage(Messages.GIVE_MYSTERY_DUST.getMessage(placeholders));
+                //target.sendMessage(Messages.GET_MYSTERY_DUST.getMessage(placeholders));
+                //sender.sendMessage(Messages.GIVE_MYSTERY_DUST.getMessage(placeholders));
             }
         }
     }

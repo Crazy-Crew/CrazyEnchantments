@@ -124,7 +124,7 @@ public class TinkererMenu extends InventoryBuilder {
                 if (total != 0)
                     this.plugin.getServer().dispatchCommand(this.plugin.getServer().getConsoleSender(), "eco give " + player.getName() + " " + total);
 
-                if (toggle) player.sendMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
+                if (toggle) player.sendRichMessage(Messages.TINKER_SOLD_MESSAGE.getMessage());
 
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
 
@@ -179,13 +179,13 @@ public class TinkererMenu extends InventoryBuilder {
 
         private boolean isFirstEmpty(InventoryClickEvent event, Player player, ItemStack current, Inventory topInventory) {
             if (topInventory.firstEmpty() == -1) {
-                player.sendMessage(Messages.TINKER_INVENTORY_FULL.getMessage());
+                player.sendRichMessage(Messages.INVENTORY_FULL.getMessage());
 
                 return true;
             }
 
             if (current.getAmount() > 1) {
-                player.sendMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
+                player.sendRichMessage(Messages.NEED_TO_UNSTACK_ITEM.getMessage());
 
                 return true;
             }

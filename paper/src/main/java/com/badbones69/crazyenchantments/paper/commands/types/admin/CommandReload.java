@@ -44,6 +44,6 @@ public class CommandReload extends BaseCommand {
         MenuManager.load();
 
         // Send message
-        sender.sendMessage(Messages.CONFIG_RELOAD.getMessage());
+        sender.sendRichMessage(Messages.CONFIG_RELOAD.getMessage());
     }
 }

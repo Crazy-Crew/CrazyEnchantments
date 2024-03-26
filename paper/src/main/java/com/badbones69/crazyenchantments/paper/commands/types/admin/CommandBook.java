@@ -31,7 +31,7 @@ public class CommandBook extends BaseCommand {
         CEnchantment enchantment = this.crazyManager.getEnchantmentFromName(name);
 
         if (enchantment == null) {
-            sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
+            sender.sendRichMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
             return;
         }
 
@@ -39,7 +39,7 @@ public class CommandBook extends BaseCommand {
 
         placeholders.put("%Player%", target.getName());
 
-        sender.sendMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
+        sender.sendRichMessage(Messages.SEND_ENCHANTMENT_BOOK.getMessage(placeholders));
 
         this.methods.addItemToInventory(target, new CEBook(enchantment, level, amount).buildBook());
     }

@@ -114,9 +114,9 @@ public class CommandManager {
             //todo() add message
         });
 
-        getCommandManager().registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendMessage(Messages.NO_PERMISSION.getMessage()));
+        getCommandManager().registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendRichMessage(Messages.NO_PERMISSION.getMessage()));
 
-        getCommandManager().registerMessage(BukkitMessageKey.PLAYER_ONLY, (sender, context) -> sender.sendMessage(Messages.PLAYERS_ONLY.getMessage()));
+        getCommandManager().registerMessage(BukkitMessageKey.PLAYER_ONLY, (sender, context) -> sender.sendRichMessage(Messages.PLAYERS_ONLY.getMessage()));
 
         getCommandManager().registerMessage(BukkitMessageKey.CONSOLE_ONLY, (sender, context) -> {
             //todo() add message

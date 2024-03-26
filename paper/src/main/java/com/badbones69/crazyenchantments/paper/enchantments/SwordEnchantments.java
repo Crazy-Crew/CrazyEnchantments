@@ -151,7 +151,7 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+            damager.sendRichMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
         }
 
         // Check if CEPlayer is null as plugins like citizen use Player objects.
@@ -371,22 +371,22 @@ public class SwordEnchantments implements Listener {
     }
 
     private void rageInformPlayer(Player player, Messages message, Map<String, String> placeholders, float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
+        //if (message.getMessageNoPrefix().isBlank()) return;
 
         if (this.crazyManager.useRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(placeholders), progress);
+            //this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(placeholders), progress);
         } else {
-            player.sendMessage(message.getMessage(placeholders));
+            player.sendRichMessage(message.getMessage(placeholders));
         }
     }
 
     private void rageInformPlayer(Player player, Messages message, float progress) {
-        if (message.getMessageNoPrefix().isBlank()) return;
+        //if (message.getMessageNoPrefix().isBlank()) return;
 
         if (this.crazyManager.useRageBossBar()) {
-            this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
+            //this.bossBarController.updateBossBar(player, message.getMessageNoPrefix(), progress);
         } else {
-            player.sendMessage(message.getMessage());
+            player.sendRichMessage(message.getMessage());
         }
     }
 }

@@ -39,12 +39,12 @@ public class CommandRemove extends BaseCommand {
         boolean isVanilla = vanillaEnchantment != null;
 
         if (vanillaEnchantment == null && ceEnchantment == null) {
-            player.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
+            player.sendRichMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
             return;
         }
 
         if (this.methods.getItemInHand(player).getType() == Material.AIR) {
-            player.sendMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
+            player.sendRichMessage(Messages.DOESNT_HAVE_ITEM_IN_HAND.getMessage());
             return;
         }
 
@@ -63,7 +63,7 @@ public class CommandRemove extends BaseCommand {
 
                 placeholders.put("%Enchantment%", ceEnchantment.getCustomName());
 
-                player.sendMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders).replaceAll("&", ""));
+                player.sendRichMessage(Messages.REMOVED_ENCHANTMENT.getMessage(placeholders).replaceAll("&", ""));
 
                 return;
             }
@@ -73,6 +73,6 @@ public class CommandRemove extends BaseCommand {
 
         placeholders.put("%Enchantment%", name);
 
-        player.sendMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
+        player.sendRichMessage(Messages.DOESNT_HAVE_ENCHANTMENT.getMessage(placeholders));
     }
 }

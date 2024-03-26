@@ -45,12 +45,12 @@ public class CommandInfo extends BaseCommand {
         CEnchantment enchantment = this.crazyManager.getEnchantmentFromName(enchantmentName);
 
         if (enchantment != null) {
-            sender.sendMessage(enchantment.getInfoName());
-            enchantment.getInfoDescription().forEach(sender::sendMessage);
+            sender.sendRichMessage(enchantment.getInfoName());
+            enchantment.getInfoDescription().forEach(sender::sendRichMessage);
 
             return;
         }
 
-        sender.sendMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
+        sender.sendRichMessage(Messages.NOT_AN_ENCHANTMENT.getMessage());
     }
 }

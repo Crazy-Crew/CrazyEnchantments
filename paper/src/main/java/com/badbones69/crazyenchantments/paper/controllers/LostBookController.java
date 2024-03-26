@@ -66,7 +66,7 @@ public class LostBookController implements Listener {
         CEBook book = crazyManager.getRandomEnchantmentBook(category);
 
         if (book == null) {
-            player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+            player.sendRichMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
             return;
         }
 
@@ -75,7 +75,7 @@ public class LostBookController implements Listener {
         HashMap<String, String> placeholders = new HashMap<>();
         placeholders.put("%Found%", book.getItemBuilder().getName());
 
-        player.sendMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
+        player.sendRichMessage(Messages.CLEAN_LOST_BOOK.getMessage(placeholders));
 
         if (lostBook.useFirework()) EntityUtils.firework(player.getLocation().add(0, 1, 0), lostBook.getFireworkColors());
 

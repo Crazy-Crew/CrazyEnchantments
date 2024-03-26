@@ -149,12 +149,12 @@ public class KitsMenu extends InventoryBuilder {
 
                     player.updateInventory();
 
-                    player.sendMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
+                    player.sendRichMessage(Messages.RECEIVED_GKIT.getMessage(placeholders));
                 } else {
-                    player.sendMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
+                    player.sendRichMessage(ColorUtils.getPrefix() + cePlayer.getCoolDown(kit).getCoolDownLeft(Messages.STILL_IN_COOLDOWN.getMessage(placeholders)));
                 }
             } else {
-                player.sendMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
+                player.sendRichMessage(Messages.NO_GKIT_PERMISSION.getMessage(placeholders));
             }
         }
     }

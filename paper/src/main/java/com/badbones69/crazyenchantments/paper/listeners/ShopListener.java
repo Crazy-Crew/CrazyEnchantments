@@ -94,7 +94,7 @@ public class ShopListener implements Listener {
                     this.plugin.getServer().getPluginManager().callEvent(buyBookEvent);
                     player.getInventory().addItem(book.buildBook());
                 } else {
-                    player.sendMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                    player.sendRichMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                 }
 
                 return;

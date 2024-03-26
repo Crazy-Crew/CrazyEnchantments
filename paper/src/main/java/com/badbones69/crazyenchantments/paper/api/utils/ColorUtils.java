@@ -75,8 +75,8 @@ public class ColorUtils {
 
         if (commandSender instanceof Player player) {
             if (!prefix.isEmpty() && prefixToggle)
-                player.sendMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix)));
-            else player.sendMessage(color(message));
+                player.sendRichMessage(color(message.replaceAll("%prefix%", quoteReplacement(prefix))).replaceAll("%Prefix%", quoteReplacement(prefix)));
+            else player.sendRichMessage(color(message));
 
             return;
         }

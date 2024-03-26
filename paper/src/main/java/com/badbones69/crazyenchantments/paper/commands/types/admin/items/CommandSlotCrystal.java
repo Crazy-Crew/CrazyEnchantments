@@ -37,8 +37,8 @@ public class CommandSlotCrystal extends BaseCommand {
         placeholders.put("%Amount%", String.valueOf(amount));
         placeholders.put("%Player%", target.getName());
 
-        sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
+        //sender.sendMessage(Messages.GIVE_SLOT_CRYSTAL.getMessage(placeholders));
 
-        target.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
+        //target.sendMessage(Messages.GET_SLOT_CRYSTAL.getMessage(placeholders));
     }
 }
