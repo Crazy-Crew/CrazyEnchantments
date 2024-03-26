@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.commands.types.admin;
+package com.badbones69.crazyenchantments.paper.commands.types.admin.items;
 
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
