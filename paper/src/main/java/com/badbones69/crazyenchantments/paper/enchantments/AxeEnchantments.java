@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
-import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
+import com.badbones69.crazyenchantments.paper.platform.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
@@ -124,7 +124,7 @@ public class AxeEnchantments implements Listener {
 
         ItemStack item = this.methods.getItemInHand(killer);
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
-        Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
+        Material headMat = EntityUtils.getHead(event.getEntity());
 
         if (headMat != null && !EventUtils.containsDrop(event, headMat)) {
             double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);

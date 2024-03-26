@@ -13,7 +13,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
-import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
+import com.badbones69.crazyenchantments.paper.platform.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.BossBarController;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
@@ -340,7 +340,7 @@ public class SwordEnchantments implements Listener {
                 event.setDroppedExp(event.getDroppedExp() * (enchantments.get(CEnchantments.INQUISITIVE.getEnchantment()) + 1));
             }
 
-            Material headMat = EntityUtils.getHeadMaterial(event.getEntity());
+            Material headMat = EntityUtils.getHead(event.getEntity());
             if (headMat != null && !EventUtils.containsDrop(event, headMat)) {
                 double multiplier = this.crazyManager.getDecapitationHeadMap().getOrDefault(headMat, 0.0);
                 if (multiplier != 0.0 && EnchantUtils.isEventActive(CEnchantments.HEADLESS, damager, item, enchantments, multiplier)) {
