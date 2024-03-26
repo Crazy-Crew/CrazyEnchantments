@@ -57,7 +57,7 @@ public class ColorUtils {
         };
     }
 
-    public static String color(String message) {
+    public static String color(String message) { //TODO Remove the usage of bungee.
         Matcher matcher = Pattern.compile("#[a-fA-F\\d]{6}").matcher(message);
         StringBuilder buffer = new StringBuilder();
 

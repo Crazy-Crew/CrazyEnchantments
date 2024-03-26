@@ -47,9 +47,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.*;
 
 //TODO() Update commands
 public class CECommand implements CommandExecutor {
@@ -95,6 +94,28 @@ public class CECommand implements CommandExecutor {
             return true;
         }
         switch (args[0].toLowerCase()) {
+            case "check-enchants" -> { // /ce check-enchants <Player> /ce <arg1> <arg2>
+
+                if (!isPlayer) return true; // Player only due to not wanting to handle colour parsing for console currently.
+
+                if (!hasPermission(sender, "checkenchants")) return true;
+
+                if (args.length != 2) {
+                    sender.sendMessage("Usage: /ce Check-Enchants <Player>");
+                    return true;
+                }
+
+                Player target = methods.getPlayer(args[1]);
+
+                if (target == null) {
+                    sender.sendMessage(Messages.NOT_ONLINE.getMessage());
+                    return true;
+                }
+
+                sendArmorStats(target, (Player) sender);
+
+                return true;
+            }
             case "updateenchants" -> {
 
                 if (!isPlayer) return true;
@@ -882,6 +903,29 @@ public class CECommand implements CommandExecutor {
                 return false;
             }
         }
+    }
+
+    private void sendArmorStats(Player target, Player sender) {
+
+        Arrays.stream(target.getEquipment().getArmorContents()).filter(Objects::nonNull).forEach(item -> {
+
+            StringBuilder enchantmentsString = new StringBuilder();
+
+            String main = Messages.MAIN_UPDATE_ENCHANTS.getMessageNoPrefix();
+            main = main.replace("%item%", item.getType().toString());
+
+            enchantmentBookSettings.getEnchantments(item).forEach((enchantment, level) -> enchantmentsString.append(Messages.BASE_UPDATE_ENCHANTS.getMessageNoPrefix(
+                    new HashMap<>() {{
+                        put("%enchant%", enchantment.getName());
+                        put("%level%", String.valueOf(level));
+                    }})
+            ));
+
+            main = main.replace("%itemEnchants%", enchantmentsString.toString());
+
+            sender.sendMessage(main);
+        });
+
     }
 
     private boolean checkInt(CommandSender sender, String arg) {

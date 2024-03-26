@@ -74,6 +74,8 @@ public enum Messages {
     RAGE_RAGE_UP("Rage.Rage-Up", "&7[&c&lRage&7]: &7You are now doing &a%Level%x &7Damage."),
     RAGE_DAMAGED("Rage.Damaged", "&7[&c&lRage&7]: &cYou have been hurt and it broke your Rage Multiplier!"),
     INVALID_ITEM_STRING("Invalid-Item-String", "&cInvalid item string supplied."),
+    MAIN_UPDATE_ENCHANTS("Show-Enchants-Format.Main", "%item% %itemEnchants%"),
+    BASE_UPDATE_ENCHANTS("Show-Enchants-Format.Base", "&2%enchant%&7: &6%level% "),
     LIMIT_COMMAND("Limit-Command", Arrays.asList(
     "&0======================================",
     "&8[&aCrazyEnchants&8]: &bPersonal Enchantment Limit:",

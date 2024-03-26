@@ -64,6 +64,9 @@ permissions:
   crazyenchantments.updateenchants:
     default: false
 
+  crazyenchantments.checkenchants:
+    default: false
+
   crazyenchantments.player.*:
     default: false
     children:

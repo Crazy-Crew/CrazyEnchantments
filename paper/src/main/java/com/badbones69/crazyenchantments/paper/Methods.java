@@ -33,6 +33,8 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -111,6 +113,7 @@ public class Methods {
         player.getInventory().setItemInMainHand(item);
     }
 
+    @Nullable
     public Player getPlayer(String name) {
         return this.plugin.getServer().getPlayer(name);
     }

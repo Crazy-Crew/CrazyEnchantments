@@ -56,6 +56,7 @@ public class CETab implements TabCompleter {
             if (hasPermission(sender, "give")) completions.add("give");
             if (hasPermission(sender, "bottle")) completions.add("bottle");
             if (hasPermission(sender, "slotcrystal")) completions.add("slotcrystal");
+            if (hasPermission(sender, "checkenchants")) completions.add("check-enchants");
 
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
@@ -113,7 +114,7 @@ public class CETab implements TabCompleter {
                         } catch (NullPointerException ignore) {}
                     }
                 }
-                case "give", "bottle" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+                case "give", "bottle", "check-enchants" -> this.plugin.getServer().getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
 
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
