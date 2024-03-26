@@ -68,7 +68,7 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> scrambler_glowing = newProperty("Settings.Scrambler.Glowing", true);
 
     @Comment("The name of the item.")
-    public static final Property<String> scrambler_name = newProperty("Settings.Scrambler.Name", "<bold><yellow>The Grand Scrambler</bold>");
+    public static final Property<String> scrambler_name = newProperty("Settings.Scrambler.Name", "<bold><yellow>Grand Scrambler</bold>");
 
     @Comment("The lore of the item.")
     public static final Property<List<String>> scrambler_lore = newListProperty("Settings.Scrambler.Lore", List.of(
