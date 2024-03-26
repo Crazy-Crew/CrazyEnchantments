@@ -10,7 +10,7 @@ public class BlockConfig implements SettingsHolder {
 
     @Comment("All blocks that can't be broken by the Blast Enchantment.")
     public static final Property<List<String>> block_list = newListProperty("blast-blacklist", List.of(
-            "OBSIDIAN",
-            "BEDROCK"
+            "obsidian",
+            "bedrock"
     ));
 }

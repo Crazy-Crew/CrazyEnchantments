@@ -28,7 +28,7 @@ public class Config implements SettingsHolder {
     public static final Property<String> inventory_name = newProperty("Settings.InvName", "&4&l&nCrazy Enchanter");
 
     @Comment("The item that the enchantment book is.")
-    public static final Property<String> enchantment_book_item = newProperty("Settings.Enchantment-Book-Item", "BOOK");
+    public static final Property<String> enchantment_book_item = newProperty("Settings.Enchantment-Book-Item", "book");
 
     @Comment("Toggle on or off if the book will be glowing.")
     public static final Property<Boolean> enchantment_book_glowing = newProperty("Settings.Enchantment-Book-Glowing", true);
@@ -48,7 +48,7 @@ public class Config implements SettingsHolder {
     ));
 
     @Comment("The item the lost books are.")
-    public static final Property<String> lost_book_item = newProperty("Settings.LostBook.Item", "BOOK");
+    public static final Property<String> lost_book_item = newProperty("Settings.LostBook.Item", "book");
 
     @Comment("The name of the lost books.")
     public static final Property<String> lost_book_name = newProperty("Settings.LostBook.Name", "&8&l&nA Lost %category%&8&l&n Book");
@@ -62,7 +62,7 @@ public class Config implements SettingsHolder {
     ));
 
     @Comment("The item it will be.")
-    public static final Property<String> scrambler_item = newProperty("Settings.Scrambler.Item", "BOOK");
+    public static final Property<String> scrambler_item = newProperty("Settings.Scrambler.Item", "book");
 
     @Comment("If it has a glowing effect.")
     public static final Property<Boolean> scrambler_glowing = newProperty("Settings.Scrambler.Glowing", true);
@@ -85,7 +85,7 @@ public class Config implements SettingsHolder {
     public static final Property<Boolean> scrambler_toggle = newProperty("Settings.Scrambler.GUI.Toggle", true);
 
     @Comment("The item the pointer is.")
-    public static final Property<String> scrambler_pointer_item = newProperty("Settings.Scrambler.GUI.Pointer.Item", "REDSTONE_TORCH");
+    public static final Property<String> scrambler_pointer_item = newProperty("Settings.Scrambler.GUI.Pointer.Item", "redstone_torch");
 
     @Comment("The name of the pointer.")
     public static final Property<String> scrambler_pointer_name = newProperty("Settings.Scrambler.GUI.Pointer.Name", "&c&lPointer");
@@ -128,7 +128,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> slot_crystal_gui_slot = newProperty("Settings.Slot_Crystal.Slot", 14);
 
     @Comment("Item it is")
-    public static final Property<String> slot_crystal_item = newProperty("Settings.Slot_Crystal.Item", "EMERALD");
+    public static final Property<String> slot_crystal_item = newProperty("Settings.Slot_Crystal.Item", "emerald");
 
     @Comment("#If it has a glowing effect.")
     public static final Property<Boolean> slot_crystal_glowing = newProperty("Settings.Slot_Crystal.Glowing", true);
@@ -170,7 +170,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> gkitz_slot = newProperty("Settings.GKitz.Slot", 1);
 
     @Comment("The item it is.")
-    public static final Property<String> gkitz_item = newProperty("Settings.GKitz.Item", "DIAMOND_CHESTPLATE");
+    public static final Property<String> gkitz_item = newProperty("Settings.GKitz.Item", "diamond_chestplate");
 
     @Comment("If it has a glowing effect.")
     public static final Property<Boolean> gkitz_glowing = newProperty("Settings.GKitz.Glowing", true);
@@ -193,7 +193,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> protection_crystal_slot = newProperty("Settings.ProtectionCrystal.Slot", 1);
 
     @Comment("The item the crystal will be.")
-    public static final Property<String> protection_crystal_item = newProperty("Settings.ProtectionCrystal.Item", "EMERALD");
+    public static final Property<String> protection_crystal_item = newProperty("Settings.ProtectionCrystal.Item", "emerald");
 
     @Comment("If the item should glow.")
     public static final Property<Boolean> protection_crystal_glowing = newProperty("Settings.ProtectionCrystal.Glowing", true);
@@ -244,7 +244,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> blacksmith_slot = newProperty("Settings.BlackSmith.Slot", 24);
 
     @Comment("The item in the gui.")
-    public static final Property<String> blacksmith_item = newProperty("Settings.BlackSmith.Item", "ANVIL");
+    public static final Property<String> blacksmith_item = newProperty("Settings.BlackSmith.Item", "anvil");
 
     @Comment("If the item should glow")
     public static final Property<Boolean> blacksmith_glowing = newProperty("Settings.BlackSmith.Glowing", false);
@@ -297,7 +297,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> tinker_slot = newProperty("Settings.Tinker.Slot", 22);
 
     @Comment("Item it is")
-    public static final Property<String> tinker_item = newProperty("Settings.Tinker.Item", "NETHER_STAR");
+    public static final Property<String> tinker_item = newProperty("Settings.Tinker.Item", "nether_star");
 
     @Comment("If it has a glowing effect.")
     public static final Property<Boolean> tinker_glowing = newProperty("Settings.Tinker.Glowing", false);
@@ -320,7 +320,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> info_slot = newProperty("Settings.Info.Slot", 23);
 
     @Comment("Item it is")
-    public static final Property<String> info_item = newProperty("Settings.Info.Item", "COMPASS");
+    public static final Property<String> info_item = newProperty("Settings.Info.Item", "compass");
 
     @Comment("If it has a glowing effect.")
     public static final Property<Boolean> info_glowing = newProperty("Settings.Info.Glowing", true);
@@ -334,7 +334,7 @@ public class Config implements SettingsHolder {
     ));
 
     @Comment("Item mystery dust is")
-    public static final Property<String> mystery_dust_item = newProperty("Settings.Dust.MysteryDust.Item", "GUNPOWDER");
+    public static final Property<String> mystery_dust_item = newProperty("Settings.Dust.MysteryDust.Item", "gunpowder");
 
     @Comment("Name of the dust")
     public static final Property<String> mystery_dust_name = newProperty("Settings.Dust.MysteryDust.Name", "&7Mystery Dust");
@@ -384,7 +384,7 @@ public class Config implements SettingsHolder {
     ));
 
     @Comment("Item the dust is")
-    public static final Property<String> success_dust_item = newProperty("Settings.Dust.SuccessDust.Item", "SUGAR");
+    public static final Property<String> success_dust_item = newProperty("Settings.Dust.SuccessDust.Item", "sugar");
 
     @Comment("Name of the dust")
     public static final Property<String> success_dust_name = newProperty("Settings.Dust.SuccessDust.Name", "&aMagical Angel Dust");
@@ -419,7 +419,7 @@ public class Config implements SettingsHolder {
     ));
 
     @Comment("Item the dust is")
-    public static final Property<String> destroy_dust_item = newProperty("Settings.Dust.DestroyDust.Item", "REDSTONE");
+    public static final Property<String> destroy_dust_item = newProperty("Settings.Dust.DestroyDust.Item", "redstone");
 
     @Comment("Name of the dust")
     public static final Property<String> destroy_dust_name = newProperty("Settings.Dust.DestroyDust.Name", "&eMagical Fixing Dust");
@@ -438,7 +438,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> destroy_dust_min_percent_range = newProperty("Settings.Dust.DestroyDust.PercentRange.Min", 2);
 
     @Comment("Item the dust is")
-    public static final Property<String> failed_dust_item = newProperty("Settings.Dust.FailedDust.Item", "GUNPOWDER");
+    public static final Property<String> failed_dust_item = newProperty("Settings.Dust.FailedDust.Item", "gunpowder");
 
     @Comment("Name of the dust")
     public static final Property<String> failed_dust_name = newProperty("Settings.Dust.FailedDust.Name", "&7Failed Dust");
@@ -451,7 +451,7 @@ public class Config implements SettingsHolder {
     ));
 
     @Comment("The item the black scroll can be")
-    public static final Property<String> black_scroll_item = newProperty("Settings.BlackScroll.Item", "INK_SAC");
+    public static final Property<String> black_scroll_item = newProperty("Settings.BlackScroll.Item", "ink_sac");
 
     @Comment("The name of the black scroll")
     public static final Property<String> black_scroll_name = newProperty("Settings.BlackScroll.Name", "&8&l&nBlack Scroll");
@@ -505,7 +505,7 @@ public class Config implements SettingsHolder {
     public static final Property<Integer> black_scroll_destroy_chance_min = newProperty("Settings.BlackScroll.DestroyChance.Min", 5);
 
     @Comment("The item the white scroll is.")
-    public static final Property<String> white_scroll_item = newProperty("Settings.WhiteScroll.Item", "PAPER");
+    public static final Property<String> white_scroll_item = newProperty("Settings.WhiteScroll.Item", "paper");
 
     @Comment("The name of the white scrolls.")
     public static final Property<String> white_scroll_name = newProperty("Settings.WhiteScroll.Name", "&e&lWhite Scroll");
@@ -543,7 +543,7 @@ public class Config implements SettingsHolder {
     public static final Property<String> white_scroll_protected = newProperty("Settings.WhiteScroll.ProtectedName", "&b&lPROTECTED");
 
     @Comment("The item the scroll is.")
-    public static final Property<String> transmog_scroll_item = newProperty("Settings.TransmogScroll.Item", "QUARTZ");
+    public static final Property<String> transmog_scroll_item = newProperty("Settings.TransmogScroll.Item", "quartz");
 
     @Comment("The name of the scroll.")
     public static final Property<String> transmog_scroll_name = newProperty("Settings.TransmogScroll.Name", "&d&lTransmog Scroll");
@@ -753,60 +753,51 @@ public class Config implements SettingsHolder {
     @Comment("The currency that will be taken when bought.")
     public static final Property<String> slot_crystal_currency = newProperty("Settings.Costs.Slot_Crystal.Currency", "Vault");
 
-    @Comment({
-            "#####################",
-            " Slot:<Slot> - The slot the item will go in.",
-            " Item:<Item Name> - The item that it will be. You can use meta data for the items. List of names: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html",
-            " Name:<Name> - The name that will go on the item.",
-            " Lore:<Line1>,<Line2>,<Line3>,<Line4> - The lore can use multiple lines by adding a , in-between letters. Example: \"Lore:&7I am line1,&aI am line 2,&eI am line3\"",
-            "Placeholders can be used in the name and lore, and they must be lowercase.",
-            "Placeholders: %vault% %xp_level% %xp_total%",
-            "#####################"
-    })
+    @Comment("The items to set to the gui.")
     public static final Property<List<String>> gui_customization = newListProperty("Settings.GUICustomization", List.of(
-            "Slot:1, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:2, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:3, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:4, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:5, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:6, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:7, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:8, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:9, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:10, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:18, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:19, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:27, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:28, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:36, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:37, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:45, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:46, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:47, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:48, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:49, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:50, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:51, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:52, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:53, Item:BLACK_STAINED_GLASS_PANE, Name: ",
-            "Slot:54, Item:BLACK_STAINED_GLASS_PANE, Name: ",
+            "Slot:1, Item:black_stained_glass_pane, Name: ",
+            "Slot:2, Item:black_stained_glass_pane, Name: ",
+            "Slot:3, Item:black_stained_glass_pane, Name: ",
+            "Slot:4, Item:black_stained_glass_pane, Name: ",
+            "Slot:5, Item:black_stained_glass_pane, Name: ",
+            "Slot:6, Item:black_stained_glass_pane, Name: ",
+            "Slot:7, Item:black_stained_glass_pane, Name: ",
+            "Slot:8, Item:black_stained_glass_pane, Name: ",
+            "Slot:9, Item:black_stained_glass_pane, Name: ",
+            "Slot:10, Item:black_stained_glass_pane, Name: ",
+            "Slot:18, Item:black_stained_glass_pane, Name: ",
+            "Slot:19, Item:black_stained_glass_pane, Name: ",
+            "Slot:27, Item:black_stained_glass_pane, Name: ",
+            "Slot:28, Item:black_stained_glass_pane, Name: ",
+            "Slot:36, Item:black_stained_glass_pane, Name: ",
+            "Slot:37, Item:black_stained_glass_pane, Name: ",
+            "Slot:45, Item:black_stained_glass_pane, Name: ",
+            "Slot:46, Item:black_stained_glass_pane, Name: ",
+            "Slot:47, Item:black_stained_glass_pane, Name: ",
+            "Slot:48, Item:black_stained_glass_pane, Name: ",
+            "Slot:49, Item:black_stained_glass_pane, Name: ",
+            "Slot:50, Item:black_stained_glass_pane, Name: ",
+            "Slot:51, Item:black_stained_glass_pane, Name: ",
+            "Slot:52, Item:black_stained_glass_pane, Name: ",
+            "Slot:53, Item:black_stained_glass_pane, Name: ",
+            "Slot:54, Item:black_stained_glass_pane, Name: ",
 
-            "Slot:11, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:12, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:13, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:14, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:15, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:16, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:17, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:20, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:26, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:29, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:35, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:38, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:39, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:41, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:42, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:43, Item:WHITE_STAINED_GLASS_PANE, Name: ",
-            "Slot:44, Item:WHITE_STAINED_GLASS_PANE, Name: "
+            "Slot:11, Item:white_stained_glass_pane, Name: ",
+            "Slot:12, Item:white_stained_glass_pane, Name: ",
+            "Slot:13, Item:white_stained_glass_pane, Name: ",
+            "Slot:14, Item:white_stained_glass_pane, Name: ",
+            "Slot:15, Item:white_stained_glass_pane, Name: ",
+            "Slot:16, Item:white_stained_glass_pane, Name: ",
+            "Slot:17, Item:white_stained_glass_pane, Name: ",
+            "Slot:20, Item:white_stained_glass_pane, Name: ",
+            "Slot:26, Item:white_stained_glass_pane, Name: ",
+            "Slot:29, Item:white_stained_glass_pane, Name: ",
+            "Slot:35, Item:white_stained_glass_pane, Name: ",
+            "Slot:38, Item:white_stained_glass_pane, Name: ",
+            "Slot:39, Item:white_stained_glass_pane, Name: ",
+            "Slot:41, Item:white_stained_glass_pane, Name: ",
+            "Slot:42, Item:white_stained_glass_pane, Name: ",
+            "Slot:43, Item:white_stained_glass_pane, Name: ",
+            "Slot:44, Item:white_stained_glass_pane, Name: "
     ));
 }

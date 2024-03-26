@@ -11,7 +11,7 @@ public class TinkerConfig implements SettingsHolder {
 
     public static final Property<String> currency = newProperty("root.currency", "XP_TOTAL");
 
-    public static final Property<String> bottle_item = newProperty("root.bottle.item", "EXPERIENCE_BOTTLE");
+    public static final Property<String> bottle_item = newProperty("root.bottle.item", "experience_bottle");
 
     public static final Property<String> bottle_name = newProperty("root.bottle.name", "&aRecycled XP");
 
