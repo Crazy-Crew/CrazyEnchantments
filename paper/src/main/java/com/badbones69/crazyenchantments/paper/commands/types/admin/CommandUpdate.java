@@ -67,8 +67,7 @@ public class CommandUpdate extends BaseCommand {
                             String lowerCaseCustom = active.getCustomName().toLowerCase().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "");
                             String lowerCaseName = active.getName().toLowerCase();
 
-                            if (!lowerCaseStrippedName.contains(lowerCaseCustom) && !lowerCaseStrippedName.contains(lowerCaseName))
-                                continue;
+                            if (!lowerCaseStrippedName.contains(lowerCaseCustom) && !lowerCaseStrippedName.contains(lowerCaseName)) continue;
 
                             Enchant object = enchant.get();
 
