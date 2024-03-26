@@ -232,12 +232,12 @@ public class CEBook {
         for (String bookLine : ConfigManager.getConfig().getProperty(Config.enchantment_book_lore)) {
             if (bookLine.contains("%Description%") || bookLine.contains("%description%")) {
                 for (String enchantmentLine : this.enchantment.getInfoDescription()) {
-                    lore.add(ColorUtils.color(enchantmentLine));
+                    //lore.add(ColorUtils.color(enchantmentLine));
                 }
             } else {
-                lore.add(ColorUtils.color(bookLine)
-                        .replace("%Destroy_Rate%", String.valueOf(this.destroyRate)).replace("%destroy_rate%", String.valueOf(this.destroyRate))
-                        .replace("%Success_Rate%", String.valueOf(this.successRate)).replace("%success_rate%", String.valueOf(this.successRate)));
+                //lore.add(ColorUtils.color(bookLine)
+               //         .replace("%Destroy_Rate%", String.valueOf(this.destroyRate)).replace("%destroy_rate%", String.valueOf(this.destroyRate))
+                //        .replace("%Success_Rate%", String.valueOf(this.successRate)).replace("%success_rate%", String.valueOf(this.successRate)));
             }
         }
 

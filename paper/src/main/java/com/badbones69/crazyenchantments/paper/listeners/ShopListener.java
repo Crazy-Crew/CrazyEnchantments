@@ -94,7 +94,7 @@ public class ShopListener implements Listener {
                     this.plugin.getServer().getPluginManager().callEvent(buyBookEvent);
                     player.getInventory().addItem(book.buildBook());
                 } else {
-                    player.sendRichMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
+                    //player.sendRichMessage(ColorUtils.getPrefix("&cThe category &6" + category.getName() + " &chas no enchantments assigned to it."));
                 }
 
                 return;
@@ -160,7 +160,7 @@ public class ShopListener implements Listener {
 
                     case INFO -> MenuManager.openInfoMenu(player);
                     case PROTECTION_CRYSTAL -> player.getInventory().addItem(this.protectionCrystalSettings.getCrystals());
-                    case SCRAMBLER -> player.getInventory().addItem(this.scramblerListener.getScramblers());
+                    //case SCRAMBLER -> player.getInventory().addItem(this.scramblerListener.getScramblers());
                     case SUCCESS_DUST -> player.getInventory().addItem(Dust.SUCCESS_DUST.getDust());
                     case DESTROY_DUST -> player.getInventory().addItem(Dust.DESTROY_DUST.getDust());
                     case BLACK_SCROLL -> player.getInventory().addItem(Scrolls.BLACK_SCROLL.getScroll());

@@ -130,7 +130,7 @@ public class BlackSmithManager {
                 .setLore(config.getProperty(Config.blacksmith_results_lore))
                 .build();
 
-        inventoryName = ColorUtils.color(config.getProperty(Config.blacksmith_gui_name));
+        //inventoryName = ColorUtils.color(config.getProperty(Config.blacksmith_gui_name));
         itemCost = config.getProperty(Config.blacksmith_results_found);
         currency = Currency.getCurrency(config.getProperty(Config.blacksmith_transaction_currency));
 

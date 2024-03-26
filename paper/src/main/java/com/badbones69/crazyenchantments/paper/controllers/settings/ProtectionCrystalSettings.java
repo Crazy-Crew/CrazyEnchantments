@@ -32,7 +32,7 @@ public class ProtectionCrystalSettings {
 
     private final @NotNull Methods methods = this.starter.getMethods();
 
-    private final @NotNull String protectionString = ColorUtils.color(ConfigManager.getConfig().getProperty(Config.protection_crystal_protected));
+    private final @NotNull String protectionString = ConfigManager.getConfig().getProperty(Config.protection_crystal_protected);
 
     private final Map<UUID, List<ItemStack>> crystalItems = new HashMap<>();
 
@@ -157,9 +157,27 @@ public class ProtectionCrystalSettings {
      * @return The new item.
      */
     public ItemStack removeProtection(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta.getPersistentDataContainer().has(DataKeys.protected_item.getNamespacedKey()))
-            meta.getPersistentDataContainer().remove(DataKeys.protected_item.getNamespacedKey());
+        if (!item.hasItemMeta()) return item;
+
+        ItemBuilder itemBuilder = ItemBuilder.convertItemStack(item);
+
+        ItemMeta itemMeta = item.getItemMeta();
+
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+
+        if (container.has(DataKeys.protected_item.getNamespacedKey())) {
+            container.remove(DataKeys.protected_item.getNamespacedKey());
+
+            List<Component> lore = itemMeta.lore();
+
+            if (lore != null) {
+                //lore.removeIf(component -> {
+
+                //});
+
+                itemMeta.lore(lore);
+            }
+        }
 
         if (!(item.lore() == null)) {
             List<Component> lore = item.lore();
@@ -167,10 +185,10 @@ public class ProtectionCrystalSettings {
             assert lore != null;
             lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").contains(this.protectionString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
 
-            meta.lore(lore);
+            //meta.lore(lore);
         }
 
-        item.setItemMeta(meta);
+        //item.setItemMeta(meta);
 
         return item;
     }

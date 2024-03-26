@@ -359,7 +359,7 @@ public class FileManager {
         DATA("users.yml", "users.yml"),
         ENCHANTMENTS("Enchantments.yml", "Enchantments.yml"),
         GKITZ("GKitz.yml", "GKitz.yml"),
-        MESSAGES("Messages.yml", "Messages.yml"),
+        //MESSAGES("Messages.yml", "Messages.yml"),
         ENCHANTMENT_TYPES("Enchantment-Types.yml", "Enchantment-Types.yml");
 
         private final String fileName;

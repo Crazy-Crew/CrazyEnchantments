@@ -83,7 +83,8 @@ public enum Scrolls {
     }
 
     public static String getWhiteScrollProtectionName() {
-        return ColorUtils.color(ConfigManager.getConfig().getProperty(Config.white_scroll_protected));
+        return "";
+        //return ColorUtils.color(ConfigManager.getConfig().getProperty(Config.white_scroll_protected));
     }
 
     public static boolean hasWhiteScrollProtection(ItemStack item) {

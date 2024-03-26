@@ -165,9 +165,9 @@ public class Methods {
 
     public boolean hasArgument(String arg, List<String> message) {
         for (String line : message) {
-            line = ColorUtils.color(line).toLowerCase();
+            //line = ColorUtils.color(line).toLowerCase();
 
-            if (line.contains(arg.toLowerCase())) return true;
+            //if (line.contains(arg.toLowerCase())) return true;
         }
 
         return false;

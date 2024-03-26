@@ -35,7 +35,7 @@ public class ShopManager {
         this.customizerItems.clear();
         this.shopItems.clear();
         SettingsManager config = ConfigManager.getConfig();
-        this.inventoryName = ColorUtils.color(config.getProperty(Config.inventory_name));
+        //this.inventoryName = ColorUtils.color(config.getProperty(Config.inventory_name));
         this.inventorySize = config.getProperty(Config.inventory_size);
         this.enchantmentTableShop = config.getProperty(Config.right_click_enchantment_table);
 

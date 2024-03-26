@@ -47,7 +47,7 @@ public class CEnchantment {
         this.customName = name;
         this.activated = true;
         this.maxLevel = 3;
-        this.infoName = ColorUtils.color("&7" + name);
+        //this.infoName = ColorUtils.color("&7" + name);
         this.chance = 0;
         this.chanceIncrease = 0;
         this.infoDescription = new ArrayList<>();
@@ -122,7 +122,7 @@ public class CEnchantment {
     }
 
     public CEnchantment setInfoName(String infoName) {
-        this.infoName = ColorUtils.color(infoName);
+        //this.infoName = ColorUtils.color(infoName);
 
         return this;
     }
@@ -171,7 +171,7 @@ public class CEnchantment {
     public CEnchantment setInfoDescription(List<String> infoDescription) {
         List<String> info = new ArrayList<>();
 
-        infoDescription.forEach(lore -> info.add(ColorUtils.color(lore)));
+        //infoDescription.forEach(lore -> info.add(ColorUtils.color(lore)));
 
         this.infoDescription = info;
 

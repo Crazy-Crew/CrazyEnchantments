@@ -27,7 +27,7 @@ public class AllyManager {
         SettingsManager config = ConfigManager.getConfig();
 
         for (AllyType type : AllyType.values()) {
-            this.allyTypeNameCache.put(type, ColorUtils.color(config.getProperty(type.getConfigName())));
+            //this.allyTypeNameCache.put(type, ColorUtils.color(config.getProperty(type.getConfigName())));
         }
     }
 

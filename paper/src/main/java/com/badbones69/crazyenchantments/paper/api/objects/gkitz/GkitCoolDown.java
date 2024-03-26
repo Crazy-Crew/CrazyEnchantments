@@ -51,9 +51,11 @@ public class GkitCoolDown {
             seconds = total / second;
         }
 
-        return ColorUtils.color(message.replace("%Day%", String.valueOf(days)).replace("%day%", String.valueOf(days))
-                .replace("%Hour%", String.valueOf(hours)).replace("%hour%", String.valueOf(hours))
-                .replace("%Minute%", String.valueOf(minutes)).replace("%minute%", String.valueOf(minutes))
-                .replace("%Second%", String.valueOf(seconds)).replace("%second%", String.valueOf(seconds)));
+        return "";
+
+        //return //ColorUtils.color(message.replace("%Day%", String.valueOf(days)).replace("%day%", String.valueOf(days))
+                //.replace("%Hour%", String.valueOf(hours)).replace("%hour%", String.valueOf(hours))
+                //.replace("%Minute%", String.valueOf(minutes)).replace("%minute%", String.valueOf(minutes))
+                //.replace("%Second%", String.valueOf(seconds)).replace("%second%", String.valueOf(seconds)));
     }
 }

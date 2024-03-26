@@ -121,7 +121,7 @@ public class DustControlListener implements Listener {
                 if (total >= 100) return;
 
                 if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                    player.sendRichMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                    //player.sendRichMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
                     return;
                 }
 
@@ -148,7 +148,7 @@ public class DustControlListener implements Listener {
                 if (total <= 0) return;
 
                 if (player.getGameMode() == GameMode.CREATIVE && dust.getAmount() > 1) {
-                    player.sendRichMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
+                    //player.sendRichMessage(ColorUtils.getPrefix() + ColorUtils.color("&cPlease unstack the dust for them to work."));
                     return;
                 }
 
