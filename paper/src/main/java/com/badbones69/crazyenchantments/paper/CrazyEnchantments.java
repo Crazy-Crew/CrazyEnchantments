@@ -58,9 +58,6 @@ public class CrazyEnchantments extends JavaPlugin {
         // Load the new commands.
         CommandManager.load();
 
-        this.pluginManager.registerEvents(new FireworkDamageListener(), this);
-        this.pluginManager.registerEvents(new ShopListener(), this);
-
         // Load what we need to properly enable the plugin.
         this.starter.getCrazyManager().load();
 
@@ -74,6 +71,9 @@ public class CrazyEnchantments extends JavaPlugin {
         this.pluginManager.registerEvents(new KitsMenu.KitsListener(), this);
         this.pluginManager.registerEvents(new TinkererMenu.TinkererListener(), this);
         this.pluginManager.registerEvents(new BaseMenu.InfoMenuListener(), this);
+
+        this.pluginManager.registerEvents(new FireworkDamageListener(), this);
+        this.pluginManager.registerEvents(new ShopListener(), this);
 
         this.pluginManager.registerEvents(new PickaxeEnchantments(), this);
         this.pluginManager.registerEvents(new SwordEnchantments(), this);
