@@ -67,6 +67,7 @@ public class Methods {
 
     public int getRandomNumber(String range) {
         int number = 1;
+
         String[] split = range.split("-");
 
         if (NumberUtils.isInt(split[0]) && NumberUtils.isInt(split[1])) {
@@ -82,22 +83,15 @@ public class Methods {
 
     public int getRandomNumber(int min, int max) {
         Random random = new Random();
-        return min + random.nextInt(max - min);
-    }
 
-    public boolean hasPermission(CommandSender sender, String perm, boolean toggle) {
-        if (sender instanceof Player player) {
-            return hasPermission(player, perm, toggle);
-        } else {
-            return true;
-        }
+        return min + random.nextInt(max - min);
     }
 
     public boolean hasPermission(Player player, String perm, boolean toggle) {
         if (player.hasPermission("crazyenchantments." + perm) || player.hasPermission("crazyenchantments.admin")) {
             return true;
         } else {
-            if (toggle) player.sendMessage(Messages.NO_PERMISSION.getMessage());
+            if (toggle) player.sendRichMessage(Messages.NO_PERMISSION.getMessage());
 
             return false;
         }
@@ -114,15 +108,6 @@ public class Methods {
 
     public Player getPlayer(String name) {
         return this.plugin.getServer().getPlayer(name);
-    }
-
-    public boolean isPlayerOnline(String playerName, CommandSender sender) {
-        for (Player player : this.plugin.getServer().getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(playerName)) return true;
-        }
-
-        sender.sendMessage(Messages.NOT_ONLINE.getMessage());
-        return false;
     }
 
     public void removeItem(ItemStack item, Player player) {
@@ -154,8 +139,7 @@ public class Methods {
                     }
                 }
             }
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) {}
     }
 
     public ItemStack removeItem(ItemStack item) {
@@ -198,7 +182,7 @@ public class Methods {
         return chance <= min;
     }
 
-    public Integer percentPick(int max, int min) {
+    public int percentPick(int max, int min) {
         if (max == min) {
             return max;
         } else {
@@ -214,7 +198,9 @@ public class Methods {
      */
     public boolean isInventoryFull(Player player) {
         if (player.getInventory().firstEmpty() != -1) return false;
-        player.sendMessage(Messages.INVENTORY_FULL.getMessage());
+
+        player.sendRichMessage(Messages.INVENTORY_FULL.getMessage());
+
         return true;
     }
 
@@ -255,8 +241,7 @@ public class Methods {
                 if (enchantment.getKey().getKey().replaceAll("-|_| ", "").equalsIgnoreCase(enchantmentName))
                     return enchantment;
             }
-        } catch (Exception ignore) {
-        }
+        } catch (Exception ignore) {}
 
         return null;
     }
@@ -270,7 +255,9 @@ public class Methods {
     public int getDurability(ItemStack item) {
         if (!PluginSupport.SupportedPlugins.ORAXEN.isPluginLoaded()) {
             ItemMeta meta = item.getItemMeta();
+
             if (meta instanceof Damageable) return ((Damageable) item.getItemMeta()).getDamage();
+
             return 0;
         }
 
@@ -300,8 +287,7 @@ public class Methods {
         if (item.hasItemMeta()) {
             try {
                 if (item.getItemMeta().isUnbreakable()) return;
-            } catch (NoSuchMethodError ignored) {
-            }
+            } catch (NoSuchMethodError ignored) {}
 
             NBTItem nbtItem = new NBTItem(item);
 
@@ -438,9 +424,9 @@ public class Methods {
         placeholders.put(two, cost);
 
         switch (option) {
-            case VAULT -> player.sendMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
-            case XP_LEVEL -> player.sendMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
-            case XP_TOTAL -> player.sendMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
+            case VAULT -> player.sendRichMessage(Messages.NEED_MORE_MONEY.getMessage(placeholders));
+            case XP_LEVEL -> player.sendRichMessage(Messages.NEED_MORE_XP_LEVELS.getMessage(placeholders));
+            case XP_TOTAL -> player.sendRichMessage(Messages.NEED_MORE_TOTAL_XP.getMessage(placeholders));
         }
     }
 
