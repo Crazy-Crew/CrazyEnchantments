@@ -12,6 +12,4 @@ public abstract class BaseCommand {
 
     protected final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    //@NotNull
-    //private final ShopListener listener = this.plugin.getShopListener();
 }
