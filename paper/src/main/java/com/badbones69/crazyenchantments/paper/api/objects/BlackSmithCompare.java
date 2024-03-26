@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import org.bukkit.enchantments.Enchantment;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;

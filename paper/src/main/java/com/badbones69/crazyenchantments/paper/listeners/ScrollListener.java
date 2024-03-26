@@ -34,7 +34,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -79,8 +78,7 @@ public class ScrollListener implements Listener {
 
         InventoryType.SlotType slotType = event.getSlotType();
 
-        if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR)
-            return;
+        if (slotType != InventoryType.SlotType.ARMOR && slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR) return;
 
         Scrolls type = Scrolls.getFromPDC(scroll);
         if (type == null) return;
@@ -166,6 +164,7 @@ public class ScrollListener implements Listener {
             event.setCancelled(true);
             return true;
         }
+
         return false;
     }
 
@@ -195,6 +194,7 @@ public class ScrollListener implements Listener {
         useSuffix(item, newMeta, newEnchantmentOrder);
 
         item.setItemMeta(newMeta);
+
         return item;
     }
 
@@ -254,6 +254,7 @@ public class ScrollListener implements Listener {
 
         meta.lore(newLore);
         item.setItemMeta(meta);
+
         return item;
     }
 

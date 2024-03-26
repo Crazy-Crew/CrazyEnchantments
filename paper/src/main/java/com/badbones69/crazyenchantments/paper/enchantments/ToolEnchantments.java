@@ -19,7 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,8 +44,7 @@ public class ToolEnchantments implements Listener {
         Player player = event.getPlayer();
         ItemStack tool = this.methods.getItemInHand(player);
 
-        if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, this.enchantmentBookSettings.getEnchantments(tool)))
-            return;
+        if (!EnchantUtils.isEventActive(CEnchantments.TELEPATHY, player, tool, this.enchantmentBookSettings.getEnchantments(tool))) return;
 
         event.setCancelled(true);
 

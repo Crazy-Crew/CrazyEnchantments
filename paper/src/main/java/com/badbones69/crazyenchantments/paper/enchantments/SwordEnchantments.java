@@ -42,7 +42,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -129,7 +128,6 @@ public class SwordEnchantments implements Listener {
         }
 
         if (isEntityPlayer && EnchantUtils.isEventActive(CEnchantments.DISORDER, damager, item, enchantments)) {
-
             Player player = (Player) event.getEntity();
             Inventory inventory = player.getInventory();
             List<ItemStack> items = new ArrayList<>();
@@ -153,8 +151,7 @@ public class SwordEnchantments implements Listener {
                 inventory.setItem(slots.get(i), items.get(i));
             }
 
-            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty())
-                damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
+            if (!Messages.DISORDERED_ENEMY_HOT_BAR.getMessageNoPrefix().isEmpty()) damager.sendMessage(Messages.DISORDERED_ENEMY_HOT_BAR.getMessage());
         }
 
         // Check if CEPlayer is null as plugins like citizen use Player objects.

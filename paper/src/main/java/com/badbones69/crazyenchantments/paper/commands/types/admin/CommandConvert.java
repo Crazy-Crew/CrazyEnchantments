@@ -6,7 +6,6 @@ import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
-
 import java.util.List;
 
 public class CommandConvert extends BaseCommand {

@@ -2,7 +2,6 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +25,7 @@ public class Category {
     private final List<CEnchantment> enchantmentList;
     private final List<CEnchantment> enabledEnchantments;
 
-    public Category(String name, int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency, int rarity, LostBook lostBook,
-                    int maxSuccessRate, int minSuccessRate, int maxDestroyRate, int minDestroyRate, boolean useMaxLevel, int maxLevel, int minLevel) {
+    public Category(String name, int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency, int rarity, LostBook lostBook, int maxSuccessRate, int minSuccessRate, int maxDestroyRate, int minDestroyRate, boolean useMaxLevel, int maxLevel, int minLevel) {
         this.name = name;
         this.slot = slot - 1;
         this.inGUI = inGUI;

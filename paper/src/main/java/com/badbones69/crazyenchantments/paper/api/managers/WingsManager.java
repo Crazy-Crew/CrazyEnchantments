@@ -6,7 +6,6 @@ import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.objects.gkitz;
 
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
-
 import java.util.Calendar;
 
 public class GkitCoolDown {

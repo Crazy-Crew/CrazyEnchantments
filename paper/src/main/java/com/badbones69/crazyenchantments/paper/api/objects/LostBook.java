@@ -10,7 +10,6 @@ import com.badbones69.crazyenchantments.platform.impl.Config;
 import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,8 +25,7 @@ public class LostBook {
     private final boolean useSound;
     private Sound sound;
 
-    public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency,
-                    boolean useFirework, List<Color> fireworkColors, boolean useSound, String sound) {
+    public LostBook(int slot, boolean inGUI, ItemBuilder displayItem, int cost, Currency currency, boolean useFirework, List<Color> fireworkColors, boolean useSound, String sound) {
         this.slot = slot - 1;
         this.inGUI = inGUI;
         this.displayItem = displayItem;

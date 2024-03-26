@@ -1,7 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.objects;
 
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
-
 import java.util.List;
 
 public class BowEnchantment {

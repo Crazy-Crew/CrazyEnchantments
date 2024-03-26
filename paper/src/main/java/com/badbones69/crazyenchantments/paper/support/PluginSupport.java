@@ -17,7 +17,6 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.Map;
 
 public class PluginSupport {
@@ -25,6 +24,7 @@ public class PluginSupport {
     private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final @NotNull Starter starter = this.plugin.getStarter();
+
     private final Map<SupportedPlugins, Boolean> cachedPlugins = Maps.newHashMap();
     private ClaimSupport claimPlugin = null;
     private WorldGuardUtils worldGuardUtils;
@@ -47,11 +47,9 @@ public class PluginSupport {
 
         if (this.claimPlugin != null) return this.claimPlugin.isFriendly(player, otherPlayer);
 
-        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer))
-            return true;
+        if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
-        if (SupportedPlugins.MCMMO.isPluginLoaded())
-            return PartyManager.inSameParty((Player) pEntity, (Player) oEntity);
+        if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyManager.inSameParty((Player) pEntity, (Player) oEntity);
 
         return false;
 

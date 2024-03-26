@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.api.utils;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;

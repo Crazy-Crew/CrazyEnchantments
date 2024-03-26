@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +37,7 @@ public class GKitz {
      * @param itemStrings The items as a string.
      * @param autoEquip   This is if the armor equips when given.
      */
-    public GKitz(String name, int slot, String cooldown, ItemStack displayItem, List<ItemStack> preview,
-                 List<String> commands, List<String> itemStrings, boolean autoEquip) {
+    public GKitz(String name, int slot, String cooldown, ItemStack displayItem, List<ItemStack> preview, List<String> commands, List<String> itemStrings, boolean autoEquip) {
         this.name = name;
         this.slot = slot;
         this.preview = preview;
@@ -110,8 +108,7 @@ public class GKitz {
                             item.addCEEnchantment(enchantment, Integer.parseInt(level));
                         }
                     }
-                } catch (Exception ignore) {
-                }
+                } catch (Exception ignore) {}
             }
 
             items.add(item.build());

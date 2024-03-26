@@ -13,7 +13,6 @@ import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class CEnchantment {
     private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
     private final @NotNull EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
+
     private final List<Category> categories;
     private final CEnchantment instance;
     private String name;

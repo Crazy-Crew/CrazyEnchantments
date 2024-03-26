@@ -7,7 +7,6 @@ import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.Map;
 

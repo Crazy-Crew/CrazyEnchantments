@@ -10,7 +10,6 @@ import dev.triumphteam.cmd.core.annotations.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.permissions.PermissionDefault;
-
 import java.util.ArrayList;
 import java.util.List;
 

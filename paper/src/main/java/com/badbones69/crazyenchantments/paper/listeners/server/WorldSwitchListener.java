@@ -21,7 +21,6 @@ public class WorldSwitchListener implements Listener {
     public void onWorldSwitch(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
 
-        if (ConfigManager.getConfig().getProperty(Config.refresh_effects_world_change))
-            this.crazyManager.updatePlayerEffects(player);
+        if (ConfigManager.getConfig().getProperty(Config.refresh_effects_world_change)) this.crazyManager.updatePlayerEffects(player);
     }
 }
