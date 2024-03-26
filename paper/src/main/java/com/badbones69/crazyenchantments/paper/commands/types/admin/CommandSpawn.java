@@ -10,6 +10,7 @@ import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
+import dev.triumphteam.cmd.core.annotations.Suggestion;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ public class CommandSpawn extends BaseCommand {
 
     @Command("spawn")
     @Permission(value = "crazyenchantments.spawn", def = PermissionDefault.OP)
-    public void spawn(CommandSender sender, String enchantment, String world, int level, int x, int y, int z) {
+    public void spawn(CommandSender sender, @Suggestion("enchants_categories") String enchantment, String world, @Suggestion("numbers") int level, @Suggestion("numbers") int x, @Suggestion("numbers") int y, @Suggestion("numbers") int z) {
         CEnchantment value = this.crazyManager.getEnchantmentFromName(enchantment);
         Category category = this.settings.getCategory(enchantment);
 

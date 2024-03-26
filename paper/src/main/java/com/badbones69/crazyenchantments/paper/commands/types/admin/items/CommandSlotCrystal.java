@@ -27,7 +27,7 @@ public class CommandSlotCrystal extends BaseCommand {
 
     @Command(value = "slotcrystal", alias = {"sc"})
     @Permission(value = "crazyenchantments.slotcrystal", def = PermissionDefault.OP)
-    public void give(CommandSender sender, int amount, @Suggestion("players") Player target) {
+    public void slotcrystal(CommandSender sender, @Suggestion("numbers") int amount, @Suggestion("players") Player target) {
         if (this.methods.isInventoryFull(target)) return;
 
         this.methods.addItemToInventory(target, this.slotCrystalListener.getSlotCrystal(amount));

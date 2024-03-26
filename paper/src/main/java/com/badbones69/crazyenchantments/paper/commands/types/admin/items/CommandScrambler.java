@@ -29,7 +29,7 @@ public class CommandScrambler extends BaseCommand {
 
     @Command("scrambler")
     @Permission(value = "crazyenchantments.scrambler", def = PermissionDefault.OP)
-    public void give(CommandSender sender, int amount, @Suggestion("players") Player target) {
+    public void scrambler(CommandSender sender, @Suggestion("numbers") int amount, @Suggestion("players") Player target) {
         if (this.methods.isInventoryFull(target)) return;
 
         this.methods.addItemToInventory(target, this.scramblerListener.getScramblers(amount));

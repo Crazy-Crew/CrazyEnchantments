@@ -15,15 +15,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandBook extends BaseCommand {
+public class CommandLostBook extends BaseCommand {
 
     private final @NotNull Starter starter = this.plugin.getStarter();
 
     private final @NotNull EnchantmentBookSettings settings = this.starter.getEnchantmentBookSettings();
 
-    @Command("give")
-    @Permission(value = "crazyenchantments.give", def = PermissionDefault.OP)
-    public void give(CommandSender sender, String name, int amount, @Suggestion("players") Player target) {
+    @Command("lostbook")
+    @Permission(value = "crazyenchantments.lostbook", def = PermissionDefault.OP)
+    public void lostbook(CommandSender sender, @Suggestion("categories") String name, int amount, @Suggestion("players") Player target) {
         Category category = this.settings.getCategory(name);
 
         if (category == null) {

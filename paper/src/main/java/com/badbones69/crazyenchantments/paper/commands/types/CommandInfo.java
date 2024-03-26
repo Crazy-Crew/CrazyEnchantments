@@ -9,6 +9,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentTy
 import com.badbones69.crazyenchantments.paper.commands.BaseCommand;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.annotations.Command;
+import dev.triumphteam.cmd.core.annotations.Suggestion;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
@@ -28,7 +29,7 @@ public class CommandInfo extends BaseCommand {
 
     @Command("info")
     @Permission(value = "crazyenchantments.info", def = PermissionDefault.TRUE)
-    public void info(CommandSender sender, String enchantmentName) {
+    public void info(CommandSender sender, @Suggestion("enchants") String enchantmentName) {
         if (sender instanceof Player player) {
             EnchantmentType type = this.starter.getMethods().getFromName(enchantmentName);
 

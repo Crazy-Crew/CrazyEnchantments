@@ -27,7 +27,7 @@ public class CommandCrystal extends BaseCommand {
 
     @Command("crystal")
     @Permission(value = "crazyenchantments.crystal", def = PermissionDefault.OP)
-    public void give(CommandSender sender, int amount, @Suggestion("players") Player target) {
+    public void crystal(CommandSender sender, @Suggestion("numbers") int amount, @Suggestion("players") Player target) {
         if (this.methods.isInventoryFull(target)) return;
 
         this.methods.addItemToInventory(target, this.protectionCrystalSettings.getCrystals(amount));
