@@ -14,8 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("ALL")
 public abstract class InventoryBuilder implements InventoryHolder {
 
-    @NotNull
-    protected final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    protected final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     private final Inventory inventory;
     private final Player player;

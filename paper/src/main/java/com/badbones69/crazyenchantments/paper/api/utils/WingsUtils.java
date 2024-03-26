@@ -23,17 +23,13 @@ import java.util.UUID;
 
 public class WingsUtils {
 
-    @NotNull
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private static final Starter starter = plugin.getStarter();
+    private static final @NotNull Starter starter = plugin.getStarter();
 
-    @NotNull
-    private static final PluginSupport pluginSupport = starter.getPluginSupport();
+    private static final @NotNull PluginSupport pluginSupport = starter.getPluginSupport();
 
-    @NotNull
-    private static final WingsManager wingsManager = starter.getWingsManager();
+    private static final @NotNull WingsManager wingsManager = starter.getWingsManager();
 
     public static void startWings() {
         if (!wingsManager.isWingsEnabled()) wingsManager.endWingsTask();

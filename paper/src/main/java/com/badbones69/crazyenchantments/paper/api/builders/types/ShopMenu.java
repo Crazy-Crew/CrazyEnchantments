@@ -18,7 +18,7 @@ public class ShopMenu extends InventoryBuilder {
 
     private final @NotNull CurrencyAPI currencyAPI = this.starter.getCurrencyAPI();
 
-    private final ShopManager shopManager = this.starter.getShopManager();
+    private final @NotNull ShopManager shopManager = this.starter.getShopManager();
 
     public ShopMenu(Player player, int size, String title) {
         super(player, size, title);

@@ -53,12 +53,11 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
 import static com.badbones69.crazyenchantments.paper.api.utils.ColorUtils.getColor;
 
 public class ItemBuilder {
 
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private final List<Component> itemLore;
     // Entities
     private final boolean isMobEgg;

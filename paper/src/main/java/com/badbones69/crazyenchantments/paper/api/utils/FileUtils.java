@@ -14,8 +14,7 @@ import java.util.logging.Level;
 
 public class FileUtils {
 
-    private final @NotNull
-    static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     public static void copyFiles(Path directory, String folder, List<String> names) {
         names.forEach(name -> copyFile(directory, folder, name));

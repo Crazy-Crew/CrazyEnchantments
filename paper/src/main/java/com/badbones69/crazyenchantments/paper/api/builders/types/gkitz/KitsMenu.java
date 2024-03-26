@@ -32,8 +32,8 @@ import java.util.Map;
 
 public class KitsMenu extends InventoryBuilder {
 
-    private final Starter starter = this.plugin.getStarter();
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
+    private final @NotNull Starter starter = this.plugin.getStarter();
+    private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
     public KitsMenu(Player player, int size, String title) {
         super(player, size, title);
@@ -85,14 +85,11 @@ public class KitsMenu extends InventoryBuilder {
 
     public static class KitsListener implements Listener {
 
-        @NotNull
-        private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+        private final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-        @NotNull
-        private final Starter starter = this.plugin.getStarter();
+        private final @NotNull Starter starter = this.plugin.getStarter();
 
-        @NotNull
-        private final CrazyManager crazyManager = this.starter.getCrazyManager();
+        private final @NotNull CrazyManager crazyManager = this.starter.getCrazyManager();
 
         @EventHandler(ignoreCancelled = true)
         public void onPreviewClick(InventoryClickEvent event) {

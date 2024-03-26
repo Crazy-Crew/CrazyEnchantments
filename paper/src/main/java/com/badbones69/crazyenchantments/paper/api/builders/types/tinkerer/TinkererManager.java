@@ -32,20 +32,15 @@ import java.util.Map;
 
 public class TinkererManager {
 
-    @NotNull
-    private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private static final @NotNull CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
-    private static final Starter starter = plugin.getStarter();
+    private static final @NotNull Starter starter = plugin.getStarter();
 
-    @NotNull
-    private static final Methods methods = starter.getMethods();
+    private static final @NotNull Methods methods = starter.getMethods();
 
-    @NotNull
-    private static final CurrencyAPI currencyAPI = starter.getCurrencyAPI();
+    private static final @NotNull CurrencyAPI currencyAPI = starter.getCurrencyAPI();
 
-    @NotNull
-    private static final SettingsManager tinker = ConfigManager.getTinker();
+    private static final @NotNull SettingsManager tinker = ConfigManager.getTinker();
 
     public static boolean useExperience(Player player, PlayerInteractEvent event, boolean mainHand) {
         PlayerInventory inventory = player.getInventory();

@@ -15,8 +15,7 @@ import java.util.Map;
 
 public class EnchantUtils {
 
-    private final @NotNull
-    static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
     /**
      * Get the highest category rarity the enchantment is in.

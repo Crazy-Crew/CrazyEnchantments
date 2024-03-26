@@ -25,11 +25,9 @@ import java.util.List;
 
 public class CommandManager {
 
-    private final @NotNull
-    static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
+    private final @NotNull static CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    private final @NotNull
-    static BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(plugin);
+    private final @NotNull static BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(plugin);
 
     public static void load() {
         Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
