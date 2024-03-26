@@ -5,11 +5,17 @@ import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.commands.types.CommandHelp;
 import com.badbones69.crazyenchantments.paper.commands.types.CommandInfo;
 import com.badbones69.crazyenchantments.paper.commands.types.CommandLimit;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandBook;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandBottle;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandConvert;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandCrystal;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandDebug;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandFix;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandGive;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandReload;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandScrambler;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandSlotCrystal;
+import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandSpawn;
 import com.badbones69.crazyenchantments.paper.commands.types.admin.CommandUpdate;
 import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
 import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
@@ -71,6 +77,13 @@ public class CommandManager {
                 new CommandInfo(),
                 new CommandHelp(),
 
+                new CommandBook(),
+                new CommandScrambler(),
+                new CommandSlotCrystal(),
+                new CommandCrystal(),
+                new CommandGive(),
+
+                new CommandSpawn(),
                 new CommandConvert(),
                 new CommandBottle(),
                 new CommandReload(),
