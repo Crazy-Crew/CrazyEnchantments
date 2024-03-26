@@ -89,4 +89,12 @@ public class SlotCrystalListener implements Listener {
     public ItemStack getSlotCrystal() {
         return slot_crystal.clone();
     }
+
+    public ItemStack getSlotCrystal(int amount) {
+        ItemStack itemStack = getSlotCrystal();
+
+        itemStack.setAmount(amount);
+
+        return itemStack;
+    }
 }
