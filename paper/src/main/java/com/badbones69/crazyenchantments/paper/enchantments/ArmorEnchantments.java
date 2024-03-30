@@ -47,13 +47,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ArmorEnchantments implements Listener {
@@ -145,11 +139,12 @@ public class ArmorEnchantments implements Listener {
         // Add all new effects that said player should now have.
         for (Map.Entry<PotionEffectType, Integer> effect : getTopPotionEffects(topEnchants).entrySet()) {
             for (PotionEffect currentEffect : player.getActivePotionEffects()) {
-                if (!currentEffect.getType().equals(effect.getKey())) break;
-                if (currentEffect.getAmplifier() > effect.getValue()) break;
-                player.removePotionEffect(effect.getKey());
-            }
+                if (!currentEffect.getType().equals(effect.getKey())) continue;
+                if (currentEffect.getAmplifier() >= effect.getValue() - 1) break;
 
+                player.removePotionEffect(effect.getKey());
+                break;
+            }
             player.addPotionEffect(new PotionEffect(effect.getKey(), -1, effect.getValue() - 1));
         }
     }
