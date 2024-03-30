@@ -110,19 +110,21 @@ public class ArmorEnchantments implements Listener {
 
     @EventHandler
     public void onEquip(PlayerArmorChangeEvent event) {
+        NamespacedKey key = DataKeys.enchantments.getNamespacedKey();
         Player player = event.getPlayer();
         ItemStack newItem = event.getNewItem();
         ItemStack oldItem = event.getOldItem();
+        boolean oldHasMeta = oldItem.hasItemMeta();
+        boolean newHasMeta = newItem.hasItemMeta();
 
-        NamespacedKey key = DataKeys.enchantments.getNamespacedKey();
+        // Return if no enchants would effect the player with the change.
+        if ((!newHasMeta || !newItem.getItemMeta().getPersistentDataContainer().has(key))
+             && (!oldHasMeta || !oldItem.getItemMeta().getPersistentDataContainer().has(key))) return;
 
-        if (newItem.hasItemMeta() // Added to prevent armor change event being called on damage.
-            && oldItem.hasItemMeta()
-            && newItem.getItemMeta().getPersistentDataContainer().has(key)
-            && oldItem.getItemMeta().getPersistentDataContainer().has(key)
+        // Added to prevent armor change event being called on damage.
+        if (newHasMeta && oldHasMeta
             && Objects.equals(newItem.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING),
-                              oldItem.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING))
-        ) return;
+                              oldItem.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING))) return;
 
         newUpdateEffects(player, newItem, oldItem);
     }
