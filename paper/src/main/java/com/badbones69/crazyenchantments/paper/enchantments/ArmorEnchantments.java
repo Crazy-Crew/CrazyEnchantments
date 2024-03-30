@@ -123,7 +123,15 @@ public class ArmorEnchantments implements Listener {
         newUpdateEffects(player, newItem, oldItem);
     }
 
-    private void newUpdateEffects(Player player, ItemStack newItem, ItemStack oldItem) {
+    /**
+     * Checks the players current armor and updates any needed effects that are created by CrazyEnchantments.
+     * Removes all effects that should no longer be on the player and adds the highest level for the others
+     * based on their armor.
+     * @param player The player for whom to update effects.
+     * @param newItem The new item equipped.
+     * @param oldItem The item that had previously been equipped.
+     */
+    private void newUpdateEffects(@NotNull Player player, @NotNull ItemStack newItem, @NotNull ItemStack oldItem) {
         Map<CEnchantment, Integer> topEnchants = currentEnchantsOnPlayerAdded(player, newItem);
 
         // Remove all effects that they no longer should have from the armor.
@@ -149,7 +157,13 @@ public class ArmorEnchantments implements Listener {
         }
     }
 
-    private Map<PotionEffectType, Integer> getTopPotionEffects(Map<CEnchantment, Integer> topEnchants) {
+    /**
+     * Pulls the data off of all of the enchantments provided and filters out the worst ones.
+     * @param topEnchants A list of {@link CEnchantment}'s to filter.
+     * @return Returns a list of top potion effects from the provided list of enchantments.
+     */
+    @NotNull
+    private Map<PotionEffectType, Integer> getTopPotionEffects(@NotNull Map<CEnchantment, Integer> topEnchants) {
         Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchantmentPotions = this.crazyManager.getEnchantmentPotions();
         HashMap<PotionEffectType, Integer> topPotions = new HashMap<>();
 
@@ -162,7 +176,14 @@ public class ArmorEnchantments implements Listener {
         return topPotions;
     }
 
-    private HashMap<CEnchantment, Integer> currentEnchantsOnPlayerAdded(Player player, ItemStack newItem) {
+    /**
+     *
+     * @param player The player to check.
+     * @param newItem The equipped item.
+     * @return Returns a map of all current active enchants on the specified player.
+     */
+    @NotNull
+    private HashMap<CEnchantment, Integer> currentEnchantsOnPlayerAdded(@NotNull Player player, @NotNull ItemStack newItem) {
         HashMap<CEnchantment, Integer> toAdd = getTopEnchantsOnPlayer(player);
 
         if (!newItem.isEmpty()) {
@@ -174,7 +195,14 @@ public class ArmorEnchantments implements Listener {
 
         return toAdd;
     }
-    private HashMap<CEnchantment, Integer> getTopEnchantsOnPlayer(Player player) {
+
+    /**
+     *
+     * @param player The player to check for {@link CEnchantments}.
+     * @return A list of {@link CEnchantments}'s on the player.
+     */
+    @NotNull
+    private HashMap<CEnchantment, Integer> getTopEnchantsOnPlayer(@NotNull Player player) {
         HashMap<CEnchantment, Integer> topEnchants = new HashMap<>();
 
         Arrays.stream(player.getEquipment().getArmorContents())
@@ -185,7 +213,6 @@ public class ArmorEnchantments implements Listener {
 
         return topEnchants;
     }
-
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
