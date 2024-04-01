@@ -100,10 +100,12 @@ public class EnchantmentControl implements Listener {
 
                             if (!bookApplyEvent.isCancelled()) {
                                 event.setCurrentItem(this.crazyManager.addEnchantment(item, enchantment, bookLevel));
-                                player.setItemOnCursor(new ItemStack(Material.AIR));
-                                HashMap<String, String> placeholders = new HashMap<>();
-                                placeholders.put("%Enchantment%", enchantment.getCustomName());
-                                placeholders.put("%Level%", String.valueOf(bookLevel));
+                                player.setItemOnCursor(null);
+                                HashMap<String, String> placeholders = new HashMap<>(){{
+                                    put("%Enchantment%", enchantment.getCustomName());
+                                    put("%Level%", String.valueOf(bookLevel));
+                                }};
+
                                 player.sendMessage(Messages.ENCHANTMENT_UPGRADE_SUCCESS.getMessage(placeholders));
                                 player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
                                 // ToDo potentially add pitch and volume options.
@@ -128,13 +130,12 @@ public class EnchantmentControl implements Listener {
                                         event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
                                         player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                                     } else {
-                                        ItemStack newItem = new ItemStack(Material.AIR);
-                                        event.setCurrentItem(newItem);
+                                        event.setCurrentItem(null);
                                         player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                                     }
                                 }
 
-                                player.setItemOnCursor(new ItemStack(Material.AIR));
+                                player.setItemOnCursor(null);
                                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                             }
 
@@ -144,7 +145,7 @@ public class EnchantmentControl implements Listener {
                             this.plugin.getServer().getPluginManager().callEvent(bookFailEvent);
 
                             if (!bookFailEvent.isCancelled()) {
-                                player.setItemOnCursor(new ItemStack(Material.AIR));
+                                player.setItemOnCursor(null);
                                 player.sendMessage(Messages.ENCHANTMENT_UPGRADE_FAILED.getMessage());
                                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                             }
@@ -167,7 +168,7 @@ public class EnchantmentControl implements Listener {
             if (success) {
                 ItemStack newItem = this.crazyManager.addEnchantment(item, enchantment, ceBook.getLevel());
                 event.setCurrentItem(newItem);
-                player.setItemOnCursor(new ItemStack(Material.AIR));
+                player.setItemOnCursor(null);
                 player.sendMessage(Messages.BOOK_WORKS.getMessage());
                 player.playSound(player.getLocation(), enchantment.getSound(), 1, 1);
 
@@ -177,13 +178,13 @@ public class EnchantmentControl implements Listener {
             if (destroy) {
                 if (Scrolls.hasWhiteScrollProtection(item)) {
                     event.setCurrentItem(Scrolls.removeWhiteScrollProtection(item));
-                    player.setItemOnCursor(new ItemStack(Material.AIR));
+                    player.setItemOnCursor(null);
                     player.sendMessage(Messages.ITEM_WAS_PROTECTED.getMessage());
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
                     return;
                 } else {
-                    player.setItemOnCursor(new ItemStack(Material.AIR));
-                    event.setCurrentItem(new ItemStack(Material.AIR));
+                    player.setItemOnCursor(null);
+                    event.setCurrentItem(null);
                     player.sendMessage(Messages.ITEM_DESTROYED.getMessage());
                 }
 
@@ -193,7 +194,7 @@ public class EnchantmentControl implements Listener {
 
         player.sendMessage(Messages.BOOK_FAILED.getMessage());
         event.setCurrentItem(this.crazyManager.changeEnchantmentLimiter(item, 1));
-        player.setItemOnCursor(new ItemStack(Material.AIR));
+        player.setItemOnCursor(null);
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
     }
 
