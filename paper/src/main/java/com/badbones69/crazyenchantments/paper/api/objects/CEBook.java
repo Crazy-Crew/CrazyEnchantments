@@ -245,7 +245,7 @@ public class CEBook {
      * @return Return the book as an ItemStack.
      */
     public ItemStack buildBook() {
-        ItemStack item = getItemBuilder().build();
+        ItemStack item = getItemBuilder().build(); //TODO Directly set data instead of reconstructing the item.
         ItemMeta meta = item.getItemMeta();
 
         // PDC Start
@@ -259,4 +259,21 @@ public class CEBook {
 
         return item;
     }
+
+    /**
+     *
+     * @return True if the success rate was successful.
+     */
+    public boolean roleSuccess() {
+        return methods.randomPicker(this.getSuccessRate(), 100);
+    }
+
+    /**
+     *
+     * @return True if the destroy rate was successful.
+     */
+    public boolean roleDestroy() {
+        return methods.randomPicker(this.getSuccessRate(), 100);
+    }
+
 }

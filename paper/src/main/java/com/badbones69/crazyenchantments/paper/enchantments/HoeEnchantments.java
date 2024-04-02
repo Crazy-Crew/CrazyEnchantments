@@ -139,7 +139,7 @@ public class HoeEnchantments implements Listener {
 
             if (!this.crazyManager.getNMSSupport().isFullyGrown(plant)) return;
 
-            getAreaCrops(plant, blockFace).forEach(block -> this.methods.playerBreakBlock(player, block, hoe));
+            getAreaCrops(plant, blockFace).forEach(block -> this.methods.playerBreakBlock(player, block, hoe, true));
         }
     }
 

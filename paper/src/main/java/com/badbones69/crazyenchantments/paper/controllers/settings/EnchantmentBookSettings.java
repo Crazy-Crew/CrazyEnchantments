@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,6 +66,7 @@ public class EnchantmentBookSettings {
      * @param book The ItemStack you are converting.
      * @return If the book is a CEBook it will return the CEBook object and if not it will return null.
      */
+    @Nullable
     public CEBook getCEBook(ItemStack book) {
         if (!book.hasItemMeta()) return null;
         ItemMeta meta = book.getItemMeta();

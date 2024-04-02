@@ -12,6 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -109,19 +112,19 @@ public enum Scrolls {
         return protectNamed;
     }
 
-    public static boolean hasWhiteScrollProtection(ItemStack item) {
+    public static boolean hasWhiteScrollProtection(@NotNull ItemStack item) {
         return item.hasItemMeta() && hasWhiteScrollProtection(item.getItemMeta());
     }
 
-    public static boolean hasWhiteScrollProtection(ItemMeta meta) {
+    public static boolean hasWhiteScrollProtection(@Nullable ItemMeta meta) {
         return meta != null && hasWhiteScrollProtection(meta.getPersistentDataContainer());
     }
 
-    public static boolean hasWhiteScrollProtection(PersistentDataContainer data) {
+    public static boolean hasWhiteScrollProtection(@Nullable PersistentDataContainer data) {
         return data != null && data.has(whiteScrollProtectionKey);
     }
 
-    public static ItemStack addWhiteScrollProtection(ItemStack item) {
+    public static ItemStack addWhiteScrollProtection(@NotNull ItemStack item) {
         assert item.hasItemMeta();
         ItemMeta meta = item.getItemMeta();
         List<Component> lore = item.lore() != null ? item.lore() : new ArrayList<>();
@@ -135,7 +138,7 @@ public enum Scrolls {
         return item;
     }
 
-    public static ItemStack removeWhiteScrollProtection(ItemStack item) {
+    public static ItemStack removeWhiteScrollProtection(@NotNull ItemStack item) {
         if (!item.hasItemMeta()) return item;
 
         ItemMeta meta = item.getItemMeta();

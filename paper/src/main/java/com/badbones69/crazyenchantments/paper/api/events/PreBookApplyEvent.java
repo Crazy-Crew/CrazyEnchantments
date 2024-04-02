@@ -2,6 +2,7 @@ package com.badbones69.crazyenchantments.paper.api.events;
 
 import com.badbones69.crazyenchantments.paper.api.objects.CEBook;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -24,16 +25,16 @@ public class PreBookApplyEvent extends Event implements Cancellable {
     private final CEnchantment enchantment;
     private final CEBook ceBook;
     
-    public PreBookApplyEvent(Player player, ItemStack enchantedItem, CEBook ceBook, boolean creativeSuccess, boolean successful, boolean destroyed) {
+    public PreBookApplyEvent(Player player, ItemStack enchantedItem, CEBook ceBook) {
         this.level = ceBook.getLevel();
         this.player = player;
         this.enchantment = ceBook.getEnchantment();
         this.enchantedItem = enchantedItem;
         this.ceBook = ceBook;
-        this.creativeSuccess = creativeSuccess;
-        this.successful = successful;
+        this.creativeSuccess = player.getGameMode() == GameMode.CREATIVE;
+        this.successful = ceBook.roleSuccess();
         this.successChance = ceBook.getSuccessRate();
-        this.destroyed = destroyed;
+        this.destroyed = ceBook.roleDestroy();
         this.destroyChance = ceBook.getDestroyRate();
         this.cancelled = false;
     }

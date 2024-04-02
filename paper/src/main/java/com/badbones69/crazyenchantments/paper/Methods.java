@@ -4,6 +4,7 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
+import com.badbones69.crazyenchantments.paper.api.events.BookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
@@ -11,19 +12,14 @@ import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.misc.OraxenSupport;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -464,10 +460,34 @@ public class Methods {
     }
 
     /**
-     * @see #playerBreakBlock(Player, Block, ItemStack, boolean)
+     *
+     * @param event The event to check.
+     * @return True if the event is cancelled.
      */
-    public boolean playerBreakBlock(Player player, Block block, ItemStack tool) {
-        return playerBreakBlock(player, block, tool, true);
+    public boolean isEventCancelled(@NotNull Event event) {
+        return !event.callEvent();
+    }
+
+    /**
+     * Checks if the player is in creative mode and lets them know that they should not be.
+     * @param player The {@link Player} whom to check.
+     * @return True if the player is in creative mode.
+     */
+    public boolean inCreativeMode(@NotNull Player player) {
+        if (player.getGameMode() != GameMode.CREATIVE) return false;
+
+        player.sendMessage(Messages.PLAYER_IS_IN_CREATIVE_MODE.getMessage());
+        return true;
+    }
+
+    /**
+     * Plays item break sound and effect.
+     * @param player The {@link Player} who's item broke.
+     * @return
+     */
+    public void playItemBreak(Player player, ItemStack item) {
+        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+        player.getWorld().spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
     }
 
     /**
