@@ -315,22 +315,21 @@ public class PickaxeEnchantments implements Listener {
     }
 
     private ItemStack getOreDrop(Material material, int amount) {
-        ItemBuilder dropItem = new ItemBuilder().setAmount(amount);
+        ItemStack item = new ItemStack(switch (material) {
+            case COAL -> Material.COAL;
+            case RAW_COPPER -> Material.COPPER_INGOT;
+            case DIAMOND -> Material.DIAMOND;
+            case EMERALD -> Material.EMERALD;
+            case RAW_GOLD -> Material.GOLD_INGOT;
+            case RAW_IRON -> Material.IRON_INGOT;
+            case LAPIS_LAZULI -> Material.LAPIS_LAZULI;
+            case REDSTONE -> Material.REDSTONE;
+            case GOLD_NUGGET -> Material.GOLD_NUGGET;
+            case QUARTZ -> Material.QUARTZ;
+            default -> Material.AIR;
+        });
 
-        switch (material) {
-            case COAL -> dropItem.setMaterial(Material.COAL);
-            case RAW_COPPER -> dropItem.setMaterial(Material.COPPER_INGOT);
-            case DIAMOND -> dropItem.setMaterial(Material.DIAMOND);
-            case EMERALD -> dropItem.setMaterial(Material.EMERALD);
-            case RAW_GOLD -> dropItem.setMaterial(Material.GOLD_INGOT);
-            case RAW_IRON -> dropItem.setMaterial(Material.IRON_INGOT);
-            case LAPIS_LAZULI -> dropItem.setMaterial(Material.LAPIS_LAZULI);
-            case REDSTONE -> dropItem.setMaterial(Material.REDSTONE);
-            case GOLD_NUGGET -> dropItem.setMaterial(Material.GOLD_NUGGET);
-            case QUARTZ -> dropItem.setMaterial(Material.QUARTZ);
-            default -> dropItem.setMaterial(Material.AIR);
-        }
-
-        return dropItem.build();
+        item.setAmount(amount);
+        return item;
     }
 }

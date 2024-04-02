@@ -172,6 +172,10 @@ public class ItemBuilder {
         this.lorePlaceholders = new HashMap<>();
 
         this.itemFlags = new ArrayList<>();
+
+        this.nameSpacedKey = null;
+        this.nameSpacedData = null;
+
     }
 
     private static final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
@@ -399,7 +403,7 @@ public class ItemBuilder {
             ItemMeta itemMeta = item.getItemMeta();
             List<Component> newLore = getUpdatedLore();
             assert itemMeta != null;
-            if (!Objects.equals(getUpdatedName(), "")) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
+            if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
             if (!newLore.isEmpty()) itemMeta.lore(newLore);
             if (this.nameSpacedData != null && this.nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(this.nameSpacedKey, PersistentDataType.STRING, this.nameSpacedData);
 
@@ -483,7 +487,7 @@ public class ItemBuilder {
         if (!getUpdatedName().isEmpty()) itemMeta.displayName(ColorUtils.legacyTranslateColourCodes(getUpdatedName()));
         if (!newLore.isEmpty()) itemMeta.lore(newLore);
         if (this.nameSpacedData != null && this.nameSpacedKey != null) itemMeta.getPersistentDataContainer().set(this.nameSpacedKey, PersistentDataType.STRING, this.nameSpacedData);
-        if (this.crazyEnchantments != null) itemMeta = addEnchantments(itemMeta, this.crazyEnchantments);
+        if (!this.crazyEnchantments.isEmpty()) itemMeta = addEnchantments(itemMeta, this.crazyEnchantments);
 
         if (itemMeta instanceof Damageable) ((Damageable) itemMeta).setDamage(this.damage);
 
@@ -825,6 +829,7 @@ public class ItemBuilder {
      */
     public List<Component> getUpdatedLore() {
         List<Component> newLore = new ArrayList<>();
+        if (this.itemLore.isEmpty()) return newLore;
 
         for (Component line : this.itemLore) {
             String newLine = ColorUtils.toLegacy(line);
