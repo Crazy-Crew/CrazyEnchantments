@@ -211,8 +211,8 @@ public class ScrollListener implements Listener {
 
         for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
             if (!data.hasEnchantment(enchantment.getName())) continue;
-            enchantments.put(enchantment, (enchantment.getCustomName() + " " +
-                    NumberUtils.toRoman(data.getLevel(enchantment.getName()))).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").length());
+            enchantments.put(enchantment,ColorUtils.stripStringColour((enchantment.getCustomName() + " " +
+                    NumberUtils.toRoman(data.getLevel(enchantment.getName())))).length());
             newEnchantmentOrder.add(enchantment);
         }
 
@@ -269,15 +269,15 @@ public class ScrollListener implements Listener {
 
         // Remove CE enchantment lore
         enchantments.forEach(enchant -> lore.removeIf(loreComponent ->
-                ColorUtils.toPlainText(loreComponent).contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""))
+                ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(enchant.getCustomName()))
         ));
 
         // Remove white-scroll protection lore
-        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(Scrolls.getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(ColorUtils.stripStringColour(Scrolls.getWhiteScrollProtectionName())));
 
         // Remove Protection-crystal protection lore
         lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).contains(
-                Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected").replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
+                ColorUtils.stripStringColour(Files.CONFIG.getFile().getString("Settings.ProtectionCrystal.Protected"))
         ));
 
         return lore;

@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.stringtemplate.v4.ST;
 
 import java.util.Arrays;
 import java.util.List;
@@ -136,5 +137,9 @@ public class ColorUtils {
                 "BLACK_STAINED_GLASS_PANE");
 
         return new ItemBuilder().setMaterial(colors.get(random.nextInt(colors.size())));
+    }
+
+    public static String stripStringColour(String s) {
+        return s.replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or])", "");
     }
 }

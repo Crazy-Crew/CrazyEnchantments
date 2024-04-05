@@ -138,7 +138,7 @@ public class CECommand implements CommandExecutor {
                     boolean addedLine = false;
 
                     for (CEnchantment activeEnchant : this.enchantmentBookSettings.getRegisteredEnchantments()) {
-                        if (!strippedName.toLowerCase().contains(activeEnchant.getCustomName().toLowerCase().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")) &&
+                        if (!strippedName.toLowerCase().contains(ColorUtils.stripStringColour(activeEnchant.getCustomName()).toLowerCase()) &&
                                 !strippedName.toLowerCase().contains(activeEnchant.getName().toLowerCase())) continue;
 
                         if (enchants.hasEnchantment(activeEnchant.getName())) break;

@@ -151,8 +151,8 @@ public enum Scrolls {
 
         List<Component> lore = item.lore();
 
-        lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                .contains(getWhiteScrollProtectionName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+        lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent)
+                .contains(ColorUtils.stripStringColour(getWhiteScrollProtectionName())));
         meta.lore(lore);
 
         meta.lore(lore);

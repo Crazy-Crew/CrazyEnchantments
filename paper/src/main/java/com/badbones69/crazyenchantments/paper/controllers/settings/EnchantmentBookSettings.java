@@ -332,9 +332,8 @@ public class EnchantmentBookSettings {
         List<Component> lore = meta.lore();
 
         if (lore != null) {
-
-            lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                    .contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+            lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent)
+                    .contains(ColorUtils.stripStringColour(enchant.getCustomName())));
             meta.lore(lore);
         }
 
@@ -364,8 +363,8 @@ public class EnchantmentBookSettings {
 
         if (lore != null) {
             for (CEnchantment enchant : enchants) {
-                lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                        .contains(enchant.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+                lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent)
+                        .contains(ColorUtils.stripStringColour(enchant.getCustomName())));
                 meta.lore(lore);
             }
         }

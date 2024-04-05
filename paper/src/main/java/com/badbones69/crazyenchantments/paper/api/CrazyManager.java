@@ -474,8 +474,8 @@ public class CrazyManager {
     public CEnchantment getEnchantmentFromName(String enchantmentString) {
         for (CEnchantment enchantment : this.enchantmentBookSettings.getRegisteredEnchantments()) {
             if (enchantment.getName().equalsIgnoreCase(enchantmentString)) return enchantment;
-            enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "");
-            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)) return enchantment;
+            enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or]| |_)", "");
+            if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)) return enchantment;
         }
         return null;
     }

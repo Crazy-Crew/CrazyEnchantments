@@ -7,6 +7,7 @@ import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Dust;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
+import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -65,7 +66,7 @@ public class CETab implements TabCompleter {
                 case "info", "add", "book" -> {
                     for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
                         try {
-                            completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "").replace(" ", "_"));
+                            completions.add(ColorUtils.stripStringColour(enchantment.getCustomName().replaceAll(" ", "_")));
                         } catch (NullPointerException ignore) {}
                     }
 
@@ -73,12 +74,12 @@ public class CETab implements TabCompleter {
                 }
                 case "remove" ->
                         this.enchantmentBookSettings.getEnchantments(((Player) sender).getInventory().getItemInMainHand())
-                            .forEach((a,b) -> completions.add(a.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+                            .forEach((a,b) -> completions.add(ColorUtils.stripStringColour(a.getCustomName())));
 
                 case "spawn" -> {
                     for (CEnchantment enchantment : this.crazyManager.getRegisteredEnchantments()) {
                         try {
-                            completions.add(enchantment.getCustomName().replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", ""));
+                            completions.add(ColorUtils.stripStringColour(enchantment.getCustomName()));
                         } catch (NullPointerException ignore) {}
                     }
 

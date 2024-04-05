@@ -159,8 +159,8 @@ public class ProtectionCrystalSettings {
             List<Component> lore = item.lore();
 
             assert lore != null;
-            lore.removeIf(loreComponent -> PlainTextComponentSerializer.plainText().serialize(loreComponent).replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")
-                    .contains(this.protectionString.replaceAll("([&§]?#[0-9a-f]{6}|[&§][1-9a-fk-or])", "")));
+            lore.removeIf(loreComponent -> ColorUtils.toPlainText(loreComponent)
+                    .contains(ColorUtils.stripStringColour(this.protectionString)));
 
             meta.lore(lore);
         }
