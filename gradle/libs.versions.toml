@@ -40,13 +40,13 @@ vault = { group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1" }
 metrics = { group = "org.bstats", name = "bstats-bukkit", version = "3.0.2" }
 config-me = { group = "ch.jalu", name = "configme", version = "1.4.1" }
 
-griefprevention = { group = "com.github.TechFortress", name = "GriefPrevention", version = "16.18.1" }
-towny = { group = "com.palmergames.bukkit.towny", name = "towny", version = "0.99.5.0" }
+griefprevention = { group = "com.github.TechFortress", name = "GriefPrevention", version = "16.18.2" }
+towny = { group = "com.palmergames.bukkit.towny", name = "towny", version = "0.100.2.0" }
 factions = { group = "com.massivecraft", name = "Factions", version = "1.6.9.5-U0.6.31" }
 
 skyblock = { group = "com.bgsoftware", name = "SuperiorSkyblockAPI", version = "2023.2" }
 plotsquared = { group = "com.plotsquared", name = "PlotSquared-Core", version = "6.11.1" }
-mcmmo = { group = "com.gmail.nossr50.mcMMO", name = "mcMMO", version = "2.1.226" }
+mcmmo = { group = "com.gmail.nossr50.mcMMO", name = "mcMMO", version = "2.2.0-SNAPSHOT" } # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
 wildstacker = { group = "com.bgsoftware", name = "WildStackerAPI", version = "2023.2" }
 
 kingdoms = { group = "com.github.cryptomorin", name = "kingdoms", version = "1.16.20.5"}
