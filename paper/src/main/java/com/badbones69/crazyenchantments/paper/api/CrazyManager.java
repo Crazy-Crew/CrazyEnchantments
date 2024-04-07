@@ -118,7 +118,6 @@ public class CrazyManager {
     private boolean useRageBossBar;
 
     private double rageIncrement;
-    private boolean enchantStackedItems;
     private boolean maxEnchantmentCheck;
     private boolean checkVanillaLimit;
 
@@ -203,7 +202,6 @@ public class CrazyManager {
         this.breakRageOnDamage = config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
         this.useRageBossBar = config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
         this.rageIncrement = config.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
-        this.enchantStackedItems = config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items", false);
         setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
         setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
 
@@ -870,13 +868,6 @@ public class CrazyManager {
 
     public double getRageIncrement() {
         return this.rageIncrement;
-    }
-
-    /**
-     * Check if players can enchant a stack of items with an enchantment book.
-     */
-    public boolean enchantStackedItems() {
-        return this.enchantStackedItems;
     }
 
     private void addCEPlayer(CEPlayer player) {
