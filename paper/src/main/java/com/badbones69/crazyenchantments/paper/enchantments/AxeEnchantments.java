@@ -66,14 +66,14 @@ public class AxeEnchantments implements Listener {
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
-                damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 1));
-                damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (crazyManager.getLevel(item, CEnchantments.BERSERK) + 5) * 20, 0));
+                damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 1));
+                damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 0));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.BLESSED, damager, item, enchantments)) removeBadPotions(damager);
 
         if (EnchantUtils.isEventActive(CEnchantments.FEEDME, damager, item, enchantments)&& damager.getFoodLevel() < 20) {
-            int food = 2 * this.crazyManager.getLevel(item, CEnchantments.FEEDME);
+            int food = 2 * enchantments.get(CEnchantments.FEEDME.getEnchantment());
 
             if (damager.getFoodLevel() + food < 20) damager.setFoodLevel((int) (damager.getSaturation() + food));
 
@@ -83,10 +83,10 @@ public class AxeEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.REKT, damager, item, enchantments)) event.setDamage(event.getDamage() * 2);
 
         if (EnchantUtils.isEventActive(CEnchantments.CURSED, damager, item, enchantments))
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (this.crazyManager.getLevel(item, CEnchantments.CURSED) + 9) * 20, 1));
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (enchantments.get(CEnchantments.CURSED.getEnchantment()) + 9) * 20, 1));
 
         if (EnchantUtils.isEventActive(CEnchantments.DIZZY, damager, item, enchantments))
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (this.crazyManager.getLevel(item, CEnchantments.DIZZY) + 9) * 20, 0));
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (enchantments.get(CEnchantments.DIZZY.getEnchantment()) + 9) * 20, 0));
 
         if (EnchantUtils.isEventActive(CEnchantments.BATTLECRY, damager, item, enchantments)) {
             damager.getNearbyEntities(3, 3, 3).stream().filter(nearbyEntity -> !this.pluginSupport.isFriendly(damager, nearbyEntity)).forEach(nearbyEntity ->

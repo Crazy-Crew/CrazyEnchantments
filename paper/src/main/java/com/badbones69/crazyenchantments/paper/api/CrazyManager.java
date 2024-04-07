@@ -789,11 +789,6 @@ public class CrazyManager {
                 Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
-
-    public int getLevel(ItemStack item, CEnchantments enchant) {
-        return this.enchantmentBookSettings.getLevel(item, enchant.getEnchantment());
-    }
-
     public int randomLevel(CEnchantment enchantment, Category category) {
         int enchantmentMax = enchantment.getMaxLevel(); // Max set by the enchantment.
         int randomLevel = 1 + new Random().nextInt(enchantmentMax);

@@ -85,7 +85,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
             checkCommander(armor, player, enchantments);
 
             if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-                final int radius = 4 + this.crazyManager.getLevel(armor, CEnchantments.ANGEL);
+                final int radius = 4 + enchantments.get(CEnchantments.ANGEL.getEnchantment());
                 checkAngel(armor, player, enchantments, radius);
             }
             useHellForge(player, armor, enchantments);
