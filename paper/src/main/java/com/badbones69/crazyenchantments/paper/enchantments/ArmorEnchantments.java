@@ -232,10 +232,10 @@ public class ArmorEnchantments implements Listener {
 
                     if (armorEnchantment.isPotionEnchantment()) {
                         for (PotionEffects effect : armorEnchantment.getPotionEffects()) {
-                            damager.addPotionEffect(new PotionEffect(effect.potionEffect(), effect.duration(), (armorEnchantment.isLevelAddedToAmplifier() ? this.crazyManager.getLevel(armor, enchantment) : 0) + effect.amplifier()));
+                            damager.addPotionEffect(new PotionEffect(effect.potionEffect(), effect.duration(), (armorEnchantment.isLevelAddedToAmplifier() ? enchants.get(enchantment.getEnchantment()) : 0) + effect.amplifier()));
                         }
                     } else {
-                        event.setDamage(event.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? this.crazyManager.getLevel(armor, enchantment) : 0) + armorEnchantment.getDamageAmplifier()));
+                        event.setDamage(event.getDamage() * ((armorEnchantment.isLevelAddedToAmplifier() ? enchants.get(enchantment.getEnchantment()) : 0) + armorEnchantment.getDamageAmplifier()));
                     }
                 }
             }
@@ -280,7 +280,7 @@ public class ArmorEnchantments implements Listener {
             }
 
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {
-                double heal = this.crazyManager.getLevel(armor, CEnchantments.ENLIGHTENED);
+                double heal = enchants.get(CEnchantments.ENLIGHTENED.getEnchantment());
                 // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
                 double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
@@ -289,13 +289,13 @@ public class ArmorEnchantments implements Listener {
                 if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
             }
 
-            if (EnchantUtils.isEventActive(CEnchantments.INSOMNIA, player, armor, enchants)) damager.damage(event.getDamage() + this.crazyManager.getLevel(armor, CEnchantments.INSOMNIA));
+            if (EnchantUtils.isEventActive(CEnchantments.INSOMNIA, player, armor, enchants)) damager.damage(event.getDamage() + enchants.get(CEnchantments.INSOMNIA.getEnchantment()));
 
-            if (EnchantUtils.isEventActive(CEnchantments.MOLTEN, player, armor, enchants)) damager.setFireTicks((this.crazyManager.getLevel(armor, CEnchantments.MOLTEN) * 2) * 20);
+            if (EnchantUtils.isEventActive(CEnchantments.MOLTEN, player, armor, enchants)) damager.setFireTicks((enchants.get(CEnchantments.MOLTEN.getEnchantment()) * 2) * 20);
 
             if (EnchantUtils.isEventActive(CEnchantments.SAVIOR, player, armor, enchants)) event.setDamage(event.getDamage() / 2);
 
-            if (EnchantUtils.isEventActive(CEnchantments.CACTUS, player, armor, enchants)) damager.damage(this.crazyManager.getLevel(armor, CEnchantments.CACTUS));
+            if (EnchantUtils.isEventActive(CEnchantments.CACTUS, player, armor, enchants)) damager.damage(enchants.get(CEnchantments.CACTUS.getEnchantment()));
 
             if (EnchantUtils.isEventActive(CEnchantments.STORMCALLER, player, armor, enchants)) {
                 Entity lightning = this.methods.lightning(damager);
