@@ -557,12 +557,21 @@ public class CrazyManager {
         return meta;
     }
 
-    public ItemStack changeEnchantmentLimiter(ItemStack item, int amount) {
+    /**
+     * @see #changeEnchantmentLimiter(ItemMeta, int)
+     */
+    public ItemStack changeEnchantmentLimiter(@NotNull ItemStack item, int amount) {
         item.setItemMeta(changeEnchantmentLimiter(item.getItemMeta(), amount));
         return item;
     }
 
-    public ItemMeta changeEnchantmentLimiter(ItemMeta meta, int amount) {
+    /**
+     *
+     * @param meta The {@link ItemMeta} of the item to change.
+     * @param amount The amount to change the stored limiter by.
+     * @return The altered {@link ItemMeta}.
+     */
+    public ItemMeta changeEnchantmentLimiter(@NotNull ItemMeta meta, int amount) {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         int newAmount = container.getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
         newAmount += amount;
@@ -576,7 +585,12 @@ public class CrazyManager {
         return meta;
     }
 
-    public int getEnchantmentLimiter(ItemStack item) {
+    /**
+     *
+     * @param item The {@link ItemStack} to check.
+     * @return The limit set on the item by slot crystals.
+     */
+    public int getEnchantmentLimiter(@NotNull ItemStack item) {
         return item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
     }
 
@@ -738,7 +752,12 @@ public class CrazyManager {
         return limit;
     }
 
-    public int getPlayerBaseEnchantments(Player player) {
+    /**
+     * Based on config options, returns the base amount of enchants that the player can have on an.
+     * @param player The {@link Player} to check.
+     * @return The base amount of enchants the player can add to items.
+     */
+    public int getPlayerBaseEnchantments(@NotNull Player player) {
         int limit = defaultBaseLimit;
 
         if (!checkLimitPermission) return limit;
@@ -756,7 +775,13 @@ public class CrazyManager {
         return limit;
     }
 
-    public boolean canAddEnchantment(Player player, ItemStack item) {
+    /**
+     * Checks if the player can add more enchants to the current item based on set limits.
+     * @param player The {@link Player} that has the item.
+     * @param item The {@link ItemStack} that they want to add the enchant to.
+     * @return True if they are able to add more enchants.
+     */
+    public boolean canAddEnchantment(@NotNull Player player, @NotNull ItemStack item) {
         //todo() update permissions
         if (!this.maxEnchantmentCheck || player.hasPermission("crazyenchantments.bypass.limit")) return true;
 
@@ -764,11 +789,7 @@ public class CrazyManager {
                 Math.min(getPlayerBaseEnchantments(player) - getEnchantmentLimiter(item), getPlayerMaxEnchantments(player));
     }
 
-    /**
-     * @param item Item you are getting the level from.
-     * @param enchant The enchantment you want the level from.
-     * @return The level the enchantment has.
-     */
+
     public int getLevel(ItemStack item, CEnchantments enchant) {
         return this.enchantmentBookSettings.getLevel(item, enchant.getEnchantment());
     }
