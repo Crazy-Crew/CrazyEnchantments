@@ -274,6 +274,10 @@ Settings:
     Add-Blank-Lines: true #Dictates if each lore section listed above should have a blank line between them.
   EnchantmentOptions: #Options for enchanted books.
     MaxAmountOfEnchantmentsToggle: true #Turn on and off the Max amount of enchantments. Use crazyenchantments.limit.# permission to set the limit.
+    Limit:
+      Check-Perms: false # If the below permissions should be checked.
+      Default-Limit: 3 # Use the permission crazyenchantments.limit.# to edit it per player.
+      Default-Base-Limit: 0 # Use the permission crazyenchantments.base-limit.# to edit it per player.
     IncludeVanillaEnchantments: false #Count Vanilla enchantments also.
     Enchant-Stacked-Items: false #Turn on if you wish for enchantment books to enchant stacked items.
     MaxRageLevel: 4 #The max amount of rage that scan stack when fighting.

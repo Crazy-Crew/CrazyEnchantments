@@ -124,6 +124,9 @@ public class CrazyManager {
 
     private boolean dropBlocksBlast;
     private boolean dropBlocksVeinMiner;
+    private int defaultLimit;
+    private int defaultBaseLimit;
+    private boolean checkLimitPermission;
 
     /**
      * Loads everything for the Crazy Enchantments plugin.
@@ -191,13 +194,16 @@ public class CrazyManager {
         this.enchantmentBookSettings.setEnchantmentBook(new ItemBuilder().setMaterial(config.getString("Settings.Enchantment-Book-Item", "BOOK")));
         this.useUnsafeEnchantments = config.getBoolean("Settings.EnchantmentOptions.UnSafe-Enchantments", true);
         this.maxEnchantmentCheck = config.getBoolean("Settings.EnchantmentOptions.MaxAmountOfEnchantmentsToggle", true);
+        this.checkLimitPermission = config.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", true);
+        this.defaultLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 0);
+        this.defaultBaseLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 0);
         this.checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
         this.gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled", true);
         this.rageMaxLevel = config.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
         this.breakRageOnDamage = config.getBoolean("Settings.EnchantmentOptions.Break-Rage-On-Damage", true);
         this.useRageBossBar = config.getBoolean("Settings.EnchantmentOptions.Rage-Boss-Bar", false);
         this.rageIncrement = config.getDouble("Settings.EnchantmentOptions.Rage-Increase", 0.1);
-        this.enchantStackedItems = config.contains("Settings.EnchantmentOptions.Enchant-Stacked-Items") && config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items");
+        this.enchantStackedItems = config.getBoolean("Settings.EnchantmentOptions.Enchant-Stacked-Items", false);
         setDropBlocksBlast(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-Blast", true));
         setDropBlocksVeinMiner(config.getBoolean("Settings.EnchantmentOptions.Drop-Blocks-For-VeinMiner", true));
 
@@ -715,7 +721,9 @@ public class CrazyManager {
      * @return The max amount of enchantments a player can have on an item.
      */
     public int getPlayerMaxEnchantments(Player player) {
-        int limit = 0;
+        int limit = defaultLimit;
+
+        if (!checkLimitPermission) return limit;
 
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
@@ -731,7 +739,9 @@ public class CrazyManager {
     }
 
     public int getPlayerBaseEnchantments(Player player) {
-        int limit = 0;
+        int limit = defaultBaseLimit;
+
+        if (!checkLimitPermission) return limit;
 
         for (PermissionAttachmentInfo Permission : player.getEffectivePermissions()) {
             String perm = Permission.getPermission().toLowerCase();
