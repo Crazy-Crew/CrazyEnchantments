@@ -15,6 +15,8 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
@@ -28,6 +30,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -483,9 +486,8 @@ public class Methods {
     /**
      * Plays item break sound and effect.
      * @param player The {@link Player} who's item broke.
-     * @return
      */
-    public void playItemBreak(Player player, ItemStack item) {
+    public void playItemBreak(@NotNull Player player, @NotNull ItemStack item) {
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
         player.getWorld().spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
     }
@@ -499,10 +501,12 @@ public class Methods {
      * @param tool ItemStack used to break the block.
      * @return If the event was cancelled.
      */
-    public boolean playerBreakBlock(Player player, Block block, ItemStack tool, boolean hasDrops) {
+    public boolean playerBreakBlock(@NotNull Player player, @NotNull Block block, @NotNull ItemStack tool, boolean hasDrops) {
+        // My favorite chain of methods I created. Feel free to ask if there are problems. -TDL
         BlockBreakEvent blockBreak = new BlockBreakEvent(block, player);
-        Collection<ItemStack> dropItems = tool != null ? block.getDrops(tool, player) : block.getDrops();
+        Collection<ItemStack> dropItems = !tool.isEmpty() ? block.getDrops(tool, player) : block.getDrops();
         if (dropItems.isEmpty()) blockBreak.setDropItems(false);
+        blockBreak.setExpToDrop(getXPThroughNMS(block, tool));
 
         EventUtils.addIgnoredEvent(blockBreak);
         this.plugin.getServer().getPluginManager().callEvent(blockBreak);
@@ -510,7 +514,7 @@ public class Methods {
 
         if (blockBreak.isCancelled()) return true;
 
-        if (blockBreak.isDropItems() && hasDrops) blockDropItems(player, block, dropItems);
+        if (blockBreak.isDropItems() && hasDrops) blockDropItems(player, block, dropItems, blockBreak.getExpToDrop());
 
         block.setType(Material.AIR);
         return false;
@@ -522,13 +526,41 @@ public class Methods {
      * @param block The block that was broken.
      * @param items The items that will be dropped from the broken block.
      */
-    public void blockDropItems(Player player, Block block, Collection<ItemStack> items) {
+    private void blockDropItems(@NotNull Player player, @NotNull Block block, @NotNull Collection<ItemStack> items, int expToDrop) {
         List<Item> dropItems = new ArrayList<>();
+        ExperienceOrb exp = null;
+
         items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
+
+        if (expToDrop > 0) {
+            exp = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+            exp.setExperience(expToDrop);
+        }
 
         BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
         this.plugin.getServer().getPluginManager().callEvent(event);
 
-        if (event.isCancelled()) dropItems.forEach(Entity::remove);
+        if (event.isCancelled()) {
+            dropItems.forEach(Entity::remove);
+            if (exp != null) exp.remove();
+        }
     }
+
+    /**
+     *
+     * @param block The {@link Block} to get xp of when broken.
+     * @param item The {@link ItemStack} used to break the block.
+     * @return The amount of xp the block would drop when broken by that item.
+     */
+    private int getXPThroughNMS(@NotNull Block block, @NotNull ItemStack item) { // When it breaks, you can not blame me as I was left unsupervised. -TDL
+
+        CraftBlock cb = (CraftBlock) block;
+
+        net.minecraft.world.level.block.state.BlockState iWorldblockdata = cb.getNMS();
+        net.minecraft.world.level.block.Block worldBlock = iWorldblockdata.getBlock();
+        net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
+        return worldBlock.getExpDrop(iWorldblockdata, cb.getHandle().getMinecraftWorld(), cb.getPosition(), nmsItem, true);
+
+    }
+
 }
