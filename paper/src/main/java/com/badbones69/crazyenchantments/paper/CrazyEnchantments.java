@@ -132,6 +132,8 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        getServer().getGlobalRegionScheduler().cancelTasks(this);
+        getServer().getAsyncScheduler().cancelTasks(this);
         this.bossBarController.removeAllBossBars();
 
         if (this.armorEnchantments != null) this.armorEnchantments.stop();
