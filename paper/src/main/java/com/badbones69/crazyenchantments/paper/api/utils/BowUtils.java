@@ -116,7 +116,7 @@ public class BowUtils {
 
             arrow.remove();
 
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
+            this.plugin.getServer().getRegionScheduler().runDelayed(this.plugin, entityLocation, scheduledTask -> {
                 entityLocation.getBlock().setType(Material.AIR);
                 webBlocks.remove(entityLocation.getBlock());
             }, 5 * 20);
@@ -127,18 +127,20 @@ public class BowUtils {
     }
 
     private void setWebBlocks(Entity hitEntity) {
-        for (Block block : getCube(hitEntity.getLocation())) {
+        hitEntity.getScheduler().run(plugin, entityTask -> {
+            for (Block block : getCube(hitEntity.getLocation())) {
 
-            block.setType(Material.COBWEB);
-            this.webBlocks.add(block);
+                block.setType(Material.COBWEB);
+                this.webBlocks.add(block);
 
-            this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> {
-                if (block.getType() == Material.COBWEB) {
-                    block.setType(Material.AIR);
-                    webBlocks.remove(block);
-                }
-            }, 5 * 20);
-        }
+                this.plugin.getServer().getRegionScheduler().runDelayed(this.plugin, block.getLocation(), scheduledTask -> {
+                    if (block.getType() == Material.COBWEB) {
+                        block.setType(Material.AIR);
+                        webBlocks.remove(block);
+                    }
+                }, 5 * 20);
+            }
+        }, null);
     }
 
     // Sticky Shot End!

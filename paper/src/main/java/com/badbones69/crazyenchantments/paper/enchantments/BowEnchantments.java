@@ -149,7 +149,7 @@ public class BowEnchantments implements Listener {
         }
 
         // Removes the arrow from the list after 5 ticks. This is done because the onArrowDamage event needs the arrow in the list, so it can check.
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.bowUtils.removeArrow(arrow), 5);
+        entityArrow.getScheduler().runDelayed(this.plugin, (arrowTask) -> this.bowUtils.removeArrow(arrow),  null, 5);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

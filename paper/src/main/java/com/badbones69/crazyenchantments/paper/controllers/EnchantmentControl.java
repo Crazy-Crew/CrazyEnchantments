@@ -199,7 +199,7 @@ public class EnchantmentControl implements Listener {
 
         if (event.getItem().getType() != Material.MILK_BUCKET) return;
 
-        player.getServer().getScheduler().runTaskLater(plugin, () -> crazyManager.updatePlayerEffects(player), 5);
+        player.getScheduler().runDelayed(plugin, playerTask -> crazyManager.updatePlayerEffects(player), null, 5);
 
     }
 }

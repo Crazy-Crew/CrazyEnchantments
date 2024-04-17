@@ -48,6 +48,6 @@ public class CommandChecker implements Listener {
     }
 
     private void updateEffects(Player player) {
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> this.crazyManager.updatePlayerEffects(player), 5);
+        player.getScheduler().runDelayed(this.plugin, playerTask -> this.crazyManager.updatePlayerEffects(player), null, 5);
     }
 }
