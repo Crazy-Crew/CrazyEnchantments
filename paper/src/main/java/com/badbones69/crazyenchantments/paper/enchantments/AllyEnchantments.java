@@ -10,7 +10,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.gmail.nossr50.party.PartyManager;
+import com.gmail.nossr50.api.PartyAPI;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -123,7 +123,7 @@ public class AllyEnchantments implements Listener {
 
         // Stop ally from targeting party members.
         if (allyMob != null && target instanceof Player && PluginSupport.SupportedPlugins.MCMMO.isPluginLoaded()) {
-            PartyManager.inSameParty(allyMob.getOwner(), (Player) target);
+            PartyAPI.inSameParty(allyMob.getOwner(), (Player) target);
         }
 
         // Stop your pets from targeting you.
