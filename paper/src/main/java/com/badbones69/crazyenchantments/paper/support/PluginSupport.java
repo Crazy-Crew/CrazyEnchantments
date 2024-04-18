@@ -8,7 +8,7 @@ import com.badbones69.crazyenchantments.paper.support.claims.GriefPreventionSupp
 import com.badbones69.crazyenchantments.paper.support.claims.TownySupport;
 import com.badbones69.crazyenchantments.paper.support.factions.FactionsUUIDSupport;
 import com.badbones69.crazyenchantments.paper.support.interfaces.claims.ClaimSupport;
-import com.gmail.nossr50.party.PartyManager;
+import com.gmail.nossr50.api.PartyAPI;
 import com.google.common.collect.Maps;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -54,7 +54,7 @@ public class PluginSupport {
 
         if (SupportedPlugins.SUPERIORSKYBLOCK.isPluginLoaded() && this.starter.getSuperiorSkyBlockSupport().isFriendly(player, otherPlayer)) return true;
 
-        if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyManager.inSameParty((Player) pEntity, (Player) oEntity);
+        if (SupportedPlugins.MCMMO.isPluginLoaded()) return PartyAPI.inSameParty((Player) pEntity, (Player) oEntity);
 
         return false;
 
