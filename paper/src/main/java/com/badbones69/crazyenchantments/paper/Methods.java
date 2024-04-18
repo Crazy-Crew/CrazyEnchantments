@@ -264,7 +264,7 @@ public class Methods {
 
         this.plugin.getFireworkDamageListener().addFirework(firework);
 
-        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, firework::detonate, 2);
+        this.plugin.getServer().getRegionScheduler().runDelayed(this.plugin, loc, task -> firework.detonate(), 2);
     }
 
     public Enchantment getEnchantment(String enchantmentName) {

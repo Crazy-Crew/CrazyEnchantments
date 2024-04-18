@@ -197,9 +197,9 @@ public class TinkererMenu extends InventoryBuilder {
         @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
         public void onInvClose(final InventoryCloseEvent event) {
             if (!(event.getInventory().getHolder() instanceof TinkererMenu holder)) return;
+            Player player = holder.getPlayer();
 
-            this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
-                Player player = holder.getPlayer();
+            player.getScheduler().execute(this.plugin, () -> {
 
                 Inventory inventory = holder.getInventory();
 
@@ -216,7 +216,7 @@ public class TinkererMenu extends InventoryBuilder {
 
                     holder.getInventory().clear();
                 }
-            }, 0);
+            }, null, 0);
         }
     }
 }
