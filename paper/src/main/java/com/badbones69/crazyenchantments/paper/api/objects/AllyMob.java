@@ -86,37 +86,39 @@ public class AllyMob {
     }
 
     public void attackEnemy(LivingEntity enemy) {
-        switch (this.ally.getType()) {
-            case WOLF -> {
-                Wolf wolf = (Wolf) this.ally;
-                wolf.setTarget(enemy);
-            }
+        this.ally.getScheduler().run(this.plugin, task -> {
+            switch (this.ally.getType()) {
+                case WOLF -> {
+                    Wolf wolf = (Wolf) this.ally;
+                    wolf.setTarget(enemy);
+                }
 
-            case IRON_GOLEM -> {
-                IronGolem iron = (IronGolem) this.ally;
-                iron.setTarget(enemy);
-            }
+                case IRON_GOLEM -> {
+                    IronGolem iron = (IronGolem) this.ally;
+                    iron.setTarget(enemy);
+                }
 
-            case ZOMBIE -> {
-                Zombie zom = (Zombie) this.ally;
-                zom.setTarget(enemy);
-            }
+                case ZOMBIE -> {
+                    Zombie zom = (Zombie) this.ally;
+                    zom.setTarget(enemy);
+                }
 
-            case ENDERMITE -> {
-                Endermite mite = (Endermite) this.ally;
-                mite.setTarget(enemy);
-            }
+                case ENDERMITE -> {
+                    Endermite mite = (Endermite) this.ally;
+                    mite.setTarget(enemy);
+                }
 
-            case SILVERFISH -> {
-                Silverfish sfish = (Silverfish) this.ally;
-                sfish.setTarget(enemy);
-            }
+                case SILVERFISH -> {
+                    Silverfish sfish = (Silverfish) this.ally;
+                    sfish.setTarget(enemy);
+                }
 
-            case BEE -> {
-                Bee bee = (Bee) this.ally;
-                bee.setTarget(enemy);
+                case BEE -> {
+                    Bee bee = (Bee) this.ally;
+                    bee.setTarget(enemy);
+                }
             }
-        }
+        }, null);
     }
     
     private void startSpawnTimer() {

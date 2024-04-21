@@ -5,7 +5,7 @@ plugins {
 repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 
-    maven("https://repo.dustplanet.de/artifactory/libs-release-local/")
+    //maven("https://repo.dustplanet.de/artifactory/libs-release-local/")
 
     maven("https://repo.md-5.net/content/repositories/snapshots/")
 
