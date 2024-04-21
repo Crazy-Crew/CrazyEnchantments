@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
@@ -8,6 +9,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +23,8 @@ public class AllyManager {
     private final List<AllyMob> allyMobs = new ArrayList<>();
     private final Map<UUID, List<AllyMob>> allyOwners = new HashMap<>();
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
+    @NotNull
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     
     public void load() {
         FileConfiguration config = Files.CONFIG.getFile();
@@ -63,7 +69,10 @@ public class AllyManager {
     
     public void forceRemoveAllies() {
         if (!this.allyMobs.isEmpty()) {
-            this.allyMobs.forEach(ally -> ally.getAlly().remove());
+            for (AllyMob ally : this.allyMobs) {
+                LivingEntity allyLE = ally.getAlly();
+                allyLE.getScheduler().run(plugin, task -> allyLE.remove(), null);
+            }
             this.allyMobs.clear();
             this.allyOwners.clear();
         }
@@ -71,8 +80,11 @@ public class AllyManager {
     
     public void forceRemoveAllies(Player owner) {
         for (AllyMob ally : this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
-            ally.getAlly().remove();
-            this.allyMobs.remove(ally);
+            LivingEntity allyLE = ally.getAlly();
+            allyLE.getScheduler().run(plugin, task -> {
+                allyLE.remove();
+                this.allyMobs.remove(ally);
+            }, null);
         }
 
         this.allyOwners.remove(owner.getUniqueId());
