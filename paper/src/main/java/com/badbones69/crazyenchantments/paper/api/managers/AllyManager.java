@@ -91,7 +91,9 @@ public class AllyManager {
     }
     
     public void setEnemy(Player owner, Entity enemy) {
-        this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> ally.attackEnemy((LivingEntity) enemy));
+        this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> {
+            ally.getAlly().getScheduler().run(plugin, task -> ally.attackEnemy((LivingEntity) enemy), null);
+        });
     }
     
     public Map<AllyType, String> getAllyTypeNameCache() {
