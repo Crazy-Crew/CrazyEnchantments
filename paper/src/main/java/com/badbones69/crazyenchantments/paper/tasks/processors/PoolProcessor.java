@@ -10,30 +10,47 @@ import java.util.concurrent.TimeUnit;
 public abstract class PoolProcessor {
 
     private final CrazyEnchantments plugin =  JavaPlugin.getPlugin(CrazyEnchantments.class);
-    private final int maxQueueSize = 10000;
+
     private ThreadPoolExecutor executor = null;
+
+    private final int maxQueueSize = 10000;
+
     private int taskId;
 
     public PoolProcessor() {
         start();
     }
 
+    /**
+     * Adds the task into the thread pool to be processed.
+     * @param process The {@link Runnable} to process.
+     */
     public void add(final Runnable process) {
         executor.submit(process);
     }
 
+    /**
+     * Creates the thread pool used to process tasks.
+     */
     public void start() {
         if (executor == null) executor = new ThreadPoolExecutor(1, 10, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(maxQueueSize));
         executor.allowCoreThreadTimeOut(true);
         resizeChecker();
     }
 
+    /**
+     * Terminates the thread pool.
+     */
     public void stop() {
         plugin.getServer().getScheduler().cancelTask(taskId);
         executor.shutdown();
         executor = null;
     }
 
+    /**
+     * Used to increase the default workers in the thread pool.
+     * This should ensure that with a higher player count, that all tasks are processed.
+     */
     private void resizeChecker() {
         taskId = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
 
