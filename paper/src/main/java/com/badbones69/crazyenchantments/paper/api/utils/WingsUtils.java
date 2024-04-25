@@ -38,7 +38,7 @@ public class WingsUtils {
     public static void startWings() {
         if (!wingsManager.isWingsEnabled()) wingsManager.endWingsTask();
 
-        wingsManager.setWingsTask(new FoliaRunnable(plugin.getServer().getAsyncScheduler(), TimeUnit.MICROSECONDS) {
+        wingsManager.setWingsTask(new FoliaRunnable(plugin.getServer().getAsyncScheduler(), TimeUnit.MILLISECONDS) {
             @Override
             public void run() {
                 for (UUID uuid : wingsManager.getFlyingPlayers()) {
@@ -56,7 +56,7 @@ public class WingsUtils {
                     }, null);
                 }
             }
-        }.runAtFixedRate(plugin, 1*50L, 1*50L));
+        }.runAtFixedRate(plugin, 50L, 50L));
     }
 
     public static void checkArmor(ItemStack newArmorPiece, boolean newArmor, ItemStack oldArmorPiece, Player player) {

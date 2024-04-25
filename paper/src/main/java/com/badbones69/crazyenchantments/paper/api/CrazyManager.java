@@ -165,7 +165,7 @@ public class CrazyManager {
             // Loop through all players & back them up.
             this.plugin.getServer().getAsyncScheduler().runAtFixedRate(this.plugin, task ->
                     getCEPlayers().forEach(name ->
-                            backupCEPlayer(name.getPlayer())), 5 * 20 * 60 * 50L, 5 * 20 * 60 * 50L, TimeUnit.MILLISECONDS);
+                            backupCEPlayer(name.getPlayer())), 5, 5, TimeUnit.MINUTES);
         });
 
         // Invalidate cached enchants.
