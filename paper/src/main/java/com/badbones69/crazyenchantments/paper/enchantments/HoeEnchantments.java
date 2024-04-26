@@ -154,7 +154,7 @@ public class HoeEnchantments implements Listener {
         ItemStack playerSeedItem;
         Block plant = soil.getLocation().add(0, 1, 0).getBlock();
 
-        if (plant.isEmpty()) return false;
+        if (!plant.isEmpty()) return false;
 
         seedType = getPlanterSeed(player.getEquipment().getItemInOffHand());
         playerSeedItem = player.getEquipment().getItemInOffHand();
