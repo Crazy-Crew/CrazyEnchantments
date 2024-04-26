@@ -12,6 +12,7 @@ import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -66,32 +67,31 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
         if (player == null) return;
 
-        player.getScheduler().run(plugin, playerTask -> {
-            for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
-                Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
-                if (enchantments.isEmpty()) continue;
+        for (final ItemStack armor : Objects.requireNonNull(player.getEquipment()).getArmorContents()) {
+            Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(armor);
+            if (enchantments.isEmpty()) continue;
 
-                int heal = 1;
-                // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
-                double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+            int heal = 1;
+            // Uses getValue as if the player has health boost it is modifying the base so the value after the modifier is needed.
+            double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
 
-                if (maxHealth > player.getHealth() && player.getHealth() > 0) {
-                    checkNursery(armor, player, enchantments, heal, maxHealth);
-                }
-
-                if (player.getFoodLevel() < 20) {
-                    checkImplants(armor, player, enchantments);
-                }
-
-                checkCommander(armor, player, enchantments);
-
-                if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
-                    final int radius = 4 + enchantments.get(CEnchantments.ANGEL.getEnchantment());
-                    checkAngel(armor, player, enchantments, radius);
-                }
-                useHellForge(player, armor, enchantments);
+            if (maxHealth > player.getHealth() && player.getHealth() > 0) {
+                checkNursery(armor, player, enchantments, heal, maxHealth);
             }
 
+            if (player.getFoodLevel() < 20) {
+                checkImplants(armor, player, enchantments);
+            }
+
+            checkCommander(armor, player, enchantments);
+
+            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+                final int radius = 4 + enchantments.get(CEnchantments.ANGEL.getEnchantment());
+                checkAngel(armor, player, enchantments, radius);
+            }
+            useHellForge(player, armor, enchantments);
+        }
+        player.getScheduler().run(this.plugin, task -> {
             PlayerInventory inv = player.getInventory();
 
             useHellForge(player, inv.getItemInMainHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInMainHand()));
@@ -100,28 +100,30 @@ public class ArmorMoveProcessor extends Processor<UUID> {
     }
 
     private void checkCommander(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
-        if (!EnchantUtils.isMoveEventActive(CEnchantments.COMMANDER, player, enchantments)) return;
-
-        int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
-
         player.getScheduler().run(this.plugin, playerTask -> {
+            if (!EnchantUtils.isMoveEventActive(CEnchantments.COMMANDER, player, enchantments)) return;
+
+            int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
             if (EnchantUtils.normalEnchantEvent(CEnchantments.COMMANDER, player, armor)) {
-                player.getNearbyEntities(radius, radius, radius).stream().filter(e ->
-                        e instanceof Player && this.pluginSupport.isFriendly(player, e)).map(e -> (Player) e)
-                        .forEach(otherPlayer -> otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1)));
+                for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
+                    e.getScheduler().run(plugin, task -> {
+                        if (e instanceof Player otherPlayer && this.pluginSupport.isFriendly(player, otherPlayer)) {
+                            otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
+                        }
+                    }, null);
+                }
             }
         }, null);
     }
 
     private void checkAngel(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int radius) {
-        if (!EnchantUtils.isMoveEventActive(CEnchantments.ANGEL, player, enchantments)) return;
-
-        List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(entity ->
-                this.pluginSupport.isFriendly(player, entity)).map(entity -> (Player) entity).toList();
-        
-        if (players.isEmpty()) return;
-
         player.getScheduler().run(this.plugin, playerTask -> {
+            if (!EnchantUtils.isMoveEventActive(CEnchantments.ANGEL, player, enchantments)) return;
+
+            List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(entity ->
+                    this.pluginSupport.isFriendly(player, entity)).map(entity -> (Player) entity).toList();
+
+            if (players.isEmpty()) return;
             if (EnchantUtils.normalEnchantEvent(CEnchantments.ANGEL, player, armor)) {
                 players.forEach(p -> p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0)));
             }
@@ -129,9 +131,9 @@ public class ArmorMoveProcessor extends Processor<UUID> {
     }
 
     private void checkImplants(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
-        if (!EnchantUtils.isMoveEventActive(CEnchantments.IMPLANTS, player, enchantments)) return;
-
         player.getScheduler().run(this.plugin, playerTask -> {
+            if (!EnchantUtils.isMoveEventActive(CEnchantments.IMPLANTS, player, enchantments)) return;
+
             if (EnchantUtils.normalEnchantEvent(CEnchantments.IMPLANTS, player, armor)) {
                 player.setFoodLevel(Math.min(20, player.getFoodLevel() + enchantments.get(CEnchantments.IMPLANTS.getEnchantment())));
             }
@@ -139,9 +141,8 @@ public class ArmorMoveProcessor extends Processor<UUID> {
     }
 
     private void checkNursery(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int heal, double maxHealth) {
-        if (!EnchantUtils.isMoveEventActive(CEnchantments.NURSERY, player, enchantments)) return;
-
         player.getScheduler().run(this.plugin, playerTask -> {
+            if (!EnchantUtils.isMoveEventActive(CEnchantments.NURSERY, player, enchantments)) return;
             if (EnchantUtils.normalEnchantEvent(CEnchantments.NURSERY, player, armor)) {
                 if (player.getHealth() + heal <= maxHealth) player.setHealth(player.getHealth() + heal);
                 if (player.getHealth() + heal >= maxHealth) player.setHealth(maxHealth);
@@ -150,11 +151,10 @@ public class ArmorMoveProcessor extends Processor<UUID> {
     }
 
     private void useHellForge(Player player, ItemStack item, Map<CEnchantment, Integer> enchantments) {
-        if (!EnchantUtils.isMoveEventActive(CEnchantments.HELLFORGED, player, enchantments)) return;
-        int armorDurability = this.methods.getDurability(item);
-        if (armorDurability <= 0) return;
-
         player.getScheduler().run(this.plugin, playerTask -> {
+            if (!EnchantUtils.isMoveEventActive(CEnchantments.HELLFORGED, player, enchantments)) return;
+            int armorDurability = this.methods.getDurability(item);
+            if (armorDurability <= 0) return;
             if (EnchantUtils.normalEnchantEvent(CEnchantments.HELLFORGED, player, item)) {
                 int finalArmorDurability = armorDurability;
                 finalArmorDurability -= enchantments.get(CEnchantments.HELLFORGED.getEnchantment());
