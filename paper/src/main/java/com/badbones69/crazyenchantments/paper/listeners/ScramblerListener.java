@@ -9,6 +9,8 @@ import com.badbones69.crazyenchantments.paper.api.enums.pdc.DataKeys;
 import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
+import com.badbones69.crazyenchantments.paper.scheduler.FoliaRunnable;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,8 +26,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class ScramblerListener implements Listener {
     @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    private final HashMap<Player, BukkitTask> roll = new HashMap<>();
+    private final HashMap<Player, ScheduledTask> roll = new HashMap<>();
 
     private ItemBuilder scramblerItem;
     private ItemBuilder pointer;
@@ -120,7 +120,7 @@ public class ScramblerListener implements Listener {
     }
 
     private void startScrambler(final Player player, final Inventory inventory, final ItemStack book) {
-        this.roll.put(player, new BukkitRunnable() {
+        this.roll.put(player, new FoliaRunnable(player.getScheduler(), null) {
             int time = 1;
             int full = 0;
             int open = 0;
@@ -168,7 +168,7 @@ public class ScramblerListener implements Listener {
                     }
                 }
             }
-        }.runTaskTimer(this.plugin, 1, 1));
+        }.runAtFixedRate(this.plugin, 1, 1));
     }
 
     private List<Integer> slowSpin() {

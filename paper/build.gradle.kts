@@ -12,8 +12,6 @@ val mcVersion: String = providers.gradleProperty("mcVersion").get()
 dependencies {
     paperweight.paperDevBundle(libs.versions.bundle)
 
-    implementation(libs.metrics)
-
     implementation(libs.nbtapi)
 
     compileOnly(libs.placeholder.api)

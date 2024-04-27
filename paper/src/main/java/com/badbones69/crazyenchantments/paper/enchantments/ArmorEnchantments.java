@@ -99,7 +99,7 @@ public class ArmorEnchantments implements Listener {
         if (!(event.getEntity() instanceof Player player)) return;
         ItemStack air = new ItemStack(Material.AIR);
 
-        this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> newUpdateEffects(player, air, air), 10);
+        player.getScheduler().runDelayed(this.plugin, playerTask -> newUpdateEffects(player, air, air), null, 10);
     }
 
     @EventHandler
@@ -271,12 +271,12 @@ public class ArmorEnchantments implements Listener {
 
             if (player.getHealth() <= 8 && EnchantUtils.isEventActive(CEnchantments.ROCKET, player, armor, enchants)) {
                 // Anti cheat support here with AAC or any others.
-                this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
+                player.getScheduler().runDelayed(this.plugin, playerTask -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), null, 1);
                 this.fallenPlayers.add(player.getUniqueId());
 
                 player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
 
-                this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> fallenPlayers.remove(player.getUniqueId()), 8 * 20);
+                player.getScheduler().runDelayed(this.plugin, playerTask -> fallenPlayers.remove(player.getUniqueId()), null, 8 * 20);
             }
 
             if (player.getHealth() > 0 && EnchantUtils.isEventActive(CEnchantments.ENLIGHTENED, player, armor, enchants)) {

@@ -10,6 +10,6 @@ public class RunnableSyncProcessor extends Processor<Runnable> {
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     
     void process(final Runnable process) {
-        this.plugin.getServer().getScheduler().runTask(this.plugin, process);
+        this.plugin.getServer().getGlobalRegionScheduler().run(this.plugin, task -> process.run());
     }
 }

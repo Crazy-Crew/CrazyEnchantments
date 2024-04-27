@@ -5,17 +5,17 @@ import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 //todo() register gkit permissions
 public class CEPlayer {
@@ -31,7 +31,7 @@ public class CEPlayer {
     private Double rageMultiplier;
     private boolean hasRage;
     private int rageLevel;
-    private BukkitTask rageTask;
+    private ScheduledTask rageTask;
     private final Set<CEnchantments> onCooldown = new HashSet<>();
     
     /**
@@ -253,7 +253,7 @@ public class CEPlayer {
     /**
      * Get the cooldown task the player's rage has till they calm down.
      */
-    public BukkitTask getRageTask() {
+    public ScheduledTask getRageTask() {
         return this.rageTask;
     }
     
@@ -261,7 +261,7 @@ public class CEPlayer {
      * Set the new cooldown task for the player's rage.
      * @param rageTask The new cooldown task for the player.
      */
-    public void setRageTask(BukkitTask rageTask) {
+    public void setRageTask(ScheduledTask rageTask) {
         this.rageTask = rageTask;
     }
 
@@ -277,7 +277,7 @@ public class CEPlayer {
 
         this.onCooldown.add(enchant);
         // Limit players to using each enchant only once per second.
-        this.plugin.getServer().getScheduler().runTaskLaterAsynchronously(this.plugin, () -> this.onCooldown.remove(enchant), delay);
+        this.plugin.getServer().getAsyncScheduler().runDelayed(this.plugin, (task) -> this.onCooldown.remove(enchant), delay * 50L, TimeUnit.MILLISECONDS);
 
         return false;
     }
