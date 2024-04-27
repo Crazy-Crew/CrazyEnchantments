@@ -31,7 +31,7 @@ decent-holograms = { group = "com.github.decentsoftware-eu", name = "decentholog
 worldedit = { group = "com.sk89q.worldedit", name = "worldedit-bukkit", version = "7.2.15" }
 worldguard = { group = "com.sk89q.worldguard", name = "worldguard-bukkit", version = "7.1.0-SNAPSHOT" }
 
-nbtapi = { group = "de.tr7zw", name = "item-nbt-api", version = "2.12.2" }
+nbtapi = { group = "de.tr7zw", name = "item-nbt-api", version = "2.12.3" }
 
 triumph-cmds = { group = "dev.triumphteam", name = "triumph-cmd-bukkit", version = "2.0.0-ALPHA-9" }
 triumph-gui = { group = "dev.triumphteam", name = "triumph-gui", version = "3.1.7" }
