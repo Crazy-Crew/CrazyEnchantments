@@ -60,6 +60,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class CrazyManager {
 
@@ -162,9 +163,9 @@ public class CrazyManager {
             if (playerHealthPatch) player.getAttribute(genericAttribute).setBaseValue(baseValue);
 
             // Loop through all players & back them up.
-            this.plugin.getServer().getScheduler().runTaskTimerAsynchronously(this.plugin, task ->
+            this.plugin.getServer().getAsyncScheduler().runAtFixedRate(this.plugin, task ->
                     getCEPlayers().forEach(name ->
-                            backupCEPlayer(name.getPlayer())), 5 * 20 * 60, 5 * 20 * 60);
+                            backupCEPlayer(name.getPlayer())), 5, 5, TimeUnit.MINUTES);
         });
 
         // Invalidate cached enchants.
