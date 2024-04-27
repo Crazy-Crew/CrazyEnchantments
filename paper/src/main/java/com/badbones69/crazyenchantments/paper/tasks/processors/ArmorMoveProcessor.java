@@ -101,8 +101,8 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
             int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
             if (EnchantUtils.normalEnchantEvent(CEnchantments.COMMANDER, player, armor)) {
+                PotionEffect fastDigging = new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1);
                 for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
-                    PotionEffect fastDigging = new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1);
                     e.getScheduler().run(plugin, task -> {
                         if (e instanceof Player otherPlayer && this.pluginSupport.isFriendly(player, otherPlayer)) {
                             otherPlayer.addPotionEffect(fastDigging);
