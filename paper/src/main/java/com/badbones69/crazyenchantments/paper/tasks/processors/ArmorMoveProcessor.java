@@ -20,10 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+
+import java.util.*;
 
 public class ArmorMoveProcessor extends Processor<UUID> {
 
@@ -104,9 +102,10 @@ public class ArmorMoveProcessor extends Processor<UUID> {
             int radius = 4 + enchantments.get(CEnchantments.COMMANDER.getEnchantment());
             if (EnchantUtils.normalEnchantEvent(CEnchantments.COMMANDER, player, armor)) {
                 for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
+                    PotionEffect fastDigging = new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1);
                     e.getScheduler().run(plugin, task -> {
                         if (e instanceof Player otherPlayer && this.pluginSupport.isFriendly(player, otherPlayer)) {
-                            otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1));
+                            otherPlayer.addPotionEffect(fastDigging);
                         }
                     }, null);
                 }
@@ -117,13 +116,22 @@ public class ArmorMoveProcessor extends Processor<UUID> {
     private void checkAngel(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments, int radius) {
         player.getScheduler().run(this.plugin, playerTask -> {
             if (!EnchantUtils.isMoveEventActive(CEnchantments.ANGEL, player, enchantments)) return;
+            if (!EnchantUtils.normalEnchantEvent(CEnchantments.ANGEL, player, armor)) return;
 
-            List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(entity ->
-                    this.pluginSupport.isFriendly(player, entity)).map(entity -> (Player) entity).toList();
+            List<Player> players = new ArrayList<>();
+            for (Entity entity : player.getNearbyEntities(radius, radius, radius)) {
+                entity.getScheduler().run(plugin, (task) -> {
+                    if (entity instanceof Player otherPlayer && this.pluginSupport.isFriendly(player, otherPlayer)) {
+                        players.add(otherPlayer);
+                    }
+                }, null);
+            }
 
             if (players.isEmpty()) return;
-            if (EnchantUtils.normalEnchantEvent(CEnchantments.ANGEL, player, armor)) {
-                players.forEach(p -> p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0)));
+
+            PotionEffect regeneration = new PotionEffect(PotionEffectType.REGENERATION, 3 * 20, 0);
+            for (Player p : players) {
+                p.getScheduler().run(plugin, task -> p.addPotionEffect(regeneration), null);
             }
         }, null);
     }
