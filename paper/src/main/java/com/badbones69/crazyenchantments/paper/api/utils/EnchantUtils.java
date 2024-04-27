@@ -38,7 +38,7 @@ public class EnchantUtils {
     }
 
     public static boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack item, Map<CEnchantment, Integer> enchants) {
-        return isEventActive(enchant, damager, item, enchants, 1.0);tt
+        return isEventActive(enchant, damager, item, enchants, 1.0);
     }
 
     public static boolean isEventActive(CEnchantments enchant, Entity damager, ItemStack item, Map<CEnchantment, Integer> enchants, double multiplier) {
