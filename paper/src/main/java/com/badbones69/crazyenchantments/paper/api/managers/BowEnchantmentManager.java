@@ -16,7 +16,7 @@ public class BowEnchantmentManager {
 
         if (CEnchantments.PIERCING.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.PIERCING, 2, false));
 
-        if (CEnchantments.ICEFREEZE.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.ICEFREEZE, List.of(new PotionEffects(PotionEffectType.SLOW, 5 * 20, 1)), false));
+        if (CEnchantments.ICEFREEZE.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.ICEFREEZE, List.of(new PotionEffects(PotionEffectType.SLOWNESS, 5 * 20, 1)), false));
 
         if (CEnchantments.VENOM.isActivated()) this.bowEnchantments.add(new BowEnchantment(CEnchantments.VENOM, List.of(new PotionEffects(PotionEffectType.POISON, 2 * 20, -1)), true));
 

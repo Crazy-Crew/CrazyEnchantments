@@ -1,17 +1,12 @@
 plugins {
-    `paper-plugin`
-
-    id("io.papermc.paperweight.userdev")
+    id("io.github.goooler.shadow")
 
     alias(libs.plugins.run.paper)
-    alias(libs.plugins.shadow)
+
+    `paper-plugin`
 }
 
-val mcVersion: String = providers.gradleProperty("mcVersion").get()
-
 dependencies {
-    paperweight.paperDevBundle(libs.versions.bundle)
-
     implementation(libs.metrics)
 
     implementation(libs.nbtapi)
@@ -52,8 +47,6 @@ dependencies {
     compileOnly(libs.mcmmo)
 
     compileOnly(libs.wildstacker)
-
-    compileOnly(fileTree("libs").include("*.jar"))
 }
 
 val component: SoftwareComponent = components["java"]
@@ -62,11 +55,11 @@ tasks {
     publishing {
         repositories {
             maven {
-                url = uri("https://repo.crazycrew.us/releases/")
+                url = uri("https://repo.crazycrew.us/releases")
 
                 credentials {
-                    this.username = System.getenv("GRADLE_USERNAME")
-                    this.password = System.getenv("GRADLE_PASSWORD")
+                    this.username = System.getenv("gradle_username")
+                    this.password = System.getenv("gradle_password")
                 }
             }
         }
@@ -87,14 +80,20 @@ tasks {
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
-        minecraftVersion(mcVersion)
+        minecraftVersion("1.20.5")
     }
 
     assemble {
-        dependsOn(reobfJar)
+        doLast {
+            copy {
+                from(shadowJar.get())
+                into(rootProject.projectDir.resolve("jars"))
+            }
+        }
     }
 
     shadowJar {
+        archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
 
         listOf(
@@ -108,10 +107,10 @@ tasks {
     processResources {
         val properties = hashMapOf(
                 "name" to rootProject.name,
-                "version" to rootProject.version,
+                "version" to project.version,
                 "group" to "${project.group}.paper",
                 "description" to rootProject.description,
-                "apiVersion" to rootProject.properties["apiVersion"],
+                "apiVersion" to "1.20",
                 "authors" to rootProject.properties["authors"],
                 "website" to rootProject.properties["website"]
         )

@@ -4,7 +4,6 @@ import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.economy.Currency;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
-import com.badbones69.crazyenchantments.paper.api.events.BookApplyEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
@@ -15,8 +14,8 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.block.CraftBlock;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
@@ -30,10 +29,8 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -327,8 +324,8 @@ public class Methods {
             if (nbtItem.hasNBTData() && nbtItem.hasTag("Unbreakable") && nbtItem.getBoolean("Unbreakable")) return;
 
             if (item.getItemMeta().hasEnchants()) {
-                if (item.getItemMeta().hasEnchant(Enchantment.DURABILITY)) {
-                    if (randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.DURABILITY))) {
+                if (item.getItemMeta().hasEnchant(Enchantment.UNBREAKING)) {
+                    if (randomPicker(1, 1 + item.getEnchantmentLevel(Enchantment.UNBREAKING))) {
                         if (getDurability(item) > getMaxDurability(item)) {
                             player.getInventory().remove(item);
                         } else {
@@ -353,7 +350,8 @@ public class Methods {
 
         for (Entity entity : getNearbyEntities(3D, player)) {
             if (this.pluginSupport.allowCombat(entity.getLocation())) {
-                if (entity.getType() == EntityType.DROPPED_ITEM) {
+                //todo() dropped_item got removed. idk if this is it now.
+                if (entity.getType() == EntityType.ITEM) {
                     entity.remove();
                     continue;
                 }
@@ -372,7 +370,7 @@ public class Methods {
         if (player.getLocation().getWorld() != null) {
             player.getLocation().getWorld().spawnParticle(Particle.FLAME, player.getLocation(), 200);
             player.getLocation().getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 30, .4F, .5F, .4F);
-            player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 2);
+            player.getLocation().getWorld().spawnParticle(Particle.EXPLOSION, player.getLocation(), 2);
         }
 
         world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1, 1);
@@ -383,7 +381,8 @@ public class Methods {
 
         for (Entity value : getNearbyEntities(3D, arrow)) {
             if (this.pluginSupport.allowCombat(value.getLocation())) {
-                if (value.getType() == EntityType.DROPPED_ITEM) {
+                //todo() dropped_item got removed. idk if this is it now.
+                if (value.getType() == EntityType.ITEM) {
                     value.remove();
                     continue;
                 }
@@ -489,7 +488,8 @@ public class Methods {
      */
     public void playItemBreak(@NotNull Player player, @NotNull ItemStack item) {
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-        player.getWorld().spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
+        //todo() what was "ITEM_CRACK"?
+        player.getWorld().spawnParticle(Particle.EGG_CRACK, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
     }
 
     /**
@@ -553,14 +553,11 @@ public class Methods {
      * @return The amount of xp the block would drop when broken by that item.
      */
     private int getXPThroughNMS(@NotNull Block block, @NotNull ItemStack item) { // When it breaks, you can not blame me as I was left unsupervised. -TDL
-
         CraftBlock cb = (CraftBlock) block;
 
         net.minecraft.world.level.block.state.BlockState iWorldblockdata = cb.getNMS();
         net.minecraft.world.level.block.Block worldBlock = iWorldblockdata.getBlock();
         net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
         return worldBlock.getExpDrop(iWorldblockdata, cb.getHandle().getMinecraftWorld(), cb.getPosition(), nmsItem, true);
-
     }
-
 }

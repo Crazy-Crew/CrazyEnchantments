@@ -6,7 +6,7 @@ import com.badbones69.crazyenchantments.paper.Starter;
 import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
@@ -28,6 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class AxeEnchantments implements Listener {
@@ -66,8 +67,8 @@ public class AxeEnchantments implements Listener {
         Map<CEnchantment, Integer> enchantments = this.enchantmentBookSettings.getEnchantments(item);
 
         if (EnchantUtils.isEventActive(CEnchantments.BERSERK, damager, item, enchantments)) {
-                damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 1));
-                damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 0));
+                damager.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 1));
+                damager.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, (enchantments.get(CEnchantments.BERSERK.getEnchantment()) + 5) * 20, 0));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.BLESSED, damager, item, enchantments)) removeBadPotions(damager);
@@ -83,10 +84,10 @@ public class AxeEnchantments implements Listener {
         if (EnchantUtils.isEventActive(CEnchantments.REKT, damager, item, enchantments)) event.setDamage(event.getDamage() * 2);
 
         if (EnchantUtils.isEventActive(CEnchantments.CURSED, damager, item, enchantments))
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, (enchantments.get(CEnchantments.CURSED.getEnchantment()) + 9) * 20, 1));
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, (enchantments.get(CEnchantments.CURSED.getEnchantment()) + 9) * 20, 1));
 
         if (EnchantUtils.isEventActive(CEnchantments.DIZZY, damager, item, enchantments))
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (enchantments.get(CEnchantments.DIZZY.getEnchantment()) + 9) * 20, 0));
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, (enchantments.get(CEnchantments.DIZZY.getEnchantment()) + 9) * 20, 0));
 
         if (EnchantUtils.isEventActive(CEnchantments.BATTLECRY, damager, item, enchantments)) {
             damager.getNearbyEntities(3, 3, 3).stream().filter(nearbyEntity -> !this.pluginSupport.isFriendly(damager, nearbyEntity)).forEach(nearbyEntity ->
@@ -143,14 +144,13 @@ public class AxeEnchantments implements Listener {
     }
 
     private void removeBadPotions(Player player) {
-
-        ArrayList<PotionEffectType> bad = new ArrayList<>() {{
+        List<PotionEffectType> bad = new ArrayList<>() {{
             add(PotionEffectType.BLINDNESS);
-            add(PotionEffectType.CONFUSION);
+            add(PotionEffectType.NAUSEA);
             add(PotionEffectType.HUNGER);
             add(PotionEffectType.POISON);
-            add(PotionEffectType.SLOW);
-            add(PotionEffectType.SLOW_DIGGING);
+            add(PotionEffectType.SLOWNESS);
+            add(PotionEffectType.MINING_FATIGUE);
             add(PotionEffectType.WEAKNESS);
             add(PotionEffectType.WITHER);
         }};

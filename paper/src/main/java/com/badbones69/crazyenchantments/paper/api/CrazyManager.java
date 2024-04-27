@@ -21,7 +21,7 @@ import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.Category;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GKitz;
 import com.badbones69.crazyenchantments.paper.api.objects.gkitz.GkitCoolDown;
-import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.ColorUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.NumberUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.WingsUtils;
@@ -481,6 +481,7 @@ public class CrazyManager {
             enchantmentString = enchantmentString.replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or]| |_)", "");
             if (enchantment.getCustomName().replaceAll("([&§]?#[0-9a-fA-F]{6}|[&§][1-9a-fA-Fk-or]| |_)", "").equalsIgnoreCase(enchantmentString)) return enchantment;
         }
+
         return null;
     }
 
@@ -507,6 +508,7 @@ public class CrazyManager {
         Map<CEnchantment, Integer> enchantments = new HashMap<>();
 
         enchantments.put(enchantment, level);
+
         return addEnchantments(item, enchantments);
     }
 
@@ -548,6 +550,7 @@ public class CrazyManager {
                 enchantData.addEnchantment(x.getKey().getName(), x.getValue());
             }
         }
+
         newLore.addAll(oldLore);
         meta.lore(newLore);
         meta.getPersistentDataContainer().set(DataKeys.enchantments.getNamespacedKey(), PersistentDataType.STRING, gson.toJson(enchantData));
@@ -612,7 +615,7 @@ public class CrazyManager {
 
     public void checkPotions(Map<PotionEffectType, Integer> effects, Player player) { //TODO Remove this Method
         for (Map.Entry<PotionEffectType, Integer> type : effects.entrySet()) {
-            Integer value = type.getValue();
+            int value = type.getValue();
             PotionEffectType key = type.getKey();
 
             player.removePotionEffect(key);
@@ -630,7 +633,7 @@ public class CrazyManager {
      * @return The list of all the max potion effects based on all the armor on the player.
      */
     public Map<PotionEffectType, Integer> getUpdatedEffects(Player player, ItemStack includedItem, ItemStack excludedItem, CEnchantments enchantment) { //TODO Remove this method.
-        HashMap<PotionEffectType, Integer> effects = new HashMap<>();
+        Map<PotionEffectType, Integer> effects = new HashMap<>();
         List<ItemStack> items = new ArrayList<>(Arrays.asList(player.getEquipment().getArmorContents()));
 
         if (includedItem == null) includedItem = new ItemStack(Material.AIR);
@@ -674,7 +677,7 @@ public class CrazyManager {
      * @return All the effects for each enchantment that needs it.
      */
     public Map<CEnchantments, HashMap<PotionEffectType, Integer>> getEnchantmentPotions() {
-        HashMap<CEnchantments, HashMap<PotionEffectType, Integer>> enchants = new HashMap<>();
+        Map<CEnchantments, HashMap<PotionEffectType, Integer>> enchants = new HashMap<>();
 
         enchants.put(CEnchantments.GLOWING, new HashMap<>());
         enchants.get(CEnchantments.GLOWING).put(PotionEffectType.NIGHT_VISION, -1);
@@ -686,17 +689,17 @@ public class CrazyManager {
         enchants.get(CEnchantments.BURNSHIELD).put(PotionEffectType.FIRE_RESISTANCE, -1);
 
         enchants.put(CEnchantments.DRUNK, new HashMap<>());
-        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.INCREASE_DAMAGE, -1);
-        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW_DIGGING, -1);
-        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOW, -1);
+        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.STRENGTH, -1);
+        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.MINING_FATIGUE, -1);
+        enchants.get(CEnchantments.DRUNK).put(PotionEffectType.SLOWNESS, -1);
 
         enchants.put(CEnchantments.HULK, new HashMap<>());
-        enchants.get(CEnchantments.HULK).put(PotionEffectType.INCREASE_DAMAGE, -1);
-        enchants.get(CEnchantments.HULK).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
-        enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOW, -1);
+        enchants.get(CEnchantments.HULK).put(PotionEffectType.STRENGTH, -1);
+        enchants.get(CEnchantments.HULK).put(PotionEffectType.RESISTANCE, -1);
+        enchants.get(CEnchantments.HULK).put(PotionEffectType.SLOWNESS, -1);
 
         enchants.put(CEnchantments.VALOR, new HashMap<>());
-        enchants.get(CEnchantments.VALOR).put(PotionEffectType.DAMAGE_RESISTANCE, -1);
+        enchants.get(CEnchantments.VALOR).put(PotionEffectType.RESISTANCE, -1);
 
         enchants.put(CEnchantments.OVERLOAD, new HashMap<>());
         enchants.get(CEnchantments.OVERLOAD).put(PotionEffectType.HEALTH_BOOST, -1);
@@ -706,23 +709,23 @@ public class CrazyManager {
         enchants.get(CEnchantments.NINJA).put(PotionEffectType.SPEED, -1);
 
         enchants.put(CEnchantments.INSOMNIA, new HashMap<>());
-        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.CONFUSION, -1);
-        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW_DIGGING, -1);
-        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOW, -1);
+        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.NAUSEA, -1);
+        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.MINING_FATIGUE, -1);
+        enchants.get(CEnchantments.INSOMNIA).put(PotionEffectType.SLOWNESS, -1);
 
         enchants.put(CEnchantments.ANTIGRAVITY, new HashMap<>());
-        enchants.get(CEnchantments.ANTIGRAVITY).put(PotionEffectType.JUMP, 1);
+        enchants.get(CEnchantments.ANTIGRAVITY).put(PotionEffectType.JUMP_BOOST, 1);
 
         enchants.put(CEnchantments.GEARS, new HashMap<>());
         enchants.get(CEnchantments.GEARS).put(PotionEffectType.SPEED, -1);
 
         enchants.put(CEnchantments.SPRINGS, new HashMap<>());
-        enchants.get(CEnchantments.SPRINGS).put(PotionEffectType.JUMP, -1);
+        enchants.get(CEnchantments.SPRINGS).put(PotionEffectType.JUMP_BOOST, -1);
 
         enchants.put(CEnchantments.CYBORG, new HashMap<>());
         enchants.get(CEnchantments.CYBORG).put(PotionEffectType.SPEED, -1);
-        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.INCREASE_DAMAGE, 0);
-        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP, -1);
+        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.STRENGTH, 0);
+        enchants.get(CEnchantments.CYBORG).put(PotionEffectType.JUMP_BOOST, -1);
 
         return enchants;
     }

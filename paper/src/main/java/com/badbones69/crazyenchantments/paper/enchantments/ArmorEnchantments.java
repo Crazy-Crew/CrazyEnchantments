@@ -274,7 +274,8 @@ public class ArmorEnchantments implements Listener {
                 this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> player.setVelocity(player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().setY(1)), 1);
                 this.fallenPlayers.add(player.getUniqueId());
 
-                player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
+                //todo() is this EXPLOSION_HUGE?
+                player.getWorld().spawnParticle(Particle.EXPLOSION, player.getLocation(), 1);
 
                 this.plugin.getServer().getScheduler().runTaskLater(this.plugin, () -> fallenPlayers.remove(player.getUniqueId()), 8 * 20);
             }
@@ -346,7 +347,7 @@ public class ArmorEnchantments implements Listener {
 
         switch (enchant) {
             case BLIZZARD -> {
-                if (EnchantUtils.isAuraActive(player, enchant, enchantments)) other.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5 * 20, level - 1));
+                if (EnchantUtils.isAuraActive(player, enchant, enchantments)) other.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 5 * 20, level - 1));
             }
 
             case INTIMIDATE -> {

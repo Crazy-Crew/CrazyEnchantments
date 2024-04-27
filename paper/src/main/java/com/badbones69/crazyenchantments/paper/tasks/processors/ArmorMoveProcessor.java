@@ -106,7 +106,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
             if (EnchantUtils.normalEnchantEvent(CEnchantments.COMMANDER, player, armor)) {
                 player.getNearbyEntities(radius, radius, radius).stream().filter(e ->
                         e instanceof Player && this.pluginSupport.isFriendly(player, e)).map(e -> (Player) e)
-                        .forEach(otherPlayer -> otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 3 * 20, 1)));
+                        .forEach(otherPlayer -> otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 3 * 20, 1)));
             }
         });
     }

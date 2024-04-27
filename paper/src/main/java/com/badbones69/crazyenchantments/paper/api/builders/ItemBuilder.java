@@ -1,4 +1,4 @@
-package com.badbones69.crazyenchantments.paper.api.objects.other;
+package com.badbones69.crazyenchantments.paper.api.builders;
 
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Starter;
@@ -39,7 +39,6 @@ import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.jline.utils.Log;
@@ -48,11 +47,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
 import static com.badbones69.crazyenchantments.paper.api.utils.ColorUtils.getColor;
 
 public class ItemBuilder {
@@ -412,14 +409,16 @@ public class ItemBuilder {
             if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
                 PotionMeta potionMeta = (PotionMeta) itemMeta;
 
-                if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
+                //todo() this is broke
+                //if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
 
                 if (this.potionColor != null) potionMeta.setColor(this.potionColor);
             }
 
             if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
                 PotionMeta potionMeta = (PotionMeta) itemMeta;
-                potionMeta.setBasePotionData(new PotionData(this.potionType));
+                //todo() this is broke
+                //potionMeta.setBasePotionData(new PotionData(this.potionType));
             }
 
             if (isArmor()) {
@@ -494,14 +493,16 @@ public class ItemBuilder {
         if (this.isPotion && (this.potionType != null || this.potionColor != null)) {
             PotionMeta potionMeta = (PotionMeta) itemMeta;
 
-            if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
+            //todo() this is broke
+            //if (this.potionType != null) potionMeta.setBasePotionData(new PotionData(this.potionType));
 
             if (this.potionColor != null) potionMeta.setColor(this.potionColor);
         }
 
         if (this.material == Material.TIPPED_ARROW && this.potionType != null) {
             PotionMeta potionMeta = (PotionMeta) itemMeta;
-            potionMeta.setBasePotionData(new PotionData(this.potionType));
+            //todo() this is broke
+            //potionMeta.setBasePotionData(new PotionData(this.potionType));
         }
 
         if (this.isLeatherArmor && this.armorColor != null) {
@@ -1311,14 +1312,14 @@ public class ItemBuilder {
         if (this.glowing) {
             try {
                 if (item != null) {
-                    if (item.getItemMeta() != null) {
-                        if (item.getItemMeta().hasEnchants()) return;
+                    ItemMeta itemMeta = item.getItemMeta();
+
+                    if (itemMeta != null) {
+                        if (itemMeta.hasEnchants()) return;
                     }
 
-                    item.addUnsafeEnchantment(Enchantment.LUCK, 1);
-                    ItemMeta meta = item.getItemMeta();
-                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                    item.setItemMeta(meta);
+                    itemMeta.setEnchantmentGlintOverride(true);
+                    item.setItemMeta(itemMeta);
                 }
             } catch (NoClassDefFoundError ignored) {}
         }
@@ -1327,34 +1328,34 @@ public class ItemBuilder {
     /**
      * Get the PotionEffect from a PotionEffectType.
      *
-     * @param type The type of the potion effect.
-     * @return The potion type.
+     * @param type the type of the potion effect.
+     * @return the potion type.
      */
     private PotionType getPotionType(PotionEffectType type) {
         if (type != null) {
             if (type.equals(PotionEffectType.FIRE_RESISTANCE)) {
                 return PotionType.FIRE_RESISTANCE;
-            } else if (type.equals(PotionEffectType.HARM)) {
-                return PotionType.INSTANT_DAMAGE;
-            } else if (type.equals(PotionEffectType.HEAL)) {
-                return PotionType.INSTANT_HEAL;
+            } else if (type.equals(PotionEffectType.INSTANT_DAMAGE)) {
+                return PotionType.HARMING;
+            } else if (type.equals(PotionEffectType.INSTANT_HEALTH)) {
+                return PotionType.HEALING;
             } else if (type.equals(PotionEffectType.INVISIBILITY)) {
                 return PotionType.INVISIBILITY;
-            } else if (type.equals(PotionEffectType.JUMP)) {
-                return PotionType.JUMP;
-            } else if (type.equals(PotionEffectType.getByName("LUCK"))) {
-                return PotionType.valueOf("LUCK");
+            } else if (type.equals(PotionEffectType.JUMP_BOOST)) {
+                return PotionType.LEAPING;
+            } else if (type.equals(PotionEffectType.LUCK)) {
+                return PotionType.LUCK;
             } else if (type.equals(PotionEffectType.NIGHT_VISION)) {
                 return PotionType.NIGHT_VISION;
             } else if (type.equals(PotionEffectType.POISON)) {
                 return PotionType.POISON;
             } else if (type.equals(PotionEffectType.REGENERATION)) {
-                return PotionType.REGEN;
-            } else if (type.equals(PotionEffectType.SLOW)) {
+                return PotionType.REGENERATION;
+            } else if (type.equals(PotionEffectType.SLOWNESS)) {
                 return PotionType.SLOWNESS;
             } else if (type.equals(PotionEffectType.SPEED)) {
-                return PotionType.SPEED;
-            } else if (type.equals(PotionEffectType.INCREASE_DAMAGE)) {
+                return PotionType.SWIFTNESS;
+            } else if (type.equals(PotionEffectType.STRENGTH)) {
                 return PotionType.STRENGTH;
             } else if (type.equals(PotionEffectType.WATER_BREATHING)) {
                 return PotionType.WATER_BREATHING;
