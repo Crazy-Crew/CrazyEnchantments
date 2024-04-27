@@ -18,8 +18,7 @@ import com.badbones69.crazyenchantments.paper.controllers.settings.ProtectionCry
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import com.badbones69.crazyenchantments.paper.support.anticheats.NoCheatPlusSupport;
-import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorMoveProcessor;
-import com.badbones69.crazyenchantments.paper.tasks.processors.Processor;
+import com.badbones69.crazyenchantments.paper.tasks.processors.ArmorProcessor;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -82,16 +81,16 @@ public class ArmorEnchantments implements Listener {
     @NotNull
     private final ArmorEnchantmentManager armorEnchantmentManager = this.starter.getArmorEnchantmentManager();
 
-    private final Processor<UUID> armorMoveProcessor = new ArmorMoveProcessor();
+    private final ArmorProcessor armorProcessor = new ArmorProcessor();
 
     private final List<UUID> fallenPlayers = new ArrayList<>();
 
     public ArmorEnchantments() {
-        this.armorMoveProcessor.start();
+        armorProcessor.start();
     }
 
     public void stop() {
-        this.armorMoveProcessor.stop();
+        armorProcessor.stop();
     }
 
     @EventHandler
@@ -375,7 +374,7 @@ public class ArmorEnchantments implements Listener {
 
         if (from.getBlockX() == to.getBlockX() && from.getBlockZ() == to.getBlockZ()) return;
 
-        this.armorMoveProcessor.add(event.getPlayer().getUniqueId());
+        armorProcessor.add(event.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

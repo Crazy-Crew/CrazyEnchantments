@@ -3,13 +3,11 @@ package com.badbones69.crazyenchantments.paper.tasks.processors;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.CrazyManager;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import com.badbones69.crazyenchantments.paper.support.PluginSupport;
-import com.badbones69.crazyenchantments.paper.support.PluginSupport.SupportedPlugins;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -18,47 +16,27 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ArmorMoveProcessor extends Processor<UUID> {
+public class ArmorProcessor extends PoolProcessor {
 
-    @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
 
-    @NotNull
     private final Starter starter = this.plugin.getStarter();
 
-    @NotNull
     private final Methods methods = this.starter.getMethods();
 
-    @NotNull
-    private final CrazyManager crazyManager = this.starter.getCrazyManager();
-
-    // Plugin Support.
-    @NotNull
     private final PluginSupport pluginSupport = this.starter.getPluginSupport();
 
-    @NotNull
     private final EnchantmentBookSettings enchantmentBookSettings = this.starter.getEnchantmentBookSettings();
 
-    private final Processor<Runnable> syncProcessor;
+    public ArmorProcessor() {}
 
-    public ArmorMoveProcessor() {
-        this.syncProcessor = new RunnableSyncProcessor();
-    }
-
-    public void stop() {
-        this.syncProcessor.stop();
-        super.stop();
-    }
-
-    public void start() {
-        this.syncProcessor.start();
-        super.start();
+    public void add(UUID id){
+        add(() -> process(id));
     }
 
     public void process(UUID playerId) {
@@ -84,10 +62,11 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
             checkCommander(armor, player, enchantments);
 
-            if (SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
+            if (PluginSupport.SupportedPlugins.FACTIONS_UUID.isPluginLoaded()) {
                 final int radius = 4 + enchantments.get(CEnchantments.ANGEL.getEnchantment());
                 checkAngel(armor, player, enchantments, radius);
             }
+
             useHellForge(player, armor, enchantments);
         }
 
@@ -104,8 +83,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
         this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
             if (EnchantUtils.normalEnchantEvent(CEnchantments.COMMANDER, player, armor)) {
-                player.getNearbyEntities(radius, radius, radius).stream().filter(e ->
-                        e instanceof Player && this.pluginSupport.isFriendly(player, e)).map(e -> (Player) e)
+                player.getNearbyEntities(radius, radius, radius).stream().filter(e -> e instanceof Player && this.pluginSupport.isFriendly(player, e)).map(e -> (Player) e)
                         .forEach(otherPlayer -> otherPlayer.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 3 * 20, 1)));
             }
         });
@@ -116,7 +94,7 @@ public class ArmorMoveProcessor extends Processor<UUID> {
 
         List<Player> players = player.getNearbyEntities(radius, radius, radius).stream().filter(entity ->
                 this.pluginSupport.isFriendly(player, entity)).map(entity -> (Player) entity).toList();
-        
+
         if (players.isEmpty()) return;
 
         this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
