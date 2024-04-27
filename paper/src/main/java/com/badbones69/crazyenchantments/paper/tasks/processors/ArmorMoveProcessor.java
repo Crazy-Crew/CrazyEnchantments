@@ -91,12 +91,10 @@ public class ArmorMoveProcessor extends Processor<UUID> {
             }
             useHellForge(player, armor, enchantments);
         }
-        player.getScheduler().run(this.plugin, task -> {
-            PlayerInventory inv = player.getInventory();
+        PlayerInventory inv = player.getInventory();
 
-            useHellForge(player, inv.getItemInMainHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInMainHand()));
-            useHellForge(player, inv.getItemInOffHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInOffHand()));
-        }, null);
+        useHellForge(player, inv.getItemInMainHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInMainHand()));
+        useHellForge(player, inv.getItemInOffHand(), this.enchantmentBookSettings.getEnchantments(inv.getItemInOffHand()));
     }
 
     private void checkCommander(ItemStack armor, Player player, Map<CEnchantment, Integer> enchantments) {
