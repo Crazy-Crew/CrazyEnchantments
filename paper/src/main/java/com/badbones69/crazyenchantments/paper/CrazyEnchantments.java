@@ -31,7 +31,7 @@ import com.badbones69.crazyenchantments.paper.listeners.MiscListener;
 import com.badbones69.crazyenchantments.paper.listeners.ProtectionCrystalListener;
 import com.badbones69.crazyenchantments.paper.listeners.ShopListener;
 import com.badbones69.crazyenchantments.paper.listeners.server.WorldSwitchListener;
-import org.bstats.bukkit.Metrics;
+import com.badbones69.crazyenchantments.paper.utils.Metrics;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
@@ -132,6 +132,9 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        getServer().getGlobalRegionScheduler().cancelTasks(this);
+        getServer().getAsyncScheduler().cancelTasks(this);
+
         this.bossBarController.removeAllBossBars();
 
         if (this.armorEnchantments != null) this.armorEnchantments.stop();

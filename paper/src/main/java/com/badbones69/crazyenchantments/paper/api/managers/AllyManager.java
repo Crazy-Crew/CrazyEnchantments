@@ -1,5 +1,6 @@
 package com.badbones69.crazyenchantments.paper.api.managers;
 
+import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob;
 import com.badbones69.crazyenchantments.paper.api.objects.AllyMob.AllyType;
@@ -8,6 +9,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +20,8 @@ import java.util.UUID;
 
 public class AllyManager {
 
+    @NotNull
+    private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
     private final List<AllyMob> allyMobs = new ArrayList<>();
     private final Map<UUID, List<AllyMob>> allyOwners = new HashMap<>();
     private final Map<AllyType, String> allyTypeNameCache = new HashMap<>();
@@ -63,7 +69,10 @@ public class AllyManager {
     
     public void forceRemoveAllies() {
         if (!this.allyMobs.isEmpty()) {
-            this.allyMobs.forEach(ally -> ally.getAlly().remove());
+            for (AllyMob ally : this.allyMobs) {
+                LivingEntity allyLE = ally.getAlly();
+                allyLE.getScheduler().run(plugin, task -> allyLE.remove(), null);
+            }
             this.allyMobs.clear();
             this.allyOwners.clear();
         }
@@ -71,15 +80,20 @@ public class AllyManager {
     
     public void forceRemoveAllies(Player owner) {
         for (AllyMob ally : this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>())) {
-            ally.getAlly().remove();
-            this.allyMobs.remove(ally);
+            LivingEntity allyLE = ally.getAlly();
+            allyLE.getScheduler().run(plugin, task -> {
+                allyLE.remove();
+                this.allyMobs.remove(ally);
+            }, null);
         }
 
         this.allyOwners.remove(owner.getUniqueId());
     }
     
     public void setEnemy(Player owner, Entity enemy) {
-        this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> ally.attackEnemy((LivingEntity) enemy));
+        this.allyOwners.getOrDefault(owner.getUniqueId(), new ArrayList<>()).forEach(ally -> {
+            ally.getAlly().getScheduler().run(plugin, task -> ally.attackEnemy((LivingEntity) enemy), null);
+        });
     }
     
     public Map<AllyType, String> getAllyTypeNameCache() {

@@ -3,6 +3,8 @@ package com.badbones69.crazyenchantments.paper.api.objects;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.managers.AllyManager;
+import com.badbones69.crazyenchantments.paper.scheduler.FoliaRunnable;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Bee;
@@ -15,8 +17,6 @@ import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 
@@ -34,7 +34,7 @@ public class AllyMob {
 
     private LivingEntity ally;
     private long spawnTime;
-    private BukkitTask runnable;
+    private ScheduledTask runnable;
 
     public AllyMob(Player owner, AllyType type) {
         this.type = type;
@@ -86,48 +86,50 @@ public class AllyMob {
     }
 
     public void attackEnemy(LivingEntity enemy) {
-        switch (this.ally.getType()) {
-            case WOLF -> {
-                Wolf wolf = (Wolf) this.ally;
-                wolf.setTarget(enemy);
-            }
+        this.ally.getScheduler().run(this.plugin, task -> {
+            switch (this.ally.getType()) {
+                case WOLF -> {
+                    Wolf wolf = (Wolf) this.ally;
+                    wolf.setTarget(enemy);
+                }
 
-            case IRON_GOLEM -> {
-                IronGolem iron = (IronGolem) this.ally;
-                iron.setTarget(enemy);
-            }
+                case IRON_GOLEM -> {
+                    IronGolem iron = (IronGolem) this.ally;
+                    iron.setTarget(enemy);
+                }
 
-            case ZOMBIE -> {
-                Zombie zom = (Zombie) this.ally;
-                zom.setTarget(enemy);
-            }
+                case ZOMBIE -> {
+                    Zombie zom = (Zombie) this.ally;
+                    zom.setTarget(enemy);
+                }
 
-            case ENDERMITE -> {
-                Endermite mite = (Endermite) this.ally;
-                mite.setTarget(enemy);
-            }
+                case ENDERMITE -> {
+                    Endermite mite = (Endermite) this.ally;
+                    mite.setTarget(enemy);
+                }
 
-            case SILVERFISH -> {
-                Silverfish sfish = (Silverfish) this.ally;
-                sfish.setTarget(enemy);
-            }
+                case SILVERFISH -> {
+                    Silverfish sfish = (Silverfish) this.ally;
+                    sfish.setTarget(enemy);
+                }
 
-            case BEE -> {
-                Bee bee = (Bee) this.ally;
-                bee.setTarget(enemy);
+                case BEE -> {
+                    Bee bee = (Bee) this.ally;
+                    bee.setTarget(enemy);
+                }
             }
-        }
+        }, null);
     }
     
     private void startSpawnTimer() {
         if (this.ally != null) {
-            this.runnable = new BukkitRunnable() {
+            this.runnable = new FoliaRunnable(this.ally.getScheduler(), null) {
                 @Override
                 public void run() {
                     allyManager.removeAllyMob(instance);
                     ally.remove();
                 }
-            }.runTaskLater(this.plugin, this.spawnTime * 20);
+            }.runDelayed(this.plugin, this.spawnTime * 20);
         }
     }
     

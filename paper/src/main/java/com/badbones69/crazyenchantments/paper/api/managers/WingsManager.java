@@ -2,9 +2,9 @@ package com.badbones69.crazyenchantments.paper.api.managers;
 
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.enums.CEnchantments;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +22,7 @@ public class WingsManager {
     private final List<String> limitlessFlightWorlds = new ArrayList<>();
     private boolean ownersCanFly;
     private boolean membersCanFly;
-    private BukkitTask wingsTask;
+    private ScheduledTask wingsTask;
     
     public void load() {
         this.isWingsEnabled = CEnchantments.WINGS.isActivated();
@@ -136,7 +136,7 @@ public class WingsManager {
         return this.membersCanFly;
     }
     
-    public void setWingsTask(BukkitTask task) {
+    public void setWingsTask(ScheduledTask task) {
         endWingsTask();
         this.wingsTask = task;
     }
