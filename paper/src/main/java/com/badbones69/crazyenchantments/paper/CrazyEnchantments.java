@@ -39,6 +39,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 public class CrazyEnchantments extends JavaPlugin {
 
     private Starter starter;
@@ -53,6 +55,24 @@ public class CrazyEnchantments extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        String version = getServer().getMinecraftVersion();
+
+        if (!version.equals("1.20.6")) {
+            List.of(
+                    "You are not running 1.20.6, Please download Paper or Purpur 1.20.6",
+                    "Paper Downloads: https://papermc.io/downloads/paper",
+                    "Purpur Downloads: https://purpurmc.org/downloads",
+                    "",
+                    "We only support 1.20.6, If you need older versions. You can downgrade versions of the plugin.",
+                    "All our older versions can be found in the versions tab on Modrinth",
+                    "The older versions do not get updates or fixes."
+            ).forEach(getLogger()::severe);
+
+            getServer().getPluginManager().disablePlugin(this);
+
+            return;
+        }
+
         this.starter = new Starter();
         this.starter.run();
 
