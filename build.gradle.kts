@@ -42,7 +42,7 @@ modrinth {
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
     gameVersions.set(listOf(
-        "1.20.5"
+        "1.20.6"
     ))
 
     loaders.add("paper")
@@ -74,7 +74,7 @@ hangarPublish {
                 jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
                 platformVersions.set(listOf(
-                    "1.20.5"
+                    "1.20.6"
                 ))
 
                 dependencies {

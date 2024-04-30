@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.papermc.paperweight", "paperweight-userdev", "1.6.0")
+    implementation("io.papermc.paperweight", "paperweight-userdev", "1.6.3")
 
     implementation("io.github.goooler.shadow", "shadow-gradle-plugin", "8.1.7")
 }

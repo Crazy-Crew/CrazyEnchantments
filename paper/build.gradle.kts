@@ -80,7 +80,7 @@ tasks {
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
-        minecraftVersion("1.20.5")
+        minecraftVersion("1.20.6")
     }
 
     assemble {
