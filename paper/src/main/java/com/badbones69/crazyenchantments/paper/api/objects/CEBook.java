@@ -273,7 +273,7 @@ public class CEBook {
      * @return True if the destroy rate was successful.
      */
     public boolean roleDestroy() {
-        return methods.randomPicker(this.getSuccessRate(), 100);
+        return methods.randomPicker(this.getDestroyRate(), 100);
     }
 
 }
