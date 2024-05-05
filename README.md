@@ -18,12 +18,12 @@
   <p align="center">
     Adds over 80 unique enchantments to your server and more!
     <br />
-    <a href="https://docs.crazycrew.us/crazyenchantments/home"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.crazycrew.us/docs/category/crazyenchantments"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/Crazy-Crew/CrazyEnchantments/issues/new?assignees=ryderbelserion&labels=bug&projects=&template=bugs.yml&title=%5BBug+Report%5D%3A+">Report Bug</a>
     ·
-    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/issues/new?assignees=&labels=feature&template=feature_request.md&title=%5BFeature%5D+">Request Feature</a>
+    <a href="https://github.com/Crazy-Crew/CrazyEnchantments/discussions/new?category=features">Request Feature</a>
     ·
     <a href="https://discord.gg/badbones-s-live-chat-182615261403283459">Get Support</a>
   </p>
