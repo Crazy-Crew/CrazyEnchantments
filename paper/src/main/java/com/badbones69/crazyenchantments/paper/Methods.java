@@ -350,7 +350,6 @@ public class Methods {
 
         for (Entity entity : getNearbyEntities(3D, player)) {
             if (this.pluginSupport.allowCombat(entity.getLocation())) {
-                //todo() dropped_item got removed. idk if this is it now.
                 if (entity.getType() == EntityType.ITEM) {
                     entity.remove();
                     continue;
@@ -381,7 +380,6 @@ public class Methods {
 
         for (Entity value : getNearbyEntities(3D, arrow)) {
             if (this.pluginSupport.allowCombat(value.getLocation())) {
-                //todo() dropped_item got removed. idk if this is it now.
                 if (value.getType() == EntityType.ITEM) {
                     value.remove();
                     continue;
@@ -488,8 +486,7 @@ public class Methods {
      */
     public void playItemBreak(@NotNull Player player, @NotNull ItemStack item) {
         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
-        //todo() what was "ITEM_CRACK"?
-        player.getWorld().spawnParticle(Particle.EGG_CRACK, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
+        player.getWorld().spawnParticle(Particle.ITEM, player.getEyeLocation(), 10, 0.3, 0.5, 0.3, 0, item);
     }
 
     /**
