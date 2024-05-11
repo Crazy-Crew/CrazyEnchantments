@@ -511,10 +511,24 @@ public class Methods {
 
         if (blockBreak.isCancelled()) return true;
 
-        if (blockBreak.isDropItems() && hasDrops) blockDropItems(player, block, dropItems, blockBreak.getExpToDrop());
+        if (blockBreak.isDropItems() && hasDrops) blockDropItems(player, block, dropItems);
+        dropXP(block, blockBreak.getExpToDrop()); //This will always try to drop xp when the event is not cancelled, as apposed to relying on isDropItems().
 
         block.setType(Material.AIR);
         return false;
+    }
+
+
+    /**
+     * Used to drop XP.
+     * @param block The block that is dropping xp.
+     * @param expToDrop The amount of xp it should drop.
+     */
+    private void dropXP(Block block, int expToDrop) {
+        if (expToDrop < 1) return;
+
+        ExperienceOrb exp = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
+        exp.setExperience(expToDrop);
     }
 
     /**
@@ -523,24 +537,14 @@ public class Methods {
      * @param block The block that was broken.
      * @param items The items that will be dropped from the broken block.
      */
-    private void blockDropItems(@NotNull Player player, @NotNull Block block, @NotNull Collection<ItemStack> items, int expToDrop) {
+    private void blockDropItems(@NotNull Player player, @NotNull Block block, @NotNull Collection<ItemStack> items) {
         List<Item> dropItems = new ArrayList<>();
-        ExperienceOrb exp = null;
 
         items.forEach(item -> dropItems.add(block.getWorld().dropItemNaturally(block.getLocation(), item)));
-
-        if (expToDrop > 0) {
-            exp = block.getWorld().spawn(block.getLocation(), ExperienceOrb.class);
-            exp.setExperience(expToDrop);
-        }
 
         BlockDropItemEvent event = new BlockDropItemEvent(block, block.getState(), player, dropItems);
         this.plugin.getServer().getPluginManager().callEvent(event);
 
-        if (event.isCancelled()) {
-            dropItems.forEach(Entity::remove);
-            if (exp != null) exp.remove();
-        }
     }
 
     /**
