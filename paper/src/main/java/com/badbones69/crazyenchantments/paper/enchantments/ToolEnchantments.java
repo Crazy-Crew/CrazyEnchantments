@@ -64,8 +64,8 @@ public class ToolEnchantments implements Listener {
 
         if (EnchantUtils.isEventActive(CEnchantments.HASTE, player, item, enchantments)) {
             int power = enchantments.get(CEnchantments.HASTE.getEnchantment());
-            player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, potionTime, power - 1));
+            player.removePotionEffect(PotionEffectType.HASTE);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, potionTime, power - 1));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.OXYGENATE, player, item, enchantments)) {

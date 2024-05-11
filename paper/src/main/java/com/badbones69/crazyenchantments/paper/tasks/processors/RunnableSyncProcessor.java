@@ -4,7 +4,7 @@ import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class RunnableSyncProcessor extends Processor<Runnable> {
+public class RunnableSyncProcessor extends ArmorProcessor {
 
     @NotNull
     private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);

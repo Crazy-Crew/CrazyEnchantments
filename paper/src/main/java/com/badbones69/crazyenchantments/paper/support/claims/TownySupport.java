@@ -9,7 +9,6 @@ import com.palmergames.bukkit.towny.utils.CombatUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.jline.utils.Log;
 
 public class TownySupport implements ClaimSupport {

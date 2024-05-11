@@ -145,7 +145,7 @@ public class HoeEnchantments implements Listener {
 
     private void fullyGrowPlant(Block block) {
         this.crazyManager.getNMSSupport().fullyGrowPlant(block);
-        block.getLocation().getWorld().spawnParticle(Particle.VILLAGER_HAPPY, block.getLocation(), 20, .25F, .25F, .25F);
+        block.getLocation().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, block.getLocation(), 20, .25F, .25F, .25F);
     }
 
     private boolean plantSeedSuccess(Block soil, Player player, boolean hasGreenThumb) {

@@ -175,5 +175,4 @@ public abstract class FoliaRunnable implements Runnable {
         this.task = task;
         return task;
     }
-
 }

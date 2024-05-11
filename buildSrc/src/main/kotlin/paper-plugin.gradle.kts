@@ -1,4 +1,6 @@
 plugins {
+    id("io.papermc.paperweight.userdev")
+
     id("root-plugin")
 }
 
@@ -11,29 +13,27 @@ repositories {
 
     maven("https://ci.ender.zone/plugin/repository/everything/")
 
-    maven("https://repo.codemc.org/repository/maven-public/")
-
     maven("https://repo.papermc.io/repository/maven-public/")
 
     maven("https://repo.glaremasters.me/repository/towny/")
 
     maven("https://repo.bg-software.com/repository/api/")
 
+    maven("https://repo.triumphteam.dev/snapshots/")
+
     maven("https://repo.crazycrew.us/third-party/")
+
+    maven("https://repo.crazycrew.us/snapshots/")
 
     maven("https://maven.enginehub.org/repo/")
 
     maven("https://repo.oraxen.com/releases/")
-
-    flatDir { dirs("libs") }
 }
 
-val mcVersion: String = providers.gradleProperty("mcVersion").get()
+dependencies {
+    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
+}
 
-project.version = if (System.getenv("BUILD_NUMBER") != null) "${rootProject.version}-${System.getenv("BUILD_NUMBER")}" else rootProject.version
-
-tasks {
-    modrinth {
-        loaders.addAll("paper", "purpur")
-    }
+paperweight {
+    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 }

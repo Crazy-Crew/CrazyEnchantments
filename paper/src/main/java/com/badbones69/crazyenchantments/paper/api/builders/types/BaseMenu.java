@@ -5,7 +5,7 @@ import com.badbones69.crazyenchantments.paper.api.builders.InventoryBuilder;
 import com.badbones69.crazyenchantments.paper.api.builders.types.gkitz.KitsManager;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
 import com.badbones69.crazyenchantments.paper.api.objects.enchants.EnchantmentType;
-import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.controllers.settings.EnchantmentBookSettings;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

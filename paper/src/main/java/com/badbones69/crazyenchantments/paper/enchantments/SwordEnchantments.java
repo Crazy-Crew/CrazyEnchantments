@@ -11,7 +11,7 @@ import com.badbones69.crazyenchantments.paper.api.enums.Messages;
 import com.badbones69.crazyenchantments.paper.api.events.RageBreakEvent;
 import com.badbones69.crazyenchantments.paper.api.objects.CEPlayer;
 import com.badbones69.crazyenchantments.paper.api.objects.CEnchantment;
-import com.badbones69.crazyenchantments.paper.api.objects.other.ItemBuilder;
+import com.badbones69.crazyenchantments.paper.api.builders.ItemBuilder;
 import com.badbones69.crazyenchantments.paper.api.utils.EnchantUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EntityUtils;
 import com.badbones69.crazyenchantments.paper.api.utils.EventUtils;
@@ -249,7 +249,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.CONFUSION, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 5 + (enchantments.get(CEnchantments.CONFUSION.getEnchantment())) * 20, 0));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 5 + (enchantments.get(CEnchantments.CONFUSION.getEnchantment())) * 20, 0));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.DOUBLEDAMAGE, damager, item, enchantments)) {
@@ -257,7 +257,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.EXECUTE, damager, item, enchantments)) {
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3 + (enchantments.get(CEnchantments.EXECUTE.getEnchantment())) * 20, 3));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 3 + (enchantments.get(CEnchantments.EXECUTE.getEnchantment())) * 20, 3));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.FASTTURN, damager, item, enchantments)) {
@@ -265,7 +265,7 @@ public class SwordEnchantments implements Listener {
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.LIGHTWEIGHT, damager, item, enchantments)) {
-            damager.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5 * 20, enchantments.get(CEnchantments.LIGHTWEIGHT.getEnchantment()) - 1));
+            damager.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 5 * 20, enchantments.get(CEnchantments.LIGHTWEIGHT.getEnchantment()) - 1));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.OBLITERATE, damager, item, enchantments)) {
@@ -281,23 +281,23 @@ public class SwordEnchantments implements Listener {
             }
 
             en.getWorld().strikeLightningEffect(en.getLocation());
-            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
-            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 2));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 3 * 20, 2));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 3 * 20, 2));
 
             if (SupportedPlugins.NO_CHEAT_PLUS.isPluginLoaded()) this.noCheatPlusSupport.denyPlayer(damager);
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.SLOWMO, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, enchantments.get(CEnchantments.SLOWMO.getEnchantment())));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 3 * 20, enchantments.get(CEnchantments.SLOWMO.getEnchantment())));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.SNARE, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 0));
-            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 3 * 20, 0));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 3 * 20, 0));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 3 * 20, 0));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.TRAP, damager, item, enchantments)) {
-            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 3 * 20, 2));
+            en.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 3 * 20, 2));
         }
 
         if (EnchantUtils.isEventActive(CEnchantments.VIPER, damager, item, enchantments)) {
@@ -334,7 +334,7 @@ public class SwordEnchantments implements Listener {
 
                 ally.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 5 * 20, 1));
                 ally.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5 * 20, 0));
-                ally.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 5 * 20, 1));
+                ally.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 5 * 20, 1));
             }
         }
     }

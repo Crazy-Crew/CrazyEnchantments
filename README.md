@@ -47,7 +47,7 @@
   </ol>
 </details>
 
-### Downloads
+### Resource Page
 [![Hangar](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/hangar_46h.png)](https://hangar.papermc.io/CrazyCrew/CrazyEnchantments)
 [![Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/compact/available/modrinth_46h.png)](https://modrinth.com/user/plugin/crazyenchantments)
 
@@ -59,6 +59,7 @@ A list of things necessary to make sure you can build CrazyEnchantments properly
 * Intellij IDEA
     * > https://www.jetbrains.com/idea/download/
 * Gradle
+* Java 21
 
 ### Installation
 1. Clone the repo
@@ -76,12 +77,16 @@ A list of things necessary to make sure you can build CrazyEnchantments properly
 ## Roadmap
 Check our public [trello board](https://trello.com/b/AJvEmcbL) for our current plans, any bugs and general tracking of the project progress.
 
-## Contributing
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/yourfeature`)
-3. Commit your Changes (`git commit -m 'your amazing feature.'`)
-4. Push to the Branch (`git push`)
-5. Open a Pull Request to the `main` branch to add your feature/fix.
+## Support the Developers
+TDL on:
+* [Kofi](https://ko-fi.com/truedarklord)
+
+Ryder Belserion on:
+* [Github Sponsors](https://github.com/sponsors/ryderbelserion)
+* [Kofi](https://ko-fi.com/ryderbelserion)
+
+BadBones on:
+* [Paypal](https://www.paypal.me/joewojcik/)
 
 ## License
 Distributed under the MIT License. See [`LICENSE`](/LICENSE) for more information.
