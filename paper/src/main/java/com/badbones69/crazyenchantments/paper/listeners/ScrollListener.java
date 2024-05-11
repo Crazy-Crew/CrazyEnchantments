@@ -3,7 +3,6 @@ package com.badbones69.crazyenchantments.paper.listeners;
 import com.badbones69.crazyenchantments.paper.CrazyEnchantments;
 import com.badbones69.crazyenchantments.paper.Methods;
 import com.badbones69.crazyenchantments.paper.Starter;
-import com.badbones69.crazyenchantments.paper.api.FileManager;
 import com.badbones69.crazyenchantments.paper.api.FileManager.Files;
 import com.badbones69.crazyenchantments.paper.api.builders.types.MenuManager;
 import com.badbones69.crazyenchantments.paper.api.enums.Messages;

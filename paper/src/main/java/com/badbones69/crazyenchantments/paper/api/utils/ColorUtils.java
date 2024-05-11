@@ -11,7 +11,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.stringtemplate.v4.ST;
 
 import java.util.Arrays;
 import java.util.List;
