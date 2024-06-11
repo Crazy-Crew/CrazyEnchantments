@@ -115,6 +115,7 @@ public class AllyMob {
 
                 case BEE -> {
                     Bee bee = (Bee) this.ally;
+                    bee.setCannotEnterHiveTicks(Integer.MAX_VALUE);
                     bee.setTarget(enemy);
                 }
             }
