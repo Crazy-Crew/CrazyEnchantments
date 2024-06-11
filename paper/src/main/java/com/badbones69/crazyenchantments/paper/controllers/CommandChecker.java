@@ -39,7 +39,7 @@ public class CommandChecker implements Listener {
         if (Arrays.asList("/ci", "/clear", "/clearinventory").contains(event.getMessage().toLowerCase())) {
             Arrays.stream(player.getEquipment().getArmorContents())
                     .map(this.enchantmentBookSettings::getEnchantments).forEach((enchant) -> enchantmentPotions.entrySet()
-                            .stream().filter(enchantedPotion -> enchantedPotion.getKey().getEnchantment().equals(enchant))
+                            .stream().filter(enchantedPotion -> enchant.containsKey(enchantedPotion.getKey().getEnchantment()))
                             .forEach(enchantedPotion -> enchantedPotion.getValue().keySet().forEach(player::removePotionEffect)));
 
         } else if (event.getMessage().equalsIgnoreCase("/heal")) {
