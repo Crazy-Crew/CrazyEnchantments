@@ -6,6 +6,10 @@ plugins {
     `paper-plugin`
 }
 
+base {
+    archivesName.set(rootProject.name)
+}
+
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
 
@@ -49,6 +53,10 @@ dependencies {
 
 val component: SoftwareComponent = components["java"]
 
+paperweight {
+    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
+}
+
 tasks {
     publishing {
         repositories {
@@ -82,9 +90,11 @@ tasks {
     }
 
     assemble {
+        dependsOn(reobfJar)
+
         doLast {
             copy {
-                from(shadowJar.get())
+                from(reobfJar.get())
                 into(rootProject.projectDir.resolve("jars"))
             }
         }
@@ -102,20 +112,16 @@ tasks {
     }
 
     processResources {
-        val properties = hashMapOf(
-                "name" to rootProject.name,
-                "version" to project.version,
-                "group" to "${project.group}.paper",
-                "description" to rootProject.description,
-                "apiVersion" to libs.versions.minecraft.get(),
-                "authors" to rootProject.properties["authors"],
-                "website" to rootProject.properties["website"]
-        )
-
-        inputs.properties(properties)
+        inputs.properties("name" to rootProject.name)
+        inputs.properties("version" to project.version)
+        inputs.properties("group" to "${project.group}.paper")
+        inputs.properties("description" to project.properties["description"])
+        inputs.properties("apiVersion" to libs.versions.minecraft.get())
+        inputs.properties("authors" to project.properties["authors"])
+        inputs.properties("website" to project.properties["website"])
 
         filesMatching("plugin.yml") {
-            expand(properties)
+            expand(inputs.properties)
         }
     }
 }
