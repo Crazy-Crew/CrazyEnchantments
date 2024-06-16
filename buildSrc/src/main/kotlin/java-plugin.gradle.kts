@@ -1,17 +1,24 @@
+import com.ryderbelserion.feather.enums.Repository
+
 plugins {
-    `java-library`
+    id("com.ryderbelserion.feather-core")
 
     `maven-publish`
+
+    `java-library`
 }
 
-base {
-    archivesName.set(rootProject.name)
-}
 
 repositories {
-    maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
 
-    maven("https://jitpack.io/")
+    maven("https://repo.codemc.io/repository/maven-public")
+
+    maven("https://repo.oraxen.com/releases")
+
+    maven(Repository.CrazyCrewReleases.url)
+
+    maven(Repository.Jitpack.url)
 
     flatDir { dirs("libs") }
 

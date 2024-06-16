@@ -1,24 +1,22 @@
-import git.formatLog
-import git.latestCommitHash
-import git.latestCommitMessage
+import com.ryderbelserion.feather.tools.formatLog
+import com.ryderbelserion.feather.tools.latestCommitHash
+import com.ryderbelserion.feather.tools.latestCommitMessage
 
 plugins {
-    id("io.papermc.hangar-publish-plugin") version "0.1.2"
-    id("com.modrinth.minotaur") version "2.+"
+    alias(libs.plugins.minotaur)
+    alias(libs.plugins.hangar)
 
-    id("io.github.goooler.shadow")
-
-    `root-plugin`
+    `java-plugin`
 }
 
-val buildNumber: String = System.getenv("BUILD_NUMBER") ?: "SNAPSHOT"
+val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-rootProject.version = "2.4-$buildNumber"
+rootProject.version = if (buildNumber != null) "2.4-$buildNumber" else "2.4"
 
 val isSnapshot = false
 
 val content: String = if (isSnapshot) {
-    formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name)
+    formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name, "Crazy-Crew")
 } else {
     rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 }
@@ -41,13 +39,9 @@ modrinth {
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
-    gameVersions.set(listOf(
-        "1.21"
-    ))
+    gameVersions.set(listOf(libs.versions.minecraft.get()))
 
-    loaders.add("paper")
-    loaders.add("purpur")
-    loaders.add("folia")
+    loaders.addAll(listOf("purpur", "paper", "folia"))
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
@@ -69,9 +63,7 @@ hangarPublish {
             paper {
                 jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
-                platformVersions.set(listOf(
-                    "1.21"
-                ))
+                platformVersions.set(listOf(libs.versions.minecraft.get()))
 
                 dependencies {
                     hangar("PlaceholderAPI") {

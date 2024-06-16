@@ -1,19 +1,15 @@
-plugins {
-    id("io.papermc.paperweight.userdev")
+import com.ryderbelserion.feather.enums.Repository
 
-    id("root-plugin")
+plugins {
+    id("java-plugin")
 }
 
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-
     maven("https://repo.dustplanet.de/artifactory/libs-release-local/")
 
     maven("https://repo.md-5.net/content/repositories/snapshots/")
 
     maven("https://ci.ender.zone/plugin/repository/everything/")
-
-    maven("https://repo.papermc.io/repository/maven-public/")
 
     maven("https://repo.glaremasters.me/repository/towny/")
 
@@ -21,19 +17,7 @@ repositories {
 
     maven("https://repo.triumphteam.dev/snapshots/")
 
-    maven("https://repo.crazycrew.us/third-party/")
-
-    maven("https://repo.crazycrew.us/snapshots/")
-
     maven("https://maven.enginehub.org/repo/")
 
-    maven("https://repo.oraxen.com/releases/")
-}
-
-dependencies {
-    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
-}
-
-paperweight {
-    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+    maven(Repository.Paper.url)
 }

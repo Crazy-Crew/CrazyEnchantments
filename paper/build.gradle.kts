@@ -1,34 +1,30 @@
 plugins {
-    id("io.github.goooler.shadow")
-
-    alias(libs.plugins.run.paper)
+    alias(libs.plugins.paperweight)
+    alias(libs.plugins.shadowJar)
+    alias(libs.plugins.runPaper)
 
     `paper-plugin`
 }
 
 dependencies {
-    implementation(libs.metrics)
+    paperweight.paperDevBundle(libs.versions.paper)
 
     implementation(libs.nbtapi)
 
-    compileOnly(libs.placeholder.api)
+    compileOnly(libs.informative.annotations)
 
     compileOnly(libs.vault) {
         exclude("org.bukkit", "bukkit")
     }
 
-    compileOnly(libs.worldguard)
-    compileOnly(libs.worldedit)
+    compileOnly(libs.griefprevention)
+
+    compileOnly(libs.nocheatplus)
 
     compileOnly(libs.oraxen.api)
 
-    compileOnly(libs.informative.annotations)
-
-    compileOnly(libs.griefprevention)
-
-    compileOnly(libs.towny)
-
-    compileOnly(libs.nocheatplus)
+    compileOnly(libs.worldguard)
+    compileOnly(libs.worldedit)
 
     compileOnly(libs.kingdoms)
 
@@ -37,6 +33,8 @@ dependencies {
         exclude("org.spongepowered")
         exclude("com.darkblade12")
     }
+
+    compileOnly(libs.towny)
 
     compileOnly(libs.paster)
 
@@ -80,7 +78,7 @@ tasks {
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
-        minecraftVersion("1.21")
+        minecraftVersion(libs.versions.minecraft.get())
     }
 
     assemble {
@@ -97,8 +95,7 @@ tasks {
         archiveClassifier.set("")
 
         listOf(
-            "de.tr7zw.changeme.nbtapi",
-            "org.bstats"
+            "de.tr7zw.changeme.nbtapi"
         ).forEach {
             relocate(it, "libs.$it")
         }
@@ -110,7 +107,7 @@ tasks {
                 "version" to project.version,
                 "group" to "${project.group}.paper",
                 "description" to rootProject.description,
-                "apiVersion" to "1.20",
+                "apiVersion" to libs.versions.minecraft.get(),
                 "authors" to rootProject.properties["authors"],
                 "website" to rootProject.properties["website"]
         )
