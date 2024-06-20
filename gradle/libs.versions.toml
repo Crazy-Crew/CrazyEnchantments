@@ -11,7 +11,7 @@ decentholograms = "2.8.8"
 fancyholograms = "2.2.0"
 worldguard = "7.0.10"
 oraxen = "1.171.0"
-nbtapi = "2.13.0"
+nbtapi = "2.13.1-SNAPSHOT"
 vault = "1.7.1"
 
 # Libraries
@@ -46,7 +46,7 @@ placeholder-api = { group = "me.clip", name = "placeholderapi", version = "2.11.
 worldedit = { group = "com.sk89q.worldedit", name = "worldedit-bukkit", version = "7.2.15" }
 worldguard = { group = "com.sk89q.worldguard", name = "worldguard-bukkit", version = "7.1.0-SNAPSHOT" }
 
-nbtapi = { group = "de.tr7zw", name = "item-nbt-api", version = "2.13.0" }
+nbtapi = { group = "de.tr7zw", name = "item-nbt-api", version = "2.13.1-SNAPSHOT" }
 
 triumph-cmds = { group = "dev.triumphteam", name = "triumph-cmd-bukkit", version = "2.0.0-ALPHA-9" }
 triumph-gui = { group = "dev.triumphteam", name = "triumph-gui", version = "3.1.7" }
