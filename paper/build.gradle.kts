@@ -47,8 +47,6 @@ dependencies {
     compileOnly(libs.plotsquared)
 
     compileOnly(libs.mcmmo)
-
-    compileOnly(libs.wildstacker)
 }
 
 val component: SoftwareComponent = components["java"]

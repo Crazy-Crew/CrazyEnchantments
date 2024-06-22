@@ -4,11 +4,8 @@ paper = "1.21-R0.1-SNAPSHOT"
 minecraft = "1.21"
 
 # Plugins
-itemsadder = "3.6.3-beta-14"
 headdatabaseapi = "1.3.1"
 placeholderapi = "2.11.6"
-decentholograms = "2.8.8"
-fancyholograms = "2.2.0"
 worldguard = "7.0.10"
 worldedit = "7.2.15"
 oraxen = "1.171.0"
@@ -20,7 +17,6 @@ factions = "1.6.9.5-U0.6.31"
 skyblock = "2023.2"
 plotsquared = "6.11.1"
 mcmmo = "2.2.0-SNAPSHOT"
-wildstacker = "2023.2"
 kingdoms = "1.16.20.5"
 
 # AniCheat
@@ -76,7 +72,6 @@ factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
 skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
 plotsquared = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plotsquared" }
 mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" } # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
-wildstacker = { module = "com.bgsoftware:WildStackerAPI", version.ref = "wildstacker" }
 
 kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
 
