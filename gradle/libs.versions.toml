@@ -10,16 +10,30 @@ placeholderapi = "2.11.6"
 decentholograms = "2.8.8"
 fancyholograms = "2.2.0"
 worldguard = "7.0.10"
+worldedit = "7.2.15"
 oraxen = "1.171.0"
 nbtapi = "2.13.1-SNAPSHOT"
 vault = "1.7.1"
+griefprevention = "16.18.2"
+towny = "0.100.2.0"
+factions = "1.6.9.5-U0.6.31"
+skyblock = "2023.2"
+plotsquared = "6.11.1"
+mcmmo = "2.2.0-SNAPSHOT"
+wildstacker = "2023.2"
+kingdoms = "1.16.20.5"
+
+# AniCheat
+nocheatsplus = "3.16.1-SNAPSHOT"
 
 # Libraries
 triumph-cmd = "2.0.0-ALPHA-10"
 tirumph-gui = "3.1.7"
+config-me = "1.4.1"
 jetbrains = "24.1.0"
 kyori = "4.17.0"
 vital = "1.5.9"
+metrics = "3.0.2"
 
 # Paper
 paperweight="1.7.1"
@@ -40,36 +54,36 @@ runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
 minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 
 [libraries]
-oraxen-api = { group = "io.th0rgal", name = "oraxen", version = "1.171.0" }
-placeholder-api = { group = "me.clip", name = "placeholderapi", version = "2.11.5" }
+oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
+placeholderapi = { module = "me.clip:placeholderapi", version.ref = "placeholderapi" }
 
-worldedit = { group = "com.sk89q.worldedit", name = "worldedit-bukkit", version = "7.2.15" }
-worldguard = { group = "com.sk89q.worldguard", name = "worldguard-bukkit", version = "7.1.0-SNAPSHOT" }
+worldedit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
+worldguard = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
 
-nbtapi = { group = "de.tr7zw", name = "item-nbt-api", version = "2.13.1-SNAPSHOT" }
+nbtapi = { module = "de.tr7zw:item-nbt-api", version.ref = "nbtapi" }
 
-triumph-cmds = { group = "dev.triumphteam", name = "triumph-cmd-bukkit", version = "2.0.0-ALPHA-9" }
-triumph-gui = { group = "dev.triumphteam", name = "triumph-gui", version = "3.1.7" }
+triumph-cmds = { module = "dev.triumphteam:triumph-cmd-bukkit", version.ref = "triumph-cmd" }
+triumph-gui = { module = "dev.triumphteam:triumph-gui", version.ref = "tirumph-gui" }
 
-vault = { group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1" }
-metrics = { group = "org.bstats", name = "bstats-bukkit", version = "3.0.2" }
-config-me = { group = "ch.jalu", name = "configme", version = "1.4.1" }
+vault = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
+metrics = { module = "org.bstats:bstats-bukkit", version.ref = "metrics" }
+config-me = { module = "ch.jalu:configme", version.ref = "config-me" }
 
-griefprevention = { group = "com.github.TechFortress", name = "GriefPrevention", version = "16.18.2" }
-towny = { group = "com.palmergames.bukkit.towny", name = "towny", version = "0.100.2.0" }
-factions = { group = "com.massivecraft", name = "Factions", version = "1.6.9.5-U0.6.31" }
+griefprevention = { module = "com.github.TechFortress:GriefPrevention", version.ref = "griefprevention" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
+factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
 
-skyblock = { group = "com.bgsoftware", name = "SuperiorSkyblockAPI", version = "2023.2" }
-plotsquared = { group = "com.plotsquared", name = "PlotSquared-Core", version = "6.11.1" }
-mcmmo = { group = "com.gmail.nossr50.mcMMO", name = "mcMMO", version = "2.2.0-SNAPSHOT" } # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
-wildstacker = { group = "com.bgsoftware", name = "WildStackerAPI", version = "2023.2" }
+skyblock = { module = "com.bgsoftware:SuperiorSkyblockAPI", version.ref = "skyblock" }
+plotsquared = { module = "com.plotsquared:PlotSquared-Core", version.ref = "plotsquared" }
+mcmmo = { module = "com.gmail.nossr50.mcMMO:mcMMO", version.ref = "mcmmo" } # https://repo.codemc.io/service/rest/repository/browse/maven-public/com/gmail/nossr50/mcMMO/mcMMO/
+wildstacker = { module = "com.bgsoftware:WildStackerAPI", version.ref = "wildstacker" }
 
-kingdoms = { group = "com.github.cryptomorin", name = "kingdoms", version = "1.16.20.5"}
+kingdoms = { module = "com.github.cryptomorin:kingdoms", version.ref = "kingdoms"}
 
 informative-annotations = { group = "com.intellectualsites.informative-annotations", name = "informative-annotations", version = "1.3" }
 paster = { group = "com.intellectualsites.paster", name = "Paster", version = "1.1.5" }
 
-nocheatplus = { group = "fr.neatmonster", name = "nocheatplus", version = "3.16.1-SNAPSHOT" }
+nocheatplus = { module = "fr.neatmonster:nocheatplus", version.ref = "nocheatsplus" }
 
 [bundles]
 triumph = ["triumph-cmds", "triumph-gui"]

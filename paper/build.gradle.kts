@@ -25,7 +25,7 @@ dependencies {
 
     compileOnly(libs.nocheatplus)
 
-    compileOnly(libs.oraxen.api)
+    compileOnly(libs.oraxen)
 
     compileOnly(libs.worldguard)
     compileOnly(libs.worldedit)
