@@ -187,10 +187,10 @@ public class CEBook {
     
     /**
      * Get the destroy rate on the book.
-     * @return Destroy rate of the book.
+     * @return Destroy rate of the book or the override value if set in config.yml
      */
     public int getDestroyRate() {
-        return this.destroyRate;
+        return this.starter.getCrazyManager().getCEFailureOverride() == -1 ? this.destroyRate : this.starter.getCrazyManager().getCEFailureOverride();
     }
     
     /**
@@ -204,10 +204,10 @@ public class CEBook {
     
     /**
      * Get the success rate on the book.
-     * @return The success rate of the book.
+     * @return The success rate of the book or the override value if set in config.yml.
      */
     public int getSuccessRate() {
-        return this.successRate;
+        return this.starter.getCrazyManager().getCESuccessOverride() == -1 ? this.successRate : this.starter.getCrazyManager().getCESuccessOverride();
     }
     
     /**

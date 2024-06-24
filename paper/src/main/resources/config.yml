@@ -13,6 +13,8 @@ Settings:
   Enchantment-Book-Item: 'BOOK' #The item that the enchantment book is.
   Enchantment-Book-Glowing: true #Toggle on or off if the book will have an enchanted look.
   GUISize: 54 #The size of the GUI, must be a factor of 9
+  CESuccessOverride: -1 #0-100, -1 for no override. Chance of success using a CE Book
+  CEFailureOverride: -1 #0-100, -1 for no override. Chance of destroying a CE Book
   EnchantmentBookLore: #The lore on the enchantments books.
     - '&7Drag book and drop on Item.'
     - '&7Right click for more Info.'

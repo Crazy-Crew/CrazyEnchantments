@@ -61,6 +61,18 @@ public class CrazyEnchantments extends JavaPlugin {
         FileConfiguration config = Files.CONFIG.getFile();
         FileConfiguration tinker = Files.TINKER.getFile();
 
+        if (!config.contains("Settings.CESuccessOverride")) {
+            config.set("Settings.CESuccessOverride", "-1");
+
+            Files.CONFIG.saveFile();
+        }
+
+        if (!config.contains("Settings.CESuccessOverride")) {
+            config.set("Settings.CEFailureOverride", "-1");
+
+            Files.CONFIG.saveFile();
+        }
+
         if (!config.contains("Settings.Toggle-Metrics")) {
             config.set("Settings.Toggle-Metrics", false);
 
