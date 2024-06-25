@@ -876,9 +876,9 @@ public class ItemBuilder {
         try {
             String[] split = stringPattern.split(":");
 
-            for (PatternType pattern : PatternType.values()) {
+            for (PatternType pattern : PatternType.values()) { // TODO Use Registry
 
-                if (split[0].equalsIgnoreCase(pattern.name()) || split[0].equalsIgnoreCase(pattern.getIdentifier())) {
+                if (split[0].equalsIgnoreCase(pattern.name())) {
                     DyeColor color = getDyeColor(split[1]);
 
                     if (color != null) addPattern(new Pattern(color, pattern));
@@ -1256,8 +1256,8 @@ public class ItemBuilder {
                         }
 
                         try {
-                            for (PatternType pattern : PatternType.values()) {
-                                if (option.equalsIgnoreCase(pattern.name()) || value.equalsIgnoreCase(pattern.getIdentifier())) {
+                            for (PatternType pattern : PatternType.values()) { // TODO Use Registry
+                                if (option.equalsIgnoreCase(pattern.name())) {
                                     DyeColor color = getDyeColor(value);
                                     if (color != null) itemBuilder.addPattern(new Pattern(color, pattern));
                                     break;

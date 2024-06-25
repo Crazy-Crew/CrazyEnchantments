@@ -349,7 +349,7 @@ public class CECommand implements CommandExecutor {
                     if (args.length >= 2) {
                         CEnchantment enchantment = this.crazyManager.getEnchantmentFromName(args[1]);
                         Category category = this.enchantmentBookSettings.getCategory(args[1]);
-                        Location location = isPlayer ? ((Player) sender).getLocation() : new Location(this.plugin.getServer().getWorlds().get(0), 0, 0, 0);
+                        Location location = isPlayer ? ((Player) sender).getLocation() : new Location(this.plugin.getServer().getWorlds().getFirst(), 0, 0, 0);
                         int level = 1;
 
                         if (enchantment == null && category == null) {

@@ -126,6 +126,7 @@ public class CrazyManager {
     private boolean dropBlocksVeinMiner;
     private int defaultLimit;
     private int defaultBaseLimit;
+    private boolean useEnchantmentLimiter;
     private boolean checkLimitPermission;
 
     private int CESuccessOverride;
@@ -200,6 +201,7 @@ public class CrazyManager {
         this.checkLimitPermission = config.getBoolean("Settings.EnchantmentOptions.Limit.Check-Perms", true);
         this.defaultLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Limit", 0);
         this.defaultBaseLimit = config.getInt("Settings.EnchantmentOptions.Limit.Default-Base-Limit", 0);
+        this.useEnchantmentLimiter = config.getBoolean("Settings.EnchantmentOptions.Limit.Enable-SlotCrystal", true);
         this.checkVanillaLimit = config.getBoolean("Settings.EnchantmentOptions.IncludeVanillaEnchantments", false);
         this.gkitzToggle = !config.contains("Settings.GKitz.Enabled") || config.getBoolean("Settings.GKitz.Enabled", true);
         this.rageMaxLevel = config.getInt("Settings.EnchantmentOptions.MaxRageLevel", 4);
@@ -322,13 +324,6 @@ public class CrazyManager {
     public void loadCEPlayer(Player player) {
         FileConfiguration data = Files.DATA.getFile();
         String uuid = player.getUniqueId().toString();
-        int souls = 0;
-        boolean isActive = false;
-
-        if (data.contains("Players." + uuid + ".Souls-Information")) {
-            souls = data.getInt("Players." + uuid + ".Souls-Information.Souls");
-            isActive = data.getBoolean("Players." + uuid + ".Souls-Information.Is-Active");
-        }
 
         List<GkitCoolDown> gkitCoolDowns = new ArrayList<>();
 
@@ -599,6 +594,7 @@ public class CrazyManager {
      * @return The limit set on the item by slot crystals.
      */
     public int getEnchantmentLimiter(@NotNull ItemStack item) {
+        if (!useEnchantmentLimiter) return 0;
         return item.getItemMeta().getPersistentDataContainer().getOrDefault(DataKeys.limit_reducer.getNamespacedKey(), PersistentDataType.INTEGER, 0);
     }
 

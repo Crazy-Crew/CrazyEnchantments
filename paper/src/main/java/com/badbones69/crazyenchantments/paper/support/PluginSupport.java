@@ -144,14 +144,8 @@ public class PluginSupport {
         // Random Plugins
         MCMMO("McMMO"),
 
-        // Stacker Plugins
-
-        // WildStacker by Ome_R
-        // WILD_STACKER("WildStacker"),
-
         // Anti Cheats
         NO_CHEAT_PLUS("NoCheatPlus"),
-        //VULCAN("Vulcan"),
 
         // Faction Plugins
         FACTIONS_UUID("Factions"),

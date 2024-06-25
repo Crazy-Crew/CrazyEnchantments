@@ -1,34 +1,34 @@
 plugins {
-    id("io.github.goooler.shadow")
-
-    alias(libs.plugins.run.paper)
+    alias(libs.plugins.paperweight)
+    alias(libs.plugins.shadowJar)
+    alias(libs.plugins.runPaper)
 
     `paper-plugin`
 }
 
+base {
+    archivesName.set(rootProject.name)
+}
+
 dependencies {
-    implementation(libs.metrics)
+    paperweight.paperDevBundle(libs.versions.paper)
 
     implementation(libs.nbtapi)
 
-    compileOnly(libs.placeholder.api)
+    compileOnly(libs.informative.annotations)
 
     compileOnly(libs.vault) {
         exclude("org.bukkit", "bukkit")
     }
 
-    compileOnly(libs.worldguard)
-    compileOnly(libs.worldedit)
-
-    compileOnly(libs.oraxen.api)
-
-    compileOnly(libs.informative.annotations)
-
     compileOnly(libs.griefprevention)
 
-    compileOnly(libs.towny)
-
     compileOnly(libs.nocheatplus)
+
+    compileOnly(libs.oraxen)
+
+    compileOnly(libs.worldguard)
+    compileOnly(libs.worldedit)
 
     compileOnly(libs.kingdoms)
 
@@ -38,6 +38,8 @@ dependencies {
         exclude("com.darkblade12")
     }
 
+    compileOnly(libs.towny)
+
     compileOnly(libs.paster)
 
     compileOnly(libs.skyblock)
@@ -45,11 +47,13 @@ dependencies {
     compileOnly(libs.plotsquared)
 
     compileOnly(libs.mcmmo)
-
-    compileOnly(libs.wildstacker)
 }
 
 val component: SoftwareComponent = components["java"]
+
+paperweight {
+    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION
+}
 
 tasks {
     publishing {
@@ -80,13 +84,15 @@ tasks {
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
-        minecraftVersion("1.20.6")
+        minecraftVersion(libs.versions.minecraft.get())
     }
 
     assemble {
+        dependsOn(reobfJar)
+
         doLast {
             copy {
-                from(shadowJar.get())
+                from(reobfJar.get())
                 into(rootProject.projectDir.resolve("jars"))
             }
         }
@@ -97,28 +103,23 @@ tasks {
         archiveClassifier.set("")
 
         listOf(
-            "de.tr7zw.changeme.nbtapi",
-            "org.bstats"
+            "de.tr7zw.changeme.nbtapi"
         ).forEach {
             relocate(it, "libs.$it")
         }
     }
 
     processResources {
-        val properties = hashMapOf(
-                "name" to rootProject.name,
-                "version" to project.version,
-                "group" to "${project.group}.paper",
-                "description" to rootProject.description,
-                "apiVersion" to "1.20",
-                "authors" to rootProject.properties["authors"],
-                "website" to rootProject.properties["website"]
-        )
-
-        inputs.properties(properties)
+        inputs.properties("name" to rootProject.name)
+        inputs.properties("version" to project.version)
+        inputs.properties("group" to "${project.group}.paper")
+        inputs.properties("description" to project.properties["description"])
+        inputs.properties("apiVersion" to libs.versions.minecraft.get())
+        inputs.properties("authors" to project.properties["authors"])
+        inputs.properties("website" to project.properties["website"])
 
         filesMatching("plugin.yml") {
-            expand(properties)
+            expand(inputs.properties)
         }
     }
 }

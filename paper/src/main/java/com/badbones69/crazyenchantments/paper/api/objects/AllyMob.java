@@ -115,6 +115,7 @@ public class AllyMob {
 
                 case BEE -> {
                     Bee bee = (Bee) this.ally;
+                    bee.setCannotEnterHiveTicks(Integer.MAX_VALUE);
                     bee.setTarget(enemy);
                 }
             }
@@ -144,7 +145,7 @@ public class AllyMob {
         private final String configName;
         private final String defaultName;
         private final EntityType entityType;
-        private final int maxHealth;
+        private final int maxHealth;  // TODO Make this into a config option.
 
         @NotNull
         private final CrazyEnchantments plugin = JavaPlugin.getPlugin(CrazyEnchantments.class);
