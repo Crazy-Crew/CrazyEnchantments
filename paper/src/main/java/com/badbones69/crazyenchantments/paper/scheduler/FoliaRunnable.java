@@ -43,7 +43,7 @@ public abstract class FoliaRunnable implements Runnable {
         this.location = location;
     }
 
-    public FoliaRunnable(@NotNull RegionScheduler scheduler, World world, int chunkX, int chunkZ) {
+    public FoliaRunnable(@NotNull RegionScheduler scheduler, @Nullable World world, int chunkX, int chunkZ) {
         this.regionScheduler = scheduler;
         this.world = world;
         this.chunkX = chunkX;
@@ -74,7 +74,7 @@ public abstract class FoliaRunnable implements Runnable {
             } else {
                 throw new UnsupportedOperationException("The region type is not supported.");
             }
-        } else if (this.asyncScheduler != null){
+        } else if (this.asyncScheduler != null) {
             return setupTask(this.asyncScheduler.runNow(plugin, scheduledTask -> this.run()));
         } else {
             throw new UnsupportedOperationException("The task type is not supported.");
