@@ -58,11 +58,6 @@ public class WingsManager {
         return this.enemyRadius;
     }
 
-    //todo() update this.
-    public String getBypassPermission() {
-        return "crazyenchantments.bypass.wings";
-    }
-    
     public List<UUID> getFlyingPlayers() {
         return this.flyingPlayers;
     }
