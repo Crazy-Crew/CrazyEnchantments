@@ -1,7 +1,14 @@
-## Fixes
-* Fixed info menu name not being able to be configured. [be7988a](https://github.com/Crazy-Crew/CrazyEnchantments/pull/834/commits/be7988a760befb7be8f7559fcb69e2c53a9dcb14)
-* Corrected the xp being dropped on block break event. [a8dcfa2](https://github.com/Crazy-Crew/CrazyEnchantments/pull/834/commits/a8dcfa2b4063ac6687ecc7957fdd22a0db9654d9)
+### Added:
+- 1.21 support
+- Ability to override success and failure rates in the config.yml.
+- `CESuccessOverride` and `CEFailureOverride` will be added to your config, -1 is no override but you can pick a number between `0 and 100`.
 
-## Other:
-* [Feature Requests](https://github.com/Crazy-Crew/CrazyEnchantments/discussions/categories/features)
-* [Bug Reports](https://github.com/Crazy-Crew/CrazyEnchantments/issues)
+### Changes:
+- Bumped internal dependencies
+- Bumped gradle version
+- Bumped java version
+- Bumped nbt api
+
+### Removed:
+- 1.20.6 support
+- Removed unused methods
